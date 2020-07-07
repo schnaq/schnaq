@@ -11,7 +11,7 @@
 (defn dispatch-timer-event
   []
   (let [now (js/Date.)]
-    (rf/dispatch [:timer now])))  ;; <-- dispatch used
+    (rf/dispatch [:timer now])))                            ;; <-- dispatch used
 
 ;; Call the dispatching function every second.
 ;; `defonce` is like `def` but it ensures only one instance is ever
@@ -21,31 +21,31 @@
 
 ;; -- Domino 2 - Event Handlers -----------------------------------------------
 
-(rf/reg-event-db              ;; sets up initial application state
-  :initialize                 ;; usage:  (dispatch [:initialize])
-  (fn [_ _]                   ;; the two parameters are not important here, so use _
-    {:time (js/Date.)         ;; What it returns becomes the new application state
-     :time-color "#f88"}))    ;; so the application state will initially be a map with two keys
+(rf/reg-event-db                                            ;; sets up initial application state
+  :initialize                                               ;; usage:  (dispatch [:initialize])
+  (fn [_ _]                                                 ;; the two parameters are not important here, so use _
+    {:time (js/Date.)                                       ;; What it returns becomes the new application state
+     :time-color "#f88"}))                                  ;; so the application state will initially be a map with two keys
 
 
-(rf/reg-event-db                ;; usage:  (dispatch [:time-color-change 34562])
-  :time-color-change            ;; dispatched when the user enters a new colour into the UI text field
-  (fn [db [_ new-color-value]]  ;; -db event handlers given 2 parameters:  current application state and event (a vector)
-    (assoc db :time-color new-color-value)))   ;; compute and return the new application state
+(rf/reg-event-db                                            ;; usage:  (dispatch [:time-color-change 34562])
+  :time-color-change                                        ;; dispatched when the user enters a new colour into the UI text field
+  (fn [db [_ new-color-value]]                              ;; -db event handlers given 2 parameters:  current application state and event (a vector)
+    (assoc db :time-color new-color-value)))                ;; compute and return the new application state
 
 
-(rf/reg-event-db                 ;; usage:  (dispatch [:timer a-js-Date])
-  :timer                         ;; every second an event of this kind will be dispatched
-  (fn [db [_ new-time]]          ;; note how the 2nd parameter is destructured to obtain the data value
-    (assoc db :time new-time)))  ;; compute and return the new application state
+(rf/reg-event-db                                            ;; usage:  (dispatch [:timer a-js-Date])
+  :timer                                                    ;; every second an event of this kind will be dispatched
+  (fn [db [_ new-time]]                                     ;; note how the 2nd parameter is destructured to obtain the data value
+    (assoc db :time new-time)))                             ;; compute and return the new application state
 
 
 ;; -- Domino 4 - Query  -------------------------------------------------------
 
 (rf/reg-sub
   :time
-  (fn [db _]     ;; db is current app state. 2nd unused param is query vector
-    (:time db))) ;; return a query computation over the application state
+  (fn [db _]                                                ;; db is current app state. 2nd unused param is query vector
+    (:time db)))                                            ;; return a query computation over the application state
 
 (rf/reg-sub
   :time-color
@@ -70,12 +70,12 @@
    "Time color: "
    [:input {:type "text"
             :value @(rf/subscribe [:time-color])
-            :on-change #(rf/dispatch [:time-color-change (-> % .-target .-value)])}]])  ;; <---
+            :on-change #(rf/dispatch [:time-color-change (-> % .-target .-value)])}]]) ;; <---
 
 (defn ui
   []
   [:div
-   [:h1 "Hello world, it is now"]
+   [:h1 "Hello world, it is now, or twas"]
    [clock]
    [color-input]])
 
@@ -94,8 +94,8 @@
   (rf/clear-subscription-cache!)
   (render))
 
-(defn run
+(defn init
   []
-  (rf/dispatch-sync [:initialize]) ;; put a value into application state
-  (render)                         ;; mount the application's ui into '<div id="app" />'
+  (rf/dispatch-sync [:initialize])                          ;; put a value into application state
+  (render)                                                  ;; mount the application's ui into '<div id="app" />'
   )
