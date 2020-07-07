@@ -1,7 +1,8 @@
 (ns meetly.meeting.database
-  [:require [datomic.client.api :as d]
-            [meetly.config :as config]
-            [meetly.meeting.models :as models]])
+  (:require
+    [datomic.client.api :as d]
+    [meetly.config :as config]
+    [meetly.meeting.models :as models]))
 
 
 (defonce datomic-client
