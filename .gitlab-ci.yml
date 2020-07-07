@@ -1,0 +1,18 @@
+test:
+  image: clojure:openjdk-14-tools-deps-alpine
+  script:
+    - clojure -A:test
+
+lint:
+  image: clojure:openjdk-14-tools-deps-alpine
+  script:
+    - clojure -A:clj-kondo --lint src
+  allow_failure: true
+  when: always
+
+up-to-date?:
+  image: clojure:openjdk-14-tools-deps-alpine
+  script:
+    - clojure -A:ancient
+  allow_failure: true
+  when: always
