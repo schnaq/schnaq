@@ -1,7 +1,11 @@
 (ns meetly.meeting.interface.core
   (:require [reagent.dom]
             [re-frame.core :as rf]
-            [meetly.meeting.interface.views :as views]))
+            [meetly.meeting.interface.views :as views]
+            [meetly.meeting.interface.subs]
+            [meetly.meeting.interface.events]))
+;; IMPORTANT: If you use subs and events in another module, you need to require it
+;; somewhere where it will be loaded like this core module.
 
 ;; -- Entry Point -------------------------------------------------------------
 

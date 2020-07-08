@@ -1,5 +1,6 @@
 {:paths ["src" "test"]
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
+        binaryage/oops {:mvn/version "0.7.0"}
         com.datomic/client-pro {:mvn/version "0.9.41"}
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.773"}

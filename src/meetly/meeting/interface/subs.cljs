@@ -12,3 +12,8 @@
   :time-color
   (fn [db _]
     (:time-color db)))
+
+(rf/reg-sub
+  :meetings
+  (fn [db _]
+    (:meetings db)))

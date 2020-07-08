@@ -7,7 +7,8 @@
   :initialize                                               ;; usage:  (dispatch [:initialize])
   (fn [_ _]                                                 ;; the two parameters are not important here, so use _
     {:time (js/Date.)                                       ;; What it returns becomes the new application state
-     :time-color "#f88"}))                                  ;; so the application state will initially be a map with two keys
+     :time-color "#f88"
+     :meetings ["Jour Fixé every day"]}))
 
 
 (rf/reg-event-db                                            ;; usage:  (dispatch [:time-color-change 34562])
@@ -21,6 +22,9 @@
   (fn [db [_ new-time]]                                     ;; note how the 2nd parameter is destructured to obtain the data value
     (assoc db :time new-time)))                             ;; compute and return the new application state
 
-
+(rf/reg-event-db
+  :new-meeting
+  (fn [db [_ meeting-title]]
+    (update db :meetings conj meeting-title)))
 
 
