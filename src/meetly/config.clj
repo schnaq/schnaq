@@ -12,3 +12,6 @@
      :validate-hostnames false}))
 
 (def db-name (or (System/getenv "DATOMIC_DISCUSSION_DB_NAME") "dev-db"))
+
+(def rest-api
+  {:port (Integer/parseInt (or (System/getenv "API_PORT") "3000"))})

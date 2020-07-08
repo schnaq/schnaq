@@ -2,12 +2,17 @@
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         com.datomic/client-pro {:mvn/version "0.9.41"}
+        compojure {:mvn/version "1.6.1"}
+        http-kit {:mvn/version "2.3.0"}
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.773"}
+        org.clojure/data.json {:mvn/version "1.0.0"}
         org.clojure/test.check {:mvn/version "1.0.0"}
         thheller/shadow-cljs {:mvn/version "2.10.14"}
         reagent {:mvn/version "1.0.0-alpha2"}
-        re-frame {:mvn/version "1.0.0-rc6"}}
+        re-frame {:mvn/version "1.0.0-rc6"}
+        ring {:mvn/version "1.8.1"}
+        ring/ring-defaults {:mvn/version "0.3.2"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
@@ -27,5 +32,6 @@
            {:extra-deps
             {luchiniatwork/cambada {:mvn/version "1.0.2"}}
             :main-opts ["-m" "cambada.uberjar"
-                        "-m" "meetly.core"]}}}
+                        "-m" "meetly.core"]}
+           :run-server {:main-opts ["-m" "meetly.core"]}}}
 
