@@ -26,5 +26,24 @@
 (defn init
   "Initialization function, which does everything needed at a fresh app-install."
   []
-  (create-discussion-schema (new-connection))
-  #_(transact test-data/testdata-cat-or-dog))
+  (create-discussion-schema (new-connection)))
+
+;; ##### Input functions #####
+(defn now [] (java.util.Date.))
+
+(defn add-meeting
+  "Adds a meeting to the database"
+  [{:keys [title description end-date start-date share-hash]}]
+  (transact [{:meeting/title title
+              :meeting/description description
+              :meeting/end-date end-date
+              :meeting/start-date start-date
+              :meeting/share-hash share-hash}]))
+
+(comment
+  (add-meeting {:title "Test"
+                :description "Jour Fixé der Liebe"
+                :start-date (now)
+                :end-date (now)
+                :share-hash "897aha-12839hd-123dfa"})
+  :end)

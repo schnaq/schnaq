@@ -34,8 +34,8 @@
            (route/not-found "Error, page not found!"))
 
 
-(defn api-main
-  "This is our main entry point for the REST API"
+(defn -main
+  "This is our main entry point for the REST API Server"
   []
   (let [port (:port config/rest-api)]
     ; Run the server with Ring.defaults middleware
@@ -43,7 +43,3 @@
     ; Run the server without ring defaults
     ;(server/run-server #'app-routes {:port port})
     (println (str "Running webserver at http:/127.0.0.1:" port "/"))))
-
-(comment
-  (api-main)
-  :end)

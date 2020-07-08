@@ -33,5 +33,5 @@
             {luchiniatwork/cambada {:mvn/version "1.0.2"}}
             :main-opts ["-m" "cambada.uberjar"
                         "-m" "meetly.core"]}
-           :run-server {:main-opts ["-m" "meetly.core"]}}}
+           :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]}}}
 

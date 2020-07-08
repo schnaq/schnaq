@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Backend Server + REPL" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
+  <configuration default="false" name="Backend Server " type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
     <module name="meetly" />
     <setting name="replType" value="CLOJURE_MAIN" />
     <setting name="execution" value="DEPS" />

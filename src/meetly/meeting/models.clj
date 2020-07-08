@@ -17,14 +17,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "A description of the meetings purpose."}
-   {:db/ident :meeting/agenda-point
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "Agenda Points which are part of the meeting"}
-   {:db/ident :meeting/authorized-participants
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "Groups or single persons that are authorized to participate"}
+   {:db/ident :meeting/share-hash
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "A hash that grants access to the discussion"}
    ;; Agenda-Point
    {:db/ident :agenda/title
     :db/valueType :db.type/string
