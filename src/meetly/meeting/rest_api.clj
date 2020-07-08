@@ -5,13 +5,14 @@
             [ring.middleware.defaults :refer
              [wrap-defaults site-defaults api-defaults]]
             [meetly.config :as config]
-            [clojure.pprint :as pp]))
+            [clojure.pprint :as pp]
+            [clojure.data.json :as json]))
 
 
-(defn simple-body-page [_req]
+(defn all-meetings [_req]
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body "Hello World"})
+   :body (str (json/write-str))})
 
 ; request-example
 (defn request-example [req]
@@ -30,7 +31,7 @@
 
 (defroutes app-routes
            (GET "/" [] hello-name)
-           (GET "/request" [] request-example)
+           (GET "/meetings" [] request-example)
            (route/not-found "Error, page not found!"))
 
 
