@@ -34,6 +34,6 @@
 
 (defn init
   []
-  (rf/dispatch-sync [:initialize])                          ;; put a value into application state
+  (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
   (render)                                                  ;; mount the application's ui into '<div id="app" />'
   )

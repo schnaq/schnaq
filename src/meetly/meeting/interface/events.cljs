@@ -1,14 +1,13 @@
 (ns meetly.meeting.interface.events
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [meetly.meeting.interface.db :as meetly-db]))
 
 ;; -- Domino 2 - Event Handlers -----------------------------------------------
-
-(rf/reg-event-db                                            ;; sets up initial application state
-  :initialize                                               ;; usage:  (dispatch [:initialize])
-  (fn [_ _]                                                 ;; the two parameters are not important here, so use _
-    {:time (js/Date.)                                       ;; What it returns becomes the new application state
-     :time-color "#f88"
-     :meetings ["Jour Fixé every day"]}))
+(rf/reg-event-fx                                            ;; part of the re-frame API
+  :initialise-db                                            ;; event id being handled
+  ;; the event handler (function) being registered
+  (fn [_ _]                                                 ;; take 2 values from coeffects. Ignore event vector itself.
+    {:db meetly-db/default-db}))
 
 
 (rf/reg-event-db                                            ;; usage:  (dispatch [:time-color-change 34562])
