@@ -7,8 +7,8 @@ The dev-Setup has different parts for Backend and frontend.
 1. Install https://github.com/borkdude/babashka[babashka].
 2. Datomic in Memory database is needed.
 Execute `bb run.clj` to start datomic in memory database.
-3. If you need the API for the frontend use `clj -A:run-server`.
-4. Execute Clojure-Repl as normal.
+3. Either start a normal REPL or the preconfigured Backend-Server + REPL.
+4. If you want to start the server standalone use `clj -A:run-server`.
 
 == Frontend
 
