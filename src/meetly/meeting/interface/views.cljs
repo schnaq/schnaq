@@ -36,7 +36,7 @@
    [:h3 "Meetings"]
    (let [meetings @(rf/subscribe [:meetings])]
      (for [meeting meetings]
-       [:p {:key (random-uuid)} meeting]))])
+       [:p {:key (:id meeting)} (:title meeting) " - " (:description meeting)]))])
 
 (defn ui
   []

@@ -1,5 +1,6 @@
 (ns meetly.meeting.interface.core
-  (:require [reagent.dom]
+  (:require [ajax.core :refer [GET json-response-format]]
+            [reagent.dom]
             [re-frame.core :as rf]
             [meetly.meeting.interface.views :as views]
             [meetly.meeting.interface.subs]
@@ -8,6 +9,17 @@
 ;; somewhere where it will be loaded like this core module.
 
 ;; -- Entry Point -------------------------------------------------------------
+
+(defn- get-meetings
+  [response]
+  (rf/dispatch-sync [:init-from-backend response]))
+
+(defn- initial-db-pull
+  "Pulls initial data from db on interface startup."
+  []
+  (GET "http://localhost:3000/meetings"
+       {:response-format (json-response-format {:keywords? true})
+        :handler get-meetings}))
 
 (defn dispatch-timer-event
   []
@@ -35,5 +47,6 @@
 (defn init
   []
   (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
+  (initial-db-pull)
   (render)                                                  ;; mount the application's ui into '<div id="app" />'
   )

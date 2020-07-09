@@ -2,8 +2,8 @@
   (:require [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
             [org.httpkit.server :as server]
-            [ring.middleware.defaults :refer
-             [wrap-defaults site-defaults api-defaults]]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.middleware.cors :refer [wrap-cors]]
             [meetly.config :as config]
             [clojure.pprint :as pp]
             [clojure.data.json :as json]
@@ -54,7 +54,12 @@
   []
   (let [port (:port config/rest-api)]
     ; Run the server with Ring.defaults middleware
-    (server/run-server (wrap-defaults #'app-routes site-defaults) {:port port})
+    (server/run-server
+      (-> #'app-routes
+          (wrap-cors :access-control-allow-origin [#".*"]
+                     :access-control-allow-methods [:get :put :post :delete])
+          (wrap-defaults site-defaults))
+      {:port port})
     ; Run the server without ring defaults
     ;(server/run-server #'app-routes {:port port})
     (println (str "Running webserver at http:/127.0.0.1:" port "/"))))

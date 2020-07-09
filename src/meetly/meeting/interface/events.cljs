@@ -9,6 +9,11 @@
   (fn [_ _]                                                 ;; take 2 values from coeffects. Ignore event vector itself.
     {:db meetly-db/default-db}))
 
+(rf/reg-event-db
+  :init-from-backend
+  (fn [db [_ all-meetings]]
+    (assoc db :meetings all-meetings)))
+
 
 (rf/reg-event-db                                            ;; usage:  (dispatch [:time-color-change 34562])
   :time-color-change                                        ;; dispatched when the user enters a new colour into the UI text field
