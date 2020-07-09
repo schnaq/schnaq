@@ -36,3 +36,8 @@ datomic-*.zip
 ## Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+
+## node / shadow-cljs
+node_modules/
+.shadow-cljs/
+public/js/compiled/
