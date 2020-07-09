@@ -16,11 +16,14 @@
                   :on-success [:init-from-backend]
                   :on-failure [:ajax-failure]}}))
 
+;; TODO build an interface-element which shows an error, when the ajax requests fail.
 (rf/reg-event-db
   :ajax-failure
   (fn [db [_ failure]]
     (assoc db :ajax/failure failure)))
 
+;; TODO there is currently no subscriber here. maybe there shouldn't be but think
+;; about what should happen if we successfully added a meeting
 (rf/reg-event-db
   :meeting-added
   (fn [db [_ meeting]]
@@ -54,5 +57,3 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:meeting-added]
                   :on-failure [:ajax-failure]}}))
-
-;; TODO effects handler that POSTs the added meeting to the backend.
