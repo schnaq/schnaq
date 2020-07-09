@@ -6,13 +6,27 @@
              [wrap-defaults site-defaults api-defaults]]
             [meetly.config :as config]
             [clojure.pprint :as pp]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [meetly.meeting.database :as db]))
 
+(defn- date->epoch-str
+  "Converts java.util.Date to epoch string"
+  [date]
+  (-> date .getTime str))
+
+(defn- fetch-meetings
+  "Fetches meetings from the db and preparse them for transit via JSON."
+  []
+  (->> (db/all-meetings)
+       (map first)
+       (map #(update % :meeting/start-date date->epoch-str))
+       (map #(update % :meeting/end-date date->epoch-str))
+       json/write-str))
 
 (defn all-meetings [_req]
   {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body (str (json/write-str))})
+   :headers {"Content-Type" "text/json"}
+   :body (fetch-meetings)})
 
 ; request-example
 (defn request-example [req]
@@ -31,7 +45,7 @@
 
 (defroutes app-routes
            (GET "/" [] hello-name)
-           (GET "/meetings" [] request-example)
+           (GET "/meetings" [] all-meetings)
            (route/not-found "Error, page not found!"))
 
 

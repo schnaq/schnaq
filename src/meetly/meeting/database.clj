@@ -44,15 +44,20 @@
 ;; TODO on the other side at the front end query it periodically or at the start
 ;; TODO then show the updated list.
 ;; TODO afterwards write all new frontend-entries to the db
+
+
 (defn all-meetings
   "Shows all meetings currently in the db."
   []
-  (d/q))
+  (d/q
+    '[:find (pull ?meetings [*])
+      :where [?meetings :meeting/title _]]
+    (d/db (new-connection))))
 
 (comment
-  (add-meeting {:title "Test"
-                :description "Jour Fixé der Liebe"
+  (add-meeting {:title "Test 2"
+                :description "Jour Fixé des Hasses"
                 :start-date (now)
                 :end-date (now)
-                :share-hash "897aha-12839hd-123dfa"})
+                :share-hash "897aasdha-12839hd-123dfa"})
   :end)
