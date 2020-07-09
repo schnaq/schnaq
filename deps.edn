@@ -15,7 +15,8 @@
         re-frame {:mvn/version "1.0.0-rc6"}
         ring {:mvn/version "1.8.1"}
         ring-cors {:mvn/version "0.1.13"}
-        ring/ring-defaults {:mvn/version "0.3.2"}}
+        ring/ring-defaults {:mvn/version "0.3.2"}
+        ring/ring-json {:mvn/version "0.5.0"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}

@@ -1,9 +1,11 @@
 (ns meetly.meeting.rest-api
-  (:require [compojure.core :refer [defroutes GET]]
+  (:require [compojure.core :refer [defroutes GET POST]]
             [compojure.route :as route]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.middleware.json :refer [wrap-json-body]]
             [ring.middleware.cors :refer [wrap-cors]]
+            [ring.util.response :refer [response]]
             [meetly.config :as config]
             [clojure.pprint :as pp]
             [clojure.data.json :as json]
@@ -43,9 +45,18 @@
            (pp/pprint req)
            (str "Hello " (:name (:params req))))})
 
+(defn add-meeting [req]
+  (let [meeting (-> req :body :meeting)
+        asdf (db/add-meeting (-> meeting
+                                 (update :end-date #(java.util.Date. %))
+                                 (update :start-date #(java.util.Date. %))))]
+    (pp/pprint asdf)
+    (response (str "Good job, meeting added!" meeting))))
+
 (defroutes app-routes
            (GET "/" [] hello-name)
            (GET "/meetings" [] all-meetings)
+           (POST "/meeting/add" [] add-meeting)
            (route/not-found "Error, page not found!"))
 
 
@@ -58,7 +69,9 @@
       (-> #'app-routes
           (wrap-cors :access-control-allow-origin [#".*"]
                      :access-control-allow-methods [:get :put :post :delete])
-          (wrap-defaults site-defaults))
+          ;; TODO this is just for the wiring. Fix this before production (Disabled CSRF)
+          (wrap-defaults (assoc site-defaults :security false))
+          (wrap-json-body {:keywords? true :bigdecimals? true}))
       {:port port})
     ; Run the server without ring defaults
     ;(server/run-server #'app-routes {:port port})

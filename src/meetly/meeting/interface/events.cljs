@@ -22,6 +22,11 @@
     (assoc db :ajax/failure failure)))
 
 (rf/reg-event-db
+  :meeting-added
+  (fn [db [_ meeting]]
+    (assoc db :meeting/added meeting)))
+
+(rf/reg-event-db
   :init-from-backend
   (fn [db [_ all-meetings]]
     (assoc db :meetings all-meetings)))
@@ -38,9 +43,16 @@
   (fn [db [_ new-time]]                                     ;; note how the 2nd parameter is destructured to obtain the data value
     (assoc db :time new-time)))                             ;; compute and return the new application state
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :new-meeting
-  (fn [db [_ meeting-title]]
-    (update db :meetings conj meeting-title)))
+  (fn [{:keys [db]} [_ meeting]]
+    {:db (update db :meetings conj meeting)
+     :http-xhrio {:method :post
+                  :uri "http://localhost:3000/meeting/add"
+                  :params {:meeting meeting}
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:meeting-added]
+                  :on-failure [:ajax-failure]}}))
 
 ;; TODO effects handler that POSTs the added meeting to the backend.

@@ -47,7 +47,7 @@
     <orderEntry type="library" name="Deps: lambdaisland/deep-diff:0.0-47" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/anomalies:0.1.12" level="project" />
     <orderEntry type="library" name="Deps: ring-cors:0.1.13" level="project" />
-    <orderEntry type="library" name="Deps: com.fasterxml.jackson.dataformat/jackson-dataformat-cbor:2.8.6" level="project" />
+    <orderEntry type="library" name="Deps: com.fasterxml.jackson.dataformat/jackson-dataformat-cbor:2.9.9" level="project" />
     <orderEntry type="library" name="Deps: com.googlecode.json-simple/json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-defaults:0.3.2" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.264" level="project" />
@@ -57,6 +57,7 @@
     <orderEntry type="library" name="Deps: slingshot:0.12.2" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpcore-nio:4.4.6" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-jetty-adapter:1.8.1" level="project" />
+    <orderEntry type="library" name="Deps: ring/ring-json:0.5.0" level="project" />
     <orderEntry type="library" name="Deps: spec-coerce:1.0.0-alpha6" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.6" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.2.11" level="project" />
@@ -64,7 +65,7 @@
     <orderEntry type="library" name="Deps: fipp:0.6.23" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.logging/jboss-logging:3.4.1.Final" level="project" />
     <orderEntry type="library" name="Deps: com.wsscode/spec-inspec:1.0.0-alpha2" level="project" />
-    <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-core:2.8.7" level="project" />
+    <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-core:2.9.9" level="project" />
     <orderEntry type="library" name="Deps: aero:1.1.6" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm:5.2" level="project" />
     <orderEntry type="library" name="Deps: cljs-ajax:0.8.0" level="project" />
@@ -115,7 +116,7 @@
     <orderEntry type="library" name="Deps: org.checkerframework/checker-qual:2.0.0" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.client/wildfly-client-config:1.0.1.Final" level="project" />
     <orderEntry type="library" name="Deps: net.java.dev.jna/jna:3.2.2" level="project" />
-    <orderEntry type="library" name="Deps: cheshire:5.7.1" level="project" />
+    <orderEntry type="library" name="Deps: cheshire:5.9.0" level="project" />
     <orderEntry type="library" name="Deps: tigris:0.1.1" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-client:9.4.15.v20190215" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-io:9.4.28.v20200408" level="project" />
@@ -144,7 +145,7 @@
     <orderEntry type="library" name="Deps: meta-merge:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: medley:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.async:1.2.603" level="project" />
-    <orderEntry type="library" name="Deps: com.fasterxml.jackson.dataformat/jackson-dataformat-smile:2.8.6" level="project" />
+    <orderEntry type="library" name="Deps: com.fasterxml.jackson.dataformat/jackson-dataformat-smile:2.9.9" level="project" />
     <orderEntry type="library" name="Deps: javax.xml.bind/jaxb-api:2.3.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.code.gson/gson:2.7" level="project" />
     <orderEntry type="library" name="Deps: http-kit:2.3.0" level="project" />
