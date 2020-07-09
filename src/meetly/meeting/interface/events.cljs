@@ -1,5 +1,6 @@
 (ns meetly.meeting.interface.events
-  (:require [re-frame.core :as rf]
+  (:require [ajax.core :as ajax]
+            [re-frame.core :as rf]
             [meetly.meeting.interface.db :as meetly-db]))
 
 ;; -- Domino 2 - Event Handlers -----------------------------------------------
@@ -7,7 +8,18 @@
   :initialise-db                                            ;; event id being handled
   ;; the event handler (function) being registered
   (fn [_ _]                                                 ;; take 2 values from coeffects. Ignore event vector itself.
-    {:db meetly-db/default-db}))
+    {:db meetly-db/default-db
+     :http-xhrio {:method :get
+                  :uri "http://localhost:3000/meetings"
+                  :timeout 10000
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:init-from-backend]
+                  :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-db
+  :ajax-failure
+  (fn [db [_ failure]]
+    (assoc db :ajax/failure failure)))
 
 (rf/reg-event-db
   :init-from-backend
@@ -31,4 +43,4 @@
   (fn [db [_ meeting-title]]
     (update db :meetings conj meeting-title)))
 
-
+;; TODO effects handler that POSTs the added meeting to the backend.

@@ -40,12 +40,6 @@
               :meeting/start-date start-date
               :meeting/share-hash share-hash}]))
 
-;; TODO Continue here. Build out the query and wire it to the api
-;; TODO on the other side at the front end query it periodically or at the start
-;; TODO then show the updated list.
-;; TODO afterwards write all new frontend-entries to the db
-
-
 (defn all-meetings
   "Shows all meetings currently in the db."
   []
@@ -55,8 +49,8 @@
     (d/db (new-connection))))
 
 (comment
-  (add-meeting {:title "Test 2"
-                :description "Jour Fixé des Hasses"
+  (add-meeting {:title "Test 1"
+                :description "Jour Fixé der Liebe"
                 :start-date (now)
                 :end-date (now)
                 :share-hash "897aasdha-12839hd-123dfa"})

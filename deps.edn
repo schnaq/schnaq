@@ -4,6 +4,7 @@
         com.datomic/client-pro {:mvn/version "0.9.41"}
         compojure {:mvn/version "1.6.1"}
         cljs-ajax {:mvn/version "0.8.0"}
+        day8.re-frame/http-fx {:mvn/version "v0.2.0"}
         http-kit {:mvn/version "2.3.0"}
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.773"}
