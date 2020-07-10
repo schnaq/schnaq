@@ -1,6 +1,5 @@
 (ns meetly.meeting.interface.core
-  (:require [ajax.core :refer [GET json-response-format]]
-            [day8.re-frame.http-fx]
+  (:require [day8.re-frame.http-fx]
             [reagent.dom]
             [re-frame.core :as rf]
             [meetly.meeting.interface.views :as views]
