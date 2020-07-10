@@ -4,4 +4,5 @@
 (def default-db
   {:time (js/Date.)
    :time-color "#f88"
-   :meetings ["Jour Fixé every day"]})
+   :meetings ["Jour Fixé every day"]
+   :current-page :home})

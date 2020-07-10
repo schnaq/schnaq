@@ -3,6 +3,7 @@
             [reagent.dom]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
+            [reitit.coercion.spec :as rcs]
             [meetly.meeting.interface.views :as views]
             [meetly.meeting.interface.subs]
             [meetly.meeting.interface.events]
@@ -31,7 +32,7 @@
 (def router
   (reitit.frontend/router
     routes/routes
-    {:data {:coercion reitit.coercion.malli/coercion}}))
+    {:data {:coercion rcs/coercion}}))
 
 (defn on-navigate [new-match]
   (when new-match

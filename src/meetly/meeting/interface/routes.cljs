@@ -15,13 +15,12 @@
                 (println "Entering home page"))
        :stop (fn []
                (println "Leaving home page"))}]}]
-   ["files"
+   ["meetings"
     {:name :routes/files
      :view views/create-meeting-form
-     :link-text "Files"
+     :link-text "Meetings"
      :controllers
      [{:start (fn []
-                (println "Entering files page")
-                (rf/dispatch [::events/fetch-files]))
+                (println "Entering meetings page"))
        :stop (fn []
-               (println "Leaving files page"))}]}]])
+               (println "Leaving meetings page"))}]}]])
