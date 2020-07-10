@@ -59,8 +59,7 @@
         [:p "Share-Hash: " (:share-hash meeting)]
         [:hr]]))])
 
-(defn ui
-  []
+(defn meetings-view []
   [:div
    [:h1 "Meetly Central"]
    [:hr]
@@ -68,9 +67,18 @@
    [create-meeting-form]
    [:hr]
    [meetings-list]
-   [:hr]
+   [:hr]])
+
+(defn re-frame-example-view []
+  [:div
    [clock]
    [color-input]])
+
+(defn ui
+  []
+  [:div
+   [meetings-view]
+   [re-frame-example-view]])
 
 
 (defn main-page
