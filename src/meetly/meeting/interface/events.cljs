@@ -1,13 +1,33 @@
 (ns meetly.meeting.interface.events
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
+            [reitit.frontend.controllers :as rfc]
             [meetly.meeting.interface.db :as meetly-db]))
 
-;; -- Domino 2 - Event Handlers -----------------------------------------------
-(rf/reg-event-fx                                            ;; part of the re-frame API
-  :initialise-db                                            ;; event id being handled
-  ;; the event handler (function) being registered
-  (fn [_ _]                                                 ;; take 2 values from coeffects. Ignore event vector itself.
+;; Starts the ball rolling on changing to another view
+(rf/reg-event-fx
+  :navigate
+  (fn [_cofx [_ & route]]
+    {:navigate! route}))
+
+(rf/reg-fx
+  :navigate!
+  (fn [route]
+    (apply rfe/push-state route)))
+
+(rf/reg-event-db
+  :navigated
+  (fn [db [_ new-match]]
+    (let [old-match (:current-route db)
+          controllers (rfc/apply-controllers (:controllers old-match) new-match)]
+      (assoc db :current-route (assoc new-match :controllers controllers)))))
+
+;; Non routing events
+
+(rf/reg-event-fx
+  :initialise-db
+  (fn [_ _]
     {:db meetly-db/default-db
      :http-xhrio {:method :get
                   :uri "http://localhost:3000/meetings"
