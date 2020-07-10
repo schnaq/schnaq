@@ -9,12 +9,18 @@
             [meetly.config :as config]
             [clojure.pprint :as pp]
             [clojure.data.json :as json]
-            [meetly.meeting.database :as db]))
+            [meetly.meeting.database :as db])
+  (:import (java.util Date)))
 
 (defn- date->epoch-str
   "Converts java.util.Date to epoch string"
   [date]
   (-> date .getTime str))
+
+(defn- epoch->date
+  "Converts an unix-timestamp to a java.util.Date"
+  [epoch]
+  (new Date epoch))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -48,8 +54,8 @@
 (defn add-meeting [req]
   (let [meeting (-> req :body :meeting)]
     (db/add-meeting (-> meeting
-                        (update :end-date #(java.util.Date. %))
-                        (update :start-date #(java.util.Date. %))))
+                        (update :end-date epoch->date)
+                        (update :start-date epoch->date)))
     (response (str "Good job, meeting added!" meeting))))
 
 (defroutes app-routes
@@ -73,4 +79,4 @@
       {:port port})
     ; Run the server without ring defaults
     ;(server/run-server #'app-routes {:port port})
-    (println (str "Running webserver at http:/127.0.0.1:" port "/"))))
+    (println (str "Running web-server at http:/127.0.0.1:" port "/"))))
