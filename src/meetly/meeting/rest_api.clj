@@ -46,11 +46,10 @@
            (str "Hello " (:name (:params req))))})
 
 (defn add-meeting [req]
-  (let [meeting (-> req :body :meeting)
-        asdf (db/add-meeting (-> meeting
-                                 (update :end-date #(java.util.Date. %))
-                                 (update :start-date #(java.util.Date. %))))]
-    (pp/pprint asdf)
+  (let [meeting (-> req :body :meeting)]
+    (db/add-meeting (-> meeting
+                        (update :end-date #(java.util.Date. %))
+                        (update :start-date #(java.util.Date. %))))
     (response (str "Good job, meeting added!" meeting))))
 
 (defroutes app-routes
