@@ -2,7 +2,7 @@
   (:require [compojure.core :refer [defroutes GET POST]]
             [compojure.route :as route]
             [org.httpkit.server :as server]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-body]]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.response :refer [response]]
@@ -69,9 +69,8 @@
       (-> #'app-routes
           (wrap-cors :access-control-allow-origin [#".*"]
                      :access-control-allow-methods [:get :put :post :delete])
-          ;; TODO this is just for the wiring. Fix this before production (Disabled CSRF)
-          (wrap-defaults (assoc site-defaults :security false))
-          (wrap-json-body {:keywords? true :bigdecimals? true}))
+          (wrap-json-body {:keywords? true :bigdecimals? true})
+          (wrap-defaults api-defaults))
       {:port port})
     ; Run the server without ring defaults
     ;(server/run-server #'app-routes {:port port})
