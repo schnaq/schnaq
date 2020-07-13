@@ -2,6 +2,7 @@
   (:require [day8.re-frame.http-fx]
             [reagent.dom]
             [re-frame.core :as rf]
+            [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as rfe]
             [reitit.coercion.spec :as rcs]
             [meetly.meeting.interface.views :as views]
@@ -30,7 +31,7 @@
                       (js/document.getElementById "app")))
 
 (def router
-  (reitit.frontend/router
+  (reitit-front/router
     routes/routes
     {:data {:coercion rcs/coercion}}))
 
