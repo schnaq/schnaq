@@ -3,7 +3,7 @@
             [compojure.route :as route]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
-            [ring.middleware.json :refer [wrap-json-body]]
+            [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.response :refer [response]]
             [meetly.config :as config]
@@ -52,16 +52,20 @@
            (str "Hello " (:name (:params req))))})
 
 (defn add-meeting [req]
-  (let [meeting (-> req :body :meeting)]
-    (db/add-meeting (-> meeting
-                        (update :end-date epoch->date)
-                        (update :start-date epoch->date)))
-    (response (str "Good job, meeting added!" meeting))))
+  (let [meeting (-> req :body :meeting)
+        new-id (db/add-meeting (-> meeting
+                                   (update :end-date epoch->date)
+                                   (update :start-date epoch->date)))]
+    (response {:text "Meeting Added"
+               :id-created new-id})))
 
-;; TODO STUB
-;; Write every agenda point to db and assign the correct meeting to it.
 (defn add-agendas [req]
-  (response :error))
+  (let [agendas (-> req :body :agendas :all vals)
+        meeting-id (-> :body :meeting-id)]
+    (doseq [agenda-point agendas]
+      (db/add-agenda-point (:title agenda-point) (:description agenda-point)
+                           meeting-id)))
+  (response {:text "Agendas, sent over successfully"}))
 
 (defroutes app-routes
            (GET "/" [] hello-name)
@@ -81,6 +85,7 @@
           (wrap-cors :access-control-allow-origin [#".*"]
                      :access-control-allow-methods [:get :put :post :delete])
           (wrap-json-body {:keywords? true :bigdecimals? true})
+          wrap-json-response
           (wrap-defaults api-defaults))
       {:port port})
     ; Run the server without ring defaults

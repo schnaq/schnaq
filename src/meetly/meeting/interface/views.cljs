@@ -36,7 +36,8 @@
 (defn create-meeting-form []
   [:div.create-meeting-form
    [:form {:on-submit (fn [e] (.preventDefault e)
-                        (new-meeting-helper (oget e [:target :elements])))}
+                        (new-meeting-helper (oget e [:target :elements]))
+                        (rf/dispatch [:navigate :routes/meetings.agenda]))}
     [:label {:for "title"} "Title: "]
     [:input#title {:type "text" :name "title"}] [:br]
     [:label {:for "description"} "Description: "]
@@ -94,13 +95,18 @@
    [:h2 "Meetings-Related views"]
    (navigation-button :routes/meetings "--> Show Meetings View")
    (navigation-button :routes/meetings.create "--> Create Meetly View")
+   (navigation-button :routes/meetings.agenda "--> Create Agendas View")
    [:h2 "Startpage"]
    (navigation-button :routes/startpage "--> Startpage")])
 
 (defn main-page
   []
-  (let [current-route @(rf/subscribe [:current-route])]
+  (let [current-route @(rf/subscribe [:current-route])
+        errors @(rf/subscribe [:error-occurred])
+        ajax-error (:ajax errors)]
     [:div
+     (when ajax-error
+       [:h1 "Error: " ajax-error])
      (when current-route
        [(-> current-route :data :view)])]))
 

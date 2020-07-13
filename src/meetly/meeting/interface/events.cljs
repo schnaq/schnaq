@@ -36,18 +36,16 @@
                   :on-success [:init-from-backend]
                   :on-failure [:ajax-failure]}}))
 
-;; TODO build an interface-element which shows an error, when the ajax requests fail.
 (rf/reg-event-db
   :ajax-failure
   (fn [db [_ failure]]
-    (assoc db :ajax/failure failure)))
+    (assoc db :error {:ajax failure})))
 
-;; TODO there is currently no subscriber here. maybe there shouldn't be but think
-;; about what should happen if we successfully added a meeting
 (rf/reg-event-db
   :meeting-added
-  (fn [db [_ meeting]]
-    (assoc db :meeting/added meeting)))
+  (fn [db [_ meeting response]]
+    (assoc db :meeting/added
+              (assoc meeting :id (:id-created response)))))
 
 (rf/reg-event-db
   :increase-agenda-forms
@@ -95,7 +93,7 @@
                   :params {:meeting meeting}
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [:meeting-added]
+                  :on-success [:meeting-added meeting]
                   :on-failure [:ajax-failure]}}))
 
 (rf/reg-event-fx
@@ -103,7 +101,8 @@
   (fn [{:keys [db]} _]
     {:http-xhrio {:method :post
                   :uri "http://localhost:3000/agendas/add"
-                  :params {:agendas (:agenda db)}
+                  :params {:agendas (:agenda db)
+                           :meeting-id (-> db :meeting/added :id)}
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:reset-temporary-agenda]

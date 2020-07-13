@@ -38,6 +38,7 @@
 (defn agenda-view []
   [:div
    [:h1 "Add Agenda!"]
+   [:h2 "For Meeting: " (:title @(rf/subscribe [:meeting/last-added]))]
    (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
      (add-form agenda-num))
    [add-agenda-button]

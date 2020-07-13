@@ -37,4 +37,4 @@
    {:db/ident :agenda/discussion-id
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db7doc "An id belonging to the (foreign) discussion represented by this agenda"}])
+    :db/doc "An id belonging to the (foreign) discussion represented by this agenda"}])

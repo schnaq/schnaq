@@ -2,7 +2,9 @@
   (:require
     [datomic.client.api :as d]
     [meetly.config :as config]
-    [meetly.meeting.models :as models]))
+    [meetly.meeting.dialog-connector :as dialogs]
+    [meetly.meeting.models :as models])
+  (:import (java.util Date)))
 
 
 (defonce datomic-client
@@ -29,16 +31,19 @@
   (create-discussion-schema (new-connection)))
 
 ;; ##### Input functions #####
-(defn now [] (java.util.Date.))
+(defn now [] (Date.))
 
 (defn add-meeting
-  "Adds a meeting to the database"
+  "Adds a meeting to the database. Returns the id of the newly added meeting."
   [{:keys [title description end-date start-date share-hash]}]
-  (transact [{:meeting/title title
-              :meeting/description description
-              :meeting/end-date end-date
-              :meeting/start-date start-date
-              :meeting/share-hash share-hash}]))
+  (get-in
+    (transact [{:db/id "newly-added-meeting"
+                :meeting/title title
+                :meeting/description description
+                :meeting/end-date end-date
+                :meeting/start-date start-date
+                :meeting/share-hash share-hash}])
+    [:tempids "newly-added-meeting"]))
 
 (defn all-meetings
   "Shows all meetings currently in the db."
@@ -48,10 +53,22 @@
       :where [?meetings :meeting/title _]]
     (d/db (new-connection))))
 
+(defn add-agenda-point
+  "Add an agenda to the database."
+  [title description meeting-id]
+  (transact [{:agenda/title title
+              :agenda/description description
+              :agenda/meeting meeting-id
+              :agenda/discussion-id
+              (dialogs/create-discussion-for-agenda title description)}]))
+
 (comment
+  (init)
   (add-meeting {:title "Test 1"
                 :description "Jour Fixé der Liebe"
                 :start-date (now)
                 :end-date (now)
                 :share-hash "897aasdha-12839hd-123dfa"})
+  (all-meetings)
+  (add-agenda-point "Gründungsform" "UG oder doch GmbH?" 17592186045450)
   :end)
