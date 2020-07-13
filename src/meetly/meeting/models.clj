@@ -29,4 +29,12 @@
    {:db/ident :agenda/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "A description of the point"}])
+    :db/doc "A description of the point"}
+   {:db/ident :agenda/meeting
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The meeting the agenda belongs to"}
+   {:db/ident :agenda/discussion-id
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db7doc "An id belonging to the (foreign) discussion represented by this agenda"}])

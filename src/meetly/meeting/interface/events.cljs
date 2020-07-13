@@ -98,13 +98,11 @@
                   :on-success [:meeting-added]
                   :on-failure [:ajax-failure]}}))
 
-
-;; TODO the server backend needs a route for this
 (rf/reg-event-fx
   :send-agendas
   (fn [{:keys [db]} _]
     {:http-xhrio {:method :post
-                  :uri "http://localhost:3000/"
+                  :uri "http://localhost:3000/agendas/add"
                   :params {:agendas (:agenda db)}
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})

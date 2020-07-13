@@ -58,10 +58,16 @@
                         (update :start-date epoch->date)))
     (response (str "Good job, meeting added!" meeting))))
 
+;; TODO STUB
+;; Write every agenda point to db and assign the correct meeting to it.
+(defn add-agendas [req]
+  (response :error))
+
 (defroutes app-routes
            (GET "/" [] hello-name)
            (GET "/meetings" [] all-meetings)
            (POST "/meeting/add" [] add-meeting)
+           (POST "/agendas/add" [] add-agendas)
            (route/not-found "Error, page not found!"))
 
 
