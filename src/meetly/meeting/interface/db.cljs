@@ -3,6 +3,6 @@
 
 (def default-db
   {:time (js/Date.)
-   :time-color "#f88"
+   :time-color "green"
    :meetings ["Jour Fixé every day"]
    :current-page :home})

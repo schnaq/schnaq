@@ -2,8 +2,9 @@
   (:require [re-frame.core :as rf]
             [meetly.meeting.interface.views :as views]))
 
-
-;; TODO the views here are not existing and the rest is just copied as of this writing
+;; It is important to note, that we navigate by not calling /meetings for example,
+;; but by calling #/meetings. The anchor triggers reitit inside of re-frame instead
+;; of hard reloading and dispatching to the web-server.
 (def routes
   ["/"
    [""
@@ -16,7 +17,7 @@
        :stop (fn []
                (println "Leaving home page"))}]}]
    ["meetings"
-    {:name :routes/files
+    {:name :routes/meetings
      :view views/create-meeting-form
      :link-text "Meetings"
      :controllers

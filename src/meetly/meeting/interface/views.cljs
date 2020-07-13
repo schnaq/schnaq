@@ -77,6 +77,10 @@
 (defn ui
   []
   [:div
+   [:input
+    {:on-click #(rf/dispatch [:navigate :routes/meetings])
+     :type "button"
+     :value "Navigate to Meetings Page"}]
    [meetings-view]
    [re-frame-example-view]])
 
