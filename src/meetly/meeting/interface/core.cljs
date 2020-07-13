@@ -3,8 +3,8 @@
             [reagent.dom]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-front]
-            [reitit.frontend.easy :as rfe]
-            [reitit.coercion.spec :as rcs]
+            [reitit.frontend.easy :as reitit-front-easy]
+            [reitit.coercion.spec :as reitit-spec]
             [meetly.meeting.interface.views :as views]
             [meetly.meeting.interface.subs]
             [meetly.meeting.interface.events]
@@ -33,14 +33,14 @@
 (def router
   (reitit-front/router
     routes/routes
-    {:data {:coercion rcs/coercion}}))
+    {:data {:coercion reitit-spec/coercion}}))
 
 (defn on-navigate [new-match]
   (when new-match
     (rf/dispatch [:navigated new-match])))
 
 (defn init-routes! []
-  (rfe/start!
+  (reitit-front-easy/start!
     router
     on-navigate
     {:use-fragment true}))

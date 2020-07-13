@@ -74,8 +74,8 @@
    [clock]
    [color-input]])
 
-(defn navigation-buton
-  "Navigates you via reitit to the desired `route`."
+(defn navigation-button
+  "Navigates you via frontend-routing to the desired `route`."
   [route label]
   [:input
    {:on-click #(rf/dispatch [:navigate route])
@@ -90,9 +90,9 @@
   []
   [:div
    [:h2 "Examples"]
-   (navigation-buton :routes/clock "--> Re-Frame Clock example")
+   (navigation-button :routes/clock "--> Re-Frame Clock example")
    [:h2 "Meetings-Related views"]
-   (navigation-buton :routes/meetings "--> Create / Show Meetings View")])
+   (navigation-button :routes/meetings "--> Create / Show Meetings View")])
 
 (defn main-page
   []
