@@ -1,8 +1,8 @@
 (ns meetly.meeting.interface.events
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
-            [reitit.frontend.controllers :as rfc]
+            [reitit.frontend.easy :as reitit-front-easy]
+            [reitit.frontend.controllers :as reitit-front-controllers]
             [meetly.meeting.interface.db :as meetly-db]))
 
 ;; Starts the ball rolling on changing to another view
@@ -14,13 +14,13 @@
 (rf/reg-fx
   :navigate!
   (fn [route]
-    (apply rfe/push-state route)))
+    (apply reitit-front-easy/push-state route)))
 
 (rf/reg-event-db
   :navigated
   (fn [db [_ new-match]]
     (let [old-match (:current-route db)
-          controllers (rfc/apply-controllers (:controllers old-match) new-match)]
+          controllers (reitit-front-controllers/apply-controllers (:controllers old-match) new-match)]
       (assoc db :current-route (assoc new-match :controllers controllers)))))
 
 ;; Non routing events
