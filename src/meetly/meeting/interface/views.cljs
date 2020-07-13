@@ -74,16 +74,25 @@
    [clock]
    [color-input]])
 
-(defn ui
+(defn navigation-buton
+  "Navigates you via reitit to the desired `route`."
+  [route label]
+  [:input
+   {:on-click #(rf/dispatch [:navigate route])
+    :type "button"
+    :value label
+    :style {:margin-bottom "1em"}}])
+
+(defn development-startpage
+  "This is the startpage during development. We can treat it a little bit similar
+  to workspaces or devcards. Just use reitit to navigate to the subsystem you are
+  working on from here."
   []
   [:div
-   [:input
-    {:on-click #(rf/dispatch [:navigate :routes/meetings])
-     :type "button"
-     :value "Navigate to Meetings Page"}]
-   [meetings-view]
-   [re-frame-example-view]])
-
+   [:h2 "Examples"]
+   (navigation-buton :routes/clock "--> Re-Frame Clock example")
+   [:h2 "Meetings-Related views"]
+   (navigation-buton :routes/meetings "--> Create / Show Meetings View")])
 
 (defn main-page
   []
