@@ -55,6 +55,21 @@
     (update-in db [:agenda :number-of-forms] inc)))
 
 (rf/reg-event-db
+  :agenda/update-title
+  (fn [db [_ content suffix]]
+    (assoc-in db [:agenda :all suffix :title] content)))
+
+(rf/reg-event-db
+  :agenda/update-description
+  (fn [db [_ content suffix]]
+    (assoc-in db [:agenda :all suffix :description] content)))
+
+(rf/reg-event-db
+  :reset-temporary-agenda
+  (fn [db _]
+    (assoc db :agenda {:number-of-forms 1 :all {}})))
+
+(rf/reg-event-db
   :init-from-backend
   (fn [db [_ all-meetings]]
     (assoc db :meetings all-meetings)))
@@ -81,4 +96,17 @@
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:meeting-added]
+                  :on-failure [:ajax-failure]}}))
+
+
+;; TODO the server backend needs a route for this
+(rf/reg-event-fx
+  :send-agendas
+  (fn [{:keys [db]} _]
+    {:http-xhrio {:method :post
+                  :uri "http://localhost:3000/"
+                  :params {:agendas (:agenda db)}
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:reset-temporary-agenda]
                   :on-failure [:ajax-failure]}}))

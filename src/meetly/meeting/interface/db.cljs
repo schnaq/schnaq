@@ -6,4 +6,5 @@
    :time-color "green"
    :meetings ["Jour Fixé every day"]
    :current-page :home
-   :agenda {:number-of-forms 1}})
+   :agenda {:number-of-forms 1
+            :all {}}})
