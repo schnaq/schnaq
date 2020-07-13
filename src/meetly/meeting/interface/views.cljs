@@ -43,7 +43,7 @@
     [:textarea#description {:name "description"}] [:br]
     [:label {:for "end-date"} "End Date: "]
     [:input#end-date {:type "datetime-local" :name "end-date"}] [:br]
-    [:input {:type "submit" :value "Create Meetly"}]]])
+    [:input {:type "submit" :value "Step 2: Add Agenda"}]]])
 
 (defn meetings-list []
   [:div.meetings-list
@@ -92,7 +92,10 @@
    [:h2 "Examples"]
    (navigation-button :routes/clock "--> Re-Frame Clock example")
    [:h2 "Meetings-Related views"]
-   (navigation-button :routes/meetings "--> Create / Show Meetings View")])
+   (navigation-button :routes/meetings "--> Show Meetings View")
+   (navigation-button :routes/meetings.create "--> Create Meetly View")
+   [:h2 "Startpage"]
+   (navigation-button :routes/startpage "--> Startpage")])
 
 (defn main-page
   []
@@ -103,5 +106,4 @@
 
 (defn root []
   [:div#root
-   {:style {:width "100vw"}}
    [main-page]])
