@@ -21,3 +21,8 @@
   :meetings
   (fn [db _]
     (:meetings db)))
+
+(rf/reg-sub
+  :agenda/number-of-forms
+  (fn [db _]
+    (-> db :agenda :number-of-forms)))

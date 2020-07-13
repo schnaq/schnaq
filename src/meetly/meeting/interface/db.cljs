@@ -5,4 +5,5 @@
   {:time (js/Date.)
    :time-color "green"
    :meetings ["Jour Fixé every day"]
-   :current-page :home})
+   :current-page :home
+   :agenda {:number-of-forms 1}})

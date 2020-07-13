@@ -50,6 +50,11 @@
     (assoc db :meeting/added meeting)))
 
 (rf/reg-event-db
+  :increase-agenda-forms
+  (fn [db _]
+    (update-in db [:agenda :number-of-forms] inc)))
+
+(rf/reg-event-db
   :init-from-backend
   (fn [db [_ all-meetings]]
     (assoc db :meetings all-meetings)))

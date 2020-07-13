@@ -1,6 +1,7 @@
 (ns meetly.meeting.interface.routes
   (:require [meetly.meeting.interface.views :as views]
-            [meetly.meeting.interface.views.startpage :as startpage-views]))
+            [meetly.meeting.interface.views.startpage :as startpage-views]
+            [meetly.meeting.interface.views.agenda :as agenda-views]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
 ;; but by calling #/meetings. The anchor triggers reitit inside of re-frame instead
@@ -15,16 +16,20 @@
      :view views/development-startpage
      :link-text "Home"
      :controllers []}]
-   ["meetings/"
-    [""
+   ["meetings"
+    ["/"
      {:name :routes/meetings
       :view views/meetings-list
       :link-text "Meetings"
       :controllers []}]
-    ["create"
+    ["/create"
      {:name :routes/meetings.create
       :view views/create-meeting-form
-      :link-text "Create Meeting"}]]
+      :link-text "Create Meeting"}]
+    ["/agenda"
+     {:name :routes/meetings.agenda
+      :view agenda-views/agenda-view
+      :link-text "Add Agenda"}]]
    ["clock"
     {:name :routes/clock
      :view views/re-frame-example-view
