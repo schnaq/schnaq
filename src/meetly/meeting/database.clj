@@ -53,6 +53,16 @@
       :where [?meetings :meeting/title _]]
     (d/db (new-connection))))
 
+(defn meeting-by-hash
+  "Returns the meeting corresponding to the share hash."
+  [hash]
+  (ffirst
+    (d/q
+      '[:find (pull ?meeting [*])
+        :in $ ?hash
+        :where [?meeting :meeting/share-hash ?hash]]
+      (d/db (new-connection)) hash)))
+
 (defn add-agenda-point
   "Add an agenda to the database."
   [title description meeting-id]
@@ -65,10 +75,11 @@
 (comment
   (init)
   (add-meeting {:title "Test 1"
-                :description "Jour Fixé der Liebe"
+                :description "Jour Fixé des Hasses"
                 :start-date (now)
                 :end-date (now)
                 :share-hash "897aasdha-12839hd-123dfa"})
   (all-meetings)
   (add-agenda-point "Gründungsform" "UG oder doch GmbH?" 17592186045450)
+  (meeting-by-hash "897aasdha-12839hd-123dfa")
   :end)

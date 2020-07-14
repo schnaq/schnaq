@@ -31,10 +31,16 @@
        (map #(update % :meeting/end-date date->epoch-str))
        json/write-str))
 
+(defn- normalize-meeting
+  "Normalizes a single meeting for the wire."
+  [meeting]
+  (-> meeting
+      (update :meeting/start-date date->epoch-str)
+      (update :meeting/end-date date->epoch-str)
+      json/write-str))
+
 (defn all-meetings [_req]
-  {:status 200
-   :headers {"Content-Type" "text/json"}
-   :body (fetch-meetings)})
+  (response (fetch-meetings)))
 
 ; request-example
 (defn request-example [req]
@@ -67,9 +73,15 @@
                            meeting-id)))
   (response {:text "Agendas, sent over successfully"}))
 
+(defn meeting-by-hash
+  [req]
+  (let [hash (get-in req [:route-params :hash])]
+    (response (normalize-meeting (db/meeting-by-hash hash)))))
+
 (defroutes app-routes
            (GET "/" [] hello-name)
            (GET "/meetings" [] all-meetings)
+           (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
            (route/not-found "Error, page not found!"))

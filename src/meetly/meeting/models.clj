@@ -20,6 +20,7 @@
    {:db/ident :meeting/share-hash
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
     :db/doc "A hash that grants access to the discussion"}
    ;; Agenda-Point
    {:db/ident :agenda/title

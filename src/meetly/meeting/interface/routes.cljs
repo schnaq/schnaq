@@ -3,7 +3,8 @@
             [meetly.meeting.interface.views.startpage :as startpage-views]
             [meetly.meeting.interface.views.agenda :as agenda-views]
             [meetly.meeting.interface.views.clock :as clock-views]
-            [meetly.meeting.interface.views.meetings :as meeting-views]))
+            [meetly.meeting.interface.views.meetings :as meeting-views]
+            [re-frame.core :as rf]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
 ;; but by calling #/meetings. The anchor triggers reitit inside of re-frame instead
@@ -28,7 +29,11 @@
      {:name :routes/meetings.show
       :view meeting-views/single-meeting
       :link-text "Show Meeting"
-      :parameters {:path {:share-hash string?}}}]
+      :parameters {:path {:share-hash string?}}
+      :controllers [{:parameters {:path [:share-hash]}
+                     :start (fn [{:keys [path]}]
+                              (let [hash (:share-hash path)]
+                                (rf/dispatch [:load-meeting-by-share-hash hash])))}]}]
     ["/create"
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form

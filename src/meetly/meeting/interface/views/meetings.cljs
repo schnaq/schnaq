@@ -1,6 +1,5 @@
 (ns meetly.meeting.interface.views.meetings
   (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitit-front-easy]
             [oops.core :refer [oget]]
             [ajax.core :as ajax]))
 
@@ -33,9 +32,10 @@
 
 (defn single-meeting
   []
-  [:div
-   (let [current-meeting @(rf/subscribe [:selected-meeting])]
-     [:h2 (:title current-meeting)])])
+  (let [current-meeting @(rf/subscribe [:selected-meeting])]
+    [:div
+     [:h2 (:title current-meeting)]
+     [:p (:description current-meeting)]]))
 
 (defn meetings-list []
   [:div.meetings-list
@@ -78,6 +78,16 @@
   :select-current-meeting
   (fn [db [_ meeting]]
     (assoc-in db [:meeting :selected] meeting)))
+
+(rf/reg-event-fx
+  :load-meeting-by-share-hash
+  (fn [_ [_ hash]]
+    {:http-xhrio {:method :get
+                  :uri (str "http://localhost:3000/meeting/by-hash/" hash)
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:select-current-meeting]
+                  :on-failure [:ajax-failure]}}))
 
 (rf/reg-event-fx
   :new-meeting
