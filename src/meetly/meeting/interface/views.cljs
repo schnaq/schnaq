@@ -59,8 +59,7 @@
         [:p "Share-Hash: " (:share-hash meeting)]
         [:hr]]))])
 
-(defn ui
-  []
+(defn meetings-view []
   [:div
    [:h1 "Meetly Central"]
    [:hr]
@@ -68,7 +67,41 @@
    [create-meeting-form]
    [:hr]
    [meetings-list]
-   [:hr]
+   [:hr]])
+
+(defn re-frame-example-view []
+  [:div
    [clock]
    [color-input]])
 
+(defn navigation-button
+  "Navigates you via frontend-routing to the desired `route`."
+  [route label]
+  [:input
+   {:on-click #(rf/dispatch [:navigate route])
+    :type "button"
+    :value label
+    :style {:margin-bottom "1em"}}])
+
+(defn development-startpage
+  "This is the startpage during development. We can treat it a little bit similar
+  to workspaces or devcards. Just use reitit to navigate to the subsystem you are
+  working on from here."
+  []
+  [:div
+   [:h2 "Examples"]
+   (navigation-button :routes/clock "--> Re-Frame Clock example")
+   [:h2 "Meetings-Related views"]
+   (navigation-button :routes/meetings "--> Create / Show Meetings View")])
+
+(defn main-page
+  []
+  (let [current-route @(rf/subscribe [:current-route])]
+    [:div
+     (when current-route
+       [(-> current-route :data :view)])]))
+
+(defn root []
+  [:div#root
+   {:style {:width "100vw"}}
+   [main-page]])
