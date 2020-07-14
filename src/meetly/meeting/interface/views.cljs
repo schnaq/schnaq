@@ -26,12 +26,15 @@
    [:h2 "Startpage"]
    (navigation-button :routes/startpage "--> Startpage")])
 
-(defn main-page
+(defn base-page
   []
   (let [current-route @(rf/subscribe [:current-route])
         errors @(rf/subscribe [:error-occurred])
         ajax-error (:ajax errors)]
-    [:div
+    [:div.container
+     [:link {:href "bootstrap/css/bootstrap.css" :rel "stylesheet"}]
+     [:script {:src "bootstrap/js/bootstrap.js"}]
+
      (when ajax-error
        [:h1 "Error: " ajax-error])
      (when current-route
@@ -39,4 +42,4 @@
 
 (defn root []
   [:div#root
-   [main-page]])
+   [base-page]])
