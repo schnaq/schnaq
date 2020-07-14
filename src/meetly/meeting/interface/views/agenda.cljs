@@ -53,7 +53,7 @@
   (fn [{:keys [db]} _]
     {:http-xhrio {:method :post
                   :uri "http://localhost:3000/agendas/add"
-                  :params {:agendas (:agenda db)
+                  :params {:agendas (get-in db [:agenda :all] [])
                            :meeting-id (-> db :meeting/added :id)}
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})

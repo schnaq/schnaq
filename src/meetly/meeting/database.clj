@@ -72,6 +72,28 @@
               :agenda/discussion-id
               (dialogs/create-discussion-for-agenda title description)}]))
 
+(defn- clean-agenda
+  "Cleans the stubborn parts of an agenda."
+  [agenda]
+  (let [agenda-point (first agenda)
+        id (get-in agenda-point [:agenda/meeting :db/id])]
+    (-> agenda-point
+        (assoc :meeting id)
+        (dissoc :agenda/meeting))))
+
+(defn agendas-by-meeting
+  "Return all agendas belonging to a certain meeting. Ready for the wire."
+  [meeting-id]
+  (map clean-agenda
+       (d/q
+         '[:find (pull ?agendas [[:agenda/title :as :title]
+                                 [:agenda/description :as :description]
+                                 :agenda/meeting
+                                 [:agenda/discussion-id :as :discussion-id]])
+           :in $ ?meeting-id
+           :where [?agendas :agenda/meeting ?meeting-id]]
+         (d/db (new-connection)) meeting-id)))
+
 (comment
   (init)
   (add-meeting {:title "Test 1"
@@ -80,6 +102,7 @@
                 :end-date (now)
                 :share-hash "897aasdha-12839hd-123dfa"})
   (all-meetings)
-  (add-agenda-point "Gründungsform" "UG oder doch GmbH?" 17592186045450)
+  (add-agenda-point "nico" "ist der" 17592186045445)
   (meeting-by-hash "897aasdha-12839hd-123dfa")
+  (agendas-by-meeting 17592186045445)
   :end)

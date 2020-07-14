@@ -81,13 +81,14 @@
 
 (rf/reg-event-fx
   :load-meeting-by-share-hash
-  (fn [_ [_ hash]]
-    {:http-xhrio {:method :get
-                  :uri (str "http://localhost:3000/meeting/by-hash/" hash)
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [:select-current-meeting]
-                  :on-failure [:ajax-failure]}}))
+  (fn [{:keys [db]} [_ hash]]
+    (when-not (get-in db [:meeting :selected])
+      {:http-xhrio {:method :get
+                    :uri (str "http://localhost:3000/meeting/by-hash/" hash)
+                    :format (ajax/json-request-format)
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success [:select-current-meeting]
+                    :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx
   :new-meeting

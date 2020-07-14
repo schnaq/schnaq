@@ -66,8 +66,8 @@
                :id-created new-id})))
 
 (defn add-agendas [req]
-  (let [agendas (-> req :body :agendas :all vals)
-        meeting-id (-> :body :meeting-id)]
+  (let [agendas (-> req :body :agendas vals)
+        meeting-id (-> req :body :meeting-id)]
     (doseq [agenda-point agendas]
       (db/add-agenda-point (:title agenda-point) (:description agenda-point)
                            meeting-id)))
@@ -78,12 +78,18 @@
   (let [hash (get-in req [:route-params :hash])]
     (response (normalize-meeting (db/meeting-by-hash hash)))))
 
+(defn agendas-by-meeting
+  [req]
+  (let [meeting-id (get-in req [:route-params :id])]
+    (response (db/agendas-by-meeting meeting-id))))
+
 (defroutes app-routes
            (GET "/" [] hello-name)
            (GET "/meetings" [] all-meetings)
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
+           (GET "/agendas/by-meeting/:id" [] agendas-by-meeting)
            (route/not-found "Error, page not found!"))
 
 
