@@ -1,5 +1,6 @@
 (ns meetly.meeting.interface.views.meetings
   (:require [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitit-front-easy]
             [oops.core :refer [oget]]
             [ajax.core :as ajax]))
 
@@ -30,6 +31,12 @@
     [:input#end-date {:type "datetime-local" :name "end-date"}] [:br]
     [:input {:type "submit" :value "Step 2: Add Agenda"}]]])
 
+(defn single-meeting
+  []
+  [:div
+   (let [current-meeting @(rf/subscribe [:selected-meeting])]
+     [:h2 (:title current-meeting)])])
+
 (defn meetings-list []
   [:div.meetings-list
    [:h3 "Meetings"]
@@ -41,7 +48,12 @@
          ;; TODO use joda.time in final application
          (str (js/Date. (js/Number. (:start-date meeting)))) " - End Date: "
          (str (js/Date. (js/Number. (:end-date meeting))))]
-        [:p "Share-Hash: " (:share-hash meeting)]
+        [:button
+         {:on-click (fn []
+                      (rf/dispatch [:navigate :routes/meetings.show
+                                    {:share-hash (:share-hash meeting)}])
+                      (rf/dispatch [:select-current-meeting meeting]))}
+         "Go to Meetly: " (:share-hash meeting)]
         [:hr]]))])
 
 (defn meetings-view []
@@ -61,6 +73,11 @@
   (fn [db [_ meeting response]]
     (assoc db :meeting/added
               (assoc meeting :id (:id-created response)))))
+
+(rf/reg-event-db
+  :select-current-meeting
+  (fn [db [_ meeting]]
+    (assoc-in db [:meeting :selected] meeting)))
 
 (rf/reg-event-fx
   :new-meeting
@@ -85,3 +102,8 @@
   :meeting/last-added
   (fn [db _]
     (:meeting/added db)))
+
+(rf/reg-sub
+  :selected-meeting
+  (fn [db _]
+    (get-in db [:meeting :selected])))

@@ -24,6 +24,11 @@
       :view meeting-views/meetings-list
       :link-text "Meetings"
       :controllers []}]
+    ["/view/:share-hash"
+     {:name :routes/meetings.show
+      :view meeting-views/single-meeting
+      :link-text "Show Meeting"
+      :parameters {:path {:share-hash string?}}}]
     ["/create"
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form
