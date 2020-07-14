@@ -9,6 +9,8 @@
     ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
             [meetly.meeting.interface.views.startpage]
             [meetly.meeting.interface.views.agenda]
+            [meetly.meeting.interface.views.clock]
+            [meetly.meeting.interface.views.meetings]
             [meetly.meeting.interface.subs]
             [meetly.meeting.interface.events]
     ;; IMPORTANT: If you use subs and events in another module, you need to require it

@@ -11,28 +11,3 @@
   :error-occurred
   (fn [db]
     (:error db)))
-
-(rf/reg-sub
-  :time
-  (fn [db _]                                                ;; db is current app state. 2nd unused param is query vector
-    (:time db)))                                            ;; return a query computation over the application state
-
-(rf/reg-sub
-  :time-color
-  (fn [db _]
-    (:time-color db)))
-
-(rf/reg-sub
-  :meetings
-  (fn [db _]
-    (:meetings db)))
-
-(rf/reg-sub
-  :meeting/last-added
-  (fn [db _]
-    (:meeting/added db)))
-
-(rf/reg-sub
-  :agenda/number-of-forms
-  (fn [db _]
-    (-> db :agenda :number-of-forms)))

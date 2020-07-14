@@ -1,6 +1,7 @@
 (ns meetly.meeting.interface.views.agenda
   (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [ajax.core :as ajax]))
 
 (defn new-agenda-local
   "This function formats the agenda-form input and saves it locally to the db until
@@ -44,3 +45,44 @@
    [add-agenda-button]
    [:br]
    [submit-agenda-button]])
+
+;; #### Events ####
+
+(rf/reg-event-fx
+  :send-agendas
+  (fn [{:keys [db]} _]
+    {:http-xhrio {:method :post
+                  :uri "http://localhost:3000/agendas/add"
+                  :params {:agendas (:agenda db)
+                           :meeting-id (-> db :meeting/added :id)}
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:reset-temporary-agenda]
+                  :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-db
+  :increase-agenda-forms
+  (fn [db _]
+    (update-in db [:agenda :number-of-forms] inc)))
+
+(rf/reg-event-db
+  :agenda/update-title
+  (fn [db [_ content suffix]]
+    (assoc-in db [:agenda :all suffix :title] content)))
+
+(rf/reg-event-db
+  :agenda/update-description
+  (fn [db [_ content suffix]]
+    (assoc-in db [:agenda :all suffix :description] content)))
+
+(rf/reg-event-db
+  :reset-temporary-agenda
+  (fn [db _]
+    (assoc db :agenda {:number-of-forms 1 :all {}})))
+
+;; #### Subs ####
+
+(rf/reg-sub
+  :agenda/number-of-forms
+  (fn [db _]
+    (-> db :agenda :number-of-forms)))
