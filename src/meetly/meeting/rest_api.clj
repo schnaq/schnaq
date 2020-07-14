@@ -81,7 +81,7 @@
 (defn agendas-by-meeting
   [req]
   (let [meeting-id (get-in req [:route-params :id])]
-    (response (db/agendas-by-meeting meeting-id))))
+    (response {:agendas (db/agendas-by-meeting (bigint meeting-id))})))
 
 (defroutes app-routes
            (GET "/" [] hello-name)

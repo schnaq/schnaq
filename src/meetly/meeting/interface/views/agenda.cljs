@@ -46,6 +46,16 @@
    [:br]
    [submit-agenda-button]])
 
+(defn agenda-in-meeting []
+  [:div.test
+   (let [agendas @(rf/subscribe [:current-agendas])]
+     (for [agenda agendas]
+       [:div {:key (random-uuid)}
+        [:p "Agenda: " (:title agenda)]
+        [:p "Mehr Infos: " (:description agenda)]
+        [:p "Discussion-ID: " (:discussion-id agenda)]
+        [:hr]]))])
+
 ;; #### Events ####
 
 (rf/reg-event-fx
@@ -59,6 +69,22 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:reset-temporary-agenda]
                   :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-fx
+  :load-agendas
+  (fn [{:keys [db]} _]
+    (let [meeting-id (get-in db [:meeting :selected :id])]
+      {:http-xhrio {:method :get
+                    :uri (str "http://localhost:3000/agendas/by-meeting/" meeting-id)
+                    :format (ajax/json-request-format)
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success [:set-current-agendas]
+                    :on-failure [:ajax-failure]}})))
+
+(rf/reg-event-db
+  :set-current-agendas
+  (fn [db [_ response]]
+    (assoc-in db [:agendas :current] (:agendas response))))
 
 (rf/reg-event-db
   :increase-agenda-forms
@@ -86,3 +112,8 @@
   :agenda/number-of-forms
   (fn [db _]
     (-> db :agenda :number-of-forms)))
+
+(rf/reg-sub
+  :current-agendas
+  (fn [db _]
+    (get-in db [:agendas :current])))

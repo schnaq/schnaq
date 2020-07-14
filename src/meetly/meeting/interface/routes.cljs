@@ -33,7 +33,8 @@
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
                               (let [hash (:share-hash path)]
-                                (rf/dispatch [:load-meeting-by-share-hash hash])))}]}]
+                                (rf/dispatch [:load-meeting-by-share-hash hash])
+                                (rf/dispatch [:load-agendas])))}]}]
     ["/create"
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form

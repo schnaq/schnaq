@@ -1,7 +1,8 @@
 (ns meetly.meeting.interface.views.meetings
   (:require [re-frame.core :as rf]
             [oops.core :refer [oget]]
-            [ajax.core :as ajax]))
+            [ajax.core :as ajax]
+            [meetly.meeting.interface.views.agenda :as agenda-views]))
 
 ;; #### Helpers ####
 
@@ -35,7 +36,9 @@
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
     [:div
      [:h2 (:title current-meeting)]
-     [:p (:description current-meeting)]]))
+     [:p (:description current-meeting)]
+     [:hr]
+     [agenda-views/agenda-in-meeting]]))
 
 (defn meetings-list []
   [:div.meetings-list
@@ -48,6 +51,7 @@
          ;; TODO use joda.time in final application
          (str (js/Date. (js/Number. (:start-date meeting)))) " - End Date: "
          (str (js/Date. (js/Number. (:end-date meeting))))]
+        [:p "ID: " (:id meeting)]
         [:button
          {:on-click (fn []
                       (rf/dispatch [:navigate :routes/meetings.show
