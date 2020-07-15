@@ -27,7 +27,7 @@
    (navigation-button :routes/startpage "--> Startpage")])
 
 
-(defn header []
+(defn- header []
   ;; collapsable navbar
   [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
    ;; logo
@@ -52,7 +52,7 @@
       [:li.nav-item [:a.nav-link {:href "#/meetings/agenda"} "Create Agenda"]]
       [:li.nav-item [:a.nav-link {:href "#"} "Overview"]]]]]])
 
-(defn base-page
+(defn- base-page
   []
   (let [current-route @(rf/subscribe [:current-route])
         errors @(rf/subscribe [:error-occurred])
