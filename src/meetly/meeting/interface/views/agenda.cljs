@@ -72,7 +72,7 @@
 
 (rf/reg-event-fx
   :load-agendas
-  (fn [{:keys [db]} [_ hash]]
+  (fn [_ [_ hash]]
     {:http-xhrio {:method :get
                   :uri (str "http://localhost:3000/agendas/by-meeting-hash/" hash)
                   :format (ajax/json-request-format)
