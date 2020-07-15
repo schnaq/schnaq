@@ -39,25 +39,22 @@
       (update :meeting/end-date date->epoch-str)
       json/write-str))
 
-(defn all-meetings [_req]
+(defn- all-meetings [_req]
+  "Returns all meetings from the db. Cleaned for the wire."
   (response (fetch-meetings)))
 
-; request-example
-(defn request-example [req]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body (->>
-           (pp/pprint req)
-           (str "Request Object: " req))})
-
-(defn hello-name [req]
+(defn- index-page [req]
+  "Returns an index page placeholder."
   {:status 200
    :headers {"Content-Type" "text/html"}
    :body (->
            (pp/pprint req)
-           (str "Hello " (:name (:params req))))})
+           (str "Hello there, General Kenobi!"))})
 
-(defn add-meeting [req]
+(defn- add-meeting [req]
+  "Adds a meeting to the database.
+  Converts the epoch dates it receives into java Dates.
+  Returns the id of the newly-created meeting as `:id-created`."
   (let [meeting (-> req :body :meeting)
         new-id (db/add-meeting (-> meeting
                                    (update :end-date epoch->date)
@@ -65,7 +62,8 @@
     (response {:text "Meeting Added"
                :id-created new-id})))
 
-(defn add-agendas [req]
+(defn- add-agendas [req]
+  "Adds a list of agendas to the database."
   (let [agendas (-> req :body :agendas vals)
         meeting-id (-> req :body :meeting-id)]
     (doseq [agenda-point agendas]
@@ -73,23 +71,25 @@
                            meeting-id)))
   (response {:text "Agendas, sent over successfully"}))
 
-(defn meeting-by-hash
+(defn- meeting-by-hash
+  "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
     (response (normalize-meeting (db/meeting-by-hash hash)))))
 
-(defn agendas-by-meeting
+(defn- agendas-by-meeting-hash
+  "Returns all agendas of a meeting, that matches the share-hash."
   [req]
   (let [meeting-hash (get-in req [:route-params :hash])]
     (response {:agendas (db/agendas-by-meeting-hash meeting-hash)})))
 
 (defroutes app-routes
-           (GET "/" [] hello-name)
+           (GET "/" [] index-page)
            (GET "/meetings" [] all-meetings)
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
-           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting)
+           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
            (route/not-found "Error, page not found!"))
 
 

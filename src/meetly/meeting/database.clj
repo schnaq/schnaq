@@ -26,7 +26,8 @@
   (d/transact connection {:tx-data models/datomic-schema}))
 
 (defn init
-  "Initialization function, which does everything needed at a fresh app-install."
+  "Initialization function, which does everything needed at a fresh app-install.
+  Particularly transacts the database schema defined in models.clj"
   []
   (create-discussion-schema (new-connection)))
 
@@ -64,7 +65,8 @@
       (d/db (new-connection)) hash)))
 
 (defn add-agenda-point
-  "Add an agenda to the database."
+  "Add an agenda to the database.
+  A discussion is automatically created for the agenda-point."
   [title description meeting-id]
   (transact [{:agenda/title title
               :agenda/description description

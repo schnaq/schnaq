@@ -22,12 +22,12 @@
    ["meetings"
     ["/"
      {:name :routes/meetings
-      :view meeting-views/meetings-list
+      :view meeting-views/meetings-list-view
       :link-text "Meetings"
       :controllers []}]
     ["/view/:share-hash"
      {:name :routes/meetings.show
-      :view meeting-views/single-meeting
+      :view meeting-views/single-meeting-view
       :link-text "Show Meeting"
       :parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
@@ -39,7 +39,7 @@
                              (rf/dispatch [:clear-current-agendas]))}]}]
     ["/create"
      {:name :routes/meetings.create
-      :view meeting-views/create-meeting-form
+      :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/agenda"
      {:name :routes/meetings.agenda

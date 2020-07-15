@@ -1,9 +1,10 @@
 (ns meetly.meeting.interface.views.agenda
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [ajax.core :as ajax]))
+            [ajax.core :as ajax]
+            [meetly.meeting.interface.config :refer [config]]))
 
-(defn new-agenda-local
+(defn- new-agenda-local
   "This function formats the agenda-form input and saves it locally to the db until
   the discussion is created fully. `field` can be `title` or `description`."
   [field content suffix]
@@ -11,7 +12,10 @@
     :title (rf/dispatch [:agenda/update-title content suffix])
     :description (rf/dispatch [:agenda/update-description content suffix])))
 
-(defn add-form [numbered-suffix]
+(defn- new-agenda-form
+  "A form for creating a new agenda. The new agenda is automatically saved in the
+  app-state according to the suffix."
+  [numbered-suffix]
   [:div.add-agenda-div {:key numbered-suffix}
    [:form {:id (str "agenda-" numbered-suffix)}
     [:label {:for "title"} "Agenda-point: "]
@@ -28,25 +32,29 @@
     [:br]]
    [:br]])
 
-(defn add-agenda-button []
+(defn- add-agenda-button []
   [:input {:type "button" :value "+ More Agenda +"
            :on-click #(rf/dispatch [:increase-agenda-forms])}])
 
-(defn submit-agenda-button []
+(defn- submit-agenda-button []
   [:input {:type "button" :value "Start Meetly"
            :on-click #(rf/dispatch [:send-agendas])}])
 
-(defn agenda-view []
+(defn agenda-view
+  "Shows the view for adding one or more agendas."
+  []
   [:div
    [:h1 "Add Agenda!"]
    [:h2 "For Meeting: " (:title @(rf/subscribe [:meeting/last-added]))]
    (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
-     (add-form agenda-num))
+     (new-agenda-form agenda-num))
    [add-agenda-button]
    [:br]
    [submit-agenda-button]])
 
-(defn agenda-in-meeting []
+(defn agenda-in-meeting-view
+  "The view of an agenda which gets embedded inside a meeting view."
+  []
   [:div.test
    (let [agendas @(rf/subscribe [:current-agendas])]
      (for [agenda agendas]
@@ -62,7 +70,7 @@
   :send-agendas
   (fn [{:keys [db]} _]
     {:http-xhrio {:method :post
-                  :uri "http://localhost:3000/agendas/add"
+                  :uri (str (:rest-backend config) "/agendas/add")
                   :params {:agendas (get-in db [:agenda :all] [])
                            :meeting-id (-> db :meeting/added :id)}
                   :format (ajax/json-request-format)
@@ -74,7 +82,7 @@
   :load-agendas
   (fn [_ [_ hash]]
     {:http-xhrio {:method :get
-                  :uri (str "http://localhost:3000/agendas/by-meeting-hash/" hash)
+                  :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:set-current-agendas]

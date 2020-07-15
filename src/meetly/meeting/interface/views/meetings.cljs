@@ -2,11 +2,13 @@
   (:require [re-frame.core :as rf]
             [oops.core :refer [oget]]
             [ajax.core :as ajax]
-            [meetly.meeting.interface.views.agenda :as agenda-views]))
+            [meetly.meeting.interface.views.agenda :as agenda-views]
+            [meetly.meeting.interface.config :refer [config]]))
 
 ;; #### Helpers ####
 
 (defn- new-meeting-helper
+  "Creates a new meeting with the form from `create-meeting-form`."
   [form-elements]
   (rf/dispatch
     [:new-meeting
@@ -18,7 +20,9 @@
 
 ;; #### Views ####
 
-(defn create-meeting-form []
+(defn create-meeting-form-view
+  "A view with a form that creates a meeting properly."
+  []
   [:div.create-meeting-form
    [:form {:on-submit (fn [e] (.preventDefault e)
                         (new-meeting-helper (oget e [:target :elements]))
@@ -31,16 +35,19 @@
     [:input#end-date {:type "datetime-local" :name "end-date"}] [:br]
     [:input {:type "submit" :value "Step 2: Add Agenda"}]]])
 
-(defn single-meeting
+(defn single-meeting-view
+  "Show a single meeting and all its Agendas."
   []
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
     [:div
      [:h2 (:title current-meeting)]
      [:p (:description current-meeting)]
      [:hr]
-     [agenda-views/agenda-in-meeting]]))
+     [agenda-views/agenda-in-meeting-view]]))
 
-(defn meetings-list []
+(defn meetings-list-view
+  "Shows a list of all meetings."
+  []
   [:div.meetings-list
    [:h3 "Meetings"]
    (let [meetings @(rf/subscribe [:meetings])]
@@ -60,16 +67,6 @@
          "Go to Meetly: " (:share-hash meeting)]
         [:hr]]))])
 
-(defn meetings-view []
-  [:div
-   [:h1 "Meetly Central"]
-   [:hr]
-   [:h2 "Meeting controls"]
-   [create-meeting-form]
-   [:hr]
-   [meetings-list]
-   [:hr]])
-
 ;; #### Events ####
 
 (rf/reg-event-db
@@ -88,7 +85,7 @@
   (fn [{:keys [db]} [_ hash]]
     (when-not (get-in db [:meeting :selected])
       {:http-xhrio {:method :get
-                    :uri (str "http://localhost:3000/meeting/by-hash/" hash)
+                    :uri (str (:rest-backend config) "/meeting/by-hash/" hash)
                     :format (ajax/json-request-format)
                     :response-format (ajax/json-response-format {:keywords? true})
                     :on-success [:select-current-meeting]
@@ -99,7 +96,7 @@
   (fn [{:keys [db]} [_ meeting]]
     {:db (update db :meetings conj meeting)
      :http-xhrio {:method :post
-                  :uri "http://localhost:3000/meeting/add"
+                  :uri (str (:rest-backend config) "/meeting/add")
                   :params {:meeting meeting}
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
