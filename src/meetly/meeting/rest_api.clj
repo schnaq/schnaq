@@ -9,7 +9,8 @@
             [meetly.config :as config]
             [clojure.pprint :as pp]
             [clojure.data.json :as json]
-            [meetly.meeting.database :as db])
+            [meetly.meeting.database :as db]
+            [meetly.meeting.dialog-connector :as dialogs])
   (:import (java.util Date)))
 
 (defn- date->epoch-str
@@ -87,6 +88,13 @@
   (let [meeting-hash (get-in req [:route-params :hash])]
     (response {:agendas (db/agendas-by-meeting-hash meeting-hash)})))
 
+(defn- all-starting-conclusions
+  "Returns all conclusions belonging to starting-arguments of discussion with id `id`.
+  Returns a list of conclusions over the wire."
+  [req]
+  (let [id (get-in req [:route-params :id])]
+    (response {:conclusions (dialogs/starting-conclusions id)})))
+
 (defroutes app-routes
            (GET "/" [] index-page)
            (GET "/meetings" [] all-meetings)
@@ -94,6 +102,7 @@
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+           (GET "/agenda/starting-conclusions/:id" [] all-starting-conclusions)
            (route/not-found "Error, page not found!"))
 
 
