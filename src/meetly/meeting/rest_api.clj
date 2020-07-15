@@ -39,22 +39,25 @@
       (update :meeting/end-date date->epoch-str)
       json/write-str))
 
-(defn- all-meetings [_req]
+(defn- all-meetings
   "Returns all meetings from the db. Cleaned for the wire."
+  [_req]
   (response (fetch-meetings)))
 
-(defn- index-page [req]
+(defn- index-page
   "Returns an index page placeholder."
+  [req]
   {:status 200
    :headers {"Content-Type" "text/html"}
    :body (->
            (pp/pprint req)
            (str "Hello there, General Kenobi!"))})
 
-(defn- add-meeting [req]
+(defn- add-meeting
   "Adds a meeting to the database.
   Converts the epoch dates it receives into java Dates.
   Returns the id of the newly-created meeting as `:id-created`."
+  [req]
   (let [meeting (-> req :body :meeting)
         new-id (db/add-meeting (-> meeting
                                    (update :end-date epoch->date)
@@ -62,8 +65,9 @@
     (response {:text "Meeting Added"
                :id-created new-id})))
 
-(defn- add-agendas [req]
+(defn- add-agendas
   "Adds a list of agendas to the database."
+  [req]
   (let [agendas (-> req :body :agendas vals)
         meeting-id (-> req :body :meeting-id)]
     (doseq [agenda-point agendas]
