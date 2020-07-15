@@ -81,18 +81,19 @@
         (assoc :meeting id)
         (dissoc :agenda/meeting))))
 
-(defn agendas-by-meeting
+(defn agendas-by-meeting-hash
   "Return all agendas belonging to a certain meeting. Ready for the wire."
-  [meeting-id]
+  [hash]
   (map clean-agenda
        (d/q
          '[:find (pull ?agendas [[:agenda/title :as :title]
                                  [:agenda/description :as :description]
                                  :agenda/meeting
                                  [:agenda/discussion-id :as :discussion-id]])
-           :in $ ?meeting-id
-           :where [?agendas :agenda/meeting ?meeting-id]]
-         (d/db (new-connection)) meeting-id)))
+           :in $ ?hash
+           :where [?agendas :agenda/meeting ?meeting]
+           [?meeting :meeting/share-hash ?hash]]
+         (d/db (new-connection)) hash)))
 
 (comment
   (init)
@@ -104,5 +105,5 @@
   (all-meetings)
   (add-agenda-point "nico" "ist der" 17592186045445)
   (meeting-by-hash "897aasdha-12839hd-123dfa")
-  (agendas-by-meeting 17592186045445)
+  (agendas-by-meeting-hash "b1c9676f-3a5d-4c6d-b63b-6b18144efdd7")
   :end)

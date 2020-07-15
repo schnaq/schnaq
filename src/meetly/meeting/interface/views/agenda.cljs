@@ -72,19 +72,23 @@
 
 (rf/reg-event-fx
   :load-agendas
-  (fn [{:keys [db]} _]
-    (let [meeting-id (get-in db [:meeting :selected :id])]
-      {:http-xhrio {:method :get
-                    :uri (str "http://localhost:3000/agendas/by-meeting/" meeting-id)
-                    :format (ajax/json-request-format)
-                    :response-format (ajax/json-response-format {:keywords? true})
-                    :on-success [:set-current-agendas]
-                    :on-failure [:ajax-failure]}})))
+  (fn [{:keys [db]} [_ hash]]
+    {:http-xhrio {:method :get
+                  :uri (str "http://localhost:3000/agendas/by-meeting-hash/" hash)
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:set-current-agendas]
+                  :on-failure [:ajax-failure]}}))
 
 (rf/reg-event-db
   :set-current-agendas
   (fn [db [_ response]]
     (assoc-in db [:agendas :current] (:agendas response))))
+
+(rf/reg-event-db
+  :clear-current-agendas
+  (fn [db _]
+    (assoc-in db [:agendas :current] [])))
 
 (rf/reg-event-db
   :increase-agenda-forms

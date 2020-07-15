@@ -80,8 +80,8 @@
 
 (defn agendas-by-meeting
   [req]
-  (let [meeting-id (get-in req [:route-params :id])]
-    (response {:agendas (db/agendas-by-meeting (bigint meeting-id))})))
+  (let [meeting-hash (get-in req [:route-params :hash])]
+    (response {:agendas (db/agendas-by-meeting-hash meeting-hash)})))
 
 (defroutes app-routes
            (GET "/" [] hello-name)
@@ -89,7 +89,7 @@
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
-           (GET "/agendas/by-meeting/:id" [] agendas-by-meeting)
+           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting)
            (route/not-found "Error, page not found!"))
 
 

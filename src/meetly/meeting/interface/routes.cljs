@@ -34,7 +34,9 @@
                      :start (fn [{:keys [path]}]
                               (let [hash (:share-hash path)]
                                 (rf/dispatch [:load-meeting-by-share-hash hash])
-                                (rf/dispatch [:load-agendas])))}]}]
+                                (rf/dispatch [:load-agendas hash])))
+                     :stop (fn []
+                             (rf/dispatch [:clear-current-agendas]))}]}]
     ["/create"
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form
