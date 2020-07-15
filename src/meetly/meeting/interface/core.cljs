@@ -6,12 +6,16 @@
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.coercion.spec :as reitit-spec]
             [meetly.meeting.interface.views :as views]
+    ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
+            [meetly.meeting.interface.views.startpage]
+            [meetly.meeting.interface.views.agenda]
+            [meetly.meeting.interface.views.clock]
+            [meetly.meeting.interface.views.meetings]
             [meetly.meeting.interface.subs]
             [meetly.meeting.interface.events]
     ;; IMPORTANT: If you use subs and events in another module, you need to require it
     ;; somewhere where it will be loaded like this core module.
             [meetly.meeting.interface.routes :as routes]))
-
 
 ;; -- Entry Point -------------------------------------------------------------
 
@@ -51,6 +55,7 @@
   ;; after shadow-cljs hot-reloads code. We force a UI update by clearing
   ;; the Reframe subscription cache.
   (rf/clear-subscription-cache!)
+  (init-routes!)
   (render))
 
 (defn init

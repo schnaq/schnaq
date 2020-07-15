@@ -1,78 +1,6 @@
 (ns meetly.meeting.interface.views
   (:require [reagent.dom]
-            [re-frame.core :as rf]
-            [clojure.string :as str]
-            [oops.core :refer [oget]]))
-
-;; -- Domino 5 - View Functions ----------------------------------------------
-
-(defn clock
-  []
-  [:div.example-clock
-   {:style {:color @(rf/subscribe [:time-color])}}
-   (-> @(rf/subscribe [:time])
-       .toTimeString
-       (str/split " ")
-       first)])
-
-(defn color-input
-  []
-  [:div.color-input
-   "Time color: "
-   [:input {:type "text"
-            :value @(rf/subscribe [:time-color])
-            :on-change #(rf/dispatch [:time-color-change (-> % .-target .-value)])}]]) ;; <---
-
-(defn- new-meeting-helper
-  [form-elements]
-  (rf/dispatch
-    [:new-meeting
-     {:title (oget form-elements [:title :value])
-      :description (oget form-elements [:description :value])
-      :end-date (.getTime (js/Date. (oget form-elements [:end-date :value])))
-      :share-hash (str (random-uuid))
-      :start-date (.now js/Date)}]))
-
-(defn create-meeting-form []
-  [:div.create-meeting-form
-   [:form {:on-submit (fn [e] (.preventDefault e)
-                        (new-meeting-helper (oget e [:target :elements])))}
-    [:label {:for "title"} "Title: "]
-    [:input#title {:type "text" :name "title"}] [:br]
-    [:label {:for "description"} "Description: "]
-    [:textarea#description {:name "description"}] [:br]
-    [:label {:for "end-date"} "End Date: "]
-    [:input#end-date {:type "datetime-local" :name "end-date"}] [:br]
-    [:input {:type "submit" :value "Create Meetly"}]]])
-
-(defn meetings-list []
-  [:div.meetings-list
-   [:h3 "Meetings"]
-   (let [meetings @(rf/subscribe [:meetings])]
-     (for [meeting meetings]
-       [:div {:key (random-uuid)}
-        [:p (:title meeting) " - " (:description meeting)]
-        [:p "Start: "
-         ;; TODO use joda.time in final application
-         (str (js/Date. (js/Number. (:start-date meeting)))) " - End Date: "
-         (str (js/Date. (js/Number. (:end-date meeting))))]
-        [:p "Share-Hash: " (:share-hash meeting)]
-        [:hr]]))])
-
-(defn meetings-view []
-  [:div
-   [:h1 "Meetly Central"]
-   [:hr]
-   [:h2 "Meeting controls"]
-   [create-meeting-form]
-   [:hr]
-   [meetings-list]
-   [:hr]])
-
-(defn re-frame-example-view []
-  [:div
-   [clock]
-   [color-input]])
+            [re-frame.core :as rf]))
 
 (defn navigation-button
   "Navigates you via frontend-routing to the desired `route`."
@@ -92,16 +20,53 @@
    [:h2 "Examples"]
    (navigation-button :routes/clock "--> Re-Frame Clock example")
    [:h2 "Meetings-Related views"]
-   (navigation-button :routes/meetings "--> Create / Show Meetings View")])
+   (navigation-button :routes/meetings "--> Show Meetings View")
+   (navigation-button :routes/meetings.create "--> Create Meetly View")
+   (navigation-button :routes/meetings.agenda "--> Create Agendas View")
+   [:h2 "Startpage"]
+   (navigation-button :routes/startpage "--> Startpage")])
 
-(defn main-page
-  []
-  (let [current-route @(rf/subscribe [:current-route])]
+
+(defn- header []
+  ;; collapsable navbar
+  [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
+   ;; logo
+   [:div.container
+    [:a.navbar-brand {:href "#/startpage"}
+     [:img.d-inline-block.align-middle.mr-2 {:src "imgs/logo.png" :width "140" :alt ""}]]
+    ;; hamburger
+    [:button.navbar-toggler
+     {:type "button" :data-toggle "collapse" :data-target "#navbarSupportedContent"
+      :aria-controls "navbarSupportedContent" :aria-expanded "false" :aria-label "Toggle navigation"}
+     [:span.navbar-toggler-icon]]
+    ;; menu items
     [:div
-     (when current-route
-       [(-> current-route :data :view)])]))
+     {:id "navbarSupportedContent"
+      :class "collapse navbar-collapse"}
+     [:ul.navbar-nav.ml-auto
+      ;[:li.nav-item.active [:a.nav-link {:href "#"} "Home" [:span.sr-only "(current)"]]]
+      [:a.nav-link {:href "#/startpage"} "Home" [:span.sr-only "(current)"]]
+      [:li.nav-item [:a.nav-link {:href "#/clock"} "Examples"]]
+      [:li.nav-item [:a.nav-link {:href "#/meetings/"} "Show Meetings"]]
+      [:li.nav-item [:a.nav-link {:href "#/meetings/create"} "Create Meeting"]]
+      [:li.nav-item [:a.nav-link {:href "#/meetings/agenda"} "Create Agenda"]]
+      [:li.nav-item [:a.nav-link {:href "#"} "Overview"]]]]]])
+
+(defn- base-page
+  []
+  (let [current-route @(rf/subscribe [:current-route])
+        errors @(rf/subscribe [:error-occurred])
+        ajax-error (:ajax errors)]
+    [:div
+
+     [header]
+     [:div.container
+
+      (when ajax-error
+        [:h1 "Error: " ajax-error])
+      (when current-route
+        [(-> current-route :data :view)])]]))
 
 (defn root []
   [:div#root
-   {:style {:width "100vw"}}
-   [main-page]])
+   [base-page]])
