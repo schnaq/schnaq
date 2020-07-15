@@ -46,4 +46,18 @@
   (fn [db [_ all-meetings]]
     (assoc db :meetings all-meetings)))
 
+(rf/reg-event-db
+  :set-username
+  (fn [db [_ username]]
+    (assoc-in db [:user :name] username)))
+
+(rf/reg-event-db
+  :hide-name-input
+  (fn [db _]
+    (assoc-in db [:controls :username-input :show?] false)))
+
+(rf/reg-event-db
+  :show-name-input
+  (fn [db _]
+    (assoc-in db [:controls :username-input :show?] true)))
 

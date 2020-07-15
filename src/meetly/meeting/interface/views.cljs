@@ -1,5 +1,6 @@
 (ns meetly.meeting.interface.views
   (:require [reagent.dom]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]))
 
 (defn navigation-button
@@ -26,6 +27,18 @@
    [:h2 "Startpage"]
    (navigation-button :routes/startpage "--> Startpage")])
 
+(defn- name-input
+  "An input, where the user can set their name. Happens automatically by typing."
+  []
+  [:form.form-inline
+   {:on-submit (fn [e]
+                 (.preventDefault e)
+                 (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
+                 (rf/dispatch [:hide-name-input]))}
+   [:label {:for "name-input"} "Enter your name: "]
+   [:input#name-input
+    {:type "text" :name "name-input"}]
+   [:input.btn.btn-primary {:type "submit" :value "Set Name"}]])
 
 (defn- header []
   ;; collapsable navbar
@@ -52,16 +65,34 @@
       [:li.nav-item [:a.nav-link {:href "#/meetings/agenda"} "Create Agenda"]]
       [:li.nav-item [:a.nav-link {:href "#"} "Overview"]]]]]])
 
+(defn- show-input-button
+  "A button triggering the showing of the name field."
+  []
+  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} "Change Name"])
+
+(defn- username-bar-view
+  "A bar containing all user related utilities and information."
+  []
+  (let [username @(rf/subscribe [:username])
+        show-input? @(rf/subscribe [:show-username-input?])]
+    [:div.row
+     [:div.col-6
+      [:p "Welcome, " username]]
+     [:div.col-6
+      [:div.float-right
+       (if show-input?
+         [name-input]
+         [show-input-button])]]]))
+
 (defn- base-page
   []
   (let [current-route @(rf/subscribe [:current-route])
         errors @(rf/subscribe [:error-occurred])
         ajax-error (:ajax errors)]
     [:div
-
      [header]
      [:div.container
-
+      [username-bar-view]
       (when ajax-error
         [:h1 "Error: " ajax-error])
       (when current-route
