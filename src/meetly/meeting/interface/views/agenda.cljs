@@ -47,7 +47,7 @@
    [:h1 "Add Agenda!"]
    [:h2 "For Meeting: " (:title @(rf/subscribe [:meeting/last-added]))]
    (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
-     (new-agenda-form agenda-num))
+     [new-agenda-form agenda-num])
    [add-agenda-button]
    [:br]
    [submit-agenda-button]])

@@ -21,7 +21,7 @@
      :link-text "Home"
      :controllers []}]
    ["meetings"
-    ["/"
+    [""
      {:name :routes/meetings
       :view meeting-views/meetings-list-view
       :link-text "Meetings"
@@ -43,9 +43,10 @@
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/agenda"
-     {:name :routes/meetings.agenda
-      :view agenda-views/agenda-view
-      :link-text "Add Agenda"}
+     [""
+      {:name :routes/meetings.agenda
+       :view agenda-views/agenda-view
+       :link-text "Add Agenda"}]
      ["/:id"
       {:controllers [{:parameters {:path [:id]}
                       :start (fn [{:keys [path]}]
