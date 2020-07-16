@@ -26,32 +26,41 @@
        [:p (:description agenda)]
        [:hr]
        (for [conclusion conclusions]
-         [:div {:key (random-uuid)}
+         [:div {:key (:statement/content conclusion)}
           [single-statement-view conclusion]])]]]))
 
 ;; #### Events ####
 
 (rf/reg-event-fx
-  :load-starting-conclusions
+  :start-discussion
   (fn [{:keys [db]} _]
     (let [discussion-id (-> db :agenda :chosen :discussion-id)]
       (if discussion-id
         {:http-xhrio {:method :get
-                      :uri (str (:rest-backend config) "/agenda/" discussion-id "/starting-conclusions")
+                      :uri (str (:rest-backend config) "/start-discussion/" discussion-id)
                       :format (ajax/json-request-format)
                       :response-format (ajax/json-response-format {:keywords? true})
-                      :on-success [:display-starting-conclusions]
+                      :on-success [:set-current-discussion-steps]
                       :on-failure [:ajax-failure]}}
-        {:dispatch-later [{:ms 20 :dispatch [:load-starting-conclusions]}]}))))
+        {:dispatch-later [{:ms 20 :dispatch [:start-discussion]}]}))))
 
 (rf/reg-event-db
-  :display-starting-conclusions
+  :set-current-discussion-steps
   (fn [db [_ response]]
-    (assoc-in db [:discussion :starting-conclusion] (:conclusions response))))
+    (let [options (:discussion-reactions response)]
+      (assoc-in db [:discussion :options] options))))
 
 ;; #### Subs ####
 
 (rf/reg-sub
   :starting-conclusions
   (fn [db _]
-    (get-in db [:discussion :starting-conclusion] [])))
+    (let [options (get-in db [:discussion :options])
+          arguments (-> options
+                        first second
+                        :present/arguments)]
+      (->>
+        arguments
+        (filter #(not= "argument.type/undercut" (:argument/type %)))
+        (map :argument/conclusion)
+        distinct))))

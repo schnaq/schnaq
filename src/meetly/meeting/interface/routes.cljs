@@ -56,7 +56,7 @@
         :parameters {:path {:id string?}}
         :view discussion-views/all-positions-view
         :controllers [{:start (fn []
-                                (rf/dispatch [:load-starting-conclusions]))}]}]]]]
+                                (rf/dispatch [:start-discussion]))}]}]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view
