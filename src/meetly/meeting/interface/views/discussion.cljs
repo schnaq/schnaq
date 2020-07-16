@@ -53,14 +53,20 @@
 ;; #### Subs ####
 
 (rf/reg-sub
-  :starting-conclusions
+  :discussion-options
   (fn [db _]
-    (let [options (get-in db [:discussion :options])
-          arguments (-> options
-                        first second
-                        :present/arguments)]
+    (get-in db [:discussion :options])))
+
+(rf/reg-sub
+  :starting-conclusions
+  (fn [_]
+    (rf/subscribe [:discussion-options]))
+  (fn [options]
+    (when (= "argument/chosen" (ffirst options))
       (->>
-        arguments
+        options
+        first second
+        :present/arguments
         (filter #(not= "argument.type/undercut" (:argument/type %)))
         (map :argument/conclusion)
         distinct))))
