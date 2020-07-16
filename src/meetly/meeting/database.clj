@@ -83,19 +83,56 @@
         (assoc :meeting id)
         (dissoc :agenda/meeting))))
 
+(def ^:private agenda-pattern
+  [[:agenda/title :as :title]
+   [:agenda/description :as :description]
+   :agenda/meeting
+   [:agenda/discussion-id :as :discussion-id]])
+
 (defn agendas-by-meeting-hash
   "Return all agendas belonging to a certain meeting. Ready for the wire."
   [hash]
   (map clean-agenda
        (d/q
-         '[:find (pull ?agendas [[:agenda/title :as :title]
-                                 [:agenda/description :as :description]
-                                 :agenda/meeting
-                                 [:agenda/discussion-id :as :discussion-id]])
-           :in $ ?hash
+         '[:find (pull ?agendas agenda-pattern)
+           :in $ ?hash agenda-pattern
            :where [?agendas :agenda/meeting ?meeting]
            [?meeting :meeting/share-hash ?hash]]
-         (d/db (new-connection)) hash)))
+         (d/db (new-connection)) hash agenda-pattern)))
+
+(defn agenda-by-discussion-id
+  "Returns an agenda which has the corresponding `discussion-id`."
+  [discussion-id]
+  (clean-agenda
+    (first
+      (d/q
+        '[:find (pull ?agenda agenda-pattern)
+          :in $ ?discussion-id agenda-pattern
+          :where [?agenda :agenda/discussion-id ?discussion-id]]
+        (d/db (new-connection)) discussion-id agenda-pattern))))
+
+(defn- author-exists?
+  "Returns whether a certain author with `nickname` already exists in the db."
+  [nickname]
+  (seq
+    (d/q
+      '[:find ?lower-name
+        :in $ ?author-name
+        :where [_ :author/nickname ?original-nickname]
+        [(.toLowerCase ^String ?original-nickname) ?lower-name]
+        [(= ?lower-name ?author-name)]]
+      (d/db (new-connection)) (.toLowerCase ^String nickname))))
+
+(defn add-author
+  "Add a new author to the database."
+  [nickname]
+  (transact [{:author/nickname nickname}]))
+
+(defn add-author-if-not-exists
+  "Adds an author if they do not exist yet."
+  [nickname]
+  (when-not (author-exists? nickname)
+    (add-author nickname)))
 
 (comment
   (init)
@@ -105,7 +142,11 @@
                 :end-date (now)
                 :share-hash "897aasdha-12839hd-123dfa"})
   (all-meetings)
-  (add-agenda-point "nico" "ist der" 17592186045445)
+  (add-agenda-point "wegi" "Test-Beschreibung, wichtig!" 17592186045445)
   (meeting-by-hash "897aasdha-12839hd-123dfa")
   (agendas-by-meeting-hash "b1c9676f-3a5d-4c6d-b63b-6b18144efdd7")
+  (agenda-by-discussion-id "8f57fd87-ab35-4a50-99fb-73af3e07d4b5")
+  (add-author "Shredder")
+  (author-exists? "shredder")
+  (add-author-if-not-exists "Shredder")
   :end)

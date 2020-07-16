@@ -11,3 +11,13 @@
   :error-occurred
   (fn [db]
     (:error db)))
+
+(rf/reg-sub
+  :username
+  (fn [db]
+    (get-in db [:user :name] "Anonymous")))
+
+(rf/reg-sub
+  :show-username-input?
+  (fn [db]
+    (get-in db [:controls :username-input :show?] true)))

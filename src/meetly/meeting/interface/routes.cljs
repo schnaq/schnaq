@@ -4,6 +4,7 @@
             [meetly.meeting.interface.views.agenda :as agenda-views]
             [meetly.meeting.interface.views.clock :as clock-views]
             [meetly.meeting.interface.views.meetings :as meeting-views]
+            [meetly.meeting.interface.views.discussion :as discussion-views]
             [re-frame.core :as rf]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
@@ -20,7 +21,7 @@
      :link-text "Home"
      :controllers []}]
    ["meetings"
-    ["/"
+    [""
      {:name :routes/meetings
       :view meeting-views/meetings-list-view
       :link-text "Meetings"
@@ -42,16 +43,25 @@
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/agenda"
-     {:name :routes/meetings.agenda
-      :view agenda-views/agenda-view
-      :link-text "Add Agenda"}]]
+     [""
+      {:name :routes/meetings.agenda
+       :view agenda-views/agenda-view
+       :link-text "Add Agenda"}]
+     ["/:id"
+      {:controllers [{:parameters {:path [:id]}
+                      :start (fn [{:keys [path]}]
+                               (rf/dispatch [:load-agenda-information (:id path)]))}]}
+      ["/start"
+       {:name :routes/meetings.discussion.start
+        :parameters {:path {:id string?}}
+        :view discussion-views/all-positions-view
+        :controllers [{:start (fn []
+                                (rf/dispatch [:start-discussion]))}]}]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view
-     :link-text "Clock Re-Frame Example"
-     :controllers []}]
+     :link-text "Clock Re-Frame Example"}]
    ["startpage"
     {:name :routes/startpage
      :view startpage-views/startpage-view
-     :link-text "Meetly"
-     :controllers []}]])
+     :link-text "Meetly"}]])

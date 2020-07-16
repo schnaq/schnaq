@@ -59,7 +59,7 @@
          (str (js/Date. (js/Number. (:start-date meeting)))) " - End Date: "
          (str (js/Date. (js/Number. (:end-date meeting))))]
         [:p "ID: " (:id meeting)]
-        [:button
+        [:button.btn.btn-success
          {:on-click (fn []
                       (rf/dispatch [:navigate :routes/meetings.show
                                     {:share-hash (:share-hash meeting)}])

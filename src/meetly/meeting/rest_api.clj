@@ -9,7 +9,8 @@
             [meetly.config :as config]
             [clojure.pprint :as pp]
             [clojure.data.json :as json]
-            [meetly.meeting.database :as db])
+            [meetly.meeting.database :as db]
+            [meetly.meeting.dialog-connector :as dialogs])
   (:import (java.util Date)))
 
 (defn- date->epoch-str
@@ -39,22 +40,25 @@
       (update :meeting/end-date date->epoch-str)
       json/write-str))
 
-(defn- all-meetings [_req]
+(defn- all-meetings
   "Returns all meetings from the db. Cleaned for the wire."
+  [_req]
   (response (fetch-meetings)))
 
-(defn- index-page [req]
+(defn- index-page
   "Returns an index page placeholder."
+  [req]
   {:status 200
    :headers {"Content-Type" "text/html"}
    :body (->
            (pp/pprint req)
            (str "Hello there, General Kenobi!"))})
 
-(defn- add-meeting [req]
+(defn- add-meeting
   "Adds a meeting to the database.
   Converts the epoch dates it receives into java Dates.
   Returns the id of the newly-created meeting as `:id-created`."
+  [req]
   (let [meeting (-> req :body :meeting)
         new-id (db/add-meeting (-> meeting
                                    (update :end-date epoch->date)
@@ -62,8 +66,16 @@
     (response {:text "Meeting Added"
                :id-created new-id})))
 
-(defn- add-agendas [req]
+(defn- add-author
+  "Adds an author to the database."
+  [req]
+  (let [author (-> req :body :nickname)]
+    (db/add-author-if-not-exists author)
+    (response {:text "POST successful"})))
+
+(defn- add-agendas
   "Adds a list of agendas to the database."
+  [req]
   (let [agendas (-> req :body :agendas vals)
         meeting-id (-> req :body :meeting-id)]
     (doseq [agenda-point agendas]
@@ -83,13 +95,28 @@
   (let [meeting-hash (get-in req [:route-params :hash])]
     (response {:agendas (db/agendas-by-meeting-hash meeting-hash)})))
 
+(defn- agenda-by-discussion-id
+  "Returns the agenda tied to a certain discussion-id."
+  [req]
+  (let [discussion-id (-> req :route-params :discussion-id)]
+    (response {:agenda (db/agenda-by-discussion-id discussion-id)})))
+
+(defn- start-discussion
+  "Start a new discussion for an agenda point."
+  [req]
+  (let [discussion-id (-> req :route-params :discussion-id)]
+    (response {:discussion-reactions (dialogs/start-discussion discussion-id)})))
+
 (defroutes app-routes
            (GET "/" [] index-page)
            (GET "/meetings" [] all-meetings)
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
+           (POST "/author/add" [] add-author)
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+           (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
+           (GET "/start-discussion/:discussion-id" [] start-discussion)
            (route/not-found "Error, page not found!"))
 
 

@@ -47,7 +47,7 @@
    [:h1 "Add Agenda!"]
    [:h2 "For Meeting: " (:title @(rf/subscribe [:meeting/last-added]))]
    (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
-     (new-agenda-form agenda-num))
+     [new-agenda-form agenda-num])
    [add-agenda-button]
    [:br]
    [submit-agenda-button]])
@@ -55,14 +55,19 @@
 (defn agenda-in-meeting-view
   "The view of an agenda which gets embedded inside a meeting view."
   []
-  [:div.test
+  [:div
    (let [agendas @(rf/subscribe [:current-agendas])]
      (for [agenda agendas]
-       [:div {:key (random-uuid)}
+       [:div.card
+        {:key (random-uuid)
+         :on-click (fn []
+                     (rf/dispatch [:navigate :routes/meetings.discussion.start
+                                   {:id (:discussion-id agenda)}])
+                     (rf/dispatch [:choose-agenda agenda]))}
         [:p "Agenda: " (:title agenda)]
         [:p "Mehr Infos: " (:description agenda)]
         [:p "Discussion-ID: " (:discussion-id agenda)]
-        [:hr]]))])
+        [:br]]))])
 
 ;; #### Events ####
 
@@ -87,6 +92,17 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:set-current-agendas]
                   :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-fx
+  :load-agenda-information
+  (fn [{:keys [db]} [_ discussion-id]]
+    (when-not (-> db :agenda :chosen)
+      {:http-xhrio {:method :get
+                    :uri (str (:rest-backend config) "/agenda/" discussion-id)
+                    :format (ajax/json-request-format)
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success [:set-response-as-agenda]
+                    :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-db
   :set-current-agendas
@@ -118,6 +134,16 @@
   (fn [db _]
     (assoc db :agenda {:number-of-forms 1 :all {}})))
 
+(rf/reg-event-db
+  :choose-agenda
+  (fn [db [_ agenda]]
+    (assoc-in db [:agenda :chosen] agenda)))
+
+(rf/reg-event-db
+  :set-response-as-agenda
+  (fn [db [_ response]]
+    (assoc-in db [:agenda :chosen] (:agenda response))))
+
 ;; #### Subs ####
 
 (rf/reg-sub
@@ -129,3 +155,8 @@
   :current-agendas
   (fn [db _]
     (get-in db [:agendas :current])))
+
+(rf/reg-sub
+  :chosen-agenda
+  (fn [db _]
+    (get-in db [:agenda :chosen])))

@@ -38,4 +38,12 @@
    {:db/ident :agenda/discussion-id
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "An id belonging to the (foreign) discussion represented by this agenda"}])
+    :db/unique :db.unique/identity
+    :db/doc "An id belonging to the (foreign) discussion represented by this agenda"}
+   ;; The author is a duplicate of dialog.core author. We need to keep this until we wire it in.
+   {:db/ident :author/nickname
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "The nickname of an author"}])
+

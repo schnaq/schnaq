@@ -8,5 +8,6 @@
                :description "Whatever"
                :share-hash "test-123-456"}]
    :current-page :home
+   :controls {:username-input {:show? false}}
    :agenda {:number-of-forms 1
             :all {}}})
