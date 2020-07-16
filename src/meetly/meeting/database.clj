@@ -114,14 +114,14 @@
 (defn- author-exists?
   "Returns whether a certain author with `nickname` already exists in the db."
   [nickname]
-  (not (empty?
-         (d/q
-           '[:find ?lower-name
-             :in $ ?author-name
-             :where [_ :author/nickname ?original-nickname]
-             [(.toLowerCase ^String ?original-nickname) ?lower-name]
-             [(= ?lower-name ?author-name)]]
-           (d/db (new-connection)) (.toLowerCase ^String nickname)))))
+  (seq
+    (d/q
+      '[:find ?lower-name
+        :in $ ?author-name
+        :where [_ :author/nickname ?original-nickname]
+        [(.toLowerCase ^String ?original-nickname) ?lower-name]
+        [(= ?lower-name ?author-name)]]
+      (d/db (new-connection)) (.toLowerCase ^String nickname)))) )
 
 (defn add-author
   "Add a new author to the database."
