@@ -89,11 +89,11 @@
     (response {:agendas (db/agendas-by-meeting-hash meeting-hash)})))
 
 (defn- all-starting-conclusions
-  "Returns all conclusions belonging to starting-arguments of discussion with id `id`.
+  "Returns all conclusions belonging to starting-arguments of `discusison-id`.
   Returns a list of conclusions over the wire."
   [req]
-  (let [id (get-in req [:route-params :id])]
-    (response {:conclusions (dialogs/starting-conclusions id)})))
+  (let [discussion-id (get-in req [:route-params :discussion-id])]
+    (response {:conclusions (dialogs/starting-conclusions discussion-id)})))
 
 (defn- agenda-by-discussion-id
   [req]
@@ -108,7 +108,7 @@
            (POST "/agendas/add" [] add-agendas)
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
            (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
-           (GET "/agenda/starting-conclusions/:id" [] all-starting-conclusions)
+           (GET "/agenda/:discussion-id/starting-conclusions" [] all-starting-conclusions)
            (route/not-found "Error, page not found!"))
 
 

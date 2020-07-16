@@ -42,7 +42,6 @@
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
-    ;; TODO the :id behind agenda should stand on its own and set the correct current agenda.
     ["/agenda"
      {:name :routes/meetings.agenda
       :view agenda-views/agenda-view
@@ -55,9 +54,8 @@
        {:name :routes/meetings.discussion.start
         :parameters {:path {:id string?}}
         :view discussion-views/all-positions-view
-        :controllers [{:parameters {:path [:id]}
-                       :start (fn [{:keys [path]}]
-                                (rf/dispatch [:load-starting-conclusions (:id path)]))}]}]]]]
+        :controllers [{:start (fn []
+                                (rf/dispatch [:load-starting-conclusions]))}]}]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view

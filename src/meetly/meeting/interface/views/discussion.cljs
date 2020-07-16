@@ -33,13 +33,16 @@
 
 (rf/reg-event-fx
   :load-starting-conclusions
-  (fn [_ [_ discussion-id]]
-    {:http-xhrio {:method :get
-                  :uri (str (:rest-backend config) "/agenda/starting-conclusions/" discussion-id)
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [:display-starting-conclusions]
-                  :on-failure [:ajax-failure]}}))
+  (fn [{:keys [db]} _]
+    (let [discussion-id (-> db :agenda :chosen :discussion-id)]
+      (if discussion-id
+        {:http-xhrio {:method :get
+                      :uri (str (:rest-backend config) "/agenda/" discussion-id "/starting-conclusions")
+                      :format (ajax/json-request-format)
+                      :response-format (ajax/json-response-format {:keywords? true})
+                      :on-success [:display-starting-conclusions]
+                      :on-failure [:ajax-failure]}}
+        {:dispatch-later [{:ms 20 :dispatch [:load-starting-conclusions]}]}))))
 
 (rf/reg-event-db
   :display-starting-conclusions
