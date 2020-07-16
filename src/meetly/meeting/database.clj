@@ -121,7 +121,7 @@
         :where [_ :author/nickname ?original-nickname]
         [(.toLowerCase ^String ?original-nickname) ?lower-name]
         [(= ?lower-name ?author-name)]]
-      (d/db (new-connection)) (.toLowerCase ^String nickname)))) )
+      (d/db (new-connection)) (.toLowerCase ^String nickname))))
 
 (defn add-author
   "Add a new author to the database."
