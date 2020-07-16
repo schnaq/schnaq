@@ -8,14 +8,13 @@
   "Display header animation video"
   []
   ;todo
-  [:div {:key (random-uuid)}
-   [:div.col-lg-6]])
+  [:div.col-lg-6])
 
 (defn- header []
   (base/header
     (data/labels :start-page-subheader)
     (data/labels :start-page-subheader-2)
-    [:div.pt-5 {:key (random-uuid)}
+    [:div.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
      [:div.row
       [:div.col-lg-6.icon-bullets
        (base/icon-bullet (data/img-path :icon-community) (data/labels :start-page-point-community))
@@ -25,7 +24,7 @@
 
 
 (defn- call-to-action
-  "Tell user to create a meetly now"
+  " Tell user to create a meetly now "
   []
   [:section.call-to-action
    [:div.container
@@ -37,7 +36,7 @@
        [:div.mx-auto.col-lg-10
         [:h3.mb-4 (data/labels :create-your-meeting)]
         [:button.btn.btn-primary
-         {:type "button"
+         {:type " button "
           :on-click #(rf/dispatch [:navigate :routes/meetings.create])}
          (data/labels :create-meetly-button)]
         [:p.pt-4 (data/labels :create-your-meeting-sub)]]]]]]])
@@ -45,7 +44,7 @@
 
 
 (defn- icons-grid
-  "Display features in a grid"
+  " Display features in a grid "
   []
   [:section.features-icons.text-center
    [:div.container
@@ -59,9 +58,9 @@
   [:br]
   [:input
    {:on-click #(rf/dispatch [:navigate :routes/meetings.create])
-    :type "button"
+    :type " button "
     :value (data/labels :create-meetly)
-    :style {:margin-bottom "1em"}}])
+    :style {:margin-bottom " 1em "}}])
 
 (defn- startpage-content []
   [:div
@@ -71,6 +70,6 @@
     [icons-grid]]])
 
 (defn startpage-view
-  "A view that represents the first page of meetly participation or creation."
+  " A view that represents the first page of meetly participation or creation. "
   []
   [startpage-content])
