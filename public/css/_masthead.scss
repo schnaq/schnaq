@@ -1,0 +1,43 @@
+$header-color: $primary;
+$header-opacity: 1;
+
+header.masthead {
+  position: relative;
+  background-color: $header-color;
+  opacity: $header-opacity;
+  padding-top: 1rem;
+
+  p {
+    line-height: 1.6;
+    font-size: 1.5rem;
+  }
+
+  .overlay {
+    position: absolute;
+    background-color: $gray-900;
+    height: 100%; 
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    padding-top: 2rem;
+    h1 {
+      font-size: 2.5rem;
+    }
+  }
+}
+
+.wavy-bottom {
+  fill: $header-color;
+  background-color: transparent;
+  width: 100%;
+  opacity: $header-opacity;
+  margin-top: -1rem;
+}
