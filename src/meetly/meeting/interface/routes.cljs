@@ -47,13 +47,17 @@
      {:name :routes/meetings.agenda
       :view agenda-views/agenda-view
       :link-text "Add Agenda"}
-     ["/:id/start"
-      {:name :routes/meetings.discussion.start
-       :parameters {:path {:id string?}}
-       :view discussion-views/all-positions-view
-       :controllers [{:parameters {:path [:id]}
+     ["/:id"
+      {:controllers [{:parameters {:path [:id]}
                       :start (fn [{:keys [path]}]
-                               (rf/dispatch [:load-starting-conclusions (:id path)]))}]}]]]
+                               (rf/dispatch [:load-agenda-information (:id path)]))}]}
+      ["/start"
+       {:name :routes/meetings.discussion.start
+        :parameters {:path {:id string?}}
+        :view discussion-views/all-positions-view
+        :controllers [{:parameters {:path [:id]}
+                       :start (fn [{:keys [path]}]
+                                (rf/dispatch [:load-starting-conclusions (:id path)]))}]}]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view

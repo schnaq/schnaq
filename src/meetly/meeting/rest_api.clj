@@ -95,6 +95,11 @@
   (let [id (get-in req [:route-params :id])]
     (response {:conclusions (dialogs/starting-conclusions id)})))
 
+(defn- agenda-by-discussion-id
+  [req]
+  (let [discussion-id (-> req :route-params :discussion-id)]
+    (response {:agenda (db/agenda-by-discussion-id discussion-id)})))
+
 (defroutes app-routes
            (GET "/" [] index-page)
            (GET "/meetings" [] all-meetings)
@@ -102,6 +107,7 @@
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+           (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
            (GET "/agenda/starting-conclusions/:id" [] all-starting-conclusions)
            (route/not-found "Error, page not found!"))
 

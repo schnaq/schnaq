@@ -38,4 +38,5 @@
    {:db/ident :agenda/discussion-id
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
     :db/doc "An id belonging to the (foreign) discussion represented by this agenda"}])

@@ -93,6 +93,17 @@
                   :on-success [:set-current-agendas]
                   :on-failure [:ajax-failure]}}))
 
+(rf/reg-event-fx
+  :load-agenda-information
+  (fn [{:keys [db]} [_ discussion-id]]
+    (when-not (-> db :agenda :chosen)
+      {:http-xhrio {:method :get
+                    :uri (str (:rest-backend config) "/agenda/" discussion-id)
+                    :format (ajax/json-request-format)
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success [:set-response-as-agenda]
+                    :on-failure [:ajax-failure]}})))
+
 (rf/reg-event-db
   :set-current-agendas
   (fn [db [_ response]]
@@ -127,6 +138,11 @@
   :choose-agenda
   (fn [db [_ agenda]]
     (assoc-in db [:agenda :chosen] agenda)))
+
+(rf/reg-event-db
+  :set-response-as-agenda
+  (fn [db [_ response]]
+    (assoc-in db [:agenda :chosen] (:agenda response))))
 
 ;; #### Subs ####
 
