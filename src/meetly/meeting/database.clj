@@ -111,6 +111,29 @@
           :where [?agenda :agenda/discussion-id ?discussion-id]]
         (d/db (new-connection)) discussion-id agenda-pattern))))
 
+(defn- author-exists?
+  "Returns whether a certain author with `nickname` already exists in the db."
+  [nickname]
+  (not (empty?
+         (d/q
+           '[:find ?lower-name
+             :in $ ?author-name
+             :where [_ :author/nickname ?original-nickname]
+             [(.toLowerCase ^String ?original-nickname) ?lower-name]
+             [(= ?lower-name ?author-name)]]
+           (d/db (new-connection)) (.toLowerCase ^String nickname)))))
+
+(defn add-author
+  "Add a new author to the database."
+  [nickname]
+  (transact [{:author/nickname nickname}]))
+
+(defn add-author-if-not-exists
+  "Adds an author if they do not exist yet."
+  [nickname]
+  (when-not (author-exists? nickname)
+    (add-author nickname)))
+
 (comment
   (init)
   (add-meeting {:title "Test 1"
@@ -123,4 +146,7 @@
   (meeting-by-hash "897aasdha-12839hd-123dfa")
   (agendas-by-meeting-hash "b1c9676f-3a5d-4c6d-b63b-6b18144efdd7")
   (agenda-by-discussion-id "8f57fd87-ab35-4a50-99fb-73af3e07d4b5")
+  (add-author "Shredder")
+  (author-exists? "shredder")
+  (add-author-if-not-exists "Shredder")
   :end)

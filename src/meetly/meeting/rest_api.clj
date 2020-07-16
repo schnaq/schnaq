@@ -66,6 +66,13 @@
     (response {:text "Meeting Added"
                :id-created new-id})))
 
+(defn- add-author
+  "Adds an author to the database."
+  [req]
+  (let [author (-> req :body :nickname)]
+    (db/add-author-if-not-exists author)
+    (response {:text "POST successful"})))
+
 (defn- add-agendas
   "Adds a list of agendas to the database."
   [req]
@@ -106,6 +113,7 @@
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
+           (POST "/author/add" [] add-author)
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
            (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
            (GET "/start-discussion/:discussion-id" [] start-discussion)

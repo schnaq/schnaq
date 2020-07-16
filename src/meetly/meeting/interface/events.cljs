@@ -34,6 +34,20 @@
                   :timeout 10000
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:init-from-backend]
+                  :on-failure [:ajax-failure]}
+     :dispatch [:set-username "Anonymous"]}))
+
+(rf/reg-event-fx
+  :set-username
+  (fn [db [_ username]]
+    {:db (assoc-in db [:user :name] username)
+     :http-xhrio {:method :post
+                  :uri "http://localhost:3000/author/add"
+                  :timeout 10000
+                  :params {:nickname username}
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:hide-name-input]
                   :on-failure [:ajax-failure]}}))
 
 (rf/reg-event-db
@@ -45,11 +59,6 @@
   :init-from-backend
   (fn [db [_ all-meetings]]
     (assoc db :meetings all-meetings)))
-
-(rf/reg-event-db
-  :set-username
-  (fn [db [_ username]]
-    (assoc-in db [:user :name] username)))
 
 (rf/reg-event-db
   :hide-name-input
