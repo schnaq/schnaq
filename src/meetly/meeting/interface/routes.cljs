@@ -60,10 +60,8 @@
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view
-     :link-text "Clock Re-Frame Example"
-     :controllers []}]
+     :link-text "Clock Re-Frame Example"}]
    ["startpage"
     {:name :routes/startpage
      :view startpage-views/startpage-view
-     :link-text "Meetly"
-     :controllers []}]])
+     :link-text "Meetly"}]])
