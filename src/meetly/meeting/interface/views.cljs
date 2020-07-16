@@ -1,5 +1,6 @@
 (ns meetly.meeting.interface.views
   (:require [reagent.dom]
+            [meetly.meeting.interface.text.display-data :as data]
             [re-frame.core :as rf]))
 
 (defn navigation-button
@@ -33,7 +34,7 @@
    ;; logo
    [:div.container
     [:a.navbar-brand {:href "#/startpage"}
-     [:img.d-inline-block.align-middle.mr-2 {:src "imgs/logo.png" :width "140" :alt ""}]]
+     [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo) :width "150" :alt ""}]]
     ;; hamburger
     [:button.navbar-toggler
      {:type "button" :data-toggle "collapse" :data-target "#navbarSupportedContent"
@@ -60,7 +61,7 @@
     [:div
 
      [header]
-     [:div.container
+     [:div
 
       (when ajax-error
         [:h1 "Error: " ajax-error])
