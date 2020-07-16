@@ -10,6 +10,7 @@
   ;todo
   [:div.col-lg-6])
 
+
 (defn- header []
   (base/header
     (data/labels :start-page-subheader)
@@ -26,7 +27,7 @@
 (defn- call-to-action
   " Tell user to create a meetly now "
   []
-  [:section.call-to-action
+  [:section.py-3
    [:div.container
     [:div.row
      [:div.col-lg-4
@@ -42,7 +43,6 @@
         [:p.pt-4 (data/labels :create-your-meeting-sub)]]]]]]])
 
 
-
 (defn- icons-grid
   " Display features in a grid "
   []
@@ -54,20 +54,13 @@
      (base/icon-in-grid (data/fa :carry) (data/labels :cooperative) (data/labels :cooperative-why))]]])
 
 
-(defn- button []
-  [:br]
-  [:input
-   {:on-click #(rf/dispatch [:navigate :routes/meetings.create])
-    :type " button "
-    :value (data/labels :create-meetly)
-    :style {:margin-bottom " 1em "}}])
-
 (defn- startpage-content []
   [:div
    [header]
    [:div.container
     [call-to-action]
     [icons-grid]]])
+
 
 (defn startpage-view
   " A view that represents the first page of meetly participation or creation. "
