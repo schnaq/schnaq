@@ -33,25 +33,25 @@
   []
   (let [agenda @(rf/subscribe [:chosen-agenda])
         conclusions @(rf/subscribe [:starting-conclusions])]
-    [:div
-     [:div.row.discussion-head
-      [:div.col-12
-       [:h2 (:title agenda)]
-       [:p (:description agenda)]
-       [:hr]
-       (for [conclusion conclusions]
-         [:div {:key (:statement/content conclusion)}
-          [single-statement-view conclusion]])]]]))
+    [:div.row.discussion-head
+     [:div.col-12
+      [:h2 (:title agenda)]
+      [:p (:description agenda)]
+      [:hr]
+      (for [conclusion conclusions]
+        [:div {:key (:statement/content conclusion)}
+         [single-statement-view conclusion]])]]))
 
 (defn discussion-start-view
   "The first step after starting a discussion."
   []
   (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-    [all-positions-view]
-    [:hr]
-    (when allow-new-argument?
-      [:h3 (labels :discussion/create-argument-heading)]
-      [input-argument-form])))
+    [:div#discussion-start
+     [all-positions-view]
+     [:hr]
+     (when allow-new-argument?
+       [:h3 (labels :discussion/create-argument-heading)]
+       [input-argument-form])]))
 
 ;; #### Events ####
 
