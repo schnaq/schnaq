@@ -102,7 +102,13 @@
                     :format (ajax/json-request-format)
                     :response-format (ajax/json-response-format {:keywords? true})
                     :on-success [:set-response-as-agenda]
-                    :on-failure [:ajax-failure]}})))
+                    :on-failure [:agenda-not-available]}})))
+
+(rf/reg-event-fx
+  :agenda-not-available
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:error :ajax] "Agenda could not be loaded, please refresh the App.")
+     :dispatch [:navigate :routes/meetings]}))
 
 (rf/reg-event-db
   :set-current-agendas

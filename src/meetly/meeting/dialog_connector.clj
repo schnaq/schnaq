@@ -10,11 +10,12 @@
 
 (defn start-discussion
   "Starts a new discussion (keyed by discussion-id)."
-  [discussion-id]
+  [discussion-id username]
   ;; TODO fill this in when wiring dialog.core
-  [[:argument/chosen
+  [[:starting-argument/select
     {:discussion/id discussion-id,
      :discussion/title "Cat or Dog?",
+     :user/name username
      :present/arguments [{:db/id 17592186045479,
                           :argument/version 1,
                           :argument/author #:author{:nickname "Wegi"},
@@ -99,4 +100,7 @@
                           :argument/conclusion {:db/id 17592186045477,
                                                 :statement/content "we should get a cat",
                                                 :statement/version 1,
-                                                :statement/author #:author{:nickname "Der Schredder"}}}]}]])
+                                                :statement/author #:author{:nickname "Der Schredder"}}}]}]
+   [:starting-argument/new {:discussion/id discussion-id
+                            :discussion/title "Cat or Dog?"
+                            :user/name username}]])

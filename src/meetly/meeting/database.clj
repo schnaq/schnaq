@@ -79,9 +79,10 @@
   [agenda]
   (let [agenda-point (first agenda)
         id (get-in agenda-point [:agenda/meeting :db/id])]
-    (-> agenda-point
-        (assoc :meeting id)
-        (dissoc :agenda/meeting))))
+    (when agenda-point
+      (-> agenda-point
+          (assoc :meeting id)
+          (dissoc :agenda/meeting)))))
 
 (def ^:private agenda-pattern
   [[:agenda/title :as :title]

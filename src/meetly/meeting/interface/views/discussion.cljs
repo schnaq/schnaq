@@ -33,16 +33,20 @@
 
 (rf/reg-event-fx
   :start-discussion
-  (fn [{:keys [db]} _]
-    (let [discussion-id (-> db :agenda :chosen :discussion-id)]
-      (if discussion-id
-        {:http-xhrio {:method :get
-                      :uri (str (:rest-backend config) "/start-discussion/" discussion-id)
-                      :format (ajax/json-request-format)
-                      :response-format (ajax/json-response-format {:keywords? true})
-                      :on-success [:set-current-discussion-steps]
-                      :on-failure [:ajax-failure]}}
-        {:dispatch-later [{:ms 20 :dispatch [:start-discussion]}]}))))
+  (fn [{:keys [db]} [_ try-counter]]
+    (let [discussion-id (-> db :agenda :chosen :discussion-id)
+          username (get-in db [:user :name] "Anonymous")
+          try-counter (or try-counter 0)]
+      (when (< try-counter 10)
+        (if discussion-id
+          {:http-xhrio {:method :get
+                        :uri (str (:rest-backend config) "/start-discussion/" discussion-id)
+                        :format (ajax/json-request-format)
+                        :url-params {:username username}
+                        :response-format (ajax/json-response-format {:keywords? true})
+                        :on-success [:set-current-discussion-steps]
+                        :on-failure [:ajax-failure]}}
+          {:dispatch-later [{:ms 50 :dispatch [:start-discussion (inc try-counter)]}]})))))
 
 (rf/reg-event-db
   :set-current-discussion-steps
@@ -62,7 +66,7 @@
   (fn [_]
     (rf/subscribe [:discussion-options]))
   (fn [options]
-    (when (= "argument/chosen" (ffirst options))
+    (when (= "starting-argument/select" (ffirst options))
       (->>
         options
         first second
