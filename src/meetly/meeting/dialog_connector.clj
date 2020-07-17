@@ -104,3 +104,7 @@
    [:starting-argument/new {:discussion/id discussion-id
                             :discussion/title "Cat or Dog?"
                             :user/name username}]])
+
+(defn continue-discussion
+  [[_reaction args]]
+  [[:test args]])

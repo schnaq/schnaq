@@ -53,7 +53,6 @@
                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
       ["/start"
        {:name :routes/meetings.discussion.start
-        :parameters {:path {:id string?}}
         :view discussion-views/discussion-start-view
         :controllers [{:start (fn []
                                 (rf/dispatch [:start-discussion]))}]}]]]]

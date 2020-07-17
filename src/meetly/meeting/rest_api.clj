@@ -111,6 +111,12 @@
         username (get-in req [:query-params "username"])]
     (response {:discussion-reactions (dialogs/start-discussion discussion-id username)})))
 
+(defn- continue-discussion
+  "Dispatches the wire-received events to the dialog.core backend."
+  [req]
+  (let [reaction-chosen (-> req :body :reaction-chosen)]
+    (response {:discussion-reactions (dialogs/continue-discussion reaction-chosen)})))
+
 (defroutes app-routes
            (GET "/" [] index-page)
            (GET "/meetings" [] all-meetings)
@@ -121,6 +127,7 @@
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
            (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
            (GET "/start-discussion/:discussion-id" [] start-discussion)
+           (POST "/continue-discussion" [] continue-discussion)
            (route/not-found "Error, page not found!"))
 
 

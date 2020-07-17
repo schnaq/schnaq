@@ -2,8 +2,8 @@
   (:require [re-frame.core :as rf]
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.text.display-data :refer [labels]]
-            [ajax.core :as ajax]))
-
+            [ajax.core :as ajax]
+            [oops.core :refer [oget]]))
 
 ;; #### Views ####
 
@@ -15,17 +15,20 @@
    [:p (:statement/content statement)]
    [:small "Written by: " (-> statement :statement/author :author/nickname)]])
 
-(defn- input-argument-form
+(defn- input-starting-argument-form
   "A form, which allows the input of a complete argument.
   (Premise and Conclusion as statements)"
   []
   [:form
    {:on-submit (fn [e] (.preventDefault e)
-                 true)}
+                 (rf/dispatch [:continue-discussion :starting-argument/new
+                               (oget e [:target :elements])]))}
    [:input.form-control.mb-1
-    {:type "text" :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+    {:type "text" :name "conclusion-text"
+     :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
    [:input.form-control.mb-1
-    {:type "text" :placeholder (labels :discussion/add-argument-premise-placeholder)}]
+    {:type "text" :name "premise-text"
+     :placeholder (labels :discussion/add-argument-premise-placeholder)}]
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
 (defn all-positions-view
@@ -51,7 +54,7 @@
      [:hr]
      (when allow-new-argument?
        [:h3 (labels :discussion/create-argument-heading)]
-       [input-argument-form])]))
+       [input-starting-argument-form])]))
 
 ;; #### Events ####
 
@@ -80,6 +83,38 @@
           (assoc-in [:discussion :options :all] options)
           (assoc-in [:discussion :options :steps] (map first options))
           (assoc-in [:discussion :options :args] (map second options))))))
+
+;; This and the following events serve as the multimethod-equivalent in the frontend
+;; for stepping through the discussion.
+(rf/reg-event-fx
+  :continue-discussion
+  (fn [_ [_ reaction args]]
+    {:dispatch [reaction args]}))
+
+(rf/reg-event-fx
+  :starting-argument/new
+  (fn [db [reaction form]]
+    (let [discussion-id (-> db :agenda :chosen :discussion-id)
+          conclusion-text (oget form [:conclusion-text :value])
+          premise-text (oget form [:premise-text :value])
+          reaction-args (-> db :discussion :options :args second)
+          updated-args
+          (-> reaction-args
+              (assoc :new/starting-argument-conclusion conclusion-text)
+              (assoc :new/starting-argument-premises [premise-text]))]
+      {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
+                    [:navigate :routes/meetings.discussion.start {:id discussion-id}]]})))
+
+(rf/reg-event-fx
+  :continue-discussion-http-call
+  (fn [_ [_ payload]]
+    {:http-xhrio {:method :post
+                  :uri (str (:rest-backend config) "/continue-discussion")
+                  :format (ajax/json-request-format)
+                  :params {:reaction-chosen payload}
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [:set-current-discussion-steps]
+                  :on-failure [:ajax-failure]}}))
 
 ;; #### Subs ####
 
