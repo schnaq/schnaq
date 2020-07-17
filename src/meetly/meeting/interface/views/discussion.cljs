@@ -32,8 +32,7 @@
   "Shows a nice header and all positions."
   []
   (let [agenda @(rf/subscribe [:chosen-agenda])
-        conclusions @(rf/subscribe [:starting-conclusions])
-        allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+        conclusions @(rf/subscribe [:starting-conclusions])]
     [:div
      [:div.row.discussion-head
       [:div.col-12
@@ -42,11 +41,17 @@
        [:hr]
        (for [conclusion conclusions]
          [:div {:key (:statement/content conclusion)}
-          [single-statement-view conclusion]])
-       [:hr]
-       (when allow-new-argument?
-         [:h3 (labels :discussion/create-argument-heading)]
-         [input-argument-form])]]]))
+          [single-statement-view conclusion]])]]]))
+
+(defn discussion-start-view
+  "The first step after starting a discussion."
+  []
+  (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+    [all-positions-view]
+    [:hr]
+    (when allow-new-argument?
+      [:h3 (labels :discussion/create-argument-heading)]
+      [input-argument-form])))
 
 ;; #### Events ####
 
