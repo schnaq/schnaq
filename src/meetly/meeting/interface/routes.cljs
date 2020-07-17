@@ -23,7 +23,7 @@
    ["meetings"
     [""
      {:name :routes/meetings
-      :view meeting-views/meetings-list-view
+      :view meeting-views/meeting-view
       :link-text "Meetings"
       :controllers []}]
     ["/view/:share-hash"

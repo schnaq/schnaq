@@ -7,8 +7,8 @@
 (defn- header-animation
   "Display header animation video"
   []
-  ;todo
-  [:div.col-lg-6])
+  [:div.col-lg-6
+   [:img#animation_container {:src (data/img-path :animation-discussion)}]])
 
 
 (defn- header []
