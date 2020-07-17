@@ -1,6 +1,7 @@
 (ns meetly.meeting.interface.views.discussion
   (:require [re-frame.core :as rf]
             [meetly.meeting.interface.config :refer [config]]
+            [meetly.meeting.interface.text.display-data :refer [labels]]
             [ajax.core :as ajax]))
 
 
@@ -14,11 +15,25 @@
    [:p (:statement/content statement)]
    [:small "Written by: " (-> statement :statement/author :author/nickname)]])
 
+(defn- input-argument-form
+  "A form, which allows the input of a complete argument.
+  (Premise and Conclusion as statements)"
+  []
+  [:form
+   {:on-submit (fn [e] (.preventDefault e)
+                 true)}
+   [:input.form-control.mb-1
+    {:type "text" :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+   [:input.form-control.mb-1
+    {:type "text" :placeholder (labels :discussion/add-argument-premise-placeholder)}]
+   [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
+
 (defn all-positions-view
   "Shows a nice header and all positions."
   []
   (let [agenda @(rf/subscribe [:chosen-agenda])
-        conclusions @(rf/subscribe [:starting-conclusions])]
+        conclusions @(rf/subscribe [:starting-conclusions])
+        allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
     [:div
      [:div.row.discussion-head
       [:div.col-12
@@ -27,7 +42,11 @@
        [:hr]
        (for [conclusion conclusions]
          [:div {:key (:statement/content conclusion)}
-          [single-statement-view conclusion]])]]]))
+          [single-statement-view conclusion]])
+       [:hr]
+       (when allow-new-argument?
+         [:h3 (labels :discussion/create-argument-heading)]
+         [input-argument-form])]]]))
 
 ;; #### Events ####
 
@@ -52,14 +71,27 @@
   :set-current-discussion-steps
   (fn [db [_ response]]
     (let [options (:discussion-reactions response)]
-      (assoc-in db [:discussion :options] options))))
+      (-> db
+          (assoc-in [:discussion :options :all] options)
+          (assoc-in [:discussion :options :steps] (map first options))
+          (assoc-in [:discussion :options :args] (map second options))))))
 
 ;; #### Subs ####
 
 (rf/reg-sub
   :discussion-options
   (fn [db _]
-    (get-in db [:discussion :options])))
+    (get-in db [:discussion :options :all])))
+
+(rf/reg-sub
+  :discussion-steps
+  (fn [db _]
+    (get-in db [:discussion :options :steps])))
+
+(rf/reg-sub
+  :discussion-step-args
+  (fn [db _]
+    (get-in db [:discussion :options :args])))
 
 (rf/reg-sub
   :starting-conclusions
@@ -74,3 +106,10 @@
         (filter #(not= "argument.type/undercut" (:argument/type %)))
         (map :argument/conclusion)
         distinct))))
+
+(rf/reg-sub
+  :allow-new-argument?
+  (fn [_]
+    (rf/subscribe [:discussion-steps]))
+  (fn [steps]
+    (some #(= % "starting-argument/new") steps)))
