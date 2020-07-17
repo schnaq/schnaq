@@ -2,6 +2,7 @@
   (:require [reagent.dom]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
+            [reitit.frontend.easy as reitfe]
             [re-frame.core :as rf]))
 
 (defn navigation-button
@@ -47,12 +48,12 @@
       :class "collapse navbar-collapse"}
      [:ul.navbar-nav.ml-auto
       ;[:li.nav-item.active [:a.nav-link {:href "#"} "Home" [:span.sr-only "(current)"]]]
-      [:a.nav-link {:href "#/startpage"} "Home" [:span.sr-only "(current)"]]
-      [:li.nav-item [:a.nav-link {:href "#/clock"} (data/labels :nav-example)]]
-      [:li.nav-item [:a.nav-link {:href "#/meetings"} (data/labels :nav-meeting)]]
-      [:li.nav-item [:a.nav-link {:href "#/meetings/create"} (data/labels :nav-meeting-create)]]
-      [:li.nav-item [:a.nav-link {:href "#/meetings/agenda"} (data/labels :nav-meeting-agenda)]]
-      [:li.nav-item [:a.nav-link {:href "#"} (data/labels :nav-overview)]]]]]])
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/startpage)} (data/labels :nav-startpage)]]
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/clock)} (data/labels :nav-example)]]
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (data/labels :nav-meeting)]]
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (data/labels :nav-meeting-create)]]
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.agenda)} (data/labels :nav-meeting-agenda)]]
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/home)} (data/labels :nav-overview)]]]]]])
 
 (defn- base-page
   []

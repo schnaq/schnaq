@@ -7,6 +7,7 @@
   (identifier
     {
      ;; navbar labels
+     :nav-startpage "Home"
      :nav-example "Examples"
      :nav-meeting "Show Meetings"
      :nav-meeting-create "Create Meeting"
