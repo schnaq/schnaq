@@ -2,7 +2,7 @@
   (:require [reagent.dom]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
-            [reitit.frontend.easy as reitfe]
+            [reitit.frontend.easy :as reitfe]
             [re-frame.core :as rf]))
 
 (defn navigation-button
