@@ -6,6 +6,12 @@
   [identifier]
   (identifier
     {
+     ;; navbar labels
+     :nav-example "Examples"
+     :nav-meeting "Show Meetings"
+     :nav-meeting-create "Create Meeting"
+     :nav-meeting-agenda "Create Agenda"
+     :nav-overview "Overview"
      ;; startpage header
      :start-page-header "Meetly"
      :start-page-subheader "Das Meeting Tool der Zukunft ist da!"
@@ -36,7 +42,8 @@
      :icon-robot "imgs/robot.svg"
      :icon-reports "imgs/reports.svg"
      :woman-pointing "imgs/stock/woman_pointing.jpg"
-     :logo "imgs/logo.svg"}))
+     :logo "imgs/logo.svg"
+     :animation-discussion "animations/animation_discussion.gif"}))
 
 (defn fa
   "Returns an fontawesome icon id as String for a given identifier"

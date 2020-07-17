@@ -1,5 +1,6 @@
-(ns meetly.meeting.interface.views.base)
-
+(ns meetly.meeting.interface.views.base
+  (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]))
 
 
 (defn- wavy-bottom []
@@ -25,6 +26,8 @@
      more]]
    [wavy-bottom]])
 
+;; grid icons
+
 (defn icon-in-grid
   "Create one icon in a grid"
   [icon heading subheading]
@@ -41,3 +44,56 @@
    [:div [:img {:src path-to-img}]]
    [:div [:span text]]])
 
+;; name entry
+
+(defn- name-input
+  "An input, where the user can set their name. Happens automatically by typing."
+  []
+  [:form.form-inline
+   {:on-submit (fn [e]
+                 (.preventDefault e)
+                 (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
+                 (rf/dispatch [:hide-name-input]))}
+   [:label {:for "name-input"} "Enter your name: "]
+   [:input#name-input
+    {:type "text" :name "name-input"}]
+   [:input.btn.btn-primary {:type "submit" :value "Set Name"}]])
+
+(defn show-input-button
+  "A button triggering the showing of the name field."
+  []
+  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} "Change Name"])
+
+(defn username-bar-view
+  "A bar containing all user related utilities and information."
+  []
+  (let [username @(rf/subscribe [:username])
+        show-input? @(rf/subscribe [:show-username-input?])]
+    [:div.row
+     [:div.col-6
+      [:p "Welcome, " username]]
+     [:div.col-6
+      [:div.float-right
+       (if show-input?
+         [name-input]
+         [show-input-button])]]]))
+
+;; footer
+
+(defn footer
+  "footer to display at the bottom the page"
+  []
+  [:footer.footer.bg-light
+   [:div.container
+    [:div.row
+     [:div {:class "col-lg-6 h-100 text-center text-lg-left my-auto"}
+      [:ul {:class "list-inline mb-2"}
+       [:li.list-inline-item.btn.btn-link
+        [:a {:href "https://dialogo.io/impressum"} "Impressum"]]]
+      [:p {:class "text-muted small mb-4 mb-lg-0"} "\u00A9 Dialogo 2020"]]
+     ;; twitter icon
+     [:div {:class "col-lg-6 h-100 text-center text-lg-right my-auto"}
+      [:ul {:class "list-inline mb-0"}
+       [:li {:class "list-inline-item mr-3"}
+        [:a {:href "https://twitter.com/dialogoIO"}
+         [:i {:class "fab fa-twitter-square fa-2x fa-fw"}]]]]]]]])

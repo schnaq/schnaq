@@ -1,7 +1,7 @@
 (ns meetly.meeting.interface.views
   (:require [reagent.dom]
-            [oops.core :refer [oget]]
             [meetly.meeting.interface.text.display-data :as data]
+            [meetly.meeting.interface.views.base :as base]
             [re-frame.core :as rf]))
 
 (defn navigation-button
@@ -28,18 +28,6 @@
    [:h2 "Startpage"]
    (navigation-button :routes/startpage "--> Startpage")])
 
-(defn- name-input
-  "An input, where the user can set their name. Happens automatically by typing."
-  []
-  [:form.form-inline
-   {:on-submit (fn [e]
-                 (.preventDefault e)
-                 (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
-                 (rf/dispatch [:hide-name-input]))}
-   [:label {:for "name-input"} "Enter your name: "]
-   [:input#name-input
-    {:type "text" :name "name-input"}]
-   [:input.btn.btn-primary {:type "submit" :value "Set Name"}]])
 
 (defn- header []
   ;; collapsable navbar
@@ -60,45 +48,31 @@
      [:ul.navbar-nav.ml-auto
       ;[:li.nav-item.active [:a.nav-link {:href "#"} "Home" [:span.sr-only "(current)"]]]
       [:a.nav-link {:href "#/startpage"} "Home" [:span.sr-only "(current)"]]
-      [:li.nav-item [:a.nav-link {:href "#/clock"} "Examples"]]
-      [:li.nav-item [:a.nav-link {:href "#/meetings/"} "Show Meetings"]]
-      [:li.nav-item [:a.nav-link {:href "#/meetings/create"} "Create Meeting"]]
-      [:li.nav-item [:a.nav-link {:href "#/meetings/agenda"} "Create Agenda"]]
-      [:li.nav-item [:a.nav-link {:href "#"} "Overview"]]]]]])
-
-(defn- show-input-button
-  "A button triggering the showing of the name field."
-  []
-  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} "Change Name"])
-
-(defn- username-bar-view
-  "A bar containing all user related utilities and information."
-  []
-  (let [username @(rf/subscribe [:username])
-        show-input? @(rf/subscribe [:show-username-input?])]
-    [:div.row
-     [:div.col-6
-      [:p "Welcome, " username]]
-     [:div.col-6
-      [:div.float-right
-       (if show-input?
-         [name-input]
-         [show-input-button])]]]))
+      [:li.nav-item [:a.nav-link {:href "#/clock"} (data/labels :nav-example)]]
+      [:li.nav-item [:a.nav-link {:href "#/meetings"} (data/labels :nav-meeting)]]
+      [:li.nav-item [:a.nav-link {:href "#/meetings/create"} (data/labels :nav-meeting-create)]]
+      [:li.nav-item [:a.nav-link {:href "#/meetings/agenda"} (data/labels :nav-meeting-agenda)]]
+      [:li.nav-item [:a.nav-link {:href "#"} (data/labels :nav-overview)]]]]]])
 
 (defn- base-page
   []
   (let [current-route @(rf/subscribe [:current-route])
         errors @(rf/subscribe [:error-occurred])
         ajax-error (:ajax errors)]
-    [:div
+    [:div#display-content
      [header]
-     [:div.container
-      [username-bar-view]
-      (when ajax-error
-        [:h1 "Error: " ajax-error])
-      (when current-route
-        [(-> current-route :data :view)])]]))
+     (when ajax-error
+       [:h1 "Error: " ajax-error])
+     (when current-route
+       [(-> current-route :data :view)])
+     ]))
+
+
+(defn- footer []
+  [base/footer])
+
 
 (defn root []
   [:div#root
-   [base-page]])
+   [base-page]
+   [footer]])

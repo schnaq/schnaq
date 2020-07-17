@@ -3,6 +3,7 @@
             [oops.core :refer [oget]]
             [ajax.core :as ajax]
             [meetly.meeting.interface.views.agenda :as agenda-views]
+            [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.config :refer [config]]))
 
 ;; #### Helpers ####
@@ -45,7 +46,7 @@
      [:hr]
      [agenda-views/agenda-in-meeting-view]]))
 
-(defn meetings-list-view
+(defn- meetings-list-view
   "Shows a list of all meetings."
   []
   [:div.meetings-list
@@ -66,6 +67,14 @@
                       (rf/dispatch [:select-current-meeting meeting]))}
          "Go to Meetly: " (:share-hash meeting)]
         [:hr]]))])
+
+
+(defn meeting-view
+  "Shows the page for an overview of all meetings"
+  []
+  [:div.container
+   [base/username-bar-view]
+   [meetings-list-view]])
 
 ;; #### Events ####
 
