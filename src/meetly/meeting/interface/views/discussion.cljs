@@ -143,9 +143,8 @@
 
 (rf/reg-sub
   :starting-conclusions
-  (fn [_]
-    [(rf/subscribe [:discussion-steps])
-     (rf/subscribe [:discussion-step-args])])
+  :<- [:discussion-steps]
+  :<- [:discussion-step-args]
   (fn [[steps args] _]
     (when (some #(= % "starting-argument/select") steps)
       (->>
