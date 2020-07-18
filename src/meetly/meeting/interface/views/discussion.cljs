@@ -5,8 +5,16 @@
             [ajax.core :as ajax]
             [oops.core :refer [oget]]))
 
-;; #### Views ####
+(defn- index-of
+  "Returns the index of the first occurrence of `elem` in `coll` if its present and
+  nil if not."
+  [coll elem]
+  (let [maybe-index (.indexOf coll elem)]
+    (if (= maybe-index -1)
+      nil
+      maybe-index)))
 
+;; #### Views ####
 (defn- single-statement-view
   "Displays a single statement inside a discussion."
   [statement]
@@ -136,12 +144,13 @@
 (rf/reg-sub
   :starting-conclusions
   (fn [_]
-    (rf/subscribe [:discussion-options]))
-  (fn [options]
-    (when (= "starting-argument/select" (ffirst options))
+    [(rf/subscribe [:discussion-steps])
+     (rf/subscribe [:discussion-step-args])])
+  (fn [[steps args] _]
+    (when (some #(= % "starting-argument/select") steps)
       (->>
-        options
-        first second
+        (index-of steps "starting-argument/select")
+        (nth args)
         :present/arguments
         (filter #(not= "argument.type/undercut" (:argument/type %)))
         (map :argument/conclusion)
