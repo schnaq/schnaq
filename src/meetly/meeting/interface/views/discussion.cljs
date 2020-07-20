@@ -17,9 +17,13 @@
 ;; #### Views ####
 (defn- single-statement-view
   "Displays a single statement inside a discussion."
-  [statement]
+  [statement discussion-id]
   [:div.card {:style {:background-color "#6aadb8"
-                      :width "600px"}}
+                      :width "600px"}
+              :on-click (fn [_e]
+                          (rf/dispatch [:chose-starting-conclusion (:db/id statement)])
+                          (rf/dispatch [:navigate :routes/meetings.discussion.start.premises
+                                        {:id discussion-id}]))}
    [:p (:statement/content statement)]
    [:small "Written by: " (-> statement :statement/author :author/nickname)]])
 
@@ -51,7 +55,7 @@
       [:hr]
       (for [conclusion conclusions]
         [:div {:key (:statement/content conclusion)}
-         [single-statement-view conclusion]])]]))
+         [single-statement-view conclusion (:discussion-id agenda)]])]]))
 
 (defn discussion-start-view
   "The first step after starting a discussion."
@@ -63,6 +67,17 @@
      (when allow-new-argument?
        [:h3 (labels :discussion/create-argument-heading)]
        [input-starting-argument-form])]))
+
+(defn discussion-starting-premises-view
+  "The shows all premises regarding a conclusion which belongs to starting-arguments."
+  []
+  [:div#discussion-start-premises
+   (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])]
+     [:p selected-conclusion])
+   [:hr]
+   #_(when allow-new-argument?
+       [:h3 (labels :discussion/create-argument-heading)]
+       [input-starting-argument-form])])
 
 ;; #### Events ####
 
@@ -124,6 +139,11 @@
                   :on-success [:set-current-discussion-steps]
                   :on-failure [:ajax-failure]}}))
 
+(rf/reg-event-db
+  :chose-starting-conclusion
+  (fn [db [_ conclusion-id]]
+    (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)))
+
 ;; #### Subs ####
 
 (rf/reg-sub
@@ -142,7 +162,7 @@
     (get-in db [:discussion :options :args])))
 
 (rf/reg-sub
-  :starting-conclusions
+  :starting-arguments
   :<- [:discussion-steps]
   :<- [:discussion-step-args]
   (fn [[steps args] _]
@@ -150,14 +170,25 @@
       (->>
         (index-of steps "starting-argument/select")
         (nth args)
-        :present/arguments
-        (filter #(not= "argument.type/undercut" (:argument/type %)))
-        (map :argument/conclusion)
-        distinct))))
+        :present/arguments))))
+
+(rf/reg-sub
+  :starting-conclusions
+  :<- [:starting-arguments]
+  (fn [arguments _]
+    (->>
+      arguments
+      (filter #(not= "argument.type/undercut" (:argument/type %)))
+      (map :argument/conclusion)
+      distinct)))
 
 (rf/reg-sub
   :allow-new-argument?
-  (fn [_]
-    (rf/subscribe [:discussion-steps]))
+  :<- [:discussion-steps]
   (fn [steps]
     (some #(= % "starting-argument/new") steps)))
+
+(rf/reg-sub
+  :current-starting-conclusion-id
+  (fn [db _]
+    (get-in db [:discussion :starting-conclusion :selected :id])))

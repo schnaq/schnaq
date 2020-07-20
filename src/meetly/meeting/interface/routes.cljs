@@ -55,7 +55,10 @@
        {:name :routes/meetings.discussion.start
         :view discussion-views/discussion-start-view
         :controllers [{:start (fn []
-                                (rf/dispatch [:start-discussion]))}]}]]]]
+                                (rf/dispatch [:start-discussion]))}]}]
+      ["/premises"
+       {:name :routes/meetings.discussion.start.premises
+        :view discussion-views/discussion-starting-premises-view}]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view
