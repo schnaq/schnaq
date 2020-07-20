@@ -103,7 +103,7 @@
                                                 :statement/author #:author{:nickname "Der Schredder"}}}]}]
    [:starting-argument/new {:discussion/id discussion-id
                             :discussion/title "Cat or Dog?"
-                            :user/name username}]])
+                            :user/nickname username}]])
 
 (defn continue-discussion
   [[_reaction args]]
