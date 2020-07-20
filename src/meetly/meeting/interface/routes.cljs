@@ -5,7 +5,8 @@
             [meetly.meeting.interface.views.clock :as clock-views]
             [meetly.meeting.interface.views.meetings :as meeting-views]
             [meetly.meeting.interface.views.discussion :as discussion-views]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [reitit.coercion.spec :as reitit-spec]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
 ;; but by calling #/meetings. The anchor triggers reitit inside of re-frame instead
@@ -43,22 +44,30 @@
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/agenda"
-     [""
+     ["/add"
       {:name :routes/meetings.agenda
        :view agenda-views/agenda-view
        :link-text "Add Agenda"}]
-     ["/:id"
+     ["/:id/"
       {:controllers [{:parameters {:path [:id]}
                       :start (fn [{:keys [path]}]
+                               (println "Path: " path)
                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
-      ["/start"
-       {:name :routes/meetings.discussion.start
-        :view discussion-views/discussion-start-view
-        :controllers [{:start (fn []
-                                (rf/dispatch [:start-discussion]))}]}]
-      ["/conclusion"
-       {:name :routes/meetings.discussion.start.premises
-        :view discussion-views/discussion-starting-premises-view}]]]]
+      ["start"
+       {:controllers [{:start (fn []
+                                (rf/dispatch [:start-discussion]))}]}
+       ["/"
+        {:name :routes/meetings.discussion.start
+         :view discussion-views/discussion-start-view}]
+       ["/conclusion/:conclusion-id/"
+        {:name :routes/meetings.discussion.start.premises
+         :view discussion-views/discussion-starting-premises-view
+         :parameters {:path {:conclusion-id int?
+                             :id string?}}
+         :controllers [{:parameters {:path [:conclusion-id]}
+                        :start (fn [{:keys [path]}]
+                                 (rf/dispatch [:choose-starting-conclusion
+                                               (:conclusion-id path)]))}]}]]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view

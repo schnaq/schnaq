@@ -16,7 +16,7 @@
   "A form for creating a new agenda. The new agenda is automatically saved in the
   app-state according to the suffix."
   [numbered-suffix]
-  [:div.add-agenda-div {:key numbered-suffix}
+  [:div.add-agenda-div
    [:form {:id (str "agenda-" numbered-suffix)}
     [:label {:for "title"} "Agenda-point: "]
     [:input {:type "text" :name "title" :placeholder (str "TOP " numbered-suffix)
@@ -47,7 +47,8 @@
    [:h1 "Add Agenda!"]
    [:h2 "For Meeting: " (:title @(rf/subscribe [:meeting/last-added]))]
    (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
-     [new-agenda-form agenda-num])
+     [:div {:key agenda-num}
+      [new-agenda-form agenda-num]])
    [add-agenda-button]
    [:br]
    [submit-agenda-button]])

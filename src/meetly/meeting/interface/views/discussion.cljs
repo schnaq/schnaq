@@ -26,14 +26,14 @@
 
 ;; #### Views ####
 (defn- single-statement-view
-  "Displays a single statement inside a discussion."
+  "Displays a single starting conclusion-statement inside a discussion."
   [statement discussion-id]
   [:div.card {:style {:background-color "#6aadb8"
                       :width "600px"}
               :on-click (fn [_e]
-                          (rf/dispatch [:chose-starting-conclusion (:db/id statement)])
+                          (rf/dispatch [:choose-starting-conclusion (:db/id statement)])
                           (rf/dispatch [:navigate :routes/meetings.discussion.start.premises
-                                        {:id discussion-id}]))}
+                                        {:id discussion-id :conclusion-id (:db/id statement)}]))}
    [:p (:statement/content statement)]
    [:small "Written by: " (-> statement :statement/author :author/nickname)]])
 
@@ -158,7 +158,7 @@
                   :on-failure [:ajax-failure]}}))
 
 (rf/reg-event-db
-  :chose-starting-conclusion
+  :choose-starting-conclusion
   (fn [db [_ conclusion-id]]
     (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)))
 
