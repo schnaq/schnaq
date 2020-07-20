@@ -43,20 +43,29 @@
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/agenda"
-     [""
+     ["/add"
       {:name :routes/meetings.agenda
        :view agenda-views/agenda-view
        :link-text "Add Agenda"}]
-     ["/:id"
+     ["/:id/"
       {:controllers [{:parameters {:path [:id]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
-      ["/start"
-       {:name :routes/meetings.discussion.start
-        :parameters {:path {:id string?}}
-        :view discussion-views/all-positions-view
-        :controllers [{:start (fn []
-                                (rf/dispatch [:start-discussion]))}]}]]]]
+      ["start"
+       {:controllers [{:start (fn []
+                                (rf/dispatch [:start-discussion]))}]}
+       ["/"
+        {:name :routes/meetings.discussion.start
+         :view discussion-views/discussion-start-view}]
+       ["/conclusion/:conclusion-id/"
+        {:name :routes/meetings.discussion.start.premises
+         :view discussion-views/discussion-starting-premises-view
+         :parameters {:path {:conclusion-id int?
+                             :id string?}}
+         :controllers [{:parameters {:path [:conclusion-id]}
+                        :start (fn [{:keys [path]}]
+                                 (rf/dispatch [:choose-starting-conclusion
+                                               (:conclusion-id path)]))}]}]]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view

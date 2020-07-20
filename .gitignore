@@ -41,3 +41,8 @@ datomic-*.zip
 node_modules/
 .shadow-cljs/
 public/js/compiled/
+
+## Generated css
+public/css/main.css*
+public/css/main.min.css*
+public/css/.sass-cache

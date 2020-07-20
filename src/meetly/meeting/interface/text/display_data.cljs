@@ -33,7 +33,16 @@
      :communicative "Kommunikativ"
      :communicative-why "Lassen Sie ihre NutzerInnen direkt zu Wort kommen"
      :cooperative "Kooperativ"
-     :cooperative-why "Fördern Sie den Meinungsaustausch zwischen Ihren TeilnehmerInnen"}))
+     :cooperative-why "Fördern Sie den Meinungsaustausch zwischen Ihren TeilnehmerInnen"
+     ;; Discussion Language
+     :discussion/create-argument-action "Meinung hinzufügen"
+     :discussion/create-argument-heading "Eigene Meinung abgeben / Informationen hinzufügen"
+     :discussion/add-argument-conclusion-placeholder "Das denke ich darüber."
+     :discussion/add-argument-premise-placeholder "Und das ist meine Begründung dafür."
+     :discussion/add-starting-premise-placeholder "weil..."
+     :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
+     :discussion/add-premise-against "Ich habe einen Grund dagegen"
+     }))
 
 (defn img-path
   "Returns an image path as String for a given identifier"
