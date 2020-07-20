@@ -5,8 +5,7 @@
             [meetly.meeting.interface.views.clock :as clock-views]
             [meetly.meeting.interface.views.meetings :as meeting-views]
             [meetly.meeting.interface.views.discussion :as discussion-views]
-            [re-frame.core :as rf]
-            [reitit.coercion.spec :as reitit-spec]))
+            [re-frame.core :as rf]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
 ;; but by calling #/meetings. The anchor triggers reitit inside of re-frame instead
@@ -51,7 +50,6 @@
      ["/:id/"
       {:controllers [{:parameters {:path [:id]}
                       :start (fn [{:keys [path]}]
-                               (println "Path: " path)
                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
       ["start"
        {:controllers [{:start (fn []

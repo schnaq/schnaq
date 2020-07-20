@@ -78,6 +78,22 @@
        [:h3 (labels :discussion/create-argument-heading)]
        [input-starting-argument-form])]))
 
+(defn- add-premise-for-starting-argument-form
+  "Allows the adding of a premise for or against a starting argument."
+  []
+  [:form
+   {:on-submit (fn [e] (.preventDefault e)
+                 (rf/dispatch [:continue-discussion-from-premises
+                               (oget e [:target :elements])]))}
+   [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"}]
+   [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
+   [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
+   [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
+   [:input.form-control.mb-1
+    {:type "text" :name "premise-text"
+     :placeholder (labels :discussion/add-starting-premise-placeholder)}]
+   [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
+
 (defn discussion-starting-premises-view
   "The shows all premises regarding a conclusion which belongs to starting-arguments."
   []
@@ -92,10 +108,11 @@
       (for [premise premises-to-show]
         [:div.premises {:key (:statement/content premise)}
          [:p (:statement/content premise)]])
+      [:hr]
       (when allow-new-argument?
-        ;; TODO hier ein anderes Auswahlmenü ob man dafür oder dagegen ist, weil...
-        [:h3 (labels :discussion/create-argument-heading)]
-        [input-starting-argument-form])])])
+        [:div
+         [:h3 (labels :discussion/create-argument-heading)]
+         [add-premise-for-starting-argument-form]])])])
 
 ;; #### Events ####
 
@@ -161,6 +178,12 @@
   :choose-starting-conclusion
   (fn [db [_ conclusion-id]]
     (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)))
+
+(rf/reg-event-fx
+  :continue-discussion-from-premises
+  (fn [{:keys [db]} [_ form]]
+    ;; TODO baue argument zusammen und schicke es ab.
+    ))
 
 ;; #### Subs ####
 
