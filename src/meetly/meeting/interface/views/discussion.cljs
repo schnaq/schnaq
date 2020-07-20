@@ -5,6 +5,16 @@
             [ajax.core :as ajax]
             [oops.core :refer [oget]]))
 
+;; #### Helpers ####
+
+(defn- select-premises
+  "Selects the premises out of all arguments that have a corresponding conclusion.
+  EXPERIMENTAL: Premisegroup-Members are treated individually instead of as a group."
+  [arguments conclusion-id]
+  (->> arguments
+       (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id))
+       (mapcat :argument/premises)))
+
 (defn- index-of
   "Returns the index of the first occurrence of `elem` in `coll` if its present and
   nil if not."
@@ -72,12 +82,20 @@
   "The shows all premises regarding a conclusion which belongs to starting-arguments."
   []
   [:div#discussion-start-premises
-   (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])]
-     [:p selected-conclusion])
-   [:hr]
-   #_(when allow-new-argument?
-       [:h3 (labels :discussion/create-argument-heading)]
-       [input-starting-argument-form])])
+   (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])
+         starting-arguments @(rf/subscribe [:starting-arguments])
+         premises-to-show (select-premises starting-arguments selected-conclusion)
+         allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+     [:div
+      [:p selected-conclusion]
+      [:hr]
+      (for [premise premises-to-show]
+        [:div.premises {:key (:statement/content premise)}
+         [:p (:statement/content premise)]])
+      (when allow-new-argument?
+        ;; TODO hier ein anderes Auswahlmenü ob man dafür oder dagegen ist, weil...
+        [:h3 (labels :discussion/create-argument-heading)]
+        [input-starting-argument-form])])])
 
 ;; #### Events ####
 

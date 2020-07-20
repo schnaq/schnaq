@@ -56,7 +56,7 @@
         :view discussion-views/discussion-start-view
         :controllers [{:start (fn []
                                 (rf/dispatch [:start-discussion]))}]}]
-      ["/premises"
+      ["/conclusion"
        {:name :routes/meetings.discussion.start.premises
         :view discussion-views/discussion-starting-premises-view}]]]]
    ["clock"
