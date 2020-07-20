@@ -15,7 +15,7 @@
   [[:starting-argument/select
     {:discussion/id discussion-id,
      :discussion/title "Cat or Dog?",
-     :user/name username
+     :user/nickname username
      :present/arguments [{:db/id 17592186045479,
                           :argument/version 1,
                           :argument/author #:author{:nickname "Wegi"},
