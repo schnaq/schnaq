@@ -3,7 +3,8 @@
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [ajax.core :as ajax]
-            [oops.core :refer [oget]]))
+            [oops.core :refer [oget]]
+            [vimsical.re-frame.cofx.inject :as inject]))
 
 ;; #### Helpers ####
 
@@ -23,6 +24,13 @@
     (if (= maybe-index -1)
       nil
       maybe-index)))
+
+(defn- argument-from-conclusion
+  "Given a sequence of arguments and a conclusion-id, get any argument that has the
+  corresponding conclusion."
+  [arguments conclusion-id]
+  (first
+    (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments)))
 
 ;; #### Views ####
 (defn- single-statement-view
@@ -80,12 +88,13 @@
 
 (defn- add-premise-for-starting-argument-form
   "Allows the adding of a premise for or against a starting argument."
-  []
+  [conclusion-id]
   [:form
    {:on-submit (fn [e] (.preventDefault e)
                  (rf/dispatch [:continue-discussion-from-premises
-                               (oget e [:target :elements])]))}
-   [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"}]
+                               (oget e [:target :elements]) conclusion-id]))}
+   [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"
+                      :default-checked true}]
    [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
    [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
    [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
@@ -112,7 +121,7 @@
       (when allow-new-argument?
         [:div
          [:h3 (labels :discussion/create-argument-heading)]
-         [add-premise-for-starting-argument-form]])])])
+         [add-premise-for-starting-argument-form selected-conclusion]])])])
 
 ;; #### Events ####
 
@@ -137,6 +146,7 @@
   :set-current-discussion-steps
   (fn [db [_ response]]
     (let [options (:discussion-reactions response)]
+      (println options)
       (-> db
           (assoc-in [:discussion :options :all] options)
           (assoc-in [:discussion :options :steps] (map first options))
@@ -155,7 +165,7 @@
     (let [discussion-id (-> db :agenda :chosen :discussion-id)
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
-          reaction-args (-> db :discussion :options :args second)
+          reaction-args (-> db :discussion :options :args second) ;; TODO this should be made durable.
           updated-args
           (-> reaction-args
               (assoc :new/starting-argument-conclusion conclusion-text)
@@ -181,9 +191,19 @@
 
 (rf/reg-event-fx
   :continue-discussion-from-premises
-  (fn [{:keys [db]} [_ form]]
-    ;; TODO baue argument zusammen und schicke es ab.
-    ))
+  [(rf/inject-cofx ::inject/sub [:starting-arguments])]
+  (fn [{:keys [db starting-arguments]} [_ form conclusion-id]]
+    (let [any-step-args (first (-> db :discussion :options :args))
+          argument-chosen (argument-from-conclusion starting-arguments conclusion-id)
+          new-text (oget form [:premise-text :value])
+          [reaction textkey]
+          (case (oget form [:premise-choice :value])
+            "for-radio" [:defend/new :new/defend]
+            "against-radio" [:rebut/new :new/rebut])
+          payload [reaction (-> any-step-args
+                                (assoc :argument/chosen argument-chosen)
+                                (assoc textkey new-text))]]
+      {:dispatch [:continue-discussion-http-call payload]})))
 
 ;; #### Subs ####
 
