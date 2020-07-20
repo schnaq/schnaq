@@ -32,6 +32,11 @@
   (first
     (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments)))
 
+(defn- args-for-reaction
+  "Returns the args for a certain reaction."
+  [all-steps all-args reaction]
+  (nth all-args (index-of all-steps reaction)))
+
 ;; #### Views ####
 (defn- single-statement-view
   "Displays a single starting conclusion-statement inside a discussion."
@@ -146,7 +151,6 @@
   :set-current-discussion-steps
   (fn [db [_ response]]
     (let [options (:discussion-reactions response)]
-      (println options)
       (-> db
           (assoc-in [:discussion :options :all] options)
           (assoc-in [:discussion :options :steps] (map first options))
@@ -161,11 +165,13 @@
 
 (rf/reg-event-fx
   :starting-argument/new
-  (fn [db [reaction form]]
+  (fn [{:keys [db]} [reaction form]]
     (let [discussion-id (-> db :agenda :chosen :discussion-id)
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
-          reaction-args (-> db :discussion :options :args second) ;; TODO this should be made durable.
+          reaction-args
+          (args-for-reaction (-> db :discussion :options :steps)
+                             (-> db :discussion :options :args) "starting-argument/new")
           updated-args
           (-> reaction-args
               (assoc :new/starting-argument-conclusion conclusion-text)
