@@ -9,7 +9,8 @@
             [meetly.config :as config]
             [clojure.data.json :as json]
             [meetly.meeting.database :as db]
-            [dialog.engine.core :as dialog])
+            [dialog.engine.core :as dialog]
+            [meetly.core :as meetly-core])
   (:import (java.util Date)))
 
 (defn- date->epoch-str
@@ -97,7 +98,7 @@
 (defn- start-discussion
   "Start a new discussion for an agenda point."
   [req]
-  (let [discussion-id (-> req :route-params :discussion-id)
+  (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
         username (get-in req [:query-params "username"])]
     (response {:discussion-reactions
                (dialog/start-discussion {:discussion/id discussion-id
@@ -127,6 +128,7 @@
   []
   (let [port (:port config/rest-api)]
     ; Run the server with Ring.defaults middleware
+    (meetly-core/-main)
     (server/run-server
       (-> #'app-routes
           (wrap-cors :access-control-allow-origin [#".*"]

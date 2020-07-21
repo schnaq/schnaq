@@ -78,7 +78,7 @@
       [:hr]
       (for [conclusion conclusions]
         [:div {:key (:statement/content conclusion)}
-         [single-statement-view conclusion (:discussion-id agenda)]])]]))
+         [single-statement-view conclusion (-> agenda :discussion-id :db/id)]])]]))
 
 (defn discussion-start-view
   "The first step after starting a discussion."
@@ -133,7 +133,7 @@
 (rf/reg-event-fx
   :start-discussion
   (fn [{:keys [db]} [_ try-counter]]
-    (let [discussion-id (-> db :agenda :chosen :discussion-id)
+    (let [discussion-id (-> db :agenda :chosen :discussion-id :db/id)
           username (get-in db [:user :name] "Anonymous")
           try-counter (or try-counter 0)]
       (when (< try-counter 10)
@@ -166,7 +166,7 @@
 (rf/reg-event-fx
   :starting-argument/new
   (fn [{:keys [db]} [reaction form]]
-    (let [discussion-id (-> db :agenda :chosen :discussion-id)
+    (let [discussion-id (-> db :agenda :chosen :discussion-id :db/id)
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
           reaction-args

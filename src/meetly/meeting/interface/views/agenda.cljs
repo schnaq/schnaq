@@ -63,11 +63,11 @@
         {:key (random-uuid)
          :on-click (fn []
                      (rf/dispatch [:navigate :routes/meetings.discussion.start
-                                   {:id (:discussion-id agenda)}])
+                                   {:id (-> agenda :discussion-id :db/id)}])
                      (rf/dispatch [:choose-agenda agenda]))}
         [:p "Agenda: " (:title agenda)]
         [:p "Mehr Infos: " (:description agenda)]
-        [:p "Discussion-ID: " (:discussion-id agenda)]
+        [:p "Discussion-ID: " (-> agenda :discussion-id :db/id)]
         [:br]]))])
 
 ;; #### Events ####
