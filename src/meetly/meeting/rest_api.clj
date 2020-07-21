@@ -3,14 +3,15 @@
             [compojure.route :as route]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
-            [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
+            [ring.middleware.format :refer [wrap-restful-format]]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.response :refer [response not-found]]
             [meetly.config :as config]
             [clojure.data.json :as json]
             [meetly.meeting.database :as db]
             [dialog.engine.core :as dialog]
-            [meetly.core :as meetly-core])
+            [meetly.core :as meetly-core]
+            [clojure.pprint :as pp])
   (:import (java.util Date)))
 
 (defn- date->epoch-str
@@ -107,7 +108,8 @@
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
   [req]
-  (let [[reaction args] (-> req :body :reaction-chosen)]
+  (let [[reaction args] (:body-params req)]
+    (pp/pprint req)
     (response {:discussion-reactions (dialog/continue-discussion reaction args)})))
 
 (defroutes app-routes
@@ -133,8 +135,7 @@
       (-> #'app-routes
           (wrap-cors :access-control-allow-origin [#".*"]
                      :access-control-allow-methods [:get :put :post :delete])
-          (wrap-json-body {:keywords? true :bigdecimals? true})
-          wrap-json-response
+          (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
           (wrap-defaults api-defaults))
       {:port port})
     ; Run the server without ring defaults

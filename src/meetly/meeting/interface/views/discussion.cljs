@@ -185,9 +185,9 @@
   (fn [_ [_ payload]]
     {:http-xhrio {:method :post
                   :uri (str (:rest-backend config) "/continue-discussion")
-                  :format (formatters/namespaced-json-request-format)
-                  :params {:reaction-chosen payload}
-                  :response-format (ajax/json-response-format {:keywords? true})
+                  :format (ajax/transit-request-format)
+                  :params payload
+                  :response-format (ajax/transit-response-format)
                   :on-success [:set-current-discussion-steps]
                   :on-failure [:ajax-failure]}}))
 

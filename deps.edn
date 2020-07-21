@@ -16,7 +16,7 @@
         ring {:mvn/version "1.8.1"}
         ring-cors {:mvn/version "0.1.13"}
         ring/ring-defaults {:mvn/version "0.3.2"}
-        ring/ring-json {:mvn/version "0.5.0"}
+        ring-middleware-format {:mvn/version "0.7.4"}
         metosin/reitit {:mvn/version "0.5.3"}
         re-frame-utils {:mvn/version "0.1.0"}
         github-hhucn/dialog.core
