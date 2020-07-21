@@ -71,8 +71,8 @@
   []
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
     [:div
-     [:h2 (:title current-meeting)]
-     [:p (:description current-meeting)]
+     [:h2 (:meeting/title current-meeting)]
+     [:p (:meeting/description current-meeting)]
      [:hr]
      [agenda-views/agenda-in-meeting-view]]))
 
@@ -84,18 +84,18 @@
    (let [meetings @(rf/subscribe [:meetings])]
      (for [meeting meetings]
        [:div {:key (random-uuid)}
-        [:p (:title meeting) " - " (:description meeting)]
+        (println meeting)
+        [:p (:meeting/title meeting) " - " (:meeting/description meeting)]
         [:p "Start: "
-         ;; TODO use joda.time in final application
-         (str (js/Date. (js/Number. (:start-date meeting)))) " - End Date: "
-         (str (js/Date. (js/Number. (:end-date meeting))))]
-        [:p "ID: " (:id meeting)]
+         (str (:meeting/start-date meeting)) " - End Date: "
+         (str (:meeting/end-date meeting))]
+        [:p "ID: " (:db/id meeting)]
         [:button.btn.btn-success
          {:on-click (fn []
                       (rf/dispatch [:navigate :routes/meetings.show
-                                    {:share-hash (:share-hash meeting)}])
+                                    {:share-hash (:meeting/share-hash meeting)}])
                       (rf/dispatch [:select-current-meeting meeting]))}
-         "Go to Meetly: " (:share-hash meeting)]
+         "Go to Meetly: " (:meeting/share-hash meeting)]
         [:hr]]))])
 
 

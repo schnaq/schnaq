@@ -28,10 +28,7 @@
   "Fetches meetings from the db and preparse them for transit via JSON."
   []
   (->> (db/all-meetings)
-       (map first)
-       (map #(update % :meeting/start-date date->epoch-str))
-       (map #(update % :meeting/end-date date->epoch-str))
-       json/write-str))
+       (map first)))
 
 (defn- normalize-meeting
   "Normalizes a single meeting for the wire."
@@ -42,7 +39,7 @@
       json/write-str))
 
 (defn- all-meetings
-  "Returns all meetings from the db. Cleaned for the wire."
+  "Returns all meetings from the db."
   [_req]
   (response (fetch-meetings)))
 
@@ -61,8 +58,8 @@
 (defn- add-author
   "Adds an author to the database."
   [req]
-  (let [author (-> req :body :nickname)]
-    (db/add-author-if-not-exists author)
+  (let [author-name (:nickname (:body-params req))]
+    (db/add-author-if-not-exists author-name)
     (response {:text "POST successful"})))
 
 (defn- add-agendas
@@ -109,15 +106,14 @@
   "Dispatches the wire-received events to the dialog.core backend."
   [req]
   (let [[reaction args] (:body-params req)]
-    (pp/pprint req)
     (response {:discussion-reactions (dialog/continue-discussion reaction args)})))
 
 (defroutes app-routes
-           (GET "/meetings" [] all-meetings)
+           (GET "/meetings" [] all-meetings)                ;;fertig!
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)
            (POST "/agendas/add" [] add-agendas)
-           (POST "/author/add" [] add-author)
+           (POST "/author/add" [] add-author)               ;; fertig!
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
            (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
            (GET "/start-discussion/:discussion-id" [] start-discussion)

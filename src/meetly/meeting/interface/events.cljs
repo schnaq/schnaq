@@ -33,7 +33,7 @@
      :http-xhrio {:method :get
                   :uri (str (:rest-backend config) "/meetings")
                   :timeout 10000
-                  :response-format (ajax/json-response-format {:keywords? true})
+                  :response-format (ajax/transit-response-format)
                   :on-success [:init-from-backend]
                   :on-failure [:ajax-failure]}
      :dispatch [:set-username "Anonymous"]}))
@@ -44,8 +44,8 @@
     {:http-xhrio {:method :post
                   :uri (str (:rest-backend config) "/author/add")
                   :params {:nickname username}
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
                   :on-success [:hide-name-input]
                   :on-failure [:ajax-failure]}
      :db (assoc-in db [:user :name] username)}))
