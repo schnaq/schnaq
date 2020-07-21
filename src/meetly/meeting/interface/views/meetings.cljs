@@ -3,6 +3,7 @@
             [oops.core :refer [oget]]
             [ajax.core :as ajax]
             [meetly.meeting.interface.views.agenda :as agenda-views]
+            [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.config :refer [config]]))
 
@@ -19,22 +20,51 @@
       :share-hash (str (random-uuid))
       :start-date (.now js/Date)}]))
 
+;; #### header ####
+
+(defn- header []
+  (base/header
+    (data/labels :meeting-create-header)
+    (data/labels :meeting-create-subheader)))
+
+;; date picker
+
+(defn- date-picker []
+  [:div
+   [:label (data/labels :meeting-form-deadline)]
+   [:div.row
+    [:div.col-sm-3
+     [:input#end-date.form-control.form-round {:type "datetime-local"
+                                               :name "end-date"}]]]])
+
 ;; #### Views ####
 
 (defn create-meeting-form-view
   "A view with a form that creates a meeting properly."
   []
   [:div.create-meeting-form
-   [:form {:on-submit (fn [e] (.preventDefault e)
-                        (new-meeting-helper (oget e [:target :elements]))
-                        (rf/dispatch [:navigate :routes/meetings.agenda]))}
-    [:label {:for "title"} "Title: "]
-    [:input#title {:type "text" :name "title"}] [:br]
-    [:label {:for "description"} "Description: "]
-    [:textarea#description {:name "description"}] [:br]
-    [:label {:for "end-date"} "End Date: "]
-    [:input#end-date {:type "datetime-local" :name "end-date"}] [:br]
-    [:input {:type "submit" :value "Step 2: Add Agenda"}]]])
+   [header]
+   [:div.container.px-5.py-3
+    ;; form
+    [:form {:on-submit (fn [e] (.preventDefault e)
+                         (new-meeting-helper (oget e [:target :elements]))
+                         (rf/dispatch [:navigate :routes/meetings.agenda]))}
+     ;; title
+     [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
+     [:input#title.form-control.form-round.form-title
+      {:type "text" :placeholder (data/labels :meeting-form-title-placeholder)}]
+     [:br] [:br]
+
+     ;; description
+     [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
+     [:textarea#description.form-control.form-round
+      {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]
+     [:br] [:br]
+
+     ;; date
+     [date-picker]
+     ;; submit
+     [:input.button-secondary {:type "submit" :value "Step 2: Add Agenda"}]]]])
 
 (defn single-meeting-view
   "Show a single meeting and all its Agendas."

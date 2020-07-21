@@ -1,0 +1,15 @@
+@import "variables";
+
+.button-secondary {
+  background-color: $secondary;
+  border-radius: 1.5rem;
+  color: $white;
+  font-size: 125%;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+  border: none;
+}
