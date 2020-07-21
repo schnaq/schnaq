@@ -10,7 +10,9 @@
             [clojure.pprint :as pp]
             [clojure.data.json :as json]
             [meetly.meeting.database :as db]
-            [meetly.meeting.dialog-connector :as dialogs])
+            [meetly.meeting.dialog-connector :as dialogs]
+            [dialog.discussion.database :as dialog-db]
+            [dialog.engine.core :as dialog-engine])
   (:import (java.util Date)))
 
 (defn- date->epoch-str
@@ -44,15 +46,6 @@
   "Returns all meetings from the db. Cleaned for the wire."
   [_req]
   (response (fetch-meetings)))
-
-(defn- index-page
-  "Returns an index page placeholder."
-  [req]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body (->
-           (pp/pprint req)
-           (str "Hello there, General Kenobi!"))})
 
 (defn- add-meeting
   "Adds a meeting to the database.
@@ -118,7 +111,6 @@
     (response {:discussion-reactions (dialogs/continue-discussion reaction-chosen)})))
 
 (defroutes app-routes
-           (GET "/" [] index-page)
            (GET "/meetings" [] all-meetings)
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)

@@ -14,4 +14,5 @@
 
 (comment
   (-main)
+  (dialog/load-testdata!)
   :end)
