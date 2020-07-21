@@ -5,7 +5,7 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.util.response :refer [response]]
+            [ring.util.response :refer [response not-found]]
             [meetly.config :as config]
             [clojure.pprint :as pp]
             [clojure.data.json :as json]
@@ -98,14 +98,24 @@
 (defn- agenda-by-discussion-id
   "Returns the agenda tied to a certain discussion-id."
   [req]
-  (let [discussion-id (-> req :route-params :discussion-id)]
-    (response {:agenda (db/agenda-by-discussion-id discussion-id)})))
+  (let [discussion-id (-> req :route-params :discussion-id)
+        agenda-point (db/agenda-by-discussion-id discussion-id)]
+    (if agenda-point
+      (response {:agenda agenda-point})
+      (not-found (str "No Agenda with discussion-id " discussion-id " in the DB.")))))
 
 (defn- start-discussion
   "Start a new discussion for an agenda point."
   [req]
-  (let [discussion-id (-> req :route-params :discussion-id)]
-    (response {:discussion-reactions (dialogs/start-discussion discussion-id)})))
+  (let [discussion-id (-> req :route-params :discussion-id)
+        username (get-in req [:query-params "username"])]
+    (response {:discussion-reactions (dialogs/start-discussion discussion-id username)})))
+
+(defn- continue-discussion
+  "Dispatches the wire-received events to the dialog.core backend."
+  [req]
+  (let [reaction-chosen (-> req :body :reaction-chosen)]
+    (response {:discussion-reactions (dialogs/continue-discussion reaction-chosen)})))
 
 (defroutes app-routes
            (GET "/" [] index-page)
@@ -117,6 +127,7 @@
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
            (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
            (GET "/start-discussion/:discussion-id" [] start-discussion)
+           (POST "/continue-discussion" [] continue-discussion)
            (route/not-found "Error, page not found!"))
 
 

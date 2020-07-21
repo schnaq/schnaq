@@ -20,3 +20,9 @@ The Frontend works with shadow-cljs for hot code reload.
 3. Shadow-cljs starts a nrepl-server.
 You can connect to localhost and the port output to the `.shadow-cljs/nrepl.port` file.
 4. In the opened *CLJ* REPL you can execute `(shadow/repl :app)` to switch to the hot development REPL for *CLJS*.
+
+=== Stylesheets
+
+To automatically create the stylesheets, enable a file-watcher for the `public/css` directory.
+In the html we use the minimized version.
+So be sure to add `--style compressed` or similar as an option to your sass command.
