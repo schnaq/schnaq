@@ -42,7 +42,7 @@
 (defn create-meeting-form-view
   "A view with a form that creates a meeting properly."
   []
-  [:div.create-meeting-form
+  [:div#create-meeting-form
    [header]
    [:div.container.px-5.py-3
     ;; form
@@ -52,7 +52,9 @@
      ;; title
      [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
      [:input#title.form-control.form-round.form-title
-      {:type "text" :placeholder (data/labels :meeting-form-title-placeholder)}]
+      {:type "text"
+       :autocomplete "off"
+       :placeholder (data/labels :meeting-form-title-placeholder)}]
      [:br] [:br]
 
      ;; description
@@ -64,7 +66,8 @@
      ;; date
      [date-picker]
      ;; submit
-     [:input.button-secondary {:type "submit" :value "Step 2: Add Agenda"}]]]])
+     [:button.btn.button-secondary-with-margin {:type "submit"}
+      "Step 2: Add Agenda"]]]])
 
 (defn single-meeting-view
   "Show a single meeting and all its Agendas."

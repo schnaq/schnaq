@@ -13,6 +13,7 @@
      :nav-meeting-create "Create Meeting"
      :nav-meeting-agenda "Create Agenda"
      :nav-overview "Overview"
+
      ;; startpage header
      :start-page-header "Meetly"
      :start-page-subheader "Das Meeting Tool der Zukunft ist da!"
@@ -27,6 +28,7 @@
      :more-info-newsletter "Holen Sie sich regelmäßig Updates zu Dialogo und den aktuellsten Produkten."
      :create-your-meeting "Erstellen Sie jetzt ihr Meetly!"
      :create-your-meeting-sub "Mit einem Klick erstellen, Agenda bestimmen und an alle Teilnehmenden schicken"
+
      ;; startpage grid
      :innovative "Innovativ"
      :innovative-why "Meetly nutzt wissenschaftlich erprobte neue Technologien"
@@ -34,6 +36,7 @@
      :communicative-why "Lassen Sie ihre NutzerInnen direkt zu Wort kommen"
      :cooperative "Kooperativ"
      :cooperative-why "Fördern Sie den Meinungsaustausch zwischen Ihren TeilnehmerInnen"
+
      ;; create meetly
      :meeting-create-header "Meetly erstellen"
      :meeting-create-subheader "Geben Sie ihrem Meetly einen Namen und eine Beschreibung"
@@ -44,6 +47,12 @@
      :meeting-form-deadline "Frist"
      :meeting-form-end-date "Datum"
      :meeting-form-end-time "Uhrzeit"
+
+     ;; Create Agenda
+     :agenda-header "Agenda erstellen"
+     :agenda-subheader "Fügen Sie zu besprechende Punkte hinzu"
+     :agenda-desc-for "Beschreibung für Top "
+     :agenda-point "Agendapunkt "
 
      ;; Discussion Language
      :discussion/create-argument-action "Meinung hinzufügen"

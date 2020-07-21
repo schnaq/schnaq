@@ -36,7 +36,7 @@
       [:div.row.mt-4
        [:div.mx-auto.col-lg-10
         [:h3.mb-4 (data/labels :create-your-meeting)]
-        [:button.btn.btn-primary
+        [:button.btn.button-secondary
          {:type " button "
           :on-click #(rf/dispatch [:navigate :routes/meetings.create])}
          (data/labels :create-meetly-button)]
