@@ -7,12 +7,9 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.response :refer [response not-found]]
             [meetly.config :as config]
-            [clojure.pprint :as pp]
             [clojure.data.json :as json]
             [meetly.meeting.database :as db]
-            [meetly.meeting.dialog-connector :as dialogs]
-            [dialog.discussion.database :as dialog-db]
-            [dialog.engine.core :as dialog-engine])
+            [dialog.engine.core :as dialog])
   (:import (java.util Date)))
 
 (defn- date->epoch-str
@@ -102,13 +99,15 @@
   [req]
   (let [discussion-id (-> req :route-params :discussion-id)
         username (get-in req [:query-params "username"])]
-    (response {:discussion-reactions (dialogs/start-discussion discussion-id username)})))
+    (response {:discussion-reactions
+               (dialog/start-discussion {:discussion/id discussion-id
+                                         :user/nickname username})})))
 
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
   [req]
-  (let [reaction-chosen (-> req :body :reaction-chosen)]
-    (response {:discussion-reactions (dialogs/continue-discussion reaction-chosen)})))
+  (let [[reaction args] (-> req :body :reaction-chosen)]
+    (response {:discussion-reactions (dialog/continue-discussion reaction args)})))
 
 (defroutes app-routes
            (GET "/meetings" [] all-meetings)

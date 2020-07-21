@@ -2,7 +2,6 @@
   (:require
     [datomic.client.api :as d]
     [meetly.config :as config]
-    [meetly.meeting.dialog-connector :as dialogs]
     [meetly.meeting.models :as models])
   (:import (java.util Date)))
 
@@ -72,7 +71,11 @@
               :agenda/description description
               :agenda/meeting meeting-id
               :agenda/discussion-id
-              (dialogs/create-discussion-for-agenda title description)}]))
+              {:db/id "temp-id"
+               :discussion/title title
+               :discussion/description description
+               :discussion/states [:discussion.state/open]
+               :discussion/starting-arguments []}}]))
 
 (defn- clean-agenda
   "Cleans the stubborn parts of an agenda."
