@@ -35,14 +35,9 @@
 
 (defn add-meeting
   "Adds a meeting to the database. Returns the id of the newly added meeting."
-  [{:keys [title description end-date start-date share-hash]}]
+  [meeting]
   (get-in
-    (transact [{:db/id "newly-added-meeting"
-                :meeting/title title
-                :meeting/description description
-                :meeting/end-date end-date
-                :meeting/start-date start-date
-                :meeting/share-hash share-hash}])
+    (transact [(assoc meeting :db/id "newly-added-meeting")])
     [:tempids "newly-added-meeting"]))
 
 (defn all-meetings

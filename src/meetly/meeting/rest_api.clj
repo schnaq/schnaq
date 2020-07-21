@@ -7,36 +7,15 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.response :refer [response not-found]]
             [meetly.config :as config]
-            [clojure.data.json :as json]
             [meetly.meeting.database :as db]
             [dialog.engine.core :as dialog]
-            [meetly.core :as meetly-core]
-            [clojure.pprint :as pp])
-  (:import (java.util Date)))
-
-(defn- date->epoch-str
-  "Converts java.util.Date to epoch string"
-  [date]
-  (-> date .getTime str))
-
-(defn- epoch->date
-  "Converts an unix-timestamp to a java.util.Date"
-  [epoch]
-  (new Date epoch))
+            [meetly.core :as meetly-core]))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
   []
   (->> (db/all-meetings)
        (map first)))
-
-(defn- normalize-meeting
-  "Normalizes a single meeting for the wire."
-  [meeting]
-  (-> meeting
-      (update :meeting/start-date date->epoch-str)
-      (update :meeting/end-date date->epoch-str)
-      json/write-str))
 
 (defn- all-meetings
   "Returns all meetings from the db."
@@ -48,12 +27,9 @@
   Converts the epoch dates it receives into java Dates.
   Returns the id of the newly-created meeting as `:id-created`."
   [req]
-  (let [meeting (-> req :body :meeting)
-        new-id (db/add-meeting (-> meeting
-                                   (update :end-date epoch->date)
-                                   (update :start-date epoch->date)))]
-    (response {:text "Meeting Added"
-               :id-created new-id})))
+  (let [meeting (-> req :body-params)
+        new-id (db/add-meeting meeting)]
+    (response {:id-created new-id})))
 
 (defn- add-author
   "Adds an author to the database."
@@ -76,7 +52,7 @@
   "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
-    (response (normalize-meeting (db/meeting-by-hash hash)))))
+    (response (db/meeting-by-hash hash))))
 
 (defn- agendas-by-meeting-hash
   "Returns all agendas of a meeting, that matches the share-hash."
@@ -110,8 +86,8 @@
 
 (defroutes app-routes
            (GET "/meetings" [] all-meetings)                ;;fertig!
-           (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
-           (POST "/meeting/add" [] add-meeting)
+           (GET "/meeting/by-hash/:hash" [] meeting-by-hash) ;;fertig
+           (POST "/meeting/add" [] add-meeting)             ;; fertig!
            (POST "/agendas/add" [] add-agendas)
            (POST "/author/add" [] add-author)               ;; fertig!
            (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)

@@ -4,7 +4,6 @@
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
-            [meetly.meeting.interface.formatters :as formatters]
             [vimsical.re-frame.cofx.inject :as inject]))
 
 ;; #### Helpers ####
