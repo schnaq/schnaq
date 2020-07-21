@@ -1,7 +1,7 @@
 {:paths ["src" "test"]
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
-        com.datomic/client-pro {:mvn/version "0.9.41"}
+        com.datomic/client-pro {:mvn/version "0.9.62"}
         compojure {:mvn/version "1.6.1"}
         cljs-ajax {:mvn/version "0.8.0"}
         day8.re-frame/http-fx {:mvn/version "v0.2.0"}
@@ -9,16 +9,18 @@
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.773"}
         org.clojure/data.json {:mvn/version "1.0.0"}
-        org.clojure/test.check {:mvn/version "1.0.0"}
-        thheller/shadow-cljs {:mvn/version "2.10.14"}
+        org.clojure/test.check {:mvn/version "1.1.0"}
+        thheller/shadow-cljs {:mvn/version "2.10.17"}
         reagent {:mvn/version "1.0.0-alpha2"}
-        re-frame {:mvn/version "1.0.0-rc6"}
+        re-frame {:mvn/version "1.0.0"}
         ring {:mvn/version "1.8.1"}
         ring-cors {:mvn/version "0.1.13"}
         ring/ring-defaults {:mvn/version "0.3.2"}
         ring/ring-json {:mvn/version "0.5.0"}
-        metosin/reitit {:mvn/version "0.5.3"}
-        re-frame-utils {:mvn/version "0.1.0"}}
+        metosin/reitit {:mvn/version "0.5.5"}
+        re-frame-utils {:mvn/version "0.1.0"}
+        github-hhucn/dialog.core
+        {:git/url "https://github.com/hhucn/dialog.core" :sha "057b745009de16dc430948225c4e246412b9e327"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
