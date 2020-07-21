@@ -33,7 +33,19 @@
      :communicative "Kommunikativ"
      :communicative-why "Lassen Sie ihre NutzerInnen direkt zu Wort kommen"
      :cooperative "Kooperativ"
-     :cooperative-why "Fördern Sie den Meinungsaustausch zwischen Ihren TeilnehmerInnen"}))
+     :cooperative-why "Fördern Sie den Meinungsaustausch zwischen Ihren TeilnehmerInnen"
+     ;; create meetly
+     :meeting-create-header "Meetly erstellen"
+     :meeting-create-subheader "Geben Sie ihrem Meetly einen Namen und eine Beschreibung"
+     :meeting-form-title "Titel"
+     :meeting-form-title-placeholder "Wie soll ihr Meetly heißen?"
+     :meeting-form-desc "Beschreibung"
+     :meeting-form-desc-placeholder "Worum geht es in ihrem Meetly?"
+     :meeting-form-deadline "Frist"
+     :meeting-form-end-date "Datum"
+     :meeting-form-end-time "Uhrzeit"
+
+     }))
 
 (defn img-path
   "Returns an image path as String for a given identifier"
