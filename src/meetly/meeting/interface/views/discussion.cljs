@@ -4,6 +4,7 @@
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
+            [meetly.meeting.interface.formatters :as formatters]
             [vimsical.re-frame.cofx.inject :as inject]))
 
 ;; #### Helpers ####
@@ -184,7 +185,7 @@
   (fn [_ [_ payload]]
     {:http-xhrio {:method :post
                   :uri (str (:rest-backend config) "/continue-discussion")
-                  :format (ajax/json-request-format)
+                  :format (formatters/namespaced-json-request-format)
                   :params {:reaction-chosen payload}
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [:set-current-discussion-steps]

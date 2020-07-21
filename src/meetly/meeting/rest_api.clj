@@ -89,7 +89,7 @@
 (defn- agenda-by-discussion-id
   "Returns the agenda tied to a certain discussion-id."
   [req]
-  (let [discussion-id (-> req :route-params :discussion-id)
+  (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
         agenda-point (db/agenda-by-discussion-id discussion-id)]
     (if agenda-point
       (response {:agenda agenda-point})
