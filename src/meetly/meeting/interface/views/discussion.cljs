@@ -150,7 +150,6 @@
 (rf/reg-event-db
   :set-current-discussion-steps
   (fn [db [_ response]]
-    (println response)
     (-> db
         (assoc-in [:discussion :options :all] response)
         (assoc-in [:discussion :options :steps] (map first response))
