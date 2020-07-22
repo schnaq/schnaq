@@ -2,6 +2,8 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
+            [meetly.meeting.interface.text.display-data :as data]
+            [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.config :refer [config]]))
 
 (defn- new-agenda-local
@@ -16,42 +18,65 @@
   "A form for creating a new agenda. The new agenda is automatically saved in the
   app-state according to the suffix."
   [numbered-suffix]
-  [:div.add-agenda-div
-   [:form {:id (str "agenda-" numbered-suffix)}
-    [:label {:for "title"} "Agenda-point: "]
-    [:input {:type "text" :name "title" :placeholder (str "TOP " numbered-suffix)
-             :id (str "title-" numbered-suffix)
-             :on-key-up
-             #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
-    [:br]
-    [:label {:for "description"} "Additional Information: "]
-    [:textarea {:name "description" :placeholder "Important to know!"
-                :id (str "description-" numbered-suffix)
-                :on-key-up
-                #(new-agenda-local :description (oget % [:target :value]) numbered-suffix)}]
-    [:br]]
-   [:br]])
+  [:div
+   [:div.agenda-line]
+   [:div.add-agenda-div.agenda-point
+    [:form {:id (str "agenda-" numbered-suffix)}
+     ;; title
+     [:input.form-control.agenda-form-title.form-title
+      {:type "text"
+       :name "title"
+       :autocomplete "off"
+       :placeholder (str (data/labels :agenda-point) numbered-suffix)
+       :id (str "title-" numbered-suffix)
+       :on-key-up
+       #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
+     ;; description
+     [:textarea.form-control.agenda-form-round
+      {:name "description"
+       :placeholder (str (data/labels :agenda-desc-for) numbered-suffix)
+       :id (str "description-" numbered-suffix)
+       :on-key-up #(new-agenda-local
+                     :description (oget % [:target :value]) numbered-suffix)}]]]])
 
 (defn- add-agenda-button []
-  [:input {:type "button" :value "+ More Agenda +"
-           :on-click #(rf/dispatch [:increase-agenda-forms])}])
+  [:input.btn.agenda-add-button {:type "button"
+                                 :value "+"
+                                 :on-click #(rf/dispatch [:increase-agenda-forms])}])
 
 (defn- submit-agenda-button []
-  [:input {:type "button" :value "Start Meetly"
-           :on-click #(rf/dispatch [:send-agendas])}])
+  [:input.btn.button-primary {:type "button"
+                              :value (data/labels :meeting-create-header)
+                              :on-click #(rf/dispatch [:send-agendas])}])
+
+;; #### header ####
+
+(defn- header []
+  (base/header
+    (data/labels :agenda-header)
+    (data/labels :agenda-subheader)))
+
 
 (defn agenda-view
   "Shows the view for adding one or more agendas."
   []
-  [:div
-   [:h1 "Add Agenda!"]
-   [:h2 "For Meeting: " (:meeting/title @(rf/subscribe [:meeting/last-added]))]
-   (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
-     [:div {:key agenda-num}
-      [new-agenda-form agenda-num]])
-   [add-agenda-button]
-   [:br]
-   [submit-agenda-button]])
+  [:div#create-agenda
+   [header]
+   [:div.container.px-5.py-3.text-center
+    [:div.agenda-meeting-title
+     [:h2 (:title @(rf/subscribe [:meeting/last-added]))]
+     [:br]
+     [:h4 (:description @(rf/subscribe [:meeting/last-added]))]]
+    [:div.container.agenda-container
+     (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
+       [:div {:key agenda-num}
+        [new-agenda-form agenda-num]])]
+    [:div.agenda-line]
+    [add-agenda-button]
+    [:br]
+    [:br]
+    [:br]
+    [submit-agenda-button]]])
 
 (defn agenda-in-meeting-view
   "The view of an agenda which gets embedded inside a meeting view."
@@ -75,14 +100,22 @@
 (rf/reg-event-fx
   :send-agendas
   (fn [{:keys [db]} _]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/agendas/add")
-                  :params {:agendas (vals (get-in db [:agenda :all] []))
-                           :meeting-id (-> db :meeting/added :db/id)}
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:reset-temporary-agenda]
-                  :on-failure [:ajax-failure]}}))
+    (let [meeting-id (-> db :meeting/added :db/id)
+          meeting-hash (-> db :meeting/added :meeting/share-hash)]
+      {:http-xhrio {:method :post
+                    :uri (str (:rest-backend config) "/agendas/add")
+                    :params {:agendas (get-in db [:agenda :all] [])
+                             :meeting-id meeting-id}
+                    :format (ajax/transit-request-format)
+                    :response-format (ajax/transit-response-format)
+                    :on-success [:on-successful-agenda-add meeting-hash]
+                    :on-failure [:ajax-failure]}})))
+
+(rf/reg-event-fx
+  :on-successful-agenda-add
+  (fn [_ [_ meeting-hash]]
+    {:dispatch-n [[:clear-current-agendas]
+                  [:navigate :routes/meetings.show {:share-hash meeting-hash}]]}))
 
 (rf/reg-event-fx
   :load-agendas
