@@ -112,7 +112,7 @@
     <orderEntry type="library" name="Deps: clout:2.2.1" level="project" />
     <orderEntry type="library" name="Deps: commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/guava:25.1-jre" level="project" />
-    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:057b74" level="project" />
+    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:37c4b2" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-schema:0.5.3" level="project" />
     <orderEntry type="library" name="Deps: binaryage/devtools:1.0.2" level="project" />
     <orderEntry type="library" name="Deps: net.cgrand/macrovich:0.2.1" level="project" />

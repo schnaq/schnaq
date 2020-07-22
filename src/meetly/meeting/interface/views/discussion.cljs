@@ -133,16 +133,16 @@
 (rf/reg-event-fx
   :start-discussion
   (fn [{:keys [db]} [_ try-counter]]
-    (let [discussion-id (-> db :agenda :chosen :discussion-id :db/id)
+    (let [discussion-id (-> db :agenda :chosen :agenda/discussion-id :db/id)
           username (get-in db [:user :name] "Anonymous")
           try-counter (or try-counter 0)]
       (when (< try-counter 10)
         (if discussion-id
           {:http-xhrio {:method :get
                         :uri (str (:rest-backend config) "/start-discussion/" discussion-id)
-                        :format (ajax/json-request-format)
+                        :format (ajax/transit-request-format)
                         :url-params {:username username}
-                        :response-format (ajax/json-response-format {:keywords? true})
+                        :response-format (ajax/transit-response-format)
                         :on-success [:set-current-discussion-steps]
                         :on-failure [:ajax-failure]}}
           {:dispatch-later [{:ms 50 :dispatch [:start-discussion (inc try-counter)]}]})))))
@@ -150,11 +150,11 @@
 (rf/reg-event-db
   :set-current-discussion-steps
   (fn [db [_ response]]
-    (let [options (:discussion-reactions response)]
-      (-> db
-          (assoc-in [:discussion :options :all] options)
-          (assoc-in [:discussion :options :steps] (map first options))
-          (assoc-in [:discussion :options :args] (map second options))))))
+    (println response)
+    (-> db
+        (assoc-in [:discussion :options :all] response)
+        (assoc-in [:discussion :options :steps] (map first response))
+        (assoc-in [:discussion :options :args] (map second response)))))
 
 ;; This and the following events serve as the multimethod-equivalent in the frontend
 ;; for stepping through the discussion.
@@ -166,12 +166,12 @@
 (rf/reg-event-fx
   :starting-argument/new
   (fn [{:keys [db]} [reaction form]]
-    (let [discussion-id (-> db :agenda :chosen :discussion-id :db/id)
+    (let [discussion-id (-> db :agenda :chosen :agenda/discussion-id :db/id)
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
           reaction-args
           (args-for-reaction (-> db :discussion :options :steps)
-                             (-> db :discussion :options :args) "starting-argument/new")
+                             (-> db :discussion :options :args) :starting-argument/new)
           updated-args
           (-> reaction-args
               (assoc :new/starting-argument-conclusion conclusion-text)
@@ -208,7 +208,8 @@
             "against-radio" [:rebut/new :new/rebut])
           payload [reaction (-> any-step-args
                                 (assoc :argument/chosen argument-chosen)
-                                (assoc textkey new-text))]]
+                                (assoc textkey [new-text])
+                                (assoc :starting-argument? true))]]
       {:dispatch [:continue-discussion-http-call payload]})))
 
 ;; #### Subs ####
@@ -233,9 +234,9 @@
   :<- [:discussion-steps]
   :<- [:discussion-step-args]
   (fn [[steps args] _]
-    (when (some #(= % "starting-argument/select") steps)
+    (when (some #(= % :starting-argument/select) steps)
       (->>
-        (index-of steps "starting-argument/select")
+        (index-of steps :starting-argument/select)
         (nth args)
         :present/arguments))))
 
@@ -245,7 +246,7 @@
   (fn [arguments _]
     (->>
       arguments
-      (filter #(not= "argument.type/undercut" (:argument/type %)))
+      (filter #(not= :argument.type/undercut (:argument/type %)))
       (map :argument/conclusion)
       distinct)))
 
@@ -253,7 +254,7 @@
   :allow-new-argument?
   :<- [:discussion-steps]
   (fn [steps]
-    (some #(= % "starting-argument/new") steps)))
+    (some #(= % :starting-argument/new) steps)))
 
 (rf/reg-sub
   :current-starting-conclusion-id

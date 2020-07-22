@@ -9,7 +9,8 @@
             [meetly.config :as config]
             [meetly.meeting.database :as db]
             [dialog.engine.core :as dialog]
-            [meetly.core :as meetly-core]))
+            [meetly.core :as meetly-core]
+            [clojure.pprint :as pp]))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -74,24 +75,25 @@
   [req]
   (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
         username (get-in req [:query-params "username"])]
-    (response {:discussion-reactions
-               (dialog/start-discussion {:discussion/id discussion-id
-                                         :user/nickname username})})))
+    (response (dialog/start-discussion {:discussion/id discussion-id
+                                        :user/nickname username}))))
 
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
   [req]
   (let [[reaction args] (:body-params req)]
-    (response {:discussion-reactions (dialog/continue-discussion reaction args)})))
+    (pp/pprint reaction)
+    (pp/pprint args)
+    (response (dialog/continue-discussion reaction args))))
 
 (defroutes app-routes
-           (GET "/meetings" [] all-meetings)                ;;fertig!
-           (GET "/meeting/by-hash/:hash" [] meeting-by-hash) ;;fertig
-           (POST "/meeting/add" [] add-meeting)             ;; fertig!
-           (POST "/agendas/add" [] add-agendas)             ;; fertig!
-           (POST "/author/add" [] add-author)               ;; fertig!
-           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash) ;fertig!
-           (GET "/agenda/:discussion-id" [] agenda-by-discussion-id) ;fertig!
+           (GET "/meetings" [] all-meetings)
+           (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
+           (POST "/meeting/add" [] add-meeting)
+           (POST "/agendas/add" [] add-agendas)
+           (POST "/author/add" [] add-author)
+           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+           (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
            (GET "/start-discussion/:discussion-id" [] start-discussion)
            (POST "/continue-discussion" [] continue-discussion)
            (route/not-found "Error, page not found!"))

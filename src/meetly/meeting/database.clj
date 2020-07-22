@@ -133,7 +133,7 @@
   (all-meetings)
   (add-agenda-point "wegi" "Test-Beschreibung, wichtig!" 17592186045480)
   (meeting-by-hash "c58ec11d-46ff-489b-a7d3-9b466de497f0")
-  (agendas-by-meeting-hash "34ed93c3-6113-449e-a4e1-e242809c7430")
+  (agendas-by-meeting-hash "897aasdha-12839hd-123dfa")
   (agenda-by-discussion-id "8f57fd87-ab35-4a50-99fb-73af3e07d4b5")
   (add-author "Shredder")
   (author-exists? "shredder")
