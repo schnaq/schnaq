@@ -14,13 +14,13 @@
   [form-elements]
   (rf/dispatch
     [:new-meeting
-     {:title (oget form-elements [:title :value])
-      :description (oget form-elements [:description :value])
-      :end-date (.getTime (js/Date. (oget form-elements [:end-date :value])))
-      :share-hash (str (random-uuid))
-      :start-date (.now js/Date)}]))
+     {:meeting/title (oget form-elements [:title :value])
+      :meeting/description (oget form-elements [:description :value])
+      :meeting/end-date (js/Date. (oget form-elements [:end-date :value]))
+      :meeting/share-hash (str (random-uuid))
+      :meeting/start-date (js/Date.)}]))
 
-;; #### header ####
+;; #### Views ####
 
 (defn- header []
   (base/header
@@ -37,8 +37,6 @@
      [:input#end-date.form-control.form-round {:type "datetime-local"
                                                :name "end-date"}]]]])
 
-;; #### Views ####
-
 (defn create-meeting-form-view
   "A view with a form that creates a meeting properly."
   []
@@ -47,8 +45,7 @@
    [:div.container.px-5.py-3
     ;; form
     [:form {:on-submit (fn [e] (.preventDefault e)
-                         (new-meeting-helper (oget e [:target :elements]))
-                         (rf/dispatch [:navigate :routes/meetings.agenda]))}
+                         (new-meeting-helper (oget e [:target :elements])))}
      ;; title
      [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
      [:input#title.form-control.form-round.form-title
@@ -74,8 +71,8 @@
   []
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
     [:div
-     [:h2 (:title current-meeting)]
-     [:p (:description current-meeting)]
+     [:h2 (:meeting/title current-meeting)]
+     [:p (:meeting/description current-meeting)]
      [:hr]
      [agenda-views/agenda-in-meeting-view]]))
 
@@ -86,19 +83,18 @@
    [:h3 "Meetings"]
    (let [meetings @(rf/subscribe [:meetings])]
      (for [meeting meetings]
-       [:div {:key (random-uuid)}
-        [:p (:title meeting) " - " (:description meeting)]
+       [:div {:key (:db/id meeting)}
+        [:p (:meeting/title meeting) " - " (:meeting/description meeting)]
         [:p "Start: "
-         ;; TODO use joda.time in final application
-         (str (js/Date. (js/Number. (:start-date meeting)))) " - End Date: "
-         (str (js/Date. (js/Number. (:end-date meeting))))]
-        [:p "ID: " (:id meeting)]
+         (str (:meeting/start-date meeting)) " - End Date: "
+         (str (:meeting/end-date meeting))]
+        [:p "ID: " (:db/id meeting)]
         [:button.btn.btn-success
          {:on-click (fn []
                       (rf/dispatch [:navigate :routes/meetings.show
-                                    {:share-hash (:share-hash meeting)}])
+                                    {:share-hash (:meeting/share-hash meeting)}])
                       (rf/dispatch [:select-current-meeting meeting]))}
-         "Go to Meetly: " (:share-hash meeting)]
+         "Go to Meetly: " (:meeting/share-hash meeting)]
         [:hr]]))])
 
 
@@ -111,11 +107,14 @@
 
 ;; #### Events ####
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :meeting-added
-  (fn [db [_ meeting response]]
-    (assoc db :meeting/added
-              (assoc meeting :id (:id-created response)))))
+  (fn [{:keys [db]} [_ meeting response]]
+    (let [new-meeting (assoc meeting :db/id (:id-created response))]
+      {:db (-> db
+               (assoc :meeting/added new-meeting)
+               (update :meetings conj new-meeting))
+       :dispatch [:navigate :routes/meetings.agenda]})))
 
 (rf/reg-event-db
   :select-current-meeting
@@ -128,20 +127,19 @@
     (when-not (get-in db [:meeting :selected])
       {:http-xhrio {:method :get
                     :uri (str (:rest-backend config) "/meeting/by-hash/" hash)
-                    :format (ajax/json-request-format)
-                    :response-format (ajax/json-response-format {:keywords? true})
+                    :format (ajax/transit-request-format)
+                    :response-format (ajax/transit-response-format)
                     :on-success [:select-current-meeting]
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx
   :new-meeting
-  (fn [{:keys [db]} [_ meeting]]
-    {:db (update db :meetings conj meeting)
-     :http-xhrio {:method :post
+  (fn [_ [_ meeting]]
+    {:http-xhrio {:method :post
                   :uri (str (:rest-backend config) "/meeting/add")
-                  :params {:meeting meeting}
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
+                  :params meeting
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
                   :on-success [:meeting-added meeting]
                   :on-failure [:ajax-failure]}}))
 

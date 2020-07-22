@@ -3,81 +3,47 @@
             [compojure.route :as route]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
-            [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
+            [ring.middleware.format :refer [wrap-restful-format]]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.response :refer [response not-found]]
             [meetly.config :as config]
-            [clojure.pprint :as pp]
-            [clojure.data.json :as json]
             [meetly.meeting.database :as db]
-            [meetly.meeting.dialog-connector :as dialogs])
-  (:import (java.util Date)))
-
-(defn- date->epoch-str
-  "Converts java.util.Date to epoch string"
-  [date]
-  (-> date .getTime str))
-
-(defn- epoch->date
-  "Converts an unix-timestamp to a java.util.Date"
-  [epoch]
-  (new Date epoch))
+            [dialog.engine.core :as dialog]
+            [meetly.core :as meetly-core]
+            [clojure.pprint :as pp]))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
   []
   (->> (db/all-meetings)
-       (map first)
-       (map #(update % :meeting/start-date date->epoch-str))
-       (map #(update % :meeting/end-date date->epoch-str))
-       json/write-str))
-
-(defn- normalize-meeting
-  "Normalizes a single meeting for the wire."
-  [meeting]
-  (-> meeting
-      (update :meeting/start-date date->epoch-str)
-      (update :meeting/end-date date->epoch-str)
-      json/write-str))
+       (map first)))
 
 (defn- all-meetings
-  "Returns all meetings from the db. Cleaned for the wire."
+  "Returns all meetings from the db."
   [_req]
   (response (fetch-meetings)))
-
-(defn- index-page
-  "Returns an index page placeholder."
-  [req]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body (->
-           (pp/pprint req)
-           (str "Hello there, General Kenobi!"))})
 
 (defn- add-meeting
   "Adds a meeting to the database.
   Converts the epoch dates it receives into java Dates.
   Returns the id of the newly-created meeting as `:id-created`."
   [req]
-  (let [meeting (-> req :body :meeting)
-        new-id (db/add-meeting (-> meeting
-                                   (update :end-date epoch->date)
-                                   (update :start-date epoch->date)))]
-    (response {:text "Meeting Added"
-               :id-created new-id})))
+  (let [meeting (-> req :body-params)
+        new-id (db/add-meeting meeting)]
+    (response {:id-created new-id})))
 
 (defn- add-author
   "Adds an author to the database."
   [req]
-  (let [author (-> req :body :nickname)]
-    (db/add-author-if-not-exists author)
+  (let [author-name (:nickname (:body-params req))]
+    (db/add-author-if-not-exists author-name)
     (response {:text "POST successful"})))
 
 (defn- add-agendas
   "Adds a list of agendas to the database."
   [req]
-  (let [agendas (-> req :body :agendas vals)
-        meeting-id (-> req :body :meeting-id)]
+  (let [agendas (-> req :body-params :agendas)
+        meeting-id (-> req :body-params :meeting-id)]
     (doseq [agenda-point agendas]
       (db/add-agenda-point (:title agenda-point) (:description agenda-point)
                            meeting-id)))
@@ -87,38 +53,40 @@
   "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
-    (response (normalize-meeting (db/meeting-by-hash hash)))))
+    (response (db/meeting-by-hash hash))))
 
 (defn- agendas-by-meeting-hash
   "Returns all agendas of a meeting, that matches the share-hash."
   [req]
   (let [meeting-hash (get-in req [:route-params :hash])]
-    (response {:agendas (db/agendas-by-meeting-hash meeting-hash)})))
+    (response (db/agendas-by-meeting-hash meeting-hash))))
 
 (defn- agenda-by-discussion-id
   "Returns the agenda tied to a certain discussion-id."
   [req]
-  (let [discussion-id (-> req :route-params :discussion-id)
+  (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
         agenda-point (db/agenda-by-discussion-id discussion-id)]
     (if agenda-point
-      (response {:agenda agenda-point})
+      (response agenda-point)
       (not-found (str "No Agenda with discussion-id " discussion-id " in the DB.")))))
 
 (defn- start-discussion
   "Start a new discussion for an agenda point."
   [req]
-  (let [discussion-id (-> req :route-params :discussion-id)
+  (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
         username (get-in req [:query-params "username"])]
-    (response {:discussion-reactions (dialogs/start-discussion discussion-id username)})))
+    (response (dialog/start-discussion {:discussion/id discussion-id
+                                        :user/nickname username}))))
 
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
   [req]
-  (let [reaction-chosen (-> req :body :reaction-chosen)]
-    (response {:discussion-reactions (dialogs/continue-discussion reaction-chosen)})))
+  (let [[reaction args] (:body-params req)]
+    (pp/pprint reaction)
+    (pp/pprint args)
+    (response (dialog/continue-discussion reaction args))))
 
 (defroutes app-routes
-           (GET "/" [] index-page)
            (GET "/meetings" [] all-meetings)
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
            (POST "/meeting/add" [] add-meeting)
@@ -136,12 +104,12 @@
   []
   (let [port (:port config/rest-api)]
     ; Run the server with Ring.defaults middleware
+    (meetly-core/-main)
     (server/run-server
       (-> #'app-routes
           (wrap-cors :access-control-allow-origin [#".*"]
                      :access-control-allow-methods [:get :put :post :delete])
-          (wrap-json-body {:keywords? true :bigdecimals? true})
-          wrap-json-response
+          (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
           (wrap-defaults api-defaults))
       {:port port})
     ; Run the server without ring defaults
