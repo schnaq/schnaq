@@ -9,8 +9,7 @@
             [meetly.config :as config]
             [meetly.meeting.database :as db]
             [dialog.engine.core :as dialog]
-            [meetly.core :as meetly-core]
-            [clojure.pprint :as pp]))
+            [meetly.core :as meetly-core]))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -82,8 +81,6 @@
   "Dispatches the wire-received events to the dialog.core backend."
   [req]
   (let [[reaction args] (:body-params req)]
-    (pp/pprint reaction)
-    (pp/pprint args)
     (response (dialog/continue-discussion reaction args))))
 
 (defroutes app-routes

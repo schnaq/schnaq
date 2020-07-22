@@ -12,9 +12,22 @@
   "Selects the premises out of all arguments that have a corresponding conclusion.
   EXPERIMENTAL: Premisegroup-Members are treated individually instead of as a group."
   [arguments conclusion-id]
-  (->> arguments
-       (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id))
-       (mapcat :argument/premises)))
+  (let [selected-arguments
+        (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments)]
+    (mapcat
+      #(partition 2 (interleave (:argument/premises %) (repeat (:argument/type %))))
+      selected-arguments)))
+
+(comment
+  "TODO Make this into a test"
+  (select-premises [{:argument/conclusion {:db/id 123}
+                     :argument/premises [:some-premise]
+                     :argument/type :argument.type/support}
+                    {:argument/conclusion {:db/id 123}
+                     :argument/premises [:attacking-premise :other-premise]
+                     :argument/type :argument.type/attack}] 123)
+  :end)
+
 
 (defn- index-of
   "Returns the index of the first occurrence of `elem` in `coll` if its present and
@@ -108,6 +121,18 @@
      :placeholder (labels :discussion/add-starting-premise-placeholder)}]
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
+(defn- single-premise-div
+  "A single premise for or against some conclusion."
+  [premise attitude]
+  (let [attitude-string
+        (if (= attitude :argument.type/support)
+          "Zustimmung"                                      ;TODO string -> labels
+          "Ablehnung")]
+    [:div.premises {:key (:statement/content premise)}
+     [:p.small.text-muted attitude-string]
+     [:p (:statement/content premise)]]))
+
+
 (defn discussion-starting-premises-view
   "The shows all premises regarding a conclusion which belongs to starting-arguments."
   []
@@ -119,9 +144,8 @@
      [:div
       [:p selected-conclusion]
       [:hr]
-      (for [premise premises-to-show]
-        [:div.premises {:key (:statement/content premise)}
-         [:p (:statement/content premise)]])
+      (for [[premise argument-type] premises-to-show]
+        [single-premise-div premise argument-type])
       [:hr]
       (when allow-new-argument?
         [:div
