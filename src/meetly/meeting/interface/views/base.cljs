@@ -89,7 +89,9 @@
      [:div {:class "col-lg-6 h-100 text-center text-lg-left my-auto"}
       [:ul {:class "list-inline mb-2"}
        [:li.list-inline-item.btn.btn-link
-        [:a {:href "https://dialogo.io/impressum"} "Impressum"]]]
+        [:a {:href "https://dialogo.io/impressum"} "Impressum"]]
+       [:li.list-inline-item.btn.btn-link
+        [:a {:href "https://dialogo.io/datenschutz"} "Datenschutz"]]]
       [:p {:class "text-muted small mb-4 mb-lg-0"} "\u00A9 Dialogo 2020"]]
      ;; twitter icon
      [:div {:class "col-lg-6 h-100 text-center text-lg-right my-auto"}

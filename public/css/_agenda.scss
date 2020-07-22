@@ -1,0 +1,80 @@
+@import "variables";
+
+.agenda-meeting-title {
+  background-color: $secondary;
+  border-radius: 1.5rem;
+  color: $white;
+  padding: 1rem;
+  text-align: center;
+}
+
+.agenda-container {
+  padding-right: 8rem;
+  padding-left: 8rem;
+}
+
+.agenda-point {
+  background-color: $primary-light;
+  border-radius: 1.5rem;
+  color: $white;
+  text-align: center;
+}
+
+.agenda-form-title {
+  background-color: transparent;
+  color: $white;
+  padding: 2rem 1rem 2rem 1rem;
+  border: none;
+  border-radius: 1.5rem 1.5rem 0rem 0rem;
+}
+
+.agenda-form-title::placeholder {
+  color: $white;
+  opacity: 0.85;
+}
+
+.agenda-form-title:focus {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: $white;
+  opacity: 0.85;
+}
+
+.agenda-form-round {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  color: $white;
+  box-sizing: border-box;
+  border-radius: 0rem 0rem 1.5rem 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.agenda-form-round::placeholder {
+  color: $white;
+  opacity: 0.85;
+}
+
+.agenda-form-round:focus {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: $white;
+  opacity: 0.85;
+}
+
+.agenda-add-button {
+  background-color: $secondary;
+  border-radius: 4rem;
+  border: none;
+  padding: 0rem 1rem;
+  color: $white;
+  font-size: 200%;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.agenda-line {
+  width: 0.5rem;
+  margin-right: auto;
+  margin-left: auto;
+  min-height: 2rem;
+  background: grey;
+  text-align: center;
+}
