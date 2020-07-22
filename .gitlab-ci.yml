@@ -13,6 +13,7 @@ lint:
 up-to-date?:
   image: clojure:openjdk-14-tools-deps-alpine
   script:
+    - apk add git
     - clojure -A:ancient
   allow_failure: true
   when: always
