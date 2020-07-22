@@ -62,8 +62,9 @@
         ajax-error (:ajax errors)]
     [:div#display-content
      [header]
-     (when ajax-error
-       [:h1 "Error: " ajax-error])
+     [:div#error-display.container
+      (when ajax-error
+        [:div.alert.alert-danger.alert-dismissible.fade.show "Error: " ajax-error])]
      (when current-route
        [(-> current-route :data :view)])
      ]))

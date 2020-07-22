@@ -72,26 +72,17 @@
                :discussion/states [:discussion.state/open]
                :discussion/starting-arguments []}}]))
 
-(defn- clean-agenda
-  "Cleans the stubborn parts of an agenda."
-  [agenda]
-  (let [agenda-point (first agenda)
-        id (get-in agenda-point [:agenda/meeting :db/id])]
-    (when agenda-point
-      (-> agenda-point
-          (assoc :meeting id)
-          (dissoc :agenda/meeting)))))
-
 (def ^:private agenda-pattern
-  [[:agenda/title :as :title]
-   [:agenda/description :as :description]
+  [:db/id
+   :agenda/title
+   :agenda/description
    :agenda/meeting
-   [:agenda/discussion-id :as :discussion-id]])
+   :agenda/discussion-id])
 
 (defn agendas-by-meeting-hash
   "Return all agendas belonging to a certain meeting. Ready for the wire."
   [hash]
-  (map clean-agenda
+  (map first
        (d/q
          '[:find (pull ?agendas agenda-pattern)
            :in $ ?hash agenda-pattern
@@ -102,13 +93,12 @@
 (defn agenda-by-discussion-id
   "Returns an agenda which has the corresponding `discussion-id`."
   [discussion-id]
-  (clean-agenda
-    (first
-      (d/q
-        '[:find (pull ?agenda agenda-pattern)
-          :in $ ?discussion-id agenda-pattern
-          :where [?agenda :agenda/discussion-id ?discussion-id]]
-        (d/db (new-connection)) discussion-id agenda-pattern))))
+  (ffirst
+    (d/q
+      '[:find (pull ?agenda agenda-pattern)
+        :in $ ?discussion-id agenda-pattern
+        :where [?agenda :agenda/discussion-id ?discussion-id]]
+      (d/db (new-connection)) discussion-id agenda-pattern)))
 
 (defn- author-exists?
   "Returns whether a certain author with `nickname` already exists in the db."
@@ -141,9 +131,9 @@
                 :end-date (now)
                 :share-hash "897aasdha-12839hd-123dfa"})
   (all-meetings)
-  (add-agenda-point "wegi" "Test-Beschreibung, wichtig!" 17592186045445)
-  (meeting-by-hash "897aasdha-12839hd-123dfa")
-  (agendas-by-meeting-hash "b1c9676f-3a5d-4c6d-b63b-6b18144efdd7")
+  (add-agenda-point "wegi" "Test-Beschreibung, wichtig!" 17592186045480)
+  (meeting-by-hash "c58ec11d-46ff-489b-a7d3-9b466de497f0")
+  (agendas-by-meeting-hash "34ed93c3-6113-449e-a4e1-e242809c7430")
   (agenda-by-discussion-id "8f57fd87-ab35-4a50-99fb-73af3e07d4b5")
   (add-author "Shredder")
   (author-exists? "shredder")

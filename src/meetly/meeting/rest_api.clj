@@ -41,8 +41,8 @@
 (defn- add-agendas
   "Adds a list of agendas to the database."
   [req]
-  (let [agendas (-> req :body :agendas vals)
-        meeting-id (-> req :body :meeting-id)]
+  (let [agendas (-> req :body-params :agendas)
+        meeting-id (-> req :body-params :meeting-id)]
     (doseq [agenda-point agendas]
       (db/add-agenda-point (:title agenda-point) (:description agenda-point)
                            meeting-id)))
@@ -58,7 +58,7 @@
   "Returns all agendas of a meeting, that matches the share-hash."
   [req]
   (let [meeting-hash (get-in req [:route-params :hash])]
-    (response {:agendas (db/agendas-by-meeting-hash meeting-hash)})))
+    (response (db/agendas-by-meeting-hash meeting-hash))))
 
 (defn- agenda-by-discussion-id
   "Returns the agenda tied to a certain discussion-id."
@@ -66,7 +66,7 @@
   (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
         agenda-point (db/agenda-by-discussion-id discussion-id)]
     (if agenda-point
-      (response {:agenda agenda-point})
+      (response agenda-point)
       (not-found (str "No Agenda with discussion-id " discussion-id " in the DB.")))))
 
 (defn- start-discussion
@@ -88,10 +88,10 @@
            (GET "/meetings" [] all-meetings)                ;;fertig!
            (GET "/meeting/by-hash/:hash" [] meeting-by-hash) ;;fertig
            (POST "/meeting/add" [] add-meeting)             ;; fertig!
-           (POST "/agendas/add" [] add-agendas)
+           (POST "/agendas/add" [] add-agendas)             ;; fertig!
            (POST "/author/add" [] add-author)               ;; fertig!
-           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
-           (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
+           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash) ;fertig!
+           (GET "/agenda/:discussion-id" [] agenda-by-discussion-id) ;fertig!
            (GET "/start-discussion/:discussion-id" [] start-discussion)
            (POST "/continue-discussion" [] continue-discussion)
            (route/not-found "Error, page not found!"))

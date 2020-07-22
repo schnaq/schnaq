@@ -107,9 +107,11 @@
 (rf/reg-event-fx
   :meeting-added
   (fn [{:keys [db]} [_ meeting response]]
-    {:db (assoc db :meeting/added
-                   (assoc meeting :db/id (:id-created response)))
-     :dispatch [:navigate :routes/meetings.agenda]}))
+    (let [new-meeting (assoc meeting :db/id (:id-created response))]
+      {:db (-> db
+               (assoc :meeting/added new-meeting)
+               (update :meetings conj new-meeting))
+       :dispatch [:navigate :routes/meetings.agenda]})))
 
 (rf/reg-event-db
   :select-current-meeting
@@ -129,9 +131,8 @@
 
 (rf/reg-event-fx
   :new-meeting
-  (fn [{:keys [db]} [_ meeting]]
-    {:db (update db :meetings conj meeting)
-     :http-xhrio {:method :post
+  (fn [_ [_ meeting]]
+    {:http-xhrio {:method :post
                   :uri (str (:rest-backend config) "/meeting/add")
                   :params meeting
                   :format (ajax/transit-request-format)

@@ -73,12 +73,12 @@
         conclusions @(rf/subscribe [:starting-conclusions])]
     [:div.row.discussion-head
      [:div.col-12
-      [:h2 (:title agenda)]
-      [:p (:description agenda)]
+      [:h2 (:agenda/title agenda)]
+      [:p (:agenda/description agenda)]
       [:hr]
       (for [conclusion conclusions]
         [:div {:key (:statement/content conclusion)}
-         [single-statement-view conclusion (-> agenda :discussion-id :db/id)]])]]))
+         [single-statement-view conclusion (-> agenda :agenda/discussion-id :db/id)]])]]))
 
 (defn discussion-start-view
   "The first step after starting a discussion."

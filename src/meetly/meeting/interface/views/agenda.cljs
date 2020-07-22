@@ -60,14 +60,14 @@
    (let [agendas @(rf/subscribe [:current-agendas])]
      (for [agenda agendas]
        [:div.card
-        {:key (random-uuid)
+        {:key (:db/id agenda)
          :on-click (fn []
                      (rf/dispatch [:navigate :routes/meetings.discussion.start
-                                   {:id (-> agenda :discussion-id :db/id)}])
+                                   {:id (-> agenda :agenda/discussion-id :db/id)}])
                      (rf/dispatch [:choose-agenda agenda]))}
-        [:p "Agenda: " (:title agenda)]
-        [:p "Mehr Infos: " (:description agenda)]
-        [:p "Discussion-ID: " (-> agenda :discussion-id :db/id)]
+        [:p "Agenda: " (:agenda/title agenda)]
+        [:p "Mehr Infos: " (:agenda/description agenda)]
+        [:p "Discussion-ID: " (-> agenda :agenda/discussion-id :db/id)]
         [:br]]))])
 
 ;; #### Events ####
@@ -77,10 +77,10 @@
   (fn [{:keys [db]} _]
     {:http-xhrio {:method :post
                   :uri (str (:rest-backend config) "/agendas/add")
-                  :params {:agendas (get-in db [:agenda :all] [])
-                           :meeting-id (-> db :meeting/added :id)}
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
+                  :params {:agendas (vals (get-in db [:agenda :all] []))
+                           :meeting-id (-> db :meeting/added :db/id)}
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
                   :on-success [:reset-temporary-agenda]
                   :on-failure [:ajax-failure]}}))
 
@@ -89,8 +89,8 @@
   (fn [_ [_ hash]]
     {:http-xhrio {:method :get
                   :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
                   :on-success [:set-current-agendas]
                   :on-failure [:ajax-failure]}}))
 
@@ -100,8 +100,8 @@
     (when-not (-> db :agenda :chosen)
       {:http-xhrio {:method :get
                     :uri (str (:rest-backend config) "/agenda/" discussion-id)
-                    :format (ajax/json-request-format)
-                    :response-format (ajax/json-response-format {:keywords? true})
+                    :format (ajax/transit-request-format)
+                    :response-format (ajax/transit-response-format)
                     :on-success [:set-response-as-agenda]
                     :on-failure [:agenda-not-available]}})))
 
@@ -114,7 +114,7 @@
 (rf/reg-event-db
   :set-current-agendas
   (fn [db [_ response]]
-    (assoc-in db [:agendas :current] (:agendas response))))
+    (assoc-in db [:agendas :current] response)))
 
 (rf/reg-event-db
   :clear-current-agendas
@@ -149,7 +149,7 @@
 (rf/reg-event-db
   :set-response-as-agenda
   (fn [db [_ response]]
-    (assoc-in db [:agenda :chosen] (:agenda response))))
+    (assoc-in db [:agenda :chosen] response)))
 
 ;; #### Subs ####
 
