@@ -23,5 +23,4 @@ up-to-date?:
   script:
     - apk add git
     - clojure -A:ancient
-  allow_failure: true
   when: always

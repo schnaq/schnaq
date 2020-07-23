@@ -4,9 +4,18 @@
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
-            [vimsical.re-frame.cofx.inject :as inject]))
+            [vimsical.re-frame.cofx.inject :as inject]
+            [cljs.pprint :as pp]))
 
 ;; #### Helpers ####
+
+(defn- deduce-step
+  "Deduces the current discussion-loop step by the available options."
+  [options]
+  (cond
+    (some #{:reaction/support} options)
+    :reactions/present
+    :else :default))
 
 (defn- select-arguments-by-conclusion
   "Selects all arguments that have a corresponding conclusion."
@@ -150,12 +159,37 @@
          [:h3 (labels :discussion/create-argument-heading)]
          [add-premise-for-starting-argument-form selected-conclusion]])])])
 
+(defn- single-argument-view
+  "Displays a single argument."
+  [argument]
+  [:div.argument {:key (:db/id argument)}
+   (if (= :argument.type/undercut (:argument/type argument))
+     [:p "Lol undercuts kriegen keine Visualisierung."]
+     [:p (-> argument :argument/conclusion :statement/content)])
+   (if (= :argument.type/support (:argument/type argument))
+     [:p "Dafür spricht:"]
+     [:p "Dagegen spricht:"])
+   (for [premise (:argument/premises argument)]
+     [:p {:key (:statement/content premise)}
+      (:statement/content premise)])])
+
+(defn- choose-reaction-view
+  "User chooses a reaction regarding some argument."
+  []
+  (let [argument (:argument/chosen (first @(rf/subscribe [:discussion-step-args])))]
+    [:div#reaction-view
+     [single-argument-view argument]
+     [:p "Was denken Sie darüber?"]]))
+
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
   []
-  [:div#discussion-loop
-   [:p "Hallo, diese view wird noch nicht supportet"]])
+  (let [steps @(rf/subscribe [:discussion-steps])]
+    [:div#discussion-loop
+     (case (deduce-step steps)
+       :reactions/present [choose-reaction-view]
+       :default [:p "Diese view wird noch nicht supportet"])]))
 
 ;; #### Events ####
 
@@ -179,6 +213,7 @@
 (rf/reg-event-db
   :set-current-discussion-steps
   (fn [db [_ response]]
+    (pp/pprint response)
     (-> db
         (assoc-in [:discussion :options :all] response)
         (assoc-in [:discussion :options :steps] (map first response))
