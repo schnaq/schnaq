@@ -40,19 +40,30 @@
       nil
       maybe-index)))
 
-(defn- argument-from-conclusion
-  "Given a sequence of arguments and a conclusion-id, get any argument that has the
-  corresponding conclusion."
-  [arguments conclusion-id]
-  (first
-    (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments)))
-
 (defn- args-for-reaction
   "Returns the args for a certain reaction."
   [all-steps all-args reaction]
   (nth all-args (index-of all-steps reaction)))
 
 ;; #### Views ####
+(defn- history-view
+  "Displays the statements it took to get to where the user is."
+  []
+  (let [history @(rf/subscribe [:discussion-history])]
+    [:div.discussion-history
+     (for [[statement attitude] history]
+       [:div {:key (:db/id statement)
+              :class (str "statement-" (name attitude))}
+        [:p (:statement/content statement)]
+        [:p.small.text-muted "By: " (-> statement :statement/author :author/nickname)]])]))
+
+(defn- discussion-base
+  "The base template of the discussion"
+  [content]
+  [:div.container
+   [history-view]
+   content])
+
 (defn- single-statement-view
   "Displays a single starting conclusion-statement inside a discussion."
   [statement discussion-id]
@@ -128,8 +139,8 @@
   [argument]
   (let [[attitude-string div-class]
         (if (= (:argument/type argument) :argument.type/support)
-          [(labels :discussion/agree) "premise-agree"]
-          [(labels :discussion/disagree) "premise-disagree"])]
+          [(labels :discussion/agree) "statement-agree"]
+          [(labels :discussion/disagree) "statement-disagree"])]
     [:div {:class div-class
            :on-click #(rf/dispatch [:starting-argument/select argument])}
      [:p.small.text-muted attitude-string]
@@ -142,22 +153,23 @@
 (defn discussion-starting-premises-view
   "The shows all premises regarding a conclusion which belongs to starting-arguments."
   []
-  [:div#discussion-start-premises
-   (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])
-         starting-arguments @(rf/subscribe [:starting-arguments])
-         arguments-to-show (select-arguments-by-conclusion starting-arguments selected-conclusion)
-         allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-     [:div
-      [:p "Es geht gerade hierum:"]
-      [:h2 (-> arguments-to-show first :argument/conclusion :statement/content)]
-      (for [argument arguments-to-show]
-        [:div.premise {:key (:db/id argument)}
-         [single-premisegroup-div argument]])
-      [:hr]
-      (when allow-new-argument?
-        [:div
-         [:h3 (labels :discussion/create-argument-heading)]
-         [add-premise-for-starting-argument-form selected-conclusion]])])])
+  [discussion-base
+   [:div#discussion-start-premises
+    (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])
+          starting-arguments @(rf/subscribe [:starting-arguments])
+          arguments-to-show (select-arguments-by-conclusion starting-arguments selected-conclusion)
+          allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+      [:div
+       [:p "Es geht gerade hierum:"]
+       [:h2 (-> arguments-to-show first :argument/conclusion :statement/content)]
+       (for [argument arguments-to-show]
+         [:div.premise {:key (:db/id argument)}
+          [single-premisegroup-div argument]])
+       [:hr]
+       (when allow-new-argument?
+         [:div
+          [:h3 (labels :discussion/create-argument-heading)]
+          [add-premise-for-starting-argument-form selected-conclusion]])])]])
 
 (defn- single-argument-view
   "Displays a single argument."
@@ -192,6 +204,19 @@
        :default [:p "Diese view wird noch nicht supportet"])]))
 
 ;; #### Events ####
+
+(rf/reg-event-db
+  :discussion.history/push
+  ;; TODO needs more logic to not let duplicates do their shit
+  (fn [db [_ statement attitude]]
+    (when statement
+      (println "Statement: " statement)
+      (update-in db [:history :statements] conj [statement attitude]))))
+
+(rf/reg-event-db
+  :discussion.history/clear
+  (fn [db _]
+    (assoc-in db [:history :statements] '())))
 
 (rf/reg-event-fx
   :start-discussion
@@ -264,17 +289,22 @@
                   :on-success [:set-current-discussion-steps]
                   :on-failure [:ajax-failure]}}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :choose-starting-conclusion
-  (fn [db [_ conclusion-id]]
-    (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)))
+  [(rf/inject-cofx ::inject/sub [:starting-arguments])]
+  (fn [{:keys [db starting-arguments]} [_ conclusion-id]]
+    (let [conclusion
+          (:argument/conclusion
+            (first (select-arguments-by-conclusion starting-arguments conclusion-id)))]
+      {:db (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)
+       :dispatch [:discussion.history/push conclusion :neutral]})))
 
 (rf/reg-event-fx
   :continue-discussion-from-premises
   [(rf/inject-cofx ::inject/sub [:starting-arguments])]
   (fn [{:keys [db starting-arguments]} [_ form conclusion-id]]
     (let [any-step-args (first (-> db :discussion :options :args))
-          argument-chosen (argument-from-conclusion starting-arguments conclusion-id)
+          argument-chosen (select-arguments-by-conclusion starting-arguments conclusion-id)
           new-text (oget form [:premise-text :value])
           [reaction textkey]
           (case (oget form [:premise-choice :value])
@@ -334,3 +364,8 @@
   :current-starting-conclusion-id
   (fn [db _]
     (get-in db [:discussion :starting-conclusion :selected :id])))
+
+(rf/reg-sub
+  :discussion-history
+  (fn [db _]
+    (get-in db [:history :statements])))
