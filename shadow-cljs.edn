@@ -11,4 +11,8 @@
                 :compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}
                 :devtools {:http-root "public"
                            :http-port 8700
-                           :preloads [devtools.preload]}}}}
+                           :preloads [devtools.preload]}}
+          :test {:target :node-test
+                 :output-dir "target/test/compiled/"
+                 :output-to "target/test/compiled/test.js"
+                 :ns-regexp "test$"}}}

@@ -64,7 +64,10 @@
          :controllers [{:parameters {:path [:conclusion-id]}
                         :start (fn [{:keys [path]}]
                                  (rf/dispatch [:choose-starting-conclusion
-                                               (:conclusion-id path)]))}]}]]]]]
+                                               (:conclusion-id path)]))}]}]]
+      ["continue/"
+       {:name :routes/meetings.discussion.continue
+        :view discussion-views/discussion-loop-view}]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view

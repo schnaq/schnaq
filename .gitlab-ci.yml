@@ -3,6 +3,15 @@ test:
   script:
     - clojure -A:test
 
+test-cljs:
+  image: clojure:openjdk-14-tools-deps-alpine
+  before_script:
+    - apk add yarn
+    - yarn install
+  script:
+    - yarn shadow-cljs compile test
+    - node target/test/compiled/test.js
+
 lint:
   image: clojure:openjdk-14-tools-deps-alpine
   script:
@@ -12,8 +21,9 @@ lint:
 
 up-to-date?:
   image: clojure:openjdk-14-tools-deps-alpine
-  script:
+  before_script:
     - apk add git
+  script:
     - clojure -A:ancient
   allow_failure: true
   when: always

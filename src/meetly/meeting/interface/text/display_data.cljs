@@ -55,6 +55,8 @@
      :agenda-point "Agendapunkt "
 
      ;; Discussion Language
+     :discussion/agree "Zustimmung"
+     :discussion/disagree "Ablehnung"
      :discussion/create-argument-action "Meinung hinzufügen"
      :discussion/create-argument-heading "Eigene Meinung abgeben / Informationen hinzufügen"
      :discussion/add-argument-conclusion-placeholder "Das denke ich darüber."

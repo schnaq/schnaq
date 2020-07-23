@@ -26,7 +26,7 @@
      [:input.form-control.agenda-form-title.form-title
       {:type "text"
        :name "title"
-       :autocomplete "off"
+       :auto-complete "off"
        :placeholder (str (data/labels :agenda-point) numbered-suffix)
        :id (str "title-" numbered-suffix)
        :on-key-up
@@ -64,9 +64,9 @@
    [header]
    [:div.container.px-5.py-3.text-center
     [:div.agenda-meeting-title
-     [:h2 (:title @(rf/subscribe [:meeting/last-added]))]
+     [:h2 (:meeting/title @(rf/subscribe [:meeting/last-added]))]
      [:br]
-     [:h4 (:description @(rf/subscribe [:meeting/last-added]))]]
+     [:h4 (:meeting/description @(rf/subscribe [:meeting/last-added]))]]
     [:div.container.agenda-container
      (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
        [:div {:key agenda-num}
@@ -104,7 +104,7 @@
           meeting-hash (-> db :meeting/added :meeting/share-hash)]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/agendas/add")
-                    :params {:agendas (get-in db [:agenda :all] [])
+                    :params {:agendas (vals (get-in db [:agenda :all] []))
                              :meeting-id meeting-id}
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)

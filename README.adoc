@@ -26,3 +26,16 @@ You can connect to localhost and the port output to the `.shadow-cljs/nrepl.port
 To automatically create the stylesheets, enable a file-watcher for the `public/css` directory.
 In the html we use the minimized version.
 So be sure to add `--style compressed` or similar as an option to your sass command.
+
+== Testing To run tests locally do the following.
+
+=== Backend
+
+Run `clj -A:test`
+
+=== Frontend
+
+Run:
+
+- `yarn shadow-cljs compile test`
+- `node target/test/compiled/test.js`
