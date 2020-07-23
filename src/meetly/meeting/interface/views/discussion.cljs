@@ -18,7 +18,6 @@
       #(partition 2 (interleave (:argument/premises %) (repeat (:argument/type %))))
       selected-arguments)))
 
-
 (defn- index-of
   "Returns the index of the first occurrence of `elem` in `coll` if its present and
   nil if not."
@@ -114,11 +113,11 @@
 (defn- single-premise-div
   "A single premise for or against some conclusion."
   [premise attitude]
-  (let [attitude-string
+  (let [[attitude-string div-class]
         (if (= attitude :argument.type/support)
-          "Zustimmung"                                      ;TODO string -> labels
-          "Ablehnung")]
-    [:div
+          [(labels :discussion/agree) "premise-agree"]
+          [(labels :discussion/disagree) "premise-disagree"])]
+    [:div {:class div-class}
      [:p.small.text-muted attitude-string]
      [:p (:statement/content premise)]]))
 
