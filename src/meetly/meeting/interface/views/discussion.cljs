@@ -55,7 +55,8 @@
        [:div {:key (:db/id statement)
               :class (str "statement-" (name attitude))}
         [:p (:statement/content statement)]
-        [:p.small.text-muted "By: " (-> statement :statement/author :author/nickname)]])]))
+        [:p.small.text-muted "By: " (-> statement :statement/author :author/nickname)]])
+     [:hr]]))
 
 (defn- discussion-base
   "The base template of the discussion"
@@ -92,7 +93,7 @@
      :placeholder (labels :discussion/add-argument-premise-placeholder)}]
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
-(defn all-positions-view
+(defn- all-positions-view
   "Shows a nice header and all positions."
   []
   (let [agenda @(rf/subscribe [:chosen-agenda])
@@ -109,13 +110,14 @@
 (defn discussion-start-view
   "The first step after starting a discussion."
   []
-  (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-    [:div#discussion-start
-     [all-positions-view]
-     [:hr]
-     (when allow-new-argument?
-       [:h3 (labels :discussion/create-argument-heading)]
-       [input-starting-argument-form])]))
+  [discussion-base
+   (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+     [:div#discussion-start
+      [all-positions-view]
+      [:hr]
+      (when allow-new-argument?
+        [:h3 (labels :discussion/create-argument-heading)]
+        [input-starting-argument-form])])])
 
 (defn- add-premise-for-starting-argument-form
   "Allows the adding of a premise for or against a starting argument."
@@ -160,8 +162,6 @@
           arguments-to-show (select-arguments-by-conclusion starting-arguments selected-conclusion)
           allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
       [:div
-       [:p "Es geht gerade hierum:"]
-       [:h2 (-> arguments-to-show first :argument/conclusion :statement/content)]
        (for [argument arguments-to-show]
          [:div.premise {:key (:db/id argument)}
           [single-premisegroup-div argument]])
@@ -207,11 +207,11 @@
 
 (rf/reg-event-db
   :discussion.history/push
-  ;; TODO needs more logic to not let duplicates do their shit
   (fn [db [_ statement attitude]]
-    (when statement
-      (println "Statement: " statement)
-      (update-in db [:history :statements] conj [statement attitude]))))
+    (let [newest-entry (-> db :history :statements ffirst)]
+      (if (and statement (not= newest-entry statement))
+        (update-in db [:history :statements] conj [statement attitude])
+        db))))
 
 (rf/reg-event-db
   :discussion.history/clear
@@ -293,11 +293,14 @@
   :choose-starting-conclusion
   [(rf/inject-cofx ::inject/sub [:starting-arguments])]
   (fn [{:keys [db starting-arguments]} [_ conclusion-id]]
-    (let [conclusion
-          (:argument/conclusion
-            (first (select-arguments-by-conclusion starting-arguments conclusion-id)))]
-      {:db (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)
-       :dispatch [:discussion.history/push conclusion :neutral]})))
+    ;; The if switch is needed, so the history works properly on hard reload.
+    (if starting-arguments
+      (let [conclusion
+            (:argument/conclusion
+              (first (select-arguments-by-conclusion starting-arguments conclusion-id)))]
+        {:db (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)
+         :dispatch [:discussion.history/push conclusion :neutral]})
+      {:dispatch-later [{:ms 20 :dispatch [:choose-starting-conclusion conclusion-id]}]})))
 
 (rf/reg-event-fx
   :continue-discussion-from-premises

@@ -52,7 +52,8 @@
                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
       ["start"
        {:controllers [{:start (fn []
-                                (rf/dispatch [:start-discussion]))}]}
+                                (rf/dispatch [:start-discussion])
+                                (rf/dispatch [:discussion.history/clear]))}]}
        ["/"
         {:name :routes/meetings.discussion.start
          :view discussion-views/discussion-start-view}]
