@@ -148,8 +148,8 @@
          arguments-to-show (select-arguments-by-conclusion starting-arguments selected-conclusion)
          allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
      [:div
-      [:p selected-conclusion]
-      [:hr]
+      [:p "Es geht gerade hierum:"]
+      [:h2 (-> arguments-to-show first :argument/conclusion :statement/content)]
       (for [argument arguments-to-show]
         [:div.premise {:key (:db/id argument)}
          [single-premisegroup-div argument]])
