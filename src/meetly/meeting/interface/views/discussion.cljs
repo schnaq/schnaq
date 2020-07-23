@@ -8,7 +8,7 @@
 
 ;; #### Helpers ####
 
-(defn- select-premises
+(defn select-premises
   "Selects the premises out of all arguments that have a corresponding conclusion.
   EXPERIMENTAL: Premisegroup-Members are treated individually instead of as a group."
   [arguments conclusion-id]
@@ -17,17 +17,6 @@
     (mapcat
       #(partition 2 (interleave (:argument/premises %) (repeat (:argument/type %))))
       selected-arguments)))
-
-;;TODO
-(comment
-  "TODO Make this into a test"
-  (select-premises [{:argument/conclusion {:db/id 123}
-                     :argument/premises [:some-premise]
-                     :argument/type :argument.type/support}
-                    {:argument/conclusion {:db/id 123}
-                     :argument/premises [:attacking-premise :other-premise]
-                     :argument/type :argument.type/attack}] 123)
-  :end)
 
 
 (defn- index-of

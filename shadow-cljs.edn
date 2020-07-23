@@ -13,5 +13,6 @@
                            :http-port 8700
                            :preloads [devtools.preload]}}
           :test {:target :node-test
-                 :output-to "target/test.js"
-                 :ns-regexp "-test$"}}}
+                 :output-dir "target/test/compiled/"
+                 :output-to "target/test/compiled/test.js"
+                 :ns-regexp "test$"}}}

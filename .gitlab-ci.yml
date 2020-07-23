@@ -9,7 +9,7 @@ test-cljs:
     - apk add yarn
     - yarn install
     - yarn shadow-cljs compile test
-    - node target/test.js
+    - node target/test/compiled/test.js
 
 lint:
   image: clojure:openjdk-14-tools-deps-alpine
