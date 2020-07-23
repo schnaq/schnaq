@@ -1,4 +1,4 @@
-(ns cljs.views.discussion-test
+(ns meetly.interface.views.discussion-test
   (:require [cljs.test :refer :all]))
 
 (deftest whatever
