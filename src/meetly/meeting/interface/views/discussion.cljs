@@ -8,12 +8,16 @@
 
 ;; #### Helpers ####
 
+(defn- select-arguments-by-conclusion
+  "Selects all arguments that have a corresponding conclusion."
+  [arguments conclusion-id]
+  (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments))
+
 (defn select-premises
   "Selects the premises out of all arguments that have a corresponding conclusion.
   EXPERIMENTAL: Premisegroup-Members are treated individually instead of as a group."
   [arguments conclusion-id]
-  (let [selected-arguments
-        (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments)]
+  (let [selected-arguments (select-arguments-by-conclusion arguments conclusion-id)]
     (mapcat
       #(partition 2 (interleave (:argument/premises %) (repeat (:argument/type %))))
       selected-arguments)))
@@ -110,16 +114,20 @@
      :placeholder (labels :discussion/add-starting-premise-placeholder)}]
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
-(defn- single-premise-div
+(defn- single-premisegroup-div
   "A single premise for or against some conclusion."
-  [premise attitude]
+  [argument]
   (let [[attitude-string div-class]
-        (if (= attitude :argument.type/support)
+        (if (= (:argument/type argument) :argument.type/support)
           [(labels :discussion/agree) "premise-agree"]
           [(labels :discussion/disagree) "premise-disagree"])]
-    [:div {:class div-class}
+    [:div {:class div-class
+           :on-click #(rf/dispatch [:starting-argument/select argument])}
      [:p.small.text-muted attitude-string]
-     [:p (:statement/content premise)]]))
+     [:div.premisegroup
+      (for [premise (:argument/premises argument)]
+        [:p {:key (:statement/content premise)}
+         (:statement/content premise)])]]))
 
 
 (defn discussion-starting-premises-view
@@ -128,19 +136,26 @@
   [:div#discussion-start-premises
    (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])
          starting-arguments @(rf/subscribe [:starting-arguments])
-         premises-to-show (select-premises starting-arguments selected-conclusion)
+         arguments-to-show (select-arguments-by-conclusion starting-arguments selected-conclusion)
          allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
      [:div
       [:p selected-conclusion]
       [:hr]
-      (for [[premise argument-type] premises-to-show]
-        [:div.premise {:key (:db/id premise)}
-         [single-premise-div premise argument-type]])
+      (for [argument arguments-to-show]
+        [:div.premise {:key (:db/id argument)}
+         [single-premisegroup-div argument]])
       [:hr]
       (when allow-new-argument?
         [:div
          [:h3 (labels :discussion/create-argument-heading)]
          [add-premise-for-starting-argument-form selected-conclusion]])])])
+
+(defn discussion-loop-view
+  "The view that is shown when the discussion goes on after the bootstrap.
+  This view dispatches to the correct discussion-steps sub-views."
+  []
+  [:div#discussion-loop
+   [:p "Hallo, diese view wird noch nicht supportet"]])
 
 ;; #### Events ####
 
@@ -191,6 +206,17 @@
               (assoc :new/starting-argument-premises [premise-text]))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
                     [:navigate :routes/meetings.discussion.start {:id discussion-id}]]})))
+
+(rf/reg-event-fx
+  :starting-argument/select
+  (fn [{:keys [db]} [reaction argument]]
+    (let [discussion-id (-> db :agenda :chosen :agenda/discussion-id :db/id)
+          old-args (args-for-reaction
+                     (-> db :discussion :options :steps)
+                     (-> db :discussion :options :args) :starting-argument/select)
+          new-args (assoc old-args :argument/chosen argument)]
+      {:dispatch-n [[:continue-discussion-http-call [reaction new-args]]
+                    [:navigate :routes/meetings.discussion.continue {:id discussion-id}]]})))
 
 (rf/reg-event-fx
   :continue-discussion-http-call
