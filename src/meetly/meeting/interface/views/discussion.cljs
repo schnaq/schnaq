@@ -18,6 +18,7 @@
       #(partition 2 (interleave (:argument/premises %) (repeat (:argument/type %))))
       selected-arguments)))
 
+;;TODO
 (comment
   "TODO Make this into a test"
   (select-premises [{:argument/conclusion {:db/id 123}
@@ -128,7 +129,7 @@
         (if (= attitude :argument.type/support)
           "Zustimmung"                                      ;TODO string -> labels
           "Ablehnung")]
-    [:div.premises {:key (:statement/content premise)}
+    [:div
      [:p.small.text-muted attitude-string]
      [:p (:statement/content premise)]]))
 
@@ -145,7 +146,8 @@
       [:p selected-conclusion]
       [:hr]
       (for [[premise argument-type] premises-to-show]
-        [single-premise-div premise argument-type])
+        [:div.premise {:key (:db/id premise)}
+         [single-premise-div premise argument-type]])
       [:hr]
       (when allow-new-argument?
         [:div

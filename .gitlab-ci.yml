@@ -3,6 +3,14 @@ test:
   script:
     - clojure -A:test
 
+test-cljs:
+  image: clojure:openjdk-14-tools-deps-alpine
+  script:
+    - apk add yarn
+    - yarn install
+    - yarn shadow-cljs compile test
+    - node target/test.js
+
 lint:
   image: clojure:openjdk-14-tools-deps-alpine
   script:
