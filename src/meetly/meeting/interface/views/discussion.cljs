@@ -174,12 +174,31 @@
           [:h3 (labels :discussion/create-argument-heading)]
           [add-premise-for-starting-argument-form selected-conclusion]])])]])
 
+(defn- reaction-subview
+  "Displays a single reaction, based on the input step"
+  [step args]
+  (case step
+    :reaction/support
+    [:p "Ich unterstütze diese Aussage."]
+    :reaction/undercut
+    [:p "Die Aussage hängt nicht mit dem vorherigen Fakt zusammen."]
+    :reaction/rebut
+    [:p "Die Konklusion (zweitletzte in History) ist murks."]
+    :reaction/undermine
+    [:p "Ich habe etwas gegen die letzte Aussage."]
+    :reaction/defend
+    [:p "Die Konklusion ist super, die will ich weiter unterstützen!"]))
+
 (defn- choose-reaction-view
   "User chooses a reaction regarding some argument."
   []
-  [discussion-base
-   [:div#reaction-view
-    [:p (labels :discussion/reason-nudge)]]])
+  (let [options @(rf/subscribe [:discussion-options])]
+    [discussion-base
+     [:div#reaction-view
+      [:p (labels :discussion/reason-nudge)]
+      (for [[step args] options]
+        [:div {:key step}
+         [reaction-subview step args]])]]))
 
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.

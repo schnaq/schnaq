@@ -70,7 +70,6 @@
         :view discussion-views/discussion-loop-view
         :controllers [{:parameters {:path [:id]}
                        :start (fn [{:keys [path]}]
-                                (println "routing steez and suchs")
                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path)]))}]}]]]]
    ["clock"
     {:name :routes/clock
