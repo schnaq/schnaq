@@ -64,11 +64,14 @@
                              :id string?}}
          :controllers [{:parameters {:path [:conclusion-id]}
                         :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:choose-starting-conclusion
-                                               (:conclusion-id path)]))}]}]]
+                                 (rf/dispatch [:choose-starting-conclusion (:conclusion-id path)]))}]}]]
       ["continue/"
        {:name :routes/meetings.discussion.continue
-        :view discussion-views/discussion-loop-view}]]]]
+        :view discussion-views/discussion-loop-view
+        :controllers [{:parameters {:path [:id]}
+                       :start (fn [{:keys [path]}]
+                                (println "routing steez and suchs")
+                                (rf/dispatch [:handle-reload-on-discussion-loop (:id path)]))}]}]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view

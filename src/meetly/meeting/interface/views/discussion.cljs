@@ -137,19 +137,22 @@
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
 (defn- single-premisegroup-div
-  "A single premise for or against some conclusion."
+  "A single premisegroup for or against some conclusion."
   [argument]
   (let [[attitude-string div-class]
         (if (= (:argument/type argument) :argument.type/support)
-          [(labels :discussion/agree) "statement-agree"]
-          [(labels :discussion/disagree) "statement-disagree"])]
-    [:div {:class div-class
-           :on-click #(rf/dispatch [:starting-argument/select argument])}
+          [(labels :discussion/agree) "agree"]
+          [(labels :discussion/disagree) "disagree"])]
+    [:div
      [:p.small.text-muted attitude-string]
-     [:div.premisegroup
-      (for [premise (:argument/premises argument)]
-        [:p {:key (:statement/content premise)}
-         (:statement/content premise)])]]))
+     (for [premise (:argument/premises argument)]
+       [:div.premisegroup
+        {:key (:statement/content premise)
+         :class (str "statement-" div-class)
+         :on-click #(do (rf/dispatch [:starting-argument/select argument])
+                        (rf/dispatch [:discussion.history/push premise div-class]))}
+        [:p (:statement/content premise)]
+        [:p.small.text-muted "By: " (-> premise :statement/author :author/nickname)]])]))
 
 
 (defn discussion-starting-premises-view
@@ -171,27 +174,12 @@
           [:h3 (labels :discussion/create-argument-heading)]
           [add-premise-for-starting-argument-form selected-conclusion]])])]])
 
-(defn- single-argument-view
-  "Displays a single argument."
-  [argument]
-  [:div.argument {:key (:db/id argument)}
-   (if (= :argument.type/undercut (:argument/type argument))
-     [:p "Lol undercuts kriegen keine Visualisierung."]
-     [:p (-> argument :argument/conclusion :statement/content)])
-   (if (= :argument.type/support (:argument/type argument))
-     [:p "Dafür spricht:"]
-     [:p "Dagegen spricht:"])
-   (for [premise (:argument/premises argument)]
-     [:p {:key (:statement/content premise)}
-      (:statement/content premise)])])
-
 (defn- choose-reaction-view
   "User chooses a reaction regarding some argument."
   []
-  (let [argument (:argument/chosen (first @(rf/subscribe [:discussion-step-args])))]
-    [:div#reaction-view
-     [single-argument-view argument]
-     [:p "Was denken Sie darüber?"]]))
+  [discussion-base
+   [:div#reaction-view
+    [:p (labels :discussion/reason-nudge)]]])
 
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
@@ -208,7 +196,7 @@
 (rf/reg-event-db
   :discussion.history/push
   (fn [db [_ statement attitude]]
-    (let [newest-entry (-> db :history :statements ffirst)]
+    (let [newest-entry (-> db :history :statements peek first)]
       (if (and statement (not= newest-entry statement))
         (update-in db [:history :statements] conj [statement attitude])
         db))))
@@ -216,7 +204,7 @@
 (rf/reg-event-db
   :discussion.history/clear
   (fn [db _]
-    (assoc-in db [:history :statements] '())))
+    (assoc-in db [:history :statements] [])))
 
 (rf/reg-event-fx
   :start-discussion

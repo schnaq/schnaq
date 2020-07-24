@@ -70,3 +70,8 @@
   (fn [db _]
     (assoc-in db [:controls :username-input :show?] true)))
 
+(rf/reg-event-fx
+  :handle-reload-on-discussion-loop
+  (fn [{:keys [db]} [_ agenda-id]]
+    (when (empty? (-> db :discussion :options :steps))
+      {:dispatch [:navigate :routes/meetings.discussion.start {:id agenda-id}]})))

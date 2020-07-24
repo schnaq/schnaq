@@ -4,7 +4,7 @@
         com.datomic/client-pro {:mvn/version "0.9.63"}
         compojure {:mvn/version "1.6.1"}
         cljs-ajax {:mvn/version "0.8.0"}
-        day8.re-frame/http-fx {:mvn/version "v0.2.0"}
+        day8.re-frame/http-fx {:mvn/version "0.2.1"}
         http-kit {:mvn/version "2.3.0"}
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.773"}
@@ -20,7 +20,7 @@
         metosin/reitit {:mvn/version "0.5.5"}
         re-frame-utils {:mvn/version "0.1.0"}
         github-hhucn/dialog.core
-        {:git/url "https://github.com/hhucn/dialog.core" :sha "0436bca68e482fd7071c49087f9008467c4115b2"}}
+        {:git/url "https://github.com/hhucn/dialog.core" :sha "70a3e22467ab77961026adf8534356ff68659ab7"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
