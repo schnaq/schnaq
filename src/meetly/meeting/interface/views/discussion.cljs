@@ -176,7 +176,7 @@
 
 (defn- reaction-subview
   "Displays a single reaction, based on the input step"
-  [step args]
+  [step _args]
   (case step
     :reaction/support
     [:p "Ich unterstütze diese Aussage."]
