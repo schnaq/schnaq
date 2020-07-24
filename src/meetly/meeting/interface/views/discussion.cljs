@@ -4,9 +4,18 @@
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
-            [vimsical.re-frame.cofx.inject :as inject]))
+            [vimsical.re-frame.cofx.inject :as inject]
+            [cljs.pprint :as pp]))
 
 ;; #### Helpers ####
+
+(defn- deduce-step
+  "Deduces the current discussion-loop step by the available options."
+  [options]
+  (cond
+    (some #{:reaction/support} options)
+    :reactions/present
+    :else :default))
 
 (defn- select-arguments-by-conclusion
   "Selects all arguments that have a corresponding conclusion."
@@ -31,19 +40,31 @@
       nil
       maybe-index)))
 
-(defn- argument-from-conclusion
-  "Given a sequence of arguments and a conclusion-id, get any argument that has the
-  corresponding conclusion."
-  [arguments conclusion-id]
-  (first
-    (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments)))
-
 (defn- args-for-reaction
   "Returns the args for a certain reaction."
   [all-steps all-args reaction]
   (nth all-args (index-of all-steps reaction)))
 
 ;; #### Views ####
+(defn- history-view
+  "Displays the statements it took to get to where the user is."
+  []
+  (let [history @(rf/subscribe [:discussion-history])]
+    [:div.discussion-history
+     (for [[statement attitude] history]
+       [:div {:key (:db/id statement)
+              :class (str "statement-" (name attitude))}
+        [:p (:statement/content statement)]
+        [:p.small.text-muted "By: " (-> statement :statement/author :author/nickname)]])
+     [:hr]]))
+
+(defn- discussion-base
+  "The base template of the discussion"
+  [content]
+  [:div.container
+   [history-view]
+   content])
+
 (defn- single-statement-view
   "Displays a single starting conclusion-statement inside a discussion."
   [statement discussion-id]
@@ -72,7 +93,7 @@
      :placeholder (labels :discussion/add-argument-premise-placeholder)}]
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
-(defn all-positions-view
+(defn- all-positions-view
   "Shows a nice header and all positions."
   []
   (let [agenda @(rf/subscribe [:chosen-agenda])
@@ -89,13 +110,14 @@
 (defn discussion-start-view
   "The first step after starting a discussion."
   []
-  (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-    [:div#discussion-start
-     [all-positions-view]
-     [:hr]
-     (when allow-new-argument?
-       [:h3 (labels :discussion/create-argument-heading)]
-       [input-starting-argument-form])]))
+  [discussion-base
+   (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+     [:div#discussion-start
+      [all-positions-view]
+      [:hr]
+      (when allow-new-argument?
+        [:h3 (labels :discussion/create-argument-heading)]
+        [input-starting-argument-form])])])
 
 (defn- add-premise-for-starting-argument-form
   "Allows the adding of a premise for or against a starting argument."
@@ -115,49 +137,93 @@
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
 (defn- single-premisegroup-div
-  "A single premise for or against some conclusion."
+  "A single premisegroup for or against some conclusion."
   [argument]
   (let [[attitude-string div-class]
         (if (= (:argument/type argument) :argument.type/support)
-          [(labels :discussion/agree) "premise-agree"]
-          [(labels :discussion/disagree) "premise-disagree"])]
-    [:div {:class div-class
-           :on-click #(rf/dispatch [:starting-argument/select argument])}
+          [(labels :discussion/agree) "agree"]
+          [(labels :discussion/disagree) "disagree"])]
+    [:div
      [:p.small.text-muted attitude-string]
-     [:div.premisegroup
-      (for [premise (:argument/premises argument)]
-        [:p {:key (:statement/content premise)}
-         (:statement/content premise)])]]))
+     (for [premise (:argument/premises argument)]
+       [:div.premisegroup
+        {:key (:statement/content premise)
+         :class (str "statement-" div-class)
+         :on-click #(do (rf/dispatch [:starting-argument/select argument])
+                        (rf/dispatch [:discussion.history/push premise div-class]))}
+        [:p (:statement/content premise)]
+        [:p.small.text-muted "By: " (-> premise :statement/author :author/nickname)]])]))
 
 
 (defn discussion-starting-premises-view
   "The shows all premises regarding a conclusion which belongs to starting-arguments."
   []
-  [:div#discussion-start-premises
-   (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])
-         starting-arguments @(rf/subscribe [:starting-arguments])
-         arguments-to-show (select-arguments-by-conclusion starting-arguments selected-conclusion)
-         allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-     [:div
-      [:p selected-conclusion]
-      [:hr]
-      (for [argument arguments-to-show]
-        [:div.premise {:key (:db/id argument)}
-         [single-premisegroup-div argument]])
-      [:hr]
-      (when allow-new-argument?
-        [:div
-         [:h3 (labels :discussion/create-argument-heading)]
-         [add-premise-for-starting-argument-form selected-conclusion]])])])
+  [discussion-base
+   [:div#discussion-start-premises
+    (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])
+          starting-arguments @(rf/subscribe [:starting-arguments])
+          arguments-to-show (select-arguments-by-conclusion starting-arguments selected-conclusion)
+          allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+      [:div
+       (for [argument arguments-to-show]
+         [:div.premise {:key (:db/id argument)}
+          [single-premisegroup-div argument]])
+       [:hr]
+       (when allow-new-argument?
+         [:div
+          [:h3 (labels :discussion/create-argument-heading)]
+          [add-premise-for-starting-argument-form selected-conclusion]])])]])
+
+(defn- reaction-subview
+  "Displays a single reaction, based on the input step"
+  [step _args]
+  (case step
+    :reaction/support
+    [:p "Ich unterstütze diese Aussage."]
+    :reaction/undercut
+    [:p "Die Aussage hängt nicht mit dem vorherigen Fakt zusammen."]
+    :reaction/rebut
+    [:p "Die Konklusion (zweitletzte in History) ist murks."]
+    :reaction/undermine
+    [:p "Ich habe etwas gegen die letzte Aussage."]
+    :reaction/defend
+    [:p "Die Konklusion ist super, die will ich weiter unterstützen!"]))
+
+(defn- choose-reaction-view
+  "User chooses a reaction regarding some argument."
+  []
+  (let [options @(rf/subscribe [:discussion-options])]
+    [discussion-base
+     [:div#reaction-view
+      [:p (labels :discussion/reason-nudge)]
+      (for [[step args] options]
+        [:div {:key step}
+         [reaction-subview step args]])]]))
 
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
   []
-  [:div#discussion-loop
-   [:p "Hallo, diese view wird noch nicht supportet"]])
+  (let [steps @(rf/subscribe [:discussion-steps])]
+    [:div#discussion-loop
+     (case (deduce-step steps)
+       :reactions/present [choose-reaction-view]
+       :default [:p "Diese view wird noch nicht supportet"])]))
 
 ;; #### Events ####
+
+(rf/reg-event-db
+  :discussion.history/push
+  (fn [db [_ statement attitude]]
+    (let [newest-entry (-> db :history :statements peek first)]
+      (if (and statement (not= newest-entry statement))
+        (update-in db [:history :statements] conj [statement attitude])
+        db))))
+
+(rf/reg-event-db
+  :discussion.history/clear
+  (fn [db _]
+    (assoc-in db [:history :statements] [])))
 
 (rf/reg-event-fx
   :start-discussion
@@ -179,6 +245,7 @@
 (rf/reg-event-db
   :set-current-discussion-steps
   (fn [db [_ response]]
+    (pp/pprint response)
     (-> db
         (assoc-in [:discussion :options :all] response)
         (assoc-in [:discussion :options :steps] (map first response))
@@ -229,17 +296,25 @@
                   :on-success [:set-current-discussion-steps]
                   :on-failure [:ajax-failure]}}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :choose-starting-conclusion
-  (fn [db [_ conclusion-id]]
-    (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)))
+  [(rf/inject-cofx ::inject/sub [:starting-arguments])]
+  (fn [{:keys [db starting-arguments]} [_ conclusion-id]]
+    ;; The if switch is needed, so the history works properly on hard reload.
+    (if starting-arguments
+      (let [conclusion
+            (:argument/conclusion
+              (first (select-arguments-by-conclusion starting-arguments conclusion-id)))]
+        {:db (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)
+         :dispatch [:discussion.history/push conclusion :neutral]})
+      {:dispatch-later [{:ms 20 :dispatch [:choose-starting-conclusion conclusion-id]}]})))
 
 (rf/reg-event-fx
   :continue-discussion-from-premises
   [(rf/inject-cofx ::inject/sub [:starting-arguments])]
   (fn [{:keys [db starting-arguments]} [_ form conclusion-id]]
     (let [any-step-args (first (-> db :discussion :options :args))
-          argument-chosen (argument-from-conclusion starting-arguments conclusion-id)
+          argument-chosen (select-arguments-by-conclusion starting-arguments conclusion-id)
           new-text (oget form [:premise-text :value])
           [reaction textkey]
           (case (oget form [:premise-choice :value])
@@ -299,3 +374,8 @@
   :current-starting-conclusion-id
   (fn [db _]
     (get-in db [:discussion :starting-conclusion :selected :id])))
+
+(rf/reg-sub
+  :discussion-history
+  (fn [db _]
+    (get-in db [:history :statements])))

@@ -42,7 +42,7 @@
     <orderEntry type="library" name="Deps: ring/ring-ssl:0.3.0" level="project" />
     <orderEntry type="library" name="Deps: org.codehaus.mojo/animal-sniffer-annotations:1.14" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-http:9.4.28.v20200408" level="project" />
-    <orderEntry type="library" name="Deps: day8.re-frame/http-fx:v0.2.0" level="project" />
+    <orderEntry type="library" name="Deps: day8.re-frame/http-fx:0.2.1" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-util:9.4.28.v20200408" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/encore:2.91.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.trace:0.7.10" level="project" />
@@ -120,7 +120,7 @@
     <orderEntry type="library" name="Deps: commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/guava:25.1-jre" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.xml:0.0.8" level="project" />
-    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:ac55e0" level="project" />
+    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:70a3e2" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-schema:0.5.5" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.truffle/truffle-api:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: binaryage/devtools:1.0.2" level="project" />

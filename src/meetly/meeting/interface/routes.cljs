@@ -52,7 +52,8 @@
                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
       ["start"
        {:controllers [{:start (fn []
-                                (rf/dispatch [:start-discussion]))}]}
+                                (rf/dispatch [:start-discussion])
+                                (rf/dispatch [:discussion.history/clear]))}]}
        ["/"
         {:name :routes/meetings.discussion.start
          :view discussion-views/discussion-start-view}]
@@ -63,11 +64,13 @@
                              :id string?}}
          :controllers [{:parameters {:path [:conclusion-id]}
                         :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:choose-starting-conclusion
-                                               (:conclusion-id path)]))}]}]]
+                                 (rf/dispatch [:choose-starting-conclusion (:conclusion-id path)]))}]}]]
       ["continue/"
        {:name :routes/meetings.discussion.continue
-        :view discussion-views/discussion-loop-view}]]]]
+        :view discussion-views/discussion-loop-view
+        :controllers [{:parameters {:path [:id]}
+                       :start (fn [{:keys [path]}]
+                                (rf/dispatch [:handle-reload-on-discussion-loop (:id path)]))}]}]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view
