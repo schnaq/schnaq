@@ -35,7 +35,8 @@
    [:div.row
     [:div.col-sm-3
      [:input#end-date.form-control.form-round {:type "datetime-local"
-                                               :name "end-date"}]]]])
+                                               :name "end-date"
+                                               :required true}]]]])
 
 (defn create-meeting-form-view
   "A view with a form that creates a meeting properly."
@@ -50,7 +51,8 @@
      [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
      [:input#title.form-control.form-round.form-title
       {:type "text"
-       :autocomplete "off"
+       :autoComplete "off"
+       :required true
        :placeholder (data/labels :meeting-form-title-placeholder)}]
      [:br] [:br]
 
