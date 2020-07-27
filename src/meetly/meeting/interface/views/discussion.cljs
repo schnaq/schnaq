@@ -13,8 +13,8 @@
   "Deduces the current discussion-loop step by the available options."
   [options]
   (cond
-    (some #{:reaction/support} options)
-    :reactions/present
+    (some #{:reaction/support} options) :reactions/present
+    (some #{:starting-support/new} options) :starting-conclusions/select
     :else :default))
 
 (defn- select-arguments-by-conclusion
@@ -71,9 +71,9 @@
   [:div.card {:style {:background-color "#6aadb8"
                       :width "600px"}
               :on-click (fn [_e]
-                          (rf/dispatch [:choose-starting-conclusion (:db/id statement)])
-                          (rf/dispatch [:navigate :routes/meetings.discussion.start.premises
-                                        {:id discussion-id :conclusion-id (:db/id statement)}]))}
+                          (rf/dispatch [:continue-discussion :starting-conclusions/select statement])
+                          (rf/dispatch [:navigate :routes/meetings.discussion.continue
+                                        {:id discussion-id}]))}
    [:p (:statement/content statement)]
    [:small "Written by: " (-> statement :statement/author :author/nickname)]])
 
@@ -119,61 +119,6 @@
         [:h3 (labels :discussion/create-argument-heading)]
         [input-starting-argument-form])])])
 
-(defn- add-premise-for-starting-argument-form
-  "Allows the adding of a premise for or against a starting argument."
-  [conclusion-id]
-  [:form
-   {:on-submit (fn [e] (.preventDefault e)
-                 (rf/dispatch [:continue-discussion-from-premises
-                               (oget e [:target :elements]) conclusion-id]))}
-   [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"
-                      :default-checked true}]
-   [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
-   [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
-   [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
-   [:input.form-control.mb-1
-    {:type "text" :name "premise-text"
-     :placeholder (labels :discussion/add-starting-premise-placeholder)}]
-   [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
-
-(defn- single-premisegroup-div
-  "A single premisegroup for or against some conclusion."
-  [argument]
-  (let [[attitude-string div-class]
-        (if (= (:argument/type argument) :argument.type/support)
-          [(labels :discussion/agree) "agree"]
-          [(labels :discussion/disagree) "disagree"])]
-    [:div
-     [:p.small.text-muted attitude-string]
-     (for [premise (:argument/premises argument)]
-       [:div.premisegroup
-        {:key (:statement/content premise)
-         :class (str "statement-" div-class)
-         :on-click #(do (rf/dispatch [:starting-argument/select argument])
-                        (rf/dispatch [:discussion.history/push premise div-class]))}
-        [:p (:statement/content premise)]
-        [:p.small.text-muted "By: " (-> premise :statement/author :author/nickname)]])]))
-
-
-(defn discussion-starting-premises-view
-  "The shows all premises regarding a conclusion which belongs to starting-arguments."
-  []
-  [discussion-base
-   [:div#discussion-start-premises
-    (let [selected-conclusion @(rf/subscribe [:current-starting-conclusion-id])
-          starting-arguments @(rf/subscribe [:starting-arguments])
-          arguments-to-show (select-arguments-by-conclusion starting-arguments selected-conclusion)
-          allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-      [:div
-       (for [argument arguments-to-show]
-         [:div.premise {:key (:db/id argument)}
-          [single-premisegroup-div argument]])
-       [:hr]
-       (when allow-new-argument?
-         [:div
-          [:h3 (labels :discussion/create-argument-heading)]
-          [add-premise-for-starting-argument-form selected-conclusion]])])]])
-
 (defn- reaction-subview
   "Displays a single reaction, based on the input step"
   [step _args]
@@ -208,7 +153,8 @@
     [:div#discussion-loop
      (case (deduce-step steps)
        :reactions/present [choose-reaction-view]
-       :default [:p "Diese view wird noch nicht supportet"])]))
+       :starting-conclusions/select [:p "ja es klappt"]
+       :default [:p ""])]))
 
 ;; #### Events ####
 
@@ -275,15 +221,14 @@
                     [:navigate :routes/meetings.discussion.start {:id discussion-id}]]})))
 
 (rf/reg-event-fx
-  :starting-argument/select
-  (fn [{:keys [db]} [reaction argument]]
-    (let [discussion-id (-> db :agenda :chosen :agenda/discussion-id :db/id)
-          old-args (args-for-reaction
-                     (-> db :discussion :options :steps)
-                     (-> db :discussion :options :args) :starting-argument/select)
-          new-args (assoc old-args :argument/chosen argument)]
-      {:dispatch-n [[:continue-discussion-http-call [reaction new-args]]
-                    [:navigate :routes/meetings.discussion.continue {:id discussion-id}]]})))
+  :starting-conclusions/select
+  [(rf/inject-cofx ::inject/sub [:discussion-steps])
+   (rf/inject-cofx ::inject/sub [:discussion-step-args])]
+  (fn [{:keys [discussion-steps discussion-step-args]} [reaction conclusion]]
+    (let [old-args (args-for-reaction discussion-steps discussion-step-args reaction)
+          new-args (assoc old-args :conclusion/chosen conclusion)]
+      {:dispatch-n [[:discussion.history/push conclusion :neutral]
+                    [:continue-discussion-http-call [reaction new-args]]]})))
 
 (rf/reg-event-fx
   :continue-discussion-http-call
@@ -295,36 +240,6 @@
                   :response-format (ajax/transit-response-format)
                   :on-success [:set-current-discussion-steps]
                   :on-failure [:ajax-failure]}}))
-
-(rf/reg-event-fx
-  :choose-starting-conclusion
-  [(rf/inject-cofx ::inject/sub [:starting-arguments])]
-  (fn [{:keys [db starting-arguments]} [_ conclusion-id]]
-    ;; The if switch is needed, so the history works properly on hard reload.
-    (if starting-arguments
-      (let [conclusion
-            (:argument/conclusion
-              (first (select-arguments-by-conclusion starting-arguments conclusion-id)))]
-        {:db (assoc-in db [:discussion :starting-conclusion :selected :id] conclusion-id)
-         :dispatch [:discussion.history/push conclusion :neutral]})
-      {:dispatch-later [{:ms 20 :dispatch [:choose-starting-conclusion conclusion-id]}]})))
-
-(rf/reg-event-fx
-  :continue-discussion-from-premises
-  [(rf/inject-cofx ::inject/sub [:starting-arguments])]
-  (fn [{:keys [db starting-arguments]} [_ form conclusion-id]]
-    (let [any-step-args (first (-> db :discussion :options :args))
-          argument-chosen (select-arguments-by-conclusion starting-arguments conclusion-id)
-          new-text (oget form [:premise-text :value])
-          [reaction textkey]
-          (case (oget form [:premise-choice :value])
-            "for-radio" [:defend/new :new/defend]
-            "against-radio" [:rebut/new :new/rebut])
-          payload [reaction (-> any-step-args
-                                (assoc :argument/chosen argument-chosen)
-                                (assoc textkey [new-text])
-                                (assoc :starting-argument? true))]]
-      {:dispatch [:continue-discussion-http-call payload]})))
 
 ;; #### Subs ####
 
@@ -344,36 +259,21 @@
     (get-in db [:discussion :options :args])))
 
 (rf/reg-sub
-  :starting-arguments
+  :starting-conclusions
   :<- [:discussion-steps]
   :<- [:discussion-step-args]
   (fn [[steps args] _]
-    (when (some #(= % :starting-argument/select) steps)
+    (when (some #(= % :starting-conclusions/select) steps)
       (->>
-        (index-of steps :starting-argument/select)
+        (index-of steps :starting-conclusions/select)
         (nth args)
-        :present/arguments))))
-
-(rf/reg-sub
-  :starting-conclusions
-  :<- [:starting-arguments]
-  (fn [arguments _]
-    (->>
-      arguments
-      (filter #(not= :argument.type/undercut (:argument/type %)))
-      (map :argument/conclusion)
-      distinct)))
+        :present/conclusions))))
 
 (rf/reg-sub
   :allow-new-argument?
   :<- [:discussion-steps]
   (fn [steps]
     (some #(= % :starting-argument/new) steps)))
-
-(rf/reg-sub
-  :current-starting-conclusion-id
-  (fn [db _]
-    (get-in db [:discussion :starting-conclusion :selected :id])))
 
 (rf/reg-sub
   :discussion-history
