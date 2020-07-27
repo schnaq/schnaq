@@ -18,8 +18,7 @@
    [""
     {:name :routes/home
      :view views/development-startpage
-     :link-text "Home"
-     :controllers []}]
+     :link-text "Home"}]
    ["meetings"
     [""
      {:name :routes/meetings
@@ -46,26 +45,17 @@
       {:name :routes/meetings.agenda
        :view agenda-views/agenda-view
        :link-text "Add Agenda"}]
-     ["/:id/"
+     ["/:id"
       {:controllers [{:parameters {:path [:id]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
-      ["start"
+      ["/start"
        {:controllers [{:start (fn []
                                 (rf/dispatch [:start-discussion])
-                                (rf/dispatch [:discussion.history/clear]))}]}
-       ["/"
-        {:name :routes/meetings.discussion.start
-         :view discussion-views/discussion-start-view}]
-       ["/conclusion/:conclusion-id/"
-        {:name :routes/meetings.discussion.start.premises
-         :view discussion-views/discussion-starting-premises-view
-         :parameters {:path {:conclusion-id int?
-                             :id string?}}
-         :controllers [{:parameters {:path [:conclusion-id]}
-                        :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:choose-starting-conclusion (:conclusion-id path)]))}]}]]
-      ["continue/"
+                                (rf/dispatch [:discussion.history/clear]))}]
+        :name :routes/meetings.discussion.start
+        :view discussion-views/discussion-start-view}]
+      ["/continue"
        {:name :routes/meetings.discussion.continue
         :view discussion-views/discussion-loop-view
         :controllers [{:parameters {:path [:id]}
