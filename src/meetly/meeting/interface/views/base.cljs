@@ -1,7 +1,6 @@
 (ns meetly.meeting.interface.views.base
   (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
-            [meetly.meeting.interface.text.display-data :as data]))
+            [re-frame.core :as rf]))
 
 
 (defn- wavy-bottom []

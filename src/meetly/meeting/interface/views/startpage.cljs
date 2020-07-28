@@ -30,7 +30,7 @@
   [:section.py-3
    [:div.container
     [:div.row
-     [:div.col-lg-4.center-content
+     [:div.col-lg-4.text-center
       [:img.img-fluid.shadow {:src (data/img-path :woman-pointing)}]]
      [:div.col-lg-8.text-center
       [:div.row.mt-4
