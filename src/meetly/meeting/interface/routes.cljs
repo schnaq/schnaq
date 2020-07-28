@@ -3,7 +3,8 @@
             [meetly.meeting.interface.views.startpage :as startpage-views]
             [meetly.meeting.interface.views.agenda :as agenda-views]
             [meetly.meeting.interface.views.clock :as clock-views]
-            [meetly.meeting.interface.views.meetings :as meeting-views]
+            [meetly.meeting.interface.views.meeting.meetings :as meeting-views]
+            [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
             [meetly.meeting.interface.views.discussion :as discussion-views]
             [re-frame.core :as rf]))
 
@@ -23,7 +24,7 @@
    ["meetings"
     [""
      {:name :routes/meetings
-      :view meeting-views/meeting-view
+      :view meetings-overview/meeting-view
       :link-text "Meetings"}]
     ["/view/:share-hash"
      {:name :routes/meetings.show

@@ -1,6 +1,7 @@
 (ns meetly.meeting.interface.views.base
   (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [meetly.meeting.interface.text.display-data :as data]))
 
 
 (defn- wavy-bottom []
@@ -26,6 +27,18 @@
      more]]
    [wavy-bottom]])
 
+;; alternative header
+
+(defn header-2
+  "Smaller wavy Header"
+  []
+  [:svg
+   {:width "100%" :height "100" :viewBox "0 0 100% 100" :fill "none" :xmlns "http://www.w3.org/2000/svg"}
+   [:rect {:width "464" :height "100" :fill "#2194EB"}]
+   [:rect {:x "980" :width "462" :height "100" :fill "#4CACF4"}]
+   [:path {:d "M0 0H1440V51.873C1333.61 51.873 1281.05 36.3094 1189 36.3094C931.044 36.3094 698.256 100 453 100C323.177 100 157.818 50 0 50V0Z" :fill "#4CACF4"}]
+   [:path {:d "M1440 0H0C106.395 0 160.946 0 253 0C510.956 0 741.744 100 987 100C1116.82 100 1282.18 50 1440 50V0Z" :fill "#2194EB"}]])
+
 ;; grid icons
 
 (defn icon-in-grid
@@ -48,35 +61,35 @@
 
 (defn- name-input
   "An input, where the user can set their name. Happens automatically by typing."
-  []
+  [username]
   [:form.form-inline
    {:on-submit (fn [e]
                  (.preventDefault e)
                  (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
                  (rf/dispatch [:hide-name-input]))}
-   [:label {:for "name-input"} "Enter your name: "]
-   [:input#name-input
-    {:type "text" :name "name-input"}]
-   [:input.btn.btn-primary {:type "submit" :value "Set Name"}]])
+   [:div.px-2 [:input#name-input.form-control.form-round-05.px-2.py-1
+               {:type "text"
+                :name "name-input"
+                :autoFocus true
+                :placeholder username}]]
+   [:input.btn.btn-primary {:type "submit"
+                            :value "Set Name"}]])
+
 
 (defn show-input-button
   "A button triggering the showing of the name field."
-  []
-  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} "Change Name"])
+  [username]
+  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} username])
 
 (defn username-bar-view
   "A bar containing all user related utilities and information."
   []
   (let [username @(rf/subscribe [:username])
         show-input? @(rf/subscribe [:show-username-input?])]
-    [:div.row
-     [:div.col-6
-      [:p "Welcome, " username]]
-     [:div.col-6
-      [:div.float-right
-       (if show-input?
-         [name-input]
-         [show-input-button])]]]))
+    [:div.float-right
+     (if show-input?
+       [name-input username]
+       [show-input-button username])]))
 
 ;; footer
 

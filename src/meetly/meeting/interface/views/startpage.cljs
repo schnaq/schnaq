@@ -30,16 +30,17 @@
   [:section.py-3
    [:div.container
     [:div.row
-     [:div.col-lg-4
+     [:div.col-lg-4.center-content
       [:img.img-fluid.shadow {:src (data/img-path :woman-pointing)}]]
      [:div.col-lg-8.text-center
       [:div.row.mt-4
        [:div.mx-auto.col-lg-10
-        [:h3.mb-4 (data/labels :create-your-meeting)]
+        [:h3.mb-1 (data/labels :create-your-meeting)]
+        [:br] [:br]
         [:button.btn.button-secondary
          {:type " button "
           :on-click #(rf/dispatch [:navigate :routes/meetings.create])}
-         (data/labels :create-meetly-button)]
+         [:h4 (data/labels :create-meetly-button)]]
         [:p.pt-4 (data/labels :create-your-meeting-sub)]]]]]]])
 
 

@@ -27,7 +27,7 @@
      :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
      :more-info-newsletter "Holen Sie sich regelmäßig Updates zu Dialogo und den aktuellsten Produkten."
      :create-your-meeting "Erstellen Sie jetzt ihr Meetly!"
-     :create-your-meeting-sub "Mit einem Klick erstellen, Agenda bestimmen und an alle Teilnehmenden schicken"
+     :create-your-meeting-sub "Mit einem Klick erstellen und an alle Teilnehmenden schicken"
 
      ;; startpage grid
      :innovative "Innovativ"
@@ -64,7 +64,16 @@
      :discussion/add-starting-premise-placeholder "weil..."
      :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
      :discussion/add-premise-against "Ich habe einen Grund dagegen"
-     :discussion/reason-nudge "Was denken Sie darüber?"}))
+     :discussion/reason-nudge "Was denken Sie darüber?"
+
+     ;; meetings overview
+     :meetings/header "Meetings"
+     :meetings/subheader "Ihre aktuellen Meetings"
+
+     ;; login
+     :login/as "Hallo, "
+     :login/set-name "Geben Sie ihren Namen ein"
+     }))
 
 
 (defn img-path
@@ -84,4 +93,5 @@
   (identifier
     {:laptop "fa-laptop-code"
      :comment "fa-comments"
-     :carry "fa-people-carry"}))
+     :carry "fa-people-carry"
+     :arrow-right "fa-arrow-right"}))

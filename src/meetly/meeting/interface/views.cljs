@@ -47,13 +47,13 @@
      {:id "navbarSupportedContent"
       :class "collapse navbar-collapse"}
      [:ul.navbar-nav.ml-auto
-      ;[:li.nav-item.active [:a.nav-link {:href "#"} "Home" [:span.sr-only "(current)"]]]
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/startpage)} (data/labels :nav-startpage)]]
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/clock)} (data/labels :nav-example)]]
+      ;; navigation items
       [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (data/labels :nav-meeting)]]
       [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (data/labels :nav-meeting-create)]]
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.agenda)} (data/labels :nav-meeting-agenda)]]
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/home)} (data/labels :nav-overview)]]]]]])
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/home)} (data/labels :nav-overview)]]]
+     ;; name input
+     [:div.px-2
+      [base/username-bar-view]]]]])
 
 (defn- base-page
   []

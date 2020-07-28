@@ -3,6 +3,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.frontend.controllers :as reitit-front-controllers]
+            [clojure.string :as clj-string]
             [meetly.meeting.interface.db :as meetly-db]
             [meetly.meeting.interface.config :refer [config]]))
 
@@ -41,14 +42,16 @@
 (rf/reg-event-fx
   :set-username
   (fn [{:keys [db]} [_ username]]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/author/add")
-                  :params {:nickname username}
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:hide-name-input]
-                  :on-failure [:ajax-failure]}
-     :db (assoc-in db [:user :name] username)}))
+    ;; only update when string contains
+    (when (not (clj-string/blank? username))
+      {:http-xhrio {:method :post
+                    :uri (str (:rest-backend config) "/author/add")
+                    :params {:nickname username}
+                    :format (ajax/transit-request-format)
+                    :response-format (ajax/transit-response-format)
+                    :on-success [:hide-name-input]
+                    :on-failure [:ajax-failure]}
+       :db (assoc-in db [:user :name] username)})))
 
 (rf/reg-event-db
   :ajax-failure
