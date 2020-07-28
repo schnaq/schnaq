@@ -1,0 +1,28 @@
+@import "variables";
+
+.meeting-entry {
+
+  background-color: $primary-light;
+  border-radius: 1.5rem;
+  color: $white;
+}
+
+.meeting-entry-title {
+  background-color: transparent;
+  color: $white;
+  padding: 2rem 1rem 2rem 1rem;
+  border: none;
+  border-radius: 1.5rem 1.5rem 0rem 0rem;
+}
+
+.meeting-entry-desc {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  color: $white;
+  box-sizing: border-box;
+}
+
+.arrow-icon {
+  font-size: 2rem;
+  cursor: pointer
+}
