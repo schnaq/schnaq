@@ -122,8 +122,3 @@
   :meeting/last-added
   (fn [db _]
     (:meeting/added db)))
-
-(rf/reg-sub
-  :selected-meeting
-  (fn [db _]
-    (get-in db [:meeting :selected])))

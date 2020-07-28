@@ -12,6 +12,7 @@
             [meetly.meeting.interface.views.clock]
             [meetly.meeting.interface.views.meeting.meetings]
             [meetly.meeting.interface.views.meeting.overview]
+            [meetly.meeting.interface.views.meeting.single]
             [meetly.meeting.interface.views.discussion]
             [meetly.meeting.interface.subs]
             [meetly.meeting.interface.events]

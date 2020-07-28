@@ -10,7 +10,7 @@
     [:span (str (.toLocaleDateString date (language/locale)))]))
 
 (defn- meeting-entry
-  "Displays a singe meeting element of the meeting list"
+  "Displays a single meeting element of the meeting list"
   [meeting]
   [:div.meeting-entry
    [:div.meeting-entry-title
@@ -34,7 +34,7 @@
   [:div.meetings-list
    (let [meetings @(rf/subscribe [:meetings])]
      (for [meeting meetings]
-       [:div {:key (:meeting/title meeting)}
+       [:div.py-3 {:key (:meeting/title meeting)}
         [meeting-entry meeting {:key (:meeting/title meeting)}]]))])
 
 
