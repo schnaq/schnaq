@@ -2,8 +2,7 @@
   (:require [re-frame.core :as rf]
             [meetly.meeting.interface.utils.language :as language]
             [meetly.meeting.interface.text.display-data :as data]
-            [meetly.meeting.interface.views.base :as base]
-            [meetly.meeting.interface.config :refer [config]]))
+            [meetly.meeting.interface.views.base :as base]))
 
 
 (defn- readable-date [date]
