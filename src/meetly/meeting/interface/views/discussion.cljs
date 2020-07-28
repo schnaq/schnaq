@@ -17,20 +17,6 @@
     (some #{:starting-support/new} options) :starting-conclusions/select
     :else :default))
 
-(defn- select-arguments-by-conclusion
-  "Selects all arguments that have a corresponding conclusion."
-  [arguments conclusion-id]
-  (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments))
-
-(defn select-premises
-  "Selects the premises out of all arguments that have a corresponding conclusion.
-  EXPERIMENTAL: Premisegroup-Members are treated individually instead of as a group."
-  [arguments conclusion-id]
-  (let [selected-arguments (select-arguments-by-conclusion arguments conclusion-id)]
-    (mapcat
-      #(partition 2 (interleave (:argument/premises %) (repeat (:argument/type %))))
-      selected-arguments)))
-
 (defn- index-of
   "Returns the index of the first occurrence of `elem` in `coll` if its present and
   nil if not."
@@ -46,6 +32,16 @@
   (nth all-args (index-of all-steps reaction)))
 
 ;; #### Views ####
+
+(defn- statement-bubble
+  "A single bubble of a statement to be used ubiquitously."
+  ;; TODO finish this
+  [statement]
+  [:div {:key (:db/id statement)
+         :class (str "statement-" (name :todo))}
+   [:p (:statement/content statement)]
+   [:p.small.text-muted "By: " (-> statement :statement/author :author/nickname)]])
+
 (defn- history-view
   "Displays the statements it took to get to where the user is."
   []
@@ -94,7 +90,7 @@
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
 (defn- all-positions-view
-  "Shows a nice header and all positions."
+  "Shows a nice header and all starting-conclusions."
   []
   (let [agenda @(rf/subscribe [:chosen-agenda])
         conclusions @(rf/subscribe [:starting-conclusions])]
@@ -145,16 +141,31 @@
         [:div {:key step}
          [reaction-subview step args]])]]))
 
+(defn- starting-premises-view
+  "Show the premises after starting-conclusions. This view is different from usual premises,
+  since we can't allow undercuts."
+  []
+  (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
+        premises @(rf/subscribe [:premises-to-select])]
+    [:div
+     (for [premise premises]
+       [:div.premise
+        {:key (:db/id premise)}
+        [:p (:statement/content premise)]])
+     (when allow-new?
+       [:p "Hier wäre ein neues Argument. WENN ICH EINS HÄTTE"])]))
+
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
   []
   (let [steps @(rf/subscribe [:discussion-steps])]
-    [:div#discussion-loop
-     (case (deduce-step steps)
-       :reactions/present [choose-reaction-view]
-       :starting-conclusions/select [:p "ja es klappt"]
-       :default [:p ""])]))
+    [discussion-base
+     [:div#discussion-loop
+      (case (deduce-step steps)
+        :reactions/present [choose-reaction-view]
+        :starting-conclusions/select [starting-premises-view]
+        :default [:p ""])]]))
 
 ;; #### Events ####
 
@@ -270,10 +281,29 @@
         :present/conclusions))))
 
 (rf/reg-sub
+  :premises-to-select
+  :<- [:discussion-steps]
+  :<- [:discussion-step-args]
+  (fn [[steps args] _]
+    (when (some #{:premises/select} steps)
+      (->>
+        (index-of steps :premises/select)
+        (nth args)
+        :present/premises
+        flatten                                             ;;TODO remove this after refactor in dialog.core
+        ))))
+
+(rf/reg-sub
   :allow-new-argument?
   :<- [:discussion-steps]
   (fn [steps]
     (some #(= % :starting-argument/new) steps)))
+
+(rf/reg-sub
+  :allow-rebut-support?
+  :<- [:discussion-steps]
+  (fn [steps _]
+    (some #{:starting-support/new :support/new} steps)))
 
 (rf/reg-sub
   :discussion-history
