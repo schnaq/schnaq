@@ -1,4 +1,6 @@
 #kaocha/v1
     {:plugins [:kaocha.plugin/cloverage]
+     :cloverage/opts {:html? true
+                      :lcov? true}
      :tests [{:id :unit
               :test-paths ["test"]}]}
