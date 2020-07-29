@@ -1,4 +1,5 @@
-(ns meetly.meeting.models)
+(ns meetly.meeting.models
+  (:require [clojure.spec.alpha :as s]))
 
 (def datomic-schema
   [{:db/ident :meeting/title
@@ -40,9 +41,32 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "An id belonging to the (foreign) discussion represented by this agenda"}
+   ;; Author
    {:db/ident :author/nickname
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/value
     :db/doc "The nickname of an author"}])
 
+;; Common
+(s/def ::entity-reference (s/or :transacted number? :temporary any?))
+
+;; Meeting
+(s/def :meeting/title string?)
+(s/def :meeting/description string?)
+(s/def :meeting/share-hash string?)
+(s/def :meeting/start-date inst?)
+(s/def :meeting/end-date inst?)
+(s/def ::meeting (s/keys :req [:meeting/title :meeting/description
+                               :meeting/share-hash
+                               :meeting/start-date :meeting/end-date]))
+
+;; Agenda
+(s/def :agenda/title string?)
+(s/def :agenda/description string?)
+(s/def :agenda/meeting ::entity-reference)
+(s/def :agenda/discussion-id ::entity-reference)
+(s/def ::agenda (s/keys :req [:agenda/title :agenda/description
+                              :agenda/meeting :agenda/discussion-id]))
+
+(s/def :author/nickname string?)

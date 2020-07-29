@@ -1,0 +1,2 @@
+{:lint-as {ghostwheel.core/>defn clojure.core/defn
+           ghostwheel.core/>defn- clojure.core/defn}}

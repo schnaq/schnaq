@@ -3,7 +3,7 @@
     <module name="meetly" />
     <setting name="replType" value="CLOJURE_MAIN" />
     <setting name="execution" value="DEPS" />
-    <setting name="jvmArgs" value="" />
+    <setting name="jvmArgs" value="-Dghostwheel.enabled=true" />
     <setting name="parameters" value="" />
     <setting name="workingDir" value="$PROJECT_DIR$" />
     <setting name="profiles" value="" />

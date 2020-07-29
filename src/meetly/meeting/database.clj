@@ -1,20 +1,20 @@
 (ns meetly.meeting.database
   (:require
     [datomic.client.api :as d]
+    [ghostwheel.core :refer [>defn]]
     [meetly.config :as config]
     [meetly.meeting.models :as models])
   (:import (java.util Date)))
 
+(defonce ^:private datomic-client
+  (d/client config/datomic))
 
-(defonce datomic-client
-         (d/client config/datomic))
-
-(defn new-connection
+(defn- new-connection
   "Connects to the database and returns a connection."
   []
   (d/connect datomic-client {:db-name config/db-name}))
 
-(defn transact
+(defn- transact
   "Shorthand for transaction."
   [data]
   (d/transact (new-connection) {:tx-data data}))
@@ -99,6 +99,21 @@
         :in $ ?discussion-id agenda-pattern
         :where [?agenda :agenda/discussion-id ?discussion-id]]
       (d/db (new-connection)) discussion-id agenda-pattern)))
+
+(>defn agenda-by-meeting-hash-and-discussion-id
+  "Returns an agenda which fits to the provided meeting. So, we can directly
+  verify that the agenda belongs to the issue."
+  [meeting-hash discussion-id]
+  [:meeting/share-hash :agenda/discussion-id
+   :ret ::models/agenda]
+  (ffirst
+    (d/q
+      '[:find (pull ?agenda agenda-pattern)
+        :in $ ?meeting-hash ?discussion-id agenda-pattern
+        :where [?meeting :meeting/share-hash ?meeting-hash]
+        [?agenda :agenda/meeting ?meeting]
+        [?agenda :agenda/discussion-id ?discussion-id]]
+      (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
 
 (defn- author-exists?
   "Returns whether a certain author with `nickname` already exists in the db."

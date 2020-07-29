@@ -2,6 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
+            [goog.string :as gstring]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.config :refer [config]]))
@@ -78,6 +79,24 @@
     [:br]
     [submit-agenda-button]]])
 
+(defn agenda-in-meeting-view
+  "The view of an agenda which gets embedded inside a meeting view."
+  []
+  [:div
+   (let [agendas @(rf/subscribe [:current-agendas])
+         meeting @(rf/subscribe [:selected-meeting])]
+     (for [agenda agendas]
+       [:div.card
+        {:key (:db/id agenda)
+         :on-click (fn []
+                     (rf/dispatch [:navigate :routes/meetings.discussion.start
+                                   {:id (-> agenda :agenda/discussion-id :db/id)
+                                    :share-hash (:meeting/share-hash meeting)}])
+                     (rf/dispatch [:choose-agenda agenda]))}
+        [:p "Agenda: " (:agenda/title agenda)]
+        [:p "Mehr Infos: " (:agenda/description agenda)]
+        [:p "Discussion-ID: " (-> agenda :agenda/discussion-id :db/id)]
+        [:br]]))])
 
 ;; #### Events ####
 
@@ -113,10 +132,10 @@
 
 (rf/reg-event-fx
   :load-agenda-information
-  (fn [{:keys [db]} [_ discussion-id]]
+  (fn [{:keys [db]} [_ share-hash discussion-id]]
     (when-not (-> db :agenda :chosen)
       {:http-xhrio {:method :get
-                    :uri (str (:rest-backend config) "/agenda/" discussion-id)
+                    :uri (gstring/format "%s/agenda/%s/%s" (:rest-backend config) share-hash discussion-id)
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
                     :on-success [:set-response-as-agenda]

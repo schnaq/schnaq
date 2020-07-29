@@ -77,4 +77,8 @@
   :handle-reload-on-discussion-loop
   (fn [{:keys [db]} [_ agenda-id]]
     (when (empty? (-> db :discussion :options :steps))
-      {:dispatch [:navigate :routes/meetings.discussion.start {:id agenda-id}]})))
+      (let [share-hash (get-in db [:meeting :selected :meeting/share-hash])]
+        {:dispatch [:navigate
+                    :routes/meetings.discussion.start
+                    {:id agenda-id
+                     :share-hash share-hash}]}))))

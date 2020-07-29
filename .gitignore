@@ -4,8 +4,11 @@ target/
 .nrepl-port
 pom.xml
 
+.datomic/
 datomic/
 datomic-*.zip
+
+.clj-kondo/.cache/
 
 # IDEA related
 ## Project-specific
