@@ -5,6 +5,7 @@
         compojure {:mvn/version "1.6.1"}
         cljs-ajax {:mvn/version "0.8.0"}
         day8.re-frame/http-fx {:mvn/version "0.2.1"}
+        gnl/ghostwheel {:mvn/version "0.3.9"}
         http-kit {:mvn/version "2.3.0"}
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.773"}
@@ -28,6 +29,7 @@
  :aliases {:test {:extra-paths ["test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.641"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0-45"}}
+                  :jvm-opts ["-Dghostwheel.enabled=true"]
                   :main-opts ["-m" "kaocha.runner"]}
 
            :ancient {:extra-deps {olical/depot {:mvn/version "2.0.1"}}
@@ -35,6 +37,7 @@
 
            :clj-kondo
            {:extra-deps {clj-kondo {:mvn/version "RELEASE"}}
+            :jvm-opts ["-Dghostwheel.enabled=true"]
             :main-opts ["-m" "clj-kondo.main"]}
 
            :uberjar
@@ -42,5 +45,6 @@
             {luchiniatwork/cambada {:mvn/version "1.0.2"}}
             :main-opts ["-m" "cambada.uberjar"
                         "-m" "meetly.core"]}
-           :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]}}}
 
+           :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]
+                        :jvm-opts ["-Dghostwheel.enabled=true"]}}}
