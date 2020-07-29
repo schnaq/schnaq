@@ -68,14 +68,16 @@
 (defn- single-statement-view
   "Displays a single starting conclusion-statement inside a discussion."
   [statement discussion-id]
-  [:div.card {:style {:background-color "#6aadb8"
-                      :width "600px"}
-              :on-click (fn [_e]
-                          (rf/dispatch [:continue-discussion :starting-conclusions/select statement])
-                          (rf/dispatch [:navigate :routes/meetings.discussion.continue
-                                        {:id discussion-id}]))}
-   [:p (:statement/content statement)]
-   [:small "Written by: " (-> statement :statement/author :author/nickname)]])
+  (let [meeting @(rf/subscribe [:selected-meeting])]
+    [:div.card {:style {:background-color "#6aadb8"
+                        :width "600px"}
+                :on-click (fn [_e]
+                            (rf/dispatch [:continue-discussion :starting-conclusions/select statement])
+                            (rf/dispatch [:navigate :routes/meetings.discussion.continue
+                                          {:id discussion-id
+                                           :share-hash (:meeting/share-hash meeting)}]))}
+     [:p (:statement/content statement)]
+     [:small "Written by: " (-> statement :statement/author :author/nickname)]]))
 
 (defn- input-starting-argument-form
   "A form, which allows the input of a complete argument.
@@ -208,6 +210,7 @@
   :starting-argument/new
   (fn [{:keys [db]} [reaction form]]
     (let [discussion-id (-> db :agenda :chosen :agenda/discussion-id :db/id)
+          share-hash (get-in db [:meeting :selected :meeting/share-hash])
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
           reaction-args
@@ -218,7 +221,8 @@
               (assoc :new/starting-argument-conclusion conclusion-text)
               (assoc :new/starting-argument-premises [premise-text]))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
-                    [:navigate :routes/meetings.discussion.start {:id discussion-id}]]})))
+                    [:navigate :routes/meetings.discussion.start {:id discussion-id
+                                                                  :share-hash share-hash}]]})))
 
 (rf/reg-event-fx
   :starting-conclusions/select
