@@ -157,7 +157,8 @@
     [:div
      [:h2 (labels :discussion/others-think)]
      (for [premise premises]
-       [:div.premise {:key (:db/id premise)}
+       [:div.premise {:key (:db/id premise)
+                      :on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
         [statement-bubble premise]])
      [:hr]
      (when allow-new?
@@ -246,6 +247,17 @@
     (let [old-args (args-for-reaction discussion-steps discussion-step-args reaction)
           new-args (assoc old-args :statement/selected conclusion)]
       {:dispatch-n [[:discussion.history/push conclusion :neutral]
+                    [:continue-discussion-http-call [reaction new-args]]]})))
+
+(rf/reg-event-fx
+  :premises/select
+  [(rf/inject-cofx ::inject/sub [:discussion-steps])
+   (rf/inject-cofx ::inject/sub [:discussion-step-args])]
+  (fn [{:keys [discussion-steps discussion-step-args]} [reaction premise]]
+    (let [old-args (args-for-reaction discussion-steps discussion-step-args reaction)
+          new-args (assoc old-args :statement/selected premise)
+          attitude (arg-type->attitude (:meta/argument.type premise))]
+      {:dispatch-n [[:discussion.history/push premise attitude]
                     [:continue-discussion-http-call [reaction new-args]]]})))
 
 (rf/reg-event-fx
