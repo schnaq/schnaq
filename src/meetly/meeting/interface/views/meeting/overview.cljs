@@ -24,6 +24,7 @@
                                                 {:share-hash (:meeting/share-hash meeting)}])
                                   (rf/dispatch [:select-current-meeting meeting]))}]]]]
    [:div.meeting-entry-desc
+    [:hr]
     [:div "Deadline: " [readable-date (:meeting/end-date meeting)]]
     [:br]
     [:p (:meeting/description meeting)]]])

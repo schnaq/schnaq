@@ -2,7 +2,6 @@
   (:require [re-frame.core :as rf]
             [oops.core :refer [oget]]
             [ajax.core :as ajax]
-            [meetly.meeting.interface.views.agenda :as agenda-views]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.config :refer [config]]))
@@ -67,16 +66,6 @@
      ;; submit
      [:button.btn.button-secondary-with-margin {:type "submit"}
       "Step 2: Add Agenda"]]]])
-
-(defn single-meeting-view
-  "Show a single meeting and all its Agendas."
-  []
-  (let [current-meeting @(rf/subscribe [:selected-meeting])]
-    [:div
-     [:h2 (:meeting/title current-meeting)]
-     [:p (:meeting/description current-meeting)]
-     [:hr]
-     [agenda-views/agenda-in-meeting-view]]))
 
 ;; #### Events ####
 

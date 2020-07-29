@@ -26,20 +26,6 @@
      more]]
    [wavy-bottom]])
 
-;; alternative header
-
-(defn header-2
-  "Smaller wavy Header"
-  []
-  [:svg
-   {:viewBox "0 0 1440 50" :fill "none" :xmlns "http://www.w3.org/2000/svg"}
-   [:rect {:width "464" :height "50" :fill "#2194EB"}]
-   [:rect {:x "455" :width "987" :height "50" :fill "#4CACF4"}]
-   [:path {:d "M0 0H1440V25.9365C1333.61 25.9365 1281.05 18.1547 1189 18.1547C931.044 18.1547 698.256 50 453 50C323.177 50 157.818 25 0 25V0Z" :fill "#4CACF4"}]
-   [:path {:d "M1440 0H0C106.395 0 160.946 0 253 0C510.956 0 741.744 50 987 50C1116.82 50 1282.18 25 1440 25V0Z" :fill "#2194EB"}]]
-
-  )
-
 ;; grid icons
 
 (defn icon-in-grid
