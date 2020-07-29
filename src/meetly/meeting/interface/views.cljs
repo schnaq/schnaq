@@ -66,13 +66,10 @@
       (when ajax-error
         [:div.alert.alert-danger.alert-dismissible.fade.show "Error: " ajax-error])]
      (when current-route
-       [(-> current-route :data :view)])
-     ]))
-
+       [(-> current-route :data :view)])]))
 
 (defn- footer []
   [base/footer])
-
 
 (defn root []
   [:div#root
