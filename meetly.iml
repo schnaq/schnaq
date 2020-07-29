@@ -122,7 +122,7 @@
     <orderEntry type="library" name="Deps: commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/guava:25.1-jre" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.xml:0.0.8" level="project" />
-    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:1c40ce" level="project" />
+    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:4dbf69" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-schema:0.5.5" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.truffle/truffle-api:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: binaryage/devtools:1.0.2" level="project" />

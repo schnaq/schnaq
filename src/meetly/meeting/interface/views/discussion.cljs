@@ -13,23 +13,9 @@
   "Deduces the current discussion-loop step by the available options."
   [options]
   (cond
-    (some #{:reaction/support} options) :reactions/present
     (some #{:starting-support/new} options) :starting-conclusions/select
+    (some #{:undercut/new} options) :select-or-react
     :else :default))
-
-(defn- select-arguments-by-conclusion
-  "Selects all arguments that have a corresponding conclusion."
-  [arguments conclusion-id]
-  (filter #(= (get-in % [:argument/conclusion :db/id]) conclusion-id) arguments))
-
-(defn select-premises
-  "Selects the premises out of all arguments that have a corresponding conclusion.
-  EXPERIMENTAL: Premisegroup-Members are treated individually instead of as a group."
-  [arguments conclusion-id]
-  (let [selected-arguments (select-arguments-by-conclusion arguments conclusion-id)]
-    (mapcat
-      #(partition 2 (interleave (:argument/premises %) (repeat (:argument/type %))))
-      selected-arguments)))
 
 (defn- index-of
   "Returns the index of the first occurrence of `elem` in `coll` if its present and
@@ -45,17 +31,54 @@
   [all-steps all-args reaction]
   (nth all-args (index-of all-steps reaction)))
 
+(defn- arg-type->attitude
+  "Returns an attitude deduced from an argument-type."
+  [arg-type]
+  (cond
+    (#{:argument.type/attack :argument.type/undercut} arg-type) "disagree"
+    (#{:argument.type/support} arg-type) "agree"))
+
+(defn- submit-new-starting-premise
+  "Takes arguments and a form input and calls the next step in the discussion."
+  [current-args form]
+  (let [new-text (oget form [:premise-text :value])
+        choice (oget form [:premise-choice :value])
+        [reaction key-name] (if (= choice "against-radio")
+                              [:starting-rebut/new :new/rebut-premise]
+                              [:starting-support/new :new/support-premise])]
+    (rf/dispatch [:continue-discussion reaction (assoc current-args key-name new-text)])))
+
+(defn- submit-new-premise
+  "Submits a newly created premise as an undercut, rebut or support."
+  [[support-args rebut-args undercut-args] form]
+  (let [new-text (oget form [:premise-text :value])
+        choice (oget form [:premise-choice :value])]
+    (case choice
+      "against-radio" (rf/dispatch [:continue-discussion :rebut/new (assoc rebut-args :new/rebut new-text)])
+      "for-radio" (rf/dispatch [:continue-discussion :support/new (assoc support-args :new/support new-text)])
+      "undercut-radio" (rf/dispatch [:continue-discussion :undercut/new (assoc undercut-args :new/undercut new-text)]))))
+
 ;; #### Views ####
+
+(defn- statement-bubble
+  "A single bubble of a statement to be used ubiquitously."
+  ([statement]
+   (statement-bubble statement (arg-type->attitude (:meta/argument.type statement))))
+  ([{:keys [statement/content statement/author] :as statement} attitude]
+   [:div {:class (str "statement-" (name attitude))}
+    (when (= :argument.type/undercut (:meta/argument.type statement))
+      [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
+    [:p content]
+    [:p.small.text-muted "By: " (:author/nickname author)]]))
+
 (defn- history-view
   "Displays the statements it took to get to where the user is."
   []
   (let [history @(rf/subscribe [:discussion-history])]
     [:div.discussion-history
      (for [[statement attitude] history]
-       [:div {:key (:db/id statement)
-              :class (str "statement-" (name attitude))}
-        [:p (:statement/content statement)]
-        [:p.small.text-muted "By: " (-> statement :statement/author :author/nickname)]])
+       [:div {:key (:db/id statement)}
+        [statement-bubble statement attitude]])
      [:hr]]))
 
 (defn- discussion-base
@@ -94,7 +117,7 @@
    [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
 
 (defn- all-positions-view
-  "Shows a nice header and all positions."
+  "Shows a nice header and all starting-conclusions."
   []
   (let [agenda @(rf/subscribe [:chosen-agenda])
         conclusions @(rf/subscribe [:starting-conclusions])]
@@ -119,42 +142,90 @@
         [:h3 (labels :discussion/create-argument-heading)]
         [input-starting-argument-form])])])
 
-(defn- reaction-subview
-  "Displays a single reaction, based on the input step"
-  [step _args]
-  (case step
-    :reaction/support
-    [:p "Ich unterstütze diese Aussage."]
-    :reaction/undercut
-    [:p "Die Aussage hängt nicht mit dem vorherigen Fakt zusammen."]
-    :reaction/rebut
-    [:p "Die Konklusion (zweitletzte in History) ist murks."]
-    :reaction/undermine
-    [:p "Ich habe etwas gegen die letzte Aussage."]
-    :reaction/defend
-    [:p "Die Konklusion ist super, die will ich weiter unterstützen!"]))
-
-(defn- choose-reaction-view
-  "User chooses a reaction regarding some argument."
+(defn- add-starting-premises-form
+  "Either support or attack a starting-conclusion with the users own premise."
   []
-  (let [options @(rf/subscribe [:discussion-options])]
-    [discussion-base
-     [:div#reaction-view
-      [:p (labels :discussion/reason-nudge)]
-      (for [[step args] options]
-        [:div {:key step}
-         [reaction-subview step args]])]]))
+  (let [all-steps @(rf/subscribe [:discussion-steps])
+        all-args @(rf/subscribe [:discussion-step-args])
+        new-statement-args (args-for-reaction all-steps all-args :starting-support/new)]
+    [:form
+     {:on-submit (fn [e] (.preventDefault e)
+                   (submit-new-starting-premise new-statement-args (oget e [:target :elements])))}
+     [:input#for-radio-starting {:type "radio" :name "premise-choice" :value "for-radio"
+                                 :default-checked true}]
+     [:label {:for "for-radio-starting"} (labels :discussion/add-premise-supporting)] [:br]
+     [:input#against-radio-starting {:type "radio" :name "premise-choice" :value "against-radio"}]
+     [:label {:for "against-radio-starting"} (labels :discussion/add-premise-against)] [:br]
+     [:input.form-control.mb-1
+      {:type "text" :name "premise-text"
+       :placeholder (labels :discussion/premise-placeholder)}]
+     [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-starting-premise-action)]]))
+
+(defn- add-premise-form
+  "Either support or attack or undercut with the users own premise."
+  []
+  (let [all-steps @(rf/subscribe [:discussion-steps])
+        all-args @(rf/subscribe [:discussion-step-args])
+        support-args (args-for-reaction all-steps all-args :support/new)
+        rebut-args (args-for-reaction all-steps all-args :rebut/new)
+        undercut-args (args-for-reaction all-steps all-args :undercut/new)]
+    [:form
+     {:on-submit (fn [e] (.preventDefault e)
+                   (submit-new-premise [support-args rebut-args undercut-args] (oget e [:target :elements])))}
+     [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"
+                        :default-checked true}]
+     [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
+     [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
+     [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
+     [:input#undercut-radio {:type "radio" :name "premise-choice" :value "undercut-radio"}]
+     [:label {:for "undercut-radio"} (labels :discussion/add-undercut)] [:br]
+     [:input.form-control.mb-1
+      {:type "text" :name "premise-text"
+       :placeholder (labels :discussion/premise-placeholder)}]
+     [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-starting-premise-action)]]))
+
+(defn- starting-premises-view
+  "Show the premises after starting-conclusions. This view is different from usual premises,
+  since we can't allow undercuts."
+  []
+  (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
+        premises @(rf/subscribe [:premises-to-select])]
+    [:div
+     [:h2 (labels :discussion/others-think)]
+     (for [premise premises]
+       [:div.premise {:key (:db/id premise)
+                      :on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
+        [statement-bubble premise]])
+     [:hr]
+     (when allow-new?
+       [add-starting-premises-form])]))
+
+(defn- select-or-react-view
+  "A view where the user either reacts to a premise or selects another reaction."
+  []
+  (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
+        premises @(rf/subscribe [:premises-and-undercuts-to-select])]
+    [:div
+     [:h2 (labels :discussion/others-think)]
+     (for [premise premises]
+       [:div.premise {:key (:db/id premise)
+                      :on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
+        [statement-bubble premise]])
+     [:hr]
+     (when allow-new?
+       [add-premise-form])]))
 
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
   []
   (let [steps @(rf/subscribe [:discussion-steps])]
-    [:div#discussion-loop
-     (case (deduce-step steps)
-       :reactions/present [choose-reaction-view]
-       :starting-conclusions/select [:p "ja es klappt"]
-       :default [:p ""])]))
+    [discussion-base
+     [:div#discussion-loop
+      (case (deduce-step steps)
+        :starting-conclusions/select [starting-premises-view]
+        :select-or-react [select-or-react-view]
+        :default [:p ""])]]))
 
 ;; #### Events ####
 
@@ -202,6 +273,8 @@
 (rf/reg-event-fx
   :continue-discussion
   (fn [_ [_ reaction args]]
+    (println "Continue Discussion: " reaction)
+    (println args)
     {:dispatch [reaction args]}))
 
 (rf/reg-event-fx
@@ -216,7 +289,7 @@
           updated-args
           (-> reaction-args
               (assoc :new/starting-argument-conclusion conclusion-text)
-              (assoc :new/starting-argument-premises [premise-text]))]
+              (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
                     [:navigate :routes/meetings.discussion.start {:id discussion-id}]]})))
 
@@ -226,9 +299,45 @@
    (rf/inject-cofx ::inject/sub [:discussion-step-args])]
   (fn [{:keys [discussion-steps discussion-step-args]} [reaction conclusion]]
     (let [old-args (args-for-reaction discussion-steps discussion-step-args reaction)
-          new-args (assoc old-args :conclusion/chosen conclusion)]
+          new-args (assoc old-args :statement/selected conclusion)]
       {:dispatch-n [[:discussion.history/push conclusion :neutral]
                     [:continue-discussion-http-call [reaction new-args]]]})))
+
+(rf/reg-event-fx
+  :premises/select
+  [(rf/inject-cofx ::inject/sub [:discussion-steps])
+   (rf/inject-cofx ::inject/sub [:discussion-step-args])]
+  (fn [{:keys [discussion-steps discussion-step-args]} [reaction premise]]
+    (let [old-args (args-for-reaction discussion-steps discussion-step-args reaction)
+          new-args (assoc old-args :statement/selected premise)
+          attitude (arg-type->attitude (:meta/argument.type premise))]
+      {:dispatch-n [[:discussion.history/push premise attitude]
+                    [:continue-discussion-http-call [reaction new-args]]]})))
+
+(rf/reg-event-fx
+  :starting-rebut/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+
+(rf/reg-event-fx
+  :starting-support/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+
+(rf/reg-event-fx
+  :rebut/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+
+(rf/reg-event-fx
+  :support/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+
+(rf/reg-event-fx
+  :undercut/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
 
 (rf/reg-event-fx
   :continue-discussion-http-call
@@ -270,10 +379,37 @@
         :present/conclusions))))
 
 (rf/reg-sub
+  :premises-to-select
+  :<- [:discussion-steps]
+  :<- [:discussion-step-args]
+  (fn [[steps args] _]
+    (when (some #{:premises/select} steps)
+      (->>
+        (index-of steps :premises/select)
+        (nth args)
+        :present/premises))))
+
+(rf/reg-sub
+  :premises-and-undercuts-to-select
+  :<- [:discussion-steps]
+  :<- [:discussion-step-args]
+  (fn [[steps args] _]
+    (when (some #{:premises/select} steps)
+      (let [present-args (nth args (index-of steps :premises/select))]
+        (concat (:present/premises present-args)
+                (:present/undercuts present-args))))))
+
+(rf/reg-sub
   :allow-new-argument?
   :<- [:discussion-steps]
   (fn [steps]
     (some #(= % :starting-argument/new) steps)))
+
+(rf/reg-sub
+  :allow-rebut-support?
+  :<- [:discussion-steps]
+  (fn [steps _]
+    (some #{:starting-support/new :support/new} steps)))
 
 (rf/reg-sub
   :discussion-history
