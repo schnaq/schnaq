@@ -13,7 +13,6 @@
   "Deduces the current discussion-loop step by the available options."
   [options]
   (cond
-    (some #{:reaction/support} options) :reactions/present
     (some #{:starting-support/new} options) :starting-conclusions/select
     :else :default))
 
@@ -31,16 +30,33 @@
   [all-steps all-args reaction]
   (nth all-args (index-of all-steps reaction)))
 
+(defn- arg-type->attitude
+  "Returns an attitude deduced from an argument-type."
+  [arg-type]
+  (cond
+    (#{:argument.type/attack :argument.type/undercut} arg-type) "disagree"
+    (#{:argument.type/support} arg-type) "agree"))
+
+(defn- submit-new-starting-premise
+  "Takes arguments and a form input and calls the next step in the discussion."
+  [current-args form]
+  (let [new-text (oget form [:premise-text :value])
+        choice (oget form [:premise-choice :value])
+        [reaction key-name] (if (= choice "against-radio")
+                              [:starting-rebut/new :new/rebut-premise]
+                              [:starting-support/new :new/support-premise])]
+    (rf/dispatch [:continue-discussion reaction (assoc current-args key-name new-text)])))
+
 ;; #### Views ####
 
 (defn- statement-bubble
   "A single bubble of a statement to be used ubiquitously."
-  ;; TODO finish this
-  [statement]
-  [:div {:key (:db/id statement)
-         :class (str "statement-" (name :todo))}
-   [:p (:statement/content statement)]
-   [:p.small.text-muted "By: " (-> statement :statement/author :author/nickname)]])
+  ([statement]
+   (statement-bubble statement (arg-type->attitude (:meta/argument.type statement))))
+  ([{:keys [statement/content statement/author]} attitude]
+   [:div {:class (str "statement-" (name attitude))}
+    [:p content]
+    [:p.small.text-muted "By: " (:author/nickname author)]]))
 
 (defn- history-view
   "Displays the statements it took to get to where the user is."
@@ -48,10 +64,8 @@
   (let [history @(rf/subscribe [:discussion-history])]
     [:div.discussion-history
      (for [[statement attitude] history]
-       [:div {:key (:db/id statement)
-              :class (str "statement-" (name attitude))}
-        [:p (:statement/content statement)]
-        [:p.small.text-muted "By: " (-> statement :statement/author :author/nickname)]])
+       [:div {:key (:db/id statement)}
+        [statement-bubble statement attitude]])
      [:hr]]))
 
 (defn- discussion-base
@@ -115,31 +129,24 @@
         [:h3 (labels :discussion/create-argument-heading)]
         [input-starting-argument-form])])])
 
-(defn- reaction-subview
-  "Displays a single reaction, based on the input step"
-  [step _args]
-  (case step
-    :reaction/support
-    [:p "Ich unterstütze diese Aussage."]
-    :reaction/undercut
-    [:p "Die Aussage hängt nicht mit dem vorherigen Fakt zusammen."]
-    :reaction/rebut
-    [:p "Die Konklusion (zweitletzte in History) ist murks."]
-    :reaction/undermine
-    [:p "Ich habe etwas gegen die letzte Aussage."]
-    :reaction/defend
-    [:p "Die Konklusion ist super, die will ich weiter unterstützen!"]))
-
-(defn- choose-reaction-view
-  "User chooses a reaction regarding some argument."
+(defn- add-starting-premises-form
+  "Either support or attack a starting-conclusion with the users own premise."
   []
-  (let [options @(rf/subscribe [:discussion-options])]
-    [discussion-base
-     [:div#reaction-view
-      [:p (labels :discussion/reason-nudge)]
-      (for [[step args] options]
-        [:div {:key step}
-         [reaction-subview step args]])]]))
+  (let [all-steps @(rf/subscribe [:discussion-steps])
+        all-args @(rf/subscribe [:discussion-step-args])
+        new-statement-args (args-for-reaction all-steps all-args :starting-support/new)]
+    [:form
+     {:on-submit (fn [e] (.preventDefault e)
+                   (submit-new-starting-premise new-statement-args (oget e [:target :elements])))}
+     [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"
+                        :default-checked true}]
+     [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
+     [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
+     [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
+     [:input.form-control.mb-1
+      {:type "text" :name "premise-text"
+       :placeholder (labels :discussion/premise-placeholder)}]
+     [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-starting-premise-action)]]))
 
 (defn- starting-premises-view
   "Show the premises after starting-conclusions. This view is different from usual premises,
@@ -148,12 +155,13 @@
   (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
         premises @(rf/subscribe [:premises-to-select])]
     [:div
+     [:h2 (labels :discussion/others-think)]
      (for [premise premises]
-       [:div.premise
-        {:key (:db/id premise)}
-        [:p (:statement/content premise)]])
+       [:div.premise {:key (:db/id premise)}
+        [statement-bubble premise]])
+     [:hr]
      (when allow-new?
-       [:p "Hier wäre ein neues Argument. WENN ICH EINS HÄTTE"])]))
+       [add-starting-premises-form])]))
 
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
@@ -163,7 +171,6 @@
     [discussion-base
      [:div#discussion-loop
       (case (deduce-step steps)
-        :reactions/present [choose-reaction-view]
         :starting-conclusions/select [starting-premises-view]
         :default [:p ""])]]))
 
@@ -227,7 +234,7 @@
           updated-args
           (-> reaction-args
               (assoc :new/starting-argument-conclusion conclusion-text)
-              (assoc :new/starting-argument-premises [premise-text]))]
+              (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
                     [:navigate :routes/meetings.discussion.start {:id discussion-id}]]})))
 
@@ -237,9 +244,19 @@
    (rf/inject-cofx ::inject/sub [:discussion-step-args])]
   (fn [{:keys [discussion-steps discussion-step-args]} [reaction conclusion]]
     (let [old-args (args-for-reaction discussion-steps discussion-step-args reaction)
-          new-args (assoc old-args :conclusion/chosen conclusion)]
+          new-args (assoc old-args :statement/selected conclusion)]
       {:dispatch-n [[:discussion.history/push conclusion :neutral]
                     [:continue-discussion-http-call [reaction new-args]]]})))
+
+(rf/reg-event-fx
+  :starting-rebut/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+
+(rf/reg-event-fx
+  :starting-support/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
 
 (rf/reg-event-fx
   :continue-discussion-http-call
@@ -289,9 +306,7 @@
       (->>
         (index-of steps :premises/select)
         (nth args)
-        :present/premises
-        flatten                                             ;;TODO remove this after refactor in dialog.core
-        ))))
+        :present/premises))))
 
 (rf/reg-sub
   :allow-new-argument?

@@ -64,7 +64,10 @@
      :discussion/add-starting-premise-placeholder "weil..."
      :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
      :discussion/add-premise-against "Ich habe einen Grund dagegen"
-     :discussion/reason-nudge "Was denken Sie darüber?"}))
+     :discussion/reason-nudge "Was denken Sie darüber?"
+     :discussion/premise-placeholder "Ich denke..."
+     :discussion/create-starting-premise-action "Beitrag hinzufügen"
+     :discussion/others-think "Andere denken folgendes:"}))
 
 
 (defn img-path
