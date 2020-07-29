@@ -78,22 +78,6 @@
     [:br]
     [submit-agenda-button]]])
 
-(defn agenda-in-meeting-view
-  "The view of an agenda which gets embedded inside a meeting view."
-  []
-  [:div
-   (let [agendas @(rf/subscribe [:current-agendas])]
-     (for [agenda agendas]
-       [:div.card
-        {:key (:db/id agenda)
-         :on-click (fn []
-                     (rf/dispatch [:navigate :routes/meetings.discussion.start
-                                   {:id (-> agenda :agenda/discussion-id :db/id)}])
-                     (rf/dispatch [:choose-agenda agenda]))}
-        [:p "Agenda: " (:agenda/title agenda)]
-        [:p "Mehr Infos: " (:agenda/description agenda)]
-        [:p "Discussion-ID: " (-> agenda :agenda/discussion-id :db/id)]
-        [:br]]))])
 
 ;; #### Events ####
 

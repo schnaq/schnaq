@@ -48,35 +48,35 @@
 
 (defn- name-input
   "An input, where the user can set their name. Happens automatically by typing."
-  []
+  [username]
   [:form.form-inline
    {:on-submit (fn [e]
                  (.preventDefault e)
                  (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
                  (rf/dispatch [:hide-name-input]))}
-   [:label {:for "name-input"} "Enter your name: "]
-   [:input#name-input
-    {:type "text" :name "name-input"}]
-   [:input.btn.btn-primary {:type "submit" :value "Set Name"}]])
+   [:div.px-2 [:input#name-input.form-control.form-round-05.px-2.py-1
+               {:type "text"
+                :name "name-input"
+                :autoFocus true
+                :placeholder username}]]
+   [:input.btn.btn-primary {:type "submit"
+                            :value "Set Name"}]])
+
 
 (defn show-input-button
   "A button triggering the showing of the name field."
-  []
-  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} "Change Name"])
+  [username]
+  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} username])
 
 (defn username-bar-view
   "A bar containing all user related utilities and information."
   []
   (let [username @(rf/subscribe [:username])
         show-input? @(rf/subscribe [:show-username-input?])]
-    [:div.row
-     [:div.col-6
-      [:p "Welcome, " username]]
-     [:div.col-6
-      [:div.float-right
-       (if show-input?
-         [name-input]
-         [show-input-button])]]]))
+    [:div.float-right
+     (if show-input?
+       [name-input username]
+       [show-input-button username])]))
 
 ;; footer
 

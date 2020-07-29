@@ -14,7 +14,7 @@
 }
 
 .agenda-point {
-  background-color: $primary-light;
+  background-color: $primary;
   border-radius: 1.5rem;
   color: $white;
   text-align: center;
@@ -23,7 +23,7 @@
 .agenda-form-title {
   background-color: transparent;
   color: $white;
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 3rem 2rem 2rem 2rem;
   border: none;
   border-radius: 1.5rem 1.5rem 0rem 0rem;
 }
@@ -34,14 +34,13 @@
 }
 
 .agenda-form-title:focus {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.025);
   color: $white;
-  opacity: 0.85;
 }
 
 .agenda-form-round {
   background-color: rgba(0, 0, 0, 0.05);
-  padding: 1rem;
+  padding: 1rem 2rem 2rem 2rem;
   color: $white;
   box-sizing: border-box;
   border-radius: 0rem 0rem 1.5rem 1.5rem;
@@ -54,9 +53,8 @@
 }
 
 .agenda-form-round:focus {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.025);
   color: $white;
-  opacity: 0.85;
 }
 
 .agenda-add-button {

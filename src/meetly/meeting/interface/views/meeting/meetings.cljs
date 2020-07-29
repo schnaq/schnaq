@@ -1,8 +1,7 @@
-(ns meetly.meeting.interface.views.meetings
+(ns meetly.meeting.interface.views.meeting.meetings
   (:require [re-frame.core :as rf]
             [oops.core :refer [oget]]
             [ajax.core :as ajax]
-            [meetly.meeting.interface.views.agenda :as agenda-views]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.config :refer [config]]))
@@ -68,45 +67,6 @@
      [:button.btn.button-secondary-with-margin {:type "submit"}
       "Step 2: Add Agenda"]]]])
 
-(defn single-meeting-view
-  "Show a single meeting and all its Agendas."
-  []
-  (let [current-meeting @(rf/subscribe [:selected-meeting])]
-    [:div
-     [:h2 (:meeting/title current-meeting)]
-     [:p (:meeting/description current-meeting)]
-     [:hr]
-     [agenda-views/agenda-in-meeting-view]]))
-
-(defn- meetings-list-view
-  "Shows a list of all meetings."
-  []
-  [:div.meetings-list
-   [:h3 "Meetings"]
-   (let [meetings @(rf/subscribe [:meetings])]
-     (for [meeting meetings]
-       [:div {:key (:db/id meeting)}
-        [:p (:meeting/title meeting) " - " (:meeting/description meeting)]
-        [:p "Start: "
-         (str (:meeting/start-date meeting)) " - End Date: "
-         (str (:meeting/end-date meeting))]
-        [:p "ID: " (:db/id meeting)]
-        [:button.btn.btn-success
-         {:on-click (fn []
-                      (rf/dispatch [:navigate :routes/meetings.show
-                                    {:share-hash (:meeting/share-hash meeting)}])
-                      (rf/dispatch [:select-current-meeting meeting]))}
-         "Go to Meetly: " (:meeting/share-hash meeting)]
-        [:hr]]))])
-
-
-(defn meeting-view
-  "Shows the page for an overview of all meetings"
-  []
-  [:div.container
-   [base/username-bar-view]
-   [meetings-list-view]])
-
 ;; #### Events ####
 
 (rf/reg-event-fx
@@ -148,16 +108,6 @@
 ;; #### Subs ####
 
 (rf/reg-sub
-  :meetings
-  (fn [db _]
-    (:meetings db)))
-
-(rf/reg-sub
   :meeting/last-added
   (fn [db _]
     (:meeting/added db)))
-
-(rf/reg-sub
-  :selected-meeting
-  (fn [db _]
-    (get-in db [:meeting :selected])))

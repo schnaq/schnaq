@@ -1,0 +1,42 @@
+@import "variables";
+
+.meeting-entry {
+  background: $white;
+  border-radius: 1.5rem;
+  color: $gray-700;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
+  0 4px 4px 0 rgba(0, 0, 0, 0.19);
+}
+
+.meeting-entry-title {
+  background-color: transparent;
+  padding: 2rem 2rem 0 2rem;
+  border: none;
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+.meeting-entry-desc {
+  background-color: transparent;
+  padding: 0 2rem 2rem 2rem;
+  box-sizing: border-box;
+  border-radius: 0 0 1.5rem 1.5rem;
+}
+
+.arrow-icon {
+  font-size: 2rem;
+  cursor: pointer
+}
+
+.meeting-single-rounded {
+  border-radius: 2rem;
+}
+
+.meeting-header {
+  padding: 2rem 2rem 1rem 2rem;
+  color: $white;
+}
+
+.back-arrow {
+  display: flex;
+  align-items: start;
+}
