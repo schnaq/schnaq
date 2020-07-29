@@ -82,13 +82,15 @@
   "The view of an agenda which gets embedded inside a meeting view."
   []
   [:div
-   (let [agendas @(rf/subscribe [:current-agendas])]
+   (let [agendas @(rf/subscribe [:current-agendas])
+         meeting @(rf/subscribe [:selected-meeting])]
      (for [agenda agendas]
        [:div.card
         {:key (:db/id agenda)
          :on-click (fn []
                      (rf/dispatch [:navigate :routes/meetings.discussion.start
-                                   {:id (-> agenda :agenda/discussion-id :db/id)}])
+                                   {:id (-> agenda :agenda/discussion-id :db/id)
+                                    :share-hash (:meeting/share-hash meeting)}])
                      (rf/dispatch [:choose-agenda agenda]))}
         [:p "Agenda: " (:agenda/title agenda)]
         [:p "Mehr Infos: " (:agenda/description agenda)]
