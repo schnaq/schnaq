@@ -70,7 +70,6 @@
      :discussion/create-starting-premise-action "Beitrag hinzufügen"
      :discussion/others-think "Andere denken folgendes:"
      :discussion/undercut-bubble-intro "Der letzte Beitrag hat nichts mit dem vorherigen zu tun. Begründung:"
-     :discussion/reason-nudge "Was denken Sie darüber?"
 
      ;; meetings overview
      :meetings/header "Meetings"
