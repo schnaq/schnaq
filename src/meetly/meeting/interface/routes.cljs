@@ -30,7 +30,6 @@
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/:share-hash"
-     {:parameters {:path {:share-hash string?}}}
      ["/"
       {:name :routes/meetings.show
        :view meeting-views/single-meeting-view
@@ -48,12 +47,12 @@
         :view agenda-views/agenda-view
         :link-text "Add Agenda"}]
       ["/:id"
-       {:controllers [{:parameters {:path {:id number?}}
+       {:controllers [{:parameters {:path [:share-hash :id]}
                        :start (fn [{:keys [path]}]
-                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
+                                (rf/dispatch [:load-agenda-information (:share-hash path) (:id path)]))}]}
        ["/start"
-        {:parameters {:path {:share-hash string?}}
-         :controllers [{:start (fn []
+        {:controllers [{:parameters {:path [:share-hash :id]}
+                        :start (fn []
                                  (rf/dispatch [:start-discussion])
                                  (rf/dispatch [:discussion.history/clear]))}]
          :name :routes/meetings.discussion.start
