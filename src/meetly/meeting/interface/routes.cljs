@@ -28,12 +28,12 @@
       :link-text "Meetings"}]
     ["/create"
      {:name :routes/meetings.create
-      :view meeting-single/create-meeting-form-view
+      :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/:share-hash"
      ["/"
       {:name :routes/meetings.show
-       :view meeting-views/single-meeting-view
+       :view meeting-single/single-meeting-view
        :link-text "Show Meeting"
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]

@@ -65,5 +65,4 @@
   []
   (init-routes!)
   (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
-  (render)                                                  ;; mount the application's ui into '<div id="app" />'
-  )
+  (render))                                                 ;; mount the application's ui into '<div id="app" />'
