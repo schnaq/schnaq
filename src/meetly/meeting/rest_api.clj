@@ -60,14 +60,15 @@
   (let [meeting-hash (get-in req [:route-params :hash])]
     (response (db/agendas-by-meeting-hash meeting-hash))))
 
-(defn- agenda-by-discussion-id
+(defn- agenda-by-meeting-hash-and-discussion-id
   "Returns the agenda tied to a certain discussion-id."
   [req]
   (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
-        agenda-point (db/agenda-by-discussion-id discussion-id)]
+        meeting-hash (-> req :route-params :meeting-hash)
+        agenda-point (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if agenda-point
       (response agenda-point)
-      (not-found (str "No Agenda with discussion-id " discussion-id " in the DB.")))))
+      (not-found (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s." discussion-id meeting-hash)))))
 
 (defn- start-discussion
   "Start a new discussion for an agenda point."
@@ -84,20 +85,20 @@
     (response (dialog/continue-discussion reaction args))))
 
 (defroutes app-routes
-           (GET "/meetings" [] all-meetings)
-           (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
-           (POST "/meeting/add" [] add-meeting)
-           (POST "/agendas/add" [] add-agendas)
-           (POST "/author/add" [] add-author)
-           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
-           (GET "/agenda/:discussion-id" [] agenda-by-discussion-id)
-           (GET "/start-discussion/:discussion-id" [] start-discussion)
-           (POST "/continue-discussion" [] continue-discussion)
-           (route/not-found "Error, page not found!"))
+  (GET "/meetings" [] all-meetings)
+  (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
+  (POST "/meeting/add" [] add-meeting)
+  (POST "/agendas/add" [] add-agendas)
+  (POST "/author/add" [] add-author)
+  (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+  (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
+  (GET "/start-discussion/:discussion-id" [] start-discussion)
+  (POST "/continue-discussion" [] continue-discussion)
+  (route/not-found "Error, page not found!"))
 
 
 (defn -main
-  "This is our main entry point for the REST API Server"
+  "This is our main entry point for the REST API Server."
   []
   (let [port (:port config/rest-api)]
     ; Run the server with Ring.defaults middleware
@@ -111,4 +112,4 @@
       {:port port})
     ; Run the server without ring defaults
     ;(server/run-server #'app-routes {:port port})
-    (println (str "Running web-server at http:/127.0.0.1:" port "/"))))
+    (println (format "Running web-server at http://127.0.0.1:%s/" port))))
