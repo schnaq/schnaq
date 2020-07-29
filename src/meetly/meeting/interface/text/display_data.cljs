@@ -9,8 +9,8 @@
      ;; navbar labels
      :nav-startpage "Home"
      :nav-example "Examples"
-     :nav-meeting "Show Meetings"
-     :nav-meeting-create "Create Meeting"
+     :nav-meeting "Meetings"
+     :nav-meeting-create "Meeting Erstellen"
      :nav-meeting-agenda "Create Agenda"
      :nav-overview "Overview"
 
@@ -94,4 +94,6 @@
     {:laptop "fa-laptop-code"
      :comment "fa-comments"
      :carry "fa-people-carry"
-     :arrow-right "fa-arrow-right"}))
+     :arrow-right "fa-arrow-right"
+     :arrow-left "fa-arrow-left"
+     }))

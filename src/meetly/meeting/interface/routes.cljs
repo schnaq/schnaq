@@ -5,6 +5,7 @@
             [meetly.meeting.interface.views.clock :as clock-views]
             [meetly.meeting.interface.views.meeting.meetings :as meeting-views]
             [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
+            [meetly.meeting.interface.views.meeting.single :as meeting-single]
             [meetly.meeting.interface.views.discussion :as discussion-views]
             [re-frame.core :as rf]))
 
@@ -27,7 +28,7 @@
       :link-text "Meetings"}]
     ["/view/:share-hash"
      {:name :routes/meetings.show
-      :view meeting-views/single-meeting-view
+      :view meeting-single/single-meeting-view
       :link-text "Show Meeting"
       :parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}

@@ -1,3 +1,5 @@
+@import "variables";
+
 html {
   scroll-behavior: smooth;
 }
@@ -22,4 +24,10 @@ h6 {
 
 #display-content {
   min-height: 85vh;
+  background: $light-background;
+}
+
+.shadow-custom {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
+  0 4px 4px 0 rgba(0, 0, 0, 0.19);
 }
