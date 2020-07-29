@@ -25,43 +25,45 @@
      {:name :routes/meetings
       :view meetings-overview/meeting-view
       :link-text "Meetings"}]
-    ["/view/:share-hash"
-     {:name :routes/meetings.show
-      :view meeting-views/single-meeting-view
-      :link-text "Show Meeting"
-      :parameters {:path {:share-hash string?}}
-      :controllers [{:parameters {:path [:share-hash]}
-                     :start (fn [{:keys [path]}]
-                              (let [hash (:share-hash path)]
-                                (rf/dispatch [:load-meeting-by-share-hash hash])
-                                (rf/dispatch [:load-agendas hash])))
-                     :stop (fn []
-                             (rf/dispatch [:clear-current-agendas]))}]}]
     ["/create"
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
-    ["/agenda"
-     ["/add"
-      {:name :routes/meetings.agenda
-       :view agenda-views/agenda-view
-       :link-text "Add Agenda"}]
-     ["/:id"
-      {:controllers [{:parameters {:path [:id]}
+    ["/:share-hash"
+     {:parameters {:path {:share-hash string?}}}
+     ["/"
+      {:name :routes/meetings.show
+       :view meeting-views/single-meeting-view
+       :link-text "Show Meeting"
+       :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (rf/dispatch [:load-agenda-information (:id path)]))}]}
-      ["/start"
-       {:controllers [{:start (fn []
-                                (rf/dispatch [:start-discussion])
-                                (rf/dispatch [:discussion.history/clear]))}]
-        :name :routes/meetings.discussion.start
-        :view discussion-views/discussion-start-view}]
-      ["/continue"
-       {:name :routes/meetings.discussion.continue
-        :view discussion-views/discussion-loop-view
-        :controllers [{:parameters {:path [:id]}
+                               (let [hash (:share-hash path)]
+                                 (rf/dispatch [:load-meeting-by-share-hash hash])
+                                 (rf/dispatch [:load-agendas hash])))
+                      :stop (fn []
+                              (rf/dispatch [:clear-current-agendas]))}]}]
+     ["/agenda"
+      ["/add"
+       {:name :routes/meetings.agenda
+        :view agenda-views/agenda-view
+        :link-text "Add Agenda"}]
+      ["/:id"
+       {:controllers [{:parameters {:path {:id number?}}
                        :start (fn [{:keys [path]}]
-                                (rf/dispatch [:handle-reload-on-discussion-loop (:id path)]))}]}]]]]
+                                (rf/dispatch [:load-agenda-information (:id path)]))}]}
+       ["/start"
+        {:parameters {:path {:share-hash string?}}
+         :controllers [{:start (fn []
+                                 (rf/dispatch [:start-discussion])
+                                 (rf/dispatch [:discussion.history/clear]))}]
+         :name :routes/meetings.discussion.start
+         :view discussion-views/discussion-start-view}]
+       ["/continue"
+        {:name :routes/meetings.discussion.continue
+         :view discussion-views/discussion-loop-view
+         :controllers [{:parameters {:path [:id]}
+                        :start (fn [{:keys [path]}]
+                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path)]))}]}]]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view
