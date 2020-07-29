@@ -151,11 +151,11 @@
     [:form
      {:on-submit (fn [e] (.preventDefault e)
                    (submit-new-starting-premise new-statement-args (oget e [:target :elements])))}
-     [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"
-                        :default-checked true}]
-     [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
-     [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
-     [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
+     [:input#for-radio-starting {:type "radio" :name "premise-choice" :value "for-radio"
+                                 :default-checked true}]
+     [:label {:for "for-radio-starting"} (labels :discussion/add-premise-supporting)] [:br]
+     [:input#against-radio-starting {:type "radio" :name "premise-choice" :value "against-radio"}]
+     [:label {:for "against-radio-starting"} (labels :discussion/add-premise-against)] [:br]
      [:input.form-control.mb-1
       {:type "text" :name "premise-text"
        :placeholder (labels :discussion/premise-placeholder)}]
@@ -177,7 +177,7 @@
      [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
      [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
      [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
-     [:input#against-radio {:type "radio" :name "premise-choice" :value "undercut-radio"}]
+     [:input#undercut-radio {:type "radio" :name "premise-choice" :value "undercut-radio"}]
      [:label {:for "undercut-radio"} (labels :discussion/add-undercut)] [:br]
      [:input.form-control.mb-1
       {:type "text" :name "premise-text"
@@ -273,6 +273,8 @@
 (rf/reg-event-fx
   :continue-discussion
   (fn [_ [_ reaction args]]
+    (println "Continue Discussion: " reaction)
+    (println args)
     {:dispatch [reaction args]}))
 
 (rf/reg-event-fx
