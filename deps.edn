@@ -20,7 +20,7 @@
         metosin/reitit {:mvn/version "0.5.5"}
         re-frame-utils {:mvn/version "0.1.0"}
         github-hhucn/dialog.core
-        {:git/url "https://github.com/hhucn/dialog.core" :sha "2e995ecb27ce81aa352a8bf365a290bcde62dbe2"}}
+        {:git/url "https://github.com/hhucn/dialog.core" :sha "3a97fd00808ebd4543f8f1ef643ad3c1defa9bb2"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}

@@ -64,10 +64,12 @@
      :discussion/add-starting-premise-placeholder "weil..."
      :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
      :discussion/add-premise-against "Ich habe einen Grund dagegen"
+     :discussion/add-undercut "Die letzten beiden Aussagen passen nicht zusammen"
      :discussion/reason-nudge "Was denken Sie darüber?"
      :discussion/premise-placeholder "Ich denke..."
      :discussion/create-starting-premise-action "Beitrag hinzufügen"
-     :discussion/others-think "Andere denken folgendes:"}))
+     :discussion/others-think "Andere denken folgendes:"
+     :discussion/undercut-bubble-intro "Der letzte Beitrag hat nichts mit dem vorherigen zu tun. Begründung:"}))
 
 
 (defn img-path

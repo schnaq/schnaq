@@ -14,6 +14,7 @@
   [options]
   (cond
     (some #{:starting-support/new} options) :starting-conclusions/select
+    (some #{:undercut/new} options) :select-or-react
     :else :default))
 
 (defn- index-of
@@ -47,14 +48,26 @@
                               [:starting-support/new :new/support-premise])]
     (rf/dispatch [:continue-discussion reaction (assoc current-args key-name new-text)])))
 
+(defn- submit-new-premise
+  "Submits a newly created premise as an undercut, rebut or support."
+  [[support-args rebut-args undercut-args] form]
+  (let [new-text (oget form [:premise-text :value])
+        choice (oget form [:premise-choice :value])]
+    (case choice
+      "against-radio" (rf/dispatch [:continue-discussion :rebut/new (assoc rebut-args :new/rebut new-text)])
+      "for-radio" (rf/dispatch [:continue-discussion :support/new (assoc support-args :new/support new-text)])
+      "undercut-radio" (rf/dispatch [:continue-discussion :undercut/new (assoc undercut-args :new/undercut new-text)]))))
+
 ;; #### Views ####
 
 (defn- statement-bubble
   "A single bubble of a statement to be used ubiquitously."
   ([statement]
    (statement-bubble statement (arg-type->attitude (:meta/argument.type statement))))
-  ([{:keys [statement/content statement/author]} attitude]
+  ([{:keys [statement/content statement/author] :as statement} attitude]
    [:div {:class (str "statement-" (name attitude))}
+    (when (= :argument.type/undercut (:meta/argument.type statement))
+      [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
     [:p content]
     [:p.small.text-muted "By: " (:author/nickname author)]]))
 
@@ -148,6 +161,29 @@
        :placeholder (labels :discussion/premise-placeholder)}]
      [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-starting-premise-action)]]))
 
+(defn- add-premise-form
+  "Either support or attack or undercut with the users own premise."
+  []
+  (let [all-steps @(rf/subscribe [:discussion-steps])
+        all-args @(rf/subscribe [:discussion-step-args])
+        support-args (args-for-reaction all-steps all-args :support/new)
+        rebut-args (args-for-reaction all-steps all-args :rebut/new)
+        undercut-args (args-for-reaction all-steps all-args :undercut/new)]
+    [:form
+     {:on-submit (fn [e] (.preventDefault e)
+                   (submit-new-premise [support-args rebut-args undercut-args] (oget e [:target :elements])))}
+     [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"
+                        :default-checked true}]
+     [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
+     [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
+     [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
+     [:input#against-radio {:type "radio" :name "premise-choice" :value "undercut-radio"}]
+     [:label {:for "undercut-radio"} (labels :discussion/add-undercut)] [:br]
+     [:input.form-control.mb-1
+      {:type "text" :name "premise-text"
+       :placeholder (labels :discussion/premise-placeholder)}]
+     [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-starting-premise-action)]]))
+
 (defn- starting-premises-view
   "Show the premises after starting-conclusions. This view is different from usual premises,
   since we can't allow undercuts."
@@ -164,6 +200,21 @@
      (when allow-new?
        [add-starting-premises-form])]))
 
+(defn- select-or-react-view
+  "A view where the user either reacts to a premise or selects another reaction."
+  []
+  (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
+        premises @(rf/subscribe [:premises-and-undercuts-to-select])]
+    [:div
+     [:h2 (labels :discussion/others-think)]
+     (for [premise premises]
+       [:div.premise {:key (:db/id premise)
+                      :on-click #(js/alert premise)}
+        [statement-bubble premise]])
+     [:hr]
+     (when allow-new?
+       [add-premise-form])]))
+
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
@@ -173,6 +224,7 @@
      [:div#discussion-loop
       (case (deduce-step steps)
         :starting-conclusions/select [starting-premises-view]
+        :select-or-react [select-or-react-view]
         :default [:p ""])]]))
 
 ;; #### Events ####
@@ -271,6 +323,21 @@
     {:dispatch [:continue-discussion-http-call [reaction args]]}))
 
 (rf/reg-event-fx
+  :rebut/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+
+(rf/reg-event-fx
+  :support/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+
+(rf/reg-event-fx
+  :undercut/new
+  (fn [_cofx [reaction args]]
+    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+
+(rf/reg-event-fx
   :continue-discussion-http-call
   (fn [_ [_ payload]]
     {:http-xhrio {:method :post
@@ -319,6 +386,16 @@
         (index-of steps :premises/select)
         (nth args)
         :present/premises))))
+
+(rf/reg-sub
+  :premises-and-undercuts-to-select
+  :<- [:discussion-steps]
+  :<- [:discussion-step-args]
+  (fn [[steps args] _]
+    (when (some #{:premises/select} steps)
+      (let [present-args (nth args (index-of steps :premises/select))]
+        (concat (:present/premises present-args)
+                (:present/undercuts present-args))))))
 
 (rf/reg-sub
   :allow-new-argument?
