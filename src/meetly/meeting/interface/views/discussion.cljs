@@ -209,7 +209,7 @@
      [:h2 (labels :discussion/others-think)]
      (for [premise premises]
        [:div.premise {:key (:db/id premise)
-                      :on-click #(js/alert premise)}
+                      :on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
         [statement-bubble premise]])
      [:hr]
      (when allow-new?
