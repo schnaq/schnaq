@@ -7,6 +7,7 @@
             [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
             [meetly.meeting.interface.views.meeting.single :as meeting-single]
             [meetly.meeting.interface.views.discussion :as discussion-views]
+            [reitit.coercion.spec]
             [re-frame.core :as rf]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
@@ -17,6 +18,7 @@
 ;; the new route.
 (def routes
   ["/"
+   {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
    [""
     {:name :routes/home
      :view views/development-startpage
@@ -31,6 +33,7 @@
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/:share-hash"
+     {:parameters {:path {:share-hash string?}}}
      ["/"
       {:name :routes/meetings.show
        :view meeting-single/single-meeting-view
@@ -48,7 +51,8 @@
         :view agenda-views/agenda-view
         :link-text "Add Agenda"}]
       ["/:id"
-       {:controllers [{:parameters {:path [:share-hash :id]}
+       {:parameters {:path {:id int?}}
+        :controllers [{:parameters {:path [:share-hash :id]}
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:load-agenda-information (:share-hash path) (:id path)]))}]}
        ["/start"
