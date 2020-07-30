@@ -5,7 +5,7 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.util.response :refer [response not-found]]
+            [ring.util.response :refer [response not-found bad-request]]
             [meetly.config :as config]
             [meetly.meeting.database :as db]
             [dialog.engine.core :as dialog]
@@ -73,16 +73,25 @@
 (defn- start-discussion
   "Start a new discussion for an agenda point."
   [req]
-  (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
-        username (get-in req [:query-params "username"])]
-    (response (dialog/start-discussion {:discussion/id discussion-id
-                                        :user/nickname username}))))
+  (let [discussion-id (Long/valueOf ^String (get-in req [:route-params :discussion-id]))
+        username (get-in req [:query-params "username"])
+        meeting-hash (get-in req [:query-params "meeting-hash"])
+        valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
+    (if valid-link?
+      (response (dialog/start-discussion {:discussion/id discussion-id
+                                          :user/nickname username}))
+      (bad-request "Your request was malformed"))))
 
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
-  [req]
-  (let [[reaction args] (:body-params req)]
-    (response (dialog/continue-discussion reaction args))))
+  [{:keys [body-params]}]
+  (let [[reaction args] (:payload body-params)
+        meeting-hash (:meeting-hash body-params)
+        discussion-id (:discussion-id body-params)
+        valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
+    (if valid-link?
+      (response (dialog/continue-discussion reaction args))
+      (bad-request "Your request was malformed"))))
 
 (defroutes app-routes
   (GET "/meetings" [] all-meetings)

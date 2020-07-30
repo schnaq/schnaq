@@ -272,7 +272,8 @@
 (rf/reg-event-fx
   :start-discussion
   (fn [{:keys [db]} [_ try-counter]]
-    (let [discussion-id (-> db :agenda :chosen :agenda/discussion-id :db/id)
+    (let [discussion-id (get-in db [:agenda :chosen :agenda/discussion-id :db/id])
+          meeting-hash (get-in db [:meeting :selected :meeting/share-hash])
           username (get-in db [:user :name] "Anonymous")
           try-counter (or try-counter 0)]
       (when (< try-counter 10)
@@ -280,7 +281,8 @@
           {:http-xhrio {:method :get
                         :uri (str (:rest-backend config) "/start-discussion/" discussion-id)
                         :format (ajax/transit-request-format)
-                        :url-params {:username username}
+                        :url-params {:username username
+                                     :meeting-hash meeting-hash}
                         :response-format (ajax/transit-response-format)
                         :on-success [:set-current-discussion-steps]
                         :on-failure [:ajax-failure]}}
@@ -372,14 +374,18 @@
 
 (rf/reg-event-fx
   :continue-discussion-http-call
-  (fn [_ [_ payload]]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/continue-discussion")
-                  :format (ajax/transit-request-format)
-                  :params payload
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:set-current-discussion-steps]
-                  :on-failure [:ajax-failure]}}))
+  (fn [{:keys [db]} [_ payload]]
+    (let [meeting-hash (get-in db [:meeting :selected :meeting/share-hash])
+          discussion-id (get-in db [:agenda :chosen :agenda/discussion-id :db/id])]
+      {:http-xhrio {:method :post
+                    :uri (str (:rest-backend config) "/continue-discussion")
+                    :format (ajax/transit-request-format)
+                    :params {:payload payload
+                             :meeting-hash meeting-hash
+                             :discussion-id discussion-id}
+                    :response-format (ajax/transit-response-format)
+                    :on-success [:set-current-discussion-steps]
+                    :on-failure [:ajax-failure]}})))
 
 ;; #### Subs ####
 
