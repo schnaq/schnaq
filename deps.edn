@@ -46,5 +46,4 @@
             :main-opts ["-m" "cambada.uberjar"
                         "-m" "meetly.core"]}
 
-           :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]
-                        :jvm-opts ["-Dghostwheel.enabled=true"]}}}
+           :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]}}}

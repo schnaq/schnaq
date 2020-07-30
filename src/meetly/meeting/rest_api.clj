@@ -97,19 +97,32 @@
   (route/not-found "Error, page not found!"))
 
 
+(defonce current-server (atom nil))
+
+(defn stop-server []
+  (when-not (nil? @current-server)
+    ;; graceful shutdown: wait 100ms for existing requests to be finished
+    ;; :timeout is optional, when no timeout, stop immediately
+    (@current-server :timeout 100)
+    (reset! current-server nil)))
+
 (defn -main
   "This is our main entry point for the REST API Server."
-  []
+  [& _args]
   (let [port (:port config/rest-api)]
     ; Run the server with Ring.defaults middleware
     (meetly-core/-main)
-    (server/run-server
-      (-> #'app-routes
-          (wrap-cors :access-control-allow-origin [#".*"]
-                     :access-control-allow-methods [:get :put :post :delete])
-          (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
-          (wrap-defaults api-defaults))
-      {:port port})
-    ; Run the server without ring defaults
-    ;(server/run-server #'app-routes {:port port})
+    (reset! current-server
+            (server/run-server
+              (-> #'app-routes
+                  (wrap-cors :access-control-allow-origin [#".*"]
+                             :access-control-allow-methods [:get :put :post :delete])
+                  (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
+                  (wrap-defaults api-defaults))
+              {:port port}))
     (println (format "Running web-server at http://127.0.0.1:%s/" port))))
+
+(comment
+  "Start the server from here"
+  (-main)
+  :end)

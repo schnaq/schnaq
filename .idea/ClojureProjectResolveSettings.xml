@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ClojureProjectResolveSettings">
-    <currentScheme>IDE</currentScheme>
+    <item key="cljs.core/defonce" resolves-as="clojure.core/def" />
+    <item key="cljs.spec.alpha/fdef" resolves-as="clojure.core/def" />
+    <item key="compojure.core/defroutes" resolves-as="clojure.core/def" />
+    <item key="clojure.test/are" resolves-as="clojure.core/def" />
+    <item key="ghostwheel.core/&gt;defn" resolves-as="clojure.core/defn" />
+    <item key="clojure.core/defonce" resolves-as="clojure.core/def" />
+    <currentScheme>PROJECT</currentScheme>
   </component>
 </project>
