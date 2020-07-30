@@ -14,6 +14,15 @@ endif::[]
 
 The dev-Setup has different parts for Backend and Frontend.
 
+== Preparation
+
+We are using `datomic dev-local` as our in-memory database, which can be used during development and testing.
+Get the jar file containing datomic via this URL: https://docs.datomic.com/dev-local/get-dev-local.html
+
+Then, store the jar in "local_jars/dev-local/dev-local.jar".
+This database stores the data in a ".datomic" folder.
+Remove it to reset the database.
+
 == Backend
 
 1. Install https://github.com/borkdude/babashka[babashka].
