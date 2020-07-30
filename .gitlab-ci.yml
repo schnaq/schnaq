@@ -24,7 +24,6 @@ test-cljs:
   before_script:
     - apk add yarn
     - yarn install
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - yarn shadow-cljs compile test
     - node target/test/compiled/test.js

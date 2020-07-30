@@ -2,7 +2,6 @@
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         com.datomic/client-pro {:mvn/version "0.9.63"}
-        com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}
         compojure {:mvn/version "1.6.1"}
         cljs-ajax {:mvn/version "0.8.0"}
         day8.re-frame/http-fx {:mvn/version "0.2.1"}
@@ -29,7 +28,8 @@
 
  :aliases {:test {:extra-paths ["test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.641"}
-                               lambdaisland/kaocha-cloverage {:mvn/version "1.0-45"}}
+                               lambdaisland/kaocha-cloverage {:mvn/version "1.0-45"}
+                               com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]
                   :main-opts ["-m" "kaocha.runner"]}
 
@@ -47,4 +47,5 @@
             :main-opts ["-m" "cambada.uberjar"
                         "-m" "meetly.core"]}
 
-           :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]}}}
+           :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]
+                        :extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}}}
