@@ -68,9 +68,9 @@
        ["/continue"
         {:name :routes/meetings.discussion.continue
          :view discussion-views/discussion-loop-view
-         :controllers [{:parameters {:path [:id]}
+         :controllers [{:parameters {:path [:id :share-hash]}
                         :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path)]))}]}]]]]]
+                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]]]]]
    ["clock"
     {:name :routes/clock
      :view clock-views/re-frame-example-view
