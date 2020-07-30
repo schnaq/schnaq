@@ -75,10 +75,9 @@
 
 (rf/reg-event-fx
   :handle-reload-on-discussion-loop
-  (fn [{:keys [db]} [_ agenda-id]]
-    (when (empty? (-> db :discussion :options :steps))
-      (let [share-hash (get-in db [:meeting :selected :meeting/share-hash])]
-        {:dispatch [:navigate
-                    :routes/meetings.discussion.start
-                    {:id agenda-id
-                     :share-hash share-hash}]}))))
+  (fn [{:keys [db]} [_ agenda-id share-hash]]
+    (when (empty? (get-in db [:discussion :options :steps]))
+      {:dispatch [:navigate
+                  :routes/meetings.discussion.start
+                  {:id agenda-id
+                   :share-hash share-hash}]})))
