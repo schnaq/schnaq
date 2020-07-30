@@ -5,7 +5,6 @@
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
-            [reitit.coercion]
             [meetly.meeting.interface.views :as views]
     ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
             [meetly.meeting.interface.views.startpage]
