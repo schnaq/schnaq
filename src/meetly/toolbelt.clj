@@ -1,5 +1,5 @@
 (ns meetly.toolbelt
-  "Utility functions support the backend."
+  "Utility functions supporting the backend."
   (:import (java.io File)))
 
 (defn create-storage-directory!
