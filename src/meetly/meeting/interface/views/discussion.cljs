@@ -74,14 +74,14 @@
 (defn- history-view
   "Displays the statements it took to get to where the user is."
   []
-  (let [history @(rf/subscribe [:discussion-history])]
-    (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-      [:div.discussion-history
-       (for [[count [statement attitude]] indexed-history]
-         [:div {:key (:db/id statement)
-                :on-click #(rf/dispatch [:discussion.history/time-travel count])}
-          [statement-bubble statement attitude]])
-       [:hr]])))
+  (let [history @(rf/subscribe [:discussion-history])
+        indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
+    [:div.discussion-history
+     (for [[count [statement attitude]] indexed-history]
+       [:div {:key (:db/id statement)
+              :on-click #(rf/dispatch [:discussion.history/time-travel count])}
+        [statement-bubble statement attitude]])
+     [:hr]]))
 
 (defn- discussion-base
   "The base template of the discussion"
