@@ -75,11 +75,13 @@
   "Displays the statements it took to get to where the user is."
   []
   (let [history @(rf/subscribe [:discussion-history])]
-    [:div.discussion-history
-     (for [[statement attitude] history]
-       [:div {:key (:db/id statement)}
-        [statement-bubble statement attitude]])
-     [:hr]]))
+    (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
+      [:div.discussion-history
+       (for [[count [statement attitude]] indexed-history]
+         [:div {:key (:db/id statement)
+                :on-click #(rf/dispatch [:discussion.history/time-travel count])}
+          [statement-bubble statement attitude]])
+       [:hr]])))
 
 (defn- discussion-base
   "The base template of the discussion"
@@ -251,20 +253,20 @@
 (rf/reg-event-fx
   :discussion.history/time-travel
   (fn [{:keys [db]} [_ times]]
-    (let [steps-back (or times 1)
-          before-time-travel (get-in db [:history :full-context])
-          keep-n (- (count before-time-travel) steps-back)
-          after-time-travel (vec (take keep-n before-time-travel))
-          discussion-id (get-in db [:agenda :chosen :agenda/discussion-id :db/id])
-          share-hash (get-in db [:meeting :selected :meeting/share-hash])]
-      (println "Time-Vector left:")
-      (pp/pprint after-time-travel)
-      (if (>= 0 keep-n)
-        {:dispatch-n [[:discussion.history/clear]
-                      [:navigate :routes/meetings.discussion.start {:id discussion-id
-                                                                    :share-hash share-hash}]]}
-        {:db (assoc-in db [:history :full-context] after-time-travel)
-         :dispatch [:set-current-discussion-steps (:options (nth before-time-travel keep-n))]}))))
+    ;; Only continue when default value (nil - go back one step) is set or we go back more than 0 steps
+    (when (or (nil? times) (< 0 times))
+      (let [steps-back (or times 1)
+            before-time-travel (get-in db [:history :full-context])
+            keep-n (- (count before-time-travel) steps-back)
+            after-time-travel (vec (take keep-n before-time-travel))
+            discussion-id (get-in db [:agenda :chosen :agenda/discussion-id :db/id])
+            share-hash (get-in db [:meeting :selected :meeting/share-hash])]
+        (if (>= 0 keep-n)
+          {:dispatch-n [[:discussion.history/clear]
+                        [:navigate :routes/meetings.discussion.start {:id discussion-id
+                                                                      :share-hash share-hash}]]}
+          {:db (assoc-in db [:history :full-context] after-time-travel)
+           :dispatch [:set-current-discussion-steps (:options (nth before-time-travel keep-n))]})))))
 
 (rf/reg-event-fx
   :start-discussion
