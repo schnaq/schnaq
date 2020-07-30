@@ -40,13 +40,17 @@
 
 (defn- add-agendas
   "Adds a list of agendas to the database."
-  [req]
-  (let [agendas (-> req :body-params :agendas)
-        meeting-id (-> req :body-params :meeting-id)]
-    (doseq [agenda-point agendas]
-      (db/add-agenda-point (:title agenda-point) (:description agenda-point)
-                           meeting-id)))
-  (response {:text "Agendas, sent over successfully"}))
+  [{:keys [body-params]}]
+  (let [agendas (:agendas body-params)
+        meeting-id (:meeting-id body-params)
+        meeting-hash (:meeting-hash body-params)
+        suspected-meeting (db/meeting-by-hash meeting-hash)]
+    (if (= meeting-id (:db/id suspected-meeting))
+      (do (doseq [agenda-point agendas]
+            (db/add-agenda-point (:title agenda-point) (:description agenda-point)
+                                 meeting-id))
+          (response {:text "Agendas, sent over successfully"}))
+      (bad-request "Your request was invalid."))))
 
 (defn- meeting-by-hash
   "Returns a meeting, identified by its share-hash."

@@ -104,12 +104,13 @@
 (rf/reg-event-fx
   :send-agendas
   (fn [{:keys [db]} _]
-    (let [meeting-id (-> db :meeting/added :db/id)
-          meeting-hash (-> db :meeting/added :meeting/share-hash)]
+    (let [meeting-id (get-in db [:meeting/added :db/id])
+          meeting-hash (get-in db [:meeting/added :meeting/share-hash])]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/agendas/add")
                     :params {:agendas (vals (get-in db [:agenda :all] []))
-                             :meeting-id meeting-id}
+                             :meeting-id meeting-id
+                             :meeting-hash meeting-hash}
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
                     :on-success [:on-successful-agenda-add meeting-hash]
