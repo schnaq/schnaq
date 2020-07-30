@@ -12,4 +12,4 @@
    :controls {:username-input {:show? false}}
    :agenda {:number-of-forms 1
             :all {}}
-   :history {:statements []}})
+   :history {:full-context []}})
