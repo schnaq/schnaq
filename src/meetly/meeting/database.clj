@@ -24,10 +24,25 @@
   [connection]
   (d/transact connection {:tx-data models/datomic-schema}))
 
-(defn init
+(defn- create-database-from-config!
+  "Re-create a database based on the config-file."
+  []
+  (d/create-database
+    datomic-client
+    {:db-name config/db-name}))
+
+(defn delete-database-from-config!
+  []
+  (d/delete-database
+    datomic-client
+    {:db-name config/db-name}))
+
+(defn init!
   "Initialization function, which does everything needed at a fresh app-install.
   Particularly transacts the database schema defined in models.clj"
   []
+  (when-not (= :peer-server (-> config/datomic :server-type))
+    (create-database-from-config!))
   (create-discussion-schema (new-connection)))
 
 ;; ##### Input functions #####
@@ -139,7 +154,7 @@
     (add-author nickname)))
 
 (comment
-  (init)
+  (init!)
   (add-meeting {:title "Test 1"
                 :description "Jour Fixé des Hasses"
                 :start-date (now)

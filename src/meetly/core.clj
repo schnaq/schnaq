@@ -8,7 +8,7 @@
 (defn -main []
   (when-not (System/getenv "PRODUCTION")
     (spec-test/instrument))
-  (db/init)
+  (db/init!)
   (dialog/init! {:datomic config/datomic
                  :name config/db-name}))
 
