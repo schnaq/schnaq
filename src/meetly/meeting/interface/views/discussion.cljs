@@ -277,7 +277,7 @@
           username (get-in db [:user :name] "Anonymous")
           try-counter (or try-counter 0)]
       (when (< try-counter 10)
-        (if discussion-id
+        (if (and discussion-id meeting-hash)
           {:http-xhrio {:method :get
                         :uri (str (:rest-backend config) "/start-discussion/" discussion-id)
                         :format (ajax/transit-request-format)
