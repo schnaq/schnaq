@@ -85,16 +85,16 @@
     (response (dialog/continue-discussion reaction args))))
 
 (defroutes app-routes
-           (GET "/meetings" [] all-meetings)
-           (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
-           (POST "/meeting/add" [] add-meeting)
-           (POST "/agendas/add" [] add-agendas)
-           (POST "/author/add" [] add-author)
-           (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
-           (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
-           (GET "/start-discussion/:discussion-id" [] start-discussion)
-           (POST "/continue-discussion" [] continue-discussion)
-           (route/not-found "Error, page not found!"))
+  (GET "/meetings" [] all-meetings)
+  (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
+  (POST "/meeting/add" [] add-meeting)
+  (POST "/agendas/add" [] add-agendas)
+  (POST "/author/add" [] add-author)
+  (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+  (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
+  (GET "/start-discussion/:discussion-id" [] start-discussion)
+  (POST "/continue-discussion" [] continue-discussion)
+  (route/not-found "Error, page not found!"))
 
 
 (defonce current-server (atom nil))
