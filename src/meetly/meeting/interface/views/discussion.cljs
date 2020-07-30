@@ -1,7 +1,7 @@
 (ns meetly.meeting.interface.views.discussion
   (:require [re-frame.core :as rf]
             [meetly.meeting.interface.config :refer [config]]
-            [meetly.meeting.interface.text.display-data :refer [labels]]
+            [meetly.meeting.interface.text.display-data :refer [labels fa]]
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
@@ -223,26 +223,48 @@
   []
   (let [steps @(rf/subscribe [:discussion-steps])]
     [discussion-base
-     [:div#discussion-loop
-      (case (deduce-step steps)
-        :starting-conclusions/select [starting-premises-view]
-        :select-or-react [select-or-react-view]
-        :default [:p ""])]]))
+     [:div
+      [:h2 {:on-click #(rf/dispatch [:discussion.history/time-travel])}
+       [:i {:class (str "m-auto text-primary fas " (fa :arrow-left))}]]
+      [:div#discussion-loop
+       (case (deduce-step steps)
+         :starting-conclusions/select [starting-premises-view]
+         :select-or-react [select-or-react-view]
+         :default [:p ""])]]]))
 
 ;; #### Events ####
 
 (rf/reg-event-db
   :discussion.history/push
-  (fn [db [_ statement attitude]]
-    (let [newest-entry (-> db :history :statements peek first)]
+  (fn [db [_ steps statement attitude]]
+    (let [newest-entry (-> db :history :full-context :statement peek first)]
       (if (and statement (not= newest-entry statement))
-        (update-in db [:history :statements] conj [statement attitude])
+        (update-in db [:history :full-context] conj {:statement [statement attitude]
+                                                     :options steps})
         db))))
 
 (rf/reg-event-db
   :discussion.history/clear
   (fn [db _]
-    (assoc-in db [:history :statements] [])))
+    (assoc-in db [:history :full-context] [])))
+
+(rf/reg-event-fx
+  :discussion.history/time-travel
+  (fn [{:keys [db]} [_ times]]
+    (let [steps-back (or times 1)
+          before-time-travel (get-in db [:history :full-context])
+          keep-n (- (count before-time-travel) steps-back)
+          after-time-travel (vec (take keep-n before-time-travel))
+          discussion-id (get-in db [:agenda :chosen :agenda/discussion-id :db/id])
+          share-hash (get-in db [:meeting :selected :meeting/share-hash])]
+      (println "Time-Vector left:")
+      (pp/pprint after-time-travel)
+      (if (>= 0 keep-n)
+        {:dispatch-n [[:discussion.history/clear]
+                      [:navigate :routes/meetings.discussion.start {:id discussion-id
+                                                                    :share-hash share-hash}]]}
+        {:db (assoc-in db [:history :full-context] after-time-travel)
+         :dispatch [:set-current-discussion-steps (:options (nth before-time-travel keep-n))]}))))
 
 (rf/reg-event-fx
   :start-discussion
@@ -301,21 +323,23 @@
   :starting-conclusions/select
   [(rf/inject-cofx ::inject/sub [:discussion-steps])
    (rf/inject-cofx ::inject/sub [:discussion-step-args])]
-  (fn [{:keys [discussion-steps discussion-step-args]} [reaction conclusion]]
+  (fn [{:keys [discussion-steps discussion-step-args db]} [reaction conclusion]]
     (let [old-args (args-for-reaction discussion-steps discussion-step-args reaction)
-          new-args (assoc old-args :statement/selected conclusion)]
-      {:dispatch-n [[:discussion.history/push conclusion :neutral]
+          new-args (assoc old-args :statement/selected conclusion)
+          options (get-in db [:discussion :options :all])]
+      {:dispatch-n [[:discussion.history/push options conclusion :neutral]
                     [:continue-discussion-http-call [reaction new-args]]]})))
 
 (rf/reg-event-fx
   :premises/select
   [(rf/inject-cofx ::inject/sub [:discussion-steps])
    (rf/inject-cofx ::inject/sub [:discussion-step-args])]
-  (fn [{:keys [discussion-steps discussion-step-args]} [reaction premise]]
+  (fn [{:keys [discussion-steps discussion-step-args db]} [reaction premise]]
     (let [old-args (args-for-reaction discussion-steps discussion-step-args reaction)
           new-args (assoc old-args :statement/selected premise)
-          attitude (arg-type->attitude (:meta/argument.type premise))]
-      {:dispatch-n [[:discussion.history/push premise attitude]
+          attitude (arg-type->attitude (:meta/argument.type premise))
+          options (get-in db [:discussion :options :all])]
+      {:dispatch-n [[:discussion.history/push options premise attitude]
                     [:continue-discussion-http-call [reaction new-args]]]})))
 
 (rf/reg-event-fx
@@ -416,6 +440,12 @@
     (some #{:starting-support/new :support/new} steps)))
 
 (rf/reg-sub
-  :discussion-history
+  :discussion-history/full
   (fn [db _]
-    (get-in db [:history :statements])))
+    (get-in db [:history :full-context])))
+
+(rf/reg-sub
+  :discussion-history
+  :<- [:discussion-history/full]
+  (fn [history _]
+    (map :statement history)))
