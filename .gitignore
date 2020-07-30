@@ -10,6 +10,8 @@ datomic-*.zip
 
 .clj-kondo/.cache/
 
+local_jars/
+
 # IDEA related
 ## Project-specific
 

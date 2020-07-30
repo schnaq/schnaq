@@ -2,6 +2,7 @@
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         com.datomic/client-pro {:mvn/version "0.9.63"}
+        com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}
         compojure {:mvn/version "1.6.1"}
         cljs-ajax {:mvn/version "0.8.0"}
         day8.re-frame/http-fx {:mvn/version "0.2.1"}
