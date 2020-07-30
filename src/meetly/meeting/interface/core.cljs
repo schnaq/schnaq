@@ -1,10 +1,11 @@
 (ns meetly.meeting.interface.core
   (:require [day8.re-frame.http-fx]
+            [goog.dom :as gdom]
             [reagent.dom]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
-            [reitit.coercion.spec :as reitit-spec]
+            [reitit.coercion]
             [meetly.meeting.interface.views :as views]
     ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
             [meetly.meeting.interface.views.startpage]
@@ -35,12 +36,11 @@
 (defn render
   []
   (reagent.dom/render [views/root]
-                      (js/document.getElementById "app")))
+                      (gdom/getElement "app")))
 
 (def router
   (reitit-front/router
-    routes/routes
-    {:data {:coercion reitit-spec/coercion}}))
+    routes/routes))
 
 (defn on-navigate [new-match]
   (when new-match
