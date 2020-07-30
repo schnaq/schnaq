@@ -14,17 +14,22 @@ endif::[]
 
 The dev-Setup has different parts for Backend and Frontend.
 
+== Preparation
+
+We are using `datomic dev-local` as our in-memory database, which can be used during development and testing.
+Get the jar file containing datomic via this URL: https://docs.datomic.com/dev-local/get-dev-local.html
+
+Then, store the jar in "local_jars/dev-local/dev-local.jar".
+This database stores the data in a ".datomic/" folder.
+Remove the folder to reset the database or call the suitable function in the database namespace.
+
 == Backend
 
-1. Install https://github.com/borkdude/babashka[babashka].
+Start the backend-server with one of these two options:
 
-2. Datomic in Memory database is needed.
-Execute `bb run.clj datomic/run` to start datomic in memory database.
-(Need to run `bb run.clj datomic/install` once before.)
+*With REPL*
 
-3. Start the backend-server
-
-a. If you need a REPL: Start the run configuration "CLJ REPL" and execute the `-main` method in
+Start the run configuration "CLJ REPL" and execute the `-main` method in
 `meetly.meeting.rest-api`.
 To do this manually, you can put the following commands into the REPL in IDEA:
 +
@@ -34,7 +39,9 @@ To do this manually, you can put the following commands into the REPL in IDEA:
 (meetly.meeting.rest-api/-main)
 ----
 
-b. Without REPL: `clj -A:run-server` on the terminal
+*Without REPL*
+
+`clj -A:run-server` on the terminal
 
 == Frontend
 

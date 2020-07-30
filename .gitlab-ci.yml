@@ -4,11 +4,14 @@ stages:
   - report
   - deploy
 
+
 # ------------------------------------------------------------------------------
 # Stage "test"
 
 test:
   image: clojure:openjdk-14-tools-deps-alpine
+  before_script:
+    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -A:test
   artifacts:
@@ -27,6 +30,8 @@ test-cljs:
 
 lint:
   image: clojure:openjdk-14-tools-deps-alpine
+  before_script:
+    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -A:clj-kondo --lint src
   allow_failure: true
@@ -36,6 +41,7 @@ up-to-date?:
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:
     - apk add git
+    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -A:ancient
   when: always
