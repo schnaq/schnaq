@@ -1,5 +1,7 @@
 (ns meetly.meeting.interface.views.base
   (:require [oops.core :refer [oget]]
+            [reitit.frontend.easy :as reitfe]
+            [meetly.meeting.interface.text.display-data :as data]
             [re-frame.core :as rf]))
 
 
@@ -77,6 +79,33 @@
      (if show-input?
        [name-input username]
        [show-input-button username])]))
+
+;; nav header
+
+(defn nav-header []
+  ;; collapsable navbar
+  [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
+   ;; logo
+   [:div.container
+    [:a.navbar-brand {:href "#/startpage"}
+     [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo) :width "150" :alt ""}]]
+    ;; hamburger
+    [:button.navbar-toggler
+     {:type "button" :data-toggle "collapse" :data-target "#navbarSupportedContent"
+      :aria-controls "navbarSupportedContent" :aria-expanded "false" :aria-label "Toggle navigation"}
+     [:span.navbar-toggler-icon]]
+    ;; menu items
+    [:div
+     {:id "navbarSupportedContent"
+      :class "collapse navbar-collapse"}
+     [:ul.navbar-nav.ml-auto
+      ;; navigation items
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (data/labels :nav-meeting)]]
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (data/labels :nav-meeting-create)]]
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/home)} (data/labels :nav-overview)]]]
+     ;; name input
+     [:div.px-2
+      [username-bar-view]]]]])
 
 ;; footer
 

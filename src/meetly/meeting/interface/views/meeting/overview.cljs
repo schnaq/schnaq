@@ -12,17 +12,20 @@
 (defn- meeting-entry
   "Displays a single meeting element of the meeting list"
   [meeting]
-  [:div.meeting-entry
+  ;; clickable div
+  [:div.meeting-entry.clickable
+   {:on-click (fn []
+                (rf/dispatch [:navigate :routes/meetings.show
+                              {:share-hash (:meeting/share-hash meeting)}])
+                (rf/dispatch [:select-current-meeting meeting]))}
+   ;; title and arrow
    [:div.meeting-entry-title
     [:div.row
      [:div.col-lg-11.px-3
       [:h3 (:meeting/title meeting)]]
      [:div.col-lg-1
-      [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-right))
-                      :on-click (fn []
-                                  (rf/dispatch [:navigate :routes/meetings.show
-                                                {:share-hash (:meeting/share-hash meeting)}])
-                                  (rf/dispatch [:select-current-meeting meeting]))}]]]]
+      [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-right))}]]]]
+   ;; description / body
    [:div.meeting-entry-desc
     [:hr]
     [:div "Deadline: " [readable-date (:meeting/end-date meeting)]]
@@ -43,6 +46,7 @@
   "Shows the page for an overview of all meetings"
   []
   [:div
+   [base/nav-header]
    [base/header
     (data/labels :meetings/header)]
    [:div.container.py-4

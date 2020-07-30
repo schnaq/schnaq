@@ -41,6 +41,7 @@
   "A view with a form that creates a meeting properly."
   []
   [:div#create-meeting-form
+   [base/nav-header]
    [header]
    [:div.container.px-5.py-3
     ;; form
