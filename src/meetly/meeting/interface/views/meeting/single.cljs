@@ -3,11 +3,12 @@
             [meetly.meeting.interface.text.display-data :as data]))
 
 
-(defn- agenda-entry [agenda]
+(defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry.clickable
    {:on-click (fn []
                 (rf/dispatch [:navigate :routes/meetings.discussion.start
-                              {:id (-> agenda :agenda/discussion-id :db/id)}])
+                              {:id (-> agenda :agenda/discussion-id :db/id)
+                               :share-hash (:meeting/share-hash meeting)}])
                 (rf/dispatch [:choose-agenda agenda]))}
    ;; title
    [:div.meeting-entry-title
@@ -22,10 +23,11 @@
   "The view of an agenda which gets embedded inside a meeting view."
   []
   [:div
-   (let [agendas @(rf/subscribe [:current-agendas])]
+   (let [agendas @(rf/subscribe [:current-agendas])
+         meeting @(rf/subscribe [:selected-meeting])]
      (for [agenda agendas]
-       [:div.py-3 {:key (:meeting/title (:db/id agenda))}
-        [agenda-entry agenda]]))])
+       [:div.py-3 {:key (:db/id agenda)}
+        [agenda-entry agenda meeting]]))])
 
 (defn- meeting-title [current-meeting]
   ;; meeting header
