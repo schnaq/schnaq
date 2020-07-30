@@ -5,7 +5,8 @@
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
-            [cljs.pprint :as pp]))
+            [cljs.pprint :as pp]
+            [meetly.meeting.interface.text.display-data :as data]))
 
 ;; #### Helpers ####
 
@@ -58,6 +59,24 @@
       "for-radio" (rf/dispatch [:continue-discussion :support/new (assoc support-args :new/support new-text)])
       "undercut-radio" (rf/dispatch [:continue-discussion :undercut/new (assoc undercut-args :new/undercut new-text)]))))
 
+;; meetingheader
+
+(defn- meeting-title [current-meeting]
+  ;; meeting header
+  [:div.meeting-header.header-custom.shadow-custom
+   [:div.row
+    [:div.col-lg-1.back-arrow
+     [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
+                     :on-click (fn []
+                                 (rf/dispatch [:navigate :routes/meetings.show
+                                               {:share-hash (:meeting/share-hash current-meeting)}])
+                                 (rf/dispatch [:select-current-meeting current-meeting]))
+
+                     }]]
+    [:div.col-lg-8.container
+     [:h2 (:meeting/title current-meeting)]
+     [:h6 (:meeting/description current-meeting)]]]])
+
 ;; #### Views ####
 
 (defn- statement-bubble
@@ -80,8 +99,7 @@
      (for [[count [statement attitude]] indexed-history]
        [:div {:key (:db/id statement)
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
-        [statement-bubble statement attitude]])
-     [:hr]]))
+        [statement-bubble statement attitude]])]))
 
 (defn- discussion-base
   "The base template of the discussion"
@@ -94,15 +112,13 @@
   "Displays a single starting conclusion-statement inside a discussion."
   [statement discussion-id]
   (let [meeting @(rf/subscribe [:selected-meeting])]
-    [:div.card {:style {:background-color "#6aadb8"
-                        :width "600px"}
-                :on-click (fn [_e]
-                            (rf/dispatch [:continue-discussion :starting-conclusions/select statement])
-                            (rf/dispatch [:navigate :routes/meetings.discussion.continue
-                                          {:id discussion-id
-                                           :share-hash (:meeting/share-hash meeting)}]))}
-     [:p (:statement/content statement)]
-     [:small "Written by: " (-> statement :statement/author :author/nickname)]]))
+    [:div.card.statement-single.shadow-custom {:on-click (fn [_e]
+                                                           (rf/dispatch [:continue-discussion :starting-conclusions/select statement])
+                                                           (rf/dispatch [:navigate :routes/meetings.discussion.continue
+                                                                         {:id discussion-id
+                                                                          :share-hash (:meeting/share-hash meeting)}]))}
+     [:small.text-right (-> statement :statement/author :author/nickname)]
+     [:p (:statement/content statement)]]))
 
 (defn- input-starting-argument-form
   "A form, which allows the input of a complete argument.
@@ -112,16 +128,19 @@
    {:on-submit (fn [e] (.preventDefault e)
                  (rf/dispatch [:continue-discussion :starting-argument/new
                                (oget e [:target :elements])]))}
-   [:input.form-control.mb-1
+   [:input.form-control.discussion-text-input.mb-1
     {:type "text" :name "conclusion-text"
+     :auto-complete "off"
      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-   [:input.form-control.mb-1
+   [:input.form-control.discussion-text-input.mb-1
     {:type "text" :name "premise-text"
+     :auto-complete "off"
      :placeholder (labels :discussion/add-argument-premise-placeholder)}]
-   [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-argument-action)]])
+   [:div.text-center.button-spacing-top
+    [:button.btn.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
 
 (defn- all-positions-view
-  "Shows a nice header and all starting-conclusions."
+  "Shows all starting-conclusions."
   []
   (let [agenda @(rf/subscribe [:chosen-agenda])
         conclusions @(rf/subscribe [:starting-conclusions])]
@@ -131,21 +150,68 @@
        [:h2 (:agenda/title agenda)]
        [:p (:agenda/description agenda)]]
       [:hr]
-      (for [conclusion conclusions]
-        [:div {:key (:statement/content conclusion)}
-         [single-statement-view conclusion (-> agenda :agenda/discussion-id :db/id)]])]]))
+      [:div.container
+       (for [conclusion conclusions]
+         [:div {:key (:statement/content conclusion)}
+          [single-statement-view conclusion (-> agenda :agenda/discussion-id :db/id)]])]]]))
+
+(defn- agenda-header []
+  (let [agenda @(rf/subscribe [:chosen-agenda])]
+    [:div.discussion-view-top-rounded
+     [:div.row
+      [:div.col-12
+       [:div
+        [:h2 (:agenda/title agenda)]
+        [:p (:agenda/description agenda)]]]]]))
+
+(defn- conclusions-list []
+  (let [agenda @(rf/subscribe [:chosen-agenda])
+        conclusions @(rf/subscribe [:starting-conclusions])]
+    [:div#conclusions-list.container
+     (for [conclusion conclusions]
+       [:div {:key (:statement/content conclusion)}
+        [single-statement-view conclusion (-> agenda :agenda/discussion-id :db/id)]])]))
+
+(defn- input-field []
+  (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+    [:div.discussion-view-bottom-rounded
+     (when allow-new-argument?
+       [:div
+        [:h5 (labels :discussion/create-argument-heading)]
+        [:br]
+        [input-starting-argument-form]]
+       )]))
+
+(defn- discussion-base-2
+  "The base template of the discussion"
+  []
+  [:div.container.discussion-view-rounded.shadow-custom
+   [agenda-header]
+   [history-view]
+   [conclusions-list]
+   [input-field]
+   ])
 
 (defn discussion-start-view
   "The first step after starting a discussion."
   []
-  [discussion-base
-   (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-     [:div#discussion-start
-      [all-positions-view]
-      [:hr]
-      (when allow-new-argument?
-        [:h3 (labels :discussion/create-argument-heading)]
-        [input-starting-argument-form])])])
+
+  ;[discussion-base
+  ; (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
+  ;   [:div#discussion-start
+  ;    [all-positions-view]
+  ;    [:hr]
+  ;    (when allow-new-argument?
+  ;      [:h3 (labels :discussion/create-argument-heading)]
+  ;      [input-starting-argument-form])])]
+
+  (let [current-meeting @(rf/subscribe [:selected-meeting])]
+    [:div
+     [meeting-title current-meeting]
+     [:br]
+     [discussion-base-2]]
+    )
+  )
 
 (defn- add-starting-premises-form
   "Either support or attack a starting-conclusion with the users own premise."

@@ -9,3 +9,58 @@
 .statement-neutral {
   background: rgba(115, 176, 196, 0.8)
 }
+
+.discussion-view-rounded {
+  border-radius: 2rem;
+  background: $white;
+  padding: 0;
+}
+
+.discussion-view-top-rounded {
+  border-radius: 2rem 2rem 0 0;
+  padding: 2rem;
+  color: $white;
+  font-weight: bold;
+  background: $primary-light;
+}
+
+.discussion-view-bottom-rounded {
+  border-radius: 0 0 2rem 2rem;
+  padding: 2rem;
+  color: $white;
+  background: $primary-light;
+}
+
+
+.statement-single {
+  border-radius: 2rem;
+  padding: 2rem;
+  margin: 2rem;
+  color: $white;
+  background: $primary;
+  cursor: pointer;
+}
+
+.statement-single:hover {
+  background: $primary-light;
+}
+
+.button-spacing-top {
+  padding-top: 2rem;
+}
+
+.discussion-text-input {
+  background: transparent;
+  border: none;
+  color: $white;
+}
+
+.discussion-text-input:focus {
+  background-color: rgba(255, 255, 255, 0.025);
+  color: $white;
+}
+
+.discussion-text-input::placeholder {
+  color: $white;
+  opacity: 0.85;
+}
