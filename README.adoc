@@ -1,15 +1,39 @@
 = Dev Setup
+:icons: font
+:icon-set: fa
+:source-highlighter: rouge
+:experimental:
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+:stem: latexmath
+endif::[]
 
-The dev-Setup has different parts for Backend and frontend.
+The dev-Setup has different parts for Backend and Frontend.
 
 == Backend
 
 1. Install https://github.com/borkdude/babashka[babashka].
+
 2. Datomic in Memory database is needed.
 Execute `bb run.clj datomic/run` to start datomic in memory database.
 (Need to run `bb run.clj datomic/install` once before.)
+
 3. Start the backend-server
-a. If you need a REPL: Start "CLJ REPL" and execute the `-main` method in meetly.meeting.rest-api
+
+a. If you need a REPL: Start the run configuration "CLJ REPL" and execute the `-main` method in
+`meetly.meeting.rest-api`.
+To do this manually, you can put the following commands into the REPL in IDEA:
++
+[source,clojure]
+----
+(require '[meetly.meeting.rest-api])
+(meetly.meeting.rest-api/-main)
+----
+
 b. Without REPL: `clj -A:run-server` on the terminal
 
 == Frontend
