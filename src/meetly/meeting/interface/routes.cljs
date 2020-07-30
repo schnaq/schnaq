@@ -31,6 +31,10 @@
       :view meeting-views/create-meeting-form-view
       :link-text "Create Meeting"}]
     ["/:share-hash"
+     {:controllers [{:parameters {:path [:share-hash]}
+                     :start (fn [{:keys [path]}]
+                              (let [hash (:share-hash path)]
+                                (rf/dispatch [:load-meeting-by-share-hash hash])))}]}
      ["/"
       {:name :routes/meetings.show
        :view meeting-single/single-meeting-view
@@ -38,7 +42,6 @@
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (let [hash (:share-hash path)]
-                                 (rf/dispatch [:load-meeting-by-share-hash hash])
                                  (rf/dispatch [:load-agendas hash])))
                       :stop (fn []
                               (rf/dispatch [:clear-current-agendas]))}]}]
