@@ -8,8 +8,9 @@ The dev-Setup has different parts for Backend and frontend.
 2. Datomic in Memory database is needed.
 Execute `bb run.clj datomic/run` to start datomic in memory database.
 (Need to run `bb run.clj datomic/install` once before.)
-3. Start the backend-server via preconfigured cursive repl or manually via `clj -A:run-server`
-4. Run normal nREPL for rest.
+3. Start the backend-server
+a. If you need a REPL: Start "CLJ REPL" and execute the `-main` method in meetly.meeting.rest-api
+b. Without REPL: `clj -A:run-server` on the terminal
 
 == Frontend
 
