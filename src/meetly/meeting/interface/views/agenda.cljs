@@ -62,6 +62,7 @@
   "Shows the view for adding one or more agendas."
   []
   [:div#create-agenda
+   [base/nav-header]
    [header]
    [:div.container.px-5.py-3.text-center
     [:div.agenda-meeting-title

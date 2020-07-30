@@ -57,6 +57,7 @@
 
 (defn- startpage-content []
   [:div
+   [base/nav-header]
    [header]
    [:div.container
     [call-to-action]

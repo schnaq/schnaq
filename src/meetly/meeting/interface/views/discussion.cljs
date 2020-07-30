@@ -125,8 +125,9 @@
         conclusions @(rf/subscribe [:starting-conclusions])]
     [:div.row.discussion-head
      [:div.col-12
-      [:h2 (:agenda/title agenda)]
-      [:p (:agenda/description agenda)]
+      [:div
+       [:h2 (:agenda/title agenda)]
+       [:p (:agenda/description agenda)]]
       [:hr]
       (for [conclusion conclusions]
         [:div {:key (:statement/content conclusion)}
