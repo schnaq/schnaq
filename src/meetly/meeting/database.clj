@@ -153,6 +153,9 @@
   (when-not (author-exists? nickname)
     (add-author nickname)))
 
+;; TODO add method for up and downvoting. Should not have to check for the core-author, since the value is unique.
+;; But still check if that assumption is true.
+
 (comment
   (init!)
   (add-meeting {:title "Test 1"
