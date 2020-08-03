@@ -97,17 +97,20 @@
 
 (defn add-agenda-point
   "Add an agenda to the database.
-  A discussion is automatically created for the agenda-point."
+  A discussion is automatically created for the agenda-point.
+  Returns the discussion-id of the newly created discussion."
   [title description meeting-id]
-  (transact [{:agenda/title title
-              :agenda/description description
-              :agenda/meeting meeting-id
-              :agenda/discussion-id
-              {:db/id "temp-id"
-               :discussion/title title
-               :discussion/description description
-               :discussion/states [:discussion.state/open]
-               :discussion/starting-arguments []}}]))
+  (get-in
+    (transact [{:agenda/title title
+                      :agenda/description description
+                      :agenda/meeting meeting-id
+                      :agenda/discussion-id
+                      {:db/id "temp-id"
+                       :discussion/title title
+                       :discussion/description description
+                       :discussion/states [:discussion.state/open]
+                       :discussion/starting-arguments []}}])
+    [:tempids "temp-id"]))
 
 (def ^:private agenda-pattern
   [:db/id
@@ -267,3 +270,21 @@
         [?user :user/core-author ?author]
         [?user :user/upvotes ?statement]]
       (d/db (new-connection)) statement-id user-nickname)))
+
+(>defn valid-statement-id-and-meeting?
+  "Checks whether the statement-id matches the meeting-hash."
+  [statement-id meeting-hash]
+  [number? string? :ret (? number?)]
+  (ffirst
+    (d/q
+      '[:find ?meeting
+        :in $ ?statement ?hash
+        :where (or [?argument :argument/premises ?statement]
+                   [?argument :argument/conclusion ?statement])
+        [?argument :argument/discussions ?discussion]
+        [?agenda :agenda/discussion-id ?discussion]
+        [?agenda :agenda/meeting ?meeting]
+        [?meeting :meeting/share-hash ?hash]]
+      (d/db (new-connection)) statement-id meeting-hash)))
+
+;;TODO refactor :agenda/discussion-id to :agenda/discussion

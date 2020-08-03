@@ -32,3 +32,18 @@
       (database/remove-upvote! (first some-statements) author-2)
       (is (= 0 (database/upvotes-for-statement (first some-statements))))
       (is (= 0 (database/downvotes-for-statement (first some-statements)))))))
+
+(deftest valid-statement-id-and-meeting?-test
+  (testing "Test the function that checks whether a statement belongs to a certain meeting."
+    (let [meeting (database/add-meeting {:meeting/title "test-meet"
+                                         :meeting/description "whatever"
+                                         :meeting/added (database/now)
+                                         :meeting/end-date (database/now)
+                                         :meeting/share-hash "Wegi-ist-der-schönste"})
+          discussion (database/add-agenda-point "Hi" "Beschreibung" (:db/id meeting))
+          _ (ddb/add-new-starting-argument! discussion "Christian" "this is sparta" ["foo" "bar" "baz"])
+          argument (first (ddb/starting-arguments-by-discussion discussion))
+          conclusion-id (:db/id (:argument/conclusion argument))
+          premise-id (:db/id (first (:argument/premises argument)))]
+      (is (database/valid-statement-id-and-meeting? conclusion-id "Wegi-ist-der-schönste"))
+      (is (database/valid-statement-id-and-meeting? premise-id "Wegi-ist-der-schönste")))))
