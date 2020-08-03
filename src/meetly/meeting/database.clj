@@ -169,7 +169,8 @@
   "Add a new user / author to the database."
   [nickname]
   (transact [{:user/core-author
-              {:author/nickname nickname}}]))
+              {:db/id (format "id-%s" nickname)
+               :author/nickname nickname}}]))
 
 (defn add-user-if-not-exists
   "Adds an author if they do not exist yet."
@@ -222,18 +223,20 @@
   "Returns the number of upvotes for a statement."
   [statement-id]
   [number? :ret number?]
-  (d/q
-    '[:find (count ?user)
-      :in $ ?statement
-      :where [?user :user/upvotes ?statement]]
-    (d/db (new-connection)) statement-id))
+  (count
+    (d/q
+      '[:find ?user
+        :in $ ?statement
+        :where [?user :user/upvotes ?statement]]
+      (d/db (new-connection)) statement-id)))
 
 (>defn downvotes-for-statement
   "Returns the number of downvotes for a statement."
   [statement-id]
   [number? :ret number?]
-  (d/q
-    '[:find (count ?user)
-      :in $ ?statement
-      :where [?user :user/downvotes ?statement]]
-    (d/db (new-connection)) statement-id))
+  (count
+    (d/q
+      '[:find ?user
+        :in $ ?statement
+        :where [?user :user/downvotes ?statement]]
+      (d/db (new-connection)) statement-id)))
