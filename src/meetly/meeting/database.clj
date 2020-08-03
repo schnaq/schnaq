@@ -111,7 +111,7 @@
     (transact [{:agenda/title title
                 :agenda/description description
                 :agenda/meeting meeting-id
-                :agenda/discussion-id
+                :agenda/discussion
                 {:db/id "temp-id"
                  :discussion/title title
                  :discussion/description description
@@ -124,7 +124,7 @@
    :agenda/title
    :agenda/description
    :agenda/meeting
-   :agenda/discussion-id])
+   :agenda/discussion])
 
 (defn agendas-by-meeting-hash
   "Return all agendas belonging to a certain meeting. Ready for the wire."
@@ -144,14 +144,14 @@
     (d/q
       '[:find (pull ?agenda agenda-pattern)
         :in $ ?discussion-id agenda-pattern
-        :where [?agenda :agenda/discussion-id ?discussion-id]]
+        :where [?agenda :agenda/discussion ?discussion-id]]
       (d/db (new-connection)) discussion-id agenda-pattern)))
 
 (>defn agenda-by-meeting-hash-and-discussion-id
   "Returns an agenda which fits to the provided meeting. So, we can directly
   verify that the agenda belongs to the issue."
   [meeting-hash discussion-id]
-  [:meeting/share-hash :agenda/discussion-id
+  [:meeting/share-hash :agenda/discussion
    :ret ::models/agenda]
   (ffirst
     (d/q
@@ -159,7 +159,7 @@
         :in $ ?meeting-hash ?discussion-id agenda-pattern
         :where [?meeting :meeting/share-hash ?meeting-hash]
         [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion-id ?discussion-id]]
+        [?agenda :agenda/discussion ?discussion-id]]
       (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
 
 (>defn- author-id-by-nickname
@@ -301,9 +301,7 @@
         :where (or [?argument :argument/premises ?statement]
                    [?argument :argument/conclusion ?statement])
         [?argument :argument/discussions ?discussion]
-        [?agenda :agenda/discussion-id ?discussion]
+        [?agenda :agenda/discussion ?discussion]
         [?agenda :agenda/meeting ?meeting]
         [?meeting :meeting/share-hash ?hash]]
       (d/db (new-connection)) statement-id meeting-hash)))
-
-;;TODO refactor :agenda/discussion-id to :agenda/discussion

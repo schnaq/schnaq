@@ -36,7 +36,7 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The meeting the agenda belongs to"}
-   {:db/ident :agenda/discussion-id
+   {:db/ident :agenda/discussion
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
@@ -73,8 +73,8 @@
 (s/def :agenda/title string?)
 (s/def :agenda/description string?)
 (s/def :agenda/meeting ::entity-reference)
-(s/def :agenda/discussion-id ::entity-reference)
+(s/def :agenda/discussion ::entity-reference)
 (s/def ::agenda (s/keys :req [:agenda/title :agenda/description
-                              :agenda/meeting :agenda/discussion-id]))
+                              :agenda/meeting :agenda/discussion]))
 
 (s/def :author/nickname string?)
