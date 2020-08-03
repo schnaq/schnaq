@@ -133,7 +133,7 @@
       [:hr]
       (for [conclusion conclusions]
         [:div {:key (:statement/content conclusion)}
-         [single-statement-view conclusion (-> agenda :agenda/discussion-id :db/id)]])]]))
+         [single-statement-view conclusion (-> agenda :agenda/discussion :db/id)]])]]))
 
 (defn discussion-start-view
   "The first step after starting a discussion."
@@ -260,7 +260,7 @@
             before-time-travel (get-in db [:history :full-context])
             keep-n (- (count before-time-travel) steps-back)
             after-time-travel (vec (take keep-n before-time-travel))
-            discussion-id (get-in db [:agenda :chosen :agenda/discussion-id :db/id])
+            discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])
             share-hash (get-in db [:meeting :selected :meeting/share-hash])]
         (if (>= 0 keep-n)
           {:dispatch-n [[:discussion.history/clear]
@@ -272,7 +272,7 @@
 (rf/reg-event-fx
   :start-discussion
   (fn [{:keys [db]} [_ try-counter]]
-    (let [discussion-id (get-in db [:agenda :chosen :agenda/discussion-id :db/id])
+    (let [discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])
           meeting-hash (get-in db [:meeting :selected :meeting/share-hash])
           username (get-in db [:user :name] "Anonymous")
           try-counter (or try-counter 0)]
@@ -309,7 +309,7 @@
 (rf/reg-event-fx
   :starting-argument/new
   (fn [{:keys [db]} [reaction form]]
-    (let [discussion-id (-> db :agenda :chosen :agenda/discussion-id :db/id)
+    (let [discussion-id (-> db :agenda :chosen :agenda/discussion :db/id)
           share-hash (get-in db [:meeting :selected :meeting/share-hash])
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
@@ -376,7 +376,7 @@
   :continue-discussion-http-call
   (fn [{:keys [db]} [_ payload]]
     (let [meeting-hash (get-in db [:meeting :selected :meeting/share-hash])
-          discussion-id (get-in db [:agenda :chosen :agenda/discussion-id :db/id])]
+          discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/continue-discussion")
                     :format (ajax/transit-request-format)

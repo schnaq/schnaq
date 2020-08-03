@@ -91,12 +91,12 @@
         {:key (:db/id agenda)
          :on-click (fn []
                      (rf/dispatch [:navigate :routes/meetings.discussion.start
-                                   {:id (-> agenda :agenda/discussion-id :db/id)
+                                   {:id (-> agenda :agenda/discussion :db/id)
                                     :share-hash (:meeting/share-hash meeting)}])
                      (rf/dispatch [:choose-agenda agenda]))}
         [:p "Agenda: " (:agenda/title agenda)]
         [:p "Mehr Infos: " (:agenda/description agenda)]
-        [:p "Discussion-ID: " (-> agenda :agenda/discussion-id :db/id)]
+        [:p "Discussion-ID: " (-> agenda :agenda/discussion :db/id)]
         [:br]]))])
 
 ;; #### Events ####

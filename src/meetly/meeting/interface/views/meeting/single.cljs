@@ -7,7 +7,7 @@
   [:div.card.meeting-entry.clickable
    {:on-click (fn []
                 (rf/dispatch [:navigate :routes/meetings.discussion.start
-                              {:id (-> agenda :agenda/discussion-id :db/id)
+                              {:id (-> agenda :agenda/discussion :db/id)
                                :share-hash (:meeting/share-hash meeting)}])
                 (rf/dispatch [:choose-agenda agenda]))}
    ;; title
