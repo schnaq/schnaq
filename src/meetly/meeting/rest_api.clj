@@ -103,8 +103,8 @@
   (let [meeting-hash (:meeting-hash body-params)
         statement-id (:statement-id body-params)
         user-nickname (:nickname body-params)]
-    (if (db/valid-statement-id-and-meeting? statement-id meeting-hash)
-      (if (db/did-user-upvote? statement-id user-nickname)
+    (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
+      (if (db/did-user-upvote-statement statement-id user-nickname)
         (db/remove-upvote! statement-id user-nickname)
         (db/upvote-statement! statement-id user-nickname))
       (bad-request "The request was malformed"))))
@@ -115,8 +115,8 @@
   (let [meeting-hash (:meeting-hash body-params)
         statement-id (:statement-id body-params)
         user-nickname (:nickname body-params)]
-    (if (db/valid-statement-id-and-meeting? statement-id meeting-hash)
-      (if (db/did-user-downvote? statement-id user-nickname)
+    (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
+      (if (db/did-user-downvote-statement statement-id user-nickname)
         (db/remove-downvote! statement-id user-nickname)
         (db/downvote-statement! statement-id user-nickname))
       (bad-request "The request was malformed"))))

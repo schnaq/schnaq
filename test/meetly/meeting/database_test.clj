@@ -20,8 +20,8 @@
       (database/upvote-statement! (first some-statements) author-1)
       (database/downvote-statement! (second some-statements) author-1)
       (database/upvote-statement! (first some-statements) author-2)
-      (is (database/did-user-upvote? (first some-statements) author-1))
-      (is (database/did-user-downvote? (second some-statements) author-1))
+      (is (database/did-user-upvote-statement (first some-statements) author-1))
+      (is (database/did-user-downvote-statement (second some-statements) author-1))
       (is (= 2 (database/upvotes-for-statement (first some-statements))))
       (is (= 1 (database/downvotes-for-statement (second some-statements))))
       (is (= 0 (database/downvotes-for-statement (first some-statements))))
@@ -47,5 +47,5 @@
           argument (first (ddb/starting-arguments-by-discussion discussion))
           conclusion-id (:db/id (:argument/conclusion argument))
           premise-id (:db/id (first (:argument/premises argument)))]
-      (is (database/valid-statement-id-and-meeting? conclusion-id "Wegi-ist-der-schönste"))
-      (is (database/valid-statement-id-and-meeting? premise-id "Wegi-ist-der-schönste")))))
+      (is (database/check-valid-statement-id-and-meeting conclusion-id "Wegi-ist-der-schönste"))
+      (is (database/check-valid-statement-id-and-meeting premise-id "Wegi-ist-der-schönste")))))

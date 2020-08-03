@@ -271,19 +271,19 @@
         [?user ?field-name ?statement]]
       (d/db (new-connection)) statement-id user-nickname field-name)))
 
-(>defn did-user-upvote?
+(>defn did-user-upvote-statement
   "Check whether a user already upvoted a statement."
   [statement-id user-nickname]
   [number? string? :ret (? number?)]
   (generic-reaction-check statement-id user-nickname :user/upvotes))
 
-(>defn did-user-downvote?
+(>defn did-user-downvote-statement
   "Check whether a user already downvoted a statement."
   [statement-id user-nickname]
   [number? string? :ret (? number?)]
   (generic-reaction-check statement-id user-nickname :user/downvotes))
 
-(>defn valid-statement-id-and-meeting?
+(>defn check-valid-statement-id-and-meeting
   "Checks whether the statement-id matches the meeting-hash."
   [statement-id meeting-hash]
   [number? string? :ret (? number?)]
