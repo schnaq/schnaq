@@ -4,6 +4,11 @@ stages:
   - report
   - deploy
 
+cache:
+  key: one-key-to-rule-them-all
+  paths:
+    - ./.m2/repository
+
 
 # ------------------------------------------------------------------------------
 # Stage "test"
@@ -13,7 +18,7 @@ test:
   before_script:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
-    - clojure -A:test
+    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
   artifacts:
     paths:
       - target/coverage/lcov.info
@@ -33,7 +38,7 @@ lint:
   before_script:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
-    - clojure -A:clj-kondo --lint src
+    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:clj-kondo --lint src
   allow_failure: true
   when: always
 
