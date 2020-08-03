@@ -13,7 +13,7 @@
   "Displays a single meeting element of the meeting list"
   [meeting]
   ;; clickable div
-  [:div.meeting-entry.clickable
+  [:div.meeting-entry
    {:on-click (fn []
                 (rf/dispatch [:navigate :routes/meetings.show
                               {:share-hash (:meeting/share-hash meeting)}])
