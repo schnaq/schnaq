@@ -41,12 +41,20 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "An id belonging to the (foreign) discussion represented by this agenda"}
-   ;; Author
-   {:db/ident :author/nickname
-    :db/valueType :db.type/string
+   ;; User
+   {:db/ident :user/core-author
+    :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/value
-    :db/doc "The nickname of an author"}])
+    :db/unique :db.unique/identity
+    :db/doc "The author of dialog.core that corresponds to this user."}
+   {:db/ident :user/upvotes
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "All upvotes the user gave."}
+   {:db/ident :user/downvotes
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "All downvotes the user gave."}])
 
 ;; Common
 (s/def ::entity-reference (s/or :transacted number? :temporary any?))

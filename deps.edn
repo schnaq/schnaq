@@ -12,7 +12,7 @@
         org.clojure/clojurescript {:mvn/version "1.10.773"}
         org.clojure/data.json {:mvn/version "1.0.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}
-        thheller/shadow-cljs {:mvn/version "2.10.18"}
+        thheller/shadow-cljs {:mvn/version "2.10.19"}
         reagent {:mvn/version "1.0.0-alpha2"}
         re-frame {:mvn/version "1.0.0"}
         day8.re-frame/test {:mvn/version "0.1.5"}
@@ -23,7 +23,7 @@
         metosin/reitit {:mvn/version "0.5.5"}
         re-frame-utils {:mvn/version "0.1.0"}
         github-hhucn/dialog.core
-        {:git/url "https://github.com/hhucn/dialog.core" :sha "4dbf691c402cdea48c54e555b72208c8992d0e27"}}
+        {:git/url "https://github.com/hhucn/dialog.core" :sha "4ac930674755ed4bf53b9d516eea62f7a75a33ac"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
