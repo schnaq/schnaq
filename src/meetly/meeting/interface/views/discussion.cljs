@@ -6,7 +6,6 @@
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
             [cljs.pprint :as pp]
-            [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]))
 
 ;; #### Helpers ####
@@ -136,7 +135,7 @@
       ;; back arrow
       [:div.col-lg-1.back-arrow
        (when on-click-back-function
-         [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
+         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))
                          :on-click on-click-back-function}])]
       ;; title
       [:div.col-lg-11
