@@ -101,4 +101,6 @@
      :carry "fa-people-carry"
      :arrow-right "fa-arrow-right"
      :arrow-left "fa-arrow-left"
+     :arrow-up "fa-arrow-up"
+     :arrow-down "fa-arrow-down"
      }))

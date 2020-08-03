@@ -79,10 +79,21 @@
    (statement-bubble statement (arg-type->attitude (:meta/argument.type statement))))
   ([{:keys [statement/content] :as statement} attitude]
    [:div.card.statement {:class (str "statement-" (name attitude))}
-    (when (= :argument.type/undercut (:meta/argument.type statement))
-      [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
-    [:small.text-right (-> statement :statement/author :author/nickname)]
-    [:p content]]))
+    [:div.row
+     [:div.col-11
+      (when (= :argument.type/undercut (:meta/argument.type statement))
+        [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
+      [:small.text-right.float-right (-> statement :statement/author :author/nickname)]
+      [:p content]]
+     [:div.col-1
+      [:p {:on-click (fn [e]
+                       (.stopPropagation e)                 ;; Prevent activating the time travel or deep dive
+                       (rf/dispatch [:toggle-upvote statement]))}
+       [:i {:class (str "m-auto fas " (fa :arrow-up))}] "  " (:meta/upvotes statement)]
+      [:p {:on-click (fn [e]
+                       (.stopPropagation e)
+                       (rf/dispatch [:toggle-downvote statement]))}
+       [:i {:class (str "m-auto fas " (fa :arrow-down))}] "  " (:meta/downvotes statement)]]]]))
 
 (defn- history-view
   "Displays the statements it took to get to where the user is."
@@ -94,18 +105,6 @@
        [:div {:key (:db/id statement)
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
         [statement-bubble statement attitude]])]))
-
-(defn- single-statement-view
-  "Displays a single starting conclusion-statement inside a discussion."
-  [statement discussion-id]
-  (let [meeting @(rf/subscribe [:selected-meeting])]
-    [:div.card.statement-single.shadow-custom {:on-click (fn [_e]
-                                                           (rf/dispatch [:continue-discussion :starting-conclusions/select statement])
-                                                           (rf/dispatch [:navigate :routes/meetings.discussion.continue
-                                                                         {:id discussion-id
-                                                                          :share-hash (:meeting/share-hash meeting)}]))}
-     [:small.text-right (-> statement :statement/author :author/nickname)]
-     [:p (:statement/content statement)]]))
 
 (defn- input-starting-argument-form
   "A form, which allows the input of a complete argument.
@@ -145,11 +144,17 @@
 
 (defn- conclusions-list []
   (let [agenda @(rf/subscribe [:chosen-agenda])
-        conclusions @(rf/subscribe [:starting-conclusions])]
+        conclusions @(rf/subscribe [:starting-conclusions])
+        meeting @(rf/subscribe [:selected-meeting])]
     [:div#conclusions-list.container
      (for [conclusion conclusions]
-       [:div {:key (:statement/content conclusion)}
-        [single-statement-view conclusion (-> agenda :agenda/discussion :db/id)]])]))
+       [:div {:key (:statement/content conclusion)
+              :on-click (fn [_e]
+                          (rf/dispatch [:continue-discussion :starting-conclusions/select conclusion])
+                          (rf/dispatch [:navigate :routes/meetings.discussion.continue
+                                        {:id (-> agenda :agenda/discussion :db/id)
+                                         :share-hash (:meeting/share-hash meeting)}]))}
+        [statement-bubble conclusion :neutral]])]))
 
 (defn- input-field []
   (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
@@ -484,6 +489,52 @@
                     :response-format (ajax/transit-response-format)
                     :on-success [:set-current-discussion-steps]
                     :on-failure [:ajax-failure]}})))
+
+(rf/reg-event-fx
+  :toggle-upvote
+  (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
+    {:http-xhrio {:method :post
+                  :uri (str (:rest-backend config) "/votes/up/toggle")
+                  :format (ajax/transit-request-format)
+                  :params {:statement-id id
+                           :nickname (get-in db [:user :name] "Anonymous")
+                           :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:upvote-success statement]
+                  :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-fx
+  :upvote-success
+  (fn [_ [_ statement {:keys [operation]}]]
+    (println "yippie")
+    (println operation)
+    (println statement)))
+
+(rf/reg-event-fx
+  :toggle-downvote
+  (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
+    {:http-xhrio {:method :post
+                  :uri (str (:rest-backend config) "/votes/up/toggle")
+                  :format (ajax/transit-request-format)
+                  :params {:statement-id id
+                           :nickname (get-in db [:user :name] "Anonymous")
+                           :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:upvote-success]
+                  :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-fx
+  :downvote-success
+  (fn [_ [_ statement {:keys [operation]}]]
+    (println "yippie")
+    (println operation)
+    (println statement)))
+
+;; TODO update der upvotes muss dynamisch an folgenden stellen durchgeführt werden:
+;; TODO history, premises-to-select, premises-and-undercuts-to-select
+;; Response ist immer: {:operation (:added | :removed)} je nachdem ob der click einen down/upvote hinzugefügt
+;; oder entfernt hat.
+
 
 ;; #### Subs ####
 

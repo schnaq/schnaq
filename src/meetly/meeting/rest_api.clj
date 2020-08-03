@@ -8,6 +8,7 @@
             [ring.util.response :refer [response not-found bad-request]]
             [meetly.config :as config]
             [meetly.meeting.database :as db]
+            [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
             [meetly.core :as meetly-core]))
 
@@ -82,8 +83,9 @@
         meeting-hash (get-in req [:query-params "meeting-hash"])
         valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if valid-link?
-      (response (dialog/start-discussion {:discussion/id discussion-id
-                                          :user/nickname username}))
+      (response (processors/with-votes
+                  (dialog/start-discussion {:discussion/id discussion-id
+                                            :user/nickname username})))
       (bad-request "Your request was malformed"))))
 
 (defn- continue-discussion
@@ -94,7 +96,8 @@
         discussion-id (:discussion-id body-params)
         valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if valid-link?
-      (response (dialog/continue-discussion reaction args))
+      (response (processors/with-votes
+                  (dialog/continue-discussion reaction args)))
       (bad-request "Your request was malformed"))))
 
 (defn- toggle-upvote-statement
@@ -105,8 +108,10 @@
         user-nickname (:nickname body-params)]
     (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
       (if (db/did-user-upvote-statement statement-id user-nickname)
-        (db/remove-upvote! statement-id user-nickname)
-        (db/upvote-statement! statement-id user-nickname))
+        (do (db/remove-upvote! statement-id user-nickname)
+            (response {:operation :removed}))
+        (do (db/upvote-statement! statement-id user-nickname)
+            (response {:operation :added})))
       (bad-request "The request was malformed"))))
 
 (defn- toggle-downvote-statement
@@ -117,8 +122,10 @@
         user-nickname (:nickname body-params)]
     (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
       (if (db/did-user-downvote-statement statement-id user-nickname)
-        (db/remove-downvote! statement-id user-nickname)
-        (db/downvote-statement! statement-id user-nickname))
+        (do (db/remove-downvote! statement-id user-nickname)
+            (response {:operation :removed}))
+        (do (db/downvote-statement! statement-id user-nickname)
+            (response {:operation :added})))
       (bad-request "The request was malformed"))))
 
 (defroutes app-routes
