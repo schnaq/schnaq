@@ -34,11 +34,18 @@
     datomic-client
     {:db-name database-name}))
 
-(defn delete-database-from-config!
-  []
+(>defn delete-database!
+  "Delete a database by its name."
+  [database-name]
+  [string? :ret boolean?]
   (d/delete-database
     datomic-client
-    {:db-name config/db-name}))
+    {:db-name database-name}))
+
+(defn delete-database-from-config!
+  "Deletes the pre-defined database from the configuration-file."
+  []
+  (delete-database! config/db-name))
 
 (defn init!
   "Initialization function, which does everything needed at a fresh app-install.
