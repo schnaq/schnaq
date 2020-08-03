@@ -20,6 +20,8 @@
       (database/upvote-statement! (first some-statements) author-1)
       (database/downvote-statement! (second some-statements) author-1)
       (database/upvote-statement! (first some-statements) author-2)
+      (is (database/did-user-upvote? (first some-statements) author-1))
+      (is (database/did-user-downvote? (second some-statements) author-1))
       (is (= 2 (database/upvotes-for-statement (first some-statements))))
       (is (= 1 (database/downvotes-for-statement (second some-statements))))
       (is (= 0 (database/downvotes-for-statement (first some-statements))))
@@ -37,7 +39,7 @@
   (testing "Test the function that checks whether a statement belongs to a certain meeting."
     (let [meeting (database/add-meeting {:meeting/title "test-meet"
                                          :meeting/description "whatever"
-                                         :meeting/added (database/now)
+                                         :meeting/start-date (database/now)
                                          :meeting/end-date (database/now)
                                          :meeting/share-hash "Wegi-ist-der-schönste"})
           discussion (database/add-agenda-point "Hi" "Beschreibung" (:db/id meeting))

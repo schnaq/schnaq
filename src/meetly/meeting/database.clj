@@ -102,14 +102,14 @@
   [title description meeting-id]
   (get-in
     (transact [{:agenda/title title
-                      :agenda/description description
-                      :agenda/meeting meeting-id
-                      :agenda/discussion-id
-                      {:db/id "temp-id"
-                       :discussion/title title
-                       :discussion/description description
-                       :discussion/states [:discussion.state/open]
-                       :discussion/starting-arguments []}}])
+                :agenda/description description
+                :agenda/meeting meeting-id
+                :agenda/discussion-id
+                {:db/id "temp-id"
+                 :discussion/title title
+                 :discussion/description description
+                 :discussion/states [:discussion.state/open]
+                 :discussion/starting-arguments []}}])
     [:tempids "temp-id"]))
 
 (def ^:private agenda-pattern
@@ -258,18 +258,30 @@
   (when-let [user (user-by-nickname user-nickname)]
     (transact [[:db/retract user :user/downvotes statement-id]])))
 
+(>defn- generic-reaction-check
+  "Checks whether a user already made some reaction."
+  [statement-id user-nickname field-name]
+  [number? string? keyword? :ret (? number?)]
+  (ffirst
+    (d/q
+      '[:find ?user
+        :in $ ?statement ?nickname ?field-name
+        :where [?author :author/nickname ?nickname]
+        [?user :user/core-author ?author]
+        [?user ?field-name ?statement]]
+      (d/db (new-connection)) statement-id user-nickname field-name)))
+
 (>defn did-user-upvote?
   "Check whether a user already upvoted a statement."
   [statement-id user-nickname]
   [number? string? :ret (? number?)]
-  (ffirst
-    (d/q
-      '[:find ?user
-        :in $ ?statement ?nickname
-        :where [?author :author/nickname ?nickname]
-        [?user :user/core-author ?author]
-        [?user :user/upvotes ?statement]]
-      (d/db (new-connection)) statement-id user-nickname)))
+  (generic-reaction-check statement-id user-nickname :user/upvotes))
+
+(>defn did-user-downvote?
+  "Check whether a user already downvoted a statement."
+  [statement-id user-nickname]
+  [number? string? :ret (? number?)]
+  (generic-reaction-check statement-id user-nickname :user/downvotes))
 
 (>defn valid-statement-id-and-meeting?
   "Checks whether the statement-id matches the meeting-hash."
