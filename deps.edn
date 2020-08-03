@@ -15,6 +15,7 @@
         thheller/shadow-cljs {:mvn/version "2.10.18"}
         reagent {:mvn/version "1.0.0-alpha2"}
         re-frame {:mvn/version "1.0.0"}
+        day8.re-frame/test {:mvn/version "0.1.5"}
         ring {:mvn/version "1.8.1"}
         ring-cors {:mvn/version "0.1.13"}
         ring/ring-defaults {:mvn/version "0.3.2"}
