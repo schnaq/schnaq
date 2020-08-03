@@ -26,4 +26,9 @@
       ;; No up- and downvote for the same statement by the same user!
       (database/downvote-statement! (first some-statements) author-1)
       (is (= 1 (database/upvotes-for-statement (first some-statements))))
-      (is (= 1 (database/downvotes-for-statement (first some-statements)))))))
+      (is (= 1 (database/downvotes-for-statement (first some-statements))))
+      ;; Remove the up and downvotes now
+      (database/remove-downvote! (first some-statements) author-1)
+      (database/remove-upvote! (first some-statements) author-2)
+      (is (= 0 (database/upvotes-for-statement (first some-statements))))
+      (is (= 0 (database/downvotes-for-statement (first some-statements)))))))

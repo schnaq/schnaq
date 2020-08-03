@@ -1,7 +1,7 @@
 (ns meetly.meeting.database
   (:require
     [datomic.client.api :as d]
-    [ghostwheel.core :refer [>defn >defn-]]
+    [ghostwheel.core :refer [>defn >defn- ?]]
     [meetly.config :as config]
     [meetly.meeting.models :as models]
     [dialog.discussion.database :as dialog])
@@ -240,3 +240,30 @@
         :in $ ?statement
         :where [?user :user/downvotes ?statement]]
       (d/db (new-connection)) statement-id)))
+
+(>defn remove-upvote!
+  "Removes an upvote of a user."
+  [statement-id user-nickname]
+  [number? string? :ret associative?]
+  (when-let [user (user-by-nickname user-nickname)]
+    (transact [[:db/retract user :user/upvotes statement-id]])))
+
+(>defn remove-downvote!
+  "Removes a downvote of a user."
+  [statement-id user-nickname]
+  [number? string? :ret associative?]
+  (when-let [user (user-by-nickname user-nickname)]
+    (transact [[:db/retract user :user/downvotes statement-id]])))
+
+(>defn did-user-upvote?
+  "Check whether a user already upvoted a statement."
+  [statement-id user-nickname]
+  [number? string? :ret (? number?)]
+  (ffirst
+    (d/q
+      '[:find ?user
+        :in $ ?statement ?nickname
+        :where [?author :author/nickname ?nickname]
+        [?user :user/core-author ?author]
+        [?user :user/upvotes ?statement]]
+      (d/db (new-connection)) statement-id user-nickname)))
