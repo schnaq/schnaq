@@ -3,7 +3,8 @@
     [datomic.client.api :as d]
     [ghostwheel.core :refer [>defn]]
     [meetly.config :as config]
-    [meetly.meeting.models :as models])
+    [meetly.meeting.models :as models]
+    [dialog.discussion.database :as dialog])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -44,6 +45,15 @@
   (when-not (= :peer-server (-> config/datomic :server-type))
     (create-database-from-config!))
   (create-discussion-schema (new-connection)))
+
+(defn init-and-seed!
+  "Initializing the datomic database and feeding it with test-data for the
+  dialog.core."
+  []
+  (init!)
+  (dialog/init! {:datomic config/datomic
+                 :name config/db-name})
+  (dialog/load-testdata!))
 
 ;; ##### Input functions #####
 (defn now [] (Date.))
