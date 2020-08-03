@@ -4,7 +4,8 @@
     [ghostwheel.core :refer [>defn >defn-]]
     [meetly.config :as config]
     [meetly.meeting.models :as models]
-    [clojure.spec.alpha :as s])
+    [clojure.spec.alpha :as s]
+    [dialog.discussion.database :as dialog])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -25,12 +26,14 @@
   [connection]
   (d/transact connection {:tx-data models/datomic-schema}))
 
-(defn- create-database-from-config!
-  "Re-create a database based on the config-file."
-  []
+(>defn create-database!
+  "Create a new database. Does not check whether there already is an existing
+  database with the same name."
+  [database-name]
+  [string? :ret boolean?]
   (d/create-database
     datomic-client
-    {:db-name config/db-name}))
+    {:db-name database-name}))
 
 (defn delete-database-from-config!
   []
@@ -40,11 +43,30 @@
 
 (defn init!
   "Initialization function, which does everything needed at a fresh app-install.
-  Particularly transacts the database schema defined in models.clj"
-  []
-  (when-not (= :peer-server (-> config/datomic :server-type))
-    (create-database-from-config!))
-  (create-discussion-schema (new-connection)))
+  Particularly transacts the database schema defined in models.clj.
+  If no parameters are provided, the function reads its configuration from the
+  config-namespace."
+  ([]
+   (init! {:datomic config/datomic
+           :name config/db-name}))
+  ([config]
+   (when-not (= :peer-server (-> (:datomic config) :server-type))
+     (create-database! (:name config)))
+   (create-discussion-schema (new-connection))))
+
+(defn init-and-seed!
+  "Initializing the datomic database and feeding it with test-data for the
+  dialog.core.
+  If no parameters are provided, the function reads its configuration from the
+  config-namespace."
+  ([]
+   (init-and-seed! {:datomic config/datomic
+                    :name config/db-name}))
+  ([config]
+   (init! config)
+   (dialog/init! config)
+   (dialog/load-testdata!)))
+
 
 ;; ##### Input functions #####
 (defn now [] (Date.))
