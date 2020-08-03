@@ -35,7 +35,7 @@
   "Adds an author to the database."
   [req]
   (let [author-name (:nickname (:body-params req))]
-    (db/add-author-if-not-exists author-name)
+    (db/add-user-if-not-exists author-name)
     (response {:text "POST successful"})))
 
 (defn- add-agendas

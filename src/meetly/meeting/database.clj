@@ -166,27 +166,42 @@
         [(= ?lower-name ?author-name)]]
       (d/db (new-connection)) (.toLowerCase ^String nickname))))
 
-(defn add-author
-  "Add a new author to the database."
+(defn add-user
+  "Add a new user / author to the database."
   [nickname]
-  (transact [{:author/nickname nickname}]))
+  (transact [{:user/core-author
+              {:author/nickname nickname}}]))
 
-(defn add-author-if-not-exists
+(defn add-user-if-not-exists
   "Adds an author if they do not exist yet."
   [nickname]
   (when-not (author-id-by-nickname nickname)
-    (add-author nickname)))
+    (add-user nickname)))
+
+(>defn- user-by-nickname
+  "Return the **meetly** user-id by nickname."
+  [nickname]
+  [string? :ret number?]
+  (ffirst
+    (d/q
+      '[:find ?user
+        :in $ ?nickname
+        :where [?user :user/core-author ?author]
+        [?author :author/nickname ?nickname]]
+      (d/db (new-connection)) nickname)))
 
 (>defn- vote-on-statement!
   "Up or Downvote a statement"
   [statement-id user-nickname vote-type]
-  [number? string? (s/or :upvote :downvote)
+  [number? string? keyword?
    :ret associative?]
-  (let [author (author-id-by-nickname user-nickname)
-        up-down-field (if (= vote-type :upvote) :user/upvotes :user/downvotes)]
-    (when author
-      (transact [{:user/core-author author
-                  up-down-field statement-id}]))))
+  (let [user (user-by-nickname user-nickname)
+        [add-field remove-field] (if (= vote-type :upvote)
+                                   [:user/upvotes :user/downvotes]
+                                   [:user/downvotes :user/upvotes])]
+    (when user
+      (transact [[:db/retract user remove-field statement-id]
+                 [:db/add user add-field statement-id]]))))
 
 (>defn upvote-statement!
   "Upvotes a statement. Takes a user-nickname and a statement-id. The user has to exist, otherwise
@@ -208,22 +223,18 @@
   "Returns the number of upvotes for a statement."
   [statement-id]
   [number? :ret number?]
-  (count
-    (d/q
-      '[:find ?user
-        :in $ ?statement
-        :where [?user :user/upvotes ?statement]]
-      (d/db (new-connection)) statement-id)))
+  (d/q
+    '[:find (count ?user)
+      :in $ ?statement
+      :where [?user :user/upvotes ?statement]]
+    (d/db (new-connection)) statement-id))
 
 (>defn downvotes-for-statement
   "Returns the number of downvotes for a statement."
   [statement-id]
   [number? :ret number?]
-  (count
-    (d/q
-      '[:find ?user
-        :in $ ?statement
-        :where [?user :user/downvotes ?statement]]
-      (d/db (new-connection)) statement-id)))
-
-;; TODO do not allow up and downvote for the same statement by the same user
+  (d/q
+    '[:find (count ?user)
+      :in $ ?statement
+      :where [?user :user/downvotes ?statement]]
+    (d/db (new-connection)) statement-id))
