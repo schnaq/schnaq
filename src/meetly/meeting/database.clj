@@ -4,7 +4,6 @@
     [ghostwheel.core :refer [>defn >defn-]]
     [meetly.config :as config]
     [meetly.meeting.models :as models]
-    [clojure.spec.alpha :as s]
     [dialog.discussion.database :as dialog])
   (:import (java.util Date)))
 
