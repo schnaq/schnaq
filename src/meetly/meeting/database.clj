@@ -1,9 +1,11 @@
 (ns meetly.meeting.database
   (:require
     [datomic.client.api :as d]
-    [ghostwheel.core :refer [>defn]]
+    [ghostwheel.core :refer [>defn >defn-]]
     [meetly.config :as config]
-    [meetly.meeting.models :as models])
+    [meetly.meeting.models :as models]
+    [dialog.discussion.database :as ddb]
+    [clojure.spec.alpha :as s])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -130,14 +132,15 @@
         [?agenda :agenda/discussion-id ?discussion-id]]
       (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
 
-(defn- author-exists?
-  "Returns whether a certain author with `nickname` already exists in the db."
+(>defn- author-id-by-nickname
+  "Returns an author-id by nickname."
   [nickname]
-  (seq
+  [string? :ret number?]
+  (ffirst
     (d/q
-      '[:find ?lower-name
+      '[:find ?author
         :in $ ?author-name
-        :where [_ :author/nickname ?original-nickname]
+        :where [?author :author/nickname ?original-nickname]
         [(.toLowerCase ^String ?original-nickname) ?lower-name]
         [(= ?lower-name ?author-name)]]
       (d/db (new-connection)) (.toLowerCase ^String nickname))))
@@ -150,25 +153,56 @@
 (defn add-author-if-not-exists
   "Adds an author if they do not exist yet."
   [nickname]
-  (when-not (author-exists? nickname)
+  (when-not (author-id-by-nickname nickname)
     (add-author nickname)))
 
-;; TODO add method for up and downvoting. Should not have to check for the core-author, since the value is unique.
-;; But still check if that assumption is true.
+(>defn- vote-on-statement!
+  "Up or Downvote a statement"
+  [statement-id user-nickname vote-type]
+  [number? string? (s/or :upvote :downvote)
+   :ret associative?]
+  (let [author (author-id-by-nickname user-nickname)
+        up-down-field (if (= vote-type :upvote) :user/upvotes :user/downvotes)]
+    (when author
+      (transact [{:user/core-author author
+                  up-down-field statement-id}]))))
 
-(comment
-  (init!)
-  (add-meeting {:title "Test 1"
-                :description "Jour Fixé des Hasses"
-                :start-date (now)
-                :end-date (now)
-                :share-hash "897aasdha-12839hd-123dfa"})
-  (all-meetings)
-  (add-agenda-point "wegi" "Test-Beschreibung, wichtig!" 17592186045480)
-  (meeting-by-hash "c58ec11d-46ff-489b-a7d3-9b466de497f0")
-  (agendas-by-meeting-hash "897aasdha-12839hd-123dfa")
-  (agenda-by-discussion-id "8f57fd87-ab35-4a50-99fb-73af3e07d4b5")
-  (add-author "Shredder")
-  (author-exists? "shredder")
-  (add-author-if-not-exists "Shredder")
-  :end)
+(>defn upvote-statement!
+  "Upvotes a statement. Takes a user-nickname and a statement-id. The user has to exist, otherwise
+  nothing happens."
+  [statement-id user-nickname]
+  [number? string?
+   :ret associative?]
+  (vote-on-statement! statement-id user-nickname :upvote))
+
+(>defn downvote-statement!
+  "Downvotes a statement. Takes a user-nickname and a statement-id. The user has to exist, otherwise
+  nothing happens."
+  [statement-id user-nickname]
+  [number? string?
+   :ret associative?]
+  (vote-on-statement! statement-id user-nickname :downvote))
+
+(>defn upvotes-for-statement
+  "Returns the number of upvotes for a statement."
+  [statement-id]
+  [number? :ret number?]
+  (count
+    (d/q
+      '[:find ?user
+        :in $ ?statement
+        :where [?user :user/upvotes ?statement]]
+      (d/db (new-connection)) statement-id)))
+
+(>defn downvotes-for-statement
+  "Returns the number of downvotes for a statement."
+  [statement-id]
+  [number? :ret number?]
+  (count
+    (d/q
+      '[:find ?user
+        :in $ ?statement
+        :where [?user :user/downvotes ?statement]]
+      (d/db (new-connection)) statement-id)))
+
+;; TODO do not allow up and downvote for the same statement by the same user
