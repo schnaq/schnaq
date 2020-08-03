@@ -6,7 +6,8 @@
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
             [cljs.pprint :as pp]
-            [meetly.meeting.interface.text.display-data :as data]))
+            [meetly.meeting.interface.text.display-data :as data]
+            [meetly.meeting.interface.views.base :as base]))
 
 ;; #### Helpers ####
 
@@ -59,23 +60,17 @@
       "for-radio" (rf/dispatch [:continue-discussion :support/new (assoc support-args :new/support new-text)])
       "undercut-radio" (rf/dispatch [:continue-discussion :undercut/new (assoc undercut-args :new/undercut new-text)]))))
 
-;; meetingheader
+;; discussion header
 
-(defn- meeting-title [current-meeting]
+(defn- discussion-header [current-meeting]
   ;; meeting header
-  [:div.meeting-header.header-custom.shadow-custom
-   [:div.row
-    [:div.col-lg-1.back-arrow
-     [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
-                     :on-click (fn []
-                                 (rf/dispatch [:navigate :routes/meetings.show
-                                               {:share-hash (:meeting/share-hash current-meeting)}])
-                                 (rf/dispatch [:select-current-meeting current-meeting]))
-
-                     }]]
-    [:div.col-lg-8.container
-     [:h2 (:meeting/title current-meeting)]
-     [:h6 (:meeting/description current-meeting)]]]])
+  (base/discussion-header
+    (:meeting/title current-meeting)
+    (:meeting/description current-meeting)
+    (fn []
+      (rf/dispatch [:navigate :routes/meetings.show
+                    {:share-hash (:meeting/share-hash current-meeting)}])
+      (rf/dispatch [:select-current-meeting current-meeting]))))
 
 ;; #### Views ####
 
@@ -84,29 +79,22 @@
   ([statement]
    (statement-bubble statement (arg-type->attitude (:meta/argument.type statement))))
   ([{:keys [statement/content statement/author] :as statement} attitude]
-   [:div {:class (str "statement-" (name attitude))}
+   [:div.card.statement {:class (str "statement-" (name attitude))}
     (when (= :argument.type/undercut (:meta/argument.type statement))
       [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
-    [:p content]
-    [:p.small.text-muted "By: " (:author/nickname author)]]))
+    [:small.text-right (-> statement :statement/author :author/nickname)]
+    [:p content]]))
 
 (defn- history-view
   "Displays the statements it took to get to where the user is."
   []
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-    [:div.discussion-history
+    [:div#discussion-history
      (for [[count [statement attitude]] indexed-history]
        [:div {:key (:db/id statement)
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
         [statement-bubble statement attitude]])]))
-
-(defn- discussion-base
-  "The base template of the discussion"
-  [content]
-  [:div.container
-   [history-view]
-   content])
 
 (defn- single-statement-view
   "Displays a single starting conclusion-statement inside a discussion."
@@ -132,6 +120,7 @@
     {:type "text" :name "conclusion-text"
      :auto-complete "off"
      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+   [:br]
    [:input.form-control.discussion-text-input.mb-1
     {:type "text" :name "premise-text"
      :auto-complete "off"
@@ -139,27 +128,18 @@
    [:div.text-center.button-spacing-top
     [:button.btn.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
 
-(defn- all-positions-view
-  "Shows all starting-conclusions."
-  []
-  (let [agenda @(rf/subscribe [:chosen-agenda])
-        conclusions @(rf/subscribe [:starting-conclusions])]
-    [:div.row.discussion-head
-     [:div.col-12
-      [:div
-       [:h2 (:agenda/title agenda)]
-       [:p (:agenda/description agenda)]]
-      [:hr]
-      [:div.container
-       (for [conclusion conclusions]
-         [:div {:key (:statement/content conclusion)}
-          [single-statement-view conclusion (-> agenda :agenda/discussion-id :db/id)]])]]]))
 
-(defn- agenda-header []
+(defn- agenda-header-back-arrow [on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])]
     [:div.discussion-view-top-rounded
      [:div.row
-      [:div.col-12
+      ;; back arrow
+      [:div.col-lg-1.back-arrow
+       (when on-click-back-function
+         [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
+                         :on-click on-click-back-function}])]
+      ;; title
+      [:div.col-lg-11
        [:div
         [:h2 (:agenda/title agenda)]
         [:p (:agenda/description agenda)]]]]]))
@@ -182,36 +162,50 @@
         [input-starting-argument-form]]
        )]))
 
-(defn- discussion-base-2
-  "The base template of the discussion"
-  []
-  [:div.container.discussion-view-rounded.shadow-custom
-   [agenda-header]
-   [history-view]
-   [conclusions-list]
-   [input-field]
-   ])
+(defn- input-footer [content]
+  [:div.discussion-view-bottom-rounded
+   content])
+
 
 (defn discussion-start-view
   "The first step after starting a discussion."
   []
-
-  ;[discussion-base
-  ; (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-  ;   [:div#discussion-start
-  ;    [all-positions-view]
-  ;    [:hr]
-  ;    (when allow-new-argument?
-  ;      [:h3 (labels :discussion/create-argument-heading)]
-  ;      [input-starting-argument-form])])]
-
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
     [:div
-     [meeting-title current-meeting]
+     [discussion-header current-meeting]
      [:br]
-     [discussion-base-2]]
-    )
-  )
+     [:div.container.discussion-view-rounded.shadow-custom
+      [agenda-header-back-arrow]
+      [history-view]
+      [conclusions-list]
+      [input-field]]]))
+
+
+(defn- radio-button
+  "Radio Button helper function. This function creates a radio button."
+  [id name value label checked?]
+  [:div.custom-control.custom-radio
+   [:input.custom-control-input.custom-radio-button
+    {:type "radio"
+     :id id
+     :name name
+     :value value
+     :default-checked checked?}]
+   [:label.custom-control-label.custom-radio-button-label.clickable
+    {:for id} (labels label)]])
+
+
+(defn- input-form
+  "Text input for adding a statement"
+  []
+  [:div
+   [:input.form-control.discussion-text-input.mb-1
+    {:type "text" :name "premise-text"
+     :auto-complete "off"
+     :placeholder (labels :discussion/premise-placeholder)}]
+   ;; add button
+   [:div.text-center.button-spacing-top
+    [:button.btn.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
 
 (defn- add-starting-premises-form
   "Either support or attack a starting-conclusion with the users own premise."
@@ -222,15 +216,14 @@
     [:form
      {:on-submit (fn [e] (.preventDefault e)
                    (submit-new-starting-premise new-statement-args (oget e [:target :elements])))}
-     [:input#for-radio-starting {:type "radio" :name "premise-choice" :value "for-radio"
-                                 :default-checked true}]
-     [:label {:for "for-radio-starting"} (labels :discussion/add-premise-supporting)] [:br]
-     [:input#against-radio-starting {:type "radio" :name "premise-choice" :value "against-radio"}]
-     [:label {:for "against-radio-starting"} (labels :discussion/add-premise-against)] [:br]
-     [:input.form-control.mb-1
-      {:type "text" :name "premise-text"
-       :placeholder (labels :discussion/premise-placeholder)}]
-     [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-starting-premise-action)]]))
+     ;; radio support
+     [radio-button "for-radio-starting" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
+     ;; radio attack
+     [radio-button "against-radio-starting" "premise-choice" "against-radio" :discussion/add-premise-against false]
+     ;; spacing
+     [:br]
+     ;; input form
+     [input-form]]))
 
 (defn- add-premise-form
   "Either support or attack or undercut with the users own premise."
@@ -243,17 +236,74 @@
     [:form
      {:on-submit (fn [e] (.preventDefault e)
                    (submit-new-premise [support-args rebut-args undercut-args] (oget e [:target :elements])))}
-     [:input#for-radio {:type "radio" :name "premise-choice" :value "for-radio"
-                        :default-checked true}]
-     [:label {:for "for-radio"} (labels :discussion/add-premise-supporting)] [:br]
-     [:input#against-radio {:type "radio" :name "premise-choice" :value "against-radio"}]
-     [:label {:for "against-radio"} (labels :discussion/add-premise-against)] [:br]
-     [:input#undercut-radio {:type "radio" :name "premise-choice" :value "undercut-radio"}]
-     [:label {:for "undercut-radio"} (labels :discussion/add-undercut)] [:br]
-     [:input.form-control.mb-1
-      {:type "text" :name "premise-text"
-       :placeholder (labels :discussion/premise-placeholder)}]
-     [:button.btn.btn-primary {:type "submit"} (labels :discussion/create-starting-premise-action)]]))
+     ;; support
+     [radio-button "for-radio" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
+     ;; attack
+     [radio-button "against-radio" "premise-choice" "against-radio" :discussion/add-premise-against false]
+     ;; undercut
+     [radio-button "undercut-radio" "premise-choice" "undercut-radio" :discussion/add-undercut false]
+     ;; spacing
+     [:br]
+     ;; input form
+     [input-form]]))
+
+
+;; carousel
+
+(defn- premises-carousel [premises]
+
+  [:div#carouselExampleIndicators.carousel.slide {:data-ride "carousel"}
+   ;; indicator
+   [:ol.carousel-indicators.carousel-indicator-custom
+    ;; range of number of premises and set the first element as selected
+    (map
+      (fn [i]
+        (let [params {:key (str "indicator-" i) :data-target "#carouselExampleIndicators" :data-slide-to (str i)}]
+          (if (= i 0)
+            [:li.active params]
+            [:li params])))
+      (range (count premises)))]
+   ;; content
+   [:div.carousel-inner
+    ;; set first indexed element as selected
+    (map-indexed
+      (fn [index premise]
+        (let [params {:key (:db/id premise)}
+              content [:div.premise-carousel-item
+                       {:on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
+                       [statement-bubble premise]]]
+          (if (= index 0)
+            [:div.carousel-item.active params content]
+            [:div.carousel-item params content])))
+      premises)]
+   ;; interface elements
+   [:a.carousel-control-prev {:href "#carouselExampleIndicators" :role "button" :data-slide "prev"}
+    [:span.carousel-control-prev-icon {:aria-hidden "true"}]
+    [:span.sr-only "Previous"]]
+   [:a.carousel-control-next {:href "#carouselExampleIndicators" :role "button" :data-slide "next"}
+    [:span.carousel-control-next-icon {:aria-hidden "true"}]
+    [:span.sr-only "Next"]]])
+
+
+(defn- other-premises-view [premises]
+  [:div#other-premises.container.others-say-container.inner-shadow-custom
+   (when (not-empty premises)
+     [premises-carousel premises])])
+
+(defn- interaction-view
+  "A view where the user interacts with statements"
+  [allow-new? premises input]
+  [:div
+   [other-premises-view premises]
+   (when allow-new?
+     [input-footer input])])
+
+(defn- select-or-react-view
+  "A view where the user either reacts to a premise or selects another reaction."
+  []
+  (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
+        premises @(rf/subscribe [:premises-and-undercuts-to-select])]
+    (interaction-view allow-new? premises [add-premise-form])))
 
 (defn- starting-premises-view
   "Show the premises after starting-conclusions. This view is different from usual premises,
@@ -261,40 +311,24 @@
   []
   (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
         premises @(rf/subscribe [:premises-to-select])]
-    [:div
-     [:h2 (labels :discussion/others-think)]
-     (for [premise premises]
-       [:div.premise {:key (:db/id premise)
-                      :on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
-        [statement-bubble premise]])
-     [:hr]
-     (when allow-new?
-       [add-starting-premises-form])]))
-
-(defn- select-or-react-view
-  "A view where the user either reacts to a premise or selects another reaction."
-  []
-  (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
-        premises @(rf/subscribe [:premises-and-undercuts-to-select])]
-    [:div
-     [:h2 (labels :discussion/others-think)]
-     (for [premise premises]
-       [:div.premise {:key (:db/id premise)
-                      :on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
-        [statement-bubble premise]])
-     [:hr]
-     (when allow-new?
-       [add-premise-form])]))
+    (interaction-view allow-new? premises [add-starting-premises-form])))
 
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
   []
-  (let [steps @(rf/subscribe [:discussion-steps])]
-    [discussion-base
-     [:div
-      [:h2 {:on-click #(rf/dispatch [:discussion.history/time-travel])}
-       [:i {:class (str "m-auto text-primary fas " (fa :arrow-left))}]]
+
+  (let [steps @(rf/subscribe [:discussion-steps])
+        current-meeting @(rf/subscribe [:selected-meeting])]
+    [:div
+     [discussion-header current-meeting]
+     [:br]
+     [:div.container.discussion-view-rounded.shadow-custom
+      ;; discussion header
+      [agenda-header-back-arrow #(rf/dispatch [:discussion.history/time-travel])]
+      [history-view]
+      [conclusions-list]
+      ;; disussion loop
       [:div#discussion-loop
        (case (deduce-step steps)
          :starting-conclusions/select [starting-premises-view]

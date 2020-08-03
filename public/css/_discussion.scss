@@ -1,13 +1,35 @@
+.statement {
+  border-radius: 2rem;
+  padding: 2rem;
+  margin: 2rem;
+  color: $white;
+}
+
 .statement-agree {
-  background: rgba(178, 212, 144, 0.8);
+  background: $primary;
+  cursor: pointer;
+}
+
+.statement-agree:hover {
+  background: $primary-selected;
 }
 
 .statement-disagree {
-  background: rgba(212, 144, 144, 0.8)
+  background: $secondary;
+  cursor: pointer;
+}
+
+.statement-disagree:hover {
+  background: $secondary-selected;
 }
 
 .statement-neutral {
-  background: rgba(115, 176, 196, 0.8)
+  background: $primary-light;
+  cursor: pointer;
+}
+
+.statement-neutral:hover {
+  background: $primary-light-selected;
 }
 
 .discussion-view-rounded {
@@ -21,14 +43,14 @@
   padding: 2rem;
   color: $white;
   font-weight: bold;
-  background: $primary-light;
+  background: $primary;
 }
 
 .discussion-view-bottom-rounded {
   border-radius: 0 0 2rem 2rem;
   padding: 2rem;
   color: $white;
-  background: $primary-light;
+  background: $primary;
 }
 
 
@@ -37,30 +59,59 @@
   padding: 2rem;
   margin: 2rem;
   color: $white;
-  background: $primary;
+  background: $primary-light;
   cursor: pointer;
 }
 
 .statement-single:hover {
-  background: $primary-light;
-}
-
-.button-spacing-top {
-  padding-top: 2rem;
+  background: $primary-light-selected;
 }
 
 .discussion-text-input {
   background: transparent;
   border: none;
+  border-bottom: 2px solid $white;
   color: $white;
 }
 
 .discussion-text-input:focus {
-  background-color: rgba(255, 255, 255, 0.025);
+  background-color: rgba(255, 255, 255, 0.0125);
+  border: none;
+  border-bottom: 2px solid $white;
   color: $white;
+  box-shadow: none;
 }
 
 .discussion-text-input::placeholder {
   color: $white;
   opacity: 0.85;
+}
+
+.premise-carousel-item {
+  padding: 0 6rem 1rem 6rem;
+}
+
+.carousel-indicator-custom li {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin: 0.5rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  background-color: $gray-700;
+}
+
+.carousel-indicator-custom .active {
+  background-color: $gray-100;
+}
+
+.carousel-control-color {
+  color: $gray-700;
+  background-color: #0000ff !important;
+}
+
+.others-say-container {
+  margin-top: 0;
+  background: $gray-500;
 }
