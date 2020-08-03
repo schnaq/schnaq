@@ -1,8 +1,9 @@
 (ns meetly.meeting.database-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
-            [dialog.test.toolbelt :as meetly-toolbelt]
+            [meetly.test.toolbelt :as meetly-toolbelt]
             [dialog.discussion.database :as ddb]
             [meetly.meeting.database :as database]))
+
 
 
 (use-fixtures :each meetly-toolbelt/init-db-test-fixture)
