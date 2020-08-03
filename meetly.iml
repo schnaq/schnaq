@@ -68,7 +68,7 @@
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.264" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20191016-6ae1f72f" level="project" />
     <orderEntry type="library" name="Deps: io.aviso/pretty:0.1.33" level="project" />
-    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.10.18" level="project" />
+    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.10.19" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.sdk/graal-sdk:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/clojurescript:1.10.773" level="project" />
     <orderEntry type="library" name="Deps: slingshot:0.12.2" level="project" />
@@ -123,7 +123,7 @@
     <orderEntry type="library" name="Deps: com.google.guava/failureaccess:1.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/guava:28.2-android" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.xml:0.0.8" level="project" />
-    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:4dbf69" level="project" />
+    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:4ac930" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-schema:0.5.5" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.truffle/truffle-api:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: binaryage/devtools:1.0.2" level="project" />
