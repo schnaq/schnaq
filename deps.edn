@@ -5,6 +5,7 @@
         compojure {:mvn/version "1.6.1"}
         cljs-ajax {:mvn/version "0.8.0"}
         day8.re-frame/http-fx {:mvn/version "0.2.1"}
+        expound {:mvn/version "0.8.5"}
         gnl/ghostwheel {:mvn/version "0.3.9"}
         http-kit {:mvn/version "2.4.0"}
         org.clojure/clojure {:mvn/version "1.10.1"}
