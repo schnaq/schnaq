@@ -1,9 +1,9 @@
 @import "variables";
 
 .meeting-entry {
-  background: $white;
+  background: $primary;
   border-radius: 1.5rem;
-  color: $gray-700;
+  color: $white;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
   0 4px 4px 0 rgba(0, 0, 0, 0.19);
 }
@@ -24,7 +24,7 @@
 
 .arrow-icon {
   font-size: 2rem;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .meeting-single-rounded {

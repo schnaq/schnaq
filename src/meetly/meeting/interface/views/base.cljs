@@ -80,6 +80,22 @@
        [name-input username]
        [show-input-button username])]))
 
+;; discussion loop header
+
+(defn discussion-header
+  "Non wavy header with a back button.
+  On-click-function is triggered when back button is clicked"
+  [title subtitle on-click-function]
+
+  [:div.meeting-header.header-custom.shadow-custom
+   [:div.row
+    [:div.col-lg-1.back-arrow
+     [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
+                     :on-click on-click-function}]]
+    [:div.col-lg-8.container
+     [:h2 title]
+     [:h6 subtitle]]]])
+
 ;; nav header
 
 (defn nav-header []

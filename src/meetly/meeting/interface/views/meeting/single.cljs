@@ -1,6 +1,6 @@
 (ns meetly.meeting.interface.views.meeting.single
   (:require [re-frame.core :as rf]
-            [meetly.meeting.interface.text.display-data :as data]))
+            [meetly.meeting.interface.views.base :as base]))
 
 
 (defn- agenda-entry [agenda meeting]
@@ -31,14 +31,10 @@
 
 (defn- meeting-title [current-meeting]
   ;; meeting header
-  [:div.meeting-header.header-custom.shadow-custom
-   [:div.row
-    [:div.col-lg-1.back-arrow
-     [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
-                     :on-click #(rf/dispatch [:navigate :routes/meetings])}]]
-    [:div.col-lg-8.container
-     [:h2 (:meeting/title current-meeting)]
-     [:h6 (:meeting/description current-meeting)]]]])
+  (base/discussion-header
+    (:meeting/title current-meeting)
+    (:meeting/description current-meeting)
+    #(rf/dispatch [:navigate :routes/meetings])))
 
 (defn- single-meeting []
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
