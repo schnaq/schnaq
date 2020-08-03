@@ -97,6 +97,30 @@
       (response (dialog/continue-discussion reaction args))
       (bad-request "Your request was malformed"))))
 
+(defn- toggle-upvote-statement
+  "Upvote if no upvote has been made, otherwise remove upvote for statement."
+  [{:keys [body-params]}]
+  (let [meeting-hash (:meeting-hash body-params)
+        statement-id (:statement-id body-params)
+        user-nickname (:nickname body-params)]
+    (if (db/valid-statement-id-and-meeting? statement-id meeting-hash)
+      (if (db/did-user-upvote? statement-id user-nickname)
+        (db/remove-upvote! statement-id user-nickname)
+        (db/upvote-statement! statement-id user-nickname))
+      (bad-request "The request was malformed"))))
+
+(defn- toggle-downvote-statement
+  "Upvote if no upvote has been made, otherwise remove upvote for statement."
+  [{:keys [body-params]}]
+  (let [meeting-hash (:meeting-hash body-params)
+        statement-id (:statement-id body-params)
+        user-nickname (:nickname body-params)]
+    (if (db/valid-statement-id-and-meeting? statement-id meeting-hash)
+      (if (db/did-user-downvote? statement-id user-nickname)
+        (db/remove-downvote! statement-id user-nickname)
+        (db/downvote-statement! statement-id user-nickname))
+      (bad-request "The request was malformed"))))
+
 (defroutes app-routes
   (GET "/meetings" [] all-meetings)
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
@@ -107,6 +131,8 @@
   (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
   (GET "/start-discussion/:discussion-id" [] start-discussion)
   (POST "/continue-discussion" [] continue-discussion)
+  (POST "/votes/up/toggle" [] toggle-upvote-statement)
+  (POST "/votes/down/toggle" [] toggle-downvote-statement)
   (route/not-found "Error, page not found!"))
 
 

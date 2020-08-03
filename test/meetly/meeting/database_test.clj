@@ -42,7 +42,7 @@
                                          :meeting/start-date (database/now)
                                          :meeting/end-date (database/now)
                                          :meeting/share-hash "Wegi-ist-der-schönste"})
-          discussion (database/add-agenda-point "Hi" "Beschreibung" (:db/id meeting))
+          discussion (database/add-agenda-point "Hi" "Beschreibung" meeting)
           _ (ddb/add-new-starting-argument! discussion "Christian" "this is sparta" ["foo" "bar" "baz"])
           argument (first (ddb/starting-arguments-by-discussion discussion))
           conclusion-id (:db/id (:argument/conclusion argument))
