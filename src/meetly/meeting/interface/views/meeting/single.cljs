@@ -4,7 +4,7 @@
 
 
 (defn- agenda-entry [agenda meeting]
-  [:div.card.meeting-entry.clickable
+  [:div.card.meeting-entry
    {:on-click (fn []
                 (rf/dispatch [:navigate :routes/meetings.discussion.start
                               {:id (-> agenda :agenda/discussion-id :db/id)

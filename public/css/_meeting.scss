@@ -6,6 +6,11 @@
   color: $white;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
   0 4px 4px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer
+}
+
+.meeting-entry:hover {
+  background: $primary-selected;
 }
 
 .meeting-entry-title {
