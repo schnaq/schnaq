@@ -78,7 +78,7 @@
   "A single bubble of a statement to be used ubiquitously."
   ([statement]
    (statement-bubble statement (arg-type->attitude (:meta/argument.type statement))))
-  ([{:keys [statement/content statement/author] :as statement} attitude]
+  ([{:keys [statement/content] :as statement} attitude]
    [:div.card.statement {:class (str "statement-" (name attitude))}
     (when (= :argument.type/undercut (:meta/argument.type statement))
       [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
