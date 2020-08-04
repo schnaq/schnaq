@@ -4,5 +4,4 @@
 (rf/reg-event-db
   :modal
   (fn [db [_ data]]
-    (println "Im Modal dispatch")
     (assoc-in db [:modal] data)))
