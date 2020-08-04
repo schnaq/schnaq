@@ -16,6 +16,8 @@
             [meetly.meeting.interface.views.discussion]
             [meetly.meeting.interface.subs]
             [meetly.meeting.interface.events]
+            [meetly.meeting.interface.effects]
+            [meetly.meeting.interface.views.modals.modal]
     ;; IMPORTANT: If you use subs and events in another module, you need to require it
     ;; somewhere where it will be loaded like this core module.
             [meetly.meeting.interface.routes :as routes]))

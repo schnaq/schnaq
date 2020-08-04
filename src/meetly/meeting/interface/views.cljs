@@ -1,6 +1,7 @@
 (ns meetly.meeting.interface.views
   (:require [reagent.dom]
             [meetly.meeting.interface.views.base :as base]
+            [meetly.meeting.interface.views.modals.modal :as modal]
             [re-frame.core :as rf]))
 
 (defn navigation-button
@@ -39,7 +40,9 @@
       (when ajax-error
         [:div.alert.alert-danger.alert-dismissible.fade.show "Error: " ajax-error])]
      (when current-route
-       [(-> current-route :data :view)])]))
+       [:div
+        [modal/modal]
+        [(-> current-route :data :view)]])]))
 
 (defn- footer []
   [base/footer])
