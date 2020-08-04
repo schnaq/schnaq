@@ -6,6 +6,7 @@
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
             [cljs.pprint :as pp]
+            [ghostwheel.core :refer [>defn-]]
             [meetly.meeting.interface.views.base :as base]))
 
 ;; #### Helpers ####
@@ -59,6 +60,19 @@
       "for-radio" (rf/dispatch [:continue-discussion :support/new (assoc support-args :new/support new-text)])
       "undercut-radio" (rf/dispatch [:continue-discussion :undercut/new (assoc undercut-args :new/undercut new-text)]))))
 
+(>defn- calculate-votes
+  "Calculates the votes without needing to reload."
+  [statement vote-type vote-store]
+  [map? keyword? map? :ret number?]
+  (let [[internal-key db-key] (if (= vote-type :upvotes)
+                                [:meta/upvotes :up]
+                                [:meta/downvotes :down])]
+    (if ((db-key vote-store) (:db/id statement))
+      ;; User voted for this option
+      (inc (internal-key statement))
+      ;; Nothing changed, take plain value
+      (internal-key statement))))
+
 ;; discussion header
 
 (defn- discussion-header [current-meeting]
@@ -78,22 +92,23 @@
   ([statement]
    (statement-bubble statement (arg-type->attitude (:meta/argument.type statement))))
   ([{:keys [statement/content] :as statement} attitude]
-   [:div.card.statement {:class (str "statement-" (name attitude))}
-    [:div.row
-     [:div.col-11
-      (when (= :argument.type/undercut (:meta/argument.type statement))
-        [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
-      [:small.text-right.float-right (-> statement :statement/author :author/nickname)]
-      [:p content]]
-     [:div.col-1
-      [:p {:on-click (fn [e]
-                       (.stopPropagation e)                 ;; Prevent activating the time travel or deep dive
-                       (rf/dispatch [:toggle-upvote statement]))}
-       [:i {:class (str "m-auto fas " (fa :arrow-up))}] "  " (:meta/upvotes statement)]
-      [:p {:on-click (fn [e]
-                       (.stopPropagation e)
-                       (rf/dispatch [:toggle-downvote statement]))}
-       [:i {:class (str "m-auto fas " (fa :arrow-down))}] "  " (:meta/downvotes statement)]]]]))
+   (let [votes @(rf/subscribe [:local-votes])]
+     [:div.card.statement {:class (str "statement-" (name attitude))}
+      [:div.row
+       [:div.col-11
+        (when (= :argument.type/undercut (:meta/argument.type statement))
+          [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
+        [:small.text-right.float-right (-> statement :statement/author :author/nickname)]
+        [:p content]]
+       [:div.col-1
+        [:p {:on-click (fn [e]
+                         (.stopPropagation e)               ;; Prevent activating the time travel or deep dive
+                         (rf/dispatch [:toggle-upvote statement]))}
+         [:i {:class (str "m-auto fas " (fa :arrow-up))}] "  " (calculate-votes statement :upvotes votes)]
+        [:p {:on-click (fn [e]
+                         (.stopPropagation e)
+                         (rf/dispatch [:toggle-downvote statement]))}
+         [:i {:class (str "m-auto fas " (fa :arrow-down))}] "  " (calculate-votes statement :downvotes votes)]]]])))
 
 (defn- history-view
   "Displays the statements it took to get to where the user is."
@@ -504,37 +519,35 @@
                   :on-failure [:ajax-failure]}}))
 
 (rf/reg-event-fx
-  :upvote-success
-  (fn [_ [_ statement {:keys [operation]}]]
-    (println "yippie")
-    (println operation)
-    (println statement)))
-
-(rf/reg-event-fx
   :toggle-downvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
     {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/votes/up/toggle")
+                  :uri (str (:rest-backend config) "/votes/down/toggle")
                   :format (ajax/transit-request-format)
                   :params {:statement-id id
                            :nickname (get-in db [:user :name] "Anonymous")
                            :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
                   :response-format (ajax/transit-response-format)
-                  :on-success [:upvote-success]
+                  :on-success [:downvote-success statement]
                   :on-failure [:ajax-failure]}}))
 
-(rf/reg-event-fx
+(rf/reg-event-db
+  :upvote-success
+  (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
+    (if (= operation :added)                                ; Other option is :removed
+      (update-in
+        (update-in db [:votes :up] conj id)
+        [:votes :down] disj id)
+      (update-in db [:votes :up] disj id))))
+
+(rf/reg-event-db
   :downvote-success
-  (fn [_ [_ statement {:keys [operation]}]]
-    (println "yippie")
-    (println operation)
-    (println statement)))
-
-;; TODO update der upvotes muss dynamisch an folgenden stellen durchgeführt werden:
-;; TODO history, premises-to-select, premises-and-undercuts-to-select
-;; Response ist immer: {:operation (:added | :removed)} je nachdem ob der click einen down/upvote hinzugefügt
-;; oder entfernt hat.
-
+  (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
+    (if (= operation :added)
+      (update-in
+        (update-in db [:votes :down] conj id)
+        [:votes :up] disj id)
+      (update-in db [:votes :down] disj id))))
 
 ;; #### Subs ####
 
@@ -607,3 +620,8 @@
   :<- [:discussion-history/full]
   (fn [history _]
     (map :statement history)))
+
+(rf/reg-sub
+  :local-votes
+  (fn [db _]
+    (get db :votes)))
