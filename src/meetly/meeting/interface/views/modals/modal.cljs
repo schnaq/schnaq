@@ -11,12 +11,11 @@
   [:div {:class "modal-wrapper"}
    [:div {:class "modal-backdrop"
           :on-click (fn [event]
-                      (do
-                        (rf/dispatch [:modal {:show? (not show?)
-                                              :child nil
-                                              :size :default}])
-                        (.preventDefault event)
-                        (.stopPropagation event)))}]
+                      (rf/dispatch [:modal {:show? (not show?)
+                                            :child nil
+                                            :size :default}])
+                      (.preventDefault event)
+                      (.stopPropagation event))}]
    [:div {:class "modal-child"
           :style {:width (case size
                            :extra-small "15%"
@@ -29,14 +28,14 @@
   (let [modal (rf/subscribe [:modal])]
     (fn []
       [:div
-       (if (:show? @modal)
+       (when (:show? @modal)
          [modal-panel @modal])])))
 
 
 (defn- close-modal []
   (rf/dispatch [:modal {:show? false :child nil}]))
 
-(defn- name-input
+(defn- modal-name-input
   "An input, where the user can set their name. Happens automatically by typing."
   [username]
   [:form.form
@@ -55,7 +54,7 @@
     [:input.btn.btn-primary {:type "submit"
                              :value "Set Name"}]]])
 
-(defn- enter-name-modal []
+(defn enter-name-modal []
   [:div.modal-content
    [:div.modal-header
     [:h5.modal-title (labels :modals/enter-name-header)]
@@ -65,4 +64,4 @@
       "x"]]]
    [:div.modal-body
     [:p (labels :modals/enter-name-primer)]
-    [name-input "Ihr Name"]]])
+    [modal-name-input "Ihr Name"]]])
