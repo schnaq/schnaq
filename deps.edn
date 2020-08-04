@@ -45,9 +45,10 @@
 
            :uberjar
            {:extra-deps
-            {luchiniatwork/cambada {:mvn/version "1.0.2"}}
+            {cambada/cambada {:mvn/version "1.0.7"}
+             com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
             :main-opts ["-m" "cambada.uberjar"
-                        "-m" "meetly.core"]}
+                        "-m" "meetly.meeting.rest-api"]}
 
            :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]
                         :extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}}}

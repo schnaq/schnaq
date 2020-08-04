@@ -1,0 +1,5 @@
+FROM clojure:openjdk-14-tools-deps-alpine
+
+WORKDIR code
+COPY . .
+RUN clojure -A:uberjar

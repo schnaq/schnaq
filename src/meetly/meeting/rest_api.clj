@@ -10,7 +10,8 @@
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
-            [meetly.core :as meetly-core]))
+            [meetly.core :as meetly-core])
+  (:gen-class))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
