@@ -80,7 +80,7 @@
      :login/set-name "Geben Sie ihren Namen ein"
 
      :modals/enter-name-header "Geben Sie einen Namen ein"
-     :modals/enter-name-primer "Der Name wird den anderen Teilnehmern im Meetly angezeigt."
+     :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."
      }))
 
 
