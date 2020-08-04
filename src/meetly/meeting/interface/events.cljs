@@ -5,6 +5,7 @@
             [reitit.frontend.controllers :as reitit-front-controllers]
             [clojure.string :as clj-string]
             [meetly.meeting.interface.db :as meetly-db]
+            [meetly.meeting.interface.localstorage :as ls]
             [meetly.meeting.interface.config :refer [config]]))
 
 ;; Starts the ball rolling on changing to another view
@@ -30,28 +31,35 @@
 (rf/reg-event-fx
   :initialise-db
   (fn [_ _]
-    {:db meetly-db/default-db
-     :http-xhrio {:method :get
-                  :uri (str (:rest-backend config) "/meetings")
-                  :timeout 10000
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:init-from-backend]
-                  :on-failure [:ajax-failure]}
-     :dispatch [:set-username "Anonymous"]}))
+    (let [init-fx {:db meetly-db/default-db
+                   :http-xhrio {:method :get
+                                :uri (str (:rest-backend config) "/meetings")
+                                :timeout 10000
+                                :response-format (ajax/transit-response-format)
+                                :on-success [:init-from-backend]
+                                :on-failure [:ajax-failure]}}]
+      (if-let [name (ls/get-item :username)]
+        ;; When the localstorage is filled, then just set the name to db.
+        (assoc-in init-fx [:db :user :name] name)
+        ;; Otherwise start with anonymous
+        (assoc init-fx :dispatch [:set-username "Anonymous"])))))
 
 (rf/reg-event-fx
   :set-username
   (fn [{:keys [db]} [_ username]]
     ;; only update when string contains
     (when (not (clj-string/blank? username))
-      {:http-xhrio {:method :post
-                    :uri (str (:rest-backend config) "/author/add")
-                    :params {:nickname username}
-                    :format (ajax/transit-request-format)
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:hide-name-input]
-                    :on-failure [:ajax-failure]}
-       :db (assoc-in db [:user :name] username)})))
+      (let [fx {:http-xhrio {:method :post
+                             :uri (str (:rest-backend config) "/author/add")
+                             :params {:nickname username}
+                             :format (ajax/transit-request-format)
+                             :response-format (ajax/transit-response-format)
+                             :on-success [:hide-name-input]
+                             :on-failure [:ajax-failure]}
+                :db (assoc-in db [:user :name] username)}]
+        (if (= "Anonymous" username)
+          fx
+          (assoc fx :write-localstorage [:username username]))))))
 
 (rf/reg-event-db
   :ajax-failure
