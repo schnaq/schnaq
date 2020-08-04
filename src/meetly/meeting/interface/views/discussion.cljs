@@ -7,7 +7,8 @@
             [vimsical.re-frame.cofx.inject :as inject]
             [cljs.pprint :as pp]
             [ghostwheel.core :refer [>defn-]]
-            [meetly.meeting.interface.views.base :as base]))
+            [meetly.meeting.interface.views.base :as base]
+            ["jdenticon" :as jdenticon]))
 
 ;; #### Helpers ####
 
@@ -73,6 +74,31 @@
       ;; Nothing changed, take plain value
       (internal-key statement))))
 
+(defn- up-down-vote
+  "Add panel for up and down votes."
+  [statement]
+  (let [votes @(rf/subscribe [:local-votes])]
+    [:div.up-down-vote
+     [:p {:on-click (fn [e]
+                      (.stopPropagation e)                  ;; Prevent activating the time travel or deep dive
+                      (rf/dispatch [:toggle-upvote statement]))}
+      [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-up))}]
+      (calculate-votes statement :upvotes votes)]
+     [:p {:on-click (fn [e]
+                      (.stopPropagation e)
+                      (rf/dispatch [:toggle-downvote statement]))}
+      [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-down))}]
+      (calculate-votes statement :downvotes votes)]]))
+
+(>defn- avatar
+  "Create an image based on the nickname."
+  [name size]
+  [string? number? :ret vector?]
+  [:div.avatar.text-center
+   [:div.avatar-image.img-thumbnail.rounded-circle
+    {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg name size)}}]
+   [:div.avatar-name name]])
+
 ;; discussion header
 
 (defn- discussion-header [current-meeting]
@@ -92,23 +118,15 @@
   ([statement]
    (statement-bubble statement (arg-type->attitude (:meta/argument.type statement))))
   ([{:keys [statement/content] :as statement} attitude]
-   (let [votes @(rf/subscribe [:local-votes])]
-     [:div.card.statement {:class (str "statement-" (name attitude))}
-      [:div.row
-       [:div.col-11
-        (when (= :argument.type/undercut (:meta/argument.type statement))
-          [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
-        [:small.text-right.float-right (-> statement :statement/author :author/nickname)]
-        [:p content]]
-       [:div.col-1
-        [:p {:on-click (fn [e]
-                         (.stopPropagation e)               ;; Prevent activating the time travel or deep dive
-                         (rf/dispatch [:toggle-upvote statement]))}
-         [:i {:class (str "m-auto fas " (fa :arrow-up))}] "  " (calculate-votes statement :upvotes votes)]
-        [:p {:on-click (fn [e]
-                         (.stopPropagation e)
-                         (rf/dispatch [:toggle-downvote statement]))}
-         [:i {:class (str "m-auto fas " (fa :arrow-down))}] "  " (calculate-votes statement :downvotes votes)]]]])))
+   [:div.card.statement {:class (str "statement-" (name attitude))}
+    [:div.row
+     [:div.col-1
+      (up-down-vote statement)]
+     [:div.col-11
+      (when (= :argument.type/undercut (:meta/argument.type statement))
+        [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
+      [:small.text-right.float-right (avatar (-> statement :statement/author :author/nickname) 50)]
+      [:p content]]]]))
 
 (defn- history-view
   "Displays the statements it took to get to where the user is."
@@ -178,8 +196,7 @@
        [:div
         [:h5 (labels :discussion/create-argument-heading)]
         [:br]
-        [input-starting-argument-form]]
-       )]))
+        [input-starting-argument-form]])]))
 
 (defn- input-footer [content]
   [:div.discussion-view-bottom-rounded
