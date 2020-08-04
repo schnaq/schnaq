@@ -5,6 +5,7 @@
             [reitit.frontend.controllers :as reitit-front-controllers]
             [clojure.string :as clj-string]
             [meetly.meeting.interface.db :as meetly-db]
+            [meetly.meeting.interface.views.modals.modal :as modal]
             [meetly.meeting.interface.localstorage :as ls]
             [meetly.meeting.interface.config :refer [config]]))
 
@@ -41,8 +42,11 @@
       (if-let [name (ls/get-item :username)]
         ;; When the localstorage is filled, then just set the name to db.
         (assoc-in init-fx [:db :user :name] name)
-        ;; Otherwise start with anonymous
-        (assoc init-fx :dispatch [:set-username "Anonymous"])))))
+        ;; Otherwise ask user for name
+        (assoc init-fx :dispatch-n [[:set-username "Anonymous"]
+                                    [:modal {:show? true
+                                             :child [modal/enter-name-modal]
+                                             :size :small}]])))))
 
 (rf/reg-event-fx
   :set-username
