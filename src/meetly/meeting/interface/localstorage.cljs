@@ -9,7 +9,7 @@
   (str (name val)))
 
 (>defn set-item!
-  "Set `key' in browser's localStorage to `val`."
+  "Set `key` in browser's localStorage to `val`."
   [key val]
   [keyword? any? :ret nil?]
   (.setItem (.-localStorage js/window) (stringify key) val))
