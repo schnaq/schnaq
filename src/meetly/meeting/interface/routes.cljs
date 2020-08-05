@@ -6,7 +6,7 @@
             [meetly.meeting.interface.views.meeting.meetings :as meeting-views]
             [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
             [meetly.meeting.interface.views.meeting.single :as meeting-single]
-            [meetly.meeting.interface.views.discussion :as discussion-views]
+            [meetly.meeting.interface.views.discussion.discussion :as discussion-views]
             [reitit.coercion.spec]
             [re-frame.core :as rf]))
 
