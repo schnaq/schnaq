@@ -23,7 +23,8 @@
         metosin/reitit {:mvn/version "0.5.5"}
         re-frame-utils {:mvn/version "0.1.0"}
         github-hhucn/dialog.core
-        {:git/url "https://github.com/hhucn/dialog.core" :sha "4ac930674755ed4bf53b9d516eea62f7a75a33ac"}}
+        {:git/url "https://github.com/hhucn/dialog.core" :sha "4ac930674755ed4bf53b9d516eea62f7a75a33ac"}
+        com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
@@ -48,7 +49,8 @@
             {cambada/cambada {:mvn/version "1.0.7"}
              com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
             :main-opts ["-m" "cambada.uberjar"
-                        "-m" "meetly.meeting.rest-api"]}
+                        "--app-version" "0.0.1"
+                        "-m" "meetly.meeting.rest_api"]}
 
            :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]
                         :extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}}}
