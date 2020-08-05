@@ -5,7 +5,6 @@
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
-            [cljs.pprint :as pp]
             [ghostwheel.core :refer [>defn-]]
             [meetly.meeting.interface.views.base :as base]
             ["jdenticon" :as jdenticon]))
@@ -423,7 +422,6 @@
 (rf/reg-event-db
   :set-current-discussion-steps
   (fn [db [_ response]]
-    (pp/pprint response)
     (-> db
         (assoc-in [:discussion :options :all] response)
         (assoc-in [:discussion :options :steps] (map first response))
@@ -434,8 +432,6 @@
 (rf/reg-event-fx
   :continue-discussion
   (fn [_ [_ reaction args]]
-    (println "Continue Discussion: " reaction)
-    (println args)
     {:dispatch [reaction args]}))
 
 (rf/reg-event-fx
