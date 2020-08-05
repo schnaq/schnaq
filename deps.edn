@@ -2,26 +2,26 @@
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         com.datomic/client-pro {:mvn/version "0.9.63"}
-        compojure {:mvn/version "1.6.1"}
-        cljs-ajax {:mvn/version "0.8.0"}
+        compojure/compojure {:mvn/version "1.6.1"}
+        cljs-ajax/cljs-ajax {:mvn/version "0.8.0"}
         day8.re-frame/http-fx {:mvn/version "0.2.1"}
-        expound {:mvn/version "0.8.5"}
+        expound/expound {:mvn/version "0.8.5"}
         gnl/ghostwheel {:mvn/version "0.3.9"}
-        http-kit {:mvn/version "2.4.0"}
+        http-kit/http-kit {:mvn/version "2.4.0"}
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.773"}
         org.clojure/data.json {:mvn/version "1.0.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}
         thheller/shadow-cljs {:mvn/version "2.10.19"}
-        reagent {:mvn/version "1.0.0-alpha2"}
-        re-frame {:mvn/version "1.0.0"}
+        reagent/reagent {:mvn/version "1.0.0-alpha2"}
+        re-frame/re-frame {:mvn/version "1.0.0"}
         day8.re-frame/test {:mvn/version "0.1.5"}
-        ring {:mvn/version "1.8.1"}
-        ring-cors {:mvn/version "0.1.13"}
+        ring/ring {:mvn/version "1.8.1"}
+        ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring-defaults {:mvn/version "0.3.2"}
-        ring-middleware-format {:mvn/version "0.7.4"}
+        ring-middleware-format/ring-middleware-format {:mvn/version "0.7.4"}
         metosin/reitit {:mvn/version "0.5.5"}
-        re-frame-utils {:mvn/version "0.1.0"}
+        re-frame-utils/re-frame-utils {:mvn/version "0.1.0"}
         github-hhucn/dialog.core
         {:git/url "https://github.com/hhucn/dialog.core" :sha "4ac930674755ed4bf53b9d516eea62f7a75a33ac"}}
 
@@ -39,7 +39,7 @@
                       :main-opts ["-m" "antq.core"]}
 
            :clj-kondo
-           {:extra-deps {clj-kondo {:mvn/version "RELEASE"}}
+           {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
             :jvm-opts ["-Dghostwheel.enabled=true"]
             :main-opts ["-m" "clj-kondo.main"]}
 
