@@ -10,8 +10,8 @@
           statement-2 {:db/id 321
                        :meta/upvotes 0
                        :meta/downvotes 1}
-          vote-store {:up #{123}
-                      :down #{321}}
+          vote-store {:up {123 1}
+                      :down {321 1}}
           calculate-votes @#'d/calculate-votes]
       (is (= 4 (calculate-votes statement-1 :upvotes vote-store)))
       (is (= 0 (calculate-votes statement-2 :upvotes vote-store)))

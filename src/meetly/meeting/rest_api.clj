@@ -10,7 +10,8 @@
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
-            [meetly.core :as meetly-core]))
+            [meetly.core :as meetly-core])
+  (:gen-class))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -100,33 +101,34 @@
                   (dialog/continue-discussion reaction args)))
       (bad-request "Your request was malformed"))))
 
+(defn- toggle-vote-statement
+  "Toggle up- or downvote of statement."
+  [{:keys [meeting-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
+  (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
+    (let [vote (check-vote-fn statement-id nickname)
+          counter-vote (counter-check-vote-fn statement-id nickname)]
+      (if vote
+        (do (remove-vote-fn statement-id nickname)
+            (response {:operation :removed}))
+        (do (add-vote-fn statement-id nickname)
+            (if counter-vote
+              (response {:operation :switched})
+              (response {:operation :added})))))
+    (bad-request "The request was malformed")))
+
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
   [{:keys [body-params]}]
-  (let [meeting-hash (:meeting-hash body-params)
-        statement-id (:statement-id body-params)
-        user-nickname (:nickname body-params)]
-    (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
-      (if (db/did-user-upvote-statement statement-id user-nickname)
-        (do (db/remove-upvote! statement-id user-nickname)
-            (response {:operation :removed}))
-        (do (db/upvote-statement! statement-id user-nickname)
-            (response {:operation :added})))
-      (bad-request "The request was malformed"))))
+  (toggle-vote-statement
+    body-params db/upvote-statement! db/remove-upvote!
+    db/did-user-upvote-statement db/did-user-downvote-statement))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
   [{:keys [body-params]}]
-  (let [meeting-hash (:meeting-hash body-params)
-        statement-id (:statement-id body-params)
-        user-nickname (:nickname body-params)]
-    (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
-      (if (db/did-user-downvote-statement statement-id user-nickname)
-        (do (db/remove-downvote! statement-id user-nickname)
-            (response {:operation :removed}))
-        (do (db/downvote-statement! statement-id user-nickname)
-            (response {:operation :added})))
-      (bad-request "The request was malformed"))))
+  (toggle-vote-statement
+    body-params db/downvote-statement! db/remove-downvote!
+    db/did-user-downvote-statement db/did-user-upvote-statement))
 
 (defroutes app-routes
   (GET "/meetings" [] all-meetings)
@@ -161,7 +163,7 @@
     (reset! current-server
             (server/run-server
               (-> #'app-routes
-                  (wrap-cors :access-control-allow-origin [#".*"]
+                  (wrap-cors :access-control-allow-origin [(re-pattern (:url config/rest-api))]
                              :access-control-allow-methods [:get :put :post :delete])
                   (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
                   (wrap-defaults api-defaults))
@@ -171,4 +173,5 @@
 (comment
   "Start the server from here"
   (-main)
+  (stop-server)
   :end)

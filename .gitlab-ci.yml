@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - report
+  - build-production-images
   - deploy
 
 cache:
@@ -48,7 +49,7 @@ up-to-date?:
     - apk add git
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
-    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:ancient
+    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:outdated
   when: always
 
 
@@ -63,3 +64,37 @@ coverage-report:
   artifacts:
     reports:
       cobertura: target/coverage/coverage.xml
+
+
+# ------------------------------------------------------------------------------
+# Stage "build-production-images"
+
+build-frontend-image:
+  image: docker
+  tags:
+    - ht
+  services:
+    - docker:stable-dind
+  stage: build-production-images
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -f Dockerfile.frontend -t $CI_REGISTRY_IMAGE/frontend .
+    - docker push $CI_REGISTRY_IMAGE/frontend
+  only:
+    - deploy
+
+build-backend-image:
+  image: docker
+  tags:
+    - ht
+  services:
+    - docker:stable-dind
+  stage: build-production-images
+  before_script:
+    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -f Dockerfile.backend -t $CI_REGISTRY_IMAGE/backend .
+    - docker push $CI_REGISTRY_IMAGE/backend
+  only:
+    - deploy
