@@ -1,8 +1,15 @@
-.statement {
-  border-radius: 2rem;
+.statement-outer {
   padding: 2rem;
-  margin: 2rem;
   color: $white;
+  background: transparent;
+  border: 0;
+}
+
+.statement {
+  border-radius: 2rem 0.5rem 0.5rem 2rem;
+  padding: 2rem;
+  color: $white;
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.2);
 }
 
 .statement-agree {
@@ -85,30 +92,6 @@
 .discussion-text-input::placeholder {
   color: $white;
   opacity: 0.85;
-}
-
-.premise-carousel-item {
-  padding: 0 6rem 1rem 6rem;
-}
-
-.carousel-indicator-custom li {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  margin: 0.5rem;
-  cursor: pointer;
-  border: none;
-  border-radius: 50%;
-  background-color: $gray-700;
-}
-
-.carousel-indicator-custom .active {
-  background-color: $gray-100;
-}
-
-.carousel-control-color {
-  color: $gray-700;
-  background-color: #0000ff !important;
 }
 
 .others-say-container {
