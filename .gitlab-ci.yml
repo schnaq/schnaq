@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - report
+  - build-production-images
   - deploy
 
 cache:
@@ -63,3 +64,25 @@ coverage-report:
   artifacts:
     reports:
       cobertura: target/coverage/coverage.xml
+
+
+# ------------------------------------------------------------------------------
+# Stage "build-production-images"
+
+build-frontend-image:
+  services:
+    - docker:stable-dind
+  stage: build-production-images
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/frontend .
+    - docker push $CI_REGISTRY_IMAGE/frontend
+
+build-backend-image:
+  services:
+    - docker:stable-dind
+  stage: build-production-images
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/backend .
+    - docker push $CI_REGISTRY_IMAGE/backend
