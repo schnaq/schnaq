@@ -14,56 +14,56 @@ cache:
 # ------------------------------------------------------------------------------
 # Stage "test"
 
-test:
-  image: clojure:openjdk-14-tools-deps-alpine
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
-  script:
-    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
-  artifacts:
-    paths:
-      - target/coverage/lcov.info
-    expire_in: 1 hour
-
-test-cljs:
-  image: clojure:openjdk-14-tools-deps-alpine
-  before_script:
-    - apk add yarn
-    - yarn install
-  script:
-    - yarn shadow-cljs compile test
-    - node target/test/compiled/test.js
-
-lint:
-  image: clojure:openjdk-14-tools-deps-alpine
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
-  script:
-    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:clj-kondo --lint src
-  allow_failure: true
-  when: always
-
-up-to-date?:
-  image: clojure:openjdk-14-tools-deps-alpine
-  before_script:
-    - apk add git
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
-  script:
-    - clojure -A:ancient
-  when: always
-
-
-# ------------------------------------------------------------------------------
-# Stage "report"
-
-coverage-report:
-  image: python:3-alpine
-  stage: report
-  script:
-    - wget -O - https://s3.cs.hhu.de/dialogo-ci/lcov_cobertura.py | python3 - target/coverage/lcov.info --output target/coverage/coverage.xml
-  artifacts:
-    reports:
-      cobertura: target/coverage/coverage.xml
+#test:
+#  image: clojure:openjdk-14-tools-deps-alpine
+#  before_script:
+#    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
+#  script:
+#    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
+#  artifacts:
+#    paths:
+#      - target/coverage/lcov.info
+#    expire_in: 1 hour
+#
+#test-cljs:
+#  image: clojure:openjdk-14-tools-deps-alpine
+#  before_script:
+#    - apk add yarn
+#    - yarn install
+#  script:
+#    - yarn shadow-cljs compile test
+#    - node target/test/compiled/test.js
+#
+#lint:
+#  image: clojure:openjdk-14-tools-deps-alpine
+#  before_script:
+#    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
+#  script:
+#    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:clj-kondo --lint src
+#  allow_failure: true
+#  when: always
+#
+#up-to-date?:
+#  image: clojure:openjdk-14-tools-deps-alpine
+#  before_script:
+#    - apk add git
+#    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
+#  script:
+#    - clojure -A:ancient
+#  when: always
+#
+#
+## ------------------------------------------------------------------------------
+## Stage "report"
+#
+#coverage-report:
+#  image: python:3-alpine
+#  stage: report
+#  script:
+#    - wget -O - https://s3.cs.hhu.de/dialogo-ci/lcov_cobertura.py | python3 - target/coverage/lcov.info --output target/coverage/coverage.xml
+#  artifacts:
+#    reports:
+#      cobertura: target/coverage/coverage.xml
 
 
 # ------------------------------------------------------------------------------
