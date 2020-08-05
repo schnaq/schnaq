@@ -13,5 +13,5 @@
    :agenda {:number-of-forms 1
             :all {}}
    :history {:full-context []}
-   :votes {:up #{}
-           :down #{}}})
+   :votes {:up {}
+           :down {}}})
