@@ -162,7 +162,7 @@
     (reset! current-server
             (server/run-server
               (-> #'app-routes
-                  (wrap-cors :access-control-allow-origin [#".*"]
+                  (wrap-cors :access-control-allow-origin [(re-pattern (:url config/rest-api))]
                              :access-control-allow-methods [:get :put :post :delete])
                   (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
                   (wrap-defaults api-defaults))
