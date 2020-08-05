@@ -50,6 +50,7 @@ up-to-date?:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:outdated
+  allow_failure: true
   when: always
 
 
