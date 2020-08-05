@@ -48,7 +48,7 @@ up-to-date?:
     - apk add git
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
-    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:ancient
+    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:outdated
   when: always
 
 
