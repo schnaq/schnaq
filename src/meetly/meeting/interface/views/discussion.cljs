@@ -67,12 +67,9 @@
   [map? keyword? map? :ret number?]
   (let [[internal-key db-key] (if (= vote-type :upvotes)
                                 [:meta/upvotes :up]
-                                [:meta/downvotes :down])]
-    (if ((db-key vote-store) (:db/id statement))
-      ;; User voted for this option
-      (inc (internal-key statement))
-      ;; Nothing changed, take plain value
-      (internal-key statement))))
+                                [:meta/downvotes :down])
+        vote-change (get-in vote-store [db-key (:db/id statement)] 0)]
+    (+ (internal-key statement) vote-change)))
 
 (defn- up-down-vote
   "Add panel for up and down votes."
@@ -551,20 +548,22 @@
 (rf/reg-event-db
   :upvote-success
   (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (if (= operation :added)                                ; Other option is :removed
-      (update-in
-        (update-in db [:votes :up] conj id)
-        [:votes :down] disj id)
-      (update-in db [:votes :up] disj id))))
+    (case operation
+      :added (update-in db [:votes :up id] inc)
+      :removed (update-in db [:votes :up id] dec)
+      :switched (update-in
+                  (update-in db [:votes :up id] inc)
+                  [:votes :down id] dec))))
 
 (rf/reg-event-db
   :downvote-success
   (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (if (= operation :added)
-      (update-in
-        (update-in db [:votes :down] conj id)
-        [:votes :up] disj id)
-      (update-in db [:votes :down] disj id))))
+    (case operation
+      :added (update-in db [:votes :down id] inc)
+      :removed (update-in db [:votes :down id] dec)
+      :switched (update-in
+                  (update-in db [:votes :down id] inc)
+                  [:votes :up id] dec))))
 
 ;; #### Subs ####
 
