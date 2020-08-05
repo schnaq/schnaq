@@ -10,12 +10,10 @@
   [map? keyword? map? :ret number?]
   (let [[internal-key db-key] (if (= vote-type :upvotes)
                                 [:meta/upvotes :up]
-                                [:meta/downvotes :down])]
-    (if ((db-key vote-store) (:db/id statement))
-      ;; User voted for this option
-      (inc (internal-key statement))
-      ;; Nothing changed, take plain value
-      (internal-key statement))))
+                                [:meta/downvotes :down])
+        vote-change (get-in vote-store [db-key (:db/id statement)] 0)]
+    (+ (internal-key statement) vote-change)))
+
 
 (defn deduce-step
   "Deduces the current discussion-loop step by the available options."

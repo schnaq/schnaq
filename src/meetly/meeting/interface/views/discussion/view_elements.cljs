@@ -240,17 +240,22 @@
 (rf/reg-event-db
   :upvote-success
   (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (if (= operation :added)                                ; Other option is :removed
-      (update-in
-        (update-in db [:votes :up] conj id)
-        [:votes :down] disj id)
-      (update-in db [:votes :up] disj id))))
+    (case operation
+      :added (update-in db [:votes :up id] inc)
+      :removed (update-in db [:votes :up id] dec)
+      :switched (update-in
+                  (update-in db [:votes :up id] inc)
+                  [:votes :down id] dec))))
+
 
 (rf/reg-event-db
   :downvote-success
   (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (if (= operation :added)
-      (update-in
-        (update-in db [:votes :down] conj id)
-        [:votes :up] disj id)
-      (update-in db [:votes :down] disj id))))
+    (case operation
+      :added (update-in db [:votes :down id] inc)
+      :removed (update-in db [:votes :down id] dec)
+      :switched (update-in
+                  (update-in db [:votes :down id] inc)
+                  [:votes :up id] dec))))
+
+
