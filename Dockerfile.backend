@@ -4,4 +4,4 @@ WORKDIR /code
 COPY . .
 RUN clojure -A:uberjar
 
-ENTRYPOINT ["java", "-cp", "/code/target/meetly-standalone.jar", "clojure.main", "-m", "meetly.meeting.rest-api"]
+CMD ["java", "-cp", "/code/target/meetly-standalone.jar", "clojure.main", "-m", "meetly.meeting.rest-api"]
