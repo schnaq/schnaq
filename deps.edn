@@ -1,4 +1,4 @@
-{:paths ["src" "test"]
+{:paths ["src"]
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         com.datomic/client-pro {:mvn/version "0.9.63"}
@@ -15,7 +15,6 @@
         thheller/shadow-cljs {:mvn/version "2.10.19"}
         reagent {:mvn/version "1.0.0-alpha2"}
         re-frame {:mvn/version "1.0.0"}
-        day8.re-frame/test {:mvn/version "0.1.5"}
         ring {:mvn/version "1.8.1"}
         ring-cors {:mvn/version "0.1.13"}
         ring/ring-defaults {:mvn/version "0.3.2"}
@@ -31,6 +30,7 @@
  :aliases {:test {:extra-paths ["test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.641"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0-45"}
+                               day8.re-frame/test {:mvn/version "0.1.5"}
                                com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]
                   :main-opts ["-m" "kaocha.runner"]}
