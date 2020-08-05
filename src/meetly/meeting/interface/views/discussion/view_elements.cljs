@@ -6,6 +6,7 @@
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.views.discussion.logic :as logic]
             [oops.core :refer [oget]]
+            [oops.core :refer [oget]]
             [meetly.meeting.interface.views.base :as base]
             [ajax.core :as ajax]))
 
@@ -13,17 +14,17 @@
   "Add panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
-    [:div.up-down-vote
-     [:p {:on-click (fn [e]
-                      (.stopPropagation e)                  ;; Prevent activating the time travel or deep dive
-                      (rf/dispatch [:toggle-upvote statement]))}
-      [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-up))}]
-      (logic/calculate-votes statement :upvotes votes)]
-     [:p {:on-click (fn [e]
-                      (.stopPropagation e)
-                      (rf/dispatch [:toggle-downvote statement]))}
-      [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-down))}]
-      (logic/calculate-votes statement :downvotes votes)]]))
+    [:div
+     [:div.up-vote
+      ;; Prevent activating the time travel or deep dive
+      {:on-click (fn [e] (.stopPropagation e) (rf/dispatch [:toggle-upvote statement]))}
+      [:h6 [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-up))}]
+       (logic/calculate-votes statement :upvotes votes)]]
+
+     [:div.down-vote
+      {:on-click (fn [e] (.stopPropagation e) (rf/dispatch [:toggle-downvote statement]))}
+      [:h6 [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-down))}]
+       (logic/calculate-votes statement :downvotes votes)]]]))
 
 (>defn avatar
   "Create an image based on the nickname."
@@ -53,12 +54,12 @@
     [:div.discussion-view-top-rounded
      [:div.row
       ;; back arrow
-      [:div.col-lg-1.back-arrow
+      [:div.col-1.back-arrow
        (when on-click-back-function
          [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))
                          :on-click on-click-back-function}])]
       ;; title
-      [:div.col-lg-11
+      [:div.col-11
        [:div
         [:h2 (:agenda/title agenda)]
         [:p (:agenda/description agenda)]]]]]))
@@ -133,16 +134,18 @@
   "A single bubble of a statement to be used ubiquitously."
   ([statement]
    (statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))))
+
   ([{:keys [statement/content] :as statement} attitude]
-   [:div.card.statement {:class (str "statement-" (name attitude))}
-    [:div.row
-     [:div.col-1
-      (up-down-vote statement)]
-     [:div.col-11
-      (when (= :argument.type/undercut (:meta/argument.type statement))
-        [:p.small.text-muted (labels :discussion/undercut-bubble-intro)])
-      [:small.text-right.float-right (avatar (-> statement :statement/author :author/nickname) 50)]
-      [:p content]]]]))
+   [:div.statement-outer.row
+    [:div.col-11.pl-0.pr-0
+     [:div.card.statement {:class (str "statement-" (name attitude))}
+      [:div
+       (when (= :argument.type/undercut (:meta/argument.type statement))
+         [:p.small (labels :discussion/undercut-bubble-intro)])
+       [:small.text-right.float-right (avatar (-> statement :statement/author :author/nickname) 50)]
+       [:p content]]]]
+    [:div.col-1.up-down-vote
+     (up-down-vote statement)]]))
 
 ;; carousel
 
@@ -155,7 +158,7 @@
     (map
       (fn [i]
         (let [params {:key (str "indicator-" i) :data-target "#carouselExampleIndicators" :data-slide-to (str i)}]
-          (if (= i 0)
+          (if (zero? i)
             [:li.active params]
             [:li params])))
       (range (count premises)))]
@@ -168,7 +171,7 @@
               content [:div.premise-carousel-item
                        {:on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
                        [statement-bubble premise]]]
-          (if (= index 0)
+          (if (zero? index)
             [:div.carousel-item.active params content]
             [:div.carousel-item params content])))
       premises)]
