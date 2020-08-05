@@ -70,6 +70,9 @@ coverage-report:
 # Stage "build-production-images"
 
 build-frontend-image:
+  image: docker
+  tags:
+    - ht
   services:
     - docker:stable-dind
   stage: build-production-images
@@ -79,6 +82,9 @@ build-frontend-image:
     - docker push $CI_REGISTRY_IMAGE/frontend
 
 build-backend-image:
+  image: docker
+  tags:
+    - ht
   services:
     - docker:stable-dind
   stage: build-production-images
