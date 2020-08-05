@@ -67,10 +67,6 @@
          :controllers [{:parameters {:path [:id :share-hash]}
                         :start (fn [{:keys [path]}]
                                  (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]]]]]
-   ["clock"
-    {:name :routes/clock
-     :view clock-views/re-frame-example-view
-     :link-text "Clock Re-Frame Example"}]
    ["startpage"
     {:name :routes/startpage
      :view startpage-views/startpage-view
