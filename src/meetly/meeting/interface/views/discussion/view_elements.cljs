@@ -6,7 +6,6 @@
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.views.discussion.logic :as logic]
             [oops.core :refer [oget]]
-            [oops.core :refer [oget]]
             [meetly.meeting.interface.views.base :as base]
             [ajax.core :as ajax]))
 

@@ -1,7 +1,6 @@
 (ns meetly.meeting.interface.views.discussion.discussion
   (:require [re-frame.core :as rf]
             [meetly.meeting.interface.config :refer [config]]
-            [meetly.meeting.interface.text.display-data :refer [labels fa]]
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
