@@ -2,14 +2,14 @@
 
  ;; set an nrepl port for connection to a REPL.
  :nrepl {:port 8777}
-
  :builds {;; example build config, usage suitable for user apps
           :app {:target :browser
                 :modules {:base {:init-fn meetly.meeting.interface.core/init}}
                 :output-dir "public/js/compiled"
                 :asset-path "/js/compiled"
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}}
-                :release {:closure-defines {meetly.meeting.interface.config/rest-api-url "https://api.meetly.dialogo.io"}}
+                :release {:closure-defines {meetly.meeting.interface.config/rest-api-url "https://api.meetly.dialogo.io"
+                                            meetly.meeting.interface.config/environment "production"}}
                 :devtools {:http-root "public"
                            :http-port 8700
                            :preloads [devtools.preload]}}

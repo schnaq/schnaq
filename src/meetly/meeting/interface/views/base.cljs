@@ -2,6 +2,7 @@
   (:require [oops.core :refer [oget]]
             [reitit.frontend.easy :as reitfe]
             [meetly.meeting.interface.text.display-data :as data]
+            [meetly.meeting.interface.config :refer [config]]
             [re-frame.core :as rf]))
 
 
@@ -116,7 +117,8 @@
       :class "collapse navbar-collapse"}
      [:ul.navbar-nav.ml-auto
       ;; navigation items
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (data/labels :nav-meeting)]]
+      (when (not= "production" (:environment config))
+        [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (data/labels :nav-meeting)]])
       [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (data/labels :nav-meeting-create)]]]
      ;; name input
      [:div.px-2

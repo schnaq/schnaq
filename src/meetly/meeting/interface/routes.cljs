@@ -1,12 +1,11 @@
 (ns meetly.meeting.interface.routes
-  (:require [meetly.meeting.interface.views :as views]
-            [meetly.meeting.interface.views.startpage :as startpage-views]
+  (:require [meetly.meeting.interface.views.startpage :as startpage-views]
             [meetly.meeting.interface.views.agenda :as agenda-views]
-            [meetly.meeting.interface.views.clock :as clock-views]
             [meetly.meeting.interface.views.meeting.meetings :as meeting-views]
             [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
             [meetly.meeting.interface.views.meeting.single :as meeting-single]
             [meetly.meeting.interface.views.discussion :as discussion-views]
+            [meetly.meeting.interface.config :refer [config]]
             [reitit.coercion.spec]
             [re-frame.core :as rf]))
 
@@ -20,10 +19,11 @@
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
    ["meetings"
-    [""
-     {:name :routes/meetings
-      :view meetings-overview/meeting-view
-      :link-text "Meetings"}]
+    (when (not= "production" (:environment config))
+      [""
+       {:name :routes/meetings
+        :view meetings-overview/meeting-view
+        :link-text "Meetings"}])
     ["/create"
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form-view
