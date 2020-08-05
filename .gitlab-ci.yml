@@ -88,6 +88,8 @@ build-backend-image:
   services:
     - docker:stable-dind
   stage: build-production-images
+  before_script:
+    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker build -f Dockerfile.backend -t $CI_REGISTRY_IMAGE/backend .
