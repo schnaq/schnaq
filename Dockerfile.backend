@@ -2,6 +2,6 @@ FROM clojure:openjdk-14-tools-deps-alpine
 
 WORKDIR /code
 COPY . .
-RUN clojure -A:uberjar
+RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:uberjar
 
 CMD ["java", "-cp", "/code/target/meetly-standalone.jar", "clojure.main", "-m", "meetly.meeting.rest-api"]

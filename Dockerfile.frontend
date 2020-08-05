@@ -1,15 +1,18 @@
 FROM clojure:openjdk-14-tools-deps-alpine AS shadow-build
 
+WORKDIR /code
+
 RUN apk add yarn
-WORKDIR code
-COPY . .
-RUN yarn install
 RUN yarn global add sass
+
+COPY package.json .
+RUN yarn install
+COPY . .
 RUN sass ./public/css/main.scss ./public/css/main.min.css --no-source-map --style compressed
 RUN yarn shadow-cljs release app
 
 FROM nginx
 WORKDIR /usr/share/nginx/html
-COPY --from=shadow-build tmp/code/public .
+COPY --from=shadow-build /code/public .
 
 EXPOSE 80
