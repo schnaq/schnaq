@@ -12,7 +12,6 @@
      :nav-meeting "Meetings"
      :nav-meeting-create "Meeting Erstellen"
      :nav-meeting-agenda "Create Agenda"
-     :nav-overview "Overview"
 
      ;; startpage header
      :start-page-header "Meetly"

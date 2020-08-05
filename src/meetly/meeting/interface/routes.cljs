@@ -19,10 +19,6 @@
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
-   [""
-    {:name :routes/home
-     :view views/development-startpage
-     :link-text "Home"}]
    ["meetings"
     [""
      {:name :routes/meetings
