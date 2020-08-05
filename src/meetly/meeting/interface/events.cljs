@@ -45,8 +45,7 @@
         ;; Otherwise ask user for name
         (assoc init-fx :dispatch-n [[:set-username "Anonymous"]
                                     [:modal {:show? true
-                                             :child [modal/enter-name-modal]
-                                             :size :small}]])))))
+                                             :child [modal/enter-name-modal]}]])))))
 
 (rf/reg-event-fx
   :set-username

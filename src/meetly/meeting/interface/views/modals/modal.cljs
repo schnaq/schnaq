@@ -7,22 +7,16 @@
 
 
 (defn modal-panel
-  [{:keys [child size show?]}]
+  [{:keys [child show?]}]
   [:div {:class "modal-wrapper"}
    [:div {:class "modal-backdrop"
           :on-click (fn [event]
                       (rf/dispatch [:modal {:show? (not show?)
-                                            :child nil
-                                            :size :default}])
+                                            :child nil}])
                       (.preventDefault event)
                       (.stopPropagation event))}]
-   [:div {:class "modal-child"
-          :style {:width (case size
-                           :extra-small "15%"
-                           :small "30%"
-                           :large "70%"
-                           :extra-large "85%"
-                           "50%")}} child]])
+   [:div {:class "modal-child modal-dialog"}
+    child]])
 
 (defn modal []
   (let [modal (rf/subscribe [:modal])]
