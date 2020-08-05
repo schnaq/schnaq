@@ -1,4 +1,4 @@
-{:paths ["src" "test"]
+{:paths ["src"]
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         com.datomic/client-pro {:mvn/version "0.9.63"}
@@ -31,6 +31,7 @@
  :aliases {:test {:extra-paths ["test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.641"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0-45"}
+                               day8.re-frame/test {:mvn/version "0.1.5"}
                                com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]
                   :main-opts ["-m" "kaocha.runner"]}
@@ -45,9 +46,10 @@
 
            :uberjar
            {:extra-deps
-            {luchiniatwork/cambada {:mvn/version "1.0.2"}}
-            :main-opts ["-m" "cambada.uberjar"
-                        "-m" "meetly.core"]}
+            {seancorfield/depstar {:mvn/version "1.0.96"}
+             com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
+            :main-opts ["-m" "hf.depstar.uberjar"
+                        "target/meetly-standalone.jar" "--verbose"]}
 
            :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]
                         :extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}}}
