@@ -116,17 +116,25 @@
   A discussion is automatically created for the agenda-point.
   Returns the discussion-id of the newly created discussion."
   [title description meeting-id]
-  (get-in
-    (transact [{:agenda/title title
-                :agenda/description description
-                :agenda/meeting meeting-id
-                :agenda/discussion
-                {:db/id "temp-id"
-                 :discussion/title title
-                 :discussion/description description
-                 :discussion/states [:discussion.state/open]
-                 :discussion/starting-arguments []}}])
-    [:tempids "temp-id"]))
+  (when (and (s/conform :agenda/title title)
+             (s/conform int? meeting-id))
+    (let [raw-agenda {:agenda/title title
+                      :agenda/meeting meeting-id
+                      :agenda/discussion
+                      {:db/id "temp-id"
+                       :discussion/title title
+                       :discussion/states [:discussion.state/open]
+                       :discussion/starting-arguments []}}
+          agenda (if description
+                   (do (s/conform :agenda/description description)
+                       (merge-with merge
+                                   raw-agenda
+                                   {:agenda/description description
+                                    :agenda/discussion {:discussion/description description}}))
+                   raw-agenda)]
+      (get-in
+        (transact [agenda])
+        [:tempids "temp-id"]))))
 
 (def ^:private agenda-pattern
   [:db/id

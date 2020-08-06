@@ -74,7 +74,7 @@
 (s/def :agenda/description string?)
 (s/def :agenda/meeting ::entity-reference)
 (s/def :agenda/discussion ::entity-reference)
-(s/def ::agenda (s/keys :req [:agenda/title :agenda/description
-                              :agenda/meeting :agenda/discussion]))
+(s/def ::agenda (s/keys :req [:agenda/title :agenda/meeting :agenda/discussion]
+                        :opt [:agenda/description]))
 
 (s/def :author/nickname string?)
