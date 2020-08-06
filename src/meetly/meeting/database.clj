@@ -113,15 +113,6 @@
         (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
         [:tempids "newly-added-meeting"]))))
 
-(defn add-meeting
-  "Adds a meeting to the database. Returns the id of the newly added meeting."
-  [meeting]
-  (let [clean-meeting (clean-nil-vals meeting)]
-    (when (tools/conforms? ::models/meeting clean-meeting)
-      (get-in
-        (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
-        [:tempids "newly-added-meeting"]))))
-
 (defn all-meetings
   "Shows all meetings currently in the db."
   []
