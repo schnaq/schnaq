@@ -1,11 +1,10 @@
 (ns meetly.meeting.interface.routes
-  (:require [meetly.meeting.interface.views :as views]
-            [meetly.meeting.interface.views.startpage :as startpage-views]
+  (:require [meetly.meeting.interface.views.startpage :as startpage-views]
             [meetly.meeting.interface.views.agenda :as agenda-views]
-            [meetly.meeting.interface.views.clock :as clock-views]
             [meetly.meeting.interface.views.meeting.meetings :as meeting-views]
             [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
             [meetly.meeting.interface.views.meeting.single :as meeting-single]
+            [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.views.discussion.discussion :as discussion-views]
             [reitit.coercion.spec]
             [re-frame.core :as rf]))
@@ -19,15 +18,12 @@
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
-   [""
-    {:name :routes/home
-     :view views/development-startpage
-     :link-text "Home"}]
    ["meetings"
-    [""
-     {:name :routes/meetings
-      :view meetings-overview/meeting-view
-      :link-text "Meetings"}]
+    (when (not= "production" (:environment config))
+      [""
+       {:name :routes/meetings
+        :view meetings-overview/meeting-view
+        :link-text "Meetings"}])
     ["/create"
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form-view
@@ -71,10 +67,6 @@
          :controllers [{:parameters {:path [:id :share-hash]}
                         :start (fn [{:keys [path]}]
                                  (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]]]]]
-   ["clock"
-    {:name :routes/clock
-     :view clock-views/re-frame-example-view
-     :link-text "Clock Re-Frame Example"}]
    ["startpage"
     {:name :routes/startpage
      :view startpage-views/startpage-view

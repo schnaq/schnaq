@@ -1,1 +1,0 @@
-{:deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}
