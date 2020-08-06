@@ -46,7 +46,7 @@
      :meeting-form-deadline "Frist"
      :meeting-form-end-date "Datum"
      :meeting-form-end-time "Uhrzeit"
-     :meeting/copy-share-link "Link Kopieren:"
+     :meeting/copy-share-link "Link kopieren:"
      :meeting/copy-link-tooltip "Hier klicken um Link zu kopieren"
      :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
      :meeting/created-success-heading "Ihr Meetly wurde erstellt!"
