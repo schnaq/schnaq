@@ -97,11 +97,12 @@
 (defn now [] (Date.))
 
 (defn add-meeting
-  "Adds a meeting to the database. Returns the id of the newly added meeting."
-  [meeting author-id]
+  "Adds a meeting to the database. Returns the id of the newly added meeting.
+  user-id refers to the meetly user."
+  [meeting user-id]
   (get-in
     (transact [(merge {:db/id "newly-added-meeting"
-                       :meeting/author author-id}
+                       :meeting/author user-id}
                       meeting)])
     [:tempids "newly-added-meeting"]))
 
