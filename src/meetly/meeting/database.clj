@@ -207,7 +207,7 @@
 (>defn add-user-if-not-exists
   "Adds an author if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  [string? :ret number?]
+  [string? :ret int?]
   (if-let [author-id (author-id-by-nickname nickname)]
     author-id
     (get-in (add-user nickname)
