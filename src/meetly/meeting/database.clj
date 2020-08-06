@@ -74,6 +74,25 @@
    (dialog/load-testdata!)))
 
 
+;; -----------------------------------------------------------------------------
+;; Pull Patterns
+
+(def ^:private user-pattern
+  "Pull a user based on these attributes."
+  [:db/id
+   :author/nickname])
+
+(def ^:private meeting-pattern
+  "Pull a meetly based on these attributes."
+  [:db/id
+   :meeting/title
+   :meeting/start-date
+   :meeting/end-date
+   :meeting/description
+   :meeting/share-hash
+   {:meeting/author user-pattern}])
+
+
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
@@ -90,9 +109,10 @@
   "Shows all meetings currently in the db."
   []
   (d/q
-    '[:find (pull ?meetings [*])
+    '[:find (pull ?meetings meeting-pattern)
+      :in $ meeting-pattern
       :where [?meetings :meeting/title _]]
-    (d/db (new-connection))))
+    (d/db (new-connection)) meeting-pattern))
 
 (defn meeting-by-hash
   "Returns the meeting corresponding to the share hash."
