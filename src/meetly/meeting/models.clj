@@ -65,9 +65,9 @@
 (s/def :meeting/share-hash string?)
 (s/def :meeting/start-date inst?)
 (s/def :meeting/end-date inst?)
-(s/def ::meeting (s/keys :req [:meeting/title :meeting/description
-                               :meeting/share-hash
-                               :meeting/start-date :meeting/end-date]))
+(s/def ::meeting (s/keys :req [:meeting/title :meeting/share-hash
+                               :meeting/start-date :meeting/end-date]
+                         :opt [:meeting/description]))
 
 ;; Agenda
 (s/def :agenda/title string?)

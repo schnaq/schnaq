@@ -4,7 +4,8 @@
     [ghostwheel.core :refer [>defn >defn- ?]]
     [meetly.config :as config]
     [meetly.meeting.models :as models]
-    [dialog.discussion.database :as dialog])
+    [dialog.discussion.database :as dialog]
+    [clojure.spec.alpha :as s])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -86,9 +87,11 @@
 (defn add-meeting
   "Adds a meeting to the database. Returns the id of the newly added meeting."
   [meeting]
-  (get-in
-    (transact [(assoc meeting :db/id "newly-added-meeting")])
-    [:tempids "newly-added-meeting"]))
+  (let [clean-meeting (clean-nil-vals meeting)]
+    (when (s/conform :meetly.meeting.models/meeting clean-meeting)
+      (get-in
+        (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
+        [:tempids "newly-added-meeting"]))))
 
 (defn all-meetings
   "Shows all meetings currently in the db."
