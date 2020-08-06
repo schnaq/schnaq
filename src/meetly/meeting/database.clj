@@ -195,9 +195,10 @@
 (defn add-user
   "Add a new user / author to the database."
   [nickname]
-  (transact [{:user/core-author
-              {:db/id (format "id-%s" nickname)
-               :author/nickname nickname}}]))
+  (when (s/conform :author/nickname nickname)
+    (transact [{:user/core-author
+                {:db/id (format "id-%s" nickname)
+                 :author/nickname nickname}}])))
 
 (defn add-user-if-not-exists
   "Adds an author if they do not exist yet."
