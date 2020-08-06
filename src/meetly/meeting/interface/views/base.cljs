@@ -86,17 +86,18 @@
 (defn discussion-header
   "Non wavy header with a back button.
   On-click-function is triggered when back button is clicked"
-  [title subtitle on-click-function]
-
-  [:div.meeting-header.header-custom.shadow-custom
-   [:div.row
-    [:div.col-1.back-arrow
-     (when on-click-function
-       [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
-                       :on-click on-click-function}])]
-    [:div.col-8.container
-     [:h2 title]
-     [:h6 subtitle]]]])
+  ([title subtitle]
+   (discussion-header title subtitle nil))
+  ([title subtitle on-click-function]
+   [:div.meeting-header.header-custom.shadow-custom
+    [:div.row
+     [:div.col-1.back-arrow
+      (when on-click-function
+        [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
+                        :on-click on-click-function}])]
+     [:div.col-8.container
+      [:h2 title]
+      [:h6 subtitle]]]]))
 
 ;; nav header
 

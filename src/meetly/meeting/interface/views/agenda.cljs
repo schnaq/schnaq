@@ -120,7 +120,7 @@
   :on-successful-agenda-add
   (fn [_ [_ meeting-hash]]
     {:dispatch-n [[:clear-current-agendas]
-                  [:navigate :routes/meetings.show {:share-hash meeting-hash}]]}))
+                  [:navigate :routes.meeting.created {:share-hash meeting-hash}]]}))
 
 (rf/reg-event-fx
   :load-agendas

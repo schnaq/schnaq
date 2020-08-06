@@ -4,6 +4,7 @@
             [meetly.meeting.interface.views.meeting.meetings :as meeting-views]
             [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
             [meetly.meeting.interface.views.meeting.single :as meeting-single]
+            [meetly.meeting.interface.views.meeting.after-create :as meeting-created]
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.views.discussion.discussion :as discussion-views]
             [reitit.coercion.spec]
@@ -34,6 +35,10 @@
                      :start (fn [{:keys [path]}]
                               (let [hash (:share-hash path)]
                                 (rf/dispatch [:load-meeting-by-share-hash hash])))}]}
+     ["/created"
+      {:name :routes.meeting.created
+       :view meeting-created/after-meeting-creation-view
+       :link-text "Show your last Meeting"}]
      ["/"
       {:name :routes/meetings.show
        :view meeting-single/single-meeting-view
