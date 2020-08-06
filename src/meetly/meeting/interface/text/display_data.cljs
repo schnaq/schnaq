@@ -46,6 +46,15 @@
      :meeting-form-deadline "Frist"
      :meeting-form-end-date "Datum"
      :meeting-form-end-time "Uhrzeit"
+     :meeting/copy-share-link "Link kopieren:"
+     :meeting/copy-link-tooltip "Hier klicken um Link zu kopieren"
+     :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
+     :meeting/created-success-heading "Ihr Meetly wurde erstellt!"
+     :meeting/created-success-subheading "Link verteilen und loslegen"
+     :meeting/educate-on-link-text "Verteilen Sie den untenstehenden Link an Ihre KollegInnen.
+     Teilnahme ist für alle die den Link kennen möglich!"
+     :meetings/continue-with-meetly-after-creation "Link kopiert? Legen Sie los!"
+     :meetings/continue-to-meetly-button "Zum Meetly"
 
      ;; Create Agenda
      :agenda-header "Agenda erstellen"
@@ -82,7 +91,6 @@
      :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."}))
 
 
-
 (defn img-path
   "Returns an image path as String for a given identifier"
   [identifier]
@@ -104,4 +112,5 @@
      :arrow-right "fa-arrow-right"
      :arrow-left "fa-arrow-left"
      :arrow-up "fa-arrow-up"
-     :arrow-down "fa-arrow-down"}))
+     :arrow-down "fa-arrow-down"
+     :copy "fa-copy"}))

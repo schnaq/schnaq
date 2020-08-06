@@ -37,7 +37,9 @@
                   :main-opts ["-m" "kaocha.runner"]}
 
            :outdated {:extra-deps {antq/antq {:mvn/version "RELEASE"}}
-                      :main-opts ["-m" "antq.core"]}
+                      :main-opts ["-m" "antq.core"
+                                  "--exclude=com.datomic/dev-local"
+                                  "--exclude=github-hhucn/dialog.core"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
@@ -46,7 +48,7 @@
 
            :uberjar
            {:extra-deps
-            {seancorfield/depstar {:mvn/version "1.0.96"}
+            {seancorfield/depstar {:mvn/version "1.0.97"}
              com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
             :main-opts ["-m" "hf.depstar.uberjar"
                         "target/meetly-standalone.jar" "--verbose"]}

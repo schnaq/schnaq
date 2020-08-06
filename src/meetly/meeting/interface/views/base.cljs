@@ -80,18 +80,30 @@
 ;; discussion loop header
 
 (defn discussion-header
-  "Non wavy header with a back button.
-  On-click-function is triggered when back button is clicked"
-  [title subtitle on-click-function]
+  "Non wavy header with an optional back button.
+  'title-on-click-function' is triggered when header is clicked
+  'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
+  ([title subtitle]
+   (discussion-header title subtitle nil nil))
 
-  [:div.meeting-header.header-custom.shadow-custom
-   [:div.row
-    [:div.col-1.back-arrow
-     [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
-                     :on-click on-click-function}]]
-    [:div.col-8.container
-     [:h2 title]
-     [:h6 subtitle]]]])
+  ([title subtitle title-on-click-function]
+   (discussion-header title subtitle title-on-click-function nil))
+
+  ([title subtitle title-on-click-function on-click-back-function]
+   ;; check if title is clickable and set properties accordingly
+   (let [header-on-click (if title-on-click-function {:on-click title-on-click-function
+                                                      :class "clickable-no-hover"}
+                                                     {})]
+     [:div.meeting-header.header-custom.shadow-custom
+      [:div.row
+       [:div.col-1.back-arrow
+        (when on-click-back-function
+          [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
+                          :on-click on-click-back-function}])]
+       [:div.col-8.container
+        [:div header-on-click
+         [:h2 title]
+         [:h6 subtitle]]]]])))
 
 ;; nav header
 

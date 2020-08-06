@@ -1,5 +1,6 @@
 (ns meetly.meeting.interface.views.meeting.single
   (:require [re-frame.core :as rf]
+            [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.views.base :as base]))
 
 
@@ -34,7 +35,9 @@
   (base/discussion-header
     (:meeting/title current-meeting)
     (:meeting/description current-meeting)
-    #(rf/dispatch [:navigate :routes/meetings])))
+    nil                                                     ;; header should not be clickable in overview
+    (when (not= "production" (:environment config))         ;; when in dev display back button
+      #(rf/dispatch [:navigate :routes/meetings]))))
 
 (defn- single-meeting []
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
