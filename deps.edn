@@ -37,7 +37,7 @@
                   :main-opts ["-m" "kaocha.runner"]}
 
            :outdated {:extra-deps {antq/antq {:mvn/version "RELEASE"}}
-                      :main-opts ["-m" "antq.core"]}
+                      :main-opts ["-m" "antq.core" "--exclude=com.datomic/dev-local github-hhucn/dialog.core"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
