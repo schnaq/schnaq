@@ -4,8 +4,8 @@
     [ghostwheel.core :refer [>defn >defn- ?]]
     [meetly.config :as config]
     [meetly.meeting.models :as models]
-    [dialog.discussion.database :as dialog]
-    [clojure.spec.alpha :as s])
+    [meetly.toolbelt :as tools]
+    [dialog.discussion.database :as dialog])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -84,11 +84,12 @@
   [associative? :ret associative?]
   (into {} (filter #(not (nil? (second %))) data)))
 
-(defn add-meeting
+(>defn add-meeting
   "Adds a meeting to the database. Returns the id of the newly added meeting."
   [meeting]
+  [::models/meeting :ret int?]
   (let [clean-meeting (clean-nil-vals meeting)]
-    (when (s/conform :meetly.meeting.models/meeting clean-meeting)
+    (when (tools/conforms? ::models/meeting clean-meeting)
       (get-in
         (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
         [:tempids "newly-added-meeting"]))))
@@ -111,13 +112,14 @@
         :where [?meeting :meeting/share-hash ?hash]]
       (d/db (new-connection)) hash)))
 
-(defn add-agenda-point
+(>defn add-agenda-point
   "Add an agenda to the database.
   A discussion is automatically created for the agenda-point.
   Returns the discussion-id of the newly created discussion."
   [title description meeting-id]
-  (when (and (s/conform :agenda/title title)
-             (s/conform int? meeting-id))
+  [:agenda/title (? :agenda/description) int? :ret int?]
+  (when (and (tools/conforms? :agenda/title title)
+             (tools/conforms? int? meeting-id))
     (let [raw-agenda {:agenda/title title
                       :agenda/meeting meeting-id
                       :agenda/discussion
@@ -125,12 +127,11 @@
                        :discussion/title title
                        :discussion/states [:discussion.state/open]
                        :discussion/starting-arguments []}}
-          agenda (if description
-                   (do (s/conform :agenda/description description)
-                       (merge-with merge
-                                   raw-agenda
-                                   {:agenda/description description
-                                    :agenda/discussion {:discussion/description description}}))
+          agenda (if (and description (tools/conforms? :agenda/description description))
+                   (merge-with merge
+                               raw-agenda
+                               {:agenda/description description
+                                :agenda/discussion {:discussion/description description}})
                    raw-agenda)]
       (get-in
         (transact [agenda])
@@ -192,13 +193,17 @@
         [(= ?lower-name ?author-name)]]
       (d/db (new-connection)) (.toLowerCase ^String nickname))))
 
-(defn add-user
+(>defn add-user
   "Add a new user / author to the database."
   [nickname]
-  (when (s/conform :author/nickname nickname)
-    (transact [{:user/core-author
-                {:db/id (format "id-%s" nickname)
-                 :author/nickname nickname}}])))
+  [:author/nickname :ret int?]
+  (when (tools/conforms? :author/nickname nickname)
+    (get-in
+      (transact [{:db/id "temp-user"
+                  :user/core-author
+                  {:db/id (format "id-%s" nickname)
+                   :author/nickname nickname}}])
+      [:tempids "temp-user"])))
 
 (defn add-user-if-not-exists
   "Adds an author if they do not exist yet."

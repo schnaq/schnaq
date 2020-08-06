@@ -57,3 +57,29 @@
       (is (= no-change-map (@#'database/clean-nil-vals no-change-map)))
       (is (= 2 (count (@#'database/clean-nil-vals (merge no-change-map {:unwished-for nil})))))
       (is (= {} (@#'database/clean-nil-vals {}))))))
+
+(deftest add-meeting-test
+  (testing "Test whether meetings are properly added"
+    (let [minimal-meeting {:meeting/title "Bla"
+                           :meeting/start-date (database/now)
+                           :meeting/end-date (database/now)
+                           :meeting/share-hash "aklsuzd98-234da-123d"}]
+      (is (number? (database/add-meeting minimal-meeting)))
+      (is (number? (database/add-meeting (assoc minimal-meeting :meeting/description "some description"))))
+      (is (nil? (database/add-meeting (assoc minimal-meeting :meeting/description 123)))))))
+
+(deftest add-agenda-point-test
+  (testing "Check whether agendas are added correctly"
+    (let [some-meeting (database/add-meeting {:meeting/title "Bla"
+                                              :meeting/start-date (database/now)
+                                              :meeting/end-date (database/now)
+                                              :meeting/share-hash "aklsuzd98-234da-123d"})]
+      (is (number? (database/add-agenda-point "Alles gut" "hier" some-meeting)))
+      (is (nil? (database/add-agenda-point 123 nil some-meeting)))
+      (is (nil? (database/add-agenda-point "Meeting-kaputt" nil "was ist das?")))
+      (is (number? (database/add-agenda-point "Kaputte description wird ignoriert" 123 some-meeting))))))
+
+(deftest add-user-test
+  (testing "Check for correct user-addition"
+    (is (number? (database/add-user "Gib ihm!")))
+    (is (nil? (database/add-user :nono-string)))))
