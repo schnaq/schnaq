@@ -79,8 +79,8 @@
      :login/set-name "Geben Sie ihren Namen ein"
 
      :modals/enter-name-header "Geben Sie einen Namen ein"
-     :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."
-     }))
+     :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."}))
+
 
 
 (defn img-path
@@ -104,5 +104,4 @@
      :arrow-right "fa-arrow-right"
      :arrow-left "fa-arrow-left"
      :arrow-up "fa-arrow-up"
-     :arrow-down "fa-arrow-down"
-     }))
+     :arrow-down "fa-arrow-down"}))
