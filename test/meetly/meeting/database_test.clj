@@ -41,7 +41,8 @@
                                          :meeting/description "whatever"
                                          :meeting/start-date (database/now)
                                          :meeting/end-date (database/now)
-                                         :meeting/share-hash "Wegi-ist-der-schönste"})
+                                         :meeting/share-hash "Wegi-ist-der-schönste"
+                                         :meeting/author (database/add-user-if-not-exists "Wegi")})
           discussion (database/add-agenda-point "Hi" "Beschreibung" meeting)
           _ (ddb/add-new-starting-argument! discussion "Christian" "this is sparta" ["foo" "bar" "baz"])
           argument (first (ddb/starting-arguments-by-discussion discussion))
@@ -63,7 +64,8 @@
     (let [minimal-meeting {:meeting/title "Bla"
                            :meeting/start-date (database/now)
                            :meeting/end-date (database/now)
-                           :meeting/share-hash "aklsuzd98-234da-123d"}]
+                           :meeting/share-hash "aklsuzd98-234da-123d"
+                           :meeting/author (database/add-user-if-not-exists "Wegi")}]
       (is (number? (database/add-meeting minimal-meeting)))
       (is (number? (database/add-meeting (assoc minimal-meeting :meeting/description "some description"))))
       (is (nil? (database/add-meeting (assoc minimal-meeting :meeting/description 123)))))))
@@ -73,7 +75,8 @@
     (let [some-meeting (database/add-meeting {:meeting/title "Bla"
                                               :meeting/start-date (database/now)
                                               :meeting/end-date (database/now)
-                                              :meeting/share-hash "aklsuzd98-234da-123d"})]
+                                              :meeting/share-hash "aklsuzd98-234da-123d"
+                                              :meeting/author (database/add-user-if-not-exists "Wegi")})]
       (is (number? (database/add-agenda-point "Alles gut" "hier" some-meeting)))
       (is (nil? (database/add-agenda-point 123 nil some-meeting)))
       (is (nil? (database/add-agenda-point "Meeting-kaputt" nil "was ist das?")))

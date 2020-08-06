@@ -23,6 +23,10 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "A hash that grants access to the discussion"}
+   {:db/ident :meeting/author
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The author of a meeting."}
    ;; Agenda-Point
    {:db/ident :agenda/title
     :db/valueType :db.type/string
@@ -65,7 +69,10 @@
 (s/def :meeting/share-hash string?)
 (s/def :meeting/start-date inst?)
 (s/def :meeting/end-date inst?)
-(s/def ::meeting (s/keys :req [:meeting/title :meeting/share-hash
+(s/def :meeting/author (s/or :reference ::entity-reference
+                             :author :dialog.discussion.models/author))
+(s/def ::meeting (s/keys :req [:meeting/title :meeting/author
+                               :meeting/share-hash
                                :meeting/start-date :meeting/end-date]
                          :opt [:meeting/description]))
 

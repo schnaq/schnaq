@@ -75,6 +75,25 @@
    (dialog/load-testdata!)))
 
 
+;; -----------------------------------------------------------------------------
+;; Pull Patterns
+
+(def ^:private user-pattern
+  "Pull a user based on these attributes."
+  [:db/id
+   :author/nickname])
+
+(def ^:private meeting-pattern
+  "Pull a meetly based on these attributes."
+  [:db/id
+   :meeting/title
+   :meeting/start-date
+   :meeting/end-date
+   :meeting/description
+   :meeting/share-hash
+   {:meeting/author user-pattern}])
+
+
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
@@ -94,13 +113,23 @@
         (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
         [:tempids "newly-added-meeting"]))))
 
+(defn add-meeting
+  "Adds a meeting to the database. Returns the id of the newly added meeting."
+  [meeting]
+  (let [clean-meeting (clean-nil-vals meeting)]
+    (when (tools/conforms? ::models/meeting clean-meeting)
+      (get-in
+        (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
+        [:tempids "newly-added-meeting"]))))
+
 (defn all-meetings
   "Shows all meetings currently in the db."
   []
   (d/q
-    '[:find (pull ?meetings [*])
+    '[:find (pull ?meetings meeting-pattern)
+      :in $ meeting-pattern
       :where [?meetings :meeting/title _]]
-    (d/db (new-connection))))
+    (d/db (new-connection)) meeting-pattern))
 
 (defn meeting-by-hash
   "Returns the meeting corresponding to the share hash."
@@ -205,13 +234,15 @@
                    :author/nickname nickname}}])
       [:tempids "temp-user"])))
 
-(defn add-user-if-not-exists
-  "Adds an author if they do not exist yet."
+(>defn add-user-if-not-exists
+  "Adds an author if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  (when-not (author-id-by-nickname nickname)
+  [:author/nickname :ret int?]
+  (if-let [author-id (author-id-by-nickname nickname)]
+    author-id
     (add-user nickname)))
 
-(>defn- user-by-nickname
+(>defn user-by-nickname
   "Return the **meetly** user-id by nickname."
   [nickname]
   [string? :ret number?]

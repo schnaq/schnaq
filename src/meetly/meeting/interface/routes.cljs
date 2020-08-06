@@ -4,7 +4,9 @@
             [meetly.meeting.interface.views.meeting.meetings :as meeting-views]
             [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
             [meetly.meeting.interface.views.meeting.single :as meeting-single]
+            [meetly.meeting.interface.views.meeting.after-create :as meeting-created]
             [meetly.meeting.interface.config :refer [config]]
+            [meetly.meeting.interface.text.display-data :refer [labels]]
             [meetly.meeting.interface.views.discussion.discussion :as discussion-views]
             [reitit.coercion.spec]
             [re-frame.core :as rf]))
@@ -23,21 +25,25 @@
       [""
        {:name :routes/meetings
         :view meetings-overview/meeting-view
-        :link-text "Meetings"}])
+        :link-text (labels :router/all-meetings)}])
     ["/create"
      {:name :routes/meetings.create
       :view meeting-views/create-meeting-form-view
-      :link-text "Create Meeting"}]
+      :link-text (labels :router/create-meeting)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
                               (let [hash (:share-hash path)]
                                 (rf/dispatch [:load-meeting-by-share-hash hash])))}]}
+     ["/created"
+      {:name :routes.meeting.created
+       :view meeting-created/after-meeting-creation-view
+       :link-text (labels :router/meeting-created)}]
      ["/"
       {:name :routes/meetings.show
        :view meeting-single/single-meeting-view
-       :link-text "Show Meeting"
+       :link-text (labels :router/show-single-meeting)
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (let [hash (:share-hash path)]
@@ -48,7 +54,7 @@
       ["/add"
        {:name :routes/meetings.agenda
         :view agenda-views/agenda-view
-        :link-text "Add Agenda"}]
+        :link-text (labels :router/add-agendas)}]
       ["/:id"
        {:parameters {:path {:id int?}}
         :controllers [{:parameters {:path [:share-hash :id]}
@@ -60,14 +66,16 @@
                                  (rf/dispatch [:start-discussion])
                                  (rf/dispatch [:discussion.history/clear]))}]
          :name :routes/meetings.discussion.start
-         :view discussion-views/discussion-start-view}]
+         :view discussion-views/discussion-start-view
+         :link-text (labels :router/start-discussion)}]
        ["/continue"
         {:name :routes/meetings.discussion.continue
          :view discussion-views/discussion-loop-view
+         :link-text (labels :router/continue-discussion)
          :controllers [{:parameters {:path [:id :share-hash]}
                         :start (fn [{:keys [path]}]
                                  (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]]]]]
    ["startpage"
     {:name :routes/startpage
      :view startpage-views/startpage-view
-     :link-text "Meetly"}]])
+     :link-text (labels :router/startpage)}]])

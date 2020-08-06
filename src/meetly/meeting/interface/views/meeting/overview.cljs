@@ -2,7 +2,8 @@
   (:require [re-frame.core :as rf]
             [meetly.meeting.interface.utils.language :as language]
             [meetly.meeting.interface.text.display-data :as data]
-            [meetly.meeting.interface.views.base :as base]))
+            [meetly.meeting.interface.views.base :as base]
+            [meetly.meeting.interface.views.common :as common]))
 
 
 (defn- readable-date [date]
@@ -28,7 +29,9 @@
    ;; description / body
    [:div.meeting-entry-desc
     [:hr]
-    [:div "Deadline: " [readable-date (:meeting/end-date meeting)]]
+    [:div (data/labels :meeting-form-deadline) ": " [readable-date (:meeting/end-date meeting)]]
+    [:small.text-right.float-right
+     (common/avatar (-> meeting :meeting/author :author/nickname) 50)]
     [:br]
     [:p (:meeting/description meeting)]]])
 
