@@ -9,6 +9,7 @@
     ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
             [meetly.meeting.interface.views.startpage]
             [meetly.meeting.interface.views.agenda]
+            [meetly.meeting.interface.views.common]
             [meetly.meeting.interface.views.meeting.meetings]
             [meetly.meeting.interface.views.meeting.overview]
             [meetly.meeting.interface.views.meeting.single]
