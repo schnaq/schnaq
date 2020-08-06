@@ -20,6 +20,4 @@
   "Shortcut to get truth value instead of s/conform results."
   [spec data]
   [keyword? any? :ret boolean?]
-  (if (= :clojure.spec.alpha/invalid (s/conform spec data))
-    false
-    true))
+  (not= :clojure.spec.alpha/invalid (s/conform spec data)))
