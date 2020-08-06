@@ -53,7 +53,7 @@
      :meeting/created-success-subheading "Link verteilen und loslegen"
      :meeting/educate-on-link-text "Verteilen Sie den untenstehenden Link an Ihre KollegInnen.
      Teilnahme ist für alle die den Link kennen möglich!"
-     :meetings/continue-with-meetly-after-creation "Link kopiert? Legen Sie los."
+     :meetings/continue-with-meetly-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-meetly-button "Zum Meetly"
 
      ;; Create Agenda
