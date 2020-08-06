@@ -73,11 +73,11 @@
   :meeting/link-copied
   (fn [{:keys [db]} _]
     {:db (assoc-in db [:display-triggers :meeting-link-success] true)
-     :dispatch-later [{:dispatch [:meetings/hide-link-copied-display]
+     :dispatch-later [{:dispatch [:meeting/hide-link-copied-display]
                        :ms 5000}]}))
 
 (rf/reg-event-db
-  :meetings/hide-link-copied-display
+  :meeting/hide-link-copied-display
   (fn [db _]
     (assoc-in db [:display-triggers :meeting-link-success] false)))
 

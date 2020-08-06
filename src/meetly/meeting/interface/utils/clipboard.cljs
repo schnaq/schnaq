@@ -3,10 +3,10 @@
 
 (>defn copy-to-clipboard!
   "Copies a string to the users clipboard."
-  [val]
+  [value]
   [string? :ret any?]
   (let [el (js/document.createElement "textarea")]
-    (set! (.-value el) val)
+    (set! (.-value el) value)
     (.appendChild js/document.body el)
     (.select el)
     (js/document.execCommand "copy")
