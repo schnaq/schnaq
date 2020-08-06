@@ -49,3 +49,11 @@
           premise-id (:db/id (first (:argument/premises argument)))]
       (is (database/check-valid-statement-id-and-meeting conclusion-id "Wegi-ist-der-schönste"))
       (is (database/check-valid-statement-id-and-meeting premise-id "Wegi-ist-der-schönste")))))
+
+(deftest clean-nil-vals-test
+  (testing "Test whether nil values are properly cleaned from a map."
+    (let [no-change-map {:foo :bar
+                         :baz :bam}]
+      (is (= no-change-map (@#'database/clean-nil-vals no-change-map)))
+      (is (= 2 (count (@#'database/clean-nil-vals (merge no-change-map {:unwished-for nil})))))
+      (is (= {} (@#'database/clean-nil-vals {}))))))

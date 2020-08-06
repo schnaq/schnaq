@@ -77,6 +77,12 @@
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
+(>defn- clean-nil-vals
+  "Removes all entries from a map that have a value of nil."
+  [data]
+  [associative? :ret associative?]
+  (into {} (filter #(not (nil? (second %))) data)))
+
 (defn add-meeting
   "Adds a meeting to the database. Returns the id of the newly added meeting."
   [meeting]
