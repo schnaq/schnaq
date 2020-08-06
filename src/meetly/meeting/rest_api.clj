@@ -29,9 +29,11 @@
   Converts the epoch dates it receives into java Dates.
   Returns the id of the newly-created meeting as `:id-created`."
   [req]
-  (let [meeting (-> req :body-params)
-        new-id (db/add-meeting meeting)]
-    (response {:id-created new-id})))
+  (let [meeting (-> req :body-params :meeting)
+        nickname (-> req :body-params :nickname)
+        author-id (db/add-user-if-not-exists nickname)
+        meeting-id (db/add-meeting meeting author-id)]
+    (response {:id-created meeting-id})))
 
 (defn- add-author
   "Adds an author to the database."

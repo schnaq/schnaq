@@ -74,23 +74,46 @@
    (dialog/load-testdata!)))
 
 
+;; -----------------------------------------------------------------------------
+;; Pull Patterns
+
+(def ^:private user-pattern
+  "Pull a user based on these attributes."
+  [:db/id
+   :author/nickname])
+
+(def ^:private meeting-pattern
+  "Pull a meetly based on these attributes."
+  [:db/id
+   :meeting/title
+   :meeting/start-date
+   :meeting/end-date
+   :meeting/description
+   :meeting/share-hash
+   {:meeting/author user-pattern}])
+
+
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
 (defn add-meeting
-  "Adds a meeting to the database. Returns the id of the newly added meeting."
-  [meeting]
+  "Adds a meeting to the database. Returns the id of the newly added meeting.
+  user-id refers to the meetly user."
+  [meeting user-id]
   (get-in
-    (transact [(assoc meeting :db/id "newly-added-meeting")])
+    (transact [(merge {:db/id "newly-added-meeting"
+                       :meeting/author user-id}
+                      meeting)])
     [:tempids "newly-added-meeting"]))
 
 (defn all-meetings
   "Shows all meetings currently in the db."
   []
   (d/q
-    '[:find (pull ?meetings [*])
+    '[:find (pull ?meetings meeting-pattern)
+      :in $ meeting-pattern
       :where [?meetings :meeting/title _]]
-    (d/db (new-connection))))
+    (d/db (new-connection)) meeting-pattern))
 
 (defn meeting-by-hash
   "Returns the meeting corresponding to the share hash."
@@ -182,13 +205,16 @@
               {:db/id (format "id-%s" nickname)
                :author/nickname nickname}}]))
 
-(defn add-user-if-not-exists
-  "Adds an author if they do not exist yet."
+(>defn add-user-if-not-exists
+  "Adds an author if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  (when-not (author-id-by-nickname nickname)
-    (add-user nickname)))
+  [string? :ret int?]
+  (if-let [author-id (author-id-by-nickname nickname)]
+    author-id
+    (get-in (add-user nickname)
+            [:tempids (format "id-%s" nickname)])))
 
-(>defn- user-by-nickname
+(>defn user-by-nickname
   "Return the **meetly** user-id by nickname."
   [nickname]
   [string? :ret number?]

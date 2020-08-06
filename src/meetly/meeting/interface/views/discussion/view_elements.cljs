@@ -1,10 +1,9 @@
 (ns meetly.meeting.interface.views.discussion.view-elements
   (:require [re-frame.core :as rf]
             [meetly.meeting.interface.text.display-data :refer [labels fa]]
-            [ghostwheel.core :refer [>defn]]
-            ["jdenticon" :as jdenticon]
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.views.discussion.logic :as logic]
+            [meetly.meeting.interface.views.common :as common]
             [oops.core :refer [oget]]
             [meetly.meeting.interface.views.base :as base]
             [ajax.core :as ajax]))
@@ -25,14 +24,6 @@
       [:h6 [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
 
-(>defn avatar
-  "Create an image based on the nickname."
-  [name size]
-  [string? number? :ret vector?]
-  [:div.avatar.text-center
-   [:div.avatar-image.img-thumbnail.rounded-circle
-    {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg name size)}}]
-   [:div.avatar-name name]])
 
 ;; discussion header
 
@@ -133,7 +124,6 @@
   "A single bubble of a statement to be used ubiquitously."
   ([statement]
    (statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))))
-
   ([{:keys [statement/content] :as statement} attitude]
    [:div.statement-outer.row
     [:div.col-11.pl-0.pr-0
@@ -141,7 +131,7 @@
       [:div
        (when (= :argument.type/undercut (:meta/argument.type statement))
          [:p.small (labels :discussion/undercut-bubble-intro)])
-       [:small.text-right.float-right (avatar (-> statement :statement/author :author/nickname) 50)]
+       [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]
        [:p content]]]]
     [:div.col-1.up-down-vote
      (up-down-vote statement)]]))
@@ -149,7 +139,6 @@
 ;; carousel
 
 (defn premises-carousel [premises]
-
   [:div#carouselExampleIndicators.carousel.slide {:data-ride "carousel"}
    ;; indicator
    [:ol.carousel-indicators.carousel-indicator-custom
