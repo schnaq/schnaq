@@ -51,18 +51,21 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [current-meeting @(rf/subscribe [:selected-meeting])]
+  (let [{:keys [meeting/share-hash]} @(rf/subscribe [:selected-meeting])]
     [:div
      [base/nav-header]
      [base/header
       (labels :meeting/created-success-heading)
       (labels :meeting/created-success-subheading)]
-     [:div.container.px-5.py-3
-      [:div.meeting-single-rounded
-       ;; list agendas
-       [:h4.mb-1 (labels :meeting/educate-on-link-text)]
-       [copy-link-form]
-       [:h3 "Oder diskutier mit dir selbst..."]]]]))
+     [:div.container.px-5.py-3.text-center
+      ;; list agendas
+      [:h4.mb-4 (labels :meeting/educate-on-link-text)]
+      [copy-link-form]
+      [:h4.mb-4 (labels :meetings/continue-with-meetly-after-creation)]
+      [:button.btn.btn-primary.btn-lg.center-block
+       {:role "button"
+        :on-click #(rf/dispatch [:navigate :routes/meetings.show {:share-hash share-hash}])}
+       (labels :meetings/continue-to-meetly-button)]]]))
 
 ;; Events
 
