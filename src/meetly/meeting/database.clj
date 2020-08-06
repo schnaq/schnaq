@@ -4,6 +4,7 @@
     [ghostwheel.core :refer [>defn >defn- ?]]
     [meetly.config :as config]
     [meetly.meeting.models :as models]
+    [meetly.toolbelt :as tools]
     [dialog.discussion.database :as dialog])
   (:import (java.util Date)))
 
@@ -96,15 +97,21 @@
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
-(defn add-meeting
-  "Adds a meeting to the database. Returns the id of the newly added meeting.
-  user-id refers to the meetly user."
-  [meeting user-id]
-  (get-in
-    (transact [(merge {:db/id "newly-added-meeting"
-                       :meeting/author user-id}
-                      meeting)])
-    [:tempids "newly-added-meeting"]))
+(>defn- clean-nil-vals
+  "Removes all entries from a map that have a value of nil."
+  [data]
+  [associative? :ret associative?]
+  (into {} (filter #(not (nil? (second %))) data)))
+
+(>defn add-meeting
+  "Adds a meeting to the database. Returns the id of the newly added meeting."
+  [meeting]
+  [::models/meeting :ret int?]
+  (let [clean-meeting (clean-nil-vals meeting)]
+    (when (tools/conforms? ::models/meeting clean-meeting)
+      (get-in
+        (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
+        [:tempids "newly-added-meeting"]))))
 
 (defn all-meetings
   "Shows all meetings currently in the db."
@@ -125,22 +132,30 @@
         :where [?meeting :meeting/share-hash ?hash]]
       (d/db (new-connection)) hash)))
 
-(defn add-agenda-point
+(>defn add-agenda-point
   "Add an agenda to the database.
   A discussion is automatically created for the agenda-point.
   Returns the discussion-id of the newly created discussion."
   [title description meeting-id]
-  (get-in
-    (transact [{:agenda/title title
-                :agenda/description description
-                :agenda/meeting meeting-id
-                :agenda/discussion
-                {:db/id "temp-id"
-                 :discussion/title title
-                 :discussion/description description
-                 :discussion/states [:discussion.state/open]
-                 :discussion/starting-arguments []}}])
-    [:tempids "temp-id"]))
+  [:agenda/title (? :agenda/description) int? :ret int?]
+  (when (and (tools/conforms? :agenda/title title)
+             (tools/conforms? int? meeting-id))
+    (let [raw-agenda {:agenda/title title
+                      :agenda/meeting meeting-id
+                      :agenda/discussion
+                      {:db/id "temp-id"
+                       :discussion/title title
+                       :discussion/states [:discussion.state/open]
+                       :discussion/starting-arguments []}}
+          agenda (if (and description (tools/conforms? :agenda/description description))
+                   (merge-with merge
+                               raw-agenda
+                               {:agenda/description description
+                                :agenda/discussion {:discussion/description description}})
+                   raw-agenda)]
+      (get-in
+        (transact [agenda])
+        [:tempids "temp-id"]))))
 
 (def ^:private agenda-pattern
   [:db/id
@@ -198,21 +213,25 @@
         [(= ?lower-name ?author-name)]]
       (d/db (new-connection)) (.toLowerCase ^String nickname))))
 
-(defn add-user
+(>defn add-user
   "Add a new user / author to the database."
   [nickname]
-  (transact [{:user/core-author
-              {:db/id (format "id-%s" nickname)
-               :author/nickname nickname}}]))
+  [:author/nickname :ret int?]
+  (when (tools/conforms? :author/nickname nickname)
+    (get-in
+      (transact [{:db/id "temp-user"
+                  :user/core-author
+                  {:db/id (format "id-%s" nickname)
+                   :author/nickname nickname}}])
+      [:tempids "temp-user"])))
 
 (>defn add-user-if-not-exists
   "Adds an author if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  [string? :ret int?]
+  [:author/nickname :ret int?]
   (if-let [author-id (author-id-by-nickname nickname)]
     author-id
-    (get-in (add-user nickname)
-            [:tempids (format "id-%s" nickname)])))
+    (add-user nickname)))
 
 (>defn user-by-nickname
   "Return the **meetly** user-id by nickname."

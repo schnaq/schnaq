@@ -71,10 +71,10 @@
 (s/def :meeting/end-date inst?)
 (s/def :meeting/author (s/or :reference ::entity-reference
                              :author :dialog.discussion.models/author))
-(s/def ::meeting (s/keys :req [:meeting/title :meeting/description
+(s/def ::meeting (s/keys :req [:meeting/title :meeting/author
                                :meeting/share-hash
                                :meeting/start-date :meeting/end-date]
-                         :opt [:meeting/author]))
+                         :opt [:meeting/description]))
 
 ;; Agenda
 (s/def :agenda/title string?)

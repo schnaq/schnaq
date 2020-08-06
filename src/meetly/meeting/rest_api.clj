@@ -32,7 +32,7 @@
   (let [meeting (-> req :body-params :meeting)
         nickname (-> req :body-params :nickname)
         author-id (db/add-user-if-not-exists nickname)
-        meeting-id (db/add-meeting meeting author-id)]
+        meeting-id (db/add-meeting (assoc meeting :meeting/author author-id))]
     (response {:id-created meeting-id})))
 
 (defn- add-author

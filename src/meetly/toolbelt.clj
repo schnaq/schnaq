@@ -1,6 +1,7 @@
 (ns meetly.toolbelt
   "Utility functions supporting the backend."
-  (:require [ghostwheel.core :refer [>defn]])
+  (:require [ghostwheel.core :refer [>defn]]
+            [clojure.spec.alpha :as s])
   (:import (java.io File)))
 
 (>defn create-storage-directory!
@@ -14,3 +15,9 @@
    (let [dir (File. (format ".datomic/dev-local/%s" sub-path))]
      (.mkdir dir)
      (.getAbsolutePath dir))))
+
+(>defn conforms?
+  "Shortcut to get truth value instead of s/conform results."
+  [spec data]
+  [keyword? any? :ret boolean?]
+  (not= :clojure.spec.alpha/invalid (s/conform spec data)))
