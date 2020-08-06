@@ -91,8 +91,9 @@
   [:div.meeting-header.header-custom.shadow-custom
    [:div.row
     [:div.col-1.back-arrow
-     [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
-                     :on-click on-click-function}]]
+     (when on-click-function
+       [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
+                       :on-click on-click-function}])]
     [:div.col-8.container
      [:h2 title]
      [:h6 subtitle]]]])

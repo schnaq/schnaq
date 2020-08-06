@@ -1,6 +1,7 @@
 (ns meetly.meeting.interface.views.meeting.single
   (:require [re-frame.core :as rf]
-            [meetly.meeting.interface.views.base :as base]))
+            [meetly.meeting.interface.views.base :as base]
+            [meetly.meeting.interface.config :refer [config]]))
 
 
 (defn- agenda-entry [agenda meeting]
@@ -34,7 +35,8 @@
   (base/discussion-header
     (:meeting/title current-meeting)
     (:meeting/description current-meeting)
-    #(rf/dispatch [:navigate :routes/meetings])))
+    (when (not= "production" (:environment config))
+      #(rf/dispatch [:navigate :routes/meetings]))))
 
 (defn- single-meeting []
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
