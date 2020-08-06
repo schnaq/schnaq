@@ -5,7 +5,6 @@
             [meetly.meeting.interface.config :refer [config]]
             [re-frame.core :as rf]))
 
-
 (defn- wavy-bottom []
   ;; bezier curves
   [:svg.wavy-bottom
@@ -13,10 +12,7 @@
     :viewBox "0 0 1440 87"
     :y "0px"
     :x "0px"}
-   [:path {
-           :d "M0,87h48c48,0,144,0,240-11.6c96-11.8,192-34.6,288-43.5c96-8.5,192-3.1,288,8.7c96,11.6,192,29,288,29 s192-17.4,240-26.1l48-8.7V0h-48c-48,0-144,0-240,0S960,0,864,0S672,0,576,0S384,0,288,0S96,0,48,0H0V87z"
-           }]])
-
+   [:path {:d "M0,87h48c48,0,144,0,240-11.6c96-11.8,192-34.6,288-43.5c96-8.5,192-3.1,288,8.7c96,11.6,192,29,288,29 s192-17.4,240-26.1l48-8.7V0h-48c-48,0-144,0-240,0S960,0,864,0S672,0,576,0S384,0,288,0S96,0,48,0H0V87z"}]])
 
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
