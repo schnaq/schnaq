@@ -4,9 +4,9 @@
 
 (>defn avatar
   "Create an image based on the nickname."
-  [name size]
+  [display-name size]
   [string? number? :ret vector?]
   [:div.avatar.text-center
    [:div.avatar-image.img-thumbnail.rounded-circle
-    {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg name size)}}]
-   [:div.avatar-name name]])
+    {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size)}}]
+   [:div.avatar-name display-name]])
