@@ -19,7 +19,8 @@
       [view/agenda-header-back-arrow]
       [view/history-view]
       [view/conclusions-list]
-      [view/input-field]]]))
+      [view/input-field]]
+     [:br]]))
 
 (defn- add-starting-premises-form
   "Either support or attack a starting-conclusion with the users own premise."
@@ -109,7 +110,8 @@
        (case (logic/deduce-step steps)
          :starting-conclusions/select [starting-premises-view]
          :select-or-react [select-or-react-view]
-         :default [:p ""])]]]))
+         :default [:p ""])]]
+     [:br]]))
 
 ;; #### Events ####
 
