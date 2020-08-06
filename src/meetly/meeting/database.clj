@@ -79,9 +79,11 @@
 
 (defn add-meeting
   "Adds a meeting to the database. Returns the id of the newly added meeting."
-  [meeting]
+  [meeting author-id]
   (get-in
-    (transact [(assoc meeting :db/id "newly-added-meeting")])
+    (transact [(merge {:db/id "newly-added-meeting"
+                       :meeting/author author-id}
+                      meeting)])
     [:tempids "newly-added-meeting"]))
 
 (defn all-meetings
@@ -182,13 +184,16 @@
               {:db/id (format "id-%s" nickname)
                :author/nickname nickname}}]))
 
-(defn add-user-if-not-exists
-  "Adds an author if they do not exist yet."
+(>defn add-user-if-not-exists
+  "Adds an author if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  (when-not (author-id-by-nickname nickname)
-    (add-user nickname)))
+  [string? :ret number?]
+  (if-let [author-id (author-id-by-nickname nickname)]
+    author-id
+    (get-in (add-user nickname)
+            [:tempids (format "id-%s" nickname)])))
 
-(>defn- user-by-nickname
+(>defn user-by-nickname
   "Return the **meetly** user-id by nickname."
   [nickname]
   [string? :ret number?]

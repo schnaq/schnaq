@@ -26,7 +26,6 @@
    {:db/ident :meeting/author
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/identity
     :db/doc "The author of a meeting."}
    ;; Agenda-Point
    {:db/ident :agenda/title

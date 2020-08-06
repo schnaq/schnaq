@@ -98,14 +98,16 @@
 
 (rf/reg-event-fx
   :new-meeting
-  (fn [_ [_ meeting]]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/meeting/add")
-                  :params meeting
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:meeting-added meeting]
-                  :on-failure [:ajax-failure]}}))
+  (fn [{:keys [db]} [_ meeting]]
+    (let [nickname (get-in db [:user :name] "Anonymous")]
+      {:http-xhrio {:method :post
+                    :uri (str (:rest-backend config) "/meeting/add")
+                    :params {:nickname nickname
+                             :meeting meeting}
+                    :format (ajax/transit-request-format)
+                    :response-format (ajax/transit-response-format)
+                    :on-success [:meeting-added meeting]
+                    :on-failure [:ajax-failure]}})))
 
 ;; #### Subs ####
 
