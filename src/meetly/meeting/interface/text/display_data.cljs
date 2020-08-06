@@ -88,7 +88,17 @@
      :login/set-name "Geben Sie ihren Namen ein"
 
      :modals/enter-name-header "Geben Sie einen Namen ein"
-     :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."}))
+     :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."
+
+     ;; Route Link Texts
+     :router/all-meetings "Alle Meetings"
+     :router/create-meeting "Meeting anlegen"
+     :router/meeting-created "Zuletzt angelegtes Meeting"
+     :router/show-single-meeting "Meeting anzeigen"
+     :router/add-agendas "Agendas hinzufügen"
+     :router/start-discussion "Starte Besprechung"
+     :router/continue-discussion "Führe Besprechung fort"
+     :router/startpage "Startseite"}))
 
 
 (defn img-path
