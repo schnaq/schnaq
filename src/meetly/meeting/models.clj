@@ -69,7 +69,8 @@
 (s/def :meeting/share-hash string?)
 (s/def :meeting/start-date inst?)
 (s/def :meeting/end-date inst?)
-(s/def :meeting/author string?)
+(s/def :meeting/author (s/or :reference ::entity-reference
+                             :author :dialog.discussion.models/author))
 (s/def ::meeting (s/keys :req [:meeting/title :meeting/description
                                :meeting/share-hash
                                :meeting/start-date :meeting/end-date]
