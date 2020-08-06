@@ -133,7 +133,6 @@
   "A single bubble of a statement to be used ubiquitously."
   ([statement]
    (statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))))
-
   ([{:keys [statement/content] :as statement} attitude]
    [:div.statement-outer.row
     [:div.col-11.pl-0.pr-0
@@ -149,7 +148,6 @@
 ;; carousel
 
 (defn premises-carousel [premises]
-
   [:div#carouselExampleIndicators.carousel.slide {:data-ride "carousel"}
    ;; indicator
    [:ol.carousel-indicators.carousel-indicator-custom
