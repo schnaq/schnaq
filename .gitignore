@@ -9,6 +9,7 @@ datomic/
 datomic-*.zip
 
 .clj-kondo/.cache/
+public/feedbacks/screenshots/
 
 local_jars/
 
