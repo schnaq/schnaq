@@ -3,7 +3,6 @@
             [clojure.java.io :as io]
             [compojure.core :refer [defroutes GET POST]]
             [compojure.route :as route]
-            [ghostwheel.core :refer [>defn]]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
