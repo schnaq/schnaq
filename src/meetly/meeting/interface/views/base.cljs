@@ -49,7 +49,7 @@
    [:div [:img {:src path-to-img}]]
    [:div
     [:div [:span [:h4 heading]]]
-    [:div [:span [:h5 subheading]]]]])
+    [:div [:p subheading]]]])
 
 
 (defn icon-bullet [path-to-img text]

@@ -93,7 +93,6 @@
      :icon-robot "imgs/robot.svg"
      :icon-reports "imgs/reports.svg"
      :icon-crane "imgs/crane.svg"
-     :woman-pointing "imgs/stock/woman_pointing.jpg"
      :logo "imgs/Meetly-Logo.svg"
      :animation-discussion "animations/animation_discussion.gif"}))
 
