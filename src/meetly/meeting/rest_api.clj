@@ -10,7 +10,8 @@
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
-            [meetly.core :as meetly-core])
+            [meetly.core :as meetly-core]
+            [clojure.spec.alpha :as s])
   (:gen-class))
 
 (defn- fetch-meetings
@@ -47,14 +48,15 @@
   [{:keys [body-params]}]
   (let [agendas (:agendas body-params)
         meeting-id (:meeting-id body-params)
-        meeting-hash (:meeting-hash body-params)
-        suspected-meeting (db/meeting-by-hash meeting-hash)]
-    (if (= meeting-id (:db/id suspected-meeting))
+        meeting-hash (:meeting-hash body-params)]
+    (if (and (s/valid? :meeting/share-hash meeting-hash)
+             (s/valid? int? meeting-id)
+             (= meeting-id (:db/id (db/meeting-by-hash meeting-hash))))
       (do (doseq [agenda-point agendas]
             (db/add-agenda-point (:title agenda-point) (:description agenda-point)
                                  meeting-id))
-          (response {:text "Agendas, sent over successfully"}))
-      (bad-request "Your request was invalid."))))
+          (response {:text "Agendas sent over successfully"}))
+      (bad-request {:error "Your request was invalid."}))))
 
 (defn- meeting-by-hash
   "Returns a meeting, identified by its share-hash."

@@ -62,7 +62,7 @@
     :db/doc "All downvotes the user gave."}])
 
 ;; Common
-(s/def ::entity-reference (s/or :transacted number? :temporary any?))
+(s/def ::entity-reference (s/or :transacted int? :temporary any?))
 (s/def ::non-blank-string (s/and string? (complement str/blank?)))
 
 ;; Meeting
