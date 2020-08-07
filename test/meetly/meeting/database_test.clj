@@ -51,14 +51,16 @@
       (is (database/check-valid-statement-id-and-meeting conclusion-id "Wegi-ist-der-schönste"))
       (is (database/check-valid-statement-id-and-meeting premise-id "Wegi-ist-der-schönste")))))
 
-(deftest clean-nil-vals-test
+(deftest clean-db-vals-test
   (testing "Test whether nil values are properly cleaned from a map."
     (let [no-change-map {:foo :bar
-                         :baz :bam}]
+                         :baz :bam}
+          time-map {:bar (database/now)}]
       (is (= no-change-map (@#'database/clean-db-vals no-change-map)))
       (is (= 2 (count (@#'database/clean-db-vals (merge no-change-map {:unwished-for nil})))))
       (is (= {} (@#'database/clean-db-vals {})))
-      (is (= {} (@#'database/clean-db-vals {:foo ""}))))))
+      (is (= {} (@#'database/clean-db-vals {:foo ""})))
+      (is (= time-map (@#'database/clean-db-vals time-map))))))
 
 (deftest add-meeting-test
   (testing "Test whether meetings are properly added"

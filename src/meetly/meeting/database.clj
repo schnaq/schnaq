@@ -103,7 +103,8 @@
   [data]
   [associative? :ret associative?]
   (into {} (filter #(not (or (nil? (second %))
-                             (str/blank? (second %))))
+                             (when (= String (type (second %)))
+                               (str/blank? (second %)))))
                    data)))
 
 (>defn add-meeting
