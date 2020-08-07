@@ -41,8 +41,8 @@
   [:div.meetings-list
    (let [meetings @(rf/subscribe [:meetings])]
      (for [meeting meetings]
-       [:div.py-3 {:key (:meeting/title meeting)}
-        [meeting-entry meeting {:key (:meeting/title meeting)}]]))])
+       [:div.py-3 {:key (:db/id meeting)}
+        [meeting-entry meeting]]))])
 
 
 (defn meeting-view

@@ -65,7 +65,7 @@
      ;; date
      [date-picker]
      ;; submit
-     [:button.btn.button-secondary-with-margin {:type "submit"}
+     [:button.btn.button-secondary.mt-5.mb-1 {:type "submit"}
       "Step 2: Add Agenda"]]]])
 
 ;; #### Events ####

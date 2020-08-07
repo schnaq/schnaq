@@ -41,6 +41,7 @@
    [:div.px-2 [:input#name-input.form-control.form-round-05.px-2.py-1
                {:type "text"
                 :name "name-input"
+                :required true
                 :autoFocus true
                 :placeholder username}]]
    [:br]

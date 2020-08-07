@@ -1,6 +1,6 @@
 (ns meetly.meeting.interface.effects
   (:require [re-frame.core :as rf]
-            [meetly.meeting.interface.localstorage :as ls]))
+            [meetly.meeting.interface.utils.localstorage :as ls]))
 
 (rf/reg-fx
   :write-localstorage

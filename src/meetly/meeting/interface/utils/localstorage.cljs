@@ -1,4 +1,4 @@
-(ns meetly.meeting.interface.localstorage
+(ns meetly.meeting.interface.utils.localstorage
   (:require [ghostwheel.core :refer [>defn >defn-]]
             [cljs.spec.alpha :as s]))
 
