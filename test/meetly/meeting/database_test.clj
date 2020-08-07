@@ -90,6 +90,12 @@
     (is (number? (database/add-user "Gib ihm!")))
     (is (nil? (database/add-user :nono-string)))))
 
+(deftest add-user-if-not-exists-test
+  (testing "Test the function to add a new user if they do not exist."
+    (let [new-user (database/add-user-if-not-exists "For Sure a new User that does Not exist")]
+      (is (int? new-user))
+      (is (= new-user (database/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
+
 (deftest user-by-nickname-test
   (testing "Tests whether the user is correctly found, disregarding case."
     (let [wegi (database/user-by-nickname "Wegi")]
