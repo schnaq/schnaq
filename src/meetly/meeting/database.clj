@@ -113,6 +113,15 @@
         (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
         [:tempids "newly-added-meeting"]))))
 
+(>defn add-feedback!
+  "Adds a meeting to the database. Returns the id of the newly added meeting."
+  [feedback]
+  [::models/feedback :ret int?]
+  (when (s/valid? ::models/feedback feedback)
+    (get-in
+      (transact [(assoc feedback :db/id "newly-added-feedback")])
+      [:tempids "newly-added-feedback"])))
+
 (defn all-meetings
   "Shows all meetings currently in the db."
   []
