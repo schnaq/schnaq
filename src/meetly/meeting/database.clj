@@ -205,7 +205,7 @@
         [?agenda :agenda/discussion ?discussion-id]]
       (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
 
-(>defn- author-id-by-nickname
+(>defn author-id-by-nickname
   "Returns an author-id by nickname. The nickname is not case sensitive"
   [nickname]
   [string? :ret number?]
