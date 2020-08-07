@@ -78,7 +78,9 @@
         agenda-point (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if agenda-point
       (response agenda-point)
-      (not-found (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s." discussion-id meeting-hash)))))
+      (not-found {:error
+                  (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s."
+                          discussion-id meeting-hash)}))))
 
 (defn- start-discussion
   "Start a new discussion for an agenda point."
@@ -91,7 +93,7 @@
       (response (processors/with-votes
                   (dialog/start-discussion {:discussion/id discussion-id
                                             :user/nickname username})))
-      (bad-request "Your request was malformed"))))
+      (bad-request {:error "Your request was malformed"}))))
 
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
@@ -103,7 +105,7 @@
     (if valid-link?
       (response (processors/with-votes
                   (dialog/continue-discussion reaction args)))
-      (bad-request "Your request was malformed"))))
+      (bad-request {:error "Your request was malformed"}))))
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
@@ -118,7 +120,7 @@
             (if counter-vote
               (response {:operation :switched})
               (response {:operation :added})))))
-    (bad-request "The request was malformed")))
+    (bad-request {:error "The request was malformed"})))
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
