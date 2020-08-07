@@ -5,8 +5,7 @@
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
             [meetly.meeting.interface.views.discussion.logic :as logic]
-            [meetly.meeting.interface.views.discussion.view-elements :as view]
-            [clojure.pprint :as pp]))
+            [meetly.meeting.interface.views.discussion.view-elements :as view]))
 
 
 (defn discussion-start-view
@@ -170,7 +169,6 @@
 (rf/reg-event-db
   :set-current-discussion-steps
   (fn [db [_ response]]
-    (pp/pprint response)
     (-> db
         (assoc-in [:discussion :options :all] response)
         (assoc-in [:discussion :options :steps] (map first response))

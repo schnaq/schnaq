@@ -14,3 +14,14 @@
           upvotes-only (filter number? (map :meta/upvotes statements-only))
           downvotes-only (filter number? (map :meta/downvotes statements-only))]
       (is (= (count statements-only) (count upvotes-only) (count downvotes-only))))))
+
+(deftest with-canonical-usernames-test
+  (testing "Tests whether arguments are correctly enriched."
+    (is (= [:starting-argument/new
+            {:discussion/id 87960930222185, :user/nickname "Wegi"}]
+           (processors/with-canonical-usernames
+             [:starting-argument/new
+              {:discussion/id 87960930222185, :user/nickname "WeGi"}])
+           (processors/with-canonical-usernames
+             [:starting-argument/new
+              {:discussion/id 87960930222185, :user/nickname "WEGI"}])))))
