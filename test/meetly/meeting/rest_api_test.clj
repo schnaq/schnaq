@@ -25,5 +25,5 @@
       (is (= 200 (:status valid-response)))
       (is (= "Agendas sent over successfully" (-> valid-response :body :text)))
       (is (= 400 (:status invalid-response)))
-      (is (= "Your request was invalid" (-> invalid-response :body :error))))))
+      (is (= "Agenda could not be added" (-> invalid-response :body :error))))))
 
