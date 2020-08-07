@@ -13,7 +13,8 @@
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
             [meetly.core :as meetly-core]
-            [clojure.spec.alpha :as s])
+            [clojure.spec.alpha :as s]
+            [meetly.toolbelt :as toolbelt])
   (:import (java.util Base64))
   (:gen-class))
 
