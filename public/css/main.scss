@@ -6,22 +6,23 @@
 @import "global";
 
 // Components
-@import "masthead";
+@import "agenda";
+@import "animations";
+@import "button";
+@import "carousel";
+@import "clickable";
+@import "discussion";
+@import "feedback";
+@import "footer";
+@import "header";
 @import "icon-bullets";
 @import "icons";
-@import "animations";
-@import "footer";
-@import "text-input";
-@import "button";
-@import "agenda";
-@import "discussion";
+@import "masthead";
 @import "meeting";
-@import "header";
-@import "clickable";
-@import "radio-button";
 @import "modals";
+@import "radio-button";
+@import "text-input";
 @import "up-down-vote";
-@import "carousel";
 
 // 3rd Party
 @import "../../node_modules/@ivoviz/feedback.js/lib/feedback";
