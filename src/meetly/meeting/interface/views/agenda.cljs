@@ -123,6 +123,7 @@
   :on-successful-agenda-add
   (fn [_ [_ meeting-hash]]
     {:dispatch-n [[:clear-current-agendas]
+                  [:reset-temporary-agendas]
                   [:navigate :routes.meeting.created {:share-hash meeting-hash}]]}))
 
 (rf/reg-event-fx
@@ -178,7 +179,7 @@
     (assoc-in db [:agenda :all suffix :description] content)))
 
 (rf/reg-event-db
-  :reset-temporary-agenda
+  :reset-temporary-agendas
   (fn [db _]
     (assoc db :agenda {:number-of-forms 1 :all {}})))
 
