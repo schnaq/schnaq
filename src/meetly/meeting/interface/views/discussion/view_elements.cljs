@@ -145,7 +145,7 @@
     ;; range of number of premises and set the first element as selected
     (map
       (fn [i]
-        (let [params {:key (str "indicator-" i) :data-target "#carouselExampleIndicators" :data-slide-to (str i)}]
+        (let [params {:key (str "indicator-" (:db/id (nth premises i))) :data-target "#carouselExampleIndicators" :data-slide-to (str i)}]
           (if (zero? i)
             [:li.active params]
             [:li params])))
@@ -178,7 +178,7 @@
         meeting @(rf/subscribe [:selected-meeting])]
     [:div#conclusions-list.container
      (for [conclusion conclusions]
-       [:div {:key (:statement/content conclusion)
+       [:div {:key (:db/id conclusion)
               :on-click (fn [_e]
                           (rf/dispatch [:continue-discussion :starting-conclusions/select conclusion])
                           (rf/dispatch [:navigate :routes/meetings.discussion.continue
