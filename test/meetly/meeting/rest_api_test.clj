@@ -7,7 +7,7 @@
 
 (deftest add-agendas-test
   (testing "Test whether the agenda is correctly validated before passed on."
-    (let [add-agendas (@#'api/add-agendas)
+    (let [add-agendas @#'api/add-agendas
           valid-req {:body-params {:meeting-id 123
                                    :meeting-hash "asjd8394h-23d"
                                    :agendas []}}
