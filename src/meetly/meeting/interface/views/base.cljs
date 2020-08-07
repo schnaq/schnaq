@@ -41,6 +41,16 @@
     [:h3 heading]
     [:p.lead.mb-0 subheading]]])
 
+(defn img-bullet-subtext
+  "Create one icon in a grid"
+  [path-to-img heading subheading]
+
+  [:div.d-flex.flex-row.p-1
+   [:div [:img {:src path-to-img}]]
+   [:div
+    [:div [:span [:h4 heading]]]
+    [:div [:span [:h5 subheading]]]]])
+
 
 (defn icon-bullet [path-to-img text]
   [:div.d-flex.flex-row.p-1

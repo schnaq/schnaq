@@ -27,22 +27,25 @@
 (defn- call-to-action
   " Tell user to create a meetly now "
   []
-  [:section.py-3
+  [:section
    [:div.container
-    [:div.row
-     [:div.col-lg-4.text-center
-      [:img.img-fluid.shadow {:src (data/img-path :woman-pointing)}]]
-     [:div.col-lg-8.text-center
-      [:div.row.mt-4
-       [:div.mx-auto.col-lg-10
-        [:h3.mb-1 (data/labels :create-your-meeting)]
-        [:br] [:br]
-        [:button.btn.button-secondary
-         {:type " button "
-          :on-click #(rf/dispatch [:navigate :routes/meetings.create])}
-         [:h4 (data/labels :create-meetly-button)]]
-        [:p.pt-4 (data/labels :create-your-meeting-sub)]]]]]]])
+    [:div.text-center
+     [:div.mx-auto.col-lg-10
+      [:button.btn.button-call-to-action
+       {:type " button "
+        :on-click #(rf/dispatch [:navigate :routes/meetings.create])}
+       [:h4 (data/labels :create-meetly-button)]]
+      [:p.pt-4 (data/labels :create-your-meeting-sub)]]]]])
 
+(defn- under-construction
+  []
+  [:div.mt-5
+   [:div.row
+    [:div.col-lg-3]
+    [:div.col-lg-6.icon-bullets-larger
+     (base/img-bullet-subtext (data/img-path :icon-crane)
+                              (data/labels :start-page-point-alpha)
+                              (data/labels :start-page-point-alpha-subtext))]]])
 
 (defn- icons-grid
   " Display features in a grid "
@@ -61,6 +64,7 @@
    [header]
    [:div.container
     [call-to-action]
+    [under-construction]
     [icons-grid]]])
 
 

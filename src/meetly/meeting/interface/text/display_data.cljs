@@ -15,18 +15,20 @@
 
      ;; startpage header
      :start-page-header "Meetly"
-     :start-page-subheader "Das Meeting Tool der Zukunft ist da!"
+     :start-page-subheader "Das Meeting Tool der Zukunft ist (fast) da!"
      :start-page-subheader-2 "Digitale Meetings neu gedacht und auf den Punkt gebracht"
      ;; key feeatures
      :start-page-point-community "Flexible Teilnahme"
-     :start-page-point-moderation "Gezielte Abfrage von Informationen"
+     :start-page-point-moderation "Automatische Moderation"
      :start-page-point-reports "Zeitersparnis durch fokussierte Diskussion"
-     :create-meetly-button "Create Meetly"
+     :start-page-point-alpha "Betreten der Baustelle erwünscht!"
+     :start-page-point-alpha-subtext "Meetly befindet sich im Aufbau und Feedback ist uns wichtig!"
+     :create-meetly-button "Erstellen Sie jetzt ihr Meetly"
      ;; startpage call to action
      :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
      :more-info-newsletter "Holen Sie sich regelmäßig Updates zu Dialogo und den aktuellsten Produkten."
      :create-your-meeting "Erstellen Sie jetzt ihr Meetly!"
-     :create-your-meeting-sub "Mit einem Klick erstellen und an alle Teilnehmenden schicken"
+     :create-your-meeting-sub "Mit einem Klick erstellen und teilen"
 
      ;; startpage grid
      :innovative "Innovativ"
@@ -90,8 +92,9 @@
     {:icon-community "imgs/community.svg"
      :icon-robot "imgs/robot.svg"
      :icon-reports "imgs/reports.svg"
+     :icon-crane "imgs/crane.svg"
      :woman-pointing "imgs/stock/woman_pointing.jpg"
-     :logo "imgs/logo.svg"
+     :logo "imgs/Meetly-Logo.svg"
      :animation-discussion "animations/animation_discussion.gif"}))
 
 (defn fa
