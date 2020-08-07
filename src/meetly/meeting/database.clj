@@ -4,8 +4,8 @@
     [ghostwheel.core :refer [>defn >defn- ?]]
     [meetly.config :as config]
     [meetly.meeting.models :as models]
-    [meetly.toolbelt :as tools]
-    [dialog.discussion.database :as dialog])
+    [dialog.discussion.database :as dialog]
+    [clojure.spec.alpha :as s])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -108,7 +108,7 @@
   [meeting]
   [::models/meeting :ret int?]
   (let [clean-meeting (clean-nil-vals meeting)]
-    (when (tools/conforms? ::models/meeting clean-meeting)
+    (when (s/valid? ::models/meeting clean-meeting)
       (get-in
         (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
         [:tempids "newly-added-meeting"]))))
@@ -138,8 +138,8 @@
   Returns the discussion-id of the newly created discussion."
   [title description meeting-id]
   [:agenda/title (? :agenda/description) int? :ret int?]
-  (when (and (tools/conforms? :agenda/title title)
-             (tools/conforms? int? meeting-id))
+  (when (and (s/valid? :agenda/title title)
+             (s/valid? int? meeting-id))
     (let [raw-agenda {:agenda/title title
                       :agenda/meeting meeting-id
                       :agenda/discussion
@@ -147,7 +147,7 @@
                        :discussion/title title
                        :discussion/states [:discussion.state/open]
                        :discussion/starting-arguments []}}
-          agenda (if (and description (tools/conforms? :agenda/description description))
+          agenda (if (and description (s/valid? :agenda/description description))
                    (merge-with merge
                                raw-agenda
                                {:agenda/description description
@@ -217,7 +217,7 @@
   "Add a new user / author to the database."
   [nickname]
   [:author/nickname :ret int?]
-  (when (tools/conforms? :author/nickname nickname)
+  (when (s/valid? :author/nickname nickname)
     (get-in
       (transact [{:db/id "temp-user"
                   :user/core-author
