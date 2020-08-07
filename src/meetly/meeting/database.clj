@@ -206,7 +206,7 @@
       (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
 
 (>defn- author-id-by-nickname
-  "Returns an author-id by nickname."
+  "Returns an author-id by nickname. The nickname is not case sensitive"
   [nickname]
   [string? :ret number?]
   (ffirst
@@ -239,16 +239,16 @@
     (add-user nickname)))
 
 (>defn user-by-nickname
-  "Return the **meetly** user-id by nickname."
+  "Return the **meetly** user-id by nickname. The nickname is not case sensitive."
   [nickname]
   [string? :ret number?]
-  (ffirst
-    (d/q
-      '[:find ?user
-        :in $ ?nickname
-        :where [?user :user/core-author ?author]
-        [?author :author/nickname ?nickname]]
-      (d/db (new-connection)) nickname)))
+  (let [dialog-author (author-id-by-nickname nickname)]
+    (ffirst
+      (d/q
+        '[:find ?user
+          :in $ ?author
+          :where [?user :user/core-author ?author]]
+        (d/db (new-connection)) dialog-author))))
 
 (>defn- vote-on-statement!
   "Up or Downvote a statement"

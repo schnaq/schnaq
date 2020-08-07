@@ -89,3 +89,11 @@
   (testing "Check for correct user-addition"
     (is (number? (database/add-user "Gib ihm!")))
     (is (nil? (database/add-user :nono-string)))))
+
+(deftest user-by-nickname-test
+  (testing "Tests whether the user is correctly found, disregarding case."
+    (let [wegi (database/user-by-nickname "Wegi")]
+      (is (int? wegi))
+      (is (= wegi (database/user-by-nickname "WeGi")
+             (database/user-by-nickname "wegi")
+             (database/user-by-nickname "wegI"))))))
