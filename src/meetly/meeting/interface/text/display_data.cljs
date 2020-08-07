@@ -23,7 +23,7 @@
      :start-page-point-reports "Zeitersparnis durch fokussierte Diskussion"
      :start-page-point-alpha "Betreten der Baustelle erwünscht!"
      :start-page-point-alpha-subtext "Meetly befindet sich im Aufbau und Feedback ist uns wichtig!"
-     :create-meetly-button "Erstellen Sie jetzt ihr Meetly"
+     :create-meetly-button "Erstellen Sie jetzt Ihr Meetly"
      ;; startpage call to action
      :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
      :more-info-newsletter "Holen Sie sich regelmäßig Updates zu Dialogo und den aktuellsten Produkten."
@@ -34,17 +34,17 @@
      :innovative "Innovativ"
      :innovative-why "Meetly nutzt wissenschaftlich erprobte neue Technologien"
      :communicative "Kommunikativ"
-     :communicative-why "Lassen Sie ihre NutzerInnen direkt zu Wort kommen"
+     :communicative-why "Lassen Sie Ihre NutzerInnen direkt zu Wort kommen"
      :cooperative "Kooperativ"
      :cooperative-why "Fördern Sie den Meinungsaustausch zwischen Ihren TeilnehmerInnen"
 
      ;; create meetly
      :meeting-create-header "Meetly erstellen"
-     :meeting-create-subheader "Geben Sie ihrem Meetly einen Namen und eine Beschreibung"
+     :meeting-create-subheader "Geben Sie Ihrem Meetly einen Namen und eine Beschreibung"
      :meeting-form-title "Titel"
-     :meeting-form-title-placeholder "Wie soll ihr Meetly heißen?"
+     :meeting-form-title-placeholder "Wie soll Ihr Meetly heißen?"
      :meeting-form-desc "Beschreibung"
-     :meeting-form-desc-placeholder "Worum geht es in ihrem Meetly?"
+     :meeting-form-desc-placeholder "Worum geht es in Ihrem Meetly?"
      :meeting-form-deadline "Frist"
      :meeting-form-end-date "Datum"
      :meeting-form-end-time "Uhrzeit"
@@ -53,8 +53,8 @@
      :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
      :meeting/created-success-heading "Ihr Meetly wurde erstellt!"
      :meeting/created-success-subheading "Link verteilen und loslegen"
-     :meeting/educate-on-link-text "Verteilen Sie den untenstehenden Link an Ihre KollegInnen.
-     Teilnahme ist für alle die den Link kennen möglich!"
+     :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
+     :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle die den Link kennen möglich!"
      :meetings/continue-with-meetly-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-meetly-button "Zum Meetly"
 
@@ -87,7 +87,7 @@
 
      ;; login
      :login/as "Hallo, "
-     :login/set-name "Geben Sie ihren Namen ein"
+     :login/set-name "Geben Sie Ihren Namen ein"
 
      :modals/enter-name-header "Geben Sie einen Namen ein"
      :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."
@@ -111,6 +111,9 @@
      :icon-robot "imgs/robot.svg"
      :icon-reports "imgs/reports.svg"
      :icon-crane "imgs/crane.svg"
+     :elephant-share "imgs/elephant-share.png"
+     :elephant-talk "imgs/elephant-talk.png"
+     :elephant-stop "imgs/elephant-stop.png"
      :logo "imgs/Meetly-Logo.svg"
      :animation-discussion "animations/animation_discussion.gif"}))
 
