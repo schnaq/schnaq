@@ -103,3 +103,9 @@
       (is (= wegi (database/user-by-nickname "WeGi")
              (database/user-by-nickname "wegi")
              (database/user-by-nickname "wegI"))))))
+
+(deftest canonical-username-test
+  (testing "Test whether the canonical username is returned."
+    (is (= "Wegi" (database/canonical-username "WEGI")
+           (database/canonical-username "WeGi")))
+    (is (= "Der Schredder" (database/canonical-username "DER schredder")))))

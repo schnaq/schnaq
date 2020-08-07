@@ -242,6 +242,13 @@
           :where [?user :user/core-author ?author]]
         (d/db (new-connection)) dialog-author))))
 
+(>defn canonical-username
+  "Return the canonical username (regarding case) that is saved."
+  [nickname]
+  [:author/nickname :ret :author/nickname]
+  (:author/nickname
+    (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
+
 (>defn add-user-if-not-exists
   "Adds an author if they do not exist yet. Returns the (new) user-id."
   [nickname]
@@ -249,6 +256,16 @@
   (if-let [user-id (user-by-nickname nickname)]
     user-id
     (add-user nickname)))
+
+(>defn all-author-names
+  "Returns the names of all authors."
+  []
+  [:ret (s/coll-of :author/nickname)]
+  (map first
+       (d/q
+         '[:find ?names
+           :where [_ :author/nickname ?names]]
+         (d/db (new-connection)))))
 
 (>defn- vote-on-statement!
   "Up or Downvote a statement"

@@ -1,10 +1,17 @@
 (ns meetly.test.toolbelt
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as stest]
-            [datomic.dev-local :as dev-local]
             [expound.alpha :as expound]
             [meetly.meeting.database :as database]))
 
+(defn create-users-for-dialog-authors
+  "Creates a user for every test author. Is only needed in testing, when dialog.core testdata has authors
+  for which no users exist."
+  []
+  (let [author-names (database/all-author-names)]
+    (doseq [name author-names]
+      (when-not (database/user-by-nickname name)
+        (@#'database/transact [{:user/core-author (database/author-id-by-nickname name)}])))))
 
 ;; -----------------------------------------------------------------------------
 ;; Fixtures
@@ -13,6 +20,7 @@
   "Fixture to initialize, test, and afterwards delete the database."
   [f]
   (database/init-and-seed!)
+  (create-users-for-dialog-authors)
   (f))
 
 (defn init-test-delete-db-fixture
