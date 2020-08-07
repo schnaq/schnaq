@@ -28,6 +28,7 @@
       {:type "text"
        :name "title"
        :auto-complete "off"
+       :required true
        :placeholder (str (data/labels :agenda-point) numbered-suffix)
        :id (str "title-" numbered-suffix)
        :on-key-up
