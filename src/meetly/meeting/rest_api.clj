@@ -93,7 +93,7 @@
       (response (processors/with-votes
                   (dialog/start-discussion {:discussion/id discussion-id
                                             :user/nickname username})))
-      (bad-request {:error "Your request was malformed"}))))
+      (bad-request {:error "The link you followed was invalid"}))))
 
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
@@ -105,7 +105,7 @@
     (if valid-link?
       (response (processors/with-votes
                   (dialog/continue-discussion reaction args)))
-      (bad-request {:error "Your request was malformed"}))))
+      (bad-request {:error "The link you followed was invalid"}))))
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
@@ -120,7 +120,7 @@
             (if counter-vote
               (response {:operation :switched})
               (response {:operation :added})))))
-    (bad-request {:error "The request was malformed"})))
+    (bad-request {:error "Vote could not be registered"})))
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
