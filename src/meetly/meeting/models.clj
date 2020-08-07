@@ -58,7 +58,12 @@
    {:db/ident :user/downvotes
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc "All downvotes the user gave."}])
+    :db/doc "All downvotes the user gave."}
+   ;; Feedback
+   {:db/ident :feedback/description
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The feedback description."}])
 
 ;; Common
 (s/def ::entity-reference (s/or :transacted number? :temporary any?))
@@ -85,3 +90,7 @@
                         :opt [:agenda/description]))
 
 (s/def :author/nickname string?)
+
+;; Feedback
+(s/def :feedback/description string?)
+(s/def ::feedback (s/keys :req [:feedback/description]))
