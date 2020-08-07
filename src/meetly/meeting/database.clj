@@ -6,7 +6,7 @@
     [meetly.meeting.models :as models]
     [dialog.discussion.database :as dialog]
     [clojure.spec.alpha :as s]
-    [clojure.string :as str])
+    [clojure.string :as string])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -104,7 +104,7 @@
   [associative? :ret associative?]
   (into {} (filter #(not (or (nil? (second %))
                              (when (= String (type (second %)))
-                               (str/blank? (second %)))))
+                               (string/blank? (second %)))))
                    data)))
 
 (>defn add-meeting

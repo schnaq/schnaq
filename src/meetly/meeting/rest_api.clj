@@ -56,7 +56,7 @@
             (db/add-agenda-point (:title agenda-point) (:description agenda-point)
                                  meeting-id))
           (response {:text "Agendas sent over successfully"}))
-      (bad-request {:error "Your request was invalid"}))))
+      (bad-request {:error "Agenda could not be added"}))))
 
 (defn- meeting-by-hash
   "Returns a meeting, identified by its share-hash."
@@ -78,7 +78,9 @@
         agenda-point (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if agenda-point
       (response agenda-point)
-      (not-found (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s." discussion-id meeting-hash)))))
+      (not-found {:error
+                  (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s."
+                          discussion-id meeting-hash)}))))
 
 (defn- start-discussion
   "Start a new discussion for an agenda point."
@@ -91,7 +93,8 @@
       (response (processors/with-votes
                   (dialog/start-discussion {:discussion/id discussion-id
                                             :user/nickname (db/canonical-username username)})))
-      (bad-request "Your request was malformed"))))
+      (bad-request {:error "The link you followed was invalid"}))))
+
 
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
@@ -103,7 +106,7 @@
     (if valid-link?
       (response (processors/with-votes
                   (dialog/continue-discussion reaction args)))
-      (bad-request "Your request was malformed"))))
+      (bad-request {:error "The link you followed was invalid"}))))
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
@@ -118,7 +121,7 @@
             (if counter-vote
               (response {:operation :switched})
               (response {:operation :added})))))
-    (bad-request "The request was malformed")))
+    (bad-request {:error "Vote could not be registered"})))
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
