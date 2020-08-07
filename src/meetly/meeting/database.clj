@@ -205,8 +205,8 @@
         [?agenda :agenda/discussion ?discussion-id]]
       (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
 
-(>defn- author-id-by-nickname
-  "Returns an author-id by nickname."
+(>defn author-id-by-nickname
+  "Returns an author-id by nickname. The nickname is not case sensitive"
   [nickname]
   [string? :ret number?]
   (ffirst
@@ -230,25 +230,43 @@
                    :author/nickname nickname}}])
       [:tempids "temp-user"])))
 
+(>defn user-by-nickname
+  "Return the **meetly** user-id by nickname. The nickname is not case sensitive."
+  [nickname]
+  [string? :ret (? number?)]
+  (let [dialog-author (author-id-by-nickname nickname)]
+    (when-not (nil? dialog-author)
+      (ffirst
+        (d/q
+          '[:find ?user
+            :in $ ?author
+            :where [?user :user/core-author ?author]]
+          (d/db (new-connection)) dialog-author)))))
+
+(>defn canonical-username
+  "Return the canonical username (regarding case) that is saved."
+  [nickname]
+  [:author/nickname :ret :author/nickname]
+  (:author/nickname
+    (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
+
 (>defn add-user-if-not-exists
   "Adds an author if they do not exist yet. Returns the (new) user-id."
   [nickname]
   [:author/nickname :ret int?]
-  (if-let [author-id (author-id-by-nickname nickname)]
-    author-id
+  (if-let [user-id (user-by-nickname nickname)]
+    user-id
     (add-user nickname)))
 
-(>defn user-by-nickname
-  "Return the **meetly** user-id by nickname."
-  [nickname]
-  [string? :ret number?]
-  (ffirst
-    (d/q
-      '[:find ?user
-        :in $ ?nickname
-        :where [?user :user/core-author ?author]
-        [?author :author/nickname ?nickname]]
-      (d/db (new-connection)) nickname)))
+(>defn all-author-names
+  "Returns the names of all authors."
+  []
+  [:ret (s/coll-of :author/nickname)]
+  (map first
+       (d/q
+         '[:find ?names
+           :where [_ :author/nickname ?names]]
+         (d/db (new-connection)))))
 
 (>defn- vote-on-statement!
   "Up or Downvote a statement"
