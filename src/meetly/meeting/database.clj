@@ -107,6 +107,31 @@
                                (string/blank? (second %)))))
                    data)))
 
+
+;; -----------------------------------------------------------------------------
+;; Feedbacks
+
+(>defn add-feedback!
+  "Adds a meeting to the database. Returns the id of the newly added meeting."
+  [feedback]
+  [::models/feedback :ret int?]
+  (when (s/valid? ::models/feedback feedback)
+    (get-in
+      (transact [(assoc feedback :db/id "newly-added-feedback")])
+      [:tempids "newly-added-feedback"])))
+
+(defn all-feedbacks
+  "Return complete feedbacks from database."
+  []
+  (d/q
+    '[:find (pull ?feedback [*])
+      :where [?feedback :feedback/description]]
+    (d/db (new-connection))))
+
+
+;; -----------------------------------------------------------------------------
+;; Meetings
+
 (>defn add-meeting
   "Adds a meeting to the database. Returns the id of the newly added meeting.
   Automatically cleans input."
@@ -117,15 +142,6 @@
       (get-in
         (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
         [:tempids "newly-added-meeting"]))))
-
-(>defn add-feedback!
-  "Adds a meeting to the database. Returns the id of the newly added meeting."
-  [feedback]
-  [::models/feedback :ret int?]
-  (when (s/valid? ::models/feedback feedback)
-    (get-in
-      (transact [(assoc feedback :db/id "newly-added-feedback")])
-      [:tempids "newly-added-feedback"])))
 
 (defn all-meetings
   "Shows all meetings currently in the db."

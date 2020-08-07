@@ -166,6 +166,11 @@
     (save-bytes-to-png! decodedBytes "public/feedbacks/screenshots" feedback-id)
     (response {:text "Feedback successfully created."})))
 
+(defn- all-feedbacks
+  "Returns all feedbacks from the db."
+  [_req]
+  (response (->> (db/all-feedbacks)
+                 (map first))))
 
 ;; -----------------------------------------------------------------------------
 ;; General
@@ -183,6 +188,7 @@
   (POST "/votes/up/toggle" [] toggle-upvote-statement)
   (POST "/votes/down/toggle" [] toggle-downvote-statement)
   (POST "/feedback/add" [] add-feedback)
+  (GET "/feedbacks" [] all-feedbacks)
   (route/not-found "Error, page not found!"))
 
 (defonce current-server (atom nil))
