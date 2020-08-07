@@ -230,14 +230,6 @@
                    :author/nickname nickname}}])
       [:tempids "temp-user"])))
 
-(>defn add-user-if-not-exists
-  "Adds an author if they do not exist yet. Returns the (new) user-id."
-  [nickname]
-  [:author/nickname :ret int?]
-  (if-let [author-id (author-id-by-nickname nickname)]
-    author-id
-    (add-user nickname)))
-
 (>defn user-by-nickname
   "Return the **meetly** user-id by nickname. The nickname is not case sensitive."
   [nickname]
@@ -249,6 +241,14 @@
           :in $ ?author
           :where [?user :user/core-author ?author]]
         (d/db (new-connection)) dialog-author))))
+
+(>defn add-user-if-not-exists
+  "Adds an author if they do not exist yet. Returns the (new) user-id."
+  [nickname]
+  [:author/nickname :ret int?]
+  (if-let [user-id (user-by-nickname nickname)]
+    user-id
+    (add-user nickname)))
 
 (>defn- vote-on-statement!
   "Up or Downvote a statement"
