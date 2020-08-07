@@ -56,7 +56,7 @@
             (db/add-agenda-point (:title agenda-point) (:description agenda-point)
                                  meeting-id))
           (response {:text "Agendas sent over successfully"}))
-      (bad-request {:error "Your request was invalid."}))))
+      (bad-request {:error "Your request was invalid"}))))
 
 (defn- meeting-by-hash
   "Returns a meeting, identified by its share-hash."

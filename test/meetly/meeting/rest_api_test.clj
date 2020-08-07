@@ -1,15 +1,21 @@
 (ns meetly.meeting.rest-api-test
   (:require [clojure.test :refer [deftest testing is use-fixtures]]
             [meetly.test.toolbelt :as meetly-toolbelt]
-            [meetly.meeting.rest-api :as api]))
+            [meetly.meeting.rest-api :as api]
+            [meetly.meeting.database :as db]))
 
 (use-fixtures :each meetly-toolbelt/init-db-test-fixture)
 
 (deftest add-agendas-test
   (testing "Test whether the agenda is correctly validated before passed on."
     (let [add-agendas @#'api/add-agendas
-          valid-req {:body-params {:meeting-id 123
-                                   :meeting-hash "asjd8394h-23d"
+          add-meeting (db/add-meeting {:meeting/title "foo"
+                                       :meeting/share-hash "abbada"
+                                       :meeting/start-date (db/now)
+                                       :meeting/end-date (db/now)
+                                       :meeting/author (db/add-user-if-not-exists "Wegi")})
+          valid-req {:body-params {:meeting-id add-meeting
+                                   :meeting-hash "abbada"
                                    :agendas []}}
           valid-response (add-agendas valid-req)
           invalid-req {:body-params {:meeting-id nil
