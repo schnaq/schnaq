@@ -17,7 +17,7 @@
        (.tooltip (js/$ "#meeting-link-form")))
      :reagent-render
      (fn []
-       (let [meeting @(rf/subscribe [:selected-meeting])
+       (let [meeting @(rf/subscribe [:meeting/last-added])
              path (reitfe/href :routes/meetings.show {:share-hash (:meeting/share-hash meeting)})
              location (oget js/window :location)
              share-link (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)
@@ -51,7 +51,7 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:keys [meeting/share-hash]} @(rf/subscribe [:selected-meeting])]
+  (let [{:keys [meeting/share-hash]} @(rf/subscribe [:meeting/last-added])]
     [:div
      [base/nav-header]
      [base/header

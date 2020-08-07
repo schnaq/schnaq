@@ -1,5 +1,6 @@
 (ns meetly.meeting.models
-  (:require [clojure.spec.alpha :as s]))
+  (:require [clojure.spec.alpha :as s]
+            [clojure.string :as str]))
 
 (def datomic-schema
   [{:db/ident :meeting/title
@@ -61,12 +62,13 @@
     :db/doc "All downvotes the user gave."}])
 
 ;; Common
-(s/def ::entity-reference (s/or :transacted number? :temporary any?))
+(s/def ::entity-reference (s/or :transacted int? :temporary any?))
+(s/def ::non-blank-string (s/and string? (complement str/blank?)))
 
 ;; Meeting
-(s/def :meeting/title string?)
-(s/def :meeting/description string?)
-(s/def :meeting/share-hash string?)
+(s/def :meeting/title ::non-blank-string)
+(s/def :meeting/description ::non-blank-string)
+(s/def :meeting/share-hash ::non-blank-string)
 (s/def :meeting/start-date inst?)
 (s/def :meeting/end-date inst?)
 (s/def :meeting/author (s/or :reference ::entity-reference
@@ -77,11 +79,11 @@
                          :opt [:meeting/description]))
 
 ;; Agenda
-(s/def :agenda/title string?)
-(s/def :agenda/description string?)
+(s/def :agenda/title ::non-blank-string)
+(s/def :agenda/description ::non-blank-string)
 (s/def :agenda/meeting ::entity-reference)
 (s/def :agenda/discussion ::entity-reference)
 (s/def ::agenda (s/keys :req [:agenda/title :agenda/meeting :agenda/discussion]
                         :opt [:agenda/description]))
 
-(s/def :author/nickname string?)
+(s/def :author/nickname ::non-blank-string)

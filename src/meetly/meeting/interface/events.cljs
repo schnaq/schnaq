@@ -6,7 +6,7 @@
             [clojure.string :as clj-string]
             [meetly.meeting.interface.db :as meetly-db]
             [meetly.meeting.interface.views.modals.modal :as modal]
-            [meetly.meeting.interface.localstorage :as ls]
+            [meetly.meeting.interface.utils.localstorage :as ls]
             [meetly.meeting.interface.config :refer [config]]))
 
 ;; Starts the ball rolling on changing to another view

@@ -22,23 +22,23 @@
   [:div
    [:div.agenda-line]
    [:div.add-agenda-div.agenda-point
-    [:form {:id (str "agenda-" numbered-suffix)}
-     ;; title
-     [:input.form-control.agenda-form-title.form-title
-      {:type "text"
-       :name "title"
-       :auto-complete "off"
-       :placeholder (str (data/labels :agenda-point) numbered-suffix)
-       :id (str "title-" numbered-suffix)
-       :on-key-up
-       #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
-     ;; description
-     [:textarea.form-control.agenda-form-round
-      {:name "description"
-       :placeholder (str (data/labels :agenda-desc-for) numbered-suffix)
-       :id (str "description-" numbered-suffix)
-       :on-key-up #(new-agenda-local
-                     :description (oget % [:target :value]) numbered-suffix)}]]]])
+    ;; title
+    [:input.form-control.agenda-form-title.form-title
+     {:type "text"
+      :name "title"
+      :auto-complete "off"
+      :required true
+      :placeholder (str (data/labels :agenda-point) numbered-suffix)
+      :id (str "title-" numbered-suffix)
+      :on-key-up
+      #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
+    ;; description
+    [:textarea.form-control.agenda-form-round
+     {:name "description"
+      :placeholder (str (data/labels :agenda-desc-for) numbered-suffix)
+      :id (str "description-" numbered-suffix)
+      :on-key-up #(new-agenda-local
+                    :description (oget % [:target :value]) numbered-suffix)}]]])
 
 (defn- add-agenda-button []
   [:input.btn.agenda-add-button {:type "button"
@@ -46,9 +46,8 @@
                                  :on-click #(rf/dispatch [:increase-agenda-forms])}])
 
 (defn- submit-agenda-button []
-  [:input.btn.button-primary {:type "button"
-                              :value (data/labels :meeting-create-header)
-                              :on-click #(rf/dispatch [:send-agendas])}])
+  [:input.btn.button-primary {:type "submit"
+                              :value (data/labels :meeting-create-header)}])
 
 ;; #### header ####
 
@@ -70,15 +69,19 @@
      [:br]
      [:h4 (:meeting/description @(rf/subscribe [:meeting/last-added]))]]
     [:div.container.agenda-container
-     (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
-       [:div {:key agenda-num}
-        [new-agenda-form agenda-num]])]
-    [:div.agenda-line]
-    [add-agenda-button]
-    [:br]
-    [:br]
-    [:br]
-    [submit-agenda-button]]])
+     [:form {:id "agendas-add-form"
+             :on-submit (fn [e]
+                          (.preventDefault e)
+                          (rf/dispatch [:send-agendas]))}
+      (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
+        [:div {:key agenda-num}
+         [new-agenda-form agenda-num]])
+      [:div.agenda-line]
+      [add-agenda-button]
+      [:br]
+      [:br]
+      [:br]
+      [submit-agenda-button]]]]])
 
 (defn agenda-in-meeting-view
   "The view of an agenda which gets embedded inside a meeting view."
@@ -120,6 +123,7 @@
   :on-successful-agenda-add
   (fn [_ [_ meeting-hash]]
     {:dispatch-n [[:clear-current-agendas]
+                  [:reset-temporary-agendas]
                   [:navigate :routes.meeting.created {:share-hash meeting-hash}]]}))
 
 (rf/reg-event-fx
@@ -175,7 +179,7 @@
     (assoc-in db [:agenda :all suffix :description] content)))
 
 (rf/reg-event-db
-  :reset-temporary-agenda
+  :reset-temporary-agendas
   (fn [db _]
     (assoc db :agenda {:number-of-forms 1 :all {}})))
 

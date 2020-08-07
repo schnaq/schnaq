@@ -5,7 +5,8 @@
     [meetly.config :as config]
     [meetly.meeting.models :as models]
     [dialog.discussion.database :as dialog]
-    [clojure.spec.alpha :as s])
+    [clojure.spec.alpha :as s]
+    [clojure.string :as str])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -97,17 +98,21 @@
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
-(>defn- clean-nil-vals
-  "Removes all entries from a map that have a value of nil."
+(>defn- clean-db-vals
+  "Removes all entries from a map that have a value of nil or empty string."
   [data]
   [associative? :ret associative?]
-  (into {} (filter #(not (nil? (second %))) data)))
+  (into {} (filter #(not (or (nil? (second %))
+                             (when (= String (type (second %)))
+                               (str/blank? (second %)))))
+                   data)))
 
 (>defn add-meeting
-  "Adds a meeting to the database. Returns the id of the newly added meeting."
+  "Adds a meeting to the database. Returns the id of the newly added meeting.
+  Automatically cleans input."
   [meeting]
-  [::models/meeting :ret int?]
-  (let [clean-meeting (clean-nil-vals meeting)]
+  [associative? :ret int?]
+  (let [clean-meeting (clean-db-vals meeting)]
     (when (s/valid? ::models/meeting clean-meeting)
       (get-in
         (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
@@ -137,7 +142,7 @@
   A discussion is automatically created for the agenda-point.
   Returns the discussion-id of the newly created discussion."
   [title description meeting-id]
-  [:agenda/title (? :agenda/description) int? :ret int?]
+  [:agenda/title (? string?) int? :ret int?]
   (when (and (s/valid? :agenda/title title)
              (s/valid? int? meeting-id))
     (let [raw-agenda {:agenda/title title
@@ -216,7 +221,7 @@
 (>defn add-user
   "Add a new user / author to the database."
   [nickname]
-  [:author/nickname :ret int?]
+  [string? :ret int?]
   (when (s/valid? :author/nickname nickname)
     (get-in
       (transact [{:db/id "temp-user"

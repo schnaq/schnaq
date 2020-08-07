@@ -57,6 +57,7 @@
                {:type "text"
                 :name "name-input"
                 :autoFocus true
+                :required true
                 :placeholder username}]]
    [:input.btn.btn-primary {:type "submit"
                             :value "Set Name"}]])
