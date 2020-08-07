@@ -5,7 +5,8 @@
     [meetly.config :as config]
     [meetly.meeting.models :as models]
     [dialog.discussion.database :as dialog]
-    [clojure.spec.alpha :as s])
+    [clojure.spec.alpha :as s]
+    [clojure.string :as str])
   (:import (java.util Date)))
 
 (defonce ^:private datomic-client
@@ -97,17 +98,19 @@
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
-(>defn- clean-nil-vals
+(>defn- clean-db-vals
   "Removes all entries from a map that have a value of nil."
   [data]
   [associative? :ret associative?]
-  (into {} (filter #(not (nil? (second %))) data)))
+  (into {} (filter #(not (or (nil? (second %))
+                             (str/blank? (second %))))
+                   data)))
 
 (>defn add-meeting
   "Adds a meeting to the database. Returns the id of the newly added meeting."
   [meeting]
   [::models/meeting :ret int?]
-  (let [clean-meeting (clean-nil-vals meeting)]
+  (let [clean-meeting (clean-db-vals meeting)]
     (when (s/valid? ::models/meeting clean-meeting)
       (get-in
         (transact [(assoc clean-meeting :db/id "newly-added-meeting")])

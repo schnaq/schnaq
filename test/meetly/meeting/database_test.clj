@@ -55,9 +55,10 @@
   (testing "Test whether nil values are properly cleaned from a map."
     (let [no-change-map {:foo :bar
                          :baz :bam}]
-      (is (= no-change-map (@#'database/clean-nil-vals no-change-map)))
-      (is (= 2 (count (@#'database/clean-nil-vals (merge no-change-map {:unwished-for nil})))))
-      (is (= {} (@#'database/clean-nil-vals {}))))))
+      (is (= no-change-map (@#'database/clean-db-vals no-change-map)))
+      (is (= 2 (count (@#'database/clean-db-vals (merge no-change-map {:unwished-for nil})))))
+      (is (= {} (@#'database/clean-db-vals {})))
+      (is (= {} (@#'database/clean-db-vals {:foo ""}))))))
 
 (deftest add-meeting-test
   (testing "Test whether meetings are properly added"
