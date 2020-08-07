@@ -233,14 +233,15 @@
 (>defn user-by-nickname
   "Return the **meetly** user-id by nickname. The nickname is not case sensitive."
   [nickname]
-  [string? :ret number?]
+  [string? :ret (? number?)]
   (let [dialog-author (author-id-by-nickname nickname)]
-    (ffirst
-      (d/q
-        '[:find ?user
-          :in $ ?author
-          :where [?user :user/core-author ?author]]
-        (d/db (new-connection)) dialog-author))))
+    (when-not (nil? dialog-author)
+      (ffirst
+        (d/q
+          '[:find ?user
+            :in $ ?author
+            :where [?user :user/core-author ?author]]
+          (d/db (new-connection)) dialog-author)))))
 
 (>defn canonical-username
   "Return the canonical username (regarding case) that is saved."
