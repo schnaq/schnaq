@@ -8,6 +8,7 @@
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [meetly.meeting.interface.views.discussion.discussion :as discussion-views]
+            [meetly.meeting.interface.views.feedback :as feedback]
             [reitit.coercion.spec]
             [re-frame.core :as rf]))
 
@@ -75,6 +76,11 @@
          :controllers [{:parameters {:path [:id :share-hash]}
                         :start (fn [{:keys [path]}]
                                  (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]]]]]
+   ["feedbacks"
+    {:name :routes/feedbacks
+     :view feedback/overview
+     :link-text (labels :router/all-feedbacks)
+     :controllers [{:start (fn [] (rf/dispatch [:feedbacks/fetch]))}]}]
    ["startpage"
     {:name :routes/startpage
      :view startpage-views/startpage-view
