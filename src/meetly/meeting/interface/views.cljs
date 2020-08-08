@@ -2,6 +2,7 @@
   (:require [reagent.dom]
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.views.modals.modal :as modal]
+            [meetly.meeting.interface.views.feedback :as feedback]
             [re-frame.core :as rf]))
 
 (defn- base-page
@@ -25,4 +26,5 @@
 (defn root []
   [:div#root
    [base-page]
-   [footer]])
+   [footer]
+   [feedback/button]])
