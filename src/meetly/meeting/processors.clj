@@ -14,3 +14,11 @@
                 :meta/downvotes (db/downvotes-for-statement (:db/id %)))
        %)
     data))
+
+(>defn with-canonical-usernames
+  "Enriches a step-vector with canonical :user/nickname."
+  [[step args]]
+  [vector? :ret vector?]
+  (let [username (:user/nickname args)
+        new-args (assoc args :user/nickname (db/canonical-username username))]
+    [step new-args]))

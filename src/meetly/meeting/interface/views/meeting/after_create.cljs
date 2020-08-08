@@ -1,6 +1,6 @@
 (ns meetly.meeting.interface.views.meeting.after-create
   (:require [re-frame.core :as rf]
-            [meetly.meeting.interface.text.display-data :refer [labels fa]]
+            [meetly.meeting.interface.text.display-data :refer [labels img-path fa]]
             [meetly.meeting.interface.utils.clipboard :as clipboard]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
@@ -28,7 +28,7 @@
                         (clipboard/copy-to-clipboard! share-link)
                         (rf/dispatch [:meeting/link-copied]))
             :data-toggle "tooltip"
-            :data-placement "left"
+            :data-placement "right"
             :title (labels :meeting/copy-link-tooltip)}
            [:input#meeting-link.form-control.form-round.form.title.col-11 {:type "text"
                                                                            :value share-link
@@ -47,6 +47,26 @@
               {:style {:visibility "hidden"}}
               [:p "Platzhalter"]])]]))}))
 
+
+(defn img-text
+  "Create one icon in a grid"
+  [path-to-img heading]
+
+  [:div.d-flex.flex-row.p-1
+   [:div [:img {:src path-to-img}]]
+   [:span [:h5 heading]]])
+
+(defn- educate-element []
+  [:div.row.mb-3
+   [:div.col-11
+    [:div.row
+     [:div.col-lg-6.share-link-icons
+      (img-text (img-path :elephant-share)
+                (labels :meeting/educate-on-link-text))]
+     [:div.col-lg-6.share-link-icons
+      (img-text (img-path :elephant-talk)
+                (labels :meetings/educate-on-link-text-subtitle))]]]])
+
 (defn after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
@@ -59,10 +79,13 @@
       (labels :meeting/created-success-subheading)]
      [:div.container.px-5.py-3.text-center
       ;; list agendas
-      [:h4.mb-4 (labels :meeting/educate-on-link-text)]
+      [educate-element]
       [copy-link-form]
+      ;; stop image and hint to copy the link
+      [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-meetly-after-creation)]
-      [:button.btn.btn-primary.btn-lg.center-block
+      ;; go to meeting button
+      [:button.btn.button-primary.btn-lg.center-block
        {:role "button"
         :on-click #(rf/dispatch [:navigate :routes/meetings.show {:share-hash share-hash}])}
        (labels :meetings/continue-to-meetly-button)]]]))
