@@ -14,5 +14,6 @@
 
 (comment
   (-main)
+  (db/delete-database-from-config!)
   (dialog/load-testdata!)
   :end)

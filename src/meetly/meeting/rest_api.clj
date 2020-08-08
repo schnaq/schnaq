@@ -158,9 +158,9 @@
 (defn- add-feedback
   "Add new feedback from meetly's frontend."
   [{:keys [body-params]}]
-  (let [description (:description body-params)
-        feedback-id (db/add-feedback! {:feedback/description description})
+  (let [feedback (:feedback body-params)
         screenshot (:screenshot body-params)
+        feedback-id (db/add-feedback! feedback)
         [_header image] (string/split screenshot #",")
         decodedBytes (.decode (Base64/getDecoder) image)]
     (save-bytes-to-png! decodedBytes "public/feedbacks/screenshots" feedback-id)
