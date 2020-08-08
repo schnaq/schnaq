@@ -85,6 +85,26 @@
      :meetings/header "Meetings"
      :meetings/subheader "Ihre aktuellen Meetings"
 
+     ;; Feedbacks
+     :feedbacks.overview/header "Rückmeldungen"
+     :feedbacks.overview/subheader "Alle abgegebenen Rückmeldungen"
+     :feedbacks.overview/description "Beschreibung"
+     :feedbacks.overview/contact-name "Von"
+     :feedbacks.overview/contact-mail "E-Mail"
+     :feedbacks/button "Feedback"
+     :feedbacks/screenshot "Screenshot"
+     :feedbacks.modal/primer "Feedback ist wichtig! Wir freuen uns sehr über
+     jede Art von Feedback, je ehrlicher desto besser 🥳 Hinterlassen Sie uns
+     gerne einen kleinen Kommentar und hilf uns diese Software weiter zu
+     verbessern. Dankeschön!"
+     :feedbacks.modal/contact-name "Ihr Name"
+     :feedbacks.modal/contact-mail "E-Mail Adresse"
+     :feedbacks.modal/description "Ihre Rückmeldung"
+     :feedbacks.modal/optional "Optional"
+     :feedbacks.modal/screenshot "Foto der Anwendung mit abschicken?"
+     :feedbacks.modal/disclaimer "Ihre Daten werden nur auf unseren Servern
+     abgespeichert und keinen Dritten zugänglich gemacht."
+
      ;; login
      :login/as "Hallo, "
      :login/set-name "Geben Sie ihren Namen ein"
@@ -94,6 +114,7 @@
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
+     :router/all-feedback "Alle Feedbacks"
      :router/create-meeting "Meeting anlegen"
      :router/meeting-created "Zuletzt angelegtes Meeting"
      :router/show-single-meeting "Meeting anzeigen"
