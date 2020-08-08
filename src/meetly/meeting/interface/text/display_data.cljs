@@ -95,8 +95,8 @@
      :feedbacks/screenshot "Screenshot"
      :feedbacks.modal/primer "Feedback ist wichtig! Wir freuen uns sehr über
      jede Art von Feedback, je ehrlicher desto besser 🥳 Hinterlassen Sie uns
-     gerne einen kleinen Kommentar und hilf uns diese Software weiter zu
-     verbessern. Dankeschön!"
+     gerne einen kleinen Kommentar und helfen Sie uns damit diese Software
+     weiter zu verbessern. Dankeschön!"
      :feedbacks.modal/contact-name "Ihr Name"
      :feedbacks.modal/contact-mail "E-Mail Adresse"
      :feedbacks.modal/description "Ihre Rückmeldung"
