@@ -4,8 +4,6 @@
             [dialog.discussion.database :as ddb]
             [meetly.meeting.database :as database]))
 
-
-
 (use-fixtures :each meetly-toolbelt/init-db-test-fixture)
 
 (deftest up-and-downvotes-test
@@ -89,6 +87,35 @@
   (testing "Check for correct user-addition"
     (is (number? (database/add-user "Gib ihm!")))
     (is (nil? (database/add-user :nono-string)))))
+
+(deftest add-feedback-test
+  (testing "Valid feedbacks should be stored."
+    (let [feedback {:feedback/description "Very good stuff 👍 Would use again"
+                    :feedback/contact-mail "christian@dialogo.io"
+                    :feedback/has-image? false}]
+      (is (zero? (count (database/all-feedbacks))))
+      (is (number? (database/add-feedback! feedback)))
+      (is (= 1 (count (database/all-feedbacks)))))))
+
+(deftest add-user-if-not-exists-test
+  (testing "Test the function to add a new user if they do not exist."
+    (let [new-user (database/add-user-if-not-exists "For Sure a new User that does Not exist")]
+      (is (int? new-user))
+      (is (= new-user (database/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
+
+(deftest user-by-nickname-test
+  (testing "Tests whether the user is correctly found, disregarding case."
+    (let [wegi (database/user-by-nickname "Wegi")]
+      (is (int? wegi))
+      (is (= wegi (database/user-by-nickname "WeGi")
+             (database/user-by-nickname "wegi")
+             (database/user-by-nickname "wegI"))))))
+
+(deftest canonical-username-test
+  (testing "Test whether the canonical username is returned."
+    (is (= "Wegi" (database/canonical-username "WEGI")
+           (database/canonical-username "WeGi")))
+    (is (= "Der Schredder" (database/canonical-username "DER schredder")))))
 
 (deftest add-user-if-not-exists-test
   (testing "Test the function to add a new user if they do not exist."
