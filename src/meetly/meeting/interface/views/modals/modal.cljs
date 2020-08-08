@@ -15,7 +15,7 @@
                                             :child nil}])
                       (.preventDefault event)
                       (.stopPropagation event))}]
-   [:div {:class "modal-child modal-dialog"}
+   [:div {:class "modal-child modal-dialog modal-dialog-scrollable"}
     child]])
 
 (defn modal []
@@ -25,7 +25,7 @@
        (when (:show? @modal)
          [modal-panel @modal])])))
 
-(defn- close-modal []
+(defn close-modal []
   (rf/dispatch [:modal {:show? false :child nil}]))
 
 (>defn modal-template
