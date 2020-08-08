@@ -6,16 +6,12 @@
             [goog.dom :as gdom]
             [goog.string :as gstring]
             [meetly.meeting.interface.config :refer [config]]
-            [meetly.meeting.interface.text.display-data :refer [labels fa]]
+            [meetly.meeting.interface.text.display-data :refer [labels]]
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.views.modals.modal :as modal]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]))
-
-
-(def ^:private endpoint
-  (gstring/format "%s/feedback/add" (:rest-backend config)))
 
 (def ^:private screenshot (atom ""))
 
