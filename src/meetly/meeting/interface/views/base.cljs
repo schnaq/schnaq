@@ -3,7 +3,6 @@
             [reitit.frontend.easy :as reitfe]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.config :refer [config]]
-            [meetly.meeting.interface.views.feedback :as feedback]
             [re-frame.core :as rf]))
 
 (defn- wavy-bottom []
@@ -150,7 +149,6 @@
   "footer to display at the bottom the page"
   []
   [:footer.footer.bg-light
-   [feedback/view]
    [:div.container
     [:div.row
      [:div {:class "col-lg-6 h-100 text-center text-lg-left my-auto"}
