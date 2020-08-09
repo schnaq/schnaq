@@ -9,6 +9,7 @@
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.views.modals.modal :as modal]
+            [meetly.meeting.interface.utils.toolbelt :as toolbelt]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]))
@@ -74,15 +75,17 @@
        [:div.form-check
         [:input.form-check-input
          {:id "feedback-include-screenshot"
-          :on-click #(reset!
-                       checked?
-                       (oget (gdom/getElement "feedback-include-screenshot")
-                             [:checked]))
+          :on-click (fn []
+                      (toolbelt/add-or-remove-class "feedback-screenshot" @checked? "d-none")
+                      (reset!
+                        checked?
+                        (oget (gdom/getElement "feedback-include-screenshot")
+                              [:checked])))
           :type "checkbox"
           :name "screenshot?"}]
         [:label.form-check-label {:for "feedback-include-screenshot"}
          (labels :feedbacks.modal/screenshot)]
-        [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2]]
+        [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2.d-none]]
        [:div.modal-footer
         [:input.btn.btn-primary {:type "submit"}]
         [:small (labels :feedbacks.modal/disclaimer)]]])))
