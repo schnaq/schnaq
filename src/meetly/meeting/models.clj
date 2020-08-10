@@ -59,7 +59,24 @@
    {:db/ident :user/downvotes
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc "All downvotes the user gave."}])
+    :db/doc "All downvotes the user gave."}
+   ;; Feedback
+   {:db/ident :feedback/contact-name
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Name of the person who gave feedback"}
+   {:db/ident :feedback/contact-mail
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "How to contact the person who gave feedback"}
+   {:db/ident :feedback/description
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The feedback description."}
+   {:db/ident :feedback/has-image?
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "Indicate wether a user provided an image."}])
 
 ;; Common
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))
@@ -87,3 +104,11 @@
                         :opt [:agenda/description]))
 
 (s/def :author/nickname ::non-blank-string)
+
+;; Feedback
+(s/def :feedback/contact-name string?)
+(s/def :feedback/contact-mail string?)
+(s/def :feedback/description ::non-blank-string)
+(s/def :feedback/has-image? boolean?)
+(s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
+                          :opt [:feedback/contact-name :feedback/contact-mail]))

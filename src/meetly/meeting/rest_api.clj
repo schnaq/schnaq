@@ -1,17 +1,21 @@
 (ns meetly.meeting.rest-api
-  (:require [compojure.core :refer [defroutes GET POST]]
+  (:require [clojure.string :as string]
+            [clojure.java.io :as io]
+            [compojure.core :refer [defroutes GET POST]]
             [compojure.route :as route]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.util.response :refer [response not-found bad-request]]
+            [ring.util.response :refer [response not-found bad-request status]]
             [meetly.config :as config]
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
             [meetly.core :as meetly-core]
-            [clojure.spec.alpha :as s])
+            [clojure.spec.alpha :as s]
+            [meetly.toolbelt :as toolbelt])
+  (:import (java.util Base64))
   (:gen-class))
 
 (defn- fetch-meetings
@@ -108,6 +112,10 @@
                   (dialog/continue-discussion reaction args)))
       (bad-request {:error "The link you followed was invalid"}))))
 
+
+;; -----------------------------------------------------------------------------
+;; Votes
+
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
   [{:keys [meeting-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
@@ -138,6 +146,39 @@
     body-params db/downvote-statement! db/remove-downvote!
     db/did-user-downvote-statement db/did-user-upvote-statement))
 
+;; -----------------------------------------------------------------------------
+;; Feedback
+
+(defn- save-bytes-to-png!
+  "Stores a base64 encoded file to disk."
+  [#^bytes decodedBytes directory file-name]
+  (let [path (toolbelt/create-directory! directory)
+        location (format "%s/%s.png" path file-name)]
+    (with-open [w (io/output-stream location)]
+      (.write w decodedBytes))))
+
+(defn- add-feedback
+  "Add new feedback from meetly's frontend."
+  [{:keys [body-params]}]
+  (let [feedback (:feedback body-params)
+        screenshot (:screenshot body-params)
+        feedback-id (db/add-feedback! feedback)
+        [_header image] (string/split screenshot #",")
+        decodedBytes (.decode (Base64/getDecoder) image)]
+    (save-bytes-to-png! decodedBytes "public/feedbacks/screenshots" feedback-id)
+    (response {:text "Feedback successfully created."})))
+
+(defn- all-feedbacks
+  "Returns all feedbacks from the db."
+  [{:keys [body-params]}]
+  (if (= "Schnapspralinen" (:password body-params))
+    (response (->> (db/all-feedbacks)
+                   (map first)))
+    (status 401)))
+
+;; -----------------------------------------------------------------------------
+;; General
+
 (defroutes app-routes
   (GET "/meetings" [] all-meetings)
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
@@ -150,8 +191,9 @@
   (POST "/continue-discussion" [] continue-discussion)
   (POST "/votes/up/toggle" [] toggle-upvote-statement)
   (POST "/votes/down/toggle" [] toggle-downvote-statement)
+  (POST "/feedback/add" [] add-feedback)
+  (POST "/feedbacks" [] all-feedbacks)
   (route/not-found "Error, page not found!"))
-
 
 (defonce current-server (atom nil))
 
