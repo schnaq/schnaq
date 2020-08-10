@@ -1,5 +1,7 @@
 FROM clojure:openjdk-14-tools-deps-alpine AS shadow-build
 
+ARG REST_API_URL
+
 WORKDIR /code
 
 RUN apk add yarn
