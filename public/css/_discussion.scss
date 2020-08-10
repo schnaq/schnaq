@@ -7,9 +7,14 @@
 
 .statement {
   border-radius: 2rem 0.5rem 0.5rem 2rem;
-  padding: 2rem;
+  padding: 1rem;
   color: $white;
-  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  min-height: 9rem;
+}
+
+.statement-content {
+  padding: 2rem 1rem 1rem 1rem;
 }
 
 .statement-agree {
