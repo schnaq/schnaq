@@ -6,6 +6,7 @@
 @import "global";
 
 // Components
+@import "after-create";
 @import "agenda";
 @import "animations";
 @import "button";
@@ -23,5 +24,6 @@
 @import "radio-button";
 @import "text-input";
 @import "up-down-vote";
-@import "carousel";
-@import "after-create";
+
+// 3rd Party
+@import "../klaro/src/scss/klaro";

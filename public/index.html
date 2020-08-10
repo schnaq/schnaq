@@ -2,12 +2,12 @@
 <html lang="en-us">
 
 <head>
-    <title>Meetly</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="css/main.min.css">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+  <title>Meetly</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="css/main.min.css">
+  <link rel="stylesheet" href="fontawesome/css/all.min.css">
 </head>
 
 <body>
@@ -15,6 +15,30 @@
 
 <script src="jquery/jquery.min.js" defer></script>
 <script src="bootstrap/js/bootstrap.bundle.min.js" defer></script>
+
+<!--<link rel="stylesheet" href="klaro/dist/klaro.min.css">-->
+<script src="klaro/config.js" defer></script>
+<script src="klaro/klaro-no-css.js" defer></script>
+<script>
+    var _paq = window._paq || [];
+    /* tracker methods like 'setCustomDimension' should be called before 'trackPageView' */
+    _paq.push(['setCookieDomain', '*.meetly.dialogo.io']);
+    _paq.push(['setDoNotTrack', true]);
+    // _paq.push(['requireConsent']);  // Require user to opt in - currently resolved via Klaro!
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function () {
+        var u = '//analytics.dialogo.io/';
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '2']);
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.type = 'text/javascript';
+        g.async = true;
+        g.defer = true;
+        g.src = u + 'matomo.js';
+        s.parentNode.insertBefore(g, s);
+    })();
+</script>
 
 <script src="js/compiled/base.js"></script>
 </body>
