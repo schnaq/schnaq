@@ -114,7 +114,7 @@
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
-     :router/all-feedback "Alle Feedbacks"
+     :router/all-feedbacks "Alle Feedbacks"
      :router/create-meeting "Meeting anlegen"
      :router/meeting-created "Zuletzt angelegtes Meeting"
      :router/show-single-meeting "Meeting anzeigen"

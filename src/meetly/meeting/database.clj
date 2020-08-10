@@ -112,7 +112,7 @@
 ;; Feedbacks
 
 (>defn add-feedback!
-  "Adds a meeting to the database. Returns the id of the newly added meeting."
+  "Adds a meeting to the database. Returns the id of the newly added feedback."
   [feedback]
   [::models/feedback :ret int?]
   (when (s/valid? ::models/feedback feedback)
