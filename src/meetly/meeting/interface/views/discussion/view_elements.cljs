@@ -135,8 +135,13 @@
       [:div
        (when (= :argument.type/undercut (:meta/argument.type statement))
          [:p.small (labels :discussion/undercut-bubble-intro)])
-       [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]
-       [:p content]]]]
+       ;; information
+       [:div
+        ;; avatar
+        [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
+       ;; content
+       [:div.statement-content
+        [:p content]]]]]
     [:div.col-1.up-down-vote
      (up-down-vote statement)]]))
 
