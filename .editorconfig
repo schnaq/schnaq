@@ -1,0 +1,11 @@
+root = true
+
+[*]
+end_of_line = lf
+
+[*.clj]
+indent_style = space
+
+[*.{yml,scss,sass,html,js}]
+indent_style = space
+indent_size = 2
