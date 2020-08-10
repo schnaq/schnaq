@@ -77,8 +77,9 @@
       {:db (-> db
                (assoc :meeting/added new-meeting)
                (update :meetings conj new-meeting))
-       :dispatch [:navigate :routes/meetings.agenda
-                  {:share-hash (:meeting/share-hash meeting)}]})))
+       :dispatch-n [[:navigate :routes/meetings.agenda
+                     {:share-hash (:meeting/share-hash meeting)}]
+                    [:select-current-meeting new-meeting]]})))
 
 (rf/reg-event-db
   :select-current-meeting
