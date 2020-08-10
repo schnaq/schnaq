@@ -13,8 +13,10 @@
 (def db-name (or (System/getenv "DATOMIC_DISCUSSION_DB_NAME") "dev-db"))
 
 (def rest-api
-  {:port (Integer/parseInt (or (System/getenv "API_PORT") "3000"))
-   :allowed-origins (or (System/getenv "ALLOWED_ORIGINS") ".*")})
+  {:port (Integer/parseInt (or (System/getenv "API_PORT") "3000"))})
 
 (def feedbacks
   {:password (or (System/getenv "FEEDBACKS_PASSWORD") "Schnapspralinen")})
+
+(def env-mode
+  (or (System/getenv "ENVIRONMENT") "development"))

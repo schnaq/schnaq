@@ -14,7 +14,8 @@
             [dialog.engine.core :as dialog]
             [meetly.core :as meetly-core]
             [clojure.spec.alpha :as s]
-            [meetly.toolbelt :as toolbelt])
+            [meetly.toolbelt :as toolbelt]
+            [taoensso.timbre :as log])
   (:import (java.util Base64))
   (:gen-class))
 
@@ -208,18 +209,21 @@
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
-  (let [port (:port config/rest-api)]
+  (let [port (:port config/rest-api)
+        allowed-origins [#".*\.dialogo\.io"]
+        allowed-origins' (if (not= "production") (conj allowed-origins #".*") allowed-origins)]
     ; Run the server with Ring.defaults middleware
     (meetly-core/-main)
     (reset! current-server
             (server/run-server
               (-> #'app-routes
-                  (wrap-cors :access-control-allow-origin [(re-pattern (:allowed-origins config/rest-api))]
+                  (wrap-cors :access-control-allow-origin allowed-origins'
                              :access-control-allow-methods [:get :put :post :delete])
                   (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
                   (wrap-defaults api-defaults))
               {:port port}))
-    (println (format "Running web-server at http://127.0.0.1:%s/" port))))
+    (log/info (format "Running web-server at http://127.0.0.1:%s/" port))
+    (log/info (format "Allowed Origin: %s" allowed-origins'))))
 
 (comment
   "Start the server from here"
