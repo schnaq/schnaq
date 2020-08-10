@@ -123,7 +123,8 @@
      :router/add-agendas "Agendas hinzufügen"
      :router/start-discussion "Starte Besprechung"
      :router/continue-discussion "Führe Besprechung fort"
-     :router/startpage "Startseite"}))
+     :router/startpage "Startseite"
+     :router/analytics "Analyse-Dashboard"}))
 
 
 (defn img-path
