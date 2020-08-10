@@ -7,7 +7,7 @@
     [dialog.discussion.database :as dialog]
     [clojure.spec.alpha :as s]
     [clojure.string :as string])
-  (:import (java.util Date)))
+  (:import (java.util Date UUID)))
 
 (defonce ^:private datomic-client
   (d/client config/datomic))
@@ -107,6 +107,20 @@
                                (string/blank? (second %)))))
                    data)))
 
+(>defn- clean-and-add-to-db!
+  "Removes empty strings and nil values from map before transacting it to the
+  database. Checks if the specification still matches. If true, transact the
+  entity."
+  [entity spec]
+  [associative? keyword? :ret int?]
+  (let [clean-entity (clean-db-vals entity)
+        identifier (format "new-entity-%s"
+                           (.toString (UUID/randomUUID)))]
+    (when (s/valid? spec clean-entity)
+      (get-in
+        (transact [(assoc clean-entity :db/id identifier)])
+        [:tempids identifier]))))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks
@@ -115,10 +129,7 @@
   "Adds a feedback to the database. Returns the id of the newly added feedback."
   [feedback]
   [::models/feedback :ret int?]
-  (when (s/valid? ::models/feedback feedback)
-    (get-in
-      (transact [(assoc feedback :db/id "newly-added-feedback")])
-      [:tempids "newly-added-feedback"])))
+  (clean-and-add-to-db! feedback ::models/feedback))
 
 (defn all-feedbacks
   "Return complete feedbacks from database."
@@ -136,12 +147,8 @@
   "Adds a meeting to the database. Returns the id of the newly added meeting.
   Automatically cleans input."
   [meeting]
-  [associative? :ret int?]
-  (let [clean-meeting (clean-db-vals meeting)]
-    (when (s/valid? ::models/meeting clean-meeting)
-      (get-in
-        (transact [(assoc clean-meeting :db/id "newly-added-meeting")])
-        [:tempids "newly-added-meeting"]))))
+  [::models/meeting :ret int?]
+  (clean-and-add-to-db! meeting ::models/meeting))
 
 (defn all-meetings
   "Shows all meetings currently in the db."
