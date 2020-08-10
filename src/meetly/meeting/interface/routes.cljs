@@ -79,8 +79,7 @@
    ["feedbacks"
     {:name :routes/feedbacks
      :view feedback/overview
-     :link-text (labels :router/all-feedbacks)
-     :controllers [{:start (fn [] (rf/dispatch [:feedbacks/fetch]))}]}]
+     :link-text (labels :router/all-feedbacks)}]
    ["startpage"
     {:name :routes/startpage
      :view startpage-views/startpage-view

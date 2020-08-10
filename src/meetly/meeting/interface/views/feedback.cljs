@@ -138,12 +138,16 @@
 (defn overview
   "Shows the page for an overview of all feedbacks."
   []
-  [:div
-   [base/nav-header]
-   [base/header
-    (labels :feedbacks.overview/header)
-    (labels :feedbacks.overview/subheader)]
-   [:div.container.py-4 [list-feedbacks]]])
+  (let [feedbacks @(rf/subscribe [:feedbacks])]
+    (if (empty? feedbacks)
+      (let [password (js/prompt "Enter password to see all Feedbacks")]
+        (rf/dispatch [:feedbacks/fetch password]))
+      [:div
+       [base/nav-header]
+       [base/header
+        (labels :feedbacks.overview/header)
+        (labels :feedbacks.overview/subheader)]
+       [:div.container.py-4 [list-feedbacks]]])))
 
 
 ;; -----------------------------------------------------------------------------
@@ -158,9 +162,10 @@
 
 (rf/reg-event-fx
   :feedbacks/fetch
-  (fn [_ [_ _]]
-    {:http-xhrio {:method :get
+  (fn [_ [_ password]]
+    {:http-xhrio {:method :post
                   :uri (gstring/format "%s/feedbacks" (:rest-backend config))
+                  :params {:password password}
                   :format (ajax/transit-request-format)
                   :response-format (ajax/transit-response-format)
                   :on-success [:feedbacks/store]
