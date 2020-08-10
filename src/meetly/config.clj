@@ -15,3 +15,6 @@
 (def rest-api
   {:port (Integer/parseInt (or (System/getenv "API_PORT") "3000"))
    :url (or (System/getenv "REST_API_URL") ".*")})
+
+(def feedbacks
+  {:password (or (System/getenv "FEEDBACKS_PASSWORD") "Schnapspralinen")})

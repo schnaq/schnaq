@@ -171,10 +171,11 @@
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
   [{:keys [body-params]}]
-  (if (= "Schnapspralinen" (:password body-params))
+  (if (= (:password config/feedbacks) (:password body-params))
     (response (->> (db/all-feedbacks)
                    (map first)))
     (status 401)))
+
 
 ;; -----------------------------------------------------------------------------
 ;; General
