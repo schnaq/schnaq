@@ -2,7 +2,7 @@ stages:
   - build
   - test
   - report
-  - build-production-images
+  - build-docker-images
   - deploy
 
 cache:
@@ -68,7 +68,7 @@ coverage-report:
 
 
 # ------------------------------------------------------------------------------
-# Stage "build-production-images"
+# Stage "build-docker-images"
 
 build-frontend-image:
   image: docker
@@ -76,10 +76,10 @@ build-frontend-image:
     - ht
   services:
     - docker:stable-dind
-  stage: build-production-images
+  stage: build-docker-images
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -f Dockerfile.frontend -t $CI_REGISTRY_IMAGE/frontend .
+    - docker build -f Dockerfile.frontend --build-arg REST_API_URL=https://api.meetly.dialogo.io -t $CI_REGISTRY_IMAGE/frontend .
     - docker push $CI_REGISTRY_IMAGE/frontend
   only:
     - deploy
@@ -90,7 +90,7 @@ build-backend-image:
     - ht
   services:
     - docker:stable-dind
-  stage: build-production-images
+  stage: build-docker-images
   before_script:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
@@ -99,3 +99,33 @@ build-backend-image:
     - docker push $CI_REGISTRY_IMAGE/backend
   only:
     - deploy
+
+build-frontend-staging-image:
+  image: docker
+  tags:
+    - ht
+  services:
+    - docker:stable-dind
+  stage: build-docker-images
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -f Dockerfile.frontend --build-arg REST_API_URL=https://api.meetly.staging.dialogo.io -t $CI_REGISTRY_IMAGE/frontend:staging .
+    - docker push $CI_REGISTRY_IMAGE/frontend:staging
+  only:
+    - develop
+
+build-backend-staging-image:
+  image: docker
+  tags:
+    - ht
+  services:
+    - docker:stable-dind
+  stage: build-docker-images
+  before_script:
+    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build -f Dockerfile.backend -t $CI_REGISTRY_IMAGE/backend:staging .
+    - docker push $CI_REGISTRY_IMAGE/backend:staging
+  only:
+    - develop
