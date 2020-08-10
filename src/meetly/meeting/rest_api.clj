@@ -211,7 +211,7 @@
   [& _args]
   (let [port (:port config/rest-api)
         allowed-origins [#".*\.dialogo\.io"]
-        allowed-origins' (if (not= "production") (conj allowed-origins #".*") allowed-origins)]
+        allowed-origins' (if (not= "production" config/env-mode) (conj allowed-origins #".*") allowed-origins)]
     ; Run the server with Ring.defaults middleware
     (meetly-core/-main)
     (reset! current-server
