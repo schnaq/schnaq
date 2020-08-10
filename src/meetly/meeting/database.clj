@@ -405,3 +405,22 @@
         [?agenda :agenda/meeting ?meeting]
         [?meeting :meeting/share-hash ?hash]]
       (d/db (new-connection)) statement-id meeting-hash)))
+
+;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
+
+(>defn number-of-meetings
+  "Returns the number of meetings. Optionally takes a date since when this counts."
+  ([]
+   [:ret int?]
+   (number-of-meetings #inst "1971-01-01T01:01:01.000-00:00"))
+  ([since]
+   [inst? :ret int?]
+   (or
+     (ffirst
+       (d/q
+         '[:find (count ?meetings)
+           :in $ ?since
+           :where [?meetings :meeting/start-date ?start-date]
+           [(< ?since ?start-date)]]
+         (d/db (new-connection)) since))
+     0)))

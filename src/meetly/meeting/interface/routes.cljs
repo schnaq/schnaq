@@ -90,4 +90,6 @@
    ["analytics"
     {:name :routes/analytics
      :view analytics/analytics-dashboard-view
-     :link-text (labels :router/analytics)}]])
+     :link-text (labels :router/analytics)
+     :controllers [{:start (fn []
+                             (rf/dispatch [:analytics/load-dashboard]))}]}]])

@@ -177,6 +177,11 @@
                    (map first)))
     (status 401)))
 
+;;TODO add passwords
+(defn- number-of-meetings
+  "Returns the number of all meetings."
+  [_]
+  (response {:meetings-num (db/number-of-meetings)}))
 
 ;; -----------------------------------------------------------------------------
 ;; General
@@ -195,6 +200,8 @@
   (POST "/votes/down/toggle" [] toggle-downvote-statement)
   (POST "/feedback/add" [] add-feedback)
   (POST "/feedbacks" [] all-feedbacks)
+  ;; Analytics routes
+  (POST "/analytics/meetings" [] number-of-meetings)
   (route/not-found "Error, page not found!"))
 
 (defonce current-server (atom nil))

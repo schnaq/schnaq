@@ -114,6 +114,9 @@
      :modals/enter-name-header "Geben Sie einen Namen ein"
      :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."
 
+     ;; analytics
+     :analytics/overall-meetings "Meetings erstellt"
+
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
      :router/all-feedbacks "Alle Feedbacks"

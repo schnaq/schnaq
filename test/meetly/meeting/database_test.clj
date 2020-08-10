@@ -136,3 +136,11 @@
     (is (= "Wegi" (database/canonical-username "WEGI")
            (database/canonical-username "WeGi")))
     (is (= "Der Schredder" (database/canonical-username "DER schredder")))))
+
+
+;; Tests for the analytics part
+
+(deftest number-of-meetings-test
+  (testing "Return the correct number of meetings"
+    (is number? (database/number-of-meetings))
+    (is (zero? (database/number-of-meetings (database/now))))))
