@@ -123,7 +123,7 @@
   [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
    ;; logo
    [:div.container
-    [:a.navbar-brand {:href "#/startpage"}
+    [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
      [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo) :width "150" :alt ""}]]
     ;; hamburger
     [:button.navbar-toggler

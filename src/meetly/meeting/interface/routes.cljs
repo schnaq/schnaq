@@ -20,6 +20,12 @@
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
+
+   [""
+    {:name :routes/startpage
+     :view startpage-views/startpage-view
+     :link-text (labels :router/startpage)}]
+
    ["meetings"
     (when (not= "production" (:environment config))
       [""
@@ -74,8 +80,4 @@
          :link-text (labels :router/continue-discussion)
          :controllers [{:parameters {:path [:id :share-hash]}
                         :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]]]]]
-   ["startpage"
-    {:name :routes/startpage
-     :view startpage-views/startpage-view
-     :link-text (labels :router/startpage)}]])
+                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]]]]]])
