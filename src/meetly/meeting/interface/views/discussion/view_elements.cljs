@@ -40,7 +40,8 @@
 ;; discussion loop box
 
 (defn agenda-header-back-arrow [on-click-back-function]
-  (let [agenda @(rf/subscribe [:chosen-agenda])]
+  (let [agenda @(rf/subscribe [:chosen-agenda])
+        {:keys [meeting/share-hash]} @(rf/subscribe [:selected-meeting])]
     [:div.discussion-view-top-rounded
      [:div.row
       ;; back arrow
@@ -51,7 +52,10 @@
       ;; title
       [:div.col-11
        [:div
-        [:h2 (:agenda/title agenda)]
+        [:h2.link-pointer {:on-click #(rf/dispatch [:navigate :routes/meetings.discussion.start
+                                                    {:share-hash share-hash
+                                                     :id (:db/id (:agenda/discussion agenda))}])}
+         (:agenda/title agenda)]
         [:p (:agenda/description agenda)]]]]]))
 
 (defn input-footer [content]
