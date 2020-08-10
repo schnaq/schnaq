@@ -28,14 +28,14 @@
       :name "title"
       :auto-complete "off"
       :required true
-      :placeholder (str (data/labels :agenda-point) numbered-suffix)
+      :placeholder (str (data/labels :agenda-point) (inc numbered-suffix))
       :id (str "title-" numbered-suffix)
       :on-key-up
       #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
     ;; description
     [:textarea.form-control.agenda-form-round
      {:name "description"
-      :placeholder (str (data/labels :agenda-desc-for) numbered-suffix)
+      :placeholder (str (data/labels :agenda-desc-for) (inc numbered-suffix))
       :id (str "description-" numbered-suffix)
       :on-key-up #(new-agenda-local
                     :description (oget % [:target :value]) numbered-suffix)}]]])
