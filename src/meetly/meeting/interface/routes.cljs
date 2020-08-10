@@ -21,6 +21,12 @@
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
+
+   [""
+    {:name :routes/startpage
+     :view startpage-views/startpage-view
+     :link-text (labels :router/startpage)}]
+
    ["meetings"
     (when (not= "production" (:environment config))
       [""
@@ -79,8 +85,4 @@
    ["feedbacks"
     {:name :routes/feedbacks
      :view feedback/overview
-     :link-text (labels :router/all-feedbacks)}]
-   ["startpage"
-    {:name :routes/startpage
-     :view startpage-views/startpage-view
-     :link-text (labels :router/startpage)}]])
+     :link-text (labels :router/all-feedbacks)}]])

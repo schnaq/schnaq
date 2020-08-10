@@ -120,7 +120,8 @@
   "Toggle up- or downvote of statement."
   [{:keys [meeting-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
   (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
-    (let [vote (check-vote-fn statement-id nickname)
+    (let [nickname (db/canonical-username nickname)
+          vote (check-vote-fn statement-id nickname)
           counter-vote (counter-check-vote-fn statement-id nickname)]
       (if vote
         (do (remove-vote-fn statement-id nickname)
