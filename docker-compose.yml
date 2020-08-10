@@ -24,7 +24,7 @@ services:
       - ./persist/feedbacks/screenshots:/code/public/feedbacks/screenshots
     environment:
       - API_PORT=80
-      - REST_API_URL="https://api.meetly.dialogo.io"
+      - ALLOWED_ORIGINS="https://meetly.dialogo.io"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.meetly-backend.rule=Host(`api.meetly.dialogo.io`)"
