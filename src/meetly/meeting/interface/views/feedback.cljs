@@ -139,7 +139,7 @@
   "Shows the page for an overview of all feedbacks."
   []
   (let [feedbacks @(rf/subscribe [:feedbacks])]
-    (if (empty? feedbacks)
+    (if (nil? feedbacks)
       (let [password (js/prompt "Enter password to see all Feedbacks")]
         (rf/dispatch [:feedbacks/fetch password]))
       [:div
