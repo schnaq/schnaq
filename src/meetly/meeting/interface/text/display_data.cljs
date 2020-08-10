@@ -10,8 +10,8 @@
      :nav-startpage "Home"
      :nav-example "Examples"
      :nav-meeting "Meetings"
-     :nav-meeting-create "Meeting Erstellen"
-     :nav-meeting-agenda "Create Agenda"
+     :nav-meeting-create "Meeting erstellen"
+     :nav-meeting-agenda "Agenda erzeugen"
 
      ;; startpage header
      :start-page-header "Meetly"
@@ -27,7 +27,7 @@
      ;; startpage call to action
      :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
      :more-info-newsletter "Holen Sie sich regelmäßig Updates zu Dialogo und den aktuellsten Produkten."
-     :create-your-meeting "Erstellen Sie jetzt ihr Meetly!"
+     :create-your-meeting "Erstellen Sie jetzt Ihr Meetly!"
      :create-your-meeting-sub "Mit einem Klick erstellen und teilen"
 
      ;; startpage grid
@@ -54,9 +54,11 @@
      :meeting/created-success-heading "Ihr Meetly wurde erstellt!"
      :meeting/created-success-subheading "Link verteilen und loslegen"
      :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
-     :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle die den Link kennen möglich!"
+     :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
      :meetings/continue-with-meetly-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-meetly-button "Zum Meetly"
+
+     :meeting.step2/button "2. Schritt: Agenda hinzufügen"
 
      ;; Create Agenda
      :agenda-header "Agenda erstellen"
