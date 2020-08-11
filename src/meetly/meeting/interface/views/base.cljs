@@ -33,7 +33,7 @@
   [:div.col-lg-4
    [:div {:class "features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3"}
     [:div.features-icons-icon.d-flex
-     [:i {:class (str "m-auto text-primary fas " icon)}]]
+     [:i {:class (str "m-auto text-primary fas fa-4x " icon)}]]
     [:h3 heading]
     [:p.lead.mb-0 subheading]]])
 

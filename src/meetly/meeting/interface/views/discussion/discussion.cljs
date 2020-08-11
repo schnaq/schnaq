@@ -15,11 +15,12 @@
     [:div
      [view/discussion-header current-meeting]
      [:br]
-     [:div.container.discussion-view-rounded.shadow-custom
-      [view/agenda-header-back-arrow]
-      [view/history-view]
-      [view/conclusions-list]
-      [view/input-field]]
+     [:div.container
+      [:div.discussion-view-rounded.shadow-custom
+       [view/agenda-header-back-arrow]
+       [view/history-view]
+       [view/conclusions-list]
+       [view/input-field]]]
      [:br]]))
 
 (defn- add-starting-premises-form
@@ -63,9 +64,10 @@
      [view/input-form]]))
 
 (defn- other-premises-view [premises]
-  [:div#other-premises.container.others-say-container.inner-shadow-custom
-   (when (not-empty premises)
-     [view/premises-carousel premises])])
+  [:div.container.px-0
+   [:div#other-premises.others-say-container.inner-shadow-custom
+    (when (not-empty premises)
+      [view/premises-carousel premises])]])
 
 (defn- interaction-view
   "A view where the user interacts with statements"
@@ -100,17 +102,18 @@
     [:div
      [view/discussion-header current-meeting]
      [:br]
-     [:div.container.discussion-view-rounded.shadow-custom
-      ;; discussion header
-      [view/agenda-header-back-arrow #(rf/dispatch [:discussion.history/time-travel])]
-      [view/history-view]
-      [view/conclusions-list]
-      ;; disussion loop
-      [:div#discussion-loop
-       (case (logic/deduce-step steps)
-         :starting-conclusions/select [starting-premises-view]
-         :select-or-react [select-or-react-view]
-         :default [:p ""])]]
+     [:div.container
+      [:div.discussion-view-rounded.shadow-custom
+       ;; discussion header
+       [view/agenda-header-back-arrow #(rf/dispatch [:discussion.history/time-travel])]
+       [view/history-view]
+       [view/conclusions-list]
+       ;; disussion loop
+       [:div#discussion-loop
+        (case (logic/deduce-step steps)
+          :starting-conclusions/select [starting-premises-view]
+          :select-or-react [select-or-react-view]
+          :default [:p ""])]]]
      [:br]]))
 
 ;; #### Events ####

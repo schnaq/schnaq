@@ -68,20 +68,21 @@
      [:h2 (:meeting/title @(rf/subscribe [:meeting/last-added]))]
      [:br]
      [:h4 (:meeting/description @(rf/subscribe [:meeting/last-added]))]]
-    [:div.container.agenda-container
-     [:form {:id "agendas-add-form"
-             :on-submit (fn [e]
-                          (.preventDefault e)
-                          (rf/dispatch [:send-agendas]))}
-      (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
-        [:div {:key agenda-num}
-         [new-agenda-form agenda-num]])
-      [:div.agenda-line]
-      [add-agenda-button]
-      [:br]
-      [:br]
-      [:br]
-      [submit-agenda-button]]]]])
+    [:div.container
+     [:div.agenda-container
+      [:form {:id "agendas-add-form"
+              :on-submit (fn [e]
+                           (.preventDefault e)
+                           (rf/dispatch [:send-agendas]))}
+       (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
+         [:div {:key agenda-num}
+          [new-agenda-form agenda-num]])
+       [:div.agenda-line]
+       [add-agenda-button]
+       [:br]
+       [:br]
+       [:br]
+       [submit-agenda-button]]]]]])
 
 (defn agenda-in-meeting-view
   "The view of an agenda which gets embedded inside a meeting view."

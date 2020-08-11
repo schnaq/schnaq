@@ -16,12 +16,12 @@
      [:div.up-vote.text-center
       ;; Prevent activating the time travel or deep dive
       {:on-click (fn [e] (.stopPropagation e) (rf/dispatch [:toggle-upvote statement]))}
-      [:h6 [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-up))}]
+      [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]
        (logic/calculate-votes statement :upvotes votes)]]
 
      [:div.down-vote.text-center
       {:on-click (fn [e] (.stopPropagation e) (rf/dispatch [:toggle-downvote statement]))}
-      [:h6 [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-down))}]
+      [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
 
 
@@ -82,7 +82,7 @@
      :auto-complete "off"
      :placeholder (labels :discussion/add-argument-premise-placeholder)}]
    [:div.text-center.button-spacing-top
-    [:button.btn.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
+    [:button.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
 
 (defn input-field []
   (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
@@ -104,7 +104,7 @@
      :placeholder (labels :discussion/premise-placeholder)}]
    ;; add button
    [:div.text-center.button-spacing-top
-    [:button.btn.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
+    [:button.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
 
 ;; selection
 
@@ -131,21 +131,21 @@
   ([{:keys [statement/content] :as statement} attitude]
    [:div.statement-outer.row
     ;; bubble content
-    [:div.col-11.pl-0.pr-0
-     [:div.card.statement {:class (str "statement-" (name attitude))}
+    [:div.col-11.px-0
+     [:div.statement {:class (str "statement-" (name attitude))}
+      (when (= :argument.type/undercut (:meta/argument.type statement))
+        [:p.small (labels :discussion/undercut-bubble-intro)])
+      ;; information
       [:div
-       (when (= :argument.type/undercut (:meta/argument.type statement))
-         [:p.small (labels :discussion/undercut-bubble-intro)])
-       ;; information
-       [:div
-        ;; avatar
-        [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
-       ;; content
-       [:div.statement-content
-        [:p content]]]]]
+       ;; avatar
+       [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
+      ;; content
+      [:div.statement-content
+       [:p content]]]]
     ;; up-down-votes
-    [:div.col-1.up-down-vote
-     (up-down-vote statement)]]))
+    [:div.col-1.px-0
+     [:div.up-down-vote
+      (up-down-vote statement)]]]))
 
 ;; carousel
 
@@ -187,15 +187,16 @@
   (let [agenda @(rf/subscribe [:chosen-agenda])
         conclusions @(rf/subscribe [:starting-conclusions])
         meeting @(rf/subscribe [:selected-meeting])]
-    [:div#conclusions-list.container
-     (for [conclusion conclusions]
-       [:div {:key (:db/id conclusion)
-              :on-click (fn [_e]
-                          (rf/dispatch [:continue-discussion :starting-conclusions/select conclusion])
-                          (rf/dispatch [:navigate :routes/meetings.discussion.continue
-                                        {:id (-> agenda :agenda/discussion :db/id)
-                                         :share-hash (:meeting/share-hash meeting)}]))}
-        [statement-bubble conclusion :neutral]])]))
+    [:div.container
+     [:div#conclusions-list.px-3
+      (for [conclusion conclusions]
+        [:div {:key (:db/id conclusion)
+               :on-click (fn [_e]
+                           (rf/dispatch [:continue-discussion :starting-conclusions/select conclusion])
+                           (rf/dispatch [:navigate :routes/meetings.discussion.continue
+                                         {:id (-> agenda :agenda/discussion :db/id)
+                                          :share-hash (:meeting/share-hash meeting)}]))}
+         [statement-bubble conclusion :neutral]])]]))
 
 
 (defn history-view
@@ -203,7 +204,7 @@
   []
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-    [:div#discussion-history.container
+    [:div#discussion-history.container.px-4
      (for [[count [statement attitude]] indexed-history]
        [:div {:key (:db/id statement)
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
