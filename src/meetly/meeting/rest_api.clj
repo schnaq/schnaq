@@ -147,6 +147,7 @@
     body-params db/downvote-statement! db/remove-downvote!
     db/did-user-downvote-statement db/did-user-upvote-statement))
 
+
 ;; -----------------------------------------------------------------------------
 ;; Feedback
 
@@ -172,57 +173,61 @@
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
   [{:keys [body-params]}]
-  (if (= (:password config/admin-password) (:password body-params))
+  (if (toolbelt/valid-password? (:password body-params))
     (response (->> (db/all-feedbacks)
                    (map first)))
     (status 401)))
 
+
+;; -----------------------------------------------------------------------------
+;; Analytics
+
 (defn- number-of-meetings
   "Returns the number of all meetings."
   [{:keys [body-params]}]
-  (if (= (:password config/admin-password) (:password body-params))
+  (if (toolbelt/valid-password? (:password body-params))
     (response {:meetings-num (db/number-of-meetings)})
     (bad-request {:message "You are not allowed to use this resource"})))
 
 (defn- number-of-usernames
   "Returns the number of all meetings."
   [{:keys [body-params]}]
-  (if (= (:password config/admin-password) (:password body-params))
+  (if (toolbelt/valid-password? (:password body-params))
     (response {:usernames-num (db/number-of-usernames)})
     (bad-request {:message "You are not allowed to use this resource"})))
 
 (defn- agendas-per-meeting
   "Returns the average numbers of meetings"
   [{:keys [body-params]}]
-  (if (= (:password config/admin-password) (:password body-params))
+  (if (toolbelt/valid-password? (:password body-params))
     (response {:average-agendas (float (db/average-number-of-agendas))})
     (bad-request {:message "You are not allowed to use this resource"})))
 
 (defn- number-of-statements
   "Returns the number of statements"
   [{:keys [body-params]}]
-  (if (= (:password config/admin-password) (:password body-params))
+  (if (toolbelt/valid-password? (:password body-params))
     (response {:statements-num (db/number-of-statements)})
     (bad-request {:message "You are not allowed to use this resource"})))
 
 (defn- number-of-active-users
   "Returns the number of statements"
   [{:keys [body-params]}]
-  (if (= (:password config/admin-password) (:password body-params))
+  (if (toolbelt/valid-password? (:password body-params))
     (response {:active-users-num (db/number-of-active-users)})
     (bad-request {:message "You are not allowed to use this resource"})))
 
 (defn- statement-lengths-stats
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
-  (if (= (:password config/admin-password) (:password body-params))
+  (if (toolbelt/valid-password? (:password body-params))
     (response {:statement-length-stats (db/statement-length-stats)})
     (bad-request {:message "You are not allowed to use this resource"})))
 
 (defn- argument-type-stats
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
-  (if (= (:password config/admin-password) (:password body-params))
+  (if (toolbelt/valid-password? (:password body-params))
     (response {:argument-type-stats (db/argument-type-stats)})
     (bad-request {:message "You are not allowed to use this resource"})))
 

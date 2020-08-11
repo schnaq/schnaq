@@ -13,3 +13,9 @@
     (let [dir (File. path)]
       (.mkdirs dir)
       (.getAbsolutePath dir))))
+
+(>defn valid-password?
+  "Check if is valid admin password."
+  [password]
+  [string? :ret boolean?]
+  (= config/admin-password password))
