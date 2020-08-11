@@ -1,7 +1,6 @@
 (ns meetly.toolbelt
   "Utility functions supporting the backend."
-  (:require [ghostwheel.core :refer [>defn]]
-            [meetly.config :as config])
+  (:require [ghostwheel.core :refer [>defn]])
   (:import (java.io File)))
 
 (>defn create-directory!
@@ -14,9 +13,3 @@
     (let [dir (File. path)]
       (.mkdirs dir)
       (.getAbsolutePath dir))))
-
-(>defn valid-password?
-  "Check if is valid admin password."
-  [password]
-  [string? :ret boolean?]
-  (= config/admin-password password))
