@@ -161,7 +161,7 @@
       (database/add-user-if-not-exists "wooooggler")
       (is (= 4 (database/number-of-active-users)))
       (@#'database/transact
-        (@#'ddb/prepare-new-argument cat-or-dog-id "wooooggler" "Alles doof" ["weil alles doof war"]))
+        [(@#'ddb/prepare-new-argument cat-or-dog-id "wooooggler" "Alles doof" ["weil alles doof war"])])
       (is (= 5 (database/number-of-active-users))))))
 
 (deftest statement-length-stats-test
