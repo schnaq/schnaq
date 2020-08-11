@@ -15,7 +15,7 @@
 (def rest-api
   {:port (Integer/parseInt (or (System/getenv "API_PORT") "3000"))})
 
-(def feedbacks
+(def admin-password
   {:password (or (System/getenv "FEEDBACKS_PASSWORD") "Schnapspralinen")})
 
 (def env-mode
