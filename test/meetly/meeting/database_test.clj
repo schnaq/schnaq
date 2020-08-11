@@ -153,3 +153,12 @@
                            :meeting/share-hash "aklsuzd98-234da-123d"
                            :meeting/author (database/add-user-if-not-exists "Wegi")})
     (is (= 1 (database/average-number-of-agendas)))))
+
+(deftest number-of-active-users-test
+  (testing "Test whether the active users are returned correctly."
+    (let [cat-or-dog-id (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))]
+      (is (= 4 (database/number-of-active-users)))
+      (database/add-user-if-not-exists "wooooggler")
+      (is (= 4 (database/number-of-active-users)))
+      (@#'ddb/prepare-new-argument cat-or-dog-id "wooooggler" "Alles doof" ["weil alles doof war"])
+      (is (= 5 (database/number-of-active-users))))))
