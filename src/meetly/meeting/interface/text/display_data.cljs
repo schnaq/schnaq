@@ -119,6 +119,7 @@
      :analytics/user-numbers "Usernamen angelegt"
      :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Meeting"
      :analytics/statements-num-title "Anzahl Statements"
+     :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"

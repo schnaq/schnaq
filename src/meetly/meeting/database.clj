@@ -448,3 +448,22 @@
   (let [meetings (number-of-meetings)
         agendas (number-of-entities-since :agenda/title)]
     (/ agendas meetings)))
+
+(>defn number-of-active-users
+  "Returns the number of active users (With at least one statement)."
+  ([]
+   [:ret int?]
+   (number-of-active-users #inst "1971-01-01T01:01:01.000-00:00"))
+  ([since]
+   [inst? :ret int?]
+   (or
+     (ffirst
+       (d/q
+         '[:find (count ?authors)
+           :in $ ?since
+           :where [?authors :author/nickname _ ?tx]
+           [?tx :db/txInstant ?start-date]
+           [(< ?since ?start-date)]
+           [?statements :statement/author ?authors]]
+         (d/db (new-connection)) since))
+     0)))
