@@ -10,7 +10,7 @@
 .up-vote {
   background: $primary;
   border-radius: 0.25rem 2rem 2rem 0.25rem;
-  padding: 1rem 0 0 1rem;
+  padding: 1.25rem 0 0 0;
   min-height: 4rem;
   cursor: pointer;
   box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
@@ -24,7 +24,7 @@
 .down-vote {
   background: $secondary;
   border-radius: 0.25rem 2rem 2rem 0.25rem;
-  padding: 1rem 0 0 1rem;
+  padding: 1.25rem 0 0 0;
   min-height: 4rem;
   cursor: pointer;
   box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);

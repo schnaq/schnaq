@@ -13,13 +13,13 @@
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
     [:div
-     [:div.up-vote
+     [:div.up-vote.text-center
       ;; Prevent activating the time travel or deep dive
       {:on-click (fn [e] (.stopPropagation e) (rf/dispatch [:toggle-upvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-up))}]
        (logic/calculate-votes statement :upvotes votes)]]
 
-     [:div.down-vote
+     [:div.down-vote.text-center
       {:on-click (fn [e] (.stopPropagation e) (rf/dispatch [:toggle-downvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
@@ -129,7 +129,9 @@
   ([statement]
    (statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))))
   ([{:keys [statement/content] :as statement} attitude]
+   ;[:div.statement-outer.row
    [:div.statement-outer.row
+    ;; bubble content
     [:div.col-11.pl-0.pr-0
      [:div.card.statement {:class (str "statement-" (name attitude))}
       [:div
@@ -142,6 +144,7 @@
        ;; content
        [:div.statement-content
         [:p content]]]]]
+    ;; up-down-votes
     [:div.col-1.up-down-vote
      (up-down-vote statement)]]))
 
