@@ -435,3 +435,11 @@
   "Returns the number of different usernames in the database."
   ([] (number-of-entities-since :author/nickname))
   ([since] (number-of-entities-since :author/nickname since)))
+
+(>defn average-number-of-agendas
+  "Returns the average number of agendas per discussion."
+  []
+  [:ret number?]
+  (let [meetings (number-of-meetings)
+        agendas (number-of-entities-since :agenda/title)]
+    (/ agendas meetings)))

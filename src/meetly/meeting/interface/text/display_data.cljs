@@ -117,6 +117,7 @@
      ;; analytics
      :analytics/overall-meetings "Meetings erstellt"
      :analytics/user-numbers "Usernamen angelegt"
+     :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Meeting"
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
