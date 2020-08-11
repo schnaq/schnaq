@@ -92,4 +92,5 @@
      :view analytics/analytics-dashboard-view
      :link-text (labels :router/analytics)
      :controllers [{:start (fn []
+                             (rf/dispatch [:admin/set-password (js/prompt "Enter the Admin Password to see analytics")])
                              (rf/dispatch [:analytics/load-dashboard]))}]}]])

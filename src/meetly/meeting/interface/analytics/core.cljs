@@ -36,20 +36,22 @@
 
 (rf/reg-event-fx
   :analytics/load-meeting-num
-  (fn [_ _]
+  (fn [{:keys [db]} _]
     {:http-xhrio {:method :post
                   :uri (str (:rest-backend config) "/analytics/meetings")
                   :format (ajax/transit-request-format)
+                  :params {:password (-> db :admin :password)}
                   :response-format (ajax/transit-response-format)
                   :on-success [:analytics/meeting-num-loaded]
                   :on-failure [:ajax-failure]}}))
 
 (rf/reg-event-fx
   :analytics/load-usernames-num
-  (fn [_ _]
+  (fn [{:keys [db]} _]
     {:http-xhrio {:method :post
                   :uri (str (:rest-backend config) "/analytics/usernames")
                   :format (ajax/transit-request-format)
+                  :params {:password (-> db :admin :password)}
                   :response-format (ajax/transit-response-format)
                   :on-success [:analytics/usernames-num-loaded]
                   :on-failure [:ajax-failure]}}))

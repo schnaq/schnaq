@@ -177,16 +177,19 @@
                    (map first)))
     (status 401)))
 
-;;TODO add passwords
 (defn- number-of-meetings
   "Returns the number of all meetings."
-  [_]
-  (response {:meetings-num (db/number-of-meetings)}))
+  [{:keys [body-params]}]
+  (if (= (:password config/feedbacks) (:password body-params))
+    (response {:meetings-num (db/number-of-meetings)})
+    (bad-request {:message "You are not allowed to use this resource"})))
 
 (defn- number-of-usernames
   "Returns the number of all meetings."
-  [_]
-  (response {:usernames-num (db/number-of-usernames)}))
+  [{:keys [body-params]}]
+  (if (= (:password config/feedbacks) (:password body-params))
+    (response {:usernames-num (db/number-of-usernames)})
+    (bad-request {:message "You are not allowed to use this resource"})))
 
 ;; -----------------------------------------------------------------------------
 ;; General
