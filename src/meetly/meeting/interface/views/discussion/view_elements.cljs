@@ -129,7 +129,6 @@
   ([statement]
    (statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))))
   ([{:keys [statement/content] :as statement} attitude]
-   ;[:div.statement-outer.row
    [:div.statement-outer.row
     ;; bubble content
     [:div.col-11.pl-0.pr-0
@@ -204,7 +203,7 @@
   []
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-    [:div#discussion-history
+    [:div#discussion-history.container
      (for [[count [statement attitude]] indexed-history]
        [:div {:key (:db/id statement)
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
