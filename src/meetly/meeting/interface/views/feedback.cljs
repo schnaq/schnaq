@@ -107,7 +107,7 @@
                 (screenshot!)
                 (rf/dispatch [:modal {:show? true
                                       :child [feedback-modal]}]))}
-   [:button.btn.btn-secondary.feedback (labels :feedbacks/button)]])
+   [:button.btn.btn-secondary.text-white.feedback (labels :feedbacks/button)]])
 
 (defn- list-feedbacks
   "Shows a list of all feedback."
@@ -115,7 +115,7 @@
   [:div#feedback-list
    (let [feedbacks @(rf/subscribe [:feedbacks])]
      [:div
-      [:h4 (gstring/format "Es gibt %s Rückmeldungen 🥳!" (count feedbacks))]
+      [:h4 (gstring/format "Es gibt %s Rückmeldungen 🥳 !" (count feedbacks))]
       [:table.table.table-striped
        [:thead
         [:tr
