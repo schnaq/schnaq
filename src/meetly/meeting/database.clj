@@ -408,19 +408,30 @@
 
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
 
-(>defn number-of-meetings
-  "Returns the number of meetings. Optionally takes a date since when this counts."
-  ([]
-   [:ret int?]
-   (number-of-meetings #inst "1971-01-01T01:01:01.000-00:00"))
-  ([since]
-   [inst? :ret int?]
+(>defn- number-of-entities-since
+  "Returns the number of entities in the db since some timestamp. Default is all."
+  ([attribute]
+   [keyword? :ret int?]
+   (number-of-entities-since attribute #inst "1971-01-01T01:01:01.000-00:00"))
+  ([attribute since]
+   [keyword? inst? :ret int?]
    (or
      (ffirst
        (d/q
-         '[:find (count ?meetings)
-           :in $ ?since
-           :where [?meetings :meeting/start-date ?start-date]
+         '[:find (count ?entities)
+           :in $ ?since ?attribute
+           :where [?entities ?attribute _ ?tx]
+           [?tx :db/txInstant ?start-date]
            [(< ?since ?start-date)]]
-         (d/db (new-connection)) since))
+         (d/db (new-connection)) since attribute))
      0)))
+
+(defn number-of-meetings
+  "Returns the number of meetings. Optionally takes a date since when this counts."
+  ([] (number-of-entities-since :meeting/title))
+  ([since] (number-of-entities-since :meeting/title since)))
+
+(defn number-of-usernames
+  "Returns the number of different usernames in the database."
+  ([] (number-of-entities-since :author/nickname))
+  ([since] (number-of-entities-since :author/nickname since)))
