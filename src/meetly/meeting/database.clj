@@ -462,11 +462,14 @@
 
 (>defn average-number-of-agendas
   "Returns the average number of agendas per discussion."
-  []
-  [:ret number?]
-  (let [meetings (number-of-meetings)
-        agendas (number-of-entities-since :agenda/title)]
-    (/ agendas meetings)))
+  ([]
+   [:ret number?]
+   (average-number-of-agendas #inst "1971-01-01T01:01:01.000-00:00"))
+  ([since]
+   [inst? :ret number?]
+   (let [meetings (number-of-meetings since)
+         agendas (number-of-entities-since :agenda/title since)]
+     (/ agendas meetings))))
 
 (>defn number-of-active-users
   "Returns the number of active users (With at least one statement)."

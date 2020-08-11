@@ -9,6 +9,18 @@
     :meeting/share-hash "89eh32hoas-2983ud"
     :meeting/author "user/wegi"}])
 
+(def ^:private agendas
+  [{:db/id "agenda/first-agenda"
+    :agenda/title "Top 1"
+    :agenda/description "Top 2"
+    :agenda/discussion "discussion/cat-or-dog"
+    :agenda/meeting "meeting/expansion"}
+   {:db/id "agenda/second-agenda"
+    :agenda/title "Top 2"
+    :agenda/description "Top 2.2"
+    :agenda/discussion "discussion/tapir-or-ameisenbaer"
+    :agenda/meeting "meeting/expansion"}])
+
 (def ^:private cat-or-dog-authors-and-users
   [{:db/id "user/wegi"
     :user/core-author {:db/id "author/wegi" :author/nickname "Wegi"}}
@@ -274,14 +286,18 @@
 (def ^:private cat-or-dog-discussion
   [{:db/id "discussion/cat-or-dog"
     :discussion/title "Cat or Dog?"
-    :discussion/description (str "Should a person looking for a pet rather buy a dog"
-                                 " or a cat?")
+    :discussion/description "Should a person looking for a pet rather buy a dog or a cat?"
     :discussion/states [:discussion.state/open]
     :discussion/starting-arguments ["argument/watchdogs" "argument/tedious-dogs"
                                     "argument/both-is-fine" "argument/hate"
                                     "argument/independent-cats" "argument/no-taxes"
-                                    "argument/moody-cats"]}])
+                                    "argument/moody-cats"]}
+   {:db/id "discussion/tapir-or-ameisenbaer"
+    :discussion/title "Tapir oder Ameistenbär?"
+    :discussion/description "What do what do"
+    :discussion/states [:discussion.state/open]
+    :discussion/starting-arguments []}])
 
 (def meetly-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-arguments
-          cat-or-dog-discussion meetings))
+          cat-or-dog-discussion meetings agendas))

@@ -138,3 +138,18 @@
     (database/add-user-if-not-exists "Some-Testdude")
     (is (= 5 (database/number-of-usernames)))
     (is (zero? (database/number-of-meetings (database/now))))))
+
+(deftest number-of-statements-test
+  (testing "Return the correct number of statements."
+    (is (= 27 (database/number-of-statements)))
+    (is (zero? (database/number-of-statements (database/now))))))
+
+(deftest average-number-of-agendas-test
+  (testing "Test whether the average number of agendas fits."
+    (is (= 2 (database/average-number-of-agendas)))
+    (database/add-meeting {:meeting/title "Bla"
+                           :meeting/start-date (database/now)
+                           :meeting/end-date (database/now)
+                           :meeting/share-hash "aklsuzd98-234da-123d"
+                           :meeting/author (database/add-user-if-not-exists "Wegi")})
+    (is (= 1 (database/average-number-of-agendas)))))
