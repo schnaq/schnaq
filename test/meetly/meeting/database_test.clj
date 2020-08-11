@@ -136,3 +136,17 @@
     (is (= "Wegi" (database/canonical-username "WEGI")
            (database/canonical-username "WeGi")))
     (is (= "Der Schredder" (database/canonical-username "DER schredder")))))
+
+
+;; Tests for the analytics part
+
+(deftest number-of-meetings-test
+  (testing "Return the correct number of meetings"
+    (is number? (database/number-of-meetings))
+    (is (zero? (database/number-of-meetings (database/now))))))
+
+(deftest number-of-usernames-test
+  (testing "Return the correct number of usernames"
+    ;; There are at least the 4 users from the test-set
+    (is (< 3 (database/number-of-usernames)))
+    (is (zero? (database/number-of-meetings (database/now))))))

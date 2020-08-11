@@ -405,3 +405,116 @@
         [?agenda :agenda/meeting ?meeting]
         [?meeting :meeting/share-hash ?hash]]
       (d/db (new-connection)) statement-id meeting-hash)))
+
+;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
+
+(>defn- number-of-entities-since
+  "Returns the number of entities in the db since some timestamp. Default is all."
+  ([attribute]
+   [keyword? :ret int?]
+   (number-of-entities-since attribute #inst "1971-01-01T01:01:01.000-00:00"))
+  ([attribute since]
+   [keyword? inst? :ret int?]
+   (or
+     (ffirst
+       (d/q
+         '[:find (count ?entities)
+           :in $ ?since ?attribute
+           :where [?entities ?attribute _ ?tx]
+           [?tx :db/txInstant ?start-date]
+           [(< ?since ?start-date)]]
+         (d/db (new-connection)) since attribute))
+     0)))
+
+(>defn- number-of-entities-with-value-since
+  "Returns the number of entities in the db since some timestamp. Default is all."
+  ([attribute value]
+   [keyword? any? :ret int?]
+   (number-of-entities-with-value-since attribute value #inst "1971-01-01T01:01:01.000-00:00"))
+  ([attribute value since]
+   [keyword? any? inst? :ret int?]
+   (or
+     (ffirst
+       (d/q
+         '[:find (count ?entities)
+           :in $ ?since ?attribute ?value
+           :where [?entities ?attribute ?value ?tx]
+           [?tx :db/txInstant ?start-date]
+           [(< ?since ?start-date)]]
+         (d/db (new-connection)) since attribute value))
+     0)))
+
+(defn number-of-meetings
+  "Returns the number of meetings. Optionally takes a date since when this counts."
+  ([] (number-of-entities-since :meeting/title))
+  ([since] (number-of-entities-since :meeting/title since)))
+
+(defn number-of-usernames
+  "Returns the number of different usernames in the database."
+  ([] (number-of-entities-since :author/nickname))
+  ([since] (number-of-entities-since :author/nickname since)))
+
+(defn number-of-statements
+  "Returns the number of different usernames in the database."
+  ([] (number-of-entities-since :statement/content))
+  ([since] (number-of-entities-since :statement/content since)))
+
+(>defn average-number-of-agendas
+  "Returns the average number of agendas per discussion."
+  []
+  [:ret number?]
+  (let [meetings (number-of-meetings)
+        agendas (number-of-entities-since :agenda/title)]
+    (/ agendas meetings)))
+
+(>defn number-of-active-users
+  "Returns the number of active users (With at least one statement)."
+  ([]
+   [:ret int?]
+   (number-of-active-users #inst "1971-01-01T01:01:01.000-00:00"))
+  ([since]
+   [inst? :ret int?]
+   (or
+     (ffirst
+       (d/q
+         '[:find (count ?authors)
+           :in $ ?since
+           :where [?authors :author/nickname _ ?tx]
+           [?tx :db/txInstant ?start-date]
+           [(< ?since ?start-date)]
+           [?statements :statement/author ?authors]]
+         (d/db (new-connection)) since))
+     0)))
+
+(>defn statement-length-stats
+  "Returns a map of stats about statement-length."
+  ([] [:ret map?]
+   (statement-length-stats #inst "1971-01-01T01:01:01.000-00:00"))
+  ([since] [inst? :ret map?]
+   (let [sorted-contents (sort-by count
+                                  (flatten
+                                    (d/q
+                                      '[:find ?contents
+                                        :in $ ?since
+                                        :where [_ :statement/content ?contents ?tx]
+                                        [?tx :db/txInstant ?add-date]
+                                        [(< ?since ?add-date)]]
+                                      (d/db (new-connection)) since)))
+         content-count (count sorted-contents)
+         max-length (count (last sorted-contents))
+         min-length (count (first sorted-contents))
+         average-length (float (/ (reduce #(+ %1 (count %2)) 0 sorted-contents) content-count))
+         median-length (count (nth sorted-contents (quot content-count 2)))]
+     {:max max-length
+      :min min-length
+      :average average-length
+      :median median-length})))
+
+(>defn argument-type-stats
+  "Returns the number of attacks, supports and undercuts since a certain timestamp."
+  ([] [:ret map?]
+   (argument-type-stats #inst "1971-01-01T01:01:01.000-00:00"))
+  ([since] [inst? :ret map?]
+   {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
+    :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
+    :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))

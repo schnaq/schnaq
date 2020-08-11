@@ -9,6 +9,7 @@
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [meetly.meeting.interface.views.discussion.discussion :as discussion-views]
             [meetly.meeting.interface.views.feedback :as feedback]
+            [meetly.meeting.interface.analytics.core :as analytics]
             [reitit.coercion.spec]
             [re-frame.core :as rf]))
 
@@ -85,4 +86,11 @@
    ["feedbacks"
     {:name :routes/feedbacks
      :view feedback/overview
-     :link-text (labels :router/all-feedbacks)}]])
+     :link-text (labels :router/all-feedbacks)}]
+   ["analytics"
+    {:name :routes/analytics
+     :view analytics/analytics-dashboard-view
+     :link-text (labels :router/analytics)
+     :controllers [{:start (fn []
+                             (rf/dispatch [:admin/set-password (js/prompt "Enter the Admin Password to see analytics")])
+                             (rf/dispatch [:analytics/load-dashboard]))}]}]])

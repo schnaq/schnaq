@@ -92,3 +92,8 @@
                   :routes/meetings.discussion.start
                   {:id agenda-id
                    :share-hash share-hash}]})))
+
+(rf/reg-event-db
+  :admin/set-password
+  (fn [db [_ password]]
+    (assoc-in db [:admin :password] password)))

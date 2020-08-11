@@ -3,6 +3,7 @@
             [clojure.java.io :as io]
             [compojure.core :refer [defroutes GET POST]]
             [compojure.route :as route]
+            [ghostwheel.core :refer [>defn-]]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
@@ -18,6 +19,12 @@
             [taoensso.timbre :as log])
   (:import (java.util Base64))
   (:gen-class))
+
+(>defn- valid-password?
+  "Check if the password is a valid."
+  [password]
+  [string? :ret boolean?]
+  (= config/admin-password password))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -147,6 +154,7 @@
     body-params db/downvote-statement! db/remove-downvote!
     db/did-user-downvote-statement db/did-user-upvote-statement))
 
+
 ;; -----------------------------------------------------------------------------
 ;; Feedback
 
@@ -172,11 +180,63 @@
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
   [{:keys [body-params]}]
-  (if (= (:password config/feedbacks) (:password body-params))
+  (if (valid-password? (:password body-params))
     (response (->> (db/all-feedbacks)
                    (map first)))
     (status 401)))
 
+
+;; -----------------------------------------------------------------------------
+;; Analytics
+
+(defn- number-of-meetings
+  "Returns the number of all meetings."
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (response {:meetings-num (db/number-of-meetings)})
+    (bad-request {:message "You are not allowed to use this resource"})))
+
+(defn- number-of-usernames
+  "Returns the number of all meetings."
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (response {:usernames-num (db/number-of-usernames)})
+    (bad-request {:message "You are not allowed to use this resource"})))
+
+(defn- agendas-per-meeting
+  "Returns the average numbers of meetings"
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (response {:average-agendas (float (db/average-number-of-agendas))})
+    (bad-request {:message "You are not allowed to use this resource"})))
+
+(defn- number-of-statements
+  "Returns the number of statements"
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (response {:statements-num (db/number-of-statements)})
+    (bad-request {:message "You are not allowed to use this resource"})))
+
+(defn- number-of-active-users
+  "Returns the number of statements"
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (response {:active-users-num (db/number-of-active-users)})
+    (bad-request {:message "You are not allowed to use this resource"})))
+
+(defn- statement-lengths-stats
+  "Returns statistics about the statement length."
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (response {:statement-length-stats (db/statement-length-stats)})
+    (bad-request {:message "You are not allowed to use this resource"})))
+
+(defn- argument-type-stats
+  "Returns statistics about the statement length."
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (response {:argument-type-stats (db/argument-type-stats)})
+    (bad-request {:message "You are not allowed to use this resource"})))
 
 ;; -----------------------------------------------------------------------------
 ;; General
@@ -195,6 +255,14 @@
   (POST "/votes/down/toggle" [] toggle-downvote-statement)
   (POST "/feedback/add" [] add-feedback)
   (POST "/feedbacks" [] all-feedbacks)
+  ;; Analytics routes
+  (POST "/analytics/meetings" [] number-of-meetings)
+  (POST "/analytics/usernames" [] number-of-usernames)
+  (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
+  (POST "/analytics/statements" [] number-of-statements)
+  (POST "/analytics/active-users" [] number-of-active-users)
+  (POST "/analytics/statement-lengths" [] statement-lengths-stats)
+  (POST "/analytics/argument-types" [] argument-type-stats)
   (route/not-found "Error, page not found!"))
 
 (defonce current-server (atom nil))

@@ -114,6 +114,15 @@
      :modals/enter-name-header "Geben Sie einen Namen ein"
      :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."
 
+     ;; analytics
+     :analytics/overall-meetings "Meetings erstellt"
+     :analytics/user-numbers "Usernamen angelegt"
+     :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Meeting"
+     :analytics/statements-num-title "Anzahl Statements"
+     :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
+     :analytics/statement-lengths-title "Beitragslängen"
+     :analytics/argument-types-title "Argumenttypen"
+
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
      :router/all-feedbacks "Alle Feedbacks"
@@ -123,7 +132,8 @@
      :router/add-agendas "Agendas hinzufügen"
      :router/start-discussion "Starte Besprechung"
      :router/continue-discussion "Führe Besprechung fort"
-     :router/startpage "Startseite"}))
+     :router/startpage "Startseite"
+     :router/analytics "Analyse-Dashboard"}))
 
 
 (defn img-path
