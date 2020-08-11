@@ -436,6 +436,11 @@
   ([] (number-of-entities-since :author/nickname))
   ([since] (number-of-entities-since :author/nickname since)))
 
+(defn number-of-statements
+  "Returns the number of different usernames in the database."
+  ([] (number-of-entities-since :statement/content))
+  ([since] (number-of-entities-since :statement/content since)))
+
 (>defn average-number-of-agendas
   "Returns the average number of agendas per discussion."
   []

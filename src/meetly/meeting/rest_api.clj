@@ -198,6 +198,13 @@
     (response {:average-agendas (float (db/average-number-of-agendas))})
     (bad-request {:message "You are not allowed to use this resource"})))
 
+(defn- number-of-statements
+  "Returns the number of statements"
+  [{:keys [body-params]}]
+  (if (= (:password config/feedbacks) (:password body-params))
+    (response {:statements-num (db/number-of-statements)})
+    (bad-request {:message "You are not allowed to use this resource"})))
+
 ;; -----------------------------------------------------------------------------
 ;; General
 
@@ -219,6 +226,7 @@
   (POST "/analytics/meetings" [] number-of-meetings)
   (POST "/analytics/usernames" [] number-of-usernames)
   (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
+  (POST "/analytics/statements" [] number-of-statements)
   (route/not-found "Error, page not found!"))
 
 (defonce current-server (atom nil))

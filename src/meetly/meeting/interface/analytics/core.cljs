@@ -22,12 +22,14 @@
    [base/nav-header]
    (let [meetings-num @(rf/subscribe [:analytics/number-of-meetings-overall])
          usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
-         average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])]
+         average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])
+         statements-num @(rf/subscribe [:analytics/number-of-statements-overall])]
      [:div.container.px-5.py-3
-      [:div.card-deck
+      [:div.card-columns
        [analytics-card (labels :analytics/overall-meetings) meetings-num]
        [analytics-card (labels :analytics/user-numbers) usernames-num]
-       [analytics-card (labels :analytics/average-agendas-title) average-agendas]]])])
+       [analytics-card (labels :analytics/average-agendas-title) average-agendas]
+       [analytics-card (labels :analytics/statements-num-title) statements-num]]])])
 
 ;; #### Events ####
 
@@ -36,7 +38,8 @@
   (fn [_ _]
     {:dispatch-n [[:analytics/load-meeting-num]
                   [:analytics/load-usernames-num]
-                  [:analytics/load-average-number-of-agendas]]}))
+                  [:analytics/load-average-number-of-agendas]
+                  [:analytics/load-statements-num]]}))
 
 (defn fetch-with-password
   "Fetches something from an endpoint with the password."
@@ -64,6 +67,11 @@
   (fn [{:keys [db]} _]
     (fetch-with-password db "/analytics/agendas-per-meeting" :analytics/agendas-per-meeting-loaded)))
 
+(rf/reg-event-fx
+  :analytics/load-statements-num
+  (fn [{:keys [db]} _]
+    (fetch-with-password db "/analytics/statements" :analytics/statements-num-loaded)))
+
 (rf/reg-event-db
   :analytics/meeting-num-loaded
   (fn [db [_ {:keys [meetings-num]}]]
@@ -73,6 +81,11 @@
   :analytics/usernames-num-loaded
   (fn [db [_ {:keys [usernames-num]}]]
     (assoc-in db [:analytics :usernames-num :overall] usernames-num)))
+
+(rf/reg-event-db
+  :analytics/statements-num-loaded
+  (fn [db [_ {:keys [statements-num]}]]
+    (assoc-in db [:analytics :statements-num :overall] statements-num)))
 
 (rf/reg-event-db
   :analytics/agendas-per-meeting-loaded
@@ -95,3 +108,8 @@
   :analytics/number-of-average-agendas
   (fn [db _]
     (get-in db [:analytics :agendas :average-per-meeting])))
+
+(rf/reg-sub
+  :analytics/number-of-statements-overall
+  (fn [db _]
+    (get-in db [:analytics :statements-num :overall])))
