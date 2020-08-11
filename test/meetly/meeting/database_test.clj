@@ -4,7 +4,7 @@
             [dialog.discussion.database :as ddb]
             [meetly.meeting.database :as database]))
 
-(use-fixtures :each meetly-toolbelt/init-db-test-fixture)
+(use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 
 (deftest up-and-downvotes-test
   (testing "Tests whether setting up and downvotes works properly."
@@ -117,36 +117,65 @@
            (database/canonical-username "WeGi")))
     (is (= "Der Schredder" (database/canonical-username "DER schredder")))))
 
-(deftest add-user-if-not-exists-test
-  (testing "Test the function to add a new user if they do not exist."
-    (let [new-user (database/add-user-if-not-exists "For Sure a new User that does Not exist")]
-      (is (int? new-user))
-      (is (= new-user (database/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
-
-(deftest user-by-nickname-test
-  (testing "Tests whether the user is correctly found, disregarding case."
-    (let [wegi (database/user-by-nickname "Wegi")]
-      (is (int? wegi))
-      (is (= wegi (database/user-by-nickname "WeGi")
-             (database/user-by-nickname "wegi")
-             (database/user-by-nickname "wegI"))))))
-
-(deftest canonical-username-test
-  (testing "Test whether the canonical username is returned."
-    (is (= "Wegi" (database/canonical-username "WEGI")
-           (database/canonical-username "WeGi")))
-    (is (= "Der Schredder" (database/canonical-username "DER schredder")))))
-
 
 ;; Tests for the analytics part
 
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
-    (is number? (database/number-of-meetings))
+    (is (= 1 (database/number-of-meetings)))
+    (database/add-meeting {:meeting/title "Bla"
+                           :meeting/start-date (database/now)
+                           :meeting/end-date (database/now)
+                           :meeting/share-hash "aklsuzd98-234da-123d"
+                           :meeting/author (database/add-user-if-not-exists "Wegi")})
+    (is (= 2 (database/number-of-meetings)))
     (is (zero? (database/number-of-meetings (database/now))))))
 
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (< 3 (database/number-of-usernames)))
+    (is (= 4 (database/number-of-usernames)))
+    (database/add-user-if-not-exists "Some-Testdude")
+    (is (= 5 (database/number-of-usernames)))
     (is (zero? (database/number-of-meetings (database/now))))))
+
+(deftest number-of-statements-test
+  (testing "Return the correct number of statements."
+    (is (= 27 (database/number-of-statements)))
+    (is (zero? (database/number-of-statements (database/now))))))
+
+(deftest average-number-of-agendas-test
+  (testing "Test whether the average number of agendas fits."
+    (is (= 2 (database/average-number-of-agendas)))
+    (database/add-meeting {:meeting/title "Bla"
+                           :meeting/start-date (database/now)
+                           :meeting/end-date (database/now)
+                           :meeting/share-hash "aklsuzd98-234da-123d"
+                           :meeting/author (database/add-user-if-not-exists "Wegi")})
+    (is (= 1 (database/average-number-of-agendas)))))
+
+(deftest number-of-active-users-test
+  (testing "Test whether the active users are returned correctly."
+    (let [cat-or-dog-id (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))]
+      (is (= 4 (database/number-of-active-users)))
+      (database/add-user-if-not-exists "wooooggler")
+      (is (= 4 (database/number-of-active-users)))
+      (@#'database/transact
+        [(@#'ddb/prepare-new-argument cat-or-dog-id "wooooggler" "Alles doof" ["weil alles doof war"])])
+      (is (= 5 (database/number-of-active-users))))))
+
+(deftest statement-length-stats-test
+  (testing "Testing the function that returns lengths of statements statistics"
+    (let [stats (database/statement-length-stats)]
+      (is (< (:min stats) (:max stats)))
+      (is (< (:min stats) (:median stats)))
+      (is (> (:max stats) (:median stats)))
+      (is (> (:max stats) (:average stats)))
+      (is float? (:average stats)))))
+
+(deftest argument-type-stats-test
+  (testing "Statistics about argument types should be working."
+    (let [stats (database/argument-type-stats)]
+      (is (= 6 (:attacks stats)))
+      (is (= 9 (:supports stats)))
+      (is (= 8 (:undercuts stats))))))

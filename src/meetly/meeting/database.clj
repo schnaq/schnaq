@@ -5,6 +5,7 @@
     [meetly.config :as config]
     [meetly.meeting.models :as models]
     [dialog.discussion.database :as dialog]
+    [meetly.meeting.test-data :as test-data]
     [clojure.spec.alpha :as s]
     [clojure.string :as string])
   (:import (java.util Date UUID)))
@@ -73,7 +74,7 @@
   ([config]
    (init! config)
    (dialog/init! config)
-   (dialog/load-testdata!)))
+   (transact test-data/meetly-test-data)))
 
 
 ;; -----------------------------------------------------------------------------
@@ -408,11 +409,13 @@
 
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
 
+(def ^:private max-time-back max-time-back)
+
 (>defn- number-of-entities-since
   "Returns the number of entities in the db since some timestamp. Default is all."
   ([attribute]
    [keyword? :ret int?]
-   (number-of-entities-since attribute #inst "1971-01-01T01:01:01.000-00:00"))
+   (number-of-entities-since attribute max-time-back))
   ([attribute since]
    [keyword? inst? :ret int?]
    (or
@@ -430,7 +433,7 @@
   "Returns the number of entities in the db since some timestamp. Default is all."
   ([attribute value]
    [keyword? any? :ret int?]
-   (number-of-entities-with-value-since attribute value #inst "1971-01-01T01:01:01.000-00:00"))
+   (number-of-entities-with-value-since attribute value max-time-back))
   ([attribute value since]
    [keyword? any? inst? :ret int?]
    (or
@@ -461,17 +464,20 @@
 
 (>defn average-number-of-agendas
   "Returns the average number of agendas per discussion."
-  []
-  [:ret number?]
-  (let [meetings (number-of-meetings)
-        agendas (number-of-entities-since :agenda/title)]
-    (/ agendas meetings)))
+  ([]
+   [:ret number?]
+   (average-number-of-agendas max-time-back))
+  ([since]
+   [inst? :ret number?]
+   (let [meetings (number-of-meetings since)
+         agendas (number-of-entities-since :agenda/title since)]
+     (/ agendas meetings))))
 
 (>defn number-of-active-users
   "Returns the number of active users (With at least one statement)."
   ([]
    [:ret int?]
-   (number-of-active-users #inst "1971-01-01T01:01:01.000-00:00"))
+   (number-of-active-users max-time-back))
   ([since]
    [inst? :ret int?]
    (or
@@ -489,7 +495,7 @@
 (>defn statement-length-stats
   "Returns a map of stats about statement-length."
   ([] [:ret map?]
-   (statement-length-stats #inst "1971-01-01T01:01:01.000-00:00"))
+   (statement-length-stats max-time-back))
   ([since] [inst? :ret map?]
    (let [sorted-contents (sort-by count
                                   (flatten
@@ -513,7 +519,7 @@
 (>defn argument-type-stats
   "Returns the number of attacks, supports and undercuts since a certain timestamp."
   ([] [:ret map?]
-   (argument-type-stats #inst "1971-01-01T01:01:01.000-00:00"))
+   (argument-type-stats max-time-back))
   ([since] [inst? :ret map?]
    {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
     :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
