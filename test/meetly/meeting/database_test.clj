@@ -117,36 +117,24 @@
            (database/canonical-username "WeGi")))
     (is (= "Der Schredder" (database/canonical-username "DER schredder")))))
 
-(deftest add-user-if-not-exists-test
-  (testing "Test the function to add a new user if they do not exist."
-    (let [new-user (database/add-user-if-not-exists "For Sure a new User that does Not exist")]
-      (is (int? new-user))
-      (is (= new-user (database/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
-
-(deftest user-by-nickname-test
-  (testing "Tests whether the user is correctly found, disregarding case."
-    (let [wegi (database/user-by-nickname "Wegi")]
-      (is (int? wegi))
-      (is (= wegi (database/user-by-nickname "WeGi")
-             (database/user-by-nickname "wegi")
-             (database/user-by-nickname "wegI"))))))
-
-(deftest canonical-username-test
-  (testing "Test whether the canonical username is returned."
-    (is (= "Wegi" (database/canonical-username "WEGI")
-           (database/canonical-username "WeGi")))
-    (is (= "Der Schredder" (database/canonical-username "DER schredder")))))
-
 
 ;; Tests for the analytics part
 
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
-    (is number? (database/number-of-meetings))
+    (is (= 1 (database/number-of-meetings)))
+    (database/add-meeting {:meeting/title "Bla"
+                           :meeting/start-date (database/now)
+                           :meeting/end-date (database/now)
+                           :meeting/share-hash "aklsuzd98-234da-123d"
+                           :meeting/author (database/add-user-if-not-exists "Wegi")})
+    (is (= 2 (database/number-of-meetings)))
     (is (zero? (database/number-of-meetings (database/now))))))
 
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (< 3 (database/number-of-usernames)))
+    (is (= 4 (database/number-of-usernames)))
+    (database/add-user-if-not-exists "Some-Testdude")
+    (is (= 5 (database/number-of-usernames)))
     (is (zero? (database/number-of-meetings (database/now))))))

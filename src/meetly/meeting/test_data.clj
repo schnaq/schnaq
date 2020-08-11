@@ -1,5 +1,14 @@
 (ns meetly.meeting.test-data)
 
+(def ^:private meetings
+  [{:db/id "meeting/expansion"
+    :meeting/title "Wir wollen expandieren"
+    :meeting/description "Woot Woot in da Hood"
+    :meeting/start-date #inst "2019-10-01T01:01:01.000-00:00"
+    :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
+    :meeting/share-hash "89eh32hoas-2983ud"
+    :meeting/author "user/wegi"}])
+
 (def ^:private cat-or-dog-authors-and-users
   [{:db/id "user/wegi"
     :user/core-author {:db/id "author/wegi" :author/nickname "Wegi"}}
@@ -275,4 +284,4 @@
 
 (def meetly-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-arguments
-          cat-or-dog-discussion))
+          cat-or-dog-discussion meetings))
