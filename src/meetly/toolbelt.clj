@@ -1,6 +1,7 @@
 (ns meetly.toolbelt
   "Utility functions supporting the backend."
-  (:require [ghostwheel.core :refer [>defn]])
+  (:require [ghostwheel.core :refer [>defn]]
+            [meetly.config :as config])
   (:import (java.io File)))
 
 (>defn create-directory!
