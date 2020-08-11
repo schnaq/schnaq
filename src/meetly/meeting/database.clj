@@ -5,6 +5,7 @@
     [meetly.config :as config]
     [meetly.meeting.models :as models]
     [dialog.discussion.database :as dialog]
+    [meetly.meeting.test-data :as test-data]
     [clojure.spec.alpha :as s]
     [clojure.string :as string])
   (:import (java.util Date UUID)))
@@ -73,7 +74,7 @@
   ([config]
    (init! config)
    (dialog/init! config)
-   (dialog/load-testdata!)))
+   (transact test-data/meetly-test-data)))
 
 
 ;; -----------------------------------------------------------------------------

@@ -4,7 +4,7 @@
             [dialog.discussion.database :as ddb]
             [meetly.meeting.database :as database]))
 
-(use-fixtures :each meetly-toolbelt/init-db-test-fixture)
+(use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 
 (deftest up-and-downvotes-test
   (testing "Tests whether setting up and downvotes works properly."

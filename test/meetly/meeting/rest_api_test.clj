@@ -4,7 +4,7 @@
             [meetly.meeting.rest-api :as api]
             [meetly.meeting.database :as db]))
 
-(use-fixtures :each meetly-toolbelt/init-db-test-fixture)
+(use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 
 (deftest add-agendas-test
   (testing "Test whether the agenda is correctly validated before passed on."
