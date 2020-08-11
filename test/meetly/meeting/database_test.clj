@@ -162,3 +162,19 @@
       (is (= 4 (database/number-of-active-users)))
       (@#'ddb/prepare-new-argument cat-or-dog-id "wooooggler" "Alles doof" ["weil alles doof war"])
       (is (= 5 (database/number-of-active-users))))))
+
+(deftest statement-length-stats-test
+  (testing "Testing the function that returns lengths of statements statistics"
+    (let [stats (database/statement-length-stats)]
+      (is (< (:min stats) (:max stats)))
+      (is (< (:min stats) (:median stats)))
+      (is (> (:max stats) (:median stats)))
+      (is (> (:max stats) (:average stats)))
+      (is float? (:average stats)))))
+
+(deftest argument-type-stats-test
+  (testing "Statistics about argument types should be working."
+    (let [stats (database/argument-type-stats)]
+      (is (= 6 (:attacks stats)))
+      (is (= 9 (:supports stats)))
+      (is (= 8 (:undercuts stats))))))
