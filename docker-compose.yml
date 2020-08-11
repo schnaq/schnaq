@@ -5,6 +5,8 @@ services:
     image: gitlab.cs.uni-duesseldorf.de:5001/dialogo/projects/meetly/frontend
     networks:
       - web
+    volumes:
+      - ./persist/feedbacks/screenshots:/usr/share/nginx/html/feedbacks/screenshots
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
