@@ -65,7 +65,7 @@
      ;; date
      [date-picker]
      ;; submit
-     [:button.btn.button-secondary.mt-5.mb-1 {:type "submit"}
+     [:button.button-secondary.mt-5.mb-1 {:type "submit"}
       (data/labels :meeting.step2/button)]]]])
 
 ;; #### Events ####
