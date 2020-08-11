@@ -23,7 +23,6 @@
    (let [meetings-num @(rf/subscribe [:analytics/number-of-meetings-overall])
          usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
          average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])]
-     (println average-agendas " Agendas")
      [:div.container.px-5.py-3
       [:div.card-deck
        [analytics-card (labels :analytics/overall-meetings) meetings-num]
@@ -39,39 +38,31 @@
                   [:analytics/load-usernames-num]
                   [:analytics/load-average-number-of-agendas]]}))
 
+(defn fetch-with-password
+  "Fetches something from an endpoint with the password."
+  [db path on-success-event]
+  {:http-xhrio {:method :post
+                :uri (str (:rest-backend config) path)
+                :format (ajax/transit-request-format)
+                :params {:password (-> db :admin :password)}
+                :response-format (ajax/transit-response-format)
+                :on-success [on-success-event]
+                :on-failure [:ajax-failure]}})
+
 (rf/reg-event-fx
   :analytics/load-meeting-num
   (fn [{:keys [db]} _]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/analytics/meetings")
-                  :format (ajax/transit-request-format)
-                  :params {:password (-> db :admin :password)}
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:analytics/meeting-num-loaded]
-                  :on-failure [:ajax-failure]}}))
+    (fetch-with-password db "/analytics/meetings" :analytics/meeting-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-usernames-num
   (fn [{:keys [db]} _]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/analytics/usernames")
-                  :format (ajax/transit-request-format)
-                  :params {:password (-> db :admin :password)}
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:analytics/usernames-num-loaded]
-                  :on-failure [:ajax-failure]}}))
+    (fetch-with-password db "/analytics/usernames" :analytics/usernames-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-average-number-of-agendas
   (fn [{:keys [db]} _]
-    (println "In load agendas")
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/analytics/agendas-per-meeting")
-                  :format (ajax/transit-request-format)
-                  :params {:password (-> db :admin :password)}
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:analytics/agendas-per-meeting-loaded]
-                  :on-failure [:ajax-failure]}}))
+    (fetch-with-password db "/analytics/agendas-per-meeting" :analytics/agendas-per-meeting-loaded)))
 
 (rf/reg-event-db
   :analytics/meeting-num-loaded
@@ -86,7 +77,6 @@
 (rf/reg-event-db
   :analytics/agendas-per-meeting-loaded
   (fn [db [_ {:keys [average-agendas]}]]
-    (println "Writing " average-agendas)
     (assoc-in db [:analytics :agendas :average-per-meeting] (gstring/format "%.2f" average-agendas))))
 
 ;; #### Subs ####
