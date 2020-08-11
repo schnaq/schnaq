@@ -121,6 +121,7 @@
      :analytics/statements-num-title "Anzahl Statements"
      :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
      :analytics/statement-lengths-title "Beitragslängen"
+     :analytics/argument-types-title "Argumenttypen"
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"

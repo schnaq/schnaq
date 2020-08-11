@@ -426,6 +426,24 @@
          (d/db (new-connection)) since attribute))
      0)))
 
+(>defn- number-of-entities-with-value-since
+  "Returns the number of entities in the db since some timestamp. Default is all."
+  ([attribute value]
+   [keyword? any? :ret int?]
+   (number-of-entities-with-value-since attribute value #inst "1971-01-01T01:01:01.000-00:00"))
+  ([attribute value since]
+   [keyword? any? inst? :ret int?]
+   (or
+     (ffirst
+       (d/q
+         '[:find (count ?entities)
+           :in $ ?since ?attribute ?value
+           :where [?entities ?attribute ?value ?tx]
+           [?tx :db/txInstant ?start-date]
+           [(< ?since ?start-date)]]
+         (d/db (new-connection)) since attribute value))
+     0)))
+
 (defn number-of-meetings
   "Returns the number of meetings. Optionally takes a date since when this counts."
   ([] (number-of-entities-since :meeting/title))
@@ -491,3 +509,12 @@
       :min min-length
       :average average-length
       :median median-length})))
+
+(>defn argument-type-stats
+  "Returns the number of attacks, supports and undercuts since a certain timestamp."
+  ([] [:ret map?]
+   (argument-type-stats #inst "1971-01-01T01:01:01.000-00:00"))
+  ([since] [inst? :ret map?]
+   {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
+    :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
+    :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))

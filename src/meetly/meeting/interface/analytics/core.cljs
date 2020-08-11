@@ -25,7 +25,8 @@
          average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])
          statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
          active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
-         statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])]
+         statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
+         argument-types @(rf/subscribe [:analytics/argument-type-stats])]
      [:div.container.px-5.py-3
       [:div.card-columns
        [analytics-card (labels :analytics/overall-meetings) meetings-num]
@@ -36,17 +37,29 @@
        [:div.card
         [:div.card-body
          [:h5.card-title (labels :analytics/statement-lengths-title)]
-         [:p.card-text [:strong "Max: "]]
+         [:p.card-text [:strong "Max"]]
          [:p.card-text.display-1 (:max statement-lengths)]
          [:hr]
-         [:p.card-text [:strong "Min: "]]
+         [:p.card-text [:strong "Min"]]
          [:p.card-text.display-1 (:min statement-lengths)]
          [:hr]
-         [:p.card-text [:strong "Avg: "]]
+         [:p.card-text [:strong "Avg"]]
          [:p.card-text.display-1 (:average statement-lengths)]
          [:hr]
-         [:p.card-text [:strong "Median: "]]
+         [:p.card-text [:strong "Median"]]
          [:p.card-text.display-1 (:median statement-lengths)]
+         [:p.card-text [:small.text-muted "Last updated ..."]]]]
+       [:div.card
+        [:div.card-body
+         [:h5.card-title (labels :analytics/argument-types-title)]
+         [:p.card-text [:strong "Supports"]]
+         [:p.card-text.display-1 (:supports argument-types)]
+         [:hr]
+         [:p.card-text [:strong "Attacks"]]
+         [:p.card-text.display-1 (:attacks argument-types)]
+         [:hr]
+         [:p.card-text [:strong "Undercuts"]]
+         [:p.card-text.display-1 (:undercuts argument-types)]
          [:p.card-text [:small.text-muted "Last updated ..."]]]]]])])
 
 ;; #### Events ####
@@ -59,7 +72,8 @@
                   [:analytics/load-average-number-of-agendas]
                   [:analytics/load-statements-num]
                   [:analytics/load-active-users]
-                  [:analytics/load-statement-length-stats]]}))
+                  [:analytics/load-statement-length-stats]
+                  [:analytics/load-argument-type-stats]]}))
 
 (defn fetch-with-password
   "Fetches something from an endpoint with the password."
@@ -102,6 +116,11 @@
   (fn [{:keys [db]} _]
     (fetch-with-password db "/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
 
+(rf/reg-event-fx
+  :analytics/load-argument-type-stats
+  (fn [{:keys [db]} _]
+    (fetch-with-password db "/analytics/argument-types" :analytics/argument-type-stats-loaded)))
+
 (rf/reg-event-db
   :analytics/meeting-num-loaded
   (fn [db [_ {:keys [meetings-num]}]]
@@ -131,6 +150,11 @@
   :analytics/statement-length-stats-loaded
   (fn [db [_ {:keys [statement-length-stats]}]]
     (assoc-in db [:analytics :statements :lengths] statement-length-stats)))
+
+(rf/reg-event-db
+  :analytics/argument-type-stats-loaded
+  (fn [db [_ {:keys [argument-type-stats]}]]
+    (assoc-in db [:analytics :arguments :types] argument-type-stats)))
 
 ;; #### Subs ####
 
@@ -163,3 +187,8 @@
   :analytics/statement-lengths-stats
   (fn [db _]
     (get-in db [:analytics :statements :lengths])))
+
+(rf/reg-sub
+  :analytics/argument-type-stats
+  (fn [db _]
+    (get-in db [:analytics :arguments :types])))
