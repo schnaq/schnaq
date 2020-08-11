@@ -183,6 +183,11 @@
   [_]
   (response {:meetings-num (db/number-of-meetings)}))
 
+(defn- number-of-usernames
+  "Returns the number of all meetings."
+  [_]
+  (response {:usernames-num (db/number-of-usernames)}))
+
 ;; -----------------------------------------------------------------------------
 ;; General
 
@@ -202,6 +207,7 @@
   (POST "/feedbacks" [] all-feedbacks)
   ;; Analytics routes
   (POST "/analytics/meetings" [] number-of-meetings)
+  (POST "/analytics/usernames" [] number-of-usernames)
   (route/not-found "Error, page not found!"))
 
 (defonce current-server (atom nil))

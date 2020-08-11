@@ -116,6 +116,7 @@
 
      ;; analytics
      :analytics/overall-meetings "Meetings erstellt"
+     :analytics/user-numbers "Usernamen angelegt"
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
