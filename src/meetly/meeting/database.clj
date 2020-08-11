@@ -467,3 +467,27 @@
            [?statements :statement/author ?authors]]
          (d/db (new-connection)) since))
      0)))
+
+(>defn statement-length-stats
+  "Returns a map of stats about statement-length."
+  ([] [:ret map?]
+   (statement-length-stats #inst "1971-01-01T01:01:01.000-00:00"))
+  ([since] [inst? :ret map?]
+   (let [sorted-contents (sort-by count
+                                  (flatten
+                                    (d/q
+                                      '[:find ?contents
+                                        :in $ ?since
+                                        :where [_ :statement/content ?contents ?tx]
+                                        [?tx :db/txInstant ?add-date]
+                                        [(< ?since ?add-date)]]
+                                      (d/db (new-connection)) since)))
+         content-count (count sorted-contents)
+         max-length (count (last sorted-contents))
+         min-length (count (first sorted-contents))
+         average-length (float (/ (reduce #(+ %1 (count %2)) 0 sorted-contents) content-count))
+         median-length (count (nth sorted-contents (quot content-count 2)))]
+     {:max max-length
+      :min min-length
+      :average average-length
+      :median median-length})))

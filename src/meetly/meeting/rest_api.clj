@@ -212,6 +212,13 @@
     (response {:active-users-num (db/number-of-active-users)})
     (bad-request {:message "You are not allowed to use this resource"})))
 
+(defn- statement-lengths-stats
+  "Returns statistics about the statement length."
+  [{:keys [body-params]}]
+  (if (= (:password config/feedbacks) (:password body-params))
+    (response {:statement-length-stats (db/statement-length-stats)})
+    (bad-request {:message "You are not allowed to use this resource"})))
+
 ;; -----------------------------------------------------------------------------
 ;; General
 
@@ -235,6 +242,7 @@
   (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
   (POST "/analytics/statements" [] number-of-statements)
   (POST "/analytics/active-users" [] number-of-active-users)
+  (POST "/analytics/statement-lengths" [] statement-lengths-stats)
   (route/not-found "Error, page not found!"))
 
 (defonce current-server (atom nil))

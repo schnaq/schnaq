@@ -24,14 +24,30 @@
          usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
          average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])
          statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
-         active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])]
+         active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
+         statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])]
      [:div.container.px-5.py-3
       [:div.card-columns
        [analytics-card (labels :analytics/overall-meetings) meetings-num]
        [analytics-card (labels :analytics/user-numbers) usernames-num]
        [analytics-card (labels :analytics/average-agendas-title) average-agendas]
        [analytics-card (labels :analytics/statements-num-title) statements-num]
-       [analytics-card (labels :analytics/active-users-num-title) active-users-num]]])])
+       [analytics-card (labels :analytics/active-users-num-title) active-users-num]
+       [:div.card
+        [:div.card-body
+         [:h5.card-title (labels :analytics/statement-lengths-title)]
+         [:p.card-text [:strong "Max: "]]
+         [:p.card-text.display-1 (:max statement-lengths)]
+         [:hr]
+         [:p.card-text [:strong "Min: "]]
+         [:p.card-text.display-1 (:min statement-lengths)]
+         [:hr]
+         [:p.card-text [:strong "Avg: "]]
+         [:p.card-text.display-1 (:average statement-lengths)]
+         [:hr]
+         [:p.card-text [:strong "Median: "]]
+         [:p.card-text.display-1 (:median statement-lengths)]
+         [:p.card-text [:small.text-muted "Last updated ..."]]]]]])])
 
 ;; #### Events ####
 
@@ -42,7 +58,8 @@
                   [:analytics/load-usernames-num]
                   [:analytics/load-average-number-of-agendas]
                   [:analytics/load-statements-num]
-                  [:analytics/load-active-users]]}))
+                  [:analytics/load-active-users]
+                  [:analytics/load-statement-length-stats]]}))
 
 (defn fetch-with-password
   "Fetches something from an endpoint with the password."
@@ -80,6 +97,11 @@
   (fn [{:keys [db]} _]
     (fetch-with-password db "/analytics/active-users" :analytics/active-users-num-loaded)))
 
+(rf/reg-event-fx
+  :analytics/load-statement-length-stats
+  (fn [{:keys [db]} _]
+    (fetch-with-password db "/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
+
 (rf/reg-event-db
   :analytics/meeting-num-loaded
   (fn [db [_ {:keys [meetings-num]}]]
@@ -93,7 +115,7 @@
 (rf/reg-event-db
   :analytics/statements-num-loaded
   (fn [db [_ {:keys [statements-num]}]]
-    (assoc-in db [:analytics :statements-num :overall] statements-num)))
+    (assoc-in db [:analytics :statements :number :overall] statements-num)))
 
 (rf/reg-event-db
   :analytics/active-users-num-loaded
@@ -104,6 +126,11 @@
   :analytics/agendas-per-meeting-loaded
   (fn [db [_ {:keys [average-agendas]}]]
     (assoc-in db [:analytics :agendas :average-per-meeting] (gstring/format "%.2f" average-agendas))))
+
+(rf/reg-event-db
+  :analytics/statement-length-stats-loaded
+  (fn [db [_ {:keys [statement-length-stats]}]]
+    (assoc-in db [:analytics :statements :lengths] statement-length-stats)))
 
 ;; #### Subs ####
 
@@ -125,9 +152,14 @@
 (rf/reg-sub
   :analytics/number-of-statements-overall
   (fn [db _]
-    (get-in db [:analytics :statements-num :overall])))
+    (get-in db [:analytics :statements :number :overall])))
 
 (rf/reg-sub
   :analytics/number-of-active-users-overall
   (fn [db _]
     (get-in db [:analytics :active-users-num :overall])))
+
+(rf/reg-sub
+  :analytics/statement-lengths-stats
+  (fn [db _]
+    (get-in db [:analytics :statements :lengths])))

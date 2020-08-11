@@ -120,6 +120,7 @@
      :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Meeting"
      :analytics/statements-num-title "Anzahl Statements"
      :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
+     :analytics/statement-lengths-title "Beitragslängen"
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
