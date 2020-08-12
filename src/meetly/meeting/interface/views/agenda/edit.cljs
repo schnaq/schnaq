@@ -11,7 +11,7 @@
      [:div.agenda-line]
      [:div.add-agenda-div.agenda-point
       [:div.row
-       [:div.col-11
+       [:div.col-10
         ;; title
         [:input.form-control.agenda-form-title.form-title
          {:type "text"
@@ -21,9 +21,10 @@
           :placeholder (labels :agenda-point)
           :default-value (:agenda/title agenda)
           :id (str "title-" db-id)}]]
-       [:div.col-1
-        [:div.pr-4.pt-3.link-pointer
-         [:i {:class (str "m-auto fas fa-lg " (fa :delete-icon))}]]]]
+       [:div.col-2
+        [:div.pt-4.link-pointer
+         {:on-click #(rf/dispatch [:agenda/delete db-id])}
+         [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
       ;; description
       [:textarea.form-control.agenda-form-round
        {:name "description"
@@ -31,10 +32,16 @@
         :default-value (:agenda/description agenda)
         :id (str "description-" db-id)}]]]))
 
+(defn add-editable-agenda-button []
+  [:input.btn.agenda-add-button {:type "button"
+                                 :value "+"
+                                 :on-click #(rf/dispatch [:agenda/add-edit-form])}])
+
 (defn edit-view []
   (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
         selected-meeting (:meeting edit-information)
-        meeting-agendas (:agendas edit-information)]
+        meeting-agendas (:agendas edit-information)
+        new-agendas (:new-agendas edit-information)]
     [:div#create-agenda
      (println meeting-agendas)
      [base/nav-header]
@@ -50,17 +57,19 @@
                 :on-submit (fn [e]
                              (.preventDefault e)
                              (rf/dispatch [:todo]))}
-         (for [agenda meeting-agendas]
+         (for [agenda (concat meeting-agendas new-agendas)]
            [:div {:key (:db/id agenda)}
             [agenda-view agenda]])
          [:div.agenda-line]
-         [agenda/add-agenda-button]
+         [add-editable-agenda-button]
          [:br]
          [:br]
          [:br]
          [agenda/submit-agenda-button]]]]]])
 
   )
+
+;; load agendas events
 
 (rf/reg-event-fx
   :agenda/load-for-edit
@@ -78,3 +87,23 @@
   :agenda/current-edit-info
   (fn [db _]
     (:edit-meeting db)))
+
+;; delete agenda events
+
+(rf/reg-event-db
+  :agenda/delete
+  (fn [db [_ agenda-id]]
+    (let [delete-fn (fn [agendas] (remove #(= agenda-id (:db/id %)) agendas))]
+      (-> db (update-in [:edit-meeting :agendas] delete-fn)
+          (update-in [:edit-meeting :new-agendas] delete-fn)))))
+
+;; add agenda form event
+
+(rf/reg-event-db
+  :agenda/add-edit-form
+  (fn [db _]
+    (update-in db [:edit-meeting :new-agendas]
+               #(conj % {:db/id (str (random-uuid))
+                         :agenda/title ""
+                         :agenda/description ""
+                         :agenda/meeting (get-in db [:edit-meeting :meeting :db/id])}))))
