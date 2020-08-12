@@ -63,13 +63,13 @@
                  (.preventDefault e)
                  (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
                  (rf/dispatch [:hide-name-input]))}
-   [:div.px-2 [:input#name-input.form-control.form-round-05.px-2.py-1
-               {:type "text"
-                :name "name-input"
-                :autoFocus true
-                :required true
-                :defaultValue username
-                :placeholder (labels :user.button/set-name-placeholder)}]]
+   [:input#name-input.form-control.form-round-05.py-1.mr-sm-2
+    {:type "text"
+     :name "name-input"
+     :autoFocus true
+     :required true
+     :defaultValue username
+     :placeholder (labels :user.button/set-name-placeholder)}]
    [:input.btn.btn-primary {:type "submit"
                             :value (labels :user.button/set-name)}]])
 
