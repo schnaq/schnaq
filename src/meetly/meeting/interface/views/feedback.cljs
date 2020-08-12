@@ -47,7 +47,7 @@
                           :feedback/contact-mail contact-mail
                           :feedback/description description
                           :feedback/has-image? @checked?}]
-            (rf/dispatch [:feedback/new feedback (screenshot-as-base64-img)])))}
+            (rf/dispatch [:feedback/new feedback (when @checked? (screenshot-as-base64-img))])))}
        [:div.form-group
         [:label {:for "feedback-contact-name"}
          (labels :feedbacks.modal/contact-name)]
@@ -131,9 +131,10 @@
                [:i.far.fa-envelope.pl-1]])]
            [:td (:feedback/description feedback)]
            [:td.image
-            (let [img-src (gstring/format "/feedbacks/screenshots/%s.png" (:db/id feedback))]
-              [:a {:href img-src}
-               [:img.img-fluid.img-thumbnail {:src img-src}]])]])]]])])
+            (when (:feedback/has-image? feedback)
+              (let [img-src (gstring/format "/feedbacks/screenshots/%s.png" (:db/id feedback))]
+                [:a {:href img-src}
+                 [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]])])
 
 (defn overview
   "Shows the page for an overview of all feedbacks."
@@ -177,8 +178,8 @@
     (when-not (string/blank? (:feedback/description feedback))
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/feedback/add")
-                    :params {:feedback feedback
-                             :screenshot screenshot}
+                    :params (cond-> {:feedback feedback}
+                                    screenshot (assoc :screenshot screenshot))
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
                     :on-success [:modal {:show? false :child nil}]
