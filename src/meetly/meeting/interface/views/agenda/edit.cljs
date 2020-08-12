@@ -170,7 +170,7 @@
   (fn [{:keys [db]} _]
     (let [edit-meeting (:edit-meeting db)]
       {:http-xhrio {:method :post
-                    :uri (str (:rest-backend config) "/meeting/edit")
+                    :uri (str (:rest-backend config) "/meeting/update")
                     :params edit-meeting
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)

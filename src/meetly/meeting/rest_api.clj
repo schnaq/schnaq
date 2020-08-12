@@ -48,6 +48,20 @@
         meeting-id (db/add-meeting (assoc meeting :meeting/author author-id))]
     (response {:id-created meeting-id})))
 
+;; TODO the author needs to be added as well.
+(defn- update-meeting
+  "Updates a meeting and its agendas."
+  [{:keys [body-params]}]
+  (let [updated-meeting (:meeting body-params)
+        updated-agendas (filter :agenda/discussion (:agendas body-params))
+        new-agendas (remove :agenda/discussion (:agendas body-params))]
+    (db/add-meeting updated-meeting)
+    (doseq [agenda new-agendas]
+      (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
+    (doseq [agenda updated-agendas]
+      (db/update-agenda agenda))
+    (response {:text "Your Meetly has been updated."})))
+
 (defn- add-author
   "Adds an author to the database."
   [req]
@@ -245,6 +259,7 @@
   (GET "/meetings" [] all-meetings)
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
   (POST "/meeting/add" [] add-meeting)
+  (POST "/meeting/update" [] update-meeting)
   (POST "/agendas/add" [] add-agendas)
   (POST "/author/add" [] add-author)
   (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)

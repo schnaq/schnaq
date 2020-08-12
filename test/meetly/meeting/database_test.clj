@@ -6,6 +6,14 @@
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 
+(defn- any-meeting-id
+  []
+  (database/add-meeting {:meeting/title "Bla"
+                         :meeting/start-date (database/now)
+                         :meeting/end-date (database/now)
+                         :meeting/share-hash "aklsuzd98-234da-123d"
+                         :meeting/author (database/add-user-if-not-exists "Wegi")}))
+
 (deftest up-and-downvotes-test
   (testing "Tests whether setting up and downvotes works properly."
     (let [cat-or-dog (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))
@@ -41,7 +49,8 @@
                                          :meeting/end-date (database/now)
                                          :meeting/share-hash "Wegi-ist-der-schönste"
                                          :meeting/author (database/add-user-if-not-exists "Wegi")})
-          discussion (database/add-agenda-point "Hi" "Beschreibung" meeting)
+          agenda (database/add-agenda-point "Hi" "Beschreibung" meeting)
+          discussion (:db/id (:agenda/discussion (database/agenda agenda)))
           _ (ddb/add-new-starting-argument! discussion "Christian" "this is sparta" ["foo" "bar" "baz"])
           argument (first (ddb/starting-arguments-by-discussion discussion))
           conclusion-id (:db/id (:argument/conclusion argument))
@@ -73,11 +82,7 @@
 
 (deftest add-agenda-point-test
   (testing "Check whether agendas are added correctly"
-    (let [some-meeting (database/add-meeting {:meeting/title "Bla"
-                                              :meeting/start-date (database/now)
-                                              :meeting/end-date (database/now)
-                                              :meeting/share-hash "aklsuzd98-234da-123d"
-                                              :meeting/author (database/add-user-if-not-exists "Wegi")})]
+    (let [some-meeting (any-meeting-id)]
       (is (number? (database/add-agenda-point "Alles gut" "hier" some-meeting)))
       (is (nil? (database/add-agenda-point 123 nil some-meeting)))
       (is (nil? (database/add-agenda-point "Meeting-kaputt" nil "was ist das?")))
@@ -123,11 +128,7 @@
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
     (is (= 1 (database/number-of-meetings)))
-    (database/add-meeting {:meeting/title "Bla"
-                           :meeting/start-date (database/now)
-                           :meeting/end-date (database/now)
-                           :meeting/share-hash "aklsuzd98-234da-123d"
-                           :meeting/author (database/add-user-if-not-exists "Wegi")})
+    (any-meeting-id)                                        ;; Ads any new meeting
     (is (= 2 (database/number-of-meetings)))
     (is (zero? (database/number-of-meetings (database/now))))))
 
@@ -147,11 +148,7 @@
 (deftest average-number-of-agendas-test
   (testing "Test whether the average number of agendas fits."
     (is (= 2 (database/average-number-of-agendas)))
-    (database/add-meeting {:meeting/title "Bla"
-                           :meeting/start-date (database/now)
-                           :meeting/end-date (database/now)
-                           :meeting/share-hash "aklsuzd98-234da-123d"
-                           :meeting/author (database/add-user-if-not-exists "Wegi")})
+    (any-meeting-id)
     (is (= 1 (database/average-number-of-agendas)))))
 
 (deftest number-of-active-users-test
@@ -179,3 +176,34 @@
       (is (= 6 (:attacks stats)))
       (is (= 9 (:supports stats)))
       (is (= 8 (:undercuts stats))))))
+
+(deftest update-agenda-test
+  (testing "Whether the new agenda is added correctly"
+    (let [meeting-id (any-meeting-id)
+          meeting (database/meeting meeting-id)
+          agenda-id (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)
+          agenda {:db/id agenda-id
+                  :agenda/title "Hallo i bims"
+                  :agenda/description "Sparkasse Marketing"
+                  :agenda/meeting meeting-id
+                  :agenda/discussion (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))}
+          old-agenda (first (database/agendas-by-meeting-hash (:meeting/share-hash meeting)))
+          _ (database/update-agenda agenda)
+          new-agenda (first (database/agendas-by-meeting-hash (:meeting/share-hash meeting)))
+          ]
+      (is (= "Hallo i bims nicht" (:agenda/title old-agenda)))
+      (is (= "Lolkasse Lolberg" (:agenda/description old-agenda)))
+      (is (= "Hallo i bims" (:agenda/title new-agenda)))
+      (is (= "Sparkasse Marketing" (:agenda/description new-agenda))))))
+
+(comment
+  (any-meeting-id)
+  (database/meeting 96757023244455)
+  (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" 96757023244455)
+  (first (database/agendas-by-meeting-hash "aklsuzd98-234da-123d"))
+  (database/update-agenda {:db/id 87960930222249
+                           :agenda/title "Hallo i bims"
+                           :agenda/description "Sparkasse Marketing"
+                           :agenda/meeting 96757023244455
+                           :agenda/discussion (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))})
+  )

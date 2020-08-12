@@ -122,6 +122,18 @@
         (transact [(assoc clean-entity :db/id identifier)])
         [:tempids identifier]))))
 
+(>defn clean-and-update-db!
+  "Removes empty strings and nil values from map before transacting it to the
+  database. Checks if the specification still matches. If true, transact the
+  entity."
+  [entity spec]
+  [associative? keyword? :ret int?]
+  (let [clean-entity (clean-db-vals entity)]
+    (println clean-entity)
+    (when (s/valid? spec clean-entity)
+      (transact [clean-entity])
+      (:db/id entity))))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks
@@ -151,6 +163,18 @@
   [::models/meeting :ret int?]
   (clean-and-add-to-db! meeting ::models/meeting))
 
+(>defn update-agenda
+  "Updates an agenda. Object must be complete with all required attributes."
+  [agenda]
+  [::models/agenda :ret int?]
+  (clean-and-update-db! (dissoc agenda :agenda/discussion) ::models/agenda-without-discussion))
+
+(>defn meeting
+  "Return meeting data by id."
+  [id]
+  [int? :ret ::models/meeting]
+  (d/pull (d/db (new-connection)) meeting-pattern id))
+
 (defn all-meetings
   "Shows all meetings currently in the db."
   []
@@ -178,10 +202,11 @@
   [:agenda/title (? string?) int? :ret int?]
   (when (and (s/valid? :agenda/title title)
              (s/valid? int? meeting-id))
-    (let [raw-agenda {:agenda/title title
+    (let [raw-agenda {:db/id "temp-id"
+                      :agenda/title title
                       :agenda/meeting meeting-id
                       :agenda/discussion
-                      {:db/id "temp-id"
+                      {:db/id "whatever-forget-it"
                        :discussion/title title
                        :discussion/states [:discussion.state/open]
                        :discussion/starting-arguments []}}
@@ -201,6 +226,12 @@
    :agenda/description
    :agenda/meeting
    :agenda/discussion])
+
+(>defn agenda
+  "Return agenda data by id."
+  [id]
+  [int? :ret ::models/agenda]
+  (d/pull (d/db (new-connection)) agenda-pattern id))
 
 (defn agendas-by-meeting-hash
   "Return all agendas belonging to a certain meeting. Ready for the wire."
