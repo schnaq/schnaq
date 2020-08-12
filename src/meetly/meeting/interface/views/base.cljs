@@ -1,7 +1,7 @@
 (ns meetly.meeting.interface.views.base
   (:require [oops.core :refer [oget]]
             [reitit.frontend.easy :as reitfe]
-            [meetly.meeting.interface.text.display-data :as data]
+            [meetly.meeting.interface.text.display-data :as data :refer [labels]]
             [meetly.meeting.interface.config :refer [config]]
             [re-frame.core :as rf]))
 
@@ -63,30 +63,31 @@
                  (.preventDefault e)
                  (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
                  (rf/dispatch [:hide-name-input]))}
-   [:div.px-2 [:input#name-input.form-control.form-round-05.px-2.py-1
-               {:type "text"
-                :name "name-input"
-                :autoFocus true
-                :required true
-                :placeholder username}]]
-   [:input.btn.btn-primary {:type "submit"
-                            :value "Set Name"}]])
+   [:input#name-input.form-control.form-round-05.py-1.mr-sm-2
+    {:type "text"
+     :name "name-input"
+     :autoFocus true
+     :required true
+     :defaultValue username
+     :placeholder (labels :user.button/set-name-placeholder)}]
+   [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+    {:type "submit"
+     :value (labels :user.button/set-name)}]])
 
 
 (defn show-input-button
   "A button triggering the showing of the name field."
   [username]
-  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} username])
+  [:button.btn.btn-outline-primary {:on-click #(rf/dispatch [:show-name-input])} username])
 
 (defn username-bar-view
   "A bar containing all user related utilities and information."
   []
   (let [username @(rf/subscribe [:username])
         show-input? @(rf/subscribe [:show-username-input?])]
-    [:div.float-right
-     (if show-input?
-       [name-input username]
-       [show-input-button username])]))
+    (if show-input?
+      [name-input username]
+      [show-input-button username])))
 
 ;; discussion loop header
 
@@ -127,21 +128,19 @@
      [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo) :width "150" :alt ""}]]
     ;; hamburger
     [:button.navbar-toggler
-     {:type "button" :data-toggle "collapse" :data-target "#navbarSupportedContent"
-      :aria-controls "navbarSupportedContent" :aria-expanded "false" :aria-label "Toggle navigation"}
+     {:type "button" :data-toggle "collapse" :data-target "#meetly-navbar"
+      :aria-controls "meetly-navbar" :aria-expanded "false" :aria-label "Toggle navigation"}
      [:span.navbar-toggler-icon]]
     ;; menu items
-    [:div
-     {:id "navbarSupportedContent"
-      :class "collapse navbar-collapse"}
-     [:ul.navbar-nav.ml-auto
+    [:div {:id "meetly-navbar"
+           :class "collapse navbar-collapse"}
+     [:ul.navbar-nav.mr-auto
       ;; navigation items
       (when (not= "production" (:environment config))
-        [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (data/labels :nav-meeting)]])
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (data/labels :nav-meeting-create)]]]
+        [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (labels :nav-meeting-create)]]]
      ;; name input
-     [:div.px-2
-      [username-bar-view]]]]])
+     [username-bar-view]]]])
 
 ;; footer
 
