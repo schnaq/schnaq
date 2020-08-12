@@ -123,6 +123,10 @@
      :analytics/statement-lengths-title "Beitragslängen"
      :analytics/argument-types-title "Argumenttypen"
 
+     ;; User related
+     :user.button/set-name "Name speichern"
+     :user.button/set-name-placeholder "Ihr Name"
+
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
      :router/all-feedbacks "Alle Feedbacks"

@@ -3,6 +3,7 @@
             [reitit.frontend.easy :as reitfe]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.config :refer [config]]
+            [meetly.meeting.interface.text.display-data :refer [labels]]
             [re-frame.core :as rf]))
 
 (defn- wavy-bottom []
@@ -68,9 +69,10 @@
                 :name "name-input"
                 :autoFocus true
                 :required true
-                :placeholder username}]]
+                :defaultValue username
+                :placeholder (labels :user.button/set-name-placeholder)}]]
    [:input.btn.btn-primary {:type "submit"
-                            :value "Set Name"}]])
+                            :value (labels :user.button/set-name)}]])
 
 
 (defn show-input-button
