@@ -84,10 +84,9 @@
   []
   (let [username @(rf/subscribe [:username])
         show-input? @(rf/subscribe [:show-username-input?])]
-    [:div.float-right
-     (if show-input?
-       [name-input username]
-       [show-input-button username])]))
+    (if show-input?
+      [name-input username]
+      [show-input-button username])))
 
 ;; discussion loop header
 
