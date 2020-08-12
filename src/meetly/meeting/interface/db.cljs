@@ -18,5 +18,4 @@
            :down {}}
    :display-triggers {:meeting-link-success false}
    :edit-meeting {:meeting {}
-                  :agendas []
-                  :new-agendas []}})
+                  :agendas []}})
