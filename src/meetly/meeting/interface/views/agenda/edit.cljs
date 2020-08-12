@@ -11,7 +11,7 @@
     [:div
      [:div.agenda-line]
      [:div.add-agenda-div.agenda-point
-      [:div.row
+      [:div.row.agenda-row-title
        [:div.col-10
         ;; title
         [:input.form-control.agenda-form-title.form-title
@@ -42,25 +42,49 @@
                                  :value "+"
                                  :on-click #(rf/dispatch [:agenda/add-edit-form])}])
 
+(defn editable-meeting-info [selected-meeting]
+  [:div.agenda-meeting-container
+   ;; title form
+   [:input.form-control.meeting-edit-title
+    {:default-value (:meeting/title selected-meeting)
+     :type "text"
+     :name "meeting-title"
+     :auto-complete "off"
+     :required true
+     :placeholder (labels :meeting-form-title)
+     :id (str "meeting-title-" (:db/id selected-meeting))
+     :on-key-up
+     #(rf/dispatch
+        [:meeting/update-meeting-attribute :meeting/title (oget % [:target :value])])}]
+   ;; description form
+   [:textarea.form-control.meeting-edit-description
+    {:default-value (:meeting/description selected-meeting)
+     :rows "3"
+     :type "text"
+     :name "meeting-description"
+     :auto-complete "off"
+     :placeholder (labels :meeting-form-title)
+     :id (str "meeting-description-" (:db/id selected-meeting))
+     :on-key-up
+     #(rf/dispatch
+        [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]])
+
 (defn edit-view []
   (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
         selected-meeting (:meeting edit-information)
         meeting-agendas (:agendas edit-information)]
     [:div#create-agenda
-     (println meeting-agendas)
      [base/nav-header]
      [agenda/header]
      [:div.container.px-5.py-3.text-center
-      [:div.agenda-meeting-title
-       [:h2 (:meeting/title selected-meeting)]
-       [:br]
-       [:h4 (:meeting/description selected-meeting)]]
-      [:div.container
-       [:div.agenda-container
-        [:form {:id "agendas-add-form"
-                :on-submit (fn [e]
-                             (.preventDefault e)
-                             (rf/dispatch [:todo]))}
+      [:form {:id "agendas-add-form"
+              :on-submit (fn [e]
+                           (.preventDefault e)
+                           (rf/dispatch [:todo]))}
+       ;; meeting title and description
+       [editable-meeting-info selected-meeting]
+       [:div.container
+        [:div.agenda-container
          (for [agenda meeting-agendas]
            [:div {:key (:db/id agenda)}
             [agenda-view agenda]])
@@ -90,7 +114,6 @@
 (rf/reg-sub
   :agenda/current-edit-info
   (fn [db _]
-    (println (:edit-meeting db))
     (:edit-meeting db)))
 
 ;; delete agenda events
@@ -119,6 +142,15 @@
   (fn [db [_ attribute id new-val]]
     (let [has-id? #(= id (:db/id %))
           update-fn (fn [coll] (map #(if (has-id? %)
+                                       ;; update attribute of agenda
                                        (assoc % attribute new-val)
+                                       ;; do not update agenda
                                        %) coll))]
       (update-in db [:edit-meeting :agendas] update-fn))))
+
+;; update title
+
+(rf/reg-event-db
+  :meeting/update-meeting-attribute
+  (fn [db [_ attribute new-val]]
+    (update-in db [:edit-meeting :meeting] assoc attribute new-val)))

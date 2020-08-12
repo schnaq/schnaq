@@ -23,7 +23,7 @@
    [:div.agenda-line]
    [:div.add-agenda-div.agenda-point
     ;; title
-    [:input.form-control.agenda-form-title.form-title
+    [:input.form-control.agenda-form-title.form-title.agenda-row-title
      {:type "text"
       :name "title"
       :auto-complete "off"
@@ -64,7 +64,7 @@
    [base/nav-header]
    [header]
    [:div.container.px-5.py-3.text-center
-    [:div.agenda-meeting-title
+    [:div.agenda-meeting-container.p-3
      [:h2 (:meeting/title @(rf/subscribe [:meeting/last-added]))]
      [:br]
      [:h4 (:meeting/description @(rf/subscribe [:meeting/last-added]))]]
