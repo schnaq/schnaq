@@ -63,7 +63,7 @@
      ;; Create Agenda
      :agenda-header "Agenda erstellen"
      :agenda-subheader "Fügen Sie zu besprechende Punkte hinzu"
-     :agenda-desc-for "Beschreibung für Top "
+     :agenda-desc-for "Beschreibung für Agendapunkt "
      :agenda-point "Agendapunkt "
 
      ;; Discussion Language
@@ -161,4 +161,5 @@
      :arrow-left "fa-arrow-left"
      :arrow-up "fa-arrow-up"
      :arrow-down "fa-arrow-down"
+     :delete-icon "fa-times-circle"
      :copy "fa-copy"}))

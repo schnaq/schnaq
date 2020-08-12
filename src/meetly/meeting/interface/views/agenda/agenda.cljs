@@ -1,4 +1,4 @@
-(ns meetly.meeting.interface.views.agenda
+(ns meetly.meeting.interface.views.agenda.agenda
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
@@ -7,7 +7,7 @@
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.config :refer [config]]))
 
-(defn- new-agenda-local
+(defn new-agenda-local
   "This function formats the agenda-form input and saves it locally to the db until
   the discussion is created fully. `field` can be `title` or `description`."
   [field content suffix]
@@ -15,7 +15,7 @@
     :title (rf/dispatch [:agenda/update-title content suffix])
     :description (rf/dispatch [:agenda/update-description content suffix])))
 
-(defn- new-agenda-form
+(defn new-agenda-form
   "A form for creating a new agenda. The new agenda is automatically saved in the
   app-state according to the suffix."
   [numbered-suffix]
@@ -40,18 +40,18 @@
       :on-key-up #(new-agenda-local
                     :description (oget % [:target :value]) numbered-suffix)}]]])
 
-(defn- add-agenda-button []
+(defn add-agenda-button []
   [:input.btn.agenda-add-button {:type "button"
                                  :value "+"
                                  :on-click #(rf/dispatch [:increase-agenda-forms])}])
 
-(defn- submit-agenda-button []
+(defn submit-agenda-button []
   [:input.btn.button-primary {:type "submit"
                               :value (data/labels :meeting-create-header)}])
 
 ;; #### header ####
 
-(defn- header []
+(defn header []
   (base/header
     (data/labels :agenda-header)
     (data/labels :agenda-subheader)))
@@ -127,15 +127,18 @@
                   [:reset-temporary-agendas]
                   [:navigate :routes.meeting.created {:share-hash meeting-hash}]]}))
 
+(defn load-agenda-fn [hash on-success-event]
+  {:http-xhrio {:method :get
+                :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
+                :format (ajax/transit-request-format)
+                :response-format (ajax/transit-response-format)
+                :on-success [on-success-event]
+                :on-failure [:ajax-failure]}})
+
 (rf/reg-event-fx
   :load-agendas
   (fn [_ [_ hash]]
-    {:http-xhrio {:method :get
-                  :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:set-current-agendas]
-                  :on-failure [:ajax-failure]}}))
+    (load-agenda-fn hash :set-current-agendas)))
 
 (rf/reg-event-fx
   :load-agenda-information

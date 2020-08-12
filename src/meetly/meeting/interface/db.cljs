@@ -16,4 +16,6 @@
    :history {:full-context []}
    :votes {:up {}
            :down {}}
-   :display-triggers {:meeting-link-success false}})
+   :display-triggers {:meeting-link-success false}
+   :edit-meeting {:meeting {}
+                  :agendas []}})
