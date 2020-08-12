@@ -168,10 +168,11 @@
 (rf/reg-event-fx
   :meeting/submit-changes
   (fn [{:keys [db]} _]
-    (let [edit-meeting (:edit-meeting db)]
+    (let [edit-meeting (:edit-meeting db)
+          nickname (-> db :user :name)]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/meeting/update")
-                    :params edit-meeting
+                    :params (assoc edit-meeting :nickname nickname)
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
                     :on-success [:navigate :routes/meetings.show {:share-hash (:meeting/share-hash edit-meeting)}]

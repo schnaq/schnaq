@@ -48,14 +48,18 @@
         meeting-id (db/add-meeting (assoc meeting :meeting/author author-id))]
     (response {:id-created meeting-id})))
 
-;; TODO the author needs to be added as well.
+;;TODO test this function
+;;TODO weiterleitung im Frontend nach dem Hinzufügen geht nicht
+;;TODO Update und dann auf diskussion refreshed nicht.
 (defn- update-meeting
   "Updates a meeting and its agendas."
   [{:keys [body-params]}]
-  (let [updated-meeting (:meeting body-params)
+  (let [nickname (:nickname body-params)
+        user-id (db/add-user-if-not-exists nickname)
+        updated-meeting (:meeting body-params)
         updated-agendas (filter :agenda/discussion (:agendas body-params))
         new-agendas (remove :agenda/discussion (:agendas body-params))]
-    (db/add-meeting updated-meeting)
+    (db/add-meeting (assoc updated-meeting :meeting/author user-id))
     (doseq [agenda new-agendas]
       (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
     (doseq [agenda updated-agendas]

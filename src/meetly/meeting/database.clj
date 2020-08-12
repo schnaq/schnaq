@@ -129,7 +129,6 @@
   [entity spec]
   [associative? keyword? :ret int?]
   (let [clean-entity (clean-db-vals entity)]
-    (println clean-entity)
     (when (s/valid? spec clean-entity)
       (transact [clean-entity])
       (:db/id entity))))
