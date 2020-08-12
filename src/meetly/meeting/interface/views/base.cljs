@@ -70,14 +70,15 @@
      :required true
      :defaultValue username
      :placeholder (labels :user.button/set-name-placeholder)}]
-   [:input.btn.btn-primary {:type "submit"
-                            :value (labels :user.button/set-name)}]])
+   [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+    {:type "submit"
+     :value (labels :user.button/set-name)}]])
 
 
 (defn show-input-button
   "A button triggering the showing of the name field."
   [username]
-  [:button.btn.btn-primary {:on-click #(rf/dispatch [:show-name-input])} username])
+  [:button.btn.btn-outline-primary {:on-click #(rf/dispatch [:show-name-input])} username])
 
 (defn username-bar-view
   "A bar containing all user related utilities and information."
