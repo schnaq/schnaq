@@ -1,9 +1,8 @@
 (ns meetly.meeting.interface.views.base
   (:require [oops.core :refer [oget]]
             [reitit.frontend.easy :as reitfe]
-            [meetly.meeting.interface.text.display-data :as data]
+            [meetly.meeting.interface.text.display-data :as data :refer [labels]]
             [meetly.meeting.interface.config :refer [config]]
-            [meetly.meeting.interface.text.display-data :refer [labels]]
             [re-frame.core :as rf]))
 
 (defn- wavy-bottom []
@@ -139,8 +138,8 @@
      [:ul.navbar-nav.ml-auto
       ;; navigation items
       (when (not= "production" (:environment config))
-        [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (data/labels :nav-meeting)]])
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (data/labels :nav-meeting-create)]]]
+        [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (labels :nav-meeting-create)]]]
      ;; name input
      [:div.px-2
       [username-bar-view]]]]])
