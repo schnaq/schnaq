@@ -158,23 +158,26 @@
 ;; -----------------------------------------------------------------------------
 ;; Feedback
 
-(defn- save-bytes-to-png!
+(>defn- save-screenshot-if-provided!
   "Stores a base64 encoded file to disk."
-  [#^bytes decodedBytes directory file-name]
-  (let [path (toolbelt/create-directory! directory)
-        location (format "%s/%s.png" path file-name)]
-    (with-open [w (io/output-stream location)]
-      (.write w decodedBytes))))
+  [screenshot directory file-name]
+  [string? string? (s/or :number number? :string string?)
+   :ret nil?]
+  (when screenshot
+    (let [[_header image] (string/split screenshot #",")
+          #^bytes decodedBytes (.decode (Base64/getDecoder) image)
+          path (toolbelt/create-directory! directory)
+          location (format "%s/%s.png" path file-name)]
+      (with-open [w (io/output-stream location)]
+        (.write w decodedBytes)))))
 
 (defn- add-feedback
   "Add new feedback from meetly's frontend."
   [{:keys [body-params]}]
   (let [feedback (:feedback body-params)
-        screenshot (:screenshot body-params)
         feedback-id (db/add-feedback! feedback)
-        [_header image] (string/split screenshot #",")
-        decodedBytes (.decode (Base64/getDecoder) image)]
-    (save-bytes-to-png! decodedBytes "public/feedbacks/screenshots" feedback-id)
+        screenshot (:screenshot body-params)]
+    (save-screenshot-if-provided! screenshot "public/feedbacks/screenshots" feedback-id)
     (response {:text "Feedback successfully created."})))
 
 (defn- all-feedbacks
