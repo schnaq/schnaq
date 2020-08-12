@@ -15,7 +15,7 @@
     [:new-meeting
      {:meeting/title (oget form-elements [:title :value])
       :meeting/description (oget form-elements [:description :value])
-      :meeting/end-date (js/Date. (oget form-elements [:end-date :value]))
+      :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
       :meeting/share-hash (str (random-uuid))
       :meeting/start-date (js/Date.)}]))
 
@@ -25,17 +25,6 @@
   (base/header
     (data/labels :meeting-create-header)
     (data/labels :meeting-create-subheader)))
-
-;; date picker
-
-(defn- date-picker []
-  [:div
-   [:label (data/labels :meeting-form-deadline)]
-   [:div.row
-    [:div.col-sm-3
-     [:input#end-date.form-control.form-round {:type "datetime-local"
-                                               :name "end-date"
-                                               :required true}]]]])
 
 (defn create-meeting-form-view
   "A view with a form that creates a meeting properly."
@@ -62,8 +51,6 @@
       {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]
      [:br] [:br]
 
-     ;; date
-     [date-picker]
      ;; submit
      [:button.btn.button-secondary.mt-5.mb-1 {:type "submit"}
       (data/labels :meeting.step2/button)]]]])
