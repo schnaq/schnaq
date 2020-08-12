@@ -28,33 +28,33 @@
       :name "title"
       :auto-complete "off"
       :required true
-      :placeholder (str (data/labels :agenda-point) (inc numbered-suffix))
+      :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
       :id (str "title-" numbered-suffix)
       :on-key-up
       #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
     ;; description
     [:textarea.form-control.agenda-form-round
      {:name "description"
-      :placeholder (str (data/labels :agenda-desc-for) (inc numbered-suffix))
+      :placeholder (str (data/labels :agenda/desc-for) (inc numbered-suffix))
       :id (str "description-" numbered-suffix)
       :on-key-up #(new-agenda-local
                     :description (oget % [:target :value]) numbered-suffix)}]]])
 
-(defn add-agenda-button []
+(defn- add-agenda-button []
   [:input.btn.agenda-add-button {:type "button"
                                  :value "+"
                                  :on-click #(rf/dispatch [:increase-agenda-forms])}])
 
-(defn submit-agenda-button []
+(defn- submit-agenda-button []
   [:input.btn.button-primary {:type "submit"
                               :value (data/labels :meeting-create-header)}])
 
 ;; #### header ####
 
-(defn header []
+(defn- header []
   (base/header
-    (data/labels :agenda-header)
-    (data/labels :agenda-subheader)))
+    (data/labels :agenda/header)
+    (data/labels :agenda/subheader)))
 
 
 (defn agenda-view

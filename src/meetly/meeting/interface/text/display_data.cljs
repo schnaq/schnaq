@@ -61,10 +61,15 @@
      :meeting.step2/button "2. Schritt: Agenda hinzufügen"
 
      ;; Create Agenda
-     :agenda-header "Agenda erstellen"
-     :agenda-subheader "Fügen Sie zu besprechende Punkte hinzu"
-     :agenda-desc-for "Beschreibung für Agendapunkt "
-     :agenda-point "Agendapunkt "
+     :agenda/header "Agenda erstellen"
+     :agenda/subheader "Fügen Sie zu besprechende Punkte hinzu"
+     :agenda/desc-for "Beschreibung für Agendapunkt "
+     :agenda/point "Agendapunkt "
+
+     ;; Edit Agenda
+     :agenda/edit-title "Meeting editieren"
+     :agenda/edit-subititle "Beschreibung und Agendapunkte editieren"
+     :agenda/edit-button "Änderungen speichern"
 
      ;; Discussion Language
      :discussion/agree "Zustimmung"

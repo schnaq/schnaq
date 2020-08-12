@@ -3,8 +3,18 @@
             [meetly.meeting.interface.views.base :as base]
             [re-frame.core :as rf]
             [oops.core :refer [oget]]
-            [meetly.meeting.interface.text.display-data :refer [labels fa]]))
+            [meetly.meeting.interface.config :refer [config]]
+            [meetly.meeting.interface.text.display-data :refer [labels fa]]
+            [ajax.core :as ajax]))
 
+(defn- header []
+  (base/header
+    (labels :agenda/edit-title)
+    (labels :agenda/edit-subititle)))
+
+(defn- submit-edit-button []
+  [:input.btn.button-primary {:type "submit"
+                              :value (labels :agenda/edit-button)}])
 
 (defn- agenda-view [agenda]
   (let [db-id (:db/id agenda)]
@@ -19,7 +29,7 @@
           :name "title"
           :auto-complete "off"
           :required true
-          :placeholder (labels :agenda-point)
+          :placeholder (labels :agenda/point)
           :default-value (:agenda/title agenda)
           :id (str "title-" db-id)
           :on-key-up
@@ -31,18 +41,18 @@
       ;; description
       [:textarea.form-control.agenda-form-round
        {:name "description"
-        :placeholder (labels :agenda-desc-for)
+        :placeholder (labels :agenda/desc-for)
         :default-value (:agenda/description agenda)
         :id (str "description-" db-id)
         :on-key-up
         #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id (oget % [:target :value])])}]]]))
 
-(defn add-editable-agenda-button []
+(defn- add-editable-agenda-button []
   [:input.btn.agenda-add-button {:type "button"
                                  :value "+"
                                  :on-click #(rf/dispatch [:agenda/add-edit-form])}])
 
-(defn editable-meeting-info [selected-meeting]
+(defn- editable-meeting-info [selected-meeting]
   [:div.agenda-meeting-container
    ;; title form
    [:input.form-control.meeting-edit-title
@@ -75,12 +85,12 @@
         meeting-agendas (:agendas edit-information)]
     [:div#create-agenda
      [base/nav-header]
-     [agenda/header]
+     [header]
      [:div.container.px-5.py-3.text-center
       [:form {:id "agendas-add-form"
               :on-submit (fn [e]
                            (.preventDefault e)
-                           (rf/dispatch [:todo]))}
+                           (rf/dispatch [:meeting/submit-changes]))}
        ;; meeting title and description
        [editable-meeting-info selected-meeting]
        [:div.container
@@ -93,9 +103,7 @@
          [:br]
          [:br]
          [:br]
-         [agenda/submit-agenda-button]]]]]])
-
-  )
+         [submit-edit-button]]]]]]))
 
 ;; load agendas events
 
@@ -154,3 +162,17 @@
   :meeting/update-meeting-attribute
   (fn [db [_ attribute new-val]]
     (update-in db [:edit-meeting :meeting] assoc attribute new-val)))
+
+;; submit changes
+
+(rf/reg-event-fx
+  :meeting/submit-changes
+  (fn [{:keys [db]} _]
+    (let [edit-meeting (:edit-meeting db)]
+      {:http-xhrio {:method :post
+                    :uri (str (:rest-backend config) "/meeting/edit")
+                    :params edit-meeting
+                    :format (ajax/transit-request-format)
+                    :response-format (ajax/transit-response-format)
+                    :on-success [:navigate :routes/meetings.show {:share-hash (:meeting/share-hash edit-meeting)}]
+                    :on-failure [:ajax-failure]}})))
