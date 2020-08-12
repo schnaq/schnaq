@@ -127,21 +127,19 @@
      [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo) :width "150" :alt ""}]]
     ;; hamburger
     [:button.navbar-toggler
-     {:type "button" :data-toggle "collapse" :data-target "#navbarSupportedContent"
-      :aria-controls "navbarSupportedContent" :aria-expanded "false" :aria-label "Toggle navigation"}
+     {:type "button" :data-toggle "collapse" :data-target "#meetly-navbar"
+      :aria-controls "meetly-navbar" :aria-expanded "false" :aria-label "Toggle navigation"}
      [:span.navbar-toggler-icon]]
     ;; menu items
-    [:div
-     {:id "navbarSupportedContent"
-      :class "collapse navbar-collapse"}
-     [:ul.navbar-nav.ml-auto
+    [:div {:id "meetly-navbar"
+           :class "collapse navbar-collapse"}
+     [:ul.navbar-nav.mr-auto
       ;; navigation items
       (when (not= "production" (:environment config))
         [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
       [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (labels :nav-meeting-create)]]]
      ;; name input
-     [:div.px-2
-      [username-bar-view]]]]])
+     [username-bar-view]]]])
 
 ;; footer
 
