@@ -285,8 +285,14 @@
 
 ;; -----------------------------------------------------------------------------
 ;; General
+
+(def ^:private not-found-msg
+  "Error, page not found!")
+
 (defroutes app-routes
-  (GET "/meetings" [] all-meetings)
+  (if (production-mode?)
+    (route/not-found not-found-msg)
+    (GET "/meetings" [] all-meetings))
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
   (POST "/meeting/add" [] add-meeting)
   (POST "/meeting/update" [] update-meeting!)
@@ -309,7 +315,7 @@
   (POST "/analytics/active-users" [] number-of-active-users)
   (POST "/analytics/statement-lengths" [] statement-lengths-stats)
   (POST "/analytics/argument-types" [] argument-type-stats)
-  (route/not-found "Error, page not found!"))
+  (route/not-found not-found-msg))
 
 (defonce current-server (atom nil))
 
@@ -325,7 +331,7 @@
   [& _args]
   (let [port (:port config/rest-api)
         allowed-origins [#".*\.dialogo\.io"]
-        allowed-origins' (if (not= "production" config/env-mode) (conj allowed-origins #".*") allowed-origins)]
+        allowed-origins' (if (production-mode?) allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middleware
     (meetly-core/-main)
     (reset! current-server
