@@ -3,6 +3,8 @@
   (:require ["html2canvas" :as html2canvas]
             [ajax.core :as ajax]
             [clojure.string :as string]
+            [cljs.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn]]
             [goog.dom :as gdom]
             [goog.string :as gstring]
             [meetly.meeting.interface.config :refer [config]]
@@ -40,13 +42,14 @@
        {:on-submit
         (fn [e]
           (.preventDefault e)
-          (let [contact-name (oget e [:target :elements :contact-name :value])
-                contact-mail (oget e [:target :elements :contact-mail :value])
-                description (oget e [:target :elements :description :value])
-                feedback {:feedback/contact-name contact-name
-                          :feedback/contact-mail contact-mail
-                          :feedback/description description
+          (let [contact-name (oget e [:target :elements :contact-name])
+                contact-mail (oget e [:target :elements :contact-mail])
+                description (oget e [:target :elements :description])
+                feedback {:feedback/contact-name (oget contact-name [:value])
+                          :feedback/contact-mail (oget contact-mail [:value])
+                          :feedback/description (oget description [:value])
                           :feedback/has-image? @checked?}]
+            (toolbelt/reset-form-fields! [contact-name contact-mail description])
             (rf/dispatch [:feedback/new feedback (when @checked? (screenshot-as-base64-img))])))}
        [:div.form-group
         [:label {:for "feedback-contact-name"}
