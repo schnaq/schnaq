@@ -17,8 +17,9 @@
 (def ^:private screenshot (atom ""))
 
 (defn- screenshot-as-base64-img []
-  (when @screenshot
-    (.toDataURL @screenshot)))
+  (let [screenshot' @screenshot]
+    (when screenshot'
+      (.toDataURL screenshot'))))
 
 (defn- screenshot! []
   (.then
