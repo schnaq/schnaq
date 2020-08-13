@@ -54,10 +54,3 @@
   []
   [:div
    [single-meeting]])
-
-;; #### Events ####
-
-(rf/reg-sub
-  :selected-meeting
-  (fn [db _]
-    (get-in db [:meeting :selected])))

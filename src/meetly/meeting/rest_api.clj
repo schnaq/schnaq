@@ -48,7 +48,6 @@
         meeting-id (db/add-meeting (assoc meeting :meeting/author author-id))]
     (response {:id-created meeting-id})))
 
-;;TODO Update und dann auf diskussion refreshed nicht.
 (defn- update-meeting
   "Updates a meeting and its agendas."
   [{:keys [body-params]}]

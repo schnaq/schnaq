@@ -73,6 +73,11 @@
   (fn [db [_ meeting]]
     (assoc-in db [:meeting :selected] meeting)))
 
+(rf/reg-sub
+  :selected-meeting
+  (fn [db _]
+    (get-in db [:meeting :selected])))
+
 (rf/reg-event-fx
   :load-meeting-by-share-hash
   (fn [{:keys [db]} [_ hash]]

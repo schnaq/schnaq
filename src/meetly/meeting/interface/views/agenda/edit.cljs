@@ -181,4 +181,5 @@
 (rf/reg-event-fx
   :meeting/on-success-submit-changes-event
   (fn [_ [_ {:keys [meeting]} _response]]
-    {:dispatch [:navigate :routes/meetings.show {:share-hash (:meeting/share-hash meeting)}]}))
+    {:dispatch-n [[:navigate :routes/meetings.show {:share-hash (:meeting/share-hash meeting)}]
+                  [:select-current-meeting meeting]]}))
