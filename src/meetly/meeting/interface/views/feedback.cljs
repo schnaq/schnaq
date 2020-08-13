@@ -19,7 +19,8 @@
 (def ^:private screenshot (atom ""))
 
 (defn- screenshot-as-base64-img []
-  (.toDataURL @screenshot))
+  (when @screenshot
+    (.toDataURL @screenshot)))
 
 (defn- screenshot! []
   (.then
@@ -49,8 +50,8 @@
                           :feedback/contact-mail (oget contact-mail [:value])
                           :feedback/description (oget description [:value])
                           :feedback/has-image? @checked?}]
-            (toolbelt/reset-form-fields! [contact-name contact-mail description])
-            (rf/dispatch [:feedback/new feedback (when @checked? (screenshot-as-base64-img))])))}
+            (rf/dispatch [:feedback/new feedback (when @checked? (screenshot-as-base64-img))
+                          [contact-name contact-mail description]])))}
        [:div.form-group
         [:label {:for "feedback-contact-name"}
          (labels :feedbacks.modal/contact-name)]
@@ -177,7 +178,7 @@
 
 (rf/reg-event-fx
   :feedback/new
-  (fn [_ [_ feedback screenshot]]
+  (fn [_ [_ feedback screenshot form-elements]]
     (when-not (string/blank? (:feedback/description feedback))
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/feedback/add")
@@ -186,4 +187,5 @@
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
                     :on-success [:modal {:show? false :child nil}]
-                    :on-failure [:ajax-failure]}})))
+                    :on-failure [:ajax-failure]}
+       :dispatch-n [[:form/clear form-elements]]})))
