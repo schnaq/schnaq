@@ -44,8 +44,8 @@
           new-meeting-request {:body-params {:nickname new-author
                                              :meeting {:db/id old-meeting-id
                                                        :meeting/title new-title
-                                                       :meeting/share-hash "Velma"
-                                                       :meeting/edit-hash "Shaggy"
+                                                       :meeting/share-hash old-share-hash
+                                                       :meeting/edit-hash old-edit-hash
                                                        :meeting/start-date (db/now)
                                                        :meeting/end-date (db/now)}
                                              :agendas []}}
@@ -63,6 +63,34 @@
       (testing "Check whether forbidden attributes stayed the same"
         (is (= old-share-hash (:meeting/share-hash new-meeting)))
         (is (= old-edit-hash (:meeting/edit-hash new-meeting)))))))
+
+(deftest update-meeting-invalid-test
+  (testing "Test if invalid credentials are caught"
+    (let [new-title "foo Neu"
+          new-author "Der Schredder"
+          old-share-hash "abbada"
+          old-edit-hash "Scooby Doo"
+          old-meeting-id (db/add-meeting {:meeting/title "foo"
+                                          :meeting/share-hash old-share-hash
+                                          :meeting/edit-hash old-edit-hash
+                                          :meeting/start-date (db/now)
+                                          :meeting/end-date (db/now)
+                                          :meeting/author (db/add-user-if-not-exists "Wegi")})
+          update-meeting @#'api/update-meeting!
+          new-meeting-request {:body-params {:nickname new-author
+                                             :meeting {:db/id old-meeting-id
+                                                       :meeting/title new-title
+                                                       :meeting/share-hash old-share-hash
+                                                       :meeting/edit-hash "i am invalid xD"
+                                                       :meeting/start-date (db/now)
+                                                       :meeting/end-date (db/now)}
+                                             :agendas []}}
+          update-response (update-meeting new-meeting-request)
+          new-meeting (db/meeting-private-data old-meeting-id)]
+      (is (= old-share-hash (:meeting/share-hash new-meeting)))
+      (is (= old-edit-hash (:meeting/edit-hash new-meeting)))
+      (is (= 400 (:status update-response)))
+      (is (= "You are not allowed to update this meeting." (-> update-response :body :error))))))
 
 (deftest check-credentials-test
   (testing "Check if credentials are verified correctly."

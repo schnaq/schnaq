@@ -170,13 +170,15 @@
   :meeting/submit-changes
   (fn [{:keys [db]} _]
     (let [edit-meeting (:edit-meeting db)
+          edit-hash (get-in db [:current-route :path-params :admin-hash])
+          finalized-changes (assoc-in edit-meeting [:meeting :meeting/edit-hash] edit-hash)
           nickname (-> db :user :name)]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/meeting/update")
-                    :params (assoc edit-meeting :nickname nickname)
+                    :params (assoc finalized-changes :nickname nickname)
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:meeting/on-success-submit-changes-event edit-meeting]
+                    :on-success [:meeting/on-success-submit-changes-event finalized-changes]
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx

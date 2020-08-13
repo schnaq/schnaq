@@ -13,6 +13,7 @@
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
+            [ghostwheel.core :refer [>defn-]]
             [meetly.core :as meetly-core]
             [clojure.spec.alpha :as s]
             [meetly.toolbelt :as toolbelt]
@@ -25,6 +26,13 @@
   [password]
   [string? :ret boolean?]
   (= config/admin-password password))
+
+(>defn- valid-credentials?
+  "Validate if share-hash and admin-hash match"
+  [share-hash edit-hash]
+  [string? string? :ret boolean?]
+  (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
+    (= edit-hash (:meeting/edit-hash authenticate-meeting))))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -56,15 +64,18 @@
   [{:keys [body-params]}]
   (let [nickname (:nickname body-params)
         user-id (db/add-user-if-not-exists nickname)
-        updated-meeting (dissoc (:meeting body-params) :meeting/share-hash :meeting/edit-hash)
+        meeting (:meeting body-params)
+        updated-meeting (dissoc meeting :meeting/share-hash :meeting/edit-hash)
         updated-agendas (filter :agenda/discussion (:agendas body-params))
         new-agendas (remove :agenda/discussion (:agendas body-params))]
-    (db/update-meeting (assoc updated-meeting :meeting/author user-id))
-    (doseq [agenda new-agendas]
-      (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
-    (doseq [agenda updated-agendas]
-      (db/update-agenda agenda))
-    (response {:text "Your Meetly has been updated."})))
+    (if (valid-credentials? (:meeting/share-hash meeting) (:meeting/edit-hash meeting))
+      (do (db/update-meeting (assoc updated-meeting :meeting/author user-id))
+          (doseq [agenda new-agendas]
+            (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
+          (doseq [agenda updated-agendas]
+            (db/update-agenda agenda))
+          (response {:text "Your Meetly has been updated."}))
+      (bad-request {:error "You are not allowed to update this meeting."}))))
 
 (defn- add-author
   "Adds an author to the database."
@@ -263,13 +274,11 @@
   "Checks whether share-hash and edit-hash match."
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)
-        edit-hash (:edit-hash body-params)
-        suspected-meeting (db/meeting-by-hash-private share-hash)]
-    (response {:valid-credentials? (= edit-hash (:meeting/edit-hash suspected-meeting))})))
+        edit-hash (:edit-hash body-params)]
+    (response {:valid-credentials? (valid-credentials? share-hash edit-hash)})))
 
 ;; -----------------------------------------------------------------------------
 ;; General
-;;TODO validate on edit route, because FUCK THIS ISSUE
 ;;TODO CREATE NO ACCESS ROUTE
 (defroutes app-routes
   (GET "/meetings" [] all-meetings)

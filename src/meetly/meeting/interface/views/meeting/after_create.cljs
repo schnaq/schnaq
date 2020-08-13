@@ -10,17 +10,20 @@
             [meetly.meeting.interface.views.base :as base]))
 
 (>defn- get-share-link
-  [meeting]
+  [current-route]
   [map? :ret string?]
-  (let [path (reitfe/href :routes/meetings.show {:share-hash (:meeting/share-hash meeting)})
+  (let [share-hash (-> current-route :path-params :share-hash)
+        path (reitfe/href :routes/meetings.show {:share-hash share-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
 
 (>defn- get-edit-link
-  [meeting]
+  [current-route]
   [map? :ret string?]
-  (let [path (reitfe/href :routes/edit {:share-hash (:meeting/share-hash meeting)
-                                        :admin-hash (:meeting/edit-hash meeting)})
+  (let [share-hash (-> current-route :path-params :share-hash)
+        admin-hash (-> current-route :path-params :admin-hash)
+        path (reitfe/href :routes/edit {:share-hash share-hash
+                                        :admin-hash admin-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
 
@@ -47,7 +50,7 @@
        (.tooltip (js/$ (str "#meeting-link-form-" id-extra))))
      :reagent-render
      (fn []
-       (let [display-content (create-link-fn @(rf/subscribe [:selected-meeting]))
+       (let [display-content (create-link-fn @(rf/subscribe [:current-route]))
              meeting-link-id (str "meeting-link" id-extra)]
          [:div
           [:form.form.create-meeting-form.form-inline.row
