@@ -23,7 +23,12 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
-    :db/doc "A hash that grants access to the discussion"}
+    :db/doc "A hash that grants participation access to the discussion"}
+   {:db/ident :meeting/edit-hash
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
+    :db/doc "A hash that grants edit access to the discussion"}
    {:db/ident :meeting/author
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
@@ -86,6 +91,7 @@
 (s/def :meeting/title ::non-blank-string)
 (s/def :meeting/description ::non-blank-string)
 (s/def :meeting/share-hash ::non-blank-string)
+(s/def :meeting/edit-hash ::non-blank-string)
 (s/def :meeting/start-date inst?)
 (s/def :meeting/end-date inst?)
 (s/def :meeting/author (s/or :reference ::entity-reference
@@ -93,7 +99,7 @@
 (s/def ::meeting (s/keys :req [:meeting/title :meeting/author
                                :meeting/share-hash
                                :meeting/start-date :meeting/end-date]
-                         :opt [:meeting/description]))
+                         :opt [:meeting/description :meeting/edit-hash]))
 
 ;; Agenda
 (s/def :agenda/title ::non-blank-string)
