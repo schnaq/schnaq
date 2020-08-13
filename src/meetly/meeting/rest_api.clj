@@ -18,7 +18,7 @@
             [meetly.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:gen-class)
-  (:import (java.util Base64)))
+  (:import (java.util Base64 UUID)))
 
 (>defn- valid-password?
   "Check if the password is a valid."
@@ -43,11 +43,16 @@
   Returns the id of the newly-created meeting as `:id-created`."
   [req]
   (let [meeting (-> req :body-params :meeting)
+        final-meeting (assoc meeting :meeting/share-hash (.toString (UUID/randomUUID))
+                                     :meeting/edit-hash (.toString (UUID/randomUUID)))
         nickname (-> req :body-params :nickname)
         author-id (db/add-user-if-not-exists nickname)
-        meeting-id (db/add-meeting (assoc meeting :meeting/author author-id))]
-    (response {:id-created meeting-id})))
+        meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
+        created-meeting (db/meeting meeting-id)]
+    (response {:new-meeting created-meeting})))
 
+
+;; TODO Only allow change of title and description and user
 (defn- update-meeting
   "Updates a meeting and its agendas."
   [{:keys [body-params]}]

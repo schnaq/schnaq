@@ -17,7 +17,6 @@
      {:meeting/title (oget form-elements [:title :value])
       :meeting/description (oget form-elements [:description :value])
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
-      :meeting/share-hash (str (random-uuid))
       :meeting/start-date (js/Date.)}]))
 
 ;; #### Views ####
@@ -60,14 +59,13 @@
 
 (rf/reg-event-fx
   :meeting-added
-  (fn [{:keys [db]} [_ meeting response]]
-    (let [new-meeting (assoc meeting :db/id (:id-created response))]
-      {:db (-> db
-               (assoc :meeting/added new-meeting)
-               (update :meetings conj new-meeting))
-       :dispatch-n [[:navigate :routes/meetings.agenda
-                     {:share-hash (:meeting/share-hash meeting)}]
-                    [:select-current-meeting new-meeting]]})))
+  (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
+    {:db (-> db
+             (assoc :meeting/added new-meeting)
+             (update :meetings conj new-meeting))
+     :dispatch-n [[:navigate :routes/meetings.agenda
+                   {:share-hash (:meeting/share-hash new-meeting)}]
+                  [:select-current-meeting new-meeting]]}))
 
 (rf/reg-event-db
   :select-current-meeting
@@ -100,7 +98,7 @@
                              :meeting meeting}
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:meeting-added meeting]
+                    :on-success [:meeting-added]
                     :on-failure [:ajax-failure]}})))
 
 ;; #### Subs ####
