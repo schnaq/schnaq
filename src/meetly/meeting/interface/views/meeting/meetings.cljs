@@ -4,7 +4,8 @@
             [ajax.core :as ajax]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
-            [meetly.meeting.interface.config :refer [config]]))
+            [meetly.meeting.interface.config :refer [config]]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 ;; #### Helpers ####
 
@@ -34,7 +35,7 @@
    [header]
    [:div.container.px-5.py-3
     ;; form
-    [:form {:on-submit (fn [e] (.preventDefault e)
+    [:form {:on-submit (fn [e] (js-wrap/prevent-default e)
                          (new-meeting-helper (oget e [:target :elements])))}
      ;; title
      [:label {:for "title"} (data/labels :meeting-form-title)] [:br]

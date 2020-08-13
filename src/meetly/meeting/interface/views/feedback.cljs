@@ -12,7 +12,8 @@
             [meetly.meeting.interface.utils.toolbelt :as toolbelt]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 (def ^:private screenshot (atom ""))
 
@@ -39,7 +40,7 @@
       [:form.form
        {:on-submit
         (fn [e]
-          (.preventDefault e)
+          (js-wrap/prevent-default e)
           (let [contact-name (oget e [:target :elements :contact-name :value])
                 contact-mail (oget e [:target :elements :contact-mail :value])
                 description (oget e [:target :elements :description :value])

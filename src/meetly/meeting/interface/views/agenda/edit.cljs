@@ -5,6 +5,7 @@
             [oops.core :refer [oget]]
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.text.display-data :refer [labels fa]]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]
             [ajax.core :as ajax]))
 
 (defn- header []
@@ -89,7 +90,7 @@
      [:div.container.px-5.py-3.text-center
       [:form {:id "agendas-add-form"
               :on-submit (fn [e]
-                           (.preventDefault e)
+                           (js-wrap/prevent-default e)
                            (rf/dispatch [:meeting/submit-changes]))}
        ;; meeting title and description
        [editable-meeting-info selected-meeting]

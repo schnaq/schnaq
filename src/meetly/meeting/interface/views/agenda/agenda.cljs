@@ -5,7 +5,8 @@
             [goog.string :as gstring]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
-            [meetly.meeting.interface.config :refer [config]]))
+            [meetly.meeting.interface.config :refer [config]]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 (defn new-agenda-local
   "This function formats the agenda-form input and saves it locally to the db until
@@ -72,7 +73,7 @@
      [:div.agenda-container
       [:form {:id "agendas-add-form"
               :on-submit (fn [e]
-                           (.preventDefault e)
+                           (js-wrap/prevent-default e)
                            (rf/dispatch [:send-agendas]))}
        (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
          [:div {:key agenda-num}
