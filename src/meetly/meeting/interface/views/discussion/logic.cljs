@@ -52,7 +52,8 @@
         [reaction key-name] (if (= choice "against-radio")
                               [:starting-rebut/new :new/rebut-premise]
                               [:starting-support/new :new/support-premise])]
-    (rf/dispatch [:continue-discussion reaction (assoc current-args key-name new-text)])))
+    (rf/dispatch [:continue-discussion reaction (assoc current-args key-name new-text)])
+    (rf/dispatch [:form/clear form])))
 
 (defn submit-new-premise
   "Submits a newly created premise as an undercut, rebut or support."
@@ -62,4 +63,5 @@
     (case choice
       "against-radio" (rf/dispatch [:continue-discussion :rebut/new (assoc rebut-args :new/rebut new-text)])
       "for-radio" (rf/dispatch [:continue-discussion :support/new (assoc support-args :new/support new-text)])
-      "undercut-radio" (rf/dispatch [:continue-discussion :undercut/new (assoc undercut-args :new/undercut new-text)]))))
+      "undercut-radio" (rf/dispatch [:continue-discussion :undercut/new (assoc undercut-args :new/undercut new-text)]))
+    (rf/dispatch [:form/clear form])))

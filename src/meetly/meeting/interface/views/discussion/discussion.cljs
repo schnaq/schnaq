@@ -8,7 +8,6 @@
             [meetly.meeting.interface.views.discussion.logic :as logic]
             [meetly.meeting.interface.views.discussion.view-elements :as view]))
 
-
 (defn discussion-start-view
   "The first step after starting a discussion."
   []
