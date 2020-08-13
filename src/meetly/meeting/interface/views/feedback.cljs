@@ -16,12 +16,19 @@
 
 (def ^:private screenshot (atom ""))
 
-(defn- screenshot-as-base64-img []
-  (let [screenshot' @screenshot]
+(defn- screenshot-as-base64-img
+  "`screenshot` is of type HTMLCanvasElement and can therefore be transformed
+  via `.toDataURL` to a base64 encoded string. This function returns the base64
+  string if available."
+  []
+  (let [^js/HTMLCanvasElement screenshot' @screenshot]
     (when screenshot'
       (.toDataURL screenshot'))))
 
-(defn- screenshot! []
+(defn- screenshot!
+  "Take screenshot of whole page using html2canvas. Errors in rendering SVG
+  elements are normal."
+  []
   (.then
     (html2canvas (gdom/getElement "app")
                  (clj->js {:letterRendering 1 :allowTaint true}))
