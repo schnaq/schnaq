@@ -6,7 +6,8 @@
             [meetly.meeting.interface.views.common :as common]
             [oops.core :refer [oget]]
             [meetly.meeting.interface.views.base :as base]
-            [ajax.core :as ajax]))
+            [ajax.core :as ajax]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 (defn up-down-vote
   "Add panel for up and down votes."
@@ -15,12 +16,12 @@
     [:div
      [:div.up-vote.text-center
       ;; Prevent activating the time travel or deep dive
-      {:on-click (fn [e] (.stopPropagation e) (rf/dispatch [:toggle-upvote statement]))}
+      {:on-click (fn [e] (js-wrap/stop-propagation e) (rf/dispatch [:toggle-upvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]
        (logic/calculate-votes statement :upvotes votes)]]
 
      [:div.down-vote.text-center
-      {:on-click (fn [e] (.stopPropagation e) (rf/dispatch [:toggle-downvote statement]))}
+      {:on-click (fn [e] (js-wrap/stop-propagation e) (rf/dispatch [:toggle-downvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
 
@@ -69,7 +70,7 @@
   (Premise and Conclusion as statements)"
   []
   [:form
-   {:on-submit (fn [e] (.preventDefault e)
+   {:on-submit (fn [e] (js-wrap/prevent-default e)
                  (rf/dispatch [:continue-discussion :starting-argument/new
                                (oget e [:target :elements])]))}
    [:input.form-control.discussion-text-input.mb-1

@@ -13,18 +13,26 @@
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
+            [ghostwheel.core :refer [>defn-]]
             [meetly.core :as meetly-core]
             [clojure.spec.alpha :as s]
             [meetly.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:gen-class)
-  (:import (java.util Base64)))
+  (:import (java.util Base64 UUID)))
 
 (>defn- valid-password?
   "Check if the password is a valid."
   [password]
   [string? :ret boolean?]
   (= config/admin-password password))
+
+(>defn- valid-credentials?
+  "Validate if share-hash and admin-hash match"
+  [share-hash edit-hash]
+  [string? string? :ret boolean?]
+  (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
+    (= edit-hash (:meeting/edit-hash authenticate-meeting))))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -43,25 +51,31 @@
   Returns the id of the newly-created meeting as `:id-created`."
   [req]
   (let [meeting (-> req :body-params :meeting)
+        final-meeting (assoc meeting :meeting/share-hash (.toString (UUID/randomUUID))
+                                     :meeting/edit-hash (.toString (UUID/randomUUID)))
         nickname (-> req :body-params :nickname)
         author-id (db/add-user-if-not-exists nickname)
-        meeting-id (db/add-meeting (assoc meeting :meeting/author author-id))]
-    (response {:id-created meeting-id})))
+        meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
+        created-meeting (db/meeting-private-data meeting-id)]
+    (response {:new-meeting created-meeting})))
 
-(defn- update-meeting
+(defn- update-meeting!
   "Updates a meeting and its agendas."
   [{:keys [body-params]}]
   (let [nickname (:nickname body-params)
         user-id (db/add-user-if-not-exists nickname)
-        updated-meeting (:meeting body-params)
+        meeting (:meeting body-params)
+        updated-meeting (dissoc meeting :meeting/share-hash :meeting/edit-hash)
         updated-agendas (filter :agenda/discussion (:agendas body-params))
         new-agendas (remove :agenda/discussion (:agendas body-params))]
-    (db/add-meeting (assoc updated-meeting :meeting/author user-id))
-    (doseq [agenda new-agendas]
-      (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
-    (doseq [agenda updated-agendas]
-      (db/update-agenda agenda))
-    (response {:text "Your Meetly has been updated."})))
+    (if (valid-credentials? (:meeting/share-hash meeting) (:meeting/edit-hash meeting))
+      (do (db/update-meeting (assoc updated-meeting :meeting/author user-id))
+          (doseq [agenda new-agendas]
+            (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
+          (doseq [agenda updated-agendas]
+            (db/update-agenda agenda))
+          (response {:text "Your Meetly has been updated."}))
+      (bad-request {:error "You are not allowed to update this meeting."}))))
 
 (defn- add-author
   "Adds an author to the database."
@@ -180,7 +194,7 @@
    :ret nil?]
   (when screenshot
     (let [[_header image] (string/split screenshot #",")
-          #^bytes decodedBytes (.decode (Base64/getDecoder) image)
+          #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)
           path (toolbelt/create-directory! directory)
           location (format "%s/%s.png" path file-name)]
       (with-open [w (io/output-stream location)]
@@ -256,14 +270,20 @@
     (response {:argument-type-stats (db/argument-type-stats)})
     (bad-request {:message "You are not allowed to use this resource"})))
 
+(defn- check-credentials
+  "Checks whether share-hash and edit-hash match."
+  [{:keys [body-params]}]
+  (let [share-hash (:share-hash body-params)
+        edit-hash (:edit-hash body-params)]
+    (response {:valid-credentials? (valid-credentials? share-hash edit-hash)})))
+
 ;; -----------------------------------------------------------------------------
 ;; General
-
 (defroutes app-routes
   (GET "/meetings" [] all-meetings)
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
   (POST "/meeting/add" [] add-meeting)
-  (POST "/meeting/update" [] update-meeting)
+  (POST "/meeting/update" [] update-meeting!)
   (POST "/agendas/add" [] add-agendas)
   (POST "/author/add" [] add-author)
   (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
@@ -274,6 +294,7 @@
   (POST "/votes/down/toggle" [] toggle-downvote-statement)
   (POST "/feedback/add" [] add-feedback)
   (POST "/feedbacks" [] all-feedbacks)
+  (POST "/credentials/validate" [] check-credentials)
   ;; Analytics routes
   (POST "/analytics/meetings" [] number-of-meetings)
   (POST "/analytics/usernames" [] number-of-usernames)

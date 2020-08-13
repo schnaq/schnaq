@@ -4,7 +4,8 @@
             [ajax.core :as ajax]
             [meetly.meeting.interface.text.display-data :as data]
             [meetly.meeting.interface.views.base :as base]
-            [meetly.meeting.interface.config :refer [config]]))
+            [meetly.meeting.interface.config :refer [config]]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 ;; #### Helpers ####
 
@@ -16,7 +17,6 @@
      {:meeting/title (oget form-elements [:title :value])
       :meeting/description (oget form-elements [:description :value])
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
-      :meeting/share-hash (str (random-uuid))
       :meeting/start-date (js/Date.)}]))
 
 ;; #### Views ####
@@ -34,7 +34,7 @@
    [header]
    [:div.container.px-5.py-3
     ;; form
-    [:form {:on-submit (fn [e] (.preventDefault e)
+    [:form {:on-submit (fn [e] (js-wrap/prevent-default e)
                          (new-meeting-helper (oget e [:target :elements])))}
      ;; title
      [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
@@ -59,14 +59,13 @@
 
 (rf/reg-event-fx
   :meeting-added
-  (fn [{:keys [db]} [_ meeting response]]
-    (let [new-meeting (assoc meeting :db/id (:id-created response))]
-      {:db (-> db
-               (assoc :meeting/added new-meeting)
-               (update :meetings conj new-meeting))
-       :dispatch-n [[:navigate :routes/meetings.agenda
-                     {:share-hash (:meeting/share-hash meeting)}]
-                    [:select-current-meeting new-meeting]]})))
+  (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
+    {:db (-> db
+             (assoc :meeting/added new-meeting)
+             (update :meetings conj new-meeting))
+     :dispatch-n [[:navigate :routes/meetings.agenda
+                   {:share-hash (:meeting/share-hash new-meeting)}]
+                  [:select-current-meeting new-meeting]]}))
 
 (rf/reg-event-db
   :select-current-meeting
@@ -99,8 +98,28 @@
                              :meeting meeting}
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:meeting-added meeting]
+                    :on-success [:meeting-added]
                     :on-failure [:ajax-failure]}})))
+
+(rf/reg-event-fx
+  :meeting/check-admin-credentials
+  (fn [_ [_ share-hash edit-hash]]
+    {:http-xhrio {:method :post
+                  :uri (str (:rest-backend config) "/credentials/validate")
+                  :params {:share-hash share-hash
+                           :edit-hash edit-hash}
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:meeting/check-admin-credentials-success]
+                  :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-fx
+  ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
+  ;; the backend every time)
+  :meeting/check-admin-credentials-success
+  (fn [_ [_ {:keys [valid-credentials?]}]]
+    (when-not valid-credentials?
+      {:dispatch [:navigate :routes/invalid-link]})))
 
 ;; #### Subs ####
 

@@ -85,8 +85,8 @@
   [:db/id
    :author/nickname])
 
-(def ^:private meeting-pattern
-  "Pull a meetly based on these attributes."
+(def ^:private meeting-pattern-public
+  "Pull a meetly based on these attributes, omit sensitive information"
   [:db/id
    :meeting/title
    :meeting/start-date
@@ -94,6 +94,10 @@
    :meeting/description
    :meeting/share-hash
    {:meeting/author user-pattern}])
+
+(def ^:private meeting-pattern
+  "Has all meeting information, including sensitive ones."
+  (conj meeting-pattern-public :meeting/edit-hash))
 
 
 ;; ##### Input functions #####
@@ -162,14 +166,21 @@
   [::models/meeting :ret int?]
   (clean-and-add-to-db! meeting ::models/meeting))
 
+(>defn update-meeting
+  "Updates a meeting. Returns the id of the newly updated meeting.
+  Automatically cleans input. Update of hashes is not allowed."
+  [meeting]
+  [::models/meeting-without-hashes :ret int?]
+  (clean-and-update-db! meeting ::models/meeting-without-hashes))
+
 (>defn update-agenda
   "Updates an agenda. Object must be complete with all required attributes."
   [agenda]
   [::models/agenda :ret int?]
   (clean-and-update-db! (dissoc agenda :agenda/discussion) ::models/agenda-without-discussion))
 
-(>defn meeting
-  "Return meeting data by id."
+(>defn meeting-private-data
+  "Return non public meeting data by id."
   [id]
   [int? :ret ::models/meeting]
   (d/pull (d/db (new-connection)) meeting-pattern id))
@@ -178,20 +189,31 @@
   "Shows all meetings currently in the db."
   []
   (d/q
-    '[:find (pull ?meetings meeting-pattern)
-      :in $ meeting-pattern
+    '[:find (pull ?meetings meeting-pattern-public)
+      :in $ meeting-pattern-public
       :where [?meetings :meeting/title _]]
-    (d/db (new-connection)) meeting-pattern))
+    (d/db (new-connection)) meeting-pattern-public))
+
+(>defn meeting-by-hash-generic
+  "Generic meeting by hash method, outputs according to pattern."
+  [hash pattern]
+  [string? sequential? :ret map?]
+  (ffirst
+    (d/q
+      '[:find (pull ?meeting pattern)
+        :in $ ?hash pattern
+        :where [?meeting :meeting/share-hash ?hash]]
+      (d/db (new-connection)) hash pattern)))
 
 (defn meeting-by-hash
   "Returns the meeting corresponding to the share hash."
   [hash]
-  (ffirst
-    (d/q
-      '[:find (pull ?meeting [*])
-        :in $ ?hash
-        :where [?meeting :meeting/share-hash ?hash]]
-      (d/db (new-connection)) hash)))
+  (meeting-by-hash-generic hash meeting-pattern-public))
+
+(defn meeting-by-hash-private
+  "Returns all meeting data, even the private parts by hash."
+  [hash]
+  (meeting-by-hash-generic hash meeting-pattern))
 
 (>defn add-agenda-point
   "Add an agenda to the database.
