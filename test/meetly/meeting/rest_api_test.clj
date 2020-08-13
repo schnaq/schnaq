@@ -27,3 +27,32 @@
       (is (= 400 (:status invalid-response)))
       (is (= "Agenda could not be added" (-> invalid-response :body :error))))))
 
+(deftest update-meeting-test
+  (testing "Test whether a meeting updates correctly"
+    (let [new-title "foo Neu"
+          new-author "Der Schredder"
+          old-meeting-id (db/add-meeting {:meeting/title "foo"
+                                          :meeting/share-hash "abbada"
+                                          :meeting/start-date (db/now)
+                                          :meeting/end-date (db/now)
+                                          :meeting/author (db/add-user-if-not-exists "Wegi")})
+          old-meeting (db/meeting old-meeting-id)
+          update-meeting @#'api/update-meeting
+          new-meeting-request {:body-params {:nickname new-author
+                                             :meeting {:db/id old-meeting-id
+                                                       :meeting/title new-title
+                                                       :meeting/share-hash "abbada"
+                                                       :meeting/start-date (db/now)
+                                                       :meeting/end-date (db/now)}
+                                             :agendas []}}
+          update-response (update-meeting new-meeting-request)
+          new-meeting (db/meeting old-meeting-id)]
+      (testing "Check response status"
+        (is (= 200 (:status update-response)))
+        (is (= "Your Meetly has been updated." (-> update-response :body :text))))
+      (testing "Check if title and author have been updated"
+        (is (not= (:meeting/title old-meeting) (:meeting/title new-meeting)))
+        (is (not= (:meeting/author old-meeting) (:meeting/author new-meeting))))
+      (testing "Check if title and author have been updated correctly"
+        (is (= new-title (:meeting/title new-meeting)))
+        (is (= (db/user-by-nickname new-author) (:db/id (:meeting/author new-meeting))))))))

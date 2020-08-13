@@ -17,8 +17,8 @@
             [clojure.spec.alpha :as s]
             [meetly.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
-  (:import (java.util Base64))
-  (:gen-class))
+  (:gen-class)
+  (:import (java.util Base64)))
 
 (>defn- valid-password?
   "Check if the password is a valid."
@@ -47,6 +47,21 @@
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc meeting :meeting/author author-id))]
     (response {:id-created meeting-id})))
+
+(defn- update-meeting
+  "Updates a meeting and its agendas."
+  [{:keys [body-params]}]
+  (let [nickname (:nickname body-params)
+        user-id (db/add-user-if-not-exists nickname)
+        updated-meeting (:meeting body-params)
+        updated-agendas (filter :agenda/discussion (:agendas body-params))
+        new-agendas (remove :agenda/discussion (:agendas body-params))]
+    (db/add-meeting (assoc updated-meeting :meeting/author user-id))
+    (doseq [agenda new-agendas]
+      (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
+    (doseq [agenda updated-agendas]
+      (db/update-agenda agenda))
+    (response {:text "Your Meetly has been updated."})))
 
 (defn- add-author
   "Adds an author to the database."
@@ -248,6 +263,7 @@
   (GET "/meetings" [] all-meetings)
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
   (POST "/meeting/add" [] add-meeting)
+  (POST "/meeting/update" [] update-meeting)
   (POST "/agendas/add" [] add-agendas)
   (POST "/author/add" [] add-author)
   (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)

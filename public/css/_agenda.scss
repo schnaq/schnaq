@@ -1,10 +1,9 @@
 @import "variables";
 
-.agenda-meeting-title {
+.agenda-meeting-container {
   background-color: $secondary;
   border-radius: 1.5rem;
   color: $white;
-  padding: 1rem;
   text-align: center;
 }
 
@@ -25,7 +24,7 @@
   color: $white;
   padding: 3rem 2rem 2rem 2rem;
   border: none;
-  border-radius: 1.5rem 1.5rem 0rem 0rem;
+  border-radius: 1.5rem 1.5rem 0 0;
 }
 
 .agenda-form-title::placeholder {
@@ -38,12 +37,13 @@
   color: $white;
 }
 
+
 .agenda-form-round {
   background-color: rgba(0, 0, 0, 0.05);
   padding: 1rem 2rem 2rem 2rem;
   color: $white;
   box-sizing: border-box;
-  border-radius: 0rem 0rem 1.5rem 1.5rem;
+  border-radius: 0 0 1.5rem 1.5rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -57,11 +57,15 @@
   color: $white;
 }
 
+.agenda-form-round:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .agenda-add-button {
   background-color: $secondary;
   border-radius: 4rem;
   border: none;
-  padding: 0rem 1rem;
+  padding: 0 1rem;
   color: $white;
   font-size: 200%;
   font-weight: bolder;
@@ -75,4 +79,12 @@
   min-height: 2rem;
   background: grey;
   text-align: center;
+}
+
+.agenda-row-title {
+  background: transparent;
+}
+
+.agenda-row-title:hover {
+  background: rgba(255, 255, 255, 0.1);
 }

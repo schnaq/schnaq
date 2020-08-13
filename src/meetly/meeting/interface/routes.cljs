@@ -1,6 +1,7 @@
 (ns meetly.meeting.interface.routes
   (:require [meetly.meeting.interface.views.startpage :as startpage-views]
-            [meetly.meeting.interface.views.agenda :as agenda-views]
+            [meetly.meeting.interface.views.agenda.agenda :as agenda-views]
+            [meetly.meeting.interface.views.agenda.edit :as agenda-edit]
             [meetly.meeting.interface.views.meeting.meetings :as meeting-views]
             [meetly.meeting.interface.views.meeting.overview :as meetings-overview]
             [meetly.meeting.interface.views.meeting.single :as meeting-single]
@@ -44,6 +45,15 @@
                      :start (fn [{:keys [path]}]
                               (let [hash (:share-hash path)]
                                 (rf/dispatch [:load-meeting-by-share-hash hash])))}]}
+     ["/edit/:admin-hash"
+      {:parameter {:path {:admin-hash string?}}
+       :name :routes/edit
+       :view agenda-edit/edit-view
+       :controllers [{:parameters {:path [:share-hash]}
+                      :start (fn [{:keys [path]}]
+                               (let [hash (:share-hash path)]
+                                 (rf/dispatch [:agenda/load-for-edit hash])))}]}]
+
      ["/created"
       {:name :routes.meeting.created
        :view meeting-created/after-meeting-creation-view

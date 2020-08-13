@@ -1,4 +1,4 @@
-(ns meetly.meeting.interface.views.agenda
+(ns meetly.meeting.interface.views.agenda.agenda
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [ajax.core :as ajax]
@@ -7,7 +7,7 @@
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.config :refer [config]]))
 
-(defn- new-agenda-local
+(defn new-agenda-local
   "This function formats the agenda-form input and saves it locally to the db until
   the discussion is created fully. `field` can be `title` or `description`."
   [field content suffix]
@@ -15,7 +15,7 @@
     :title (rf/dispatch [:agenda/update-title content suffix])
     :description (rf/dispatch [:agenda/update-description content suffix])))
 
-(defn- new-agenda-form
+(defn new-agenda-form
   "A form for creating a new agenda. The new agenda is automatically saved in the
   app-state according to the suffix."
   [numbered-suffix]
@@ -23,19 +23,19 @@
    [:div.agenda-line]
    [:div.add-agenda-div.agenda-point
     ;; title
-    [:input.form-control.agenda-form-title.form-title
+    [:input.form-control.agenda-form-title.form-title.agenda-row-title
      {:type "text"
       :name "title"
       :auto-complete "off"
       :required true
-      :placeholder (str (data/labels :agenda-point) (inc numbered-suffix))
+      :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
       :id (str "title-" numbered-suffix)
       :on-key-up
       #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
     ;; description
     [:textarea.form-control.agenda-form-round
      {:name "description"
-      :placeholder (str (data/labels :agenda-desc-for) (inc numbered-suffix))
+      :placeholder (str (data/labels :agenda/desc-for) (inc numbered-suffix))
       :id (str "description-" numbered-suffix)
       :on-key-up #(new-agenda-local
                     :description (oget % [:target :value]) numbered-suffix)}]]])
@@ -53,8 +53,8 @@
 
 (defn- header []
   (base/header
-    (data/labels :agenda-header)
-    (data/labels :agenda-subheader)))
+    (data/labels :agenda/header)
+    (data/labels :agenda/subheader)))
 
 
 (defn agenda-view
@@ -64,7 +64,7 @@
    [base/nav-header]
    [header]
    [:div.container.px-5.py-3.text-center
-    [:div.agenda-meeting-title
+    [:div.agenda-meeting-container.p-3
      [:h2 (:meeting/title @(rf/subscribe [:meeting/last-added]))]
      [:br]
      [:h4 (:meeting/description @(rf/subscribe [:meeting/last-added]))]]
@@ -127,15 +127,18 @@
                   [:reset-temporary-agendas]
                   [:navigate :routes.meeting.created {:share-hash meeting-hash}]]}))
 
+(defn load-agenda-fn [hash on-success-event]
+  {:http-xhrio {:method :get
+                :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
+                :format (ajax/transit-request-format)
+                :response-format (ajax/transit-response-format)
+                :on-success [on-success-event]
+                :on-failure [:ajax-failure]}})
+
 (rf/reg-event-fx
   :load-agendas
   (fn [_ [_ hash]]
-    {:http-xhrio {:method :get
-                  :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:set-current-agendas]
-                  :on-failure [:ajax-failure]}}))
+    (load-agenda-fn hash :set-current-agendas)))
 
 (rf/reg-event-fx
   :load-agenda-information

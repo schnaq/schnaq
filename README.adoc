@@ -65,6 +65,10 @@ So be sure to add `--style compressed` or similar as an option to your sass comm
 
 Run `clj -A:test`
 
+Run a single test or test namespace `clj -A:test --focus [namespace]/[function-name]`
+
+E.g.: `clj -A:test --focus meetly.meeting.rest-api-test/update-meeting-test`
+
 === Frontend
 
 Run:

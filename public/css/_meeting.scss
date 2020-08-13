@@ -45,3 +45,40 @@
   display: flex;
   align-items: start;
 }
+
+.meeting-edit-title {
+  background: transparent;
+  color: $white;
+  padding: 3rem 2rem 3rem 2rem;
+  border: 0;
+  border-radius: 1.5rem 1.5rem 0 0;
+  font-size: 2rem;
+}
+
+.meeting-edit-title:focus {
+  background: rgba(255, 255, 255, 0.05);
+  color: $white;
+}
+
+.meeting-edit-title:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+
+.meeting-edit-description {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1rem 2rem 0 2rem;
+  border-radius: 0 0 1.5rem 1.5rem;
+  color: $white;
+  border: 0;
+  font-size: 1.5rem;
+}
+
+.meeting-edit-description:focus {
+  background: rgba(255, 255, 255, 0.05);
+  color: $white;
+}
+
+.meeting-edit-description:hover {
+  background: rgba(255, 255, 255, 0.1);
+}

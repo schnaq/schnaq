@@ -102,6 +102,8 @@
 (s/def :agenda/discussion ::entity-reference)
 (s/def ::agenda (s/keys :req [:agenda/title :agenda/meeting :agenda/discussion]
                         :opt [:agenda/description]))
+(s/def ::agenda-without-discussion (s/keys :req [:agenda/title :agenda/meeting]
+                                           :opt [:agenda/description]))
 
 (s/def :author/nickname ::non-blank-string)
 

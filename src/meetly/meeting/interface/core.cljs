@@ -11,7 +11,8 @@
             [meetly.meeting.interface.views :as views]
     ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
             [meetly.meeting.interface.views.startpage]
-            [meetly.meeting.interface.views.agenda]
+            [meetly.meeting.interface.views.agenda.agenda]
+            [meetly.meeting.interface.views.agenda.edit]
             [meetly.meeting.interface.views.common]
             [meetly.meeting.interface.views.feedback]
             [meetly.meeting.interface.views.meeting.meetings]
