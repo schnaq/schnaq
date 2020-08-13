@@ -185,7 +185,7 @@
    :ret nil?]
   (when screenshot
     (let [[_header image] (string/split screenshot #",")
-          #^bytes decodedBytes (.decode (Base64/getDecoder) image)
+          #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)
           path (toolbelt/create-directory! directory)
           location (format "%s/%s.png" path file-name)]
       (with-open [w (io/output-stream location)]
