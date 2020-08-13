@@ -439,7 +439,7 @@
 
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
 
-(def ^:private max-time-back max-time-back)
+(def ^:private max-time-back #inst "1971-01-01T01:01:01.000-00:00")
 
 (>defn- number-of-entities-since
   "Returns the number of entities in the db since some timestamp. Default is all."
