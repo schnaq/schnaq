@@ -27,6 +27,12 @@
   [string? :ret boolean?]
   (= config/admin-password password))
 
+(>defn- production-mode?
+  "Returns true if we are in production mode."
+  []
+  [:ret boolean?]
+  (= "production" config/env-mode))
+
 (>defn- valid-credentials?
   "Validate if share-hash and admin-hash match"
   [share-hash edit-hash]
