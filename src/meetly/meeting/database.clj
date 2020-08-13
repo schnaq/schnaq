@@ -85,8 +85,8 @@
   [:db/id
    :author/nickname])
 
-(def ^:private meeting-pattern
-  "Pull a meetly based on these attributes."
+(def ^:private public-meeting-pattern
+  "Pull a meetly based on these attributes, omit sensitive information"
   [:db/id
    :meeting/title
    :meeting/start-date
@@ -94,6 +94,10 @@
    :meeting/description
    :meeting/share-hash
    {:meeting/author user-pattern}])
+
+(def ^:private meeting-pattern
+  "Has all meeting information, including sensitive ones."
+  (conj public-meeting-pattern :meeting/edit-hash))
 
 
 ;; ##### Input functions #####
@@ -185,10 +189,10 @@
   "Shows all meetings currently in the db."
   []
   (d/q
-    '[:find (pull ?meetings meeting-pattern)
-      :in $ meeting-pattern
+    '[:find (pull ?meetings public-meeting-pattern)
+      :in $ public-meeting-pattern
       :where [?meetings :meeting/title _]]
-    (d/db (new-connection)) meeting-pattern))
+    (d/db (new-connection)) public-meeting-pattern))
 
 (defn meeting-by-hash
   "Returns the meeting corresponding to the share hash."
