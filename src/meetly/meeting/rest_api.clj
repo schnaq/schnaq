@@ -17,8 +17,8 @@
             [clojure.spec.alpha :as s]
             [meetly.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
-  (:import (java.util Base64))
-  (:gen-class))
+  (:gen-class)
+  (:import (java.util Base64)))
 
 (>defn- valid-password?
   "Check if the password is a valid."
@@ -190,7 +190,7 @@
         screenshot (:screenshot body-params)
         feedback-id (db/add-feedback! feedback)
         [_header image] (string/split screenshot #",")
-        decodedBytes (.decode (Base64/getDecoder) image)]
+        decodedBytes (.decode (Base64/getDecoder) #^String image)]
     (save-bytes-to-png! decodedBytes "public/feedbacks/screenshots" feedback-id)
     (response {:text "Feedback successfully created."})))
 
