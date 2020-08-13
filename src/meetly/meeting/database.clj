@@ -199,10 +199,10 @@
   [hash]
   (ffirst
     (d/q
-      '[:find (pull ?meeting [*])
-        :in $ ?hash
+      '[:find (pull ?meeting meeting-pattern)
+        :in $ ?hash meeting-pattern
         :where [?meeting :meeting/share-hash ?hash]]
-      (d/db (new-connection)) hash)))
+      (d/db (new-connection)) hash meeting-pattern)))
 
 (>defn add-agenda-point
   "Add an agenda to the database.
