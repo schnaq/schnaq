@@ -13,7 +13,6 @@
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
-            [ghostwheel.core :refer [>defn-]]
             [meetly.core :as meetly-core]
             [clojure.spec.alpha :as s]
             [meetly.toolbelt :as toolbelt]
