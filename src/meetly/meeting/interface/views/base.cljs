@@ -3,7 +3,8 @@
             [reitit.frontend.easy :as reitfe]
             [meetly.meeting.interface.text.display-data :as data :refer [labels]]
             [meetly.meeting.interface.config :refer [config]]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 (defn- wavy-bottom []
   ;; bezier curves
@@ -60,7 +61,7 @@
   [username]
   [:form.form-inline
    {:on-submit (fn [e]
-                 (.preventDefault e)
+                 (js-wrap/prevent-default e)
                  (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
                  (rf/dispatch [:hide-name-input]))}
    [:input#name-input.form-control.form-round-05.py-1.mr-sm-2

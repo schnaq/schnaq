@@ -4,7 +4,8 @@
             [meetly.meeting.interface.views.modals.subs]
             [meetly.meeting.interface.text.display-data :refer [labels]]
             [ghostwheel.core :refer [>defn]]
-            [oops.core :refer [oget]]))
+            [oops.core :refer [oget]]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 (defn modal-panel
   [{:keys [child show?]}]
@@ -13,8 +14,8 @@
           :on-click (fn [event]
                       (rf/dispatch [:modal {:show? (not show?)
                                             :child nil}])
-                      (.preventDefault event)
-                      (.stopPropagation event))}]
+                      (js-wrap/prevent-default event)
+                      (js-wrap/stop-propagation event))}]
    [:div {:class "modal-child modal-dialog modal-dialog-scrollable"}
     child]])
 
@@ -50,7 +51,7 @@
   [username]
   [:form.form
    {:on-submit (fn [e]
-                 (.preventDefault e)
+                 (js-wrap/prevent-default e)
                  (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
                  (rf/dispatch [:hide-name-input])
                  (close-modal))}

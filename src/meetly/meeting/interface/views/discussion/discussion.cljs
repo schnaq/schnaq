@@ -6,7 +6,8 @@
             [vimsical.re-frame.cofx.inject :as inject]
             [meetly.meeting.interface.utils.toolbelt :as toolbelt]
             [meetly.meeting.interface.views.discussion.logic :as logic]
-            [meetly.meeting.interface.views.discussion.view-elements :as view]))
+            [meetly.meeting.interface.views.discussion.view-elements :as view]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 (defn discussion-start-view
   "The first step after starting a discussion."
@@ -30,7 +31,7 @@
         all-args @(rf/subscribe [:discussion-step-args])
         new-statement-args (logic/args-for-reaction all-steps all-args :starting-support/new)]
     [:form
-     {:on-submit (fn [e] (.preventDefault e)
+     {:on-submit (fn [e] (js-wrap/prevent-default e)
                    (logic/submit-new-starting-premise new-statement-args (oget e [:target :elements])))}
      ;; radio support
      [view/radio-button "for-radio-starting" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
@@ -50,7 +51,7 @@
         rebut-args (logic/args-for-reaction all-steps all-args :rebut/new)
         undercut-args (logic/args-for-reaction all-steps all-args :undercut/new)]
     [:form
-     {:on-submit (fn [e] (.preventDefault e)
+     {:on-submit (fn [e] (js-wrap/prevent-default e)
                    (logic/submit-new-premise [support-args rebut-args undercut-args] (oget e [:target :elements])))}
      ;; support
      [view/radio-button "for-radio" "premise-choice" "for-radio" :discussion/add-premise-supporting true]

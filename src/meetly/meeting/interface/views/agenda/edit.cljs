@@ -5,6 +5,7 @@
             [oops.core :refer [oget]]
             [meetly.meeting.interface.config :refer [config]]
             [meetly.meeting.interface.text.display-data :refer [labels fa]]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]
             [ajax.core :as ajax]))
 
 (defn- header []
@@ -89,7 +90,7 @@
      [:div.container.px-5.py-3.text-center
       [:form {:id "agendas-add-form"
               :on-submit (fn [e]
-                           (.preventDefault e)
+                           (js-wrap/prevent-default e)
                            (rf/dispatch [:meeting/submit-changes]))}
        ;; meeting title and description
        [editable-meeting-info selected-meeting]
@@ -169,13 +170,15 @@
   :meeting/submit-changes
   (fn [{:keys [db]} _]
     (let [edit-meeting (:edit-meeting db)
+          edit-hash (get-in db [:current-route :path-params :admin-hash])
+          finalized-changes (assoc-in edit-meeting [:meeting :meeting/edit-hash] edit-hash)
           nickname (-> db :user :name)]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/meeting/update")
-                    :params (assoc edit-meeting :nickname nickname)
+                    :params (assoc finalized-changes :nickname nickname)
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:meeting/on-success-submit-changes-event edit-meeting]
+                    :on-success [:meeting/on-success-submit-changes-event finalized-changes]
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx

@@ -4,48 +4,71 @@
             [meetly.meeting.interface.utils.clipboard :as clipboard]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
+            [ghostwheel.core :refer [>defn-]]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
             [meetly.meeting.interface.views.base :as base]))
 
+(>defn- get-share-link
+  [current-route]
+  [map? :ret string?]
+  (let [share-hash (-> current-route :path-params :share-hash)
+        path (reitfe/href :routes/meetings.show {:share-hash share-hash})
+        location (oget js/window :location)]
+    (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
+
+(>defn- get-edit-link
+  [current-route]
+  [map? :ret string?]
+  (let [share-hash (-> current-route :path-params :share-hash)
+        admin-hash (-> current-route :path-params :admin-hash)
+        path (reitfe/href :routes/edit {:share-hash share-hash
+                                        :admin-hash admin-hash})
+        location (oget js/window :location)]
+    (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
+
+(defn- copy-success-display
+  []
+  (let [display-success? @(rf/subscribe [:meeting/link-copied-display])]
+    [:div
+     (if display-success?
+       [:div.alert-success.text-center
+        {:style {:width "50%"
+                 :margin "auto"}
+         :role "alert"}
+        [:p (labels :meeting/link-copied-success)]]
+       [:div.alert-success
+        {:style {:visibility "hidden"}}
+        [:p "Platzhalter"]])]))
+
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
-  []
+  [create-link-fn id-extra]
   (reagent/create-class
     {:component-did-mount
      (fn [_]
-       (.tooltip (js/$ "#meeting-link-form")))
+       (.tooltip (js/$ (str "#meeting-link-form-" id-extra))))
      :reagent-render
      (fn []
-       (let [meeting @(rf/subscribe [:meeting/last-added])
-             path (reitfe/href :routes/meetings.show {:share-hash (:meeting/share-hash meeting)})
-             location (oget js/window :location)
-             share-link (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)
-             display-success? @(rf/subscribe [:meeting/link-copied-display])]
+       (let [display-content (create-link-fn @(rf/subscribe [:current-route]))
+             meeting-link-id (str "meeting-link" id-extra)]
          [:div
-          [:form#meeting-link-form.form.create-meeting-form.form-inline.row
-           {:on-click (fn []
-                        (clipboard/copy-to-clipboard! share-link)
+          [:form.form.create-meeting-form.form-inline.row
+           {:id (str "meeting-link-form-" id-extra)
+            :on-click (fn []
+                        (clipboard/copy-to-clipboard! display-content)
                         (rf/dispatch [:meeting/link-copied]))
             :data-toggle "tooltip"
             :data-placement "right"
             :title (labels :meeting/copy-link-tooltip)}
-           [:input#meeting-link.form-control.form-round.form.title.col-11 {:type "text"
-                                                                           :value share-link
-                                                                           :readOnly true}]
-           [:label.col-1 {:for "meeting-link"}
+           [:input.form-control.form-round.form.title.col-11
+            {:id meeting-link-id
+             :type "text"
+             :value display-content
+             :readOnly true}]
+           [:label.col-1 {:for meeting-link-id}
             [:h3 {:class (str "m-auto far " (fa :copy))}]]]
-          [:br]
-          [:div
-           (if display-success?
-             [:div.alert-success.text-center
-              {:style {:width "50%"
-                       :margin "auto"}
-               :role "alert"}
-              [:p (labels :meeting/link-copied-success)]]
-             [:div.alert-success
-              {:style {:visibility "hidden"}}
-              [:p "Platzhalter"]])]]))}))
+          [:br]]))}))
 
 
 (defn img-text
@@ -71,7 +94,7 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:keys [meeting/share-hash]} @(rf/subscribe [:meeting/last-added])]
+  (let [{:keys [meeting/share-hash]} @(rf/subscribe [:selected-meeting])]
     [:div
      [base/nav-header]
      [base/header
@@ -80,7 +103,11 @@
      [:div.container.px-5.py-3.text-center
       ;; list agendas
       [educate-element]
-      [copy-link-form]
+      [copy-link-form get-share-link "share-hash"]
+      [:p "Admin-Link:"]
+      [copy-link-form get-edit-link "edit-hash"]
+      [:br]
+      [copy-success-display]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-meetly-after-creation)]
