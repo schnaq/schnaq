@@ -265,7 +265,7 @@
   (let [share-hash (:share-hash body-params)
         edit-hash (:edit-hash body-params)
         suspected-meeting (db/meeting-by-hash share-hash)]
-    (response {:valid-credentials? (= edit-hash (:edit-hash suspected-meeting))})))
+    (response {:valid-credentials? (= edit-hash (:meeting/edit-hash suspected-meeting))})))
 
 ;; -----------------------------------------------------------------------------
 ;; General
