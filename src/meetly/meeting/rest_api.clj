@@ -279,7 +279,6 @@
 
 ;; -----------------------------------------------------------------------------
 ;; General
-;;TODO CREATE NO ACCESS ROUTE
 (defroutes app-routes
   (GET "/meetings" [] all-meetings)
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)

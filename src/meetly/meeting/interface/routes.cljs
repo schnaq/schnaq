@@ -11,6 +11,7 @@
             [meetly.meeting.interface.views.discussion.discussion :as discussion-views]
             [meetly.meeting.interface.views.feedback :as feedback]
             [meetly.meeting.interface.analytics.core :as analytics]
+            [meetly.meeting.interface.views.errors :as error-views]
             [reitit.coercion.spec]
             [re-frame.core :as rf]))
 
@@ -111,5 +112,5 @@
                              (rf/dispatch [:analytics/load-dashboard]))}]}]
    ["invalid-link"
     {:name :routes/invalid-link
-     ;; TODO
-     :view startpage-views/startpage-view}]])
+     :view error-views/invalid-admin-link-view
+     :link-text (labels :router/invalid-link)}]])

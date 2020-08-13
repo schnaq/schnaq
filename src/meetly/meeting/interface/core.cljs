@@ -23,6 +23,7 @@
             [meetly.meeting.interface.views.discussion.view-elements]
             [meetly.meeting.interface.views.discussion.logic]
             [meetly.meeting.interface.subs]
+            [meetly.meeting.interface.views.errors]
             [meetly.meeting.interface.events]
             [meetly.meeting.interface.effects]
             [meetly.meeting.interface.views.modals.modal]

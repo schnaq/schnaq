@@ -132,6 +132,9 @@
      :user.button/set-name "Name speichern"
      :user.button/set-name-placeholder "Ihr Name"
 
+     ;; Errors
+     :errors/invalid-admin-link "Sie haben nicht genügend Rechte um diese Seite anzusehen."
+
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
      :router/all-feedbacks "Alle Feedbacks"
@@ -142,7 +145,8 @@
      :router/start-discussion "Starte Besprechung"
      :router/continue-discussion "Führe Besprechung fort"
      :router/startpage "Startseite"
-     :router/analytics "Analyse-Dashboard"}))
+     :router/analytics "Analyse-Dashboard"
+     :router/invalid-link "Fehlerseite"}))
 
 
 (defn img-path
