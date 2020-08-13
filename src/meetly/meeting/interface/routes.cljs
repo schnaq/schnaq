@@ -45,19 +45,24 @@
                      :start (fn [{:keys [path]}]
                               (let [hash (:share-hash path)]
                                 (rf/dispatch [:load-meeting-by-share-hash hash])))}]}
-     ["/edit/:admin-hash"
-      {:parameter {:path {:admin-hash string?}}
-       :name :routes/edit
-       :view agenda-edit/edit-view
-       :controllers [{:parameters {:path [:share-hash]}
+     ["/:admin-hash"
+      {:controllers [{:parameters {:path [:share-hash :admin-hash]}
                       :start (fn [{:keys [path]}]
-                               (let [hash (:share-hash path)]
-                                 (rf/dispatch [:agenda/load-for-edit hash])))}]}]
-
-     ["/created"
-      {:name :routes.meeting.created
-       :view meeting-created/after-meeting-creation-view
-       :link-text (labels :router/meeting-created)}]
+                               (let [share-hash (:share-hash path)
+                                     edit-hash (:admin-hash path)]
+                                 (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
+      ["/edit"
+       {:parameter {:path {:admin-hash string?}}
+        :name :routes/edit
+        :view agenda-edit/edit-view
+        :controllers [{:parameters {:path [:share-hash]}
+                       :start (fn [{:keys [path]}]
+                                (let [hash (:share-hash path)]
+                                  (rf/dispatch [:agenda/load-for-edit hash])))}]}]
+      ["/created"
+       {:name :routes.meeting.created
+        :view meeting-created/after-meeting-creation-view
+        :link-text (labels :router/meeting-created)}]]
      ["/"
       {:name :routes/meetings.show
        :view meeting-single/single-meeting-view
@@ -103,4 +108,7 @@
      :link-text (labels :router/analytics)
      :controllers [{:start (fn []
                              (rf/dispatch [:admin/set-password (js/prompt "Enter the Admin Password to see analytics")])
-                             (rf/dispatch [:analytics/load-dashboard]))}]}]])
+                             (rf/dispatch [:analytics/load-dashboard]))}]}]
+   ["invalid-link"
+    {:name :routes/invalid-link
+     :view :todo}]])

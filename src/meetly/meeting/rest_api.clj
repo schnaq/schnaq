@@ -259,9 +259,18 @@
     (response {:argument-type-stats (db/argument-type-stats)})
     (bad-request {:message "You are not allowed to use this resource"})))
 
+(defn- check-credentials
+  "Checks whether share-hash and edit-hash match."
+  [{:keys [body-params]}]
+  (let [share-hash (:share-hash body-params)
+        edit-hash (:edit-hash body-params)
+        suspected-meeting (db/meeting-by-hash share-hash)]
+    (response {:valid-credentials? (= edit-hash (:edit-hash suspected-meeting))})))
+
 ;; -----------------------------------------------------------------------------
 ;; General
-
+;;TODO omit fucking edit-hash
+;;TODO validate on edit route, because FUCK THIS ISSUE
 (defroutes app-routes
   (GET "/meetings" [] all-meetings)
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
@@ -277,6 +286,7 @@
   (POST "/votes/down/toggle" [] toggle-downvote-statement)
   (POST "/feedback/add" [] add-feedback)
   (POST "/feedbacks" [] all-feedbacks)
+  (POST "/credentials/validate" [] check-credentials)
   ;; Analytics routes
   (POST "/analytics/meetings" [] number-of-meetings)
   (POST "/analytics/usernames" [] number-of-usernames)

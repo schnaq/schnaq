@@ -110,7 +110,8 @@
   :send-agendas
   (fn [{:keys [db]} _]
     (let [meeting-id (get-in db [:meeting/added :db/id])
-          meeting-hash (get-in db [:meeting/added :meeting/share-hash])]
+          meeting-hash (get-in db [:meeting/added :meeting/share-hash])
+          edit-hash (get-in db [:meeting/added :meeting/edit-hash])]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/agendas/add")
                     :params {:agendas (vals (get-in db [:agenda :all] []))
@@ -118,15 +119,16 @@
                              :meeting-hash meeting-hash}
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:on-successful-agenda-add meeting-hash]
+                    :on-success [:on-successful-agenda-add meeting-hash edit-hash]
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx
   :on-successful-agenda-add
-  (fn [_ [_ meeting-hash]]
+  (fn [_ [_ meeting-hash edit-hash]]
     {:dispatch-n [[:clear-current-agendas]
                   [:reset-temporary-agendas]
-                  [:navigate :routes.meeting.created {:share-hash meeting-hash}]]}))
+                  [:navigate :routes.meeting.created {:share-hash meeting-hash
+                                                      :admin-hash edit-hash}]]}))
 
 (defn load-agenda-fn [hash on-success-event]
   {:http-xhrio {:method :get

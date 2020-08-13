@@ -63,3 +63,21 @@
       (testing "Check whether forbidden attributes stayed the same"
         (is (= old-share-hash (:meeting/share-hash new-meeting)))
         (is (= old-edit-hash (:meeting/edit-hash new-meeting)))))))
+
+(deftest check-credentials-test
+  (testing "Check if credentials are verified correctly."
+    (let [check-credentials @#'api/check-credentials
+          share-hash "abbada"
+          edit-hash "Scooby Doo"
+          _ (db/add-meeting {:meeting/title "foo"
+                             :meeting/share-hash share-hash
+                             :meeting/edit-hash edit-hash
+                             :meeting/start-date (db/now)
+                             :meeting/end-date (db/now)
+                             :meeting/author (db/add-user-if-not-exists "Wegi")})
+          succeeding-response (check-credentials {:body-params {:share-hash share-hash :edit-hash edit-hash}})
+          failing-response (check-credentials {:body-params {:share-hash share-hash :edit-hash "INVALID"}})]
+      (is (= 200 (:status succeeding-response)))
+      (is (-> succeeding-response :body :valid-credentials?))
+      (is (not (-> failing-response :body :valid-credentials?)))
+      (is (= 200 (:status failing-response))))))

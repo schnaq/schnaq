@@ -101,6 +101,26 @@
                     :on-success [:meeting-added]
                     :on-failure [:ajax-failure]}})))
 
+(rf/reg-event-fx
+  :meeting/check-admin-credentials
+  (fn [_ [_ share-hash edit-hash]]
+    {:http-xhrio {:method :post
+                  :uri (str (:rest-backend config) "/credentials/validate")
+                  :params {:share-hash share-hash
+                           :edit-hash edit-hash}
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:meeting/check-admin-credentials-success]
+                  :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-fx
+  ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
+  ;; the backend every time)
+  :meeting/check-admin-credentials-success
+  (fn [_ [_ {:keys [valid-credentials?]}]]
+    (when-not valid-credentials?
+      {:dispatch [:navigate :routes/invalid-link]})))
+
 ;; #### Subs ####
 
 (rf/reg-sub

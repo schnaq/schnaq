@@ -8,7 +8,7 @@
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
             [meetly.meeting.interface.views.base :as base]))
-;; TODO created view only accesible with edit-hash
+
 (>defn- get-share-link
   [meeting]
   [map? :ret string?]
