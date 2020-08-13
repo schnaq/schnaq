@@ -31,17 +31,21 @@
   (testing "Test whether a meeting updates correctly"
     (let [new-title "foo Neu"
           new-author "Der Schredder"
+          old-share-hash "abbada"
+          old-edit-hash "Scooby Doo"
           old-meeting-id (db/add-meeting {:meeting/title "foo"
-                                          :meeting/share-hash "abbada"
+                                          :meeting/share-hash old-share-hash
+                                          :meeting/edit-hash old-edit-hash
                                           :meeting/start-date (db/now)
                                           :meeting/end-date (db/now)
                                           :meeting/author (db/add-user-if-not-exists "Wegi")})
           old-meeting (db/meeting old-meeting-id)
-          update-meeting @#'api/update-meeting
+          update-meeting @#'api/update-meeting!
           new-meeting-request {:body-params {:nickname new-author
                                              :meeting {:db/id old-meeting-id
                                                        :meeting/title new-title
-                                                       :meeting/share-hash "abbada"
+                                                       :meeting/share-hash "Velma"
+                                                       :meeting/edit-hash "Shaggy"
                                                        :meeting/start-date (db/now)
                                                        :meeting/end-date (db/now)}
                                              :agendas []}}
@@ -55,4 +59,7 @@
         (is (not= (:meeting/author old-meeting) (:meeting/author new-meeting))))
       (testing "Check if title and author have been updated correctly"
         (is (= new-title (:meeting/title new-meeting)))
-        (is (= (db/user-by-nickname new-author) (:db/id (:meeting/author new-meeting))))))))
+        (is (= (db/user-by-nickname new-author) (:db/id (:meeting/author new-meeting)))))
+      (testing "Check whether forbidden attributes stayed the same"
+        (is (= old-share-hash (:meeting/share-hash new-meeting)))
+        (is (= old-edit-hash (:meeting/edit-hash new-meeting)))))))

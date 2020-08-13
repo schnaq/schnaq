@@ -101,6 +101,9 @@
                                :meeting/start-date :meeting/end-date]
                          :opt [:meeting/description :meeting/edit-hash]))
 
+(s/def ::meeting-without-hashes (s/keys :req [:meeting/title :meeting/author]
+                                        :opt [:meeting/description]))
+
 ;; Agenda
 (s/def :agenda/title ::non-blank-string)
 (s/def :agenda/description ::non-blank-string)

@@ -51,17 +51,15 @@
         created-meeting (db/meeting meeting-id)]
     (response {:new-meeting created-meeting})))
 
-
-;; TODO Only allow change of title and description and user
-(defn- update-meeting
+(defn- update-meeting!
   "Updates a meeting and its agendas."
   [{:keys [body-params]}]
   (let [nickname (:nickname body-params)
         user-id (db/add-user-if-not-exists nickname)
-        updated-meeting (:meeting body-params)
+        updated-meeting (dissoc (:meeting body-params) :meeting/share-hash :meeting/edit-hash)
         updated-agendas (filter :agenda/discussion (:agendas body-params))
         new-agendas (remove :agenda/discussion (:agendas body-params))]
-    (db/add-meeting (assoc updated-meeting :meeting/author user-id))
+    (db/update-meeting (assoc updated-meeting :meeting/author user-id))
     (doseq [agenda new-agendas]
       (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
     (doseq [agenda updated-agendas]
@@ -268,7 +266,7 @@
   (GET "/meetings" [] all-meetings)
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
   (POST "/meeting/add" [] add-meeting)
-  (POST "/meeting/update" [] update-meeting)
+  (POST "/meeting/update" [] update-meeting!)
   (POST "/agendas/add" [] add-agendas)
   (POST "/author/add" [] add-author)
   (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)

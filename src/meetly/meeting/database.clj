@@ -162,6 +162,13 @@
   [::models/meeting :ret int?]
   (clean-and-add-to-db! meeting ::models/meeting))
 
+(>defn update-meeting
+  "Updates a meeting. Returns the id of the newly updated meeting.
+  Automatically cleans input. Update of hashes is not allowed."
+  [meeting]
+  [::models/meeting-without-hashes :ret int?]
+  (clean-and-update-db! meeting ::models/meeting-without-hashes))
+
 (>defn update-agenda
   "Updates an agenda. Object must be complete with all required attributes."
   [agenda]
