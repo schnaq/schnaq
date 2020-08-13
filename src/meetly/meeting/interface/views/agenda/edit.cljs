@@ -175,5 +175,10 @@
                     :params (assoc edit-meeting :nickname nickname)
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:navigate :routes/meetings.show {:share-hash (:meeting/share-hash edit-meeting)}]
+                    :on-success [:meeting/on-success-submit-changes-event edit-meeting]
                     :on-failure [:ajax-failure]}})))
+
+(rf/reg-event-fx
+  :meeting/on-success-submit-changes-event
+  (fn [_ [_ {:keys [meeting]} _response]]
+    {:dispatch [:navigate :routes/meetings.show {:share-hash (:meeting/share-hash meeting)}]}))
