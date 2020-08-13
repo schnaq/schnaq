@@ -39,7 +39,7 @@
                                           :meeting/start-date (db/now)
                                           :meeting/end-date (db/now)
                                           :meeting/author (db/add-user-if-not-exists "Wegi")})
-          old-meeting (db/meeting old-meeting-id)
+          old-meeting (db/meeting-private-data old-meeting-id)
           update-meeting @#'api/update-meeting!
           new-meeting-request {:body-params {:nickname new-author
                                              :meeting {:db/id old-meeting-id
@@ -50,7 +50,7 @@
                                                        :meeting/end-date (db/now)}
                                              :agendas []}}
           update-response (update-meeting new-meeting-request)
-          new-meeting (db/meeting old-meeting-id)]
+          new-meeting (db/meeting-private-data old-meeting-id)]
       (testing "Check response status"
         (is (= 200 (:status update-response)))
         (is (= "Your Meetly has been updated." (-> update-response :body :text))))

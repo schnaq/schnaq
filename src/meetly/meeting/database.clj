@@ -85,7 +85,7 @@
   [:db/id
    :author/nickname])
 
-(def ^:private public-meeting-pattern
+(def ^:private meeting-pattern-public
   "Pull a meetly based on these attributes, omit sensitive information"
   [:db/id
    :meeting/title
@@ -97,7 +97,7 @@
 
 (def ^:private meeting-pattern
   "Has all meeting information, including sensitive ones."
-  (conj public-meeting-pattern :meeting/edit-hash))
+  (conj meeting-pattern-public :meeting/edit-hash))
 
 
 ;; ##### Input functions #####
@@ -179,8 +179,8 @@
   [::models/agenda :ret int?]
   (clean-and-update-db! (dissoc agenda :agenda/discussion) ::models/agenda-without-discussion))
 
-(>defn meeting
-  "Return meeting data by id."
+(>defn meeting-private-data
+  "Return non public meeting data by id."
   [id]
   [int? :ret ::models/meeting]
   (d/pull (d/db (new-connection)) meeting-pattern id))
@@ -189,20 +189,31 @@
   "Shows all meetings currently in the db."
   []
   (d/q
-    '[:find (pull ?meetings public-meeting-pattern)
-      :in $ public-meeting-pattern
+    '[:find (pull ?meetings meeting-pattern-public)
+      :in $ meeting-pattern-public
       :where [?meetings :meeting/title _]]
-    (d/db (new-connection)) public-meeting-pattern))
+    (d/db (new-connection)) meeting-pattern-public))
+
+(>defn meeting-by-hash-generic
+  "Generic meeting by hash method, outputs according to pattern."
+  [hash pattern]
+  [string? symbol? :ret map?]
+  (ffirst
+    (d/q
+      '[:find (pull ?meeting pattern)
+        :in $ ?hash pattern
+        :where [?meeting :meeting/share-hash ?hash]]
+      (d/db (new-connection)) hash pattern)))
 
 (defn meeting-by-hash
   "Returns the meeting corresponding to the share hash."
   [hash]
-  (ffirst
-    (d/q
-      '[:find (pull ?meeting meeting-pattern)
-        :in $ ?hash meeting-pattern
-        :where [?meeting :meeting/share-hash ?hash]]
-      (d/db (new-connection)) hash meeting-pattern)))
+  (meeting-by-hash-generic hash meeting-pattern-public))
+
+(defn meeting-by-hash-private
+  "Returns all meeting data, even the private parts by hash."
+  [hash]
+  (meeting-by-hash-generic hash meeting-pattern))
 
 (>defn add-agenda-point
   "Add an agenda to the database.

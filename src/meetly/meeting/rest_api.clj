@@ -48,7 +48,7 @@
         nickname (-> req :body-params :nickname)
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
-        created-meeting (db/meeting meeting-id)]
+        created-meeting (db/meeting-private-data meeting-id)]
     (response {:new-meeting created-meeting})))
 
 (defn- update-meeting!
@@ -264,12 +264,11 @@
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)
         edit-hash (:edit-hash body-params)
-        suspected-meeting (db/meeting-by-hash share-hash)]
+        suspected-meeting (db/meeting-by-hash-private share-hash)]
     (response {:valid-credentials? (= edit-hash (:meeting/edit-hash suspected-meeting))})))
 
 ;; -----------------------------------------------------------------------------
 ;; General
-;;TODO omit fucking edit-hash
 ;;TODO validate on edit route, because FUCK THIS ISSUE
 ;;TODO CREATE NO ACCESS ROUTE
 (defroutes app-routes

@@ -180,7 +180,7 @@
 (deftest update-agenda-test
   (testing "Whether the new agenda is added correctly"
     (let [meeting-id (any-meeting-id)
-          meeting (database/meeting meeting-id)
+          meeting (database/meeting-private-data meeting-id)
           agenda-id (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)
           agenda {:db/id agenda-id
                   :agenda/title "Hallo i bims"
@@ -198,7 +198,7 @@
 
 (comment
   (any-meeting-id)
-  (database/meeting 96757023244455)
+  (database/meeting-private-data 96757023244455)
   (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" 96757023244455)
   (first (database/agendas-by-meeting-hash "aklsuzd98-234da-123d"))
   (database/update-agenda {:db/id 87960930222249
