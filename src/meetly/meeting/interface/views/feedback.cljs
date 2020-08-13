@@ -3,8 +3,6 @@
   (:require ["html2canvas" :as html2canvas]
             [ajax.core :as ajax]
             [clojure.string :as string]
-            [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn]]
             [goog.dom :as gdom]
             [goog.string :as gstring]
             [meetly.meeting.interface.config :refer [config]]
