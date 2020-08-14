@@ -5,6 +5,7 @@
             [meetly.meeting.processors :as processors]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
+(use-fixtures :once meetly-toolbelt/clean-database-fixture)
 
 (deftest with-votes-processor-test
   (testing "Result should have all statements enriched with votes-metadata"

@@ -5,6 +5,7 @@
             [meetly.meeting.database :as database]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
+(use-fixtures :once meetly-toolbelt/clean-database-fixture)
 
 (defn- any-meeting-id
   []
