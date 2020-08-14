@@ -11,7 +11,7 @@
   {:datomic {:system "test"
              :server-type :dev-local
              :storage-dir (meetly-toolbelt/create-directory! ".datomic/dev-local/test-data")}
-   :name (or (System/getenv "DATOMIC_TEST_DB_NAME") "test-db")})
+   :name "test-db"})
 
 (defn clean-database-fixture
   "Cleans the database. Should be used with :once to start with a clean sheet."
