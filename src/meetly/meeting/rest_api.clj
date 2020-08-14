@@ -283,6 +283,7 @@
 (def ^:private not-found-msg
   "Error, page not found!")
 
+
 (def ^:private common-routes
   "Common routes for all modes."
   (routes
