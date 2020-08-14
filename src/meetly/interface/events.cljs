@@ -7,7 +7,8 @@
             [meetly.interface.db :as meetly-db]
             [meetly.interface.views.modals.modal :as modal]
             [meetly.interface.utils.localstorage :as ls]
-            [meetly.interface.config :refer [config]]))
+            [meetly.interface.config :refer [config]]
+            [meetly.interface.utils.toolbelt :as toolbelt]))
 
 ;; Starts the ball rolling on changing to another view
 (rf/reg-event-fx
@@ -27,18 +28,20 @@
           controllers (reitit-front-controllers/apply-controllers (:controllers old-match) new-match)]
       (assoc db :current-route (assoc new-match :controllers controllers)))))
 
-;; Non routing events
+;; Non-routing events
 
 (rf/reg-event-fx
   :initialise-db
   (fn [_ _]
-    (let [init-fx {:db meetly-db/default-db
-                   :http-xhrio {:method :get
-                                :uri (str (:rest-backend config) "/meetings")
-                                :timeout 10000
-                                :response-format (ajax/transit-response-format)
-                                :on-success [:init-from-backend]
-                                :on-failure [:ajax-failure]}}]
+    (let [http-xhrio {:method :get
+                      :uri (str (:rest-backend config) "/meetings")
+                      :timeout 10000
+                      :response-format (ajax/transit-response-format)
+                      :on-success [:init-from-backend]
+                      :on-failure [:ajax-failure]}
+          init-fx (cond-> {:db meetly-db/default-db}
+                          ;; Only call /meetings if not in production
+                          (not (toolbelt/production?)) (assoc :http-xhrio http-xhrio))]
       (if-let [name (ls/get-item :username)]
         ;; When the localstorage is filled, then just set the name to db.
         (assoc-in init-fx [:db :user :name] name)
