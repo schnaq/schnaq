@@ -1,12 +1,12 @@
 (ns meetly.interface.analytics.core
-  (:require [meetly.interface.views.base :as base]
-            [meetly.interface.text.display-data :refer [labels]]
-            [meetly.interface.config :refer [config]]
-            [ghostwheel.core :refer [>defn-]]
+  (:require [ajax.core :as ajax]
             [clojure.string :as string]
+            [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
-            [re-frame.core :as rf]
-            [ajax.core :as ajax]))
+            [meetly.interface.config :refer [config]]
+            [meetly.interface.text.display-data :refer [labels]]
+            [meetly.interface.views.base :as base]
+            [re-frame.core :as rf]))
 
 (defn- analytics-card
   "A single card containing a metric and a title."
