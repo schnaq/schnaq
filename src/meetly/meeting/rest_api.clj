@@ -1,7 +1,7 @@
 (ns meetly.meeting.rest-api
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
-            [compojure.core :refer [defroutes GET POST routes]]
+            [compojure.core :refer [GET POST routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
