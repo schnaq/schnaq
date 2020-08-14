@@ -4,7 +4,6 @@
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
-            [meetly.meeting.interface.utils.toolbelt :as toolbelt]
             [meetly.meeting.interface.views.discussion.logic :as logic]
             [meetly.meeting.interface.views.discussion.view-elements :as view]
             [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
@@ -201,13 +200,8 @@
               (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
                     [:navigate :routes/meetings.discussion.start {:id discussion-id
-                                                                  :share-hash share-hash}]
-                    [:form/clear form]]})))
-
-(rf/reg-event-fx
-  :form/clear
-  (fn [_ [_ form-elements]]
-    (toolbelt/reset-form-fields! form-elements)))
+                                                                  :share-hash share-hash}]]
+       :form/clear form})))
 
 (rf/reg-event-fx
   :starting-conclusions/select
