@@ -13,7 +13,7 @@
   [current-route]
   [map? :ret string?]
   (let [share-hash (-> current-route :path-params :share-hash)
-        path (reitfe/href :routes/meeting.show {:share-hash share-hash})
+        path (reitfe/href :routes.meeting/show {:share-hash share-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
 
@@ -22,7 +22,7 @@
   [map? :ret string?]
   (let [share-hash (-> current-route :path-params :share-hash)
         admin-hash (-> current-route :path-params :admin-hash)
-        path (reitfe/href :routes/meeting.edit {:share-hash share-hash
+        path (reitfe/href :routes.meeting/edit {:share-hash share-hash
                                                 :admin-hash admin-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
@@ -114,7 +114,7 @@
       ;; go to meeting button
       [:button.btn.button-primary.btn-lg.center-block
        {:role "button"
-        :on-click #(rf/dispatch [:navigate :routes/meeting.show {:share-hash share-hash}])}
+        :on-click #(rf/dispatch [:navigate :routes.meeting/show {:share-hash share-hash}])}
        (labels :meetings/continue-to-meetly-button)]]]))
 
 ;; Events

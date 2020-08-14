@@ -35,7 +35,7 @@
         :view meetings-overview/meeting-view
         :link-text (labels :router/all-meetings)}])
     ["/create"
-     {:name :routes/meeting.create
+     {:name :routes.meeting/create
       :view meeting-views/create-meeting-form-view
       :link-text (labels :router/create-meeting)}]
     ["/:share-hash"
@@ -50,17 +50,17 @@
                                (let [{:keys [share-hash admin-hash]} path]
                                  (rf/dispatch [:meeting/check-admin-credentials share-hash admin-hash])))}]}
       ["/edit"
-       {:name :routes/meeting.edit
+       {:name :routes.meeting/edit
         :view agenda-edit/edit-view
         :controllers [{:parameters {:path [:share-hash]}
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))}]}]
       ["/created"
-       {:name :routes.meeting.created
+       {:name :routes.meeting/created
         :view meeting-created/after-meeting-creation-view
         :link-text (labels :router/meeting-created)}]]
      ["/"
-      {:name :routes/meeting.show
+      {:name :routes.meeting/show
        :view meeting-single/single-meeting-view
        :link-text (labels :router/show-single-meeting)
        :controllers [{:parameters {:path [:share-hash]}
@@ -69,7 +69,7 @@
                       :stop #(rf/dispatch [:clear-current-agendas])}]}]
      ["/agenda"
       ["/add"
-       {:name :routes/agenda.add
+       {:name :routes.agenda/add
         :view agenda-views/agenda-view
         :link-text (labels :router/add-agendas)}]
       ["/:id"
@@ -82,11 +82,11 @@
                         :start (fn []
                                  (rf/dispatch [:start-discussion])
                                  (rf/dispatch [:discussion.history/clear]))}]
-         :name :routes/meetings.discussion.start
+         :name :routes.discussion/start
          :view discussion-views/discussion-start-view
          :link-text (labels :router/start-discussion)}]
        ["/continue"
-        {:name :routes/meetings.discussion.continue
+        {:name :routes.discussion/continue
          :view discussion-views/discussion-loop-view
          :link-text (labels :router/continue-discussion)
          :controllers [{:parameters {:path [:id :share-hash]}
