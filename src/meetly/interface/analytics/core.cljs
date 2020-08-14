@@ -18,7 +18,7 @@
     [:p.card-text [:small.text-muted "Last updated ..."]]]])
 
 (>defn- multi-arguments-card
-  "A card containing multiple sub-metrics that are related Uses the keys of a map
+  "A card containing multiple sub-metrics that are related. Uses the keys of a map
   to make sub-headings."
   [title content]
   [string? map? :ret vector?]
