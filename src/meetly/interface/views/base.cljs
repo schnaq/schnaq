@@ -139,7 +139,7 @@
       ;; navigation items
       (when (not= "production" (:environment config))
         [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (labels :nav-meeting-create)]]]
+      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meeting.create)} (labels :nav-meeting-create)]]]
      ;; name input
      [username-bar-view]]]])
 

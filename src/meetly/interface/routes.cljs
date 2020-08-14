@@ -1,19 +1,19 @@
 (ns meetly.interface.routes
-  (:require [meetly.interface.views.startpage :as startpage-views]
+  (:require [meetly.interface.analytics.core :as analytics]
+            [meetly.interface.config :refer [config]]
+            [meetly.interface.text.display-data :refer [labels]]
             [meetly.interface.views.agenda.agenda :as agenda-views]
             [meetly.interface.views.agenda.edit :as agenda-edit]
+            [meetly.interface.views.discussion.discussion :as discussion-views]
+            [meetly.interface.views.errors :as error-views]
+            [meetly.interface.views.feedback :as feedback]
+            [meetly.interface.views.meeting.after-create :as meeting-created]
             [meetly.interface.views.meeting.meetings :as meeting-views]
             [meetly.interface.views.meeting.overview :as meetings-overview]
             [meetly.interface.views.meeting.single :as meeting-single]
-            [meetly.interface.views.meeting.after-create :as meeting-created]
-            [meetly.interface.config :refer [config]]
-            [meetly.interface.text.display-data :refer [labels]]
-            [meetly.interface.views.discussion.discussion :as discussion-views]
-            [meetly.interface.views.feedback :as feedback]
-            [meetly.interface.analytics.core :as analytics]
-            [meetly.interface.views.errors :as error-views]
-            [reitit.coercion.spec]
-            [re-frame.core :as rf]))
+            [meetly.interface.views.startpage :as startpage-views]
+            [re-frame.core :as rf]
+            [reitit.coercion.spec]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
 ;; but by calling #/meetings. The anchor triggers reitit inside of re-frame instead
@@ -24,12 +24,10 @@
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
-
    [""
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
-
    ["meetings"
     (when (not= "production" (:environment config))
       [""
@@ -37,7 +35,7 @@
         :view meetings-overview/meeting-view
         :link-text (labels :router/all-meetings)}])
     ["/create"
-     {:name :routes/meetings.create
+     {:name :routes/meeting.create
       :view meeting-views/create-meeting-form-view
       :link-text (labels :router/create-meeting)}]
     ["/:share-hash"
