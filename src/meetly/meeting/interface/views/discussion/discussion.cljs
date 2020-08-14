@@ -83,7 +83,7 @@
   []
   (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
         premises @(rf/subscribe [:premises-and-undercuts-to-select])]
-    (interaction-view allow-new? premises [add-premise-form])))
+    [interaction-view allow-new? premises [add-premise-form]]))
 
 (defn- starting-premises-view
   "Show the premises after starting-conclusions. This view is different from usual premises,
@@ -91,7 +91,7 @@
   []
   (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
         premises @(rf/subscribe [:premises-to-select])]
-    (interaction-view allow-new? premises [add-starting-premises-form])))
+    [interaction-view allow-new? premises [add-starting-premises-form]]))
 
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
