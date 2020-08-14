@@ -6,7 +6,8 @@
             [vimsical.re-frame.cofx.inject :as inject]
             [meetly.meeting.interface.views.discussion.logic :as logic]
             [meetly.meeting.interface.views.discussion.view-elements :as view]
-            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]
+            [clojure.pprint :as pp]))
 
 
 (defn discussion-start-view
@@ -154,7 +155,7 @@
 (rf/reg-event-fx
   :start-discussion
   (fn [{:keys [db]} _]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :path-params])
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
           username (get-in db [:user :name] "Anonymous")]
       {:http-xhrio {:method :get
                     :uri (str (:rest-backend config) "/start-discussion/" id)
@@ -183,7 +184,7 @@
 (rf/reg-event-fx
   :starting-argument/new
   (fn [{:keys [db]} [reaction form]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :path-params])
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
           reaction-args
@@ -248,14 +249,13 @@
 (rf/reg-event-fx
   :continue-discussion-http-call
   (fn [{:keys [db]} [_ payload]]
-    (let [meeting-hash (get-in db [:meeting :selected :meeting/share-hash])
-          discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/continue-discussion")
                     :format (ajax/transit-request-format)
                     :params {:payload payload
-                             :meeting-hash meeting-hash
-                             :discussion-id discussion-id}
+                             :meeting-hash share-hash
+                             :discussion-id id}
                     :response-format (ajax/transit-response-format)
                     :on-success [:set-current-discussion-steps]
                     :on-failure [:ajax-failure]}})))
