@@ -1,6 +1,5 @@
 (ns meetly.interface.routes
   (:require [meetly.interface.analytics.core :as analytics]
-            [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :refer [labels]]
             [meetly.interface.utils.toolbelt :as toolbelt]
             [meetly.interface.views.agenda.agenda :as agenda-views]
