@@ -22,8 +22,8 @@
   [map? :ret string?]
   (let [share-hash (-> current-route :path-params :share-hash)
         admin-hash (-> current-route :path-params :admin-hash)
-        path (reitfe/href :routes/edit {:share-hash share-hash
-                                        :admin-hash admin-hash})
+        path (reitfe/href :routes/meeting.edit {:share-hash share-hash
+                                                :admin-hash admin-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
 

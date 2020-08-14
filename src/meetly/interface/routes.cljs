@@ -42,17 +42,15 @@
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
-                              (let [hash (:share-hash path)]
-                                (rf/dispatch [:load-meeting-by-share-hash hash])))}]}
+                              (rf/dispatch [:load-meeting-by-share-hash (:share-hash path)]))}]}
      ["/:admin-hash"
       {:parameters {:path {:admin-hash string?}}
        :controllers [{:parameters {:path [:share-hash :admin-hash]}
                       :start (fn [{:keys [path]}]
-                               (let [share-hash (:share-hash path)
-                                     edit-hash (:admin-hash path)]
-                                 (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
+                               (let [{:keys [share-hash admin-hash]} path]
+                                 (rf/dispatch [:meeting/check-admin-credentials share-hash admin-hash])))}]}
       ["/edit"
-       {:name :routes/edit
+       {:name :routes/meeting.edit
         :view agenda-edit/edit-view
         :controllers [{:parameters {:path [:share-hash]}
                        :start (fn [{:keys [path]}]
