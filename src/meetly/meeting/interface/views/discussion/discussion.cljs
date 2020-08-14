@@ -183,8 +183,7 @@
 (rf/reg-event-fx
   :starting-argument/new
   (fn [{:keys [db]} [reaction form]]
-    (let [discussion-id (-> db :agenda :chosen :agenda/discussion :db/id)
-          share-hash (get-in db [:meeting :selected :meeting/share-hash])
+    (let [{:keys [id share-hash]} (get-in db [:current-route :path-params])
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
           reaction-args
@@ -195,7 +194,7 @@
               (assoc :new/starting-argument-conclusion conclusion-text)
               (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
-                    [:navigate :routes/meetings.discussion.start {:id discussion-id
+                    [:navigate :routes/meetings.discussion.start {:id id
                                                                   :share-hash share-hash}]]})))
 
 (rf/reg-event-fx
