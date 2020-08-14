@@ -54,8 +54,7 @@
         :view agenda-edit/edit-view
         :controllers [{:parameters {:path [:share-hash]}
                        :start (fn [{:keys [path]}]
-                                (let [hash (:share-hash path)]
-                                  (rf/dispatch [:agenda/load-for-edit hash])))}]}]
+                                (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))}]}]
       ["/created"
        {:name :routes.meeting.created
         :view meeting-created/after-meeting-creation-view
@@ -66,13 +65,11 @@
        :link-text (labels :router/show-single-meeting)
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (let [hash (:share-hash path)]
-                                 (rf/dispatch [:load-agendas hash])))
-                      :stop (fn []
-                              (rf/dispatch [:clear-current-agendas]))}]}]
+                               (rf/dispatch [:load-agendas (:share-hash path)]))
+                      :stop #(rf/dispatch [:clear-current-agendas])}]}]
      ["/agenda"
       ["/add"
-       {:name :routes/meetings.agenda
+       {:name :routes/agenda.add
         :view agenda-views/agenda-view
         :link-text (labels :router/add-agendas)}]
       ["/:id"
