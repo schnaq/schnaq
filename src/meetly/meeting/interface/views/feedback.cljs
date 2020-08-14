@@ -10,17 +10,27 @@
             [meetly.meeting.interface.views.base :as base]
             [meetly.meeting.interface.views.modals.modal :as modal]
             [meetly.meeting.interface.utils.toolbelt :as toolbelt]
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]
             [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]
-            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
+            [reagent.core :as reagent]))
+
 
 (def ^:private screenshot (atom ""))
 
-(defn- screenshot-as-base64-img []
-  (.toDataURL @screenshot))
+(defn- screenshot-as-base64-img
+  "`screenshot` is of type HTMLCanvasElement and can therefore be transformed
+  via `.toDataURL` to a base64 encoded string. This function returns the base64
+  string if available."
+  []
+  (let [^js/HTMLCanvasElement screenshot' @screenshot]
+    (when screenshot'
+      (.toDataURL screenshot'))))
 
-(defn- screenshot! []
+(defn- screenshot!
+  "Take screenshot of whole page using html2canvas. Errors in rendering SVG
+  elements are normal."
+  []
   (.then
     (html2canvas (gdom/getElement "app")
                  (clj->js {:letterRendering 1 :allowTaint true}))
@@ -41,14 +51,15 @@
        {:on-submit
         (fn [e]
           (js-wrap/prevent-default e)
-          (let [contact-name (oget e [:target :elements :contact-name :value])
-                contact-mail (oget e [:target :elements :contact-mail :value])
-                description (oget e [:target :elements :description :value])
-                feedback {:feedback/contact-name contact-name
-                          :feedback/contact-mail contact-mail
-                          :feedback/description description
+          (let [contact-name (oget e [:target :elements :contact-name])
+                contact-mail (oget e [:target :elements :contact-mail])
+                description (oget e [:target :elements :description])
+                feedback {:feedback/contact-name (oget contact-name [:value])
+                          :feedback/contact-mail (oget contact-mail [:value])
+                          :feedback/description (oget description [:value])
                           :feedback/has-image? @checked?}]
-            (rf/dispatch [:feedback/new feedback (when @checked? (screenshot-as-base64-img))])))}
+            (rf/dispatch [:feedback/new feedback (when @checked? (screenshot-as-base64-img))
+                          [contact-name contact-mail description]])))}
        [:div.form-group
         [:label {:for "feedback-contact-name"}
          (labels :feedbacks.modal/contact-name)]
@@ -175,7 +186,7 @@
 
 (rf/reg-event-fx
   :feedback/new
-  (fn [_ [_ feedback screenshot]]
+  (fn [_ [_ feedback screenshot form-elements]]
     (when-not (string/blank? (:feedback/description feedback))
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/feedback/add")
@@ -184,4 +195,5 @@
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
                     :on-success [:modal {:show? false :child nil}]
-                    :on-failure [:ajax-failure]}})))
+                    :on-failure [:ajax-failure]}
+       :form/clear form-elements})))

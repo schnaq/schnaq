@@ -100,3 +100,8 @@
   :admin/set-password
   (fn [db [_ password]]
     (assoc-in db [:admin :password] password)))
+
+(rf/reg-event-fx
+  :form/should-clear
+  (fn [_ [_ form-elements]]
+    {:form/clear form-elements}))

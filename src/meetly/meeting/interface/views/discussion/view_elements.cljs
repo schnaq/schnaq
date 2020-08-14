@@ -102,6 +102,7 @@
    [:input.form-control.discussion-text-input.mb-1
     {:type "text" :name "premise-text"
      :auto-complete "off"
+     :required true
      :placeholder (labels :discussion/premise-placeholder)}]
    ;; add button
    [:div.text-center.button-spacing-top
