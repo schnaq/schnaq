@@ -52,7 +52,7 @@
      (fn []
        (let [display-content (create-link-fn @(rf/subscribe [:current-route]))
              meeting-link-id (str "meeting-link" id-extra)]
-         [:div
+         [:div.pb-4
           [:form.form.create-meeting-form.form-inline.row
            {:id (str "meeting-link-form-" id-extra)
             :on-click (fn []
@@ -61,14 +61,13 @@
             :data-toggle "tooltip"
             :data-placement "right"
             :title (labels :meeting/copy-link-tooltip)}
-           [:input.form-control.form-round.form.title.col-11
+           [:input.form-control.form-round.form.title.col-11.copy-link-form
             {:id meeting-link-id
              :type "text"
              :value display-content
              :readOnly true}]
            [:label.col-1 {:for meeting-link-id}
-            [:h3 {:class (str "m-auto far " (fa :copy))}]]]
-          [:br]]))}))
+            [:h3 {:class (str "m-auto far " (fa :copy))}]]]]))}))
 
 
 (defn img-text
@@ -90,11 +89,31 @@
       (img-text (img-path :elephant-talk)
                 (labels :meetings/educate-on-link-text-subtitle))]]]])
 
+(defn- educate-admin-element [share-hash admin-hash]
+  [:div.row.mb-3
+   [:div.col-11
+    [:div.row
+     ;; edit
+     [:div.col-lg-6
+      [:div.share-link-icons
+       (img-text (img-path :elephant-erase)
+                 (labels :meeting/educate-on-edit))]
+      [:button.btn.button-secondary.btn-lg.float-left.mt-2.span-container
+       {:role "button"
+        :on-click #(rf/dispatch [:navigate :routes/edit {:share-hash share-hash :admin-hash admin-hash}])}
+       (labels :meetings/edit-meetly-button)]]
+     ;; admin hash
+     [:div.col-lg-6.share-link-icons
+      (img-text (img-path :elephant-admin)
+                (labels :meeting/educate-on-admin))
+      [:div.py-3
+       [copy-link-form get-edit-link "edit-hash"]]]]]])
+
 (defn after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:keys [share-hash]} (:path-params @(rf/subscribe [:current-route]))]
+  (let [{:keys [share-hash admin-hash]} (:path-params @(rf/subscribe [:current-route]))]
     [:div
      [base/nav-header]
      [base/header
@@ -104,9 +123,7 @@
       ;; list agendas
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
-      [:p "Admin-Link:"]
-      [copy-link-form get-edit-link "edit-hash"]
-      [:br]
+      [educate-admin-element share-hash admin-hash]
       [copy-success-display]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]

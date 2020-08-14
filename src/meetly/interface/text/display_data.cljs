@@ -51,12 +51,16 @@
      :meeting/copy-share-link "Link kopieren:"
      :meeting/copy-link-tooltip "Hier klicken um Link zu kopieren"
      :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
+     :meeting/admin-link-copied-success "Der Admin-Link wurde in Ihre Zwischenablage kopiert!"
      :meeting/created-success-heading "Ihr Meetly wurde erstellt!"
      :meeting/created-success-subheading "Link verteilen und loslegen"
      :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
      :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
+     :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
+     :meeting/educate-on-admin "Später jederzeit per Admin Link editieren!"
      :meetings/continue-with-meetly-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-meetly-button "Zum Meetly"
+     :meetings/edit-meetly-button "Meetly editieren"
 
      :meeting.step2/button "2. Schritt: Agenda hinzufügen"
 
@@ -133,7 +137,10 @@
      :user.button/set-name-placeholder "Ihr Name"
 
      ;; Errors
-     :errors/invalid-admin-link "Sie haben nicht genügend Rechte um diese Seite anzusehen."
+     :errors/navgate-to-startpage "Zurück zur Startseite"
+     :errors/comic-relief "Ups ..."
+     :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
+
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
@@ -157,9 +164,11 @@
      :icon-robot "imgs/robot.svg"
      :icon-reports "imgs/reports.svg"
      :icon-crane "imgs/crane.svg"
-     :elephant-share "imgs/elephant-share.png"
-     :elephant-talk "imgs/elephant-talk.png"
-     :elephant-stop "imgs/elephant-stop.png"
+     :elephant-share "imgs/elephants/share.png"
+     :elephant-talk "imgs/elephants/talk.png"
+     :elephant-stop "imgs/elephants/stop.png"
+     :elephant-admin "imgs/elephants/admin.png"
+     :elephant-erase "imgs/elephants/erase.png"
      :logo "imgs/Meetly-Logo.svg"
      :animation-discussion "animations/animation_discussion.gif"}))
 
