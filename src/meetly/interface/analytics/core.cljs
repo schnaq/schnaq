@@ -1,10 +1,12 @@
 (ns meetly.interface.analytics.core
-  (:require [meetly.interface.views.base :as base]
-            [meetly.interface.text.display-data :refer [labels]]
-            [meetly.interface.config :refer [config]]
+  (:require [ajax.core :as ajax]
+            [clojure.string :as string]
+            [ghostwheel.core :refer [>defn- >defn]]
             [goog.string :as gstring]
-            [re-frame.core :as rf]
-            [ajax.core :as ajax]))
+            [meetly.interface.config :refer [config]]
+            [meetly.interface.text.display-data :refer [labels]]
+            [meetly.interface.views.base :as base]
+            [re-frame.core :as rf]))
 
 (defn- analytics-card
   "A single card containing a metric and a title."
@@ -13,6 +15,21 @@
    [:div.card-body
     [:h5.card-title title]
     [:p.card-text.display-1 metric]
+    [:p.card-text [:small.text-muted "Last updated ..."]]]])
+
+(>defn- multi-arguments-card
+  "A card containing multiple sub-metrics that are related. Uses the keys of a map
+  to make sub-headings."
+  [title content]
+  [string? map? :ret vector?]
+  [:div.card
+   [:div.card-body
+    [:h5.card-title title]
+    (for [[metric-name metric-value] content]
+      [:div {:key metric-name}
+       [:p.card-text [:strong (string/capitalize (name metric-name))]]
+       [:p.card-text.display-1 metric-value]
+       [:hr]])
     [:p.card-text [:small.text-muted "Last updated ..."]]]])
 
 (defn analytics-dashboard-view
@@ -34,33 +51,8 @@
        [analytics-card (labels :analytics/average-agendas-title) average-agendas]
        [analytics-card (labels :analytics/statements-num-title) statements-num]
        [analytics-card (labels :analytics/active-users-num-title) active-users-num]
-       [:div.card
-        [:div.card-body
-         [:h5.card-title (labels :analytics/statement-lengths-title)]
-         [:p.card-text [:strong "Max"]]
-         [:p.card-text.display-1 (:max statement-lengths)]
-         [:hr]
-         [:p.card-text [:strong "Min"]]
-         [:p.card-text.display-1 (:min statement-lengths)]
-         [:hr]
-         [:p.card-text [:strong "Avg"]]
-         [:p.card-text.display-1 (:average statement-lengths)]
-         [:hr]
-         [:p.card-text [:strong "Median"]]
-         [:p.card-text.display-1 (:median statement-lengths)]
-         [:p.card-text [:small.text-muted "Last updated ..."]]]]
-       [:div.card
-        [:div.card-body
-         [:h5.card-title (labels :analytics/argument-types-title)]
-         [:p.card-text [:strong "Supports"]]
-         [:p.card-text.display-1 (:supports argument-types)]
-         [:hr]
-         [:p.card-text [:strong "Attacks"]]
-         [:p.card-text.display-1 (:attacks argument-types)]
-         [:hr]
-         [:p.card-text [:strong "Undercuts"]]
-         [:p.card-text.display-1 (:undercuts argument-types)]
-         [:p.card-text [:small.text-muted "Last updated ..."]]]]]])])
+       [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
+       [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])])
 
 ;; #### Events ####
 
@@ -75,9 +67,10 @@
                   [:analytics/load-statement-length-stats]
                   [:analytics/load-argument-type-stats]]}))
 
-(defn fetch-with-password
+(>defn fetch-with-password
   "Fetches something from an endpoint with the password."
   [db path on-success-event]
+  [map? string? keyword? :ret map?]
   {:http-xhrio {:method :post
                 :uri (str (:rest-backend config) path)
                 :format (ajax/transit-request-format)
