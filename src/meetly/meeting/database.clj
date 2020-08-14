@@ -120,9 +120,9 @@
   "Removes all entries from a map that have a value of nil or empty string."
   [data]
   [associative? :ret associative?]
-  (into {} (filter #(not (or (nil? (second %))
-                             (when (= String (type (second %)))
-                               (string/blank? (second %)))))
+  (into {} (remove #(or (nil? (second %))
+                        (when (= String (type (second %)))
+                          (string/blank? (second %))))
                    data)))
 
 (>defn- clean-and-add-to-db!
@@ -176,14 +176,14 @@
   "Adds a meeting to the database. Returns the id of the newly added meeting.
   Automatically cleans input."
   [meeting]
-  [::models/meeting :ret int?]
+  [map? :ret int?]
   (clean-and-add-to-db! meeting ::models/meeting))
 
 (>defn update-meeting
   "Updates a meeting. Returns the id of the newly updated meeting.
   Automatically cleans input. Update of hashes is not allowed."
   [meeting]
-  [::models/meeting-without-hashes :ret int?]
+  [map? :ret int?]
   (clean-and-update-db! meeting ::models/meeting-without-hashes))
 
 (>defn update-agenda

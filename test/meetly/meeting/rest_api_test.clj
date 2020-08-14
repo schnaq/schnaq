@@ -1,11 +1,23 @@
 (ns meetly.meeting.rest-api-test
-  (:require [clojure.test :refer [deftest testing is use-fixtures]]
-            [meetly.test.toolbelt :as meetly-toolbelt]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.test :refer [deftest testing is use-fixtures]]
+            [meetly.meeting.database :as db]
+            [meetly.meeting.models :as models]
             [meetly.meeting.rest-api :as api]
-            [meetly.meeting.database :as db]))
+            [meetly.test.toolbelt :as meetly-toolbelt]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once meetly-toolbelt/clean-database-fixture)
+
+(deftest add-meeting-with-empty-description-test
+  (testing "Check whether a meeting with an empty description is added or refused."
+    (let [response (@#'api/add-meeting {:body-params {:meeting {:meeting/title "Test"
+                                                                :meeting/start-date (db/now)
+                                                                :meeting/end-date (db/now)
+                                                                :meeting/description ""}
+                                                      :nickname "Wegi"}})]
+      (is (= 200 (:status response)))
+      (is (s/valid? ::models/meeting (-> response :body :new-meeting))))))
 
 (deftest add-agendas-test
   (testing "Test whether the agenda is correctly validated before passed on."
