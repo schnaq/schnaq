@@ -153,22 +153,17 @@
 
 (rf/reg-event-fx
   :start-discussion
-  (fn [{:keys [db]} [_ try-counter]]
-    (let [discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])
-          meeting-hash (get-in db [:meeting :selected :meeting/share-hash])
-          username (get-in db [:user :name] "Anonymous")
-          try-counter (or try-counter 0)]
-      (when (< try-counter 10)
-        (if (and discussion-id meeting-hash)
-          {:http-xhrio {:method :get
-                        :uri (str (:rest-backend config) "/start-discussion/" discussion-id)
-                        :format (ajax/transit-request-format)
-                        :url-params {:username username
-                                     :meeting-hash meeting-hash}
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:set-current-discussion-steps]
-                        :on-failure [:ajax-failure]}}
-          {:dispatch-later [{:ms 50 :dispatch [:start-discussion (inc try-counter)]}]})))))
+  (fn [{:keys [db]} _]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :path-params])
+          username (get-in db [:user :name] "Anonymous")]
+      {:http-xhrio {:method :get
+                    :uri (str (:rest-backend config) "/start-discussion/" id)
+                    :format (ajax/transit-request-format)
+                    :url-params {:username username
+                                 :meeting-hash share-hash}
+                    :response-format (ajax/transit-response-format)
+                    :on-success [:set-current-discussion-steps]
+                    :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-db
   :set-current-discussion-steps
