@@ -30,13 +30,13 @@
 
 (defn discussion-header [current-meeting]
   ;; meeting header
-  (base/discussion-header
-    (:meeting/title current-meeting)
-    (:meeting/description current-meeting)
-    (fn []
-      (rf/dispatch [:navigate :routes/meetings.show
-                    {:share-hash (:meeting/share-hash current-meeting)}])
-      (rf/dispatch [:select-current-meeting current-meeting]))))
+  [base/discussion-header
+   (:meeting/title current-meeting)
+   (:meeting/description current-meeting)
+   (fn []
+     (rf/dispatch [:navigate :routes/meetings.show
+                   {:share-hash (:meeting/share-hash current-meeting)}])
+     (rf/dispatch [:select-current-meeting current-meeting]))])
 
 ;; discussion loop box
 
@@ -48,8 +48,8 @@
       ;; back arrow
       [:div.col-1.back-arrow
        (when on-click-back-function
-         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))
-                         :on-click on-click-back-function}])]
+         [:p {:on-click on-click-back-function}
+          [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
       ;; title
       [:div.col-11
        [:div
@@ -258,5 +258,3 @@
       :switched (update-in
                   (update-in db [:votes :down id] inc)
                   [:votes :up id] dec))))
-
-

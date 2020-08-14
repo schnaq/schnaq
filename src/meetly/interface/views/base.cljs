@@ -108,8 +108,8 @@
     [:div.row
      [:div.col-1.back-arrow
       (when on-click-back-function
-        [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
-                        :on-click on-click-back-function}])]
+        [:p {:on-click on-click-back-function}              ;; the icon itself is not clickable
+         [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))}]])]
      [:div.col-8.container
       [:div
        (when title-on-click-function

@@ -32,12 +32,14 @@
 
 (defn- meeting-title [current-meeting]
   ;; meeting header
-  (base/discussion-header
-    (:meeting/title current-meeting)
-    (:meeting/description current-meeting)
-    nil                                                     ;; header should not be clickable in overview
-    (when (not= "production" (:environment config))         ;; when in dev display back button
-      #(rf/dispatch [:navigate :routes/meetings]))))
+  [base/discussion-header
+   (:meeting/title current-meeting)
+   (:meeting/description current-meeting)
+   nil                                                      ;; header should not be clickable in overview
+   (when (not= "production" (:environment config))          ;; when in dev display back button
+     (fn []
+       (println "Clicked")
+       (rf/dispatch [:navigate :routes/meetings])))])
 
 (defn- single-meeting []
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
