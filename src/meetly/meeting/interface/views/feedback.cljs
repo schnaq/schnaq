@@ -196,4 +196,4 @@
                     :response-format (ajax/transit-response-format)
                     :on-success [:modal {:show? false :child nil}]
                     :on-failure [:ajax-failure]}
-       :dispatch-n [[:form/clear form-elements]]})))
+       :form/clear form-elements})))
