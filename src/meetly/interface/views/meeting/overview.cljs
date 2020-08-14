@@ -16,7 +16,7 @@
   ;; clickable div
   [:div.meeting-entry
    {:on-click (fn []
-                (rf/dispatch [:navigate :routes/meetings.show
+                (rf/dispatch [:navigate :routes.meeting/show
                               {:share-hash (:meeting/share-hash meeting)}])
                 (rf/dispatch [:select-current-meeting meeting]))}
    ;; title and arrow

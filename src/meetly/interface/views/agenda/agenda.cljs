@@ -108,7 +108,7 @@
   (fn [_ [_ meeting-hash edit-hash]]
     {:dispatch-n [[:clear-current-agendas]
                   [:reset-temporary-agendas]
-                  [:navigate :routes.meeting.created {:share-hash meeting-hash
+                  [:navigate :routes.meeting/created {:share-hash meeting-hash
                                                       :admin-hash edit-hash}]]}))
 
 (defn load-agenda-fn [hash on-success-event]

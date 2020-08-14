@@ -33,7 +33,7 @@
      [:div.mx-auto.col-lg-10
       [:button.btn.button-call-to-action
        {:type "button"
-        :on-click #(rf/dispatch [:navigate :routes/meetings.create])}
+        :on-click #(rf/dispatch [:navigate :routes.meeting/create])}
        [:h4 (data/labels :create-meetly-button)]]
       [:p.pt-4 (data/labels :create-your-meeting-sub)]]]]])
 

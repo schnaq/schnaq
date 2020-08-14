@@ -1,19 +1,19 @@
 (ns meetly.interface.routes
-  (:require [meetly.interface.views.startpage :as startpage-views]
+  (:require [meetly.interface.analytics.core :as analytics]
+            [meetly.interface.text.display-data :refer [labels]]
+            [meetly.interface.utils.toolbelt :as toolbelt]
             [meetly.interface.views.agenda.agenda :as agenda-views]
             [meetly.interface.views.agenda.edit :as agenda-edit]
+            [meetly.interface.views.discussion.discussion :as discussion-views]
+            [meetly.interface.views.errors :as error-views]
+            [meetly.interface.views.feedback :as feedback]
+            [meetly.interface.views.meeting.after-create :as meeting-created]
             [meetly.interface.views.meeting.meetings :as meeting-views]
             [meetly.interface.views.meeting.overview :as meetings-overview]
             [meetly.interface.views.meeting.single :as meeting-single]
-            [meetly.interface.views.meeting.after-create :as meeting-created]
-            [meetly.interface.text.display-data :refer [labels]]
-            [meetly.interface.views.discussion.discussion :as discussion-views]
-            [meetly.interface.views.feedback :as feedback]
-            [meetly.interface.analytics.core :as analytics]
-            [meetly.interface.views.errors :as error-views]
-            [meetly.interface.utils.toolbelt :as toolbelt]
-            [reitit.coercion.spec]
-            [re-frame.core :as rf]))
+            [meetly.interface.views.startpage :as startpage-views]
+            [re-frame.core :as rf]
+            [reitit.coercion.spec]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
 ;; but by calling #/meetings. The anchor triggers reitit inside of re-frame instead
@@ -24,12 +24,10 @@
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
-
    [""
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
-
    ["meetings"
     (when-not toolbelt/production?
       [""
@@ -37,46 +35,41 @@
         :view meetings-overview/meeting-view
         :link-text (labels :router/all-meetings)}])
     ["/create"
-     {:name :routes/meetings.create
+     {:name :routes.meeting/create
       :view meeting-views/create-meeting-form-view
       :link-text (labels :router/create-meeting)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
-                              (let [hash (:share-hash path)]
-                                (rf/dispatch [:load-meeting-by-share-hash hash])))}]}
+                              (rf/dispatch [:load-meeting-by-share-hash (:share-hash path)]))}]}
      ["/:admin-hash"
       {:parameters {:path {:admin-hash string?}}
        :controllers [{:parameters {:path [:share-hash :admin-hash]}
                       :start (fn [{:keys [path]}]
-                               (let [share-hash (:share-hash path)
-                                     edit-hash (:admin-hash path)]
-                                 (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
+                               (let [{:keys [share-hash admin-hash]} path]
+                                 (rf/dispatch [:meeting/check-admin-credentials share-hash admin-hash])))}]}
       ["/edit"
-       {:name :routes/edit
+       {:name :routes.meeting/edit
         :view agenda-edit/edit-view
         :controllers [{:parameters {:path [:share-hash]}
                        :start (fn [{:keys [path]}]
-                                (let [hash (:share-hash path)]
-                                  (rf/dispatch [:agenda/load-for-edit hash])))}]}]
+                                (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))}]}]
       ["/created"
-       {:name :routes.meeting.created
+       {:name :routes.meeting/created
         :view meeting-created/after-meeting-creation-view
         :link-text (labels :router/meeting-created)}]]
      ["/"
-      {:name :routes/meetings.show
+      {:name :routes.meeting/show
        :view meeting-single/single-meeting-view
        :link-text (labels :router/show-single-meeting)
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (let [hash (:share-hash path)]
-                                 (rf/dispatch [:load-agendas hash])))
-                      :stop (fn []
-                              (rf/dispatch [:clear-current-agendas]))}]}]
+                               (rf/dispatch [:load-agendas (:share-hash path)]))
+                      :stop #(rf/dispatch [:clear-current-agendas])}]}]
      ["/agenda"
       ["/add"
-       {:name :routes/meetings.agenda
+       {:name :routes.agenda/add
         :view agenda-views/agenda-view
         :link-text (labels :router/add-agendas)}]
       ["/:id"
@@ -89,11 +82,11 @@
                         :start (fn []
                                  (rf/dispatch [:start-discussion])
                                  (rf/dispatch [:discussion.history/clear]))}]
-         :name :routes/meetings.discussion.start
+         :name :routes.discussion/start
          :view discussion-views/discussion-start-view
          :link-text (labels :router/start-discussion)}]
        ["/continue"
-        {:name :routes/meetings.discussion.continue
+        {:name :routes.discussion/continue
          :view discussion-views/discussion-loop-view
          :link-text (labels :router/continue-discussion)
          :controllers [{:parameters {:path [:id :share-hash]}

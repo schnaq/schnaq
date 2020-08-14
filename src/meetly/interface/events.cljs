@@ -92,7 +92,7 @@
   (fn [{:keys [db]} [_ agenda-id share-hash]]
     (when (empty? (get-in db [:discussion :options :steps]))
       {:dispatch [:navigate
-                  :routes/meetings.discussion.start
+                  :routes.discussion/start
                   {:id agenda-id
                    :share-hash share-hash}]})))
 

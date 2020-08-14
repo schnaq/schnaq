@@ -6,7 +6,7 @@
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry
    {:on-click (fn []
-                (rf/dispatch [:navigate :routes/meetings.discussion.start
+                (rf/dispatch [:navigate :routes.discussion/start
                               {:id (-> agenda :agenda/discussion :db/id)
                                :share-hash (:meeting/share-hash meeting)}])
                 (rf/dispatch [:choose-agenda agenda]))}
