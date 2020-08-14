@@ -26,12 +26,6 @@
   [string? :ret boolean?]
   (= config/admin-password password))
 
-(>defn- production-mode?
-  "Returns true if we are in production mode."
-  []
-  [:ret boolean?]
-  (= "production" config/env-mode))
-
 (>defn- valid-credentials?
   "Validate if share-hash and admin-hash match"
   [share-hash edit-hash]
@@ -289,7 +283,7 @@
   "Error, page not found!")
 
 (defroutes app-routes
-  (if (production-mode?)
+  (if meetly-core/production-mode?
     (route/not-found not-found-msg)
     (GET "/meetings" [] all-meetings))
   (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
@@ -330,7 +324,7 @@
   [& _args]
   (let [port (:port config/rest-api)
         allowed-origins [#".*\.dialogo\.io"]
-        allowed-origins' (if (production-mode?) allowed-origins (conj allowed-origins #".*"))]
+        allowed-origins' (if meetly-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middleware
     (meetly-core/-main)
     (reset! current-server
