@@ -1,7 +1,7 @@
 (ns meetly.interface.views.meeting.single
-  (:require [re-frame.core :as rf]
-            [meetly.interface.config :refer [config]]
-            [meetly.interface.views.base :as base]))
+  (:require [meetly.interface.config :refer [config]]
+            [meetly.interface.views.base :as base]
+            [re-frame.core :as rf]))
 
 
 (defn- agenda-entry [agenda meeting]

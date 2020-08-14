@@ -1,10 +1,10 @@
 (ns meetly.interface.views.base
-  (:require [oops.core :refer [oget]]
-            [reitit.frontend.easy :as reitfe]
+  (:require [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :as data :refer [labels]]
-            [meetly.interface.config :refer [config]]
+            [meetly.interface.utils.js-wrapper :as js-wrap]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [meetly.interface.utils.js-wrapper :as js-wrap]))
+            [reitit.frontend.easy :as reitfe]))
 
 (defn- wavy-bottom []
   ;; bezier curves
