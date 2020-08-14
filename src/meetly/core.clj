@@ -6,7 +6,7 @@
 
 ;; Used for properly starting the discussion service
 (defn -main []
-  (when-not (System/getenv "PRODUCTION")
+  (when-not (= "production" config/env-mode)
     (spec-test/instrument))
   (db/init!)
   (dialog/init! {:datomic config/datomic
