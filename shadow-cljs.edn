@@ -4,7 +4,7 @@
  :nrepl {:port 8777}
  :builds {;; example build config, usage suitable for user apps
           :app {:target :browser
-                :modules {:base {:init-fn meetly.meeting.interface.core/init}}
+                :modules {:base {:init-fn meetly.interface.core/init}}
                 :output-dir "public/js/compiled"
                 :asset-path "/js/compiled"
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}}
