@@ -1,7 +1,7 @@
 (ns meetly.meeting.rest-api
   (:require [clojure.string :as string]
             [clojure.java.io :as io]
-            [compojure.core :refer [defroutes GET POST]]
+            [compojure.core :refer [GET POST routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
@@ -276,39 +276,56 @@
         edit-hash (:edit-hash body-params)]
     (response {:valid-credentials? (valid-credentials? share-hash edit-hash)})))
 
+
 ;; -----------------------------------------------------------------------------
-;; General
+;; Routes
 
 (def ^:private not-found-msg
   "Error, page not found!")
 
-(defroutes app-routes
+(def ^:private common-routes
+  "Common routes for all modes."
+  (routes
+    (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
+    (POST "/meeting/add" [] add-meeting)
+    (POST "/meeting/update" [] update-meeting!)
+    (POST "/agendas/add" [] add-agendas)
+    (POST "/author/add" [] add-author)
+    (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+    (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
+    (GET "/start-discussion/:discussion-id" [] start-discussion)
+    (POST "/continue-discussion" [] continue-discussion)
+    (POST "/votes/up/toggle" [] toggle-upvote-statement)
+    (POST "/votes/down/toggle" [] toggle-downvote-statement)
+    (POST "/feedback/add" [] add-feedback)
+    (POST "/feedbacks" [] all-feedbacks)
+    (POST "/credentials/validate" [] check-credentials)
+    ;; Analytics routes
+    (POST "/analytics/meetings" [] number-of-meetings)
+    (POST "/analytics/usernames" [] number-of-usernames)
+    (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
+    (POST "/analytics/statements" [] number-of-statements)
+    (POST "/analytics/active-users" [] number-of-active-users)
+    (POST "/analytics/statement-lengths" [] statement-lengths-stats)
+    (POST "/analytics/argument-types" [] argument-type-stats)))
+
+(def ^:private development-routes
+  "Exclusive Routes only available outside of production."
+  (routes
+    (GET "/meetings" [] all-meetings)))
+
+(def ^:private app-routes
+  "Building routes for app."
   (if meetly-core/production-mode?
-    (route/not-found not-found-msg)
-    (GET "/meetings" [] all-meetings))
-  (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
-  (POST "/meeting/add" [] add-meeting)
-  (POST "/meeting/update" [] update-meeting!)
-  (POST "/agendas/add" [] add-agendas)
-  (POST "/author/add" [] add-author)
-  (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
-  (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
-  (GET "/start-discussion/:discussion-id" [] start-discussion)
-  (POST "/continue-discussion" [] continue-discussion)
-  (POST "/votes/up/toggle" [] toggle-upvote-statement)
-  (POST "/votes/down/toggle" [] toggle-downvote-statement)
-  (POST "/feedback/add" [] add-feedback)
-  (POST "/feedbacks" [] all-feedbacks)
-  (POST "/credentials/validate" [] check-credentials)
-  ;; Analytics routes
-  (POST "/analytics/meetings" [] number-of-meetings)
-  (POST "/analytics/usernames" [] number-of-usernames)
-  (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
-  (POST "/analytics/statements" [] number-of-statements)
-  (POST "/analytics/active-users" [] number-of-active-users)
-  (POST "/analytics/statement-lengths" [] statement-lengths-stats)
-  (POST "/analytics/argument-types" [] argument-type-stats)
-  (route/not-found not-found-msg))
+    (routes common-routes
+            (route/not-found not-found-msg))
+    (routes common-routes
+            development-routes
+            (route/not-found not-found-msg))))
+
+
+;; -----------------------------------------------------------------------------
+;; General
 
 (defonce current-server (atom nil))
 
