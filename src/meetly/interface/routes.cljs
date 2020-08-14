@@ -6,12 +6,12 @@
             [meetly.interface.views.meeting.overview :as meetings-overview]
             [meetly.interface.views.meeting.single :as meeting-single]
             [meetly.interface.views.meeting.after-create :as meeting-created]
-            [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :refer [labels]]
             [meetly.interface.views.discussion.discussion :as discussion-views]
             [meetly.interface.views.feedback :as feedback]
             [meetly.interface.analytics.core :as analytics]
             [meetly.interface.views.errors :as error-views]
+            [meetly.interface.utils.toolbelt :as toolbelt]
             [reitit.coercion.spec]
             [re-frame.core :as rf]))
 
@@ -31,7 +31,7 @@
      :link-text (labels :router/startpage)}]
 
    ["meetings"
-    (when (not= "production" (:environment config))
+    (when-not toolbelt/production?
       [""
        {:name :routes/meetings
         :view meetings-overview/meeting-view

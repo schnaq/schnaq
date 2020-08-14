@@ -1,8 +1,7 @@
 (ns meetly.interface.views.meeting.single
-  (:require [meetly.interface.config :refer [config]]
-            [meetly.interface.views.base :as base]
+  (:require [meetly.interface.views.base :as base]
+            [meetly.interface.utils.toolbelt :as toolbelt]
             [re-frame.core :as rf]))
-
 
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry
@@ -36,9 +35,8 @@
    (:meeting/title current-meeting)
    (:meeting/description current-meeting)
    nil                                                      ;; header should not be clickable in overview
-   (when (not= "production" (:environment config))          ;; when in dev display back button
+   (when-not toolbelt/production?                           ;; when in dev display back button
      (fn []
-       (println "Clicked")
        (rf/dispatch [:navigate :routes/meetings])))])
 
 (defn- single-meeting []

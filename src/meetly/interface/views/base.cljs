@@ -1,7 +1,7 @@
 (ns meetly.interface.views.base
-  (:require [meetly.interface.config :refer [config]]
-            [meetly.interface.text.display-data :as data :refer [labels]]
+  (:require [meetly.interface.text.display-data :as data :refer [labels]]
             [meetly.interface.utils.js-wrapper :as js-wrap]
+            [meetly.interface.utils.toolbelt :as toolbelt]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]))
@@ -137,7 +137,7 @@
            :class "collapse navbar-collapse"}
      [:ul.navbar-nav.mr-auto
       ;; navigation items
-      (when (not= "production" (:environment config))
+      (when-not toolbelt/production?
         [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
       [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (labels :nav-meeting-create)]]]
      ;; name input
