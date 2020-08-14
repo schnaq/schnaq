@@ -1,12 +1,15 @@
 (ns meetly.core
   (:require [clojure.spec.test.alpha :as spec-test]
-            [meetly.meeting.database :as db]
+            [dialog.discussion.database :as dialog]
             [meetly.config :as config]
-            [dialog.discussion.database :as dialog]))
+            [meetly.meeting.database :as db]))
+
+(def production-mode?
+  (= "production" config/env-mode))
 
 ;; Used for properly starting the discussion service
 (defn -main []
-  (when-not (System/getenv "PRODUCTION")
+  (when-not production-mode?
     (spec-test/instrument))
   (db/init!)
   (dialog/init! {:datomic config/datomic

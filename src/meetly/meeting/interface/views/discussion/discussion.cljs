@@ -82,7 +82,7 @@
   []
   (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
         premises @(rf/subscribe [:premises-and-undercuts-to-select])]
-    (interaction-view allow-new? premises [add-premise-form])))
+    [interaction-view allow-new? premises [add-premise-form]]))
 
 (defn- starting-premises-view
   "Show the premises after starting-conclusions. This view is different from usual premises,
@@ -90,7 +90,7 @@
   []
   (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
         premises @(rf/subscribe [:premises-to-select])]
-    (interaction-view allow-new? premises [add-starting-premises-form])))
+    [interaction-view allow-new? premises [add-starting-premises-form]]))
 
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
@@ -141,33 +141,27 @@
             before-time-travel (get-in db [:history :full-context])
             keep-n (- (count before-time-travel) steps-back)
             after-time-travel (vec (take keep-n before-time-travel))
-            discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])
-            share-hash (get-in db [:meeting :selected :meeting/share-hash])]
+            {:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
         (if (>= 0 keep-n)
           {:dispatch-n [[:discussion.history/clear]
-                        [:navigate :routes/meetings.discussion.start {:id discussion-id
+                        [:navigate :routes/meetings.discussion.start {:id id
                                                                       :share-hash share-hash}]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
            :dispatch [:set-current-discussion-steps (:options (nth before-time-travel keep-n))]})))))
 
 (rf/reg-event-fx
   :start-discussion
-  (fn [{:keys [db]} [_ try-counter]]
-    (let [discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])
-          meeting-hash (get-in db [:meeting :selected :meeting/share-hash])
-          username (get-in db [:user :name] "Anonymous")
-          try-counter (or try-counter 0)]
-      (when (< try-counter 10)
-        (if (and discussion-id meeting-hash)
-          {:http-xhrio {:method :get
-                        :uri (str (:rest-backend config) "/start-discussion/" discussion-id)
-                        :format (ajax/transit-request-format)
-                        :url-params {:username username
-                                     :meeting-hash meeting-hash}
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:set-current-discussion-steps]
-                        :on-failure [:ajax-failure]}}
-          {:dispatch-later [{:ms 50 :dispatch [:start-discussion (inc try-counter)]}]})))))
+  (fn [{:keys [db]} _]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
+          username (get-in db [:user :name] "Anonymous")]
+      {:http-xhrio {:method :get
+                    :uri (str (:rest-backend config) "/start-discussion/" id)
+                    :format (ajax/transit-request-format)
+                    :url-params {:username username
+                                 :meeting-hash share-hash}
+                    :response-format (ajax/transit-response-format)
+                    :on-success [:set-current-discussion-steps]
+                    :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-db
   :set-current-discussion-steps
@@ -187,8 +181,7 @@
 (rf/reg-event-fx
   :starting-argument/new
   (fn [{:keys [db]} [reaction form]]
-    (let [discussion-id (-> db :agenda :chosen :agenda/discussion :db/id)
-          share-hash (get-in db [:meeting :selected :meeting/share-hash])
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
           conclusion-text (oget form [:conclusion-text :value])
           premise-text (oget form [:premise-text :value])
           reaction-args
@@ -199,7 +192,7 @@
               (assoc :new/starting-argument-conclusion conclusion-text)
               (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
-                    [:navigate :routes/meetings.discussion.start {:id discussion-id
+                    [:navigate :routes/meetings.discussion.start {:id id
                                                                   :share-hash share-hash}]]
        :form/clear form})))
 
@@ -254,14 +247,13 @@
 (rf/reg-event-fx
   :continue-discussion-http-call
   (fn [{:keys [db]} [_ payload]]
-    (let [meeting-hash (get-in db [:meeting :selected :meeting/share-hash])
-          discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/continue-discussion")
                     :format (ajax/transit-request-format)
                     :params {:payload payload
-                             :meeting-hash meeting-hash
-                             :discussion-id discussion-id}
+                             :meeting-hash share-hash
+                             :discussion-id id}
                     :response-format (ajax/transit-response-format)
                     :on-success [:set-current-discussion-steps]
                     :on-failure [:ajax-failure]}})))

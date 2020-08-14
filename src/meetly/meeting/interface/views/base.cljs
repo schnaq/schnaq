@@ -97,26 +97,26 @@
   'title-on-click-function' is triggered when header is clicked
   'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
   ([title subtitle]
-   (discussion-header title subtitle nil nil))
+   [discussion-header title subtitle nil nil])
 
   ([title subtitle title-on-click-function]
-   (discussion-header title subtitle title-on-click-function nil))
+   [discussion-header title subtitle title-on-click-function nil])
 
   ([title subtitle title-on-click-function on-click-back-function]
    ;; check if title is clickable and set properties accordingly
-   (let [header-on-click (if title-on-click-function {:on-click title-on-click-function
-                                                      :class "clickable-no-hover"}
-                                                     {})]
-     [:div.meeting-header.header-custom.shadow-custom
-      [:div.row
-       [:div.col-1.back-arrow
-        (when on-click-back-function
-          [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
-                          :on-click on-click-back-function}])]
-       [:div.col-8.container
-        [:div header-on-click
-         [:h2 title]
-         [:h6 subtitle]]]]])))
+   [:div.meeting-header.header-custom.shadow-custom
+    [:div.row
+     [:div.col-1.back-arrow
+      (when on-click-back-function
+        [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
+                        :on-click on-click-back-function}])]
+     [:div.col-8.container
+      [:div
+       (when title-on-click-function
+         {:on-click title-on-click-function
+          :class "clickable-no-hover"})
+       [:h2 title]
+       [:h6 subtitle]]]]]))
 
 ;; nav header
 

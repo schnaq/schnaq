@@ -11,7 +11,7 @@
 (defn- header []
   (base/header
     (labels :agenda/edit-title)
-    (labels :agenda/edit-subititle)))
+    (labels :agenda/edit-subtitle)))
 
 (defn- submit-edit-button []
   [:input.btn.button-primary {:type "submit"

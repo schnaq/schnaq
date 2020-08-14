@@ -186,9 +186,8 @@
 
 
 (defn conclusions-list []
-  (let [agenda @(rf/subscribe [:chosen-agenda])
-        conclusions @(rf/subscribe [:starting-conclusions])
-        meeting @(rf/subscribe [:selected-meeting])]
+  (let [path-params (:path-params @(rf/subscribe [:current-route]))
+        conclusions @(rf/subscribe [:starting-conclusions])]
     [:div.container
      [:div#conclusions-list.px-3
       (for [conclusion conclusions]
@@ -196,8 +195,8 @@
                :on-click (fn [_e]
                            (rf/dispatch [:continue-discussion :starting-conclusions/select conclusion])
                            (rf/dispatch [:navigate :routes/meetings.discussion.continue
-                                         {:id (-> agenda :agenda/discussion :db/id)
-                                          :share-hash (:meeting/share-hash meeting)}]))}
+                                         {:id (:id path-params)
+                                          :share-hash (:share-hash path-params)}]))}
          [statement-bubble conclusion :neutral]])]]))
 
 
