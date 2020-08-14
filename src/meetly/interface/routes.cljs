@@ -61,7 +61,7 @@
         :view meeting-created/after-meeting-creation-view
         :link-text (labels :router/meeting-created)}]]
      ["/"
-      {:name :routes/meetings.show
+      {:name :routes/meeting.show
        :view meeting-single/single-meeting-view
        :link-text (labels :router/show-single-meeting)
        :controllers [{:parameters {:path [:share-hash]}

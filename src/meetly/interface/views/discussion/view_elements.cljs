@@ -34,7 +34,7 @@
     (:meeting/title current-meeting)
     (:meeting/description current-meeting)
     (fn []
-      (rf/dispatch [:navigate :routes/meetings.show
+      (rf/dispatch [:navigate :routes/meeting.show
                     {:share-hash (:meeting/share-hash current-meeting)}])
       (rf/dispatch [:select-current-meeting current-meeting]))))
 
