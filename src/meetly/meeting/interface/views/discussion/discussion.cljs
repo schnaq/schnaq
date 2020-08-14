@@ -141,11 +141,10 @@
             before-time-travel (get-in db [:history :full-context])
             keep-n (- (count before-time-travel) steps-back)
             after-time-travel (vec (take keep-n before-time-travel))
-            discussion-id (get-in db [:agenda :chosen :agenda/discussion :db/id])
-            share-hash (get-in db [:meeting :selected :meeting/share-hash])]
+            {:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
         (if (>= 0 keep-n)
           {:dispatch-n [[:discussion.history/clear]
-                        [:navigate :routes/meetings.discussion.start {:id discussion-id
+                        [:navigate :routes/meetings.discussion.start {:id id
                                                                       :share-hash share-hash}]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
            :dispatch [:set-current-discussion-steps (:options (nth before-time-travel keep-n))]})))))
@@ -193,7 +192,7 @@
               (assoc :new/starting-argument-conclusion conclusion-text)
               (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
-                    [:navigate :routes/meetings.discussion.start {:id -id
+                    [:navigate :routes/meetings.discussion.start {:id id
                                                                   :share-hash share-hash}]]
        :form/clear form})))
 
