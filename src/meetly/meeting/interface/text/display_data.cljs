@@ -68,7 +68,7 @@
 
      ;; Edit Agenda
      :agenda/edit-title "Meeting editieren"
-     :agenda/edit-subititle "Beschreibung und Agendapunkte editieren"
+     :agenda/edit-subtitle "Beschreibung und Agendapunkte editieren"
      :agenda/edit-button "Änderungen speichern"
 
      ;; Discussion Language
