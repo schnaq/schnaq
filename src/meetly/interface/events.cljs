@@ -41,7 +41,7 @@
                       :on-failure [:ajax-failure]}
           init-fx (cond-> {:db meetly-db/default-db}
                           ;; Only call /meetings if not in production
-                          (not (toolbelt/production?)) (assoc :http-xhrio http-xhrio))]
+                          (not toolbelt/production?) (assoc :http-xhrio http-xhrio))]
       (if-let [name (ls/get-item :username)]
         ;; When the localstorage is filled, then just set the name to db.
         (assoc-in init-fx [:db :user :name] name)

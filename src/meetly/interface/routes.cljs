@@ -2,6 +2,7 @@
   (:require [meetly.interface.analytics.core :as analytics]
             [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :refer [labels]]
+            [meetly.interface.utils.toolbelt :as toolbelt]
             [meetly.interface.views.agenda.agenda :as agenda-views]
             [meetly.interface.views.agenda.edit :as agenda-edit]
             [meetly.interface.views.discussion.discussion :as discussion-views]
@@ -29,7 +30,7 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
    ["meetings"
-    (when (not= "production" (:environment config))
+    (when-not toolbelt/production?
       [""
        {:name :routes/meetings
         :view meetings-overview/meeting-view
