@@ -3,7 +3,7 @@
             [clojure.java.io :as io]
             [compojure.core :refer [defroutes GET POST]]
             [compojure.route :as route]
-            [ghostwheel.core :refer [>defn-]]
+            [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
@@ -13,7 +13,6 @@
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [dialog.engine.core :as dialog]
-            [ghostwheel.core :refer [>defn-]]
             [meetly.core :as meetly-core]
             [clojure.spec.alpha :as s]
             [meetly.toolbelt :as toolbelt]
@@ -196,7 +195,7 @@
 (>defn- save-screenshot-if-provided!
   "Stores a base64 encoded file to disk."
   [screenshot directory file-name]
-  [string? string? (s/or :number number? :string string?)
+  [(? string?) string? (s/or :number number? :string string?)
    :ret nil?]
   (when screenshot
     (let [[_header image] (string/split screenshot #",")
