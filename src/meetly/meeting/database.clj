@@ -189,7 +189,7 @@
 (>defn update-agenda
   "Updates an agenda. Object must be complete with all required attributes."
   [agenda]
-  [::models/agenda :ret int?]
+  [map? :ret int?]
   (clean-and-update-db! (dissoc agenda :agenda/discussion) ::models/agenda-without-discussion))
 
 (>defn meeting-private-data

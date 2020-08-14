@@ -190,12 +190,13 @@
                   :agenda/discussion (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))}
           old-agenda (first (database/agendas-by-meeting-hash (:meeting/share-hash meeting)))
           _ (database/update-agenda agenda)
-          new-agenda (first (database/agendas-by-meeting-hash (:meeting/share-hash meeting)))
-          ]
+          new-agenda (first (database/agendas-by-meeting-hash (:meeting/share-hash meeting)))]
       (is (= "Hallo i bims nicht" (:agenda/title old-agenda)))
       (is (= "Lolkasse Lolberg" (:agenda/description old-agenda)))
       (is (= "Hallo i bims" (:agenda/title new-agenda)))
-      (is (= "Sparkasse Marketing" (:agenda/description new-agenda))))))
+      (is (= "Sparkasse Marketing" (:agenda/description new-agenda)))
+      ;; In buggy cases the following update would throw an exception
+      (database/update-agenda (assoc agenda :agenda/description "")))))
 
 (comment
   (any-meeting-id)
