@@ -2,22 +2,35 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as stest]
             [expound.alpha :as expound]
-            [meetly.meeting.database :as database]))
+            [meetly.meeting.database :as database]
+            [meetly.toolbelt :as meetly-toolbelt]))
 
 ;; -----------------------------------------------------------------------------
 ;; Fixtures
+(def ^:private test-config
+  {:datomic {:system "test"
+             :server-type :dev-local
+             :storage-dir (meetly-toolbelt/create-directory! ".datomic/dev-local/test-data")}
+   :name "test-db"})
+
+(defn clean-database-fixture
+  "Cleans the database. Should be used with :once to start with a clean sheet."
+  [f]
+  (database/init! test-config)
+  (database/delete-database!)
+  (f))
 
 (defn init-db-test-fixture
   "Fixture to initialize, test, and afterwards delete the database."
   [f]
-  (database/init-and-seed!)
+  (database/init-and-seed! test-config)
   (f))
 
 (defn init-test-delete-db-fixture
   "Fixture to initialize, test, and afterwards delete the database."
   [f]
   (init-db-test-fixture f)
-  (database/delete-database-from-config!))
+  (database/delete-database!))
 
 ;; -----------------------------------------------------------------------------
 ;; Generative Test Helpers

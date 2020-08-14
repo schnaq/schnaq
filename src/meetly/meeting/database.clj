@@ -10,13 +10,27 @@
     [clojure.string :as string])
   (:import (java.util Date UUID)))
 
-(defonce ^:private datomic-client
-  (d/client config/datomic))
+(def ^:private datomic-info
+  (atom {:client nil
+         :database-name nil}))
+
+(>defn- reset-datomic-client!
+  "Sets a new datomic client for transactions."
+  [datomic-config]
+  [map? :ret any?]
+  (swap! datomic-info assoc :client (d/client datomic-config)))
+
+(>defn- reset-datomic-db-name!
+  "Sets a new database-name for transactions."
+  [database-name]
+  [string? :ret any?]
+  (swap! datomic-info assoc :database-name database-name))
 
 (defn- new-connection
   "Connects to the database and returns a connection."
   []
-  (d/connect datomic-client {:db-name config/db-name}))
+  (let [{:keys [client database-name]} @datomic-info]
+    (d/connect client {:db-name database-name})))
 
 (defn- transact
   "Shorthand for transaction."
@@ -31,24 +45,21 @@
 (>defn create-database!
   "Create a new database. Does not check whether there already is an existing
   database with the same name."
-  [database-name]
-  [string? :ret boolean?]
-  (d/create-database
-    datomic-client
-    {:db-name database-name}))
+  []
+  [:ret boolean?]
+  (let [{:keys [client database-name]} @datomic-info]
+    (d/create-database
+      client
+      {:db-name database-name})))
 
 (>defn delete-database!
   "Delete a database by its name."
-  [database-name]
-  [string? :ret boolean?]
-  (d/delete-database
-    datomic-client
-    {:db-name database-name}))
-
-(defn delete-database-from-config!
-  "Deletes the pre-defined database from the configuration-file."
   []
-  (delete-database! config/db-name))
+  [:ret boolean?]
+  (let [{:keys [client database-name]} @datomic-info]
+    (d/delete-database
+      client
+      {:db-name database-name})))
 
 (defn init!
   "Initialization function, which does everything needed at a fresh app-install.
@@ -59,8 +70,10 @@
    (init! {:datomic config/datomic
            :name config/db-name}))
   ([config]
+   (reset-datomic-client! (:datomic config))
+   (reset-datomic-db-name! (:name config))
    (when-not (= :peer-server (-> (:datomic config) :server-type))
-     (create-database! (:name config)))
+     (create-database!))
    (create-discussion-schema (new-connection))))
 
 (defn init-and-seed!
