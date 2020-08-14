@@ -39,6 +39,11 @@
   (->> (db/all-meetings)
        (map first)))
 
+(defn- ping
+  "Route to ping the API. Used in our monitoring system."
+  [_]
+  (response {:text "🧙‍♂️"}))
+
 (defn- all-meetings
   "Returns all meetings from the db."
   [_req]
@@ -283,10 +288,10 @@
 (def ^:private not-found-msg
   "Error, page not found!")
 
-
 (def ^:private common-routes
   "Common routes for all modes."
   (routes
+    (GET "/ping" [] ping)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
