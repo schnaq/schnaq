@@ -1,10 +1,10 @@
 (ns meetly.interface.views.base
-  (:require [oops.core :refer [oget]]
-            [reitit.frontend.easy :as reitfe]
-            [meetly.interface.text.display-data :as data :refer [labels]]
-            [meetly.interface.config :refer [config]]
+  (:require [meetly.interface.text.display-data :as data :refer [labels]]
+            [meetly.interface.utils.js-wrapper :as js-wrap]
+            [meetly.interface.utils.toolbelt :as toolbelt]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [meetly.interface.utils.js-wrapper :as js-wrap]))
+            [reitit.frontend.easy :as reitfe]))
 
 (defn- wavy-bottom []
   ;; bezier curves
@@ -108,8 +108,8 @@
     [:div.row
      [:div.col-1.back-arrow
       (when on-click-back-function
-        [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))
-                        :on-click on-click-back-function}])]
+        [:p {:on-click on-click-back-function}              ;; the icon itself is not clickable
+         [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))}]])]
      [:div.col-8.container
       [:div
        (when title-on-click-function
@@ -137,7 +137,7 @@
            :class "collapse navbar-collapse"}
      [:ul.navbar-nav.mr-auto
       ;; navigation items
-      (when (not= "production" (:environment config))
+      (when-not toolbelt/production?
         [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
       [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings.create)} (labels :nav-meeting-create)]]]
      ;; name input

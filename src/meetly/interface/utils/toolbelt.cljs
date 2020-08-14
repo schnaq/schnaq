@@ -15,11 +15,8 @@
       (gclasses/add element class)
       (gclasses/remove element class))))
 
-
-(>defn production?
+(def production?
   "Checks the configuration for the current environment."
-  []
-  [:ret boolean?]
   (= "production" (:environment config)))
 
 (>defn reset-form-fields!

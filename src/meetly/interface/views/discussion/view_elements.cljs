@@ -1,13 +1,13 @@
 (ns meetly.interface.views.discussion.view-elements
-  (:require [re-frame.core :as rf]
-            [meetly.interface.text.display-data :refer [labels fa]]
+  (:require [ajax.core :as ajax]
             [meetly.interface.config :refer [config]]
-            [meetly.interface.views.discussion.logic :as logic]
-            [meetly.interface.views.common :as common]
-            [oops.core :refer [oget]]
+            [meetly.interface.text.display-data :refer [labels fa]]
+            [meetly.interface.utils.js-wrapper :as js-wrap]
             [meetly.interface.views.base :as base]
-            [ajax.core :as ajax]
-            [meetly.interface.utils.js-wrapper :as js-wrap]))
+            [meetly.interface.views.common :as common]
+            [meetly.interface.views.discussion.logic :as logic]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]))
 
 (defn up-down-vote
   "Add panel for up and down votes."
@@ -16,12 +16,16 @@
     [:div
      [:div.up-vote.text-center
       ;; Prevent activating the time travel or deep dive
-      {:on-click (fn [e] (js-wrap/stop-propagation e) (rf/dispatch [:toggle-upvote statement]))}
+      {:on-click (fn [e]
+                   (js-wrap/stop-propagation e)
+                   (rf/dispatch [:toggle-upvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]
        (logic/calculate-votes statement :upvotes votes)]]
 
      [:div.down-vote.text-center
-      {:on-click (fn [e] (js-wrap/stop-propagation e) (rf/dispatch [:toggle-downvote statement]))}
+      {:on-click (fn [e]
+                   (js-wrap/stop-propagation e)
+                   (rf/dispatch [:toggle-downvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
 
@@ -30,13 +34,13 @@
 
 (defn discussion-header [current-meeting]
   ;; meeting header
-  (base/discussion-header
-    (:meeting/title current-meeting)
-    (:meeting/description current-meeting)
-    (fn []
-      (rf/dispatch [:navigate :routes/meetings.show
-                    {:share-hash (:meeting/share-hash current-meeting)}])
-      (rf/dispatch [:select-current-meeting current-meeting]))))
+  [base/discussion-header
+   (:meeting/title current-meeting)
+   (:meeting/description current-meeting)
+   (fn []
+     (rf/dispatch [:navigate :routes/meetings.show
+                   {:share-hash (:meeting/share-hash current-meeting)}])
+     (rf/dispatch [:select-current-meeting current-meeting]))])
 
 ;; discussion loop box
 
@@ -48,8 +52,8 @@
       ;; back arrow
       [:div.col-1.back-arrow
        (when on-click-back-function
-         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))
-                         :on-click on-click-back-function}])]
+         [:p {:on-click on-click-back-function}
+          [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
       ;; title
       [:div.col-11
        [:div
@@ -258,5 +262,3 @@
       :switched (update-in
                   (update-in db [:votes :down id] inc)
                   [:votes :up id] dec))))
-
-
