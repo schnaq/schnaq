@@ -6,8 +6,7 @@
             [vimsical.re-frame.cofx.inject :as inject]
             [meetly.meeting.interface.views.discussion.logic :as logic]
             [meetly.meeting.interface.views.discussion.view-elements :as view]
-            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]
-            [clojure.pprint :as pp]))
+            [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
 
 (defn discussion-start-view
