@@ -1,7 +1,7 @@
 (ns meetly.interface.analytics.core
   (:require [ajax.core :as ajax]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn-]]
+            [ghostwheel.core :refer [>defn- >defn]]
             [goog.string :as gstring]
             [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :refer [labels]]
@@ -67,9 +67,10 @@
                   [:analytics/load-statement-length-stats]
                   [:analytics/load-argument-type-stats]]}))
 
-(defn fetch-with-password
+(>defn fetch-with-password
   "Fetches something from an endpoint with the password."
   [db path on-success-event]
+  [map? string? keyword? :ret map?]
   {:http-xhrio {:method :post
                 :uri (str (:rest-backend config) path)
                 :format (ajax/transit-request-format)
