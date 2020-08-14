@@ -94,7 +94,7 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:keys [meeting/share-hash]} @(rf/subscribe [:selected-meeting])]
+  (let [{:keys [share-hash]} (:path-params @(rf/subscribe [:current-route]))]
     [:div
      [base/nav-header]
      [base/header
