@@ -8,7 +8,6 @@
             [meetly.meeting.interface.views.discussion.view-elements :as view]
             [meetly.meeting.interface.utils.js-wrapper :as js-wrap]))
 
-
 (defn discussion-start-view
   "The first step after starting a discussion."
   []
@@ -194,8 +193,9 @@
               (assoc :new/starting-argument-conclusion conclusion-text)
               (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
-                    [:navigate :routes/meetings.discussion.start {:id id
-                                                                  :share-hash share-hash}]]})))
+                    [:navigate :routes/meetings.discussion.start {:id -id
+                                                                  :share-hash share-hash}]]
+       :form/clear form})))
 
 (rf/reg-event-fx
   :starting-conclusions/select
