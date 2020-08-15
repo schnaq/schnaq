@@ -17,36 +17,47 @@
   [:input.btn.button-primary {:type "submit"
                               :value (labels :agenda/edit-button)}])
 
-(defn- agenda-view [agenda]
+(defn- agenda-edit-title
+  "The editable title input of an edit-agenda-form."
+  [agenda]
   (let [db-id (:db/id agenda)]
-    [:div
-     [:div.agenda-line]
-     [:div.add-agenda-div.agenda-point
-      [:div.row.agenda-row-title
-       [:div.col-10
-        ;; title
-        [:input.form-control.agenda-form-title.form-title
-         {:type "text"
-          :name "title"
-          :auto-complete "off"
-          :required true
-          :placeholder (labels :agenda/point)
-          :default-value (:agenda/title agenda)
-          :id (str "title-" db-id)
-          :on-key-up
-          #(rf/dispatch [:agenda/update-edit-form :agenda/title db-id (oget % [:target :value])])}]]
-       [:div.col-2
-        [:div.pt-4.link-pointer
-         {:on-click #(rf/dispatch [:agenda/delete db-id])}
-         [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
-      ;; description
-      [:textarea.form-control.agenda-form-round
-       {:name "description"
-        :placeholder (labels :agenda/desc-for)
-        :default-value (:agenda/description agenda)
-        :id (str "description-" db-id)
-        :on-key-up
-        #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id (oget % [:target :value])])}]]]))
+    [:input.form-control.agenda-form-title.form-title
+     {:type "text"
+      :name "title"
+      :auto-complete "off"
+      :required true
+      :placeholder (labels :agenda/point)
+      :default-value (:agenda/title agenda)
+      :id (str "title-" db-id)
+      :on-key-up
+      #(rf/dispatch [:agenda/update-edit-form :agenda/title db-id (oget % [:target :value])])}]))
+
+(defn- agenda-edit-description
+  "The editable description input of an edit-agenda-form"
+  [agenda]
+  (let [db-id (:db/id agenda)]
+    [:textarea.form-control.agenda-form-round
+     {:name "description"
+      :placeholder (labels :agenda/desc-for)
+      :default-value (:agenda/description agenda)
+      :id (str "description-" db-id)
+      :on-key-up
+      #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id (oget % [:target :value])])}]))
+
+(defn- agenda-view [agenda]
+  [:div
+   [:div.agenda-line]
+   [:div.add-agenda-div.agenda-point
+    [:div.row.agenda-row-title
+     [:div.col-10
+      ;; title
+      [agenda-edit-title agenda]]
+     [:div.col-2
+      [:div.pt-4.link-pointer
+       {:on-click #(rf/dispatch [:agenda/delete (:db/id agenda)])}
+       [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
+    ;; description
+    [agenda-edit-description agenda]]])
 
 (defn- add-editable-agenda-button []
   [:input.btn.agenda-add-button {:type "button"
