@@ -47,7 +47,7 @@
 (defn- agenda-view [agenda]
   [:div
    [:div.agenda-line]
-   [:div.add-agenda-div.agenda-point
+   [:div.edit-agenda-div.agenda-point
     [:div.row.agenda-row-title
      [:div.col-10
       ;; title
@@ -58,6 +58,7 @@
        [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
     ;; description
     [agenda-edit-description agenda]]])
+
 
 (defn- add-editable-agenda-button []
   [:input.btn.agenda-add-button {:type "button"
