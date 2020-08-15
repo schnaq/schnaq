@@ -472,6 +472,15 @@
         [?meeting :meeting/share-hash ?hash]]
       (d/db (new-connection)) statement-id meeting-hash)))
 
+(>defn delete-agendas
+  "Remove all agendas. Check for id belonging to a meeting before removing."
+  [agenda-ids meeting-id]
+  [(s/coll-of int?) int? :ret (? map?)]
+  (let [corresponding-meetings (map #(d/pull (d/db (new-connection)) [:agenda/meeting] %) agenda-ids)
+        checked-agendas (filter #(= meeting-id (get-in % [:agenda/meeting :db/id])) corresponding-meetings)]
+    (when (= (count corresponding-meetings) (count checked-agendas))
+      (transact (mapv #(vector :db/retractEntity %) agenda-ids)))))
+
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
 
 (def ^:private max-time-back #inst "1971-01-01T01:01:01.000-00:00")

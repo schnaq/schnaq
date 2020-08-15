@@ -78,6 +78,7 @@
             (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
           (doseq [agenda updated-agendas]
             (db/update-agenda agenda))
+          (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
           (response {:text "Your Meetly has been updated."}))
       (bad-request {:error "You are not allowed to update this meeting."}))))
 

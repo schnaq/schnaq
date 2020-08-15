@@ -2,7 +2,8 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [meetly.test.toolbelt :as meetly-toolbelt]
             [dialog.discussion.database :as ddb]
-            [meetly.meeting.database :as database]))
+            [meetly.meeting.database :as database]
+            [meetly.meeting.database :as db]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once meetly-toolbelt/clean-database-fixture)
@@ -198,14 +199,14 @@
       ;; In buggy cases the following update would throw an exception
       (database/update-agenda (assoc agenda :agenda/description "")))))
 
-(comment
-  (any-meeting-id)
-  (database/meeting-private-data 96757023244455)
-  (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" 96757023244455)
-  (first (database/agendas-by-meeting-hash "aklsuzd98-234da-123d"))
-  (database/update-agenda {:db/id 87960930222249
-                           :agenda/title "Hallo i bims"
-                           :agenda/description "Sparkasse Marketing"
-                           :agenda/meeting 96757023244455
-                           :agenda/discussion (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))})
-  )
+(deftest delete-agendas-test
+  (testing "Agendas need to delete properly, when they belong to the authorized meeting-id."
+    (let [meeting-id (any-meeting-id)
+          agenda-id (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)]
+      (is (= meeting-id (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))
+      (testing "Invalid delete should do nothing"
+        (db/delete-agendas [agenda-id] (inc meeting-id))
+        (is (= meeting-id (get-in (db/agenda agenda-id) [:agenda/meeting :db/id]))))
+      (testing "Agenda should be gone"
+        (db/delete-agendas [agenda-id] meeting-id)
+        (is (nil? (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))))))
