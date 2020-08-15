@@ -69,8 +69,8 @@
   "Add some logging to validate and verify the correct environment."
   []
   (log/info "Welcome to Meetly 🎉")
-  (log/info (gstring/format "API: \t\t\t%s" config/rest-api-url))
-  (log/info (gstring/format "Environment: \t%s" config/environment)))
+  (log/info (gstring/format "API: %s" config/rest-api-url))
+  (log/info (gstring/format "Environment: %s" config/environment)))
 
 (defn init
   "Entrypoint into the application."
