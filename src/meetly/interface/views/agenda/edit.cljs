@@ -127,9 +127,9 @@
 (rf/reg-event-db
   :agenda/load-for-edit-success
   (fn [db [_ agendas]]
-    (-> db
-        (assoc-in [:edit-meeting :agendas] agendas)
-        (assoc-in [:edit-meeting :meeting] (get-in db [:meeting :selected])))))
+    (assoc db :edit-meeting {:agendas agendas
+                             :meeting (get-in db [:meeting :selected])
+                             :delete-agendas #{}})))
 
 (rf/reg-sub
   :agenda/current-edit-info
