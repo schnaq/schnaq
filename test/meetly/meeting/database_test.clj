@@ -1,9 +1,8 @@
 (ns meetly.meeting.database-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
-            [meetly.test.toolbelt :as meetly-toolbelt]
             [dialog.discussion.database :as ddb]
             [meetly.meeting.database :as database]
-            [meetly.meeting.database :as db]))
+            [meetly.test.toolbelt :as meetly-toolbelt]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once meetly-toolbelt/clean-database-fixture)
@@ -203,10 +202,10 @@
   (testing "Agendas need to delete properly, when they belong to the authorized meeting-id."
     (let [meeting-id (any-meeting-id)
           agenda-id (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)]
-      (is (= meeting-id (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))
+      (is (= meeting-id (get-in (database/agenda agenda-id) [:agenda/meeting :db/id])))
       (testing "Invalid delete should do nothing"
-        (db/delete-agendas [agenda-id] (inc meeting-id))
-        (is (= meeting-id (get-in (db/agenda agenda-id) [:agenda/meeting :db/id]))))
+        (database/delete-agendas [agenda-id] (inc meeting-id))
+        (is (= meeting-id (get-in (database/agenda agenda-id) [:agenda/meeting :db/id]))))
       (testing "Agenda should be gone"
-        (db/delete-agendas [agenda-id] meeting-id)
-        (is (nil? (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))))))
+        (database/delete-agendas [agenda-id] meeting-id)
+        (is (nil? (get-in (database/agenda agenda-id) [:agenda/meeting :db/id])))))))

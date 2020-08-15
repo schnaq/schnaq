@@ -1,13 +1,12 @@
 (ns meetly.meeting.database
-  (:require
-    [datomic.client.api :as d]
-    [ghostwheel.core :refer [>defn >defn- ?]]
-    [meetly.config :as config]
-    [meetly.meeting.models :as models]
-    [dialog.discussion.database :as dialog]
-    [meetly.meeting.test-data :as test-data]
-    [clojure.spec.alpha :as s]
-    [clojure.string :as string])
+  (:require [clojure.spec.alpha :as s]
+            [clojure.string :as string]
+            [datomic.client.api :as d]
+            [dialog.discussion.database :as dialog]
+            [ghostwheel.core :refer [>defn >defn- ?]]
+            [meetly.config :as config]
+            [meetly.meeting.models :as models]
+            [meetly.meeting.test-data :as test-data])
   (:import (java.util Date UUID)))
 
 (def ^:private datomic-info

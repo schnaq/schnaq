@@ -1,24 +1,24 @@
 (ns meetly.meeting.rest-api
-  (:require [clojure.string :as string]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
+            [clojure.spec.alpha :as s]
+            [clojure.string :as string]
             [compojure.core :refer [GET POST routes]]
             [compojure.route :as route]
+            [dialog.engine.core :as dialog]
             [ghostwheel.core :refer [>defn- ?]]
-            [org.httpkit.server :as server]
-            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
-            [ring.middleware.format :refer [wrap-restful-format]]
-            [ring.middleware.cors :refer [wrap-cors]]
-            [ring.util.response :refer [response not-found bad-request status]]
             [meetly.config :as config]
+            [meetly.core :as meetly-core]
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
-            [dialog.engine.core :as dialog]
-            [meetly.core :as meetly-core]
-            [clojure.spec.alpha :as s]
             [meetly.toolbelt :as toolbelt]
+            [org.httpkit.server :as server]
+            [ring.middleware.cors :refer [wrap-cors]]
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
+            [ring.middleware.format :refer [wrap-restful-format]]
+            [ring.util.response :refer [response not-found bad-request status]]
             [taoensso.timbre :as log])
-  (:gen-class)
-  (:import (java.util Base64 UUID)))
+  (:import (java.util Base64 UUID))
+  (:gen-class))
 
 (>defn- valid-password?
   "Check if the password is a valid."
