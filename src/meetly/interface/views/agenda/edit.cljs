@@ -131,7 +131,10 @@
   :agenda/delete
   (fn [db [_ agenda-id]]
     (let [delete-fn (fn [agendas] (remove #(= agenda-id (:db/id %)) agendas))]
-      (update-in db [:edit-meeting :agendas] delete-fn))))
+      (cond-> db
+              true (update-in [:edit-meeting :agendas] delete-fn)
+              ;; We do not need to remove temporary agendas in the backend
+              (int? agenda-id) (update-in [:edit-meeting :delete-agendas] conj agenda-id)))))
 
 ;; add agenda form event
 
