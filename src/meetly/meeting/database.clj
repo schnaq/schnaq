@@ -1,13 +1,12 @@
 (ns meetly.meeting.database
-  (:require
-    [datomic.client.api :as d]
-    [ghostwheel.core :refer [>defn >defn- ?]]
-    [meetly.config :as config]
-    [meetly.meeting.models :as models]
-    [dialog.discussion.database :as dialog]
-    [meetly.meeting.test-data :as test-data]
-    [clojure.spec.alpha :as s]
-    [clojure.string :as string])
+  (:require [clojure.spec.alpha :as s]
+            [clojure.string :as string]
+            [datomic.client.api :as d]
+            [dialog.discussion.database :as dialog]
+            [ghostwheel.core :refer [>defn >defn- ?]]
+            [meetly.config :as config]
+            [meetly.meeting.models :as models]
+            [meetly.meeting.test-data :as test-data])
   (:import (java.util Date UUID)))
 
 (def ^:private datomic-info
@@ -471,6 +470,15 @@
         [?agenda :agenda/meeting ?meeting]
         [?meeting :meeting/share-hash ?hash]]
       (d/db (new-connection)) statement-id meeting-hash)))
+
+(>defn delete-agendas
+  "Remove all agendas. Check for id belonging to a meeting before removing."
+  [agenda-ids meeting-id]
+  [(s/coll-of int?) int? :ret (? map?)]
+  (let [corresponding-meetings (map #(d/pull (d/db (new-connection)) [:agenda/meeting] %) agenda-ids)
+        checked-agendas (filter #(= meeting-id (get-in % [:agenda/meeting :db/id])) corresponding-meetings)]
+    (when (= (count corresponding-meetings) (count checked-agendas))
+      (transact (mapv #(vector :db/retractEntity %) agenda-ids)))))
 
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
 
