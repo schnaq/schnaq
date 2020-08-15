@@ -8,9 +8,24 @@
 }
 
 .agenda-container {
-  padding-right: 8rem;
-  padding-left: 8rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
 }
+
+@include media-breakpoint-up(md) {
+  .agenda-container {
+    padding-right: 4rem;
+    padding-left: 4rem;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .agenda-container {
+    padding-right: 8rem;
+    padding-left: 8rem;
+  }
+}
+
 
 .agenda-point {
   background-color: $primary;

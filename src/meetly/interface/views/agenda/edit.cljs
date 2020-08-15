@@ -21,7 +21,7 @@
   (let [db-id (:db/id agenda)]
     [:div
      [:div.agenda-line]
-     [:div.add-agenda-div.agenda-point
+     [:div.edit-agenda-div.agenda-point
       [:div.row.agenda-row-title
        [:div.col-10
         ;; title
