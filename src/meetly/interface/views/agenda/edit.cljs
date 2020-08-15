@@ -1,12 +1,12 @@
 (ns meetly.interface.views.agenda.edit
-  (:require [meetly.interface.views.agenda.agenda :as agenda]
-            [meetly.interface.views.base :as base]
-            [re-frame.core :as rf]
-            [oops.core :refer [oget]]
+  (:require [ajax.core :as ajax]
             [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :refer [labels fa]]
             [meetly.interface.utils.js-wrapper :as js-wrap]
-            [ajax.core :as ajax]))
+            [meetly.interface.views.agenda.agenda :as agenda]
+            [meetly.interface.views.base :as base]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]))
 
 (defn- header []
   (base/header
