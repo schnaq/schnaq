@@ -335,12 +335,20 @@
 
 (defonce current-server (atom nil))
 
-(defn stop-server []
+(defn- stop-server []
   (when-not (nil? @current-server)
     ;; graceful shutdown: wait 100ms for existing requests to be finished
     ;; :timeout is optional, when no timeout, stop immediately
     (@current-server :timeout 100)
     (reset! current-server nil)))
+
+(defn- say-hello
+  "Print some debug information to the console when the system is loaded."
+  []
+  (log/info "Welcome to Meetly's Backend 🧙")
+  (log/info (format "Environment: %s" config/env-mode))
+  (log/info (format "Port: %s" (:port config/rest-api)))
+  (log/info (format "Database Name: %s" config/db-name)))
 
 (defn -main
   "This is our main entry point for the REST API Server."
@@ -358,6 +366,7 @@
                   (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
                   (wrap-defaults api-defaults))
               {:port port}))
+    (say-hello)
     (log/info (format "Running web-server at http://127.0.0.1:%s/" port))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
 

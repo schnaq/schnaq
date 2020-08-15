@@ -1,6 +1,7 @@
 (ns meetly.interface.core
   (:require [day8.re-frame.http-fx]
             [goog.dom :as gdom]
+            [goog.string :as gstring]
             [reagent.dom]
             ["jquery"]
             ["bootstrap"]
@@ -8,6 +9,7 @@
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
+            [meetly.interface.config :as config]
             [meetly.interface.views :as views]
     ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
             [meetly.interface.views.startpage]
@@ -30,7 +32,8 @@
             [meetly.interface.analytics.core]
     ;; IMPORTANT: If you use subs and events in another module, you need to require it
     ;; somewhere where it will be loaded like this core module.
-            [meetly.interface.routes :as routes]))
+            [meetly.interface.routes :as routes]
+            [taoensso.timbre :as log]))
 
 ;; -- Entry Point -------------------------------------------------------------
 
@@ -62,8 +65,17 @@
   (init-routes!)
   (render))
 
+(defn say-hello
+  "Add some logging to validate and verify the correct environment."
+  []
+  (log/info "Welcome to Meetly 🎉")
+  (log/info (gstring/format "API: %s" config/rest-api-url))
+  (log/info (gstring/format "Environment: %s" config/environment)))
+
 (defn init
+  "Entrypoint into the application."
   []
   (init-routes!)
   (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
-  (render))                                                 ;; mount the application's ui into '<div id="app" />'
+  (render)
+  (say-hello))                                              ;; mount the application's ui into '<div id="app" />'
