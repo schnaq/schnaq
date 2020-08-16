@@ -45,6 +45,7 @@ local_jars/
 
 ## node / shadow-cljs
 node_modules/
+!node_modules/.gitkeep
 .shadow-cljs/
 public/js/compiled/
 
