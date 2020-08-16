@@ -79,7 +79,11 @@ build-frontend-image:
   stage: build-docker-images
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -f Dockerfile.frontend --build-arg REST_API_URL=https://api.meetly.dialogo.io --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE/frontend .
+    - >
+      docker build -f Dockerfile.frontend
+      --build-arg REST_API_URL=https://api.meetly.dialogo.io
+      --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      -t $CI_REGISTRY_IMAGE/frontend .
     - docker push $CI_REGISTRY_IMAGE/frontend
   only:
     - deploy
@@ -95,7 +99,10 @@ build-backend-image:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -f Dockerfile.backend -t $CI_REGISTRY_IMAGE/backend .
+    - >
+      docker build -f Dockerfile.backend
+      --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      -t $CI_REGISTRY_IMAGE/backend .
     - docker push $CI_REGISTRY_IMAGE/backend
   only:
     - deploy
@@ -109,7 +116,11 @@ build-frontend-staging-image:
   stage: build-docker-images
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -f Dockerfile.frontend --build-arg REST_API_URL=https://api.meetly.staging.dialogo.io --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE/frontend:staging .
+    - >
+      docker build -f Dockerfile.frontend
+      --build-arg REST_API_URL=https://api.meetly.staging.dialogo.io
+      --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      -t $CI_REGISTRY_IMAGE/frontend:staging .
     - docker push $CI_REGISTRY_IMAGE/frontend:staging
   only:
     - develop
@@ -125,7 +136,10 @@ build-backend-staging-image:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker build -f Dockerfile.backend -t $CI_REGISTRY_IMAGE/backend:staging .
+    - >
+      docker build -f Dockerfile.backend
+      --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      -t $CI_REGISTRY_IMAGE/backend:staging .
     - docker push $CI_REGISTRY_IMAGE/backend:staging
   only:
     - develop
