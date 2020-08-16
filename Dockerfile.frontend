@@ -1,17 +1,32 @@
 FROM clojure:openjdk-14-tools-deps-alpine AS shadow-build
 
-ARG REST_API_URL
-
 WORKDIR /code
+
+# Cache and install Clojure dependencies
+COPY deps.edn .
+RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -e "(prn \"Downloading deps\")"
+
+# ------------------------------------------------------------------------------
+
+ARG REST_API_URL
+ARG BUILD_HASH
 
 RUN apk add yarn
 RUN yarn global add sass
 
+# Cache and install JavaScript dependencies
 COPY package.json .
+COPY package-lock.json .
+COPY node_modules/ .
 RUN yarn install
+
 COPY . .
+
 RUN sass ./public/css/main.scss ./public/css/main.min.css --no-source-map --style compressed
 RUN yarn shadow-cljs release app
+
+
+# ------------------------------------------------------------------------------
 
 FROM nginx
 WORKDIR /usr/share/nginx/html

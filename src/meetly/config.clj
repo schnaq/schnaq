@@ -20,3 +20,6 @@
 
 (def env-mode
   (or (System/getenv "ENVIRONMENT") "development"))
+
+(def build-hash
+  (or (System/getenv "BUILD_HASH") "dev"))

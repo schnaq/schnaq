@@ -1,6 +1,17 @@
 FROM clojure:openjdk-14-tools-deps-alpine
 
 WORKDIR /code
+
+# Cache and install Clojure dependencies
+COPY deps.edn .
+RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -e "(prn \"Downloading deps\")"
+
+# ------------------------------------------------------------------------------
+
+ARG BUILD_HASH
+ENV BUILD_HASH=$BUILD_HASH
+EXPOSE 3000
+
 COPY . .
 RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:uberjar
 

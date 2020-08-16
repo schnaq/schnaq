@@ -9,7 +9,8 @@
                 :asset-path "/js/compiled"
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}}
                 :release {:closure-defines {meetly.interface.config/rest-api-url #shadow/env "REST_API_URL"
-                                            meetly.interface.config/environment "production"}}
+                                            meetly.interface.config/environment "production"
+                                            meetly.interface.config/build-hash #shadow/env "BUILD_HASH"}}
                 :devtools {:http-root "public"
                            :http-port 8700
                            :preloads [devtools.preload]}}

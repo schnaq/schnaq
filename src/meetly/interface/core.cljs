@@ -65,10 +65,11 @@
   (init-routes!)
   (render))
 
-(defn say-hello
+(defn- say-hello
   "Add some logging to validate and verify the correct environment."
   []
   (log/info "Welcome to Meetly 🎉")
+  (log/info (gstring/format "Build Hash: %s" config/build-hash))
   (log/info (gstring/format "API: %s" config/rest-api-url))
   (log/info (gstring/format "Environment: %s" config/environment)))
 
@@ -77,5 +78,5 @@
   []
   (init-routes!)
   (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
-  (render)
-  (say-hello))                                              ;; mount the application's ui into '<div id="app" />'
+  (render)                                                  ;; mount the application's ui into '<div id="app" />'
+  (say-hello))
