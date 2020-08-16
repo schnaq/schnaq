@@ -347,6 +347,7 @@
   "Print some debug information to the console when the system is loaded."
   []
   (log/info "Welcome to Meetly's Backend 🧙")
+  (log/info (format "Build Hash: %s" config/build-hash))
   (log/info (format "Environment: %s" config/env-mode))
   (log/info (format "Port: %s" (:port config/rest-api)))
   (log/info (format "Database Name: %s" config/db-name)))
