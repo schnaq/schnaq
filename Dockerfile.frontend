@@ -1,17 +1,23 @@
 FROM clojure:openjdk-14-tools-deps-alpine AS shadow-build
 
+WORKDIR /code
+
+# Cache and install Clojure dependencies
+COPY deps.edn .
+RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -e "(prn \"Downloading deps\")"
+
+# ------------------------------------------------------------------------------
+
 ARG REST_API_URL
 ARG BUILD_HASH
-
-WORKDIR /code
 
 RUN apk add yarn
 RUN yarn global add sass
 
+# Cache and install JavaScript dependencies
 COPY package.json .
 COPY package-lock.json .
 COPY node_modules/ .
-
 RUN yarn install
 
 COPY . .
