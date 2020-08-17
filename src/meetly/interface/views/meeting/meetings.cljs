@@ -61,7 +61,7 @@
   :meeting-added
   (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
     {:db (-> db
-             (assoc :meeting/added new-meeting)
+             (assoc-in [:meeting :last-added] new-meeting)
              (update :meetings conj new-meeting))
      :dispatch-n [[:navigate :routes.agenda/add
                    {:share-hash (:meeting/share-hash new-meeting)}]
@@ -120,10 +120,3 @@
   (fn [_ [_ {:keys [valid-credentials?]}]]
     (when-not valid-credentials?
       {:dispatch [:navigate :routes/invalid-link]})))
-
-;; #### Subs ####
-
-(rf/reg-sub
-  :meeting/last-added
-  (fn [db _]
-    (:meeting/added db)))
