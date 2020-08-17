@@ -42,6 +42,16 @@
                    {:share-hash (:meeting/share-hash current-meeting)}])
      (rf/dispatch [:select-current-meeting current-meeting]))])
 
+(defn discussion-header-no-subtitle [current-meeting]
+  ;; meeting header
+  [base/discussion-header
+   (:meeting/title current-meeting)
+   nil
+   (fn []
+     (rf/dispatch [:navigate :routes.meeting/show
+                   {:share-hash (:meeting/share-hash current-meeting)}])
+     (rf/dispatch [:select-current-meeting current-meeting]))])
+
 
 ;; discussion loop box
 
@@ -78,11 +88,10 @@
    {:on-submit (fn [e] (js-wrap/prevent-default e)
                  (rf/dispatch [:continue-discussion :starting-argument/new
                                (oget e [:target :elements])]))}
-   [:input.form-control.discussion-text-input.mb-1
+   [:input.form-control.discussion-text-input.mb-5
     {:type "text" :name "conclusion-text"
      :auto-complete "off"
      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-   [:br]
    [:input.form-control.discussion-text-input.mb-1
     {:type "text" :name "premise-text"
      :auto-complete "off"
@@ -95,15 +104,14 @@
     [:div.discussion-view-bottom-rounded
      (when allow-new-argument?
        [:div
-        [:h5 (labels :discussion/create-argument-heading)]
-        [:br]
+        [:div.mb-5 [:h5 (labels :discussion/create-argument-heading)]]
         [input-starting-argument-form]])]))
 
 
 (defn input-form
   "Text input for adding a statement"
   []
-  [:div
+  [:div.mt-4
    [:input.form-control.discussion-text-input.mb-1
     {:type "text" :name "premise-text"
      :auto-complete "off"
@@ -118,7 +126,7 @@
 (defn radio-button
   "Radio Button helper function. This function creates a radio button."
   [id name value label checked?]
-  [:div.custom-control.custom-radio
+  [:div.custom-control.custom-radio.my-2
    [:input.custom-control-input.custom-radio-button
     {:type "radio"
      :id id

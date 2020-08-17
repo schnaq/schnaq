@@ -6,22 +6,8 @@
             [vimsical.re-frame.cofx.inject :as inject]
             [meetly.interface.views.discussion.logic :as logic]
             [meetly.interface.views.discussion.view-elements :as view]
-            [meetly.interface.utils.js-wrapper :as js-wrap]))
-
-(defn discussion-start-view
-  "The first step after starting a discussion."
-  []
-  (let [current-meeting @(rf/subscribe [:selected-meeting])]
-    [:div
-     [view/discussion-header current-meeting]
-     [:br]
-     [:div.container
-      [:div.discussion-view-rounded.shadow-custom
-       [view/agenda-header-back-arrow]
-       [view/history-view]
-       [view/conclusions-list]
-       [view/input-field]]]
-     [:br]]))
+            [meetly.interface.utils.js-wrapper :as js-wrap]
+            [meetly.interface.views.base :as base]))
 
 (defn- add-starting-premises-form
   "Either support or attack a starting-conclusion with the users own premise."
@@ -36,8 +22,6 @@
      [view/radio-button "for-radio-starting" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
      ;; radio attack
      [view/radio-button "against-radio-starting" "premise-choice" "against-radio" :discussion/add-premise-against false]
-     ;; spacing
-     [:br]
      ;; input form
      [view/input-form]]))
 
@@ -58,8 +42,6 @@
      [view/radio-button "against-radio" "premise-choice" "against-radio" :discussion/add-premise-against false]
      ;; undercut
      [view/radio-button "undercut-radio" "premise-choice" "undercut-radio" :discussion/add-undercut false]
-     ;; spacing
-     [:br]
      ;; input form
      [view/input-form]]))
 
@@ -92,6 +74,28 @@
         premises @(rf/subscribe [:premises-to-select])]
     [interaction-view allow-new? premises [add-starting-premises-form]]))
 
+(defn- discussion-base-page
+  "Base discussion view containinga nav header, meeting title and content container"
+  [meeting content]
+  [:div
+   [base/nav-header]
+   [view/discussion-header-no-subtitle meeting]
+   [:div.container.py-4
+    [:div.discussion-view-rounded.shadow-custom
+     content]]])
+
+(defn discussion-start-view
+  "The first step after starting a discussion."
+  []
+  (let [current-meeting @(rf/subscribe [:selected-meeting])]
+    [discussion-base-page current-meeting
+     [:div
+      [:div.discussion-view-rounded.shadow-custom
+       [view/agenda-header-back-arrow]
+       [view/history-view]
+       [view/conclusions-list]
+       [view/input-field]]]]))
+
 (defn discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
@@ -99,22 +103,18 @@
 
   (let [steps @(rf/subscribe [:discussion-steps])
         current-meeting @(rf/subscribe [:selected-meeting])]
-    [:div
-     [view/discussion-header current-meeting]
-     [:br]
-     [:div.container
-      [:div.discussion-view-rounded.shadow-custom
-       ;; discussion header
-       [view/agenda-header-back-arrow #(rf/dispatch [:discussion.history/time-travel])]
-       [view/history-view]
-       [view/conclusions-list]
-       ;; disussion loop
-       [:div#discussion-loop
-        (case (logic/deduce-step steps)
-          :starting-conclusions/select [starting-premises-view]
-          :select-or-react [select-or-react-view]
-          :default [:p ""])]]]
-     [:br]]))
+    [discussion-base-page current-meeting
+     [:div
+      ;; discussion header
+      [view/agenda-header-back-arrow #(rf/dispatch [:discussion.history/time-travel])]
+      [view/history-view]
+      [view/conclusions-list]
+      ;; disussion loop
+      [:div#discussion-loop
+       (case (logic/deduce-step steps)
+         :starting-conclusions/select [starting-premises-view]
+         :select-or-react [select-or-react-view]
+         :default [:p ""])]]]))
 
 ;; #### Events ####
 
@@ -145,7 +145,7 @@
         (if (>= 0 keep-n)
           {:dispatch-n [[:discussion.history/clear]
                         [:navigate :routes.discussion/start {:id id
-                                                                      :share-hash share-hash}]]}
+                                                             :share-hash share-hash}]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
            :dispatch [:set-current-discussion-steps (:options (nth before-time-travel keep-n))]})))))
 
@@ -193,7 +193,7 @@
               (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
                     [:navigate :routes.discussion/start {:id id
-                                                                  :share-hash share-hash}]]
+                                                         :share-hash share-hash}]]
        :form/clear form})))
 
 (rf/reg-event-fx
