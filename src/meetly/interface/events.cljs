@@ -1,14 +1,14 @@
 (ns meetly.interface.events
   (:require [ajax.core :as ajax]
-            [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitit-front-easy]
-            [reitit.frontend.controllers :as reitit-front-controllers]
             [clojure.string :as clj-string]
-            [meetly.interface.db :as meetly-db]
-            [meetly.interface.views.modals.modal :as modal]
-            [meetly.interface.utils.localstorage :as ls]
             [meetly.interface.config :refer [config]]
-            [meetly.interface.utils.toolbelt :as toolbelt]))
+            [meetly.interface.db :as meetly-db]
+            [meetly.interface.utils.localstorage :as ls]
+            [meetly.interface.utils.toolbelt :as toolbelt]
+            [meetly.interface.views.modals.modal :as modal]
+            [re-frame.core :as rf]
+            [reitit.frontend.controllers :as reitit-front-controllers]
+            [reitit.frontend.easy :as reitit-front-easy]))
 
 ;; Starts the ball rolling on changing to another view
 (rf/reg-event-fx
