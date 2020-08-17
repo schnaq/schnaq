@@ -43,6 +43,7 @@
   (let [current-meeting @(rf/subscribe [:selected-meeting])]
     ;; meeting header
     [:div
+     [base/nav-header]
      [meeting-title current-meeting]
      [:div.container.py-2
       [:div.meeting-single-rounded
