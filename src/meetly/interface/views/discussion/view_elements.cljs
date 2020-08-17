@@ -40,7 +40,7 @@
    (fn []
      (rf/dispatch [:navigate :routes.meeting/show
                    {:share-hash (:meeting/share-hash current-meeting)}])
-     (rf/dispatch [:select-current-meeting current-meeting]))])
+     (rf/dispatch [:meeting/select-current current-meeting]))])
 
 (defn discussion-header-no-subtitle [current-meeting]
   ;; meeting header
@@ -50,7 +50,7 @@
    (fn []
      (rf/dispatch [:navigate :routes.meeting/show
                    {:share-hash (:meeting/share-hash current-meeting)}])
-     (rf/dispatch [:select-current-meeting current-meeting]))])
+     (rf/dispatch [:meeting/select-current current-meeting]))])
 
 
 ;; discussion loop box

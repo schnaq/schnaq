@@ -1,11 +1,11 @@
 (ns meetly.interface.views.meeting.meetings
-  (:require [re-frame.core :as rf]
-            [oops.core :refer [oget]]
-            [ajax.core :as ajax]
-            [meetly.interface.text.display-data :as data]
-            [meetly.interface.views.base :as base]
+  (:require [ajax.core :as ajax]
             [meetly.interface.config :refer [config]]
-            [meetly.interface.utils.js-wrapper :as js-wrap]))
+            [meetly.interface.text.display-data :as data]
+            [meetly.interface.utils.js-wrapper :as js-wrap]
+            [meetly.interface.views.base :as base]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]))
 
 ;; #### Helpers ####
 
@@ -65,10 +65,10 @@
              (update :meetings conj new-meeting))
      :dispatch-n [[:navigate :routes.agenda/add
                    {:share-hash (:meeting/share-hash new-meeting)}]
-                  [:select-current-meeting new-meeting]]}))
+                  [:meeting/select-current new-meeting]]}))
 
 (rf/reg-event-db
-  :select-current-meeting
+  :meeting/select-current
   (fn [db [_ meeting]]
     (assoc-in db [:meeting :selected] meeting)))
 
@@ -85,7 +85,7 @@
                     :uri (str (:rest-backend config) "/meeting/by-hash/" hash)
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:select-current-meeting]
+                    :on-success [:meeting/select-current]
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx

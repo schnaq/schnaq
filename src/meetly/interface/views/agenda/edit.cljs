@@ -200,4 +200,4 @@
   :meeting/on-success-submit-changes-event
   (fn [_ [_ {:keys [meeting]} _response]]
     {:dispatch-n [[:navigate :routes.meeting/show {:share-hash (:meeting/share-hash meeting)}]
-                  [:select-current-meeting meeting]]}))
+                  [:meeting/select-current meeting]]}))
