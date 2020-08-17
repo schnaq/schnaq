@@ -1,12 +1,12 @@
 (ns meetly.interface.views.agenda.agenda
-  (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
-            [ajax.core :as ajax]
+  (:require [ajax.core :as ajax]
             [goog.string :as gstring]
-            [meetly.interface.text.display-data :as data]
-            [meetly.interface.views.base :as base]
             [meetly.interface.config :refer [config]]
-            [meetly.interface.utils.js-wrapper :as js-wrap]))
+            [meetly.interface.text.display-data :as data]
+            [meetly.interface.utils.js-wrapper :as js-wrap]
+            [meetly.interface.views.base :as base]
+            [re-frame.core :as rf]
+            [oops.core :refer [oget]]))
 
 (defn new-agenda-local
   "This function formats the agenda-form input and saves it locally to the db until
@@ -181,6 +181,12 @@
   :set-response-as-agenda
   (fn [db [_ response]]
     (assoc-in db [:agenda :chosen] response)))
+
+(rf/reg-event-fx
+  :agenda/redirect-on-reload
+  (fn [{:keys [db]} _]
+    (when-not (get-in db [:meeting :last-added])
+      {:dispatch [:navigate :routes.meeting/create]})))
 
 ;; #### Subs ####
 
