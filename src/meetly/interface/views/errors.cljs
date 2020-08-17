@@ -1,5 +1,5 @@
 (ns meetly.interface.views.errors
-  (:require [meetly.interface.text.display-data :refer [labels img-path]]
+  (:require [meetly.interface.text.display-data :refer [labels img-path fa]]
             [meetly.interface.views.base :as base]
             [re-frame.core :as rf]
             ["framer-motion" :refer [motion AnimatePresence]]))
@@ -18,7 +18,8 @@
        "Error: " error
        [:button.close {:type "button"
                        :on-click #(rf/dispatch [:clear-error])}
-        [:span {:aria-hidden "true"} "X"]]]])])
+        [:span {:aria-hidden "true"}
+         [:i {:class (str " m-auto fas fa-2x " (fa :delete-icon))}]]]]])])
 
 (defn- educate-element []
   [:div
