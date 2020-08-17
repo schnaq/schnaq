@@ -19,7 +19,7 @@
        [:button.close {:type "button"
                        :on-click #(rf/dispatch [:clear-error])}
         [:span {:aria-hidden "true"}
-         [:i {:class (str " m-auto fas fa-2x " (fa :delete-icon))}]]]]])])
+         [:i {:class (str " m-auto fas fa-lg " (fa :delete-icon))}]]]]])])
 
 (defn- educate-element []
   [:div
