@@ -100,7 +100,7 @@
                  (labels :meeting/educate-on-edit))]
       [:button.btn.button-secondary.btn-lg.float-left.mt-2.span-container
        {:role "button"
-        :on-click #(rf/dispatch [:navigate :routes/edit {:share-hash share-hash :admin-hash admin-hash}])}
+        :on-click #(rf/dispatch [:navigate :routes.meeting/edit {:share-hash share-hash :admin-hash admin-hash}])}
        (labels :meetings/edit-meetly-button)]]
      ;; admin hash
      [:div.col-lg-6.share-link-icons
