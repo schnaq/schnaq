@@ -137,7 +137,7 @@
      :user.button/set-name-placeholder "Ihr Name"
 
      ;; Errors
-     :errors/navgate-to-startpage "Zurück zur Startseite"
+     :errors/navigate-to-startpage "Zurück zur Startseite"
      :errors/comic-relief "Ups ..."
      :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
 

@@ -68,11 +68,6 @@
           (assoc fx :write-localstorage [:username username]))))))
 
 (rf/reg-event-db
-  :ajax-failure
-  (fn [db [_ failure]]
-    (assoc db :error {:ajax failure})))
-
-(rf/reg-event-db
   :init-from-backend
   (fn [db [_ all-meetings]]
     (assoc db :meetings all-meetings)))

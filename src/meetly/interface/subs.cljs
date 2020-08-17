@@ -8,11 +8,6 @@
     (:current-route db)))
 
 (rf/reg-sub
-  :error-occurred
-  (fn [db]
-    (:error db)))
-
-(rf/reg-sub
   :username
   (fn [db]
     (get-in db [:user :name] "Anonymous")))

@@ -1,9 +1,10 @@
 (ns meetly.interface.views
-  (:require [reagent.dom]
+  (:require [meetly.interface.views.feedback :as feedback]
             [meetly.interface.views.base :as base]
+            [meetly.interface.views.errors :as errors]
             [meetly.interface.views.modals.modal :as modal]
-            [meetly.interface.views.feedback :as feedback]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [reagent.dom]))
 
 (defn- base-page
   []
@@ -13,8 +14,7 @@
     [:div#display-content
      ;[header]
      [:div#error-display.container
-      (when ajax-error
-        [:div.alert.alert-danger.alert-dismissible.fade.show "Error: " ajax-error])]
+      [errors/upper-error-box ajax-error]]
      (when current-route
        [:div
         [modal/modal]
