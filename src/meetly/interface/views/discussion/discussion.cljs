@@ -75,7 +75,7 @@
     [interaction-view allow-new? premises [add-starting-premises-form]]))
 
 (defn- discussion-base-page
-  "Base discussion view containinga nav header, meeting title and content container"
+  "Base discussion view containing a nav header, meeting title and content container."
   [meeting content]
   [:div
    [base/nav-header]
