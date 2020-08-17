@@ -87,7 +87,7 @@
 (defn discussion-start-view
   "The first step after starting a discussion."
   []
-  (let [current-meeting @(rf/subscribe [:selected-meeting])]
+  (let [current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page current-meeting
      [:div
       [:div.discussion-view-rounded.shadow-custom
@@ -102,7 +102,7 @@
   []
 
   (let [steps @(rf/subscribe [:discussion-steps])
-        current-meeting @(rf/subscribe [:selected-meeting])]
+        current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page current-meeting
      [:div
       ;; discussion header

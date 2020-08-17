@@ -73,7 +73,7 @@
     (assoc-in db [:meeting :selected] meeting)))
 
 (rf/reg-sub
-  :selected-meeting
+  :meeting/selected
   (fn [db _]
     (get-in db [:meeting :selected])))
 

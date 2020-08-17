@@ -57,7 +57,7 @@
 
 (defn agenda-header-back-arrow [on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
-        {:keys [meeting/share-hash]} @(rf/subscribe [:selected-meeting])]
+        {:keys [meeting/share-hash]} @(rf/subscribe [:meeting/selected])]
     [:div.discussion-view-top-rounded
      [:div.row
       ;; back arrow
