@@ -24,7 +24,7 @@
   []
   [:div
    (let [agendas @(rf/subscribe [:current-agendas])
-         meeting @(rf/subscribe [:selected-meeting])]
+         meeting @(rf/subscribe [:meeting/selected])]
      (for [agenda agendas]
        [:div.py-3 {:key (:db/id agenda)}
         [agenda-entry agenda meeting]]))])
@@ -40,7 +40,7 @@
        (rf/dispatch [:navigate :routes/meetings])))])
 
 (defn- single-meeting []
-  (let [current-meeting @(rf/subscribe [:selected-meeting])]
+  (let [current-meeting @(rf/subscribe [:meeting/selected])]
     ;; meeting header
     [:div
      [base/nav-header]

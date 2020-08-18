@@ -71,7 +71,8 @@
       ["/add"
        {:name :routes.agenda/add
         :view agenda-views/agenda-view
-        :link-text (labels :router/add-agendas)}]
+        :link-text (labels :router/add-agendas)
+        :controllers [{:start #(rf/dispatch [:agenda/redirect-on-reload])}]}]
       ["/:id"
        {:parameters {:path {:id int?}}
         :controllers [{:parameters {:path [:share-hash :id]}

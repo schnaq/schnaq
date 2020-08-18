@@ -18,7 +18,7 @@
    {:on-click (fn []
                 (rf/dispatch [:navigate :routes.meeting/show
                               {:share-hash (:meeting/share-hash meeting)}])
-                (rf/dispatch [:select-current-meeting meeting]))}
+                (rf/dispatch [:meeting/select-current meeting]))}
    ;; title and arrow
    [:div.meeting-entry-title
     [:div.row

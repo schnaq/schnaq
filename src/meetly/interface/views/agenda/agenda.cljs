@@ -1,12 +1,12 @@
 (ns meetly.interface.views.agenda.agenda
-  (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
-            [ajax.core :as ajax]
+  (:require [ajax.core :as ajax]
             [goog.string :as gstring]
-            [meetly.interface.text.display-data :as data]
-            [meetly.interface.views.base :as base]
             [meetly.interface.config :refer [config]]
-            [meetly.interface.utils.js-wrapper :as js-wrap]))
+            [meetly.interface.text.display-data :as data]
+            [meetly.interface.utils.js-wrapper :as js-wrap]
+            [meetly.interface.views.base :as base]
+            [re-frame.core :as rf]
+            [oops.core :refer [oget]]))
 
 (defn new-agenda-local
   "This function formats the agenda-form input and saves it locally to the db until
@@ -66,9 +66,8 @@
    [header]
    [:div.container.px-5.py-3.text-center
     [:div.agenda-meeting-container.p-3
-     [:h2 (:meeting/title @(rf/subscribe [:meeting/last-added]))]
-     [:br]
-     [:h4 (:meeting/description @(rf/subscribe [:meeting/last-added]))]]
+     [:h2.mb-4 (:meeting/title @(rf/subscribe [:meeting/selected]))]
+     [:h4 (:meeting/description @(rf/subscribe [:meeting/selected]))]]
     [:div.container
      [:div.agenda-container
       [:form {:id "agendas-add-form"
@@ -90,9 +89,10 @@
 (rf/reg-event-fx
   :send-agendas
   (fn [{:keys [db]} _]
-    (let [meeting-id (get-in db [:meeting/added :db/id])
-          meeting-hash (get-in db [:meeting/added :meeting/share-hash])
-          edit-hash (get-in db [:meeting/added :meeting/edit-hash])]
+    ;; Use [:meeting :last-added] instead of selected meeting because it contains secret information
+    (let [meeting-id (get-in db [:meeting :last-added :db/id])
+          meeting-hash (get-in db [:meeting :last-added :meeting/share-hash])
+          edit-hash (get-in db [:meeting :last-added :meeting/edit-hash])]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/agendas/add")
                     :params {:agendas (vals (get-in db [:agenda :all] []))
@@ -180,6 +180,12 @@
   :set-response-as-agenda
   (fn [db [_ response]]
     (assoc-in db [:agenda :chosen] response)))
+
+(rf/reg-event-fx
+  :agenda/redirect-on-reload
+  (fn [{:keys [db]} _]
+    (when-not (get-in db [:meeting :last-added])
+      {:dispatch [:navigate :routes.meeting/create]})))
 
 ;; #### Subs ####
 

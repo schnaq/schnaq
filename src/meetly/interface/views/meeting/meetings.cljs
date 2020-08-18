@@ -1,11 +1,11 @@
 (ns meetly.interface.views.meeting.meetings
-  (:require [re-frame.core :as rf]
-            [oops.core :refer [oget]]
-            [ajax.core :as ajax]
-            [meetly.interface.text.display-data :as data]
-            [meetly.interface.views.base :as base]
+  (:require [ajax.core :as ajax]
             [meetly.interface.config :refer [config]]
-            [meetly.interface.utils.js-wrapper :as js-wrap]))
+            [meetly.interface.text.display-data :as data]
+            [meetly.interface.utils.js-wrapper :as js-wrap]
+            [meetly.interface.views.base :as base]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]))
 
 ;; #### Helpers ####
 
@@ -61,19 +61,19 @@
   :meeting-added
   (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
     {:db (-> db
-             (assoc :meeting/added new-meeting)
+             (assoc-in [:meeting :last-added] new-meeting)
              (update :meetings conj new-meeting))
      :dispatch-n [[:navigate :routes.agenda/add
                    {:share-hash (:meeting/share-hash new-meeting)}]
-                  [:select-current-meeting new-meeting]]}))
+                  [:meeting/select-current new-meeting]]}))
 
 (rf/reg-event-db
-  :select-current-meeting
+  :meeting/select-current
   (fn [db [_ meeting]]
     (assoc-in db [:meeting :selected] meeting)))
 
 (rf/reg-sub
-  :selected-meeting
+  :meeting/selected
   (fn [db _]
     (get-in db [:meeting :selected])))
 
@@ -85,7 +85,7 @@
                     :uri (str (:rest-backend config) "/meeting/by-hash/" hash)
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:select-current-meeting]
+                    :on-success [:meeting/select-current]
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx
@@ -120,10 +120,3 @@
   (fn [_ [_ {:keys [valid-credentials?]}]]
     (when-not valid-credentials?
       {:dispatch [:navigate :routes/invalid-link]})))
-
-;; #### Subs ####
-
-(rf/reg-sub
-  :meeting/last-added
-  (fn [db _]
-    (:meeting/added db)))
