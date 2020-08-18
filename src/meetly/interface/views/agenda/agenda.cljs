@@ -66,8 +66,7 @@
    [header]
    [:div.container.px-5.py-3.text-center
     [:div.agenda-meeting-container.p-3
-     [:h2 (:meeting/title @(rf/subscribe [:meeting/selected]))]
-     [:br]
+     [:h2.mb-4 (:meeting/title @(rf/subscribe [:meeting/selected]))]
      [:h4 (:meeting/description @(rf/subscribe [:meeting/selected]))]]
     [:div.container
      [:div.agenda-container
