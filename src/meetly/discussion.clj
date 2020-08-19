@@ -1,12 +1,27 @@
 (ns meetly.discussion
-  (:require [ghostwheel.core :refer [>defn >defn-]]))
+  (:require [clojure.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn >defn-]]))
 
 (>defn- descendant-undercuts
   "Finds all undercuts to a set of arguments."
   [argument-subset all-arguments]
   [sequential? sequential? :ret sequential?]
-  (let [ids (map :db/id argument-subset)]
-    (filter #((set ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
+  (let [argument-ids (map :db/id argument-subset)]
+    (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
+
+(>defn- premise-ids
+  "Return all premise-ids of a single argument."
+  [argument]
+  [map? :ret (s/coll-of int?)]
+  (map :db/id (:argument/premises argument)))
+
+(>defn- undercuts-for-root
+  "Find all undercuts, where root-statement is undercut. (Root is set as a premise)"
+  [root-id all-arguments]
+  [int? sequential? :ret sequential?]
+  (let [subset-arguments (filter #((set (premise-ids %)) root-id) all-arguments)
+        argument-ids (map :db/id subset-arguments)]
+    (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
 
 (>defn- direct-children
   "Looks up all direct children of a node. The edge itself is considered a child as well
@@ -16,7 +31,7 @@
   (let [arguments-with-root (filter
                               #(= root-id (get-in % [:argument/conclusion :db/id]))
                               all-arguments)
-        potential-undercuts (descendant-undercuts arguments-with-root all-arguments)
+        potential-undercuts (undercuts-for-root root-id all-arguments)
         children (concat arguments-with-root potential-undercuts)
         premises-list (map :argument/premises children)]
     (flatten premises-list)))
