@@ -47,21 +47,23 @@
 (defn submit-new-starting-premise
   "Takes arguments and a form input and calls the next step in the discussion."
   [current-args form]
-  (let [new-text (oget form [:premise-text :value])
+  (let [new-text-element (oget form [:premise-text])
+        new-text (oget new-text-element [:value])
         choice (oget form [:premise-choice :value])
         [reaction key-name] (if (= choice "against-radio")
                               [:starting-rebut/new :new/rebut-premise]
                               [:starting-support/new :new/support-premise])]
     (rf/dispatch [:continue-discussion reaction (assoc current-args key-name new-text)])
-    (rf/dispatch [:form/should-clear form])))
+    (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (defn submit-new-premise
   "Submits a newly created premise as an undercut, rebut or support."
   [[support-args rebut-args undercut-args] form]
-  (let [new-text (oget form [:premise-text :value])
+  (let [new-text-element (oget form [:premise-text])
+        new-text (oget new-text-element [:value])
         choice (oget form [:premise-choice :value])]
     (case choice
       "against-radio" (rf/dispatch [:continue-discussion :rebut/new (assoc rebut-args :new/rebut new-text)])
       "for-radio" (rf/dispatch [:continue-discussion :support/new (assoc support-args :new/support new-text)])
       "undercut-radio" (rf/dispatch [:continue-discussion :undercut/new (assoc undercut-args :new/undercut new-text)]))
-    (rf/dispatch [:form/should-clear form])))
+    (rf/dispatch [:form/should-clear [new-text-element]])))
