@@ -144,23 +144,29 @@
   ([statement]
    (statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))))
   ([{:keys [statement/content] :as statement} attitude]
-   [:div.statement-outer.row
-    ;; bubble content
-    [:div.col-11.px-0
-     [:div.statement {:class (str "statement-" (name attitude))}
-      (when (= :argument.type/undercut (:meta/argument.type statement))
-        [:p.small (labels :discussion/undercut-bubble-intro)])
-      ;; information
-      [:div
-       ;; avatar
-       [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
-      ;; content
-      [:div.statement-content
-       [:p content]]]]
-    ;; up-down-votes
-    [:div.col-1.px-0
-     [:div.up-down-vote
-      (up-down-vote statement)]]]))
+   [:div.statement-outer
+    [:div.row
+     ;; bubble content
+     [:div.col-11.px-0
+      [:div.statement {:class (str "statement-" (name attitude))}
+       (when (= :argument.type/undercut (:meta/argument.type statement))
+         [:p.small (labels :discussion/undercut-bubble-intro)])
+       ;; information
+       [:div
+        ;; avatar
+        [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
+       ;; content
+       [:div.statement-content
+        [:p content]]
+       [:div.row
+        [:div.col-6
+         [:p.small "Anzahl Statements: " (-> statement :meta/sub-discussion-info :sub-statements)]]
+        [:div.col-6
+         [:p.small "User beteiligt: " (-> statement :meta/sub-discussion-info :authors count)]]]]]
+     ;; up-down-votes
+     [:div.col-1.px-0
+      [:div.up-down-vote
+       (up-down-vote statement)]]]]))
 
 ;; carousel
 
