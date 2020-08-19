@@ -20,7 +20,7 @@
         potential-undercuts (descendant-undercuts arguments-with-root all-arguments)
         children (concat arguments-with-root potential-undercuts)
         premises-list (map :argument/premises children)]
-    (map :db/id (flatten premises-list))))
+    (flatten premises-list)))
 
 (>defn sub-discussion-information
   "Returns statistics about the sub-discussion starting with `root-statement-id`.
@@ -30,9 +30,15 @@
   (let [all-arguments (dialog-db/all-arguments-for-discussion discussion-id)]
     (loop [current-root root-statement-id
            descendants (direct-children current-root all-arguments)
-           sub-statements-count 0]
+           sub-statements-count 0
+           authors #{}]
       (if (seq descendants)
-        (recur (first descendants)
-               (concat (rest descendants) (direct-children (first descendants) all-arguments))
-               (inc sub-statements-count))
-        {:sub-statements sub-statements-count}))))
+        (let [next-child (first descendants)]
+          (recur (:db/id next-child)
+                 (concat (rest descendants) (direct-children (:db/id next-child) all-arguments))
+                 (inc sub-statements-count)
+                 (conj authors (or (:statement/author next-child) (:argument/author next-child)))))
+        {:sub-statements sub-statements-count
+         :authors authors}))))
+
+(sub-discussion-information 101155069755552 96757023244400)
