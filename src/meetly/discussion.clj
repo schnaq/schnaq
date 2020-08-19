@@ -1,6 +1,5 @@
 (ns meetly.discussion
-  (:require [dialog.discussion.database :as dialog-db]
-            [ghostwheel.core :refer [>defn >defn-]]))
+  (:require [ghostwheel.core :refer [>defn >defn-]]))
 
 (>defn- descendant-undercuts
   "Finds all undercuts to a set of arguments."
@@ -24,19 +23,18 @@
 
 (>defn sub-discussion-information
   "Returns statistics about the sub-discussion starting with `root-statement-id`.
-  Does not watch out for cycles in the graph."
-  [root-statement-id discussion-id]
-  [int? int? :ret map?]
-  (let [all-arguments (dialog-db/all-arguments-for-discussion discussion-id)]
-    (loop [current-root root-statement-id
-           descendants (direct-children current-root all-arguments)
-           sub-statements-count 0
-           authors #{}]
-      (if (seq descendants)
-        (let [next-child (first descendants)]
-          (recur (:db/id next-child)
-                 (concat (rest descendants) (direct-children (:db/id next-child) all-arguments))
-                 (inc sub-statements-count)
-                 (conj authors (or (:statement/author next-child) (:argument/author next-child)))))
-        {:sub-statements sub-statements-count
-         :authors authors}))))
+  Does not watch out for cycles in the graph, only aggregates information for root-statement."
+  [root-statement-id arguments]
+  [int? sequential? :ret map?]
+  (loop [current-root root-statement-id
+         descendants (direct-children current-root arguments)
+         sub-statements-count 0
+         authors #{}]
+    (if (seq descendants)
+      (let [next-child (first descendants)]
+        (recur (:db/id next-child)
+               (concat (rest descendants) (direct-children (:db/id next-child) arguments))
+               (inc sub-statements-count)
+               (conj authors (or (:statement/author next-child) (:argument/author next-child)))))
+      {:sub-statements sub-statements-count
+       :authors authors})))
