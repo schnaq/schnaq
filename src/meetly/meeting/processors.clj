@@ -10,7 +10,7 @@
   [data]
   [any? :ret any?]
   (walk/postwalk
-    #(if (and (= PersistentArrayMap (type %)) (contains? % :statement/content))
+    #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content))
        (assoc % :meta/upvotes (db/upvotes-for-statement (:db/id %))
                 :meta/downvotes (db/downvotes-for-statement (:db/id %)))
        %)
@@ -21,7 +21,7 @@
   [data all-arguments]
   [any? sequential? :ret any?]
   (walk/postwalk
-    #(if (and (= PersistentArrayMap (type %)) (contains? % :statement/content))
+    #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content))
        (assoc % :meta/sub-discussion-info (discussion/sub-discussion-information (:db/id %) all-arguments))
        %)
     data))
