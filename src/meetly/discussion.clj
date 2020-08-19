@@ -40,5 +40,3 @@
                  (conj authors (or (:statement/author next-child) (:argument/author next-child)))))
         {:sub-statements sub-statements-count
          :authors authors}))))
-
-(sub-discussion-information 101155069755552 96757023244400)
