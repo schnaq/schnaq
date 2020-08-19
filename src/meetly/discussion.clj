@@ -23,7 +23,7 @@
 
 (>defn sub-discussion-information
   "Returns statistics about the sub-discussion starting with `root-statement-id`.
-  Does not watch out for cycles in the graph."
+  Does not watch out for cycles in the graph, only aggregates information for root-statement."
   [root-statement-id arguments]
   [int? sequential? :ret map?]
   (loop [current-root root-statement-id
