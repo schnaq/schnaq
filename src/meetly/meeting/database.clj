@@ -305,7 +305,7 @@
 (>defn author-id-by-nickname
   "Returns an author-id by nickname. The nickname is not case sensitive"
   [nickname]
-  [string? :ret number?]
+  [string? :ret (? number?)]
   (ffirst
     (d/q
       '[:find ?author
