@@ -55,7 +55,7 @@
     :argument/conclusion "statement/get-dog"
     :argument/version 1
     :argument/type :argument.type/support
-    :argument/discussions ["discussion/cat-or-dog"]}
+    :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "argument/tedious-dogs"
     :argument/author "author/schredder"
     :argument/premises [{:db/id "statement/walks"
@@ -66,7 +66,7 @@
     :argument/conclusion "statement/get-dog"
     :argument/version 1
     :argument/type :argument.type/attack
-    :argument/discussions ["discussion/cat-or-dog"]}
+    :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:argument/author "author/stinky"
     :argument/premises [{:db/id "statement/no-use"
                          :statement/author "author/stinky"
@@ -80,13 +80,12 @@
     :argument/premises [{:db/id "statement/exercise"
                          :statement/author "author/stinky"
                          :statement/content
-                         (str "going for a walk with the dog every day is good for"
-                              " social interaction and physical exercise")
+                         "going for a walk with the dog every day is good for social interaction and physical exercise"
                          :statement/version 1}]
     :argument/conclusion "argument/tedious-dogs"
     :argument/version 1
     :argument/type :argument.type/undercut
-    :argument/discussions ["discussion/cat-or-dog"]}
+    :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "argument/both-is-fine"
     :argument/author "author/rambo"
     :argument/premises [{:db/id "statement/no-problem"
@@ -293,10 +292,10 @@
                                     "argument/independent-cats" "argument/no-taxes"
                                     "argument/moody-cats"]}
    {:db/id "discussion/tapir-or-ameisenbaer"
-    :discussion/title "Tapir oder Ameistenbär?"
+    :discussion/title "Tapir oder Ameisenbär?"
     :discussion/description "What do what do"
     :discussion/states [:discussion.state/open]
-    :discussion/starting-arguments []}])
+    :discussion/starting-arguments ["argument/tedious-dogs"]}])
 
 (def meetly-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-arguments
