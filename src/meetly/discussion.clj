@@ -1,8 +1,13 @@
 (ns meetly.discussion
-  (:require [datomic.client.api :as d]
-            [dialog.discussion.database :as dialog-db]
-            [ghostwheel.core :refer [>defn >defn-]]
-            [meetly.meeting.database :as db]))
+  (:require [dialog.discussion.database :as dialog-db]
+            [ghostwheel.core :refer [>defn >defn-]]))
+
+(>defn- descendant-undercuts
+  "Finds all undercuts to a set of arguments."
+  [argument-subset all-arguments]
+  [sequential? sequential? :ret sequential?]
+  (let [ids (map :db/id argument-subset)]
+    (filter #((set ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
 
 (>defn- direct-children
   "Looks up all direct children of a node. The edge itself is considered a child as well
@@ -10,11 +15,11 @@
   [root-id all-arguments]
   [int? sequential? :ret sequential?]
   (let [arguments-with-root (filter
-                              (fn [coll] (or (= root-id (:db/id coll))
-                                             (= root-id (get-in coll [:argument/conclusion :db/id]))))
+                              #(= root-id (get-in % [:argument/conclusion :db/id]))
                               all-arguments)
-        premises-list (map :argument/premises arguments-with-root)]
-    (println (flatten premises-list))
+        potential-undercuts (descendant-undercuts arguments-with-root all-arguments)
+        children (concat arguments-with-root potential-undercuts)
+        premises-list (map :argument/premises children)]
     (map :db/id (flatten premises-list))))
 
 (>defn sub-discussion-information
@@ -31,17 +36,3 @@
                (concat (rest descendants) (direct-children (first descendants) all-arguments))
                (inc sub-statements-count))
         {:sub-statements sub-statements-count}))))
-
-(sub-discussion-information 101155069755552 96757023244400)
-
-(comment
-  (dialog-db/all-discussions-by-title "sadsad")
-  (dialog-db/all-arguments-for-discussion 96757023244400)
-  (let [db (d/db (db/new-connection))]
-    (:e
-      (first
-        (d/datoms db {:index :vaet
-                      :components [101155069755551 :argument/conclusion]}))))
-  ;; TODO so könnte man sich funktionen definieren um die verschiedenen knoten
-  ;; als datom zu holen. Dann könnte man diese normal durchqueren.
-  )
