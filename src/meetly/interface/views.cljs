@@ -3,6 +3,7 @@
             [meetly.interface.views.base :as base]
             [meetly.interface.views.errors :as errors]
             [meetly.interface.views.modals.modal :as modal]
+            [meetly.interface.views.notifications :as notifications]
             [re-frame.core :as rf]
             [reagent.dom]))
 
@@ -27,4 +28,5 @@
   [:div#root
    [base-page]
    [footer]
-   [feedback/button]])
+   [feedback/button]
+   [notifications/view]])
