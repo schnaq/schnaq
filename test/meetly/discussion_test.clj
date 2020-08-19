@@ -32,8 +32,9 @@
 (deftest sub-discussion-information-test
   (testing "Test information regarding sub-discussions."
     (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Tapir oder Ameisenbär?")))
+          arguments (ddb/all-arguments-for-discussion discussion-id)
           root-id (:db/id (:argument/conclusion (first (ddb/starting-arguments-by-discussion discussion-id))))
-          infos (discussion/sub-discussion-information root-id discussion-id)
+          infos (discussion/sub-discussion-information root-id arguments)
           author-names (into #{} (map :author/nickname (:authors infos)))]
       (is (= 3 (:sub-statements infos)))
       (is (contains? author-names "Der miese Peter"))
