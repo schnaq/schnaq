@@ -1,8 +1,8 @@
 (ns meetly.meeting.processors-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
-            [meetly.test.toolbelt :as meetly-toolbelt]
             [dialog.discussion.database :as ddb]
-            [meetly.meeting.processors :as processors]))
+            [meetly.meeting.processors :as processors]
+            [meetly.test.toolbelt :as meetly-toolbelt]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once meetly-toolbelt/clean-database-fixture)

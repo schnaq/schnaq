@@ -151,9 +151,11 @@
         meeting-hash (get-in req [:query-params "meeting-hash"])
         valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if valid-link?
-      (response (processors/with-votes
+      (response (->
                   (dialog/start-discussion {:discussion/id discussion-id
-                                            :user/nickname (db/canonical-username username)})))
+                                            :user/nickname (db/canonical-username username)})
+                  processors/with-votes
+                  (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
       (bad-request {:error "The link you followed was invalid"}))))
 
 
@@ -165,8 +167,10 @@
         discussion-id (:discussion-id body-params)
         valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if valid-link?
-      (response (processors/with-votes
-                  (dialog/continue-discussion reaction args)))
+      (response (->
+                  (dialog/continue-discussion reaction args)
+                  processors/with-votes
+                  (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
       (bad-request {:error "The link you followed was invalid"}))))
 
 
