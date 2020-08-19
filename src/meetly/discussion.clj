@@ -2,13 +2,6 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]))
 
-(>defn- descendant-undercuts
-  "Finds all undercuts to a set of arguments."
-  [argument-subset all-arguments]
-  [sequential? sequential? :ret sequential?]
-  (let [argument-ids (map :db/id argument-subset)]
-    (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
-
 (>defn- premise-ids
   "Return all premise-ids of a single argument."
   [argument]
@@ -24,8 +17,8 @@
     (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
 
 (>defn- direct-children
-  "Looks up all direct children of a node. The edge itself is considered a child as well
-  to accommodate undercuts. The root itself can be an edge as well."
+  "Looks up all direct children of a node. An undercut is considered a child of the premise
+  of an argument."
   [root-id all-arguments]
   [int? sequential? :ret sequential?]
   (let [arguments-with-root (filter
