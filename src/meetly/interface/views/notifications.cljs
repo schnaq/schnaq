@@ -14,6 +14,51 @@
 
   :end)
 
-(defn view []
-  (.toast (js/$ ".toast"))
-  [:h1 (toast "foo" "bar")])
+(defn view
+  "Presenting all notifications to the user."
+  []
+  (let [notifications @(rf/subscribe [:notifications/all])]
+    [:div#notifications
+     {:aria-live "polite"
+      :aria-atomic true
+      :style {:position "absolute"
+              :top "1rem"
+              :left "1rem"}}
+     [:> AnimatePresence
+      (for [notification notifications]
+        [:div {:key (:id notification)}
+         [toast notification]])]]))
+
+
+;; -----------------------------------------------------------------------------
+
+(rf/reg-event-fx
+  :notification/add
+  (fn [{:keys [db]} [_ notification]]
+    (let [notification-id (str (random-uuid))
+          notification' (assoc notification :id notification-id)]
+      {:db (update db :notifications conj notification')
+       :notification/timed-remove notification-id})))
+
+(rf/reg-fx
+  :notification/timed-remove
+  (fn [notification-id]
+    (js/setTimeout #(rf/dispatch [:notification/remove notification-id])
+                   display-time)))
+
+(rf/reg-event-db
+  :notification/remove
+  (fn [db [_ notification-id]]
+    (when-let [notifications (:notifications db)]
+      (assoc db :notifications
+                (remove (fn [{:keys [id]}] (= id notification-id)) notifications)))))
+
+(rf/reg-event-db
+  :notifications/reset
+  (fn [db [_]]
+    (assoc db :notifications [])))
+
+(rf/reg-sub
+  :notifications/all
+  (fn [db]
+    (get db :notifications)))
