@@ -1,4 +1,4 @@
-(ns meetly.meeting.rest-api
+(ns meetly.api
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
@@ -369,13 +369,13 @@
   (log/info "Welcome to Meetly's Backend 🧙")
   (log/info (format "Build Hash: %s" config/build-hash))
   (log/info (format "Environment: %s" config/env-mode))
-  (log/info (format "Port: %s" (:port config/rest-api)))
+  (log/info (format "Port: %s" (:port config/api)))
   (log/info (format "Database Name: %s" config/db-name)))
 
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
-  (let [port (:port config/rest-api)
+  (let [port (:port config/api)
         allowed-origins [#".*\.dialogo\.io"]
         allowed-origins' (if meetly-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middleware

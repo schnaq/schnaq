@@ -70,7 +70,7 @@
   []
   (log/info "Welcome to Meetly 🎉")
   (log/info (gstring/format "Build Hash: %s" config/build-hash))
-  (log/info (gstring/format "API: %s" config/rest-api-url))
+  (log/info (gstring/format "API: %s" config/api-url))
   (log/info (gstring/format "Environment: %s" config/environment)))
 
 (defn init

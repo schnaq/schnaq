@@ -30,13 +30,13 @@ Start the backend-server with one of these two options:
 *With REPL*
 
 Start the run configuration "CLJ REPL" and execute the `-main` method in
-`meetly.meeting.rest-api`.
+`meetly.rest-api`.
 To do this manually, you can put the following commands into the REPL in IDEA:
 +
 [source,clojure]
 ----
-(require '[meetly.meeting.rest-api])
-(meetly.meeting.rest-api/-main)
+(require '[meetly.api])
+(meetly.api/-main)
 ----
 
 *Without REPL*
