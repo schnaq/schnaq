@@ -2,9 +2,7 @@
 
 
 (def default-db
-  {:time (js/Date.)
-   :time-color "green"
-   :meetings [{:db/id "Fake"
+  {:meetings [{:db/id "Fake"
                :meeting/title "Jour Fixé every day"
                :meeting/description "Whatever"
                :meeting/share-hash "test-123-456"
