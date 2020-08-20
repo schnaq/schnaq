@@ -9,7 +9,7 @@
             [meetly.interface.effects]
             [meetly.interface.events]
             [meetly.interface.navigation :as navigation]
-            [meetly.interface.routes :as routes]
+            [meetly.interface.routes]
             [meetly.interface.views :as views]
             [meetly.interface.views.agenda.agenda]
             [meetly.interface.views.agenda.edit]
