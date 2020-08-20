@@ -6,7 +6,7 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [meetly.config :as config]
             [meetly.meeting.models :as models]
-            [meetly.meeting.test-data :as test-data])
+            [meetly.test-data :as test-data])
   (:import (java.util Date UUID)))
 
 (def ^:private datomic-info

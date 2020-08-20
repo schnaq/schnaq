@@ -1,4 +1,4 @@
-(ns meetly.meeting.test-data)
+(ns meetly.test-data)
 
 (def ^:private meetings
   [{:db/id "meeting/expansion"
