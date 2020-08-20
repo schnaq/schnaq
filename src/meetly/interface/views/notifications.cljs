@@ -1,16 +1,40 @@
 (ns meetly.interface.views.notifications
-  (:require [goog.dom :as gdom]))
+  (:require [meetly.interface.text.display-data :refer [fa]]
+            [reagent.dom]
+            [re-frame.core :as rf]
+            ["framer-motion" :refer [motion AnimatePresence]]))
 
-(defn toast [title body]
-  [:div.toast {:role "alert" :aria-live "assertive" :aria-atomic "true"}
-   [:div.toast-header
-    [:strong.mr-auto title]
-    [:small.text-muted "11 mins ago"]
-    [:button.ml-2.mb-1.close {:type "button" :data-dismiss "toast" :aria-label "Close"}
-     [:span {:aria-hidden "true"} "&times;"]]]
-   [:div.toast-body body]])
+(def ^:private display-time "Milliseconds, that a notification stays visible."
+  20000)
+
+(defn toast [{:keys [title body id]}]
+  [:> (.-div motion)
+   {:initial {:opacity 0}
+    :animate {:opacity 1}
+    :exit {:opacity 0}}
+   [:div.toast.show
+    {:aria-atomic "true", :aria-live "assertive", :role "alert"
+     :data-autohide false
+     :style {:width "15rem"
+             :margin-bottom ".5rem"}}
+    [:div.toast-header
+     [:strong.mr-auto title]
+     #_[:small.text-muted "just now"]
+     [:button.close {:type "button"
+                     :on-click #(rf/dispatch [:notification/remove id])}
+      [:span {:aria-hidden "true"}
+       [:i {:class (str " m-auto fas fa-xs " (fa :delete-icon))}]]]]
+    [:div.toast-body body]]])
 
 (comment
+  (.toast (js/$ ".toast") #js {:delay 3000
+                               :autohide false})
+  (.toast (js/$ ".toast") "show")
+  (.toast (js/$ ".toast") "hide")
+
+  (rf/dispatch [:notification/add {:title "Har har!" :body "Ich bin es, der Teufel!"}])
+  (rf/dispatch [:notification/add {:title "some" :body "other"}])
+  (rf/dispatch [:notifications/reset])
 
   :end)
 
