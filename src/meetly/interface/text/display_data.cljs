@@ -184,4 +184,5 @@
      :arrow-up "fa-arrow-up"
      :arrow-down "fa-arrow-down"
      :delete-icon "fa-times-circle"
-     :copy "fa-copy"}))
+     :copy "fa-copy"
+     :users "fa-users"}))

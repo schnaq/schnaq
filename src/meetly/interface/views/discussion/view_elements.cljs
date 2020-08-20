@@ -158,11 +158,15 @@
        ;; content
        [:div.statement-content
         [:p content]]
-       [:div.row
-        [:div.col-6
-         [:p.small "Anzahl Statements: " (-> statement :meta/sub-discussion-info :sub-statements)]]
-        [:div.col-6
-         [:p.small "User beteiligt: " (-> statement :meta/sub-discussion-info :authors count)]]]]]
+       [:div.row.px-3
+        [:div.col
+         [:p
+          [:span.badge.badge-pill.badge-transparent.mr-2
+           [:i {:class (str "m-auto fas " (fa :comment))}] " "
+           (-> statement :meta/sub-discussion-info :sub-statements)]
+          [:span.badge.badge-pill.badge-transparent
+           [:i {:class (str "m-auto fas " (fa :users))}] " "
+           (-> statement :meta/sub-discussion-info :authors count)]]]]]]
      ;; up-down-votes
      [:div.col-1.px-0
       [:div.up-down-vote
