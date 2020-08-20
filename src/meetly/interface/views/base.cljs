@@ -62,8 +62,8 @@
   [:form.form-inline
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
-                 (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
-                 (rf/dispatch [:hide-name-input]))}
+                 (rf/dispatch [:user/set-display-name (oget e [:target :elements :name-input :value])])
+                 (rf/dispatch [:user/hide-display-name-input]))}
    [:input#name-input.form-control.form-round-05.py-1.mr-sm-2
     {:type "text"
      :name "name-input"
@@ -79,13 +79,13 @@
 (defn show-input-button
   "A button triggering the showing of the name field."
   [username]
-  [:button.btn.btn-outline-primary {:on-click #(rf/dispatch [:show-name-input])} username])
+  [:button.btn.btn-outline-primary {:on-click #(rf/dispatch [:user/show-display-name-input])} username])
 
 (defn username-bar-view
   "A bar containing all user related utilities and information."
   []
-  (let [username @(rf/subscribe [:username])
-        show-input? @(rf/subscribe [:show-username-input?])]
+  (let [username @(rf/subscribe [:user/display-name])
+        show-input? @(rf/subscribe [:user/show-display-name-input?])]
     (if show-input?
       [name-input username]
       [show-input-button username])))

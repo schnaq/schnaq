@@ -1,39 +1,40 @@
 (ns meetly.interface.core
-  (:require [day8.re-frame.http-fx]
+  (:require ["@fortawesome/fontawesome-free/js/all.js"]
+            ["bootstrap"]
+            ["jquery"]
             [goog.dom :as gdom]
             [goog.string :as gstring]
-            [reagent.dom]
-            ["jquery"]
-            ["bootstrap"]
-            ["@fortawesome/fontawesome-free/js/all.js"]
-            [re-frame.core :as rf]
-            [reitit.frontend :as reitit-front]
-            [reitit.frontend.easy :as reitit-front-easy]
+            [meetly.interface.analytics.core]
             [meetly.interface.config :as config]
+            [meetly.interface.effects]
+            [meetly.interface.events]
+            [meetly.interface.routes :as routes]
+            [meetly.interface.subs]
             [meetly.interface.views :as views]
-    ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
-            [meetly.interface.views.startpage]
             [meetly.interface.views.agenda.agenda]
             [meetly.interface.views.agenda.edit]
             [meetly.interface.views.common]
+            [meetly.interface.views.discussion.discussion]
+            [meetly.interface.views.discussion.logic]
+            [meetly.interface.views.discussion.view-elements]
+            [meetly.interface.views.errors]
             [meetly.interface.views.feedback]
-            [meetly.interface.views.meeting.meetings]
             [meetly.interface.views.meeting.after-create]
+            [meetly.interface.views.meeting.meetings]
             [meetly.interface.views.meeting.overview]
             [meetly.interface.views.meeting.single]
-            [meetly.interface.views.discussion.discussion]
-            [meetly.interface.views.discussion.view-elements]
-            [meetly.interface.views.discussion.logic]
-            [meetly.interface.subs]
-            [meetly.interface.views.errors]
-            [meetly.interface.events]
-            [meetly.interface.effects]
             [meetly.interface.views.modals.modal]
-            [meetly.interface.analytics.core]
-    ;; IMPORTANT: If you use subs and events in another module, you need to require it
-    ;; somewhere where it will be loaded like this core module.
-            [meetly.interface.routes :as routes]
-            [taoensso.timbre :as log]))
+            [meetly.interface.views.startpage]
+            [meetly.interface.views.user]
+            [re-frame.core :as rf]
+            [reagent.dom]
+            [reitit.frontend :as reitit-front]
+            [reitit.frontend.easy :as reitit-front-easy]
+            [taoensso.timbre :as log]
+            [day8.re-frame.http-fx]))
+;; NOTE: If you use subs and events in another module, you need to require it
+;; Requiring other views is needed to have dynamic updates from shadow and re-frame
+;; somewhere where it will be loaded like this core module.
 
 ;; -- Entry Point -------------------------------------------------------------
 

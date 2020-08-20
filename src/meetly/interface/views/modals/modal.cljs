@@ -52,8 +52,8 @@
   [:form.form
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
-                 (rf/dispatch [:set-username (oget e [:target :elements :name-input :value])])
-                 (rf/dispatch [:hide-name-input])
+                 (rf/dispatch [:user/set-display-name (oget e [:target :elements :name-input :value])])
+                 (rf/dispatch [:user/hide-display-name-input])
                  (close-modal))}
    [:div.px-2 [:input#name-input.form-control.form-round-05.px-2.py-1
                {:type "text"

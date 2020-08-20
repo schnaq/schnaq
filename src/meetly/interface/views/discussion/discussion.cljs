@@ -258,6 +258,14 @@
                     :on-success [:set-current-discussion-steps]
                     :on-failure [:ajax-failure]}})))
 
+(rf/reg-event-fx
+  :handle-reload-on-discussion-loop
+  (fn [{:keys [db]} [_ agenda-id share-hash]]
+    (when (empty? (get-in db [:discussion :options :steps]))
+      {:dispatch [:navigate
+                  :routes.discussion/start
+                  {:id agenda-id
+                   :share-hash share-hash}]})))
 
 ;; #### Subs ####
 

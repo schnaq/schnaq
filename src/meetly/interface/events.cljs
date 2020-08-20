@@ -1,6 +1,5 @@
 (ns meetly.interface.events
   (:require [ajax.core :as ajax]
-            [clojure.string :as clj-string]
             [meetly.interface.config :refer [config]]
             [meetly.interface.db :as meetly-db]
             [meetly.interface.utils.localstorage :as ls]
@@ -46,50 +45,14 @@
         ;; When the localstorage is filled, then just set the name to db.
         (assoc-in init-fx [:db :user :name] name)
         ;; Otherwise ask user for name
-        (assoc init-fx :dispatch-n [[:set-username "Anonymous"]
+        (assoc init-fx :dispatch-n [[:user/set-display-name "Anonymous"]
                                     [:modal {:show? true
                                              :child [modal/enter-name-modal]}]])))))
-
-(rf/reg-event-fx
-  :set-username
-  (fn [{:keys [db]} [_ username]]
-    ;; only update when string contains
-    (when (not (clj-string/blank? username))
-      (let [fx {:http-xhrio {:method :post
-                             :uri (str (:rest-backend config) "/author/add")
-                             :params {:nickname username}
-                             :format (ajax/transit-request-format)
-                             :response-format (ajax/transit-response-format)
-                             :on-success [:hide-name-input]
-                             :on-failure [:ajax-failure]}
-                :db (assoc-in db [:user :name] username)}]
-        (if (= "Anonymous" username)
-          fx
-          (assoc fx :write-localstorage [:username username]))))))
 
 (rf/reg-event-db
   :init-from-backend
   (fn [db [_ all-meetings]]
     (assoc db :meetings all-meetings)))
-
-(rf/reg-event-db
-  :hide-name-input
-  (fn [db _]
-    (assoc-in db [:controls :username-input :show?] false)))
-
-(rf/reg-event-db
-  :show-name-input
-  (fn [db _]
-    (assoc-in db [:controls :username-input :show?] true)))
-
-(rf/reg-event-fx
-  :handle-reload-on-discussion-loop
-  (fn [{:keys [db]} [_ agenda-id share-hash]]
-    (when (empty? (get-in db [:discussion :options :steps]))
-      {:dispatch [:navigate
-                  :routes.discussion/start
-                  {:id agenda-id
-                   :share-hash share-hash}]})))
 
 (rf/reg-event-db
   :admin/set-password
