@@ -25,13 +25,13 @@
   [string? :ret any?]
   (swap! datomic-info assoc :database-name database-name))
 
-(defn- new-connection
+(defn new-connection
   "Connects to the database and returns a connection."
   []
   (let [{:keys [client database-name]} @datomic-info]
     (d/connect client {:db-name database-name})))
 
-(defn- transact
+(defn transact
   "Shorthand for transaction."
   [data]
   (d/transact (new-connection) {:tx-data data}))
@@ -305,7 +305,7 @@
 (>defn author-id-by-nickname
   "Returns an author-id by nickname. The nickname is not case sensitive"
   [nickname]
-  [string? :ret number?]
+  [string? :ret (? number?)]
   (ffirst
     (d/q
       '[:find ?author

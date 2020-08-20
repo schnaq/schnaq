@@ -5,9 +5,11 @@
             [compojure.core :refer [GET POST routes]]
             [compojure.route :as route]
             [dialog.engine.core :as dialog]
+            [dialog.discussion.database :as dialog-db]
             [ghostwheel.core :refer [>defn- ?]]
             [meetly.config :as config]
             [meetly.core :as meetly-core]
+            [meetly.discussion :as discussion]
             [meetly.meeting.database :as db]
             [meetly.meeting.processors :as processors]
             [meetly.toolbelt :as toolbelt]
@@ -128,6 +130,19 @@
                   (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s."
                           discussion-id meeting-hash)}))))
 
+(defn- statement-infos
+  "Returns additional information regarding a statement. Currently queries every time anew.
+  This could be made way more efficient with a cache or an optimized graph traversal for the whole
+  discussion. It is not needed yet though."
+  [req]
+  (let [discussion-id (Long/valueOf ^String (get-in req [:query-params "discussion-id"]))
+        meeting-hash (get-in req [:query-params "meeting-hash"])
+        statement-id (Long/valueOf ^String (get-in req [:query-params "statement-id"]))
+        valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
+    (if valid-link?
+      (response (discussion/sub-discussion-information statement-id (dialog-db/all-arguments-for-discussion discussion-id)))
+      (bad-request {:error "The link you followed was invalid."}))))
+
 (defn- start-discussion
   "Start a new discussion for an agenda point."
   [req]
@@ -136,9 +151,11 @@
         meeting-hash (get-in req [:query-params "meeting-hash"])
         valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if valid-link?
-      (response (processors/with-votes
+      (response (->
                   (dialog/start-discussion {:discussion/id discussion-id
-                                            :user/nickname (db/canonical-username username)})))
+                                            :user/nickname (db/canonical-username username)})
+                  processors/with-votes
+                  (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
       (bad-request {:error "The link you followed was invalid"}))))
 
 
@@ -150,8 +167,10 @@
         discussion-id (:discussion-id body-params)
         valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if valid-link?
-      (response (processors/with-votes
-                  (dialog/continue-discussion reaction args)))
+      (response (->
+                  (dialog/continue-discussion reaction args)
+                  processors/with-votes
+                  (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
       (bad-request {:error "The link you followed was invalid"}))))
 
 
@@ -301,6 +320,7 @@
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
     (GET "/start-discussion/:discussion-id" [] start-discussion)
+    (GET "/statement-infos" [] statement-infos)
     (POST "/continue-discussion" [] continue-discussion)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)

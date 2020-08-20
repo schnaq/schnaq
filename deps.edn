@@ -30,7 +30,7 @@
              "clojars" {:url "https://repo.clojars.org/"}}
 
  :aliases {:test {:extra-paths ["test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.663"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.669"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.56"}
                                day8.re-frame/test {:mvn/version "0.1.5"}
                                com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
