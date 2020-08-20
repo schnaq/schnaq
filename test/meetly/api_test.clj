@@ -1,9 +1,9 @@
-(ns meetly.meeting.rest-api-test
+(ns meetly.api-test
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest testing is use-fixtures]]
+            [meetly.api :as api]
             [meetly.meeting.database :as db]
             [meetly.meeting.models :as models]
-            [meetly.meeting.rest-api :as api]
             [meetly.test.toolbelt :as meetly-toolbelt]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
