@@ -8,7 +8,7 @@
                 :output-dir "public/js/compiled"
                 :asset-path "/js/compiled"
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}}
-                :release {:closure-defines {meetly.interface.config/rest-api-url #shadow/env ["REST_API_URL" :default ""]
+                :release {:closure-defines {meetly.interface.config/api-url #shadow/env ["REST_API_URL" :default ""]
                                             meetly.interface.config/environment "production"
                                             meetly.interface.config/build-hash #shadow/env ["BUILD_HASH" :default ""]}}
                 :devtools {:http-root "public"
