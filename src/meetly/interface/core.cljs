@@ -17,6 +17,7 @@
             [meetly.interface.views.agenda.edit]
             [meetly.interface.views.common]
             [meetly.interface.views.feedback]
+            [meetly.interface.views.graph.view]
             [meetly.interface.views.meeting.meetings]
             [meetly.interface.views.meeting.after-create]
             [meetly.interface.views.meeting.overview]
