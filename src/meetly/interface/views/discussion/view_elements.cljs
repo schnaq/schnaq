@@ -143,7 +143,7 @@
   [authors]
   [sequential? :ret string?]
   (str
-    "<ul>"
+    "<ul class=\"authors-list\">"
     (apply str (map #(str "<li>" (:author/nickname %) "</li>") authors))
     "</ul>"))
 
