@@ -1,0 +1,15 @@
+.badge-transparent {
+  color: inherit;
+  background-color: transparent;
+
+  &:hover, &:visited, &:active, &:focus {
+    border: none;
+    outline: none;
+  }
+}
+
+.badge-clickable {
+  &:hover, &:active, &:focus {
+    background-color: rgba($black, 0.2);
+  }
+}

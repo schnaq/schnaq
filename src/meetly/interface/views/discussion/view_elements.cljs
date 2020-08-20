@@ -1,5 +1,6 @@
 (ns meetly.interface.views.discussion.view-elements
   (:require [ajax.core :as ajax]
+            [ghostwheel.core :refer [>defn-]]
             [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :refer [labels fa]]
             [meetly.interface.utils.js-wrapper :as js-wrap]
@@ -7,7 +8,8 @@
             [meetly.interface.views.common :as common]
             [meetly.interface.views.discussion.logic :as logic]
             [oops.core :refer [oget]]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [reagent.core :as reagent]))
 
 (defn up-down-vote
   "Add panel for up and down votes."
@@ -136,6 +138,38 @@
    [:label.custom-control-label.custom-radio-button-label.clickable
     {:for id} (labels label)]])
 
+(>defn- build-author-list
+  "Build a nicely formatted string of a html list containing the authors from a sequence."
+  [authors]
+  [sequential? :ret string?]
+  (str
+    "<ul class=\"authors-list\">"
+    (apply str (map #(str "<li>" (:author/nickname %) "</li>") authors))
+    "</ul>"))
+
+(defn- extra-discussion-info-badges
+  "Badges that display additional discussion info."
+  [statement]
+  (reagent/create-class
+    {:component-did-mount
+     (fn [_]
+       (.popover (js/$ "[data-toggle=\"popover\"]")))
+     :reagent-render
+     (fn []
+       [:p
+        [:span.badge.badge-pill.badge-transparent.mr-2
+         [:i {:class (str "m-auto fas " (fa :comment))}] " "
+         (-> statement :meta/sub-discussion-info :sub-statements)]
+        [:span.badge.badge-pill.badge-transparent.badge-clickable
+         {:data-toggle "popover"
+          :data-trigger "focus"
+          :tabIndex 20
+          :on-click #(js-wrap/stop-propagation %)
+          :title (labels :discussion.badges/user-overview)
+          :data-html true
+          :data-content (build-author-list (get-in statement [:meta/sub-discussion-info :authors]))}
+         [:i {:class (str "m-auto fas " (fa :users))}] " "
+         (-> statement :meta/sub-discussion-info :authors count)]])}))
 
 ;; bubble
 
@@ -144,23 +178,27 @@
   ([statement]
    (statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))))
   ([{:keys [statement/content] :as statement} attitude]
-   [:div.statement-outer.row
-    ;; bubble content
-    [:div.col-11.px-0
-     [:div.statement {:class (str "statement-" (name attitude))}
-      (when (= :argument.type/undercut (:meta/argument.type statement))
-        [:p.small (labels :discussion/undercut-bubble-intro)])
-      ;; information
-      [:div
-       ;; avatar
-       [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
-      ;; content
-      [:div.statement-content
-       [:p content]]]]
-    ;; up-down-votes
-    [:div.col-1.px-0
-     [:div.up-down-vote
-      (up-down-vote statement)]]]))
+   [:div.statement-outer
+    [:div.row
+     ;; bubble content
+     [:div.col-11.px-0
+      [:div.statement {:class (str "statement-" (name attitude))}
+       (when (= :argument.type/undercut (:meta/argument.type statement))
+         [:p.small (labels :discussion/undercut-bubble-intro)])
+       ;; information
+       [:div
+        ;; avatar
+        [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
+       ;; content
+       [:div.statement-content
+        [:p content]]
+       [:div.row.px-3
+        [:div.col
+         [extra-discussion-info-badges statement]]]]]
+     ;; up-down-votes
+     [:div.col-1.px-0
+      [:div.up-down-vote
+       (up-down-vote statement)]]]]))
 
 ;; carousel
 

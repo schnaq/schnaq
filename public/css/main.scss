@@ -11,10 +11,12 @@
 @import "after-create";
 @import "agenda";
 @import "animations";
+@import "badges";
 @import "button";
 @import "carousel";
 @import "clickable";
 @import "discussion";
+@import "error-view";
 @import "feedback";
 @import "footer";
 @import "header";
@@ -26,7 +28,6 @@
 @import "radio-button";
 @import "text-input";
 @import "up-down-vote";
-@import "error-view";
 
 // 3rd Party
 @import "../klaro/src/scss/klaro";
