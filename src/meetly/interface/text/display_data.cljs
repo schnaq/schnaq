@@ -14,7 +14,7 @@
      :nav-meeting-agenda "Agenda erzeugen"
 
      ;; startpage header
-     :start-page-header "Meetly"
+     :start-page-header "schnaq"
      :start-page-subheader "Das Meeting Tool der Zukunft ist (fast) da!"
      :start-page-subheader-2 "Digitale Meetings neu gedacht und auf den Punkt gebracht"
      ;; key feeatures
@@ -22,29 +22,28 @@
      :start-page-point-moderation "Automatische Moderation"
      :start-page-point-reports "Zeitersparnis durch fokussierte Diskussion"
      :start-page-point-alpha "Betreten der Baustelle erwünscht!"
-     :start-page-point-alpha-subtext "Meetly befindet sich im Aufbau und Feedback ist uns wichtig!"
-     :create-meetly-button "Erstellen Sie jetzt Ihr Meetly"
+     :start-page-point-alpha-subtext "schnaq befindet sich im Aufbau und Feedback ist uns wichtig!"
+     :create-meetly-button "Jetzt einen schnaq starten!"
      ;; startpage call to action
      :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
      :more-info-newsletter "Holen Sie sich regelmäßig Updates zu Dialogo und den aktuellsten Produkten."
-     :create-your-meeting "Erstellen Sie jetzt Ihr Meetly!"
      :create-your-meeting-sub "Mit einem Klick erstellen und teilen"
 
      ;; startpage grid
      :innovative "Innovativ"
-     :innovative-why "Meetly nutzt wissenschaftlich erprobte neue Technologien"
+     :innovative-why "schnaq nutzt wissenschaftlich erprobte neue Technologien"
      :communicative "Kommunikativ"
      :communicative-why "Lassen Sie Ihre NutzerInnen direkt zu Wort kommen"
      :cooperative "Kooperativ"
      :cooperative-why "Fördern Sie den Meinungsaustausch zwischen Ihren TeilnehmerInnen"
 
      ;; create meetly
-     :meeting-create-header "Meetly erstellen"
-     :meeting-create-subheader "Geben Sie Ihrem Meetly einen Namen und eine Beschreibung"
+     :meeting-create-header "schnaq erstellen"
+     :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
      :meeting-form-title "Titel"
-     :meeting-form-title-placeholder "Wie soll Ihr Meetly heißen?"
+     :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
      :meeting-form-desc "Beschreibung"
-     :meeting-form-desc-placeholder "Worum geht es in Ihrem Meetly?"
+     :meeting-form-desc-placeholder "Worum geht es in Ihrem schnaq?"
      :meeting-form-deadline "Frist"
      :meeting-form-end-date "Datum"
      :meeting-form-end-time "Uhrzeit"
@@ -52,15 +51,15 @@
      :meeting/copy-link-tooltip "Hier klicken um Link zu kopieren"
      :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
      :meeting/admin-link-copied-success "Der Admin-Link wurde in Ihre Zwischenablage kopiert!"
-     :meeting/created-success-heading "Ihr Meetly wurde erstellt!"
+     :meeting/created-success-heading "Ihr schnaq wurde erstellt!"
      :meeting/created-success-subheading "Link verteilen und loslegen"
      :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
      :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
      :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
      :meeting/educate-on-admin "Später jederzeit per Admin Link editieren!"
      :meetings/continue-with-meetly-after-creation "Link kopiert? Legen Sie los!"
-     :meetings/continue-to-meetly-button "Zum Meetly"
-     :meetings/edit-meetly-button "Meetly editieren"
+     :meetings/continue-to-meetly-button "Zum schnaq"
+     :meetings/edit-meetly-button "schnaq editieren"
 
      :meeting.step2/button "2. Schritt: Agenda hinzufügen"
 
@@ -121,7 +120,7 @@
      :login/set-name "Geben Sie Ihren Namen ein"
 
      :modals/enter-name-header "Geben Sie einen Namen ein"
-     :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im Meetly angezeigt."
+     :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im schnaq angezeigt."
 
      ;; analytics
      :analytics/overall-meetings "Meetings erstellt"
