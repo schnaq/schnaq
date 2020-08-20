@@ -38,7 +38,7 @@
    (:meeting/title current-meeting)
    (:meeting/description current-meeting)
    (fn []
-     (rf/dispatch [:navigate :routes.meeting/show
+     (rf/dispatch [:navigation/navigate :routes.meeting/show
                    {:share-hash (:meeting/share-hash current-meeting)}])
      (rf/dispatch [:meeting/select-current current-meeting]))])
 
@@ -48,7 +48,7 @@
    (:meeting/title current-meeting)
    nil
    (fn []
-     (rf/dispatch [:navigate :routes.meeting/show
+     (rf/dispatch [:navigation/navigate :routes.meeting/show
                    {:share-hash (:meeting/share-hash current-meeting)}])
      (rf/dispatch [:meeting/select-current current-meeting]))])
 
@@ -68,7 +68,7 @@
       ;; title
       [:div.col-11
        [:div
-        [:h2.link-pointer {:on-click #(rf/dispatch [:navigate :routes.discussion/start
+        [:h2.link-pointer {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
                                                     {:share-hash share-hash
                                                      :id (:db/id (:agenda/discussion agenda))}])}
          (:agenda/title agenda)]
@@ -199,7 +199,7 @@
 
 
 (defn conclusions-list []
-  (let [path-params (:path-params @(rf/subscribe [:current-route]))
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         conclusions @(rf/subscribe [:starting-conclusions])]
     [:div.container
      [:div#conclusions-list.px-3
@@ -207,7 +207,7 @@
         [:div {:key (:db/id conclusion)
                :on-click (fn [_e]
                            (rf/dispatch [:continue-discussion :starting-conclusions/select conclusion])
-                           (rf/dispatch [:navigate :routes.discussion/continue
+                           (rf/dispatch [:navigation/navigate :routes.discussion/continue
                                          {:id (:id path-params)
                                           :share-hash (:share-hash path-params)}]))}
          [statement-bubble conclusion :neutral]])]]))

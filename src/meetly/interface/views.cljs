@@ -8,7 +8,7 @@
 
 (defn- base-page
   []
-  (let [current-route @(rf/subscribe [:current-route])
+  (let [current-route @(rf/subscribe [:navigation/current-route])
         errors @(rf/subscribe [:error-occurred])
         ajax-error (:ajax errors)]
     [:div#display-content

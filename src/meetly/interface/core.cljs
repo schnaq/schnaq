@@ -8,8 +8,8 @@
             [meetly.interface.config :as config]
             [meetly.interface.effects]
             [meetly.interface.events]
+            [meetly.interface.navigation :as navigation]
             [meetly.interface.routes :as routes]
-            [meetly.interface.subs]
             [meetly.interface.views :as views]
             [meetly.interface.views.agenda.agenda]
             [meetly.interface.views.agenda.edit]
@@ -28,8 +28,6 @@
             [meetly.interface.views.user]
             [re-frame.core :as rf]
             [reagent.dom]
-            [reitit.frontend :as reitit-front]
-            [reitit.frontend.easy :as reitit-front-easy]
             [taoensso.timbre :as log]
             [day8.re-frame.http-fx]))
 ;; NOTE: If you use subs and events in another module, you need to require it
@@ -43,27 +41,13 @@
   (reagent.dom/render [views/root]
                       (gdom/getElement "app")))
 
-(def router
-  (reitit-front/router
-    routes/routes))
-
-(defn on-navigate [new-match]
-  (when new-match
-    (rf/dispatch [:navigated new-match])))
-
-(defn init-routes! []
-  (reitit-front-easy/start!
-    router
-    on-navigate
-    {:use-fragment true}))
-
 (defn ^:dev/after-load clear-cache-and-render!
   []
   ;; The `:dev/after-load` metadata causes this function to be called
   ;; after shadow-cljs hot-reloads code. We force a UI update by clearing
   ;; the Reframe subscription cache.
   (rf/clear-subscription-cache!)
-  (init-routes!)
+  (navigation/init-routes!)
   (render))
 
 (defn- say-hello
@@ -77,7 +61,7 @@
 (defn init
   "Entrypoint into the application."
   []
-  (init-routes!)
+  (navigation/init-routes!)
   (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
   (render)                                                  ;; mount the application's ui into '<div id="app" />'
   (say-hello))

@@ -5,29 +5,7 @@
             [meetly.interface.utils.localstorage :as ls]
             [meetly.interface.utils.toolbelt :as toolbelt]
             [meetly.interface.views.modals.modal :as modal]
-            [re-frame.core :as rf]
-            [reitit.frontend.controllers :as reitit-front-controllers]
-            [reitit.frontend.easy :as reitit-front-easy]))
-
-;; Starts the ball rolling on changing to another view
-(rf/reg-event-fx
-  :navigate
-  (fn [_cofx [_ & route]]
-    {:navigate! route}))
-
-(rf/reg-fx
-  :navigate!
-  (fn [route]
-    (apply reitit-front-easy/push-state route)))
-
-(rf/reg-event-db
-  :navigated
-  (fn [db [_ new-match]]
-    (let [old-match (:current-route db)
-          controllers (reitit-front-controllers/apply-controllers (:controllers old-match) new-match)]
-      (assoc db :current-route (assoc new-match :controllers controllers)))))
-
-;; Non-routing events
+            [re-frame.core :as rf]))
 
 (rf/reg-event-fx
   :initialise-db
