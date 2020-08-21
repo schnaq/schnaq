@@ -18,7 +18,9 @@
     "react-dom": "^16.13.1",
     "react-flip-move": "^3.0.4",
     "react-highlight.js": "1.0.7",
+    "react-vega": "^7.4.1",
     "shadow-cljs": "^2.10.21",
+    "vega": "^5.14.0",
     "xmlhttprequest": "^1.8.0"
   }
 }

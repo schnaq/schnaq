@@ -1,195 +1,158 @@
 (ns meetly.interface.views.graph.view
-  (:require ["d3" :as d3]
+  (:require ["vega" :as vega]
             [oops.core :refer [oget]]
             [reagent.core :as reagent]))
 
+(def graph-spec
+  {:description
+   "A node-link diagram with force-directed layout, depicting character co-occurrence in the novel Les Misérables.",
+   :autosize "none",
+   :width 800,
+   :height 500,
+   :scales
+   [{:name "color",
+     :type "ordinal",
+     :domain {:data "node-data", :field "group"},
+     :range {:scheme "category20c"}}],
+   :padding 0,
+   :marks
+   [{:name "nodes",
+     :type "symbol",
+     :zindex 1,
+     :from {:data "node-data"},
+     :on
+     [{:trigger "fix",
+       :modify "node",
+       :values
+       "fix === true ? {fx: node.x, fy: node.y} : {fx: fix[0], fy: fix[1]}"}
+      {:trigger "!fix",
+       :modify "node",
+       :values "{fx: null, fy: null}"}],
+     :encode
+     {:enter
+      {:fill {:scale "color", :field "group"},
+       :stroke {:value "white"}},
+      :update
+      {:size
+       {:signal "2 * nodeRadius * nodeRadius"},
+       :cursor {:value "pointer"}}},
+     :transform
+     [{:type "force",
+       :iterations 300,
+       :restart {:signal "restart"},
+       :static {:signal "static"},
+       :signal "force",
+       :forces
+       [{:force "center",
+         :x {:signal "cx"},
+         :y {:signal "cy"}}
+        {:force "collide",
+         :radius {:signal "nodeRadius"}}
+        {:force "nbody",
+         :strength {:signal "nodeCharge"}}
+        {:force "link",
+         :links "link-data",
+         :distance {:signal "linkDistance"}}]}]}
+    {:type "path",
+     :from {:data "link-data"},
+     :interactive false,
+     :encode
+     {:update
+      {:stroke {:value "#ccc"},
+       :strokeWidth {:value 0.5}}},
+     :transform
+     [{:type "linkpath",
+       :require {:signal "force"},
+       :shape "line",
+       :sourceX "datum.source.x",
+       :sourceY "datum.source.y",
+       :targetX "datum.target.x",
+       :targetY "datum.target.y"}]}],
+   :$schema
+   "https://vega.github.io/schema/vega/v5.json",
+   :signals
+   [{:name "cx", :update "width / 2"}
+    {:name "cy", :update "height / 2"}
+    {:name "nodeRadius",
+     :value 8,
+     :bind
+     {:input "range", :min 1, :max 50, :step 1}}
+    {:name "nodeCharge",
+     :value -30,
+     :bind
+     {:input "range",
+      :min -100,
+      :max 10,
+      :step 1}}
+    {:name "linkDistance",
+     :value 30,
+     :bind
+     {:input "range", :min 5, :max 100, :step 1}}
+    {:name "static",
+     :value true,
+     :bind {:input "checkbox"}}
+    {:description
+     "State variable for active node fix status.",
+     :name "fix",
+     :value false,
+     :on
+     [{:events
+       "symbol:mouseout[!event.buttons], window:mouseup",
+       :update "false"}
+      {:events "symbol:mouseover",
+       :update "fix || true"}
+      {:events
+       "[symbol:mousedown, window:mouseup] > window:mousemove!",
+       :update "xy()",
+       :force true}]}
+    {:description
+     "Graph node most recently interacted with.",
+     :name "node",
+     :value nil,
+     :on
+     [{:events "symbol:mouseover",
+       :update "fix === true ? item() : node"}]}
+    {:description
+     "Flag to restart Force simulation upon data changes.",
+     :name "restart",
+     :value false,
+     :on
+     [{:events {:signal "fix"},
+       :update "fix && fix.length"}]}],
+   :data
+   [{:name "node-data",
+     :url "https://raw.githubusercontent.com/d3/d3-plugins/master/graph/data/miserables.json",
+     :format {:type "json", :property "nodes"}}
+    {:name "link-data",
+     :url "https://raw.githubusercontent.com/d3/d3-plugins/master/graph/data/miserables.json",
+     :format {:type "json", :property "links"}}]})
 
-(def bar-data [{:x 1}
-               {:x 2}
-               {:x 3}])
+(defn render
+  "Takes a json describing a vega specification and renders it."
+  [spec-json id]
+  (let [spec (vega/parse spec-json)
+        options (clj->js {:renderer "svg"
+                          :container (str "#" id)
+                          :hover true})]
+    (.runAsync
+      (vega/View. spec options))))
 
-(def data
-  {:nodes
-   [{:id 1, :name "A"}
-    {:id 2, :name "B"}
-    {:id 3, :name "C"}
-    {:id 4, :name "D"}
-    {:id 5, :name "E"}
-    {:id 6, :name "F"}
-    {:id 7, :name "G"}
-    {:id 8, :name "H"}
-    {:id 9, :name "I"}
-    {:id 10, :name "J"}],
-   :links
-   [{:source 1, :target 2}
-    {:source 1, :target 5}
-    {:source 1, :target 6}
-    {:source 2, :target 3}
-    {:source 2, :target 7}
-    {:source 3, :target 4}
-    {:source 8, :target 3}
-    {:source 4, :target 5}
-    {:source 4, :target 9}
-    {:source 5, :target 10}]})
+(defn vega-did-mount
+  [id]
+  (render (clj->js graph-spec) id))
 
-(def margin {:top 10, :right 30, :bottom 30, :left 40})
-
-(def width (- 400 (:left margin) (:right margin)))
-(def height (- 400 (:top margin) (:bottom margin)))
-
-(defn svg [id]
-  (-> d3
-      (.select (str "#" id))
-      (.append "svg")
-      (.attr "width" (+ width (:left margin) (:right margin)))
-      (.attr "height" (+ height (:top margin) (:bottom margin)))
-      (.append "g")
-      (.attr "transform" (str "translate("
-                              (:left margin) ","
-                              (:top margin) ")"))))
-
-(defn link [svg-selected]
-  (-> svg-selected
-      (.selectAll "line")
-      (.data (clj->js (:links data)))
-      (.enter)
-      (.append "line")
-      (.style "stroke" "#aaa")))
-
-(defn node [svg-selected]
-  (-> svg-selected
-      (.selectAll "circle")
-      (.data (clj->js (:nodes data)))
-      (.enter)
-      (.append "circle")
-      (.attr "r" 20)
-      (.style "fill" "#69b3a2")))
-
-(defn ticked [link node]
-  (fn [] (-> link
-             (.attr "x1" (fn [d] (.-x (.-source d))))
-             (.attr "y1" (fn [d] (.-y (.-source d))))
-             (.attr "x2" (fn [d] (.-x (.-target d))))
-             (.attr "y2" (fn [d] (.-y (.-target d)))))
-
-    (-> node
-        (.attr "cx" (fn [d]
-                      ;(println d)
-                      ;(+ (.-x d) 6)
-                      (rand 40)
-                      ))
-        (.attr "cy" (fn [d]
-                      ;(+ (.-y d) 6)
-                      (rand 40)
-                      )))))
-
-
-
-;; -----------------------------------------------------------------------------
-;; Bars lifecycle and drawing methods
-
-(defn d3-enter [id]
-  (let [svg-prepared (svg id)
-        link-prepared (link svg-prepared)
-        node-prepared (node svg-prepared)
-        link-nodes (-> d3
-                       (.forceLink)
-                       (.id (fn [d] (.-id d)))
-                       (.links (clj->js (:links data))))]
-
-    (-> d3
-        (.forceSimulation (clj->js (:nodes data)))
-        (.force "link" link-nodes)
-        (.force "charge" (.strength (.forceManyBody d3) -400))
-        (.force "center" (.forceCenter d3 (/ width 2) (/ height 2)))
-        (.on "end" (ticked link-prepared node-prepared))))
-
-  #_(-> d3
-        (.select (str "#" id " svg .container .bars"))
-        (.selectAll "rect")
-        (.data (clj->js bar-data))
-        (.enter)
-        (.append "rect")))
-
-(defn d3-update [id]
-  #_(let [data-n (count bar-data)
-          rect-height (/ height data-n)
-          x-scale (-> d3
-                      (.scaleLinear)
-                      (.domain #js [0 5])
-                      (.range #js [0 width]))]
-      (-> (.select d3 (str "#" id " svg .container .bars"))
-          (.selectAll "rect")
-          (.data (clj->js bar-data))
-          (.attr "fill" "green")
-          (.attr "x" (x-scale 0))
-          (.attr "y" (fn [_ i]
-                       (* i rect-height)))
-          (.attr "height" (- rect-height 1))
-          (.attr "width" (fn [d]
-                           (x-scale (aget d "x")))))))
-
-(defn d3-exit [id]
-  #_(-> (.select d3 (str "#" id " svg .container .bars"))
-        (.selectAll "rect")
-        (.data (clj->js bar-data))
-        (.exit)
-        (.remove)))
-
-(defn d3-did-update [id]
-  (d3-enter id)
-  (d3-update id)
-  (d3-exit id))
-
-(defn d3-did-mount [id]
-  (-> (.select d3 (str "#" id " svg .container"))
-      (.append "g")
-      (.attr "class" "bars"))
-  (d3-did-update id))
-
-
-;; -----------------------------------------------------------------------------
-;; Container creates a group to draw the bar into.
-
-(defn d3-container-enter [id]
-  (-> (.select d3 (str "#" id " svg"))
-      (.append "g")
-      (.attr "class" "container")))
-
-(defn d3-container-did-mount [id]
-  (d3-container-enter id))
-
-
-;; -----------------------------------------------------------------------------
-;; Visualization lifecycle methods.
-
-(def view-width "100%")
-(def view-height "80vh")
-
-(defn viz-component [id]
-  [:div
-   {:id id}
-   [:svg
-    {:width view-width
-     :height view-height}]])
-
-(defn viz2-did-mount [id]
-  ;; order matters here
-  (d3-container-did-mount id)
-  (d3-did-mount id))
-
-(defn viz-did-update [id]
-  (d3-did-update id))
+(comment
+  (vega-did-mount 1)
+  )
 
 (defn viz [id]
   (reagent/create-class
-    {:reagent-render #(viz-component id)
-     :component-did-mount #(viz2-did-mount id)
-     :component-did-update #(viz-did-update id)}))
+    {:reagent-render (fn [] [:div {:id id}])
+     :component-did-mount #(vega-did-mount id)}))
 
 
 
 (defn view []
-  [:div
+  [:div.container
    [:h1 "Barchart"]
    [viz "barchart"]])
