@@ -1,5 +1,7 @@
 (ns meetly.interface.views.graph.view
-  (:require ["vega" :as vega]
+  (:require ["d3"]
+            ["vega" :as vega]
+            ["/js/schnaqd3/graph" :as schnaqd3]
             [oops.core :refer [oget]]
             [reagent.core :as reagent]))
 
@@ -7,8 +9,7 @@
   {:description
    "A node-link diagram with force-directed layout, depicting character co-occurrence in the novel Les Misérables.",
    :autosize "none",
-   :width 800,
-   :height 500,
+   :width 700,
    :scales
    [{:name "color",
      :type "ordinal",
@@ -55,10 +56,11 @@
          :distance {:signal "linkDistance"}}]}]}
     {:type "path",
      :from {:data "link-data"},
+     :field "name"
      :interactive false,
      :encode
      {:update
-      {:stroke {:value "#ccc"},
+      {:stroke {:value "#000"},
        :strokeWidth {:value 0.5}}},
      :transform
      [{:type "linkpath",
@@ -119,6 +121,7 @@
      :on
      [{:events {:signal "fix"},
        :update "fix && fix.length"}]}],
+   :height 500,
    :data
    [{:name "node-data",
      :url "https://raw.githubusercontent.com/d3/d3-plugins/master/graph/data/miserables.json",
@@ -137,22 +140,26 @@
     (.runAsync
       (vega/View. spec options))))
 
+(comment
+  (vega/View. (vega/parse (clj->js graph-spec)))
+  )
+
 (defn vega-did-mount
   [id]
   (render (clj->js graph-spec) id))
 
 (comment
-  (vega-did-mount 1)
-  )
+  (defn viz [id]
+    (reagent/create-class
+      {:reagent-render (fn [] [:div {:id id}])
+       :component-did-mount #(vega-did-mount id)})))
 
 (defn viz [id]
   (reagent/create-class
-    {:reagent-render (fn [] [:div {:id id}])
-     :component-did-mount #(vega-did-mount id)}))
-
-
+    {:reagent-render (fn [] [:div {:id id} "Graph, lel"])
+     :component-did-mount #(schnaqd3/SchnaqGraph. (str "#" id))}))
 
 (defn view []
   [:div.container
    [:h1 "Barchart"]
-   [viz "barchart"]])
+   [viz "viz"]])
