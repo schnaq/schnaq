@@ -1,7 +1,9 @@
+import * as d3 from "d3";
+
 class SchnaqD3 {
-  constructor(d3, parentId, data) {
+  constructor(parentId, data) {
+    console.log(d3);
     let that = this;
-    this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
     this.width = 800;
@@ -28,22 +30,6 @@ class SchnaqD3 {
       .force("charge", d3.forceManyBody().strength(-50))
       .force("link", d3.forceLink(this.label.links).distance(0).strength(2));
 
-    this.graphLayout = d3.forceSimulation(data.nodes)
-      .force("charge", d3.forceManyBody().strength(-3000))
-      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", d3.forceX(this.width / 2).strength(1))
-      .force("y", d3.forceY(this.height / 2).strength(1))
-      .force("link", d3.forceLink(data.links).id(d => {
-        return d.id;
-      }).distance(50).strength(1))
-      .on("tick", this.ticked);
-    // TODO ticked unresolved
-
-    data.links.forEach(link => {
-      this.adjlist[link.source.index + "-" + link.target.index] = true;
-      this.adjlist[link.target.index + "-" + link.source.index] = true;
-    });
-
     this.svg = d3.select(parentId).attr("width", this.width).attr("height", this.height);
     this.container = this.svg.append("g");
     this.svg.call(
@@ -54,14 +40,6 @@ class SchnaqD3 {
         })
     );
 
-    this.link = this.container.append("g").attr("class", "links")
-      .selectAll("line")
-      .data(data.links)
-      .enter()
-      .append("line")
-      .attr("stroke", "#aaa")
-      .attr("stroke-width", "1px");
-
     this.node = this.container.append("g").attr("class", "nodes")
       .selectAll("g")
       .data(data.nodes)
@@ -69,18 +47,16 @@ class SchnaqD3 {
       .append("circle")
       .attr("r", 5)
       .attr("fill", node => {
-        return color(node.group);
+        return this.color(node.group);
       })
-    this.node.on("mouseover", focus).on("mouseout", this.unfocus);
-    // TODO unfocus is unreverenced
 
-    this.node.call(
-      d3.drag()
-        .on("start", this.dragstarted)
-        .on("drag", this.dragged)
-        .on("end", this.dragended)
-      //TODO unreferenced drag-methods
-    );
+    this.link = this.container.append("g").attr("class", "links")
+      .selectAll("line")
+      .data(data.links)
+      .enter()
+      .append("line")
+      .attr("stroke", "#aaa")
+      .attr("stroke-width", "1px");
 
     this.labelNode = this.container.append("g").attr("class", "labelNodes")
       .selectAll("text")
@@ -94,19 +70,49 @@ class SchnaqD3 {
       .style("font-family", "Arial")
       .style("font-size", 12)
       .style("pointer-events", "none"); // to prevent mouseover/drag capture
+
+    data.links.forEach(link => {
+      this.adjlist[link.source.index + "-" + link.target.index] = true;
+      this.adjlist[link.target.index + "-" + link.source.index] = true;
+    });
+
+
+    this.graphLayout = d3.forceSimulation(data.nodes)
+      .force("charge", d3.forceManyBody().strength(-3000))
+      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
+      .force("x", d3.forceX(this.width / 2).strength(1))
+      .force("y", d3.forceY(this.height / 2).strength(1))
+      .force("link", d3.forceLink(data.links).id(d => {
+        return d.id;
+      }).distance(50).strength(1))
+      .on("tick", this.ticked(that));
+    // Note: everything that ticked calls from `that` should be defined before.
+
+    this.node.on("mouseover", this.focus(that)).on("mouseout", this.unfocus(that));
+
+    this.node.call(
+      d3.drag()
+        .on("start", this.dragstarted)
+        .on("drag", this.dragged)
+        .on("end", this.dragended)
+    );
+
   }
 
   neigh(a, b) {
     return a === b || this.adjlist[a + "-" + b];
   }
 
-  ticked() {
+  ticked(that) {
+    that.node.call(node => {
+      that.updateNode(that, node)
+    });
+    that.link.call(link => {
+      that.updateLink(that, link)
+    });
 
-    this.node.call(this.updateNode);
-    this.link.call(this.updateLink);
-
-    this.labelLayout.alphaTarget(0.3).restart();
-    this.labelNode.each(function (d, i) {
+    that.labelLayout.alphaTarget(0.3).restart();
+    that.labelNode.each(function (d, i) {
       if (i % 2 === 0) {
         d.x = d.node.x;
         d.y = d.node.y;
@@ -124,7 +130,9 @@ class SchnaqD3 {
         this.setAttribute("transform", "translate(" + shiftX + "," + shiftY + ")");
       }
     });
-    this.labelNode.call(this.updateNode);
+    that.labelNode.call(node => {
+      that.updateNode(that, node)
+    });
 
   }
 
@@ -133,60 +141,60 @@ class SchnaqD3 {
     return 0;
   }
 
-  focus() {
-    let index = this.d3.select(this.d3.event.target).datum().index;
-    this.node.style("opacity", link => {
-      return this.neigh(index, link.index) ? 1 : 0.1;
+  focus(that) {
+    let index = d3.select(d3.event.target).datum().index;
+    that.node.style("opacity", link => {
+      return that.neigh(index, link.index) ? 1 : 0.1;
     });
-    this.labelNode.attr("display", link => {
-      return this.neigh(index, link.node.index) ? "block" : "none";
+    that.labelNode.attr("display", link => {
+      return that.neigh(index, link.node.index) ? "block" : "none";
     });
-    link.style("opacity", link => {
+    that.link.style("opacity", link => {
       return link.source.index === index || link.target.index === index ? 1 : 0.1;
     });
   }
 
-  unfocus() {
-    this.labelNode.attr("display", "block");
-    this.node.style("opacity", 1);
-    this.link.style("opacity", 1);
+  unfocus(that) {
+    that.labelNode.attr("display", "block");
+    that.node.style("opacity", 1);
+    that.link.style("opacity", 1);
   }
 
-  updateLink(link) {
+  updateLink(that, link) {
     link.attr("x1", link => {
-      return this.fixna(link.source.x);
+      return that.fixna(link.source.x);
     })
       .attr("y1", link => {
-        return this.fixna(link.source.y);
+        return that.fixna(link.source.y);
       })
       .attr("x2", link => {
-        return this.fixna(link.target.x);
+        return that.fixna(link.target.x);
       })
       .attr("y2", link => {
-        return this.fixna(link.target.y);
+        return that.fixna(link.target.y);
       });
   }
 
-  updateNode(node) {
+  updateNode(that, node) {
     node.attr("transform", node => {
-      return "translate(" + this.fixna(node.x) + "," + this.fixna(node.y) + ")";
+      return "translate(" + that.fixna(node.x) + "," + that.fixna(node.y) + ")";
     });
   }
 
   dragstarted(d) {
-    this.d3.event.sourceEvent.stopPropagation();
-    if (!this.d3.event.active) this.graphLayout.alphaTarget(0.3).restart();
+    d3.event.sourceEvent.stopPropagation();
+    if (!d3.event.active) this.graphLayout.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
 
   dragged(d) {
-    d.fx = this.d3.event.x;
-    d.fy = this.d3.event.y;
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
   }
 
   dragended(d) {
-    if (!this.d3.event.active) this.graphLayout.alphaTarget(0);
+    if (!d3.event.active) this.graphLayout.alphaTarget(0);
     d.fx = null;
     d.fy = null;
   }

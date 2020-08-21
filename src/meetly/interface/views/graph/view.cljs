@@ -1,6 +1,5 @@
 (ns meetly.interface.views.graph.view
-  (:require ["d3" :as d3]
-            ["/js/schnaqd3/graph" :as schnaqd3]
+  (:require ["/js/schnaqd3/graph" :as schnaqd3]
             [meetly.interface.views.graph.test-data :as test-data]
             [reagent.core :as reagent]))
 
@@ -8,7 +7,7 @@
   (reagent/create-class
     {:reagent-render (fn [] [:svg {:id id} "Graph, lel"])
      :component-did-mount (fn []
-                            (schnaqd3/SchnaqD3. d3 (str "#" id) (clj->js test-data/miserables)))}))
+                            (schnaqd3/SchnaqD3. (str "#" id) (clj->js test-data/miserables)))}))
 
 (defn view []
   [:div.container
