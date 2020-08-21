@@ -156,8 +156,8 @@
 
 (defn viz [id]
   (reagent/create-class
-    {:reagent-render (fn [] [:div {:id id} "Graph, lel"])
-     :component-did-mount #(schnaqd3/SchnaqGraph. (str "#" id))}))
+    {:reagent-render (fn [] [:svg {:id id} "Graph, lel"])
+     :component-did-mount #(schnaqd3/drawGraph "#viz")}))
 
 (defn view []
   [:div.container

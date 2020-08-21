@@ -1583,109 +1583,112 @@ var graph = {
   ]
 }
 
-class SchnaqGraph {
-
-  constructor(parent_id) {
-    this.parent_id = parent_id;
-    this.data = graph;
-    this.width = 800;
-    this.height = 600;
-    this.color = d3.scaleOrdinal(d3.schemeCategory10);
-    this.label = {
-      'nodes': [],
-      'links': []
-    };
-
-    this.data.nodes.forEach(function (d, i) {
-      console.log(d);
-      this.label.nodes.push({node: d});
-      this.label.nodes.push({node: d});
-      this.label.links.push({
-        source: i * 2,
-        target: i * 2 + 1
-      });
-    }, this);
-
-    var labelLayout = d3.forceSimulation(this.label.nodes)
-      .force("charge", d3.forceManyBody().strength(-50))
-      .force("link", d3.forceLink(this.label.links).distance(0).strength(2));
-
-    var graphLayout = d3.forceSimulation(this.data.nodes)
-      .force("charge", d3.forceManyBody().strength(-3000))
-      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", d3.forceX(this.width / 2).strength(1))
-      .force("y", d3.forceY(this.height / 2).strength(1))
-      .force("link", d3.forceLink(this.data.links).id(function (d) {
-        return d.id;
-      }).distance(50).strength(1))
-      .on("tick", this.ticked);
-
-    this.adjlist = [];
-    this.data.links.forEach(function (d) {
-      this.adjlist[d.source.index + "-" + d.target.index] = true;
-      this.adjlist[d.target.index + "-" + d.source.index] = true;
-    }, this);
-
-    var svg = d3.select(this.parent_id).attr("width", this.width).attr("height", this.height);
-    var container = svg.append("g");
-    svg.call(
-      d3.zoom()
-        .scaleExtent([.1, 4])
-        .on("zoom", function () {
-          container.attr("transform", d3.event.transform);
-        })
-    );
-
-    var link = container.append("g").attr("class", "links")
-      .selectAll("line")
-      .data(this.data.links)
-      .enter()
-      .append("line")
-      .attr("stroke", "#aaa")
-      .attr("stroke-width", "1px");
+function drawGraph(parent_id) {
+  var width = 800;
+  var height = 600;
+  var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 
-    var node = container.append("g").attr("class", "nodes")
-      .selectAll("g")
-      .data(this.data.nodes)
-      .enter()
-      .append("circle")
-      .attr("r", 5)
-      .attr("fill", d => this.color(d.group));
+  var label = {
+    'nodes': [],
+    'links': []
+  };
 
-    node.on("mouseover", focus).on("mouseout", this.unfocus);
-    node.call(
-      d3.drag()
-        .on("start", this.dragstarted)
-        .on("drag", this.dragged)
-        .on("end", this.dragended)
-    );
+  graph.nodes.forEach(function (d, i) {
+    label.nodes.push({node: d});
+    label.nodes.push({node: d});
+    label.links.push({
+      source: i * 2,
+      target: i * 2 + 1
+    });
+  });
 
-    var labelNode = container.append("g").attr("class", "labelNodes")
-      .selectAll("text")
-      .data(this.label.nodes)
-      .enter()
-      .append("text")
-      .text(function (d, i) {
-        return i % 2 == 0 ? "" : d.node.id;
+  var labelLayout = d3.forceSimulation(label.nodes)
+    .force("charge", d3.forceManyBody().strength(-50))
+    .force("link", d3.forceLink(label.links).distance(0).strength(2));
+
+  var graphLayout = d3.forceSimulation(graph.nodes)
+    .force("charge", d3.forceManyBody().strength(-3000))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("x", d3.forceX(width / 2).strength(1))
+    .force("y", d3.forceY(height / 2).strength(1))
+    .force("link", d3.forceLink(graph.links).id(function (d) {
+      return d.id;
+    }).distance(50).strength(1))
+    .on("tick", ticked);
+
+  var adjlist = [];
+
+  graph.links.forEach(function (d) {
+    adjlist[d.source.index + "-" + d.target.index] = true;
+    adjlist[d.target.index + "-" + d.source.index] = true;
+  });
+
+  function neigh(a, b) {
+    return a == b || adjlist[a + "-" + b];
+  }
+
+
+  var svg = d3.select(parent_id).attr("width", width).attr("height", height);
+  var container = svg.append("g");
+
+  svg.call(
+    d3.zoom()
+      .scaleExtent([.1, 4])
+      .on("zoom", function () {
+        container.attr("transform", d3.event.transform);
       })
-      .style("fill", "#555")
-      .style("font-family", "Arial")
-      .style("font-size", 12)
-      .style("pointer-events", "none"); // to prevent mouseover/drag capture
-    //this.node.on("mouseover", focus).on("mouseout", unfocus);
-  }
+  );
 
-  neigh(a, b) {
-    return a == b || this.adjlist[a + "-" + b];
-  }
+  var link = container.append("g").attr("class", "links")
+    .selectAll("line")
+    .data(graph.links)
+    .enter()
+    .append("line")
+    .attr("stroke", "#aaa")
+    .attr("stroke-width", "1px");
 
-  ticked() {
-    this.node.call(this.updateNode);
-    this.link.call(this.updateLink);
+  var node = container.append("g").attr("class", "nodes")
+    .selectAll("g")
+    .data(graph.nodes)
+    .enter()
+    .append("circle")
+    .attr("r", 5)
+    .attr("fill", function (d) {
+      return color(d.group);
+    })
 
-    this.labelLayout.alphaTarget(0.3).restart();
-    this.labelNode.each(function (d, i) {
+  node.on("mouseover", focus).on("mouseout", unfocus);
+
+  node.call(
+    d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended)
+  );
+
+  var labelNode = container.append("g").attr("class", "labelNodes")
+    .selectAll("text")
+    .data(label.nodes)
+    .enter()
+    .append("text")
+    .text(function (d, i) {
+      return i % 2 == 0 ? "" : d.node.id;
+    })
+    .style("fill", "#555")
+    .style("font-family", "Arial")
+    .style("font-size", 12)
+    .style("pointer-events", "none"); // to prevent mouseover/drag capture
+
+  node.on("mouseover", focus).on("mouseout", unfocus);
+
+  function ticked() {
+
+    node.call(updateNode);
+    link.call(updateLink);
+
+    labelLayout.alphaTarget(0.3).restart();
+    labelNode.each(function (d, i) {
       if (i % 2 == 0) {
         d.x = d.node.x;
         d.y = d.node.y;
@@ -1703,35 +1706,35 @@ class SchnaqGraph {
         this.setAttribute("transform", "translate(" + shiftX + "," + shiftY + ")");
       }
     });
-    this.labelNode.call(this.updateNode);
+    labelNode.call(updateNode);
+
   }
 
-  fixna(x) {
+  function fixna(x) {
     if (isFinite(x)) return x;
     return 0;
   }
 
-  focus(d) {
+  function focus(d) {
     var index = d3.select(d3.event.target).datum().index;
-    this.node.style("opacity", function (o) {
+    node.style("opacity", function (o) {
       return neigh(index, o.index) ? 1 : 0.1;
     });
-    this.labelNode.attr("display", function (o) {
+    labelNode.attr("display", function (o) {
       return neigh(index, o.node.index) ? "block" : "none";
     });
-    this.link.style("opacity", function (o) {
+    link.style("opacity", function (o) {
       return o.source.index == index || o.target.index == index ? 1 : 0.1;
     });
   }
 
-  unfocus() {
-    this.labelNode.attr("display", "block");
-    this.node.style("opacity", 1);
-    this.link.style("opacity", 1);
+  function unfocus() {
+    labelNode.attr("display", "block");
+    node.style("opacity", 1);
+    link.style("opacity", 1);
   }
 
-  updateLink(link) {
-    let fixna = this.fixna;
+  function updateLink(link) {
     link.attr("x1", function (d) {
       return fixna(d.source.x);
     })
@@ -1746,30 +1749,30 @@ class SchnaqGraph {
       });
   }
 
-  updateNode(node) {
-    let fixna = this.fixna
+  function updateNode(node) {
     node.attr("transform", function (d) {
       return "translate(" + fixna(d.x) + "," + fixna(d.y) + ")";
     });
   }
 
-  dragstarted(d) {
+  function dragstarted(d) {
     d3.event.sourceEvent.stopPropagation();
-    if (!d3.event.active) this.graphLayout.alphaTarget(0.3).restart();
+    if (!d3.event.active) graphLayout.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
 
-  dragged(d) {
+  function dragged(d) {
     d.fx = d3.event.x;
     d.fy = d3.event.y;
   }
 
-  dragended(d) {
-    if (!d3.event.active) this.graphLayout.alphaTarget(0);
+  function dragended(d) {
+    if (!d3.event.active) graphLayout.alphaTarget(0);
     d.fx = null;
     d.fy = null;
   }
+
 }
 
-export {SchnaqGraph};
+export {drawGraph};
