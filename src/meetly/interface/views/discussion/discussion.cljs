@@ -144,8 +144,8 @@
             {:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
         (if (>= 0 keep-n)
           {:dispatch-n [[:discussion.history/clear]
-                        [:navigate :routes.discussion/start {:id id
-                                                             :share-hash share-hash}]]}
+                        [:navigation/navigate :routes.discussion/start {:id id
+                                                                        :share-hash share-hash}]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
            :dispatch [:set-current-discussion-steps (:options (nth before-time-travel keep-n))]})))))
 
@@ -192,8 +192,8 @@
               (assoc :new/starting-argument-conclusion conclusion-text)
               (assoc :new/starting-argument-premises premise-text))]
       {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
-                    [:navigate :routes.discussion/start {:id id
-                                                         :share-hash share-hash}]]
+                    [:navigation/navigate :routes.discussion/start {:id id
+                                                                    :share-hash share-hash}]]
        :form/clear form})))
 
 (rf/reg-event-fx
@@ -258,6 +258,12 @@
                     :on-success [:set-current-discussion-steps]
                     :on-failure [:ajax-failure]}})))
 
+(rf/reg-event-fx
+  :handle-reload-on-discussion-loop
+  (fn [{:keys [db]} [_ agenda-id share-hash]]
+    (when (empty? (get-in db [:discussion :options :steps]))
+      {:dispatch [:navigation/navigate :routes.discussion/start {:id agenda-id
+                                                                 :share-hash share-hash}]})))
 
 ;; #### Subs ####
 
