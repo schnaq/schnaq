@@ -1583,7 +1583,7 @@ var graph = {
   ]
 }
 
-function drawGraph(parent_id) {
+function drawGraph(d3, parent_id) {
   var width = 800;
   var height = 600;
   var color = d3.scaleOrdinal(d3.schemeCategory10);

@@ -6,7 +6,7 @@
 (defn viz [id]
   (reagent/create-class
     {:reagent-render (fn [] [:svg {:id id} "Graph, lel"])
-     :component-did-mount #(schnaqd3/drawGraph "#viz")}))
+     :component-did-mount #(schnaqd3/drawGraph d3 (str "#" id))}))
 
 (defn view []
   [:div.container
