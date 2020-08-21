@@ -13,20 +13,22 @@
 ;; -----------------------------------------------------------------------------
 ;; Bars lifecycle and drawing methods
 
-(defn bars-enter []
-  (-> (.select d3 "#barchart svg .container .bars")
+(defn d3-enter [id]
+  (-> d3
+      (.select (str "#" id " svg .container .bars"))
       (.selectAll "rect")
       (.data (clj->js data))
       (.enter)
       (.append "rect")))
 
-(defn bars-update []
+(defn d3-update [id]
   (let [data-n (count data)
         rect-height (/ height data-n)
-        x-scale (-> (.scaleLinear d3)
+        x-scale (-> d3
+                    (.scaleLinear)
                     (.domain #js [0 5])
                     (.range #js [0 width]))]
-    (-> (.select d3 "#barchart svg .container .bars")
+    (-> (.select d3 (str "#" id " svg .container .bars"))
         (.selectAll "rect")
         (.data (clj->js data))
         (.attr "fill" "green")
@@ -37,61 +39,67 @@
         (.attr "width" (fn [d]
                          (x-scale (aget d "x")))))))
 
-(defn bars-exit []
-  (-> (.select d3 "#barchart svg .container .bars")
+(defn d3-exit [id]
+  (-> (.select d3 (str "#" id " svg .container .bars"))
       (.selectAll "rect")
       (.data (clj->js data))
       (.exit)
       (.remove)))
 
-(defn bars-did-update []
-  (bars-enter)
-  (bars-update)
-  (bars-exit))
+(defn d3-did-update [id]
+  (d3-enter id)
+  (d3-update id)
+  (d3-exit id))
 
-(defn bars-did-mount []
-  (-> (.select d3 "#barchart svg .container")
+(defn d3-did-mount [id]
+  (-> (.select d3 (str "#" id " svg .container"))
       (.append "g")
       (.attr "class" "bars"))
-  (bars-did-update))
+  (d3-did-update id))
 
 
 ;; -----------------------------------------------------------------------------
 ;; Container creates a group to draw the bar into.
 
-(defn container-enter []
-  (-> (.select d3 "#barchart svg")
+(defn d3-container-enter [id]
+  (-> (.select d3 (str "#" id " svg"))
       (.append "g")
       (.attr "class" "container")))
 
-(defn container-did-mount []
-  (container-enter))
+(defn d3-container-did-mount [id]
+  (d3-container-enter id))
 
 
 ;; -----------------------------------------------------------------------------
 ;; Visualization lifecycle methods.
 
-(defn viz-component []
-  [:div#barchart
+(def view-width "100%")
+(def view-height "80vh")
+
+(defn viz-component [id]
+  [:div
+   {:id id}
    [:svg
-    {:width width
-     :height height}]])
+    {:width view-width
+     :height view-height}]])
 
-(defn viz-did-mount []
+(defn viz2-did-mount [id]
   ;; order matters here
-  (container-did-mount)
-  (bars-did-mount))
+  (d3-container-did-mount id)
+  (d3-did-mount id))
 
-(defn viz-did-update []
-  (bars-did-update))
+(defn viz-did-update [id]
+  (d3-did-update id))
 
-(defn viz []
+(defn viz [id]
   (reagent/create-class
-    {:reagent-render #(viz-component)
-     :component-did-mount #(viz-did-mount)
-     :component-did-update #(viz-did-update)}))
+    {:reagent-render #(viz-component id)
+     :component-did-mount #(viz2-did-mount id)
+     :component-did-update #(viz-did-update id)}))
+
+
 
 (defn view []
   [:div
    [:h1 "Barchart"]
-   [viz]])
+   [viz "barchart"]])
