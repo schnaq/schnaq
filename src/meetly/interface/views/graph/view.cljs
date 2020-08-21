@@ -1,7 +1,6 @@
 (ns meetly.interface.views.graph.view
   (:require ["d3" :as d3]
             ["/js/schnaqd3/graph" :as schnaqd3]
-            [oops.core :refer [oget]]
             [reagent.core :as reagent]))
 
 (defn viz [id]
