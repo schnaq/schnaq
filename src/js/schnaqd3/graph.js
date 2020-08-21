@@ -92,9 +92,13 @@ class SchnaqD3 {
 
     this.node.call(
       d3.drag()
-        .on("start", this.dragstarted)
+        .on("start", d => {
+          this.dragstarted(that, d)
+        })
         .on("drag", this.dragged)
-        .on("end", this.dragended)
+        .on("end", d => {
+          this.dragended(that, d)
+        })
     );
 
   }
@@ -142,16 +146,18 @@ class SchnaqD3 {
   }
 
   focus(that) {
-    let index = d3.select(d3.event.target).datum().index;
-    that.node.style("opacity", link => {
-      return that.neigh(index, link.index) ? 1 : 0.1;
-    });
-    that.labelNode.attr("display", link => {
-      return that.neigh(index, link.node.index) ? "block" : "none";
-    });
-    that.link.style("opacity", link => {
-      return link.source.index === index || link.target.index === index ? 1 : 0.1;
-    });
+    if (d3.event) {
+      let index = d3.select(d3.event.target).datum().index;
+      that.node.style("opacity", link => {
+        return that.neigh(index, link.index) ? 1 : 0.1;
+      });
+      that.labelNode.attr("display", link => {
+        return that.neigh(index, link.node.index) ? "block" : "none";
+      });
+      that.link.style("opacity", link => {
+        return link.source.index === index || link.target.index === index ? 1 : 0.1;
+      });
+    }
   }
 
   unfocus(that) {
@@ -181,9 +187,9 @@ class SchnaqD3 {
     });
   }
 
-  dragstarted(d) {
+  dragstarted(that, d) {
     d3.event.sourceEvent.stopPropagation();
-    if (!d3.event.active) this.graphLayout.alphaTarget(0.3).restart();
+    if (!d3.event.active) that.graphLayout.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
@@ -193,8 +199,8 @@ class SchnaqD3 {
     d.fy = d3.event.y;
   }
 
-  dragended(d) {
-    if (!d3.event.active) this.graphLayout.alphaTarget(0);
+  dragended(that, d) {
+    if (!d3.event.active) that.graphLayout.alphaTarget(0);
     d.fx = null;
     d.fy = null;
   }
