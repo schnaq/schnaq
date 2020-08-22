@@ -143,19 +143,6 @@ class SchnaqD3 {
     });
   }
 
-  setSize(width, height) {
-    this.width = width;
-    this.height = height;
-    d3.select(this.parentId).attr("width", this.width).attr("height", this.height);
-    this.graphLayout = this.graphLayout
-      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", d3.forceX(this.width / 2).strength(1))
-      .force("y", d3.forceY(this.height / 2).strength(1))
-      .on("tick", () => {
-        this.ticked(this)
-      });
-  }
-
   fixna(coord) {
     if (isFinite(coord)) return coord;
     return 0;
@@ -219,6 +206,109 @@ class SchnaqD3 {
     if (!d3.event.active) that.graphLayout.alphaTarget(0);
     d.fx = null;
     d.fy = null;
+  }
+
+  // Public Methods, not used as event-handlers
+
+  setSize(width, height) {
+    this.width = width;
+    this.height = height;
+    d3.select(this.parentId).attr("width", this.width).attr("height", this.height);
+    this.graphLayout = this.graphLayout
+      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
+      .force("x", d3.forceX(this.width / 2).strength(1))
+      .force("y", d3.forceY(this.height / 2).strength(1));
+    return this;
+  }
+
+  replaceData(data) {
+    this.data = data;
+
+    this.svg.selectAll("*").remove();
+    this.container = this.svg.append("g");
+    this.node = this.container.append("g").attr("class", "nodes")
+      .selectAll("g")
+      .data(data.nodes)
+      .enter()
+      .append("circle")
+      .attr("r", 5)
+      .attr("fill", node => {
+        return this.color(node.group);
+      })
+
+    this.link = this.container.append("g").attr("class", "links")
+      .selectAll("line")
+      .data(data.links)
+      .enter()
+      .append("line")
+      .attr("stroke", "#aaa")
+      .attr("stroke-width", "1px");
+
+    this.label = {
+      "nodes": [],
+      "links": []
+    };
+    data.nodes.forEach((node, index) => {
+      this.label.nodes.push({node: node});
+      this.label.nodes.push({node: node});
+      this.label.links.push({
+        source: index * 2,
+        target: index * 2 + 1
+      });
+    });
+
+    this.labelNode = this.container.append("g").attr("class", "labelNodes")
+      .selectAll("text")
+      .data(this.label.nodes)
+      .enter()
+      .append("text")
+      .text((node, index) => {
+        return index % 2 === 0 ? "" : node.node.id;
+      })
+      .style("fill", "#555")
+      .style("font-family", "Arial")
+      .style("font-size", 12)
+      .style("pointer-events", "none"); // to prevent mouseover/drag capture
+
+    this.graphLayout = this.graphLayout
+      .nodes(data.nodes)
+      .force("charge", d3.forceManyBody().strength(-3000))
+      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
+      .force("x", d3.forceX(this.width / 2).strength(1))
+      .force("y", d3.forceY(this.height / 2).strength(1))
+      .force("link", d3.forceLink(data.links).id(d => {
+        return d.id;
+      }).distance(50).strength(1))
+      .on("tick", () => {
+        this.ticked(this)
+      });
+
+    this.labelLayout = this.labelLayout
+      .nodes(this.label.nodes)
+      .force("charge", d3.forceManyBody().strength(-50))
+      .force("link", d3.forceLink(this.label.links).distance(0).strength(2));
+
+    data.links.forEach(link => {
+      this.adjlist[link.source.index + "-" + link.target.index] = true;
+      this.adjlist[link.target.index + "-" + link.source.index] = true;
+    });
+
+    this.node.on("mouseover", () => {
+      this.focus(this)
+    }).on("mouseout", () => {
+      this.unfocus(this)
+    });
+
+    this.node.call(
+      d3.drag()
+        .on("start", d => {
+          this.dragstarted(this, d)
+        })
+        .on("drag", this.dragged)
+        .on("end", d => {
+          this.dragended(this, d)
+        })
+    );
   }
 
 }

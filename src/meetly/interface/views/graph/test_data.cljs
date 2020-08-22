@@ -823,3 +823,16 @@
     {:source "Mme.Hucheloup",
      :target "Enjolras",
      :value 1}]})
+
+(def short-miserables
+  {:nodes
+   [{:id "Myriel", :group 1}
+    {:id "Napoleon", :group 2}
+    {:id "Mlle.Baptistine", :group 3}]
+   :links
+   [{:source "Napoleon",
+     :target "Myriel",
+     :value 1}
+    {:source "Mlle.Baptistine",
+     :target "Myriel",
+     :value 1}]})

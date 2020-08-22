@@ -9,7 +9,8 @@
      :component-did-mount (fn []
                             (->
                               (schnaqd3/SchnaqD3. (str "#" id) (clj->js test-data/miserables))
-                              (.setSize 1200 600)))}))
+                              (.setSize 1200 600)
+                              (.replaceData (clj->js test-data/short-miserables))))}))
 
 (defn view []
   [:div.container
