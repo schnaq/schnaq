@@ -7,7 +7,9 @@
   (reagent/create-class
     {:reagent-render (fn [] [:svg {:id id} "Graph, lel"])
      :component-did-mount (fn []
-                            (schnaqd3/SchnaqD3. (str "#" id) (clj->js test-data/miserables)))}))
+                            (->
+                              (schnaqd3/SchnaqD3. (str "#" id) (clj->js test-data/miserables))
+                              (.setSize 1200 600)))}))
 
 (defn view []
   [:div.container

@@ -144,6 +144,19 @@ class SchnaqD3 {
     });
   }
 
+  setSize(width, height) {
+    this.width = width;
+    this.height = height;
+    d3.select(this.parentId).attr("width", this.width).attr("height", this.height);
+    this.graphLayout = this.graphLayout
+      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
+      .force("x", d3.forceX(this.width / 2).strength(1))
+      .force("y", d3.forceY(this.height / 2).strength(1))
+      .on("tick", () => {
+        this.ticked(this)
+      });
+  }
+
   fixna(coord) {
     if (isFinite(coord)) return coord;
     return 0;
