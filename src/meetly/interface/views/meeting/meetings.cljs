@@ -63,7 +63,7 @@
     {:db (-> db
              (assoc-in [:meeting :last-added] new-meeting)
              (update :meetings conj new-meeting))
-     :dispatch-n [[:navigate :routes.agenda/add
+     :dispatch-n [[:navigation/navigate :routes.agenda/add
                    {:share-hash (:meeting/share-hash new-meeting)}]
                   [:meeting/select-current new-meeting]]}))
 
@@ -119,4 +119,4 @@
   :meeting/check-admin-credentials-success
   (fn [_ [_ {:keys [valid-credentials?]}]]
     (when-not valid-credentials?
-      {:dispatch [:navigate :routes/invalid-link]})))
+      {:dispatch [:navigation/navigate :routes/invalid-link]})))

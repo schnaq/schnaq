@@ -108,8 +108,8 @@
   (fn [_ [_ meeting-hash edit-hash]]
     {:dispatch-n [[:clear-current-agendas]
                   [:reset-temporary-agendas]
-                  [:navigate :routes.meeting/created {:share-hash meeting-hash
-                                                      :admin-hash edit-hash}]]}))
+                  [:navigation/navigate :routes.meeting/created {:share-hash meeting-hash
+                                                                 :admin-hash edit-hash}]]}))
 
 (defn load-agenda-fn [hash on-success-event]
   {:http-xhrio {:method :get
@@ -139,7 +139,7 @@
   :agenda-not-available
   (fn [{:keys [db]} _]
     {:db (assoc-in db [:error :ajax] "Agenda could not be loaded, please refresh the App.")
-     :dispatch [:navigate :routes/meetings]}))
+     :dispatch [:navigation/navigate :routes/meetings]}))
 
 (rf/reg-event-db
   :set-current-agendas
@@ -185,7 +185,7 @@
   :agenda/redirect-on-reload
   (fn [{:keys [db]} _]
     (when-not (get-in db [:meeting :last-added])
-      {:dispatch [:navigate :routes.meeting/create]})))
+      {:dispatch [:navigation/navigate :routes.meeting/create]})))
 
 ;; #### Subs ####
 

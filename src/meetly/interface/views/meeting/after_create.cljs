@@ -50,7 +50,7 @@
        (.tooltip (js/$ (str "#meeting-link-form-" id-extra))))
      :reagent-render
      (fn []
-       (let [display-content (create-link-fn @(rf/subscribe [:current-route]))
+       (let [display-content (create-link-fn @(rf/subscribe [:navigation/current-route]))
              meeting-link-id (str "meeting-link" id-extra)]
          [:div.pb-4
           [:form.form.create-meeting-form.form-inline.row
@@ -100,7 +100,9 @@
                  (labels :meeting/educate-on-edit))]
       [:button.btn.button-secondary.btn-lg.float-left.mt-2.span-container
        {:role "button"
-        :on-click #(rf/dispatch [:navigate :routes.meeting/edit {:share-hash share-hash :admin-hash admin-hash}])}
+        :on-click #(rf/dispatch [:navigation/navigate
+                                 :routes.meeting/edit
+                                 {:share-hash share-hash :admin-hash admin-hash}])}
        (labels :meetings/edit-meetly-button)]]
      ;; admin hash
      [:div.col-lg-6.share-link-icons
@@ -113,7 +115,7 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:keys [share-hash admin-hash]} (:path-params @(rf/subscribe [:current-route]))]
+  (let [{:keys [share-hash admin-hash]} (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div
      [base/nav-header]
      [base/header
@@ -131,7 +133,7 @@
       ;; go to meeting button
       [:button.btn.button-primary.btn-lg.center-block
        {:role "button"
-        :on-click #(rf/dispatch [:navigate :routes.meeting/show {:share-hash share-hash}])}
+        :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
        (labels :meetings/continue-to-meetly-button)]]]))
 
 ;; Events

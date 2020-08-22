@@ -38,7 +38,7 @@
      [educate-element]]
     [:button.btn.button-primary.btn-lg.center-block
      {:role "button"
-      :on-click #(rf/dispatch [:navigate :routes/startpage])}
+      :on-click #(rf/dispatch [:navigation/navigate :routes/startpage])}
      (labels :errors/navigate-to-startpage)]]])
 
 (rf/reg-event-db

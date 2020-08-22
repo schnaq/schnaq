@@ -6,7 +6,7 @@
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry
    {:on-click (fn []
-                (rf/dispatch [:navigate :routes.discussion/start
+                (rf/dispatch [:navigation/navigate :routes.discussion/start
                               {:id (-> agenda :agenda/discussion :db/id)
                                :share-hash (:meeting/share-hash meeting)}])
                 (rf/dispatch [:choose-agenda agenda]))}
@@ -37,7 +37,7 @@
    nil                                                      ;; header should not be clickable in overview
    (when-not toolbelt/production?                           ;; when in dev display back button
      (fn []
-       (rf/dispatch [:navigate :routes/meetings])))])
+       (rf/dispatch [:navigation/navigate :routes/meetings])))])
 
 (defn- single-meeting []
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
