@@ -70,12 +70,6 @@ class SchnaqD3 {
       .style("font-size", 12)
       .style("pointer-events", "none"); // to prevent mouseover/drag capture
 
-    data.links.forEach(link => {
-      this.adjlist[link.source.index + "-" + link.target.index] = true;
-      this.adjlist[link.target.index + "-" + link.source.index] = true;
-    });
-
-
     this.graphLayout = d3.forceSimulation(data.nodes)
       .force("charge", d3.forceManyBody().strength(-3000))
       .force("center", d3.forceCenter(this.width / 2, this.height / 2))
@@ -88,6 +82,11 @@ class SchnaqD3 {
         that.ticked(that)
       });
     // Note: everything that ticked calls from `that` should be defined before.
+
+    data.links.forEach(link => {
+      this.adjlist[link.source.index + "-" + link.target.index] = true;
+      this.adjlist[link.target.index + "-" + link.source.index] = true;
+    });
 
     this.node.on("mouseover", () => {
       that.focus(that)
