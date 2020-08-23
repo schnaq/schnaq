@@ -12,6 +12,7 @@
             [meetly.interface.views.meeting.overview :as meetings-overview]
             [meetly.interface.views.meeting.single :as meeting-single]
             [meetly.interface.views.startpage :as startpage-views]
+            [meetly.interface.views.graph.view :as graph-view]
             [re-frame.core :as rf]
             [reitit.coercion.spec]))
 
@@ -107,4 +108,8 @@
    ["invalid-link"
     {:name :routes/invalid-link
      :view error-views/invalid-admin-link-view
-     :link-text (labels :router/invalid-link)}]])
+     :link-text (labels :router/invalid-link)}]
+   ["graph"
+    {:name :routes/graph-view
+     :view graph-view/view
+     :link-text (labels :router/graph-view)}]])

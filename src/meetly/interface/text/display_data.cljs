@@ -153,7 +153,8 @@
      :router/continue-discussion "Führe Besprechung fort"
      :router/startpage "Startseite"
      :router/analytics "Analyse-Dashboard"
-     :router/invalid-link "Fehlerseite"}))
+     :router/invalid-link "Fehlerseite"
+     :router/graph-view "Graph View"}))
 
 
 (defn img-path
