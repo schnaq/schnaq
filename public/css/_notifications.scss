@@ -5,10 +5,12 @@
 }
 
 .toast {
-  min-width: 20rem;
+  max-width: 25rem;
+  width: 25rem;
   margin-bottom: .5rem
 }
 
+// Create all sub-classes of a toast
 $contexts: primary $primary,
 secondary $secondary,
 success $success,
@@ -23,4 +25,9 @@ info $info;
       color: white;
     }
   }
+}
+
+.toast-danger {
+  max-width: 30rem;
+  width: 30rem;
 }
