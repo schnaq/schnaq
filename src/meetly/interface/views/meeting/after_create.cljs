@@ -29,20 +29,6 @@
         location (oget js/window :location)]
     (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
 
-(defn- copy-success-display
-  []
-  (let [display-success? @(rf/subscribe [:meeting/link-copied-display])]
-    [:div
-     (if display-success?
-       [:div.alert-success.text-center
-        {:style {:width "50%"
-                 :margin "auto"}
-         :role "alert"}
-        [:p (labels :meeting/link-copied-success)]]
-       [:div.alert-success
-        {:style {:visibility "hidden"}}
-        [:p "Platzhalter"]])]))
-
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
   [create-link-fn id-extra]
