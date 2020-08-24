@@ -5,9 +5,12 @@
 }
 
 .toast {
-  max-width: 25rem;
-  width: 25rem;
-  margin-bottom: .5rem
+  width: 20rem;
+  margin-bottom: .5rem;
+
+  @media (min-width: 768px) {
+    width: 100%;
+  }
 }
 
 // Create all sub-classes of a toast
@@ -25,9 +28,4 @@ info $info;
       color: white;
     }
   }
-}
-
-.toast-danger {
-  max-width: 30rem;
-  width: 30rem;
 }
