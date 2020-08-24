@@ -15,7 +15,8 @@
             [re-frame.core :as rf]
             ["framer-motion" :refer [motion AnimatePresence]]))
 
-(def ^:private display-time "Milliseconds, that a notification stays visible."
+(def ^:private display-time
+  "Milliseconds, that a notification stays visible."
   5000)
 
 (defn- toast-classes
@@ -46,33 +47,6 @@
       [:span {:aria-hidden "true"}
        [:i {:class (str " m-auto fas fa-xs " (fa :delete-icon))}]]]]
     [:div.toast-body body]]])
-
-(comment
-  (do
-    (rf/dispatch [:notification/add
-                  {:title "Har har!" :body "Ich bin es, der Teufel!"
-                   :context :success}])
-    (rf/dispatch [:notification/add
-                  {:title "Har har!" :body "Ich bin es, der Teufel!"
-                   :context :primary}])
-    (rf/dispatch [:notification/add
-                  {:title "Har har!" :body "Ich bin es, der Teufel!"
-                   :context :secondary}])
-    (rf/dispatch [:notification/add
-                  {:title "Har har!" :body "Ich bin es, der Teufel!"
-                   :context :danger}])
-    (rf/dispatch [:notification/add
-                  {:title "Har har!" :body "Ich bin es, der Teufel!"
-                   :context :warning}])
-    (rf/dispatch [:notification/add
-                  {:title "Har har!" :body "Ich bin es, der Teufel!"
-                   :context :info
-                   :autohide? false}]))
-  (rf/dispatch [:notification/add {:title "Har har!" :body "Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel!"}])
-  (rf/dispatch [:notification/add {:title "some" :body "other"}])
-  (rf/dispatch [:notifications/reset])
-
-  :end)
 
 (defn view
   "Presenting all notifications to the user."
