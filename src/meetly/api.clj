@@ -301,6 +301,15 @@
         edit-hash (:edit-hash body-params)]
     (response {:valid-credentials? (valid-credentials? share-hash edit-hash)})))
 
+(defn- graph-data-for-agenda
+  "Delivers the graph-data needed to draw the graph in the frontend."
+  [{:keys [body-params]}]
+  (let [share-hash (:share-hash body-params)
+        discussion-id (:discussion-id body-params)
+        raw-nodes (db/all-statements-for-agenda discussion-id)
+        starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)
+        _ :check_discussion]
+    (response {:data {:nodes [] :links []}})))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
@@ -327,6 +336,7 @@
     (POST "/feedback/add" [] add-feedback)
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/credentials/validate" [] check-credentials)
+    (POST "/graph/discussion" [] graph-data-for-agenda)
     ;; Analytics routes
     (POST "/analytics/meetings" [] number-of-meetings)
     (POST "/analytics/usernames" [] number-of-usernames)

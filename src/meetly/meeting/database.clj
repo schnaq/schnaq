@@ -107,6 +107,12 @@
    :meeting/share-hash
    {:meeting/author user-pattern}])
 
+(def ^:private graph-statement-pattern
+  "Representation of a statement. Oftentimes used in a Datalog pull pattern."
+  [:db/id
+   [:statement/content :as :content]
+   {:statement/author [:author/nickname]}])
+
 (def ^:private meeting-pattern
   "Has all meeting information, including sensitive ones."
   (conj meeting-pattern-public :meeting/edit-hash))
@@ -346,6 +352,25 @@
   [:author/nickname :ret :author/nickname]
   (:author/nickname
     (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
+
+(>defn all-statements-for-agenda
+  "Returns all statements for a discussion."
+  [discussion-id]
+  [int? :ret sequential?]
+  (map
+    (fn [[statement & _]]
+      {:author (-> statement :statement/author :author/nickname)
+       :id (:db/id statement)
+       :content (:content statement)})
+    (d/q
+      '[:find (pull ?statements statement-pattern)
+        :in $ ?discussion-id statement-pattern
+        :where [?arguments :argument/discussions ?discussion-id]
+        [?statements :statement/version _]
+        (or
+          [?argument :argument/conclusion ?statements]
+          [?argument :argument/premises ?statements])]
+      (d/db (new-connection)) discussion-id graph-statement-pattern)))
 
 (>defn add-user-if-not-exists
   "Adds an author if they do not exist yet. Returns the (new) user-id."

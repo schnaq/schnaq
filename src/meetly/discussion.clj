@@ -46,3 +46,15 @@
                (conj authors (or (:statement/author next-child) (:argument/author next-child)))))
       {:sub-statements sub-statements-count
        :authors authors})))
+
+(>defn mark-starting-nodes
+  "Marks every conclusion-node belonging to a starting-argument in preparation for the graph view."
+  [nodes starting-arguments]
+  [sequential? sequential? :ret sequential?]
+  (let [starting-conclusions (into #{} (map #(-> % :argument/conclusion :db/id) starting-arguments))]
+    (map
+      (fn [node]
+        (if (starting-conclusions (:id node))
+          (assoc node :starting-statement? true)
+          (assoc node :starting-statement? false)))
+      nodes)))
