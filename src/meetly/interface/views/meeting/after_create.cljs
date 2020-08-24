@@ -132,7 +132,6 @@
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
       [educate-admin-element share-hash admin-hash]
-      [copy-success-display]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-meetly-after-creation)]
@@ -141,24 +140,3 @@
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
        (labels :meetings/continue-to-meetly-button)]]]))
-
-;; Events
-
-(rf/reg-event-fx
-  :meeting/link-copied
-  (fn [{:keys [db]} _]
-    {:db (assoc-in db [:display-triggers :meeting-link-success] true)
-     :dispatch-later [{:dispatch [:meeting/hide-link-copied-display]
-                       :ms 5000}]}))
-
-(rf/reg-event-db
-  :meeting/hide-link-copied-display
-  (fn [db _]
-    (assoc-in db [:display-triggers :meeting-link-success] false)))
-
-;; Subs
-
-(rf/reg-sub
-  :meeting/link-copied-display
-  (fn [db _]
-    (get-in db [:display-triggers :meeting-link-success])))
