@@ -185,6 +185,15 @@
                   :on-failure [:ajax-failure]}}))
 
 (rf/reg-event-fx
+  :feedbacks/success
+  (fn [_ _]
+    {:dispatch-n [[:modal {:show? false :child nil}]
+                  [:notification/add
+                   #:notification{:title (labels :feedbacks.notification/title)
+                                  :body (labels :feedbacks.notification/body)
+                                  :context :success}]]}))
+
+(rf/reg-event-fx
   :feedback/new
   (fn [_ [_ feedback screenshot form-elements]]
     (when-not (string/blank? (:feedback/description feedback))
@@ -194,6 +203,6 @@
                                     screenshot (assoc :screenshot screenshot))
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:modal {:show? false :child nil}]
+                    :on-success [:feedbacks/success]
                     :on-failure [:ajax-failure]}
        :form/clear form-elements})))
