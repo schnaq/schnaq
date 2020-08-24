@@ -61,6 +61,7 @@
   Converts the epoch dates it receives into java Dates.
   Returns the id of the newly-created meeting as `:id-created`."
   [req]
+  (prn (keys req))
   (let [meeting (-> req :body-params :meeting)
         final-meeting (assoc meeting :meeting/share-hash (.toString (UUID/randomUUID))
                                      :meeting/edit-hash (.toString (UUID/randomUUID)))
@@ -68,7 +69,7 @@
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
-    (created {:new-meeting created-meeting})))
+    (created "" {:new-meeting created-meeting})))
 
 (defn- update-meeting!
   "Updates a meeting and its agendas."
@@ -236,7 +237,7 @@
         feedback-id (db/add-feedback! feedback)
         screenshot (:screenshot body-params)]
     (save-screenshot-if-provided! screenshot "public/feedbacks/screenshots" feedback-id)
-    (created {:feedback feedback})))
+    (created "" {:feedback feedback})))
 
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
