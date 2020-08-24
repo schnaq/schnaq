@@ -1,25 +1,9 @@
 (ns meetly.interface.views.errors
-  (:require [meetly.interface.text.display-data :refer [labels img-path fa]]
+  (:require [cljs.pprint :refer [pprint]]
+            [meetly.interface.text.display-data :refer [labels img-path fa]]
             [meetly.interface.views.base :as base]
             [re-frame.core :as rf]
             ["framer-motion" :refer [motion AnimatePresence]]))
-
-
-(defn upper-error-box
-  "The error box, that is displayed on top of all pages, when an error occurs."
-  [error]
-  [:> AnimatePresence
-   (when error
-     [:> (.-div motion)
-      {:initial {:opacity 0}
-       :animate {:opacity 1}
-       :exit {:opacity 0}}
-      [:div.alert.alert-danger.alert-dismissible
-       "Error: " error
-       [:button.close {:type "button"
-                       :on-click #(rf/dispatch [:clear-error])}
-        [:span {:aria-hidden "true"}
-         [:i {:class (str " m-auto fas fa-lg " (fa :delete-icon))}]]]]])])
 
 (defn- educate-element []
   [:div
@@ -41,10 +25,18 @@
       :on-click #(rf/dispatch [:navigation/navigate :routes/startpage])}
      (labels :errors/navigate-to-startpage)]]])
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :ajax-failure
-  (fn [db [_ failure]]
-    (assoc db :error {:ajax failure})))
+  (fn [{:keys [db]} [_ failure]]
+    {:db (assoc db :error {:ajax failure})
+     :dispatch [:notification/add
+                #:notification{:title "Fehler"
+                               :body [:pre
+                                      [:code
+                                       (with-out-str (pprint failure))]]
+                               :context :danger
+                               :stay-visible? true
+                               :on-close-fn #(rf/dispatch [:clear-error])}]}))
 
 (rf/reg-sub
   :error-occurred
