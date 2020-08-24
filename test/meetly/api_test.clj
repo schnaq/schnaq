@@ -102,7 +102,7 @@
           new-meeting (db/meeting-private-data old-meeting-id)]
       (is (= old-share-hash (:meeting/share-hash new-meeting)))
       (is (= old-edit-hash (:meeting/edit-hash new-meeting)))
-      (is (= 400 (:status update-response)))
+      (is (= 403 (:status update-response)))
       (is (= "You are not allowed to update this meeting." (-> update-response :body :error))))))
 
 (deftest check-credentials-test
