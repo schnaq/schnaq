@@ -1,25 +1,46 @@
 (ns meetly.interface.views.notifications
-  (:require [meetly.interface.text.display-data :refer [fa]]
+  "Prints notifications on the screen. Usage:
+  `(rf/dispatch
+     [:notification/add
+       #:notification{:title \"Hello, World!\"
+                      :body \"I am a toast\"
+                      :context :primary
+                      :autohide? false}])`"
+  (:require [cljs.spec.alpha :as s]
+            [clojure.string :as string]
+            [ghostwheel.core :refer [>defn-]]
+            [goog.string :as gstring]
+            [meetly.interface.text.display-data :refer [fa]]
             [reagent.dom]
             [re-frame.core :as rf]
             ["framer-motion" :refer [motion AnimatePresence]]))
 
 (def ^:private display-time "Milliseconds, that a notification stays visible."
-  20000)
+  5000)
 
-(defn toast [{:keys [title body id]}]
+(defn- toast-classes
+  "Specify toast classes, depending on the context it is being used."
+  [context]
+  (let [common-classes "show toast"]
+    (if context
+      (gstring/format "%s toast-%s" common-classes (str (name context)))
+      common-classes)))
+
+(>defn- toast
+  "Adds a toast to the screen. Has a title and a body, id is randomly generated.
+   The context uses the same classes as it is known from bootstrap (e.g. primary,
+   secondary, ...)."
+  [{:keys [title body id context]}]
+  [::notification :ret associative?]
   [:> (.-div motion)
    {:initial {:opacity 0}
     :animate {:opacity 1}
     :exit {:opacity 0}}
-   [:div.toast.show
-    {:aria-atomic "true", :aria-live "assertive", :role "alert"
-     :data-autohide false
-     :style {:width "15rem"
-             :margin-bottom ".5rem"}}
+   [:div
+    {:class-name (toast-classes context)
+     :aria-atomic "true", :aria-live "assertive", :role "alert"}
     [:div.toast-header
      [:strong.mr-auto title]
-     #_[:small.text-muted "just now"]
      [:button.close {:type "button"
                      :on-click #(rf/dispatch [:notification/remove id])}
       [:span {:aria-hidden "true"}
@@ -27,12 +48,27 @@
     [:div.toast-body body]]])
 
 (comment
-  (.toast (js/$ ".toast") #js {:delay 3000
-                               :autohide false})
-  (.toast (js/$ ".toast") "show")
-  (.toast (js/$ ".toast") "hide")
-
-  (rf/dispatch [:notification/add {:title "Har har!" :body "Ich bin es, der Teufel!"}])
+  (do
+    (rf/dispatch [:notification/add
+                  {:title "Har har!" :body "Ich bin es, der Teufel!"
+                   :context :success}])
+    (rf/dispatch [:notification/add
+                  {:title "Har har!" :body "Ich bin es, der Teufel!"
+                   :context :primary}])
+    (rf/dispatch [:notification/add
+                  {:title "Har har!" :body "Ich bin es, der Teufel!"
+                   :context :secondary}])
+    (rf/dispatch [:notification/add
+                  {:title "Har har!" :body "Ich bin es, der Teufel!"
+                   :context :danger}])
+    (rf/dispatch [:notification/add
+                  {:title "Har har!" :body "Ich bin es, der Teufel!"
+                   :context :warning}])
+    (rf/dispatch [:notification/add
+                  {:title "Har har!" :body "Ich bin es, der Teufel!"
+                   :context :info
+                   :autohide? false}]))
+  (rf/dispatch [:notification/add {:title "Har har!" :body "Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel! Ich bin es, der Teufel!"}])
   (rf/dispatch [:notification/add {:title "some" :body "other"}])
   (rf/dispatch [:notifications/reset])
 
@@ -42,16 +78,26 @@
   "Presenting all notifications to the user."
   []
   (let [notifications @(rf/subscribe [:notifications/all])]
-    [:div#notifications
+    [:div#notifications-wrapper
      {:aria-live "polite"
-      :aria-atomic true
-      :style {:position "absolute"
-              :top "1rem"
-              :left "1rem"}}
+      :aria-atomic true}
      [:> AnimatePresence
       (for [notification notifications]
         [:div {:key (:id notification)}
          [toast notification]])]]))
+
+
+;; -----------------------------------------------------------------------------
+
+(s/def ::non-blank-string (s/and string? (complement string/blank?)))
+
+(s/def :notification/title ::non-blank-string)
+(s/def :notification/body ::non-blank-string)
+(s/def :notification/id string?)
+(s/def :notification/context #{:primary :secondary :success :danger :warning :info})
+(s/def ::notification
+  (s/keys :req [:notification/title :notification/body]
+          :opt [:notification/id :notification/context]))
 
 
 ;; -----------------------------------------------------------------------------
