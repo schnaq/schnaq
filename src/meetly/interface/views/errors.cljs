@@ -1,9 +1,8 @@
 (ns meetly.interface.views.errors
   (:require [cljs.pprint :refer [pprint]]
-            [meetly.interface.text.display-data :refer [labels img-path fa]]
+            [meetly.interface.text.display-data :refer [labels img-path]]
             [meetly.interface.views.base :as base]
-            [re-frame.core :as rf]
-            ["framer-motion" :refer [motion AnimatePresence]]))
+            [re-frame.core :as rf]))
 
 (defn- educate-element []
   [:div
