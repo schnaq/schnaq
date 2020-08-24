@@ -304,12 +304,19 @@
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [body-params]}]
-  (let [share-hash (:share-hash body-params)
+  (let [_share-hash (:share-hash body-params)
         discussion-id (:discussion-id body-params)
-        raw-nodes (db/all-statements-for-agenda discussion-id)
+        statements (db/all-statements-for-agenda discussion-id)
         starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)
+        arguments (dialog-db/all-arguments-for-discussion discussion-id)
+        raw-links (map #(discussion/create-link % arguments) statements)
         _ :check_discussion]
-    (response {:data {:nodes [] :links []}})))
+    (response {:data {:nodes (discussion/mark-starting-nodes statements starting-arguments)
+                      :links raw-links}})))
+;;TODO tests schreiben
+;;TODO Agenda point als Urknoten
+;;TODO links zum Urknoten aus starting-arguments
+;;TODO check zugriffsrechte
 
 ;; -----------------------------------------------------------------------------
 ;; Routes

@@ -16,6 +16,13 @@
         argument-ids (map :db/id subset-arguments)]
     (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
 
+(>defn- assoc-type-to-premises
+  "Assocs a type to a list of premises"
+  [argument]
+  [map? :ret sequential?]
+  (let [premises (:argument/premises argument)]
+    (map #(assoc % :type (:argument/type argument)) premises)))
+
 (>defn- direct-children
   "Looks up all direct children of a node. An undercut is considered a child of the premise
   of an argument."
@@ -26,8 +33,16 @@
                               all-arguments)
         potential-undercuts (undercuts-for-root root-id all-arguments)
         children (concat arguments-with-root potential-undercuts)
-        premises-list (map :argument/premises children)]
+        premises-list (map assoc-type-to-premises children)]
     (flatten premises-list)))
+
+(>defn create-link
+  [statement arguments]
+  [map? sequential? :ret sequential?]
+  (let [children (direct-children (:id statement) arguments)]
+    (map (fn [child]
+           {:source (:id statement) :target (:db/id child) :type (:type child)})
+         children)))
 
 (>defn sub-discussion-information
   "Returns statistics about the sub-discussion starting with `root-statement-id`.
