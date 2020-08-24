@@ -1,5 +1,6 @@
 (ns meetly.interface.views.meeting.after-create
-  (:require [re-frame.core :as rf]
+  (:require ["jquery" :as jquery]
+            [re-frame.core :as rf]
             [meetly.interface.text.display-data :refer [labels img-path fa]]
             [meetly.interface.utils.clipboard :as clipboard]
             [goog.string :as gstring]
@@ -47,7 +48,7 @@
   (reagent/create-class
     {:component-did-mount
      (fn [_]
-       (.tooltip (js/$ (str "#meeting-link-form-" id-extra))))
+       (.tooltip (jquery (str "#meeting-link-form-" id-extra))))
      :reagent-render
      (fn []
        (let [display-content (create-link-fn @(rf/subscribe [:navigation/current-route]))

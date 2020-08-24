@@ -1,5 +1,6 @@
 (ns meetly.interface.views.discussion.view-elements
-  (:require [ajax.core :as ajax]
+  (:require ["jquery" :as jquery]
+            [ajax.core :as ajax]
             [ghostwheel.core :refer [>defn-]]
             [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :refer [labels fa]]
@@ -153,7 +154,7 @@
   (reagent/create-class
     {:component-did-mount
      (fn [_]
-       (.popover (js/$ "[data-toggle=\"popover\"]")))
+       (.popover (jquery "[data-toggle=\"popover\"]")))
      :reagent-render
      (fn []
        [:p
