@@ -135,6 +135,7 @@
      ;; User related
      :user.button/set-name "Name speichern"
      :user.button/set-name-placeholder "Ihr Name"
+     :user.button/success-body "Name erfolgreich gespeichert"
 
      ;; Errors
      :errors/navigate-to-startpage "Zurück zur Startseite"
