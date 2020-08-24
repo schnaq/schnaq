@@ -1,8 +1,7 @@
-import * as d3 from "d3";
-
 class SchnaqD3 {
-  constructor(parentId, data) {
+  constructor(d3, parentId, data) {
     let that = this;
+    this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
     this.width = 800;
@@ -99,7 +98,9 @@ class SchnaqD3 {
         .on("start", d => {
           that.dragstarted(that, d)
         })
-        .on("drag", that.dragged)
+        .on("drag", d => {
+          that.dragged(that, d)
+        })
         .on("end", d => {
           that.dragended(that, d)
         })
@@ -149,8 +150,8 @@ class SchnaqD3 {
   }
 
   focus(that) {
-    if (d3.event) {
-      let index = d3.select(d3.event.target).datum().index;
+    if (that.d3.event) {
+      let index = that.d3.select(that.d3.event.target).datum().index;
       that.node.style("opacity", link => {
         return that.neigh(index, link.index) ? 1 : 0.1;
       });
@@ -191,19 +192,19 @@ class SchnaqD3 {
   }
 
   dragstarted(that, d) {
-    d3.event.sourceEvent.stopPropagation();
-    if (!d3.event.active) that.graphLayout.alphaTarget(0.3).restart();
+    that.d3.event.sourceEvent.stopPropagation();
+    if (!that.d3.event.active) that.graphLayout.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
 
-  dragged(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
+  dragged(that, d) {
+    d.fx = that.d3.event.x;
+    d.fy = that.d3.event.y;
   }
 
   dragended(that, d) {
-    if (!d3.event.active) that.graphLayout.alphaTarget(0);
+    if (!that.d3.event.active) that.graphLayout.alphaTarget(0);
     d.fx = null;
     d.fy = null;
   }
@@ -213,11 +214,11 @@ class SchnaqD3 {
   setSize(width, height) {
     this.width = width;
     this.height = height;
-    d3.select(this.parentId).attr("width", this.width).attr("height", this.height);
+    this.d3.select(this.parentId).attr("width", this.width).attr("height", this.height);
     this.graphLayout = this.graphLayout
-      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", d3.forceX(this.width / 2).strength(1))
-      .force("y", d3.forceY(this.height / 2).strength(1));
+      .force("center", this.d3.forceCenter(this.width / 2, this.height / 2))
+      .force("x", this.d3.forceX(this.width / 2).strength(1))
+      .force("y", this.d3.forceY(this.height / 2).strength(1));
     return this;
   }
 
@@ -272,11 +273,11 @@ class SchnaqD3 {
 
     this.graphLayout = this.graphLayout
       .nodes(data.nodes)
-      .force("charge", d3.forceManyBody().strength(-3000))
-      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", d3.forceX(this.width / 2).strength(1))
-      .force("y", d3.forceY(this.height / 2).strength(1))
-      .force("link", d3.forceLink(data.links).id(d => {
+      .force("charge", this.d3.forceManyBody().strength(-3000))
+      .force("center", this.d3.forceCenter(this.width / 2, this.height / 2))
+      .force("x", this.d3.forceX(this.width / 2).strength(1))
+      .force("y", this.d3.forceY(this.height / 2).strength(1))
+      .force("link", this.d3.forceLink(data.links).id(d => {
         return d.id;
       }).distance(50).strength(1))
       .on("tick", () => {
@@ -285,8 +286,8 @@ class SchnaqD3 {
 
     this.labelLayout = this.labelLayout
       .nodes(this.label.nodes)
-      .force("charge", d3.forceManyBody().strength(-50))
-      .force("link", d3.forceLink(this.label.links).distance(0).strength(2));
+      .force("charge", this.d3.forceManyBody().strength(-50))
+      .force("link", this.d3.forceLink(this.label.links).distance(0).strength(2));
 
     data.links.forEach(link => {
       this.adjlist[link.source.index + "-" + link.target.index] = true;
@@ -300,11 +301,13 @@ class SchnaqD3 {
     });
 
     this.node.call(
-      d3.drag()
+      this.d3.drag()
         .on("start", d => {
           this.dragstarted(this, d)
         })
-        .on("drag", this.dragged)
+        .on("drag", d => {
+          this.dragged(this, d)
+        })
         .on("end", d => {
           this.dragended(this, d)
         })
