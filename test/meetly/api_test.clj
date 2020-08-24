@@ -1,5 +1,6 @@
 (ns meetly.api-test
   (:require [clojure.spec.alpha :as s]
+            [clojure.string :as string]
             [clojure.test :refer [deftest testing is use-fixtures]]
             [meetly.api :as api]
             [meetly.meeting.database :as db]
@@ -103,7 +104,7 @@
       (is (= old-share-hash (:meeting/share-hash new-meeting)))
       (is (= old-edit-hash (:meeting/edit-hash new-meeting)))
       (is (= 403 (:status update-response)))
-      (is (= "You are not allowed to update this meeting." (-> update-response :body :error))))))
+      (is (not (string/blank? (-> update-response :body :error)))))))
 
 (deftest check-credentials-test
   (testing "Check if credentials are verified correctly."

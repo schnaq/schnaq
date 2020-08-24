@@ -38,7 +38,7 @@
 (defn- deny-access
   "Return a 403 Forbidden to unauthorized access."
   []
-  (forbidden {:message "You are not allowed to access this resource"}))
+  (forbidden {:error "You are not allowed to access this resource."}))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
