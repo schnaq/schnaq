@@ -4,8 +4,8 @@ class SchnaqD3 {
     this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
-    this.width = 800;
-    this.height = 600;
+    let INITIAL_WIDTH = 800;
+    let INITIAL_HEIGHT = 600;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
 
     this.label = {
@@ -28,7 +28,7 @@ class SchnaqD3 {
       .force("charge", d3.forceManyBody().strength(-50))
       .force("link", d3.forceLink(this.label.links).distance(0).strength(2));
 
-    this.svg = d3.select(parentId).attr("width", this.width).attr("height", this.height);
+    this.svg = this.resizeCanvas(INITIAL_WIDTH, INITIAL_HEIGHT);
     this.container = this.svg.append("g");
     this.svg.call(
       d3.zoom()
@@ -71,9 +71,9 @@ class SchnaqD3 {
 
     this.graphLayout = d3.forceSimulation(data.nodes)
       .force("charge", d3.forceManyBody().strength(-3000))
-      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", d3.forceX(this.width / 2).strength(1))
-      .force("y", d3.forceY(this.height / 2).strength(1))
+      .force("center", d3.forceCenter(INITIAL_WIDTH / 2, INITIAL_HEIGHT / 2))
+      .force("x", d3.forceX(INITIAL_WIDTH / 2).strength(1))
+      .force("y", d3.forceY(INITIAL_HEIGHT / 2).strength(1))
       .force("link", d3.forceLink(data.links).id(d => {
         return d.id;
       }).distance(50).strength(1))
@@ -211,10 +211,14 @@ class SchnaqD3 {
 
   // Public Methods, not used as event-handlers
 
+  resizeCanvas(width, height) {
+    return this.d3.select(this.parentId).attr("width", width).attr("height", height);
+  }
+
   setSize(width, height) {
     this.width = width;
     this.height = height;
-    this.d3.select(this.parentId).attr("width", this.width).attr("height", this.height);
+    this.resizeCanvas(width, height);
     this.graphLayout = this.graphLayout
       .force("center", this.d3.forceCenter(this.width / 2, this.height / 2))
       .force("x", this.d3.forceX(this.width / 2).strength(1))
