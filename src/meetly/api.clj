@@ -17,7 +17,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
-            [ring.util.http-response :refer [ok not-found bad-request status forbidden unauthorized]]
+            [ring.util.http-response :refer [ok created not-found bad-request forbidden unauthorized]]
             [taoensso.timbre :as log])
   (:import (java.util Base64 UUID))
   (:gen-class))
@@ -34,6 +34,11 @@
   [string? string? :ret boolean?]
   (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
     (= edit-hash (:meeting/edit-hash authenticate-meeting))))
+
+(defn- deny-access
+  "Return a 403 Forbidden to unauthorized access."
+  []
+  (forbidden {:message "You are not allowed to access this resource"}))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -63,7 +68,7 @@
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
-    (ok {:new-meeting created-meeting})))
+    (created {:new-meeting created-meeting})))
 
 (defn- update-meeting!
   "Updates a meeting and its agendas."
@@ -82,7 +87,7 @@
             (db/update-agenda agenda))
           (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
           (ok {:text "Your Meetly has been updated."}))
-      (bad-request {:error "You are not allowed to update this meeting."}))))
+      (deny-access))))
 
 (defn- add-author
   "Adds an author to the database."
@@ -231,7 +236,7 @@
         feedback-id (db/add-feedback! feedback)
         screenshot (:screenshot body-params)]
     (save-screenshot-if-provided! screenshot "public/feedbacks/screenshots" feedback-id)
-    (ok {:text "Feedback successfully created."})))
+    (created {:feedback feedback})))
 
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
@@ -244,9 +249,6 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
-
-(defn- deny-access []
-  (forbidden {:message "You are not allowed to use this resource"}))
 
 (defn- number-of-meetings
   "Returns the number of all meetings."
