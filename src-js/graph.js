@@ -1,108 +1,24 @@
 class SchnaqD3 {
   constructor(d3, parentId, data) {
-    let that = this;
     this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
-    this.width = 800;
-    this.height = 600;
+    let INITIAL_WIDTH = 800;
+    let INITIAL_HEIGHT = 600;
+    let INITIAL_NODE_SIZE = 5;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
-
-    this.label = {
-      'nodes': [],
-      'links': []
-    };
-
     this.adjlist = [];
+    this.svg = this.resizeCanvas(INITIAL_WIDTH, INITIAL_HEIGHT);
+    this.graphForces = d3.forceSimulation();
+    this.labelForces = d3.forceSimulation();
 
-    data.nodes.forEach((node, index) => {
-      this.label.nodes.push({node: node});
-      this.label.nodes.push({node: node});
-      this.label.links.push({
-        source: index * 2,
-        target: index * 2 + 1
-      });
-    });
+    this.initializeGraph(data, INITIAL_WIDTH, INITIAL_HEIGHT, INITIAL_NODE_SIZE);
 
-    this.labelLayout = d3.forceSimulation(this.label.nodes)
-      .force("charge", d3.forceManyBody().strength(-50))
-      .force("link", d3.forceLink(this.label.links).distance(0).strength(2));
-
-    this.svg = d3.select(parentId).attr("width", this.width).attr("height", this.height);
-    this.container = this.svg.append("g");
     this.svg.call(
       d3.zoom()
         .scaleExtent([.1, 4])
         .on("zoom", () => {
-          that.container.attr("transform", d3.event.transform);
-        })
-    );
-
-    this.node = this.container.append("g").attr("class", "nodes")
-      .selectAll("g")
-      .data(data.nodes)
-      .enter()
-      .append("circle")
-      .attr("r", 5)
-      .attr("fill", node => {
-        return this.color(node.group);
-      })
-
-    this.link = this.container.append("g").attr("class", "links")
-      .selectAll("line")
-      .data(data.links)
-      .enter()
-      .append("line")
-      .attr("stroke", "#aaa")
-      .attr("stroke-width", "1px");
-
-    this.labelNode = this.container.append("g").attr("class", "labelNodes")
-      .selectAll("text")
-      .data(this.label.nodes)
-      .enter()
-      .append("text")
-      .text((node, index) => {
-        return index % 2 === 0 ? "" : node.node.id;
-      })
-      .style("fill", "#555")
-      .style("font-family", "Arial")
-      .style("font-size", 12)
-      .style("pointer-events", "none"); // to prevent mouseover/drag capture
-
-    this.graphLayout = d3.forceSimulation(data.nodes)
-      .force("charge", d3.forceManyBody().strength(-3000))
-      .force("center", d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", d3.forceX(this.width / 2).strength(1))
-      .force("y", d3.forceY(this.height / 2).strength(1))
-      .force("link", d3.forceLink(data.links).id(d => {
-        return d.id;
-      }).distance(50).strength(1))
-      .on("tick", () => {
-        that.ticked(that)
-      });
-    // Note: everything that ticked calls from `that` should be defined before.
-
-    data.links.forEach(link => {
-      this.adjlist[link.source.index + "-" + link.target.index] = true;
-      this.adjlist[link.target.index + "-" + link.source.index] = true;
-    });
-
-    this.node.on("mouseover", () => {
-      that.focus(that)
-    }).on("mouseout", () => {
-      that.unfocus(that)
-    });
-
-    this.node.call(
-      d3.drag()
-        .on("start", d => {
-          that.dragstarted(that, d)
-        })
-        .on("drag", d => {
-          that.dragged(that, d)
-        })
-        .on("end", d => {
-          that.dragended(that, d)
+          this.container.attr("transform", d3.event.transform);
         })
     );
 
@@ -120,7 +36,7 @@ class SchnaqD3 {
       that.updateLink(that, link)
     });
 
-    that.labelLayout.alphaTarget(0.3).restart();
+    that.labelForces.alphaTarget(0.3).restart();
     that.labelNode.each(function (d, i) {
       if (i % 2 === 0) {
         d.x = d.node.x;
@@ -193,7 +109,7 @@ class SchnaqD3 {
 
   dragstarted(that, d) {
     that.d3.event.sourceEvent.stopPropagation();
-    if (!that.d3.event.active) that.graphLayout.alphaTarget(0.3).restart();
+    if (!that.d3.event.active) that.graphForces.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
@@ -204,39 +120,54 @@ class SchnaqD3 {
   }
 
   dragended(that, d) {
-    if (!that.d3.event.active) that.graphLayout.alphaTarget(0);
+    if (!that.d3.event.active) that.graphForces.alphaTarget(0);
     d.fx = null;
     d.fy = null;
   }
 
   // Public Methods, not used as event-handlers
 
-  setSize(width, height) {
-    this.width = width;
-    this.height = height;
-    this.d3.select(this.parentId).attr("width", this.width).attr("height", this.height);
-    this.graphLayout = this.graphLayout
-      .force("center", this.d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", this.d3.forceX(this.width / 2).strength(1))
-      .force("y", this.d3.forceY(this.height / 2).strength(1));
-    return this;
+  resizeCanvas(width, height) {
+    return this.d3.select(this.parentId).attr("width", width).attr("height", height);
   }
 
-  replaceData(data) {
-    this.data = data;
+  centerForces(forceObject, width, height) {
+    return forceObject
+      .force("center", this.d3.forceCenter(width / 2, height / 2))
+      .force("x", this.d3.forceX(width / 2).strength(1))
+      .force("y", this.d3.forceY(height / 2).strength(1));
+  }
 
-    this.svg.selectAll("*").remove();
-    this.container = this.svg.append("g");
+  setLinkForces(forceObject) {
+    return forceObject
+      .force("charge", this.d3.forceManyBody().strength(-3000))
+      .force("link", this.d3.forceLink(this.data.links).id(d => {
+        return d.id;
+      }).distance(50).strength(1))
+      .on("tick", () => {
+        this.ticked(this)
+      });
+  }
+
+  setNodeForces(forceObject, nodes, width, height) {
+    let forces = forceObject.nodes(nodes);
+    forces = this.centerForces(forces, width, height);
+    return this.setLinkForces(forces);
+  }
+
+  drawNodes(data, size) {
     this.node = this.container.append("g").attr("class", "nodes")
       .selectAll("g")
       .data(data.nodes)
       .enter()
       .append("circle")
-      .attr("r", 5)
+      .attr("r", size)
       .attr("fill", node => {
         return this.color(node.group);
-      })
+      });
+  }
 
+  drawLinks(data) {
     this.link = this.container.append("g").attr("class", "links")
       .selectAll("line")
       .data(data.links)
@@ -244,23 +175,12 @@ class SchnaqD3 {
       .append("line")
       .attr("stroke", "#aaa")
       .attr("stroke-width", "1px");
+  }
 
-    this.label = {
-      "nodes": [],
-      "links": []
-    };
-    data.nodes.forEach((node, index) => {
-      this.label.nodes.push({node: node});
-      this.label.nodes.push({node: node});
-      this.label.links.push({
-        source: index * 2,
-        target: index * 2 + 1
-      });
-    });
-
+  drawLabels(labels) {
     this.labelNode = this.container.append("g").attr("class", "labelNodes")
       .selectAll("text")
-      .data(this.label.nodes)
+      .data(labels.nodes)
       .enter()
       .append("text")
       .text((node, index) => {
@@ -270,36 +190,41 @@ class SchnaqD3 {
       .style("font-family", "Arial")
       .style("font-size", 12)
       .style("pointer-events", "none"); // to prevent mouseover/drag capture
+  }
 
-    this.graphLayout = this.graphLayout
-      .nodes(data.nodes)
-      .force("charge", this.d3.forceManyBody().strength(-3000))
-      .force("center", this.d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", this.d3.forceX(this.width / 2).strength(1))
-      .force("y", this.d3.forceY(this.height / 2).strength(1))
-      .force("link", this.d3.forceLink(data.links).id(d => {
-        return d.id;
-      }).distance(50).strength(1))
-      .on("tick", () => {
-        this.ticked(this)
+  createLabels(data) {
+    let labels = {
+      "nodes": [],
+      "links": []
+    };
+    data.nodes.forEach((node, index) => {
+      labels.nodes.push({node: node});
+      labels.nodes.push({node: node});
+      labels.links.push({
+        source: index * 2,
+        target: index * 2 + 1
       });
-
-    this.labelLayout = this.labelLayout
-      .nodes(this.label.nodes)
-      .force("charge", this.d3.forceManyBody().strength(-50))
-      .force("link", this.d3.forceLink(this.label.links).distance(0).strength(2));
-
-    data.links.forEach(link => {
-      this.adjlist[link.source.index + "-" + link.target.index] = true;
-      this.adjlist[link.target.index + "-" + link.source.index] = true;
     });
+    return labels;
+  }
 
+  buildAdjacencyMatrix(data, adjlist) {
+    data.links.forEach(link => {
+      adjlist[link.source.index + "-" + link.target.index] = true;
+      adjlist[link.target.index + "-" + link.source.index] = true;
+    });
+    return adjlist
+  }
+
+  setMouseOverEvents() {
     this.node.on("mouseover", () => {
       this.focus(this)
     }).on("mouseout", () => {
       this.unfocus(this)
     });
+  }
 
+  setDragEvents() {
     this.node.call(
       this.d3.drag()
         .on("start", d => {
@@ -312,6 +237,43 @@ class SchnaqD3 {
           this.dragended(this, d)
         })
     );
+  }
+
+  setLabelForces(force, labels) {
+    return force
+      .nodes(labels.nodes)
+      .force("charge", this.d3.forceManyBody().strength(-50))
+      .force("link", this.d3.forceLink(labels.links).distance(0).strength(2));
+  }
+
+  initializeGraph(data, width, height, nodeSize) {
+    this.container = this.svg.append("g");
+    this.drawNodes(data, nodeSize);
+    this.drawLinks(data);
+
+    let labels = this.createLabels(data);
+    this.drawLabels(labels);
+
+    this.graphForces = this.setNodeForces(this.graphForces, data.nodes, width, height);
+    // Note: everything that ticked calls from `that` should be defined before.
+    this.labelForces = this.setLabelForces(this.labelForces, labels);
+
+    this.adjlist = this.buildAdjacencyMatrix(data, this.adjlist);
+
+    this.setMouseOverEvents();
+    this.setDragEvents();
+  }
+
+  setSize(width, height) {
+    this.resizeCanvas(width, height);
+    this.graphForces = this.centerForces(this.graphForces, width, height);
+    return this;
+  }
+
+  replaceData(data, width, height, nodeSize) {
+    this.data = data;
+    this.svg.selectAll("*").remove();
+    this.initializeGraph(data, width, height, nodeSize);
   }
 
 }
