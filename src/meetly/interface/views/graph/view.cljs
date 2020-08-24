@@ -8,10 +8,12 @@
   (reagent/create-class
     {:reagent-render (fn [] [:svg {:id id} "Graph, lel"])
      :component-did-mount (fn []
-                            (->
-                              (schnaqd3/SchnaqD3. d3 (str "#" id) (clj->js test-data/miserables))
-                              (.setSize 1200 600)
-                              (.replaceData (clj->js test-data/short-miserables))))}))
+                            (let [width 1200
+                                  height 600]
+                              (->
+                                (schnaqd3/SchnaqD3. d3 (str "#" id) (clj->js test-data/miserables))
+                                (.setSize width height)
+                                (.replaceData (clj->js test-data/short-miserables) width height))))}))
 
 (defn view []
   [:div.container
