@@ -8,7 +8,8 @@
             [ghostwheel.core :refer [>defn-]]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
-            [meetly.interface.views.base :as base]))
+            [meetly.interface.views.base :as base]
+            [meetly.interface.utils.js-wrapper :as js-wrap]))
 
 (>defn- get-share-link
   [current-route]
@@ -56,20 +57,24 @@
          [:div.pb-4
           [:form.form.create-meeting-form.form-inline.row
            {:id (str "meeting-link-form-" id-extra)
-            :on-click (fn []
+            :on-click (fn [e]
+                        (js-wrap/prevent-default e)
                         (clipboard/copy-to-clipboard! display-content)
-                        (rf/dispatch [:meeting/link-copied]))
+                        (rf/dispatch
+                          [:notification/add
+                           #:notification{:title (labels :meeting/link-copied-heading)
+                                          :body (labels :meeting/link-copied-success)
+                                          :context :info}]))
             :data-toggle "tooltip"
             :data-placement "right"
             :title (labels :meeting/copy-link-tooltip)}
-           [:input.form-control.form-round.form.title.col-11.copy-link-form
+           [:input.form-control.form-round.col-11.copy-link-form.link-pointer
             {:id meeting-link-id
              :type "text"
              :value display-content
              :readOnly true}]
-           [:label.col-1 {:for meeting-link-id}
-            [:h3 {:class (str "m-auto far " (fa :copy))}]]]]))}))
-
+           [:label.col-1.link-pointer {:for meeting-link-id}
+            [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]]))}))
 
 (defn img-text
   "Create one icon in a grid"
