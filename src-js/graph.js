@@ -216,17 +216,15 @@ class SchnaqD3 {
   }
 
   setSize(width, height) {
-    this.width = width;
-    this.height = height;
     this.resizeCanvas(width, height);
     this.graphLayout = this.graphLayout
-      .force("center", this.d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", this.d3.forceX(this.width / 2).strength(1))
-      .force("y", this.d3.forceY(this.height / 2).strength(1));
+      .force("center", this.d3.forceCenter(width / 2, height / 2))
+      .force("x", this.d3.forceX(width / 2).strength(1))
+      .force("y", this.d3.forceY(height / 2).strength(1));
     return this;
   }
 
-  replaceData(data) {
+  replaceData(data, width, height) {
     this.data = data;
 
     this.svg.selectAll("*").remove();
@@ -278,9 +276,9 @@ class SchnaqD3 {
     this.graphLayout = this.graphLayout
       .nodes(data.nodes)
       .force("charge", this.d3.forceManyBody().strength(-3000))
-      .force("center", this.d3.forceCenter(this.width / 2, this.height / 2))
-      .force("x", this.d3.forceX(this.width / 2).strength(1))
-      .force("y", this.d3.forceY(this.height / 2).strength(1))
+      .force("center", this.d3.forceCenter(width / 2, height / 2))
+      .force("x", this.d3.forceX(width / 2).strength(1))
+      .force("y", this.d3.forceY(height / 2).strength(1))
       .force("link", this.d3.forceLink(data.links).id(d => {
         return d.id;
       }).distance(50).strength(1))
