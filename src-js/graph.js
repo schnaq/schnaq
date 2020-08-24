@@ -1,98 +1,23 @@
 class SchnaqD3 {
   constructor(d3, parentId, data) {
-    let that = this;
     this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
     let INITIAL_WIDTH = 800;
     let INITIAL_HEIGHT = 600;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
-
-    this.label = {
-      'nodes': [],
-      'links': []
-    };
-
     this.adjlist = [];
-
-    data.nodes.forEach((node, index) => {
-      this.label.nodes.push({node: node});
-      this.label.nodes.push({node: node});
-      this.label.links.push({
-        source: index * 2,
-        target: index * 2 + 1
-      });
-    });
-
-    this.labelLayout = d3.forceSimulation(this.label.nodes)
-      .force("charge", d3.forceManyBody().strength(-50))
-      .force("link", d3.forceLink(this.label.links).distance(0).strength(2));
-
     this.svg = this.resizeCanvas(INITIAL_WIDTH, INITIAL_HEIGHT);
-    this.container = this.svg.append("g");
+    this.graphLayout = d3.forceSimulation();
+    this.labelLayout = d3.forceSimulation();
+
+    this.initializeGraph(data, INITIAL_WIDTH, INITIAL_HEIGHT);
+
     this.svg.call(
       d3.zoom()
         .scaleExtent([.1, 4])
         .on("zoom", () => {
-          that.container.attr("transform", d3.event.transform);
-        })
-    );
-
-    this.node = this.container.append("g").attr("class", "nodes")
-      .selectAll("g")
-      .data(data.nodes)
-      .enter()
-      .append("circle")
-      .attr("r", 5)
-      .attr("fill", node => {
-        return this.color(node.group);
-      })
-
-    this.link = this.container.append("g").attr("class", "links")
-      .selectAll("line")
-      .data(data.links)
-      .enter()
-      .append("line")
-      .attr("stroke", "#aaa")
-      .attr("stroke-width", "1px");
-
-    this.labelNode = this.container.append("g").attr("class", "labelNodes")
-      .selectAll("text")
-      .data(this.label.nodes)
-      .enter()
-      .append("text")
-      .text((node, index) => {
-        return index % 2 === 0 ? "" : node.node.id;
-      })
-      .style("fill", "#555")
-      .style("font-family", "Arial")
-      .style("font-size", 12)
-      .style("pointer-events", "none"); // to prevent mouseover/drag capture
-
-    this.graphLayout = this.setNodeForces(d3.forceSimulation(), data.nodes, INITIAL_WIDTH, INITIAL_HEIGHT);
-    // Note: everything that ticked calls from `that` should be defined before.
-
-    data.links.forEach(link => {
-      this.adjlist[link.source.index + "-" + link.target.index] = true;
-      this.adjlist[link.target.index + "-" + link.source.index] = true;
-    });
-
-    this.node.on("mouseover", () => {
-      that.focus(that)
-    }).on("mouseout", () => {
-      that.unfocus(that)
-    });
-
-    this.node.call(
-      d3.drag()
-        .on("start", d => {
-          that.dragstarted(that, d)
-        })
-        .on("drag", d => {
-          that.dragged(that, d)
-        })
-        .on("end", d => {
-          that.dragended(that, d)
+          this.container.attr("transform", d3.event.transform);
         })
     );
 
@@ -206,7 +131,6 @@ class SchnaqD3 {
   }
 
   centerForces(forceObject, width, height) {
-    // TODO is this a side-effect or do we need to return it
     return forceObject
       .force("center", this.d3.forceCenter(width / 2, height / 2))
       .force("x", this.d3.forceX(width / 2).strength(1))
@@ -230,16 +154,7 @@ class SchnaqD3 {
     return this.setLinkForces(forces);
   }
 
-  setSize(width, height) {
-    this.resizeCanvas(width, height);
-    this.graphLayout = this.centerForces(this.graphLayout, width, height)
-    return this;
-  }
-
-  replaceData(data, width, height) {
-    this.data = data;
-
-    this.svg.selectAll("*").remove();
+  initializeGraph(data, width, height) {
     this.container = this.svg.append("g");
     this.node = this.container.append("g").attr("class", "nodes")
       .selectAll("g")
@@ -249,7 +164,7 @@ class SchnaqD3 {
       .attr("r", 5)
       .attr("fill", node => {
         return this.color(node.group);
-      })
+      });
 
     this.link = this.container.append("g").attr("class", "links")
       .selectAll("line")
@@ -286,6 +201,7 @@ class SchnaqD3 {
       .style("pointer-events", "none"); // to prevent mouseover/drag capture
 
     this.graphLayout = this.setNodeForces(this.graphLayout, this.data.nodes, width, height);
+    // Note: everything that ticked calls from `that` should be defined before.
 
     this.labelLayout = this.labelLayout
       .nodes(this.label.nodes)
@@ -315,6 +231,18 @@ class SchnaqD3 {
           this.dragended(this, d)
         })
     );
+  }
+
+  setSize(width, height) {
+    this.resizeCanvas(width, height);
+    this.graphLayout = this.centerForces(this.graphLayout, width, height);
+    return this;
+  }
+
+  replaceData(data, width, height) {
+    this.data = data;
+    this.svg.selectAll("*").remove();
+    this.initializeGraph(data, width, height);
   }
 
 }
