@@ -1,10 +1,20 @@
 (ns meetly.interface.views.notifications
-  "Prints notifications on the screen. See specs for more options. Usage:
+  "Prints notifications on the screen. See specs for more options.
+
+  Minimal example:
   `(rf/dispatch
      [:notification/add
        #:notification{:title \"Hello, World!\"
                       :body \"I am a toast\"
-                      :context :primary}])`"
+                      :context :primary}])`
+
+  Extended example:
+  `{:dispatch [:notification/add
+               #:notification{:title \"Fehler\"
+                              :body [:pre [:code (str failure)]]
+                              :context :danger
+                              :stay-visible? true
+                              :on-close-fn #(rf/dispatch [:clear-error])}]}`"
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
@@ -30,7 +40,7 @@
   "Adds a toast to the screen. Has a title and a body, id is randomly generated.
    The context uses the same classes as it is known from bootstrap (e.g. primary,
    secondary, ...)."
-  [{:notification/keys [title body id context]}]
+  [{:notification/keys [title body id context on-close-fn]}]
   [::notification :ret associative?]
   [:> (.-div motion)
    {:initial {:opacity 0}
@@ -42,7 +52,9 @@
     [:div.toast-header
      [:strong.mr-auto title]
      [:button.close {:type "button"
-                     :on-click #(rf/dispatch [:notification/remove id])}
+                     :on-click (fn []
+                                 (when on-close-fn (on-close-fn))
+                                 (rf/dispatch [:notification/remove id]))}
       [:span {:aria-hidden "true"}
        [:i {:class (str " m-auto fas fa-xs " (fa :delete-icon))}]]]]
     [:div.toast-body body]]])
@@ -69,9 +81,11 @@
 (s/def :notification/id string?)
 (s/def :notification/context #{:primary :secondary :success :danger :warning :info})
 (s/def :notification/stay-visible? boolean?)
+(s/def :notification/on-close-fn fn?)
 (s/def ::notification
   (s/keys :req [:notification/title :notification/body :notification/context]
-          :opt [:notification/id :notification/stay-visible?]))
+          :opt [:notification/id :notification/stay-visible?
+                :notification/on-close-fn]))
 
 
 ;; -----------------------------------------------------------------------------
