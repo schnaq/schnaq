@@ -1,11 +1,10 @@
 (ns meetly.interface.views.notifications
-  "Prints notifications on the screen. Usage:
+  "Prints notifications on the screen. See specs for more options. Usage:
   `(rf/dispatch
      [:notification/add
        #:notification{:title \"Hello, World!\"
                       :body \"I am a toast\"
-                      :context :primary
-                      :autohide? false}])`"
+                      :context :primary}])`"
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
@@ -69,20 +68,22 @@
 (s/def :notification/body ::non-blank-string)
 (s/def :notification/id string?)
 (s/def :notification/context #{:primary :secondary :success :danger :warning :info})
+(s/def :notification/stay-visible? boolean?)
 (s/def ::notification
-  (s/keys :req [:notification/title :notification/body]
-          :opt [:notification/id :notification/context]))
+  (s/keys :req [:notification/title :notification/body :notification/context]
+          :opt [:notification/id :notification/stay-visible?]))
 
 
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
   :notification/add
-  (fn [{:keys [db]} [_ notification]]
+  (fn [{:keys [db]} [_ {:notification/keys [stay-visible?] :as notification}]]
     (let [notification-id (str (random-uuid))
           notification' (assoc notification :notification/id notification-id)]
-      {:db (update db :notifications conj notification')
-       :notification/timed-remove notification-id})))
+      (cond-> {:db (update db :notifications conj notification')}
+              ;; Auto-hide notification if not specified otherwise
+              (not stay-visible?) (assoc :notification/timed-remove notification-id)))))
 
 (rf/reg-fx
   :notification/timed-remove
