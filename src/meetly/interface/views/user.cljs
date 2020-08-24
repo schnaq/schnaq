@@ -2,6 +2,7 @@
   (:require [ajax.core :as ajax]
             [clojure.string :as clj-string]
             [meetly.interface.config :refer [config]]
+            [meetly.interface.text.display-data :refer [labels]]
             [re-frame.core :as rf]))
 
 (rf/reg-event-fx
@@ -31,10 +32,14 @@
   (fn [db]
     (get-in db [:controls :username-input :show?] true)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :user/hide-display-name-input
-  (fn [db _]
-    (assoc-in db [:controls :username-input :show?] false)))
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:controls :username-input :show?] false)
+     :dispatch [:notification/add
+                #:notification{:title (labels :user.button/set-name)
+                               :body (labels :user.button/success-body)
+                               :context :success}]}))
 
 (rf/reg-event-db
   :user/show-display-name-input
