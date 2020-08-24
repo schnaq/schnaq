@@ -141,6 +141,7 @@
      :errors/navigate-to-startpage "Zurück zur Startseite"
      :errors/comic-relief "Ups ..."
      :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
+     :errors/generic "Es ist ein Fehler aufgetreten"
 
 
      ;; Route Link Texts

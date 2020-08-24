@@ -29,7 +29,7 @@
   (fn [{:keys [db]} [_ failure]]
     {:db (assoc db :error {:ajax failure})
      :dispatch [:notification/add
-                #:notification{:title "Fehler"
+                #:notification{:title (labels :errors/generic)
                                :body [:pre
                                       [:code
                                        (with-out-str (pprint failure))]]
