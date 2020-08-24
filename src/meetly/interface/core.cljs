@@ -25,6 +25,7 @@
             [meetly.interface.views.meeting.overview]
             [meetly.interface.views.meeting.single]
             [meetly.interface.views.modals.modal]
+            [meetly.interface.views.notifications]
             [meetly.interface.views.startpage]
             [meetly.interface.views.user]
             [re-frame.core :as rf]
