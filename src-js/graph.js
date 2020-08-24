@@ -69,17 +69,7 @@ class SchnaqD3 {
       .style("font-size", 12)
       .style("pointer-events", "none"); // to prevent mouseover/drag capture
 
-    this.graphLayout = d3.forceSimulation(data.nodes)
-      .force("charge", d3.forceManyBody().strength(-3000))
-      .force("center", d3.forceCenter(INITIAL_WIDTH / 2, INITIAL_HEIGHT / 2))
-      .force("x", d3.forceX(INITIAL_WIDTH / 2).strength(1))
-      .force("y", d3.forceY(INITIAL_HEIGHT / 2).strength(1))
-      .force("link", d3.forceLink(data.links).id(d => {
-        return d.id;
-      }).distance(50).strength(1))
-      .on("tick", () => {
-        that.ticked(that)
-      });
+    this.graphLayout = this.setNodeForces(d3.forceSimulation(), data.nodes, INITIAL_WIDTH, INITIAL_HEIGHT);
     // Note: everything that ticked calls from `that` should be defined before.
 
     data.links.forEach(link => {
@@ -215,12 +205,34 @@ class SchnaqD3 {
     return this.d3.select(this.parentId).attr("width", width).attr("height", height);
   }
 
-  setSize(width, height) {
-    this.resizeCanvas(width, height);
-    this.graphLayout = this.graphLayout
+  centerForces(forceObject, width, height) {
+    // TODO is this a side-effect or do we need to return it
+    return forceObject
       .force("center", this.d3.forceCenter(width / 2, height / 2))
       .force("x", this.d3.forceX(width / 2).strength(1))
       .force("y", this.d3.forceY(height / 2).strength(1));
+  }
+
+  setLinkForces(forceObject) {
+    return forceObject
+      .force("charge", this.d3.forceManyBody().strength(-3000))
+      .force("link", this.d3.forceLink(this.data.links).id(d => {
+        return d.id;
+      }).distance(50).strength(1))
+      .on("tick", () => {
+        this.ticked(this)
+      });
+  }
+
+  setNodeForces(forceObject, nodes, width, height) {
+    let forces = forceObject.nodes(nodes);
+    forces = this.centerForces(forces, width, height);
+    return this.setLinkForces(forces);
+  }
+
+  setSize(width, height) {
+    this.resizeCanvas(width, height);
+    this.graphLayout = this.centerForces(this.graphLayout, width, height)
     return this;
   }
 
@@ -273,18 +285,7 @@ class SchnaqD3 {
       .style("font-size", 12)
       .style("pointer-events", "none"); // to prevent mouseover/drag capture
 
-    this.graphLayout = this.graphLayout
-      .nodes(data.nodes)
-      .force("charge", this.d3.forceManyBody().strength(-3000))
-      .force("center", this.d3.forceCenter(width / 2, height / 2))
-      .force("x", this.d3.forceX(width / 2).strength(1))
-      .force("y", this.d3.forceY(height / 2).strength(1))
-      .force("link", this.d3.forceLink(data.links).id(d => {
-        return d.id;
-      }).distance(50).strength(1))
-      .on("tick", () => {
-        this.ticked(this)
-      });
+    this.graphLayout = this.setNodeForces(this.graphLayout, this.data.nodes, width, height);
 
     this.labelLayout = this.labelLayout
       .nodes(this.label.nodes)
