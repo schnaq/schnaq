@@ -31,7 +31,7 @@
   "Adds a toast to the screen. Has a title and a body, id is randomly generated.
    The context uses the same classes as it is known from bootstrap (e.g. primary,
    secondary, ...)."
-  [{:keys [title body id context]}]
+  [{:notification/keys [title body id context]}]
   [::notification :ret associative?]
   [:> (.-div motion)
    {:initial {:opacity 0}
