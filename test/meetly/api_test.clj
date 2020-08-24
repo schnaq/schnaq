@@ -16,7 +16,7 @@
                                                                 :meeting/end-date (db/now)
                                                                 :meeting/description ""}
                                                       :nickname "Wegi"}})]
-      (is (= 200 (:status response)))
+      (is (= 201 (:status response)))
       (is (s/valid? ::models/meeting (-> response :body :new-meeting))))))
 
 (deftest add-agendas-test
