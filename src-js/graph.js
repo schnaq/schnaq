@@ -154,18 +154,19 @@ class SchnaqD3 {
     return this.setLinkForces(forces);
   }
 
-  initializeGraph(data, width, height) {
-    this.container = this.svg.append("g");
+  drawNodes(data, size) {
     this.node = this.container.append("g").attr("class", "nodes")
       .selectAll("g")
       .data(data.nodes)
       .enter()
       .append("circle")
-      .attr("r", 5)
+      .attr("r", size)
       .attr("fill", node => {
         return this.color(node.group);
       });
+  }
 
+  drawLinks(data) {
     this.link = this.container.append("g").attr("class", "links")
       .selectAll("line")
       .data(data.links)
@@ -173,23 +174,12 @@ class SchnaqD3 {
       .append("line")
       .attr("stroke", "#aaa")
       .attr("stroke-width", "1px");
+  }
 
-    this.label = {
-      "nodes": [],
-      "links": []
-    };
-    data.nodes.forEach((node, index) => {
-      this.label.nodes.push({node: node});
-      this.label.nodes.push({node: node});
-      this.label.links.push({
-        source: index * 2,
-        target: index * 2 + 1
-      });
-    });
-
+  drawLabels(labels) {
     this.labelNode = this.container.append("g").attr("class", "labelNodes")
       .selectAll("text")
-      .data(this.label.nodes)
+      .data(labels.nodes)
       .enter()
       .append("text")
       .text((node, index) => {
@@ -199,14 +189,35 @@ class SchnaqD3 {
       .style("font-family", "Arial")
       .style("font-size", 12)
       .style("pointer-events", "none"); // to prevent mouseover/drag capture
+  }
+
+  initializeGraph(data, width, height) {
+    this.container = this.svg.append("g");
+    this.drawNodes(data, 5);
+    this.drawLinks(data);
+
+    let labels = {
+      "nodes": [],
+      "links": []
+    };
+    data.nodes.forEach((node, index) => {
+      labels.nodes.push({node: node});
+      labels.nodes.push({node: node});
+      labels.links.push({
+        source: index * 2,
+        target: index * 2 + 1
+      });
+    });
+
+    this.drawLabels(labels);
 
     this.graphLayout = this.setNodeForces(this.graphLayout, this.data.nodes, width, height);
     // Note: everything that ticked calls from `that` should be defined before.
 
     this.labelLayout = this.labelLayout
-      .nodes(this.label.nodes)
+      .nodes(labels.nodes)
       .force("charge", this.d3.forceManyBody().strength(-50))
-      .force("link", this.d3.forceLink(this.label.links).distance(0).strength(2));
+      .force("link", this.d3.forceLink(labels.links).distance(0).strength(2));
 
     data.links.forEach(link => {
       this.adjlist[link.source.index + "-" + link.target.index] = true;
