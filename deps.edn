@@ -11,6 +11,7 @@
         gnl/ghostwheel {:mvn/version "0.3.9"}
         http-kit/http-kit {:mvn/version "2.4.0"}
         metosin/reitit {:mvn/version "0.5.5"}
+        metosin/ring-http-response {:mvn/version "0.9.1"}
         org.clojure/clojure {:mvn/version "1.10.1"}
         org.clojure/clojurescript {:mvn/version "1.10.773"}
         org.clojure/data.json {:mvn/version "1.0.0"}
