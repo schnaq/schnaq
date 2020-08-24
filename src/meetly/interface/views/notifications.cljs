@@ -57,7 +57,7 @@
       :aria-atomic true}
      [:> AnimatePresence
       (for [notification notifications]
-        [:div {:key (:id notification)}
+        [:div {:key (:notification/id notification)}
          [toast notification]])]]))
 
 
@@ -80,7 +80,7 @@
   :notification/add
   (fn [{:keys [db]} [_ notification]]
     (let [notification-id (str (random-uuid))
-          notification' (assoc notification :id notification-id)]
+          notification' (assoc notification :notification/id notification-id)]
       {:db (update db :notifications conj notification')
        :notification/timed-remove notification-id})))
 
@@ -95,7 +95,9 @@
   (fn [db [_ notification-id]]
     (when-let [notifications (:notifications db)]
       (assoc db :notifications
-                (remove (fn [{:keys [id]}] (= id notification-id)) notifications)))))
+                (remove (fn [{:notification/keys [id]}]
+                          (= id notification-id))
+                        notifications)))))
 
 (rf/reg-event-db
   :notifications/reset
