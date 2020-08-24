@@ -13,7 +13,7 @@
                               (->
                                 (schnaqd3/SchnaqD3. d3 (str "#" id) (clj->js test-data/miserables))
                                 (.setSize width height)
-                                (.replaceData (clj->js test-data/short-miserables) width height))))}))
+                                (.replaceData (clj->js test-data/short-miserables) width height 10))))}))
 
 (defn view []
   [:div.container
