@@ -233,6 +233,10 @@
   [hash]
   (meeting-by-hash-generic hash meeting-pattern))
 
+;; ----------------------------------------------------------------------------
+;; agenda
+;; ----------------------------------------------------------------------------
+
 (>defn add-agenda-point
   "Add an agenda to the database.
   A discussion is automatically created for the agenda-point.
@@ -307,6 +311,14 @@
         [?agenda :agenda/meeting ?meeting]
         [?agenda :agenda/discussion ?discussion-id]]
       (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
+
+;; ----------------------------------------------------------------------------
+;; user
+;; ----------------------------------------------------------------------------
+
+(>defn user [id]
+  [int? :ret map?]
+  (d/pull (d/db (new-connection)) user-pattern id))
 
 (>defn author-id-by-nickname
   "Returns an author-id by nickname. The nickname is not case sensitive"
@@ -389,6 +401,10 @@
          '[:find ?names
            :where [_ :author/nickname ?names]]
          (d/db (new-connection)))))
+
+;; ----------------------------------------------------------------------------
+;; voting
+;; ----------------------------------------------------------------------------
 
 (>defn- vote-on-statement!
   "Up or Downvote a statement"

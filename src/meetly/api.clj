@@ -313,10 +313,28 @@
         _ :check_discussion]
     (response {:data {:nodes (discussion/mark-starting-nodes statements starting-arguments)
                       :links raw-links}})))
-;;TODO tests schreiben
+
+(comment
+  (let [discussion-id 74766790689302
+        discussion (db/agenda-by-discussion-id discussion-id)
+        meeting (db/meeting-by-hash "1ebb0319-3782-45e3-bcb3-746d398000d7")
+        author (db/user (-> meeting :meeting/author :db/id))
+        ]
+    {:id (:db/id discussion)
+     :content (:agenda/title discussion)
+     :author (:author/nickname author)
+     :type "agenda"})
+
+  )
+
+;{:id 54321, :content "Eine Woche fängt am Sonntag an!", :author "Wugisan" :starting-statement? false :type "statement"}
+
+
+
 ;;TODO Agenda point als Urknoten
 ;;TODO links zum Urknoten aus starting-arguments
 ;;TODO check zugriffsrechte
+;;TODO tests schreiben
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
