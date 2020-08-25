@@ -3,4 +3,4 @@
      :cloverage/opts {:html? true
                       :lcov? true}
      :tests [{:id :unit
-              :test-paths ["test"]}]}
+              :test-paths ["src/test"]}]}

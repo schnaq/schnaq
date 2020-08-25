@@ -1,4 +1,4 @@
-{:paths ["src" "src-js"]
+{:paths ["src/main" "src-js" "src/test"]
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
@@ -28,7 +28,7 @@
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
 
- :aliases {:test {:extra-paths ["test"]
+ :aliases {:test {:extra-paths ["src/test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.669"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.63"}
                                day8.re-frame/test {:mvn/version "0.1.5"}
