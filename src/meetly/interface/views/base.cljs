@@ -62,8 +62,7 @@
   [:form.form-inline
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
-                 (rf/dispatch [:user/set-display-name (oget e [:target :elements :name-input :value])])
-                 (rf/dispatch [:user/hide-display-name-input]))}
+                 (rf/dispatch [:user/set-display-name (oget e [:target :elements :name-input :value])]))}
    [:input#name-input.form-control.form-round-05.py-1.mr-sm-2
     {:type "text"
      :name "name-input"

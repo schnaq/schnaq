@@ -1,0 +1,31 @@
+#notifications-wrapper {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.toast {
+  width: 20rem;
+  margin-bottom: .5rem;
+
+  @media (min-width: 768px) {
+    width: 100%;
+  }
+}
+
+// Create all sub-classes of a toast
+$contexts: primary $primary,
+secondary $secondary,
+success $success,
+danger $danger,
+warning $warning,
+info $info;
+
+@each $class, $color in $contexts {
+  .toast-#{$class} {
+    .toast-header {
+      background-color: #{$color};
+      color: white;
+    }
+  }
+}

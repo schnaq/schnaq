@@ -49,8 +49,8 @@
      :meeting-form-end-time "Uhrzeit"
      :meeting/copy-share-link "Link kopieren:"
      :meeting/copy-link-tooltip "Hier klicken um Link zu kopieren"
+     :meeting/link-copied-heading "Link kopiert"
      :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
-     :meeting/admin-link-copied-success "Der Admin-Link wurde in Ihre Zwischenablage kopiert!"
      :meeting/created-success-heading "Ihr schnaq wurde erstellt!"
      :meeting/created-success-subheading "Link verteilen und loslegen"
      :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
@@ -91,6 +91,8 @@
      :discussion/others-think "Andere denken folgendes:"
      :discussion/undercut-bubble-intro "Der letzte Beitrag hat nichts mit dem vorherigen zu tun. Begründung:"
      :discussion.badges/user-overview "Alle Teilnehmenden"
+     :discussion.notification/new-content-title "Neuer Beitrag!"
+     :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
 
      ;; meetings overview
      :meetings/header "Meetings"
@@ -115,6 +117,9 @@
      :feedbacks.modal/screenshot "Foto der Anwendung mit abschicken?"
      :feedbacks.modal/disclaimer "Ihre Daten werden nur auf unseren Servern
      abgespeichert und keinen Dritten zugänglich gemacht."
+     :feedbacks.notification/title "Vielen Dank für Ihre Rückmeldung!"
+     :feedbacks.notification/body "Ihr Feedback wurde erfolgreich an uns
+     gesendet 🎉"
 
      ;; login
      :login/as "Hallo, "
@@ -135,11 +140,13 @@
      ;; User related
      :user.button/set-name "Name speichern"
      :user.button/set-name-placeholder "Ihr Name"
+     :user.button/success-body "Name erfolgreich gespeichert"
 
      ;; Errors
      :errors/navigate-to-startpage "Zurück zur Startseite"
      :errors/comic-relief "Ups ..."
      :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
+     :errors/generic "Es ist ein Fehler aufgetreten"
 
 
      ;; Route Link Texts

@@ -17,7 +17,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
-            [ring.util.response :refer [response not-found bad-request status]]
+            [ring.util.http-response :refer [ok created not-found bad-request forbidden unauthorized]]
             [taoensso.timbre :as log])
   (:import (java.util Base64 UUID))
   (:gen-class))
@@ -35,11 +35,18 @@
   (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
     (= edit-hash (:meeting/edit-hash authenticate-meeting))))
 
+
 (>defn- valid-discussion-hash?
   "Check if share hash and discussion id match."
   [share-hash discussion-id]
   [string? int? :ret boolean?]
   (not (nil? (db/agenda-by-meeting-hash-and-discussion-id share-hash discussion-id))))
+
+(defn- deny-access
+  "Return a 403 Forbidden to unauthorized access."
+  []
+  (forbidden {:error "You are not allowed to access this resource."}))
+
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -50,12 +57,12 @@
 (defn- ping
   "Route to ping the API. Used in our monitoring system."
   [_]
-  (response {:text "🧙‍♂️"}))
+  (ok {:text "🧙‍♂️"}))
 
 (defn- all-meetings
   "Returns all meetings from the db."
   [_req]
-  (response (fetch-meetings)))
+  (ok (fetch-meetings)))
 
 (defn- add-meeting
   "Adds a meeting to the database.
@@ -69,7 +76,7 @@
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
-    (response {:new-meeting created-meeting})))
+    (created "" {:new-meeting created-meeting})))
 
 (defn- update-meeting!
   "Updates a meeting and its agendas."
@@ -87,15 +94,15 @@
           (doseq [agenda updated-agendas]
             (db/update-agenda agenda))
           (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
-          (response {:text "Your Meetly has been updated."}))
-      (bad-request {:error "You are not allowed to update this meeting."}))))
+          (ok {:text "Your Meetly has been updated."}))
+      (deny-access))))
 
 (defn- add-author
   "Adds an author to the database."
   [req]
   (let [author-name (:nickname (:body-params req))]
     (db/add-user-if-not-exists author-name)
-    (response {:text "POST successful"})))
+    (ok {:text "POST successful"})))
 
 (defn- add-agendas
   "Adds a list of agendas to the database."
@@ -109,20 +116,20 @@
       (do (doseq [agenda-point agendas]
             (db/add-agenda-point (:title agenda-point) (:description agenda-point)
                                  meeting-id))
-          (response {:text "Agendas sent over successfully"}))
+          (ok {:text "Agendas sent over successfully"}))
       (bad-request {:error "Agenda could not be added"}))))
 
 (defn- meeting-by-hash
   "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
-    (response (db/meeting-by-hash hash))))
+    (ok (db/meeting-by-hash hash))))
 
 (defn- agendas-by-meeting-hash
   "Returns all agendas of a meeting, that matches the share-hash."
   [req]
   (let [meeting-hash (get-in req [:route-params :hash])]
-    (response (db/agendas-by-meeting-hash meeting-hash))))
+    (ok (db/agendas-by-meeting-hash meeting-hash))))
 
 (defn- agenda-by-meeting-hash-and-discussion-id
   "Returns the agenda tied to a certain discussion-id."
@@ -131,7 +138,7 @@
         meeting-hash (-> req :route-params :meeting-hash)
         agenda-point (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
     (if agenda-point
-      (response agenda-point)
+      (ok agenda-point)
       (not-found {:error
                   (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s."
                           discussion-id meeting-hash)}))))
@@ -145,7 +152,7 @@
         meeting-hash (get-in req [:query-params "meeting-hash"])
         statement-id (Long/valueOf ^String (get-in req [:query-params "statement-id"]))]
     (if (valid-discussion-hash? meeting-hash discussion-id)
-      (response (discussion/sub-discussion-information statement-id (dialog-db/all-arguments-for-discussion discussion-id)))
+      (ok (discussion/sub-discussion-information statement-id (dialog-db/all-arguments-for-discussion discussion-id)))
       (bad-request {:error "The link you followed was invalid."}))))
 
 (defn- start-discussion
@@ -155,11 +162,11 @@
         username (get-in req [:query-params "username"])
         meeting-hash (get-in req [:query-params "meeting-hash"])]
     (if (valid-discussion-hash? meeting-hash discussion-id)
-      (response (->
-                  (dialog/start-discussion {:discussion/id discussion-id
-                                            :user/nickname (db/canonical-username username)})
-                  processors/with-votes
-                  (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
+      (ok (->
+            (dialog/start-discussion {:discussion/id discussion-id
+                                      :user/nickname (db/canonical-username username)})
+            processors/with-votes
+            (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
       (bad-request {:error "The link you followed was invalid"}))))
 
 
@@ -170,10 +177,10 @@
         meeting-hash (:meeting-hash body-params)
         discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? meeting-hash discussion-id)
-      (response (->
-                  (dialog/continue-discussion reaction args)
-                  processors/with-votes
-                  (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
+      (ok (->
+            (dialog/continue-discussion reaction args)
+            processors/with-votes
+            (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
       (bad-request {:error "The link you followed was invalid"}))))
 
 
@@ -189,11 +196,11 @@
           counter-vote (counter-check-vote-fn statement-id nickname)]
       (if vote
         (do (remove-vote-fn statement-id nickname)
-            (response {:operation :removed}))
+            (ok {:operation :removed}))
         (do (add-vote-fn statement-id nickname)
             (if counter-vote
-              (response {:operation :switched})
-              (response {:operation :added})))))
+              (ok {:operation :switched})
+              (ok {:operation :added})))))
     (bad-request {:error "Vote could not be registered"})))
 
 (defn- toggle-upvote-statement
@@ -234,15 +241,15 @@
         feedback-id (db/add-feedback! feedback)
         screenshot (:screenshot body-params)]
     (save-screenshot-if-provided! screenshot "public/feedbacks/screenshots" feedback-id)
-    (response {:text "Feedback successfully created."})))
+    (created "" {:feedback feedback})))
 
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (response (->> (db/all-feedbacks)
-                   (map first)))
-    (status 401)))
+    (ok (->> (db/all-feedbacks)
+             (map first)))
+    (unauthorized)))
 
 
 ;; -----------------------------------------------------------------------------
@@ -252,57 +259,57 @@
   "Returns the number of all meetings."
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (response {:meetings-num (db/number-of-meetings)})
-    (bad-request {:message "You are not allowed to use this resource"})))
+    (ok {:meetings-num (db/number-of-meetings)})
+    (deny-access)))
 
 (defn- number-of-usernames
   "Returns the number of all meetings."
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (response {:usernames-num (db/number-of-usernames)})
-    (bad-request {:message "You are not allowed to use this resource"})))
+    (ok {:usernames-num (db/number-of-usernames)})
+    (deny-access)))
 
 (defn- agendas-per-meeting
   "Returns the average numbers of meetings"
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (response {:average-agendas (float (db/average-number-of-agendas))})
-    (bad-request {:message "You are not allowed to use this resource"})))
+    (ok {:average-agendas (float (db/average-number-of-agendas))})
+    (deny-access)))
 
 (defn- number-of-statements
   "Returns the number of statements"
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (response {:statements-num (db/number-of-statements)})
-    (bad-request {:message "You are not allowed to use this resource"})))
+    (ok {:statements-num (db/number-of-statements)})
+    (deny-access)))
 
 (defn- number-of-active-users
   "Returns the number of statements"
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (response {:active-users-num (db/number-of-active-users)})
-    (bad-request {:message "You are not allowed to use this resource"})))
+    (ok {:active-users-num (db/number-of-active-users)})
+    (deny-access)))
 
 (defn- statement-lengths-stats
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (response {:statement-length-stats (db/statement-length-stats)})
-    (bad-request {:message "You are not allowed to use this resource"})))
+    (ok {:statement-length-stats (db/statement-length-stats)})
+    (deny-access)))
 
 (defn- argument-type-stats
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (response {:argument-type-stats (db/argument-type-stats)})
-    (bad-request {:message "You are not allowed to use this resource"})))
+    (ok {:argument-type-stats (db/argument-type-stats)})
+    (deny-access)))
 
 (defn- check-credentials
   "Checks whether share-hash and edit-hash match."
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)
         edit-hash (:edit-hash body-params)]
-    (response {:valid-credentials? (valid-credentials? share-hash edit-hash)})))
+    (ok {:valid-credentials? (valid-credentials? share-hash edit-hash)})))
 
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."

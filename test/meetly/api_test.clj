@@ -1,5 +1,6 @@
 (ns meetly.api-test
   (:require [clojure.spec.alpha :as s]
+            [clojure.string :as string]
             [clojure.test :refer [deftest testing is use-fixtures]]
             [dialog.discussion.database :as dialog-db]
             [meetly.api :as api]
@@ -17,7 +18,7 @@
                                                                 :meeting/end-date (db/now)
                                                                 :meeting/description ""}
                                                       :nickname "Wegi"}})]
-      (is (= 200 (:status response)))
+      (is (= 201 (:status response)))
       (is (s/valid? ::models/meeting (-> response :body :new-meeting))))))
 
 (deftest add-agendas-test
@@ -103,8 +104,8 @@
           new-meeting (db/meeting-private-data old-meeting-id)]
       (is (= old-share-hash (:meeting/share-hash new-meeting)))
       (is (= old-edit-hash (:meeting/edit-hash new-meeting)))
-      (is (= 400 (:status update-response)))
-      (is (= "You are not allowed to update this meeting." (-> update-response :body :error))))))
+      (is (= 403 (:status update-response)))
+      (is (not (string/blank? (-> update-response :body :error)))))))
 
 (deftest check-credentials-test
   (testing "Check if credentials are verified correctly."
