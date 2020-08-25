@@ -147,11 +147,11 @@
           error-text "Invalid meeting hash. You are not allowed to view this data."]
       (testing "valid request"
         (is (= 200 (:status response)))
-        (is (contains? (:body response) :data))
-        (is (contains? (-> response :body :data) :nodes))
-        (is (contains? (-> response :body :data) :links))
-        (is (not (nil? (-> response :body :data :nodes))))
-        (is (not (nil? (-> response :body :data :links)))))
+        (is (contains? (:body response) :graph))
+        (is (contains? (-> response :body :graph) :nodes))
+        (is (contains? (-> response :body :graph) :links))
+        (is (not (nil? (-> response :body :graph :nodes))))
+        (is (not (nil? (-> response :body :graph :links)))))
       (testing "bad request"
         (is (= 400 (:status bad-response)))
         (is (= error-text (-> bad-response :body :error)))))))
