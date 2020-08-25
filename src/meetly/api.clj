@@ -317,8 +317,6 @@
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
 
 
-;;TODO tests schreiben
-
 ;; -----------------------------------------------------------------------------
 ;; Routes
 
