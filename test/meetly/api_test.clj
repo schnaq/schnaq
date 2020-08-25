@@ -1,6 +1,7 @@
 (ns meetly.api-test
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest testing is use-fixtures]]
+            [dialog.discussion.database :as dialog-db]
             [meetly.api :as api]
             [meetly.meeting.database :as db]
             [meetly.meeting.models :as models]
@@ -122,3 +123,12 @@
       (is (-> succeeding-response :body :valid-credentials?))
       (is (not (-> failing-response :body :valid-credentials?)))
       (is (= 200 (:status failing-response))))))
+
+(deftest valid-discussion-hash?-test
+  (testing "Check if share hash matches discussion id"
+    (let [valid-discussion-hash? @#'api/valid-discussion-hash?
+          meeting-share-hash "89eh32hoas-2983ud"
+          discussion-id (:db/id (first (dialog-db/all-discussions-by-title "Cat or Dog?")))]
+      (is (not (valid-discussion-hash? "wugilugi" discussion-id)))
+      (is (not (valid-discussion-hash? "" discussion-id)))
+      (is (valid-discussion-hash? meeting-share-hash discussion-id)))))
