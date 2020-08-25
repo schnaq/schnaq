@@ -32,7 +32,6 @@ test-cljs:
     - yarn install
   script:
     - yarn shadow-cljs compile test
-    - node target/test/compiled/test.js
 
 lint:
   image: clojure:openjdk-14-tools-deps-alpine

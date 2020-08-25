@@ -3,6 +3,7 @@
 target/
 .nrepl-port
 pom.xml
+out/
 
 .datomic/
 datomic/
