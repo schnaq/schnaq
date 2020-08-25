@@ -37,13 +37,19 @@
         premises-list (map assoc-type-to-premises children)]
     (flatten premises-list)))
 
-(>defn create-link
+(>defn- create-link
   [statement arguments]
   [map? sequential? :ret sequential?]
   (let [children (direct-children (:id statement) arguments)]
     (map (fn [child]
            {:source (:id statement) :target (:db/id child) :type (:type child)})
          children)))
+
+(>defn create-links
+  "Create a link for every argument."
+  [statements arguments]
+  [sequential? sequential? :ret sequential?]
+  (remove empty? (map #(create-link % arguments) statements)))
 
 (>defn sub-discussion-information
   "Returns statistics about the sub-discussion starting with `root-statement-id`.
@@ -88,3 +94,11 @@
      :content (:agenda/title discussion)
      :author (:author/nickname (:user/core-author author))
      :type "agenda"}))
+
+(>defn agenda-links
+  "Creates links from an starting argument to an agenda node."
+  [discussion-id starting-arguments]
+  [int? sequential? :ret set?]
+  (set (map (fn [argument] {:source (-> argument :argument/conclusion :db/id)
+                            :target discussion-id
+                            :type :argument.type/starting}) starting-arguments)))

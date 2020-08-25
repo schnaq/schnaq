@@ -387,8 +387,8 @@
         :where [?arguments :argument/discussions ?discussion-id]
         [?statements :statement/version _]
         (or
-          [?argument :argument/conclusion ?statements]
-          [?argument :argument/premises ?statements])]
+          [?arguments :argument/conclusion ?statements]
+          [?arguments :argument/premises ?statements])]
       (d/db (new-connection)) discussion-id graph-statement-pattern)))
 
 (>defn add-user-if-not-exists

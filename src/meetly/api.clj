@@ -309,14 +309,15 @@
         statements (db/all-statements-for-agenda discussion-id)
         starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)
         arguments (dialog-db/all-arguments-for-discussion discussion-id)
-        raw-links (map #(discussion/create-link % arguments) statements)
+        raw-links (discussion/create-links statements arguments)
         _ :check_discussion]
     (response {:data {:nodes
                       (conj (discussion/mark-starting-nodes statements starting-arguments)
                             (discussion/agenda-node discussion-id share-hash))
-                      :links raw-links}})))
+                      :links (concat raw-links
+                                     (discussion/agenda-links discussion-id starting-arguments))}})))
 
-;;TODO links zum Urknoten aus starting-arguments
+
 ;;TODO check zugriffsrechte
 ;;TODO tests schreiben
 
