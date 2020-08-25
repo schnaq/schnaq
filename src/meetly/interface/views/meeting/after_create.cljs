@@ -8,7 +8,8 @@
             [ghostwheel.core :refer [>defn-]]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
-            [meetly.interface.views.base :as base]))
+            [meetly.interface.views.base :as base]
+            [meetly.interface.utils.js-wrapper :as js-wrap]))
 
 (>defn- get-share-link
   [current-route]
@@ -28,20 +29,6 @@
         location (oget js/window :location)]
     (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
 
-(defn- copy-success-display
-  []
-  (let [display-success? @(rf/subscribe [:meeting/link-copied-display])]
-    [:div
-     (if display-success?
-       [:div.alert-success.text-center
-        {:style {:width "50%"
-                 :margin "auto"}
-         :role "alert"}
-        [:p (labels :meeting/link-copied-success)]]
-       [:div.alert-success
-        {:style {:visibility "hidden"}}
-        [:p "Platzhalter"]])]))
-
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
   [create-link-fn id-extra]
@@ -56,20 +43,24 @@
          [:div.pb-4
           [:form.form.create-meeting-form.form-inline.row
            {:id (str "meeting-link-form-" id-extra)
-            :on-click (fn []
+            :on-click (fn [e]
+                        (js-wrap/prevent-default e)
                         (clipboard/copy-to-clipboard! display-content)
-                        (rf/dispatch [:meeting/link-copied]))
+                        (rf/dispatch
+                          [:notification/add
+                           #:notification{:title (labels :meeting/link-copied-heading)
+                                          :body (labels :meeting/link-copied-success)
+                                          :context :info}]))
             :data-toggle "tooltip"
             :data-placement "right"
             :title (labels :meeting/copy-link-tooltip)}
-           [:input.form-control.form-round.form.title.col-11.copy-link-form
+           [:input.form-control.form-round.col-11.copy-link-form.link-pointer
             {:id meeting-link-id
              :type "text"
              :value display-content
              :readOnly true}]
-           [:label.col-1 {:for meeting-link-id}
-            [:h3 {:class (str "m-auto far " (fa :copy))}]]]]))}))
-
+           [:label.col-1.link-pointer {:for meeting-link-id}
+            [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]]))}))
 
 (defn img-text
   "Create one icon in a grid"
@@ -127,7 +118,6 @@
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
       [educate-admin-element share-hash admin-hash]
-      [copy-success-display]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-meetly-after-creation)]
@@ -136,24 +126,3 @@
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
        (labels :meetings/continue-to-meetly-button)]]]))
-
-;; Events
-
-(rf/reg-event-fx
-  :meeting/link-copied
-  (fn [{:keys [db]} _]
-    {:db (assoc-in db [:display-triggers :meeting-link-success] true)
-     :dispatch-later [{:dispatch [:meeting/hide-link-copied-display]
-                       :ms 5000}]}))
-
-(rf/reg-event-db
-  :meeting/hide-link-copied-display
-  (fn [db _]
-    (assoc-in db [:display-triggers :meeting-link-success] false)))
-
-;; Subs
-
-(rf/reg-sub
-  :meeting/link-copied-display
-  (fn [db _]
-    (get-in db [:display-triggers :meeting-link-success])))

@@ -26,6 +26,7 @@
     <orderEntry type="library" name="Deps: ring/ring-devel:1.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.logging:0.5.0" level="project" />
+    <orderEntry type="library" name="Deps: metosin/ring-http-response:0.9.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.44" level="project" />
     <orderEntry type="library" name="Deps: metosin/muuntaja:0.6.7" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.0.669" level="project" />
@@ -107,6 +108,7 @@
     <orderEntry type="library" name="Deps: instaparse:1.4.8" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client-pro:0.9.63" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-js:0.8.861" level="project" />
+    <orderEntry type="library" name="Deps: clj-tuple:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-core:0.5.5" level="project" />
     <orderEntry type="library" name="Deps: zprint:0.5.1" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/truss:1.5.0" level="project" />
@@ -178,6 +180,7 @@
     <orderEntry type="library" name="Deps: org.clojure/tools.reader:1.3.3" level="project" />
     <orderEntry type="library" name="Deps: org.tcrawley/dynapath:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: javax.servlet/javax.servlet-api:3.1.0" level="project" />
+    <orderEntry type="library" name="Deps: potemkin:0.4.5" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-http:0.5.5" level="project" />
     <orderEntry type="library" name="Deps: nrepl:0.7.0" level="project" />
     <orderEntry type="library" name="Deps: binaryage/oops:0.7.0" level="project" />
