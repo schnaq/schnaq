@@ -2,7 +2,8 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [dialog.discussion.database :as ddb]
             [meetly.meeting.database :as database]
-            [meetly.test.toolbelt :as meetly-toolbelt]))
+            [meetly.test.toolbelt :as meetly-toolbelt]
+            [meetly.meeting.database :as db]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once meetly-toolbelt/clean-database-fixture)
@@ -209,3 +210,10 @@
       (testing "Agenda should be gone"
         (database/delete-agendas [agenda-id] meeting-id)
         (is (nil? (get-in (database/agenda agenda-id) [:agenda/meeting :db/id])))))))
+
+(deftest all-statements-for-discussion-test
+  (testing "Returns all statements belonging to a agenda."
+    (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Wetter Graph")))
+          statements (db/all-statements-for-discussion discussion-id)]
+      (is (= 7 (count statements)))
+      (is (= 1 (count (filter #(= "foo" (:content %)) statements)))))))

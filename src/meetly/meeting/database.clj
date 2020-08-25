@@ -372,7 +372,7 @@
   (:author/nickname
     (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
 
-(>defn all-statements-for-agenda
+(>defn all-statements-for-discussion
   "Returns all statements for a discussion."
   [discussion-id]
   [int? :ret sequential?]

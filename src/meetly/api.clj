@@ -309,7 +309,7 @@
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)
         discussion-id (:discussion-id body-params)
-        statements (db/all-statements-for-agenda discussion-id)
+        statements (db/all-statements-for-discussion discussion-id)
         starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)]
     (if (valid-discussion-hash? share-hash discussion-id)
       (response {:data {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)

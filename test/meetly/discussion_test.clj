@@ -48,7 +48,7 @@
   (testing "Validate data for graph nodes."
     (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Tapir oder Ameisenbär?")))
           share-hash "89eh32hoas-2983ud"
-          statements (db/all-statements-for-agenda discussion-id)
+          statements (db/all-statements-for-discussion discussion-id)
           contents (set (map :content statements))
           starting-arguments (ddb/starting-arguments-by-discussion discussion-id)
           nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
@@ -63,7 +63,7 @@
 (deftest links-for-agenda-test
   (testing "Validate data for graph links"
     (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Wetter Graph")))
-          statements (db/all-statements-for-agenda discussion-id)
+          statements (db/all-statements-for-discussion discussion-id)
           starting-arguments (ddb/starting-arguments-by-discussion discussion-id)
           links (discussion/links-for-agenda statements starting-arguments discussion-id)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
