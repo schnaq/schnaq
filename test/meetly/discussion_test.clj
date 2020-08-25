@@ -62,17 +62,9 @@
 
 (deftest links-for-agenda-test
   (testing "Validate data for graph links"
-
     (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Wetter Graph")))
           statements (db/all-statements-for-agenda discussion-id)
           starting-arguments (ddb/starting-arguments-by-discussion discussion-id)
           links (discussion/links-for-agenda statements starting-arguments discussion-id)]
-
-      (testing (str "Links contains agenda as data thus containing one more element than the statements:n"
-                    (apply str links) "Statements:\n"
-                    (apply str statements))
-        (is (= (count statements) (count links))))
-
-      )
-
-    ))
+      (testing "Links contains agenda as data thus containing one more element than the statements."
+        (is (= (count statements) (count links)))))))

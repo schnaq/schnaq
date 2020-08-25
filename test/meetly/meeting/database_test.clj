@@ -128,27 +128,27 @@
 
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
-    (is (= 1 (database/number-of-meetings)))
-    (any-meeting-id)                                        ;; Ads any new meeting
     (is (= 2 (database/number-of-meetings)))
+    (any-meeting-id)                                        ;; Ads any new meeting
+    (is (= 3 (database/number-of-meetings)))
     (is (zero? (database/number-of-meetings (database/now))))))
 
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (= 4 (database/number-of-usernames)))
-    (database/add-user-if-not-exists "Some-Testdude")
     (is (= 5 (database/number-of-usernames)))
+    (database/add-user-if-not-exists "Some-Testdude")
+    (is (= 6 (database/number-of-usernames)))
     (is (zero? (database/number-of-meetings (database/now))))))
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
-    (is (= 27 (database/number-of-statements)))
+    (is (= 34 (database/number-of-statements)))
     (is (zero? (database/number-of-statements (database/now))))))
 
 (deftest average-number-of-agendas-test
   (testing "Test whether the average number of agendas fits."
-    (is (= 2 (database/average-number-of-agendas)))
+    (is (= 3/2 (database/average-number-of-agendas)))
     (any-meeting-id)
     (is (= 1 (database/average-number-of-agendas)))))
 
@@ -175,7 +175,7 @@
   (testing "Statistics about argument types should be working."
     (let [stats (database/argument-type-stats)]
       (is (= 6 (:attacks stats)))
-      (is (= 9 (:supports stats)))
+      (is (= 14 (:supports stats)))
       (is (= 8 (:undercuts stats))))))
 
 (deftest update-agenda-test
