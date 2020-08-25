@@ -93,7 +93,7 @@
 ;; Pull Patterns
 
 (def ^:private author-pattern
-  "Pull a author based on these attributes."
+  "Pull an author based on these attributes."
   [:db/id
    :author/nickname])
 
