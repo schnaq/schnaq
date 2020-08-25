@@ -61,7 +61,6 @@
   Converts the epoch dates it receives into java Dates.
   Returns the id of the newly-created meeting as `:id-created`."
   [req]
-  (prn (keys req))
   (let [meeting (-> req :body-params :meeting)
         final-meeting (assoc meeting :meeting/share-hash (.toString (UUID/randomUUID))
                                      :meeting/edit-hash (.toString (UUID/randomUUID)))
