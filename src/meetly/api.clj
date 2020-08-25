@@ -319,8 +319,8 @@
         statements (db/all-statements-for-discussion discussion-id)
         starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (response {:data {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
-                        :links (discussion/links-for-agenda statements starting-arguments discussion-id)}})
+      (ok {:data {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
+                  :links (discussion/links-for-agenda statements starting-arguments discussion-id)}})
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
 
 
