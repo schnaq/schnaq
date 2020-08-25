@@ -304,34 +304,18 @@
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [body-params]}]
-  (let [_share-hash (:share-hash body-params)
+  (let [share-hash (:share-hash body-params)
         discussion-id (:discussion-id body-params)
         statements (db/all-statements-for-agenda discussion-id)
         starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)
         arguments (dialog-db/all-arguments-for-discussion discussion-id)
         raw-links (map #(discussion/create-link % arguments) statements)
         _ :check_discussion]
-    (response {:data {:nodes (discussion/mark-starting-nodes statements starting-arguments)
+    (response {:data {:nodes
+                      (conj (discussion/mark-starting-nodes statements starting-arguments)
+                            (discussion/agenda-node discussion-id share-hash))
                       :links raw-links}})))
 
-(comment
-  (let [discussion-id 74766790689302
-        discussion (db/agenda-by-discussion-id discussion-id)
-        meeting (db/meeting-by-hash "1ebb0319-3782-45e3-bcb3-746d398000d7")
-        author (db/user (-> meeting :meeting/author :db/id))
-        ]
-    {:id (:db/id discussion)
-     :content (:agenda/title discussion)
-     :author (:author/nickname author)
-     :type "agenda"})
-
-  )
-
-;{:id 54321, :content "Eine Woche fängt am Sonntag an!", :author "Wugisan" :starting-statement? false :type "statement"}
-
-
-
-;;TODO Agenda point als Urknoten
 ;;TODO links zum Urknoten aus starting-arguments
 ;;TODO check zugriffsrechte
 ;;TODO tests schreiben

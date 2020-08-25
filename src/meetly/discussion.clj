@@ -1,6 +1,7 @@
 (ns meetly.discussion
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn >defn-]]))
+            [ghostwheel.core :refer [>defn >defn-]]
+            [meetly.meeting.database :as db]))
 
 (>defn- premise-ids
   "Return all premise-ids of a single argument."
@@ -69,7 +70,21 @@
   (let [starting-conclusions (into #{} (map #(-> % :argument/conclusion :db/id) starting-arguments))]
     (map
       (fn [node]
-        (if (starting-conclusions (:id node))
-          (assoc node :starting-statement? true)
-          (assoc node :starting-statement? false)))
+        (assoc
+          (if (starting-conclusions (:id node))
+            (assoc node :starting-statement? true)
+            (assoc node :starting-statement? false))
+          :type "statement"))
       nodes)))
+
+(>defn agenda-node
+  "Creates node data for an agenda point."
+  [discussion-id meeting-hash]
+  [int? string? :ret map?]
+  (let [discussion (db/agenda-by-discussion-id discussion-id)
+        meeting (db/meeting-by-hash meeting-hash)
+        author (db/user (-> meeting :meeting/author :db/id))]
+    {:id (:db/id discussion)
+     :content (:agenda/title discussion)
+     :author (:author/nickname (:user/core-author author))
+     :type "agenda"}))

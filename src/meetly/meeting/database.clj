@@ -92,10 +92,17 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
-(def ^:private user-pattern
-  "Pull a user based on these attributes."
+(def ^:private author-pattern
+  "Pull a author based on these attributes."
   [:db/id
    :author/nickname])
+
+(def ^:private user-pattern
+  "Pull a user based on these atributes"
+  [:db/id
+   {:user/core-author [:author/nickname]}
+   :user/upvotes
+   :user/downvotes])
 
 (def ^:private meeting-pattern-public
   "Pull a meetly based on these attributes, omit sensitive information"
@@ -105,7 +112,7 @@
    :meeting/end-date
    :meeting/description
    :meeting/share-hash
-   {:meeting/author user-pattern}])
+   {:meeting/author author-pattern}])
 
 (def ^:private graph-statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
