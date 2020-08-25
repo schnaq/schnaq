@@ -7,7 +7,14 @@
     :meeting/start-date #inst "2019-10-01T01:01:01.000-00:00"
     :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
     :meeting/share-hash "89eh32hoas-2983ud"
-    :meeting/author "user/wegi"}])
+    :meeting/author "user/wegi"}
+   {:db/id "meeting/graph"
+    :meeting/title "graph-title"
+    :meeting/description "graph-description"
+    :meeting/start-date #inst "2019-10-01T01:01:01.000-00:00"
+    :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
+    :meeting/share-hash "graph-hash"
+    :meeting/author "user/mike"}])
 
 (def ^:private agendas
   [{:db/id "agenda/first-agenda"
@@ -19,11 +26,18 @@
     :agenda/title "Top 2"
     :agenda/description "Top 2.2"
     :agenda/discussion "discussion/tapir-or-ameisenbaer"
-    :agenda/meeting "meeting/expansion"}])
+    :agenda/meeting "meeting/expansion"}
+   {:db/id "agenda/graph-agenda"
+    :agenda/title "Top 3"
+    :agenda/description "Top 2.3"
+    :agenda/discussion "discussion/graph"
+    :agenda/meeting "meeting/graph"}])
 
 (def ^:private cat-or-dog-authors-and-users
   [{:db/id "user/wegi"
     :user/core-author {:db/id "author/wegi" :author/nickname "Wegi"}}
+   {:db/id "user/mike"
+    :user/core-author {:db/id "author/mike" :author/nickname "Mike"}}
    {:db/id "user/schredder"
     :user/core-author {:db/id "author/schredder" :author/nickname "Der Schredder"}}
    {:db/id "user/rambo"
@@ -297,6 +311,77 @@
     :discussion/states [:discussion.state/open]
     :discussion/starting-arguments ["argument/tedious-dogs"]}])
 
+(def ^:private graph-discussion
+  [{:db/id "discussion/graph"
+    :discussion/title "Wetter Graph"
+    :discussion/description "Der Graph muss korrekt sein"
+    :discussion/states [:discussion.state/open]
+    :discussion/starting-arguments ["argument/warm" "argument/foo"]}
+
+   {:db/id "argument/warm"
+    :argument/author "author/rambo"
+    :argument/premises [{:db/id "statement/GrossFoo"
+                         :statement/author "author/rambo"
+                         :statement/content "Foo"
+                         :statement/version 1}]
+    :argument/conclusion {:db/id "statement/warm"
+                          :statement/author "author/rambo"
+                          :statement/content "Es ist warm"
+                          :statement/version 1}
+    :argument/version 1
+    :argument/type :argument.type/support
+    :argument/discussions ["discussion/graph"]}
+
+   {:db/id "argument/B"
+    :argument/author "author/schredder"
+    :argument/premises [{:db/id "statement/B"
+                         :statement/author "author/rambo"
+                         :statement/content "B"
+                         :statement/version 1}]
+    :argument/conclusion "statement/GrossFoo"
+    :argument/version 1
+    :argument/type :argument.type/support
+    :argument/discussions ["discussion/graph"]}
+
+   {:db/id "argument/SonneScheint"
+    :argument/author "author/schredder"
+    :argument/premises [{:db/id "statement/SonneScheint"
+                         :statement/author "author/rambo"
+                         :statement/content "Die Sonne scheint!"
+                         :statement/version 1}]
+    :argument/conclusion "statement/warm"
+    :argument/version 1
+    :argument/type :argument.type/support
+    :argument/discussions ["discussion/graph"]}
+
+   {:db/id "argument/SonneScheintC"
+    :argument/author "author/schredder"
+    :argument/premises [{:db/id "statement/C"
+                         :statement/author "author/rambo"
+                         :statement/content "Die Sonne gibt Vitamin C"
+                         :statement/version 1}]
+    :argument/conclusion "statement/SonneScheint"
+    :argument/version 1
+    :argument/type :argument.type/support
+    :argument/discussions ["discussion/graph"]}
+
+   {:db/id "argument/foo"
+    :argument/author "author/schredder"
+    :argument/premises [{:db/id "statement/Bar"
+                         :statement/author "author/rambo"
+                         :statement/content "Bar"
+                         :statement/version 1}]
+    :argument/conclusion {:db/id "statement/foo"
+                          :statement/author "author/rambo"
+                          :statement/content "foo"
+                          :statement/version 1}
+    :argument/version 1
+    :argument/type :argument.type/support
+    :argument/discussions ["discussion/graph"]}
+
+   ])
+
 (def meetly-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-arguments
-          cat-or-dog-discussion meetings agendas))
+          cat-or-dog-discussion meetings agendas
+          graph-discussion))
