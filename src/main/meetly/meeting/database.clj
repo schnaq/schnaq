@@ -92,10 +92,17 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
-(def ^:private user-pattern
-  "Pull a user based on these attributes."
+(def ^:private author-pattern
+  "Pull an author based on these attributes."
   [:db/id
    :author/nickname])
+
+(def ^:private user-pattern
+  "Pull a user based on these atributes"
+  [:db/id
+   {:user/core-author [:author/nickname]}
+   :user/upvotes
+   :user/downvotes])
 
 (def ^:private meeting-pattern-public
   "Pull a meetly based on these attributes, omit sensitive information"
@@ -105,7 +112,13 @@
    :meeting/end-date
    :meeting/description
    :meeting/share-hash
-   {:meeting/author user-pattern}])
+   {:meeting/author author-pattern}])
+
+(def ^:private graph-statement-pattern
+  "Representation of a statement. Oftentimes used in a Datalog pull pattern."
+  [:db/id
+   [:statement/content :as :content]
+   {:statement/author [:author/nickname]}])
 
 (def ^:private meeting-pattern
   "Has all meeting information, including sensitive ones."
@@ -227,6 +240,10 @@
   [hash]
   (meeting-by-hash-generic hash meeting-pattern))
 
+;; ----------------------------------------------------------------------------
+;; agenda
+;; ----------------------------------------------------------------------------
+
 (>defn add-agenda-point
   "Add an agenda to the database.
   A discussion is automatically created for the agenda-point.
@@ -302,6 +319,14 @@
         [?agenda :agenda/discussion ?discussion-id]]
       (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
 
+;; ----------------------------------------------------------------------------
+;; user
+;; ----------------------------------------------------------------------------
+
+(>defn user [id]
+  [int? :ret map?]
+  (d/pull (d/db (new-connection)) user-pattern id))
+
 (>defn author-id-by-nickname
   "Returns an author-id by nickname. The nickname is not case sensitive"
   [nickname]
@@ -347,6 +372,25 @@
   (:author/nickname
     (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
 
+(>defn all-statements-for-discussion
+  "Returns all statements for a discussion."
+  [discussion-id]
+  [int? :ret sequential?]
+  (map
+    (fn [[statement & _]]
+      {:author (-> statement :statement/author :author/nickname)
+       :id (:db/id statement)
+       :content (:content statement)})
+    (d/q
+      '[:find (pull ?statements statement-pattern)
+        :in $ ?discussion-id statement-pattern
+        :where [?arguments :argument/discussions ?discussion-id]
+        [?statements :statement/version _]
+        (or
+          [?arguments :argument/conclusion ?statements]
+          [?arguments :argument/premises ?statements])]
+      (d/db (new-connection)) discussion-id graph-statement-pattern)))
+
 (>defn add-user-if-not-exists
   "Adds an author if they do not exist yet. Returns the (new) user-id."
   [nickname]
@@ -364,6 +408,10 @@
          '[:find ?names
            :where [_ :author/nickname ?names]]
          (d/db (new-connection)))))
+
+;; ----------------------------------------------------------------------------
+;; voting
+;; ----------------------------------------------------------------------------
 
 (>defn- vote-on-statement!
   "Up or Downvote a statement"

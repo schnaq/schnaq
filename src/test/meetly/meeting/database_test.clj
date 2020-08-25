@@ -2,7 +2,8 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [dialog.discussion.database :as ddb]
             [meetly.meeting.database :as database]
-            [meetly.test.toolbelt :as meetly-toolbelt]))
+            [meetly.test.toolbelt :as meetly-toolbelt]
+            [meetly.meeting.database :as db]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once meetly-toolbelt/clean-database-fixture)
@@ -128,27 +129,27 @@
 
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
-    (is (= 1 (database/number-of-meetings)))
-    (any-meeting-id)                                        ;; Ads any new meeting
     (is (= 2 (database/number-of-meetings)))
+    (any-meeting-id)                                        ;; Ads any new meeting
+    (is (= 3 (database/number-of-meetings)))
     (is (zero? (database/number-of-meetings (database/now))))))
 
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (= 4 (database/number-of-usernames)))
-    (database/add-user-if-not-exists "Some-Testdude")
     (is (= 5 (database/number-of-usernames)))
+    (database/add-user-if-not-exists "Some-Testdude")
+    (is (= 6 (database/number-of-usernames)))
     (is (zero? (database/number-of-meetings (database/now))))))
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
-    (is (= 27 (database/number-of-statements)))
+    (is (= 34 (database/number-of-statements)))
     (is (zero? (database/number-of-statements (database/now))))))
 
 (deftest average-number-of-agendas-test
   (testing "Test whether the average number of agendas fits."
-    (is (= 2 (database/average-number-of-agendas)))
+    (is (= 3/2 (database/average-number-of-agendas)))
     (any-meeting-id)
     (is (= 1 (database/average-number-of-agendas)))))
 
@@ -175,7 +176,7 @@
   (testing "Statistics about argument types should be working."
     (let [stats (database/argument-type-stats)]
       (is (= 6 (:attacks stats)))
-      (is (= 9 (:supports stats)))
+      (is (= 14 (:supports stats)))
       (is (= 8 (:undercuts stats))))))
 
 (deftest update-agenda-test
@@ -209,3 +210,10 @@
       (testing "Agenda should be gone"
         (database/delete-agendas [agenda-id] meeting-id)
         (is (nil? (get-in (database/agenda agenda-id) [:agenda/meeting :db/id])))))))
+
+(deftest all-statements-for-discussion-test
+  (testing "Returns all statements belonging to a agenda."
+    (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Wetter Graph")))
+          statements (db/all-statements-for-discussion discussion-id)]
+      (is (= 7 (count statements)))
+      (is (= 1 (count (filter #(= "foo" (:content %)) statements)))))))

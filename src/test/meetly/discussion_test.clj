@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
             [dialog.discussion.database :as ddb]
             [meetly.discussion :as discussion]
+            [meetly.meeting.database :as db]
             [meetly.test.toolbelt :as meetly-toolbelt]))
 
 (use-fixtures :each meetly-toolbelt/init-test-delete-db-fixture)
@@ -41,3 +42,29 @@
       (is (contains? author-names "Der miese Peter"))
       (is (contains? author-names "Wegi"))
       (is (contains? author-names "Der Schredder")))))
+
+
+(deftest nodes-for-agenda-test
+  (testing "Validate data for graph nodes."
+    (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Tapir oder Ameisenbär?")))
+          share-hash "89eh32hoas-2983ud"
+          statements (db/all-statements-for-discussion discussion-id)
+          contents (set (map :content statements))
+          starting-arguments (ddb/starting-arguments-by-discussion discussion-id)
+          nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
+          statement-nodes (filter #(= "statement" (:type %)) nodes)]
+      (testing "Nodes contains agenda as data thus containing one more element than the statements."
+        (is (= (count statements) (dec (count nodes)))))
+      (testing "Only one agenda point."
+        (is (= 1 (count (filter #(= "agenda" (:type %)) nodes)))))
+      (testing (str "Check if all content from statements is present in nodes.")
+        (is (= (count statement-nodes) (count (filter #(contents (:content %)) statement-nodes))))))))
+
+(deftest links-for-agenda-test
+  (testing "Validate data for graph links"
+    (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Wetter Graph")))
+          statements (db/all-statements-for-discussion discussion-id)
+          starting-arguments (ddb/starting-arguments-by-discussion discussion-id)
+          links (discussion/links-for-agenda statements starting-arguments discussion-id)]
+      (testing "Links contains agenda as data thus containing one more element than the statements."
+        (is (= (count statements) (count links)))))))

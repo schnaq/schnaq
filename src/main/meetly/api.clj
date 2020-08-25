@@ -35,6 +35,12 @@
   (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
     (= edit-hash (:meeting/edit-hash authenticate-meeting))))
 
+(>defn- valid-discussion-hash?
+  "Check if share hash and discussion id match."
+  [share-hash discussion-id]
+  [string? int? :ret boolean?]
+  (not (nil? (db/agenda-by-meeting-hash-and-discussion-id share-hash discussion-id))))
+
 (defn- deny-access
   "Return a 403 Forbidden to unauthorized access."
   []
@@ -142,9 +148,8 @@
   [req]
   (let [discussion-id (Long/valueOf ^String (get-in req [:query-params "discussion-id"]))
         meeting-hash (get-in req [:query-params "meeting-hash"])
-        statement-id (Long/valueOf ^String (get-in req [:query-params "statement-id"]))
-        valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
-    (if valid-link?
+        statement-id (Long/valueOf ^String (get-in req [:query-params "statement-id"]))]
+    (if (valid-discussion-hash? meeting-hash discussion-id)
       (ok (discussion/sub-discussion-information statement-id (dialog-db/all-arguments-for-discussion discussion-id)))
       (bad-request {:error "The link you followed was invalid."}))))
 
@@ -153,9 +158,8 @@
   [req]
   (let [discussion-id (Long/valueOf ^String (get-in req [:route-params :discussion-id]))
         username (get-in req [:query-params "username"])
-        meeting-hash (get-in req [:query-params "meeting-hash"])
-        valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
-    (if valid-link?
+        meeting-hash (get-in req [:query-params "meeting-hash"])]
+    (if (valid-discussion-hash? meeting-hash discussion-id)
       (ok (->
             (dialog/start-discussion {:discussion/id discussion-id
                                       :user/nickname (db/canonical-username username)})
@@ -169,9 +173,8 @@
   [{:keys [body-params]}]
   (let [[reaction args] (processors/with-canonical-usernames (:payload body-params))
         meeting-hash (:meeting-hash body-params)
-        discussion-id (:discussion-id body-params)
-        valid-link? (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
-    (if valid-link?
+        discussion-id (:discussion-id body-params)]
+    (if (valid-discussion-hash? meeting-hash discussion-id)
       (ok (->
             (dialog/continue-discussion reaction args)
             processors/with-votes
@@ -306,6 +309,18 @@
         edit-hash (:edit-hash body-params)]
     (ok {:valid-credentials? (valid-credentials? share-hash edit-hash)})))
 
+(defn- graph-data-for-agenda
+  "Delivers the graph-data needed to draw the graph in the frontend."
+  [{:keys [body-params]}]
+  (let [share-hash (:share-hash body-params)
+        discussion-id (:discussion-id body-params)
+        statements (db/all-statements-for-discussion discussion-id)
+        starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
+                         :links (discussion/links-for-agenda statements starting-arguments discussion-id)}})
+      (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
@@ -332,6 +347,7 @@
     (POST "/feedback/add" [] add-feedback)
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/credentials/validate" [] check-credentials)
+    (POST "/graph/discussion" [] graph-data-for-agenda)
     ;; Analytics routes
     (POST "/analytics/meetings" [] number-of-meetings)
     (POST "/analytics/usernames" [] number-of-usernames)
