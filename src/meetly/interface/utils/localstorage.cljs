@@ -13,7 +13,7 @@
     (str (name k))))
 
 (>defn- stringify
-  "Stringifies a symbol or keyword. Tosses the namespace."
+  "Stringifies a symbol or keyword."
   [val]
   [(s/or keyword? symbol? string?) :ret string?]
   (if (keyword? val)
