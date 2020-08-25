@@ -115,6 +115,9 @@
      :feedbacks.modal/screenshot "Foto der Anwendung mit abschicken?"
      :feedbacks.modal/disclaimer "Ihre Daten werden nur auf unseren Servern
      abgespeichert und keinen Dritten zugänglich gemacht."
+     :feedbacks.notification/title "Vielen Dank für Ihre Rückmeldung!"
+     :feedbacks.notification/body "Ihr Feedback wurde erfolgreich an uns
+     gesendet 🎉"
 
      ;; login
      :login/as "Hallo, "
