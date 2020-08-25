@@ -317,7 +317,6 @@
     :discussion/description "Der Graph muss korrekt sein"
     :discussion/states [:discussion.state/open]
     :discussion/starting-arguments ["argument/warm" "argument/foo"]}
-
    {:db/id "argument/warm"
     :argument/author "author/rambo"
     :argument/premises [{:db/id "statement/GrossFoo"
@@ -331,7 +330,6 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
-
    {:db/id "argument/B"
     :argument/author "author/schredder"
     :argument/premises [{:db/id "statement/B"
@@ -342,7 +340,6 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
-
    {:db/id "argument/SonneScheint"
     :argument/author "author/schredder"
     :argument/premises [{:db/id "statement/SonneScheint"
@@ -353,7 +350,6 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
-
    {:db/id "argument/SonneScheintC"
     :argument/author "author/schredder"
     :argument/premises [{:db/id "statement/C"
@@ -364,7 +360,6 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
-
    {:db/id "argument/foo"
     :argument/author "author/schredder"
     :argument/premises [{:db/id "statement/Bar"
@@ -377,9 +372,7 @@
                           :statement/version 1}
     :argument/version 1
     :argument/type :argument.type/support
-    :argument/discussions ["discussion/graph"]}
-
-   ])
+    :argument/discussions ["discussion/graph"]}])
 
 (def meetly-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-arguments

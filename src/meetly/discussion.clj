@@ -43,14 +43,14 @@
   [map? sequential? :ret sequential?]
   (let [children (direct-children (:id statement) arguments)]
     (map (fn [child]
-           {:source (:id statement) :target (:db/id child) :type (:type child)})
+           {:source (:db/id child) :target (:id statement) :type (:type child)})
          children)))
 
-(>defn create-links
+(>defn- create-links
   "Create a link for every argument."
   [statements arguments]
   [sequential? sequential? :ret sequential?]
-  (remove empty? (map #(create-link % arguments) statements)))
+  (remove empty? (flatten (map #(create-link % arguments) statements))))
 
 (>defn sub-discussion-information
   "Returns statistics about the sub-discussion starting with `root-statement-id`.
