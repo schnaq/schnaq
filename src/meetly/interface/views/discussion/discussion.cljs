@@ -4,6 +4,7 @@
             [ajax.core :as ajax]
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
+            [meetly.interface.text.display-data :refer [labels]]
             [meetly.interface.views.discussion.logic :as logic]
             [meetly.interface.views.discussion.view-elements :as view]
             [meetly.interface.utils.js-wrapper :as js-wrap]
@@ -163,13 +164,14 @@
                     :on-success [:set-current-discussion-steps]
                     :on-failure [:ajax-failure]}})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :set-current-discussion-steps
-  (fn [db [_ response]]
-    (-> db
-        (assoc-in [:discussion :options :all] response)
-        (assoc-in [:discussion :options :steps] (map first response))
-        (assoc-in [:discussion :options :args] (map second response)))))
+  (fn [{:keys [db]} [_ response]]
+    {:db (-> db
+             (assoc-in [:discussion :options :all] response)
+             (assoc-in [:discussion :options :steps] (map first response))
+             (assoc-in [:discussion :options :args] (map second response)))
+     :dispatch [:notification/new-content]}))
 
 ;; This and the following events serve as the multimethod-equivalent in the frontend
 ;; for stepping through the discussion.
@@ -191,7 +193,8 @@
           (-> reaction-args
               (assoc :new/starting-argument-conclusion conclusion-text)
               (assoc :new/starting-argument-premises premise-text))]
-      {:dispatch-n [[:continue-discussion-http-call [reaction updated-args]]
+      {:dispatch-n [[:added/new-content]
+                    [:continue-discussion-http-call [reaction updated-args]]
                     [:navigation/navigate :routes.discussion/start {:id id
                                                                     :share-hash share-hash}]]
        :form/clear form})))
@@ -219,30 +222,50 @@
       {:dispatch-n [[:discussion.history/push options premise attitude]
                     [:continue-discussion-http-call [reaction new-args]]]})))
 
+(rf/reg-event-db
+  :added/new-content
+  (fn [db _]
+    (assoc db :added/new-content? true)))
+
+(rf/reg-event-fx
+  :notification/new-content
+  (fn [{:keys [db]} _]
+    (when (:added/new-content? db)
+      {:db (assoc db :added/new-content? false)
+       :dispatch [:notification/add
+                  #:notification{:title (labels :discussion.notification/new-content-title)
+                                 :body (labels :discussion.notification/new-content-body)
+                                 :context :success}]})))
+
 (rf/reg-event-fx
   :starting-rebut/new
   (fn [_cofx [reaction args]]
-    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+    {:dispatch-n [[:added/new-content]
+                  [:continue-discussion-http-call [reaction args]]]}))
 
 (rf/reg-event-fx
   :starting-support/new
   (fn [_cofx [reaction args]]
-    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+    {:dispatch-n [[:added/new-content]
+                  [:continue-discussion-http-call [reaction args]]]}))
 
 (rf/reg-event-fx
   :rebut/new
   (fn [_cofx [reaction args]]
-    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+    {:dispatch-n [[:added/new-content]
+                  [:continue-discussion-http-call [reaction args]]]}))
 
 (rf/reg-event-fx
   :support/new
   (fn [_cofx [reaction args]]
-    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+    {:dispatch-n [[:added/new-content]
+                  [:continue-discussion-http-call [reaction args]]]}))
 
 (rf/reg-event-fx
   :undercut/new
   (fn [_cofx [reaction args]]
-    {:dispatch [:continue-discussion-http-call [reaction args]]}))
+    {:dispatch-n [[:added/new-content]
+                  [:continue-discussion-http-call [reaction args]]]}))
 
 (rf/reg-event-fx
   :continue-discussion-http-call
