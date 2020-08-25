@@ -91,6 +91,8 @@
      :discussion/others-think "Andere denken folgendes:"
      :discussion/undercut-bubble-intro "Der letzte Beitrag hat nichts mit dem vorherigen zu tun. Begründung:"
      :discussion.badges/user-overview "Alle Teilnehmenden"
+     :discussion.notification/new-content-title "Neuer Beitrag!"
+     :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
 
      ;; meetings overview
      :meetings/header "Meetings"
