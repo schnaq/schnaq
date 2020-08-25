@@ -1,5 +1,5 @@
 (ns meetly.interface.views.discussion-test
-  (:require [cljs.test :refer [deftest is testing run-tests]]
+  (:require [cljs.test :refer [deftest is testing]]
             [meetly.interface.views.discussion.logic :as d]))
 
 (deftest calculate-votes-test
