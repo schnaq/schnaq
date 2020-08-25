@@ -310,15 +310,10 @@
   (let [share-hash (:share-hash body-params)
         discussion-id (:discussion-id body-params)
         statements (db/all-statements-for-agenda discussion-id)
-        starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)
-        arguments (dialog-db/all-arguments-for-discussion discussion-id)
-        raw-links (discussion/create-links statements arguments)]
+        starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (response {:data {:nodes
-                        (conj (discussion/mark-starting-nodes statements starting-arguments)
-                              (discussion/agenda-node discussion-id share-hash))
-                        :links (concat raw-links
-                                       (discussion/agenda-links discussion-id starting-arguments))}})
+      (response {:data {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
+                        :links (discussion/links-for-agenda statements starting-arguments discussion-id)}})
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
 
 

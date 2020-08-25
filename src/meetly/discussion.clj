@@ -1,5 +1,6 @@
 (ns meetly.discussion
   (:require [clojure.spec.alpha :as s]
+            [dialog.discussion.database :as dialog-db]
             [ghostwheel.core :refer [>defn >defn-]]
             [meetly.meeting.database :as db]))
 
@@ -69,7 +70,7 @@
       {:sub-statements sub-statements-count
        :authors authors})))
 
-(>defn mark-starting-nodes
+(>defn- mark-starting-nodes
   "Marks every conclusion-node belonging to a starting-argument in preparation for the graph view."
   [nodes starting-arguments]
   [sequential? sequential? :ret sequential?]
@@ -83,7 +84,7 @@
           :type "statement"))
       nodes)))
 
-(>defn agenda-node
+(>defn- agenda-node
   "Creates node data for an agenda point."
   [discussion-id meeting-hash]
   [int? string? :ret map?]
@@ -95,10 +96,26 @@
      :author (:author/nickname (:user/core-author author))
      :type "agenda"}))
 
-(>defn agenda-links
+(>defn- agenda-links
   "Creates links from an starting argument to an agenda node."
   [discussion-id starting-arguments]
   [int? sequential? :ret set?]
   (set (map (fn [argument] {:source (-> argument :argument/conclusion :db/id)
                             :target discussion-id
                             :type :argument.type/starting}) starting-arguments)))
+
+(>defn nodes-for-agenda
+  "Returns all nodes for a discussion including its agenda."
+  [statements starting-arguments discussion-id share-hash]
+  [sequential? sequential? int? :meeting/share-hash :ret sequential?]
+  (conj (mark-starting-nodes statements starting-arguments)
+        (agenda-node discussion-id share-hash)))
+
+(>defn links-for-agenda
+  "Creates all links for a discussion with its agenda as root."
+  [statements starting-arguments discussion-id]
+  [int? sequential? sequential? :ret sequential?]
+  (let [arguments (dialog-db/all-arguments-for-discussion discussion-id)]
+    (concat
+      (create-links statements arguments)
+      (agenda-links discussion-id starting-arguments))))
