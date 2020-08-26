@@ -318,7 +318,7 @@
         starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)]
     (if (valid-discussion-hash? share-hash discussion-id)
       (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
-                         :links (discussion/links-for-agenda statements starting-arguments discussion-id)}})
+                   :links (discussion/links-for-agenda statements starting-arguments discussion-id)}})
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
 
 

@@ -114,7 +114,7 @@
 (>defn links-for-agenda
   "Creates all links for a discussion with its agenda as root."
   [statements starting-arguments discussion-id]
-  [int? sequential? sequential? :ret sequential?]
+  [sequential? sequential? int? :ret sequential?]
   (let [arguments (dialog-db/all-arguments-for-discussion discussion-id)]
     (concat
       (create-links statements arguments)

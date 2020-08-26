@@ -1,12 +1,15 @@
 (ns meetly.interface.views.graph.view
   (:require ["d3" :as d3]
             ["/graph" :as schnaqd3]
+            [ajax.core :as ajax]
+            [meetly.interface.config :refer [config]]
             [meetly.interface.views.graph.test-data :as test-data]
+            [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
 (defn viz [id]
   (reagent/create-class
-    {:reagent-render (fn [] [:svg {:id id} "Graph, lel"])
+    {:reagent-render (fn [] [:svg {:id id}])
      :component-did-mount (fn []
                             (let [width 1200
                                   height 600]
@@ -16,6 +19,31 @@
                                 #_(.replaceData (clj->js test-data/short-miserables) width height 10))))}))
 
 (defn view []
-  [:div.container
-   [:h1 "Barchart"]
-   [viz "viz"]])
+  (let [graph-data @(rf/subscribe [:graph/current])]
+    [:div.container
+     [:h1 "Barchart"]
+     (when-not (nil? graph-data)
+       [viz "viz"])]))
+
+
+(rf/reg-event-fx
+  :graph/load-data-for-discussion
+  (fn [_ [_ id share-hash]]
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/graph/discussion")
+                        :params {:share-hash share-hash
+                                 :discussion-id id}
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:graph/set-current-graph]
+                        :on-failure [:ajax-failure]}]]}))
+
+(rf/reg-event-db
+  :graph/set-current-graph
+  (fn [db [_ graph-data]]
+    (assoc-in db [:graph :current] graph-data)))
+
+(rf/reg-sub
+  :graph/current
+  (fn [db _]
+    (get-in db [:graph :current])))
