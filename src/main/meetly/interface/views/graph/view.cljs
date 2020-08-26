@@ -3,7 +3,6 @@
             ["/graph" :as schnaqd3]
             [ajax.core :as ajax]
             [meetly.interface.config :refer [config]]
-            [meetly.interface.views.graph.test-data :as test-data]
             [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
