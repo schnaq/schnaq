@@ -3,6 +3,8 @@ class SchnaqD3 {
     this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
+    this.width = width;
+    this.height = height;
     let INITIAL_NODE_SIZE = 5;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.adjlist = [];
@@ -26,6 +28,11 @@ class SchnaqD3 {
   }
 
   ticked(that) {
+    // Fix root node to center.
+    let rootNode = that.data.nodes.find(node => node.type === "agenda");
+    rootNode.fx = that.width / 2;
+    rootNode.fy = that.height / 2;
+
     that.node.call(node => {
       that.updateNode(that, node)
     });
@@ -125,6 +132,8 @@ class SchnaqD3 {
   // Public Methods, not used as event-handlers
 
   resizeCanvas(width, height) {
+    this.width = width;
+    this.height = height;
     return this.d3.select(this.parentId).attr("width", width).attr("height", height);
   }
 
@@ -291,6 +300,8 @@ class SchnaqD3 {
   }
 
   replaceData(data, width, height, nodeSize) {
+    this.width = width;
+    this.height = height;
     this.data = data;
     this.svg.selectAll("*").remove();
     this.initializeGraph(data, width, height, nodeSize);
