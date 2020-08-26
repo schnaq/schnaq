@@ -4,19 +4,21 @@
             [ajax.core :as ajax]
             [meetly.interface.config :refer [config]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [reagent.dom :as rdom]))
 
 (defn viz [graph]
-  (let [d3-instance (reagent/atom {})]
-    (let [width 1200 height 600 node-size 10]
-      (reagent/create-class
-        {:display-name "D3-Visualization of Discussion Graph"
-         :reagent-render (fn [_graph] [:svg {:id "viz"}])
-         :component-did-mount (fn [_this]
-                                (reset! d3-instance (schnaqd3/SchnaqD3. d3 (str "#viz") (clj->js graph) width height)))
-         :component-did-update (fn [this _argv]
-                                 (let [[_ graph] (reagent/argv this)]
-                                   (.replaceData @d3-instance (clj->js graph) width height node-size)))}))))
+  (let [d3-instance (reagent/atom {})
+        width 1200 height 600 node-size 5]
+    (reagent/create-class
+      {:display-name "D3-Visualization of Discussion Graph"
+       :reagent-render (fn [_graph] [:svg])
+       :component-did-mount (fn [this]
+                              (reset! d3-instance
+                                      (schnaqd3/SchnaqD3. d3 (rdom/dom-node this) (clj->js graph) width height)))
+       :component-did-update (fn [this _argv]
+                               (let [[_ graph] (reagent/argv this)]
+                                 (.replaceData @d3-instance (clj->js graph) width height node-size)))})))
 
 (defn view []
   [:div.container
