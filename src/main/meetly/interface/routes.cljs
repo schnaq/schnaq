@@ -98,9 +98,8 @@
         {:name :routes/graph-view
          :view graph-view/view
          :link-text (labels :router/graph-view)
-         :controllers [{:parameters {:path [:id :share-hash]}
-                        :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:graph/load-data-for-discussion (:id path) (:share-hash path)]))}]}]]]]]
+         :controllers [{:identity (fn [] (random-uuid))
+                        :start #(rf/dispatch [:graph/load-data-for-discussion])}]}]]]]]
    ["feedbacks"
     {:name :routes/feedbacks
      :view feedback/overview
