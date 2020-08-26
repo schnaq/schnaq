@@ -109,3 +109,15 @@
   list-style-type: circle;
   color: $gray-900;
 }
+
+#discussion-history, #conclusions-list {
+  @include media-breakpoint-up(md) {
+    padding: 0 2rem;
+  }
+
+  @include media-breakpoint-up(xl) {
+    padding: 0 4rem;
+  }
+
+  padding: 0 0.5rem;
+}
