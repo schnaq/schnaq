@@ -1,18 +1,16 @@
 class SchnaqD3 {
-  constructor(d3, parentId, data) {
+  constructor(d3, parentId, data, width, height) {
     this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
-    let INITIAL_WIDTH = 800;
-    let INITIAL_HEIGHT = 600;
     let INITIAL_NODE_SIZE = 5;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.adjlist = [];
-    this.svg = this.resizeCanvas(INITIAL_WIDTH, INITIAL_HEIGHT);
+    this.svg = this.resizeCanvas(width, height);
     this.graphForces = d3.forceSimulation();
     this.labelForces = d3.forceSimulation();
 
-    this.initializeGraph(data, INITIAL_WIDTH, INITIAL_HEIGHT, INITIAL_NODE_SIZE);
+    this.initializeGraph(data, width, height, INITIAL_NODE_SIZE);
 
     this.svg.call(
       d3.zoom()
@@ -21,7 +19,6 @@ class SchnaqD3 {
           this.container.attr("transform", d3.event.transform);
         })
     );
-
   }
 
   neigh(a, b) {
@@ -134,8 +131,8 @@ class SchnaqD3 {
   centerForces(forceObject, width, height) {
     return forceObject
       .force("center", this.d3.forceCenter(width / 2, height / 2))
-      .force("x", this.d3.forceX(width / 2).strength(1))
-      .force("y", this.d3.forceY(height / 2).strength(1));
+      .force("x", this.d3.forceX(width / 2).strength(1.5))
+      .force("y", this.d3.forceY(height / 2).strength(1.5));
   }
 
   setLinkForces(forceObject) {
@@ -163,8 +160,29 @@ class SchnaqD3 {
       .append("circle")
       .attr("r", size)
       .attr("fill", node => {
-        return this.color(node.group);
+        return this.color(node.type);
       });
+  }
+
+  chooseColor(link) {
+    let chosenColor;
+    switch (link.type) {
+      case "undercut":
+        chosenColor = "#990000";
+        break;
+      case "support":
+        chosenColor = "#009933";
+        break;
+      case "attack":
+        chosenColor = "#ff0000";
+        break;
+      case "starting":
+        chosenColor = "#0033cc";
+        break;
+      default:
+        chosenColor = "#aaa";
+    }
+    return chosenColor;
   }
 
   drawLinks(data) {
@@ -173,7 +191,9 @@ class SchnaqD3 {
       .data(data.links)
       .enter()
       .append("line")
-      .attr("stroke", "#aaa")
+      .attr("stroke", link => {
+        return this.chooseColor(link);
+      })
       .attr("stroke-width", "1px");
   }
 
@@ -184,7 +204,7 @@ class SchnaqD3 {
       .enter()
       .append("text")
       .text((node, index) => {
-        return index % 2 === 0 ? "" : node.node.id;
+        return index % 2 === 0 ? "" : node.node.content;
       })
       .style("fill", "#555")
       .style("font-family", "Arial")

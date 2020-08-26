@@ -88,11 +88,11 @@
   "Creates node data for an agenda point."
   [discussion-id meeting-hash]
   [int? string? :ret map?]
-  (let [discussion (db/agenda-by-discussion-id discussion-id)
+  (let [agenda (db/agenda-by-discussion-id discussion-id)
         meeting (db/meeting-by-hash meeting-hash)
         author (db/user (-> meeting :meeting/author :db/id))]
-    {:id (:db/id discussion)
-     :content (:agenda/title discussion)
+    {:id (:db/id (:agenda/discussion agenda))
+     :content (:agenda/title agenda)
      :author (:author/nickname (:user/core-author author))
      :type "agenda"}))
 
@@ -114,7 +114,7 @@
 (>defn links-for-agenda
   "Creates all links for a discussion with its agenda as root."
   [statements starting-arguments discussion-id]
-  [int? sequential? sequential? :ret sequential?]
+  [sequential? sequential? int? :ret sequential?]
   (let [arguments (dialog-db/all-arguments-for-discussion discussion-id)]
     (concat
       (create-links statements arguments)

@@ -93,7 +93,14 @@
          :link-text (labels :router/continue-discussion)
          :controllers [{:parameters {:path [:id :share-hash]}
                         :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]]]]]
+                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]
+       ["/graph"
+        {:name :routes/graph-view
+         :view graph-view/view
+         :link-text (labels :router/graph-view)
+         :controllers [{:parameters {:path [:id :share-hash]}
+                        :start (fn [{:keys [path]}]
+                                 (rf/dispatch [:graph/load-data-for-discussion (:id path) (:share-hash path)]))}]}]]]]]
    ["feedbacks"
     {:name :routes/feedbacks
      :view feedback/overview
@@ -108,8 +115,4 @@
    ["invalid-link"
     {:name :routes/invalid-link
      :view error-views/invalid-admin-link-view
-     :link-text (labels :router/invalid-link)}]
-   ["graph"
-    {:name :routes/graph-view
-     :view graph-view/view
-     :link-text (labels :router/graph-view)}]])
+     :link-text (labels :router/invalid-link)}]])
