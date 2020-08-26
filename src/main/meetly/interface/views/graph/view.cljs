@@ -41,11 +41,11 @@
                                    :discussion-id id}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
-                          :on-success [:graph/set-current-graph]
+                          :on-success [:graph/set-current]
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-db
-  :graph/set-current-graph
+  :graph/set-current
   (fn [db [_ graph-data]]
     (assoc-in db [:graph :current] graph-data)))
 
