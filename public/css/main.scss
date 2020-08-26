@@ -3,9 +3,8 @@
 @import "mixins";
 
 // Global
-@import "global";
-
 @import "../../node_modules/bootstrap/scss/bootstrap";
+@import "global";
 
 // Components
 @import "after-create";

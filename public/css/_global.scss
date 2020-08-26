@@ -43,3 +43,10 @@ h6 {
 .link-pointer {
   cursor: pointer;
 }
+
+.sm-pad-0 {
+  @include media-breakpoint-down(sm) {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
