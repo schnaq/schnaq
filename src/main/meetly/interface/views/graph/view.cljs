@@ -11,12 +11,8 @@
   (reagent/create-class
     {:reagent-render (fn [] [:svg {:id id}])
      :component-did-mount (fn []
-                            (let [width 1200
-                                  height 600]
-                              (->
-                                (schnaqd3/SchnaqD3. d3 (str "#" id) (clj->js test-data/miserables))
-                                (.setSize width height)
-                                #_(.replaceData (clj->js test-data/short-miserables) width height 10))))}))
+                            (let [width 1200 height 600]
+                              (schnaqd3/SchnaqD3. d3 (str "#" id) (clj->js test-data/miserables) width height)))}))
 
 (defn view []
   (let [graph-data @(rf/subscribe [:graph/current])]
@@ -24,7 +20,6 @@
      [:h1 "Barchart"]
      (when-not (nil? graph-data)
        [viz "viz"])]))
-
 
 (rf/reg-event-fx
   :graph/load-data-for-discussion

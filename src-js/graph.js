@@ -1,18 +1,16 @@
 class SchnaqD3 {
-  constructor(d3, parentId, data) {
+  constructor(d3, parentId, data, width, height) {
     this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
-    let INITIAL_WIDTH = 800;
-    let INITIAL_HEIGHT = 600;
     let INITIAL_NODE_SIZE = 5;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.adjlist = [];
-    this.svg = this.resizeCanvas(INITIAL_WIDTH, INITIAL_HEIGHT);
+    this.svg = this.resizeCanvas(width, height);
     this.graphForces = d3.forceSimulation();
     this.labelForces = d3.forceSimulation();
 
-    this.initializeGraph(data, INITIAL_WIDTH, INITIAL_HEIGHT, INITIAL_NODE_SIZE);
+    this.initializeGraph(data, width, height, INITIAL_NODE_SIZE);
 
     this.svg.call(
       d3.zoom()
