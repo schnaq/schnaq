@@ -148,6 +148,8 @@
      :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
      :errors/generic "Es ist ein Fehler aufgetreten"
 
+     ;; Graph Texts
+     :graph/heading "Diskussionsübersicht"
 
      ;; Route Link Texts
      :router/all-meetings "Alle Meetings"
