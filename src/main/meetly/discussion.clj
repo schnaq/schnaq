@@ -88,11 +88,11 @@
   "Creates node data for an agenda point."
   [discussion-id meeting-hash]
   [int? string? :ret map?]
-  (let [discussion (db/agenda-by-discussion-id discussion-id)
+  (let [agenda (db/agenda-by-discussion-id discussion-id)
         meeting (db/meeting-by-hash meeting-hash)
         author (db/user (-> meeting :meeting/author :db/id))]
-    {:id (:db/id discussion)
-     :content (:agenda/title discussion)
+    {:id (:db/id (:agenda/discussion agenda))
+     :content (:agenda/title agenda)
      :author (:author/nickname (:user/core-author author))
      :type "agenda"}))
 

@@ -7,19 +7,19 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
-(defn viz [id]
+(defn viz [id data]
   (reagent/create-class
     {:reagent-render (fn [] [:svg {:id id}])
      :component-did-mount (fn []
                             (let [width 1200 height 600]
-                              (schnaqd3/SchnaqD3. d3 (str "#" id) (clj->js test-data/miserables) width height)))}))
+                              (schnaqd3/SchnaqD3. d3 (str "#" id) (clj->js (:graph data)) width height)))}))
 
 (defn view []
   (let [graph-data @(rf/subscribe [:graph/current])]
     [:div.container
      [:h1 "Barchart"]
      (when-not (nil? graph-data)
-       [viz "viz"])]))
+       [viz "viz" graph-data])]))
 
 (rf/reg-event-fx
   :graph/load-data-for-discussion
