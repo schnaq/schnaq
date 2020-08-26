@@ -3,11 +3,14 @@
             ["/graph" :as schnaqd3]
             [ajax.core :as ajax]
             [meetly.interface.config :refer [config]]
+            [meetly.interface.text.display-data :refer [labels]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]))
 
-(defn viz [graph]
+(defn- graph-view
+  "Visualization of Discussion Graph."
+  [graph]
   (let [d3-instance (reagent/atom {})
         width 1200 height 600 node-size 5]
     (reagent/create-class
@@ -20,11 +23,13 @@
                                (let [[_ graph] (reagent/argv this)]
                                  (.replaceData @d3-instance (clj->js graph) width height node-size)))})))
 
-(defn view []
+(defn view
+  "The core Graph visualization wrapper."
+  []
   [:div.container
-   [:h1 "Überblick"]
+   [:h1 (labels :graph/heading)]
    (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
-     [viz graph])])
+     [graph-view graph])])
 
 (rf/reg-event-fx
   :graph/load-data-for-discussion
