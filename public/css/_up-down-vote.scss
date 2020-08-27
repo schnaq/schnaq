@@ -1,13 +1,15 @@
+@import 'variables';
+
 .up-down-vote {
-  padding: 0.5rem 0 0.5rem 0;
   max-width: 5rem;
+  padding: 0.5rem 0;
 
   @include media-breakpoint-down(sm) {
-    padding-top: 0;
+    align-items: flex-end;
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
     margin-left: 52vw;
+    padding-top: 0;
   }
 }
 
@@ -17,16 +19,16 @@
 
 .vote {
   border-radius: 0.25rem 2rem 2rem 0.25rem;
-  padding: 1.25rem 0 0 0;
-  min-height: 4rem;
-  cursor: pointer;
   box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  min-height: 4rem;
+  padding: 1.25rem 0 0;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0.25rem 0.25rem 2rem 2rem;
-    min-width: 4rem;
     min-height: 0;
-    padding: 0.25rem 0 0 0;
+    min-width: 4rem;
+    padding: 0.25rem 0 0;
   }
 }
 
