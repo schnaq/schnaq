@@ -111,8 +111,8 @@
       {:fx [[:dispatch [:clear-current-agendas]]
             [:dispatch [:reset-temporary-agendas]]
             [:dispatch [:navigation/navigate :routes.meeting/created meeting-hashs]]
-            [:write-localstorage ["meeting.last-created/meeting-hash" meeting-hash]]
-            [:write-localstorage ["meeting.last-created/edit-hash" edit-hash]]]})))
+            [:write-localstorage [:meeting.last-created/meeting-hash meeting-hash]]
+            [:write-localstorage [:meeting.last-created/edit-hash edit-hash]]]})))
 
 (defn load-agenda-fn [hash on-success-event]
   {:http-xhrio {:method :get
