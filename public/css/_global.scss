@@ -53,3 +53,15 @@ h6 {
 .schnaq-rounded {
   border-radius: 30% 30% 30% 30%;
 }
+
+.mobile-container {
+  @include media-breakpoint-up(md) {
+    padding: 0 2rem;
+  }
+
+  @include media-breakpoint-up(xl) {
+    padding: 0 4rem;
+  }
+
+  padding: 0 0.5rem;
+}

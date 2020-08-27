@@ -242,7 +242,7 @@
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         conclusions @(rf/subscribe [:starting-conclusions])]
     [:div
-     [:div#conclusions-list
+     [:div#conclusions-list.mobile-container
       (for [conclusion conclusions]
         [:div {:key (:db/id conclusion)
                :on-click (fn [_e]
@@ -258,7 +258,7 @@
   []
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-    [:div#discussion-history
+    [:div#discussion-history.mobile-container
      (for [[count [statement attitude]] indexed-history]
        [:div {:key (:db/id statement)
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
