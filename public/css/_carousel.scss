@@ -1,5 +1,13 @@
 .premise-carousel-item {
-  padding: 0 6.5% 1rem 6.5%;
+  padding: 0 0.5rem 1rem 0.5rem;
+
+  @include media-breakpoint-up(md) {
+    padding: 0 2rem 1rem 2rem;
+  }
+
+  @include media-breakpoint-up(xl) {
+    padding: 0 4rem 1rem 4rem;
+  }
 }
 
 .carousel-indicator-custom li {

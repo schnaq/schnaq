@@ -3,6 +3,10 @@
   color: $white;
   background: transparent;
   border: 0;
+
+  @include media-breakpoint-down(sm) {
+    padding: 1rem 1rem 1rem 1rem;
+  }
 }
 
 .statement {
@@ -11,6 +15,10 @@
   color: $white;
   box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
   min-height: 9rem;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 2rem;
+  }
 }
 
 .statement-content {
@@ -65,7 +73,6 @@
   background: $primary;
 }
 
-
 .statement-single {
   border-radius: 2rem;
   padding: 2rem;
@@ -108,4 +115,23 @@
   padding-left: 1rem;
   list-style-type: circle;
   color: $gray-900;
+}
+
+.discussion-base.container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  .discussion-view-top-rounded {
+    @include media-breakpoint-down(sm) {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 0;
+  }
+
 }

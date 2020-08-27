@@ -16,8 +16,8 @@
   "Add panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
-    [:div
-     [:div.up-vote.text-center
+    [:<>
+     [:div.vote.up-vote.text-center
       ;; Prevent activating the time travel or deep dive
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
@@ -25,7 +25,7 @@
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]
        (logic/calculate-votes statement :upvotes votes)]]
 
-     [:div.down-vote.text-center
+     [:div.vote.down-vote.text-center
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:toggle-downvote statement]))}
@@ -157,7 +157,7 @@
        (.popover (jquery "[data-toggle=\"popover\"]")))
      :reagent-render
      (fn []
-       [:p
+       [:p.my-0
         [:span.badge.badge-pill.badge-transparent.mr-2
          [:i {:class (str "m-auto fas " (fa :comment))}] " "
          (-> statement :meta/sub-discussion-info :sub-statements)]
@@ -182,24 +182,25 @@
    [:div.statement-outer
     [:div.row
      ;; bubble content
-     [:div.col-11.px-0
+     [:div.col-12.col-md-11.px-0
       [:div.statement {:class (str "statement-" (name attitude))}
        (when (= :argument.type/undercut (:meta/argument.type statement))
          [:p.small (labels :discussion/undercut-bubble-intro)])
-       ;; information
-       [:div
-        ;; avatar
-        [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
        ;; content
        [:div.statement-content
-        [:p content]]
+        [:p.my-0 content]]
+       ;; additional Info
        [:div.row.px-3
-        [:div.col
-         [extra-discussion-info-badges statement]]]]]
+        [:div.col-5.align-self-end
+         [extra-discussion-info-badges statement]]
+        [:div.col-7
+         ;; avatar
+         [:small.text-right.float-right
+          (common/avatar (-> statement :statement/author :author/nickname) 50)]]]]]
      ;; up-down-votes
-     [:div.col-1.px-0
+     [:div.col-12.col-md-1.px-0
       [:div.up-down-vote
-       (up-down-vote statement)]]]]))
+       [up-down-vote statement]]]]]))
 
 ;; carousel
 
@@ -240,8 +241,8 @@
 (defn conclusions-list []
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         conclusions @(rf/subscribe [:starting-conclusions])]
-    [:div.container
-     [:div#conclusions-list.px-3
+    [:div
+     [:div#conclusions-list.mobile-container
       (for [conclusion conclusions]
         [:div {:key (:db/id conclusion)
                :on-click (fn [_e]
@@ -257,7 +258,7 @@
   []
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-    [:div#discussion-history.container.px-4
+    [:div#discussion-history.mobile-container
      (for [[count [statement attitude]] indexed-history]
        [:div {:key (:db/id statement)
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
