@@ -9,5 +9,5 @@
   ;[:div.avatar.text-center
   [:div.d-flex.flex-row
    [:div.avatar-name.mr-4.align-self-end display-name]
-   [:div.avatar-image.img-thumbnail.schnaq-rounded
+   [:div.avatar-image.img-thumbnail.schnaq-rounded.align-self-end.p-0
     {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size)}}]])
