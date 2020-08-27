@@ -1,5 +1,5 @@
 (ns meetly.interface.utils.localstorage-test
-  (:require [cljs.test :refer [deftest are testing run-tests]]
+  (:require [cljs.test :refer [deftest are testing]]
             [meetly.interface.utils.localstorage :as ls]))
 
 (deftest stringify-test
