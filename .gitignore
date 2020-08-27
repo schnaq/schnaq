@@ -27,6 +27,8 @@ local_jars/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/saveactions_settings.xml
+.idea/codeStyles
 
 ## Generated files
 .idea/**/contentModel.xml

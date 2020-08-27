@@ -302,6 +302,20 @@
     (ok {:argument-type-stats (db/argument-type-stats)})
     (deny-access)))
 
+(defn- all-stats
+  "Returns all statistics at once."
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (let [timestamp-since (toolbelt/now-minus-days (Integer/parseInt (:days-since body-params)))]
+      (ok {:stats {:meetings-num (db/number-of-meetings timestamp-since)
+                   :usernames-num (db/number-of-usernames timestamp-since)
+                   :average-agendas (float (db/average-number-of-agendas timestamp-since))
+                   :statements-num (db/number-of-statements timestamp-since)
+                   :active-users-num (db/number-of-active-users timestamp-since)
+                   :statement-length-stats (db/statement-length-stats timestamp-since)
+                   :argument-type-stats (db/argument-type-stats timestamp-since)}}))
+    (deny-access)))
+
 (defn- check-credentials
   "Checks whether share-hash and edit-hash match."
   [{:keys [body-params]}]
@@ -320,7 +334,6 @@
       (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
                    :links (discussion/links-for-agenda statements starting-arguments discussion-id)}})
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
-
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
@@ -355,7 +368,8 @@
     (POST "/analytics/statements" [] number-of-statements)
     (POST "/analytics/active-users" [] number-of-active-users)
     (POST "/analytics/statement-lengths" [] statement-lengths-stats)
-    (POST "/analytics/argument-types" [] argument-type-stats)))
+    (POST "/analytics/argument-types" [] argument-type-stats)
+    (POST "/analytics" [] all-stats)))
 
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."

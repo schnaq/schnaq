@@ -136,6 +136,7 @@
      :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
      :analytics/statement-lengths-title "Beitragslängen"
      :analytics/argument-types-title "Argumenttypen"
+     :analytics/fetch-data-button "Hole Daten"
 
      ;; User related
      :user.button/set-name "Name speichern"
