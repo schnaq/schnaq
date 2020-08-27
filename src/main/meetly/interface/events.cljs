@@ -1,7 +1,6 @@
 (ns meetly.interface.events
   (:require [ajax.core :as ajax]
             [meetly.interface.config :refer [config]]
-            [meetly.interface.db :as meetly-db]
             [meetly.interface.utils.localstorage :as ls]
             [meetly.interface.utils.toolbelt :as toolbelt]
             [meetly.interface.views.modals.modal :as modal]
