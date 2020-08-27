@@ -7,7 +7,7 @@
   [display-name size]
   [string? number? :ret vector?]
   ;[:div.avatar.text-center
-  [::div.d-flex.flex-row
-   [:div.avatar-name.mr-4 display-name]
+  [:div.d-flex.flex-row
+   [:div.avatar-name.mr-4.align-self-end display-name]
    [:div.avatar-image.img-thumbnail.rounded-circle
     {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size)}}]])

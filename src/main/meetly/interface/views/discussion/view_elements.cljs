@@ -157,7 +157,7 @@
        (.popover (jquery "[data-toggle=\"popover\"]")))
      :reagent-render
      (fn []
-       [:p
+       [:p.my-0
         [:span.badge.badge-pill.badge-transparent.mr-2
          [:i {:class (str "m-auto fas " (fa :comment))}] " "
          (-> statement :meta/sub-discussion-info :sub-statements)]
@@ -188,16 +188,15 @@
          [:p.small (labels :discussion/undercut-bubble-intro)])
        ;; content
        [:div.statement-content
-        [:p content
-         [:small.text-right.float-right.d-none.d-md-block
-          (common/avatar (-> statement :statement/author :author/nickname) 50)]]]
+        [:p.my-0 content]]
        ;; additional Info
        [:div.row.px-3
-        [:div.col-5.col-md-12
+        [:div.col-5.align-self-end
          [extra-discussion-info-badges statement]]
-        [:div.col-7.d-md-none
+        [:div.col-7
          ;; avatar
-         [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]]]]
+         [:small.text-right.float-right
+          (common/avatar (-> statement :statement/author :author/nickname) 50)]]]]]
      ;; up-down-votes
      [:div.col-1.px-0
       [:div.up-down-vote
