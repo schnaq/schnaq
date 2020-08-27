@@ -81,7 +81,7 @@
   [:div
    [base/nav-header]
    [view/discussion-header-no-subtitle meeting]
-   [:div.container.py-4.sm-pad-0
+   [:div.container.discussion-base
     [:div.discussion-view-rounded.shadow-custom
      content]]])
 

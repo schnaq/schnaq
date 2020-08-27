@@ -121,3 +121,22 @@
 
   padding: 0 0.5rem;
 }
+
+.discussion-base.container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  .discussion-view-top-rounded {
+    @include media-breakpoint-down(sm) {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: 0;
+  }
+
+}
