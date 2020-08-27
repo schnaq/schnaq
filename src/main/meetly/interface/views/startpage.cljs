@@ -8,7 +8,7 @@
   "Display header animation video"
   []
   [:div.col-lg-6
-   [:img#animation_container {:src (data/img-path :animation-discussion)}]])
+   [:img.w-100 {:src (data/img-path :animation-discussion)}]])
 
 
 (defn- header []
