@@ -1,44 +1,36 @@
-/*****************/
-/* modal popovers*/
-/*****************/
+@import 'variables';
 
 .modal-wrapper {
   display: flex;
-  position: fixed;
+  height: 100%;
   left: 0;
+  position: fixed;
   top: 0;
   width: 100%;
-  height: 100%;
-  z-index: 1040
+  z-index: 1040;
 }
 
 .modal-backdrop {
+  animation: fade-in 0.2s;
+  background-color: $black;
+  height: 100%;
+  opacity: 0.6;
   position: fixed;
   width: 100%;
-  height: 100%;
-  background-color: black;
-  opacity: 0.6;
   z-index: 1;
-  -webkit-animation: fade-in 0.2s; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fade-in 0.2s; /* Firefox < 16 */
-  -o-animation: fade-in 0.2s; /* Opera < 12.1 */
-  animation: fade-in 0.2s;
 }
 
 .modal-child {
-  margin: auto;
-  margin-top: 30px;
-  z-index: 2;
-  -webkit-animation: fade-in-child 0.2s;
-  -moz-animation: fade-in-child 0.2s;
-  -o-animation: fade-in-child 0.2s;
   animation: fade-in-child 0.2s;
+  margin: 30px auto auto;
+  z-index: 2;
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 0.6;
   }
@@ -48,13 +40,14 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
 
 .modal-dialog {
-  overflow-y: initial !important
+  overflow-y: initial !important;
 }
 
 .modal-body {
