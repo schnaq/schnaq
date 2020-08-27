@@ -1,12 +1,11 @@
-@import "variables";
+@import 'variables';
 
 .meeting-entry {
   background: $primary;
   border-radius: 1.5rem;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 4px 0 rgba(0, 0, 0, 0.19);
   color: $white;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
-  0 4px 4px 0 rgba(0, 0, 0, 0.19);
-  cursor: pointer
+  cursor: pointer;
 }
 
 .meeting-entry:hover {
@@ -15,21 +14,21 @@
 
 .meeting-entry-title {
   background-color: transparent;
-  padding: 2rem 2rem 0 2rem;
-  border: none;
+  border: 0;
   border-radius: 1.5rem 1.5rem 0 0;
+  padding: 2rem 2rem 0;
 }
 
 .meeting-entry-desc {
   background-color: transparent;
-  padding: 0 2rem 2rem 2rem;
-  box-sizing: border-box;
   border-radius: 0 0 1.5rem 1.5rem;
+  box-sizing: border-box;
+  padding: 0 2rem 2rem;
 }
 
 .arrow-icon {
-  font-size: 2rem;
   cursor: pointer;
+  font-size: 2rem;
 }
 
 .meeting-single-rounded {
@@ -37,22 +36,22 @@
 }
 
 .meeting-header {
-  padding: 2rem 2rem 1rem 2rem;
   color: $white;
+  padding: 2rem 2rem 1rem;
 }
 
 .back-arrow {
-  display: flex;
   align-items: start;
+  display: flex;
 }
 
 .meeting-edit-title {
   background: transparent;
-  color: $white;
-  padding: 3rem 2rem 3rem 2rem;
   border: 0;
   border-radius: 1.5rem 1.5rem 0 0;
+  color: $white;
   font-size: 2rem;
+  padding: 3rem 2rem;
 }
 
 .meeting-edit-title:focus {
@@ -64,14 +63,13 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-
 .meeting-edit-description {
   background: rgba(0, 0, 0, 0.05);
-  padding: 1rem 2rem 0 2rem;
+  border: 0;
   border-radius: 0 0 1.5rem 1.5rem;
   color: $white;
-  border: 0;
   font-size: 1.5rem;
+  padding: 1rem 2rem 0;
 }
 
 .meeting-edit-description:focus {
