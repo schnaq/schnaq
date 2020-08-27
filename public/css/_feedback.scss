@@ -1,19 +1,12 @@
-#feedback-wrapper {
+.feedback-wrapper {
   .feedback {
-    opacity: 0.75;
-
-    $rotation: -90deg;
-    -webkit-transform: rotate($rotation);
-    -moz-transform: rotate($rotation);
-    -o-transform: rotate($rotation);
-    -ms-transform: rotate($rotation);
-    transform: rotate($rotation);
-
-    position: fixed;
     bottom: 50px;
+    opacity: 0.75;
+    position: fixed;
     right: -30px;
+    transform: rotate(-90deg);
 
-    @media (min-width: 768px) {
+    @include media-breakpoint-up(md) {
       bottom: 20%;
     }
   }

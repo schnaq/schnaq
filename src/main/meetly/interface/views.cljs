@@ -9,7 +9,7 @@
 (defn- base-page
   []
   (let [current-route @(rf/subscribe [:navigation/current-route])]
-    [:div#display-content
+    [:div.base-wrapper
      (when current-route
        [:div
         [modal/modal]

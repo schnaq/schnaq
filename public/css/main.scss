@@ -1,34 +1,32 @@
 // Core variables and Mixins
-@import "variables";
-@import "mixins";
+@import 'variables';
+@import 'mixins';
 
 // Global
-@import "../../node_modules/bootstrap/scss/bootstrap";
-@import "global";
+@import '../../node_modules/bootstrap/scss/bootstrap';
+@import 'global';
 
 // Components
-@import "after-create";
-@import "agenda";
-@import "animations";
-@import "avatar";
-@import "badges";
-@import "button";
-@import "carousel";
-@import "clickable";
-@import "discussion";
-@import "error-view";
-@import "feedback";
-@import "footer";
-@import "header";
-@import "icon-bullets";
-@import "icons";
-@import "masthead";
-@import "meeting";
-@import "modals";
-@import "notifications";
-@import "radio-button";
-@import "text-input";
-@import "up-down-vote";
+@import 'after-create';
+@import 'agenda';
+@import 'avatar';
+@import 'badges';
+@import 'button';
+@import 'carousel';
+@import 'discussion';
+@import 'error-view';
+@import 'feedback';
+@import 'footer';
+@import 'header';
+@import 'icon-bullets';
+@import 'icons';
+@import 'masthead';
+@import 'meeting';
+@import 'modals';
+@import 'notifications';
+@import 'radio-button';
+@import 'text-input';
+@import 'up-down-vote';
 
 // 3rd Party
-@import "../klaro/src/scss/klaro";
+@import '../klaro/src/scss/klaro';

@@ -1,31 +1,35 @@
-#notifications-wrapper {
-  position: fixed;
+@import 'variables';
+
+.notifications-wrapper {
   bottom: 1rem;
   left: 1rem;
+  position: fixed;
 }
 
 .toast {
+  margin-bottom: 0.5rem;
   width: 20rem;
-  margin-bottom: .5rem;
 
-  @media (min-width: 768px) {
+  @include media-breakpoint-up(md) {
     width: 100%;
   }
 }
 
 // Create all sub-classes of a toast
+// @formatter:off
 $contexts: primary $primary,
-secondary $secondary,
-success $success,
-danger $danger,
-warning $warning,
-info $info;
+  secondary $secondary,
+  success $success,
+  danger $danger,
+  warning $warning,
+  info $info;
+// @formatter:on
 
 @each $class, $color in $contexts {
   .toast-#{$class} {
     .toast-header {
       background-color: #{$color};
-      color: white;
+      color: $white;
     }
   }
 }

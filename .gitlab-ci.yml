@@ -42,6 +42,15 @@ lint:
   allow_failure: true
   when: always
 
+css-lint:
+  image: node:14.8-alpine
+  before_script:
+    - yarn install --dev
+  script:
+    - yarn stylelint "public/css/*.scss"
+  allow_failure: true
+  when: always
+
 up-to-date?:
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:

@@ -54,12 +54,12 @@
             :data-toggle "tooltip"
             :data-placement "right"
             :title (labels :meeting/copy-link-tooltip)}
-           [:input.form-control.form-round.col-11.copy-link-form.link-pointer
+           [:input.form-control.form-round.col-11.copy-link-form.clickable-no-hover
             {:id meeting-link-id
              :type "text"
              :value display-content
              :readOnly true}]
-           [:label.col-1.link-pointer {:for meeting-link-id}
+           [:label.col-1.clickable-no-hover {:for meeting-link-id}
             [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]]))}))
 
 (defn img-text

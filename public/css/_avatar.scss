@@ -1,10 +1,11 @@
 .avatar-image {
   @include media-breakpoint-down(sm) {
-    svg {
-      width: 35px;
-      height: 35px;
-    }
-    width: 35px;
     height: 35px;
+    width: 35px;
+
+    svg {
+      height: 35px;
+      width: 35px;
+    }
   }
 }

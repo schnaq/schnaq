@@ -1,38 +1,37 @@
-@import "variables";
-
+@import 'variables';
 
 .button-secondary {
   background-color: $secondary;
+  border: 0;
   border-radius: 1.5rem;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
   color: $white;
   font-size: 125%;
-  border: none;
-  padding: 1rem 2rem;
   font-weight: bold;
-  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  padding: 1rem 2rem;
 }
 
 .button-secondary:hover {
-  color: $white;
   background-color: $secondary-selected;
   box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.2);
+  color: $white;
 }
 
 .button-primary {
   background-color: $primary;
+  border: 0;
   border-radius: 1.5rem;
-  padding: 1rem 2rem;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
   color: $white;
   font-size: 150%;
-  border: none;
   font-weight: bold;
-  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  padding: 1rem 2rem;
 }
 
 .button-primary:hover {
-  color: $white;
   background-color: $primary-selected;
   box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.2);
+  color: $white;
 }
 
 .button-spacing-top {
@@ -41,17 +40,17 @@
 
 .button-call-to-action {
   background-color: $secondary;
+  border: 0;
   border-radius: 2rem;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
   color: $white;
-  border: none;
-  padding: 2rem 3rem 2rem 3rem;
   font-size: 150%;
   font-weight: bold;
-  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  padding: 2rem 3rem;
 }
 
 .button-call-to-action:hover {
   background-color: $secondary-selected;
-  color: $white;
   box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.2);
+  color: $white;
 }

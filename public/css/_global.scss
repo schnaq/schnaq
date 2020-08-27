@@ -1,4 +1,5 @@
-@import "variables";
+@import 'variables';
+@import 'mixins';
 
 html {
   scroll-behavior: smooth;
@@ -22,14 +23,13 @@ h6 {
   background-color: $gray-100;
 }
 
-#display-content {
-  min-height: 85vh;
+.base-wrapper {
   background: $light-background;
+  min-height: 85vh;
 }
 
 .shadow-custom {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2),
-  0 4px 4px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 4px 0 rgba(0, 0, 0, 0.19);
 }
 
 .shadow-straight-down {
@@ -40,8 +40,13 @@ h6 {
   box-shadow: inset 1px 2px 0 rgba(0, 0, 0, 0.2);
 }
 
-.link-pointer {
+.clickable,
+.clickable-no-hover {
   cursor: pointer;
+}
+
+.clickable:hover {
+  background: rgba(255, 255, 255, 0.125);
 }
 
 .sm-pad-0 {
@@ -51,10 +56,12 @@ h6 {
 }
 
 .schnaq-rounded {
-  border-radius: 30% 30% 30% 30%;
+  border-radius: 30%;
 }
 
 .mobile-container {
+  padding: 0 0.5rem;
+
   @include media-breakpoint-up(md) {
     padding: 0 2rem;
   }
@@ -62,6 +69,4 @@ h6 {
   @include media-breakpoint-up(xl) {
     padding: 0 4rem;
   }
-
-  padding: 0 0.5rem;
 }

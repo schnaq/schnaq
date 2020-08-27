@@ -114,7 +114,7 @@
 (defn button
   "Presenting the feedback button."
   []
-  [:div#feedback-wrapper
+  [:div#feedback-wrapper.feedback-wrapper
    {:on-click (fn [_e]
                 (screenshot!)
                 (rf/dispatch [:modal {:show? true

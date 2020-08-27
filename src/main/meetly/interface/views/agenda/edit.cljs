@@ -53,7 +53,7 @@
       ;; title
       [agenda-edit-title agenda]]
      [:div.col-2
-      [:div.pt-4.link-pointer
+      [:div.pt-4.clickable
        {:on-click #(rf/dispatch [:agenda/delete (:db/id agenda)])}
        [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
     ;; description

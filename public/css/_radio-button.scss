@@ -1,8 +1,7 @@
-/* Create a custom radio button */
-
+@import 'variables';
 
 .custom-radio-button:checked ~ .custom-radio-button-label::before {
-  color: $white;
-  border-color: $secondary;
   background-color: $secondary;
+  border-color: $secondary;
+  color: $white;
 }

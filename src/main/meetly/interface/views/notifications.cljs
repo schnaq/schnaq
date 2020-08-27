@@ -63,7 +63,7 @@
   "Presenting all notifications to the user."
   []
   (let [notifications @(rf/subscribe [:notifications/all])]
-    [:div#notifications-wrapper
+    [:div#notifications-wrapper.notifications-wrapper
      {:aria-live "polite"
       :aria-atomic true}
      [:> AnimatePresence

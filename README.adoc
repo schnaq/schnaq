@@ -59,6 +59,9 @@ To automatically create the stylesheets, enable a file-watcher for the `public/c
 In the html we use the minimized version.
 So be sure to add `--style compressed` or similar as an option to your sass command.
 
+=== Linting Styles locally If you want to lint the style locally, you need to run `yarn install --dev` to install stylelint.
+Then just execute `yarn stylelint "public/css/*.scss"` in the project root.
+
 == Testing To run tests locally do the following.
 
 === Backend
