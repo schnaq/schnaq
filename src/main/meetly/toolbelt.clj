@@ -1,7 +1,8 @@
 (ns meetly.toolbelt
   "Utility functions supporting the backend."
   (:require [ghostwheel.core :refer [>defn]])
-  (:import (java.io File)))
+  (:import (java.io File)
+           (java.time LocalDate ZoneId)))
 
 (>defn create-directory!
   "Creates a directory in the project's path. Returns the absolut path of the
@@ -13,3 +14,11 @@
     (let [dir (File. path)]
       (.mkdirs dir)
       (.getAbsolutePath dir))))
+
+(>defn now-minus-days
+  "Returns an instant that represents the current date minus some days. Assumes systemDefault timezone."
+  [days]
+  [int? :ret inst?]
+  (-> (.minusDays (LocalDate/now) days)
+      (.atStartOfDay (ZoneId/systemDefault))
+      .toInstant))

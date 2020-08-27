@@ -5,7 +5,9 @@
             [goog.string :as gstring]
             [meetly.interface.config :refer [config]]
             [meetly.interface.text.display-data :refer [labels]]
+            [meetly.interface.utils.js-wrapper :as js-wrap]
             [meetly.interface.views.base :as base]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]))
 
 (defn- analytics-card
@@ -32,6 +34,24 @@
        [:hr]])
     [:p.card-text [:small.text-muted "Last updated ..."]]]])
 
+(defn- analytics-controls
+  "The controls for the analytics view."
+  []
+  [:div
+   [:form.form-inline
+    {:on-submit (fn [e]
+                  (js-wrap/prevent-default e)
+                  (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
+    [:input#days-input.form-control.form-round-05.py-1.mr-sm-2
+     {:type "number"
+      :name "days-input"
+      :autoFocus true
+      :required true
+      :defaultValue 7}]
+    [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+     {:type "submit"
+      :value (labels :analytics/fetch-data-button)}]]])
+
 (defn analytics-dashboard-view
   "The dashboard displaying all analytics."
   []
@@ -45,6 +65,7 @@
          statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
          argument-types @(rf/subscribe [:analytics/argument-type-stats])]
      [:div.container.px-5.py-3
+      [analytics-controls]
       [:div.card-columns
        [analytics-card (labels :analytics/overall-meetings) meetings-num]
        [analytics-card (labels :analytics/user-numbers) usernames-num]
@@ -69,15 +90,24 @@
 
 (>defn fetch-with-password
   "Fetches something from an endpoint with the password."
-  [db path on-success-event]
-  [map? string? keyword? :ret map?]
-  {:http-xhrio {:method :post
-                :uri (str (:rest-backend config) path)
-                :format (ajax/transit-request-format)
-                :params {:password (-> db :admin :password)}
-                :response-format (ajax/transit-response-format)
-                :on-success [on-success-event]
-                :on-failure [:ajax-failure]}})
+  ([db path on-success-event]
+   [map? string? keyword? :ret map?]
+   (fetch-with-password db path on-success-event 9999))
+  ([db path on-success-event days-since]
+   [map? string? keyword? int? :ret map?]
+   {:http-xhrio {:method :post
+                 :uri (str (:rest-backend config) path)
+                 :format (ajax/transit-request-format)
+                 :params {:password (-> db :admin :password)
+                          :days-since days-since}
+                 :response-format (ajax/transit-response-format)
+                 :on-success [on-success-event]
+                 :on-failure [:ajax-failure]}}))
+
+(rf/reg-event-fx
+  :analytics/load-all-with-time
+  (fn [{:keys [db]} [_ days]]
+    (fetch-with-password db "/analytics" :analytics/all-stats-loaded days)))
 
 (rf/reg-event-fx
   :analytics/load-meeting-num
@@ -148,6 +178,19 @@
   :analytics/argument-type-stats-loaded
   (fn [db [_ {:keys [argument-type-stats]}]]
     (assoc-in db [:analytics :arguments :types] argument-type-stats)))
+
+(rf/reg-event-db
+  :analytics/all-stats-loaded
+  (fn [db [_ {:keys [stats]}]]
+    (println "Setting new stats")
+    (println stats)
+    (assoc db :analytics {:meetings-num {:overall (:meetings-num stats)}
+                          :usernames-num {:overall (:usernames-num stats)}
+                          :statements {:number {:overall (:statements-num stats)}
+                                       :lengths (:statement-length-stats stats)}
+                          :active-users-num {:overall (:active-users-num stats)}
+                          :agendas {:average-per-meeting (:average-agendas stats)}
+                          :arguments {:types (:argument-type-stats stats)}})))
 
 ;; #### Subs ####
 
