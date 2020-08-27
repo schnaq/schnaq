@@ -182,8 +182,6 @@
 (rf/reg-event-db
   :analytics/all-stats-loaded
   (fn [db [_ {:keys [stats]}]]
-    (println "Setting new stats")
-    (println stats)
     (assoc db :analytics {:meetings-num {:overall (:meetings-num stats)}
                           :usernames-num {:overall (:usernames-num stats)}
                           :statements {:number {:overall (:statements-num stats)}

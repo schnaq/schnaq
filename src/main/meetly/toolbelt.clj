@@ -2,7 +2,7 @@
   "Utility functions supporting the backend."
   (:require [ghostwheel.core :refer [>defn]])
   (:import (java.io File)
-           (java.time LocalDate ZoneId)))
+           (org.joda.time DateTime)))
 
 (>defn create-directory!
   "Creates a directory in the project's path. Returns the absolut path of the
@@ -19,6 +19,4 @@
   "Returns an instant that represents the current date minus some days. Assumes systemDefault timezone."
   [days]
   [int? :ret inst?]
-  (-> (.minusDays (LocalDate/now) days)
-      (.atStartOfDay (ZoneId/systemDefault))
-      .toInstant))
+  (.toDate (.minusDays (DateTime.) days)))

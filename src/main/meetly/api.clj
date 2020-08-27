@@ -315,7 +315,7 @@
                    :statement-length-stats (db/statement-length-stats timestamp-since)
                    :argument-type-stats (db/argument-type-stats timestamp-since)}}))
     (deny-access)))
-(db/number-of-meetings (toolbelt/now-minus-days 1))
+
 (defn- check-credentials
   "Checks whether share-hash and edit-hash match."
   [{:keys [body-params]}]
