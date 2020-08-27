@@ -71,9 +71,9 @@
       ;; title
       [:div.col-11
        [:div
-        [:h2.link-pointer {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
-                                                    {:share-hash share-hash
-                                                     :id (:db/id (:agenda/discussion agenda))}])}
+        [:h2.clickable-no-hover {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
+                                                          {:share-hash share-hash
+                                                           :id (:db/id (:agenda/discussion agenda))}])}
          (:agenda/title agenda)]
         [:p (:agenda/description agenda)]]]]]))
 
