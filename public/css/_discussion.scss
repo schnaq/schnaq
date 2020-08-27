@@ -1,20 +1,22 @@
+@import 'variables';
+
 .statement-outer {
-  padding: 2rem 1rem 2rem 1rem;
-  color: $white;
   background: transparent;
   border: 0;
+  color: $white;
+  padding: 2rem 1rem;
 
   @include media-breakpoint-down(sm) {
-    padding: 1rem 1rem 1rem 1rem;
+    padding: 1rem;
   }
 }
 
 .statement {
   border-radius: 2rem 0.5rem 0.5rem 2rem;
-  padding: 1rem;
-  color: $white;
   box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  color: $white;
   min-height: 9rem;
+  padding: 1rem;
 
   @include media-breakpoint-down(sm) {
     border-radius: 2rem;
@@ -22,7 +24,7 @@
 }
 
 .statement-content {
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 2rem 1rem 1rem;
 }
 
 .statement-agree {
@@ -53,33 +55,33 @@
 }
 
 .discussion-view-rounded {
-  border-radius: 2rem;
   background: $white;
+  border-radius: 2rem;
   padding: 0;
 }
 
 .discussion-view-top-rounded {
+  background: $primary;
   border-radius: 2rem 2rem 0 0;
-  padding: 2rem;
   color: $white;
   font-weight: bold;
-  background: $primary;
+  padding: 2rem;
 }
 
 .discussion-view-bottom-rounded {
-  border-radius: 0 0 2rem 2rem;
-  padding: 2rem;
-  color: $white;
   background: $primary;
+  border-radius: 0 0 2rem 2rem;
+  color: $white;
+  padding: 2rem;
 }
 
 .statement-single {
-  border-radius: 2rem;
-  padding: 2rem;
-  margin: 2rem;
-  color: $white;
   background: $primary-light;
+  border-radius: 2rem;
+  color: $white;
   cursor: pointer;
+  margin: 2rem;
+  padding: 2rem;
 }
 
 .statement-single:hover {
@@ -88,17 +90,17 @@
 
 .discussion-text-input {
   background: transparent;
-  border: none;
+  border: 0;
   border-bottom: 2px solid $white;
   color: $white;
 }
 
 .discussion-text-input:focus {
   background-color: rgba(255, 255, 255, 0.0125);
-  border: none;
+  border: 0;
   border-bottom: 2px solid $white;
-  color: $white;
   box-shadow: none;
+  color: $white;
 }
 
 .discussion-text-input::placeholder {
@@ -107,31 +109,30 @@
 }
 
 .others-say-container {
-  margin-top: 0;
   background: $gray-500;
+  margin-top: 0;
 }
 
 .authors-list {
-  padding-left: 1rem;
-  list-style-type: circle;
   color: $gray-900;
+  list-style-type: circle;
+  padding-left: 1rem;
 }
 
 .discussion-base.container {
-  padding-top: 2rem;
   padding-bottom: 2rem;
+  padding-top: 2rem;
 
-  .discussion-view-top-rounded {
-    @include media-breakpoint-down(sm) {
-      border-top-right-radius: 0;
+  @include media-breakpoint-down(sm) {
+    .discussion-view-top-rounded {
       border-top-left-radius: 0;
-      padding-top: 1rem;
+      border-top-right-radius: 0;
       padding-bottom: 1rem;
+      padding-top: 1rem;
     }
   }
 
   @include media-breakpoint-down(sm) {
     padding: 0;
   }
-
 }
