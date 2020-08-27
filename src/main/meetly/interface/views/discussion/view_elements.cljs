@@ -186,16 +186,18 @@
       [:div.statement {:class (str "statement-" (name attitude))}
        (when (= :argument.type/undercut (:meta/argument.type statement))
          [:p.small (labels :discussion/undercut-bubble-intro)])
-       ;; information
-       [:div
-        ;; avatar
-        [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]
        ;; content
        [:div.statement-content
-        [:p content]]
+        [:p content
+         [:small.text-right.float-right.d-none.d-md-block
+          (common/avatar (-> statement :statement/author :author/nickname) 50)]]]
+       ;; additional Info
        [:div.row.px-3
-        [:div.col
-         [extra-discussion-info-badges statement]]]]]
+        [:div.col-5.col-md-12
+         [extra-discussion-info-badges statement]]
+        [:div.col-7.d-md-none
+         ;; avatar
+         [:small.text-right.float-right (common/avatar (-> statement :statement/author :author/nickname) 50)]]]]]
      ;; up-down-votes
      [:div.col-1.px-0
       [:div.up-down-vote
