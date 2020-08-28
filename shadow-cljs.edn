@@ -4,13 +4,13 @@
  :nrepl {:port 8777}
  :builds {;; example build config, usage suitable for user apps
           :app {:target :browser
-                :modules {:base {:init-fn meetly.interface.core/init}}
+                :modules {:base {:init-fn schnaq.interface.core/init}}
                 :output-dir "public/js/compiled"
                 :asset-path "/js/compiled"
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}}
-                :release {:closure-defines {meetly.interface.config/api-url #shadow/env "REST_API_URL"
-                                            meetly.interface.config/environment "production"
-                                            meetly.interface.config/build-hash #shadow/env "BUILD_HASH"}}
+                :release {:closure-defines {schnaq.interface.config/api-url #shadow/env "REST_API_URL"
+                                            schnaq.interface.config/environment "production"
+                                            schnaq.interface.config/build-hash #shadow/env "BUILD_HASH"}}
                 :devtools {:http-root "public"
                            :http-port 8700
                            :preloads [devtools.preload day8.re-frame-10x.preload]}}

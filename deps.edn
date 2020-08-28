@@ -51,7 +51,7 @@
             {seancorfield/depstar {:mvn/version "1.1.104"}
              com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
             :main-opts ["-m" "hf.depstar.uberjar"
-                        "target/meetly-standalone.jar" "--verbose"]}
+                        "target/schnaq-standalone.jar" "--verbose"]}
 
-           :run-server {:main-opts ["-m" "meetly.meeting.rest-api"]
+           :run-server {:main-opts ["-m" "schnaq.api"]
                         :extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}}}

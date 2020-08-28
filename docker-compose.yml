@@ -10,10 +10,10 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.meetly-frontend.rule=Host(`meetly.dialogo.io`)"
-      - "traefik.http.routers.meetly-frontend.entrypoints=websecure"
-      - "traefik.http.routers.meetly-frontend.tls.certresolver=myresolver"
-      - "traefik.http.services.meetly-frontend.loadbalancer.server.port=80"
+      - "traefik.http.routers.schnaq-frontend.rule=Host(`schnaq.com`)"
+      - "traefik.http.routers.schnaq-frontend.entrypoints=websecure"
+      - "traefik.http.routers.schnaq-frontend.tls.certresolver=myresolver"
+      - "traefik.http.services.schnaq-frontend.loadbalancer.server.port=80"
       - "traefik.docker.network=web"
 
   backend:
@@ -29,10 +29,10 @@ services:
       - ENVIRONMENT=production
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.meetly-backend.rule=Host(`api.meetly.dialogo.io`)"
-      - "traefik.http.routers.meetly-backend.entrypoints=websecure"
-      - "traefik.http.routers.meetly-backend.tls.certresolver=myresolver"
-      - "traefik.http.services.meetly-backend.loadbalancer.server.port=80"
+      - "traefik.http.routers.schnaq-backend.rule=Host(`api.schnaq.com`)"
+      - "traefik.http.routers.schnaq-backend.entrypoints=websecure"
+      - "traefik.http.routers.schnaq-backend.tls.certresolver=myresolver"
+      - "traefik.http.services.schnaq-backend.loadbalancer.server.port=80"
       - "traefik.docker.network=web"
 
 networks:

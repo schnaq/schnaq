@@ -15,7 +15,7 @@ var klaroConfig = {
 
   // You can customize the name of the cookie that Klaro uses for storing
   // user consent decisions. If undefined, Klaro will use 'klaro'.
-  cookieName: 'meetly-analytics',
+  cookieName: 'schnaq-analytics',
 
   // You can also set a custom expiration time for the Klaro cookie.
   // By default, it will expire after 120 days.
@@ -126,7 +126,7 @@ var klaroConfig = {
         // is not the current domain. If you do not set these values
         // properly, the cookie can't be deleted by Klaro
         // (there is no way to access the path or domain of a cookie in JS)
-        [/^_pk_.*$/, '/', 'meetly.dialogo.io'], //for the production version
+        [/^_pk_.*$/, '/', 'schnaq.com'], //for the production version
         [/^_pk_.*$/, '/', 'localhost'], //for the local version
         'piwik_ignore',
       ],
