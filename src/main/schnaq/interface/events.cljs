@@ -1,16 +1,17 @@
 (ns schnaq.interface.events
   (:require [ajax.core :as ajax]
+            [re-frame.core :as rf]
+            [schnaq.interface.db :as schnaq-db]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.modals.modal :as modal]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.modals.modal :as modal]))
 
 (rf/reg-event-fx
   :load/username
   (fn [{:keys [db]} _]
     (if-let [name (ls/get-item :username)]
-      {:db (assoc-in db [:db :user :name] name)}
+      {:db (assoc-in db [:user :name] name)}
       {:fx [[:dispatch [:user/set-display-name "Anonymous"]]
             [:dispatch [:modal {:show? true
                                 :child [modal/enter-name-modal]}]]]})))
@@ -30,7 +31,8 @@
 (rf/reg-event-fx
   :initialise-db
   (fn [_ _]
-    {:fx [[:dispatch [:load/meetings]]
+    {:db schnaq-db/default-db
+     :fx [[:dispatch [:load/meetings]]
           [:dispatch [:load/username]]]}))
 
 (rf/reg-event-db
