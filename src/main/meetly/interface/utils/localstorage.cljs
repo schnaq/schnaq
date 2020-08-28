@@ -1,12 +1,24 @@
 (ns meetly.interface.utils.localstorage
-  (:require [ghostwheel.core :refer [>defn >defn-]]
-            [cljs.spec.alpha :as s]))
+  (:require [ghostwheel.core :refer [>defn >defn- ?]]
+            [cljs.spec.alpha :as s]
+            [clojure.string :as string]))
+
+(>defn- keyword->string
+  "Takes (namespaced) keywords and creates a string. Optionally is prefixed with
+  the keyword's namespace."
+  [k]
+  [keyword? :ret (? string?)]
+  (if-let [keyword-namespace (namespace k)]
+    (string/join "/" [keyword-namespace (name k)])
+    (str (name k))))
 
 (>defn- stringify
-  "Stringifies a symbol or keyword. Tosses the namespace."
+  "Stringifies a symbol or keyword."
   [val]
   [(s/or keyword? symbol? string?) :ret string?]
-  (str (name val)))
+  (if (keyword? val)
+    (keyword->string val)
+    (str val)))
 
 (>defn set-item!
   "Set `key` in browser's localStorage to `val`."
