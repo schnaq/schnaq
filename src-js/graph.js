@@ -1,18 +1,27 @@
 class SchnaqD3 {
-  constructor(d3, parentId, data, width, height) {
+  constructor(d3, parentId, data, width, height, textwrap) {
     this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
     this.width = width;
     this.height = height;
-    let INITIAL_NODE_SIZE = 20;
+    let INITIAL_NODE_SIZE = 25;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.adjlist = [];
     this.svg = this.resizeCanvas(width, height);
     this.graphForces = d3.forceSimulation();
     this.labelForces = d3.forceSimulation();
+    this.d3.textwrap = textwrap;
 
     this.initializeGraph(data, width, height, INITIAL_NODE_SIZE);
+
+    // create a text wrapping function
+    let textWidth = INITIAL_NODE_SIZE * 2;
+    let wrap = d3.textwrap().bounds({height: 480, width: textWidth}).method('tspans');
+    // select all text nodes
+    let text = d3.selectAll('text');
+    // run the text wrapping function on all text nodes
+    text.call(wrap);
 
     this.svg.call(
       d3.zoom()
@@ -163,7 +172,6 @@ class SchnaqD3 {
 
   setSVG(node) {
     let svgPath;
-    console.log(node.type)
     switch (node.type) {
       case "starting-argument":
         svgPath = "imgs/graph/bubble_light_blue_graph.svg";
@@ -183,18 +191,47 @@ class SchnaqD3 {
     return svgPath;
   }
 
+  fillNode(node) {
+    let color;
+    let blueLight = "#4cacf4";
+    let blue = "#1292ee";
+    let orange = "#ff772d";
+
+    switch (node.type) {
+      case "starting-argument":
+        color = blueLight
+        break;
+      case "attack":
+        color = orange;
+        break;
+      case "undercut":
+        color = orange;
+        break;
+      case "support":
+        color = blue;
+        break;
+      default:
+        color = blueLight;
+    }
+    return color;
+  }
+
   drawNodes(data, size) {
+    let width = size * 2;
+    let height = size;
     this.node = this.container.append("g").attr("class", "nodes")
       .selectAll("g")
       .data(data.nodes)
       .enter()
-      .append('image')
-      .attr("xlink:href", node => {
-        return this.setSVG(node);
+      .append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("x", -width/ 2)
+      .attr("y", -height / 2)
+      .attr("rx", 4)
+      .style("fill", node => {
+        return this.fillNode(node);
       })
-      .attr('width', size)
-      .attr("x", -size / 2)
-      .attr("y", -size / 2);
   }
 
   chooseColor(link) {
@@ -230,10 +267,11 @@ class SchnaqD3 {
       .attr("stroke-width", "1px");
   }
 
-  drawLabels(labels) {
+  drawLabels(data) {
+
     this.labelNode = this.container.append("g").attr("class", "labelNodes")
       .selectAll("text")
-      .data(labels.nodes)
+      .data(data.nodes)
       .enter()
       .append("text")
       .text((node, index) => {
@@ -241,8 +279,9 @@ class SchnaqD3 {
       })
       .style("fill", "#555")
       .style("font-family", "Arial")
-      .style("font-size", 12)
-      .style("pointer-events", "none"); // to prevent mouseover/drag capture
+      .style("font-size", 6)
+      .style("pointer-events", "none") // to prevent mouseover/drag capture
+      .style("text-anchor", "middle");
   }
 
   createLabels(data) {
@@ -301,8 +340,8 @@ class SchnaqD3 {
 
   initializeGraph(data, width, height, nodeSize) {
     this.container = this.svg.append("g");
-    this.drawNodes(data, nodeSize);
     this.drawLinks(data);
+    this.drawNodes(data, nodeSize);
 
     let labels = this.createLabels(data);
     this.drawLabels(labels);

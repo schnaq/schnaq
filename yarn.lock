@@ -888,7 +888,7 @@ d3-scale@2:
     d3-time "1"
     d3-time-format "2"
 
-d3-selection@1, d3-selection@^1.1.0:
+d3-selection@1, d3-selection@^1.0.2, d3-selection@^1.1.0:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-1.4.2.tgz#dcaa49522c0dbf32d6c1858afc26b6094555bc5c"
   integrity sha512-SJ0BqYihzOjDnnlfyeHT0e30k0K1+5sR3d5fNueCNeuhZTnGw4M4o8mqJchSwgKMXCNFo+e2VTChiSJ0vYtXkg==
@@ -899,6 +899,13 @@ d3-shape@1:
   integrity sha512-EUkvKjqPFUAZyOlhY5gzCxCeI0Aep04LwIRpsZ/mLFelJiUfnK56jo5JMDSE7yyP2kLSb6LtF+S5chMk7uqPqw==
   dependencies:
     d3-path "1"
+
+d3-textwrap@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/d3-textwrap/-/d3-textwrap-3.0.0.tgz#ed2855fd41cb15533a724284c03d67cb8294043f"
+  integrity sha512-Uj2YFm95i+bM4nu1+jIUJdB6U0sW/K0D506u6tYbTEkt0+SNeEWPJ8bZbvBHPhOqom/UK6hyrMAY7JYA6t6XIg==
+  dependencies:
+    d3-selection "^1.0.2"
 
 d3-time-format@2:
   version "2.2.3"

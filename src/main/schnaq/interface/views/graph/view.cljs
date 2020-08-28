@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.graph.view
   (:require ["d3" :as d3]
+            ["d3-textwrap":as d3-textwrap]
             ["/graph" :as schnaqd3]
             [ajax.core :as ajax]
             [schnaq.interface.config :refer [config]]
@@ -12,13 +13,14 @@
   "Visualization of Discussion Graph."
   [graph]
   (let [d3-instance (reagent/atom {})
-        width 1200 height 600 node-size 5]
+        width 1200 height 900 node-size 5]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:svg])
        :component-did-mount (fn [this]
                               (reset! d3-instance
-                                      (schnaqd3/SchnaqD3. d3 (rdom/dom-node this) (clj->js graph) width height)))
+                                      (schnaqd3/SchnaqD3.
+                                        d3 (rdom/dom-node this) (clj->js graph) width height d3-textwrap/textwrap)))
        :component-did-update (fn [this _argv]
                                (let [[_ graph] (reagent/argv this)]
                                  (.replaceData @d3-instance (clj->js graph) width height node-size)))})))
