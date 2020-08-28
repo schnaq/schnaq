@@ -89,7 +89,7 @@ build-frontend-image:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
       docker build -f Dockerfile.frontend
-      --build-arg REST_API_URL=https://api.meetly.dialogo.io
+      --build-arg REST_API_URL=https://api.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE/frontend .
     - docker push $CI_REGISTRY_IMAGE/frontend
@@ -126,7 +126,7 @@ build-frontend-staging-image:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
       docker build -f Dockerfile.frontend
-      --build-arg REST_API_URL=https://api.meetly.staging.dialogo.io
+      --build-arg REST_API_URL=https://api.staging.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE/frontend:staging .
     - docker push $CI_REGISTRY_IMAGE/frontend:staging

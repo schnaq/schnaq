@@ -15,4 +15,4 @@ EXPOSE 3000
 COPY . .
 RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:uberjar
 
-CMD ["java", "-cp", "/code/target/meetly-standalone.jar", "clojure.main", "-m", "meetly.api"]
+CMD ["java", "-cp", "/code/target/schnaq-standalone.jar", "clojure.main", "-m", "schnaq.api"]
