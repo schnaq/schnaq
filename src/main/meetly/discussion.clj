@@ -71,13 +71,21 @@
        :authors authors})))
 
 (>defn- create-node
+  "Adds a type to the node.
+  Checks if the node is a starting argument.
+  If the current node is no starting argument checks if the current node is present as a premise in an argument.
+  If so add the type of the argument to the node."
   [node arguments starting-conclusions]
   [map? sequential? map? :ret map?]
   (let [premise (first
+                  ;; filter all arguments
                   (filter
-                    (fn [a] (not-empty
-                              (filter
-                                (fn [p] (= (:id node) (:db/id p))) (:argument/premises a))))
+                    (fn [argument]
+                      ;; check if node id is present in argument/premises of current argument
+                      (let [premises (:argument/premises argument)]
+                        (seq
+                          (filter
+                            (fn [premise] (= (:id node) (:db/id premise))) premises))))
                     arguments))]
     (if (starting-conclusions (:id node))
       (assoc node :type "starting-argument")

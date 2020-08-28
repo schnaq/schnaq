@@ -29,7 +29,7 @@
     <orderEntry type="library" name="Deps: metosin/ring-http-response:0.9.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.44" level="project" />
     <orderEntry type="library" name="Deps: metosin/muuntaja:0.6.7" level="project" />
-    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.0.669" level="project" />
+    <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.0.672" level="project" />
     <orderEntry type="library" name="Deps: edn-query-language/eql:0.0.9" level="project" />
     <orderEntry type="library" name="Deps: io.undertow/undertow-core:2.1.3.Final" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client-api:0.8.54" level="project" />
@@ -72,7 +72,7 @@
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.264" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20191016-6ae1f72f" level="project" />
     <orderEntry type="library" name="Deps: io.aviso/pretty:0.1.33" level="project" />
-    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.0" level="project" />
+    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.1" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.sdk/graal-sdk:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: rewrite-clj:0.6.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/clojurescript:1.10.773" level="project" />
