@@ -75,29 +75,21 @@
   Checks if the node is a starting argument.
   If the current node is no starting argument checks if the current node is present as a premise in an argument.
   If so add the type of the argument to the node."
-  [node arguments starting-conclusions]
-  [map? sequential? map? :ret map?]
-  (let [premise (first
-                  ;; filter all arguments
-                  (filter
-                    (fn [argument]
-                      ;; check if node id is present in argument/premises of current argument
-                      (let [premises (:argument/premises argument)]
-                        (seq
-                          (filter
-                            (fn [premise] (= (:id node) (:db/id premise))) premises))))
-                    arguments))]
-    (if (starting-conclusions (:id node))
-      (assoc node :type "starting-argument")
-      (assoc node :type (:argument/type premise)))))
+  [statement arguments starting-conclusions]
+  [map? sequential? set? :ret map?]
+  (let [statement-id (:id statement)
+        premise (first (filter #((set (premise-ids %)) statement-id) arguments))]
+    (if (starting-conclusions statement-id)
+      (assoc statement :type "starting-argument")
+      (assoc statement :type (:argument/type premise)))))
 
 (>defn- create-nodes
   "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
-  [nodes discussion-id starting-arguments]
+  [statements discussion-id starting-arguments]
   [sequential? int? sequential? :ret sequential?]
   (let [arguments (dialog-db/all-arguments-for-discussion discussion-id)
         starting-conclusions (into #{} (map #(-> % :argument/conclusion :db/id) starting-arguments))]
-    (map #(create-node % arguments starting-conclusions) nodes)))
+    (map #(create-node % arguments starting-conclusions) statements)))
 
 
 (>defn- agenda-node
