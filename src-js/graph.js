@@ -171,6 +171,9 @@ class SchnaqD3 {
       case "attack":
         svgPath = "imgs/graph/bubble_orange_graph.svg";
         break;
+      case "undercut":
+        svgPath = "imgs/graph/bubble_orange_graph.svg";
+        break;
       case "support":
         svgPath = "imgs/graph/bubble_blue_graph.svg";
         break;
