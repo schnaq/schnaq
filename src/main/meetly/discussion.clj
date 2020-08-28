@@ -70,19 +70,27 @@
       {:sub-statements sub-statements-count
        :authors authors})))
 
-(>defn- mark-starting-nodes
-  "Marks every conclusion-node belonging to a starting-argument in preparation for the graph view."
-  [nodes starting-arguments]
-  [sequential? sequential? :ret sequential?]
-  (let [starting-conclusions (into #{} (map #(-> % :argument/conclusion :db/id) starting-arguments))]
-    (map
-      (fn [node]
-        (assoc
-          (if (starting-conclusions (:id node))
-            (assoc node :starting-statement? true)
-            (assoc node :starting-statement? false))
-          :type "statement"))
-      nodes)))
+(>defn- create-node
+  [node arguments starting-conclusions]
+  [map? sequential? map? :ret map?]
+  (let [premise (first
+                  (filter
+                    (fn [a] (not-empty
+                              (filter
+                                (fn [p] (= (:id node) (:db/id p))) (:argument/premises a))))
+                    arguments))]
+    (if (starting-conclusions (:id node))
+      (assoc node :type "starting-argument")
+      (assoc node :type (:argument/type premise)))))
+
+(>defn- create-nodes
+  "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
+  [nodes discussion-id starting-arguments]
+  [sequential? int? sequential? :ret sequential?]
+  (let [arguments (dialog-db/all-arguments-for-discussion discussion-id)
+        starting-conclusions (into #{} (map #(-> % :argument/conclusion :db/id) starting-arguments))]
+    (map #(create-node % arguments starting-conclusions) nodes)))
+
 
 (>defn- agenda-node
   "Creates node data for an agenda point."
@@ -108,7 +116,7 @@
   "Returns all nodes for a discussion including its agenda."
   [statements starting-arguments discussion-id share-hash]
   [sequential? sequential? int? :meeting/share-hash :ret sequential?]
-  (conj (mark-starting-nodes statements starting-arguments)
+  (conj (create-nodes statements discussion-id starting-arguments)
         (agenda-node discussion-id share-hash)))
 
 (>defn links-for-agenda
