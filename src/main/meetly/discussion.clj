@@ -70,19 +70,27 @@
       {:sub-statements sub-statements-count
        :authors authors})))
 
-(>defn- mark-starting-nodes
-  "Marks every conclusion-node belonging to a starting-argument in preparation for the graph view."
-  [nodes starting-arguments]
-  [sequential? sequential? :ret sequential?]
-  (let [starting-conclusions (into #{} (map #(-> % :argument/conclusion :db/id) starting-arguments))]
-    (map
-      (fn [node]
-        (assoc
-          (if (starting-conclusions (:id node))
-            (assoc node :starting-statement? true)
-            (assoc node :starting-statement? false))
-          :type "statement"))
-      nodes)))
+(>defn- create-node
+  "Adds a type to the node.
+  Checks if the node is a starting argument.
+  If the current node is no starting argument checks if the current node is present as a premise in an argument.
+  If so add the type of the argument to the node."
+  [statement arguments starting-conclusions]
+  [map? sequential? set? :ret map?]
+  (let [statement-id (:id statement)
+        premise (first (filter #((set (premise-ids %)) statement-id) arguments))]
+    (if (starting-conclusions statement-id)
+      (assoc statement :type "starting-argument")
+      (assoc statement :type (:argument/type premise)))))
+
+(>defn- create-nodes
+  "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
+  [statements discussion-id starting-arguments]
+  [sequential? int? sequential? :ret sequential?]
+  (let [arguments (dialog-db/all-arguments-for-discussion discussion-id)
+        starting-conclusions (into #{} (map #(-> % :argument/conclusion :db/id) starting-arguments))]
+    (map #(create-node % arguments starting-conclusions) statements)))
+
 
 (>defn- agenda-node
   "Creates node data for an agenda point."
@@ -108,7 +116,7 @@
   "Returns all nodes for a discussion including its agenda."
   [statements starting-arguments discussion-id share-hash]
   [sequential? sequential? int? :meeting/share-hash :ret sequential?]
-  (conj (mark-starting-nodes statements starting-arguments)
+  (conj (create-nodes statements discussion-id starting-arguments)
         (agenda-node discussion-id share-hash)))
 
 (>defn links-for-agenda

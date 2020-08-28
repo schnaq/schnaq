@@ -5,7 +5,7 @@ class SchnaqD3 {
     this.data = data;
     this.width = width;
     this.height = height;
-    let INITIAL_NODE_SIZE = 5;
+    let INITIAL_NODE_SIZE = 20;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.adjlist = [];
     this.svg = this.resizeCanvas(width, height);
@@ -161,16 +161,40 @@ class SchnaqD3 {
     return this.setLinkForces(forces);
   }
 
+  setSVG(node) {
+    let svgPath;
+    console.log(node.type)
+    switch (node.type) {
+      case "starting-argument":
+        svgPath = "imgs/graph/bubble_light_blue_graph.svg";
+        break;
+      case "attack":
+        svgPath = "imgs/graph/bubble_orange_graph.svg";
+        break;
+      case "undercut":
+        svgPath = "imgs/graph/bubble_orange_graph.svg";
+        break;
+      case "support":
+        svgPath = "imgs/graph/bubble_blue_graph.svg";
+        break;
+      default:
+        svgPath = "imgs/graph/bubble_light_blue_graph.svg";
+    }
+    return svgPath;
+  }
+
   drawNodes(data, size) {
     this.node = this.container.append("g").attr("class", "nodes")
       .selectAll("g")
       .data(data.nodes)
       .enter()
-      .append("circle")
-      .attr("r", size)
-      .attr("fill", node => {
-        return this.color(node.type);
-      });
+      .append('image')
+      .attr("xlink:href", node => {
+        return this.setSVG(node);
+      })
+      .attr('width', size)
+      .attr("x", -size / 2)
+      .attr("y", -size / 2);
   }
 
   chooseColor(link) {
