@@ -2,12 +2,12 @@ version: "3.7"
 
 services:
   frontend:
-    image: gitlab.cs.uni-duesseldorf.de:5001/dialogo/projects/meetly/frontend
+    image: gitlab.cs.uni-duesseldorf.de:5001/dialogo/projects/schnaq/frontend
     networks:
       - web
+    restart: unless-stopped
     volumes:
       - ./persist/feedbacks/screenshots:/usr/share/nginx/html/feedbacks/screenshots
-    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.schnaq-frontend.rule=Host(`schnaq.com`)"
@@ -17,7 +17,7 @@ services:
       - "traefik.docker.network=web"
 
   backend:
-    image: gitlab.cs.uni-duesseldorf.de:5001/dialogo/projects/meetly/backend
+    image: gitlab.cs.uni-duesseldorf.de:5001/dialogo/projects/schnaq/backend
     networks:
       - web
     restart: unless-stopped
