@@ -43,6 +43,8 @@
      :meeting-form-title "Titel"
      :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
      :meeting-form-desc "Beschreibung"
+     :meeting.creation/with-agendas "Mit Agendas diskutieren"
+     :meeting.creation/without-agendas "Ohne Agendas diskutieren"
      :meeting-form-desc-placeholder "Worum geht es in Ihrem schnaq?"
      :meeting-form-deadline "Frist"
      :meeting-form-end-date "Datum"

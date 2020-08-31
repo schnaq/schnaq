@@ -1,11 +1,11 @@
 (ns schnaq.interface.views.meeting.meetings
   (:require [ajax.core :as ajax]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.base :as base]
-            [oops.core :refer [oget]]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.base :as base]))
 
 ;; #### Helpers ####
 
@@ -29,31 +29,40 @@
 (defn create-meeting-form-view
   "A view with a form that creates a meeting properly."
   []
-  [:div#create-meeting-form
-   [base/nav-header]
-   [header]
-   [:div.container.px-5.py-3
-    ;; form
-    [:form {:on-submit (fn [e] (js-wrap/prevent-default e)
-                         (new-meeting-helper (oget e [:target :elements])))}
-     ;; title
-     [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
-     [:input#title.form-control.form-round.form-title
-      {:type "text"
-       :autoComplete "off"
-       :required true
-       :placeholder (data/labels :meeting-form-title-placeholder)}]
-     [:br] [:br]
+  (let [with-agendas? @(rf/subscribe [:meeting.creation/with-agendas?])]
+    [:div#create-meeting-form
+     [base/nav-header]
+     [header]
+     [:div.container.px-5.py-3
+      ;; form
+      [:form {:on-submit (fn [e] (js-wrap/prevent-default e)
+                           (new-meeting-helper (oget e [:target :elements])))}
+       ;; title
+       [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
+       [:input#title.form-control.form-round.form-title
+        {:type "text"
+         :autoComplete "off"
+         :required true
+         :placeholder (data/labels :meeting-form-title-placeholder)}]
+       [:br] [:br]
 
-     ;; description
-     [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
-     [:textarea#description.form-control.form-round
-      {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]
-     [:br] [:br]
+       ;; description
+       [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
+       [:textarea#description.form-control.form-round
+        {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]
+       [:br]
 
-     ;; submit
-     [:button.button-secondary.mt-5.mb-1 {:type "submit"}
-      (data/labels :meeting.step2/button)]]]])
+       [:div.custom-control.custom-switch
+        [:input#agenda-switch.custom-control-input {:type "checkbox"
+                                                    :on-click #(rf/dispatch [:meeting.creation/toggle-agendas])}]
+        [:label.custom-control-label {:for "agenda-switch"}
+         (if with-agendas?
+           (data/labels :meeting.creation/with-agendas)
+           (data/labels :meeting.creation/without-agendas))]]
+       [:br]
+       ;; submit
+       [:button.button-secondary.mt-5.mb-1 {:type "submit"}
+        (data/labels :meeting.step2/button)]]]]))
 
 ;; #### Events ####
 
@@ -120,3 +129,13 @@
   (fn [_ [_ {:keys [valid-credentials?]}]]
     (when-not valid-credentials?
       {:dispatch [:navigation/navigate :routes/invalid-link]})))
+
+(rf/reg-event-db
+  :meeting.creation/toggle-agendas
+  (fn [db _]
+    (update-in db [:meeting :creation :with-agendas?] not)))
+
+(rf/reg-sub
+  :meeting.creation/with-agendas?
+  (fn [db _]
+    (get-in db [:meeting :creation :with-agendas?] false)))
