@@ -411,7 +411,7 @@
   "This is our main entry point for the REST API Server."
   [& _args]
   (let [port (:port config/api)
-        allowed-origins [#".*\.dialogo\.io"]
+        allowed-origins [#".*\.schnaq\.com"]
         allowed-origins' (if schnaq-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middleware
     (schnaq-core/-main)
