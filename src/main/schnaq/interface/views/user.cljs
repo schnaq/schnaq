@@ -9,7 +9,7 @@
   :user/set-display-name
   (fn [{:keys [db]} [_ username]]
     ;; only update when string contains
-    (when (not (clj-string/blank? username))
+    (when-not (clj-string/blank? username)
       (let [fx {:http-xhrio {:method :post
                              :uri (str (:rest-backend config) "/author/add")
                              :params {:nickname username}
