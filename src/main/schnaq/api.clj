@@ -407,11 +407,15 @@
   (log/info (format "Port: %s" (:port config/api)))
   (log/info (format "Database Name: %s" config/db-name)))
 
+(def allowed-origin
+  "Regular expression, which defines the allowed origins for API requests."
+  #"^((https?:\/\/)?(.*\.)?(schnaq\.com))($|\/.*$)")
+
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
   (let [port (:port config/api)
-        allowed-origins [#".*\.schnaq\.com"]
+        allowed-origins [allowed-origin]
         allowed-origins' (if schnaq-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middleware
     (schnaq-core/-main)
