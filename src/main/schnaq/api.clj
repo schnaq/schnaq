@@ -408,7 +408,7 @@
   (log/info (format "Database Name: %s" config/db-name)))
 
 (def allowed-origin
-  "Regular expression, which define the allowed origins for API requests."
+  "Regular expression, which defines the allowed origins for API requests."
   #"^((https?:\/\/)?(.*\.)?(schnaq\.com))($|\/.*$)")
 
 (defn -main
