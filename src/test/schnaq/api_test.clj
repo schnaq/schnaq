@@ -1,7 +1,7 @@
 (ns schnaq.api-test
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [clojure.test :refer [deftest testing is use-fixtures]]
+            [clojure.test :refer [deftest testing is are use-fixtures]]
             [dialog.discussion.database :as dialog-db]
             [schnaq.api :as api]
             [schnaq.meeting.database :as db]
@@ -156,3 +156,26 @@
       (testing "bad request"
         (is (= 400 (:status bad-response)))
         (is (= error-text (-> bad-response :body :error)))))))
+
+(deftest cors-origin-tests
+  (let [test-regex (partial re-matches api/allowed-origin)]
+    (testing "Valid origins for production mode."
+      (are [origin] (not (nil? (test-regex origin)))
+        "api.schnaq.com"
+        "schnaq.com"
+        "www.schnaq.com"
+        "https://api.schnaq.com"
+        "https://schnaq.com"
+        "https://schnaq.com/?kangaroo=rocks"
+        "api.staging.schnaq.com"
+        "staging.schnaq.com"
+        "https://api.staging.schnaq.com"
+        "https://staging.schnaq.com"
+        "https://staging.schnaq.com/meetings/create"))
+    (testing "Invalid origins."
+      (are [origin] (nil? (test-regex origin))
+        "localhost"
+        "penguin.books"
+        "christian.rocks"
+        "schnaqi.com"
+        "fakeschnaq.com"))))
