@@ -62,7 +62,9 @@
        [:br]
        ;; submit
        [:button.button-secondary.mt-5.mb-1 {:type "submit"}
-        (data/labels :meeting.step2/button)]]]]))
+        (if with-agendas?
+          (data/labels :meeting.step2/button)
+          (data/labels :meeting.creation/create-now))]]]]))
 
 ;; #### Events ####
 
