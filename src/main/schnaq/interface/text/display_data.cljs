@@ -15,14 +15,14 @@
 
      ;; startpage header
      :start-page-header "schnaq"
-     :start-page-subheader "Das Meeting Tool der Zukunft ist (fast) da!"
-     :start-page-subheader-2 "Digitale Meetings neu gedacht und auf den Punkt gebracht"
-     ;; key feeatures
-     :start-page-point-community "Flexible Teilnahme"
-     :start-page-point-moderation "Automatische Moderation"
-     :start-page-point-reports "Zeitersparnis durch fokussierte Diskussion"
+     :start-page-subheader "Nie wieder langwierige Meetings ohne Ziel!"
+     :start-page-subheader-2 "Schnaq bringt strukturierte Meetings auf den Punkt."
+     ;; key features
+     :start-page-point-1 "Meetingziele kollaborativ festlegen"
+     :start-page-point-2 "Informationen gezielt austauschen"
+     :start-page-point-3 "Durch fokussierte Meetings Zeit sparen"
      :start-page-point-alpha "Betreten der Baustelle erwünscht!"
-     :start-page-point-alpha-subtext "schnaq befindet sich im Aufbau und Feedback ist uns wichtig!"
+     :start-page-point-alpha-subtext "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
      :create-schnaq-button "Jetzt einen schnaq starten!"
      ;; startpage call to action
      :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
@@ -30,12 +30,12 @@
      :create-your-meeting-sub "Mit einem Klick erstellen und teilen"
 
      ;; startpage grid
-     :innovative "Innovativ"
-     :innovative-why "schnaq nutzt wissenschaftlich erprobte neue Technologien"
+     :innovative "Zielgerichtet"
+     :innovative-why "Meetings mit einer klaren Agenda sind produktiver"
      :communicative "Kommunikativ"
-     :communicative-why "Lassen Sie Ihre NutzerInnen direkt zu Wort kommen"
+     :communicative-why "Lassen Sie alle WissensträgerInnen zu Wort kommen"
      :cooperative "Kooperativ"
-     :cooperative-why "Fördern Sie den Meinungsaustausch zwischen Ihren TeilnehmerInnen"
+     :cooperative-why "Gemeinsame Planung fördert die aktive Teilnahme an Meetings"
 
      ;; create schnaq
      :meeting-create-header "schnaq erstellen"
