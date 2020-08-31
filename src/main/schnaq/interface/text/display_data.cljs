@@ -171,17 +171,17 @@
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-    {:icon-community "imgs/community.svg"
-     :icon-robot "imgs/robot.svg"
-     :icon-reports "imgs/reports.svg"
-     :icon-crane "imgs/crane.svg"
-     :elephant-share "imgs/elephants/share.png"
-     :elephant-talk "imgs/elephants/talk.png"
-     :elephant-stop "imgs/elephants/stop.png"
-     :elephant-admin "imgs/elephants/admin.png"
-     :elephant-erase "imgs/elephants/erase.png"
-     :logo "imgs/Schnaq-Logo.svg"
-     :animation-discussion "animations/animation_discussion.gif"}))
+    {:icon-community "/imgs/community.svg"
+     :icon-robot "/imgs/robot.svg"
+     :icon-reports "/imgs/reports.svg"
+     :icon-crane "/imgs/crane.svg"
+     :elephant-share "/imgs/elephants/share.png"
+     :elephant-talk "/imgs/elephants/talk.png"
+     :elephant-stop "/imgs/elephants/stop.png"
+     :elephant-admin "/imgs/elephants/admin.png"
+     :elephant-erase "/imgs/elephants/erase.png"
+     :logo "/imgs/Schnaq-Logo.svg"
+     :animation-discussion "/animations/animation_discussion.gif"}))
 
 (defn fa
   "Returns an fontawesome icon id as String for a given identifier"

@@ -17,7 +17,7 @@
   (reitit-front-easy/start!
     router
     on-navigate
-    {:use-fragment true}))
+    {:use-fragment false}))
 
 (rf/reg-sub
   :navigation/current-route
