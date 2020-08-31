@@ -180,7 +180,7 @@
      :elephant-stop "imgs/elephants/stop.png"
      :elephant-admin "imgs/elephants/admin.png"
      :elephant-erase "imgs/elephants/erase.png"
-     :logo "imgs/Meetly-Logo.svg"
+     :logo "imgs/Schnaq-Logo.svg"
      :animation-discussion "animations/animation_discussion.gif"}))
 
 (defn fa
