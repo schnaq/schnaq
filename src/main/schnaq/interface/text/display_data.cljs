@@ -175,6 +175,7 @@
      :icon-robot "/imgs/robot.svg"
      :icon-reports "/imgs/reports.svg"
      :icon-crane "/imgs/crane.svg"
+     :icon-graph "/imgs/graph/graph-icon.svg"
      :elephant-share "/imgs/elephants/share.png"
      :elephant-talk "/imgs/elephants/talk.png"
      :elephant-stop "/imgs/elephants/stop.png"

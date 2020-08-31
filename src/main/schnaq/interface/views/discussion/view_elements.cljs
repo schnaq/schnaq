@@ -3,7 +3,7 @@
             [ajax.core :as ajax]
             [ghostwheel.core :refer [>defn-]]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
@@ -69,13 +69,22 @@
          [:p {:on-click on-click-back-function}
           [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
       ;; title
-      [:div.col-11
+      [:div.col-10
        [:div
         [:h2.clickable-no-hover {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
                                                           {:share-hash share-hash
                                                            :id (:db/id (:agenda/discussion agenda))}])}
          (:agenda/title agenda)]
-        [:p (:agenda/description agenda)]]]]]))
+        [:p (:agenda/description agenda)]]]
+      [:div.col-1.back-arrow
+       [:p {:on-click #(rf/dispatch
+                         [:navigation/navigate :routes/graph-view
+                          {:id (-> agenda :agenda/discussion :db/id)
+                           :share-hash share-hash}])}
+        [:img.w-100.clickable-no-hover
+         {:src (img-path :icon-graph) :alt ""}]
+        ]]
+      ]]))
 
 (defn input-footer [content]
   [:div.discussion-view-bottom-rounded
