@@ -16,11 +16,11 @@
      ;; startpage header
      :start-page-header "schnaq"
      :start-page-subheader "Nie wieder langwierige Meetings ohne Ziel!"
-     :start-page-subheader-2 "Schnaq bringt strukturierte Meetings auf den Punkt."
+     :start-page-subheader-2 "Schnaq strukturiert Meetings und bringt sie auf den Punkt"
      ;; key features
      :start-page-point-1 "Meetingziele kollaborativ festlegen"
      :start-page-point-2 "Informationen gezielt austauschen"
-     :start-page-point-3 "Durch fokussierte Meetings Zeit sparen"
+     :start-page-point-3 "Zeit sparen durch fokussierte Meetings"
      :start-page-point-alpha "Betreten der Baustelle erwünscht!"
      :start-page-point-alpha-subtext "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
      :create-schnaq-button "Jetzt einen schnaq starten!"
