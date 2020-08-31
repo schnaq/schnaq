@@ -123,9 +123,9 @@
                 :on-failure [:ajax-failure]}})
 
 (rf/reg-event-fx
-  :load-agendas
+  :agenda/load-and-redirect
   (fn [_ [_ hash]]
-    (load-agenda-fn hash :set-current-agendas)))
+    (load-agenda-fn hash :agenda/set-current-maybe-enter)))
 
 (rf/reg-event-fx
   :load-agenda-information
@@ -144,10 +144,15 @@
     {:db (assoc-in db [:error :ajax] "Agenda could not be loaded, please refresh the App.")
      :dispatch [:navigation/navigate :routes/meetings]}))
 
-(rf/reg-event-db
-  :set-current-agendas
-  (fn [db [_ response]]
-    (assoc-in db [:agendas :current] response)))
+(rf/reg-event-fx
+  :agenda/set-current-maybe-enter
+  (fn [{:keys [db]} [_ agendas]]
+    (let [selected-meeting (get-in db [:meeting :selected])]
+      {:db (assoc-in db [:agendas :current] agendas)
+       :fx [(when (<= (count agendas) 1)
+              [:dispatch [:navigation/navigate :routes.discussion/start
+                          {:share-hash (:meeting/share-hash selected-meeting)
+                           :id (-> agendas first :agenda/discussion :db/id)}]])]})))
 
 (rf/reg-event-db
   :clear-current-agendas
