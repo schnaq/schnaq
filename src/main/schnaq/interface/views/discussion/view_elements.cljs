@@ -76,7 +76,7 @@
                                                            :id (:db/id (:agenda/discussion agenda))}])}
          (:agenda/title agenda)]
         [:p (:agenda/description agenda)]]]
-      [:div.col-1.back-arrow
+      [:div.col-1.graph-icon
        [:p {:on-click #(rf/dispatch
                          [:navigation/navigate :routes/graph-view
                           {:id (-> agenda :agenda/discussion :db/id)
