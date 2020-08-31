@@ -11,13 +11,16 @@
 
 (defn- new-meeting-helper
   "Creates a new meeting with the form from `create-meeting-form`."
-  [form-elements]
+  [form-elements with-agendas?]
   (rf/dispatch
-    [:new-meeting
+    [(if with-agendas?
+       :meeting.creation/new-with-agendas
+       :meeting.creation/new-without-agendas)
      {:meeting/title (oget form-elements [:title :value])
       :meeting/description (oget form-elements [:description :value])
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
-      :meeting/start-date (js/Date.)}]))
+      :meeting/start-date (js/Date.)}])
+  (rf/dispatch [:meeting.creation/reset-agenda-toggle]))
 
 ;; #### Views ####
 
@@ -36,7 +39,7 @@
      [:div.container.px-5.py-3
       ;; form
       [:form {:on-submit (fn [e] (js-wrap/prevent-default e)
-                           (new-meeting-helper (oget e [:target :elements])))}
+                           (new-meeting-helper (oget e [:target :elements]) with-agendas?))}
        ;; title
        [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
        [:input#title.form-control.form-round.form-title
@@ -69,14 +72,31 @@
 ;; #### Events ####
 
 (rf/reg-event-fx
-  :meeting-added
+  :meeting.creation/added-continue-with-agendas
   (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
     {:db (-> db
              (assoc-in [:meeting :last-added] new-meeting)
              (update :meetings conj new-meeting))
-     :dispatch-n [[:navigation/navigate :routes.agenda/add
-                   {:share-hash (:meeting/share-hash new-meeting)}]
-                  [:meeting/select-current new-meeting]]}))
+     :fx [[:dispatch [:navigation/navigate :routes.agenda/add
+                      {:share-hash (:meeting/share-hash new-meeting)}]]
+          [:dispatch [:meeting/select-current new-meeting]]]}))
+
+(rf/reg-event-fx
+  ;; Meeting added, no Agendas needed, create a stub-agenda.
+  :meeting.creation/added
+  (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
+    {:db (-> db
+             (assoc-in [:meeting :last-added] new-meeting)
+             (update :meetings conj new-meeting))
+     :fx [[:dispatch [:meeting/select-current new-meeting]]
+          [:dispatch [:meeting.creation/set-stub-agenda new-meeting]]
+          [:dispatch [:send-agendas]]]}))
+
+(rf/reg-event-db
+  :meeting.creation/set-stub-agenda
+  (fn [db [_ {:meeting/keys [title description]}]]
+    (assoc-in db [:agenda :all] {0 {:title title
+                                    :description description}})))
 
 (rf/reg-event-db
   :meeting/select-current
@@ -100,8 +120,20 @@
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx
-  :new-meeting
-  (fn [{:keys [db]} [_ meeting]]
+  :meeting.creation/new-with-agendas
+  (fn [_ [_ meeting]]
+    {:fx [[:dispatch [:meeting.creation/new-meeting-http-call meeting
+                      :meeting.creation/added-continue-with-agendas]]]}))
+
+(rf/reg-event-fx
+  :meeting.creation/new-without-agendas
+  (fn [_ [_ meeting]]
+    {:fx [[:dispatch [:meeting.creation/new-meeting-http-call meeting
+                      :meeting.creation/added]]]}))
+
+(rf/reg-event-fx
+  :meeting.creation/new-meeting-http-call
+  (fn [{:keys [db]} [_ meeting on-success-event]]
     (let [nickname (get-in db [:user :name] "Anonymous")]
       {:http-xhrio {:method :post
                     :uri (str (:rest-backend config) "/meeting/add")
@@ -109,7 +141,7 @@
                              :meeting meeting}
                     :format (ajax/transit-request-format)
                     :response-format (ajax/transit-response-format)
-                    :on-success [:meeting-added]
+                    :on-success [on-success-event]
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx
@@ -136,6 +168,11 @@
   :meeting.creation/toggle-agendas
   (fn [db _]
     (update-in db [:meeting :creation :with-agendas?] not)))
+
+(rf/reg-event-db
+  :meeting.creation/reset-agenda-toggle
+  (fn [db _]
+    (assoc-in db [:meeting :creation :with-agendas?] false)))
 
 (rf/reg-sub
   :meeting.creation/with-agendas?
