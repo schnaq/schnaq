@@ -156,10 +156,10 @@
         [:a {:href "https://dialogo.io/impressum"} "Impressum"]]
        [:li.list-inline-item.btn.btn-link
         [:a {:href "https://dialogo.io/datenschutz"} "Datenschutz"]]]
-      [:p {:class "text-muted small mb-4 mb-lg-0"} "\u00A9 Dialogo 2020"]]
+      [:p {:class "text-muted small mb-4 mb-lg-0"} "\u00A9 DisqTec 2020"]]
      ;; twitter icon
      [:div {:class "col-lg-6 h-100 text-center text-lg-right my-auto"}
-      [:ul {:class "list-inline mb-0"}
-       [:li {:class "list-inline-item mr-3"}
-        [:a {:href "https://twitter.com/dialogoIO"}
-         [:i {:class "fab fa-twitter-square fa-2x fa-fw"}]]]]]]]])
+      #_[:ul {:class "list-inline mb-0"}
+         [:li {:class "list-inline-item mr-3"}
+          [:a {:href "https://twitter.com/dialogoIO"}
+           [:i {:class "fab fa-twitter-square fa-2x fa-fw"}]]]]]]]])
