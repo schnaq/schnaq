@@ -17,7 +17,7 @@
   (let [share-hash (-> current-route :path-params :share-hash)
         path (reitfe/href :routes.meeting/show {:share-hash share-hash})
         location (oget js/window :location)]
-    (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
+    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
 (>defn- get-edit-link
   [current-route]
@@ -27,7 +27,7 @@
         path (reitfe/href :routes.meeting/edit {:share-hash share-hash
                                                 :admin-hash admin-hash})
         location (oget js/window :location)]
-    (gstring/format "%s//%s/%s" (oget location :protocol) (oget location :host) path)))
+    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
