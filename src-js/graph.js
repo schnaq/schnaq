@@ -355,7 +355,6 @@ class SchnaqD3 {
     this.data = data;
     this.svg.selectAll("*").remove();
     this.initializeGraph(data, width, height, nodeSize);
-    console.log("replace data");
   }
 
 }
