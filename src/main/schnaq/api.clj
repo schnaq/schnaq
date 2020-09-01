@@ -62,14 +62,21 @@
   [_req]
   (ok (fetch-meetings)))
 
+(defn- add-hashes-to-meeting
+  "Enrich meeting by its hashes."
+  [meeting share-hash edit-hash]
+  (assoc meeting :meeting/share-hash share-hash
+                 :meeting/edit-hash edit-hash))
+
 (defn- add-meeting
   "Adds a meeting to the database.
   Converts the epoch dates it receives into java Dates.
   Returns the id of the newly-created meeting as `:id-created`."
   [req]
   (let [meeting (-> req :body-params :meeting)
-        final-meeting (assoc meeting :meeting/share-hash (.toString (UUID/randomUUID))
-                                     :meeting/edit-hash (.toString (UUID/randomUUID)))
+        final-meeting (add-hashes-to-meeting meeting
+                                             (.toString (UUID/randomUUID))
+                                             (.toString (UUID/randomUUID)))
         nickname (-> req :body-params :nickname)
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
@@ -92,7 +99,7 @@
           (doseq [agenda updated-agendas]
             (db/update-agenda agenda))
           (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
-          (ok {:text "Your Schnaq has been updated."}))
+          (ok {:text "Your schnaq has been updated."}))
       (deny-access))))
 
 (defn- add-author
@@ -122,6 +129,18 @@
   [req]
   (let [hash (get-in req [:route-params :hash])]
     (ok (db/meeting-by-hash hash))))
+
+(defn- meeting-by-hash-as-admin
+  "If user is authenticated, a meeting with an edit-hash is returned for further
+  processing in the frontend."
+  [{:keys [body-params]}]
+  (let [share-hash (:share-hash body-params)
+        edit-hash (:edit-hash body-params)]
+    (if (valid-credentials? share-hash edit-hash)
+      (ok {:meeting (add-hashes-to-meeting (db/meeting-by-hash share-hash)
+                                           share-hash
+                                           edit-hash)})
+      (deny-access))))
 
 (defn- agendas-by-meeting-hash
   "Returns all agendas of a meeting, that matches the share-hash."
@@ -346,6 +365,7 @@
   (routes
     (GET "/ping" [] ping)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
+    (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
     (POST "/agendas/add" [] add-agendas)
