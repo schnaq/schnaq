@@ -156,3 +156,19 @@
       (testing "bad request"
         (is (= 400 (:status bad-response)))
         (is (= error-text (-> bad-response :body :error)))))))
+
+(deftest meeting-by-hash-as-admin-test
+  (let [meeting-by-hash-as-admin #'api/meeting-by-hash-as-admin
+        valid-share-hash "valid-share-hash"
+        valid-edit-hash "valid-edit-hash"
+        _ (db/add-meeting {:meeting/title "Schni Schna Schnaqqi"
+                           :meeting/share-hash valid-share-hash
+                           :meeting/edit-hash valid-edit-hash
+                           :meeting/start-date (db/now)
+                           :meeting/end-date (db/now)
+                           :meeting/author (db/add-user-if-not-exists "Christian")})
+        request {:body-params {:share-hash valid-share-hash
+                               :edit-hash valid-edit-hash}}]
+    (testing "Valid hashes are ok."
+      (let [response (meeting-by-hash-as-admin request)]
+        (is (= 200 (:status response)))))))
