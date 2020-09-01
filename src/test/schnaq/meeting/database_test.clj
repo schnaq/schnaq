@@ -211,8 +211,8 @@
         (is (nil? (get-in (database/agenda agenda-id) [:agenda/meeting :db/id])))))))
 
 (deftest all-statements-for-discussion-test
-  (testing "Returns all statements belonging to a agenda."
+  (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
     (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Wetter Graph")))
           statements (database/all-statements-for-discussion discussion-id)]
       (is (= 7 (count statements)))
-      (is (= 1 (count (filter #(= "foo" (:content %)) statements)))))))
+      (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
