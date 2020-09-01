@@ -22,8 +22,6 @@ class SchnaqD3 {
           this.container.attr("transform", d3.event.transform);
         })
     );
-
-    console.log("constructor data");
   }
 
   neigh(a, b) {
