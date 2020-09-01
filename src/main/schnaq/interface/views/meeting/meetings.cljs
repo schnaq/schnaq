@@ -156,54 +156,6 @@
           [:localstorage/remove [:meeting.last-added/share-hash]]]}))
 
 (rf/reg-event-fx
-  ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
-  ;; the backend every time)
-  :meeting/check-admin-credentials-success
-  (fn [_ [_ {:keys [valid-credentials?]}]]
-    (when-not valid-credentials?
-      {:dispatch [:navigation/navigate :routes/invalid-link]})))
-
-(rf/reg-event-db
-  :meeting/save-as-last-added
-  (fn [db [_ {:keys [meeting]}]]
-    (assoc-in db [:meeting :last-added] meeting)))
-
-(rf/reg-sub
-  :meeting/last-added
-  (fn [db _]
-    (get-in db [:meeting :last-added])))
-
-(rf/reg-event-fx
-  :meeting/error-remove-hashes
-  (fn [_ [_ response]]
-    {:fx [[:dispatch [:ajax-failure response]]
-          [:localstorage/remove [:meeting.last-added/edit-hash]]
-          [:localstorage/remove [:meeting.last-added/share-hash]]]}))
-
-(rf/reg-event-fx
-  ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
-  ;; the backend every time)
-  :meeting/check-admin-credentials-success
-  (fn [_ [_ {:keys [valid-credentials?]}]]
-    (when-not valid-credentials?
-      {:dispatch [:navigation/navigate :routes/invalid-link]})))
-
-(rf/reg-event-db
-  :meeting.creation/toggle-agendas
-  (fn [db _]
-    (update-in db [:meeting :creation :with-agendas?] not)))
-
-(rf/reg-event-db
-  :meeting.creation/reset-agenda-toggle
-  (fn [db _]
-    (assoc-in db [:meeting :creation :with-agendas?] false)))
-
-(rf/reg-sub
-  :meeting.creation/with-agendas?
-  (fn [db _]
-    (get-in db [:meeting :creation :with-agendas?] false)))
-
-(rf/reg-event-fx
   :meeting/load-by-hash-as-admin
   (fn [_ [_ share-hash edit-hash]]
     {:http-xhrio {:method :post
