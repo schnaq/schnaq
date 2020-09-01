@@ -130,6 +130,14 @@
                   :on-success [:meeting/check-admin-credentials-success]
                   :on-failure [:ajax-failure]}}))
 
+(rf/reg-event-fx
+  ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
+  ;; the backend every time)
+  :meeting/check-admin-credentials-success
+  (fn [_ [_ {:keys [valid-credentials?]}]]
+    (when-not valid-credentials?
+      {:dispatch [:navigation/navigate :routes/invalid-link]})))
+
 (rf/reg-event-db
   :meeting/save-as-last-added
   (fn [db [_ {:keys [meeting]}]]
