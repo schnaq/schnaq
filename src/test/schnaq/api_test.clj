@@ -68,7 +68,7 @@
           new-meeting (db/meeting-private-data old-meeting-id)]
       (testing "Check response status"
         (is (= 200 (:status update-response)))
-        (is (= "Your Schnaq has been updated." (-> update-response :body :text))))
+        (is (string? (-> update-response :body :text))))
       (testing "Check if title and author have been updated"
         (is (not= (:meeting/title old-meeting) (:meeting/title new-meeting)))
         (is (not= (:meeting/author old-meeting) (:meeting/author new-meeting))))
