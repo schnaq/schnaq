@@ -1,32 +1,47 @@
 (ns schnaq.interface.views.graph.view
   (:require ["vis-network" :as vis]
             [ajax.core :as ajax]
+            [clojure.string :as string]
+            [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.views.base :as base]))
 
+(defn- wrap-line
+  "Takes a set of `nodes` and changes their labels to wrap properly after `break` characters."
+  [size text]
+  (string/join "\n"
+               (re-seq (re-pattern (str ".{1," size "}\\s|.{1," size "}"))
+                       (string/replace text #"\n" " "))))
+
+(>defn- wrap-node-labels
+  "Wrap the labels of all nodes inside a sequence."
+  [size nodes]
+  [sequential? int? :ret sequential?]
+  (map #(update % :label (fn [label] (wrap-line size label))) nodes))
+
 (defn- graph-view
   "Visualization of Discussion Graph."
   [graph]
-  (let [d3-instance (reagent/atom {})
-        width (.-innerWidth js/window)
+  (let [width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
-        node-size 50]
+        node-size 50
+        graph (update graph :nodes #(wrap-node-labels node-size %))]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:div#graph])
        :component-did-mount
-       (fn [this] :todo
+       (fn [this]
          (let [root-node (rdom/dom-node this)
                data (clj->js graph)
-               options (clj->js {:width width
-                                 :height height})]
+               options (clj->js {:width (str width)
+                                 :height (str height)})]
            (vis/Network. root-node data options)))
        :component-did-update
        (fn [this _argv]
-         (let [[_ graph] (reagent/argv this)]
+         (let [[_ _graph] (reagent/argv this)]
            :Todo))})))
 
 (defn graph-agenda-header [agenda share-hash]
