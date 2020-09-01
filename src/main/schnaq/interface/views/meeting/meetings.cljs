@@ -117,6 +117,18 @@
                   :on-success [:meeting/check-admin-credentials-success]
                   :on-failure [:ajax-failure]}}))
 
+(rf/reg-event-db
+  :meeting/save-as-last-added
+  (fn [db [_ {:keys [meeting]}]]
+    (assoc-in db [:meeting :last-added] meeting)))
+
+(rf/reg-event-fx
+  :meeting/error-remove-hashes
+  (fn [_ [_ {:keys [error]}]]
+    {:fx [[:dispatch [:ajax-failure error]]
+          [:localstorage/remove [:meeting.last-added/edit-hash]]
+          [:localstorage/remove [:meeting.last-added/share-hash]]]}))
+
 (rf/reg-event-fx
   ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
   ;; the backend every time)
