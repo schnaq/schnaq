@@ -48,11 +48,11 @@
                     :description (oget % [:target :value]) numbered-suffix)}]]])
 
 (defn- add-agenda-button [number-of-forms]
-  [:input.btn.agenda-add-button {:type "button"
-                                 :value (if (or (nil? number-of-forms) (zero? number-of-forms))
-                                          (data/labels :agenda.create/optional-agenda)
-                                          "+")
-                                 :on-click #(rf/dispatch [:increase-agenda-forms])}])
+  [:input.btn.agenda-add-button.mb-5 {:type "button"
+                                      :value (if (or (nil? number-of-forms) (zero? number-of-forms))
+                                               (data/labels :agenda.create/optional-agenda)
+                                               "+")
+                                      :on-click #(rf/dispatch [:increase-agenda-forms])}])
 
 (defn- submit-agenda-button []
   [:input.btn.button-primary {:type "submit"
@@ -88,9 +88,6 @@
             [new-agenda-form agenda-num]])
          [:div.agenda-line]
          [add-agenda-button number-of-forms]
-         [:br]
-         [:br]
-         [:br]
          [submit-agenda-button]]]]]]))
 
 ;; #### Events ####
