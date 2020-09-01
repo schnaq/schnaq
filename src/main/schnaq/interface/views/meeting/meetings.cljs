@@ -130,6 +130,11 @@
   (fn [db [_ {:keys [meeting]}]]
     (assoc-in db [:meeting :last-added] meeting)))
 
+(rf/reg-sub
+  :meeting/last-added
+  (fn [db _]
+    (get-in db [:meeting :last-added])))
+
 (rf/reg-event-fx
   :meeting/error-remove-hashes
   (fn [_ [_ {:keys [error]}]]
