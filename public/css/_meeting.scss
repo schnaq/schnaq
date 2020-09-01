@@ -45,6 +45,12 @@
   display: flex;
 }
 
+.graph-icon {
+  align-items: end;
+  display: flex;
+  min-width: 4em;
+}
+
 .meeting-edit-title {
   background: transparent;
   border: 0;
