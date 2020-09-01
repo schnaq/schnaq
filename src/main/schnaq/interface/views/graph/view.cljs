@@ -21,7 +21,6 @@
        :reagent-render (fn [_graph] [:svg])
        :component-did-mount
        (fn [this]
-         (println (str "Width: " width))
          (reset! d3-instance
                  (schnaqd3/SchnaqD3.
                    d3
