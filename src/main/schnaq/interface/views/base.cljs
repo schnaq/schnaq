@@ -4,8 +4,7 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.utils.localstorage :as ls]))
+            [reitit.frontend.easy :as reitfe]))
 
 (defn- wavy-bottom []
   ;; bezier curves
@@ -141,7 +140,7 @@
         (when-not toolbelt/production?
           [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
         [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meeting/create)} (labels :nav-meeting-create)]]
-        (when (ls/get-item :meeting.last-added/edit-hash)
+        (when-not (nil? edit-hash)
           [:li.nav-item
            [:div.nav-link.clickable
             {:on-click #(rf/dispatch [:navigation/navigate
