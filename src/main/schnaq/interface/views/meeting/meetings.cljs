@@ -130,9 +130,13 @@
           [:localstorage/remove [:meeting.last-added/share-hash]]]}))
 
 (rf/reg-event-fx
-  ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
-  ;; the backend every time)
-  :meeting/check-admin-credentials-success
-  (fn [_ [_ {:keys [valid-credentials?]}]]
-    (when-not valid-credentials?
-      {:dispatch [:navigation/navigate :routes/invalid-link]})))
+  :meeting/load-by-hash-as-admin
+  (fn [_ [_ share-hash edit-hash]]
+    {:http-xhrio {:method :post
+                  :uri (str (:rest-backend config) "/meeting/by-hash-as-admin")
+                  :params {:share-hash share-hash
+                           :edit-hash edit-hash}
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:meeting/save-as-last-added]
+                  :on-failure [:meeting/error-remove-hashes]}}))
