@@ -164,3 +164,15 @@
   :meeting.creation/with-agendas?
   (fn [db _]
     (get-in db [:meeting :creation :with-agendas?] false)))
+
+(rf/reg-event-fx
+  :meeting/load-by-hash-as-admin
+  (fn [_ [_ share-hash edit-hash]]
+    {:http-xhrio {:method :post
+                  :uri (str (:rest-backend config) "/meeting/by-hash-as-admin")
+                  :params {:share-hash share-hash
+                           :edit-hash edit-hash}
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:meeting/save-as-last-added]
+                  :on-failure [:meeting/error-remove-hashes]}}))
