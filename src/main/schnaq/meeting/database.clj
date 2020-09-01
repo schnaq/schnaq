@@ -592,7 +592,9 @@
    [inst? :ret number?]
    (let [meetings (number-of-meetings since)
          agendas (number-of-entities-since :agenda/title since)]
-     (/ agendas meetings))))
+     (if (zero? meetings)
+       0
+       (/ agendas meetings)))))
 
 (>defn number-of-active-users
   "Returns the number of active users (With at least one statement)."
@@ -630,8 +632,8 @@
          content-count (count sorted-contents)
          max-length (count (last sorted-contents))
          min-length (count (first sorted-contents))
-         average-length (float (/ (reduce #(+ %1 (count %2)) 0 sorted-contents) content-count))
-         median-length (count (nth sorted-contents (quot content-count 2)))]
+         average-length (if (zero? content-count) 0 (float (/ (reduce #(+ %1 (count %2)) 0 sorted-contents) content-count)))
+         median-length (if (zero? content-count) 0 (count (nth sorted-contents (quot content-count 2))))]
      {:max max-length
       :min min-length
       :average average-length
