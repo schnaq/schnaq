@@ -24,15 +24,21 @@
    [:div.agenda-line]
    [:div.add-agenda-div.agenda-point
     ;; title
-    [:input.form-control.agenda-form-title.form-title.agenda-row-title
-     {:type "text"
-      :name "title"
-      :auto-complete "off"
-      :required true
-      :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
-      :id (str "title-" numbered-suffix)
-      :on-key-up
-      #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
+    [:div.row.agenda-row-title
+     [:div.col-10
+      [:input.form-control.agenda-form-title.form-title
+       {:type "text"
+        :name "title"
+        :auto-complete "off"
+        :required true
+        :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
+        :id (str "title-" numbered-suffix)
+        :on-key-up
+        #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]]
+     [:div.col-2
+      [:div.pt-4.clickable
+       {:on-click #(rf/dispatch [:agenda/delete-temporary numbered-suffix])}
+       [:i {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]
     ;; description
     [:textarea.form-control.agenda-form-round
      {:name "description"
@@ -184,6 +190,13 @@
   :reset-temporary-agendas
   (fn [db _]
     (assoc db :agenda {})))
+
+(rf/reg-event-db
+  :agenda/delete-temporary
+  (fn [db [_ suffix]]
+    (-> db
+        (update-in [:agenda :number-of-forms] dec)
+        (update-in [:agenda :all] dissoc suffix))))
 
 (rf/reg-event-db
   :choose-agenda
