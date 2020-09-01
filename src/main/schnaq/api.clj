@@ -43,8 +43,10 @@
 
 (defn- deny-access
   "Return a 403 Forbidden to unauthorized access."
-  []
-  (forbidden {:error "You are not allowed to access this resource."}))
+  ([]
+   (deny-access "You are not allowed to access this resource."))
+  ([message]
+   (forbidden {:error message})))
 
 (defn- fetch-meetings
   "Fetches meetings from the db and preparse them for transit via JSON."
@@ -140,7 +142,7 @@
       (ok {:meeting (add-hashes-to-meeting (db/meeting-by-hash share-hash)
                                            share-hash
                                            edit-hash)})
-      (deny-access))))
+      (deny-access "You provided the wrong hashes to access this schnaq."))))
 
 (defn- agendas-by-meeting-hash
   "Returns all agendas of a meeting, that matches the share-hash."
