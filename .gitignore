@@ -56,3 +56,5 @@ public/js/compiled/
 public/css/main.css*
 public/css/main.min.css*
 public/css/.sass-cache
+
+yarn-error.log

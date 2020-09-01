@@ -20,6 +20,7 @@
     "react-flip-move": "^3.0.4",
     "react-highlight.js": "1.0.7",
     "shadow-cljs": "^2.10.21",
+    "vis-data": "^7.0.0",
     "vis-network": "^8.3.1",
     "xmlhttprequest": "^1.8.0"
   },

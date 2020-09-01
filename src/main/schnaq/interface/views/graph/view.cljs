@@ -19,21 +19,18 @@
         node-size 50]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
-       :reagent-render (fn [_graph] [:svg])
+       :reagent-render (fn [_graph] [:div#graph])
        :component-did-mount
-       (fn [this]
-         (println (str "Width: " width))
-         (reset! d3-instance
-                 (schnaqd3/SchnaqD3.
-                   d3
-                   (rdom/dom-node this)
-                   (clj->js graph)
-                   width height node-size
-                   d3-textwrap/textwrap)))
+       (fn [this] :todo
+         (let [root-node (rdom/dom-node this)
+               data (clj->js graph)
+               options (clj->js {:width width
+                                 :height height})]
+           (vis/Network. root-node data options)))
        :component-did-update
        (fn [this _argv]
          (let [[_ graph] (reagent/argv this)]
-           (.replaceData @d3-instance (clj->js graph) width height node-size)))})))
+           :Todo))})))
 
 (defn graph-agenda-header [agenda share-hash]
   ;; meeting header

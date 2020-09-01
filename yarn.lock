@@ -2999,6 +2999,11 @@ vfile@^4.0.0:
     unist-util-stringify-position "^2.0.0"
     vfile-message "^2.0.0"
 
+vis-data@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/vis-data/-/vis-data-7.0.0.tgz#71ff8ec06e4d0b99f1c8cdecfdf97309eb4562cf"
+  integrity sha512-qKpyAQ9UMT0QygLbCulgabKkgfo8aVkuWSqhvEiaah/iy/Dvj17iMFChUU+UIioorWlweXcp5ziXoMLIl7hTAg==
+
 vis-network@^8.3.1:
   version "8.3.1"
   resolved "https://registry.yarnpkg.com/vis-network/-/vis-network-8.3.1.tgz#5786cc82ca3aafc99e82820b47eae41284f3d446"
