@@ -27,7 +27,7 @@
   [graph]
   (let [width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
-        node-size 50
+        node-size 30
         graph (update graph :nodes #(wrap-node-labels node-size %))]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
