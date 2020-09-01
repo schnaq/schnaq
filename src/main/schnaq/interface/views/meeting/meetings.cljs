@@ -137,8 +137,8 @@
 
 (rf/reg-event-fx
   :meeting/error-remove-hashes
-  (fn [_ [_ {:keys [error]}]]
-    {:fx [[:dispatch [:ajax-failure error]]
+  (fn [_ [_ response]]
+    {:fx [[:dispatch [:ajax-failure response]]
           [:localstorage/remove [:meeting.last-added/edit-hash]]
           [:localstorage/remove [:meeting.last-added/share-hash]]]}))
 
