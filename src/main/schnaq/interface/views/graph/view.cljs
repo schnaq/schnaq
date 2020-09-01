@@ -2,11 +2,12 @@
   (:require ["d3" :as d3]
             ["d3-textwrap" :as d3-textwrap]
             ["/graph" :as schnaqd3]
+            ["vis-network" :as vis]
             [ajax.core :as ajax]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [schnaq.interface.config :refer [config]]  
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.views.base :as base]))
 
 (defn- graph-view
