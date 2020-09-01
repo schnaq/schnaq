@@ -66,7 +66,7 @@
        :link-text (labels :router/show-single-meeting)
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (rf/dispatch [:load-agendas (:share-hash path)]))
+                               (rf/dispatch [:agenda/load-and-redirect (:share-hash path)]))
                       :stop #(rf/dispatch [:clear-current-agendas])}]}]
      ["/agenda"
       ["/add"

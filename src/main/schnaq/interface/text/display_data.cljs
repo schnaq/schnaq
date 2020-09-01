@@ -9,8 +9,8 @@
      ;; navbar labels
      :nav-startpage "Home"
      :nav-example "Examples"
-     :nav-meeting "Meetings"
-     :nav-meeting-create "Meeting erstellen"
+     :nav-meeting "Schnaqs"
+     :nav-meeting-create "Schnaq erstellen"
      :nav-meeting-agenda "Agenda erzeugen"
 
      ;; startpage header
@@ -61,16 +61,17 @@
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
 
-     :meeting.step2/button "2. Schritt: Agenda hinzufügen"
+     :meeting.step2/button "Schritt 2: Agenda hinzufügen"
 
      ;; Create Agenda
      :agenda/header "Agenda erstellen"
      :agenda/subheader "Fügen Sie zu besprechende Punkte hinzu"
      :agenda/desc-for "Beschreibung für Agendapunkt "
      :agenda/point "Agendapunkt "
+     :agenda.create/optional-agenda "Agenda hinzufügen (optional)"
 
      ;; Edit Agenda
-     :agenda/edit-title "Meeting editieren"
+     :agenda/edit-title "Schnaq editieren"
      :agenda/edit-subtitle "Beschreibung und Agendapunkte editieren"
      :agenda/edit-button "Änderungen speichern"
 
@@ -95,8 +96,8 @@
      :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
 
      ;; meetings overview
-     :meetings/header "Meetings"
-     :meetings/subheader "Ihre aktuellen Meetings"
+     :meetings/header "Schnaqs"
+     :meetings/subheader "Ihre aktuellen Schnaqs"
 
      ;; Feedbacks
      :feedbacks.overview/header "Rückmeldungen"
@@ -129,9 +130,9 @@
      :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im schnaq angezeigt."
 
      ;; analytics
-     :analytics/overall-meetings "Meetings erstellt"
+     :analytics/overall-meetings "Schnaqs erstellt"
      :analytics/user-numbers "Usernamen angelegt"
-     :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Meeting"
+     :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Schnaq"
      :analytics/statements-num-title "Anzahl Statements"
      :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
      :analytics/statement-lengths-title "Beitragslängen"
@@ -153,11 +154,11 @@
      :graph/heading "Diskussionsübersicht"
 
      ;; Route Link Texts
-     :router/all-meetings "Alle Meetings"
+     :router/all-meetings "Alle Schnaqs"
      :router/all-feedbacks "Alle Feedbacks"
-     :router/create-meeting "Meeting anlegen"
-     :router/meeting-created "Zuletzt angelegtes Meeting"
-     :router/show-single-meeting "Meeting anzeigen"
+     :router/create-meeting "Schnaq anlegen"
+     :router/meeting-created "Zuletzt angelegtes Schnaq"
+     :router/show-single-meeting "Schnaq anzeigen"
      :router/add-agendas "Agendas hinzufügen"
      :router/start-discussion "Starte Besprechung"
      :router/continue-discussion "Führe Besprechung fort"

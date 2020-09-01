@@ -24,15 +24,21 @@
    [:div.agenda-line]
    [:div.add-agenda-div.agenda-point
     ;; title
-    [:input.form-control.agenda-form-title.form-title.agenda-row-title
-     {:type "text"
-      :name "title"
-      :auto-complete "off"
-      :required true
-      :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
-      :id (str "title-" numbered-suffix)
-      :on-key-up
-      #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]
+    [:div.row.agenda-row-title
+     [:div.col-10
+      [:input.form-control.agenda-form-title.form-title
+       {:type "text"
+        :name "title"
+        :auto-complete "off"
+        :required true
+        :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
+        :id (str "title-" numbered-suffix)
+        :on-key-up
+        #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]]
+     [:div.col-2
+      [:div.pt-4.clickable
+       {:on-click #(rf/dispatch [:agenda/delete-temporary numbered-suffix])}
+       [:i {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]
     ;; description
     [:textarea.form-control.agenda-form-round
      {:name "description"
@@ -41,10 +47,12 @@
       :on-key-up #(new-agenda-local
                     :description (oget % [:target :value]) numbered-suffix)}]]])
 
-(defn- add-agenda-button []
-  [:input.btn.agenda-add-button {:type "button"
-                                 :value "+"
-                                 :on-click #(rf/dispatch [:increase-agenda-forms])}])
+(defn- add-agenda-button [number-of-forms]
+  [:input.btn.agenda-add-button.mb-5 {:type "button"
+                                      :value (if (or (nil? number-of-forms) (zero? number-of-forms))
+                                               (data/labels :agenda.create/optional-agenda)
+                                               "+")
+                                      :on-click #(rf/dispatch [:increase-agenda-forms])}])
 
 (defn- submit-agenda-button []
   [:input.btn.button-primary {:type "submit"
@@ -61,28 +69,26 @@
 (defn agenda-view
   "Shows the view for adding one or more agendas."
   []
-  [:div#create-agenda
-   [base/nav-header]
-   [header]
-   [:div.container.px-5.py-3.text-center
-    [:div.agenda-meeting-container.p-3
-     [:h2.mb-4 (:meeting/title @(rf/subscribe [:meeting/selected]))]
-     [:h4 (:meeting/description @(rf/subscribe [:meeting/selected]))]]
-    [:div.container
-     [:div.agenda-container
-      [:form {:id "agendas-add-form"
-              :on-submit (fn [e]
-                           (js-wrap/prevent-default e)
-                           (rf/dispatch [:send-agendas]))}
-       (for [agenda-num (range @(rf/subscribe [:agenda/number-of-forms]))]
-         [:div {:key agenda-num}
-          [new-agenda-form agenda-num]])
-       [:div.agenda-line]
-       [add-agenda-button]
-       [:br]
-       [:br]
-       [:br]
-       [submit-agenda-button]]]]]])
+  (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])]
+    [:div#create-agenda
+     [base/nav-header]
+     [header]
+     [:div.container.px-5.py-3.text-center
+      [:div.agenda-meeting-container.p-3
+       [:h2.mb-4 (:meeting/title @(rf/subscribe [:meeting/selected]))]
+       [:h4 (:meeting/description @(rf/subscribe [:meeting/selected]))]]
+      [:div.container
+       [:div.agenda-container
+        [:form {:id "agendas-add-form"
+                :on-submit (fn [e]
+                             (js-wrap/prevent-default e)
+                             (rf/dispatch [:send-agendas]))}
+         (for [agenda-num (range number-of-forms)]
+           [:div {:key agenda-num}
+            [new-agenda-form agenda-num]])
+         [:div.agenda-line]
+         [add-agenda-button number-of-forms]
+         [submit-agenda-button]]]]]]))
 
 ;; #### Events ####
 
@@ -90,18 +96,21 @@
   :send-agendas
   (fn [{:keys [db]} _]
     ;; Use [:meeting :last-added] instead of selected meeting because it contains secret information
-    (let [meeting-id (get-in db [:meeting :last-added :db/id])
-          meeting-hash (get-in db [:meeting :last-added :meeting/share-hash])
-          edit-hash (get-in db [:meeting :last-added :meeting/edit-hash])]
-      {:http-xhrio {:method :post
-                    :uri (str (:rest-backend config) "/agendas/add")
-                    :params {:agendas (vals (get-in db [:agenda :all] []))
-                             :meeting-id meeting-id
-                             :meeting-hash meeting-hash}
-                    :format (ajax/transit-request-format)
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:on-successful-agenda-add meeting-hash edit-hash]
-                    :on-failure [:ajax-failure]}})))
+    (let [agendas (get-in db [:agenda :all] [])
+          {:keys [db/id meeting/share-hash meeting/edit-hash meeting/title meeting/description]}
+          (get-in db [:meeting :last-added])
+          stub-agenda {0 {:title title
+                          :description description}}
+          agendas-to-send (if (zero? (count agendas)) stub-agenda agendas)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/agendas/add")
+                          :params {:agendas (vals agendas-to-send)
+                                   :meeting-id id
+                                   :meeting-hash share-hash}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:on-successful-agenda-add share-hash edit-hash]
+                          :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
   :on-successful-agenda-add
@@ -123,9 +132,9 @@
                 :on-failure [:ajax-failure]}})
 
 (rf/reg-event-fx
-  :load-agendas
+  :agenda/load-and-redirect
   (fn [_ [_ hash]]
-    (load-agenda-fn hash :set-current-agendas)))
+    (load-agenda-fn hash :agenda/set-current-maybe-enter)))
 
 (rf/reg-event-fx
   :load-agenda-information
@@ -144,10 +153,15 @@
     {:db (assoc-in db [:error :ajax] "Agenda could not be loaded, please refresh the App.")
      :dispatch [:navigation/navigate :routes/meetings]}))
 
-(rf/reg-event-db
-  :set-current-agendas
-  (fn [db [_ response]]
-    (assoc-in db [:agendas :current] response)))
+(rf/reg-event-fx
+  :agenda/set-current-maybe-enter
+  (fn [{:keys [db]} [_ agendas]]
+    (let [selected-meeting (get-in db [:meeting :selected])]
+      {:db (assoc-in db [:agendas :current] agendas)
+       :fx [(when (<= (count agendas) 1)
+              [:dispatch [:navigation/navigate :routes.discussion/start
+                          {:share-hash (:meeting/share-hash selected-meeting)
+                           :id (-> agendas first :agenda/discussion :db/id)}]])]})))
 
 (rf/reg-event-db
   :clear-current-agendas
@@ -172,7 +186,14 @@
 (rf/reg-event-db
   :reset-temporary-agendas
   (fn [db _]
-    (assoc db :agenda {:number-of-forms 1 :all {}})))
+    (assoc db :agenda {})))
+
+(rf/reg-event-db
+  :agenda/delete-temporary
+  (fn [db [_ suffix]]
+    (-> db
+        (update-in [:agenda :number-of-forms] dec)
+        (update-in [:agenda :all] dissoc suffix))))
 
 (rf/reg-event-db
   :choose-agenda

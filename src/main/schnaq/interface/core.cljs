@@ -2,8 +2,11 @@
   (:require ["@fortawesome/fontawesome-free/js/all.js"]
             ["bootstrap"]
             ["jquery"]
+            [day8.re-frame.http-fx]
             [goog.dom :as gdom]
             [goog.string :as gstring]
+            [re-frame.core :as rf]
+            [reagent.dom]
             [schnaq.interface.analytics.core]
             [schnaq.interface.config :as config]
             [schnaq.interface.effects]
@@ -28,10 +31,7 @@
             [schnaq.interface.views.notifications]
             [schnaq.interface.views.startpage]
             [schnaq.interface.views.user]
-            [re-frame.core :as rf]
-            [reagent.dom]
-            [taoensso.timbre :as log]
-            [day8.re-frame.http-fx]))
+            [taoensso.timbre :as log]))
 ;; NOTE: If you use subs and events in another module, you need to require it
 ;; Requiring other views is needed to have dynamic updates from shadow and re-frame
 ;; somewhere where it will be loaded like this core module.
