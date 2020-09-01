@@ -4,12 +4,10 @@
             ["/graph" :as schnaqd3]
             [ajax.core :as ajax]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.discussion.view-elements :as view]))
+            [schnaq.interface.views.base :as base]))
 
 (defn- graph-view
   "Visualization of Discussion Graph."
