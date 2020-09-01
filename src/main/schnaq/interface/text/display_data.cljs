@@ -43,8 +43,6 @@
      :meeting-form-title "Titel"
      :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
      :meeting-form-desc "Beschreibung"
-     :meeting.creation/with-agendas "Mit Agendas diskutieren"
-     :meeting.creation/without-agendas "Ohne Agendas diskutieren"
      :meeting-form-desc-placeholder "Worum geht es in Ihrem schnaq?"
      :meeting-form-deadline "Frist"
      :meeting-form-end-date "Datum"
@@ -63,8 +61,7 @@
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
 
-     :meeting.step2/button "Agendas hinzufügen"
-     :meeting.creation/create-now "schnaq anlegen"
+     :meeting.step2/button "Schritt 2: Optional Agendas hinzufügen"
 
      ;; Create Agenda
      :agenda/header "Agenda erstellen"

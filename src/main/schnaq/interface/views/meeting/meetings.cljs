@@ -11,16 +11,13 @@
 
 (defn- new-meeting-helper
   "Creates a new meeting with the form from `create-meeting-form`."
-  [form-elements with-agendas?]
+  [form-elements]
   (rf/dispatch
-    [(if with-agendas?
-       :meeting.creation/new-with-agendas
-       :meeting.creation/new-without-agendas)
+    [:meeting.creation/new
      {:meeting/title (oget form-elements [:title :value])
       :meeting/description (oget form-elements [:description :value])
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
-      :meeting/start-date (js/Date.)}])
-  (rf/dispatch [:meeting.creation/reset-agenda-toggle]))
+      :meeting/start-date (js/Date.)}]))
 
 ;; #### Views ####
 
@@ -32,42 +29,31 @@
 (defn create-meeting-form-view
   "A view with a form that creates a meeting properly."
   []
-  (let [with-agendas? @(rf/subscribe [:meeting.creation/with-agendas?])]
-    [:div#create-meeting-form
-     [base/nav-header]
-     [header]
-     [:div.container.px-5.py-3
-      ;; form
-      [:form {:on-submit (fn [e] (js-wrap/prevent-default e)
-                           (new-meeting-helper (oget e [:target :elements]) with-agendas?))}
-       ;; title
-       [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
-       [:input#title.form-control.form-round.form-title
-        {:type "text"
-         :autoComplete "off"
-         :required true
-         :placeholder (data/labels :meeting-form-title-placeholder)}]
-       [:br] [:br]
+  [:div#create-meeting-form
+   [base/nav-header]
+   [header]
+   [:div.container.px-5.py-3
+    ;; form
+    [:form {:on-submit (fn [e] (js-wrap/prevent-default e)
+                         (new-meeting-helper (oget e [:target :elements])))}
+     ;; title
+     [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
+     [:input#title.form-control.form-round.form-title
+      {:type "text"
+       :autoComplete "off"
+       :required true
+       :placeholder (data/labels :meeting-form-title-placeholder)}]
+     [:br] [:br]
 
-       ;; description
-       [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
-       [:textarea#description.form-control.form-round
-        {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]
-       [:br]
+     ;; description
+     [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
+     [:textarea#description.form-control.form-round
+      {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]
+     [:br] [:br]
 
-       [:div.custom-control.custom-switch
-        [:input#agenda-switch.custom-control-input {:type "checkbox"
-                                                    :on-click #(rf/dispatch [:meeting.creation/toggle-agendas])}]
-        [:label.custom-control-label {:for "agenda-switch"}
-         (if with-agendas?
-           (data/labels :meeting.creation/with-agendas)
-           (data/labels :meeting.creation/without-agendas))]]
-       [:br]
-       ;; submit
-       [:button.button-secondary.mt-5.mb-1 {:type "submit"}
-        (if with-agendas?
-          (data/labels :meeting.step2/button)
-          (data/labels :meeting.creation/create-now))]]]]))
+     ;; submit
+     [:button.button-secondary.mt-5.mb-1 {:type "submit"}
+      (data/labels :meeting.step2/button)]]]])
 
 ;; #### Events ####
 
@@ -82,21 +68,11 @@
           [:dispatch [:meeting/select-current new-meeting]]]}))
 
 (rf/reg-event-fx
-  ;; Meeting added, no Agendas needed, create a stub-agenda.
-  :meeting.creation/added
-  (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
-    {:db (-> db
-             (assoc-in [:meeting :last-added] new-meeting)
-             (update :meetings conj new-meeting))
-     :fx [[:dispatch [:meeting/select-current new-meeting]]
-          [:dispatch [:meeting.creation/set-stub-agenda new-meeting]]
-          [:dispatch [:send-agendas]]]}))
-
-(rf/reg-event-db
-  :meeting.creation/set-stub-agenda
-  (fn [db [_ {:meeting/keys [title description]}]]
-    (assoc-in db [:agenda :all] {0 {:title title
-                                    :description description}})))
+  :meeting.creation/create-stub-agenda
+  (fn [{:keys [db]} [_ {:meeting/keys [title description]}]]
+    {:db (assoc-in db [:agenda :all] {0 {:title title
+                                         :description description}})
+     :fx [[:dispatch [:send-agendas]]]}))
 
 (rf/reg-event-db
   :meeting/select-current
@@ -120,16 +96,10 @@
                     :on-failure [:ajax-failure]}})))
 
 (rf/reg-event-fx
-  :meeting.creation/new-with-agendas
+  :meeting.creation/new
   (fn [_ [_ meeting]]
     {:fx [[:dispatch [:meeting.creation/new-meeting-http-call meeting
                       :meeting.creation/added-continue-with-agendas]]]}))
-
-(rf/reg-event-fx
-  :meeting.creation/new-without-agendas
-  (fn [_ [_ meeting]]
-    {:fx [[:dispatch [:meeting.creation/new-meeting-http-call meeting
-                      :meeting.creation/added]]]}))
 
 (rf/reg-event-fx
   :meeting.creation/new-meeting-http-call
