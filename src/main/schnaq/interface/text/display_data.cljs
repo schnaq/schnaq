@@ -12,6 +12,7 @@
      :nav-meeting "Schnaqs"
      :nav-meeting-create "Schnaq erstellen"
      :nav-meeting-agenda "Agenda erzeugen"
+     :nav-meeting-last-added "Zuletzt erstellter schnaq"
 
      ;; startpage header
      :start-page-header "schnaq"
