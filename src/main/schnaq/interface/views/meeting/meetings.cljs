@@ -60,12 +60,16 @@
 (rf/reg-event-fx
   :meeting.creation/added-continue-with-agendas
   (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
-    {:db (-> db
-             (assoc-in [:meeting :last-added] new-meeting)
-             (update :meetings conj new-meeting))
-     :fx [[:dispatch [:navigation/navigate :routes.agenda/add
-                      {:share-hash (:meeting/share-hash new-meeting)}]]
-          [:dispatch [:meeting/select-current new-meeting]]]}))
+    (let [share-hash (:meeting/share-hash new-meeting)
+          edit-hash (:meeting/edit-hash new-meeting)]
+      {:db (-> db
+               (assoc-in [:meeting :last-added] new-meeting)
+               (update :meetings conj new-meeting))
+       :fx [[:dispatch [:navigation/navigate :routes.agenda/add
+                        {:share-hash share-hash}]]
+            [:dispatch [:meeting/select-current new-meeting]]
+            [:localstorage/write [:meeting.last-added/share-hash share-hash]]
+            [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]]})))
 
 (rf/reg-event-fx
   :meeting.creation/create-stub-agenda
