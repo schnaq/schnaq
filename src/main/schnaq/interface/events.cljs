@@ -27,13 +27,21 @@
                           :on-success [:init-from-backend]
                           :on-failure [:ajax-failure]}]]})))
 
+(rf/reg-event-fx
+  :load/last-added-meeting
+  (fn [_ _]
+    (let [share-hash (ls/get-item :meeting.last-added/share-hash)
+          edit-hash (ls/get-item :meeting.last-added/edit-hash)]
+      (when-not (and (nil? edit-hash) (nil? share-hash))
+        {:fx [[:dispatch [:meeting/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx
   :initialise-db
   (fn [_ _]
     {:db schnaq-db/default-db
      :fx [[:dispatch [:load/meetings]]
-          [:dispatch [:load/username]]]}))
+          [:dispatch [:load/username]]
+          [:dispatch [:load/last-added-meeting]]]}))
 
 (rf/reg-event-db
   :init-from-backend
