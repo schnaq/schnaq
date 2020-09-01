@@ -20,7 +20,7 @@
                 :db (assoc-in db [:user :name] username)}]
         (if (= "Anonymous" username)
           fx
-          (assoc fx :write-localstorage [:username username]))))))
+          (assoc fx :localstorage/write [:username username]))))))
 
 (rf/reg-sub
   :user/display-name

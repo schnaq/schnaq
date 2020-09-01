@@ -4,9 +4,14 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (rf/reg-fx
-  :write-localstorage
+  :localstorage/write
   (fn [[key value]]
     (ls/set-item! key value)))
+
+(rf/reg-fx
+  :localstorage/remove
+  (fn [[key]]
+    (ls/remove-item! key)))
 
 (rf/reg-fx
   :form/clear
