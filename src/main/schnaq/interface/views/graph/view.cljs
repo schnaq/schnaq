@@ -1,8 +1,5 @@
 (ns schnaq.interface.views.graph.view
-  (:require ["d3" :as d3]
-            ["d3-textwrap" :as d3-textwrap]
-            ["/graph" :as schnaqd3]
-            ["vis-network" :as vis]
+  (:require ["vis-network" :as vis]
             [ajax.core :as ajax]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
