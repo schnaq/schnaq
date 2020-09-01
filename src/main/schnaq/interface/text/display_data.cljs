@@ -61,13 +61,14 @@
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
 
-     :meeting.step2/button "Schritt 2: Optional Agendas hinzufügen"
+     :meeting.step2/button "Schritt 2: Agenda hinzufügen"
 
      ;; Create Agenda
      :agenda/header "Agenda erstellen"
      :agenda/subheader "Fügen Sie zu besprechende Punkte hinzu"
      :agenda/desc-for "Beschreibung für Agendapunkt "
      :agenda/point "Agendapunkt "
+     :agenda.create/optional-agenda "Agenda hinzufügen (optional)"
 
      ;; Edit Agenda
      :agenda/edit-title "Schnaq editieren"
