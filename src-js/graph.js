@@ -1,27 +1,19 @@
 class SchnaqD3 {
-  constructor(d3, parentId, data, width, height, textwrap) {
+  constructor(d3, parentId, data, width, height, nodeSize, textwrap) {
     this.d3 = d3;
     this.parentId = parentId;
     this.data = data;
     this.width = width;
     this.height = height;
-    let INITIAL_NODE_SIZE = 25;
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.adjlist = [];
     this.svg = this.resizeCanvas(width, height);
     this.graphForces = d3.forceSimulation();
     this.labelForces = d3.forceSimulation();
     this.d3.textwrap = textwrap;
+    this.NODE_SIZE = nodeSize;
 
-    this.initializeGraph(data, width, height, INITIAL_NODE_SIZE);
-
-    // create a text wrapping function
-    let textWidth = INITIAL_NODE_SIZE * 2;
-    let wrap = d3.textwrap().bounds({height: 480, width: textWidth}).method('tspans');
-    // select all text nodes
-    let text = d3.selectAll('text');
-    // run the text wrapping function on all text nodes
-    text.call(wrap);
+    this.initializeGraph(data, width, height, nodeSize);
 
     this.svg.call(
       d3.zoom()
@@ -30,6 +22,8 @@ class SchnaqD3 {
           this.container.attr("transform", d3.event.transform);
         })
     );
+
+    console.log("constructor data");
   }
 
   neigh(a, b) {
@@ -55,21 +49,10 @@ class SchnaqD3 {
         d.x = d.node.x;
         d.y = d.node.y;
       } else {
-        let b = this.getBBox();
 
-        let diffX = d.x - d.node.x;
-        let diffY = d.y - d.node.y;
-
-        let dist = Math.sqrt(diffX * diffX + diffY * diffY);
-
-        let shiftX = b.width * (diffX - dist) / (dist * 2);
-        shiftX = Math.max(-b.width, Math.min(0, shiftX));
-        let shiftY = 16;
-        this.setAttribute("transform", "translate(" + shiftX + "," + shiftY + ")");
+        let x = d.node.x - that.NODE_SIZE/2;
+        this.setAttribute("transform", "translate(" + x + "," + d.node.y + ")");
       }
-    });
-    that.labelNode.call(node => {
-      that.updateNode(that, node)
     });
   }
 
@@ -158,7 +141,7 @@ class SchnaqD3 {
       .force("charge", this.d3.forceManyBody().strength(-3000))
       .force("link", this.d3.forceLink(this.data.links).id(d => {
         return d.id;
-      }).distance(50).strength(1))
+      }).distance(75).strength(2))
       .on("tick", () => {
         this.ticked(this)
       });
@@ -168,6 +151,13 @@ class SchnaqD3 {
     let forces = forceObject.nodes(nodes);
     forces = this.centerForces(forces, width, height);
     return this.setLinkForces(forces);
+  }
+
+  setLabelForces(force, labels) {
+    return force
+      .nodes(labels.nodes)
+      .force("charge", this.d3.forceManyBody().strength(-50))
+      .force("link", this.d3.forceLink(labels.links).distance(0).strength(2));
   }
 
   setSVG(node) {
@@ -217,8 +207,8 @@ class SchnaqD3 {
   }
 
   drawNodes(data, size) {
-    let width = size * 2;
-    let height = size;
+    let width = size + 10;
+    let height = size * 0.75;
     this.node = this.container.append("g").attr("class", "nodes")
       .selectAll("g")
       .data(data.nodes)
@@ -238,19 +228,19 @@ class SchnaqD3 {
     let chosenColor;
     switch (link.type) {
       case "undercut":
-        chosenColor = "#990000";
+        chosenColor = "#333";
         break;
       case "support":
-        chosenColor = "#009933";
+        chosenColor = "#999";
         break;
       case "attack":
-        chosenColor = "#ff0000";
+        chosenColor = "#444";
         break;
       case "starting":
-        chosenColor = "#0033cc";
+        chosenColor = "#888";
         break;
       default:
-        chosenColor = "#aaa";
+        chosenColor = "#666";
     }
     return chosenColor;
   }
@@ -277,11 +267,11 @@ class SchnaqD3 {
       .text((node, index) => {
         return index % 2 === 0 ? "" : node.node.content;
       })
-      .style("fill", "#555")
+      .style("fill", "#FFF")
       .style("font-family", "Arial")
       .style("font-size", 6)
       .style("pointer-events", "none") // to prevent mouseover/drag capture
-      .style("text-anchor", "middle");
+      .style("text-anchor", "start");
   }
 
   createLabels(data) {
@@ -331,13 +321,6 @@ class SchnaqD3 {
     );
   }
 
-  setLabelForces(force, labels) {
-    return force
-      .nodes(labels.nodes)
-      .force("charge", this.d3.forceManyBody().strength(-50))
-      .force("link", this.d3.forceLink(labels.links).distance(0).strength(2));
-  }
-
   initializeGraph(data, width, height, nodeSize) {
     this.container = this.svg.append("g");
     this.drawLinks(data);
@@ -354,6 +337,12 @@ class SchnaqD3 {
 
     this.setMouseOverEvents();
     this.setDragEvents();
+
+    let wrap = this.d3.textwrap().bounds({height: nodeSize/2, width: nodeSize}).method('tspans');
+    // select all text nodes
+    let text = this.d3.selectAll('text');
+    // run the text wrapping function on all text nodes
+    text.call(wrap);
   }
 
   setSize(width, height) {
@@ -368,6 +357,7 @@ class SchnaqD3 {
     this.data = data;
     this.svg.selectAll("*").remove();
     this.initializeGraph(data, width, height, nodeSize);
+    console.log("replace data");
   }
 
 }

@@ -17,7 +17,7 @@
   (let [d3-instance (reagent/atom {})
         width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
-        node-size 5]
+        node-size 50]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:svg])
@@ -26,7 +26,11 @@
          (println (str "Width: " width))
          (reset! d3-instance
                  (schnaqd3/SchnaqD3.
-                   d3 (rdom/dom-node this) (clj->js graph) width height d3-textwrap/textwrap)))
+                   d3
+                   (rdom/dom-node this)
+                   (clj->js graph)
+                   width height node-size
+                   d3-textwrap/textwrap)))
        :component-did-update
        (fn [this _argv]
          (let [[_ graph] (reagent/argv this)]
