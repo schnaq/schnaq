@@ -191,7 +191,13 @@
                            :meeting/end-date (db/now)
                            :meeting/author (db/add-user-if-not-exists "Christian")})
         request {:body-params {:share-hash valid-share-hash
-                               :edit-hash valid-edit-hash}}]
+                               :edit-hash valid-edit-hash}}
+        req-wrong-edit-hash {:body-params {:share-hash valid-share-hash
+                                           :edit-hash "👾"}}
+        req-wrong-share-hash {:body-params {:share-hash "razupaltuff"
+                                            :edit-hash valid-edit-hash}}]
     (testing "Valid hashes are ok."
-      (let [response (meeting-by-hash-as-admin request)]
-        (is (= 200 (:status response)))))))
+      (is (= 200 (:status (meeting-by-hash-as-admin request)))))
+    (testing "Wrong hashes are forbidden."
+      (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-edit-hash))))
+      (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-share-hash)))))))
