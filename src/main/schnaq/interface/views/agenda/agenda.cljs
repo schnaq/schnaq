@@ -48,14 +48,16 @@
                     :description (oget % [:target :value]) numbered-suffix)}]]])
 
 (defn- add-agenda-button [number-of-forms]
-  [:div.mb-5
-   [:button.btn.agenda-add-button
-    {:on-click (fn [e]
-                 (js-wrap/prevent-default e)
-                 (rf/dispatch [:increase-agenda-forms]))}
-    (if (or (nil? number-of-forms) (zero? number-of-forms))
-      [:span.display-6 (data/labels :agenda.create/optional-agenda)]
-      [:span.display-4 "+"])]])
+  (let [zero-agendas? (or (nil? number-of-forms) (zero? number-of-forms))]
+    [:div.mb-5
+     [:button.btn.agenda-add-button
+      {:on-click (fn [e]
+                   (js-wrap/prevent-default e)
+                   (rf/dispatch [:increase-agenda-forms]))
+       :style {:padding (if zero-agendas? "0.5rem 1rem" "0 1rem")}}
+      (if zero-agendas?
+        [:span.display-6.my-4 (data/labels :agenda.create/optional-agenda)]
+        [:span.display-4 "+"])]]))
 
 (defn- submit-agenda-button []
   [:input.btn.button-primary {:type "submit"
@@ -76,7 +78,7 @@
     [:div#create-agenda
      [base/nav-header]
      [header]
-     [:div.container.px-5.py-3.text-center
+     [:div.container.text-center.pb-5
       [:div.agenda-meeting-container.p-3
        [:h2.mb-4 (:meeting/title @(rf/subscribe [:meeting/selected]))]
        [:h4 (:meeting/description @(rf/subscribe [:meeting/selected]))]]
