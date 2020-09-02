@@ -49,11 +49,13 @@
 
 (defn- add-agenda-button [number-of-forms]
   [:div.mb-5
-   [:input.btn.agenda-add-button {:type "button"
-                                  :value (if (or (nil? number-of-forms) (zero? number-of-forms))
-                                           (data/labels :agenda.create/optional-agenda)
-                                           "+")
-                                  :on-click #(rf/dispatch [:increase-agenda-forms])}]])
+   [:button.btn.agenda-add-button
+    {:on-click (fn [e]
+                 (js-wrap/prevent-default e)
+                 (rf/dispatch [:increase-agenda-forms]))}
+    (if (or (nil? number-of-forms) (zero? number-of-forms))
+      [:span.display-6 (data/labels :agenda.create/optional-agenda)]
+      [:span.display-4 "+"])]])
 
 (defn- submit-agenda-button []
   [:input.btn.button-primary {:type "submit"

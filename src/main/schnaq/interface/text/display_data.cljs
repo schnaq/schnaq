@@ -69,7 +69,7 @@
      :agenda/subheader "Fügen Sie zu besprechende Punkte hinzu"
      :agenda/desc-for "Beschreibung für Agendapunkt "
      :agenda/point "Agendapunkt "
-     :agenda.create/optional-agenda "Agenda hinzufügen (optional)"
+     :agenda.create/optional-agenda "Agenda hinzufügen"
 
      ;; Edit Agenda
      :agenda/edit-title "Schnaq editieren"
