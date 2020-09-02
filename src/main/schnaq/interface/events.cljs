@@ -27,10 +27,7 @@
                                     [:p (labels :user.set-name/dialog-lead)]
                                     [:p (labels :user.set-name/dialog-body)]
                                     [:div.mt-2.btn.btn-sm.btn-outline-primary
-                                     {:on-click
-                                      (fn []
-                                        (rf/dispatch [:username/open-dialog])
-                                        (rf/dispatch [:notification/remove notification-id]))}
+                                     {:on-click #(rf/dispatch [:username/open-dialog])}
                                      (labels :user.set-name/dialog-button)]]
                              :context :info
                              :stay-visible? true}]]]})))
