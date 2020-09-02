@@ -30,6 +30,8 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
    ["meetings"
+    {:controllers [{:start (fn [_]
+                             (rf/dispatch [:username/open-dialog]))}]}
     (when-not toolbelt/production?
       [""
        {:name :routes/meetings
