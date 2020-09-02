@@ -13,6 +13,10 @@
   @include media-breakpoint-up(md) {
     width: 100%;
   }
+
+  p {
+    margin-bottom: 0.25rem;
+  }
 }
 
 // Create all sub-classes of a toast
