@@ -1,37 +1,75 @@
 (ns schnaq.interface.views.graph.view
-  (:require ["d3" :as d3]
-            ["d3-textwrap" :as d3-textwrap]
-            ["/graph" :as schnaqd3]
+  (:require ["vis-network" :as vis]
             [ajax.core :as ajax]
+            [clojure.string :as string]
+            [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [schnaq.interface.config :refer [config]]  
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.views.base :as base]))
+
+(defn- wrap-line
+  "Takes a set of `nodes` and changes their labels to wrap properly after `break` characters."
+  [size text]
+  (string/join "\n"
+               (re-seq (re-pattern (str ".{1," size "}\\s|.{1," size "}"))
+                       (string/replace text #"\n" " "))))
+
+(>defn- wrap-node-labels
+  "Wrap the labels of all nodes inside a sequence."
+  [size nodes]
+  [sequential? int? :ret sequential?]
+  (map #(update % :label (fn [label] (wrap-line size label))) nodes))
+
+(>defn- node-types->colors
+  "Add colors depending on node type."
+  [nodes]
+  [sequential? :ret sequential?]
+  (map #(assoc % :color (case (:type %)
+                          :argument.type/starting "#4cacf4"
+                          :argument.type/support "#1292ee"
+                          :argument.type/attack "#ff772d"
+                          :argument.type/undercut "#ff772d"
+                          :agenda "#4cacf4"
+                          "#1292ee"))
+       nodes))
+
+(>defn- convert-nodes-for-vis
+  "Converts the nodes received from backend specifically for viz."
+  [nodes]
+  [sequential? :ret sequential?]
+  (->> nodes
+       node-types->colors
+       (map #(merge % {:shape "box"
+                       :shapeProperties {:borderRadius 12}
+                       :widthConstraint {:minimum 50
+                                         :maximum 200}
+                       :font {:align "left"}
+                       :margin 10}))))
 
 (defn- graph-view
   "Visualization of Discussion Graph."
   [graph]
-  (let [d3-instance (reagent/atom {})
+  (let [vis-object (reagent/atom nil)
         width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
-        node-size 50]
+        _node-size 200]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
-       :reagent-render (fn [_graph] [:svg])
+       :reagent-render (fn [_graph] [:div#graph])
        :component-did-mount
        (fn [this]
-         (reset! d3-instance
-                 (schnaqd3/SchnaqD3.
-                   d3
-                   (rdom/dom-node this)
-                   (clj->js graph)
-                   width height node-size
-                   d3-textwrap/textwrap)))
+         (let [root-node (rdom/dom-node this)
+               data (clj->js (update graph :nodes #(convert-nodes-for-vis %)))
+               options (clj->js {:width (str width)
+                                 :height (str height)})]
+           (reset! vis-object (vis/Network. root-node data options))))
        :component-did-update
        (fn [this _argv]
-         (let [[_ graph] (reagent/argv this)]
-           (.replaceData @d3-instance (clj->js graph) width height node-size)))})))
+         (let [[_ new-graph] (reagent/argv this)
+               new-data (clj->js (update new-graph :nodes #(convert-nodes-for-vis %)))]
+           (reset! vis-object (.setData @vis-object new-data))))})))
 
 (defn graph-agenda-header [agenda share-hash]
   ;; meeting header

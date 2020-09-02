@@ -43,7 +43,7 @@
   [map? sequential? :ret sequential?]
   (let [children (direct-children (:id statement) arguments)]
     (map (fn [child]
-           {:source (:db/id child) :target (:id statement) :type (:type child)})
+           {:from (:db/id child) :to (:id statement) :type (:type child)})
          children)))
 
 (>defn- create-links
@@ -80,7 +80,7 @@
   (let [statement-id (:id statement)
         premise (first (filter #((set (premise-ids %)) statement-id) arguments))]
     (if (starting-conclusions statement-id)
-      (assoc statement :type "starting-argument")
+      (assoc statement :type :argument.type/starting)
       (assoc statement :type (:argument/type premise)))))
 
 (>defn- create-nodes
@@ -100,16 +100,16 @@
         meeting (db/meeting-by-hash meeting-hash)
         author (db/user (-> meeting :meeting/author :db/id))]
     {:id (:db/id (:agenda/discussion agenda))
-     :content (:agenda/title agenda)
+     :label (:agenda/title agenda)
      :author (:author/nickname (:user/core-author author))
-     :type "agenda"}))
+     :type :agenda}))
 
 (>defn- agenda-links
   "Creates links from an starting argument to an agenda node."
   [discussion-id starting-arguments]
   [int? sequential? :ret set?]
-  (set (map (fn [argument] {:source (-> argument :argument/conclusion :db/id)
-                            :target discussion-id
+  (set (map (fn [argument] {:from (-> argument :argument/conclusion :db/id)
+                            :to discussion-id
                             :type :argument.type/starting}) starting-arguments)))
 
 (>defn nodes-for-agenda

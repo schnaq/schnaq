@@ -373,14 +373,14 @@
     (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
 
 (>defn all-statements-for-discussion
-  "Returns all statements for a discussion."
+  "Returns all statements for a discussion. Specially prepared for node and edge generation."
   [discussion-id]
   [int? :ret sequential?]
   (map
     (fn [[statement & _]]
       {:author (-> statement :statement/author :author/nickname)
        :id (:db/id statement)
-       :content (:content statement)})
+       :label (:content statement)})
     (d/q
       '[:find (pull ?statements statement-pattern)
         :in $ ?discussion-id statement-pattern

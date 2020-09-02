@@ -150,9 +150,9 @@
         (is (= 200 (:status response)))
         (is (contains? (:body response) :graph))
         (is (contains? (-> response :body :graph) :nodes))
-        (is (contains? (-> response :body :graph) :links))
+        (is (contains? (-> response :body :graph) :edges))
         (is (not (nil? (-> response :body :graph :nodes))))
-        (is (not (nil? (-> response :body :graph :links)))))
+        (is (not (nil? (-> response :body :graph :edges)))))
       (testing "bad request"
         (is (= 400 (:status bad-response)))
         (is (= error-text (-> bad-response :body :error)))))))

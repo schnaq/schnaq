@@ -56,7 +56,7 @@
       (testing "Nodes contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (dec (count nodes)))))
       (testing "Only one agenda point."
-        (is (= 1 (count (filter #(= "agenda" (:type %)) nodes)))))
+        (is (= 1 (count (filter #(= :agenda (:type %)) nodes)))))
       (testing (str "Check if all content from statements is present in nodes.")
         (is (= (count statement-nodes) (count (filter #(contents (:content %)) statement-nodes))))))))
 
