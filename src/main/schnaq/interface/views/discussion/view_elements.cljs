@@ -82,13 +82,12 @@
                           {:id (-> agenda :agenda/discussion :db/id)
                            :share-hash share-hash}])}
         [:img.w-100.clickable-no-hover
-         {:src (img-path :icon-graph) :alt ""}]
-        ]]
-      ]]))
+         {:src (img-path :icon-graph) :alt "icon of graph"}]]]]]))
 
-(defn input-footer [content]
-  [:div.discussion-view-bottom-rounded
-   content])
+(defn input-footer [allow-new? content]
+  (when allow-new?
+    [:div.discussion-view-bottom-rounded
+     content]))
 
 ;; text input
 
