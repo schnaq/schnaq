@@ -7,8 +7,7 @@
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.views.base :as base]
-            [cljs.pprint :as pp]))
+            [schnaq.interface.views.base :as base]))
 
 (defn- wrap-line
   "Takes a set of `nodes` and changes their labels to wrap properly after `break` characters."
@@ -39,7 +38,7 @@
 (>defn- convert-nodes-for-vis
   "Converts the nodes received from backend specifically for viz."
   [nodes]
-  [sequential? int? :ret sequential?]
+  [sequential? :ret sequential?]
   (->> nodes
        node-types->colors
        (map #(assoc % :shape "box"))
@@ -52,25 +51,25 @@
 (defn- graph-view
   "Visualization of Discussion Graph."
   [graph]
-  (let [width (.-innerWidth js/window)
+  (let [vis-object (reagent/atom nil)
+        width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
-        _node-size 200
-        graph (update graph :nodes #(convert-nodes-for-vis %))]
+        _node-size 200]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:div#graph])
        :component-did-mount
        (fn [this]
-         (pp/pprint graph)
          (let [root-node (rdom/dom-node this)
-               data (clj->js graph)
+               data (clj->js (update graph :nodes #(convert-nodes-for-vis %)))
                options (clj->js {:width (str width)
                                  :height (str height)})]
-           (vis/Network. root-node data options)))
+           (reset! vis-object (vis/Network. root-node data options))))
        :component-did-update
        (fn [this _argv]
-         (let [[_ _graph] (reagent/argv this)]
-           :Todo))})))
+         (let [[_ new-graph] (reagent/argv this)]
+           (let [new-data (clj->js (update new-graph :nodes #(convert-nodes-for-vis %)))]
+             (reset! vis-object (.setData @vis-object new-data)))))})))
 
 (defn graph-agenda-header [agenda share-hash]
   ;; meeting header
