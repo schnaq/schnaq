@@ -94,6 +94,9 @@
          [add-agenda-button number-of-forms :increase-agenda-forms]
          [submit-agenda-button]]]]]]))
 
+(defn add-agenda-view []
+  [agenda-view])
+
 ;; #### Events ####
 
 (rf/reg-event-fx

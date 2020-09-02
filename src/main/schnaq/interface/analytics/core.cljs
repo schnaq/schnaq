@@ -76,6 +76,9 @@
        [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
        [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])])
 
+(defn analytics-dashboard-entrypoint []
+  [analytics-dashboard-view])
+
 ;; #### Events ####
 
 (rf/reg-event-fx

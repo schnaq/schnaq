@@ -24,6 +24,9 @@
       :on-click #(rf/dispatch [:navigation/navigate :routes/startpage])}
      (labels :errors/navigate-to-startpage)]]])
 
+(defn invalid-admin-link-view-entrypoint []
+  [invalid-admin-link-view])
+
 (rf/reg-event-fx
   :ajax-failure
   (fn [{:keys [db]} [_ failure]]

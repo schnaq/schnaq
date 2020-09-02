@@ -48,7 +48,7 @@
                        :font {:align "left"}
                        :margin 10}))))
 
-(defn- graph-view
+(defn- graph
   "Visualization of Discussion Graph."
   [graph]
   (let [vis-object (reagent/atom nil)
@@ -80,7 +80,7 @@
                         {:share-hash share-hash
                          :id (:db/id (:agenda/discussion agenda))}]))])
 
-(defn view
+(defn graph-view
   "The core Graph visualization wrapper."
   []
   (let [current-agenda @(rf/subscribe [:chosen-agenda])
@@ -88,7 +88,10 @@
     [:div
      [graph-agenda-header current-agenda share-hash]
      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
-       [graph-view graph])]))
+       [graph graph])]))
+
+(defn graph-view-entrypoint []
+  [graph-view])
 
 (rf/reg-event-fx
   :graph/load-data-for-discussion

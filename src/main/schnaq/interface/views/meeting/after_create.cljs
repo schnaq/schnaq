@@ -126,3 +126,6 @@
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
        (labels :meetings/continue-to-schnaq-button)]]]))
+
+(defn admin-central-view []
+  [after-meeting-creation-view])

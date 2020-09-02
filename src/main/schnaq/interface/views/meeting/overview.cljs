@@ -55,6 +55,9 @@
    [:div.container.py-4
     [meetings-list-view]]])
 
+(defn meeting-view-entry []
+  [meeting-view])
+
 ;; #### Subs ####
 
 (rf/reg-sub

@@ -22,9 +22,28 @@
 ;; #### Views ####
 
 (defn- header []
-  (base/header
-    (data/labels :meeting-create-header)
-    (data/labels :meeting-create-subheader)))
+  [base/header
+   (data/labels :meeting-create-header)
+   (data/labels :meeting-create-subheader)])
+
+(defn- meeting-title-input
+  "The input and label for a new meeting-title"
+  []
+  [:<>
+   [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
+   [:input#title.form-control.form-round.form-title.mb-5
+    {:type "text"
+     :autoComplete "off"
+     :required true
+     :placeholder (data/labels :meeting-form-title-placeholder)}]])
+
+(defn- meeting-description-input
+  "The input and label for a meeting description"
+  []
+  [:<>
+   [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
+   [:textarea#description.form-control.form-round.mb-4
+    {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
 
 (defn create-meeting-form-view
   "A view with a form that creates a meeting properly."
@@ -34,26 +53,18 @@
    [header]
    [:div.container.px-5.py-3
     ;; form
-    [:form {:on-submit (fn [e] (js-wrap/prevent-default e)
-                         (new-meeting-helper (oget e [:target :elements])))}
-     ;; title
-     [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
-     [:input#title.form-control.form-round.form-title
-      {:type "text"
-       :autoComplete "off"
-       :required true
-       :placeholder (data/labels :meeting-form-title-placeholder)}]
-     [:br] [:br]
-
-     ;; description
-     [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
-     [:textarea#description.form-control.form-round
-      {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]
-     [:br] [:br]
-
+    [:form
+     {:on-submit (fn [e]
+                   (js-wrap/prevent-default e)
+                   (new-meeting-helper (oget e [:target :elements])))}
+     [meeting-title-input]
+     [meeting-description-input]
      ;; submit
      [:button.button-secondary.mt-5.mb-1 {:type "submit"}
       (data/labels :meeting.step2/button)]]]])
+
+(defn create-meeting-view []
+  [create-meeting-form-view])
 
 ;; #### Events ####
 

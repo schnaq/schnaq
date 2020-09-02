@@ -162,6 +162,9 @@
         (labels :feedbacks.overview/subheader)]
        [:div.container.py-4 [list-feedbacks]]])))
 
+(defn feedbacks-view []
+  [overview])
+
 
 ;; -----------------------------------------------------------------------------
 

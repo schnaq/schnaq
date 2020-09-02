@@ -107,6 +107,10 @@
         [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
         [submit-edit-button]]]]]))
 
+(defn agenda-edit-view
+  []
+  [edit-view])
+
 ;; load agendas events
 
 (rf/reg-event-fx
