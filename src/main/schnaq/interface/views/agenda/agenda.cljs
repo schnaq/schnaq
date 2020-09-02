@@ -25,7 +25,7 @@
    [:div.add-agenda-div.agenda-point
     ;; title
     [:div.row.agenda-row-title
-     [:div.col-10
+     [:div.col-8.col-md-10
       [:input.form-control.agenda-form-title.form-title
        {:type "text"
         :name "title"
@@ -35,7 +35,7 @@
         :id (str "title-" numbered-suffix)
         :on-key-up
         #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]]
-     [:div.col-2
+     [:div.col-4.col-md-2
       [:div.pt-4.clickable
        {:on-click #(rf/dispatch [:agenda/delete-temporary numbered-suffix])}
        [:i {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]
@@ -47,17 +47,20 @@
       :on-key-up #(new-agenda-local
                     :description (oget % [:target :value]) numbered-suffix)}]]])
 
-(defn- add-agenda-button [number-of-forms]
-  [:div.mb-5
-   [:input.btn.agenda-add-button {:type "button"
-                                  :value (if (or (nil? number-of-forms) (zero? number-of-forms))
-                                           (data/labels :agenda.create/optional-agenda)
-                                           "+")
-                                  :on-click #(rf/dispatch [:increase-agenda-forms])}]])
+(defn add-agenda-button [number-of-forms add-event]
+  (let [zero-agendas? (or (nil? number-of-forms) (zero? number-of-forms))]
+    [:div.mb-5
+     [:button.btn.agenda-add-button
+      {:on-click (fn [e]
+                   (js-wrap/prevent-default e)
+                   (rf/dispatch [add-event]))
+       :style {:padding (if zero-agendas? "0.5rem 1rem" "0 1rem")}}
+      (if zero-agendas?
+        [:span.display-6.my-4 (data/labels :agenda.create/optional-agenda)]
+        [:span.display-4 "+"])]]))
 
 (defn- submit-agenda-button []
-  [:input.btn.button-primary {:type "submit"
-                              :value (data/labels :meeting-create-header)}])
+  [:button.btn.button-primary (data/labels :meeting-create-header)])
 
 ;; #### header ####
 
@@ -74,7 +77,7 @@
     [:div#create-agenda
      [base/nav-header]
      [header]
-     [:div.container.px-5.py-3.text-center
+     [:div.container.text-center.pb-5
       [:div.agenda-meeting-container.p-3
        [:h2.mb-4 (:meeting/title @(rf/subscribe [:meeting/selected]))]
        [:h4 (:meeting/description @(rf/subscribe [:meeting/selected]))]]
@@ -88,7 +91,7 @@
            [:div {:key agenda-num}
             [new-agenda-form agenda-num]])
          [:div.agenda-line]
-         [add-agenda-button number-of-forms]
+         [add-agenda-button number-of-forms :increase-agenda-forms]
          [submit-agenda-button]]]]]]))
 
 ;; #### Events ####
