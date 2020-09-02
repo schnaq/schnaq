@@ -3,7 +3,7 @@
 @import 'mixins';
 
 // Global
-@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '../../../node_modules/bootstrap/scss/bootstrap';
 @import 'global';
 
 // Components
@@ -29,4 +29,4 @@
 @import 'up-down-vote';
 
 // 3rd Party
-@import '../klaro/src/scss/klaro';
+@import '../js/klaro/src/scss/klaro';
