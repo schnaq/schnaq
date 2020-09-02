@@ -48,7 +48,7 @@
                        :font {:align "left"}
                        :margin 10}))))
 
-(defn- graph
+(defn- graph-canvas
   "Visualization of Discussion Graph."
   [graph]
   (let [vis-object (reagent/atom nil)
@@ -88,7 +88,7 @@
     [:div
      [graph-agenda-header current-agenda share-hash]
      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
-       [graph graph])]))
+       [graph-canvas graph])]))
 
 (defn graph-view-entrypoint []
   [graph-view])
