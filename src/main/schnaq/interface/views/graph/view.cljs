@@ -38,19 +38,24 @@
 
 (>defn- convert-nodes-for-vis
   "Converts the nodes received from backend specifically for viz."
-  [nodes char-per-line]
+  [nodes]
   [sequential? int? :ret sequential?]
   (->> nodes
-       (wrap-node-labels char-per-line)
-       node-types->colors))
+       node-types->colors
+       (map #(assoc % :shape "box"))
+       (map #(assoc-in % [:shapeProperties :borderRadius] 12))
+       (map #(assoc-in % [:widthConstraint :minimum] 50))
+       (map #(assoc-in % [:widthConstraint :maximum] 200))
+       (map #(assoc-in % [:font :align] "left"))
+       (map #(assoc % :margin 10))))
 
 (defn- graph-view
   "Visualization of Discussion Graph."
   [graph]
   (let [width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
-        node-size 30
-        graph (update graph :nodes #(convert-nodes-for-vis % node-size))]
+        _node-size 200
+        graph (update graph :nodes #(convert-nodes-for-vis %))]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:div#graph])
