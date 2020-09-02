@@ -67,9 +67,9 @@
            (reset! vis-object (vis/Network. root-node data options))))
        :component-did-update
        (fn [this _argv]
-         (let [[_ new-graph] (reagent/argv this)]
-           (let [new-data (clj->js (update new-graph :nodes #(convert-nodes-for-vis %)))]
-             (reset! vis-object (.setData @vis-object new-data)))))})))
+         (let [[_ new-graph] (reagent/argv this)
+               new-data (clj->js (update new-graph :nodes #(convert-nodes-for-vis %)))]
+           (reset! vis-object (.setData @vis-object new-data))))})))
 
 (defn graph-agenda-header [agenda share-hash]
   ;; meeting header
