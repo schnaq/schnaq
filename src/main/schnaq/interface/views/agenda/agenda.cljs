@@ -47,21 +47,20 @@
       :on-key-up #(new-agenda-local
                     :description (oget % [:target :value]) numbered-suffix)}]]])
 
-(defn- add-agenda-button [number-of-forms]
+(defn add-agenda-button [number-of-forms add-event]
   (let [zero-agendas? (or (nil? number-of-forms) (zero? number-of-forms))]
     [:div.mb-5
      [:button.btn.agenda-add-button
       {:on-click (fn [e]
                    (js-wrap/prevent-default e)
-                   (rf/dispatch [:increase-agenda-forms]))
+                   (rf/dispatch [add-event]))
        :style {:padding (if zero-agendas? "0.5rem 1rem" "0 1rem")}}
       (if zero-agendas?
         [:span.display-6.my-4 (data/labels :agenda.create/optional-agenda)]
         [:span.display-4 "+"])]]))
 
 (defn- submit-agenda-button []
-  [:input.btn.button-primary {:type "submit"
-                              :value (data/labels :meeting-create-header)}])
+  [:button.btn.button-primary (data/labels :meeting-create-header)])
 
 ;; #### header ####
 
@@ -92,7 +91,7 @@
            [:div {:key agenda-num}
             [new-agenda-form agenda-num]])
          [:div.agenda-line]
-         [add-agenda-button number-of-forms]
+         [add-agenda-button number-of-forms :increase-agenda-forms]
          [submit-agenda-button]]]]]]))
 
 ;; #### Events ####

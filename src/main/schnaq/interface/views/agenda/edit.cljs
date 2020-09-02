@@ -14,8 +14,7 @@
     (labels :agenda/edit-subtitle)))
 
 (defn- submit-edit-button []
-  [:input.btn.button-primary {:type "submit"
-                              :value (labels :agenda/edit-button)}])
+  [:button.btn.button-primary (labels :agenda/edit-button)])
 
 (defn- agenda-edit-title
   "The editable title input of an edit-agenda-form."
@@ -49,21 +48,15 @@
    [:div.agenda-line]
    [:div.edit-agenda-div.agenda-point
     [:div.row.agenda-row-title
-     [:div.col-10
+     [:div.col-8.col-md-10
       ;; title
       [agenda-edit-title agenda]]
-     [:div.col-2
+     [:div.col-4.col-md-2
       [:div.pt-4.clickable
        {:on-click #(rf/dispatch [:agenda/delete (:db/id agenda)])}
        [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
     ;; description
     [agenda-edit-description agenda]]])
-
-
-(defn- add-editable-agenda-button []
-  [:input.btn.agenda-add-button {:type "button"
-                                 :value "+"
-                                 :on-click #(rf/dispatch [:agenda/add-edit-form])}])
 
 (defn- editable-meeting-info [selected-meeting]
   [:div.agenda-meeting-container
@@ -99,7 +92,7 @@
     [:div#create-agenda
      [base/nav-header]
      [header]
-     [:div.container.px-5.py-3.text-center
+     [:div.container.text-center.pb-5
       [:form {:id "agendas-add-form"
               :on-submit (fn [e]
                            (js-wrap/prevent-default e)
@@ -107,16 +100,12 @@
        ;; meeting title and description
        [editable-meeting-info selected-meeting]
        [:div.container
-        [:div.agenda-container
-         (for [agenda meeting-agendas]
-           [:div {:key (:db/id agenda)}
-            [agenda-view agenda]])
-         [:div.agenda-line]
-         [add-editable-agenda-button]
-         [:br]
-         [:br]
-         [:br]
-         [submit-edit-button]]]]]]))
+        (for [agenda meeting-agendas]
+          [:div {:key (:db/id agenda)}
+           [agenda-view agenda]])
+        [:div.agenda-line]
+        [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
+        [submit-edit-button]]]]]))
 
 ;; load agendas events
 
