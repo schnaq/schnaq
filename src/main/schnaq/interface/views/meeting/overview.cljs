@@ -45,7 +45,7 @@
         [meeting-entry meeting]]))])
 
 
-(defn meeting-view
+(defn- meeting-view
   "Shows the page for an overview of all meetings"
   []
   [:div
@@ -54,6 +54,9 @@
     (data/labels :meetings/header)]
    [:div.container.py-4
     [meetings-list-view]]])
+
+(defn meeting-view-entry []
+  [meeting-view])
 
 ;; #### Subs ####
 

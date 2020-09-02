@@ -70,7 +70,7 @@
     (data/labels :agenda/subheader)))
 
 
-(defn agenda-view
+(defn- agenda-view
   "Shows the view for adding one or more agendas."
   []
   (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])]
@@ -93,6 +93,9 @@
          [:div.agenda-line]
          [add-agenda-button number-of-forms :increase-agenda-forms]
          [submit-agenda-button]]]]]]))
+
+(defn add-agenda-view []
+  [agenda-view])
 
 ;; #### Events ####
 

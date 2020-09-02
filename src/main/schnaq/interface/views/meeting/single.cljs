@@ -53,5 +53,4 @@
 (defn single-meeting-view
   "Show a single meeting and all its Agendas."
   []
-  [:div
-   [single-meeting]])
+  [single-meeting])

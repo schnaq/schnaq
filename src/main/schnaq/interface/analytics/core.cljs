@@ -53,7 +53,7 @@
      {:type "submit"
       :value (labels :analytics/fetch-data-button)}]]])
 
-(defn analytics-dashboard-view
+(defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
   []
   [:div
@@ -75,6 +75,9 @@
        [analytics-card (labels :analytics/active-users-num-title) active-users-num]
        [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
        [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])])
+
+(defn analytics-dashboard-entrypoint []
+  [analytics-dashboard-view])
 
 ;; #### Events ####
 

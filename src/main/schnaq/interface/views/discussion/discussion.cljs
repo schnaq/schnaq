@@ -85,7 +85,7 @@
     [:div.discussion-view-rounded.shadow-custom
      content]]])
 
-(defn discussion-start-view
+(defn- discussion-start-view
   "The first step after starting a discussion."
   []
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
@@ -97,11 +97,13 @@
        [view/conclusions-list]
        [view/input-field]]]]))
 
-(defn discussion-loop-view
+(defn discussion-start-view-entrypoint []
+  [discussion-start-view])
+
+(defn- discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
   []
-
   (let [steps @(rf/subscribe [:discussion-steps])
         current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page current-meeting
@@ -116,6 +118,9 @@
          :starting-conclusions/select [starting-premises-view]
          :select-or-react [select-or-react-view]
          :default [:p ""])]]]))
+
+(defn discussion-loop-view-entrypoint []
+  [discussion-loop-view])
 
 ;; #### Events ####
 

@@ -11,7 +11,7 @@
     [:h1 (labels :errors/comic-relief)]
     [:h4 (labels :errors/insufficient-access-rights)]]])
 
-(defn invalid-admin-link-view
+(defn- invalid-admin-link-view
   "Shall tell the user they have no rights to view the content, they are trying to access."
   []
   [:div.text-center
@@ -23,6 +23,9 @@
      {:role "button"
       :on-click #(rf/dispatch [:navigation/navigate :routes/startpage])}
      (labels :errors/navigate-to-startpage)]]])
+
+(defn invalid-admin-link-view-entrypoint []
+  [invalid-admin-link-view])
 
 (rf/reg-event-fx
   :ajax-failure
