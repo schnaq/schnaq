@@ -15,7 +15,7 @@
                              :params {:nickname username}
                              :format (ajax/transit-request-format)
                              :response-format (ajax/transit-response-format)
-                             :on-success [:user/hide-display-name-input]
+                             :on-success [:user/hide-display-name-input username]
                              :on-failure [:ajax-failure]}
                 :db (assoc-in db [:user :name] username)}]
         (if (= "Anonymous" username)
@@ -34,12 +34,16 @@
 
 (rf/reg-event-fx
   :user/hide-display-name-input
-  (fn [{:keys [db]} _]
-    {:db (assoc-in db [:controls :username-input :show?] false)
-     :dispatch [:notification/add
-                #:notification{:title (labels :user.button/set-name)
-                               :body (labels :user.button/success-body)
-                               :context :success}]}))
+  (fn [{:keys [db]} [_ username]]
+    (let [notification
+          [[:dispatch [:notification/add
+                       #:notification{:title (labels :user.button/set-name)
+                                      :body (labels :user.button/success-body)
+                                      :context :success}]]
+           [:dispatch [:notification/remove "username/notification-set-name"]]]]
+      ;; Show notification if user is not named "Anonymous"
+      (cond-> {:db (assoc-in db [:controls :username-input :show?] false)}
+              (not= "Anonymous" username) (assoc :fx notification)))))
 
 (rf/reg-event-db
   :user/show-display-name-input
