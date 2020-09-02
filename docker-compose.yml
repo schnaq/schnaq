@@ -7,7 +7,7 @@ services:
       - web
     restart: unless-stopped
     volumes:
-      - ./persist/feedbacks/screenshots:/usr/share/nginx/html/feedbacks/screenshots
+      - ./persist/media:/usr/share/nginx/html/media
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.schnaq-frontend.rule=Host(`schnaq.com`)"
@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./persist/datomic:/code/.datomic
-      - ./persist/feedbacks/screenshots:/code/public/feedbacks/screenshots
+      - ./persist/media:/code/resources/public/media
     environment:
       - API_PORT=80
       - ENVIRONMENT=production

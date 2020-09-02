@@ -5,3 +5,4 @@ target/
 .clj-kondo/
 .idea/
 .shadow-cljs/
+out/
