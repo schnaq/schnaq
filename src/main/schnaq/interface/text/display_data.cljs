@@ -144,6 +144,10 @@
      :user.button/set-name "Name speichern"
      :user.button/set-name-placeholder "Ihr Name"
      :user.button/success-body "Name erfolgreich gespeichert"
+     :user.set-name/dialog-header "Hallo 👋"
+     :user.set-name/dialog-lead "Schön, dass Sie hier sind!"
+     :user.set-name/dialog-body "Um an Diskussionen teilzunehmen ist es notwendig, dass Sie einen Namen eingeben."
+     :user.set-name/dialog-button "Wie möchten Sie genannt werden?"
 
      ;; Errors
      :errors/navigate-to-startpage "Zurück zur Startseite"
