@@ -3,18 +3,47 @@
             [re-frame.core :as rf]
             [schnaq.interface.db :as schnaq-db]
             [schnaq.interface.config :refer [config]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modals.modal :as modal]))
 
 (rf/reg-event-fx
-  :load/username
+  :username/from-localstorage
   (fn [{:keys [db]} _]
     (if-let [name (ls/get-item :username)]
       {:db (assoc-in db [:user :name] name)}
-      {:fx [[:dispatch [:user/set-display-name "Anonymous"]]
-            [:dispatch [:modal {:show? true
-                                :child [modal/enter-name-modal]}]]]})))
+      {:fx [[:dispatch [:username/notification-set-name]]]})))
+
+(rf/reg-event-fx
+  :username/notification-set-name
+  (fn [_ _]
+    (let [notification-id "username/notification-set-name"]
+      {:fx [[:dispatch
+             [:notification/add
+              #:notification{:id notification-id
+                             :title (labels :user.set-name/dialog-header)
+                             :body [:<>
+                                    [:p (labels :user.set-name/dialog-lead)]
+                                    [:p (labels :user.set-name/dialog-body)]
+                                    [:div.mt-2.btn.btn-sm.btn-outline-primary
+                                     {:on-click
+                                      (fn []
+                                        (rf/dispatch [:username/open-dialog])
+                                        (rf/dispatch [:notification/remove notification-id]))}
+                                     (labels :user.set-name/dialog-button)]]
+                             :context :info
+                             :stay-visible? true}]]]})))
+
+(rf/reg-event-fx
+  :username/open-dialog
+  (fn [{:keys [db]} _]
+    (let [username (get-in db [:user :name])]
+      (when (or (= "Anonymous" username)
+                (nil? username))
+        {:fx [[:dispatch [:user/set-display-name "Anonymous"]]
+              [:dispatch [:modal {:show? true
+                                  :child [modal/enter-name-modal]}]]]}))))
 
 (rf/reg-event-fx
   :load/meetings
@@ -40,7 +69,7 @@
   (fn [_ _]
     {:db schnaq-db/default-db
      :fx [[:dispatch [:load/meetings]]
-          [:dispatch [:load/username]]
+          [:dispatch [:username/from-localstorage]]
           [:dispatch [:load/last-added-meeting]]]}))
 
 (rf/reg-event-db
