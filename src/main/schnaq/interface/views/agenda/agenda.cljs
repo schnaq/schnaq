@@ -25,7 +25,7 @@
    [:div.add-agenda-div.agenda-point
     ;; title
     [:div.row.agenda-row-title
-     [:div.col-10
+     [:div.col-8.col-md-10
       [:input.form-control.agenda-form-title.form-title
        {:type "text"
         :name "title"
@@ -35,7 +35,7 @@
         :id (str "title-" numbered-suffix)
         :on-key-up
         #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]]
-     [:div.col-2
+     [:div.col-4.col-md-2
       [:div.pt-4.clickable
        {:on-click #(rf/dispatch [:agenda/delete-temporary numbered-suffix])}
        [:i {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]
