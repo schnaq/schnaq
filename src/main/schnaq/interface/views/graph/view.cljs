@@ -41,12 +41,12 @@
   [sequential? :ret sequential?]
   (->> nodes
        node-types->colors
-       (map #(assoc % :shape "box"))
-       (map #(assoc-in % [:shapeProperties :borderRadius] 12))
-       (map #(assoc-in % [:widthConstraint :minimum] 50))
-       (map #(assoc-in % [:widthConstraint :maximum] 200))
-       (map #(assoc-in % [:font :align] "left"))
-       (map #(assoc % :margin 10))))
+       (map #(merge % {:shape "box"
+                       :shapeProperties {:borderRadius 12}
+                       :widthConstraint {:minimum 50
+                                         :maximum 200}
+                       :font {:align "left"}
+                       :margin 10}))))
 
 (defn- graph-view
   "Visualization of Discussion Graph."
