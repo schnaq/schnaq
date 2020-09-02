@@ -45,6 +45,7 @@
     [:input#days-input.form-control.form-round-05.py-1.mr-sm-2
      {:type "number"
       :name "days-input"
+      :placeholder "Stats for last X days"
       :autoFocus true
       :required true
       :defaultValue 7}]

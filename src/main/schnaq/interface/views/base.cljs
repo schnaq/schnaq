@@ -120,27 +120,36 @@
 ;; nav header
 
 (defn nav-header []
-  ;; collapsable navbar
-  [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
-   ;; logo
-   [:div.container
-    [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
-     [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo) :width "150" :alt ""}]]
-    ;; hamburger
-    [:button.navbar-toggler
-     {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
-      :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"}
-     [:span.navbar-toggler-icon]]
-    ;; menu items
-    [:div {:id "schnaq-navbar"
-           :class "collapse navbar-collapse"}
-     [:ul.navbar-nav.mr-auto
-      ;; navigation items
-      (when-not toolbelt/production?
-        [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
-      [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meeting/create)} (labels :nav-meeting-create)]]]
-     ;; name input
-     [username-bar-view]]]])
+  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])]
+    ;; collapsable navbar
+    [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
+     ;; logo
+     [:div.container
+      [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
+       [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo) :width "150" :alt ""}]]
+      ;; hamburger
+      [:button.navbar-toggler
+       {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
+        :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"}
+       [:span.navbar-toggler-icon]]
+      ;; menu items
+      [:div {:id "schnaq-navbar"
+             :class "collapse navbar-collapse"}
+       [:ul.navbar-nav.mr-auto
+        ;; navigation items
+        (when-not toolbelt/production?
+          [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
+        [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meeting/create)} (labels :nav-meeting-create)]]
+        (when-not (nil? edit-hash)
+          [:li.nav-item
+           [:div.nav-link.clickable
+            {:on-click #(rf/dispatch [:navigation/navigate
+                                      :routes.meeting/created
+                                      {:share-hash share-hash :admin-hash edit-hash}])}
+            (labels :nav-meeting-last-added)]])]
+
+       ;; name input
+       [username-bar-view]]]]))
 
 ;; footer
 
@@ -153,9 +162,9 @@
      [:div {:class "col-lg-6 h-100 text-center text-lg-left my-auto"}
       [:ul {:class "list-inline mb-2"}
        [:li.list-inline-item.btn.btn-link
-        [:a {:href "https://dialogo.io/impressum"} "Impressum"]]
+        [:a {:href "https://disqtec.com/impressum"} "Impressum"]]
        [:li.list-inline-item.btn.btn-link
-        [:a {:href "https://dialogo.io/datenschutz"} "Datenschutz"]]]
+        [:a {:href "https://disqtec.com/datenschutz"} "Datenschutz"]]]
       [:p {:class "text-muted small mb-4 mb-lg-0"} "\u00A9 DisqTec 2020"]]
      ;; twitter icon
      [:div {:class "col-lg-6 h-100 text-center text-lg-right my-auto"}

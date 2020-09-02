@@ -68,7 +68,7 @@
           new-meeting (db/meeting-private-data old-meeting-id)]
       (testing "Check response status"
         (is (= 200 (:status update-response)))
-        (is (= "Your Schnaq has been updated." (-> update-response :body :text))))
+        (is (string? (-> update-response :body :text))))
       (testing "Check if title and author have been updated"
         (is (not= (:meeting/title old-meeting) (:meeting/title new-meeting)))
         (is (not= (:meeting/author old-meeting) (:meeting/author new-meeting))))
@@ -179,3 +179,25 @@
         "christian.rocks"
         "schnaqi.com"
         "fakeschnaq.com"))))
+
+(deftest meeting-by-hash-as-admin-test
+  (let [meeting-by-hash-as-admin #'api/meeting-by-hash-as-admin
+        valid-share-hash "valid-share-hash"
+        valid-edit-hash "valid-edit-hash"
+        _ (db/add-meeting {:meeting/title "Schni Schna Schnaqqi"
+                           :meeting/share-hash valid-share-hash
+                           :meeting/edit-hash valid-edit-hash
+                           :meeting/start-date (db/now)
+                           :meeting/end-date (db/now)
+                           :meeting/author (db/add-user-if-not-exists "Christian")})
+        request {:body-params {:share-hash valid-share-hash
+                               :edit-hash valid-edit-hash}}
+        req-wrong-edit-hash {:body-params {:share-hash valid-share-hash
+                                           :edit-hash "👾"}}
+        req-wrong-share-hash {:body-params {:share-hash "razupaltuff"
+                                            :edit-hash valid-edit-hash}}]
+    (testing "Valid hashes are ok."
+      (is (= 200 (:status (meeting-by-hash-as-admin request)))))
+    (testing "Wrong hashes are forbidden."
+      (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-edit-hash))))
+      (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-share-hash)))))))

@@ -48,11 +48,12 @@
                     :description (oget % [:target :value]) numbered-suffix)}]]])
 
 (defn- add-agenda-button [number-of-forms]
-  [:input.btn.agenda-add-button.mb-5 {:type "button"
-                                      :value (if (or (nil? number-of-forms) (zero? number-of-forms))
-                                               (data/labels :agenda.create/optional-agenda)
-                                               "+")
-                                      :on-click #(rf/dispatch [:increase-agenda-forms])}])
+  [:div.mb-5
+   [:input.btn.agenda-add-button {:type "button"
+                                  :value (if (or (nil? number-of-forms) (zero? number-of-forms))
+                                           (data/labels :agenda.create/optional-agenda)
+                                           "+")
+                                  :on-click #(rf/dispatch [:increase-agenda-forms])}]])
 
 (defn- submit-agenda-button []
   [:input.btn.button-primary {:type "submit"
@@ -119,9 +120,7 @@
                          :admin-hash edit-hash}]
       {:fx [[:dispatch [:clear-current-agendas]]
             [:dispatch [:reset-temporary-agendas]]
-            [:dispatch [:navigation/navigate :routes.meeting/created meeting-hashs]]
-            [:write-localstorage [:meeting.last-created/meeting-hash meeting-hash]]
-            [:write-localstorage [:meeting.last-created/edit-hash edit-hash]]]})))
+            [:dispatch [:navigation/navigate :routes.meeting/created meeting-hashs]]]})))
 
 (defn load-agenda-fn [hash on-success-event]
   {:http-xhrio {:method :get

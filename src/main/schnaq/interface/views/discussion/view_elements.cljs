@@ -211,16 +211,16 @@
       [:div.up-down-vote
        [up-down-vote statement]]]]]))
 
-;; carousel
+;; carousel carouselIndicators
 
 (defn premises-carousel [premises]
-  [:div#carouselExampleIndicators.carousel.slide {:data-ride "carousel"}
+  [:div#carouselIndicators.carousel.slide {:data-ride "carousel"}
    ;; indicator
    [:ol.carousel-indicators.carousel-indicator-custom
     ;; range of number of premises and set the first element as selected
     (map
       (fn [i]
-        (let [params {:key (str "indicator-" (:db/id (nth premises i))) :data-target "#carouselExampleIndicators" :data-slide-to (str i)}]
+        (let [params {:key (str "indicator-" (:db/id (nth premises i))) :data-target "#carouselIndicators" :data-slide-to (str i)}]
           (if (zero? i)
             [:li.active params]
             [:li params])))
@@ -239,10 +239,10 @@
             [:div.carousel-item params content])))
       premises)]
    ;; interface elements
-   [:a.carousel-control-prev {:href "#carouselExampleIndicators" :role "button" :data-slide "prev"}
+   [:a.carousel-control-prev {:href "#carouselIndicators" :role "button" :data-slide "prev"}
     [:span.carousel-control-prev-icon {:aria-hidden "true"}]
     [:span.sr-only "Previous"]]
-   [:a.carousel-control-next {:href "#carouselExampleIndicators" :role "button" :data-slide "next"}
+   [:a.carousel-control-next {:href "#carouselIndicators" :role "button" :data-slide "next"}
     [:span.carousel-control-next-icon {:aria-hidden "true"}]
     [:span.sr-only "Next"]]])
 

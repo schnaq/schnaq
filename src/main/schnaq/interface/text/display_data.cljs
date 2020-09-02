@@ -12,6 +12,7 @@
      :nav-meeting "Schnaqs"
      :nav-meeting-create "Schnaq erstellen"
      :nav-meeting-agenda "Agenda erzeugen"
+     :nav-meeting-last-added "Zuletzt erstellter schnaq"
 
      ;; startpage header
      :start-page-header "schnaq"
@@ -26,7 +27,7 @@
      :create-schnaq-button "Jetzt einen schnaq starten!"
      ;; startpage call to action
      :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
-     :more-info-newsletter "Holen Sie sich regelmäßig Updates zu Dialogo und den aktuellsten Produkten."
+     :more-info-newsletter "Holen Sie sich regelmäßig Updates zu DisqTec und den aktuellsten Produkten."
      :create-your-meeting-sub "Mit einem Klick erstellen und teilen"
 
      ;; startpage grid

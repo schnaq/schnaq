@@ -60,12 +60,16 @@
 (rf/reg-event-fx
   :meeting.creation/added-continue-with-agendas
   (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
-    {:db (-> db
-             (assoc-in [:meeting :last-added] new-meeting)
-             (update :meetings conj new-meeting))
-     :fx [[:dispatch [:navigation/navigate :routes.agenda/add
-                      {:share-hash (:meeting/share-hash new-meeting)}]]
-          [:dispatch [:meeting/select-current new-meeting]]]}))
+    (let [share-hash (:meeting/share-hash new-meeting)
+          edit-hash (:meeting/edit-hash new-meeting)]
+      {:db (-> db
+               (assoc-in [:meeting :last-added] new-meeting)
+               (update :meetings conj new-meeting))
+       :fx [[:dispatch [:navigation/navigate :routes.agenda/add
+                        {:share-hash share-hash}]]
+            [:dispatch [:meeting/select-current new-meeting]]
+            [:localstorage/write [:meeting.last-added/share-hash share-hash]]
+            [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]]})))
 
 (rf/reg-event-fx
   :meeting.creation/create-stub-agenda
@@ -135,16 +139,30 @@
       {:dispatch [:navigation/navigate :routes/invalid-link]})))
 
 (rf/reg-event-db
-  :meeting.creation/toggle-agendas
-  (fn [db _]
-    (update-in db [:meeting :creation :with-agendas?] not)))
-
-(rf/reg-event-db
-  :meeting.creation/reset-agenda-toggle
-  (fn [db _]
-    (assoc-in db [:meeting :creation :with-agendas?] false)))
+  :meeting/save-as-last-added
+  (fn [db [_ {:keys [meeting]}]]
+    (assoc-in db [:meeting :last-added] meeting)))
 
 (rf/reg-sub
-  :meeting.creation/with-agendas?
+  :meeting/last-added
   (fn [db _]
-    (get-in db [:meeting :creation :with-agendas?] false)))
+    (get-in db [:meeting :last-added])))
+
+(rf/reg-event-fx
+  :meeting/error-remove-hashes
+  (fn [_ [_ response]]
+    {:fx [[:dispatch [:ajax-failure response]]
+          [:localstorage/remove [:meeting.last-added/edit-hash]]
+          [:localstorage/remove [:meeting.last-added/share-hash]]]}))
+
+(rf/reg-event-fx
+  :meeting/load-by-hash-as-admin
+  (fn [_ [_ share-hash edit-hash]]
+    {:http-xhrio {:method :post
+                  :uri (str (:rest-backend config) "/meeting/by-hash-as-admin")
+                  :params {:share-hash share-hash
+                           :edit-hash edit-hash}
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:meeting/save-as-last-added]
+                  :on-failure [:meeting/error-remove-hashes]}}))
