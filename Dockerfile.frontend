@@ -22,7 +22,7 @@ RUN yarn install
 
 COPY . .
 
-RUN sass ./public/css/main.scss ./public/css/main.min.css --no-source-map --style compressed
+RUN sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
 RUN yarn shadow-cljs release app
 
 
