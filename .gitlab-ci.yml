@@ -47,7 +47,7 @@ css-lint:
   before_script:
     - yarn install --dev
   script:
-    - yarn stylelint "public/css/*.scss"
+    - yarn stylelint "resources/public/css/*.scss"
   allow_failure: true
   when: always
 
