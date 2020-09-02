@@ -40,7 +40,6 @@
 
 (defn render
   []
-  (println "Rerendering")
   (reagent.dom/render [views/root]
                       (gdom/getElement "app")))
 
@@ -51,7 +50,6 @@
   ;; the Reframe subscription cache.
   (rf/clear-subscription-cache!)
   (navigation/init-routes!)
-  (print "Hot reload!")
   (render))
 
 (defn- say-hello
