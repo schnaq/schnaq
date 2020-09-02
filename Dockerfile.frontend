@@ -22,7 +22,7 @@ RUN yarn install
 
 COPY . .
 
-RUN sass ./public/css/main.scss ./public/css/main.min.css --no-source-map --style compressed
+RUN sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
 RUN yarn shadow-cljs release app
 
 
@@ -30,7 +30,7 @@ RUN yarn shadow-cljs release app
 
 FROM nginx
 WORKDIR /usr/share/nginx/html
-COPY --from=shadow-build /code/public .
+COPY --from=shadow-build /code/resources/public .
 COPY nginx/schnaq.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

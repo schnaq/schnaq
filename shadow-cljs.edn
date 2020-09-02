@@ -5,13 +5,13 @@
  :builds {;; example build config, usage suitable for user apps
           :app {:target :browser
                 :modules {:base {:init-fn schnaq.interface.core/init}}
-                :output-dir "public/js/compiled"
+                :output-dir "resources/public/js/compiled"
                 :asset-path "/js/compiled"
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}}
                 :release {:closure-defines {schnaq.interface.config/api-url #shadow/env "REST_API_URL"
                                             schnaq.interface.config/environment "production"
                                             schnaq.interface.config/build-hash #shadow/env "BUILD_HASH"}}
-                :devtools {:http-root "public"
+                :devtools {:http-root "resources/public"
                            :http-port 8700
                            :preloads [devtools.preload day8.re-frame-10x.preload]}}
           :test {:target :node-test

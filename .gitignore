@@ -10,7 +10,8 @@ datomic/
 datomic-*.zip
 
 .clj-kondo/.cache/
-public/feedbacks/screenshots/
+resources/public/media/
+!resources/public/media/.gitkeep
 
 local_jars/
 
@@ -50,11 +51,11 @@ local_jars/
 node_modules/
 !node_modules/.gitkeep
 .shadow-cljs/
-public/js/compiled/
+resources/public/js/compiled/
 
 ## Generated css
-public/css/main.css*
-public/css/main.min.css*
-public/css/.sass-cache
+resources/public/css/main.css*
+resources/public/css/main.min.css*
+resources/public/css/.sass-cache
 
 yarn-error.log
