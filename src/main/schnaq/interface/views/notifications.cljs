@@ -92,8 +92,8 @@
 
 (rf/reg-event-fx
   :notification/add
-  (fn [{:keys [db]} [_ {:notification/keys [stay-visible?] :as notification}]]
-    (let [notification-id (str (random-uuid))
+  (fn [{:keys [db]} [_ {:notification/keys [stay-visible? id] :as notification}]]
+    (let [notification-id (if-not (nil? id) id (str (random-uuid)))
           notification' (assoc notification :notification/id notification-id)]
       (cond-> {:db (update db :notifications conj notification')}
               ;; Auto-hide notification if not specified otherwise
