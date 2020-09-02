@@ -80,7 +80,7 @@
   (let [statement-id (:id statement)
         premise (first (filter #((set (premise-ids %)) statement-id) arguments))]
     (if (starting-conclusions statement-id)
-      (assoc statement :type "starting-argument")
+      (assoc statement :type :argument.type/starting)
       (assoc statement :type (:argument/type premise)))))
 
 (>defn- create-nodes
@@ -102,7 +102,7 @@
     {:id (:db/id (:agenda/discussion agenda))
      :label (:agenda/title agenda)
      :author (:author/nickname (:user/core-author author))
-     :type "agenda"}))
+     :type :agenda}))
 
 (>defn- agenda-links
   "Creates links from an starting argument to an agenda node."

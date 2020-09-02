@@ -7,7 +7,8 @@
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.views.base :as base]))
+            [schnaq.interface.views.base :as base]
+            [cljs.pprint :as pp]))
 
 (defn- wrap-line
   "Takes a set of `nodes` and changes their labels to wrap properly after `break` characters."
@@ -22,18 +23,40 @@
   [sequential? int? :ret sequential?]
   (map #(update % :label (fn [label] (wrap-line size label))) nodes))
 
+(>defn- node-types->colors
+  "Add colors depending on node type."
+  [nodes]
+  [sequential? :ret sequential?]
+  (map #(assoc % :color (case (:type %)
+                          :argument.type/starting "#4cacf4"
+                          :argument.type/support "#1292ee"
+                          :argument.type/attack "#ff772d"
+                          :argument.type/undercut "#ff772d"
+                          :agenda "#4cacf4"
+                          "#1292ee"))
+       nodes))
+
+(>defn- convert-nodes-for-vis
+  "Converts the nodes received from backend specifically for viz."
+  [nodes char-per-line]
+  [sequential? int? :ret sequential?]
+  (->> nodes
+       (wrap-node-labels char-per-line)
+       node-types->colors))
+
 (defn- graph-view
   "Visualization of Discussion Graph."
   [graph]
   (let [width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
         node-size 30
-        graph (update graph :nodes #(wrap-node-labels node-size %))]
+        graph (update graph :nodes #(convert-nodes-for-vis % node-size))]
     (reagent/create-class
       {:display-name "D3-Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:div#graph])
        :component-did-mount
        (fn [this]
+         (pp/pprint graph)
          (let [root-node (rdom/dom-node this)
                data (clj->js graph)
                options (clj->js {:width (str width)
