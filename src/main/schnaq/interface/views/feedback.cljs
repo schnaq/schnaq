@@ -144,7 +144,7 @@
            [:td (:feedback/description feedback)]
            [:td.image
             (when (:feedback/has-image? feedback)
-              (let [img-src (gstring/format "/feedbacks/screenshots/%s.png" (:db/id feedback))]
+              (let [img-src (gstring/format "/media/feedbacks/screenshots/%s.png" (:db/id feedback))]
                 [:a {:href img-src}
                  [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]])])
 

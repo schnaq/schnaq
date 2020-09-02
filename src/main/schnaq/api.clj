@@ -259,7 +259,7 @@
   (let [feedback (:feedback body-params)
         feedback-id (db/add-feedback! feedback)
         screenshot (:screenshot body-params)]
-    (save-screenshot-if-provided! screenshot "public/feedbacks/screenshots" feedback-id)
+    (save-screenshot-if-provided! screenshot "resources/public/media/feedbacks/screenshots" feedback-id)
     (created "" {:feedback feedback})))
 
 (defn- all-feedbacks
