@@ -45,7 +45,7 @@
         [meeting-entry meeting]]))])
 
 
-(defn meeting-view
+(defn- meeting-view
   "Shows the page for an overview of all meetings"
   []
   [:div

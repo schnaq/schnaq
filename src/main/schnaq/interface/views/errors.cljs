@@ -11,7 +11,7 @@
     [:h1 (labels :errors/comic-relief)]
     [:h4 (labels :errors/insufficient-access-rights)]]])
 
-(defn invalid-admin-link-view
+(defn- invalid-admin-link-view
   "Shall tell the user they have no rights to view the content, they are trying to access."
   []
   [:div.text-center

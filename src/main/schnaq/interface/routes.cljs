@@ -100,7 +100,7 @@
                                  (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]
        ["/graph"
         {:name :routes/graph-view
-         :view graph-view/graph-view
+         :view graph-view/graph-view-entrypoint
          :link-text (labels :router/graph-view)
          :controllers [{:identity (fn [] (random-uuid))
                         :start #(rf/dispatch [:graph/load-data-for-discussion])}]}]]]]]

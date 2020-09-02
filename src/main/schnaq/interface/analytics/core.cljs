@@ -53,7 +53,7 @@
      {:type "submit"
       :value (labels :analytics/fetch-data-button)}]]])
 
-(defn analytics-dashboard-view
+(defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
   []
   [:div

@@ -85,7 +85,7 @@
      #(rf/dispatch
         [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]])
 
-(defn edit-view []
+(defn- edit-view []
   (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
         selected-meeting (:meeting edit-information)
         meeting-agendas (:agendas edit-information)]

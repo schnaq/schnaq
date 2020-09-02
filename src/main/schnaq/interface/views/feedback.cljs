@@ -148,7 +148,7 @@
                 [:a {:href img-src}
                  [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]])])
 
-(defn overview
+(defn- overview
   "Shows the page for an overview of all feedbacks."
   []
   (let [feedbacks @(rf/subscribe [:feedbacks])]

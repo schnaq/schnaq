@@ -85,7 +85,7 @@
     [:div.discussion-view-rounded.shadow-custom
      content]]])
 
-(defn discussion-start-view
+(defn- discussion-start-view
   "The first step after starting a discussion."
   []
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
@@ -100,7 +100,7 @@
 (defn discussion-start-view-entrypoint []
   [discussion-start-view])
 
-(defn discussion-loop-view
+(defn- discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."
   []

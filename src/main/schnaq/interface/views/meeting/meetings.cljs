@@ -45,7 +45,7 @@
    [:textarea#description.form-control.form-round.mb-4
     {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
 
-(defn create-meeting-form-view
+(defn- create-meeting-form-view
   "A view with a form that creates a meeting properly."
   []
   [:div#create-meeting-form

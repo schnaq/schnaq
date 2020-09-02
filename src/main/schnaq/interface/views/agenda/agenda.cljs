@@ -70,7 +70,7 @@
     (data/labels :agenda/subheader)))
 
 
-(defn agenda-view
+(defn- agenda-view
   "Shows the view for adding one or more agendas."
   []
   (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])]

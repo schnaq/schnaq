@@ -103,7 +103,7 @@
       [:div.py-3
        [copy-link-form get-edit-link "edit-hash"]]]]]])
 
-(defn after-meeting-creation-view
+(defn- after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []

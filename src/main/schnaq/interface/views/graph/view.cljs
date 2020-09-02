@@ -80,7 +80,7 @@
                         {:share-hash share-hash
                          :id (:db/id (:agenda/discussion agenda))}]))])
 
-(defn graph-view
+(defn- graph-view
   "The core Graph visualization wrapper."
   []
   (let [current-agenda @(rf/subscribe [:chosen-agenda])
