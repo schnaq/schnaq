@@ -97,7 +97,7 @@
           notification' (assoc notification :notification/id notification-id)]
       (cond-> {:db (update db :notifications conj notification')}
               ;; Auto-hide notification if not specified otherwise
-              (not stay-visible?) (assoc :notification/timed-remove notification-id)))))
+              (not stay-visible?) (assoc :fx [[:notification/timed-remove notification-id]])))))
 
 (rf/reg-fx
   :notification/timed-remove

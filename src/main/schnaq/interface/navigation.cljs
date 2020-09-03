@@ -27,7 +27,7 @@
 (rf/reg-event-fx
   :navigation/navigate
   (fn [_cofx [_ & route]]
-    {:navigation/navigate! route}))
+    {:fx [[:navigation/navigate! route]]}))
 
 (rf/reg-fx
   :navigation/navigate!

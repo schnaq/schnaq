@@ -166,6 +166,7 @@
   [overview])
 
 
+
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
@@ -179,33 +180,33 @@
 (rf/reg-event-fx
   :feedbacks/fetch
   (fn [_ [_ password]]
-    {:http-xhrio {:method :post
-                  :uri (gstring/format "%s/feedbacks" (:rest-backend config))
-                  :params {:password password}
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:feedbacks/store]
-                  :on-failure [:ajax-failure]}}))
+    {:fx [[:http-xhrio {:method :post
+                        :uri (gstring/format "%s/feedbacks" (:rest-backend config))
+                        :params {:password password}
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:feedbacks/store]
+                        :on-failure [:ajax-failure]}]]}))
 
 (rf/reg-event-fx
   :feedbacks/success
   (fn [_ _]
-    {:dispatch-n [[:modal {:show? false :child nil}]
-                  [:notification/add
-                   #:notification{:title (labels :feedbacks.notification/title)
-                                  :body (labels :feedbacks.notification/body)
-                                  :context :success}]]}))
+    {:fx [[:dispatch [:modal {:show? false :child nil}]]
+          [:dispatch [:notification/add
+                      #:notification{:title (labels :feedbacks.notification/title)
+                                     :body (labels :feedbacks.notification/body)
+                                     :context :success}]]]}))
 
 (rf/reg-event-fx
   :feedback/new
   (fn [_ [_ feedback screenshot form-elements]]
     (when-not (string/blank? (:feedback/description feedback))
-      {:http-xhrio {:method :post
-                    :uri (str (:rest-backend config) "/feedback/add")
-                    :params (cond-> {:feedback feedback}
-                                    screenshot (assoc :screenshot screenshot))
-                    :format (ajax/transit-request-format)
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:feedbacks/success]
-                    :on-failure [:ajax-failure]}
-       :form/clear form-elements})))
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/feedback/add")
+                          :params (cond-> {:feedback feedback}
+                                          screenshot (assoc :screenshot screenshot))
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:feedbacks/success]
+                          :on-failure [:ajax-failure]}]
+            [:form/clear form-elements]]})))
