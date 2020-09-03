@@ -98,7 +98,7 @@
   []
   [:form
    {:on-submit (fn [e] (js-wrap/prevent-default e)
-                 (rf/dispatch [:continue-discussion :starting-argument/new
+                 (rf/dispatch [:discussion/continue :starting-argument/new
                                (oget e [:target :elements])]))}
    [:input.form-control.discussion-text-input.mb-5
     {:type "text" :name "conclusion-text"
@@ -231,7 +231,7 @@
       (fn [index premise]
         (let [params {:key (:db/id premise)}
               content [:div.premise-carousel-item
-                       {:on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
+                       {:on-click #(rf/dispatch [:discussion/continue :premises/select premise])}
                        [statement-bubble premise]]]
           (if (zero? index)
             [:div.carousel-item.active params content]
@@ -254,7 +254,7 @@
       (for [conclusion conclusions]
         [:div {:key (:db/id conclusion)
                :on-click (fn [_e]
-                           (rf/dispatch [:continue-discussion :starting-conclusions/select conclusion])
+                           (rf/dispatch [:discussion/continue :starting-conclusions/select conclusion])
                            (rf/dispatch [:navigation/navigate :routes.discussion/continue
                                          {:id (:id path-params)
                                           :share-hash (:share-hash path-params)}]))}

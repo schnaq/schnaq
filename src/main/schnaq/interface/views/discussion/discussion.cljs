@@ -149,41 +149,41 @@
             after-time-travel (vec (take keep-n before-time-travel))
             {:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
         (if (>= 0 keep-n)
-          {:dispatch-n [[:discussion.history/clear]
-                        [:navigation/navigate :routes.discussion/start {:id id
-                                                                        :share-hash share-hash}]]}
+          {:fx [[:dispatch [:discussion.history/clear]]
+                [:dispatch [:navigation/navigate :routes.discussion/start {:id id
+                                                                           :share-hash share-hash}]]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
-           :dispatch [:set-current-discussion-steps (:options (nth before-time-travel keep-n))]})))))
+           :fx [[:dispatch [:discussion.steps/set-current (:options (nth before-time-travel keep-n))]]]})))))
 
 (rf/reg-event-fx
-  :start-discussion
+  :discussion/start
   (fn [{:keys [db]} _]
     (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
           username (get-in db [:user :name] "Anonymous")]
-      {:http-xhrio {:method :get
-                    :uri (str (:rest-backend config) "/start-discussion/" id)
-                    :format (ajax/transit-request-format)
-                    :url-params {:username username
-                                 :meeting-hash share-hash}
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:set-current-discussion-steps]
-                    :on-failure [:ajax-failure]}})))
+      {:fx [[:http-xhrio {:method :get
+                          :uri (str (:rest-backend config) "/start-discussion/" id)
+                          :format (ajax/transit-request-format)
+                          :url-params {:username username
+                                       :meeting-hash share-hash}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.steps/set-current]
+                          :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
-  :set-current-discussion-steps
+  :discussion.steps/set-current
   (fn [{:keys [db]} [_ response]]
     {:db (-> db
              (assoc-in [:discussion :options :all] response)
              (assoc-in [:discussion :options :steps] (map first response))
              (assoc-in [:discussion :options :args] (map second response)))
-     :dispatch [:notification/new-content]}))
+     :fx [[:dispatch [:notification/new-content]]]}))
 
 ;; This and the following events serve as the multimethod-equivalent in the frontend
 ;; for stepping through the discussion.
 (rf/reg-event-fx
-  :continue-discussion
+  :discussion/continue
   (fn [_ [_ reaction args]]
-    {:dispatch [reaction args]}))
+    {:fx [[:dispatch [reaction args]]]}))
 
 (rf/reg-event-fx
   :starting-argument/new
@@ -198,11 +198,11 @@
           (-> reaction-args
               (assoc :new/starting-argument-conclusion conclusion-text)
               (assoc :new/starting-argument-premises premise-text))]
-      {:dispatch-n [[:added/new-content]
-                    [:continue-discussion-http-call [reaction updated-args]]
-                    [:navigation/navigate :routes.discussion/start {:id id
-                                                                    :share-hash share-hash}]]
-       :form/clear form})))
+      {:fx [[:dispatch [:added/new-content]]
+            [:dispatch [:discussion/continue-http-call [reaction updated-args]]]
+            [:dispatch [[:navigation/navigate :routes.discussion/start {:id id
+                                                                        :share-hash share-hash}]]]
+            [:form/clear form]]})))
 
 (rf/reg-event-fx
   :starting-conclusions/select
@@ -212,8 +212,8 @@
     (let [old-args (logic/args-for-reaction discussion-steps discussion-step-args reaction)
           new-args (assoc old-args :statement/selected conclusion)
           options (get-in db [:discussion :options :all])]
-      {:dispatch-n [[:discussion.history/push options conclusion :neutral]
-                    [:continue-discussion-http-call [reaction new-args]]]})))
+      {:fx [[:dispatch [:discussion.history/push options conclusion :neutral]]
+            [:dispatch [:discussion/continue-http-call [reaction new-args]]]]})))
 
 (rf/reg-event-fx
   :premises/select
@@ -224,8 +224,8 @@
           new-args (assoc old-args :statement/selected premise)
           attitude (logic/arg-type->attitude (:meta/argument.type premise))
           options (get-in db [:discussion :options :all])]
-      {:dispatch-n [[:discussion.history/push options premise attitude]
-                    [:continue-discussion-http-call [reaction new-args]]]})))
+      {:fx [[:dispatch [:discussion.history/push options premise attitude]]
+            [:dispatch [:discussion/continue-http-call [reaction new-args]]]]})))
 
 (rf/reg-event-db
   :added/new-content
@@ -237,61 +237,61 @@
   (fn [{:keys [db]} _]
     (when (:added/new-content? db)
       {:db (assoc db :added/new-content? false)
-       :dispatch [:notification/add
-                  #:notification{:title (labels :discussion.notification/new-content-title)
-                                 :body (labels :discussion.notification/new-content-body)
-                                 :context :success}]})))
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :discussion.notification/new-content-title)
+                                       :body (labels :discussion.notification/new-content-body)
+                                       :context :success}]]]})))
 
 (rf/reg-event-fx
   :starting-rebut/new
   (fn [_cofx [reaction args]]
-    {:dispatch-n [[:added/new-content]
-                  [:continue-discussion-http-call [reaction args]]]}))
+    {:fx [[:dispatch [:added/new-content]]
+          [:dispatch [:discussion/continue-http-call [reaction args]]]]}))
 
 (rf/reg-event-fx
   :starting-support/new
   (fn [_cofx [reaction args]]
-    {:dispatch-n [[:added/new-content]
-                  [:continue-discussion-http-call [reaction args]]]}))
+    {:fx [[:dispatch [:added/new-content]]
+          [:dispatch [:discussion/continue-http-call [reaction args]]]]}))
 
 (rf/reg-event-fx
   :rebut/new
   (fn [_cofx [reaction args]]
-    {:dispatch-n [[:added/new-content]
-                  [:continue-discussion-http-call [reaction args]]]}))
+    {:fx [[:dispatch [:added/new-content]]
+          [:dispatch [:discussion/continue-http-call [reaction args]]]]}))
 
 (rf/reg-event-fx
   :support/new
   (fn [_cofx [reaction args]]
-    {:dispatch-n [[:added/new-content]
-                  [:continue-discussion-http-call [reaction args]]]}))
+    {:fx [[:dispatch [:added/new-content]]
+          [:dispatch [:discussion/continue-http-call [reaction args]]]]}))
 
 (rf/reg-event-fx
   :undercut/new
   (fn [_cofx [reaction args]]
-    {:dispatch-n [[:added/new-content]
-                  [:continue-discussion-http-call [reaction args]]]}))
+    {:fx [[:dispatch [:added/new-content]]
+          [:dispatch [:discussion/continue-http-call [reaction args]]]]}))
 
 (rf/reg-event-fx
-  :continue-discussion-http-call
+  :discussion/continue-http-call
   (fn [{:keys [db]} [_ payload]]
     (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
-      {:http-xhrio {:method :post
-                    :uri (str (:rest-backend config) "/continue-discussion")
-                    :format (ajax/transit-request-format)
-                    :params {:payload payload
-                             :meeting-hash share-hash
-                             :discussion-id id}
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:set-current-discussion-steps]
-                    :on-failure [:ajax-failure]}})))
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/continue-discussion")
+                          :format (ajax/transit-request-format)
+                          :params {:payload payload
+                                   :meeting-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.steps/set-current]
+                          :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
-  :handle-reload-on-discussion-loop
+  :discussion/handle-hard-reload
   (fn [{:keys [db]} [_ agenda-id share-hash]]
     (when (empty? (get-in db [:discussion :options :steps]))
-      {:dispatch [:navigation/navigate :routes.discussion/start {:id agenda-id
-                                                                 :share-hash share-hash}]})))
+      {:fx [[:dispatch [:navigation/navigate :routes.discussion/start {:id agenda-id
+                                                                       :share-hash share-hash}]]]})))
 
 ;; #### Subs ####
 

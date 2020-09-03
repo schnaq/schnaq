@@ -99,7 +99,7 @@
          :link-text (labels :router/continue-discussion)
          :controllers [{:parameters {:path [:id :share-hash]}
                         :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:handle-reload-on-discussion-loop (:id path) (:share-hash path)]))}]}]
+                                 (rf/dispatch [:discussion/handle-hard-reload (:id path) (:share-hash path)]))}]}]
        ["/graph"
         {:name :routes/graph-view
          :view graph-view/graph-view-entrypoint
