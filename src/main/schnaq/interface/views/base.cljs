@@ -130,7 +130,8 @@
       ;; hamburger
       [:button.navbar-toggler
        {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
-        :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"}
+        :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
+        :data-html2canvas-ignore true}
        [:span.navbar-toggler-icon]]
       ;; menu items
       [:div {:id "schnaq-navbar"
@@ -147,7 +148,6 @@
                                       :routes.meeting/created
                                       {:share-hash share-hash :edit-hash edit-hash}])}
             (labels :nav-meeting-last-added)]])]
-
        ;; name input
        [username-bar-view]]]]))
 
