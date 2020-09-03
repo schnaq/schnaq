@@ -145,7 +145,7 @@
            [:div.nav-link.clickable
             {:on-click #(rf/dispatch [:navigation/navigate
                                       :routes.meeting/created
-                                      {:share-hash share-hash :admin-hash edit-hash}])}
+                                      {:share-hash share-hash :edit-hash edit-hash}])}
             (labels :nav-meeting-last-added)]])]
 
        ;; name input

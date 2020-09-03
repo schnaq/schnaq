@@ -177,7 +177,7 @@
   :meeting/submit-changes
   (fn [{:keys [db]} _]
     (let [edit-meeting (:edit-meeting db)
-          edit-hash (get-in db [:current-route :path-params :admin-hash])
+          edit-hash (get-in db [:current-route :path-params :edit-hash])
           finalized-changes (assoc-in edit-meeting [:meeting :meeting/edit-hash] edit-hash)
           nickname (-> db :user :name)]
       {:fx [[:http-xhrio {:method :post

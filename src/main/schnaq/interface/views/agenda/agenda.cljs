@@ -122,11 +122,10 @@
 (rf/reg-event-fx
   :agenda/on-successful-add
   (fn [_ [_ meeting-hash edit-hash]]
-    (let [meeting-hashs {:share-hash meeting-hash
-                         :admin-hash edit-hash}]
-      {:fx [[:dispatch [:agenda/clear-current]]
-            [:dispatch [:agenda/reset-temporary-entries]]
-            [:dispatch [:navigation/navigate :routes.meeting/created meeting-hashs]]]})))
+    {:fx [[:dispatch [:agenda/clear-current]]
+          [:dispatch [:agenda/reset-temporary-entries]]
+          [:dispatch [:navigation/navigate :routes.meeting/created {:share-hash meeting-hash
+                                                                    :edit-hash edit-hash}]]]}))
 
 (defn load-agenda-fn [hash on-success-event]
   {:fx [[:http-xhrio {:method :get
