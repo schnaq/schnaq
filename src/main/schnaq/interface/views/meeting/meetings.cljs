@@ -100,15 +100,15 @@
     (get-in db [:meeting :selected])))
 
 (rf/reg-event-fx
-  :load-meeting-by-share-hash
+  :meeting/load-by-share-hash
   (fn [{:keys [db]} [_ hash]]
     (when-not (get-in db [:meeting :selected])
-      {:http-xhrio {:method :get
-                    :uri (str (:rest-backend config) "/meeting/by-hash/" hash)
-                    :format (ajax/transit-request-format)
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:meeting/select-current]
-                    :on-failure [:ajax-failure]}})))
+      {:fx [[:http-xhrio {:method :get
+                          :uri (str (:rest-backend config) "/meeting/by-hash/" hash)
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting/select-current]
+                          :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
   :meeting.creation/new
@@ -120,26 +120,26 @@
   :meeting.creation/new-meeting-http-call
   (fn [{:keys [db]} [_ meeting on-success-event]]
     (let [nickname (get-in db [:user :name] "Anonymous")]
-      {:http-xhrio {:method :post
-                    :uri (str (:rest-backend config) "/meeting/add")
-                    :params {:nickname nickname
-                             :meeting meeting}
-                    :format (ajax/transit-request-format)
-                    :response-format (ajax/transit-response-format)
-                    :on-success [on-success-event]
-                    :on-failure [:ajax-failure]}})))
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/meeting/add")
+                          :params {:nickname nickname
+                                   :meeting meeting}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [on-success-event]
+                          :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
   :meeting/check-admin-credentials
   (fn [_ [_ share-hash edit-hash]]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/credentials/validate")
-                  :params {:share-hash share-hash
-                           :edit-hash edit-hash}
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:meeting/check-admin-credentials-success]
-                  :on-failure [:ajax-failure]}}))
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/credentials/validate")
+                        :params {:share-hash share-hash
+                                 :edit-hash edit-hash}
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:meeting/check-admin-credentials-success]
+                        :on-failure [:ajax-failure]}]]}))
 
 (rf/reg-event-fx
   ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
@@ -147,7 +147,7 @@
   :meeting/check-admin-credentials-success
   (fn [_ [_ {:keys [valid-credentials?]}]]
     (when-not valid-credentials?
-      {:dispatch [:navigation/navigate :routes/invalid-link]})))
+      {:fx [[:dispatch [:navigation/navigate :routes/invalid-link]]]})))
 
 (rf/reg-event-db
   :meeting/save-as-last-added
@@ -169,11 +169,11 @@
 (rf/reg-event-fx
   :meeting/load-by-hash-as-admin
   (fn [_ [_ share-hash edit-hash]]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/meeting/by-hash-as-admin")
-                  :params {:share-hash share-hash
-                           :edit-hash edit-hash}
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:meeting/save-as-last-added]
-                  :on-failure [:meeting/error-remove-hashes]}}))
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/meeting/by-hash-as-admin")
+                        :params {:share-hash share-hash
+                                 :edit-hash edit-hash}
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:meeting/save-as-last-added]
+                        :on-failure [:meeting/error-remove-hashes]}]]}))
