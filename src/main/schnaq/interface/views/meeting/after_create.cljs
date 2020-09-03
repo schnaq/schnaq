@@ -107,7 +107,7 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:meeting/keys [share-hash admin-hash title]} @(rf/subscribe [:meeting/last-added])]
+  (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])]
     [:div
      [base/nav-header]
      [base/header
@@ -118,7 +118,7 @@
       [:h4.text-left.mb-3 title]
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
-      [educate-admin-element share-hash admin-hash]
+      [educate-admin-element share-hash edit-hash]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
