@@ -3,8 +3,10 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
+            [re-frame.core :as rf]
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.utils.localstorage :as ls]
-            [re-frame.core :as rf]))
+            [ajax.core :as ajax]))
 
 (def ^:private hash-separator ",")
 
@@ -29,9 +31,9 @@
       (join-hashes meetings-visited))))
 
 (rf/reg-event-db
-  :meeting.visited/store-hashes-from-localstorage
+  :meeting.visited/update-hashes-from-localstorage
   (fn [db _]
-    (assoc-in db [:meetings :visited-hashs]
+    (assoc-in db [:meetings :visited-hashes]
               (parse-visited-meetings-from-localstorage))))
 
 (rf/reg-event-fx
@@ -39,4 +41,28 @@
   (fn [_ [_ share-hash]]
     {:fx [[:localstorage/write
            [:meetings/visited
-            (build-visited-meetings-from-localstorage share-hash)]]]}))
+            (build-visited-meetings-from-localstorage share-hash)]]
+          [:dispatch [:meeting.visited/update-hashes-from-localstorage]]]}))
+
+(rf/reg-sub
+  :meeting.visited/all-hashes
+  (fn [db _]
+    (get-in db [:meetings :visited-hashes])))
+
+(rf/reg-event-db
+  :meeting.visited/store-from-backend
+  (fn [db [_ {:keys [meetings]}]]
+    (assoc-in db [:meetings :visited] meetings)))
+
+(rf/reg-event-fx
+  :meetings.visited/load
+  (fn [{:keys [db]} _]
+    (when-let [visited-hashes (get-in db [:meetings :visited-hashes])]
+      {:fx [[:http-xhrio {:method :get
+                          :uri (str (:rest-backend config) "/meetings/by-hashes")
+                          :params {:share-hashes visited-hashes}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting.visited/store-from-backend]
+                          :on-failure [:ajax-failure]}]]})))
+
