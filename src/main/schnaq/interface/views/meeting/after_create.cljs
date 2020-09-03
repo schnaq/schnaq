@@ -22,10 +22,9 @@
 (>defn- get-edit-link
   [current-route]
   [map? :ret string?]
-  (let [share-hash (-> current-route :path-params :share-hash)
-        admin-hash (-> current-route :path-params :admin-hash)
+  (let [{:keys [share-hash edit-hash]} (:path-params current-route)
         path (reitfe/href :routes.meeting/edit {:share-hash share-hash
-                                                :admin-hash admin-hash})
+                                                :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
@@ -81,7 +80,7 @@
       (img-text (img-path :elephant-talk)
                 (labels :meetings/educate-on-link-text-subtitle))]]]])
 
-(defn- educate-admin-element [share-hash admin-hash]
+(defn- educate-admin-element [share-hash edit-hash]
   [:div.row.mb-3
    [:div.col-11
     [:div.row
@@ -94,7 +93,7 @@
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate
                                  :routes.meeting/edit
-                                 {:share-hash share-hash :admin-hash admin-hash}])}
+                                 {:share-hash share-hash :edit-hash edit-hash}])}
        (labels :meetings/edit-schnaq-button)]]
      ;; admin hash
      [:div.col-lg-6.share-link-icons

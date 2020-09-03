@@ -29,7 +29,7 @@
   (= config/admin-password password))
 
 (>defn- valid-credentials?
-  "Validate if share-hash and admin-hash match"
+  "Validate if share-hash and edit-hash match"
   [share-hash edit-hash]
   [string? string? :ret boolean?]
   (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
