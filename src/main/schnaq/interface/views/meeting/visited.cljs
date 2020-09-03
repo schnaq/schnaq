@@ -65,4 +65,3 @@
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting.visited/store-from-backend]
                           :on-failure [:ajax-failure]}]]})))
-

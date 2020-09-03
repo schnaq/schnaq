@@ -132,6 +132,14 @@
   (let [hash (get-in req [:route-params :hash])]
     (ok (db/meeting-by-hash hash))))
 
+(defn- meetings-by-hashes
+  "Bulk loading of meetings. May be used when users asks for all the meetings
+  they have access to."
+  [req]
+  (if-let [hashes (get-in req [:params :share-hashes])]
+    (ok {:meetings (map db/meeting-by-hash hashes)})
+    (bad-request {:error "Meetings could not be loaded."})))
+
 (defn- meeting-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
   processing in the frontend."
@@ -368,6 +376,7 @@
     (GET "/ping" [] ping)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
+    (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
     (POST "/agendas/add" [] add-agendas)
