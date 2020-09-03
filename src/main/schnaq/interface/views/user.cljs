@@ -18,7 +18,7 @@
                                   :response-format (ajax/transit-response-format)
                                   :on-success [:user/hide-display-name-input username]
                                   :on-failure [:ajax-failure]}]]}
-              (= "Anonymous" username) (update :fx conj [:localstorage/write [:username username]])))))
+              (not= "Anonymous" username) (update :fx conj [:localstorage/write [:username username]])))))
 
 (rf/reg-sub
   :user/display-name
