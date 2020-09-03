@@ -19,9 +19,12 @@
   the localstorage."
   [share-hash]
   [string? :ret (s/coll-of string?)]
-  (let [meetings-visited (parse-visited-meetings-from-localstorage)]
-    (when-not (some #{share-hash} meetings-visited)
-      (string/join "," (conj meetings-visited share-hash)))))
+  (let [meetings-visited (parse-visited-meetings-from-localstorage)
+        meetings-visited-with-new-hash (conj meetings-visited share-hash)
+        join-hashes (partial string/join ",")]
+    (if-not (some #{share-hash} meetings-visited)
+      (join-hashes meetings-visited-with-new-hash)
+      (join-hashes meetings-visited))))
 
 (rf/reg-event-db
   :meeting.visited/store-hashes-from-localstorage
@@ -32,4 +35,6 @@
 (rf/reg-event-fx
   :meeting.visited/to-localstorage
   (fn [_ [_ share-hash]]
-    {:fx [[:localstorage/write :meetings/visited (build-visited-meetings-from-localstorage share-hash)]]}))
+    {:fx [[:localstorage/write
+           [:meetings/visited
+            (build-visited-meetings-from-localstorage share-hash)]]]}))

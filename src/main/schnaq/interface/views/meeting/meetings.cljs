@@ -94,7 +94,7 @@
   :meeting/select-current
   (fn [{:keys [db]} [_ meeting]]
     {:db (assoc-in db [:meeting :selected] meeting)
-     :fx [[:meeting.visited/to-localstorage (:meeting/share-hash meeting)]]}))
+     :fx [[:dispatch [:meeting.visited/to-localstorage (:meeting/share-hash meeting)]]]}))
 
 (rf/reg-sub
   :meeting/selected
