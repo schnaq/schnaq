@@ -49,7 +49,7 @@
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
-                              (rf/dispatch [:load-meeting-by-share-hash (:share-hash path)]))}]}
+                              (rf/dispatch [:meeting/load-by-share-hash (:share-hash path)]))}]}
      ["/:edit-hash"
       {:parameters {:path {:edit-hash string?}}
        :controllers [{:parameters {:path [:share-hash :edit-hash]}
