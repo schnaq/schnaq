@@ -9,10 +9,9 @@
      ;; navbar labels
      :nav-startpage "Home"
      :nav-example "Examples"
-     :nav-meeting "Schnaqs"
+     :nav-meeting "Alle schnaqs"
      :nav-meeting-create "Schnaq erstellen"
      :nav-meeting-agenda "Agenda erzeugen"
-     :nav-meeting-last-added "Zuletzt erstellter schnaq"
 
      ;; startpage header
      :start-page-header "schnaq"
@@ -159,10 +158,11 @@
      :graph/heading "Diskussionsübersicht"
 
      ;; Route Link Texts
-     :router/all-meetings "Alle Schnaqs"
+     :router/all-meetings "Alle schnaqs"
      :router/all-feedbacks "Alle Feedbacks"
      :router/create-meeting "Schnaq anlegen"
-     :router/meeting-created "Zuletzt angelegtes Schnaq"
+     :router/meeting-created "Zuletzt angelegtes schnaq"
+     :router/my-schnaqs "Meine schnaqs"
      :router/show-single-meeting "Schnaq anzeigen"
      :router/add-agendas "Agendas hinzufügen"
      :router/start-discussion "Starte Besprechung"

@@ -146,7 +146,7 @@
             {:on-click #(rf/dispatch [:navigation/navigate
                                       :routes.meeting/created
                                       {:share-hash share-hash :edit-hash edit-hash}])}
-            (labels :nav-meeting-last-added)]])]
+            (labels :router/meeting-created)]])]
 
        ;; name input
        [username-bar-view]]]]))
