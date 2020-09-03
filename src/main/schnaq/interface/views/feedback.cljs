@@ -14,6 +14,8 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
+(defonce screenshot-url (reagent/atom nil))
+
 (defn- screenshot!
   "Take screenshot of whole page using html2canvas. Errors in rendering SVG
   elements are normal."
@@ -22,7 +24,7 @@
     (html2canvas (gdom/getElement "app")
                  (clj->js {:letterRendering 1 :allowTaint true}))
     (fn [e]
-      (rf/dispatch [:feedback/save-screenshot (.toDataURL e)]))))
+      (reset! screenshot-url (.toDataURL e)))))
 
 ;; -----------------------------------------------------------------------------
 ;; Views
@@ -30,8 +32,7 @@
 (defn- form-input
   "Show a form in a modal, which is presented to the user."
   []
-  (let [with-screenshot? (reagent/atom false)
-        screenshot-url (rf/subscribe [:feedback/screenshot-url])]
+  (let [with-screenshot? (reagent/atom false)]
     (fn []
       [:form.form
        {:on-submit
@@ -193,13 +194,3 @@
                           :on-success [:feedbacks/success]
                           :on-failure [:ajax-failure]}]
             [:form/clear form-elements]]})))
-
-(rf/reg-event-db
-  :feedback/save-screenshot
-  (fn [db [_ url]]
-    (assoc-in db [:feedback :screenshot :url] url)))
-
-(rf/reg-sub
-  :feedback/screenshot-url
-  (fn [db _]
-    (get-in db [:feedback :screenshot :url])))
