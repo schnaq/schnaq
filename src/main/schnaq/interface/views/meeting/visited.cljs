@@ -31,7 +31,7 @@
       (join-hashes meetings-visited))))
 
 (rf/reg-event-db
-  :meeting.visited/update-hashes-from-localstorage
+  :meeting.visited/get-hashes-from-localstorage
   (fn [db _]
     (assoc-in db [:meetings :visited-hashes]
               (parse-visited-meetings-from-localstorage))))
@@ -42,7 +42,7 @@
     {:fx [[:localstorage/write
            [:meetings/visited
             (build-visited-meetings-from-localstorage share-hash)]]
-          [:dispatch [:meeting.visited/update-hashes-from-localstorage]]]}))
+          [:dispatch [:meeting.visited/get-hashes-from-localstorage]]]}))
 
 (rf/reg-sub
   :meeting.visited/all-hashes
