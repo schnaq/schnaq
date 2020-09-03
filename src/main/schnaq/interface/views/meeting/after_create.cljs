@@ -54,12 +54,12 @@
             :data-toggle "tooltip"
             :data-placement "right"
             :title (labels :meeting/copy-link-tooltip)}
-           [:input.form-control.form-round.col-11.copy-link-form.clickable-no-hover
+           [:input.form-control.form-round.col-10.col-md-11.copy-link-form.clickable-no-hover
             {:id meeting-link-id
              :type "text"
              :value display-content
              :readOnly true}]
-           [:label.col-1.clickable-no-hover {:for meeting-link-id}
+           [:label.col-2.col-md-1.clickable-no-hover {:for meeting-link-id}
             [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]]))}))
 
 (defn img-text
@@ -90,7 +90,7 @@
       [:div.share-link-icons
        (img-text (img-path :elephant-erase)
                  (labels :meeting/educate-on-edit))]
-      [:button.btn.button-secondary.btn-lg.float-left.mt-2.span-container
+      [:button.btn.button-secondary.btn-lg.float-left.my-2.span-container
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate
                                  :routes.meeting/edit
@@ -107,17 +107,18 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:keys [share-hash admin-hash]} (:path-params @(rf/subscribe [:navigation/current-route]))]
+  (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])]
     [:div
      [base/nav-header]
      [base/header
       (labels :meeting/created-success-heading)
       (labels :meeting/created-success-subheading)]
-     [:div.container.px-5.py-3.text-center
+     [:div.container.px-3.px-md-5.py-3.text-center
       ;; list agendas
+      [:h4.text-left.mb-3 title]
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
-      [educate-admin-element share-hash admin-hash]
+      [educate-admin-element share-hash edit-hash]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
