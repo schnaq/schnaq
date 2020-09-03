@@ -107,7 +107,7 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:keys [share-hash admin-hash]} (:path-params @(rf/subscribe [:navigation/current-route]))]
+  (let [{:meeting/keys [share-hash admin-hash title]} @(rf/subscribe [:meeting/last-added])]
     [:div
      [base/nav-header]
      [base/header
@@ -115,6 +115,7 @@
       (labels :meeting/created-success-subheading)]
      [:div.container.px-5.py-3.text-center
       ;; list agendas
+      [:h4.text-left.mb-3 title]
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
       [educate-admin-element share-hash admin-hash]
