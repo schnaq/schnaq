@@ -9,9 +9,8 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.modals.modal :as modal]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [oops.core :refer [oget oset!]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
