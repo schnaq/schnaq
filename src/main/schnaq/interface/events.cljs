@@ -72,7 +72,7 @@
 (rf/reg-event-db
   :init-from-backend
   (fn [db [_ all-meetings]]
-    (assoc db :meetings all-meetings)))
+    (assoc-in db [:meetings :all] all-meetings)))
 
 (rf/reg-event-db
   :admin/set-password

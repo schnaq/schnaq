@@ -39,7 +39,7 @@
   "Shows a list of all meetings."
   []
   [:div.meetings-list
-   (let [meetings @(rf/subscribe [:meetings])]
+   (let [meetings @(rf/subscribe [:meetings/all])]
      (for [meeting meetings]
        [:div.py-3 {:key (:db/id meeting)}
         [meeting-entry meeting]]))])
@@ -61,6 +61,6 @@
 ;; #### Subs ####
 
 (rf/reg-sub
-  :meetings
+  :meetings/all
   (fn [db _]
-    (:meetings db)))
+    (get-in db [:meetings :all])))
