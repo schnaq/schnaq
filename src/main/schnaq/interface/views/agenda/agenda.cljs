@@ -129,12 +129,12 @@
             [:dispatch [:navigation/navigate :routes.meeting/created meeting-hashs]]]})))
 
 (defn load-agenda-fn [hash on-success-event]
-  {:http-xhrio {:method :get
-                :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
-                :format (ajax/transit-request-format)
-                :response-format (ajax/transit-response-format)
-                :on-success [on-success-event]
-                :on-failure [:ajax-failure]}})
+  {:fx [[:http-xhrio {:method :get
+                      :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
+                      :format (ajax/transit-request-format)
+                      :response-format (ajax/transit-response-format)
+                      :on-success [on-success-event]
+                      :on-failure [:ajax-failure]}]]})
 
 (rf/reg-event-fx
   :agenda/load-and-redirect
@@ -145,18 +145,18 @@
   :load-agenda-information
   (fn [{:keys [db]} [_ share-hash discussion-id]]
     (when-not (-> db :agenda :chosen)
-      {:http-xhrio {:method :get
-                    :uri (gstring/format "%s/agenda/%s/%s" (:rest-backend config) share-hash discussion-id)
-                    :format (ajax/transit-request-format)
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:set-response-as-agenda]
-                    :on-failure [:agenda-not-available]}})))
+      {:fx [[:http-xhrio {:method :get
+                          :uri (gstring/format "%s/agenda/%s/%s" (:rest-backend config) share-hash discussion-id)
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:set-response-as-agenda]
+                          :on-failure [:agenda-not-available]}]]})))
 
 (rf/reg-event-fx
   :agenda-not-available
   (fn [{:keys [db]} _]
     {:db (assoc-in db [:error :ajax] "Agenda could not be loaded, please refresh the App.")
-     :dispatch [:navigation/navigate :routes/meetings]}))
+     :fx [[:dispatch [:navigation/navigate :routes/meetings]]]}))
 
 (rf/reg-event-fx
   :agenda/set-current-maybe-enter
@@ -214,7 +214,7 @@
   :agenda/redirect-on-reload
   (fn [{:keys [db]} _]
     (when-not (get-in db [:meeting :last-added])
-      {:dispatch [:navigation/navigate :routes.meeting/create]})))
+      {:fx [[:dispatch [:navigation/navigate :routes.meeting/create]]]})))
 
 ;; #### Subs ####
 
