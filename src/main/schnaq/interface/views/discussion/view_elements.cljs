@@ -21,14 +21,14 @@
       ;; Prevent activating the time travel or deep dive
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
-                   (rf/dispatch [:toggle-upvote statement]))}
+                   (rf/dispatch [:discussion/toggle-upvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]
        (logic/calculate-votes statement :upvotes votes)]]
 
      [:div.vote.down-vote.text-center
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
-                   (rf/dispatch [:toggle-downvote statement]))}
+                   (rf/dispatch [:discussion/toggle-downvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
 
@@ -98,7 +98,7 @@
   []
   [:form
    {:on-submit (fn [e] (js-wrap/prevent-default e)
-                 (rf/dispatch [:continue-discussion :starting-argument/new
+                 (rf/dispatch [:discussion/continue :starting-argument/new
                                (oget e [:target :elements])]))}
    [:input.form-control.discussion-text-input.mb-5
     {:type "text" :name "conclusion-text"
@@ -231,7 +231,7 @@
       (fn [index premise]
         (let [params {:key (:db/id premise)}
               content [:div.premise-carousel-item
-                       {:on-click #(rf/dispatch [:continue-discussion :premises/select premise])}
+                       {:on-click #(rf/dispatch [:discussion/continue :premises/select premise])}
                        [statement-bubble premise]]]
           (if (zero? index)
             [:div.carousel-item.active params content]
@@ -254,7 +254,7 @@
       (for [conclusion conclusions]
         [:div {:key (:db/id conclusion)
                :on-click (fn [_e]
-                           (rf/dispatch [:continue-discussion :starting-conclusions/select conclusion])
+                           (rf/dispatch [:discussion/continue :starting-conclusions/select conclusion])
                            (rf/dispatch [:navigation/navigate :routes.discussion/continue
                                          {:id (:id path-params)
                                           :share-hash (:share-hash path-params)}]))}
@@ -274,30 +274,30 @@
 
 
 (rf/reg-event-fx
-  :toggle-upvote
+  :discussion/toggle-upvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/votes/up/toggle")
-                  :format (ajax/transit-request-format)
-                  :params {:statement-id id
-                           :nickname (get-in db [:user :name] "Anonymous")
-                           :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:upvote-success statement]
-                  :on-failure [:ajax-failure]}}))
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/votes/up/toggle")
+                        :format (ajax/transit-request-format)
+                        :params {:statement-id id
+                                 :nickname (get-in db [:user :name] "Anonymous")
+                                 :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:upvote-success statement]
+                        :on-failure [:ajax-failure]}]]}))
 
 (rf/reg-event-fx
-  :toggle-downvote
+  :discussion/toggle-downvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:http-xhrio {:method :post
-                  :uri (str (:rest-backend config) "/votes/down/toggle")
-                  :format (ajax/transit-request-format)
-                  :params {:statement-id id
-                           :nickname (get-in db [:user :name] "Anonymous")
-                           :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
-                  :response-format (ajax/transit-response-format)
-                  :on-success [:downvote-success statement]
-                  :on-failure [:ajax-failure]}}))
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/votes/down/toggle")
+                        :format (ajax/transit-request-format)
+                        :params {:statement-id id
+                                 :nickname (get-in db [:user :name] "Anonymous")
+                                 :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:downvote-success statement]
+                        :on-failure [:ajax-failure]}]]}))
 
 (rf/reg-event-db
   :upvote-success
