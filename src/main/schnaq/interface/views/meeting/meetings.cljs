@@ -5,7 +5,8 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.base :as base]))
+            [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.meeting.visited :as visited]))
 
 ;; #### Helpers ####
 
@@ -89,10 +90,11 @@
                                          :description description}})
      :fx [[:dispatch [:agenda/send-all]]]}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :meeting/select-current
-  (fn [db [_ meeting]]
-    (assoc-in db [:meeting :selected] meeting)))
+  (fn [{:keys [db]} [_ meeting]]
+    {:db (assoc-in db [:meeting :selected] meeting)
+     :fx [[:meeting.visited/to-localstorage (:meeting/share-hash meeting)]]}))
 
 (rf/reg-sub
   :meeting/selected
