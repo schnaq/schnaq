@@ -12,16 +12,16 @@
 
 
 (defn- header []
-  (base/header
-    (data/labels :start-page-subheader)
-    (data/labels :start-page-subheader-2)
-    [:div.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
-     [:div.row
-      [:div.col-lg-6.icon-bullets
-       (base/icon-bullet (data/img-path :icon-community) (data/labels :start-page-point-1))
-       (base/icon-bullet (data/img-path :icon-robot) (data/labels :start-page-point-2))
-       (base/icon-bullet (data/img-path :icon-reports) (data/labels :start-page-point-3))]
-      [header-animation]]]))
+  [base/header
+   (data/labels :start-page-subheader)
+   (data/labels :start-page-subheader-2)
+   [:div.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
+    [:div.row
+     [:div.col-lg-6.icon-bullets
+      (base/icon-bullet (data/img-path :icon-community) (data/labels :start-page-point-1))
+      (base/icon-bullet (data/img-path :icon-robot) (data/labels :start-page-point-2))
+      (base/icon-bullet (data/img-path :icon-reports) (data/labels :start-page-point-3))]
+     [header-animation]]]])
 
 
 (defn- call-to-action
