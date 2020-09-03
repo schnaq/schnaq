@@ -82,4 +82,4 @@
 (rf/reg-event-fx
   :form/should-clear
   (fn [_ [_ form-elements]]
-    {:form/clear form-elements}))
+    {:fx [[:form/clear form-elements]]}))

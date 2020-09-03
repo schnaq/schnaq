@@ -31,14 +31,14 @@
   :ajax-failure
   (fn [{:keys [db]} [_ failure]]
     {:db (assoc db :error {:ajax failure})
-     :dispatch [:notification/add
-                #:notification{:title (labels :errors/generic)
-                               :body [:pre
-                                      [:code
-                                       (with-out-str (pprint failure))]]
-                               :context :danger
-                               :stay-visible? true
-                               :on-close-fn #(rf/dispatch [:clear-error])}]}))
+     :fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :errors/generic)
+                                     :body [:pre
+                                            [:code
+                                             (with-out-str (pprint failure))]]
+                                     :context :danger
+                                     :stay-visible? true
+                                     :on-close-fn #(rf/dispatch [:clear-error])}]]]}))
 
 (rf/reg-sub
   :error-occurred
