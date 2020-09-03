@@ -54,12 +54,12 @@
             :data-toggle "tooltip"
             :data-placement "right"
             :title (labels :meeting/copy-link-tooltip)}
-           [:input.form-control.form-round.col-11.copy-link-form.clickable-no-hover
+           [:input.form-control.form-round.col-10.col-md-11.copy-link-form.clickable-no-hover
             {:id meeting-link-id
              :type "text"
              :value display-content
              :readOnly true}]
-           [:label.col-1.clickable-no-hover {:for meeting-link-id}
+           [:label.col-2.col-md-1.clickable-no-hover {:for meeting-link-id}
             [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]]))}))
 
 (defn img-text
@@ -90,7 +90,7 @@
       [:div.share-link-icons
        (img-text (img-path :elephant-erase)
                  (labels :meeting/educate-on-edit))]
-      [:button.btn.button-secondary.btn-lg.float-left.mt-2.span-container
+      [:button.btn.button-secondary.btn-lg.float-left.my-2.span-container
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate
                                  :routes.meeting/edit
@@ -113,7 +113,7 @@
      [base/header
       (labels :meeting/created-success-heading)
       (labels :meeting/created-success-subheading)]
-     [:div.container.px-5.py-3.text-center
+     [:div.container.px-3.px-md-5.py-3.text-center
       ;; list agendas
       [:h4.text-left.mb-3 title]
       [educate-element]
