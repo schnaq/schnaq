@@ -84,13 +84,13 @@
 (rf/reg-event-fx
   :analytics/load-dashboard
   (fn [_ _]
-    {:dispatch-n [[:analytics/load-meeting-num]
-                  [:analytics/load-usernames-num]
-                  [:analytics/load-average-number-of-agendas]
-                  [:analytics/load-statements-num]
-                  [:analytics/load-active-users]
-                  [:analytics/load-statement-length-stats]
-                  [:analytics/load-argument-type-stats]]}))
+    {:fx [[:dispatch [:analytics/load-meeting-num]]
+          [:dispatch [:analytics/load-usernames-num]]
+          [:dispatch [:analytics/load-average-number-of-agendas]]
+          [:dispatch [:analytics/load-statements-num]]
+          [:dispatch [:analytics/load-active-users]]
+          [:dispatch [:analytics/load-statement-length-stats]]
+          [:dispatch [:analytics/load-argument-type-stats]]]}))
 
 (>defn fetch-with-password
   "Fetches something from an endpoint with the password."
@@ -99,14 +99,14 @@
    (fetch-with-password db path on-success-event 9999))
   ([db path on-success-event days-since]
    [map? string? keyword? int? :ret map?]
-   {:http-xhrio {:method :post
-                 :uri (str (:rest-backend config) path)
-                 :format (ajax/transit-request-format)
-                 :params {:password (-> db :admin :password)
-                          :days-since days-since}
-                 :response-format (ajax/transit-response-format)
-                 :on-success [on-success-event]
-                 :on-failure [:ajax-failure]}}))
+   {:fx [[:http-xhrio {:method :post
+                       :uri (str (:rest-backend config) path)
+                       :format (ajax/transit-request-format)
+                       :params {:password (-> db :admin :password)
+                                :days-since days-since}
+                       :response-format (ajax/transit-response-format)
+                       :on-success [on-success-event]
+                       :on-failure [:ajax-failure]}]]}))
 
 (rf/reg-event-fx
   :analytics/load-all-with-time
