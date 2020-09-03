@@ -180,16 +180,16 @@
           edit-hash (get-in db [:current-route :path-params :admin-hash])
           finalized-changes (assoc-in edit-meeting [:meeting :meeting/edit-hash] edit-hash)
           nickname (-> db :user :name)]
-      {:http-xhrio {:method :post
-                    :uri (str (:rest-backend config) "/meeting/update")
-                    :params (assoc finalized-changes :nickname nickname)
-                    :format (ajax/transit-request-format)
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:meeting/on-success-submit-changes-event finalized-changes]
-                    :on-failure [:ajax-failure]}})))
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/meeting/update")
+                          :params (assoc finalized-changes :nickname nickname)
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting/on-success-submit-changes-event finalized-changes]
+                          :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
   :meeting/on-success-submit-changes-event
   (fn [_ [_ {:keys [meeting]} _response]]
-    {:dispatch-n [[:navigation/navigate :routes.meeting/show {:share-hash (:meeting/share-hash meeting)}]
-                  [:meeting/select-current meeting]]}))
+    {:fx [[:dispatch [:meeting/select-current meeting]]
+          [:dispatch [:navigation/navigate :routes.meeting/show {:share-hash (:meeting/share-hash meeting)}]]]}))

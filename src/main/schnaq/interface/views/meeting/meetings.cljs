@@ -87,7 +87,7 @@
   (fn [{:keys [db]} [_ {:meeting/keys [title description]}]]
     {:db (assoc-in db [:agenda :all] {0 {:title title
                                          :description description}})
-     :fx [[:dispatch [:send-agendas]]]}))
+     :fx [[:dispatch [:agenda/send-all]]]}))
 
 (rf/reg-event-db
   :meeting/select-current

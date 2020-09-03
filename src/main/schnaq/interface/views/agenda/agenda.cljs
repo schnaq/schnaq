@@ -86,12 +86,12 @@
         [:form {:id "agendas-add-form"
                 :on-submit (fn [e]
                              (js-wrap/prevent-default e)
-                             (rf/dispatch [:send-agendas]))}
+                             (rf/dispatch [:agenda/send-all]))}
          (for [agenda-num (range number-of-forms)]
            [:div {:key agenda-num}
             [new-agenda-form agenda-num]])
          [:div.agenda-line]
-         [add-agenda-button number-of-forms :increase-agenda-forms]
+         [add-agenda-button number-of-forms :agenda/increase-form-num]
          [submit-agenda-button]]]]]]))
 
 (defn add-agenda-view []
@@ -100,7 +100,7 @@
 ;; #### Events ####
 
 (rf/reg-event-fx
-  :send-agendas
+  :agenda/send-all
   (fn [{:keys [db]} _]
     ;; Use [:meeting :last-added] instead of selected meeting because it contains secret information
     (let [agendas (get-in db [:agenda :all] [])
@@ -116,25 +116,25 @@
                                    :meeting-hash share-hash}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
-                          :on-success [:on-successful-agenda-add share-hash edit-hash]
+                          :on-success [:agenda/on-successful-add share-hash edit-hash]
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
-  :on-successful-agenda-add
+  :agenda/on-successful-add
   (fn [_ [_ meeting-hash edit-hash]]
     (let [meeting-hashs {:share-hash meeting-hash
                          :admin-hash edit-hash}]
-      {:fx [[:dispatch [:clear-current-agendas]]
-            [:dispatch [:reset-temporary-agendas]]
+      {:fx [[:dispatch [:agenda/clear-current]]
+            [:dispatch [:agenda/reset-temporary-entries]]
             [:dispatch [:navigation/navigate :routes.meeting/created meeting-hashs]]]})))
 
 (defn load-agenda-fn [hash on-success-event]
-  {:http-xhrio {:method :get
-                :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
-                :format (ajax/transit-request-format)
-                :response-format (ajax/transit-response-format)
-                :on-success [on-success-event]
-                :on-failure [:ajax-failure]}})
+  {:fx [[:http-xhrio {:method :get
+                      :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
+                      :format (ajax/transit-request-format)
+                      :response-format (ajax/transit-response-format)
+                      :on-success [on-success-event]
+                      :on-failure [:ajax-failure]}]]})
 
 (rf/reg-event-fx
   :agenda/load-and-redirect
@@ -142,21 +142,21 @@
     (load-agenda-fn hash :agenda/set-current-maybe-enter)))
 
 (rf/reg-event-fx
-  :load-agenda-information
+  :agenda/load-chosen
   (fn [{:keys [db]} [_ share-hash discussion-id]]
     (when-not (-> db :agenda :chosen)
-      {:http-xhrio {:method :get
-                    :uri (gstring/format "%s/agenda/%s/%s" (:rest-backend config) share-hash discussion-id)
-                    :format (ajax/transit-request-format)
-                    :response-format (ajax/transit-response-format)
-                    :on-success [:set-response-as-agenda]
-                    :on-failure [:agenda-not-available]}})))
+      {:fx [[:http-xhrio {:method :get
+                          :uri (gstring/format "%s/agenda/%s/%s" (:rest-backend config) share-hash discussion-id)
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:agenda/set-response-as-chosen]
+                          :on-failure [:agenda.error/not-available]}]]})))
 
 (rf/reg-event-fx
-  :agenda-not-available
+  :agenda.error/not-available
   (fn [{:keys [db]} _]
     {:db (assoc-in db [:error :ajax] "Agenda could not be loaded, please refresh the App.")
-     :dispatch [:navigation/navigate :routes/meetings]}))
+     :fx [[:dispatch [:navigation/navigate :routes/meetings]]]}))
 
 (rf/reg-event-fx
   :agenda/set-current-maybe-enter
@@ -169,12 +169,12 @@
                            :id (-> agendas first :agenda/discussion :db/id)}]])]})))
 
 (rf/reg-event-db
-  :clear-current-agendas
+  :agenda/clear-current
   (fn [db _]
     (assoc-in db [:agendas :current] [])))
 
 (rf/reg-event-db
-  :increase-agenda-forms
+  :agenda/increase-form-num
   (fn [db _]
     (update-in db [:agenda :number-of-forms] inc)))
 
@@ -189,7 +189,7 @@
     (assoc-in db [:agenda :all suffix :description] content)))
 
 (rf/reg-event-db
-  :reset-temporary-agendas
+  :agenda/reset-temporary-entries
   (fn [db _]
     (assoc db :agenda {})))
 
@@ -201,12 +201,12 @@
         (update-in [:agenda :all] dissoc suffix))))
 
 (rf/reg-event-db
-  :choose-agenda
+  :agenda/choose
   (fn [db [_ agenda]]
     (assoc-in db [:agenda :chosen] agenda)))
 
 (rf/reg-event-db
-  :set-response-as-agenda
+  :agenda/set-response-as-chosen
   (fn [db [_ response]]
     (assoc-in db [:agenda :chosen] response)))
 
@@ -214,7 +214,7 @@
   :agenda/redirect-on-reload
   (fn [{:keys [db]} _]
     (when-not (get-in db [:meeting :last-added])
-      {:dispatch [:navigation/navigate :routes.meeting/create]})))
+      {:fx [[:dispatch [:navigation/navigate :routes.meeting/create]]]})))
 
 ;; #### Subs ####
 

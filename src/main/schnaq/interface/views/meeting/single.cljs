@@ -9,7 +9,7 @@
                 (rf/dispatch [:navigation/navigate :routes.discussion/start
                               {:id (-> agenda :agenda/discussion :db/id)
                                :share-hash (:meeting/share-hash meeting)}])
-                (rf/dispatch [:choose-agenda agenda]))}
+                (rf/dispatch [:agenda/choose agenda]))}
    ;; title
    [:div.meeting-entry-title
     [:h4 (:agenda/title agenda)]]
