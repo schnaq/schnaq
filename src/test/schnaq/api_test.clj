@@ -182,20 +182,14 @@
 
 (deftest meeting-by-hash-as-admin-test
   (let [meeting-by-hash-as-admin #'api/meeting-by-hash-as-admin
-        valid-share-hash "valid-share-hash"
-        valid-edit-hash "valid-edit-hash"
-        _ (db/add-meeting {:meeting/title "Schni Schna Schnaqqi"
-                           :meeting/share-hash valid-share-hash
-                           :meeting/edit-hash valid-edit-hash
-                           :meeting/start-date (db/now)
-                           :meeting/end-date (db/now)
-                           :meeting/author (db/add-user-if-not-exists "Christian")})
-        request {:body-params {:share-hash valid-share-hash
-                               :edit-hash valid-edit-hash}}
-        req-wrong-edit-hash {:body-params {:share-hash valid-share-hash
+        share-hash "graph-hash"
+        edit-hash "graph-edit-hash"
+        request {:body-params {:share-hash share-hash
+                               :edit-hash edit-hash}}
+        req-wrong-edit-hash {:body-params {:share-hash share-hash
                                            :edit-hash "👾"}}
         req-wrong-share-hash {:body-params {:share-hash "razupaltuff"
-                                            :edit-hash valid-edit-hash}}]
+                                            :edit-hash edit-hash}}]
     (testing "Valid hashes are ok."
       (is (= 200 (:status (meeting-by-hash-as-admin request)))))
     (testing "Wrong hashes are forbidden."
