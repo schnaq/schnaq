@@ -209,42 +209,6 @@
       [:div.up-down-vote
        [up-down-vote statement]]]]]))
 
-;; carousel carouselIndicators
-
-(defn premises-carousel [premises]
-  [:div#carouselIndicators.carousel.slide {:data-ride "carousel"}
-   ;; indicator
-   [:ol.carousel-indicators.carousel-indicator-custom
-    ;; range of number of premises and set the first element as selected
-    (map
-      (fn [i]
-        (let [params {:key (str "indicator-" (:db/id (nth premises i))) :data-target "#carouselIndicators" :data-slide-to (str i)}]
-          (if (zero? i)
-            [:li.active params]
-            [:li params])))
-      (range (count premises)))]
-   ;; content
-   [:div.carousel-inner
-    ;; set first indexed element as selected
-    (map-indexed
-      (fn [index premise]
-        (let [params {:key (:db/id premise)}
-              content [:div.premise-carousel-item
-                       {:on-click #(rf/dispatch [:discussion/continue :premises/select premise])}
-                       [statement-bubble premise]]]
-          (if (zero? index)
-            [:div.carousel-item.active params content]
-            [:div.carousel-item params content])))
-      premises)]
-   ;; interface elements
-   [:a.carousel-control-prev {:href "#carouselIndicators" :role "button" :data-slide "prev"}
-    [:span.carousel-control-prev-icon {:aria-hidden "true"}]
-    [:span.sr-only "Previous"]]
-   [:a.carousel-control-next {:href "#carouselIndicators" :role "button" :data-slide "next"}
-    [:span.carousel-control-next-icon {:aria-hidden "true"}]
-    [:span.sr-only "Next"]]])
-
-
 (defn conclusions-list []
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         conclusions @(rf/subscribe [:starting-conclusions])]
@@ -258,7 +222,6 @@
                                          {:id (:id path-params)
                                           :share-hash (:share-hash path-params)}]))}
          [statement-bubble conclusion :neutral]])]]))
-
 
 (defn history-view
   "Displays the statements it took to get to where the user is."
