@@ -21,10 +21,9 @@
 
 (defn agenda-in-meeting-view
   "The view of an agenda which gets embedded inside a meeting view."
-  []
+  [meeting]
   [:div
-   (let [agendas @(rf/subscribe [:current-agendas])
-         meeting @(rf/subscribe [:meeting/selected])]
+   (let [agendas @(rf/subscribe [:current-agendas])]
      (for [agenda agendas]
        [:div.py-3 {:key (:db/id agenda)}
         [agenda-entry agenda meeting]]))])
@@ -48,7 +47,7 @@
      [:div.container.py-2
       [:div.meeting-single-rounded
        ;; list agendas
-       [agenda-in-meeting-view]]]]))
+       [agenda-in-meeting-view current-meeting]]]]))
 
 (defn single-meeting-view
   "Show a single meeting and all its Agendas."
