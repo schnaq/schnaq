@@ -121,7 +121,7 @@
 
 (defn nav-header []
   (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
-        visited-hashes @(rf/subscribe [:meeting.visited/all-hashes])]
+        visited-hashes @(rf/subscribe [:meetings.visited/all-hashes])]
     ;; collapsable navbar
     [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
      ;; logo

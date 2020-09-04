@@ -66,9 +66,9 @@
   (fn [_ _]
     {:db schnaq-db/default-db
      :fx [[:dispatch [:load/meetings]]
-          [:dispatch [:meeting.visited/get-hashes-from-localstorage]]
           [:dispatch [:username/from-localstorage]]
-          [:dispatch [:load/last-added-meeting]]]}))
+          [:dispatch [:load/last-added-meeting]]
+          [:dispatch [:meetings.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-event-db
   :init-from-backend
