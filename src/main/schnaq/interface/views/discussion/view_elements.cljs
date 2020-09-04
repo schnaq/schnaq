@@ -77,12 +77,12 @@
          (:agenda/title agenda)]
         [:p (:agenda/description agenda)]]]
       [:div.col-1.graph-icon
-       [:p {:on-click #(rf/dispatch
-                         [:navigation/navigate :routes/graph-view
-                          {:id (-> agenda :agenda/discussion :db/id)
-                           :share-hash share-hash}])}
-        [:img.w-100.clickable-no-hover
-         {:src (img-path :icon-graph) :alt "icon of graph"}]]]]]))
+       [:img.w-100.clickable-no-hover
+        {:src (img-path :icon-graph) :alt "icon of graph"
+         :on-click #(rf/dispatch
+                      [:navigation/navigate :routes/graph-view
+                       {:id (-> agenda :agenda/discussion :db/id)
+                        :share-hash share-hash}])}]]]]))
 
 (defn input-footer [allow-new? content]
   (when allow-new?
