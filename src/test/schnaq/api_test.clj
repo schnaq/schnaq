@@ -195,3 +195,27 @@
     (testing "Wrong hashes are forbidden."
       (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-edit-hash))))
       (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-share-hash)))))))
+
+(deftest meetings-by-hashes-test
+  (let [meetings-by-hashes #'api/meetings-by-hashes
+        share-hash1 "89eh32hoas-2983ud"
+        share-hash2 "graph-hash"]
+    (testing "No hash provided, no meeting returned."
+      (is (= 400 (:status (meetings-by-hashes {})))))
+    (testing "Querying by a single valid hash returns a meeting."
+      (let [api-call (meetings-by-hashes {:params {:share-hashes share-hash1}})]
+        (is (= 200 (:status api-call)))
+        (is (= 1 (count (get-in api-call [:body :meetings]))))
+        (is (s/valid? ::models/meeting (first (get-in api-call [:body :meetings]))))))
+    (testing "A valid hash packed into a collection should also work."
+      (let [api-call (meetings-by-hashes {:params {:share-hashes [share-hash1]}})]
+        (is (= 200 (:status api-call)))
+        (is (= 1 (count (get-in api-call [:body :meetings]))))
+        (is (s/valid? ::models/meeting (first (get-in api-call [:body :meetings]))))))
+    (testing "Asking for multiple valid hashes, returns a list of valid meetings."
+      (let [api-call (meetings-by-hashes {:params {:share-hashes [share-hash1 share-hash2]}})]
+        (is (= 200 (:status api-call)))
+        (is (= 2 (count (get-in api-call [:body :meetings]))))
+        (is (every? true?
+                    (map (partial s/valid? ::models/meeting)
+                         (get-in api-call [:body :meetings]))))))))
