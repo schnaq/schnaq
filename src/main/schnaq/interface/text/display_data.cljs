@@ -63,6 +63,11 @@
 
      :meeting.step2/button "Schritt 2: Agenda hinzufügen"
 
+     ;; schnaqs not found
+     :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
+     :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
+
+
      ;; Create Agenda
      :agenda/header "Agenda erstellen"
      :agenda/subheader "Fügen Sie zu besprechende Punkte hinzu"

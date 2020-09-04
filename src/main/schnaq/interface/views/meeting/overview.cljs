@@ -1,10 +1,12 @@
 (ns schnaq.interface.views.meeting.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.utils.language :as language]
-            [schnaq.interface.text.display-data :as data]
+            [schnaq.interface.text.display-data :as data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]))
+
 
 
 (defn- readable-date [date]
@@ -41,9 +43,18 @@
   [subscription-key]
   [:div.meetings-list
    (let [meetings @(rf/subscribe [subscription-key])]
-     (for [meeting meetings]
-       [:div.py-3 {:key (:db/id meeting)}
-        [meeting-entry meeting]]))])
+     (if (empty? meetings)
+       [:div.alert.alert-primary.text-center
+        [:p.lead
+         "🙈 "
+         (labels :schnaqs.not-found/alert-lead)]
+        [:p (labels :schnaqs.not-found/alert-body)]
+        [:div
+         [:a.btn.btn-outline-primary {:href (reitfe/href :routes.meeting/create)}
+          (labels :nav-meeting-create)]]]
+       (for [meeting meetings]
+         [:div.py-3 {:key (:db/id meeting)}
+          [meeting-entry meeting]])))])
 
 
 (>defn- meeting-view
