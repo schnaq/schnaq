@@ -51,7 +51,7 @@
                                           :body (labels :meeting/link-copied-success)
                                           :context :info}]))
             :data-toggle "tooltip"
-            :data-placement "right"
+            :data-placement "bottom"
             :title (labels :meeting/copy-link-tooltip)}
            [:input.form-control.form-round.copy-link-form.clickable-no-hover
             {:id meeting-link-id
