@@ -134,10 +134,20 @@
 
 (defn- meetings-by-hashes
   "Bulk loading of meetings. May be used when users asks for all the meetings
-  they have access to."
+  they have access to. If only one meeting shall be loaded, compojure packs it
+  into a single string:
+  `{:params {:share-hashes \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"}}`
+
+  If multiple share-hashes are sent to the backend, compojure wraps them into a
+  collection:
+  `{:params {:share-hashes [\"bb328b5e-297d-4725-8c11-f1ed7db39109\"
+                            \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
   [req]
   (if-let [hashes (get-in req [:params :share-hashes])]
-    (ok {:meetings (map db/meeting-by-hash hashes)})
+    (let [meetings (if (string? hashes)
+                     [(db/meeting-by-hash hashes)]
+                     (map db/meeting-by-hash hashes))]
+      (ok {:meetings meetings}))
     (bad-request {:error "Meetings could not be loaded."})))
 
 (defn- meeting-by-hash-as-admin
