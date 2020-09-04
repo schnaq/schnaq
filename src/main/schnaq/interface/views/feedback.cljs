@@ -9,23 +9,12 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.modals.modal :as modal]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [oops.core :refer [oget oset!]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
-
-(def ^:private screenshot (atom ""))
-
-(defn- screenshot-as-base64-img
-  "`screenshot` is of type HTMLCanvasElement and can therefore be transformed
-  via `.toDataURL` to a base64 encoded string. This function returns the base64
-  string if available."
-  []
-  (let [^js/HTMLCanvasElement screenshot' @screenshot]
-    (when screenshot'
-      (.toDataURL screenshot'))))
+(defonce screenshot-url (reagent/atom nil))
 
 (defn- screenshot!
   "Take screenshot of whole page using html2canvas. Errors in rendering SVG
@@ -35,9 +24,7 @@
     (html2canvas (gdom/getElement "app")
                  (clj->js {:letterRendering 1 :allowTaint true}))
     (fn [e]
-      (reset! screenshot e)
-      (oset! (gdom/getElement "feedback-screenshot") [:src] (.toDataURL e)))))
-
+      (reset! screenshot-url (.toDataURL e)))))
 
 ;; -----------------------------------------------------------------------------
 ;; Views
@@ -45,7 +32,7 @@
 (defn- form-input
   "Show a form in a modal, which is presented to the user."
   []
-  (let [checked? (reagent/atom false)]
+  (let [with-screenshot? (reagent/atom false)]
     (fn []
       [:form.form
        {:on-submit
@@ -57,8 +44,8 @@
                 feedback {:feedback/contact-name (oget contact-name [:value])
                           :feedback/contact-mail (oget contact-mail [:value])
                           :feedback/description (oget description [:value])
-                          :feedback/has-image? @checked?}]
-            (rf/dispatch [:feedback/new feedback (when @checked? (screenshot-as-base64-img))
+                          :feedback/has-image? @with-screenshot?}]
+            (rf/dispatch [:feedback/new feedback (when @with-screenshot? @screenshot-url)
                           [contact-name contact-mail description]])))}
        [:div.form-group
         [:label {:for "feedback-contact-name"}
@@ -87,17 +74,14 @@
        [:div.form-check
         [:input.form-check-input
          {:id "feedback-include-screenshot"
-          :on-click (fn []
-                      (toolbelt/add-or-remove-class "feedback-screenshot" @checked? "d-none")
-                      (reset!
-                        checked?
-                        (oget (gdom/getElement "feedback-include-screenshot")
-                              [:checked])))
+          :on-click #(reset! with-screenshot?
+                             (oget (gdom/getElement "feedback-include-screenshot") [:checked]))
           :type "checkbox"
           :name "screenshot?"}]
         [:label.form-check-label {:for "feedback-include-screenshot"}
-         (labels :feedbacks.modal/screenshot)]
-        [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2.d-none]]
+         (labels :feedbacks.modal/screenshot)]]
+       (when (and @screenshot-url @with-screenshot?)
+         [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2 {:src @screenshot-url}])
        [:div.modal-footer
         [:input.btn.btn-primary {:type "submit"}]
         [:small (labels :feedbacks.modal/disclaimer)]]])))

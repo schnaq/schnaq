@@ -89,11 +89,11 @@
        {:parameters {:path {:id int?}}
         :controllers [{:parameters {:path [:share-hash :id]}
                        :start (fn [{:keys [path]}]
-                                (rf/dispatch [:load-agenda-information (:share-hash path) (:id path)]))}]}
+                                (rf/dispatch [:agenda/load-chosen (:share-hash path) (:id path)]))}]}
        ["/start"
         {:controllers [{:parameters {:path [:share-hash :id]}
                         :start (fn []
-                                 (rf/dispatch [:start-discussion])
+                                 (rf/dispatch [:discussion/start])
                                  (rf/dispatch [:discussion.history/clear]))}]
          :name :routes.discussion/start
          :view discussion-views/discussion-start-view-entrypoint

@@ -69,26 +69,25 @@
          [:p {:on-click on-click-back-function}
           [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
       ;; title
-      [:div.col-10
+      [:div.col-7.col-lg-10
        [:div
         [:h2.clickable-no-hover {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
                                                           {:share-hash share-hash
                                                            :id (:db/id (:agenda/discussion agenda))}])}
          (:agenda/title agenda)]
         [:p (:agenda/description agenda)]]]
-      [:div.col-1.graph-icon
-       [:p {:on-click #(rf/dispatch
-                         [:navigation/navigate :routes/graph-view
-                          {:id (-> agenda :agenda/discussion :db/id)
-                           :share-hash share-hash}])}
-        [:img.w-100.clickable-no-hover
-         {:src (img-path :icon-graph) :alt ""}]
-        ]]
-      ]]))
+      [:div.col-3.col-lg-1.graph-icon
+       [:img.graph-icon-img.clickable-no-hover
+        {:src (img-path :icon-graph) :alt "icon of graph"
+         :on-click #(rf/dispatch
+                      [:navigation/navigate :routes/graph-view
+                       {:id (-> agenda :agenda/discussion :db/id)
+                        :share-hash share-hash}])}]]]]))
 
-(defn input-footer [content]
-  [:div.discussion-view-bottom-rounded
-   content])
+(defn input-footer [allow-new? content]
+  (when allow-new?
+    [:div.discussion-view-bottom-rounded
+     content]))
 
 ;; text input
 

@@ -124,6 +124,8 @@
   padding-top: 2rem;
 
   @include media-breakpoint-down(sm) {
+    padding: 0;
+
     .discussion-view-top-rounded {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
@@ -131,8 +133,13 @@
       padding-top: 1rem;
     }
   }
+}
 
-  @include media-breakpoint-down(sm) {
-    padding: 0;
+.graph-icon-img {
+  height: 100%;
+  width: 100%;
+
+  @include media-breakpoint-down(md) {
+    max-height: 4rem;
   }
 }

@@ -46,34 +46,17 @@
      ;; input form
      [view/input-form]]))
 
-(defn- other-premises-view [premises]
+(defn- carousel-view [premises]
   [:div.container.px-0
    [:div#other-premises.others-say-container.inner-shadow-custom
     (when (not-empty premises)
       [view/premises-carousel premises])]])
 
-(defn- interaction-view
-  "A view where the user interacts with statements"
-  [allow-new? premises input]
-  [:div
-   [other-premises-view premises]
-   (when allow-new?
-     [view/input-footer input])])
-
-(defn- select-or-react-view
-  "A view where the user either reacts to a premise or selects another reaction."
-  []
-  (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
-        premises @(rf/subscribe [:premises-and-undercuts-to-select])]
-    [interaction-view allow-new? premises [add-premise-form]]))
-
-(defn- starting-premises-view
-  "Show the premises after starting-conclusions. This view is different from usual premises,
-  since we can't allow undercuts."
-  []
-  (let [allow-new? @(rf/subscribe [:allow-rebut-support?])
-        premises @(rf/subscribe [:premises-to-select])]
-    [interaction-view allow-new? premises [add-starting-premises-form]]))
+(defn- add-input-form [state]
+  (case state
+    :starting-conclusions/select [add-starting-premises-form]
+    :select-or-react [add-premise-form]
+    :default [:p ""]))
 
 (defn- discussion-base-page
   "Base discussion view containing a nav header, meeting title and content container."
@@ -105,19 +88,20 @@
   This view dispatches to the correct discussion-steps sub-views."
   []
   (let [steps @(rf/subscribe [:discussion-steps])
-        current-meeting @(rf/subscribe [:meeting/selected])]
+        current-step (logic/deduce-step steps)
+        current-meeting @(rf/subscribe [:meeting/selected])
+        allow-new? @(rf/subscribe [:allow-rebut-support?])
+        premises @(rf/subscribe [:premises-and-undercuts-to-select])]
     [discussion-base-page current-meeting
-     [:div
+     [:<>
       ;; discussion header
       [view/agenda-header-back-arrow #(rf/dispatch [:discussion.history/time-travel])]
       [view/history-view]
       [view/conclusions-list]
       ;; disussion loop
       [:div#discussion-loop
-       (case (logic/deduce-step steps)
-         :starting-conclusions/select [starting-premises-view]
-         :select-or-react [select-or-react-view]
-         :default [:p ""])]]]))
+       [carousel-view premises]
+       [view/input-footer allow-new? (add-input-form current-step)]]]]))
 
 (defn discussion-loop-view-entrypoint []
   [discussion-loop-view])
