@@ -13,7 +13,7 @@
                                             schnaq.interface.config/build-hash #shadow/env "BUILD_HASH"}}
                 :devtools {:http-root "resources/public"
                            :http-port 8700
-                           :preloads [devtools.preload #_day8.re-frame-10x.preload]}}
+                           :preloads [devtools.preload day8.re-frame-10x.preload]}}
           :test {:target :node-test
                  :output-dir "target/test/compiled/"
                  :output-to "target/test/compiled/test.js"

@@ -64,27 +64,27 @@
 (defn img-text
   "Create one icon in a grid"
   [path-to-img heading]
-
   [:div.d-flex.flex-row.p-1
-   [:div [:img {:src path-to-img}]]
-   [:span [:h5 heading]]])
+   [:div
+    [:img {:src path-to-img}]
+    [:span [:h5 heading]]]])
 
 (defn- educate-element []
   [:div.row.mb-3
-   [:div.col-lg-6.share-link-icons
-    (img-text (img-path :elephant-share)
-              (labels :meeting/educate-on-link-text))]
-   [:div.col-lg-6.share-link-icons
-    (img-text (img-path :elephant-talk)
-              (labels :meetings/educate-on-link-text-subtitle))]])
+   [:div.col-12.col-md-6.share-link-icons
+    [img-text (img-path :elephant-share)
+     (labels :meeting/educate-on-link-text)]]
+   [:div.col-12.col-md-6.share-link-icons
+    [img-text (img-path :elephant-talk)
+     (labels :meetings/educate-on-link-text-subtitle)]]])
 
 (defn- educate-admin-element [share-hash edit-hash]
   [:div.row.mb-3
    ;; edit
-   [:div.col-lg-6
+   [:div.col-md-6
     [:div.share-link-icons
-     (img-text (img-path :elephant-erase)
-               (labels :meeting/educate-on-edit))]
+     [img-text (img-path :elephant-erase)
+      (labels :meeting/educate-on-edit)]]
     [:button.btn.button-secondary.btn-lg.float-left.my-2.span-container
      {:role "button"
       :on-click #(rf/dispatch [:navigation/navigate
@@ -92,9 +92,9 @@
                                {:share-hash share-hash :edit-hash edit-hash}])}
      (labels :meetings/edit-schnaq-button)]]
    ;; admin hash
-   [:div.col-lg-6.share-link-icons
-    (img-text (img-path :elephant-admin)
-              (labels :meeting/educate-on-admin))
+   [:div.col-md-6.share-link-icons
+    [img-text (img-path :elephant-admin)
+     (labels :meeting/educate-on-admin)]
     [:div.py-3
      [copy-link-form get-edit-link "edit-hash"]]]])
 
