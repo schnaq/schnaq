@@ -122,7 +122,7 @@
      :view error-views/invalid-admin-link-view-entrypoint
      :link-text (labels :router/invalid-link)}]
    ["error"
-    {:name :routes/not-found
+    {:name :routes/cause-not-found
      :view error-views/not-found-view-entrypoint
      :link-text (labels :router/not-found-label)}]
    ["404/"

@@ -10,8 +10,9 @@
     routes/routes))
 
 (defn on-navigate [new-match]
-  (when new-match
-    (rf/dispatch [:navigation/navigated new-match])))
+  (if new-match
+    (rf/dispatch [:navigation/navigated new-match])
+    (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
 
 (defn init-routes! []
   (reitit-front-easy/start!
