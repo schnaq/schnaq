@@ -13,3 +13,9 @@
    (tooltip selector "enable"))
   ([selector option]
    (.tooltip (jquery selector) option)))
+
+(defn popover
+  ([selector]
+   (popover selector "enable"))
+  ([selector option]
+   (.popover (jquery selector) option)))
