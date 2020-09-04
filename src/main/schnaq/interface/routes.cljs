@@ -43,7 +43,7 @@
         :link-text (labels :router/all-meetings)}])
     ["/my"
      {:name :routes.meetings/my-schnaqs
-      :view meetings-overview/meeting-view-entry
+      :view meetings-overview/meeting-view-visited
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]
     ["/create"

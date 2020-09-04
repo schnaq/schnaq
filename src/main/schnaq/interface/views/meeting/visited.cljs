@@ -49,6 +49,11 @@
   (fn [db _]
     (get-in db [:meetings :visited-hashes])))
 
+(rf/reg-sub
+  :meetings.visited/all
+  (fn [db _]
+    (get-in db [:meetings :visited])))
+
 (rf/reg-event-db
   :meeting.visited/store-from-backend
   (fn [db [_ {:keys [meetings]}]]

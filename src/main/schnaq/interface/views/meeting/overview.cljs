@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.meeting.overview
-  (:require [re-frame.core :as rf]
+  (:require [ghostwheel.core :refer [>defn-]]
+            [re-frame.core :as rf]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.text.display-data :as data]
             [schnaq.interface.views.base :as base]
@@ -37,26 +38,36 @@
 
 (defn- meetings-list-view
   "Shows a list of all meetings."
-  []
+  [subscription-key]
   [:div.meetings-list
-   (let [meetings @(rf/subscribe [:meetings/all])]
+   (let [meetings @(rf/subscribe [subscription-key])]
      (for [meeting meetings]
        [:div.py-3 {:key (:db/id meeting)}
         [meeting-entry meeting]]))])
 
 
-(defn- meeting-view
-  "Shows the page for an overview of all meetings"
-  []
-  [:div
+(>defn- meeting-view
+  "Shows the page for an overview of meetings. Takes a subscription-key which
+  must be a keyword referring to a subscription, which returns a collection of
+  meetings."
+  [subscription-key]
+  [keyword? :ret vector?]
+  [:<>
    [base/nav-header]
    [base/header
     (data/labels :meetings/header)]
    [:div.container.py-4
-    [meetings-list-view]]])
+    [meetings-list-view subscription-key]]])
 
-(defn meeting-view-entry []
-  [meeting-view])
+(defn meeting-view-entry
+  "Render all meetings."
+  []
+  [meeting-view :meetings/all])
+
+(defn meeting-view-visited
+  "Render visited meetings."
+  []
+  [meeting-view :meetings.visited/all])
 
 ;; #### Subs ####
 
