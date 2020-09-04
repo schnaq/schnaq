@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.errors
   (:require [cljs.pprint :refer [pprint]]
+            [oops.core :refer [oset!]]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.views.base :as base]
             [re-frame.core :as rf]))
@@ -26,6 +27,25 @@
 
 (defn invalid-admin-link-view-entrypoint []
   [invalid-admin-link-view])
+
+(defn not-found-view []
+  "The view that is displayed with a 404"
+  (.replace (.-location js/window) "/404/"))
+
+(defn not-found-view-entrypoint []
+  [not-found-view])
+
+(defn true-404-page
+  []
+  "The 404 page the user gets to see."
+  [:<>
+   [base/nav-header]
+   [:div
+    [:h1 "Seite nicht vorhanden"]
+    [:p "Der Link dem Sie gefolgt sind existiert leider nicht."]]])
+
+(defn true-404-entrypoint []
+  [true-404-page])
 
 (rf/reg-event-fx
   :ajax-failure
