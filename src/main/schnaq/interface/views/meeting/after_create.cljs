@@ -1,15 +1,14 @@
 (ns schnaq.interface.views.meeting.after-create
-  (:require ["jquery" :as jquery]
-            [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.utils.clipboard :as clipboard]
+  (:require [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
-            [ghostwheel.core :refer [>defn-]]
+            [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]))
+            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.utils.clipboard :as clipboard]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.base :as base]))
 
 (>defn- get-share-link
   [current-route]
@@ -34,11 +33,11 @@
   (reagent/create-class
     {:component-did-mount
      (fn [_]
-       (.tooltip (jquery (str "#meeting-link-form-" id-extra))))
+       (js-wrap/tooltip (str "#meeting-link-form-" id-extra)))
      :component-will-unmount
      (fn [_]
-       (.tooltip (jquery (str "#meeting-link-form-" id-extra)) "disable")
-       (.tooltip (jquery (str "#meeting-link-form-" id-extra)) "dispose"))
+       (js-wrap/tooltip (str "#meeting-link-form-" id-extra) "disable")
+       (js-wrap/tooltip (str "#meeting-link-form-" id-extra) "dispose"))
      :reagent-render
      (fn []
        (let [display-content (create-link-fn @(rf/subscribe [:navigation/current-route]))
