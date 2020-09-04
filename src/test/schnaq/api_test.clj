@@ -161,24 +161,24 @@
   (let [test-regex (partial re-matches api/allowed-origin)]
     (testing "Valid origins for production mode."
       (are [origin] (not (nil? (test-regex origin)))
-        "api.schnaq.com"
-        "schnaq.com"
-        "www.schnaq.com"
-        "https://api.schnaq.com"
-        "https://schnaq.com"
-        "https://schnaq.com/?kangaroo=rocks"
-        "api.staging.schnaq.com"
-        "staging.schnaq.com"
-        "https://api.staging.schnaq.com"
-        "https://staging.schnaq.com"
-        "https://staging.schnaq.com/meetings/create"))
+                    "api.schnaq.com"
+                    "schnaq.com"
+                    "www.schnaq.com"
+                    "https://api.schnaq.com"
+                    "https://schnaq.com"
+                    "https://schnaq.com/?kangaroo=rocks"
+                    "api.staging.schnaq.com"
+                    "staging.schnaq.com"
+                    "https://api.staging.schnaq.com"
+                    "https://staging.schnaq.com"
+                    "https://staging.schnaq.com/meetings/create"))
     (testing "Invalid origins."
       (are [origin] (nil? (test-regex origin))
-        "localhost"
-        "penguin.books"
-        "christian.rocks"
-        "schnaqi.com"
-        "fakeschnaq.com"))))
+                    "localhost"
+                    "penguin.books"
+                    "christian.rocks"
+                    "schnaqi.com"
+                    "fakeschnaq.com"))))
 
 (deftest meeting-by-hash-as-admin-test
   (let [meeting-by-hash-as-admin #'api/meeting-by-hash-as-admin
