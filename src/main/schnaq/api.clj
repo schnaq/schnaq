@@ -147,7 +147,9 @@
     (let [meetings (if (string? hashes)
                      [(db/meeting-by-hash hashes)]
                      (map db/meeting-by-hash hashes))]
-      (ok {:meetings meetings}))
+      (if-not (or (nil? meetings) (= [nil] meetings))
+        (ok {:meetings meetings})
+        (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
     (bad-request {:error "Meetings could not be loaded."})))
 
 (defn- meeting-by-hash-as-admin
