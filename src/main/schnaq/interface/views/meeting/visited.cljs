@@ -62,11 +62,12 @@
 (rf/reg-event-fx
   :meetings.visited/load
   (fn [{:keys [db]} _]
-    (when-let [visited-hashes (get-in db [:meetings :visited-hashes])]
-      {:fx [[:http-xhrio {:method :get
-                          :uri (str (:rest-backend config) "/meetings/by-hashes")
-                          :params {:share-hashes visited-hashes}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:meeting.visited/store-from-backend]
-                          :on-failure [:ajax-failure]}]]})))
+    (let [visited-hashes (get-in db [:meetings :visited-hashes])]
+      (when-not (empty? visited-hashes)
+        {:fx [[:http-xhrio {:method :get
+                            :uri (str (:rest-backend config) "/meetings/by-hashes")
+                            :params {:share-hashes visited-hashes}
+                            :format (ajax/transit-request-format)
+                            :response-format (ajax/transit-response-format)
+                            :on-success [:meeting.visited/store-from-backend]
+                            :on-failure [:ajax-failure]}]]}))))
