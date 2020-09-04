@@ -35,6 +35,10 @@
     {:component-did-mount
      (fn [_]
        (.tooltip (jquery (str "#meeting-link-form-" id-extra))))
+     :component-will-unmount
+     (fn [_]
+       (.tooltip (jquery (str "#meeting-link-form-" id-extra)) "disable")
+       (.tooltip (jquery (str "#meeting-link-form-" id-extra)) "dispose"))
      :reagent-render
      (fn []
        (let [display-content (create-link-fn @(rf/subscribe [:navigation/current-route]))
