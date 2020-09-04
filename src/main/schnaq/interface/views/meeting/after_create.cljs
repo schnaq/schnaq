@@ -40,7 +40,7 @@
        (let [display-content (create-link-fn @(rf/subscribe [:navigation/current-route]))
              meeting-link-id (str "meeting-link" id-extra)]
          [:div.pb-4
-          [:form.form.create-meeting-form.form-inline.row
+          [:form.form.create-meeting-form.d-flex
            {:id (str "meeting-link-form-" id-extra)
             :on-click (fn [e]
                         (js-wrap/prevent-default e)
@@ -51,56 +51,52 @@
                                           :body (labels :meeting/link-copied-success)
                                           :context :info}]))
             :data-toggle "tooltip"
-            :data-placement "right"
+            :data-placement "bottom"
             :title (labels :meeting/copy-link-tooltip)}
-           [:input.form-control.form-round.col-10.col-md-11.copy-link-form.clickable-no-hover
+           [:input.form-control.form-round.copy-link-form.clickable-no-hover
             {:id meeting-link-id
              :type "text"
              :value display-content
              :readOnly true}]
-           [:label.col-2.col-md-1.clickable-no-hover {:for meeting-link-id}
+           [:label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
             [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]]))}))
 
 (defn img-text
   "Create one icon in a grid"
   [path-to-img heading]
-
   [:div.d-flex.flex-row.p-1
-   [:div [:img {:src path-to-img}]]
-   [:span [:h5 heading]]])
+   [:div
+    [:img {:src path-to-img}]
+    [:span [:h5 heading]]]])
 
 (defn- educate-element []
   [:div.row.mb-3
-   [:div.col-11
-    [:div.row
-     [:div.col-lg-6.share-link-icons
-      (img-text (img-path :elephant-share)
-                (labels :meeting/educate-on-link-text))]
-     [:div.col-lg-6.share-link-icons
-      (img-text (img-path :elephant-talk)
-                (labels :meetings/educate-on-link-text-subtitle))]]]])
+   [:div.col-12.col-md-6.share-link-icons
+    [img-text (img-path :elephant-share)
+     (labels :meeting/educate-on-link-text)]]
+   [:div.col-12.col-md-6.share-link-icons
+    [img-text (img-path :elephant-talk)
+     (labels :meetings/educate-on-link-text-subtitle)]]])
 
 (defn- educate-admin-element [share-hash edit-hash]
   [:div.row.mb-3
-   [:div.col-11
-    [:div.row
-     ;; edit
-     [:div.col-lg-6
-      [:div.share-link-icons
-       (img-text (img-path :elephant-erase)
-                 (labels :meeting/educate-on-edit))]
-      [:button.btn.button-secondary.btn-lg.float-left.my-2.span-container
-       {:role "button"
-        :on-click #(rf/dispatch [:navigation/navigate
-                                 :routes.meeting/edit
-                                 {:share-hash share-hash :edit-hash edit-hash}])}
-       (labels :meetings/edit-schnaq-button)]]
-     ;; admin hash
-     [:div.col-lg-6.share-link-icons
-      (img-text (img-path :elephant-admin)
-                (labels :meeting/educate-on-admin))
-      [:div.py-3
-       [copy-link-form get-edit-link "edit-hash"]]]]]])
+   ;; edit
+   [:div.col-md-6
+    [:div.share-link-icons
+     [img-text (img-path :elephant-erase)
+      (labels :meeting/educate-on-edit)]]
+    [:button.btn.button-secondary.btn-lg.float-left.my-2.span-container
+     {:role "button"
+      :on-click #(rf/dispatch [:navigation/navigate
+                               :routes.meeting/edit
+                               {:share-hash share-hash :edit-hash edit-hash}])}
+     (labels :meetings/edit-schnaq-button)]]
+   ;; admin hash
+   [:div.col-md-6.share-link-icons
+    [img-text (img-path :elephant-admin)
+     (labels :meeting/educate-on-admin)]
+    [:div.py-3
+     [copy-link-form get-edit-link "edit-hash"]]]])
 
 (defn- after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
