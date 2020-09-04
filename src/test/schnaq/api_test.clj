@@ -202,6 +202,9 @@
         share-hash2 "graph-hash"]
     (testing "No hash provided, no meeting returned."
       (is (= 400 (:status (meetings-by-hashes {})))))
+    (testing "Invalid hash returns no meeting."
+      (is (= 404 (:status (meetings-by-hashes
+                            {:params {:share-hashes "something-non-existent"}})))))
     (testing "Querying by a single valid hash returns a meeting."
       (let [api-call (meetings-by-hashes {:params {:share-hashes share-hash1}})]
         (is (= 200 (:status api-call)))
