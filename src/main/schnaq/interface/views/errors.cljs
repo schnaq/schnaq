@@ -1,9 +1,8 @@
 (ns schnaq.interface.views.errors
   (:require [cljs.pprint :refer [pprint]]
-            [oops.core :refer [oset!]]
+            [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels img-path]]
-            [schnaq.interface.views.base :as base]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.base :as base]))
 
 (defn- educate-element []
   [:div
@@ -28,16 +27,17 @@
 (defn invalid-admin-link-view-entrypoint []
   [invalid-admin-link-view])
 
-(defn not-found-view []
+(defn not-found-view
   "The view that is displayed with a 404"
+  []
   (.replace (.-location js/window) "/404/"))
 
 (defn not-found-view-entrypoint []
   [not-found-view])
 
 (defn true-404-page
-  []
   "The 404 page the user gets to see."
+  []
   [:<>
    [base/nav-header]
    [:div
