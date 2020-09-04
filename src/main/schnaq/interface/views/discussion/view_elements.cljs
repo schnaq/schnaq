@@ -125,8 +125,8 @@
   "Text input for adding a statement"
   []
   [:div.mt-4
-   [:input.form-control.discussion-text-input.mb-1
-    {:type "text" :name "premise-text"
+   [:textarea.form-control.discussion-text-input.mb-1
+    {:name "premise-text" :wrap "soft" :rows 2
      :auto-complete "off"
      :required true
      :placeholder (labels :discussion/premise-placeholder)}]
