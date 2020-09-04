@@ -2,11 +2,11 @@
 
 
 (def default-db
-  {:meetings [{:db/id "Fake"
-               :meeting/title "Jour Fixé every day"
-               :meeting/description "Whatever"
-               :meeting/share-hash "test-123-456"
-               :meeting/author "Wegi"}]
+  {:meetings {:all [{:db/id "Fake"
+                     :meeting/title "Jour Fixé every day"
+                     :meeting/description "Whatever"
+                     :meeting/share-hash "test-123-456"
+                     :meeting/author "Wegi"}]}
    :current-page :home
    :controls {:username-input {:show? false}}
    :history {:full-context []}

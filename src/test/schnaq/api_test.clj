@@ -161,43 +161,64 @@
   (let [test-regex (partial re-matches api/allowed-origin)]
     (testing "Valid origins for production mode."
       (are [origin] (not (nil? (test-regex origin)))
-        "api.schnaq.com"
-        "schnaq.com"
-        "www.schnaq.com"
-        "https://api.schnaq.com"
-        "https://schnaq.com"
-        "https://schnaq.com/?kangaroo=rocks"
-        "api.staging.schnaq.com"
-        "staging.schnaq.com"
-        "https://api.staging.schnaq.com"
-        "https://staging.schnaq.com"
-        "https://staging.schnaq.com/meetings/create"))
+                    "api.schnaq.com"
+                    "schnaq.com"
+                    "www.schnaq.com"
+                    "https://api.schnaq.com"
+                    "https://schnaq.com"
+                    "https://schnaq.com/?kangaroo=rocks"
+                    "api.staging.schnaq.com"
+                    "staging.schnaq.com"
+                    "https://api.staging.schnaq.com"
+                    "https://staging.schnaq.com"
+                    "https://staging.schnaq.com/meetings/create"))
     (testing "Invalid origins."
       (are [origin] (nil? (test-regex origin))
-        "localhost"
-        "penguin.books"
-        "christian.rocks"
-        "schnaqi.com"
-        "fakeschnaq.com"))))
+                    "localhost"
+                    "penguin.books"
+                    "christian.rocks"
+                    "schnaqi.com"
+                    "fakeschnaq.com"))))
 
 (deftest meeting-by-hash-as-admin-test
   (let [meeting-by-hash-as-admin #'api/meeting-by-hash-as-admin
-        valid-share-hash "valid-share-hash"
-        valid-edit-hash "valid-edit-hash"
-        _ (db/add-meeting {:meeting/title "Schni Schna Schnaqqi"
-                           :meeting/share-hash valid-share-hash
-                           :meeting/edit-hash valid-edit-hash
-                           :meeting/start-date (db/now)
-                           :meeting/end-date (db/now)
-                           :meeting/author (db/add-user-if-not-exists "Christian")})
-        request {:body-params {:share-hash valid-share-hash
-                               :edit-hash valid-edit-hash}}
-        req-wrong-edit-hash {:body-params {:share-hash valid-share-hash
+        share-hash "graph-hash"
+        edit-hash "graph-edit-hash"
+        request {:body-params {:share-hash share-hash
+                               :edit-hash edit-hash}}
+        req-wrong-edit-hash {:body-params {:share-hash share-hash
                                            :edit-hash "👾"}}
         req-wrong-share-hash {:body-params {:share-hash "razupaltuff"
-                                            :edit-hash valid-edit-hash}}]
+                                            :edit-hash edit-hash}}]
     (testing "Valid hashes are ok."
       (is (= 200 (:status (meeting-by-hash-as-admin request)))))
     (testing "Wrong hashes are forbidden."
       (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-edit-hash))))
       (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-share-hash)))))))
+
+(deftest meetings-by-hashes-test
+  (let [meetings-by-hashes #'api/meetings-by-hashes
+        share-hash1 "89eh32hoas-2983ud"
+        share-hash2 "graph-hash"]
+    (testing "No hash provided, no meeting returned."
+      (is (= 400 (:status (meetings-by-hashes {})))))
+    (testing "Invalid hash returns no meeting."
+      (is (= 404 (:status (meetings-by-hashes
+                            {:params {:share-hashes "something-non-existent"}})))))
+    (testing "Querying by a single valid hash returns a meeting."
+      (let [api-call (meetings-by-hashes {:params {:share-hashes share-hash1}})]
+        (is (= 200 (:status api-call)))
+        (is (= 1 (count (get-in api-call [:body :meetings]))))
+        (is (s/valid? ::models/meeting (first (get-in api-call [:body :meetings]))))))
+    (testing "A valid hash packed into a collection should also work."
+      (let [api-call (meetings-by-hashes {:params {:share-hashes [share-hash1]}})]
+        (is (= 200 (:status api-call)))
+        (is (= 1 (count (get-in api-call [:body :meetings]))))
+        (is (s/valid? ::models/meeting (first (get-in api-call [:body :meetings]))))))
+    (testing "Asking for multiple valid hashes, returns a list of valid meetings."
+      (let [api-call (meetings-by-hashes {:params {:share-hashes [share-hash1 share-hash2]}})]
+        (is (= 200 (:status api-call)))
+        (is (= 2 (count (get-in api-call [:body :meetings]))))
+        (is (every? true?
+                    (map (partial s/valid? ::models/meeting)
+                         (get-in api-call [:body :meetings]))))))))

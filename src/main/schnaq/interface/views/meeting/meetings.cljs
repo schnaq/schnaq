@@ -89,10 +89,11 @@
                                          :description description}})
      :fx [[:dispatch [:agenda/send-all]]]}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :meeting/select-current
-  (fn [db [_ meeting]]
-    (assoc-in db [:meeting :selected] meeting)))
+  (fn [{:keys [db]} [_ meeting]]
+    {:db (assoc-in db [:meeting :selected] meeting)
+     :fx [[:dispatch [:meeting.visited/to-localstorage (:meeting/share-hash meeting)]]]}))
 
 (rf/reg-sub
   :meeting/selected

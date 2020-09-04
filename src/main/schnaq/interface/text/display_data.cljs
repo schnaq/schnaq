@@ -9,10 +9,9 @@
      ;; navbar labels
      :nav-startpage "Home"
      :nav-example "Examples"
-     :nav-meeting "Schnaqs"
+     :nav-meeting "Alle schnaqs"
      :nav-meeting-create "Schnaq erstellen"
      :nav-meeting-agenda "Agenda erzeugen"
-     :nav-meeting-last-added "Zuletzt erstellter schnaq"
 
      ;; startpage header
      :start-page-header "schnaq"
@@ -63,6 +62,11 @@
      :meetings/edit-schnaq-button "schnaq editieren"
 
      :meeting.step2/button "Schritt 2: Agenda hinzufügen"
+
+     ;; schnaqs not found
+     :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
+     :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
+
 
      ;; Create Agenda
      :agenda/header "Agenda erstellen"
@@ -159,10 +163,11 @@
      :graph/heading "Diskussionsübersicht"
 
      ;; Route Link Texts
-     :router/all-meetings "Alle Schnaqs"
+     :router/all-meetings "Alle schnaqs"
      :router/all-feedbacks "Alle Feedbacks"
      :router/create-meeting "Schnaq anlegen"
-     :router/meeting-created "Zuletzt angelegtes Schnaq"
+     :router/meeting-created "Zuletzt angelegter schnaq"
+     :router/my-schnaqs "Meine schnaqs"
      :router/show-single-meeting "Schnaq anzeigen"
      :router/add-agendas "Agendas hinzufügen"
      :router/start-discussion "Starte Besprechung"

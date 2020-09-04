@@ -120,7 +120,8 @@
 ;; nav header
 
 (defn nav-header []
-  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])]
+  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
+        visited-hashes @(rf/subscribe [:meetings.visited/all-hashes])]
     ;; collapsable navbar
     [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
      ;; logo
@@ -141,13 +142,15 @@
         (when-not toolbelt/production?
           [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
         [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meeting/create)} (labels :nav-meeting-create)]]
+        (when-not (empty? visited-hashes)
+          [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meetings/my-schnaqs)} (labels :router/my-schnaqs)]])
         (when-not (nil? edit-hash)
           [:li.nav-item
            [:div.nav-link.clickable
             {:on-click #(rf/dispatch [:navigation/navigate
                                       :routes.meeting/created
                                       {:share-hash share-hash :edit-hash edit-hash}])}
-            (labels :nav-meeting-last-added)]])]
+            (labels :router/meeting-created)]])]
        ;; name input
        [username-bar-view]]]]))
 

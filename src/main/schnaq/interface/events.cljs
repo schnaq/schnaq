@@ -67,12 +67,13 @@
     {:db schnaq-db/default-db
      :fx [[:dispatch [:load/meetings]]
           [:dispatch [:username/from-localstorage]]
-          [:dispatch [:load/last-added-meeting]]]}))
+          [:dispatch [:load/last-added-meeting]]
+          [:dispatch [:meetings.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-event-db
   :init-from-backend
   (fn [db [_ all-meetings]]
-    (assoc db :meetings all-meetings)))
+    (assoc-in db [:meetings :all] all-meetings)))
 
 (rf/reg-event-db
   :admin/set-password
