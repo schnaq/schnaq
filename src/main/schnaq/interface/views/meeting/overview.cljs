@@ -49,9 +49,9 @@
          "🙈 "
          (labels :schnaqs.not-found/alert-lead)]
         [:p (labels :schnaqs.not-found/alert-body)]
-        [:div
-         [:a.btn.btn-outline-primary {:href (reitfe/href :routes.meeting/create)}
-          (labels :nav-meeting-create)]]]
+        [:div.btn.btn-outline-primary
+         {:on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
+         (labels :nav-meeting-create)]]
        (for [meeting meetings]
          [:div.py-3 {:key (:db/id meeting)}
           [meeting-entry meeting]])))])
