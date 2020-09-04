@@ -166,7 +166,7 @@
      :router/all-meetings "Alle schnaqs"
      :router/all-feedbacks "Alle Feedbacks"
      :router/create-meeting "Schnaq anlegen"
-     :router/meeting-created "Zuletzt angelegtes schnaq"
+     :router/meeting-created "Zuletzt angelegter schnaq"
      :router/my-schnaqs "Meine schnaqs"
      :router/show-single-meeting "Schnaq anzeigen"
      :router/add-agendas "Agendas hinzufügen"
