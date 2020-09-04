@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.discussion.carousel
   (:require ["jquery" :as jquery]
             [re-frame.core :as rf]
-            [schnaq.interface.views.discussion.view-elements :as view]))
+            [schnaq.interface.views.discussion.view-elements :as view]
+            [reagent.core :as reagent]))
 
 
 (defn- carousel-indicators
@@ -49,11 +50,43 @@
       [:span.carousel-control-next-icon {:aria-hidden "true"}]
       [:span.sr-only "Next"]]]))
 
+
+(defn- statement-carousel
+  "reagent component to launch a carousel which does not spin
+  and sets the current element as selected statement"
+  [id statements on-click]
+  (let [id# (str "#" id)
+        statements-atom (reagent/atom statements)
+        event-name "slid.bs.carousel"
+        add-listener  #(.on (jquery id#) event-name
+                             (fn []
+                               (let [index (.index (jquery "div.active"))
+                                          selected-statement (nth % index)]
+                                      (println selected-statement))))
+        remove-listener #(.off (jquery id#) event-name)]
+    (reagent/create-class
+      {:reagent-render
+       (fn [] [statement-carousel-div id @statements-atom on-click])
+       :component-did-mount
+       (fn [_comp]
+         ;; on select function for current carousel element
+         (add-listener @statements-atom))
+       :component-did-update
+       (fn [this _argv]
+         (let [[_ _ new-statements] (reagent/argv this)]
+           (reset! statements-atom new-statements)
+           (remove-listener)
+           (add-listener @statements-atom)
+           ))
+       :component-will-unmount
+       (fn [] (remove-listener))
+       :display-name "carousel-component"})))
+
 (defn premises-carousel [premises]
   (let [id "carouselIndicators"
         function (fn [premise]
                    #(rf/dispatch [:discussion/continue :premises/select premise]))]
-    [statement-carousel-div id premises function]))
+    [statement-carousel id premises function]))
 
 (defn view [premises]
   [:div.container.px-0
