@@ -24,7 +24,8 @@
    ;; set first indexed element as selected
    (map-indexed
      (fn [index premise]
-       (let [params {:key (:db/id premise)}
+       (let [params {:key (:db/id premise)
+                     :data-pause true}
              content [:div.premise-carousel-item
                       {:on-click (on-click premise)}
                       [view/statement-bubble premise]]]
