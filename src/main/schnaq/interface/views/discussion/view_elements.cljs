@@ -98,13 +98,15 @@
    {:on-submit (fn [e] (js-wrap/prevent-default e)
                  (rf/dispatch [:discussion/continue :starting-argument/new
                                (oget e [:target :elements])]))}
-   [:input.form-control.discussion-text-input.mb-5
-    {:type "text" :name "conclusion-text"
+   [:textarea.form-control.discussion-text-input.mb-5
+    {:name "conclusion-text" :wrap "soft" :rows 2
      :auto-complete "off"
+     :required true
      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-   [:input.form-control.discussion-text-input.mb-1
-    {:type "text" :name "premise-text"
+   [:textarea.form-control.discussion-text-input.mb-1
+    {:name "premise-text" :wrap "soft" :rows 2
      :auto-complete "off"
+     :required true
      :placeholder (labels :discussion/add-argument-premise-placeholder)}]
    [:div.text-center.button-spacing-top
     [:button.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
@@ -122,8 +124,8 @@
   "Text input for adding a statement"
   []
   [:div.mt-4
-   [:input.form-control.discussion-text-input.mb-1
-    {:type "text" :name "premise-text"
+   [:textarea.form-control.discussion-text-input.mb-1
+    {:name "premise-text" :wrap "soft" :rows 2
      :auto-complete "off"
      :required true
      :placeholder (labels :discussion/premise-placeholder)}]
