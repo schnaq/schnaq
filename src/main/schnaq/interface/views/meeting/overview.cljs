@@ -1,17 +1,29 @@
 (ns schnaq.interface.views.meeting.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.text.display-data :as data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]))
 
-
-
 (defn- readable-date [date]
   (when date
     [:span (str (.toLocaleDateString date (language/locale)))]))
+
+(defn- no-meetings-found
+  "Show error message when no meetings were loaded."
+  []
+  [:div.alert.alert-primary.text-center
+   [:p.lead
+    "🙈 "
+    (labels :schnaqs.not-found/alert-lead)]
+   [:p (labels :schnaqs.not-found/alert-body)]
+   [:div.btn.btn-outline-primary
+    {:on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
+    (labels :nav-meeting-create)]])
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- meeting-entry
   "Displays a single meeting element of the meeting list"
@@ -44,18 +56,10 @@
   [:div.meetings-list
    (let [meetings @(rf/subscribe [subscription-key])]
      (if (empty? meetings)
-       [:div.alert.alert-primary.text-center
-        [:p.lead
-         "🙈 "
-         (labels :schnaqs.not-found/alert-lead)]
-        [:p (labels :schnaqs.not-found/alert-body)]
-        [:div.btn.btn-outline-primary
-         {:on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
-         (labels :nav-meeting-create)]]
+       [no-meetings-found]
        (for [meeting meetings]
          [:div.py-3 {:key (:db/id meeting)}
           [meeting-entry meeting]])))])
-
 
 (>defn- meeting-view
   "Shows the page for an overview of meetings. Takes a subscription-key which
