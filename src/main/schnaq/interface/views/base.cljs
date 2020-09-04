@@ -142,7 +142,7 @@
         (when-not toolbelt/production?
           [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
         [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meeting/create)} (labels :nav-meeting-create)]]
-        (when visited-hashes
+        (when-not (empty? visited-hashes)
           [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meetings/my-schnaqs)} (labels :router/my-schnaqs)]])
         (when-not (nil? edit-hash)
           [:li.nav-item

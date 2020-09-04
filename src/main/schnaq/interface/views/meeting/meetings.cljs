@@ -5,8 +5,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.meeting.visited :as visited]))
+            [schnaq.interface.views.base :as base]))
 
 ;; #### Helpers ####
 
