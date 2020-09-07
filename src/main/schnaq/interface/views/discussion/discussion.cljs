@@ -129,8 +129,7 @@
             {:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
         (if (>= 0 keep-n)
           {:fx [[:dispatch [:discussion.history/clear]]
-                [:dispatch [:navigation/navigate :routes.discussion/start {:id id
-                                                                           :share-hash share-hash}]]]}
+                [:dispatch [:navigation/navigate :routes.discussion/start {:id id :share-hash share-hash}]]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
            :fx [[:dispatch [:discussion.steps/set-current (:options (nth before-time-travel keep-n))]]]})))))
 
@@ -179,8 +178,7 @@
               (assoc :new/starting-argument-premises premise-text))]
       {:fx [[:dispatch [:added/new-content]]
             [:dispatch [:discussion/continue-http-call [reaction updated-args]]]
-            [:dispatch [[:navigation/navigate :routes.discussion/start {:id id
-                                                                        :share-hash share-hash}]]]
+            [:dispatch [:navigation/navigate :routes.discussion/start {:id id :share-hash share-hash}]]
             [:form/clear form]]})))
 
 (rf/reg-event-fx
