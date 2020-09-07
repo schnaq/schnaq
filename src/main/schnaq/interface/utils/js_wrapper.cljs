@@ -27,3 +27,9 @@
   [selector event-name]
   [string? string? :ret nil?]
   (.off (jquery selector) event-name))
+
+(>defn element-index
+  "Shows the index of the selected element inside of its parent element."
+  [selector]
+  [string? :ret int?]
+  (.index (jquery selector)))

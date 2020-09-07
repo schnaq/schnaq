@@ -1,9 +1,8 @@
 (ns schnaq.interface.views.discussion.carousel
-  (:require ["jquery" :as jquery]
-            [re-frame.core :as rf]
-            [schnaq.interface.views.discussion.view-elements :as view]
-            [reagent.core :as reagent]))
-
+  (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.discussion.view-elements :as view]))
 
 (defn- carousel-indicators
   "Display indicators as circles at bottom"
@@ -13,10 +12,10 @@
    (map (fn [i] (let [params {:key (str "indicator-" (:db/id (nth statements i)))
                               :data-target id#
                               :data-slide-to (str i)}]
-         (if (zero? i)
-           [:li.active params]
-           [:li params])))
-     (range (count statements)))])
+                  (if (zero? i)
+                    [:li.active params]
+                    [:li params])))
+        (range (count statements)))])
 
 (defn- carousel-content
   "Display statement-bubbles inside a carousel."
@@ -37,7 +36,8 @@
 
 (defn- statement-carousel-div [id statement on-click]
   (let [id# (str "#" id)]
-    [:div.carousel.slide {:data-ride "carousel" :id id}
+    [:div.carousel.slide {:data-ride "carousel" :id id
+                          :data-interval "false"}
      ;; indicator
      [carousel-indicators id# statement]
      ;; content
@@ -57,29 +57,28 @@
   [id statements on-click]
   (let [id# (str "#" id)
         statements-atom (reagent/atom statements)
+        ;; selected-statement is used for demonstration purposes here. It may be unnecessary on
+        ;; the next discussion-flow rework.
+        selected-statement (reagent/atom nil)
         event-name "slid.bs.carousel"
-        add-listener  #(.on (jquery id#) event-name
-                             (fn []
-                               (let [index (.index (jquery "div.active"))
-                                          selected-statement (nth % index)]
-                                      (println selected-statement))))
-        remove-listener #(.off (jquery id#) event-name)]
+        listener-fn #(let [index (js-wrap/element-index "div.active")
+                           active-statement (nth @statements-atom index)]
+                       (reset! selected-statement active-statement))]
     (reagent/create-class
       {:reagent-render
        (fn [] [statement-carousel-div id @statements-atom on-click])
        :component-did-mount
        (fn [_comp]
          ;; on select function for current carousel element
-         (add-listener @statements-atom))
+         (js-wrap/add-listener id# event-name listener-fn))
        :component-did-update
        (fn [this _argv]
-         (let [[_ _ new-statements] (reagent/argv this)]
+         (let [[_ _ new-statements _] (reagent/argv this)]
            (reset! statements-atom new-statements)
-           (remove-listener)
-           (add-listener @statements-atom)
-           ))
+           (js-wrap/remove-listener id# event-name)
+           (js-wrap/add-listener id# event-name listener-fn)))
        :component-will-unmount
-       (fn [] (remove-listener))
+       (fn [] (js-wrap/remove-listener id# event-name))
        :display-name "carousel-component"})))
 
 (defn premises-carousel [premises]
