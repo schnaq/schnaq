@@ -181,7 +181,7 @@
          (-> statement :meta/sub-discussion-info :authors count)]])}))
 
 ;; bubble
-(defn- statement-bubble
+(defn statement-bubble
   "A single bubble of a statement to be used ubiquitously."
   ([statement]
    [statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))])
