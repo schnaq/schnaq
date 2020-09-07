@@ -34,7 +34,9 @@
            [:div.carousel-item params content])))
      statements)])
 
-(defn- statement-carousel-div [id statement on-click]
+(defn- statement-carousel-div
+  "The div containing the carousel element."
+  [id statement on-click]
   (let [id# (str "#" id)]
     [:div.carousel.slide {:data-ride "carousel" :id id
                           :data-interval "false"}
@@ -81,13 +83,15 @@
        (fn [] (js-wrap/remove-listener id# event-name))
        :display-name "carousel-component"})))
 
-(defn premises-carousel [premises]
+(defn- premises-carousel
+  "Displays a carousel containing the input premises"
+  [premises]
   (let [id "carouselIndicators"
         function (fn [premise]
                    #(rf/dispatch [:discussion/continue :premises/select premise]))]
     [statement-carousel id premises function]))
 
-(defn view [premises]
+(defn carousel-element [premises]
   [:div.container.px-0
    [:div#other-premises.others-say-container.inner-shadow-custom
     (when (not-empty premises)

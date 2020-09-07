@@ -95,7 +95,7 @@
       [view/conclusions-list]
       ;; disussion loop
       [:div#discussion-loop
-       [carousel/view premises]
+       [carousel/carousel-element premises]
        [view/input-footer allow-new? (add-input-form current-step)]]]]))
 
 (defn discussion-loop-view-entrypoint []
