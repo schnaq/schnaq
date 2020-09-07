@@ -4,13 +4,13 @@
 
 
 (>defn prevent-default
-  "Wraps the js `<Event>.preventDefault` method to prevent cursive warnings."
+  "Wraps the js `<Event>.preventDefault` method to prevent Cursive warnings."
   [event]
   [any? :ret nil?]
   (.preventDefault event))
 
 (>defn stop-propagation
-  "Wraps the js `<Event>.stopPrapagation` method to prevent cursive warnings."
+  "Wraps the js `<Event>.stopPrapagation` method to prevent Cursive warnings."
   [event]
   [any? :ret nil?]
   (.stopPropagation event))
