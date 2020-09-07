@@ -132,6 +132,26 @@
   (let [hash (get-in req [:route-params :hash])]
     (ok (db/meeting-by-hash hash))))
 
+(defn- meetings-by-hashes
+  "Bulk loading of meetings. May be used when users asks for all the meetings
+  they have access to. If only one meeting shall be loaded, compojure packs it
+  into a single string:
+  `{:params {:share-hashes \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"}}`
+
+  If multiple share-hashes are sent to the backend, compojure wraps them into a
+  collection:
+  `{:params {:share-hashes [\"bb328b5e-297d-4725-8c11-f1ed7db39109\"
+                            \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
+  [req]
+  (if-let [hashes (get-in req [:params :share-hashes])]
+    (let [meetings (if (string? hashes)
+                     [(db/meeting-by-hash hashes)]
+                     (map db/meeting-by-hash hashes))]
+      (if-not (or (nil? meetings) (= [nil] meetings))
+        (ok {:meetings meetings})
+        (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
+    (bad-request {:error "Meetings could not be loaded."})))
+
 (defn- meeting-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
   processing in the frontend."
@@ -368,6 +388,7 @@
     (GET "/ping" [] ping)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
+    (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
     (POST "/agendas/add" [] add-agendas)

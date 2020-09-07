@@ -1,16 +1,15 @@
 (ns schnaq.interface.views.discussion.view-elements
-  (:require ["jquery" :as jquery]
-            [ajax.core :as ajax]
+  (:require [ajax.core :as ajax]
             [ghostwheel.core :refer [>defn-]]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]
+            [reagent.core :as reagent]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.logic :as logic]
-            [oops.core :refer [oget]]
-            [re-frame.core :as rf]
-            [reagent.core :as reagent]))
+            [schnaq.interface.views.discussion.logic :as logic]))
 
 (defn up-down-vote
   "Add panel for up and down votes."
@@ -99,13 +98,15 @@
    {:on-submit (fn [e] (js-wrap/prevent-default e)
                  (rf/dispatch [:discussion/continue :starting-argument/new
                                (oget e [:target :elements])]))}
-   [:input.form-control.discussion-text-input.mb-5
-    {:type "text" :name "conclusion-text"
+   [:textarea.form-control.discussion-text-input.mb-5
+    {:name "conclusion-text" :wrap "soft" :rows 2
      :auto-complete "off"
+     :required true
      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-   [:input.form-control.discussion-text-input.mb-1
-    {:type "text" :name "premise-text"
+   [:textarea.form-control.discussion-text-input.mb-1
+    {:name "premise-text" :wrap "soft" :rows 2
      :auto-complete "off"
+     :required true
      :placeholder (labels :discussion/add-argument-premise-placeholder)}]
    [:div.text-center.button-spacing-top
     [:button.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
@@ -123,8 +124,8 @@
   "Text input for adding a statement"
   []
   [:div.mt-4
-   [:input.form-control.discussion-text-input.mb-1
-    {:type "text" :name "premise-text"
+   [:textarea.form-control.discussion-text-input.mb-1
+    {:name "premise-text" :wrap "soft" :rows 2
      :auto-complete "off"
      :required true
      :placeholder (labels :discussion/premise-placeholder)}]
@@ -159,26 +160,32 @@
 (defn- extra-discussion-info-badges
   "Badges that display additional discussion info."
   [statement]
-  (reagent/create-class
-    {:component-did-mount
-     (fn [_]
-       (.popover (jquery "[data-toggle=\"popover\"]")))
-     :reagent-render
-     (fn []
-       [:p.my-0
-        [:span.badge.badge-pill.badge-transparent.mr-2
-         [:i {:class (str "m-auto fas " (fa :comment))}] " "
-         (-> statement :meta/sub-discussion-info :sub-statements)]
-        [:span.badge.badge-pill.badge-transparent.badge-clickable
-         {:data-toggle "popover"
-          :data-trigger "focus"
-          :tabIndex 20
-          :on-click #(js-wrap/stop-propagation %)
-          :title (labels :discussion.badges/user-overview)
-          :data-html true
-          :data-content (build-author-list (get-in statement [:meta/sub-discussion-info :authors]))}
-         [:i {:class (str "m-auto fas " (fa :users))}] " "
-         (-> statement :meta/sub-discussion-info :authors count)]])}))
+  (let [popover-id (str "debater-popover-" (:db/id statement))]
+    (reagent/create-class
+      {:component-did-mount
+       (fn [_]
+         (js-wrap/popover (str "#" popover-id)))
+       :component-will-unmount
+       (fn [_]
+         (js-wrap/popover (str "#" popover-id) "disable")
+         (js-wrap/popover (str "#" popover-id) "dispose"))
+       :reagent-render
+       (fn []
+         [:p.my-0
+          [:span.badge.badge-pill.badge-transparent.mr-2
+           [:i {:class (str "m-auto fas " (fa :comment))}] " "
+           (-> statement :meta/sub-discussion-info :sub-statements)]
+          [:span.badge.badge-pill.badge-transparent.badge-clickable
+           {:id popover-id
+            :data-toggle "popover"
+            :data-trigger "focus"
+            :tabIndex 20
+            :on-click #(js-wrap/stop-propagation %)
+            :title (labels :discussion.badges/user-overview)
+            :data-html true
+            :data-content (build-author-list (get-in statement [:meta/sub-discussion-info :authors]))}
+           [:i {:class (str "m-auto fas " (fa :users))}] " "
+           (-> statement :meta/sub-discussion-info :authors count)]])})))
 
 ;; bubble
 (defn statement-bubble

@@ -41,6 +41,11 @@
        {:name :routes/meetings
         :view meetings-overview/meeting-view-entry
         :link-text (labels :router/all-meetings)}])
+    ["/my"
+     {:name :routes.meetings/my-schnaqs
+      :view meetings-overview/meeting-view-visited
+      :link-text (labels :router/my-schnaqs)
+      :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]
     ["/create"
      {:name :routes.meeting/create
       :view meeting-views/create-meeting-view
@@ -120,4 +125,12 @@
    ["invalid-link"
     {:name :routes/invalid-link
      :view error-views/invalid-admin-link-view-entrypoint
-     :link-text (labels :router/invalid-link)}]])
+     :link-text (labels :router/invalid-link)}]
+   ["error"
+    {:name :routes/cause-not-found
+     :view error-views/not-found-view-entrypoint
+     :link-text (labels :router/not-found-label)}]
+   ["404/"
+    {:name :routes/true-404-view
+     :view error-views/true-404-entrypoint
+     :link-text (labels :router/true-404-view)}]])

@@ -14,6 +14,7 @@
     :meeting/start-date #inst "2019-10-01T01:01:01.000-00:00"
     :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
     :meeting/share-hash "graph-hash"
+    :meeting/edit-hash "graph-edit-hash"
     :meeting/author "user/mike"}])
 
 (def ^:private agendas
