@@ -5,6 +5,7 @@
             [oops.core :refer [oget]]
             [vimsical.re-frame.cofx.inject :as inject]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.views.discussion.carousel :as carousel]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.discussion.view-elements :as view]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -45,12 +46,6 @@
      [view/radio-button "undercut-radio" "premise-choice" "undercut-radio" :discussion/add-undercut false]
      ;; input form
      [view/input-form]]))
-
-(defn- carousel-view [premises]
-  [:div.container.px-0
-   [:div#other-premises.others-say-container.inner-shadow-custom
-    (when (not-empty premises)
-      [view/premises-carousel premises])]])
 
 (defn- add-input-form [state]
   (case state
@@ -100,7 +95,7 @@
       [view/conclusions-list]
       ;; disussion loop
       [:div#discussion-loop
-       [carousel-view premises]
+       [carousel/carousel-element premises]
        [view/input-footer allow-new? (add-input-form current-step)]]]]))
 
 (defn discussion-loop-view-entrypoint []
