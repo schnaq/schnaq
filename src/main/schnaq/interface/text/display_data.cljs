@@ -158,6 +158,9 @@
      :errors/comic-relief "Ups ..."
      :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
      :errors/generic "Es ist ein Fehler aufgetreten"
+     :error.404/heading "Diese Seite existiert nicht \uD83D\uDE49"
+     :error.404/body-text "Die URL der Sie gefolgt sind existiert leider nicht. Möglicherweise hat sich ein Tippfehler
+     oder ein Zeichen zu viel eingeschlichen."
 
      ;; Graph Texts
      :graph/heading "Diskussionsübersicht"

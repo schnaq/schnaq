@@ -38,8 +38,10 @@
    [:div.container.py-3.text-center
     [:img {:src (img-path :elephant-stop)
            :style {:max-width "60%"}}]
-    [:h1 "Seite nicht vorhanden"]
-    [:p "Der Link dem Sie gefolgt sind existiert leider nicht."]]])
+    [:div.alert.alert-danger.mt-4 {:role "alert"}
+     [:h4.alert-heading (labels :error.404/heading)]
+     [:hr]
+     [:p (labels :error.404/body-text)]]]])
 
 (defn true-404-entrypoint []
   "404 view wrapper for routes."
