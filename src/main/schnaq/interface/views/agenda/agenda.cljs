@@ -160,12 +160,14 @@
 (rf/reg-event-fx
   :agenda/set-current-maybe-enter
   (fn [{:keys [db]} [_ agendas]]
-    (let [selected-meeting (get-in db [:meeting :selected])]
-      {:db (assoc-in db [:agendas :current] agendas)
-       :fx [(when (<= (count agendas) 1)
-              [:dispatch [:navigation/navigate :routes.discussion/start
+    (let [selected-meeting (get-in db [:meeting :selected])
+          always-to-db (assoc-in db [:agendas :current] agendas)]
+      (if (<= (count agendas) 1)
+        {:db (assoc-in always-to-db [:agenda :chosen] (first agendas))
+         :fx [[:dispatch [:navigation/navigate :routes.discussion/start
                           {:share-hash (:meeting/share-hash selected-meeting)
-                           :id (-> agendas first :agenda/discussion :db/id)}]])]})))
+                           :id (-> agendas first :agenda/discussion :db/id)}]]]}
+        {:db always-to-db}))))
 
 (rf/reg-event-db
   :agenda/clear-current
