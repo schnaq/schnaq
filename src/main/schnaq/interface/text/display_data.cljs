@@ -158,6 +158,10 @@
      :errors/comic-relief "Ups ..."
      :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
      :errors/generic "Es ist ein Fehler aufgetreten"
+     :error.404/heading "Diese Seite existiert nicht 🙉"
+     :error.404/body-text "Die URL der Sie gefolgt sind existiert leider nicht. Möglicherweise hat sich ein Tippfehler
+     oder ein Zeichen zu viel eingeschlichen."
+     :error.404/help-text "\uD83D\uDC50 Sollten Sie hier landen nachdem Sie etwas auf schnaq.com angeklickt haben, geben Sie uns gerne Bescheid unter "
 
      ;; Graph Texts
      :graph/heading "Diskussionsübersicht"
