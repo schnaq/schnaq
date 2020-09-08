@@ -3,6 +3,7 @@
             [reitit.coercion.spec]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.agenda.agenda :as agenda-views]
             [schnaq.interface.views.agenda.edit :as agenda-edit]
@@ -128,8 +129,10 @@
      :link-text (labels :router/invalid-link)}]
    ["error"
     {:name :routes/cause-not-found
-     :view error-views/not-found-view-entrypoint
-     :link-text (labels :router/not-found-label)}]
+     :view error-views/not-found-view-stub
+     :link-text (labels :router/not-found-label)
+     :controllers [{:identity #(random-uuid)
+                    :start #(js-wrap/replace-url "/404/")}]}]
    ["404/"
     {:name :routes/true-404-view
      :view error-views/true-404-entrypoint

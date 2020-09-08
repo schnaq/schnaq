@@ -45,3 +45,9 @@
    (popover selector "enable"))
   ([selector option]
    (.popover (jquery selector) option)))
+
+(>defn replace-url
+  "Replaces the current URL in the users window and acts as a redirect."
+  [new-url]
+  [string? :ret nil?]
+  (.replace (.-location js/window) new-url))
