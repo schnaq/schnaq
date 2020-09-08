@@ -35,7 +35,9 @@
   []
   [:<>
    [base/nav-header]
-   [:div
+   [:div.container.py-3.text-center
+    [:img {:src (img-path :elephant-stop)
+           :style {:max-width "60%"}}]
     [:h1 "Seite nicht vorhanden"]
     [:p "Der Link dem Sie gefolgt sind existiert leider nicht."]]])
 
