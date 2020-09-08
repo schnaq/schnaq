@@ -37,12 +37,13 @@
    [base/nav-header]
    [:div.container.py-3.text-center
     [:img {:src (img-path :elephant-stop)
-           :style {:max-width "60%"}}]
+           :style {:max-width "30%"}}]
     [:div.alert.alert-danger.mt-4 {:role "alert"}
      [:h4.alert-heading (labels :error.404/heading)]
      [:hr]
      [:p (labels :error.404/body-text)]
-     [:p.mb-0 (labels :error.404/help-text) [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]]]])
+     [:p.mb-0 (labels :error.404/help-text)
+      [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]]]])
 
 (defn true-404-entrypoint
   "404 view wrapper for routes."
