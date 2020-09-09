@@ -1,9 +1,9 @@
 (ns schnaq.emails
-  (:require [ghostwheel.core :refer [>defn >defn- ?]]
+  (:require [cljs.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn >defn- ?]]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
-            [taoensso.timbre :refer [info error]]
-            [cljs.spec.alpha :as s]))
+            [taoensso.timbre :refer [info error]]))
 
 (def ^:private conn {:host (:sender-host config/email)
                      :ssl true

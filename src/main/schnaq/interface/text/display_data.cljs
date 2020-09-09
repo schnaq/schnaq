@@ -68,6 +68,8 @@
      :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per Email ein"
      :meeting.admin.notifications/emails-successfully-sent-title "Einladungen verschickt!"
      :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Einladungen wurden erfolgreich an die Teilnehmenden versendet."
+     :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
+     :meeting.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
 
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."

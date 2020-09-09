@@ -142,11 +142,21 @@
 
 (rf/reg-event-fx
   :meeting-admin/send-email-invites-success
-  (fn [_ _]
+  (fn [_ [_ {:keys [failed-sendings]}]]
     {:fx [[:dispatch [:notification/add
                       #:notification{:title (labels :meeting.admin.notifications/emails-successfully-sent-title)
                                      :body (labels :meeting.admin.notifications/emails-successfully-sent-body-text)
-                                     :context :success}]]]}))
+                                     :context :success}]]
+          (when (seq failed-sendings)
+            [:dispatch [:notification/add
+                        #:notification{:title (labels :meeting.admin.notifications/sending-failed-title)
+                                       :body [:<>
+                                              (labels :meeting.admin.notifications/sending-failed-lead)
+                                              [:ul
+                                               (for [failed-sending failed-sendings]
+                                                 [:li {:key failed-sending} failed-sending])]]
+                                       :context :warning
+                                       :stay-visible? true}]])]}))
 
 (defn- after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
