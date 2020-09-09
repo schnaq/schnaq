@@ -115,7 +115,7 @@
       {:on-submit (fn [e]
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:meeting.admin/send-email-invites
-                                  (oget e [:target :elements "participant-addresses" :value])]))}
+                                  (oget e [:target :elements])]))}
       [:div.form-group
        [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
        [:textarea.form-control.m-1
@@ -126,27 +126,33 @@
          :placeholder (labels :meeting.admin/addresses-placeholder)}]
        [:button.btn.button-primary.btn-lg.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
 
+
 (rf/reg-event-fx
   :meeting.admin/send-email-invites
-  (fn [{:keys [db]} [_ raw-emails]]
-    (let [recipients (string/split raw-emails #"\s+")
-          last-meeting (get-in db [:meeting :last-added])]
+  (fn [{:keys [db]} [_ form]]
+    (let [raw-emails (oget form ["participant-addresses" :value])
+          recipients (string/split raw-emails #"\s+")
+          current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/emails/send-invites")
                           :format (ajax/transit-request-format)
                           :params {:recipients recipients
-                                   :meeting last-meeting}
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash
+                                   :share-link (get-share-link current-route)}
                           :response-format (ajax/transit-response-format)
-                          :on-success [:meeting-admin/send-email-invites-success]
+                          :on-success [:meeting-admin/send-email-invites-success form]
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
   :meeting-admin/send-email-invites-success
-  (fn [_ [_ {:keys [failed-sendings]}]]
+  (fn [_ [_ form {:keys [failed-sendings]}]]
     {:fx [[:dispatch [:notification/add
                       #:notification{:title (labels :meeting.admin.notifications/emails-successfully-sent-title)
                                      :body (labels :meeting.admin.notifications/emails-successfully-sent-body-text)
                                      :context :success}]]
+          [:form/clear form]
           (when (seq failed-sendings)
             [:dispatch [:notification/add
                         #:notification{:title (labels :meeting.admin.notifications/sending-failed-title)

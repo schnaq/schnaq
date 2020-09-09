@@ -1,5 +1,5 @@
 (ns schnaq.emails
-  (:require [cljs.spec.alpha :as s]
+  (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn- ?]]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
@@ -23,13 +23,13 @@
 (>defn send-mail
   "Sends a single mail to the recipient. Title and content are used as passed."
   [title content recipient]
-  [string? string? (s/coll-of string?) :ret sequential?]
+  [string? string? string? :ret sequential?]
   (if (valid-mail recipient)
     (try
       (send-message conn {:from (:sender-address config/email)
                           :to recipient
                           :subject title
-                          :body [{:type "text/html; charset=utf-8"
+                          :body [{:type "text/plain; charset=utf-8"
                                   :content content}]})
       (info "Sent mail to" recipient)
       (Thread/sleep 100)
@@ -42,7 +42,7 @@
   "Sends an email with a `title` and `content` to all valid recipients.
   Returns a list of invalid addresses and failed sends."
   [title content recipients]
-  [string? string? (s/coll-of string?) :ret map?]
+  [string? string? (s/coll-of string?) :ret any?]
   (reset! failed-sendings '())
   (run! (partial send-mail title content) recipients)
   {:failed-sendings @failed-sendings})

@@ -19,6 +19,7 @@
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
+            [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log])
   (:import (java.util Base64 UUID))
   (:gen-class))
@@ -301,13 +302,14 @@
   "Expects a list of recipients and the meeting which shall be send."
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [meeting recipients]} body-params]
-    (if (valid-credentials? (:share-hash meeting) (:edit-hash meeting))
+  (let [{:keys [share-hash edit-hash recipients share-link]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
       (ok (merge
             {:message "Emails sent successfully"}
-            (emails/send-mails :title :content recipients)))
+            (emails/send-mails (email-templates :invitation/title)
+                               (format (email-templates :invitation/body) share-link)
+                               recipients)))
       (deny-access))))
-
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
