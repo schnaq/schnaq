@@ -3,35 +3,41 @@
             [schnaq.config :as config]
             [taoensso.timbre :refer [info error]]))
 
-(def ^:private mail-template "body der mail - sicher kein Spam!")
-(def conn {:host (:sender-host config/email)
-           :ssl true
-           :user (:sender-address config/email)
-           :pass (:sender-password config/email)})
+(def ^:private conn {:host (:sender-host config/email)
+                     :ssl true
+                     :user (:sender-address config/email)
+                     :pass (:sender-password config/email)})
 
-(defn valid-mail
+(defn- valid-mail
   "Check valid mail"
   [mail]
-  (when (re-matches #"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,10}" mail)
-    mail))
+  (if (re-matches #"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,10}" mail)
+    mail
+    (info (format "Mail validation failed for address %s" mail))))
 
-(defn send-one-mail [recipient]
+(def ^:private failed-sendings (atom '()))
+
+(defn send-one-mail
+  "Sends a single mail to the recipient. Title and content are used as passed."
+  [title content recipient]
   (if (valid-mail recipient)
     (try
       (send-message conn {:from (:sender-address config/email)
                           :to recipient
-                          :subject "EIngeladen zum lullzen - vom Lellinger"
+                          :subject title
                           :body [{:type "text/html; charset=utf-8"
-                                  :content mail-template}]})
+                                  :content content}]})
       (info "Sent mail to" recipient)
-      (Thread/sleep 500)
+      (Thread/sleep 100)
       (catch Exception _
-        (error "Failed to send mail to" recipient)))
-    :invalid-mail))
+        (error "Failed to send mail to" recipient)
+        (swap! failed-sendings conj recipient)))
+    (swap! failed-sendings conj recipient)))
 
-(defn send-all-mails [recipients]
-  (run! send-one-mail recipients))
-
-(comment
-  (send-all-mails ["alexander@schneider.gg" "cmeter@gmail.com"])
-  :end)
+(defn send-all-mails
+  "Sends an email with a `title` and `content` to all valid recipients.
+  Returns a list of invalid addresses and failed sends."
+  [title content recipients]
+  (reset! failed-sendings '())
+  (run! (partial send-one-mail title content) recipients)
+  {:failed-sendings @failed-sendings})
