@@ -66,6 +66,8 @@
      :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
      :meeting.admin/send-invites-button-text "Einladungen versenden"
      :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per Email ein"
+     :meeting.admin.notifications/emails-successfully-sent-title "Einladungen verschickt!"
+     :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Einladungen wurden erfolgreich an die Teilnehmenden versendet."
 
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."

@@ -1,11 +1,13 @@
 (ns schnaq.interface.views.meeting.admin-center
-  (:require [clojure.string :as string]
+  (:require [ajax.core :as ajax]
+            [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -128,7 +130,21 @@
   :meeting.admin/send-email-invites
   (fn [_ [_ raw-emails]]
     (let [emails (string/split raw-emails #"\s+")]
-      {:fx [[:http-xhrio {:todo :here}]]})))
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/send-invite-emails")
+                          :format (ajax/transit-request-format)
+                          :params {:emails emails}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting-admin/send-email-invites-success]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :meeting-admin/send-email-invites-success
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :meeting.admin.notifications/emails-successfully-sent-title)
+                                     :body (labels :meeting.admin.notifications/emails-successfully-sent-body-text)
+                                     :context :success}]]]}))
 
 (defn- after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
