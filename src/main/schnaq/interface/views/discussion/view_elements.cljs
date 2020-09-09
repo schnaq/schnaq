@@ -68,7 +68,7 @@
          [:p {:on-click on-click-back-function}
           [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
       ;; title
-      [:div.col-7.col-lg-10
+      [:div.col-8.col-lg-10
        [:div
         [:h2.clickable-no-hover {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
                                                           {:share-hash share-hash
