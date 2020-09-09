@@ -27,22 +27,24 @@
   "Returns the index of the first occurrence of `elem` in `coll` if its present and
   nil if not."
   [coll elem]
-  (let [maybe-index (.indexOf coll elem)]
-    (if (= maybe-index -1)
-      nil
-      maybe-index)))
+  (when coll
+    (let [maybe-index (.indexOf coll elem)]
+      (when-not (= maybe-index -1)
+        maybe-index))))
 
 (defn args-for-reaction
   "Returns the args for a certain reaction."
   [all-steps all-args reaction]
-  (get all-args (index-of all-steps reaction)))
+  (when-let [idx (index-of all-steps reaction)]
+    (nth all-args idx)))
 
 (defn arg-type->attitude
   "Returns an attitude deduced from an argument-type."
   [arg-type]
   (cond
     (#{:argument.type/attack :argument.type/undercut} arg-type) "disagree"
-    (#{:argument.type/support} arg-type) "agree"))
+    (#{:argument.type/support} arg-type) "agree"
+    :else "neutral"))
 
 (defn submit-new-starting-premise
   "Takes arguments and a form input and calls the next step in the discussion."
