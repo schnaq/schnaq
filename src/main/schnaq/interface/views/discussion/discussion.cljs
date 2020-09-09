@@ -56,7 +56,7 @@
 (defn- discussion-base-page
   "Base discussion view containing a nav header, meeting title and content container."
   [meeting content]
-  [:div
+  [:<>
    [base/nav-header]
    [view/discussion-header-no-subtitle meeting]
    [:div.container.discussion-base
@@ -68,12 +68,11 @@
   []
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page current-meeting
-     [:div
-      [:div.discussion-view-rounded.shadow-custom
-       [view/agenda-header-back-arrow]
-       [view/history-view]
-       [view/conclusions-list]
-       [view/input-field]]]]))
+     [:<>
+      [view/agenda-header-back-arrow]
+      [view/history-view]
+      [view/conclusions-list]
+      [view/input-field]]]))
 
 (defn discussion-start-view-entrypoint []
   [discussion-start-view])
@@ -89,14 +88,11 @@
         premises @(rf/subscribe [:premises-and-undercuts-to-select])]
     [discussion-base-page current-meeting
      [:<>
-      ;; discussion header
       [view/agenda-header-back-arrow #(rf/dispatch [:discussion.history/time-travel])]
       [view/history-view]
       [view/conclusions-list]
-      ;; disussion loop
-      [:div#discussion-loop
-       [carousel/carousel-element premises]
-       [view/input-footer allow-new? (add-input-form current-step)]]]]))
+      [view/input-footer allow-new? (add-input-form current-step)]
+      [carousel/carousel-element premises]]]))
 
 (defn discussion-loop-view-entrypoint []
   [discussion-loop-view])

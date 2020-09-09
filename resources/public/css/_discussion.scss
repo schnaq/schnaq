@@ -57,20 +57,17 @@
 .discussion-view-rounded {
   background: $white;
   border-radius: 2rem;
+  overflow: hidden;
   padding: 0;
+
+  @include media-breakpoint-down(sm) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
 }
 
-.discussion-view-top-rounded {
+.discussion-primary-background {
   background: $primary;
-  border-radius: 2rem 2rem 0 0;
-  color: $white;
-  font-weight: bold;
-  padding: 2rem;
-}
-
-.discussion-view-bottom-rounded {
-  background: $primary;
-  border-radius: 0 0 2rem 2rem;
   color: $white;
   padding: 2rem;
 }
@@ -124,14 +121,7 @@
   padding-top: 2rem;
 
   @include media-breakpoint-down(sm) {
-    padding: 0;
-
-    .discussion-view-top-rounded {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      padding-bottom: 1rem;
-      padding-top: 1rem;
-    }
+    padding: 1rem 0;
   }
 }
 

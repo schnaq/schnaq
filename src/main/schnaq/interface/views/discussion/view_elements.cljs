@@ -60,7 +60,7 @@
 (defn agenda-header-back-arrow [on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         {:keys [meeting/share-hash]} @(rf/subscribe [:meeting/selected])]
-    [:div.discussion-view-top-rounded
+    [:div.discussion-primary-background
      [:div.row
       ;; back arrow
       [:div.col-1.back-arrow
@@ -85,7 +85,7 @@
 
 (defn input-footer [allow-new? content]
   (when allow-new?
-    [:div.discussion-view-bottom-rounded
+    [:div.discussion-primary-background
      content]))
 
 ;; text input
@@ -113,7 +113,7 @@
 
 (defn input-field []
   (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-    [:div.discussion-view-bottom-rounded
+    [:div.discussion-primary-background
      (when allow-new-argument?
        [:div
         [:div.mb-5 [:h5 (labels :discussion/create-argument-heading)]]
