@@ -13,7 +13,7 @@
 
 .statement {
   border-radius: 2rem 0.5rem 0.5rem 2rem;
-  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  box-shadow: $regular-shadow;
   color: $white;
   min-height: 9rem;
   padding: 1rem;
@@ -57,22 +57,19 @@
 .discussion-view-rounded {
   background: $white;
   border-radius: 2rem;
+  overflow: hidden;
   padding: 0;
+
+  @include media-breakpoint-down(sm) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
 }
 
-.discussion-view-top-rounded {
+.discussion-primary-background {
   background: $primary;
-  border-radius: 2rem 2rem 0 0;
   color: $white;
-  font-weight: bold;
-  padding: 2rem;
-}
-
-.discussion-view-bottom-rounded {
-  background: $primary;
-  border-radius: 0 0 2rem 2rem;
-  color: $white;
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .statement-single {
@@ -108,11 +105,6 @@
   opacity: 0.85;
 }
 
-.others-say-container {
-  background: $gray-500;
-  margin-top: 0;
-}
-
 .authors-list {
   color: $gray-900;
   list-style-type: circle;
@@ -124,22 +116,6 @@
   padding-top: 2rem;
 
   @include media-breakpoint-down(sm) {
-    padding: 0;
-
-    .discussion-view-top-rounded {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      padding-bottom: 1rem;
-      padding-top: 1rem;
-    }
-  }
-}
-
-.graph-icon-img {
-  height: 100%;
-  width: 100%;
-
-  @include media-breakpoint-down(md) {
-    max-height: 4rem;
+    padding: 1rem 0;
   }
 }

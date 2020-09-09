@@ -2,6 +2,7 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [reagent.core :as reagent]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.discussion.view-elements :as view]
             [schnaq.meeting.specs :as specs]
@@ -91,9 +92,11 @@
   discussion or for premises in all other cases."
   [statements]
   [(s/coll-of ::specs/statement) :ret :re-frame/component]
-  [:div.container.px-0
-   [:div#other-premises.others-say-container.inner-shadow-custom
-    (when (not-empty statements)
+  (when (seq statements)
+    [:div.container.px-0
+     [:div.carousel-wrapper.inner-shadow-custom
+      [:p.display-6.carousel-header.discussion-primary-background
+       (labels :discussion.carousel/heading)]
       [statement-carousel statements
        (fn [premise]
-         #(rf/dispatch [:discussion/continue :premises/select premise]))])]])
+         #(rf/dispatch [:discussion/continue :premises/select premise]))]]]))

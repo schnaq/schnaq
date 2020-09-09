@@ -107,6 +107,7 @@
      :discussion.badges/user-overview "Alle Teilnehmenden"
      :discussion.notification/new-content-title "Neuer Beitrag!"
      :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
+     :discussion.carousel/heading "Beiträge Anderer"
 
      ;; meetings overview
      :meetings/header "Schnaqs"
@@ -173,6 +174,7 @@
 
      ;; Graph Texts
      :graph/heading "Diskussionsübersicht"
+     :graph.button/text "Zeige Diskussionsgraphen an"
 
      ;; Route Link Texts
      :router/all-meetings "Alle schnaqs"

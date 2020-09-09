@@ -60,7 +60,7 @@
 (defn agenda-header-back-arrow [on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         {:keys [meeting/share-hash]} @(rf/subscribe [:meeting/selected])]
-    [:div.discussion-view-top-rounded
+    [:div.discussion-primary-background
      [:div.row
       ;; back arrow
       [:div.col-1.back-arrow
@@ -68,7 +68,7 @@
          [:p {:on-click on-click-back-function}
           [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
       ;; title
-      [:div.col-7.col-lg-10
+      [:div.col-8.col-lg-10
        [:div
         [:h2.clickable-no-hover {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
                                                           {:share-hash share-hash
@@ -77,7 +77,8 @@
         [:p (:agenda/description agenda)]]]
       [:div.col-3.col-lg-1.graph-icon
        [:img.graph-icon-img.clickable-no-hover
-        {:src (img-path :icon-graph) :alt "icon of graph"
+        {:src (img-path :icon-graph) :alt (labels :graph.button/text)
+         :title (labels :graph.button/text)
          :on-click #(rf/dispatch
                       [:navigation/navigate :routes/graph-view
                        {:id (-> agenda :agenda/discussion :db/id)
@@ -85,7 +86,7 @@
 
 (defn input-footer [allow-new? content]
   (when allow-new?
-    [:div.discussion-view-bottom-rounded
+    [:div.discussion-primary-background
      content]))
 
 ;; text input
@@ -113,7 +114,7 @@
 
 (defn input-field []
   (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-    [:div.discussion-view-bottom-rounded
+    [:div.discussion-primary-background
      (when allow-new-argument?
        [:div
         [:div.mb-5 [:h5 (labels :discussion/create-argument-heading)]]

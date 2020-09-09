@@ -19,7 +19,7 @@
 
 .vote {
   border-radius: 0.25rem 2rem 2rem 0.25rem;
-  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  box-shadow: $regular-shadow;
   cursor: pointer;
   min-height: 4rem;
   padding: 1.25rem 0 0;

@@ -1,3 +1,5 @@
+@import 'variables';
+
 .premise-carousel-item {
   padding: 0 0.5rem 1rem;
 
@@ -36,4 +38,17 @@
 
 .carousel-control-next {
   max-width: 50px;
+}
+
+.carousel-wrapper {
+  background: $gray-600;
+  margin-top: 0;
+}
+
+.carousel-header {
+  border-top: $gray-200 1px solid;
+  color: $white;
+  font-weight: bold;
+  margin-bottom: 0;
+  padding: 1rem 0 0 2rem;
 }
