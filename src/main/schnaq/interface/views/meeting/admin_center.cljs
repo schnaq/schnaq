@@ -128,12 +128,14 @@
 
 (rf/reg-event-fx
   :meeting.admin/send-email-invites
-  (fn [_ [_ raw-emails]]
-    (let [emails (string/split raw-emails #"\s+")]
+  (fn [{:keys [db]} [_ raw-emails]]
+    (let [recipients (string/split raw-emails #"\s+")
+          last-meeting (get-in db [:meeting :last-added])]
       {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/send-invite-emails")
+                          :uri (str (:rest-backend config) "/emails/send-invites")
                           :format (ajax/transit-request-format)
-                          :params {:emails emails}
+                          :params {:recipients recipients
+                                   :meeting last-meeting}
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting-admin/send-email-invites-success]
                           :on-failure [:ajax-failure]}]]})))

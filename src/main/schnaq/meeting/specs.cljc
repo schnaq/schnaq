@@ -1,11 +1,10 @@
 (ns schnaq.meeting.specs
-  (:require #?(:clj [clojure.spec.alpha :as s]
+  (:require #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]))
 
-;; Frontend
+;; Frontend only
 #?(:cljs (s/def :re-frame/component vector?))
-
 
 ;; Common
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))

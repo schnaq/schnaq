@@ -22,6 +22,12 @@
   (:import (java.util Base64 UUID))
   (:gen-class))
 
+(s/def :http/status nat-int?)
+(s/def :http/headers map?)
+(s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
+(s/def :ring/body-params map?)
+(s/def :ring/request (s/keys :req-un [:ring/body-params]))
+
 (>defn- valid-password?
   "Check if the password is a valid."
   [password]
@@ -290,6 +296,17 @@
              (map first)))
     (unauthorized)))
 
+(>defn- send-invite-emails
+  "Expects a list of recipients and the meeting which shall be send."
+  [{:keys [body-params]}]
+  [:ring/request :ret :ring/response]
+  (let [{:keys [meeting recipients]} body-params]
+    (if (valid-credentials? (:share-hash meeting) (:edit-hash meeting))
+      (do
+        :sent-mails-here
+        (ok {:message "Emails sent successfully"}))
+      (deny-access))))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
@@ -404,6 +421,7 @@
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/graph/discussion" [] graph-data-for-agenda)
+    (POST "/emails/send-invites" [] send-invite-emails)
     ;; Analytics routes
     (POST "/analytics/meetings" [] number-of-meetings)
     (POST "/analytics/usernames" [] number-of-usernames)
