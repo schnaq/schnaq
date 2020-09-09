@@ -293,10 +293,7 @@
   :<- [:discussion-step-args]
   (fn [[steps args] _]
     (when (some #(= % :starting-conclusions/select) steps)
-      (->>
-        (logic/index-of steps :starting-conclusions/select)
-        (nth args)
-        :present/conclusions))))
+      (:present/conclusions (logic/args-for-reaction steps args :starting-conclusions/select)))))
 
 (rf/reg-sub
   :premises-to-select
@@ -304,10 +301,7 @@
   :<- [:discussion-step-args]
   (fn [[steps args] _]
     (when (some #{:premises/select} steps)
-      (->>
-        (logic/index-of steps :premises/select)
-        (nth args)
-        :present/premises))))
+      (:present/premises (logic/args-for-reaction steps args :premises/select)))))
 
 (rf/reg-sub
   :premises-and-undercuts-to-select
@@ -315,7 +309,7 @@
   :<- [:discussion-step-args]
   (fn [[steps args] _]
     (when (some #{:premises/select} steps)
-      (let [present-args (nth args (logic/index-of steps :premises/select))]
+      (let [present-args (logic/args-for-reaction steps args :premises/select)]
         (concat (:present/premises present-args)
                 (:present/undercuts present-args))))))
 
