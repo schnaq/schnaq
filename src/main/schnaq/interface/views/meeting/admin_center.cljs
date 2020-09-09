@@ -118,7 +118,7 @@
                                   (oget e [:target :elements])]))}
       [:div.form-group
        [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
-       [:textarea.form-control.m-1
+       [:textarea.form-control.m-1.input-rounded
         {:id input-id
          :name "participant-addresses" :wrap "soft" :rows 3
          :auto-complete "off"
