@@ -15,6 +15,7 @@
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
             [schnaq.discussion :as discussion]
+            [schnaq.emails :as emails]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
@@ -302,9 +303,9 @@
   [:ring/request :ret :ring/response]
   (let [{:keys [meeting recipients]} body-params]
     (if (valid-credentials? (:share-hash meeting) (:edit-hash meeting))
-      (do
-        :sent-mails-here
-        (ok {:message "Emails sent successfully"}))
+      (ok (merge
+            {:message "Emails sent successfully"}
+            (emails/send-mails :title :content recipients)))
       (deny-access))))
 
 
