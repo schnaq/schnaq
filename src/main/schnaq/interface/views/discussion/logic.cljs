@@ -35,7 +35,7 @@
 (defn args-for-reaction
   "Returns the args for a certain reaction."
   [all-steps all-args reaction]
-  (nth all-args (index-of all-steps reaction)))
+  (get all-args (index-of all-steps reaction)))
 
 (defn arg-type->attitude
   "Returns an attitude deduced from an argument-type."
