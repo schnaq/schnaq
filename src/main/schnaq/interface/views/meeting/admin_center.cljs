@@ -103,8 +103,8 @@
 
 (>defn- invite-participants-form
   "A form which allows the sending of the invitation-link to several participants via E-Mail."
-  [share-hash edit-hash]
-  [:meeting/share-hash :meeting/edit-hash :ret :re-frame/component]
+  []
+  [:ret :re-frame/component]
   (let [input-id "participant-email-addresses"]
     [:<>
      [:h4.mt-4 (labels :meeting.admin/send-invites-heading)]
