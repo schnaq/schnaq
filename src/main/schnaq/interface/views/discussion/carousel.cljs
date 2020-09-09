@@ -1,8 +1,11 @@
 (ns schnaq.interface.views.discussion.carousel
-  (:require [re-frame.core :as rf]
+  (:require [cljs.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn]]
             [reagent.core :as reagent]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.discussion.view-elements :as view]))
+            [schnaq.interface.views.discussion.view-elements :as view]
+            [schnaq.meeting.specs :as specs]
+            [re-frame.core :as rf]))
 
 (defn- carousel-indicators
   "Display indicators as circles at bottom"
@@ -52,12 +55,12 @@
       [:span.carousel-control-next-icon {:aria-hidden "true"}]
       [:span.sr-only "Next"]]]))
 
-
 (defn- statement-carousel
   "reagent component to launch a carousel which does not spin
   and sets the current element as selected statement"
-  [id statements on-click]
-  (let [id# (str "#" id)
+  [statements on-click]
+  (let [id "carouselIndicators"
+        id# (str "#" id)
         statements-atom (reagent/atom statements)
         ;; selected-statement is used for demonstration purposes here. It may be unnecessary on
         ;; the next discussion-flow rework.
@@ -83,16 +86,17 @@
        (fn [] (js-wrap/remove-listener id# event-name))
        :display-name "carousel-component"})))
 
-(defn- premises-carousel
-  "Displays a carousel containing the input premises"
-  [premises]
-  (let [id "carouselIndicators"
-        function (fn [premise]
-                   #(rf/dispatch [:discussion/continue :premises/select premise]))]
-    [statement-carousel id premises function]))
-
-(defn carousel-element [premises]
+(>defn carousel-element
+  "Build a carousel. Can either be for conclusions in the beginning of a
+  discussion or for premises in all other cases."
+  [statements for-conclusions?]
+  [(s/coll-of ::specs/statement) boolean? :ret :re-frame/component]
   [:div.container.px-0
    [:div#other-premises.others-say-container.inner-shadow-custom
-    (when (not-empty premises)
-      [premises-carousel premises])]])
+    (when (not-empty statements)
+      (let [on-click (if for-conclusions?
+                       (fn [conclusion]
+                         #(rf/dispatch [:discussion/continue :starting-conclusions/select-again conclusion]))
+                       (fn [premise]
+                         #(rf/dispatch [:discussion/continue :premises/select premise])))]
+        [statement-carousel statements on-click]))]])
