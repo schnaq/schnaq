@@ -23,3 +23,8 @@
 
 (def build-hash
   (or (System/getenv "BUILD_HASH") "dev"))
+
+(def email
+  {:sender-address (or (System/getenv "EMAIL_SENDER_ADDRESS") "noreply@dialogo.io")
+   :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
+   :sender-password (System/getenv "EMAIL_PASSWORD")})
