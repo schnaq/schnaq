@@ -3,6 +3,9 @@
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]))
 
+;; Frontend
+#?(:cljs (s/def :re-frame/component vector?))
+
 
 ;; Common
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))

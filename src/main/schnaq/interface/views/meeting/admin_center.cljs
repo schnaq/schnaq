@@ -101,6 +101,24 @@
     [:div.py-3
      [copy-link-form get-edit-link "edit-hash"]]]])
 
+(>defn- invite-participants-form
+  "A form which allows the sending of the invitation-link to several participants via E-Mail."
+  [share-hash edit-hash]
+  [:meeting/share-hash :meeting/edit-hash :ret :re-frame/component]
+  (let [input-id "participant-email-addresses"]
+    [:<>
+     [:h4.mt-4 (labels :meeting.admin/send-invites-heading)]
+     [:form.form.text-left.mb-5
+      [:div.form-group
+       [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
+       [:textarea.form-control.m-1
+        {:id input-id
+         :name "participant-addresses" :wrap "soft" :rows 3
+         :auto-complete "off"
+         :required true
+         :placeholder (labels :meeting.admin/addresses-placeholder)}]
+       [:button.btn.button-primary.btn-lg.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
+
 (defn- after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
@@ -116,6 +134,7 @@
       [:h4.text-left.mb-3 title]
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
+      [invite-participants-form]
       [educate-admin-element share-hash edit-hash]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
