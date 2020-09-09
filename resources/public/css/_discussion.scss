@@ -13,7 +13,7 @@
 
 .statement {
   border-radius: 2rem 0.5rem 0.5rem 2rem;
-  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  box-shadow: $regular-shadow;
   color: $white;
   min-height: 9rem;
   padding: 1rem;
@@ -117,14 +117,5 @@
 
   @include media-breakpoint-down(sm) {
     padding: 1rem 0;
-  }
-}
-
-.graph-icon-img {
-  height: 100%;
-  width: 100%;
-
-  @include media-breakpoint-down(md) {
-    max-height: 4rem;
   }
 }
