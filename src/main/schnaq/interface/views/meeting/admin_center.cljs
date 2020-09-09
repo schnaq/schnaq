@@ -1,10 +1,13 @@
-(ns schnaq.interface.views.meeting.after-create
-  (:require [ghostwheel.core :refer [>defn-]]
+(ns schnaq.interface.views.meeting.admin-center
+  (:require [ajax.core :as ajax]
+            [clojure.string :as string]
+            [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -101,6 +104,66 @@
     [:div.py-3
      [copy-link-form get-edit-link "edit-hash"]]]])
 
+(>defn- invite-participants-form
+  "A form which allows the sending of the invitation-link to several participants via E-Mail."
+  []
+  [:ret :re-frame/component]
+  (let [input-id "participant-email-addresses"]
+    [:<>
+     [:h4.mt-4 (labels :meeting.admin/send-invites-heading)]
+     [:form.form.text-left.mb-5
+      {:on-submit (fn [e]
+                    (js-wrap/prevent-default e)
+                    (rf/dispatch [:meeting.admin/send-email-invites
+                                  (oget e [:target :elements])]))}
+      [:div.form-group
+       [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
+       [:textarea.form-control.m-1.input-rounded
+        {:id input-id
+         :name "participant-addresses" :wrap "soft" :rows 3
+         :auto-complete "off"
+         :required true
+         :placeholder (labels :meeting.admin/addresses-placeholder)}]
+       [:button.btn.button-primary.btn-lg.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
+
+
+(rf/reg-event-fx
+  :meeting.admin/send-email-invites
+  (fn [{:keys [db]} [_ form]]
+    (let [raw-emails (oget form ["participant-addresses" :value])
+          recipients (string/split raw-emails #"\s+")
+          current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/emails/send-invites")
+                          :format (ajax/transit-request-format)
+                          :params {:recipients recipients
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash
+                                   :share-link (get-share-link current-route)}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting-admin/send-email-invites-success form]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :meeting-admin/send-email-invites-success
+  (fn [_ [_ form {:keys [failed-sendings]}]]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :meeting.admin.notifications/emails-successfully-sent-title)
+                                     :body (labels :meeting.admin.notifications/emails-successfully-sent-body-text)
+                                     :context :success}]]
+          [:form/clear form]
+          (when (seq failed-sendings)
+            [:dispatch [:notification/add
+                        #:notification{:title (labels :meeting.admin.notifications/sending-failed-title)
+                                       :body [:<>
+                                              (labels :meeting.admin.notifications/sending-failed-lead)
+                                              [:ul
+                                               (for [failed-sending failed-sendings]
+                                                 [:li {:key failed-sending} failed-sending])]]
+                                       :context :warning
+                                       :stay-visible? true}]])]}))
+
 (defn- after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
@@ -116,6 +179,7 @@
       [:h4.text-left.mb-3 title]
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
+      [invite-participants-form]
       [educate-admin-element share-hash edit-hash]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]

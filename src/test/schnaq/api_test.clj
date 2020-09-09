@@ -5,7 +5,7 @@
             [dialog.discussion.database :as dialog-db]
             [schnaq.api :as api]
             [schnaq.meeting.database :as db]
-            [schnaq.meeting.models :as models]
+            [schnaq.meeting.specs :as specs]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -19,7 +19,7 @@
                                                                 :meeting/description ""}
                                                       :nickname "Wegi"}})]
       (is (= 201 (:status response)))
-      (is (s/valid? ::models/meeting (-> response :body :new-meeting))))))
+      (is (s/valid? ::specs/meeting (-> response :body :new-meeting))))))
 
 (deftest add-agendas-test
   (testing "Test whether the agenda is correctly validated before passed on."
@@ -209,16 +209,16 @@
       (let [api-call (meetings-by-hashes {:params {:share-hashes share-hash1}})]
         (is (= 200 (:status api-call)))
         (is (= 1 (count (get-in api-call [:body :meetings]))))
-        (is (s/valid? ::models/meeting (first (get-in api-call [:body :meetings]))))))
+        (is (s/valid? ::specs/meeting (first (get-in api-call [:body :meetings]))))))
     (testing "A valid hash packed into a collection should also work."
       (let [api-call (meetings-by-hashes {:params {:share-hashes [share-hash1]}})]
         (is (= 200 (:status api-call)))
         (is (= 1 (count (get-in api-call [:body :meetings]))))
-        (is (s/valid? ::models/meeting (first (get-in api-call [:body :meetings]))))))
+        (is (s/valid? ::specs/meeting (first (get-in api-call [:body :meetings]))))))
     (testing "Asking for multiple valid hashes, returns a list of valid meetings."
       (let [api-call (meetings-by-hashes {:params {:share-hashes [share-hash1 share-hash2]}})]
         (is (= 200 (:status api-call)))
         (is (= 2 (count (get-in api-call [:body :meetings]))))
         (is (every? true?
-                    (map (partial s/valid? ::models/meeting)
+                    (map (partial s/valid? ::specs/meeting)
                          (get-in api-call [:body :meetings]))))))))

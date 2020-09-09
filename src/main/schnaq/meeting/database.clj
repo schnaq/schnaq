@@ -6,6 +6,7 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.config :as config]
             [schnaq.meeting.models :as models]
+            [schnaq.meeting.specs :as specs]
             [schnaq.test-data :as test-data])
   (:import (java.util Date UUID)))
 
@@ -169,8 +170,8 @@
 (>defn add-feedback!
   "Adds a feedback to the database. Returns the id of the newly added feedback."
   [feedback]
-  [::models/feedback :ret int?]
-  (clean-and-add-to-db! feedback ::models/feedback))
+  [::specs/feedback :ret int?]
+  (clean-and-add-to-db! feedback ::specs/feedback))
 
 (defn all-feedbacks
   "Return complete feedbacks from database."
@@ -189,25 +190,25 @@
   Automatically cleans input."
   [meeting]
   [map? :ret int?]
-  (clean-and-add-to-db! meeting ::models/meeting))
+  (clean-and-add-to-db! meeting ::specs/meeting))
 
 (>defn update-meeting
   "Updates a meeting. Returns the id of the newly updated meeting.
   Automatically cleans input. Update of hashes is not allowed."
   [meeting]
   [map? :ret int?]
-  (clean-and-update-db! meeting ::models/meeting-without-hashes))
+  (clean-and-update-db! meeting ::specs/meeting-without-hashes))
 
 (>defn update-agenda
   "Updates an agenda. Object must be complete with all required attributes."
   [agenda]
   [map? :ret int?]
-  (clean-and-update-db! (dissoc agenda :agenda/discussion) ::models/agenda-without-discussion))
+  (clean-and-update-db! (dissoc agenda :agenda/discussion) ::specs/agenda-without-discussion))
 
 (>defn meeting-private-data
   "Return non public meeting data by id."
   [id]
-  [int? :ret ::models/meeting]
+  [int? :ret ::specs/meeting]
   (d/pull (d/db (new-connection)) meeting-pattern id))
 
 (defn all-meetings
@@ -280,7 +281,7 @@
 (>defn agenda
   "Return agenda data by id."
   [id]
-  [int? :ret ::models/agenda]
+  [int? :ret ::specs/agenda]
   (d/pull (d/db (new-connection)) agenda-pattern id))
 
 (defn agendas-by-meeting-hash
@@ -309,7 +310,7 @@
   verify that the agenda belongs to the issue."
   [meeting-hash discussion-id]
   [:meeting/share-hash :agenda/discussion
-   :ret ::models/agenda]
+   :ret ::specs/agenda]
   (ffirst
     (d/q
       '[:find (pull ?agenda agenda-pattern)

@@ -15,12 +15,20 @@
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
             [schnaq.discussion :as discussion]
+            [schnaq.emails :as emails]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
+            [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log])
   (:import (java.util Base64 UUID))
   (:gen-class))
+
+(s/def :http/status nat-int?)
+(s/def :http/headers map?)
+(s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
+(s/def :ring/body-params map?)
+(s/def :ring/request (s/keys :req-un [:ring/body-params]))
 
 (>defn- valid-password?
   "Check if the password is a valid."
@@ -290,6 +298,18 @@
              (map first)))
     (unauthorized)))
 
+(>defn- send-invite-emails
+  "Expects a list of recipients and the meeting which shall be send."
+  [{:keys [body-params]}]
+  [:ring/request :ret :ring/response]
+  (let [{:keys [share-hash edit-hash recipients share-link]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (ok (merge
+            {:message "Emails sent successfully"}
+            (emails/send-mails (email-templates :invitation/title)
+                               (format (email-templates :invitation/body) share-link)
+                               recipients)))
+      (deny-access))))
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
@@ -404,6 +424,7 @@
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/graph/discussion" [] graph-data-for-agenda)
+    (POST "/emails/send-invites" [] send-invite-emails)
     ;; Analytics routes
     (POST "/analytics/meetings" [] number-of-meetings)
     (POST "/analytics/usernames" [] number-of-usernames)

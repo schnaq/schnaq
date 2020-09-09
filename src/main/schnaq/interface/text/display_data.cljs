@@ -60,8 +60,16 @@
      :meetings/continue-with-schnaq-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
-
      :meeting.step2/button "Schritt 2: Agenda hinzufügen"
+
+     :meeting.admin/addresses-label "Teilnehmer-Adressen"
+     :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
+     :meeting.admin/send-invites-button-text "Einladungen versenden"
+     :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per Email ein"
+     :meeting.admin.notifications/emails-successfully-sent-title "Einladungen verschickt!"
+     :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Einladungen wurden erfolgreich an die Teilnehmenden versendet."
+     :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
+     :meeting.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
 
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
