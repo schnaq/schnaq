@@ -93,7 +93,7 @@
   [(s/coll-of ::specs/statement) :ret :re-frame/component]
   [:div.container.px-0
    [:div#other-premises.others-say-container.inner-shadow-custom
-    (when (not-empty statements)
+    (when (seq statements)
       [statement-carousel statements
        (fn [premise]
          #(rf/dispatch [:discussion/continue :premises/select premise]))])]])
