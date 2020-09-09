@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.meeting.admin-center
-  (:require [ghostwheel.core :refer [>defn-]]
+  (:require [clojure.string :as string]
+            [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -109,6 +110,10 @@
     [:<>
      [:h4.mt-4 (labels :meeting.admin/send-invites-heading)]
      [:form.form.text-left.mb-5
+      {:on-submit (fn [e]
+                    (js-wrap/prevent-default e)
+                    (rf/dispatch [:meeting.admin/send-email-invites
+                                  (oget e [:target :elements "participant-addresses" :value])]))}
       [:div.form-group
        [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
        [:textarea.form-control.m-1
@@ -118,6 +123,12 @@
          :required true
          :placeholder (labels :meeting.admin/addresses-placeholder)}]
        [:button.btn.button-primary.btn-lg.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
+
+(rf/reg-event-fx
+  :meeting.admin/send-email-invites
+  (fn [_ [_ raw-emails]]
+    (let [emails (string/split raw-emails #"\s+")]
+      {:fx [[:http-xhrio {:todo :here}]]})))
 
 (defn- after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
