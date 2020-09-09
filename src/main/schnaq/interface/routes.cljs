@@ -10,7 +10,7 @@
             [schnaq.interface.views.discussion.discussion :as discussion-views]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feedback :as feedback]
-            [schnaq.interface.views.meeting.after-create :as meeting-created]
+            [schnaq.interface.views.meeting.admin-center :as meeting-admin]
             [schnaq.interface.views.meeting.meetings :as meeting-views]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.meeting.single :as meeting-single]
@@ -70,7 +70,7 @@
                                 (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))}]}]
       ["/created"
        {:name :routes.meeting/created
-        :view meeting-created/admin-central-view
+        :view meeting-admin/admin-central-view
         :link-text (labels :router/meeting-created)}]]
      ["/"
       {:name :routes.meeting/show

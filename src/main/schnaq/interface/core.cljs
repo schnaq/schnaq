@@ -23,7 +23,7 @@
             [schnaq.interface.views.errors]
             [schnaq.interface.views.feedback]
             [schnaq.interface.views.graph.view]
-            [schnaq.interface.views.meeting.after-create]
+            [schnaq.interface.views.meeting.admin-center]
             [schnaq.interface.views.meeting.meetings]
             [schnaq.interface.views.meeting.overview]
             [schnaq.interface.views.meeting.single]

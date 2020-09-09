@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.meeting.after-create
+(ns schnaq.interface.views.meeting.admin-center
   (:require [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
