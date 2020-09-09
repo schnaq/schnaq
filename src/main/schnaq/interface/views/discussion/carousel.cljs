@@ -89,14 +89,11 @@
 (>defn carousel-element
   "Build a carousel. Can either be for conclusions in the beginning of a
   discussion or for premises in all other cases."
-  [statements for-conclusions?]
-  [(s/coll-of ::specs/statement) boolean? :ret :re-frame/component]
+  [statements]
+  [(s/coll-of ::specs/statement) :ret :re-frame/component]
   [:div.container.px-0
    [:div#other-premises.others-say-container.inner-shadow-custom
     (when (not-empty statements)
-      (let [on-click (if for-conclusions?
-                       (fn [conclusion]
-                         #(rf/dispatch [:discussion/continue :starting-conclusions/select-again conclusion]))
-                       (fn [premise]
-                         #(rf/dispatch [:discussion/continue :premises/select premise])))]
-        [statement-carousel statements on-click]))]])
+      [statement-carousel statements
+       (fn [premise]
+         #(rf/dispatch [:discussion/continue :premises/select premise]))])]])
