@@ -174,6 +174,7 @@
 
      ;; Graph Texts
      :graph/heading "Diskussionsübersicht"
+     :graph.button/text "Zeige Diskussionsgraphen an"
 
      ;; Route Link Texts
      :router/all-meetings "Alle schnaqs"

@@ -77,7 +77,8 @@
         [:p (:agenda/description agenda)]]]
       [:div.col-3.col-lg-1.graph-icon
        [:img.graph-icon-img.clickable-no-hover
-        {:src (img-path :icon-graph) :alt "icon of graph"
+        {:src (img-path :icon-graph) :alt (labels :graph.button/text)
+         :title (labels :graph.button/text)
          :on-click #(rf/dispatch
                       [:navigation/navigate :routes/graph-view
                        {:id (-> agenda :agenda/discussion :db/id)
