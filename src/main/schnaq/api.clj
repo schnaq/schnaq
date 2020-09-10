@@ -79,18 +79,17 @@
                  :meeting/edit-hash edit-hash))
 
 (defn- add-meeting
-  "Adds a meeting to the database.
-  Converts the epoch dates it receives into java Dates.
-  Returns the id of the newly-created meeting as `:id-created`."
-  [req]
-  (let [meeting (-> req :body-params :meeting)
+  "Adds a meeting and (optional) agendas to the database.
+  Returns the newly-created meeting."
+  [request]
+  (let [{:keys [meeting nickname agendas]} (:body-params request)
         final-meeting (add-hashes-to-meeting meeting
                                              (.toString (UUID/randomUUID))
                                              (.toString (UUID/randomUUID)))
-        nickname (-> req :body-params :nickname)
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
+    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id) agendas)
     (created "" {:new-meeting created-meeting})))
 
 (defn- update-meeting!

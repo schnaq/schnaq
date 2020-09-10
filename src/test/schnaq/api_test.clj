@@ -17,7 +17,8 @@
                                                                 :meeting/start-date (db/now)
                                                                 :meeting/end-date (db/now)
                                                                 :meeting/description ""}
-                                                      :nickname "Wegi"}})]
+                                                      :nickname "Wegi"
+                                                      :agendas []}})]
       (is (= 201 (:status response)))
       (is (s/valid? ::specs/meeting (-> response :body :new-meeting))))))
 
