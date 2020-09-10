@@ -123,7 +123,6 @@
           stub-agendas [{:title title
                          :description description}]
           agendas-to-send (if (zero? (count agendas)) stub-agendas (vals agendas))]
-      (println new-meeting)
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/meeting/add")
                           :params {:nickname nickname

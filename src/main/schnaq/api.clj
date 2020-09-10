@@ -89,7 +89,6 @@
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
-    (println agendas)
     (run! #(db/add-agenda-point (:title %) (:description %) meeting-id) agendas)
     (created "" {:new-meeting created-meeting})))
 
