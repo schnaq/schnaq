@@ -171,7 +171,7 @@
 (>defn suggest-meeting-updates
   "Creates a new suggestion for a meeting update."
   [{:keys [db/id meeting/title meeting/description] :as meeting-suggestion} user-id]
-  [::meeting-suggestion-input :ret :db/id]
+  [::meeting-suggestion-input :db/id :ret :db/id]
   (let [clean-suggestion (clean-db-vals meeting-suggestion)]
     (when (s/valid? ::meeting-suggestion-input clean-suggestion)
       (get-in
@@ -182,6 +182,39 @@
                     :meeting.suggestion/description description}])
         [:tempids "temporary-suggestion"]))))
 
+(s/def ::agenda-suggestion-input (s/keys :req-un [:agenda/title :agenda/description :db/id]))
+(s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion))
+(s/def :agenda.suggestion/type #{:agenda.suggestion.type/update :agenda.suggestion.type/new :agenda.suggestion.type/delete})
+
+(defn- build-update-agenda-suggestion
+  [{:keys [db/id agenda/title agenda/description]} user-id]
+  {:agenda.suggestion/agenda id
+   :agenda.suggestion/ideator user-id
+   :agenda.suggestion/title title
+   :agenda.suggestion/description description
+   :agenda.suggestion/type :agenda.suggestion.type/update})
+
+(defn- build-delete-agenda-suggestion
+  [{:keys [db/id]} user-id]
+  {:agenda.suggestion/agenda id
+   :agenda.suggestion/ideator user-id
+   :agenda.suggestion/type :agenda.suggestion.type/delete})
+
+(defn- build-new-agenda-suggestion
+  [{:keys [db/id agenda/title agenda/description]} user-id meeting-id]
+  {:agenda.suggestion/agenda id
+   :agenda.suggestion/ideator user-id
+   :agenda.suggestion/title title
+   :agenda.suggestion/description description
+   :agenda.suggestion/type :agenda.suggestion.type/new
+   :agenda.suggestion/meeting meeting-id})
+
+(>defn suggest-agenda-updates
+  "Creates a new suggestion for an agenda update."
+  [agenda-suggestions user-id]
+  [::agenda-suggestion-inputs :db/id :ret :db/id]
+  (when (s/valid? ::agenda-suggestion-input (clean-db-vals agenda-suggestion))
+    (transact [nil])))
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks
