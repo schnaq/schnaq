@@ -31,6 +31,48 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
+
+   ;; Suggesting changes to a meeting
+   {:db/ident :meeting.suggestion/meeting
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Suggestion for a meeting"}
+   {:db/ident :meeting.suggestion/title
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Suggestion to change title of a meeting"}
+   {:db/ident :meeting.suggestion/description
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "Suggestion to change description of a meeting"}
+
+   ;; Suggesting agenda update
+   {:db/ident :agenda.suggestion/agenda
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Suggestion to change agenda"}
+   {:db/ident :agenda.suggestion/title
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "New title for agenda"}
+   {:db/ident :agenda.suggestion/description
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "New title for agenda"}
+   {:db/ident :agenda.suggestion/type
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Indicate the update on the agenda"}
+   {:db/ident :agenda.suggestion/meeting
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Referring (new) agenda to an existing meeting"}
+
+   ;; Valid suggestion types on an agenda
+   {:db/ident :agenda.suggestion.type/update}
+   {:db/ident :agenda.suggestion.type/new}
+   {:db/ident :agenda.suggestion.type/delete}
+
    ;; Agenda-Point
    {:db/ident :agenda/title
     :db/valueType :db.type/string
