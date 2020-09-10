@@ -5,6 +5,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.agenda.agenda :as agenda]
             [schnaq.interface.views.base :as base]))
 
 ;; #### Helpers ####
@@ -43,25 +44,34 @@
   [:<>
    [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
    [:textarea#description.form-control.form-round.mb-4
-    {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
+    {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
 
 (defn- create-meeting-form-view
-  "A view with a form that creates a meeting properly."
+  "A view with a form that creates a meeting and optional agendas."
   []
-  [:div#create-meeting-form
-   [base/nav-header]
-   [header]
-   [:div.container.px-5.py-3
-    ;; form
-    [:form
-     {:on-submit (fn [e]
-                   (js-wrap/prevent-default e)
-                   (new-meeting-helper (oget e [:target :elements])))}
-     [meeting-title-input]
-     [meeting-description-input]
-     ;; submit
-     [:button.button-secondary.mt-5.mb-1 {:type "submit"}
-      (data/labels :meeting.step2/button)]]]])
+  (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])]
+    [:div#create-meeting-form
+     [base/nav-header]
+     [header]
+     [:div.container.px-5.py-3
+      [:form
+       {:on-submit (fn [e]
+                     (js-wrap/prevent-default e)
+                     (new-meeting-helper (oget e [:target :elements])))}
+       #_{:id "agendas-add-form"
+          :on-submit (fn [e]
+                       (js-wrap/prevent-default e)
+                       (rf/dispatch [:agenda/send-all]))}
+       [:div.agenda-meeting-container.p-3.text-left
+        [meeting-title-input]
+        [meeting-description-input]]
+       [:div.agenda-container.text-center
+        (for [agenda-num (range number-of-forms)]
+          [:div {:key agenda-num}
+           [agenda/new-agenda-form agenda-num]])
+        [:div.agenda-line]
+        [agenda/add-agenda-button number-of-forms :agenda/increase-form-num]
+        [agenda/submit-agenda-button]]]]]))
 
 (defn create-meeting-view []
   [create-meeting-form-view])
