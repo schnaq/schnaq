@@ -46,6 +46,9 @@
    [:textarea#meeting-description.form-control.form-round.mb-2
     {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
 
+(defn- submit-meeting-button []
+  [:button.btn.button-primary (data/labels :meeting-create-header)])
+
 (defn- create-meeting-form-view
   "A view with a form that creates a meeting and optional agendas."
   []
@@ -67,7 +70,7 @@
            [agenda/new-agenda-form agenda-num]])
         [:div.agenda-line]
         [agenda/add-agenda-button number-of-forms :agenda/increase-form-num]
-        [agenda/submit-agenda-button]]]]]))
+        [submit-meeting-button]]]]]))
 
 (defn create-meeting-view []
   [create-meeting-form-view])

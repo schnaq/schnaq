@@ -59,9 +59,6 @@
         [:span.display-6.my-4 (data/labels :agenda.create/optional-agenda)]
         [:span.display-4 "+"])]]))
 
-(defn- submit-agenda-button []
-  [:button.btn.button-primary (data/labels :meeting-create-header)])
-
 (defn load-agenda-fn [hash on-success-event]
   {:fx [[:http-xhrio {:method :get
                       :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
