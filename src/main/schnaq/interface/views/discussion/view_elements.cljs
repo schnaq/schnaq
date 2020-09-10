@@ -69,12 +69,11 @@
           [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
       ;; title
       [:div.col-8.col-lg-10
-       [:div
-        [:h2.clickable-no-hover {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
-                                                          {:share-hash share-hash
-                                                           :id (:db/id (:agenda/discussion agenda))}])}
-         (:agenda/title agenda)]
-        [:p (:agenda/description agenda)]]]
+       [:h2.clickable-no-hover {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
+                                                         {:share-hash share-hash
+                                                          :id (:db/id (:agenda/discussion agenda))}])}
+        (:agenda/title agenda)]
+       [:p (:agenda/description agenda)]]
       [:div.col-3.col-lg-1.graph-icon
        [:img.graph-icon-img.clickable-no-hover
         {:src (img-path :icon-graph) :alt (labels :graph.button/text)
