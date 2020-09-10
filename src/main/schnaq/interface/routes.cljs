@@ -79,6 +79,12 @@
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:agenda/load-and-redirect (:share-hash path)]))
                       :stop #(rf/dispatch [:agenda/clear-current])}]}]
+     ["/suggestions"
+      {:name :routes.meeting/suggestions
+       :view agenda-edit/agenda-suggestion-view
+       :controllers [{:parameters {:path [:share-hash]}
+                      :start (fn [{:keys [path]}]
+                               (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))}]}]
      ["/agenda"
       ["/:id"
        {:parameters {:path {:id int?}}
