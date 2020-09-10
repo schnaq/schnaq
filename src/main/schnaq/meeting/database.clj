@@ -166,7 +166,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Suggestions
 
-(s/def ::meeting-suggestion-input (s/keys :req-un [:meeting/title :meeting/description :db/id]))
+(s/def ::meeting-suggestion-input (s/keys :req [:meeting/title :meeting/description :db/id]))
 
 (>defn suggest-meeting-updates
   "Creates a new suggestion for a meeting update."
@@ -182,11 +182,11 @@
                     :meeting.suggestion/description description}])
         [:tempids "temporary-suggestion"]))))
 
-(s/def ::agenda-suggestion-input (s/keys :req-un [:agenda/title :agenda/description :db/id]))
-(s/def ::new-agenda-suggestion-input (s/keys :req-un [:agenda/title :agenda/description]))
+(s/def ::agenda-suggestion-input (s/keys :req [:agenda/title :agenda/description :db/id]))
+(s/def ::new-agenda-suggestion-input (s/keys :req [:agenda/title :agenda/description]))
 (s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion))
 (s/def ::new-agenda-suggestion-inputs (s/coll-of ::new-agenda-suggestion-input))
-(s/def ::delete-agenda-suggestion-input (s/keys :req-un [:db/id]))
+(s/def ::delete-agenda-suggestion-input (s/keys :req [:db/id]))
 (s/def ::delete-agenda-suggestion-inputs (s/coll-of ::delete-agenda-suggestion-input))
 (s/def :agenda.suggestion/type #{:agenda.suggestion.type/update :agenda.suggestion.type/new :agenda.suggestion.type/delete})
 

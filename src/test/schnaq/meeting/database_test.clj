@@ -216,3 +216,13 @@
           statements (database/all-statements-for-discussion discussion-id)]
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
+
+(deftest suggest-meeting-updates-test
+  (testing "Create a new suggest-meeting-update entity."
+    (let [user-id (database/add-user-if-not-exists "Christian")
+          meeting-id (:db/id (database/meeting-by-hash "89eh32hoas-2983ud"))]
+      (is (nil? (database/suggest-meeting-updates {} user-id)))
+      (is (int? (database/suggest-meeting-updates {:db/id meeting-id
+                                                   :meeting/title "Neuer Title"
+                                                   :meeting/description "Whatup bruh"}
+                                                  user-id))))))
