@@ -121,10 +121,10 @@
         updated-meeting (select-keys meeting [:db/id :meeting/title :meeting/description])
         updated-agendas (filter :agenda/discussion agendas)
         new-agendas (remove :agenda/discussion agendas)]
-    (db/suggest-meeting-updates updated-meeting user-id)
-    (db/suggest-agenda-updates updated-agendas user-id)
-    (db/suggest-new-agendas new-agendas user-id (:db/id meeting))
-    (db/suggest-agenda-deletion delete-agendas user-id)
+    (db/suggest-meeting-updates! updated-meeting user-id)
+    (db/suggest-agenda-updates! updated-agendas user-id)
+    (db/suggest-new-agendas! new-agendas user-id (:db/id meeting))
+    (db/suggest-agenda-deletion! delete-agendas user-id)
     (created "" {:message "Successfully created suggestions!"})))
 
 (defn- add-author

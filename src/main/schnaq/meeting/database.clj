@@ -168,7 +168,7 @@
 
 (s/def ::meeting-suggestion-input (s/keys :req [:meeting/title :meeting/description :db/id]))
 
-(>defn suggest-meeting-updates
+(>defn suggest-meeting-updates!
   "Creates a new suggestion for a meeting update."
   [{:keys [db/id meeting/title meeting/description] :as meeting-suggestion} user-id]
   [::meeting-suggestion-input :db/id :ret :db/id]
@@ -186,8 +186,7 @@
 (s/def ::new-agenda-suggestion-input (s/keys :req [:agenda/title :agenda/description]))
 (s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion))
 (s/def ::new-agenda-suggestion-inputs (s/coll-of ::new-agenda-suggestion-input))
-(s/def ::delete-agenda-suggestion-input (s/keys :req [:db/id]))
-(s/def ::delete-agenda-suggestion-inputs (s/coll-of ::delete-agenda-suggestion-input))
+(s/def ::delete-agenda-suggestion-inputs (s/coll-of :db/id))
 (s/def :agenda.suggestion/type #{:agenda.suggestion.type/update :agenda.suggestion.type/new :agenda.suggestion.type/delete})
 
 (defn- build-update-agenda-suggestion
@@ -200,9 +199,9 @@
      :agenda.suggestion/type :agenda.suggestion.type/update}))
 
 (defn- build-delete-agenda-suggestion
-  [user-id {:keys [db/id]}]
-  (when (s/valid? :db/id id)
-    {:agenda.suggestion/agenda id
+  [user-id agenda-id]
+  (when (s/valid? :db/id agenda-id)
+    {:agenda.suggestion/agenda agenda-id
      :agenda.suggestion/ideator user-id
      :agenda.suggestion/type :agenda.suggestion.type/delete}))
 
@@ -215,7 +214,7 @@
      :agenda.suggestion/type :agenda.suggestion.type/new
      :agenda.suggestion/meeting meeting-id}))
 
-(>defn suggest-agenda-generic
+(>defn- suggest-agenda-generic!
   "Transacts multiple new suggestion entities."
   [agenda-suggestions builder-fn]
   [map? fn? :ret any?]
@@ -225,22 +224,22 @@
        (into [])
        transact))
 
-(>defn suggest-agenda-updates
+(>defn suggest-agenda-updates!
   "Creates new suggestions for agenda updates."
   [agenda-suggestions user-id]
   [::agenda-suggestion-inputs :db/id :ret any?]
-  (suggest-agenda-generic agenda-suggestions (partial build-update-agenda-suggestion user-id)))
+  (suggest-agenda-generic! agenda-suggestions (partial build-update-agenda-suggestion user-id)))
 
-(>defn suggest-new-agendas
+(>defn suggest-new-agendas!
   "Creates suggestions for new agendas."
   [agenda-suggestions user-id meeting-id]
   [::new-agenda-suggestion-inputs :db/id :db/id :ret any?]
-  (suggest-agenda-generic agenda-suggestions (partial build-new-agenda-suggestion user-id meeting-id)))
+  (suggest-agenda-generic! agenda-suggestions (partial build-new-agenda-suggestion user-id meeting-id)))
 
-(>defn suggest-agenda-deletion
-  [agenda-suggestions user-id]
+(>defn suggest-agenda-deletion!
+  [agenda-ids user-id]
   [::delete-agenda-suggestion-inputs :db/id :ret any?]
-  (suggest-agenda-generic agenda-suggestions (partial build-delete-agenda-suggestion user-id)))
+  (suggest-agenda-generic! agenda-ids (partial build-delete-agenda-suggestion user-id)))
 
 
 ;; -----------------------------------------------------------------------------
