@@ -183,38 +183,45 @@
         [:tempids "temporary-suggestion"]))))
 
 (s/def ::agenda-suggestion-input (s/keys :req-un [:agenda/title :agenda/description :db/id]))
+(s/def ::new-agenda-suggestion-input (s/keys :req-un [:agenda/title :agenda/description]))
 (s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion))
 (s/def :agenda.suggestion/type #{:agenda.suggestion.type/update :agenda.suggestion.type/new :agenda.suggestion.type/delete})
 
 (defn- build-update-agenda-suggestion
-  [{:keys [db/id agenda/title agenda/description]} user-id]
-  {:agenda.suggestion/agenda id
-   :agenda.suggestion/ideator user-id
-   :agenda.suggestion/title title
-   :agenda.suggestion/description description
-   :agenda.suggestion/type :agenda.suggestion.type/update})
+  [user-id {:keys [db/id agenda/title agenda/description] :as agenda-suggestion}]
+  (when (s/valid? ::agenda-suggestion-input (clean-db-vals agenda-suggestion))
+    {:agenda.suggestion/agenda id
+     :agenda.suggestion/ideator user-id
+     :agenda.suggestion/title title
+     :agenda.suggestion/description description
+     :agenda.suggestion/type :agenda.suggestion.type/update}))
 
 (defn- build-delete-agenda-suggestion
-  [{:keys [db/id]} user-id]
-  {:agenda.suggestion/agenda id
-   :agenda.suggestion/ideator user-id
-   :agenda.suggestion/type :agenda.suggestion.type/delete})
+  [user-id {:keys [db/id]}]
+  (when (s/valid :db/id id)
+    {:agenda.suggestion/agenda id
+     :agenda.suggestion/ideator user-id
+     :agenda.suggestion/type :agenda.suggestion.type/delete}))
 
 (defn- build-new-agenda-suggestion
-  [{:keys [db/id agenda/title agenda/description]} user-id meeting-id]
-  {:agenda.suggestion/agenda id
-   :agenda.suggestion/ideator user-id
-   :agenda.suggestion/title title
-   :agenda.suggestion/description description
-   :agenda.suggestion/type :agenda.suggestion.type/new
-   :agenda.suggestion/meeting meeting-id})
+  [user-id meeting-id {:keys [db/id agenda/title agenda/description]}]
+  (when (s/valid? ::new-agenda-suggestion-input (clean-db-vals agenda-suggestion))
+    {:agenda.suggestion/ideator user-id
+     :agenda.suggestion/title title
+     :agenda.suggestion/description description
+     :agenda.suggestion/type :agenda.suggestion.type/new
+     :agenda.suggestion/meeting meeting-id}))
 
 (>defn suggest-agenda-updates
   "Creates a new suggestion for an agenda update."
   [agenda-suggestions user-id]
-  [::agenda-suggestion-inputs :db/id :ret :db/id]
-  (when (s/valid? ::agenda-suggestion-input (clean-db-vals agenda-suggestion))
-    (transact [nil])))
+  [::agenda-suggestion-inputs :db/id :ret any?]
+  (let [transaction-entities
+        (->> agenda-suggestions
+             (map (partial build-update-agenda-suggestion user-id))
+             (remove nil?)
+             (into []))]
+    (transact transaction-entities)))
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks

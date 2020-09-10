@@ -7,7 +7,7 @@
 #?(:cljs (s/def :re-frame/component vector?))
 
 ;; Common
-(s/def :db-id int?)
+(s/def :db/id int?)
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
 
