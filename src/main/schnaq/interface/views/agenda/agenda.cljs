@@ -1,12 +1,11 @@
 (ns schnaq.interface.views.agenda.agenda
   (:require [ajax.core :as ajax]
             [goog.string :as gstring]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.base :as base]
-            [re-frame.core :as rf]
-            [oops.core :refer [oget]]))
+            [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn new-agenda-local
   "This function formats the agenda-form input and saves it locally to the db until
@@ -61,71 +60,6 @@
 
 (defn- submit-agenda-button []
   [:button.btn.button-primary (data/labels :meeting-create-header)])
-
-;; #### header ####
-
-(defn- header []
-  (base/header
-    (data/labels :agenda/header)
-    (data/labels :agenda/subheader)))
-
-
-(defn- agenda-view
-  "Shows the view for adding one or more agendas."
-  []
-  (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])]
-    [:div#create-agenda
-     [base/nav-header]
-     [header]
-     [:div.container.text-center.pb-5
-      [:div.agenda-meeting-container.p-3
-       [:h2.mb-4 (:meeting/title @(rf/subscribe [:meeting/selected]))]
-       [:h4 (:meeting/description @(rf/subscribe [:meeting/selected]))]]
-      [:div.container
-       [:div.agenda-container
-        [:form {:id "agendas-add-form"
-                :on-submit (fn [e]
-                             (js-wrap/prevent-default e)
-                             (rf/dispatch [:agenda/send-all]))}
-         (for [agenda-num (range number-of-forms)]
-           [:div {:key agenda-num}
-            [new-agenda-form agenda-num]])
-         [:div.agenda-line]
-         [add-agenda-button number-of-forms :agenda/increase-form-num]
-         [submit-agenda-button]]]]]]))
-
-(defn add-agenda-view []
-  [agenda-view])
-
-;; #### Events ####
-
-(rf/reg-event-fx
-  :agenda/send-all
-  (fn [{:keys [db]} _]
-    ;; Use [:meeting :last-added] instead of selected meeting because it contains secret information
-    (let [agendas (get-in db [:agenda :all] [])
-          {:keys [db/id meeting/share-hash meeting/edit-hash meeting/title meeting/description]}
-          (get-in db [:meeting :last-added])
-          stub-agenda {0 {:title title
-                          :description description}}
-          agendas-to-send (if (zero? (count agendas)) stub-agenda agendas)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/agendas/add")
-                          :params {:agendas (vals agendas-to-send)
-                                   :meeting-id id
-                                   :meeting-hash share-hash}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:agenda/on-successful-add share-hash edit-hash]
-                          :on-failure [:ajax-failure]}]]})))
-
-(rf/reg-event-fx
-  :agenda/on-successful-add
-  (fn [_ [_ meeting-hash edit-hash]]
-    {:fx [[:dispatch [:agenda/clear-current]]
-          [:dispatch [:agenda/reset-temporary-entries]]
-          [:dispatch [:navigation/navigate :routes.meeting/created {:share-hash meeting-hash
-                                                                    :edit-hash edit-hash}]]]}))
 
 (defn load-agenda-fn [hash on-success-event]
   {:fx [[:http-xhrio {:method :get
@@ -210,12 +144,6 @@
   :agenda/set-response-as-chosen
   (fn [db [_ response]]
     (assoc-in db [:agenda :chosen] response)))
-
-(rf/reg-event-fx
-  :agenda/redirect-on-reload
-  (fn [{:keys [db]} _]
-    (when-not (get-in db [:meeting :last-added])
-      {:fx [[:dispatch [:navigation/navigate :routes.meeting/create]]]})))
 
 ;; #### Subs ####
 

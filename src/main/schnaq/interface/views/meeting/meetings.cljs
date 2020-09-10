@@ -58,10 +58,6 @@
        {:on-submit (fn [e]
                      (js-wrap/prevent-default e)
                      (new-meeting-helper (oget e [:target :elements])))}
-       #_{:id "agendas-add-form"
-          :on-submit (fn [e]
-                       (js-wrap/prevent-default e)
-                       (rf/dispatch [:agenda/send-all]))}
        [:div.agenda-meeting-container.p-3.text-left
         [meeting-title-input]
         [meeting-description-input]]
@@ -94,13 +90,6 @@
             [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]
             [:dispatch [:agenda/clear-current]]
             [:dispatch [:agenda/reset-temporary-entries]]]})))
-
-(rf/reg-event-fx
-  :meeting.creation/create-stub-agenda
-  (fn [{:keys [db]} [_ {:meeting/keys [title description]}]]
-    {:db (assoc-in db [:agenda :all] {0 {:title title
-                                         :description description}})
-     :fx [[:dispatch [:agenda/send-all]]]}))
 
 (rf/reg-event-fx
   :meeting/select-current
@@ -140,20 +129,6 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting.creation/added-continue-with-agendas]
-                          :on-failure [:ajax-failure]}]]})))
-;;TODO continue here
-
-(rf/reg-event-fx
-  :meeting.creation/new-meeting-http-call
-  (fn [{:keys [db]} [_ meeting on-success-event]]
-    (let [nickname (get-in db [:user :name] "Anonymous")]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/meeting/add")
-                          :params {:nickname nickname
-                                   :meeting meeting}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [on-success-event]
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx

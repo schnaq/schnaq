@@ -119,21 +119,6 @@
     (db/add-user-if-not-exists author-name)
     (ok {:text "POST successful"})))
 
-(defn- add-agendas
-  "Adds a list of agendas to the database."
-  [{:keys [body-params]}]
-  (let [agendas (:agendas body-params)
-        meeting-id (:meeting-id body-params)
-        meeting-hash (:meeting-hash body-params)]
-    (if (and (s/valid? :meeting/share-hash meeting-hash)
-             (s/valid? int? meeting-id)
-             (= meeting-id (:db/id (db/meeting-by-hash meeting-hash))))
-      (do (doseq [agenda-point agendas]
-            (db/add-agenda-point (:title agenda-point) (:description agenda-point)
-                                 meeting-id))
-          (ok {:text "Agendas sent over successfully"}))
-      (bad-request {:error "Agenda could not be added"}))))
-
 (defn- meeting-by-hash
   "Returns a meeting, identified by its share-hash."
   [req]
@@ -411,7 +396,6 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
-    (POST "/agendas/add" [] add-agendas)
     (POST "/author/add" [] add-author)
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)

@@ -5,7 +5,6 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.agenda.agenda :as agenda-views]
             [schnaq.interface.views.agenda.edit :as agenda-edit]
             [schnaq.interface.views.discussion.discussion :as discussion-views]
             [schnaq.interface.views.errors :as error-views]
@@ -81,11 +80,6 @@
                                (rf/dispatch [:agenda/load-and-redirect (:share-hash path)]))
                       :stop #(rf/dispatch [:agenda/clear-current])}]}]
      ["/agenda"
-      ["/add"
-       {:name :routes.agenda/add
-        :view agenda-views/add-agenda-view
-        :link-text (labels :router/add-agendas)
-        :controllers [{:start #(rf/dispatch [:agenda/redirect-on-reload])}]}]
       ["/:id"
        {:parameters {:path {:id int?}}
         :controllers [{:parameters {:path [:share-hash :id]}

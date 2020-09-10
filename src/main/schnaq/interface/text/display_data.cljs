@@ -60,7 +60,6 @@
      :meetings/continue-with-schnaq-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
-     :meeting.step2/button "Schritt 2: Agenda hinzufügen"
 
      :meeting.admin/addresses-label "Teilnehmer-Adressen"
      :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
@@ -77,8 +76,6 @@
 
 
      ;; Create Agenda
-     :agenda/header "Agenda erstellen"
-     :agenda/subheader "Fügen Sie zu besprechende Punkte hinzu"
      :agenda/desc-for "Beschreibung für Agendapunkt "
      :agenda/point "Agendapunkt "
      :agenda.create/optional-agenda "Agenda hinzufügen"
@@ -183,7 +180,6 @@
      :router/meeting-created "Zuletzt angelegter schnaq"
      :router/my-schnaqs "Meine schnaqs"
      :router/show-single-meeting "Schnaq anzeigen"
-     :router/add-agendas "Agendas hinzufügen"
      :router/start-discussion "Starte Besprechung"
      :router/continue-discussion "Führe Besprechung fort"
      :router/startpage "Startseite"
