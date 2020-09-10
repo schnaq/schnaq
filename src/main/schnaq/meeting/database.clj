@@ -163,6 +163,25 @@
       (transact [clean-entity])
       (:db/id entity))))
 
+;; -----------------------------------------------------------------------------
+;; Suggestions
+
+(s/def ::meeting-suggestion-input (s/keys :req-un [:meeting/title :meeting/description :db/id]))
+
+(>defn suggest-meeting-updates
+  "Creates a new suggestion for a meeting update."
+  [{:keys [db/id meeting/title meeting/description] :as meeting-suggestion} user-id]
+  [::meeting-suggestion-input :ret :db/id]
+  (let [clean-suggestion (clean-db-vals meeting-suggestion)]
+    (when (s/valid? ::meeting-suggestion-input clean-suggestion)
+      (get-in
+        (transact [{:db/id "temporary-suggestion"
+                    :meeting.suggestion/ideator user-id
+                    :meeting.suggestion/meeting id
+                    :meeting.suggestion/title title
+                    :meeting.suggestion/description description}])
+        [:tempids "temporary-suggestion"]))))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks

@@ -37,6 +37,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "Suggestion for a meeting"}
+   {:db/ident :meeting.suggestion/ideator
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The user making the suggestion"}
    {:db/ident :meeting.suggestion/title
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
@@ -51,6 +55,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "Suggestion to change agenda"}
+   {:db/ident :agenda.suggestion/ideator
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The user making the suggestion"}
    {:db/ident :agenda.suggestion/title
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
