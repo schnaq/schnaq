@@ -5,6 +5,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.agenda.agenda :as agenda]
             [schnaq.interface.views.base :as base]))
 
 ;; #### Helpers ####
@@ -14,8 +15,8 @@
   [form-elements]
   (rf/dispatch
     [:meeting.creation/new
-     {:meeting/title (oget form-elements [:title :value])
-      :meeting/description (oget form-elements [:description :value])
+     {:meeting/title (oget form-elements [:meeting-title :value])
+      :meeting/description (oget form-elements [:meeting-description :value])
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
       :meeting/start-date (js/Date.)}]))
 
@@ -30,8 +31,8 @@
   "The input and label for a new meeting-title"
   []
   [:<>
-   [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
-   [:input#title.form-control.form-round.form-title.mb-5
+   [:label {:for "meeting-title"} (data/labels :meeting-form-title)] [:br]
+   [:input#meeting-title.form-control.form-round.form-title.mb-2
     {:type "text"
      :autoComplete "off"
      :required true
@@ -41,27 +42,35 @@
   "The input and label for a meeting description"
   []
   [:<>
-   [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
-   [:textarea#description.form-control.form-round.mb-4
-    {:rows "6" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
+   [:label {:for "meeting-description"} (data/labels :meeting-form-desc)] [:br]
+   [:textarea#meeting-description.form-control.form-round.mb-2
+    {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
+
+(defn- submit-meeting-button []
+  [:button.btn.button-primary (data/labels :meeting-create-header)])
 
 (defn- create-meeting-form-view
-  "A view with a form that creates a meeting properly."
+  "A view with a form that creates a meeting and optional agendas."
   []
-  [:div#create-meeting-form
-   [base/nav-header]
-   [header]
-   [:div.container.px-5.py-3
-    ;; form
-    [:form
-     {:on-submit (fn [e]
-                   (js-wrap/prevent-default e)
-                   (new-meeting-helper (oget e [:target :elements])))}
-     [meeting-title-input]
-     [meeting-description-input]
-     ;; submit
-     [:button.button-secondary.mt-5.mb-1 {:type "submit"}
-      (data/labels :meeting.step2/button)]]]])
+  (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])]
+    [:div#create-meeting-form
+     [base/nav-header]
+     [header]
+     [:div.container.px-5.py-3
+      [:form
+       {:on-submit (fn [e]
+                     (js-wrap/prevent-default e)
+                     (new-meeting-helper (oget e [:target :elements])))}
+       [:div.agenda-meeting-container.p-3.text-left
+        [meeting-title-input]
+        [meeting-description-input]]
+       [:div.agenda-container.text-center
+        (for [agenda-num (range number-of-forms)]
+          [:div {:key agenda-num}
+           [agenda/new-agenda-form agenda-num]])
+        [:div.agenda-line]
+        [agenda/add-agenda-button number-of-forms :agenda/increase-form-num]
+        [submit-meeting-button]]]]]))
 
 (defn create-meeting-view []
   [create-meeting-form-view])
@@ -76,18 +85,14 @@
       {:db (-> db
                (assoc-in [:meeting :last-added] new-meeting)
                (update :meetings conj new-meeting))
-       :fx [[:dispatch [:navigation/navigate :routes.agenda/add
-                        {:share-hash share-hash}]]
+       :fx [[:dispatch [:navigation/navigate :routes.meeting/created
+                        {:share-hash share-hash
+                         :edit-hash edit-hash}]]
             [:dispatch [:meeting/select-current new-meeting]]
             [:localstorage/write [:meeting.last-added/share-hash share-hash]]
-            [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]]})))
-
-(rf/reg-event-fx
-  :meeting.creation/create-stub-agenda
-  (fn [{:keys [db]} [_ {:meeting/keys [title description]}]]
-    {:db (assoc-in db [:agenda :all] {0 {:title title
-                                         :description description}})
-     :fx [[:dispatch [:agenda/send-all]]]}))
+            [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]
+            [:dispatch [:agenda/clear-current]]
+            [:dispatch [:agenda/reset-temporary-entries]]]})))
 
 (rf/reg-event-fx
   :meeting/select-current
@@ -112,21 +117,20 @@
 
 (rf/reg-event-fx
   :meeting.creation/new
-  (fn [_ [_ meeting]]
-    {:fx [[:dispatch [:meeting.creation/new-meeting-http-call meeting
-                      :meeting.creation/added-continue-with-agendas]]]}))
-
-(rf/reg-event-fx
-  :meeting.creation/new-meeting-http-call
-  (fn [{:keys [db]} [_ meeting on-success-event]]
-    (let [nickname (get-in db [:user :name] "Anonymous")]
+  (fn [{:keys [db]} [_ {:meeting/keys [title description] :as new-meeting}]]
+    (let [nickname (get-in db [:user :name] "Anonymous")
+          agendas (get-in db [:agenda :all] [])
+          stub-agendas [{:title title
+                         :description description}]
+          agendas-to-send (if (zero? (count agendas)) stub-agendas (vals agendas))]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/meeting/add")
                           :params {:nickname nickname
-                                   :meeting meeting}
+                                   :meeting new-meeting
+                                   :agendas agendas-to-send}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
-                          :on-success [on-success-event]
+                          :on-success [:meeting.creation/added-continue-with-agendas]
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx

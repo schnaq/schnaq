@@ -79,18 +79,17 @@
                  :meeting/edit-hash edit-hash))
 
 (defn- add-meeting
-  "Adds a meeting to the database.
-  Converts the epoch dates it receives into java Dates.
-  Returns the id of the newly-created meeting as `:id-created`."
-  [req]
-  (let [meeting (-> req :body-params :meeting)
+  "Adds a meeting and (optional) agendas to the database.
+  Returns the newly-created meeting."
+  [request]
+  (let [{:keys [meeting nickname agendas]} (:body-params request)
         final-meeting (add-hashes-to-meeting meeting
                                              (.toString (UUID/randomUUID))
                                              (.toString (UUID/randomUUID)))
-        nickname (-> req :body-params :nickname)
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
+    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id) agendas)
     (created "" {:new-meeting created-meeting})))
 
 (defn- update-meeting!
@@ -118,21 +117,6 @@
   (let [author-name (:nickname (:body-params req))]
     (db/add-user-if-not-exists author-name)
     (ok {:text "POST successful"})))
-
-(defn- add-agendas
-  "Adds a list of agendas to the database."
-  [{:keys [body-params]}]
-  (let [agendas (:agendas body-params)
-        meeting-id (:meeting-id body-params)
-        meeting-hash (:meeting-hash body-params)]
-    (if (and (s/valid? :meeting/share-hash meeting-hash)
-             (s/valid? int? meeting-id)
-             (= meeting-id (:db/id (db/meeting-by-hash meeting-hash))))
-      (do (doseq [agenda-point agendas]
-            (db/add-agenda-point (:title agenda-point) (:description agenda-point)
-                                 meeting-id))
-          (ok {:text "Agendas sent over successfully"}))
-      (bad-request {:error "Agenda could not be added"}))))
 
 (defn- meeting-by-hash
   "Returns a meeting, identified by its share-hash."
@@ -411,7 +395,6 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
-    (POST "/agendas/add" [] add-agendas)
     (POST "/author/add" [] add-author)
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
