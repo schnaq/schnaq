@@ -110,6 +110,31 @@
 (defn agenda-edit-view []
   [edit-view])
 
+(defn- suggestion-view []
+  (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
+        selected-meeting (:meeting edit-information)
+        meeting-agendas (:agendas edit-information)]
+    [:<>
+     [base/nav-header]
+     [header]
+     [:div.container.text-center.pb-5
+      [:form {:id "agendas-add-form"
+              :on-submit (fn [e]
+                           (js-wrap/prevent-default e)
+                           (rf/dispatch [:meeting/submit-suggestions]))}
+       ;; meeting title and description
+       [editable-meeting-info selected-meeting]
+       [:div.container
+        (for [agenda meeting-agendas]
+          [:div {:key (:db/id agenda)}
+           [agenda-view agenda]])
+        [:div.agenda-line]
+        [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
+        [submit-edit-button]]]]]))
+
+(defn agenda-suggestion-view []
+  [suggestion-view])
+
 ;; load agendas events
 
 (rf/reg-event-fx
@@ -193,3 +218,27 @@
   (fn [_ [_ {:keys [meeting]} _response]]
     {:fx [[:dispatch [:meeting/select-current meeting]]
           [:dispatch [:navigation/navigate :routes.meeting/show {:share-hash (:meeting/share-hash meeting)}]]]}))
+
+(rf/reg-event-fx
+  :meeting/on-success-submit-suggestions-event
+  (fn [_ [_ _]]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title "Vorschläge eingereicht"
+                                     :body "Ihre Vorschläge wurden erfolgreich verschickt!"
+                                     :context :success}]]]}))
+
+(rf/reg-event-fx
+  :meeting/submit-suggestions
+  (fn [{:keys [db]} _]
+    (let [edit-meeting (:edit-meeting db)
+          nickname (-> db :user :name)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/meeting/suggestions")
+                          :params {:meeting (:meeting edit-meeting)
+                                   :agendas (:agendas edit-meeting)
+                                   :deleted-agendas (:deleted-agendas edit-meeting)
+                                   :nickname nickname}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting/on-success-submit-suggestions-event]
+                          :on-failure [:ajax-failure]}]]})))
