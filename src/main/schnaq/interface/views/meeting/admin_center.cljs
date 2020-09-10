@@ -124,6 +124,8 @@
          :auto-complete "off"
          :required true
          :placeholder (labels :meeting.admin/addresses-placeholder)}]
+       [:small.form-text.text-muted.float-right
+        (labels :meeting.admin/addresses-privacy)]
        [:button.btn.button-primary.btn-lg.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
 
 
@@ -168,7 +170,8 @@
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
-  (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])]
+  (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])
+        spacer [:hr.pb-4.mt-4]]
     [:div
      [base/nav-header]
      [base/header
@@ -179,8 +182,11 @@
       [:h4.text-left.mb-3 title]
       [educate-element]
       [copy-link-form get-share-link "share-hash"]
+      spacer
       [invite-participants-form]
+      spacer
       [educate-admin-element share-hash edit-hash]
+      spacer
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
