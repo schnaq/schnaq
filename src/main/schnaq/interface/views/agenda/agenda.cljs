@@ -28,7 +28,7 @@
      [:div.col-8.col-md-10
       [:input.form-control.agenda-form-title.form-title
        {:type "text"
-        :name "title"
+        :name (str "title-" numbered-suffix)
         :auto-complete "off"
         :required true
         :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
@@ -41,7 +41,7 @@
        [:i {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]
     ;; description
     [:textarea.form-control.agenda-form-round
-     {:name "description"
+     {:name (str "title-" numbered-suffix)
       :placeholder (str (data/labels :agenda/desc-for) (inc numbered-suffix))
       :id (str "description-" numbered-suffix)
       :on-key-up #(new-agenda-local

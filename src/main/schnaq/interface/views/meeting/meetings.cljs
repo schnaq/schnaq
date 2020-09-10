@@ -15,8 +15,8 @@
   [form-elements]
   (rf/dispatch
     [:meeting.creation/new
-     {:meeting/title (oget form-elements [:title :value])
-      :meeting/description (oget form-elements [:description :value])
+     {:meeting/title (oget form-elements [:meeting-title :value])
+      :meeting/description (oget form-elements [:meeting-description :value])
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
       :meeting/start-date (js/Date.)}]))
 
@@ -31,8 +31,8 @@
   "The input and label for a new meeting-title"
   []
   [:<>
-   [:label {:for "title"} (data/labels :meeting-form-title)] [:br]
-   [:input#title.form-control.form-round.form-title.mb-5
+   [:label {:for "meeting-title"} (data/labels :meeting-form-title)] [:br]
+   [:input#meeting-title.form-control.form-round.form-title.mb-5
     {:type "text"
      :autoComplete "off"
      :required true
@@ -42,8 +42,8 @@
   "The input and label for a meeting description"
   []
   [:<>
-   [:label {:for "description"} (data/labels :meeting-form-desc)] [:br]
-   [:textarea#description.form-control.form-round.mb-4
+   [:label {:for "meeting-description"} (data/labels :meeting-form-desc)] [:br]
+   [:textarea#meeting-description.form-control.form-round.mb-4
     {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
 
 (defn- create-meeting-form-view
@@ -127,10 +127,11 @@
   :meeting.creation/new
   (fn [{:keys [db]} [_ {:meeting/keys [title description] :as new-meeting}]]
     (let [nickname (get-in db [:user :name] "Anonymous")
-          agendas (vals (get-in db [:agenda :all] []))
+          agendas (get-in db [:agenda :all] [])
           stub-agendas [{:title title
                          :description description}]
-          agendas-to-send (if (zero? (count agendas)) stub-agendas agendas)]
+          agendas-to-send (if (zero? (count agendas)) stub-agendas (vals agendas))]
+      (println new-meeting)
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/meeting/add")
                           :params {:nickname nickname
@@ -139,9 +140,8 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting.creation/added-continue-with-agendas]
-                          :on-failure [:ajax-failure]}]
-            [:dispatch [:meeting.creation/new-meeting-http-call new-meeting
-                        :meeting.creation/added-continue-with-agendas]]]})))
+                          :on-failure [:ajax-failure]}]]})))
+;;TODO continue here
 
 (rf/reg-event-fx
   :meeting.creation/new-meeting-http-call
