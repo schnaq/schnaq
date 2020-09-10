@@ -63,7 +63,7 @@
 
      :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmenden"
      :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
-     :meeting.admin/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von uns gelöscht."
+     :meeting.admin/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
      :meeting.admin/send-invites-button-text "Einladungen versenden"
      :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per Email ein"
      :meeting.admin.notifications/emails-successfully-sent-title "Einladungen verschickt!"
