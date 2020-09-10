@@ -113,11 +113,18 @@
           (ok {:text "Your schnaq has been updated."}))
       (deny-access))))
 
-(defn meeting-suggestions
-  "TODO"
+(defn- meeting-suggestions
+  "Create suggestions for the change of a meeting."
   [request]
-  (let [{:keys [meeting agendas deleted-agendas nickname]} (:body-params request)]))
-
+  (let [{:keys [meeting agendas delete-agendas nickname]} (:body-params request)
+        user-id (db/add-user-if-not-exists nickname)
+        updated-meeting (select-keys meeting [:db/id :meeting/title :meeting/description])
+        updated-agendas (filter :agenda/discussion agendas)
+        new-agendas (remove :agenda/discussion agendas)]
+    (created "" {:suggestion.meeting/id (db/suggest-meeting-updates updated-meeting user-id)
+                 :suggestion.agendas/update (db/suggest-agenda-updates updated-agendas user-id)
+                 :suggestion.agendas/new (db/suggest-new-agendas new-agendas user-id)
+                 :suggestion.agendas/delete (db/suggest-agenda-deletion delete-agendas user-id)})))
 
 (defn- add-author
   "Adds an author to the database."
@@ -403,7 +410,7 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
-    (POST "/meeting/suggestions" meeting-suggestions)
+    (POST "/meeting/suggestions" [] meeting-suggestions)
     (POST "/author/add" [] add-author)
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)

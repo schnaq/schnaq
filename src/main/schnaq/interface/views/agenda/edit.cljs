@@ -236,7 +236,7 @@
                           :uri (str (:rest-backend config) "/meeting/suggestions")
                           :params {:meeting (:meeting edit-meeting)
                                    :agendas (:agendas edit-meeting)
-                                   :deleted-agendas (:deleted-agendas edit-meeting)
+                                   :delete-agendas (:delete-agendas edit-meeting)
                                    :nickname nickname}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
