@@ -111,6 +111,12 @@
           (ok {:text "Your schnaq has been updated."}))
       (deny-access))))
 
+(defn meeting-suggestions
+  "TODO"
+  [request]
+  (let [{:keys [meeting agendas deleted-agendas nickname]} (:body-params request)]))
+
+
 (defn- add-author
   "Adds an author to the database."
   [req]
@@ -395,6 +401,7 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
+    (POST "/meeting/suggestions" meeting-suggestions)
     (POST "/author/add" [] add-author)
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
