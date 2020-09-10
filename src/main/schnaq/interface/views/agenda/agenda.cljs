@@ -41,6 +41,7 @@
     ;; description
     [:textarea.form-control.agenda-form-round
      {:name (str "title-" numbered-suffix)
+      :rows 2
       :placeholder (str (data/labels :agenda/desc-for) (inc numbered-suffix))
       :id (str "description-" numbered-suffix)
       :on-key-up #(new-agenda-local

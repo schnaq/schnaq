@@ -32,7 +32,7 @@
   []
   [:<>
    [:label {:for "meeting-title"} (data/labels :meeting-form-title)] [:br]
-   [:input#meeting-title.form-control.form-round.form-title.mb-5
+   [:input#meeting-title.form-control.form-round.form-title.mb-2
     {:type "text"
      :autoComplete "off"
      :required true
@@ -43,7 +43,7 @@
   []
   [:<>
    [:label {:for "meeting-description"} (data/labels :meeting-form-desc)] [:br]
-   [:textarea#meeting-description.form-control.form-round.mb-4
+   [:textarea#meeting-description.form-control.form-round.mb-2
     {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
 
 (defn- create-meeting-form-view
