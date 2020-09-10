@@ -86,11 +86,14 @@
       {:db (-> db
                (assoc-in [:meeting :last-added] new-meeting)
                (update :meetings conj new-meeting))
-       :fx [[:dispatch [:navigation/navigate :routes.agenda/add
-                        {:share-hash share-hash}]]
+       :fx [[:dispatch [:navigation/navigate :routes.meeting/created
+                        {:share-hash share-hash
+                         :edit-hash edit-hash}]]
             [:dispatch [:meeting/select-current new-meeting]]
             [:localstorage/write [:meeting.last-added/share-hash share-hash]]
-            [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]]})))
+            [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]
+            [:dispatch [:agenda/clear-current]]
+            [:dispatch [:agenda/reset-temporary-entries]]]})))
 
 (rf/reg-event-fx
   :meeting.creation/create-stub-agenda
@@ -122,9 +125,23 @@
 
 (rf/reg-event-fx
   :meeting.creation/new
-  (fn [_ [_ meeting]]
-    {:fx [[:dispatch [:meeting.creation/new-meeting-http-call meeting
-                      :meeting.creation/added-continue-with-agendas]]]}))
+  (fn [{:keys [db]} [_ {:meeting/keys [title description] :as new-meeting}]]
+    (let [nickname (get-in db [:user :name] "Anonymous")
+          agendas (vals (get-in db [:agenda :all] []))
+          stub-agendas [{:title title
+                         :description description}]
+          agendas-to-send (if (zero? (count agendas)) stub-agendas agendas)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/meeting/add")
+                          :params {:nickname nickname
+                                   :meeting new-meeting
+                                   :agendas agendas-to-send}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting.creation/added-continue-with-agendas]
+                          :on-failure [:ajax-failure]}]
+            [:dispatch [:meeting.creation/new-meeting-http-call new-meeting
+                        :meeting.creation/added-continue-with-agendas]]]})))
 
 (rf/reg-event-fx
   :meeting.creation/new-meeting-http-call
