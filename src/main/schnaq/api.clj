@@ -98,7 +98,9 @@
   (let [nickname (:nickname body-params)
         user-id (db/add-user-if-not-exists nickname)
         meeting (:meeting body-params)
-        updated-meeting (dissoc meeting :meeting/share-hash :meeting/edit-hash)
+        ;; Do not let the user modify arbitrary db/id's
+        meeting-id (-> meeting :meeting/share-hash db/meeting-by-hash :db/id)
+        updated-meeting (assoc (select-keys meeting [:meeting/title :meeting/description]) :db/id meeting-id)
         updated-agendas (filter :agenda/discussion (:agendas body-params))
         new-agendas (remove :agenda/discussion (:agendas body-params))]
     (if (valid-credentials? (:meeting/share-hash meeting) (:meeting/edit-hash meeting))
