@@ -166,7 +166,8 @@
 ;; -----------------------------------------------------------------------------
 ;; Suggestions
 
-(s/def ::meeting-suggestion-input (s/keys :req [:meeting/title :meeting/description :db/id]))
+(s/def ::meeting-suggestion-input (s/keys :req [:meeting/title :db/id]
+                                          :opt [:meeting/description]))
 
 (>defn suggest-meeting-updates!
   "Creates a new suggestion for a meeting update."
@@ -174,17 +175,21 @@
   [::meeting-suggestion-input :db/id :ret :db/id]
   (let [clean-suggestion (clean-db-vals meeting-suggestion)]
     (when (s/valid? ::meeting-suggestion-input clean-suggestion)
-      (get-in
-        (transact [{:db/id "temporary-suggestion"
-                    :meeting.suggestion/ideator user-id
-                    :meeting.suggestion/meeting id
-                    :meeting.suggestion/title title
-                    :meeting.suggestion/description description}])
-        [:tempids "temporary-suggestion"]))))
+      (let [raw-suggestion {:db/id "temporary-suggestion"
+                            :meeting.suggestion/ideator user-id
+                            :meeting.suggestion/meeting id
+                            :meeting.suggestion/title title}]
+        (get-in
+          (transact [(if description
+                       (assoc raw-suggestion :meeting.suggestion/description description)
+                       raw-suggestion)])
+          [:tempids "temporary-suggestion"])))))
 
-(s/def ::agenda-suggestion-input (s/keys :req [:agenda/title :agenda/description :db/id]))
-(s/def ::new-agenda-suggestion-input (s/keys :req [:agenda/title :agenda/description]))
-(s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion))
+(s/def ::agenda-suggestion-input (s/keys :req [:agenda/title :db/id]
+                                         :opt [:agenda/description]))
+(s/def ::new-agenda-suggestion-input (s/keys :req [:agenda/title]
+                                             :opt [:agenda/description]))
+(s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion-input))
 (s/def ::new-agenda-suggestion-inputs (s/coll-of ::new-agenda-suggestion-input))
 (s/def ::delete-agenda-suggestion-inputs (s/coll-of :db/id))
 (s/def :agenda.suggestion/type #{:agenda.suggestion.type/update :agenda.suggestion.type/new :agenda.suggestion.type/delete})
@@ -192,11 +197,13 @@
 (defn- build-update-agenda-suggestion
   [user-id {:keys [db/id agenda/title agenda/description] :as agenda-suggestion}]
   (when (s/valid? ::agenda-suggestion-input (clean-db-vals agenda-suggestion))
-    {:agenda.suggestion/agenda id
-     :agenda.suggestion/ideator user-id
-     :agenda.suggestion/title title
-     :agenda.suggestion/description description
-     :agenda.suggestion/type :agenda.suggestion.type/update}))
+    (let [raw-suggestion {:agenda.suggestion/agenda id
+                          :agenda.suggestion/ideator user-id
+                          :agenda.suggestion/title title
+                          :agenda.suggestion/type :agenda.suggestion.type/update}]
+      (if description
+        (assoc raw-suggestion :agenda.suggestion/description description)
+        raw-suggestion))))
 
 (defn- build-delete-agenda-suggestion
   [user-id agenda-id]
@@ -208,11 +215,13 @@
 (defn- build-new-agenda-suggestion
   [user-id meeting-id {:keys [agenda/title agenda/description] :as agenda-suggestion}]
   (when (s/valid? ::new-agenda-suggestion-input (clean-db-vals agenda-suggestion))
-    {:agenda.suggestion/ideator user-id
-     :agenda.suggestion/title title
-     :agenda.suggestion/description description
-     :agenda.suggestion/type :agenda.suggestion.type/new
-     :agenda.suggestion/meeting meeting-id}))
+    (let [raw-suggestion {:agenda.suggestion/ideator user-id
+                          :agenda.suggestion/title title
+                          :agenda.suggestion/type :agenda.suggestion.type/new
+                          :agenda.suggestion/meeting meeting-id}]
+      (if description
+        (assoc raw-suggestion :agenda.suggestion/description description)
+        raw-suggestion))))
 
 (>defn- suggest-agenda-generic!
   "Transacts multiple new suggestion entities."

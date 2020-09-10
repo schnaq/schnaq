@@ -225,6 +225,9 @@
       (is (int? (database/suggest-meeting-updates! {:db/id meeting-id
                                                     :meeting/title "Neuer Title"
                                                     :meeting/description "Whatup bruh"}
+                                                   user-id)))
+      (is (int? (database/suggest-meeting-updates! {:db/id meeting-id
+                                                    :meeting/title "Neuer Title"}
                                                    user-id))))))
 
 (deftest suggest-agenda-updates!-test
@@ -237,6 +240,11 @@
         ;; We transact 5 attributes, so we expect 6 datoms (one for every attribute and one for the transaction
         6 [{:db/id (first agenda-ids)
             :agenda/title "Neuer Title"
+            :agenda/description "Whatup bruh"}]
+        5 [{:db/id (first agenda-ids)
+            :agenda/title "Neuer Title"}]
+        ;; When title is missing, do not transact any attributes
+        1 [{:db/id (first agenda-ids)
             :agenda/description "Whatup bruh"}]
         11 [{:db/id (first agenda-ids)
              :agenda/title "Neuer Title"
@@ -254,6 +262,8 @@
         1 [{}]
         6 [{:agenda/title "Neuer Title"
             :agenda/description "Whatup bruh"}]
+        5 [{:agenda/title "Neuer Title"}]
+        1 [{:agenda/description "Whatup bruh"}]
         11 [{:agenda/title "Neuer Title"
              :agenda/description "Whatup bruh"}
             {:agenda/title "Neuer Title 2"
