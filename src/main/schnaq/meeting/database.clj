@@ -185,6 +185,9 @@
 (s/def ::agenda-suggestion-input (s/keys :req-un [:agenda/title :agenda/description :db/id]))
 (s/def ::new-agenda-suggestion-input (s/keys :req-un [:agenda/title :agenda/description]))
 (s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion))
+(s/def ::new-agenda-suggestion-inputs (s/coll-of ::new-agenda-suggestion-input))
+(s/def ::delete-agenda-suggestion-input (s/keys :req-un [:db/id]))
+(s/def ::delete-agenda-suggestion-inputs (s/coll-of ::delete-agenda-suggestion-input))
 (s/def :agenda.suggestion/type #{:agenda.suggestion.type/update :agenda.suggestion.type/new :agenda.suggestion.type/delete})
 
 (defn- build-update-agenda-suggestion
@@ -198,13 +201,13 @@
 
 (defn- build-delete-agenda-suggestion
   [user-id {:keys [db/id]}]
-  (when (s/valid :db/id id)
+  (when (s/valid? :db/id id)
     {:agenda.suggestion/agenda id
      :agenda.suggestion/ideator user-id
      :agenda.suggestion/type :agenda.suggestion.type/delete}))
 
 (defn- build-new-agenda-suggestion
-  [user-id meeting-id {:keys [db/id agenda/title agenda/description]}]
+  [user-id meeting-id {:keys [agenda/title agenda/description] :as agenda-suggestion}]
   (when (s/valid? ::new-agenda-suggestion-input (clean-db-vals agenda-suggestion))
     {:agenda.suggestion/ideator user-id
      :agenda.suggestion/title title
@@ -212,16 +215,33 @@
      :agenda.suggestion/type :agenda.suggestion.type/new
      :agenda.suggestion/meeting meeting-id}))
 
+(>defn suggest-agenda-generic
+  "Transacts multiple new suggestion entities."
+  [agenda-suggestions builder-fn]
+  [map? fn? :ret any?]
+  (->> agenda-suggestions
+       (map builder-fn)
+       (remove nil?)
+       (into [])
+       transact))
+
 (>defn suggest-agenda-updates
-  "Creates a new suggestion for an agenda update."
+  "Creates new suggestions for agenda updates."
   [agenda-suggestions user-id]
   [::agenda-suggestion-inputs :db/id :ret any?]
-  (let [transaction-entities
-        (->> agenda-suggestions
-             (map (partial build-update-agenda-suggestion user-id))
-             (remove nil?)
-             (into []))]
-    (transact transaction-entities)))
+  (suggest-agenda-generic agenda-suggestions (partial build-update-agenda-suggestion user-id)))
+
+(>defn suggest-new-agendas
+  "Creates suggestions for new agendas."
+  [agenda-suggestions user-id meeting-id]
+  [::new-agenda-suggestion-inputs :db/id :db/id :ret any?]
+  (suggest-agenda-generic agenda-suggestions (partial build-new-agenda-suggestion user-id meeting-id)))
+
+(>defn suggest-agenda-deletion
+  [agenda-suggestions user-id]
+  [::delete-agenda-suggestion-inputs :db/id :ret any?]
+  (suggest-agenda-generic agenda-suggestions (partial build-delete-agenda-suggestion user-id)))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks
