@@ -11,6 +11,49 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]))
 
+(defn- suggestions-table
+  "Show all suggestions."
+  [suggestions suggestion-type]
+  [:table.table
+   [:thead
+    [:tr
+     [:th {:width "10%"} (labels :suggestions.modal.table/nickname)]
+     [:th {:width "25%"} (labels :suggestions.modal.table/suggestion-title)]
+     [:th {:width "65%"} (labels :suggestions.modal.table/suggestion-description)]]]
+   [:tbody
+    (for [suggestion suggestions]
+      (let [get-value #(suggestion (keyword (str (name suggestion-type) "/" %)))]
+        [:tr {:key (:db/id suggestion)}
+         [:td (get-value "ideator")]
+         [:td (get-value "title")]
+         [:td (get-value "description")]]))]])
+
+(defn- suggestions-modal
+  "Open a modal containing the suggested changes."
+  [suggestions suggestion-type]
+  [modal/modal-template
+   (labels :suggestions.modal/header)
+   [:<>
+    [:p (labels :suggestions.modal/primer)]
+    [suggestions-table suggestions suggestion-type]]])
+
+(defn- suggestions-badge [selected-entity subscription-key suggestions-namespace]
+  (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
+    (let [suggestions @(rf/subscribe [subscription-key (:db/id selected-entity)])]
+      (when (seq suggestions)
+        [:<>
+         [:p.my-0.p-2.display-6.text-left
+          [:span.badge.badge-pill.mr-2.badge-clickable.clickable
+           {:title (labels :suggestions.modal/header)
+            :on-click #(rf/dispatch [:modal {:show? true
+                                             :large? true
+                                             :child [suggestions-modal suggestions suggestions-namespace]}])}
+           [:i {:class (str "m-auto fas " (fa :comment))}] " "
+           (count suggestions)]]]))))
+
+
+;; -----------------------------------------------------------------------------
+
 (defn- edit-header []
   [base/header
    (labels :agenda/edit-title)
@@ -59,46 +102,8 @@
        {:on-click #(rf/dispatch [:agenda/delete (:db/id agenda)])}
        [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
     ;; description
-    [agenda-edit-description agenda]]])
-
-(defn- suggestions-table
-  "Show all suggestions."
-  [suggestions suggestion-type]
-  [:table.table
-   [:thead
-    [:tr
-     [:th {:width "10%"} (labels :suggestions.modal.table/nickname)]
-     [:th {:width "25%"} (labels :suggestions.modal.table/suggestion-title)]
-     [:th {:width "65%"} (labels :suggestions.modal.table/suggestion-description)]]]
-   [:tbody
-    (for [suggestion suggestions]
-      (let [get-value #(suggestion (keyword (str (name suggestion-type) "/" %)))]
-        [:tr {:key (:db/id suggestion)}
-         [:td (get-value "ideator")]
-         [:td (get-value "title")]
-         [:td (get-value "description")]]))]])
-
-(defn- suggestions-modal
-  "Open a modal containing the suggested changes."
-  [suggestions suggestion-type]
-  [modal/modal-template
-   (labels :suggestions.modal/header)
-   [:<>
-    [:p (labels :suggestions.modal/primer)]
-    [suggestions-table suggestions suggestion-type]]])
-
-(defn- suggestions-indicator-meeting [selected-entity subscription-key suggestions-namespace]
-  (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
-    (let [suggestions @(rf/subscribe [subscription-key (:db/id selected-entity)])]
-      [:<>
-       [:p.my-0.p-2.display-6.text-left
-        [:span.badge.badge-pill.mr-2.badge-clickable.clickable
-         {:title (labels :suggestions.modal/header)
-          :on-click #(rf/dispatch [:modal {:show? true
-                                           :large? true
-                                           :child [suggestions-modal suggestions suggestions-namespace]}])}
-         [:i {:class (str "m-auto fas " (fa :comment))}] " "
-         (count suggestions)]]])))
+    [agenda-edit-description agenda]
+    [suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]]])
 
 (defn- editable-meeting-info [selected-meeting]
   [:div.agenda-meeting-container
@@ -126,7 +131,7 @@
      :on-change
      #(rf/dispatch
         [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]
-   [suggestions-indicator-meeting selected-meeting :suggestions/meeting :meeting.suggestion]])
+   [suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]])
 
 (>defn- editable-meeting-template
   "Can be used to present an editable meeting in different views. Customize the heading
@@ -307,3 +312,8 @@
   :suggestions/meeting
   (fn [db [_ meeting-id]]
     (get-in db [:suggestions :meetings meeting-id])))
+
+(rf/reg-sub
+  :suggestions/agenda-updates
+  (fn [db [_ agenda-id]]
+    (get-in db [:suggestions :agendas :updates agenda-id])))
