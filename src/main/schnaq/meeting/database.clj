@@ -227,7 +227,8 @@
 (>defn- suggest-agenda-generic!
   "Transacts multiple new suggestion entities."
   [agenda-suggestions builder-fn]
-  [(s/coll-of map?) fn? :ret any?]
+  [(s/or :entity (s/coll-of map?)
+         :id (s/coll-of :db/id)) fn? :ret any?]
   (->> agenda-suggestions
        (map builder-fn)
        (remove nil?)
