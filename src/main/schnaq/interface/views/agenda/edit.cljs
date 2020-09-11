@@ -28,21 +28,21 @@
       :auto-complete "off"
       :required true
       :placeholder (labels :agenda/point)
-      :default-value (:agenda/title agenda)
+      :value (:agenda/title agenda)
       :id (str "title-" db-id)
-      :on-key-up
+      :on-change
       #(rf/dispatch [:agenda/update-edit-form :agenda/title db-id (oget % [:target :value])])}]))
 
 (defn- agenda-edit-description
-  "The editable description input of an edit-agenda-form"
+  "The editable description input of an edit-agenda-form."
   [agenda]
   (let [db-id (:db/id agenda)]
     [:textarea.form-control.agenda-form-round
      {:name "description"
       :placeholder (labels :agenda/desc-for)
-      :default-value (:agenda/description agenda)
+      :value (:agenda/description agenda)
       :id (str "description-" db-id)
-      :on-key-up
+      :on-change
       #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id (oget % [:target :value])])}]))
 
 (defn- agenda-view [agenda]
@@ -64,26 +64,26 @@
   [:div.agenda-meeting-container
    ;; title form
    [:input.form-control.meeting-edit-title
-    {:default-value (:meeting/title selected-meeting)
+    {:value (:meeting/title selected-meeting)
      :type "text"
      :name "meeting-title"
      :auto-complete "off"
      :required true
      :placeholder (labels :meeting-form-title)
      :id (str "meeting-title-" (:db/id selected-meeting))
-     :on-key-up
+     :on-change
      #(rf/dispatch
         [:meeting/update-meeting-attribute :meeting/title (oget % [:target :value])])}]
    ;; description form
    [:textarea.form-control.meeting-edit-description
-    {:default-value (:meeting/description selected-meeting)
+    {:value (:meeting/description selected-meeting)
      :rows "3"
      :type "text"
      :name "meeting-description"
      :auto-complete "off"
      :placeholder (labels :meeting-form-title)
      :id (str "meeting-description-" (:db/id selected-meeting))
-     :on-key-up
+     :on-change
      #(rf/dispatch
         [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]])
 
@@ -99,8 +99,7 @@
      [base/nav-header]
      heading
      [:div.container.text-center.pb-5
-      [:form {:id "agendas-add-form"
-              :on-submit on-submit-fn}
+      [:form {:on-submit on-submit-fn}
        ;; meeting title and description
        [editable-meeting-info selected-meeting]
        [:div.container
