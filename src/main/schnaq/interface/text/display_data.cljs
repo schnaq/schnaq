@@ -60,6 +60,8 @@
      :meetings/continue-with-schnaq-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
+     :meetings.suggestions/header "Vorschläge einreichen"
+     :meetings.suggestions/subheader "Die erstellende Person kann die Vorschläge einsehen und berücksichtigen"
 
      :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmenden"
      :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."

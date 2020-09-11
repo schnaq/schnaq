@@ -8,10 +8,10 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]))
 
-(defn- header []
-  (base/header
-    (labels :agenda/edit-title)
-    (labels :agenda/edit-subtitle)))
+(defn- edit-header []
+  [base/header
+   (labels :agenda/edit-title)
+   (labels :agenda/edit-subtitle)])
 
 (defn- submit-edit-button []
   [:button.btn.button-primary (labels :agenda/edit-button)])
@@ -91,7 +91,7 @@
         meeting-agendas (:agendas edit-information)]
     [:div#create-agenda
      [base/nav-header]
-     [header]
+     [edit-header]
      [:div.container.text-center.pb-5
       [:form {:id "agendas-add-form"
               :on-submit (fn [e]
@@ -116,7 +116,9 @@
         meeting-agendas (:agendas edit-information)]
     [:<>
      [base/nav-header]
-     [header]
+     [base/header
+      (labels :meetings.suggestions/header)
+      (labels :meetings.suggestions/subheader)]
      [:div.container.text-center.pb-5
       [:form {:id "agendas-add-form"
               :on-submit (fn [e]
