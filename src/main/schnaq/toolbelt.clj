@@ -1,11 +1,10 @@
 (ns schnaq.toolbelt
   "Utility functions supporting the backend."
   (:require [ghostwheel.core :refer [>defn]]
-            [clojure.walk :as walk]
-            [cljs.spec.alpha :as s])
+            [clojure.walk :as walk])
   (:import (java.io File)
            (org.joda.time DateTime)
-           (clojure.lang PersistentArrayMap MapEntry)))
+           (clojure.lang PersistentArrayMap)))
 
 (>defn create-directory!
   "Creates a directory in the project's path. Returns the absolut path of the
