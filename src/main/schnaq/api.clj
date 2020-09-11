@@ -18,6 +18,7 @@
             [schnaq.emails :as emails]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
+            [schnaq.suggestions :as suggestions]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log])
@@ -118,11 +119,10 @@
   [request]
   (let [{:keys [meeting agendas delete-agendas nickname]} (:body-params request)
         user-id (db/add-user-if-not-exists nickname)
-        updated-meeting (select-keys meeting [:db/id :meeting/title :meeting/description])
         updated-agendas (filter :agenda/discussion agendas)
         new-agendas (remove :agenda/discussion agendas)]
-    (db/suggest-meeting-updates! updated-meeting user-id)
-    (db/suggest-agenda-updates! updated-agendas user-id)
+    (suggestions/new-meeting-suggestion meeting user-id)
+    (suggestions/new-agenda-updates-suggestion updated-agendas user-id)
     (db/suggest-new-agendas! new-agendas user-id (:db/id meeting))
     (db/suggest-agenda-deletion! delete-agendas user-id)
     (created "" {:message "Successfully created suggestions!"})))
