@@ -1,6 +1,6 @@
 (ns schnaq.suggestions
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.meeting.database :as db]))
 
 (s/def ::new-meeting-suggestion-input (s/keys :req [:meeting/title :db/id :meeting/share-hash]
@@ -9,7 +9,7 @@
 (>defn new-meeting-suggestion
   "Adds a new meeting suggestions, if it has any changes."
   [suggestion user-id]
-  [::new-meeting-suggestion-input :db/id :ret :db/id]
+  [::new-meeting-suggestion-input :db/id :ret (? :db/id)]
   (let [original-meeting (db/meeting-by-hash (:meeting/share-hash suggestion))
         updated-meeting (select-keys suggestion [:db/id :meeting/title :meeting/description])]
     (when (or (not= (:meeting/title original-meeting) (:meeting/title suggestion))
