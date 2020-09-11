@@ -83,6 +83,7 @@
      :suggestions.modal.table/nickname "Nickname"
      :suggestions.modal.table/suggestion-title "Titel"
      :suggestions.modal.table/suggestion-description "Beschreibung"
+     :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "
@@ -220,13 +221,15 @@
   "Returns an fontawesome icon id as String for a given identifier"
   [identifier]
   (identifier
-    {:laptop "fa-laptop-code"
-     :comment "fa-comments"
-     :carry "fa-people-carry"
-     :arrow-right "fa-arrow-right"
+    {:add "fa-plus-circle"
      :arrow-left "fa-arrow-left"
+     :arrow-right "fa-arrow-right"
      :arrow-up "fa-arrow-up"
-     :arrow-down "fa-arrow-down"
-     :delete-icon "fa-times-circle"
+     :carry "fa-people-carry"
+     :comment "fa-comments"
      :copy "fa-copy"
+     :delete-icon "fa-times-circle"
+     :edit "fa-edit"
+     :laptop "fa-laptop-code"
+     :trash "fa-trash-alt"
      :users "fa-users"}))

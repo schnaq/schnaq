@@ -41,15 +41,44 @@
   (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
     (let [suggestions @(rf/subscribe [subscription-key (:db/id selected-entity)])]
       (when (seq suggestions)
-        [:<>
-         [:p.my-0.p-2.display-6.text-left
-          [:span.badge.badge-pill.mr-2.badge-clickable.clickable
-           {:title (labels :suggestions.modal/header)
-            :on-click #(rf/dispatch [:modal {:show? true
-                                             :large? true
-                                             :child [suggestions-modal suggestions suggestions-namespace]}])}
-           [:i {:class (str "m-auto fas " (fa :comment))}] " "
-           (count suggestions)]]]))))
+        [:span.badge.badge-pill.mr-2.badge-clickable.clickable
+         {:title (labels :suggestions.modal/header)
+          :on-click #(rf/dispatch [:modal {:show? true
+                                           :large? true
+                                           :child [suggestions-modal suggestions suggestions-namespace]}])}
+         [:i {:class (str "m-auto fas " (fa :edit))}] " "
+         (count suggestions)]))))
+
+(defn- deletion-modal [suggestions]
+  [modal/modal-template
+   (labels :suggestions.modal/header)
+   [:<>
+    [:p (labels :suggestions.modal/primer)]
+    [:strong (labels :suggestions.modal.delete/title)]
+    [:ul
+     (for [suggestion suggestions]
+       [:li {:key (:db/id suggestion)}
+        (:agenda.suggestion/ideator suggestion)])]]])
+
+(defn- deletion-badge
+  "Badge containing the wishes of users to delete the agenda point."
+  [agenda]
+  (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
+    (let [delete-suggestions @(rf/subscribe [:suggestions/agenda-delete (:db/id agenda)])]
+      (when (seq delete-suggestions)
+        [:span.badge.badge-pill.mr-2.badge-clickable.clickable
+         {:title (labels :suggestions.modal.delete/title)
+          :on-click #(rf/dispatch [:modal {:show? true
+                                           :large? true
+                                           :child [deletion-modal delete-suggestions]}])}
+         [:i {:class (str "m-auto fas " (fa :trash))}] " "
+         (count delete-suggestions)]))))
+
+(defn- badge-wrapper
+  "Wrap all the badges!"
+  [& badges]
+  [:div.my-0.p-2.display-6.text-left
+   badges])
 
 
 ;; -----------------------------------------------------------------------------
@@ -90,7 +119,7 @@
       #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id (oget % [:target :value])])}]))
 
 (defn- agenda-view [agenda]
-  [:div
+  [:<>
    [:div.agenda-line]
    [:div.edit-agenda-div.agenda-point
     [:div.row.agenda-row-title
@@ -103,7 +132,13 @@
        [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
     ;; description
     [agenda-edit-description agenda]
-    [suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]]])
+    [badge-wrapper
+     (with-meta
+       [suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
+       {:key (str "suggestion-badge-" (:db/id agenda))})
+     (with-meta
+       [deletion-badge agenda]
+       {:key (str "deletion-badge-" (:db/id agenda))})]]])
 
 (defn- editable-meeting-info [selected-meeting]
   [:div.agenda-meeting-container
@@ -131,7 +166,10 @@
      :on-change
      #(rf/dispatch
         [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]
-   [suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]])
+   [badge-wrapper
+    (with-meta
+      [suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]
+      {:key (str "suggestion-badge-" (:db/id selected-meeting))})]])
 
 (>defn- editable-meeting-template
   "Can be used to present an editable meeting in different views. Customize the heading
@@ -317,3 +355,8 @@
   :suggestions/agenda-updates
   (fn [db [_ agenda-id]]
     (get-in db [:suggestions :agendas :updates agenda-id])))
+
+(rf/reg-sub
+  :suggestions/agenda-delete
+  (fn [db [_ agenda-id]]
+    (get-in db [:suggestions :agendas :delete agenda-id])))
