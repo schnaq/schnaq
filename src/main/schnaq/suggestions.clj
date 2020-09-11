@@ -17,10 +17,13 @@
       (db/suggest-meeting-updates! updated-meeting user-id))))
 
 (>defn- does-agenda-suggestion-change-anything?
+  "Check if an agenda suggestion contains changes compared to the database
+  entity."
   [suggestion]
+  [:db/agenda-suggestion-input :ret boolean?]
   (let [original-agenda (db/agenda (:db/id suggestion))]
-     (or (not= (:agenda/title original-agenda) (:agenda/title suggestion))
-         (not= (:agenda/description original-agenda) (:agenda/description suggestion)))))
+    (or (not= (:agenda/title original-agenda) (:agenda/title suggestion))
+        (not= (:agenda/description original-agenda) (:agenda/description suggestion)))))
 
 (>defn new-agenda-updates-suggestion
   "Adds agenda-suggestions, if they represent changes."
