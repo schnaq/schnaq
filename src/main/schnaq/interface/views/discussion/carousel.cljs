@@ -13,13 +13,13 @@
   [id# statements]
   [:ol.carousel-indicators.carousel-indicator-custom
    ;; get number of statements and set the first element as selected
-   (map (fn [i] (let [params {:key (str "indicator-" (:db/id (nth statements i)))
-                              :data-target id#
-                              :data-slide-to (str i)}]
-                  (if (zero? i)
-                    [:li.active params]
-                    [:li params])))
-        (range (count statements)))])
+   [:li.active {:key (str "indicator-" (:db/id (nth statements 0)))
+                :data-target id#
+                :data-slide-to 0}]
+   (for [[index statement] (map-indexed vector (rest statements))]
+     [:li {:key (str "indicator-" (:db/id statement))
+           :data-target id#
+           :data-slide-to (inc index)}])])
 
 (defn- carousel-content
   "Display statement-bubbles inside a carousel."
@@ -79,7 +79,7 @@
          (js-wrap/add-listener id# event-name listener-fn))
        :component-did-update
        (fn [this _argv]
-         (let [[_ _ new-statements _] (reagent/argv this)]
+         (let [[_ new-statements _] (reagent/argv this)]
            (reset! statements-atom new-statements)
            (js-wrap/remove-listener id# event-name)
            (js-wrap/add-listener id# event-name listener-fn)))
