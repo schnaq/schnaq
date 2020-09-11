@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.agenda.edit
   (:require [ajax.core :as ajax]
+            [ghostwheel.core :refer [>defn-]]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -85,45 +86,20 @@
      #(rf/dispatch
         [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]])
 
-(defn- edit-view []
-  (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
-        selected-meeting (:meeting edit-information)
-        meeting-agendas (:agendas edit-information)]
-    [:div#create-agenda
-     [base/nav-header]
-     [edit-header]
-     [:div.container.text-center.pb-5
-      [:form {:id "agendas-add-form"
-              :on-submit (fn [e]
-                           (js-wrap/prevent-default e)
-                           (rf/dispatch [:meeting/submit-changes]))}
-       ;; meeting title and description
-       [editable-meeting-info selected-meeting]
-       [:div.container
-        (for [agenda meeting-agendas]
-          [:div {:key (:db/id agenda)}
-           [agenda-view agenda]])
-        [:div.agenda-line]
-        [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
-        [submit-edit-button]]]]]))
-
-(defn agenda-edit-view []
-  [edit-view])
-
-(defn- suggestion-view []
+(>defn- editable-meeting-template
+  "Can be used to present an editable meeting in different views. Customize the heading
+  and on-submit-function to your liking."
+  [heading on-submit-fn]
+  [:re-frame/component fn? :ret :re-frame/component]
   (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
         selected-meeting (:meeting edit-information)
         meeting-agendas (:agendas edit-information)]
     [:<>
      [base/nav-header]
-     [base/header
-      (labels :meetings.suggestions/header)
-      (labels :meetings.suggestions/subheader)]
+     heading
      [:div.container.text-center.pb-5
       [:form {:id "agendas-add-form"
-              :on-submit (fn [e]
-                           (js-wrap/prevent-default e)
-                           (rf/dispatch [:meeting/submit-suggestions]))}
+              :on-submit on-submit-fn}
        ;; meeting title and description
        [editable-meeting-info selected-meeting]
        [:div.container
@@ -133,6 +109,25 @@
         [:div.agenda-line]
         [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
         [submit-edit-button]]]]]))
+
+(defn- edit-view []
+  [editable-meeting-template
+   [edit-header]
+   (fn [e]
+     (js-wrap/prevent-default e)
+     (rf/dispatch [:meeting/submit-changes]))])
+
+(defn agenda-edit-view []
+  [edit-view])
+
+(defn- suggestion-view []
+  [editable-meeting-template
+   [base/header
+    (labels :meetings.suggestions/header)
+    (labels :meetings.suggestions/subheader)]
+   (fn [e]
+     (js-wrap/prevent-default e)
+     (rf/dispatch [:meeting/submit-suggestions]))])
 
 (defn agenda-suggestion-view []
   [suggestion-view])
