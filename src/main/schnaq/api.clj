@@ -127,6 +127,18 @@
     (db/suggest-agenda-deletion! delete-agendas user-id)
     (created "" {:message "Successfully created suggestions!"})))
 
+(>defn- load-meeting-suggestions
+  "Return all suggestions for a given meeting by its share hash."
+  [{:keys [params]}]
+  [:ring/request :ret :ring/response]
+  (let [{:keys [share-hash edit-hash]} params]
+    (if (valid-credentials? share-hash edit-hash)
+      (let [agenda-suggestions (group-by :agenda.suggestion/type (db/all-agenda-suggestions share-hash))
+            meeting-suggestions (db/all-meeting-suggestions share-hash)]
+        (ok (assoc agenda-suggestions
+              :meeting.suggestions/all meeting-suggestions)))
+      (deny-access))))
+
 (defn- add-author
   "Adds an author to the database."
   [req]
@@ -411,6 +423,7 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
+    (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
     (POST "/meeting/suggestions" [] meeting-suggestions)
     (POST "/author/add" [] add-author)
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
