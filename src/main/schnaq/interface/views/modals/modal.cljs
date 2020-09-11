@@ -22,10 +22,9 @@
 
 (defn modal []
   (let [modal (rf/subscribe [:modal])]
-    (fn []
-      [:div
-       (when (:show? @modal)
-         [modal-panel @modal])])))
+    [:<>
+     (when (:show? @modal)
+       [modal-panel @modal])]))
 
 (defn close-modal []
   (rf/dispatch [:modal {:show? false :child nil}]))
