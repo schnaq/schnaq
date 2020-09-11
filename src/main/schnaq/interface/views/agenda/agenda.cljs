@@ -59,9 +59,25 @@
         [:span.display-6.my-4 (data/labels :agenda.create/optional-agenda)]
         [:span.display-4 "+"])]]))
 
-(defn load-agenda-fn [hash on-success-event]
+(rf/reg-event-db
+  :meeting/suggestions
+  (fn [db [_ _suggestions]]
+    db))
+
+(rf/reg-event-fx
+  :suggestions/for-meeting
+  (fn [_ [_ share-hash edit-hash]]
+    {:fx [[:http-xhrio {:method :get
+                        :uri (gstring/format "%s/meeting/suggestions/%s/%s"
+                                             (:rest-backend config) share-hash edit-hash)
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:meeting/suggestions]
+                        :on-failure [:ajax-failure]}]]}))
+
+(defn load-agenda-fn [share-hash on-success-event]
   {:fx [[:http-xhrio {:method :get
-                      :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" hash)
+                      :uri (str (:rest-backend config) "/agendas/by-meeting-hash/" share-hash)
                       :format (ajax/transit-request-format)
                       :response-format (ajax/transit-response-format)
                       :on-success [on-success-event]
