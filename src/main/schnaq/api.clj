@@ -129,9 +129,9 @@
 
 (>defn- load-meeting-suggestions
   "Return all suggestions for a given meeting by its share hash."
-  [{:keys [params]}]
+  [{:keys [route-params]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash]} params]
+  (let [{:keys [share-hash edit-hash]} route-params]
     (if (valid-credentials? share-hash edit-hash)
       (let [agenda-suggestions (group-by :agenda.suggestion/type (db/all-agenda-suggestions share-hash))
             meeting-suggestions (db/all-meeting-suggestions share-hash)]
