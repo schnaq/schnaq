@@ -136,8 +136,8 @@
 
 (rf/reg-event-fx
   :agenda/load-for-edit
-  (fn [_ [_ hash]]
-    (agenda/load-agenda-fn hash :agenda/load-for-edit-success)))
+  (fn [_ [_ share-hash]]
+    (agenda/load-agenda-fn share-hash :agenda/load-for-edit-success)))
 
 (rf/reg-event-db
   :agenda/load-for-edit-success
