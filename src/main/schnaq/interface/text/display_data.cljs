@@ -84,6 +84,8 @@
      :suggestions.modal.table/suggestion-title "Titel"
      :suggestions.modal.table/suggestion-description "Beschreibung"
      :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
+     :suggestions.modal.update/title "Änderungsvorschläge"
+     :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "

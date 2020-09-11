@@ -30,31 +30,31 @@
 
 (defn- suggestions-modal
   "Open a modal containing the suggested changes."
-  [suggestions suggestion-type]
+  [suggestions suggestion-type modal-title]
   [modal/modal-template
-   (labels :suggestions.modal/header)
+   modal-title
    [:<>
     [:p (labels :suggestions.modal/primer)]
     [suggestions-table suggestions suggestion-type]]])
 
-(defn- suggestions-badge [selected-entity subscription-key suggestions-namespace]
-  (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
-    (let [suggestions @(rf/subscribe [subscription-key (:db/id selected-entity)])]
-      (when (seq suggestions)
-        [:span.badge.badge-pill.mr-2.badge-clickable.clickable
-         {:title (labels :suggestions.modal/header)
-          :on-click #(rf/dispatch [:modal {:show? true
-                                           :large? true
-                                           :child [suggestions-modal suggestions suggestions-namespace]}])}
-         [:i {:class (str "m-auto fas " (fa :edit))}] " "
-         (count suggestions)]))))
+(defn- update-suggestions-badge
+  "Show update-suggestion badge."
+  [selected-entity subscription-key suggestions-namespace]
+  (when-let [suggestions @(rf/subscribe [subscription-key (:db/id selected-entity)])]
+    [:span.badge.badge-pill.mr-2.badge-clickable.clickable
+     {:title (labels :suggestions.modal/header)
+      :on-click #(rf/dispatch [:modal {:show? true
+                                       :large? true
+                                       :child [suggestions-modal suggestions suggestions-namespace
+                                               (labels :suggestions.modal.update/title)]}])}
+     [:i {:class (str "m-auto fas " (fa :edit))}] " "
+     (count suggestions)]))
 
 (defn- deletion-modal [suggestions]
   [modal/modal-template
-   (labels :suggestions.modal/header)
+   (labels :suggestions.modal.delete/title)
    [:<>
     [:p (labels :suggestions.modal/primer)]
-    [:strong (labels :suggestions.modal.delete/title)]
     [:ul
      (for [suggestion suggestions]
        [:li {:key (:db/id suggestion)}
@@ -63,22 +63,34 @@
 (defn- deletion-badge
   "Badge containing the wishes of users to delete the agenda point."
   [agenda]
-  (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
-    (let [delete-suggestions @(rf/subscribe [:suggestions/agenda-delete (:db/id agenda)])]
-      (when (seq delete-suggestions)
-        [:span.badge.badge-pill.mr-2.badge-clickable.clickable
-         {:title (labels :suggestions.modal.delete/title)
-          :on-click #(rf/dispatch [:modal {:show? true
-                                           :large? true
-                                           :child [deletion-modal delete-suggestions]}])}
-         [:i {:class (str "m-auto fas " (fa :trash))}] " "
-         (count delete-suggestions)]))))
+  (when-let [delete-suggestions @(rf/subscribe [:suggestions/agenda-delete (:db/id agenda)])]
+    [:span.badge.badge-pill.mr-2.badge-clickable.clickable
+     {:title (labels :suggestions.modal.delete/title)
+      :on-click #(rf/dispatch [:modal {:show? true
+                                       :large? true
+                                       :child [deletion-modal delete-suggestions]}])}
+     [:i {:class (str "m-auto fas " (fa :trash))}] " "
+     (count delete-suggestions)]))
+
+(defn- addition-badge
+  "Badge indicating an addition of an agenda point to the meeting."
+  []
+  (when-let [suggestions @(rf/subscribe [:suggestions/agenda-new])]
+    [:span.badge.badge-pill.mr-2.badge-clickable.clickable
+     {:title (labels :suggestions.modal/header)
+      :on-click #(rf/dispatch [:modal {:show? true
+                                       :large? true
+                                       :child [suggestions-modal suggestions :agenda.suggestion
+                                               (labels :suggestions.modal.new/title)]}])}
+     [:i {:class (str "m-auto fas " (fa :add))}] " "
+     (count suggestions)]))
 
 (defn- badge-wrapper
   "Wrap all the badges!"
   [& badges]
-  [:div.my-0.p-2.display-6.text-left
-   badges])
+  (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
+    [:div.my-0.p-2.display-6.text-left
+     badges]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -134,7 +146,7 @@
     [agenda-edit-description agenda]
     [badge-wrapper
      (with-meta
-       [suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
+       [update-suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
        {:key (str "suggestion-badge-" (:db/id agenda))})
      (with-meta
        [deletion-badge agenda]
@@ -168,8 +180,11 @@
         [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]
    [badge-wrapper
     (with-meta
-      [suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]
-      {:key (str "suggestion-badge-" (:db/id selected-meeting))})]])
+      [update-suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]
+      {:key (str "suggestion-badge-" (:db/id selected-meeting))})
+    (with-meta
+      [addition-badge]
+      {:key (str "addition-badge-" (:db/id selected-meeting))})]])
 
 (>defn- editable-meeting-template
   "Can be used to present an editable meeting in different views. Customize the heading
@@ -360,3 +375,9 @@
   :suggestions/agenda-delete
   (fn [db [_ agenda-id]]
     (get-in db [:suggestions :agendas :delete agenda-id])))
+
+(rf/reg-sub
+  :suggestions/agenda-new
+  (fn [db _]
+    (get-in db [:suggestions :agendas :new])))
+
