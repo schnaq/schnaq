@@ -30,6 +30,7 @@
   background-color: $primary;
   border-radius: 1.5rem;
   color: $white;
+  overflow: hidden;
   text-align: center;
 }
 
@@ -54,7 +55,7 @@
 .agenda-form-round {
   background-color: rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 1.5rem 1.5rem;
+  //border-radius: 0 0 1.5rem 1.5rem;
   box-sizing: border-box;
   color: $white;
   padding: 1rem 2rem 2rem;
