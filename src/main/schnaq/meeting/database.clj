@@ -164,6 +164,7 @@
       (transact [clean-entity])
       (:db/id entity))))
 
+
 ;; -----------------------------------------------------------------------------
 ;; Suggestions
 
@@ -282,8 +283,26 @@
    {:agenda.suggestion/meeting [:db/id]}
    {:agenda.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
 
-(defn all-agenda-suggestions
-  "Return all suggestions concerning an agenda for a given meeting-hash."
+(defn- all-new-agenda-suggestions
+  "New agenda suggestions don't have an existing agenda id. This function
+  returns them separately."
+  [share-hash]
+  (->
+    (d/q
+      '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
+        :in $ ?share-hash agenda-suggestion-pattern
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?agenda-suggestions :agenda.suggestion/meeting ?meeting]
+        [?agenda-suggestions :agenda.suggestion/type :agenda.suggestion.type/new]]
+      (d/db (new-connection)) share-hash agenda-suggestion-pattern)
+    (toolbelt/pull-key-up :db/ident)
+    (toolbelt/pull-key-up :user/core-author)
+    (toolbelt/pull-key-up :author/nickname)
+    flatten))
+
+(defn- all-update-and-delete-agenda-suggestions
+  "Return all update- and delete-suggestions concerning an agenda for a given
+  meeting's share-hash."
   [share-hash]
   (-> (d/q
         '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
@@ -296,6 +315,12 @@
       (toolbelt/pull-key-up :user/core-author)
       (toolbelt/pull-key-up :author/nickname)
       flatten))
+
+(defn all-agenda-suggestions
+  "Return all suggestions for a given meeting share-hash."
+  [share-hash]
+  (concat (all-update-and-delete-agenda-suggestions share-hash)
+          (all-new-agenda-suggestions share-hash)))
 
 
 ;; -----------------------------------------------------------------------------
