@@ -7,7 +7,8 @@
             [schnaq.config :as config]
             [schnaq.meeting.models :as models]
             [schnaq.meeting.specs :as specs]
-            [schnaq.test-data :as test-data])
+            [schnaq.test-data :as test-data]
+            [schnaq.toolbelt :as toolbelt])
   (:import (java.util Date UUID)))
 
 (def ^:private datomic-info
@@ -249,6 +250,51 @@
   [agenda-ids user-id]
   [::delete-agenda-suggestion-inputs :db/id :ret any?]
   (suggest-agenda-generic! agenda-ids (partial build-delete-agenda-suggestion user-id)))
+
+(def ^:private meeting-suggestion-pattern
+  [:db/id
+   {:meeting.suggestion/meeting [:db/id]}
+   :meeting.suggestion/title
+   :meeting.suggestion/description
+   {:meeting.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
+
+(defn all-meeting-suggestions
+  "Return all suggestions for a meeting."
+  [share-hash]
+  (-> (d/q
+        '[:find (pull ?meeting-suggestion meeting-suggestion-pattern)
+          :in $ ?share-hash meeting-suggestion-pattern
+          :where [?meeting :meeting/share-hash ?share-hash]
+          [?agendas :agenda/meeting ?meeting]
+          [?meeting-suggestion :meeting.suggestion/meeting ?meeting]]
+        (d/db (new-connection)) share-hash meeting-suggestion-pattern)
+      (toolbelt/pull-key-up :user/core-author)
+      (toolbelt/pull-key-up :author/nickname)
+      flatten))
+
+(def ^:private agenda-suggestion-pattern
+  [:db/id
+   :agenda.suggestion/title
+   :agenda.suggestion/description
+   :agenda.suggestion/type
+   {:agenda.suggestion/agenda [:db/id]}
+   {:agenda.suggestion/meeting [:db/id]}
+   {:agenda.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
+
+(defn all-agenda-suggestions
+  "Return all suggestions concerning an agenda for a given meeting-hash."
+  [share-hash]
+  (-> (d/q
+        '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
+          :in $ ?share-hash agenda-suggestion-pattern
+          :where [?meeting :meeting/share-hash ?share-hash]
+          [?agendas :agenda/meeting ?meeting]
+          [?agenda-suggestions :agenda.suggestion/agenda ?agendas]]
+        (d/db (new-connection)) share-hash agenda-suggestion-pattern)
+      (toolbelt/pull-key-up :db/ident)
+      (toolbelt/pull-key-up :user/core-author)
+      (toolbelt/pull-key-up :author/nickname)
+      flatten))
 
 
 ;; -----------------------------------------------------------------------------
