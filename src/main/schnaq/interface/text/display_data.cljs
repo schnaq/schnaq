@@ -77,6 +77,12 @@
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
      :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
 
+     ;; Suggestions
+     :suggestions.modal/header "Eingereichte Vorschläge"
+     :suggestions.modal/primer "Einige TeilnehmerInnen haben Ihnen Vorschläge zu Ihrem schnaq gegeben."
+     :suggestions.modal.table/nickname "Nickname"
+     :suggestions.modal.table/suggestion-title "Titel"
+     :suggestions.modal.table/suggestion-description "Beschreibung"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "
