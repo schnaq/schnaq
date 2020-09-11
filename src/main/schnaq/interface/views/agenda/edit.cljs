@@ -60,6 +60,16 @@
     ;; description
     [agenda-edit-description agenda]]])
 
+(defn- suggestions-indicator-meeting [selected-meeting]
+  (let [meeting-id (:db/id selected-meeting)
+        suggestions @(rf/subscribe [:suggestions/meeting meeting-id])]
+    [:<>
+     [:p.my-0.p-2.display-6.text-left
+      [:span.badge.badge-pill.mr-2.badge-clickable.clickable
+       {:title "Änderungsvorschläge"}
+       [:i {:class (str "m-auto fas " (fa :comment))}] " "
+       (count suggestions)]]]))
+
 (defn- editable-meeting-info [selected-meeting]
   [:div.agenda-meeting-container
    ;; title form
@@ -85,7 +95,9 @@
      :id (str "meeting-description-" (:db/id selected-meeting))
      :on-change
      #(rf/dispatch
-        [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]])
+        [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]
+   (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
+     [suggestions-indicator-meeting selected-meeting])])
 
 (>defn- editable-meeting-template
   "Can be used to present an editable meeting in different views. Customize the heading
@@ -246,13 +258,13 @@
                      agenda.suggestion.type/delete meeting.suggestions/all]}]]
     (let [group-by-agenda-id #(get-in % [:agenda.suggestion/agenda :db/id])]
       (-> db
-          (assoc-in [:suggestions :meetings (:db/id (first all))] all)
+          (assoc-in [:suggestions :meetings (:db/id (:meeting.suggestion/meeting (first all)))] all)
           (assoc-in [:suggestions :agendas :updates] (group-by group-by-agenda-id update))
           (assoc-in [:suggestions :agendas :delete] (group-by group-by-agenda-id delete))
           (assoc-in [:suggestions :agendas :new] new)))))
 
 (rf/reg-event-fx
-  :suggestions/for-meeting
+  :suggestions/send-updates
   (fn [_ [_ share-hash edit-hash]]
     {:fx [[:http-xhrio {:method :get
                         :uri (gstring/format "%s/meeting/suggestions/%s/%s"
@@ -261,3 +273,8 @@
                         :response-format (ajax/transit-response-format)
                         :on-success [:suggestions/for-meeting-success]
                         :on-failure [:ajax-failure]}]]}))
+
+(rf/reg-sub
+  :suggestions/meeting
+  (fn [db [_ meeting-id]]
+    (get-in db [:suggestions :meetings meeting-id])))

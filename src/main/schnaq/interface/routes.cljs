@@ -67,7 +67,7 @@
         :controllers [{:parameters {:path [:share-hash :edit-hash]}
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:agenda/load-for-edit (:share-hash path)])
-                                (rf/dispatch [:suggestions/for-meeting (:share-hash path) (:edit-hash path)]))}]}]
+                                (rf/dispatch [:suggestions/send-updates (:share-hash path) (:edit-hash path)]))}]}]
       ["/created"
        {:name :routes.meeting/created
         :view meeting-admin/admin-central-view
