@@ -64,7 +64,7 @@
       ["/edit"
        {:name :routes.meeting/edit
         :view agenda-edit/agenda-edit-view
-        :controllers [{:parameters {:path [:share-hash]}
+        :controllers [{:parameters {:path [:share-hash :edit-hash]}
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:agenda/load-for-edit (:share-hash path)])
                                 (rf/dispatch [:suggestions/for-meeting (:share-hash path) (:edit-hash path)]))}]}]

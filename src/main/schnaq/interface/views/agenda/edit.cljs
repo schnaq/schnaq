@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.agenda.edit
   (:require [ajax.core :as ajax]
             [ghostwheel.core :refer [>defn-]]
+            [goog.string :as gstring]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -127,7 +128,7 @@
     (labels :meetings.suggestions/subheader)]
    (fn [e]
      (js-wrap/prevent-default e)
-     (rf/dispatch [:meeting/submit-suggestions]))])
+     (rf/dispatch [:suggestions/submit]))])
 
 (defn agenda-suggestion-view []
   [suggestion-view])
@@ -225,7 +226,7 @@
                                      :context :success}]]]}))
 
 (rf/reg-event-fx
-  :meeting/submit-suggestions
+  :suggestions/submit
   (fn [{:keys [db]} _]
     (let [edit-meeting (:edit-meeting db)
           nickname (-> db :user :name)]
@@ -239,3 +240,25 @@
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting/on-success-submit-suggestions-event]
                           :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-db
+  :suggestions/for-meeting-success
+  (fn [db [_ {:keys [agenda.suggestion.type/update agenda.suggestion.type/new
+                     agenda.suggestion.type/delete meeting.suggestions/all]}]]
+    (let [group-by-agenda-id #(get-in % [:agenda.suggestion/agenda :db/id])]
+      (-> db
+          (assoc-in [:suggestions :meetings (:db/id (first all))] all)
+          (assoc-in [:suggestions :agendas :updates] (group-by group-by-agenda-id update))
+          (assoc-in [:suggestions :agendas :delete] (group-by group-by-agenda-id delete))
+          (assoc-in [:suggestions :agendas :new] new)))))
+
+(rf/reg-event-fx
+  :suggestions/for-meeting
+  (fn [_ [_ share-hash edit-hash]]
+    {:fx [[:http-xhrio {:method :get
+                        :uri (gstring/format "%s/meeting/suggestions/%s/%s"
+                                             (:rest-backend config) share-hash edit-hash)
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:suggestions/for-meeting-success]
+                        :on-failure [:ajax-failure]}]]}))
