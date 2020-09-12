@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.meeting.single
-  (:require [schnaq.interface.views.base :as base]
+  (:require [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.base :as base]))
 
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry
@@ -47,7 +48,12 @@
      [:div.container.py-2
       [:div.meeting-single-rounded
        ;; list agendas
-       [agenda-in-meeting-view current-meeting]]]]))
+       [agenda-in-meeting-view current-meeting]]
+      [:div.text-center.pb-2
+       [:button.btn.button-primary.button-md
+        {:on-click #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
+                                  {:share-hash (:meeting/share-hash current-meeting)}])}
+        (labels :agendas.button/navigate-to-suggestions)]]]]))
 
 (defn single-meeting-view
   "Show a single meeting and all its Agendas."
