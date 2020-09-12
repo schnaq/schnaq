@@ -7,7 +7,8 @@
             [schnaq.config :as config]
             [schnaq.meeting.models :as models]
             [schnaq.meeting.specs :as specs]
-            [schnaq.test-data :as test-data])
+            [schnaq.test-data :as test-data]
+            [schnaq.toolbelt :as toolbelt])
   (:import (java.util Date UUID)))
 
 (def ^:private datomic-info
@@ -162,6 +163,164 @@
     (when (s/valid? spec clean-entity)
       (transact [clean-entity])
       (:db/id entity))))
+
+
+;; -----------------------------------------------------------------------------
+;; Suggestions
+
+(s/def ::meeting-suggestion-input (s/keys :req [:meeting/title :db/id]
+                                          :opt [:meeting/description]))
+
+(>defn suggest-meeting-updates!
+  "Creates a new suggestion for a meeting update."
+  [{:keys [db/id meeting/title meeting/description] :as meeting-suggestion} user-id]
+  [::meeting-suggestion-input :db/id :ret :db/id]
+  (let [clean-suggestion (clean-db-vals meeting-suggestion)]
+    (when (s/valid? ::meeting-suggestion-input clean-suggestion)
+      (let [raw-suggestion {:db/id "temporary-suggestion"
+                            :meeting.suggestion/ideator user-id
+                            :meeting.suggestion/meeting id
+                            :meeting.suggestion/title title}]
+        (get-in
+          (transact [(if description
+                       (assoc raw-suggestion :meeting.suggestion/description description)
+                       raw-suggestion)])
+          [:tempids "temporary-suggestion"])))))
+
+(s/def ::agenda-suggestion-input (s/keys :req [:agenda/title :db/id]
+                                         :opt [:agenda/description]))
+(s/def ::new-agenda-suggestion-input (s/keys :req [:agenda/title]
+                                             :opt [:agenda/description]))
+(s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion-input))
+(s/def ::new-agenda-suggestion-inputs (s/coll-of ::new-agenda-suggestion-input))
+(s/def ::delete-agenda-suggestion-inputs (s/coll-of :db/id))
+(s/def :agenda.suggestion/type #{:agenda.suggestion.type/update :agenda.suggestion.type/new :agenda.suggestion.type/delete})
+
+(defn- build-update-agenda-suggestion
+  [user-id {:keys [db/id agenda/title agenda/description] :as agenda-suggestion}]
+  (when (s/valid? ::agenda-suggestion-input (clean-db-vals agenda-suggestion))
+    (let [raw-suggestion {:agenda.suggestion/agenda id
+                          :agenda.suggestion/ideator user-id
+                          :agenda.suggestion/title title
+                          :agenda.suggestion/type :agenda.suggestion.type/update}]
+      (if description
+        (assoc raw-suggestion :agenda.suggestion/description description)
+        raw-suggestion))))
+
+(defn- build-delete-agenda-suggestion
+  [user-id agenda-id]
+  (when (s/valid? :db/id agenda-id)
+    {:agenda.suggestion/agenda agenda-id
+     :agenda.suggestion/ideator user-id
+     :agenda.suggestion/type :agenda.suggestion.type/delete}))
+
+(defn- build-new-agenda-suggestion
+  [user-id meeting-id {:keys [agenda/title agenda/description] :as agenda-suggestion}]
+  (when (s/valid? ::new-agenda-suggestion-input (clean-db-vals agenda-suggestion))
+    (let [raw-suggestion {:agenda.suggestion/ideator user-id
+                          :agenda.suggestion/title title
+                          :agenda.suggestion/type :agenda.suggestion.type/new
+                          :agenda.suggestion/meeting meeting-id}]
+      (if description
+        (assoc raw-suggestion :agenda.suggestion/description description)
+        raw-suggestion))))
+
+(>defn- suggest-agenda-generic!
+  "Transacts multiple new suggestion entities."
+  [agenda-suggestions builder-fn]
+  [(s/or :entity (s/coll-of map?)
+         :id (s/coll-of :db/id)) fn? :ret any?]
+  (->> agenda-suggestions
+       (map builder-fn)
+       (remove nil?)
+       (into [])
+       transact))
+
+(>defn suggest-agenda-updates!
+  "Creates new suggestions for agenda updates."
+  [agenda-suggestions user-id]
+  [::agenda-suggestion-inputs :db/id :ret any?]
+  (suggest-agenda-generic! agenda-suggestions (partial build-update-agenda-suggestion user-id)))
+
+(>defn suggest-new-agendas!
+  "Creates suggestions for new agendas."
+  [agenda-suggestions user-id meeting-id]
+  [::new-agenda-suggestion-inputs :db/id :db/id :ret any?]
+  (suggest-agenda-generic! agenda-suggestions (partial build-new-agenda-suggestion user-id meeting-id)))
+
+(>defn suggest-agenda-deletion!
+  [agenda-ids user-id]
+  [::delete-agenda-suggestion-inputs :db/id :ret any?]
+  (suggest-agenda-generic! agenda-ids (partial build-delete-agenda-suggestion user-id)))
+
+(def ^:private meeting-suggestion-pattern
+  [:db/id
+   {:meeting.suggestion/meeting [:db/id]}
+   :meeting.suggestion/title
+   :meeting.suggestion/description
+   {:meeting.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
+
+(defn all-meeting-suggestions
+  "Return all suggestions for a meeting."
+  [share-hash]
+  (-> (d/q
+        '[:find (pull ?meeting-suggestion meeting-suggestion-pattern)
+          :in $ ?share-hash meeting-suggestion-pattern
+          :where [?meeting :meeting/share-hash ?share-hash]
+          [?agendas :agenda/meeting ?meeting]
+          [?meeting-suggestion :meeting.suggestion/meeting ?meeting]]
+        (d/db (new-connection)) share-hash meeting-suggestion-pattern)
+      (toolbelt/pull-key-up :user/core-author)
+      (toolbelt/pull-key-up :author/nickname)
+      flatten))
+
+(def ^:private agenda-suggestion-pattern
+  [:db/id
+   :agenda.suggestion/title
+   :agenda.suggestion/description
+   :agenda.suggestion/type
+   {:agenda.suggestion/agenda [:db/id]}
+   {:agenda.suggestion/meeting [:db/id]}
+   {:agenda.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
+
+(defn- all-new-agenda-suggestions
+  "New agenda suggestions don't have an existing agenda id. This function
+  returns them separately."
+  [share-hash]
+  (->
+    (d/q
+      '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
+        :in $ ?share-hash agenda-suggestion-pattern
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?agenda-suggestions :agenda.suggestion/meeting ?meeting]
+        [?agenda-suggestions :agenda.suggestion/type :agenda.suggestion.type/new]]
+      (d/db (new-connection)) share-hash agenda-suggestion-pattern)
+    (toolbelt/pull-key-up :db/ident)
+    (toolbelt/pull-key-up :user/core-author)
+    (toolbelt/pull-key-up :author/nickname)
+    flatten))
+
+(defn- all-update-and-delete-agenda-suggestions
+  "Return all update- and delete-suggestions concerning an agenda for a given
+  meeting's share-hash."
+  [share-hash]
+  (-> (d/q
+        '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
+          :in $ ?share-hash agenda-suggestion-pattern
+          :where [?meeting :meeting/share-hash ?share-hash]
+          [?agendas :agenda/meeting ?meeting]
+          [?agenda-suggestions :agenda.suggestion/agenda ?agendas]]
+        (d/db (new-connection)) share-hash agenda-suggestion-pattern)
+      (toolbelt/pull-key-up :db/ident)
+      (toolbelt/pull-key-up :user/core-author)
+      (toolbelt/pull-key-up :author/nickname)
+      flatten))
+
+(defn all-agenda-suggestions
+  "Return all suggestions for a given meeting share-hash."
+  [share-hash]
+  (concat (all-update-and-delete-agenda-suggestions share-hash)
+          (all-new-agenda-suggestions share-hash)))
 
 
 ;; -----------------------------------------------------------------------------

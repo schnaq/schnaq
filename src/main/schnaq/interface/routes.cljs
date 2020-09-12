@@ -64,9 +64,10 @@
       ["/edit"
        {:name :routes.meeting/edit
         :view agenda-edit/agenda-edit-view
-        :controllers [{:parameters {:path [:share-hash]}
+        :controllers [{:parameters {:path [:share-hash :edit-hash]}
                        :start (fn [{:keys [path]}]
-                                (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))}]}]
+                                (rf/dispatch [:agenda/load-for-edit (:share-hash path)])
+                                (rf/dispatch [:suggestions/send-updates (:share-hash path) (:edit-hash path)]))}]}]
       ["/created"
        {:name :routes.meeting/created
         :view meeting-admin/admin-central-view
@@ -79,6 +80,12 @@
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:agenda/load-and-redirect (:share-hash path)]))
                       :stop #(rf/dispatch [:agenda/clear-current])}]}]
+     ["/suggestions"
+      {:name :routes.meeting/suggestions
+       :view agenda-edit/agenda-suggestion-view
+       :controllers [{:parameters {:path [:share-hash]}
+                      :start (fn [{:keys [path]}]
+                               (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))}]}]
      ["/agenda"
       ["/:id"
        {:parameters {:path {:id int?}}

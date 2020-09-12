@@ -18,6 +18,7 @@
             [schnaq.emails :as emails]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
+            [schnaq.suggestions :as suggestions]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log])
@@ -28,7 +29,8 @@
 (s/def :http/headers map?)
 (s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
 (s/def :ring/body-params map?)
-(s/def :ring/request (s/keys :req-un [:ring/body-params]))
+(s/def :ring/route-params map?)
+(s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
 
 (>defn- valid-password?
   "Check if the password is a valid."
@@ -98,7 +100,9 @@
   (let [nickname (:nickname body-params)
         user-id (db/add-user-if-not-exists nickname)
         meeting (:meeting body-params)
-        updated-meeting (dissoc meeting :meeting/share-hash :meeting/edit-hash)
+        ;; Do not let the user modify arbitrary db/id's
+        meeting-id (-> meeting :meeting/share-hash db/meeting-by-hash :db/id)
+        updated-meeting (assoc (select-keys meeting [:meeting/title :meeting/description]) :db/id meeting-id)
         updated-agendas (filter :agenda/discussion (:agendas body-params))
         new-agendas (remove :agenda/discussion (:agendas body-params))]
     (if (valid-credentials? (:meeting/share-hash meeting) (:meeting/edit-hash meeting))
@@ -109,6 +113,31 @@
             (db/update-agenda agenda))
           (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
           (ok {:text "Your schnaq has been updated."}))
+      (deny-access))))
+
+(defn- meeting-suggestions
+  "Create suggestions for the change of a meeting."
+  [request]
+  (let [{:keys [meeting agendas delete-agendas nickname]} (:body-params request)
+        user-id (db/add-user-if-not-exists nickname)
+        updated-agendas (filter :agenda/discussion agendas)
+        new-agendas (remove :agenda/discussion agendas)]
+    (suggestions/new-meeting-suggestion meeting user-id)
+    (suggestions/new-agenda-updates-suggestion updated-agendas user-id)
+    (db/suggest-new-agendas! new-agendas user-id (:db/id meeting))
+    (db/suggest-agenda-deletion! delete-agendas user-id)
+    (created "" {:message "Successfully created suggestions!"})))
+
+(>defn- load-meeting-suggestions
+  "Return all suggestions for a given meeting by its share hash."
+  [{:keys [route-params]}]
+  [:ring/request :ret :ring/response]
+  (let [{:keys [share-hash edit-hash]} route-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (let [agenda-suggestions (group-by :agenda.suggestion/type (db/all-agenda-suggestions share-hash))
+            meeting-suggestions (db/all-meeting-suggestions share-hash)]
+        (ok (assoc agenda-suggestions
+              :meeting.suggestions/all meeting-suggestions)))
       (deny-access))))
 
 (defn- add-author
@@ -395,6 +424,8 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/update" [] update-meeting!)
+    (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
+    (POST "/meeting/suggestions" [] meeting-suggestions)
     (POST "/author/add" [] add-author)
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)

@@ -60,6 +60,8 @@
      :meetings/continue-with-schnaq-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
+     :meetings.suggestions/header "Vorschläge einreichen"
+     :meetings.suggestions/subheader "Die erstellende Person kann die Vorschläge einsehen und berücksichtigen"
 
      :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmenden"
      :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
@@ -75,6 +77,15 @@
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
      :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
 
+     ;; Suggestions
+     :suggestions.modal/header "Eingereichte Vorschläge"
+     :suggestions.modal/primer "Einige TeilnehmerInnen haben Ihnen Vorschläge zu Ihrem schnaq gegeben."
+     :suggestions.modal.table/nickname "Nickname"
+     :suggestions.modal.table/suggestion-title "Titel"
+     :suggestions.modal.table/suggestion-description "Beschreibung"
+     :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
+     :suggestions.modal.update/title "Änderungsvorschläge"
+     :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "
@@ -212,13 +223,15 @@
   "Returns an fontawesome icon id as String for a given identifier"
   [identifier]
   (identifier
-    {:laptop "fa-laptop-code"
-     :comment "fa-comments"
-     :carry "fa-people-carry"
-     :arrow-right "fa-arrow-right"
+    {:add "fa-plus-circle"
      :arrow-left "fa-arrow-left"
+     :arrow-right "fa-arrow-right"
      :arrow-up "fa-arrow-up"
-     :arrow-down "fa-arrow-down"
-     :delete-icon "fa-times-circle"
+     :carry "fa-people-carry"
+     :comment "fa-comments"
      :copy "fa-copy"
+     :delete-icon "fa-times-circle"
+     :edit "fa-edit"
+     :laptop "fa-laptop-code"
+     :trash "fa-trash-alt"
      :users "fa-users"}))

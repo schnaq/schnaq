@@ -8,7 +8,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn modal-panel
-  [{:keys [child show?]}]
+  [{:keys [child show? large?]}]
   [:div {:class "modal-wrapper"}
    [:div {:class "modal-backdrop"
           :on-click (fn [event]
@@ -16,15 +16,15 @@
                                             :child nil}])
                       (js-wrap/prevent-default event)
                       (js-wrap/stop-propagation event))}]
-   [:div {:class "modal-child modal-dialog modal-dialog-scrollable"}
-    child]])
+   (let [classes "modal-child modal-dialog modal-dialog-scrollable"]
+     [:div {:class (if large? (str classes " modal-lg") classes)}
+      child])])
 
 (defn modal []
   (let [modal (rf/subscribe [:modal])]
-    (fn []
-      [:div
-       (when (:show? @modal)
-         [modal-panel @modal])])))
+    [:<>
+     (when (:show? @modal)
+       [modal-panel @modal])]))
 
 (defn close-modal []
   (rf/dispatch [:modal {:show? false :child nil}]))

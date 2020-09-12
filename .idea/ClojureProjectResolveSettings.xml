@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ClojureProjectResolveSettings">
     <item key="cljs.core/defonce" resolves-as="clojure.core/def" />
+    <item key="clojure.core/defmulti" resolves-as="clojure.core/defn" />
     <item key="cljs.spec.alpha/fdef" resolves-as="clojure.core/def" />
     <item key="compojure.core/defroutes" resolves-as="clojure.core/def" />
     <item key="clojure.test/are" resolves-as="clojure.core/def" />

@@ -29,8 +29,8 @@
     :agenda/discussion "discussion/tapir-or-ameisenbaer"
     :agenda/meeting "meeting/expansion"}
    {:db/id "agenda/graph-agenda"
-    :agenda/title "Top 3"
-    :agenda/description "Top 2.3"
+    :agenda/title "Top Graph"
+    :agenda/description "Description Graphical"
     :agenda/discussion "discussion/graph"
     :agenda/meeting "meeting/graph"}])
 

@@ -1,5 +1,5 @@
 (ns schnaq.meeting.database-test
-  (:require [clojure.test :refer [deftest testing use-fixtures is]]
+  (:require [clojure.test :refer [deftest testing use-fixtures is are]]
             [dialog.discussion.database :as ddb]
             [schnaq.meeting.database :as database]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -216,3 +216,66 @@
           statements (database/all-statements-for-discussion discussion-id)]
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
+
+(deftest suggest-meeting-updates!-test
+  (testing "Create a new suggest-meeting-update entity."
+    (let [user-id (database/add-user-if-not-exists "Christian")
+          meeting-id (:db/id (database/meeting-by-hash "89eh32hoas-2983ud"))]
+      (is (nil? (database/suggest-meeting-updates! {} user-id)))
+      (is (int? (database/suggest-meeting-updates! {:db/id meeting-id
+                                                    :meeting/title "Neuer Title"
+                                                    :meeting/description "Whatup bruh"}
+                                                   user-id)))
+      (is (int? (database/suggest-meeting-updates! {:db/id meeting-id
+                                                    :meeting/title "Neuer Title"}
+                                                   user-id))))))
+
+(deftest suggest-agenda-updates!-test
+  (testing "Create a new update-agenda suggestion entity."
+    (let [user-id (database/add-user-if-not-exists "Christian")
+          agenda-ids (map :db/id (database/agendas-by-meeting-hash "89eh32hoas-2983ud"))]
+      (are [expected input-suggestions]
+        (= expected (count (:tx-data (database/suggest-agenda-updates! input-suggestions user-id))))
+        1 [{}]
+        ;; We transact 5 attributes, so we expect 6 datoms (one for every attribute and one for the transaction
+        6 [{:db/id (first agenda-ids)
+            :agenda/title "Neuer Title"
+            :agenda/description "Whatup bruh"}]
+        5 [{:db/id (first agenda-ids)
+            :agenda/title "Neuer Title"}]
+        ;; When title is missing, do not transact any attributes
+        1 [{:db/id (first agenda-ids)
+            :agenda/description "Whatup bruh"}]
+        11 [{:db/id (first agenda-ids)
+             :agenda/title "Neuer Title"
+             :agenda/description "Whatup bruh"}
+            {:db/id (second agenda-ids)
+             :agenda/title "Neuer Title 2"
+             :agenda/description "Whatup bruh 2"}]))))
+
+(deftest suggest-new-agendas!-test
+  (testing "Create a new agenda suggestion entity."
+    (let [user-id (database/add-user-if-not-exists "Christian")
+          meeting-id (:db/id (database/meeting-by-hash "89eh32hoas-2983ud"))]
+      (are [total-datoms input]
+        (= total-datoms (count (:tx-data (database/suggest-new-agendas! input user-id meeting-id))))
+        1 [{}]
+        6 [{:agenda/title "Neuer Title"
+            :agenda/description "Whatup bruh"}]
+        5 [{:agenda/title "Neuer Title"}]
+        1 [{:agenda/description "Whatup bruh"}]
+        11 [{:agenda/title "Neuer Title"
+             :agenda/description "Whatup bruh"}
+            {:agenda/title "Neuer Title 2"
+             :agenda/description "Whatup bruh 2"}]))))
+
+(deftest suggest-agenda-deletion!-test
+  (testing "Create a delete agenda suggestion entity."
+    (let [user-id (database/add-user-if-not-exists "Christian")
+          agenda-ids (map :db/id (database/agendas-by-meeting-hash "89eh32hoas-2983ud"))]
+      (are [total-datoms input]
+        (= total-datoms (count (:tx-data (database/suggest-agenda-deletion! input user-id))))
+        1 #{}
+        7 (into #{} agenda-ids)
+        ;; We transact 3 attributes, so we expect 4 datoms (one for every attribute and one for the transaction)
+        4 #{(first agenda-ids)}))))
