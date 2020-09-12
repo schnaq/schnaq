@@ -139,6 +139,12 @@
                           (string/blank? (second %))))
                    data)))
 
+(>defn- clean-nil-vals
+  "Removes all entries from a map that have a value of nil."
+  [data]
+  [associative? :ret associative?]
+  (into {} (remove #(nil? (second %)) data)))
+
 (>defn- clean-and-add-to-db!
   "Removes empty strings and nil values from map before transacting it to the
   database. Checks if the specification still matches. If true, transact the
@@ -168,15 +174,14 @@
 ;; -----------------------------------------------------------------------------
 ;; Suggestions
 
-(s/def ::meeting-suggestion-input (s/keys :req [:meeting/title :db/id]
-                                          :opt [:meeting/description]))
-
 (>defn suggest-meeting-updates!
   "Creates a new suggestion for a meeting update."
-  [{:keys [db/id meeting/title meeting/description] :as meeting-suggestion} user-id]
-  [::meeting-suggestion-input :db/id :ret :db/id]
-  (let [clean-suggestion (clean-db-vals meeting-suggestion)]
-    (when (s/valid? ::meeting-suggestion-input clean-suggestion)
+  [meeting-suggestion user-id]
+  [map? :db/id :ret :db/id]
+  (let [{:keys [db/id meeting/title meeting/description]} (clean-nil-vals meeting-suggestion)]
+    (when (and (int? id)
+               (s/valid? ::specs/non-blank-string title)
+               (or (nil? description) (string? description)))
       (let [raw-suggestion {:db/id "temporary-suggestion"
                             :meeting.suggestion/ideator user-id
                             :meeting.suggestion/meeting id
@@ -187,25 +192,21 @@
                        raw-suggestion)])
           [:tempids "temporary-suggestion"])))))
 
-(s/def ::agenda-suggestion-input (s/keys :req [:agenda/title :db/id]
-                                         :opt [:agenda/description]))
-(s/def ::new-agenda-suggestion-input (s/keys :req [:agenda/title]
-                                             :opt [:agenda/description]))
-(s/def ::agenda-suggestion-inputs (s/coll-of ::agenda-suggestion-input))
-(s/def ::new-agenda-suggestion-inputs (s/coll-of ::new-agenda-suggestion-input))
 (s/def ::delete-agenda-suggestion-inputs (s/coll-of :db/id))
-(s/def :agenda.suggestion/type #{:agenda.suggestion.type/update :agenda.suggestion.type/new :agenda.suggestion.type/delete})
 
 (defn- build-update-agenda-suggestion
-  [user-id {:keys [db/id agenda/title agenda/description] :as agenda-suggestion}]
-  (when (s/valid? ::agenda-suggestion-input (clean-db-vals agenda-suggestion))
-    (let [raw-suggestion {:agenda.suggestion/agenda id
-                          :agenda.suggestion/ideator user-id
-                          :agenda.suggestion/title title
-                          :agenda.suggestion/type :agenda.suggestion.type/update}]
-      (if description
-        (assoc raw-suggestion :agenda.suggestion/description description)
-        raw-suggestion))))
+  [user-id agenda-suggestion]
+  (let [{:keys [db/id agenda/title agenda/description]} (clean-nil-vals agenda-suggestion)]
+    (when (and (int? id)
+               (s/valid? ::specs/non-blank-string title)
+               (or (nil? description) (string? description)))
+      (let [raw-suggestion {:agenda.suggestion/agenda id
+                            :agenda.suggestion/ideator user-id
+                            :agenda.suggestion/title title
+                            :agenda.suggestion/type :agenda.suggestion.type/update}]
+        (if description
+          (assoc raw-suggestion :agenda.suggestion/description description)
+          raw-suggestion)))))
 
 (defn- build-delete-agenda-suggestion
   [user-id agenda-id]
@@ -215,15 +216,17 @@
      :agenda.suggestion/type :agenda.suggestion.type/delete}))
 
 (defn- build-new-agenda-suggestion
-  [user-id meeting-id {:keys [agenda/title agenda/description] :as agenda-suggestion}]
-  (when (s/valid? ::new-agenda-suggestion-input (clean-db-vals agenda-suggestion))
-    (let [raw-suggestion {:agenda.suggestion/ideator user-id
-                          :agenda.suggestion/title title
-                          :agenda.suggestion/type :agenda.suggestion.type/new
-                          :agenda.suggestion/meeting meeting-id}]
-      (if description
-        (assoc raw-suggestion :agenda.suggestion/description description)
-        raw-suggestion))))
+  [user-id meeting-id agenda-suggestion]
+  (let [{:keys [agenda/title agenda/description]} (clean-nil-vals agenda-suggestion)]
+    (when (and (s/valid? ::specs/non-blank-string title)
+               (or (nil? description) (string? description)))
+      (let [raw-suggestion {:agenda.suggestion/ideator user-id
+                            :agenda.suggestion/title title
+                            :agenda.suggestion/type :agenda.suggestion.type/new
+                            :agenda.suggestion/meeting meeting-id}]
+        (if description
+          (assoc raw-suggestion :agenda.suggestion/description description)
+          raw-suggestion)))))
 
 (>defn- suggest-agenda-generic!
   "Transacts multiple new suggestion entities."
@@ -239,13 +242,13 @@
 (>defn suggest-agenda-updates!
   "Creates new suggestions for agenda updates."
   [agenda-suggestions user-id]
-  [::agenda-suggestion-inputs :db/id :ret any?]
+  [(s/coll-of map?) :db/id :ret any?]
   (suggest-agenda-generic! agenda-suggestions (partial build-update-agenda-suggestion user-id)))
 
 (>defn suggest-new-agendas!
   "Creates suggestions for new agendas."
   [agenda-suggestions user-id meeting-id]
-  [::new-agenda-suggestion-inputs :db/id :db/id :ret any?]
+  [(s/coll-of map?) :db/id :db/id :ret any?]
   (suggest-agenda-generic! agenda-suggestions (partial build-new-agenda-suggestion user-id meeting-id)))
 
 (>defn suggest-agenda-deletion!
