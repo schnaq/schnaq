@@ -30,7 +30,7 @@
              "clojars" {:url "https://repo.clojars.org/"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.681"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.690"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.63"}
                                day8.re-frame/test {:mvn/version "0.1.5"}
                                com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
@@ -49,7 +49,7 @@
 
            :uberjar
            {:extra-deps
-            {seancorfield/depstar {:mvn/version "1.1.104"}
+            {seancorfield/depstar {:mvn/version "1.1.116"}
              com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
             :main-opts ["-m" "hf.depstar.uberjar"
                         "target/schnaq-standalone.jar" "--verbose"]}
