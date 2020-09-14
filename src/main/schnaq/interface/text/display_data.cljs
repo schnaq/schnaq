@@ -97,6 +97,8 @@
      :agenda/edit-subtitle "Beschreibung und Agendapunkte editieren"
      :agenda/edit-button "Änderungen speichern"
 
+     :agendas.button/navigate-to-suggestions "Änderungsvorschläge erstellen"
+
      ;; Discussion Language
      :discussion/agree "Zustimmung"
      :discussion/disagree "Ablehnung"
