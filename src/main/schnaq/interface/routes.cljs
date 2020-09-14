@@ -78,7 +78,7 @@
        :link-text (labels :router/show-single-meeting)
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (rf/dispatch [:agenda/load-and-redirect (:share-hash path)]))
+                               (rf/dispatch [:agenda/load-agendas (:share-hash path)]))
                       :stop #(rf/dispatch [:agenda/clear-current])}]}]
      ["/suggestions"
       {:name :routes.meeting/suggestions
