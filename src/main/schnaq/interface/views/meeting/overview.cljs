@@ -1,14 +1,9 @@
 (ns schnaq.interface.views.meeting.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
-            [schnaq.interface.utils.language :as language]
             [schnaq.interface.text.display-data :as data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]))
-
-(defn- readable-date [date]
-  (when date
-    [:span (str (.toLocaleDateString date (language/locale)))]))
 
 (defn- no-meetings-found
   "Show error message when no meetings were loaded."
