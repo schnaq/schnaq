@@ -173,7 +173,7 @@
      :type "text"
      :name "meeting-description"
      :auto-complete "off"
-     :placeholder (labels :meeting-form-title)
+     :placeholder (labels :meeting-form-description-placeholder)
      :id (str "meeting-description-" (:db/id selected-meeting))
      :on-change
      #(rf/dispatch
