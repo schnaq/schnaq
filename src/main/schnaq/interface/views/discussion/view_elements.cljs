@@ -11,7 +11,7 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.logic :as logic]))
 
-(defn up-down-vote
+(defn- up-down-vote
   "Add panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
