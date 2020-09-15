@@ -226,6 +226,7 @@
   [identifier]
   (identifier
     {:add "fa-plus-circle"
+     :arrow-down "fa-arrow-down"
      :arrow-left "fa-arrow-left"
      :arrow-right "fa-arrow-right"
      :arrow-up "fa-arrow-up"
