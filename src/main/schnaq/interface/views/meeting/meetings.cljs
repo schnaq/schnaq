@@ -42,9 +42,9 @@
   "The input and label for a meeting description"
   []
   [:<>
-   [:label {:for "meeting-description"} (data/labels :meeting-form-desc)] [:br]
+   [:label {:for "meeting-description"} (data/labels :meeting-form-description)] [:br]
    [:textarea#meeting-description.form-control.form-round.mb-2
-    {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
+    {:rows "4" :placeholder (data/labels :meeting-form-description-placeholder)}]])
 
 (defn- submit-meeting-button []
   [:button.btn.button-primary (data/labels :meeting-create-header)])
