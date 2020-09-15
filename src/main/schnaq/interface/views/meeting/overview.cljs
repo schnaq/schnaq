@@ -44,10 +44,9 @@
    ;; description / body
    [:div.meeting-entry-desc
     [:hr]
-    [:div (data/labels :meeting-form-deadline) ": " [readable-date (:meeting/end-date meeting)]]
-    [:small.text-right.float-right
-     (common/avatar (-> meeting :meeting/author :author/nickname) 50)]
-    [:br]
+    [:small.text-right.float-right.pb-3
+     (when-let [nickname (-> meeting :meeting/author :author/nickname)]
+       (common/avatar nickname 50))]
     [:p (:meeting/description meeting)]]])
 
 (defn- meetings-list-view
