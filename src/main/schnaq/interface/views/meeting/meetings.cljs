@@ -24,8 +24,7 @@
 
 (defn- header []
   [base/header
-   (data/labels :meeting-create-header)
-   (data/labels :meeting-create-subheader)])
+   (data/labels :meeting-create-header)])
 
 (defn- meeting-title-input
   "The input and label for a new meeting-title"
@@ -56,12 +55,12 @@
     [:div#create-meeting-form
      [base/nav-header]
      [header]
-     [:div.container.px-5.py-3
+     [:div.container.py-3
       [:form
        {:on-submit (fn [e]
                      (js-wrap/prevent-default e)
                      (new-meeting-helper (oget e [:target :elements])))}
-       [:div.agenda-meeting-container.p-3.text-left
+       [:div.agenda-meeting-container.shadow-custom.p-3.text-left
         [meeting-title-input]
         [meeting-description-input]]
        [:div.agenda-container.text-center
