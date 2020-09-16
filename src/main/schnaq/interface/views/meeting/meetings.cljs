@@ -46,8 +46,7 @@
    [:label {:for "meeting-description"} (data/labels :meeting-form-desc)] [:br]
    #_[:textarea#meeting-description.form-control.form-round.mb-2
     {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]
-   [editor/view]
-   ])
+   [editor/view]])
 
 (defn- submit-meeting-button []
   [:button.btn.button-primary (data/labels :meeting-create-header)])
