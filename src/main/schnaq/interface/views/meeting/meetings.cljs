@@ -6,7 +6,9 @@
             [schnaq.interface.text.display-data :as data]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.agenda.agenda :as agenda]
-            [schnaq.interface.views.base :as base]))
+            [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.text-editor.view :as editor]
+            ))
 
 ;; #### Helpers ####
 
@@ -42,8 +44,10 @@
   []
   [:<>
    [:label {:for "meeting-description"} (data/labels :meeting-form-desc)] [:br]
-   [:textarea#meeting-description.form-control.form-round.mb-2
-    {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]])
+   #_[:textarea#meeting-description.form-control.form-round.mb-2
+    {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]
+   [editor/view]
+   ])
 
 (defn- submit-meeting-button []
   [:button.btn.button-primary (data/labels :meeting-create-header)])
