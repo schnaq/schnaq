@@ -44,7 +44,6 @@
      :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
      :meeting-form-desc "Beschreibung"
      :meeting-form-desc-placeholder "Worum geht es in Ihrem schnaq?"
-     :meeting-form-deadline "Frist"
      :meeting-form-end-date "Datum"
      :meeting-form-end-time "Uhrzeit"
      :meeting/copy-share-link "Link kopieren:"
