@@ -1,25 +1,25 @@
 (ns schnaq.interface.views.startpage
   "Defining the startpage of schnaq."
   (:require [schnaq.interface.views.base :as base]
-            [schnaq.interface.text.display-data :as data]
+            [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [re-frame.core :as rf]))
 
 (defn- header-animation
   "Display header animation video"
   []
   [:div.col-lg-6
-   [:img.w-100 {:src (data/img-path :animation-discussion)}]])
+   [:img.w-100 {:src (img-path :animation-discussion)}]])
 
 (defn- header []
   [base/header
-   (data/labels :start-page-subheader)
-   (data/labels :start-page-subheader-2)
+   (labels :startpage/heading)
+   (labels :startpage/subheading)
    [:div.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
     [:div.row
      [:div.col-lg-6.icon-bullets
-      (base/icon-bullet (data/img-path :icon-community) (data/labels :start-page-point-1))
-      (base/icon-bullet (data/img-path :icon-robot) (data/labels :start-page-point-2))
-      (base/icon-bullet (data/img-path :icon-reports) (data/labels :start-page-point-3))]
+      (base/icon-bullet (img-path :icon-community) (labels :startpage.heading-list/community))
+      (base/icon-bullet (img-path :icon-robot) (labels :startpage.heading-list/exchange))
+      (base/icon-bullet (img-path :icon-reports) (labels :startpage.heading-list/reports))]
      [header-animation]]]])
 
 (defn- start-schnaq-button
@@ -29,14 +29,14 @@
    [:button.btn.button-call-to-action
     {:type "button"
      :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
-    (data/labels :create-schnaq-button)]])
+    (labels :startpage.button/create-schnaq)]])
 
 (defn- under-construction
   []
   [:div.icon-bullets-larger
-   (base/img-bullet-subtext (data/img-path :icon-crane)
-                            (data/labels :start-page-point-alpha)
-                            (data/labels :start-page-point-alpha-subtext))])
+   (base/img-bullet-subtext (img-path :icon-crane)
+                            (labels :startpage.under-construction/heading)
+                            (labels :startpage.under-construction/body))])
 
 (defn- icons-grid
   "Display features in a grid."
@@ -44,18 +44,42 @@
   [:section.features-icons.text-center
    [:div.container
     [:div.row
-     (base/icon-in-grid (data/fa :laptop) (data/labels :innovative) (data/labels :innovative-why))
-     (base/icon-in-grid (data/fa :comment) (data/labels :communicative) (data/labels :communicative-why))
-     (base/icon-in-grid (data/fa :carry) (data/labels :cooperative) (data/labels :cooperative-why))]]])
+     (base/icon-in-grid (fa :laptop) (labels :startpage.grid/innovative) (labels :startpage.grid/innovative-body))
+     (base/icon-in-grid (fa :comment) (labels :startpage.grid/communicative) (labels :startpage.grid/communicative-body))
+     (base/icon-in-grid (fa :carry) (labels :startpage.grid/cooperative) (labels :startpage.grid/cooperative-body))]]])
 
 (defn- usage-of-schnaq-heading
   "Heading introducing the features of schnaq."
   []
   [:div.d-flex.d-row.justify-content-center
-   [:p.display-5 "Wofür kann ich schnaq verwenden?"]
+   [:p.display-5 (labels :startpage.usage/lead)]
    [:img.pl-3.d-md-none.d-lg-block
     {:style {:max-height "3rem"}
-     :src (data/img-path :schnaqqifant/original)}]])
+     :src (img-path :schnaqqifant/original)}]])
+
+(defn- build-feature-text-box
+  "Composing the text-part of a feature-row."
+  [lead title body]
+  [:article
+   [:p.lead.mb-2 lead]
+   [:h5 title]
+   [:p body]])
+
+(defn- feature-meeting-organisation
+  "Featuring meeting-organisation with an image."
+  []
+  [build-feature-text-box
+   "Meetingplanung"
+   "Gemeinsame Vorbereitung eines Meetings"
+   "Binden Sie Ihre Mitarbeiter:innen mit in die Planung des Meetings ein!
+       Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere
+       Zufriedenheit bei der Besprechung."])
+
+(defn- feature-rows
+  "Collection of feature rows."
+  []
+  [:section
+   [feature-meeting-organisation]])
 
 (defn- startpage-content []
   [:<>
@@ -68,7 +92,8 @@
      [:div.col-12.col-lg-6
       [start-schnaq-button]]]
     [icons-grid]
-    [usage-of-schnaq-heading]]])
+    [usage-of-schnaq-heading]
+    [feature-rows]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

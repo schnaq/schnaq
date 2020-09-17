@@ -13,28 +13,26 @@
      :nav-meeting-create "Schnaq erstellen"
      :nav-meeting-agenda "Agenda erzeugen"
 
-     ;; startpage header
-     :start-page-header "schnaq"
-     :start-page-subheader "Nie wieder langwierige Meetings ohne Ziel!"
-     :start-page-subheader-2 "Schnaq strukturiert Meetings und bringt sie auf den Punkt"
-     ;; key features
-     :start-page-point-1 "Meetingziele kollaborativ festlegen"
-     :start-page-point-2 "Informationen gezielt austauschen"
-     :start-page-point-3 "Zeit sparen durch fokussierte Meetings"
-     :start-page-point-alpha "Betreten der Baustelle erwünscht!"
-     :start-page-point-alpha-subtext "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
-     :create-schnaq-button "Jetzt einen schnaq starten!"
-     ;; startpage call to action
-     :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
-     :more-info-newsletter "Holen Sie sich regelmäßig Updates zu DisqTec und den aktuellsten Produkten."
+     ;; Startpage
+     :startpage/heading "Nie wieder langwierige Meetings ohne Ziel!"
+     :startpage/subheading "Schnaq strukturiert Meetings und bringt sie auf den Punkt"
 
-     ;; startpage grid
-     :innovative "Zielgerichtet"
-     :innovative-why "Meetings mit einer klaren Agenda sind produktiver"
-     :communicative "Kommunikativ"
-     :communicative-why "Lassen Sie alle WissensträgerInnen zu Wort kommen"
-     :cooperative "Kooperativ"
-     :cooperative-why "Gemeinsame Planung fördert die aktive Teilnahme an Meetings"
+     :startpage.heading-list/community "Meetingziele kollaborativ festlegen"
+     :startpage.heading-list/exchange "Informationen gezielt austauschen"
+     :startpage.heading-list/reports "Zeit sparen durch fokussierte Meetings"
+     :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
+     :startpage.under-construction/body "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
+
+     :startpage.button/create-schnaq "Jetzt einen schnaq starten!"
+
+     :startpage.grid/innovative "Zielgerichtet"
+     :startpage.grid/innovative-body "Meetings mit einer klaren Agenda sind produktiver"
+     :startpage.grid/communicative "Kommunikativ"
+     :startpage.grid/communicative-body "Lassen Sie alle WissensträgerInnen zu Wort kommen"
+     :startpage.grid/cooperative "Kooperativ"
+     :startpage.grid/cooperative-body "Gemeinsame Planung fördert die aktive Teilnahme an Meetings"
+
+     :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
 
      ;; create schnaq
      :meeting-create-header "schnaq erstellen"
