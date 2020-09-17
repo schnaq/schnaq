@@ -39,15 +39,6 @@
      :required true
      :placeholder (data/labels :meeting-form-title-placeholder)}]])
 
-(defn- meeting-description-input
-  "The input and label for a meeting description"
-  []
-  [:<>
-   #_[:label {:for "meeting-description"} (data/labels :meeting-form-desc)]
-   #_[:textarea#meeting-description.form-control.form-round.mb-2
-    {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]
-   [editor/view]])
-
 (defn- submit-meeting-button []
   [:button.btn.button-primary (data/labels :meeting-create-header)])
 
@@ -65,7 +56,7 @@
                      (new-meeting-helper (oget e [:target :elements])))}
        [:div.agenda-meeting-container.shadow-straight.text-left.p-3
         [meeting-title-input]
-        [meeting-description-input]]
+        [editor/view :meeting-description]]
        [:div.agenda-container.text-center
         (for [agenda-num (range number-of-forms)]
           [:div {:key agenda-num}
