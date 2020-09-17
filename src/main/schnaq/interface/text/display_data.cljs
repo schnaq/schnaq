@@ -34,6 +34,16 @@
 
      :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
 
+     :startpage.features/more-information "Mehr Informationen"
+
+     :startpage.features.meeting-organisation/lead "Meetingplanung"
+     :startpage.features.meeting-organisation/title "Gemeinsame Vorbereitung eines Meetings"
+     :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeiter:innen mit in die Planung des Meetings ein! Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit bei der Besprechung."
+
+     :startpage.features.discussion/lead "Strukturierte Diskussionen"
+     :startpage.features.discussion/title "Produktiver Austausch"
+     :startpage.features.discussion/body "Durch strukturierten Meinungsaustausch können Entscheidungen und Ideen fundiert ausgetauscht und gebildet werden. Wir bieten eine dialogbasierte Diskussionslösung für Ihr Team, um das zu ermöglichen. Durch die vorangehende Diskussion sind Ihrer Mitarbeiter:innen besser vorbereitet für das bevorstehende Meeting."
+
      ;; create schnaq
      :meeting-create-header "schnaq erstellen"
      :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
@@ -204,20 +214,23 @@
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-    {:icon-community "/imgs/community.svg"
-     :icon-robot "/imgs/robot.svg"
-     :icon-reports "/imgs/reports.svg"
-     :icon-crane "/imgs/crane.svg"
-     :icon-graph "/imgs/graph/graph-icon.svg"
-     :elephant-share "/imgs/elephants/share.png"
-     :elephant-talk "/imgs/elephants/talk.png"
-     :elephant-stop "/imgs/elephants/stop.png"
+    {:animation-discussion "/animations/animation_discussion.gif"
      :elephant-admin "/imgs/elephants/admin.png"
      :elephant-erase "/imgs/elephants/erase.png"
+     :elephant-share "/imgs/elephants/share.png"
+     :elephant-stop "/imgs/elephants/stop.png"
+     :elephant-talk "/imgs/elephants/talk.png"
+     :icon-community "/imgs/community.svg"
+     :icon-crane "/imgs/crane.svg"
+     :icon-graph "/imgs/graph/graph-icon.svg"
+     :icon-reports "/imgs/reports.svg"
+     :icon-robot "/imgs/robot.svg"
      :logo "/imgs/Schnaq-Logo.svg"
      :schnaqqifant/original "/imgs/schnaqqifant.svg"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
-     :animation-discussion "/animations/animation_discussion.gif"}))
+     :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation.png"
+     :startpage.features/sample-discussion "/imgs/startpage/discussion_elearning.png"
+     :startpage.features/discussion-graph "/imgs/startpage/discussion_graph.png"}))
 
 (defn fa
   "Returns an fontawesome icon id as String for a given identifier"
