@@ -54,9 +54,9 @@
    [header]
    [:div.container
     [:div.row.mt-5
-     [:div.col-6
+     [:div.col-12.col-lg-6
       [under-construction]]
-     [:div.col-6
+     [:div.col-12.col-lg-6
       [call-to-action]]]
     [icons-grid]]])
 

@@ -41,12 +41,11 @@
 (defn img-bullet-subtext
   "Create one icon in a grid"
   [path-to-img heading subheading]
-
   [:div.d-flex.flex-row.p-1
    [:div [:img {:src path-to-img}]]
    [:div
-    [:div [:span [:h4 heading]]]
-    [:div [:p subheading]]]])
+    [:p.h4 heading]
+    [:p subheading]]])
 
 
 (defn icon-bullet [path-to-img text]
