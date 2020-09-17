@@ -53,8 +53,9 @@
   []
   [:div.d-flex.d-row.justify-content-center
    [:p.display-5 "Wofür kann ich schnaq verwenden?"]
-   [:img.pl-3 {:style {:max-height "3rem"}
-               :src (data/img-path :schnaqqifant/original)}]])
+   [:img.pl-3.d-md-none.d-lg-block
+    {:style {:max-height "3rem"}
+     :src (data/img-path :schnaqqifant/original)}]])
 
 (defn- startpage-content []
   [:<>
