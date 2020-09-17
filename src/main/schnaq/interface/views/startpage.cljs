@@ -22,7 +22,7 @@
       (base/icon-bullet (data/img-path :icon-reports) (data/labels :start-page-point-3))]
      [header-animation]]]])
 
-(defn- call-to-action
+(defn- start-schnaq-button
   "Tell user to create a schnaq now."
   []
   [:section.text-center
@@ -48,17 +48,26 @@
      (base/icon-in-grid (data/fa :comment) (data/labels :communicative) (data/labels :communicative-why))
      (base/icon-in-grid (data/fa :carry) (data/labels :cooperative) (data/labels :cooperative-why))]]])
 
+(defn- usage-of-schnaq-heading
+  "Heading introducing the features of schnaq."
+  []
+  [:div.d-flex.d-row.justify-content-center
+   [:p.display-5 "Wofür kann ich schnaq verwenden?"]
+   [:img.pl-3 {:style {:max-height "3rem"}
+               :src (data/img-path :schnaqqifant/original)}]])
+
 (defn- startpage-content []
   [:<>
    [base/nav-header]
    [header]
-   [:div.container
+   [:section.container
     [:div.row.mt-5
      [:div.col-12.col-lg-6.pb-3.pb-lg-0
       [under-construction]]
      [:div.col-12.col-lg-6
-      [call-to-action]]]
-    [icons-grid]]])
+      [start-schnaq-button]]]
+    [icons-grid]
+    [usage-of-schnaq-heading]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
