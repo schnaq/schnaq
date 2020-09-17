@@ -217,6 +217,8 @@
      :elephant-admin "/imgs/elephants/admin.png"
      :elephant-erase "/imgs/elephants/erase.png"
      :logo "/imgs/Schnaq-Logo.svg"
+     :schnaqqifant/original "/imgs/schnaqqifant.svg"
+     :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :animation-discussion "/animations/animation_discussion.gif"}))
 
 (defn fa
