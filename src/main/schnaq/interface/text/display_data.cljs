@@ -27,7 +27,6 @@
      ;; startpage call to action
      :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
      :more-info-newsletter "Holen Sie sich regelmäßig Updates zu DisqTec und den aktuellsten Produkten."
-     :create-your-meeting-sub "Mit einem Klick erstellen und teilen"
 
      ;; startpage grid
      :innovative "Zielgerichtet"

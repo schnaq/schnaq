@@ -25,25 +25,18 @@
 (defn- call-to-action
   "Tell user to create a schnaq now."
   []
-  [:section
-   [:div.container
-    [:div.text-center
-     [:div.mx-auto.col-lg-10
-      [:button.btn.button-call-to-action
-       {:type "button"
-        :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
-       (data/labels :create-schnaq-button)]
-      [:p.pt-4 (data/labels :create-your-meeting-sub)]]]]])
+  [:section.text-center
+   [:button.btn.button-call-to-action
+    {:type "button"
+     :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
+    (data/labels :create-schnaq-button)]])
 
 (defn- under-construction
   []
-  [:div.mt-5
-   [:div.row
-    [:div.col-lg-3]
-    [:div.col-lg-6.icon-bullets-larger
-     (base/img-bullet-subtext (data/img-path :icon-crane)
-                              (data/labels :start-page-point-alpha)
-                              (data/labels :start-page-point-alpha-subtext))]]])
+  [:div.icon-bullets-larger
+   (base/img-bullet-subtext (data/img-path :icon-crane)
+                            (data/labels :start-page-point-alpha)
+                            (data/labels :start-page-point-alpha-subtext))])
 
 (defn- icons-grid
   "Display features in a grid."
@@ -60,8 +53,11 @@
    [base/nav-header]
    [header]
    [:div.container
-    [call-to-action]
-    [under-construction]
+    [:div.row.mt-5
+     [:div.col-6
+      [under-construction]]
+     [:div.col-6
+      [call-to-action]]]
     [icons-grid]]])
 
 (defn startpage-view
