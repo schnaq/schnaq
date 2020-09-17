@@ -54,7 +54,7 @@
    [header]
    [:div.container
     [:div.row.mt-5
-     [:div.col-12.col-lg-6
+     [:div.col-12.col-lg-6.pb-3.pb-lg-0
       [under-construction]]
      [:div.col-12.col-lg-6
       [call-to-action]]]
