@@ -60,7 +60,7 @@
    [base/nav-header]
    [view/discussion-header-no-subtitle meeting]
    [:div.container.discussion-base
-    [:div.discussion-view-rounded.shadow-custom
+    [:div.discussion-view-rounded.shadow-straight
      content]]])
 
 (defn- discussion-start-view

@@ -7,9 +7,9 @@
 (defn view
   "Mark Up Text Editor View"
   []
-  (let [id "text-area"]
+  (let [id "meeting-description"]
     (reagent/create-class
-      {:display-name "carousel-component"
+      {:display-name "mde-component"
        :reagent-render
        (fn [] [:textarea {:id id}])
        :component-did-mount

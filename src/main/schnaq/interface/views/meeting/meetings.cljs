@@ -32,8 +32,8 @@
   "The input and label for a new meeting-title"
   []
   [:<>
-   [:label {:for "meeting-title"} (data/labels :meeting-form-title)] [:br]
-   [:input#meeting-title.form-control.form-round.form-title.mb-2
+   ;[:label {:for "meeting-title"} (data/labels :meeting-form-title)] [:br]
+   [:input#meeting-title.form-control.form-title.form-border-bottom.mb-2
     {:type "text"
      :autoComplete "off"
      :required true
@@ -43,7 +43,7 @@
   "The input and label for a meeting description"
   []
   [:<>
-   [:label {:for "meeting-description"} (data/labels :meeting-form-desc)] [:br]
+   #_[:label {:for "meeting-description"} (data/labels :meeting-form-desc)]
    #_[:textarea#meeting-description.form-control.form-round.mb-2
     {:rows "4" :placeholder (data/labels :meeting-form-desc-placeholder)}]
    [editor/view]])
@@ -63,7 +63,7 @@
        {:on-submit (fn [e]
                      (js-wrap/prevent-default e)
                      (new-meeting-helper (oget e [:target :elements])))}
-       [:div.agenda-meeting-container.shadow-custom.p-3.text-left
+       [:div.agenda-meeting-container.shadow-straight.text-left.p-3
         [meeting-title-input]
         [meeting-description-input]]
        [:div.agenda-container.text-center

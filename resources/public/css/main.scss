@@ -6,6 +6,9 @@
 @import '../../../node_modules/bootstrap/scss/bootstrap';
 @import 'global';
 
+// Mark Down Editor
+@import '../../../node_modules/easymde/dist/easymde.min';
+
 // Components
 @import 'after-create';
 @import 'agenda';
@@ -14,6 +17,7 @@
 @import 'button';
 @import 'carousel';
 @import 'discussion';
+@import 'easy-mde-extension';
 @import 'error-view';
 @import 'feedback';
 @import 'footer';
@@ -30,4 +34,3 @@
 
 // 3rd Party
 @import '../js/klaro/src/scss/klaro';
-@import '../../../node_modules/easymde/dist/easymde.min';

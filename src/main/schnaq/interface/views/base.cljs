@@ -112,7 +112,7 @@
 
   ([title subtitle title-on-click-function on-click-back-function]
    ;; check if title is clickable and set properties accordingly
-   [:div.meeting-header.header-custom.shadow-custom
+   [:div.meeting-header.header-custom.shadow-straight
     [:div.row
      [:div.col-1.back-arrow
       (when on-click-back-function
