@@ -1,15 +1,14 @@
 (ns schnaq.interface.views.startpage
+  "Defining the startpage of schnaq."
   (:require [schnaq.interface.views.base :as base]
             [schnaq.interface.text.display-data :as data]
             [re-frame.core :as rf]))
-
 
 (defn- header-animation
   "Display header animation video"
   []
   [:div.col-lg-6
    [:img.w-100 {:src (data/img-path :animation-discussion)}]])
-
 
 (defn- header []
   [base/header
@@ -23,9 +22,8 @@
       (base/icon-bullet (data/img-path :icon-reports) (data/labels :start-page-point-3))]
      [header-animation]]]])
 
-
 (defn- call-to-action
-  " Tell user to create a schnaq now "
+  "Tell user to create a schnaq now."
   []
   [:section
    [:div.container
@@ -48,7 +46,7 @@
                               (data/labels :start-page-point-alpha-subtext))]]])
 
 (defn- icons-grid
-  " Display features in a grid "
+  "Display features in a grid."
   []
   [:section.features-icons.text-center
    [:div.container
@@ -57,9 +55,8 @@
      (base/icon-in-grid (data/fa :comment) (data/labels :communicative) (data/labels :communicative-why))
      (base/icon-in-grid (data/fa :carry) (data/labels :cooperative) (data/labels :cooperative-why))]]])
 
-
 (defn- startpage-content []
-  [:div
+  [:<>
    [base/nav-header]
    [header]
    [:div.container
@@ -67,8 +64,7 @@
     [under-construction]
     [icons-grid]]])
 
-
 (defn startpage-view
-  " A view that represents the first page of schnaq participation or creation. "
+  "A view that represents the first page of schnaq participation or creation."
   []
   [startpage-content])
