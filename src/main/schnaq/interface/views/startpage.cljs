@@ -60,26 +60,57 @@
 (defn- build-feature-text-box
   "Composing the text-part of a feature-row."
   [lead title body]
-  [:article
-   [:p.lead.mb-2 lead]
+  [:article.feature-text-box.pb-5
+   [:p.lead.mb-1 lead]
    [:h5 title]
-   [:p body]])
+   [:p body]
+   [:div.btn.btn-outline-dark
+    (labels :startpage.features/more-information)]])
+
+(defn- feature-row-image-left
+  "Build a feature row, where the image is located on the left side."
+  [image-key lead title body]
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-5
+    [:img.img-fluid {:src (img-path :startpage.features/sample-discussion)}]]
+   [:div.col-12.col-lg-6.offset-lg-1
+    [build-feature-text-box
+     (labels :startpage.features.discussion/lead)
+     (labels :startpage.features.discussion/title)
+     (labels :startpage.features.discussion/body)]]])
+
+
 
 (defn- feature-meeting-organisation
   "Featuring meeting-organisation with an image."
   []
-  [build-feature-text-box
-   "Meetingplanung"
-   "Gemeinsame Vorbereitung eines Meetings"
-   "Binden Sie Ihre Mitarbeiter:innen mit in die Planung des Meetings ein!
-       Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere
-       Zufriedenheit bei der Besprechung."])
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-6
+    [build-feature-text-box
+     (labels :startpage.features.meeting-organisation/lead)
+     (labels :startpage.features.meeting-organisation/title)
+     (labels :startpage.features.meeting-organisation/body)]]
+   [:div.col-12.col-lg-5.offset-lg-1
+    [:img.img-fluid {:src (img-path :startpage.features/meeting-organisation)}]]])
+
+(defn- feature-structured-discussions
+  "Overview of structured discussions."
+  []
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-5
+    [:img.img-fluid {:src (img-path :startpage.features/sample-discussion)}]]
+   [:div.col-12.col-lg-6.offset-lg-1
+    [build-feature-text-box
+     (labels :startpage.features.discussion/lead)
+     (labels :startpage.features.discussion/title)
+     (labels :startpage.features.discussion/body)]]])
 
 (defn- feature-rows
   "Collection of feature rows."
   []
-  [:section
-   [feature-meeting-organisation]])
+  [:section.pt-5
+   [feature-meeting-organisation]
+   [feature-structured-discussions]])
 
 (defn- startpage-content []
   [:<>

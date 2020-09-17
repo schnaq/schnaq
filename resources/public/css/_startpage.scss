@@ -1,0 +1,17 @@
+@mixin shadow-and-hover {
+  box-shadow: $regular-shadow;
+}
+
+.feature-text-box {
+  p {
+    font-size: 1.2rem;
+  }
+}
+
+.feature-row {
+  padding-bottom: 3rem;
+
+  img {
+    width: 100%;
+  }
+}
