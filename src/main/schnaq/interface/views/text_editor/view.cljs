@@ -24,3 +24,8 @@
   :mde/save-content
   (fn [db [_ storage-key value]]
     (assoc-in db [:mde storage-key] value)))
+
+(rf/reg-sub
+  :mde/load-content
+  (fn [db [_ storage-key]]
+    (get-in db [:mde storage-key])))

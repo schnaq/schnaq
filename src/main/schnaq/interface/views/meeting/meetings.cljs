@@ -14,11 +14,11 @@
 
 (defn- new-meeting-helper
   "Creates a new meeting with the form from `create-meeting-form`."
-  [form-elements]
+  [title description]
   (rf/dispatch
     [:meeting.creation/new
-     {:meeting/title (oget form-elements [:meeting-title :value])
-      :meeting/description (oget form-elements [:meeting-description :value])
+     {:meeting/title title
+      :meeting/description description
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
       :meeting/start-date (js/Date.)}]))
 
@@ -45,18 +45,21 @@
 (defn- create-meeting-form-view
   "A view with a form that creates a meeting and optional agendas."
   []
-  (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])]
+  (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])
+        description-storage-key :meeting.create/description]
     [:div#create-meeting-form
      [base/nav-header]
      [header]
      [:div.container.py-3
       [:form
        {:on-submit (fn [e]
-                     (js-wrap/prevent-default e)
-                     (new-meeting-helper (oget e [:target :elements])))}
+                     (let [title (oget e [:target :elements :meeting-title :value])
+                           description @(rf/subscribe [:mde/load-content description-storage-key])]
+                       (js-wrap/prevent-default e)
+                       (new-meeting-helper title description)))}
        [:div.agenda-meeting-container.shadow-straight.text-left.p-3
         [meeting-title-input]
-        [editor/view :meeting-description]]
+        [editor/view description-storage-key]]
        [:div.agenda-container.text-center
         (for [agenda-num (range number-of-forms)]
           [:div {:key agenda-num}
