@@ -7,8 +7,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.agenda.agenda :as agenda]
             [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.text-editor.view :as editor]
-            ))
+            [schnaq.interface.views.text-editor.view :as editor]))
 
 ;; #### Helpers ####
 
@@ -32,7 +31,6 @@
   "The input and label for a new meeting-title"
   []
   [:<>
-   ;[:label {:for "meeting-title"} (data/labels :meeting-form-title)] [:br]
    [:input#meeting-title.form-control.form-title.form-border-bottom.mb-2
     {:type "text"
      :autoComplete "off"
