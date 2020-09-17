@@ -2,6 +2,7 @@
   "Defining the startpage of schnaq."
   (:require [schnaq.interface.views.base :as base]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.views.common :as common]
             [re-frame.core :as rf]))
 
 (defn- header-animation
@@ -58,52 +59,48 @@
      :src (img-path :schnaqqifant/original)}]])
 
 (defn- build-feature-text-box
-  "Composing the text-part of a feature-row."
-  [lead title body]
-  [:article.feature-text-box.pb-5
-   [:p.lead.mb-1 lead]
-   [:h5 title]
-   [:p body]
-   [:div.btn.btn-outline-dark
-    (labels :startpage.features/more-information)]])
+  "Composing the text-part of a feature-row. Takes a `text-namespace` which
+  looks up the corresponding text entries, which are then rendered."
+  [text-namespace]
+  (let [prepend-namespace (partial common/add-namespace-to-keyword text-namespace)]
+    [:article.feature-text-box.pb-5
+     [:p.lead.mb-1 (labels (prepend-namespace :lead))]
+     [:h5 (labels (prepend-namespace :title))]
+     [:p (labels (prepend-namespace :body))]
+     [:div.btn.btn-outline-dark
+      (labels :startpage.features/more-information)]]))
 
 (defn- feature-row-image-left
   "Build a feature row, where the image is located on the left side."
-  [image-key lead title body]
+  [image-key text-namespace]
   [:div.row.align-items-center.feature-row
    [:div.col-12.col-lg-5
-    [:img.img-fluid {:src (img-path :startpage.features/sample-discussion)}]]
+    [:img.img-fluid {:src (img-path image-key)}]]
    [:div.col-12.col-lg-6.offset-lg-1
-    [build-feature-text-box
-     (labels :startpage.features.discussion/lead)
-     (labels :startpage.features.discussion/title)
-     (labels :startpage.features.discussion/body)]]])
+    [build-feature-text-box text-namespace]]])
 
-
+(defn- feature-row-image-right
+  "Build a feature row, where the image is located on the right side."
+  [image-key text-namespace]
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-6
+    [build-feature-text-box text-namespace]]
+   [:div.col-12.col-lg-5.offset-lg-1
+    [:img.img-fluid {:src (img-path image-key)}]]])
 
 (defn- feature-meeting-organisation
   "Featuring meeting-organisation with an image."
   []
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-6
-    [build-feature-text-box
-     (labels :startpage.features.meeting-organisation/lead)
-     (labels :startpage.features.meeting-organisation/title)
-     (labels :startpage.features.meeting-organisation/body)]]
-   [:div.col-12.col-lg-5.offset-lg-1
-    [:img.img-fluid {:src (img-path :startpage.features/meeting-organisation)}]]])
+  (feature-row-image-right
+    :startpage.features/meeting-organisation
+    :startpage.features.meeting-organisation))
 
 (defn- feature-structured-discussions
   "Overview of structured discussions."
   []
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-5
-    [:img.img-fluid {:src (img-path :startpage.features/sample-discussion)}]]
-   [:div.col-12.col-lg-6.offset-lg-1
-    [build-feature-text-box
-     (labels :startpage.features.discussion/lead)
-     (labels :startpage.features.discussion/title)
-     (labels :startpage.features.discussion/body)]]])
+  (feature-row-image-left
+    :startpage.features/sample-discussion
+    :startpage.features.discussion))
 
 (defn- feature-rows
   "Collection of feature rows."
