@@ -77,17 +77,26 @@
 
 (defn show-input-button
   "A button triggering the showing of the name field."
-  [username]
-  [:button.btn.btn-outline-primary {:on-click #(rf/dispatch [:user/show-display-name-input])} username])
+  [username button-class]
+  [:button.btn {:class button-class
+                :on-click #(rf/dispatch [:user/show-display-name-input])} username])
 
 (defn username-bar-view
   "A bar containing all user related utilities and information."
+  ([]
+   (username-bar-view "btn-outline-primary"))
+
+  ([button-class]
+   (let [username @(rf/subscribe [:user/display-name])
+         show-input? @(rf/subscribe [:user/show-display-name-input?])]
+     (if show-input?
+       [name-input username]
+       [show-input-button username button-class]))))
+
+(defn username-bar-view-light
   []
-  (let [username @(rf/subscribe [:user/display-name])
-        show-input? @(rf/subscribe [:user/show-display-name-input?])]
-    (if show-input?
-      [name-input username]
-      [show-input-button username])))
+  (username-bar-view "btn-outline-light"))
+
 
 ;; discussion loop header
 
@@ -103,7 +112,7 @@
 
   ([title subtitle title-on-click-function on-click-back-function]
    ;; check if title is clickable and set properties accordingly
-   [:div.meeting-header.header-custom.shadow-custom
+   [:div.meeting-header.header-custom.shadow-straight
     [:div.row
      [:div.col-1.back-arrow
       (when on-click-back-function
@@ -153,6 +162,22 @@
             (labels :router/meeting-created)]])]
        ;; name input
        [username-bar-view]]]]))
+
+(defn context-header []
+  [:nav.navbar.navbar-expand-lg.py-3.navbar-light.context-header
+   [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
+    [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo-white) :width "150" :alt ""}]]
+   ;; hamburger
+   [:button.navbar-toggler
+    {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
+     :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
+     :data-html2canvas-ignore true}
+    [:span.navbar-toggler-icon]]
+   ;; menu items
+   [:div {:id "schnaq-navbar"
+          :class "collapse navbar-collapse"}
+    ;; name input
+    [username-bar-view-light]]])
 
 ;; footer
 

@@ -1,4 +1,10 @@
+@import 'variables';
+
 .header-custom {
   background-image: url('../imgs/header.svg');
   background-size: 100%;
+}
+
+.context-header {
+  background: $primary-light;
 }
