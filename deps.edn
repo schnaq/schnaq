@@ -10,7 +10,7 @@
         expound/expound {:mvn/version "0.8.5"}
         github-hhucn/dialog.core {:git/url "https://github.com/hhucn/dialog.core" :sha "4ac930674755ed4bf53b9d516eea62f7a75a33ac"}
         gnl/ghostwheel {:mvn/version "0.3.9"}
-        http-kit/http-kit {:mvn/version "2.4.0"}
+        http-kit/http-kit {:mvn/version "2.5.0"}
         metosin/reitit {:mvn/version "0.5.5"}
         metosin/ring-http-response {:mvn/version "0.9.1"}
         org.clojure/clojure {:mvn/version "1.10.1"}
@@ -30,7 +30,7 @@
              "clojars" {:url "https://repo.clojars.org/"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.690"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.700"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.63"}
                                day8.re-frame/test {:mvn/version "0.1.5"}
                                com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
