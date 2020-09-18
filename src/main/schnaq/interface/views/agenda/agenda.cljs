@@ -38,7 +38,7 @@
   [numbered-suffix]
   (let [min-description-height "150px"
         on-submit-function (fn [value] (new-agenda-local :description value numbered-suffix))]
-    [:div
+    [:<>
      [:div.agenda-line]
      [:div.agenda-point.shadow-straight.pb-3
       ;; title
