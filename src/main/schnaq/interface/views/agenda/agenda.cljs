@@ -50,14 +50,15 @@
 (defn add-agenda-button [number-of-forms add-event]
   (let [zero-agendas? (or (nil? number-of-forms) (zero? number-of-forms))]
     [:div.mb-5
-     [:button.btn.agenda-add-button
+     [:div.p-0
       {:on-click (fn [e]
                    (js-wrap/prevent-default e)
                    (rf/dispatch [add-event]))
        :style {:padding (if zero-agendas? "0.5rem 1rem" "0 1rem")}}
       (if zero-agendas?
-        [:span.display-6.my-4 (data/labels :agenda.create/optional-agenda)]
-        [:span.display-4 "+"])]]))
+        [:button.btn.agenda-add-button.font-150
+         [:span.m-4 (data/labels :agenda.create/optional-agenda)]]
+        [:img.align-middle.clickable {:src (data/img-path :icon-add) :width "50" :alt ""}])]]))
 
 (defn load-agenda-fn [share-hash on-success-event]
   {:fx [[:http-xhrio {:method :get

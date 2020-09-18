@@ -212,6 +212,7 @@
      :icon-reports "/imgs/reports.svg"
      :icon-crane "/imgs/crane.svg"
      :icon-graph "/imgs/graph/graph-icon.svg"
+     :icon-add "/imgs/buttons/add-button.svg"
      :elephant-share "/imgs/elephants/share.png"
      :elephant-talk "/imgs/elephants/talk.png"
      :elephant-stop "/imgs/elephants/stop.png"
