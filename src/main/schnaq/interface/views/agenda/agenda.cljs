@@ -22,7 +22,7 @@
 (defn- agenda-title-input
   [numbered-suffix]
   [:<>
-   [:input#meeting-title.form-control.form-title.form-border-bottom.mb-2
+   [:input#meeting-title.form-control.form-border-bottom-light.form-title-light
     {:type "text"
      :name (str "title-" numbered-suffix)
      :auto-complete "off"
@@ -40,15 +40,16 @@
         on-submit-function (fn [value] (new-agenda-local :description value numbered-suffix))]
     [:div
      [:div.agenda-line]
-     [:div.agenda-point.shadow-straight.p-3
+     [:div.agenda-point.shadow-straight.pb-3
       ;; title
-      [:div.row
-       [:div.col-10.col-md-10
-        [agenda-title-input numbered-suffix]]
-       [:div.col-2.col-md-2
-        [:div.pt-4
-         {:on-click #(rf/dispatch [:agenda/delete-temporary numbered-suffix])}
-         [:i.clickable {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]
+      [:div.background-secondary.p-3
+       [:div.row
+        [:div.col-10.col-md-10
+         [agenda-title-input numbered-suffix]]
+        [:div.col-2.col-md-2
+         [:div.pt-4
+          {:on-click #(rf/dispatch [:agenda/delete-temporary numbered-suffix])}
+          [:i.clickable {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]]
       ;; description
       [:div.text-left
        [editor/view on-submit-function min-description-height]]]]))

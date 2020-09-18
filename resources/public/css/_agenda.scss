@@ -34,6 +34,11 @@
   overflow: hidden;
 }
 
+.background-secondary {
+  background-color: $secondary;
+  color: $white;
+}
+
 .agenda-form-title {
   border: 0;
   border-radius: 1.5rem 1.5rem 0 0;

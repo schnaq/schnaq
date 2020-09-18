@@ -14,6 +14,22 @@
   font-size: 150%;
 }
 
+.form-title-light {
+  /* stylelint-disable */
+  @extend .form-title;
+  /* stylelint-enable */
+
+  color: $white;
+
+  &:focus {
+    color: $white;
+  }
+
+  &::placeholder {
+    color: $gray-200;
+  }
+}
+
 .form-border-bottom {
   background: transparent;
   border: 0;
@@ -22,7 +38,20 @@
   font-size: 150%;
 
   &:focus {
+    background: transparent;
     border-bottom: 2px solid $primary-selected;
     box-shadow: none;
+  }
+}
+
+.form-border-bottom-light {
+  /* stylelint-disable */
+  @extend .form-border-bottom;
+  /* stylelint-enable */
+
+  border-bottom: 2px solid $white;
+
+  &:focus {
+    border-bottom: 3px solid $white;
   }
 }
