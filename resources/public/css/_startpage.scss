@@ -1,5 +1,48 @@
-@mixin shadow-and-hover {
-  box-shadow: $regular-shadow;
+@import 'variables';
+
+$header-color: $primary;
+$header-opacity: 1;
+
+.masthead {
+  background-color: $header-color;
+  opacity: $header-opacity;
+  padding-top: 1rem;
+  position: relative;
+
+  .overlay {
+    background-color: $gray-900;
+    height: 100%;
+    left: 0;
+    opacity: 0.3;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    padding-top: 2rem;
+
+    h1 {
+      font-size: 2.5rem;
+    }
+  }
+}
+
+.wavy-curve {
+  background-color: transparent;
+  fill: $header-color;
+  margin: -1rem 0;
+  opacity: $header-opacity;
+  width: 100%;
 }
 
 .feature-text-box {
@@ -14,4 +57,15 @@
   img {
     width: 100%;
   }
+}
+
+.early-adopter {
+  background-color: $primary;
+  color: $white;
+  padding: 2rem 0;
+}
+
+.early-adopter-schnaqqifant {
+  display: block;
+  width: 100px;
 }
