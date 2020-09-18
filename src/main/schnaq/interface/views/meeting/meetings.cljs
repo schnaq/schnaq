@@ -57,7 +57,7 @@
                        (new-meeting-helper title description)))}
        [:div.agenda-meeting-container.shadow-straight.text-left.p-3
         [meeting-title-input]
-        [editor/view description-storage-key]]
+        [editor/view-store-on-change description-storage-key]]
        [:div.agenda-container.text-center
         (for [agenda-num (range number-of-forms)]
           [:div {:key agenda-num}
