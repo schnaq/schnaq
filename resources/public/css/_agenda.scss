@@ -1,9 +1,9 @@
 @import 'variables';
 
 .agenda-meeting-container {
-  background-color: $secondary;
+  background-color: $white;
   border-radius: 1.5rem;
-  color: $white;
+  color: $gray-700;
   overflow: hidden;
   text-align: center;
 }
@@ -15,43 +15,45 @@
 
 @include media-breakpoint-up(md) {
   .agenda-container {
-    padding-left: 4rem;
-    padding-right: 4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
 @include media-breakpoint-up(xl) {
   .agenda-container {
-    padding-left: 8rem;
-    padding-right: 8rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
   }
 }
 
 .agenda-point {
-  background-color: $primary;
+  background-color: $white;
   border-radius: 1.5rem;
-  color: $white;
+  color: $secondary;
   overflow: hidden;
-  text-align: center;
+}
+
+.background-secondary {
+  background-color: $secondary;
+  color: $white;
 }
 
 .agenda-form-title {
-  background-color: transparent;
   border: 0;
   border-radius: 1.5rem 1.5rem 0 0;
-  color: $white;
+  color: $gray-700;
   padding: 3rem 2rem 2rem;
+
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+
+  &::placeholder {
+    color: $gray-600;
+  }
 }
 
-.agenda-form-title::placeholder {
-  color: $white;
-  opacity: 0.85;
-}
-
-.agenda-form-title:focus {
-  background-color: rgba(255, 255, 255, 0.025);
-  color: $white;
-}
 
 .agenda-form-round {
   background-color: rgba(0, 0, 0, 0.05);
@@ -82,7 +84,7 @@
   border-radius: 4rem;
   box-shadow: $regular-shadow;
   color: $white;
-  font-weight: bolder;
+  font-weight: bold;
   text-align: center;
 }
 
@@ -93,10 +95,6 @@
   min-height: 2rem;
   text-align: center;
   width: 0.5rem;
-}
-
-.agenda-row-title {
-  background: transparent;
 }
 
 .agenda-row-title:hover {

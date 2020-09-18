@@ -94,7 +94,7 @@
   [(s/coll-of ::specs/statement) :ret :re-frame/component]
   (when (seq statements)
     [:div.container.px-0
-     [:div.carousel-wrapper.inner-shadow-custom
+     [:div.carousel-wrapper.inner-shadow-straight
       [:p.display-6.carousel-header.discussion-primary-background
        (labels :discussion.carousel/heading)]
       [statement-carousel statements
