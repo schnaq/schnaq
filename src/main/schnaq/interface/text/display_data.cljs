@@ -235,9 +235,9 @@
      :logo-white "/imgs/Schnaq-Logo-White.svg"
      :schnaqqifant/original "/imgs/schnaqqifant.svg"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
-     :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation.png"
+     :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
      :startpage.features/sample-discussion "/imgs/startpage/discussion_elearning.png"
-     :startpage.features/discussion-graph "/imgs/startpage/discussion_graph.png"}))
+     :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"}))
 
 (defn fa
   "Returns an fontawesome icon id as String for a given identifier"
