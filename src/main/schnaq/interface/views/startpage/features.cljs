@@ -32,19 +32,26 @@
    [:div.col-12.col-lg-5.offset-lg-1
     [:img.img-fluid {:src (img-path image-key)}]]])
 
-(defn- feature-meeting-organisation
+(defn- meeting-organisation
   "Featuring meeting-organisation with an image."
   []
   (feature-row-image-right
     :startpage.features/meeting-organisation
     :startpage.features.meeting-organisation))
 
-(defn- feature-structured-discussions
+(defn- structured-discussions
   "Overview of structured discussions."
   []
   (feature-row-image-left
     :startpage.features/sample-discussion
     :startpage.features.discussion))
+
+(defn- graph-visualization
+  "Feature box showcasing the graph."
+  []
+  (feature-row-image-right
+    :startpage.features/discussion-graph
+    :startpage.features.graph))
 
 
 ;; -----------------------------------------------------------------------------
@@ -53,5 +60,6 @@
   "Collection of feature rows."
   []
   [:section.pt-5
-   [feature-meeting-organisation]
-   [feature-structured-discussions]])
+   [meeting-organisation]
+   [structured-discussions]
+   [graph-visualization]])
