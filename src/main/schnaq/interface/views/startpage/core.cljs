@@ -52,7 +52,7 @@
 (defn- usage-of-schnaq-heading
   "Heading introducing the features of schnaq."
   []
-  [:div.d-flex.d-row.justify-content-center
+  [:div.d-flex.d-row.justify-content-center.py-3
    [:p.display-5 (labels :startpage.usage/lead)]
    [:img.pl-3.d-md-none.d-lg-block
     {:style {:max-height "3rem"}

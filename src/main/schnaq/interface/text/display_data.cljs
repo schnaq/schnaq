@@ -44,7 +44,7 @@
      :startpage.features.discussion/body "Durch strukturierten Meinungsaustausch können Entscheidungen und Ideen fundiert ausgetauscht und gebildet werden. Wir bieten eine dialogbasierte Diskussionslösung für Ihr Team, um das zu ermöglichen. Durch die vorangehende Diskussion sind Ihrer Mitarbeiter:innen besser vorbereitet für das bevorstehende Meeting."
      :startpage.features.graph/lead "Übersicht"
      :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
-     :startpage.features.graph/body "Verfolgen Sie die Argumente Ihrer Mitarbeiter:innen. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können.\u2028Fokussieren Sie die zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
+     :startpage.features.graph/body "Verfolgen Sie die Argumente Ihrer Mitarbeiter:innen. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
 
      ;; create schnaq
      :meeting-create-header "schnaq erstellen"

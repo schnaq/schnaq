@@ -10,9 +10,7 @@
     [:article.feature-text-box.pb-5
      [:p.lead.mb-1 (labels (prepend-namespace :lead))]
      [:h5 (labels (prepend-namespace :title))]
-     [:p (labels (prepend-namespace :body))]
-     [:div.btn.btn-outline-dark
-      (labels :startpage.features/more-information)]]))
+     [:p (labels (prepend-namespace :body))]]))
 
 (defn- feature-row-image-left
   "Build a feature row, where the image is located on the left side."
