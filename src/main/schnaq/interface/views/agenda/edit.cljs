@@ -9,7 +9,8 @@
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.modals.modal :as modal]
             [oops.core :refer [oget]]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [schnaq.interface.views.text-editor.view :as editor]))
 
 (defn- suggestions-table
   "Show all suggestions."
@@ -107,7 +108,7 @@
   "The editable title input of an edit-agenda-form."
   [agenda]
   (let [db-id (:db/id agenda)]
-    [:input.form-control.agenda-form-title.form-title
+    [:input.form-control.form-border-bottom-light.form-title-light
      {:type "text"
       :name "title"
       :auto-complete "off"
@@ -122,28 +123,26 @@
   "The editable description input of an edit-agenda-form."
   [agenda]
   (let [db-id (:db/id agenda)]
-    [:textarea.form-control.agenda-form-round
-     {:name "description"
-      :placeholder (labels :agenda/desc-for)
-      :value (:agenda/description agenda)
-      :id (str "description-" db-id)
-      :on-change
-      #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id (oget % [:target :value])])}]))
+    [editor/view
+     #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id %])
+     (:agenda/description agenda)]))
 
 (defn- agenda-view [agenda]
   [:<>
    [:div.agenda-line]
-   [:div.edit-agenda-div.agenda-point
-    [:div.row.agenda-row-title
-     [:div.col-8.col-md-10
-      ;; title
-      [agenda-edit-title agenda]]
-     [:div.col-4.col-md-2
-      [:div.pt-4.clickable
-       {:on-click #(rf/dispatch [:agenda/delete (:db/id agenda)])}
-       [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]
+   [:div.agenda-point.shadow-straight.pb-3
+       ;; title
+    [:div.background-secondary.p-3
+     [:div.row
+      [:div.col-10.col-md-10
+       [agenda-edit-title agenda]]
+      [:div.col-2.col-md-2
+       [:div.pt-4.clickable
+        {:on-click #(rf/dispatch [:agenda/delete (:db/id agenda)])}
+        [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]]
     ;; description
-    [agenda-edit-description agenda]
+    [:div.text-left
+     [agenda-edit-description agenda]]
     [badge-wrapper
      (with-meta
        [update-suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
@@ -153,9 +152,9 @@
        {:key (str "deletion-badge-" (:db/id agenda))})]]])
 
 (defn- editable-meeting-info [selected-meeting]
-  [:div.agenda-meeting-container
+  [:div.agenda-meeting-container.shadow-straight.text-left.p-3
    ;; title form
-   [:input.form-control.meeting-edit-title
+   [:input#meeting-title.form-control.form-title.form-border-bottom.mb-2
     {:value (:meeting/title selected-meeting)
      :type "text"
      :name "meeting-title"
@@ -167,17 +166,10 @@
      #(rf/dispatch
         [:meeting/update-meeting-attribute :meeting/title (oget % [:target :value])])}]
    ;; description form
-   [:textarea.form-control.meeting-edit-description
-    {:value (:meeting/description selected-meeting)
-     :rows "3"
-     :type "text"
-     :name "meeting-description"
-     :auto-complete "off"
-     :placeholder (labels :meeting-form-description-placeholder)
-     :id (str "meeting-description-" (:db/id selected-meeting))
-     :on-change
-     #(rf/dispatch
-        [:meeting/update-meeting-attribute :meeting/description (oget % [:target :value])])}]
+   [editor/view
+    #(rf/dispatch
+       [:meeting/update-meeting-attribute :meeting/description %])
+    (:meeting/description selected-meeting)]
    [badge-wrapper
     (with-meta
       [update-suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]

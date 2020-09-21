@@ -29,8 +29,7 @@
      :required true
      :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
      :id (str "title-" numbered-suffix)
-     :on-key-up
-     #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]])
+     :on-key-up #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]])
 
 (defn new-agenda-form
   "A form for creating a new agenda. The new agenda is automatically saved in the
@@ -52,7 +51,7 @@
           [:i.clickable {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]]
       ;; description
       [:div.text-left
-       [editor/view on-submit-function min-description-height]]]]))
+       [editor/view on-submit-function nil min-description-height]]]]))
 
 (defn add-agenda-button [number-of-forms add-event]
   (let [zero-agendas? (or (nil? number-of-forms) (zero? number-of-forms))]
