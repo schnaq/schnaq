@@ -68,25 +68,21 @@
   [:section.overflow-hidden.py-3
    [base/wavy-curve "scale(1.5,-1)"]
    [:div.early-adopter
-    [:div.container.text-center
+    [:div.container.text-center.early-adopter-schnaqqifant-wrapper
+     [:img.early-adopter-schnaqqifant.pull-right.d-none.d-md-inline
+      {:src (img-path :schnaqqifant/white)}]
+
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-     [:div.row
-      [:div.offset-md-2.col-md-4.col-6.text-center
-       [:div.button.button-secondary
-        {:type "button"
-         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
-        (labels :startpage.button/create-schnaq)]]
-      [:div.col-md-4.col-6.text-center
-       [:div.button.button-secondary
-        {:type "button"
-         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show
-                                  {:share-hash config/demo-discussion-hash}])}
-        (labels :startpage.early-adopter.buttons/join-schnaq)]]
+     [:a.button-secondary {:href config/demo-discussion-link}
+      (labels :startpage.early-adopter.buttons/join-schnaq)]
 
-      [:div.col-md-2.col-12
-       [:img.early-adopter-schnaqqifant.ml-auto.pt-3
-        {:src (img-path :schnaqqifant/white)}]]]]]
+     [:p.pt-4 (labels :startpage.early-adopter/or)]
+
+     [:span.button-secondary
+      {:type "button"
+       :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
+      (labels :startpage.button/create-schnaq)]]]
    [base/wavy-curve "scale(1.5,1)"]])
 
 (defn- subscribe-to-mailinglist
@@ -95,8 +91,8 @@
   [:section.container.text-center.subscribe-to-mailinglist
    [:p.h4 (labels :startpage.mailing-list/title)]
    [:p.lead.pb-3 (labels :startpage.mailing-list/body)]
-   [:a.btn.btn-primary {:href "https://disqtec.com/newsletter"
-                        :target "_blank"}
+   [:a.button-primary {:href "https://disqtec.com/newsletter"
+                       :target "_blank"}
     (labels :startpage.mailing-list/button)]])
 
 
