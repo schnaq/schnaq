@@ -3,7 +3,8 @@
   (:require [schnaq.interface.views.base :as base]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.views.startpage.features :as startpage-features]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [schnaq.interface.config :as config]))
 
 (defn- header-animation
   "Display header animation video"
@@ -27,7 +28,7 @@
   "Tell user to create a schnaq now."
   []
   [:section
-   [:button.btn.button-call-to-action
+   [:button.button-call-to-action
     {:type "button"
      :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
     (labels :startpage.button/create-schnaq)]])
@@ -64,15 +65,25 @@
 (defn- early-adopters
   "Present early-adopters section to catch up interest."
   []
-  [:section.overflow-hidden
+  [:section.overflow-hidden.py-3
    [base/wavy-curve "scale(1.5,-1)"]
    [:div.early-adopter
     [:div.container.text-center
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
      [:div.row
-      [:div.offset-md-2.col-md-8.col-12.text-center
-       [start-schnaq-button]]
+      [:div.offset-md-2.col-md-4.col-6.text-center
+       [:div.button.button-secondary
+        {:type "button"
+         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
+        (labels :startpage.button/create-schnaq)]]
+      [:div.col-md-4.col-6.text-center
+       [:div.button.button-secondary
+        {:type "button"
+         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show
+                                  {:share-hash config/demo-discussion-hash}])}
+        (labels :startpage.early-adopter.buttons/join-schnaq)]]
+
       [:div.col-md-2.col-12
        [:img.early-adopter-schnaqqifant.ml-auto.pt-3
         {:src (img-path :schnaqqifant/white)}]]]]]

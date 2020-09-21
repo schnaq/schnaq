@@ -46,8 +46,9 @@
      :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
      :startpage.features.graph/body "Sehen Sie die Argumente Ihrer Mitarbeitenden. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
 
-     :startpage.early-adopter/title "Gehören Sie zu den ersten Personen, die schnaq einsetzen!"
+     :startpage.early-adopter/title "Neugierig geworden?"
      :startpage.early-adopter/body "Nutzen Sie exklusiv jetzt schon schnaq.com und zählen Sie damit zu unseren Early Adoptern."
+     :startpage.early-adopter.buttons/join-schnaq "Beispielschnaq ansehen"
 
      ;; create schnaq
      :meeting-create-header "schnaq erstellen"
