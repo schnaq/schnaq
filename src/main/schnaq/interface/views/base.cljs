@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.base
-  (:require [schnaq.interface.text.display-data :as data :refer [labels]]
+  (:require [schnaq.interface.text.display-data :as data :refer [labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [oops.core :refer [oget]]
@@ -142,7 +142,8 @@
      ;; logo
      [:div.container
       [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
-       [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo) :width "150" :alt ""}]]
+       [:img.d-inline-block.align-middle.mr-2
+        {:src (img-path :logo) :width "150" :alt "schnaq logo"}]]
       ;; hamburger
       [:button.navbar-toggler
        {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
@@ -172,7 +173,8 @@
 (defn context-header []
   [:nav.navbar.navbar-expand-lg.py-3.navbar-light.context-header
    [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
-    [:img.d-inline-block.align-middle.mr-2 {:src (data/img-path :logo-white) :width "150" :alt ""}]]
+    [:img.d-inline-block.align-middle.mr-2
+     {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
    ;; hamburger
    [:button.navbar-toggler
     {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
@@ -188,21 +190,20 @@
 ;; footer
 
 (defn footer
-  "footer to display at the bottom the page"
+  "Footer to display at the bottom the page."
   []
-  [:footer.footer.bg-light
+  [:footer
    [:div.container
     [:div.row
-     [:div {:class "col-lg-6 h-100 text-center text-lg-left my-auto"}
-      [:ul {:class "list-inline mb-2"}
-       [:li.list-inline-item.btn.btn-link
+     [:div.col-md-4.col-12.text-center
+      [:img.footer-schnaqqifant
+       {:src (img-path :logo-white)}]
+      [:div.lead.text-white.font-italic.pb-1
+       (labels :startpage/heading)]
+      [:small.text-white "\u00A9 DisqTec 2020"]]
+     [:div.col-md-8.col-12.text-center.text-md-left.pt-3.pt-md-0
+      [:ul.list-inline.mb-2
+       [:li.list-inline-item.btn.btn-outline-white
         [:a {:href "https://disqtec.com/impressum"} "Impressum"]]
-       [:li.list-inline-item.btn.btn-link
-        [:a {:href "https://disqtec.com/datenschutz"} "Datenschutz"]]]
-      [:p {:class "text-muted small mb-4 mb-lg-0"} "\u00A9 DisqTec 2020"]]
-     ;; twitter icon
-     [:div {:class "col-lg-6 h-100 text-center text-lg-right my-auto"}
-      #_[:ul {:class "list-inline mb-0"}
-         [:li {:class "list-inline-item mr-3"}
-          [:a {:href "https://twitter.com/dialogoIO"}
-           [:i {:class "fab fa-twitter-square fa-2x fa-fw"}]]]]]]]])
+       [:li.list-inline-item.btn.btn-outline-white
+        [:a {:href "https://disqtec.com/datenschutz"} "Datenschutz"]]]]]]])
