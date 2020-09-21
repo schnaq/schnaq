@@ -65,11 +65,17 @@ $header-opacity: 1;
   padding: 2rem 0;
 }
 
+.early-adopter-schnaqqifant-wrapper {
+  position: relative;
+}
+
 .early-adopter-schnaqqifant {
-  display: block;
+  bottom: 0;
+  position: absolute;
+  right: 0;
   width: 100px;
 }
 
 .subscribe-to-mailinglist {
-  padding: 2rem 0 4rem;
+  padding: 2rem 0 6rem;
 }
