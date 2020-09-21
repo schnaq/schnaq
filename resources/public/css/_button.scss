@@ -1,42 +1,41 @@
 @import 'variables';
 
-.button-secondary {
-  background-color: $secondary;
+@mixin button-template {
   border: 0;
   border-radius: 1.5rem;
   box-shadow: $regular-shadow;
   color: $white;
-  font-size: 125%;
   font-weight: bold;
   padding: 1rem 2rem;
 }
 
-.button-secondary:hover {
-  background-color: $secondary-selected;
-  box-shadow: $hover-shadow;
-  color: $white;
+.button-secondary {
+  @include button-template;
+  background-color: $secondary;
+  font-size: 125%;
+
+  &:hover {
+    background-color: $secondary-selected;
+    box-shadow: $hover-shadow;
+    color: $white;
+  }
 }
 
 .button-primary {
+  @include button-template;
   background-color: $primary;
-  border: 0;
-  border-radius: 1.5rem;
-  box-shadow: $regular-shadow;
-  color: $white;
   font-size: 150%;
-  font-weight: bold;
-  padding: 1rem 2rem;
+
+  &:hover {
+    background-color: $primary-selected;
+    box-shadow: $hover-shadow;
+    color: $white;
+  }
 }
 
 .button-md {
   font-size: 100%;
   padding: 0.75rem 1rem;
-}
-
-.button-primary:hover {
-  background-color: $primary-selected;
-  box-shadow: $hover-shadow;
-  color: $white;
 }
 
 .button-spacing-top {
