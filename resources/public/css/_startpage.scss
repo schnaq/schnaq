@@ -37,10 +37,35 @@ $header-opacity: 1;
   }
 }
 
-.wavy-bottom {
+.wavy-curve {
   background-color: transparent;
   fill: $header-color;
-  margin-top: -1rem;
+  margin: -1rem 0;
   opacity: $header-opacity;
   width: 100%;
+}
+
+.feature-text-box {
+  p {
+    font-size: 1.2rem;
+  }
+}
+
+.feature-row {
+  padding-bottom: 3rem;
+
+  img {
+    width: 100%;
+  }
+}
+
+.early-adopter {
+  background-color: $primary;
+  color: $white;
+  padding: 2rem 0;
+}
+
+.early-adopter-schnaqqifant {
+  display: block;
+  width: 100px;
 }

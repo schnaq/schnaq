@@ -13,7 +13,7 @@
             [schnaq.interface.views.meeting.meetings :as meeting-views]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.meeting.single :as meeting-single]
-            [schnaq.interface.views.startpage :as startpage-views]
+            [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.graph.view :as graph-view]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,

@@ -30,7 +30,7 @@
             [schnaq.interface.views.meeting.visited]
             [schnaq.interface.views.modals.modal]
             [schnaq.interface.views.notifications]
-            [schnaq.interface.views.startpage]
+            [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]
             [schnaq.meeting.specs]
             [taoensso.timbre :as log]))

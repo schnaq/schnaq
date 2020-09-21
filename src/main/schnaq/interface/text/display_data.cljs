@@ -13,29 +13,41 @@
      :nav-meeting-create "Schnaq erstellen"
      :nav-meeting-agenda "Agenda erzeugen"
 
-     ;; startpage header
-     :start-page-header "schnaq"
-     :start-page-subheader "Nie wieder langwierige Meetings ohne Ziel!"
-     :start-page-subheader-2 "Schnaq strukturiert Meetings und bringt sie auf den Punkt"
-     ;; key features
-     :start-page-point-1 "Meetingziele kollaborativ festlegen"
-     :start-page-point-2 "Informationen gezielt austauschen"
-     :start-page-point-3 "Zeit sparen durch fokussierte Meetings"
-     :start-page-point-alpha "Betreten der Baustelle erwünscht!"
-     :start-page-point-alpha-subtext "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
-     :create-schnaq-button "Jetzt einen schnaq starten!"
-     ;; startpage call to action
-     :more-info "Fordern Sie mehr Informationen zum Aufbau Ihrer Community an"
-     :more-info-newsletter "Holen Sie sich regelmäßig Updates zu DisqTec und den aktuellsten Produkten."
-     :create-your-meeting-sub "Mit einem Klick erstellen und teilen"
+     ;; Startpage
+     :startpage/heading "Nie wieder langwierige Meetings ohne Ziel!"
+     :startpage/subheading "Schnaq strukturiert Meetings und bringt sie auf den Punkt"
 
-     ;; startpage grid
-     :innovative "Zielgerichtet"
-     :innovative-why "Meetings mit einer klaren Agenda sind produktiver"
-     :communicative "Kommunikativ"
-     :communicative-why "Lassen Sie alle WissensträgerInnen zu Wort kommen"
-     :cooperative "Kooperativ"
-     :cooperative-why "Gemeinsame Planung fördert die aktive Teilnahme an Meetings"
+     :startpage.heading-list/community "Meetingziele kollaborativ festlegen"
+     :startpage.heading-list/exchange "Informationen gezielt austauschen"
+     :startpage.heading-list/reports "Zeit sparen durch fokussierte Meetings"
+     :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
+     :startpage.under-construction/body "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
+
+     :startpage.button/create-schnaq "Jetzt einen schnaq starten!"
+
+     :startpage.grid/innovative "Zielgerichtet"
+     :startpage.grid/innovative-body "Meetings mit einer klaren Agenda sind produktiver"
+     :startpage.grid/communicative "Kommunikativ"
+     :startpage.grid/communicative-body "Lassen Sie alle WissensträgerInnen zu Wort kommen"
+     :startpage.grid/cooperative "Kooperativ"
+     :startpage.grid/cooperative-body "Gemeinsame Planung fördert die aktive Teilnahme an Meetings"
+
+     :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
+
+     :startpage.features/more-information "Mehr Informationen"
+
+     :startpage.features.meeting-organisation/lead "Meetingplanung"
+     :startpage.features.meeting-organisation/title "Gemeinsame Vorbereitung eines Meetings"
+     :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeitenden mit in die Planung des Meetings ein! Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit bei der Besprechung."
+     :startpage.features.discussion/lead "Strukturierte Diskussionen"
+     :startpage.features.discussion/title "Produktiver Austausch"
+     :startpage.features.discussion/body "Durch strukturierten Meinungsaustausch können Entscheidungen und Ideen fundiert ausgetauscht und gebildet werden. Um genau das zu lösen, bieten wir eine dialogbasierte Diskussionslösung für Ihr Team. Bessere Vorbereitung durch vorherigen Austausch!."
+     :startpage.features.graph/lead "Übersicht"
+     :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
+     :startpage.features.graph/body "Sehen Sie die Argumente Ihrer Mitarbeitenden. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
+
+     :startpage.early-adopter/title "Gehören Sie zu den ersten Personen, die schnaq einsetzen!"
+     :startpage.early-adopter/body "Nutzen Sie exklusiv jetzt schon schnaq.com und zählen Sie damit zu unseren Early Adoptern."
 
      ;; create schnaq
      :meeting-create-header "schnaq erstellen"
@@ -207,20 +219,25 @@
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-    {:icon-community "/imgs/community.svg"
-     :icon-robot "/imgs/robot.svg"
-     :icon-reports "/imgs/reports.svg"
-     :icon-crane "/imgs/crane.svg"
-     :icon-graph "/imgs/graph/graph-icon.svg"
-     :icon-add "/imgs/buttons/add-button.svg"
-     :elephant-share "/imgs/elephants/share.png"
-     :elephant-talk "/imgs/elephants/talk.png"
-     :elephant-stop "/imgs/elephants/stop.png"
+    {:animation-discussion "/animations/animation_discussion.gif"
      :elephant-admin "/imgs/elephants/admin.png"
      :elephant-erase "/imgs/elephants/erase.png"
+     :elephant-share "/imgs/elephants/share.png"
+     :elephant-stop "/imgs/elephants/stop.png"
+     :elephant-talk "/imgs/elephants/talk.png"
+     :icon-add "/imgs/buttons/add-button.svg"
+     :icon-community "/imgs/community.svg"
+     :icon-crane "/imgs/crane.svg"
+     :icon-graph "/imgs/graph/graph-icon.svg"
+     :icon-reports "/imgs/reports.svg"
+     :icon-robot "/imgs/robot.svg"
      :logo "/imgs/Schnaq-Logo.svg"
      :logo-white "/imgs/Schnaq-Logo-White.svg"
-     :animation-discussion "/animations/animation_discussion.gif"}))
+     :schnaqqifant/original "/imgs/schnaqqifant.svg"
+     :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
+     :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
+     :startpage.features/sample-discussion "/imgs/startpage/discussion_elearning.png"
+     :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"}))
 
 (defn fa
   "Returns an fontawesome icon id as String for a given identifier"
