@@ -50,6 +50,10 @@
      :startpage.early-adopter/body "Nutzen Sie exklusiv jetzt schon schnaq.com und zählen Sie damit zu unseren Early Adoptern."
      :startpage.early-adopter.buttons/join-schnaq "Beispielschnaq ansehen"
 
+     :startpage.mailing-list/title "Fordern Sie mehr Informationen zu schnaq an"
+     :startpage.mailing-list/body "Holen Sie sich regelmäßig Updates zu schnaq, DisqTec und den aktuellsten Produkten."
+     :startpage.mailing-list/button "Zum Newsletter anmelden"
+
      ;; create schnaq
      :meeting-create-header "schnaq erstellen"
      :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"

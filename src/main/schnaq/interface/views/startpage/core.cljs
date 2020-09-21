@@ -89,6 +89,16 @@
         {:src (img-path :schnaqqifant/white)}]]]]]
    [base/wavy-curve "scale(1.5,1)"]])
 
+(defn- subscribe-to-mailinglist
+  "Add possibility to subscribe to our mailing list."
+  []
+  [:section.container.text-center.subscribe-to-mailinglist
+   [:p.h4 (labels :startpage.mailing-list/title)]
+   [:p.lead.pb-3 (labels :startpage.mailing-list/body)]
+   [:a.btn.btn-primary {:href "https://disqtec.com/newsletter"
+                        :target "_blank"}
+    (labels :startpage.mailing-list/button)]])
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -105,7 +115,8 @@
     [icons-grid]
     [usage-of-schnaq-heading]
     [startpage-features/feature-rows]]
-   [early-adopters]])
+   [early-adopters]
+   [subscribe-to-mailinglist]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
