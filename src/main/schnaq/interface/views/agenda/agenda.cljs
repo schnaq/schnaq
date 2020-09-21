@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.agenda.agenda
   (:require [ajax.core :as ajax]
             [goog.string :as gstring]
-            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
@@ -22,7 +21,7 @@
 (defn- agenda-title-input
   [attributes]
   [:<>
-   [:input#meeting-title.form-control.form-border-bottom-light.form-title-light
+   [:input.form-control.form-border-bottom-light.form-title-light
     attributes]])
 
 (defn agenda-form
