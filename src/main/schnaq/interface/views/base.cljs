@@ -195,7 +195,7 @@
   [:footer
    [:div.container
     [:div.row
-     [:div.col-md-4.col-12.text-center
+     [:div.col-md-4.col-12
       [:img.footer-schnaqqifant
        {:src (img-path :logo-white)}]
       [:div.lead.text-white.font-italic.pb-1
