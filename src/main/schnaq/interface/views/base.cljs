@@ -201,7 +201,7 @@
       [:div.lead.text-white.font-italic.pb-1
        (labels :startpage/heading)]
       [:small.text-white "\u00A9 DisqTec 2020"]]
-     [:div.col-md-8.col-12.text-center.text-md-left.pt-3.pt-md-0
+     [:div.col-md-8.col-12.text-center.text-md-right.pt-3.pt-md-0
       [:ul.list-inline
        [:li.list-inline-item.btn.btn-outline-white
         [:a {:href "https://disqtec.com/ueber-uns"}
