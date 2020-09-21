@@ -29,6 +29,23 @@
      :required true
      :placeholder (data/labels :meeting-form-title-placeholder)}]])
 
+(defn create-agenda-title-attributes [agenda-num]
+  {:type "text"
+   :name (str "title-" agenda-num)
+   :auto-complete "off"
+   :required true
+   :placeholder (str (data/labels :agenda/point) (inc agenda-num))
+   :id (str "title-" agenda-num)
+   :on-key-up #(agenda/new-agenda-local :title (oget % [:target :value]) agenda-num)})
+
+(defn agendas [number-of-forms]
+  [:<>
+   (for [agenda-num (range number-of-forms)]
+     (let [delete-agenda-fn #(rf/dispatch [:agenda/delete-temporary agenda-num])
+           update-description-fn (fn [value] (agenda/new-agenda-local :description value agenda-num))]
+       [:div {:key agenda-num}
+        [agenda/agenda-form delete-agenda-fn nil update-description-fn (create-agenda-title-attributes agenda-num)]]))])
+
 (defn view []
   (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])
         description-storage-key :meeting.create/description]
@@ -43,9 +60,7 @@
        [meeting-title-input]
        [editor/view-store-on-change description-storage-key]]
       [:div.agenda-container.text-center
-       (for [agenda-num (range number-of-forms)]
-         [:div {:key agenda-num}
-          [agenda/new-agenda-form agenda-num]])
+       [agendas number-of-forms]
        [:div.agenda-line]
        [agenda/add-agenda-button number-of-forms :agenda/increase-form-num]
        [submit-meeting-button]]]]))

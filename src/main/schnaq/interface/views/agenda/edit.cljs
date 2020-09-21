@@ -104,52 +104,33 @@
 (defn- submit-edit-button []
   [:button.btn.button-primary (labels :agenda/edit-button)])
 
-(defn- agenda-edit-title
-  "The editable title input of an edit-agenda-form."
-  [agenda]
-  (let [db-id (:db/id agenda)]
-    [:input.form-control.form-border-bottom-light.form-title-light
-     {:type "text"
-      :name "title"
-      :auto-complete "off"
-      :required true
-      :placeholder (labels :agenda/point)
-      :value (:agenda/title agenda)
-      :id (str "title-" db-id)
-      :on-change
-      #(rf/dispatch [:agenda/update-edit-form :agenda/title db-id (oget % [:target :value])])}]))
-
-(defn- agenda-edit-description
-  "The editable description input of an edit-agenda-form."
-  [agenda]
-  (let [db-id (:db/id agenda)]
-    [editor/view
-     (:agenda/description agenda)
-     #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id %])]))
+(defn edit-agenda-title-attributes [db-id agenda]
+  {:type "text"
+   :name "title"
+   :auto-complete "off"
+   :required true
+   :placeholder (labels :agenda/point)
+   :value (:agenda/title agenda)
+   :id (str "title-" db-id)
+   :on-change #(rf/dispatch [:agenda/update-edit-form :agenda/title db-id (oget % [:target :value])])})
 
 (defn- agenda-view [agenda]
-  [:<>
-   [:div.agenda-line]
-   [:div.agenda-point.shadow-straight.pb-3
-       ;; title
-    [:div.background-secondary.p-3
-     [:div.row
-      [:div.col-10.col-md-10
-       [agenda-edit-title agenda]]
-      [:div.col-2.col-md-2
-       [:div.pt-4.clickable
-        {:on-click #(rf/dispatch [:agenda/delete (:db/id agenda)])}
-        [:i {:class (str "m-auto fas fa-2x " (fa :delete-icon))}]]]]]
-    ;; description
-    [:div.text-left
-     [agenda-edit-description agenda]]
-    [badge-wrapper
-     (with-meta
-       [update-suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
-       {:key (str "suggestion-badge-" (:db/id agenda))})
-     (with-meta
-       [deletion-badge agenda]
-       {:key (str "deletion-badge-" (:db/id agenda))})]]])
+  (let [db-id (:db/id agenda)
+        delete-agenda-fn #(rf/dispatch [:agenda/delete (:db/id agenda)])
+        description-update-fn #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id %])]
+    [:<>
+     [agenda/agenda-form
+      delete-agenda-fn
+      (:agenda/description agenda)
+      description-update-fn
+      (edit-agenda-title-attributes db-id agenda)]
+     [badge-wrapper
+      (with-meta
+        [update-suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
+        {:key (str "suggestion-badge-" (:db/id agenda))})
+      (with-meta
+        [deletion-badge agenda]
+        {:key (str "deletion-badge-" (:db/id agenda))})]]))
 
 (defn- editable-meeting-info [selected-meeting]
   [:div.agenda-meeting-container.shadow-straight.text-left.p-3
