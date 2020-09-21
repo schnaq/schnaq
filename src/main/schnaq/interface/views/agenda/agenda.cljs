@@ -51,7 +51,7 @@
           [:i.clickable {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]]
       ;; description
       [:div.text-left
-       [editor/view on-submit-function nil min-description-height]]]]))
+       [editor/view nil on-submit-function min-description-height]]]]))
 
 (defn add-agenda-button [number-of-forms add-event]
   (let [zero-agendas? (or (nil? number-of-forms) (zero? number-of-forms))]

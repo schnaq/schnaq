@@ -124,8 +124,8 @@
   [agenda]
   (let [db-id (:db/id agenda)]
     [editor/view
-     #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id %])
-     (:agenda/description agenda)]))
+     (:agenda/description agenda)
+     #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id %])]))
 
 (defn- agenda-view [agenda]
   [:<>
@@ -167,9 +167,9 @@
         [:meeting/update-meeting-attribute :meeting/title (oget % [:target :value])])}]
    ;; description form
    [editor/view
+    (:meeting/description selected-meeting)
     #(rf/dispatch
-       [:meeting/update-meeting-attribute :meeting/description %])
-    (:meeting/description selected-meeting)]
+       [:meeting/update-meeting-attribute :meeting/description %])]
    [badge-wrapper
     (with-meta
       [update-suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]
