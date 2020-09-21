@@ -1,4 +1,21 @@
+@import 'variables';
+
 footer {
+  background-color: $blue-dark;
   min-height: 15vh;
   padding: 2rem 0;
+
+
+  .lead {
+    font-size: 1.2rem;
+  }
+
+  .footer-schnaqqifant {
+    padding-bottom: 0.5rem;
+    width: 40%;
+
+    @include media-breakpoint-down(md) {
+      width: 12rem;
+    }
+  }
 }
