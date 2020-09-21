@@ -49,10 +49,15 @@
      :startpage.early-adopter/title "Neugierig geworden?"
      :startpage.early-adopter/body "Nutzen Sie exklusiv jetzt schon schnaq.com und zählen Sie damit zu unseren Early Adoptern."
      :startpage.early-adopter.buttons/join-schnaq "Beispielschnaq ansehen"
+     :startpage.early-adopter/or "oder"
 
      :startpage.mailing-list/title "Fordern Sie mehr Informationen zu schnaq an"
      :startpage.mailing-list/body "Holen Sie sich regelmäßig Updates zu schnaq, DisqTec und den aktuellsten Produkten."
      :startpage.mailing-list/button "Zum Newsletter anmelden"
+
+     :footer.buttons/about-us "Über uns"
+     :footer.buttons/legal-note "Impressum"
+     :footer.buttons/privacy "Datenschutz"
 
      ;; create schnaq
      :meeting-create-header "schnaq erstellen"
