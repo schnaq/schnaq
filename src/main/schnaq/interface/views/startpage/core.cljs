@@ -76,9 +76,7 @@
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
      [:a.button-secondary {:href config/demo-discussion-link}
       (labels :startpage.early-adopter.buttons/join-schnaq)]
-
      [:p.pt-4 (labels :startpage.early-adopter/or)]
-
      [:span.button-secondary
       {:type "button"
        :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
