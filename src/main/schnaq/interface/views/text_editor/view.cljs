@@ -24,6 +24,7 @@
           (let [newMDE (mde.
                          (clj->js {:element (rdom/dom-node comp)
                                    :minHeight min-height
+                                   :spellChecker false
                                    :initialValue (data/labels :meeting-form-desc-placeholder)}))]
             (reset! mde-ref newMDE)
             (when text
