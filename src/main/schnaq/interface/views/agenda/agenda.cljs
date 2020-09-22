@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.agenda.agenda
   (:require [ajax.core :as ajax]
             [goog.string :as gstring]
-            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
@@ -20,24 +19,16 @@
   (keyword (str "meeting.create/agenda/" numbered-suffix "/description")))
 
 (defn- agenda-title-input
-  [numbered-suffix]
+  [attributes]
   [:<>
-   [:input#meeting-title.form-control.form-border-bottom-light.form-title-light
-    {:type "text"
-     :name (str "title-" numbered-suffix)
-     :auto-complete "off"
-     :required true
-     :placeholder (str (data/labels :agenda/point) (inc numbered-suffix))
-     :id (str "title-" numbered-suffix)
-     :on-key-up
-     #(new-agenda-local :title (oget % [:target :value]) numbered-suffix)}]])
+   [:input.form-control.form-border-bottom-light.form-title-light
+    attributes]])
 
-(defn new-agenda-form
+(defn agenda-form
   "A form for creating a new agenda. The new agenda is automatically saved in the
   app-state according to the suffix."
-  [numbered-suffix]
-  (let [min-description-height "150px"
-        on-submit-function (fn [value] (new-agenda-local :description value numbered-suffix))]
+  [delete-fn description description-submit-fn title-attributes]
+  (let [min-description-height "150px"]
     [:<>
      [:div.agenda-line]
      [:div.agenda-point.shadow-straight.pb-3
@@ -45,14 +36,14 @@
       [:div.background-secondary.p-3
        [:div.row
         [:div.col-10.col-md-10
-         [agenda-title-input numbered-suffix]]
+         [agenda-title-input title-attributes]]
         [:div.col-2.col-md-2
          [:div.pt-4
-          {:on-click #(rf/dispatch [:agenda/delete-temporary numbered-suffix])}
+          {:on-click delete-fn}
           [:i.clickable {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]]
       ;; description
       [:div.text-left
-       [editor/view on-submit-function min-description-height]]]]))
+       [editor/view description description-submit-fn min-description-height]]]]))
 
 (defn add-agenda-button [number-of-forms add-event]
   (let [zero-agendas? (or (nil? number-of-forms) (zero? number-of-forms))]

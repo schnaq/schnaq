@@ -1,25 +1,11 @@
 (ns schnaq.interface.views.meeting.meetings
   (:require [ajax.core :as ajax]
-            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.agenda.agenda :as agenda]
             [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.text-editor.view :as editor]))
+            [schnaq.interface.views.meeting.create :as create-view]))
 
-;; #### Helpers ####
-
-(defn- new-meeting-helper
-  "Creates a new meeting with the form from `create-meeting-form`."
-  [title description]
-  (rf/dispatch
-    [:meeting.creation/new
-     {:meeting/title title
-      :meeting/description description
-      :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
-      :meeting/start-date (js/Date.)}]))
 
 ;; #### Views ####
 
@@ -27,44 +13,13 @@
   [base/header
    (data/labels :meeting-create-header)])
 
-(defn- meeting-title-input
-  "The input and label for a new meeting-title"
-  []
-  [:<>
-   [:input#meeting-title.form-control.form-title.form-border-bottom.mb-2
-    {:type "text"
-     :autoComplete "off"
-     :required true
-     :placeholder (data/labels :meeting-form-title-placeholder)}]])
-
-(defn- submit-meeting-button []
-  [:button.btn.button-primary (data/labels :meeting-create-header)])
-
 (defn- create-meeting-form-view
   "A view with a form that creates a meeting and optional agendas."
   []
-  (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])
-        description-storage-key :meeting.create/description]
-    [:div#create-meeting-form
-     [base/nav-header]
-     [header]
-     [:div.container.py-3
-      [:form
-       {:on-submit (fn [e]
-                     (let [title (oget e [:target :elements :meeting-title :value])
-                           description @(rf/subscribe [:mde/load-content description-storage-key])]
-                       (js-wrap/prevent-default e)
-                       (new-meeting-helper title description)))}
-       [:div.agenda-meeting-container.shadow-straight.text-left.p-3
-        [meeting-title-input]
-        [editor/view-store-on-change description-storage-key]]
-       [:div.agenda-container.text-center
-        (for [agenda-num (range number-of-forms)]
-          [:div {:key agenda-num}
-           [agenda/new-agenda-form agenda-num]])
-        [:div.agenda-line]
-        [agenda/add-agenda-button number-of-forms :agenda/increase-form-num]
-        [submit-meeting-button]]]]]))
+  [:div#create-meeting-form
+   [base/nav-header]
+   [header]
+   [create-view/view]])
 
 (defn create-meeting-view []
   [create-meeting-form-view])
