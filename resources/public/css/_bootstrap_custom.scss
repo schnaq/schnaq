@@ -1,0 +1,23 @@
+@import 'variables';
+@import '../../../node_modules/bootstrap/scss/bootstrap';
+
+.btn-white {
+  @include button-variant($white, darken($white, 7.5%), darken($white, 10%), lighten($white, 5%), lighten($white, 10%), darken($white, 30%));
+
+  a {
+    color: $black;
+  }
+}
+
+.btn-outline-white {
+  @include button-outline-variant($white, #222222, lighten($white, 5%), $white);
+
+  a {
+    color: $white;
+
+  }
+
+  a:hover {
+    color: $black;
+  }
+}

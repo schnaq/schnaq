@@ -3,7 +3,8 @@
   (:require [schnaq.interface.views.base :as base]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.views.startpage.features :as startpage-features]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [schnaq.interface.config :as config]))
 
 (defn- header-animation
   "Display header animation video"
@@ -27,7 +28,7 @@
   "Tell user to create a schnaq now."
   []
   [:section
-   [:button.btn.button-call-to-action
+   [:button.button-call-to-action
     {:type "button"
      :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
     (labels :startpage.button/create-schnaq)]])
@@ -64,19 +65,33 @@
 (defn- early-adopters
   "Present early-adopters section to catch up interest."
   []
-  [:section.overflow-hidden
+  [:section.overflow-hidden.py-3
    [base/wavy-curve "scale(1.5,-1)"]
    [:div.early-adopter
-    [:div.container.text-center
+    [:div.container.text-center.early-adopter-schnaqqifant-wrapper
+     [:img.early-adopter-schnaqqifant.pull-right.d-none.d-md-inline
+      {:src (img-path :schnaqqifant/white)}]
+
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-     [:div.row
-      [:div.offset-md-2.col-md-8.col-12.text-center
-       [start-schnaq-button]]
-      [:div.col-md-2.col-12
-       [:img.early-adopter-schnaqqifant.ml-auto.pt-3
-        {:src (img-path :schnaqqifant/white)}]]]]]
+     [:a.button-secondary {:href config/demo-discussion-link}
+      (labels :startpage.early-adopter.buttons/join-schnaq)]
+     [:p.pt-4 (labels :startpage.early-adopter/or)]
+     [:span.button-secondary
+      {:type "button"
+       :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
+      (labels :startpage.button/create-schnaq)]]]
    [base/wavy-curve "scale(1.5,1)"]])
+
+(defn- subscribe-to-mailinglist
+  "Add possibility to subscribe to our mailing list."
+  []
+  [:section.container.text-center.subscribe-to-mailinglist
+   [:p.h4 (labels :startpage.mailing-list/title)]
+   [:p.lead.pb-3 (labels :startpage.mailing-list/body)]
+   [:a.button-primary {:href "https://disqtec.com/newsletter"
+                       :target "_blank"}
+    (labels :startpage.mailing-list/button)]])
 
 
 ;; -----------------------------------------------------------------------------
@@ -94,7 +109,8 @@
     [icons-grid]
     [usage-of-schnaq-heading]
     [startpage-features/feature-rows]]
-   [early-adopters]])
+   [early-adopters]
+   [subscribe-to-mailinglist]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
