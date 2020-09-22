@@ -4,7 +4,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data]
             [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.meeting.edit :as edit-meeting-view]))
+            [schnaq.interface.views.meeting.create :as create-view]))
 
 
 ;; #### Views ####
@@ -19,7 +19,7 @@
   [:div#create-meeting-form
    [base/nav-header]
    [header]
-   [edit-meeting-view/view]])
+   [create-view/view]])
 
 (defn create-meeting-view []
   [create-meeting-form-view])

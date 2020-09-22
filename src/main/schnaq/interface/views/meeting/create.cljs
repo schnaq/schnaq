@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.meeting.edit
+(ns schnaq.interface.views.meeting.create
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :as data]

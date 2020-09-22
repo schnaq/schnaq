@@ -165,7 +165,7 @@
   [heading on-submit-fn]
   [:re-frame/component fn? :ret :re-frame/component]
   (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
-        selected-meeting (:meeting edit-information)
+        edit-meeting (:meeting edit-information)
         meeting-agendas (:agendas edit-information)]
     [:<>
      [base/nav-header]
@@ -173,7 +173,7 @@
      [:div.container.text-center.pb-5
       [:form {:on-submit on-submit-fn}
        ;; meeting title and description
-       [editable-meeting-info selected-meeting]
+       [editable-meeting-info edit-meeting]
        [:div.container
         (for [agenda meeting-agendas]
           [:div {:key (:db/id agenda)}
