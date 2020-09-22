@@ -71,9 +71,8 @@
   "Create one icon in a grid"
   [path-to-img heading]
   [:div.d-flex.flex-row.p-1
-   [:div
-    [:img {:src path-to-img}]
-    [:span [:h5 heading]]]])
+   [:img {:src path-to-img}]
+   [:span [:h5 heading]]])
 
 (defn- educate-element []
   [:div.row.mb-3
@@ -91,7 +90,7 @@
     [:div.share-link-icons
      [img-text (img-path :elephant-erase)
       (labels :meeting/educate-on-edit)]]
-    [:button.btn.button-secondary.btn-lg.float-left.my-2.span-container
+    [:button.btn.button-secondary.float-left.my-2.w-100
      {:role "button"
       :on-click #(rf/dispatch [:navigation/navigate
                                :routes.meeting/edit
