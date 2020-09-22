@@ -172,9 +172,6 @@
      :login/as "Hallo, "
      :login/set-name "Geben Sie Ihren Namen ein"
 
-     :modals/enter-name-header "Geben Sie einen Namen ein"
-     :modals/enter-name-primer "Der Name wird den anderen Teilnehmenden im schnaq angezeigt."
-
      ;; analytics
      :analytics/overall-meetings "Schnaqs erstellt"
      :analytics/user-numbers "Usernamen angelegt"
@@ -193,6 +190,8 @@
      :user.set-name/dialog-lead "Schön, dass Sie hier sind!"
      :user.set-name/dialog-body "Um an Diskussionen teilzunehmen ist es notwendig, dass Sie einen Namen eingeben."
      :user.set-name/dialog-button "Wie möchten Sie genannt werden?"
+     :user.set-name.modal/header "Geben Sie einen Namen ein"
+     :user.set-name.modal/primer "Der Name wird den anderen Teilnehmenden im schnaq angezeigt."
 
      ;; Errors
      :errors/navigate-to-startpage "Zurück zur Startseite"
