@@ -71,13 +71,12 @@
     [:div.container.text-center.early-adopter-schnaqqifant-wrapper
      [:img.early-adopter-schnaqqifant.pull-right.d-none.d-md-inline
       {:src (img-path :schnaqqifant/white)}]
-
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
      [:a.button-secondary {:href config/demo-discussion-link}
       (labels :startpage.early-adopter.buttons/join-schnaq)]
      [:p.pt-4 (labels :startpage.early-adopter/or)]
-     [:span.button-secondary
+     [:button.button-secondary
       {:type "button"
        :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
       (labels :startpage.button/create-schnaq)]]]
