@@ -13,16 +13,13 @@
   [base/header
    (data/labels :meeting-create-header)])
 
-(defn- create-meeting-form-view
+(defn create-meeting-view
   "A view with a form that creates a meeting and optional agendas."
   []
   [:div#create-meeting-form
    [base/nav-header]
    [header]
    [create-view/view]])
-
-(defn create-meeting-view []
-  [create-meeting-form-view])
 
 ;; #### Events ####
 

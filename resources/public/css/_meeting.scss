@@ -36,7 +36,8 @@
 }
 
 .meeting-header {
-  color: $white;
+  background-color: $white;
+  color: $text-dark;
   overflow-wrap: break-word;
   padding: 2rem 2rem 1rem;
 }

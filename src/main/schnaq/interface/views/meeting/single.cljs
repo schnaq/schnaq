@@ -1,8 +1,26 @@
 (ns schnaq.interface.views.meeting.single
   (:require [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.base :as base]))
+
+(defn meeting-entry
+  "Non wavy header with an optional back button.
+  'title-on-click-function' is triggered when header is clicked
+  'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
+  ([_title subtitle _title-on-click-function on-click-back-function]
+   ;; check if title is clickable and set properties accordingly
+   [:div.meeting-header.header-meeting.shadow-straight
+    [:div.row
+     [:div.col-1.back-arrow
+      (when on-click-back-function
+        [:p {:on-click on-click-back-function}              ;; the icon itself is not clickable
+         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
+     [:div.col-10
+      [:div.container
+       [:h6 subtitle]]]
+     [:div.col-1]
+     ]]))
 
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry
@@ -31,7 +49,7 @@
 
 (defn- meeting-title [current-meeting]
   ;; meeting header
-  [base/discussion-header
+  [meeting-entry
    (:meeting/title current-meeting)
    (:meeting/description current-meeting)
    nil                                                      ;; header should not be clickable in overview
@@ -43,7 +61,7 @@
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
     ;; meeting header
     [:div
-     [base/nav-header]
+     [base/context-header current-meeting]
      [meeting-title current-meeting]
      [:div.container.py-2
       [:div.meeting-single-rounded
