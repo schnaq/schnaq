@@ -21,6 +21,15 @@
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
+(>defn- get-current-url
+  "Building the current URL with validated path, and without extra-stuff, like
+  internal hashtag-routing."
+  [current-route]
+  [map? :ret string?]
+  (let [path (:path current-route)
+        location (oget js/window :location)]
+    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
+
 (>defn- get-edit-link
   [current-route]
   [map? :ret string?]
