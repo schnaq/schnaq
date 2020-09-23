@@ -98,7 +98,7 @@
      :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
      :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
      :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
-     :meeting/educate-on-admin "Später jederzeit per Admin Link editieren!"
+     :meeting/educate-on-admin "Später jederzeit per Admin-Center Link editieren!"
      :meeting.admin-center.link/header "Zugang zum Admin Center"
      :meeting.admin-center.link/primer "Schicken Sie sich den Zugang zu dieser Seite per Mail zu!"
      :meeting.admin-center.link.form/label "Ihre E-Mail Adresse"

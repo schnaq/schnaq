@@ -147,7 +147,7 @@
      [img-text (img-path :elephant-admin)
       (labels :meeting/educate-on-admin)]
      [:div.py-3
-      [copy-link-form get-edit-link "edit-hash"]]]]])
+      [copy-link-form get-admin-center-link "admin-center"]]]]])
 
 (>defn- invite-participants-form
   "A form which allows the sending of the invitation-link to several participants via E-Mail."
@@ -255,10 +255,10 @@
   "Composing admin-related sections."
   [share-hash edit-hash]
   (tab-builder "admin"
-               {:link "Link verschicken"
-                :view [send-admin-link share-hash edit-hash]}
                {:link "Administration"
-                :view [educate-admin-element share-hash edit-hash]}))
+                :view [educate-admin-element share-hash edit-hash]}
+               {:link "Link verschicken"
+                :view [send-admin-link share-hash edit-hash]}))
 
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
