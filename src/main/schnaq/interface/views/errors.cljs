@@ -32,7 +32,7 @@
   []
   (error-page-layout
     (labels :error.404/heading)
-    (labels :error.404/body-text)))
+    (labels :error.404/body)))
 
 (defn true-404-entrypoint
   "404 view wrapper for routes."

@@ -84,7 +84,7 @@
      :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
      :meeting.admin/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
      :meeting.admin/send-invites-button-text "Einladungen versenden"
-     :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per Email ein"
+     :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per E-Mail ein"
      :meeting.admin.notifications/emails-successfully-sent-title "Mail(s) verschickt!"
      :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Mail(s) wurden erfolgreich versendet."
      :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
@@ -99,6 +99,7 @@
      :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
      :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
      :meeting/educate-on-admin "Später jederzeit zum Admin-Center zurückkehren!"
+     :meeting.admin-center/heading "Admin-Center"
      :meeting.admin-center.edit.link/header "Zugang zum Admin-Center"
      :meeting.admin-center.edit.link/primer "Schicken Sie sich den Zugang zu dieser Seite per Mail zu!"
      :meeting.admin-center.edit.link.form/label "Ihre E-Mail Adresse"
@@ -209,7 +210,7 @@
      :error.generic/contact-us [:span "Sollten Sie hier landen nachdem Sie etwas auf schnaq.com angeklickt haben, geben Sie uns gerne Bescheid unter " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
 
      :error.404/heading "Diese Seite existiert nicht 🙉"
-     :error.404/body-text "Die URL der Sie gefolgt sind existiert leider nicht. Möglicherweise hat sich ein Tippfehler
+     :error.404/body "Die URL der Sie gefolgt sind existiert leider nicht. Möglicherweise hat sich ein Tippfehler
      oder ein Zeichen zu viel eingeschlichen."
 
      :error.403/heading "Sie haben nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"

@@ -34,7 +34,7 @@
       {:db (-> db
                (assoc-in [:meeting :last-added] new-meeting)
                (update :meetings conj new-meeting))
-       :fx [[:dispatch [:navigation/navigate :routes.meeting/created
+       :fx [[:dispatch [:navigation/navigate :routes.meeting/admin-center
                         {:share-hash share-hash
                          :edit-hash edit-hash}]]
             [:dispatch [:meeting/select-current new-meeting]]

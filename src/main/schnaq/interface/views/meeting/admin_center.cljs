@@ -27,8 +27,8 @@
   [current-route]
   [map? :ret string?]
   (let [{:keys [share-hash edit-hash]} (:path-params current-route)
-        path (reitfe/href :routes.meeting/created {:share-hash share-hash
-                                                   :edit-hash edit-hash})
+        path (reitfe/href :routes.meeting/admin-center {:share-hash share-hash
+                                                        :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
@@ -164,20 +164,20 @@
          :required true
          :placeholder (labels :meeting.admin/addresses-placeholder)}]
        [:small.form-text.text-muted.float-right
-        (labels :meeting.admin/addresses-privacy)]
-       [:button.btn.button-primary.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
+        (labels :meeting.admin/addresses-privacy)]]
+      [:button.btn.btn-outline-primary
+       (labels :meeting.admin/send-invites-button-text)]]]))
 
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
   []
   (tab-builder "invite-participants"
+               {:link "Per Mail einladen"
+                :view [invite-participants-form]}
                {:link "TeilnehmerInnen einladen"
                 :view [:<>
                        [educate-element]
-                       [copy-link-form get-share-link "share-hash"]]}
-               {:link "Per Mail einladen"
-                :view [invite-participants-form]}))
-
+                       [copy-link-form get-share-link "share-hash"]]}))
 
 (rf/reg-event-fx
   :meeting.admin/send-admin-center-link
@@ -277,11 +277,9 @@
     [:<>
      [base/nav-header]
      [base/header
-      (labels :meeting/created-success-heading)
-      (labels :meeting/created-success-subheading)]
+      (labels :meeting.admin-center/heading)
+      title]
      [:div.container.px-3.px-md-5.py-3.text-center
-      ;; list agendas
-      [:h4.text-left.mb-3 title]
       [invite-participants-tabs]
       spacer
       [educate-admin-element-tabs share-hash edit-hash]
