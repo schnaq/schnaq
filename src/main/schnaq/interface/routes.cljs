@@ -68,9 +68,9 @@
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:agenda/load-for-edit (:share-hash path)])
                                 (rf/dispatch [:suggestions/send-updates (:share-hash path) (:edit-hash path)]))}]}]
-      ["/created"
-       {:name :routes.meeting/created
-        :view meeting-admin/admin-central-view
+      ["/manage"
+       {:name :routes.meeting/admin-center
+        :view meeting-admin/admin-center-view
         :link-text (labels :router/meeting-created)}]]
      ["/"
       {:name :routes.meeting/show
@@ -124,16 +124,15 @@
      :controllers [{:start (fn []
                              (rf/dispatch [:admin/set-password (js/prompt "Enter the Admin Password to see analytics")])
                              (rf/dispatch [:analytics/load-dashboard]))}]}]
-   ["invalid-link"
-    {:name :routes/invalid-link
-     :view error-views/invalid-admin-link-view-entrypoint
-     :link-text (labels :router/invalid-link)}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
      :link-text (labels :router/not-found-label)
      :controllers [{:identity #(random-uuid)
                     :start #(js-wrap/replace-url "/404/")}]}]
+   ["403/"
+    {:name :routes/forbidden-page
+     :view error-views/forbidden-page}]
    ["404/"
     {:name :routes/true-404-view
      :view error-views/true-404-entrypoint
