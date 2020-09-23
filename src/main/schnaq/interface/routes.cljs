@@ -68,7 +68,7 @@
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:agenda/load-for-edit (:share-hash path)])
                                 (rf/dispatch [:suggestions/send-updates (:share-hash path) (:edit-hash path)]))}]}]
-      ["/admin-center"
+      ["/manage"
        {:name :routes.meeting/admin-center
         :view meeting-admin/admin-center-view
         :link-text (labels :router/meeting-created)}]]
