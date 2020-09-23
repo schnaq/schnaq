@@ -39,6 +39,38 @@
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
+(defn- tab-builder
+  "Create a tabbed view. Prefix must be unique on this page."
+  [tab-prefix first-tab second-tab]
+  (let [tab-prefix# (str "#" tab-prefix)]
+    [:<>
+     [:nav.nav-justified
+      [:div.nav.nav-tabs {:role "tablist"}
+       [:a.nav-item.nav-link.active {:data-toggle "tab"
+                                     :href (str tab-prefix# "-home")
+                                     :role "tab"
+                                     :aria-controls (str tab-prefix "-home")
+                                     :aria-selected "true"}
+        (:link first-tab)]
+       [:a.nav-item.nav-link {:data-toggle "tab"
+                              :href (str tab-prefix# "-link")
+                              :role "tab"
+                              :aria-controls (str tab-prefix "-link")
+                              :aria-selected "false"}
+        (:link second-tab)]]]
+     [:div.tab-content.mt-4
+      [:div.tab-pane.fade.show.active
+       {:id (str tab-prefix "-home")
+        :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
+       (:view first-tab)]
+      [:div.tab-pane.fade
+       {:id (str tab-prefix "-link")
+        :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab")}
+       (:view second-tab)]]]))
+
+
+;; -----------------------------------------------------------------------------
+
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
   [create-link-fn id-extra]
