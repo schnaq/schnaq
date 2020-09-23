@@ -173,6 +173,20 @@
         (labels :meeting.admin/addresses-privacy)]
        [:button.btn.button-primary.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
 
+(defn- invite-participants-tabs
+  "Share link and invite via mail in a tabbed view."
+  []
+  (tab-builder "invite-participants"
+               {:link "TeilnehmerInnen einladen"
+                :view [:<>
+                       [educate-element]
+                       [copy-link-form get-share-link "share-hash"]]}
+               {:link "Per Mail einladen"
+                :view [invite-participants-form]}))
+
+
+;; -----------------------------------------------------------------------------
+
 (rf/reg-event-fx
   :meeting.admin/send-admin-center-link
   (fn [{:keys [db]} [_ form]]
@@ -260,11 +274,14 @@
                {:link (labels :meeting.admin-center/send-link)
                 :view [send-admin-center-link share-hash edit-hash]}))
 
+
+;; -----------------------------------------------------------------------------
+
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
   []
   (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])
-        spacer [:hr.pb-4.mt-4]]
+        spacer [:div.pb-5.mt-3]]
     [:<>
      [base/nav-header]
      [base/header
@@ -273,17 +290,15 @@
      [:div.container.px-3.px-md-5.py-3.text-center
       ;; list agendas
       [:h4.text-left.mb-3 title]
-      [educate-element]
-      [copy-link-form get-share-link "share-hash"]
+      [invite-participants-tabs]
       spacer
-      [invite-participants-form]
       [educate-admin-element-tabs share-hash edit-hash]
       spacer
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
       ;; go to meeting button
-      [:button.btn.button-primary.btn-lg.center-block
+      [:button.btn.button-primary.btn-lg.center-block.mb-5
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
        (labels :meetings/continue-to-schnaq-button)]]]))
