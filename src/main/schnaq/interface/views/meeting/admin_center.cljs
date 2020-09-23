@@ -32,15 +32,6 @@
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
-(>defn- get-edit-link
-  [current-route]
-  [map? :ret string?]
-  (let [{:keys [share-hash edit-hash]} (:path-params current-route)
-        path (reitfe/href :routes.meeting/edit {:share-hash share-hash
-                                                :edit-hash edit-hash})
-        location (oget js/window :location)]
-    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
-
 (defn- tab-builder
   "Create a tabbed view. Prefix must be unique on this page."
   [tab-prefix first-tab second-tab]
@@ -149,6 +140,9 @@
      [:div.py-3
       [copy-link-form get-admin-center-link "admin-center"]]]]])
 
+
+;; -----------------------------------------------------------------------------
+
 (>defn- invite-participants-form
   "A form which allows the sending of the invitation-link to several participants via E-Mail."
   []
@@ -184,8 +178,6 @@
                {:link "Per Mail einladen"
                 :view [invite-participants-form]}))
 
-
-;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
   :meeting.admin/send-admin-center-link
