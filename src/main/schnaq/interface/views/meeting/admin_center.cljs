@@ -11,6 +11,7 @@
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.base :as base]))
 
 (>defn- get-share-link
@@ -27,17 +28,8 @@
   [current-route]
   [map? :ret string?]
   (let [{:keys [share-hash edit-hash]} (:path-params current-route)
-        path (reitfe/href :routes.meeting/created {:share-hash share-hash
-                                                   :edit-hash edit-hash})
-        location (oget js/window :location)]
-    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
-
-(>defn- get-edit-link
-  [current-route]
-  [map? :ret string?]
-  (let [{:keys [share-hash edit-hash]} (:path-params current-route)
-        path (reitfe/href :routes.meeting/edit {:share-hash share-hash
-                                                :edit-hash edit-hash})
+        path (reitfe/href :routes.meeting/admin-center {:share-hash share-hash
+                                                        :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
@@ -94,11 +86,9 @@
             :on-click (fn [e]
                         (js-wrap/prevent-default e)
                         (clipboard/copy-to-clipboard! display-content)
-                        (rf/dispatch
-                          [:notification/add
-                           #:notification{:title (labels :meeting/link-copied-heading)
-                                          :body (labels :meeting/link-copied-success)
-                                          :context :info}]))
+                        (notify! (labels :meeting/link-copied-heading)
+                                 (labels :meeting/link-copied-success)
+                                 :info))
             :data-toggle "tooltip"
             :data-placement "bottom"
             :title (labels :meeting/copy-link-tooltip)}
@@ -149,6 +139,9 @@
      [:div.py-3
       [copy-link-form get-admin-center-link "admin-center"]]]]])
 
+
+;; -----------------------------------------------------------------------------
+
 (>defn- invite-participants-form
   "A form which allows the sending of the invitation-link to several participants via E-Mail."
   []
@@ -170,8 +163,20 @@
          :required true
          :placeholder (labels :meeting.admin/addresses-placeholder)}]
        [:small.form-text.text-muted.float-right
-        (labels :meeting.admin/addresses-privacy)]
-       [:button.btn.button-primary.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
+        (labels :meeting.admin/addresses-privacy)]]
+      [:button.btn.btn-outline-primary
+       (labels :meeting.admin/send-invites-button-text)]]]))
+
+(defn- invite-participants-tabs
+  "Share link and invite via mail in a tabbed view."
+  []
+  (tab-builder "invite-participants"
+               {:link (labels :meeting.admin-center.invite/via-link)
+                :view [:<>
+                       [educate-element]
+                       [copy-link-form get-share-link "share-hash"]]}
+               {:link (labels :meeting.admin-center.invite/via-mail)
+                :view [invite-participants-form]}))
 
 (rf/reg-event-fx
   :meeting.admin/send-admin-center-link
@@ -254,36 +259,35 @@
 (defn- educate-admin-element-tabs
   "Composing admin-related sections."
   [share-hash edit-hash]
-  (tab-builder "admin"
+  (tab-builder "edit"
                {:link (labels :meeting.admin-center.edit/heading)
                 :view [educate-admin-element share-hash edit-hash]}
-               {:link (labels :meeting.admin-center/send-link)
+               {:link (labels :meeting.admin-center.edit/send-link)
                 :view [send-admin-center-link share-hash edit-hash]}))
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
   []
   (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])
-        spacer [:hr.pb-4.mt-4]]
+        spacer [:div.pb-5.mt-3]]
     [:<>
      [base/nav-header]
      [base/header
-      (labels :meeting/created-success-heading)
-      (labels :meeting/created-success-subheading)]
+      (labels :meeting.admin-center/heading)
+      (gstring/format (labels :meeting.admin-center/subheading) title)]
      [:div.container.px-3.px-md-5.py-3.text-center
-      ;; list agendas
-      [:h4.text-left.mb-3 title]
-      [educate-element]
-      [copy-link-form get-share-link "share-hash"]
+      [invite-participants-tabs]
       spacer
-      [invite-participants-form]
       [educate-admin-element-tabs share-hash edit-hash]
       spacer
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
       ;; go to meeting button
-      [:button.btn.button-primary.btn-lg.center-block
+      [:button.btn.button-primary.btn-lg.center-block.mb-5
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
        (labels :meetings/continue-to-schnaq-button)]]]))

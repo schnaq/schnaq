@@ -2,7 +2,7 @@
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :as data]
+            [schnaq.interface.text.display-data :as data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.meeting.create :as create-view]))
 
@@ -34,10 +34,14 @@
       {:db (-> db
                (assoc-in [:meeting :last-added] new-meeting)
                (update :meetings conj new-meeting))
-       :fx [[:dispatch [:navigation/navigate :routes.meeting/created
+       :fx [[:dispatch [:navigation/navigate :routes.meeting/admin-center
                         {:share-hash share-hash
                          :edit-hash edit-hash}]]
             [:dispatch [:meeting/select-current new-meeting]]
+            [:dispatch [:notification/add
+                        #:notification{:title (labels :meeting/created-success-heading)
+                                       :body (labels :meeting/created-success-subheading)
+                                       :context :success}]]
             [:localstorage/write [:meeting.last-added/share-hash share-hash]]
             [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]
             [:dispatch [:agenda/clear-current]]
@@ -100,7 +104,7 @@
   :meeting/check-admin-credentials-success
   (fn [_ [_ {:keys [valid-credentials?]}]]
     (when-not valid-credentials?
-      {:fx [[:dispatch [:navigation/navigate :routes/invalid-link]]]})))
+      {:fx [[:dispatch [:navigation/navigate :routes/forbidden-page]]]})))
 
 (rf/reg-event-db
   :meeting/save-as-last-added

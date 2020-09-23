@@ -73,7 +73,7 @@
      :meeting/link-copied-heading "Link kopiert"
      :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
      :meeting/created-success-heading "Ihr schnaq wurde erstellt!"
-     :meeting/created-success-subheading "Link verteilen und loslegen"
+     :meeting/created-success-subheading "Nun können Sie den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
      :meetings/continue-with-schnaq-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
@@ -84,7 +84,7 @@
      :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
      :meeting.admin/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
      :meeting.admin/send-invites-button-text "Einladungen versenden"
-     :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per Email ein"
+     :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per E-Mail ein"
      :meeting.admin.notifications/emails-successfully-sent-title "Mail(s) verschickt!"
      :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Mail(s) wurden erfolgreich versendet."
      :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
@@ -98,14 +98,18 @@
      :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
      :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
      :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
-     :meeting/educate-on-admin "Später jederzeit per Admin-Center Link editieren!"
-     :meeting.admin-center.edit.link/header "Zugang zum Admin Center"
+     :meeting/educate-on-admin "Später jederzeit zum Admin-Center zurückkehren!"
+     :meeting.admin-center/heading "Admin-Center"
+     :meeting.admin-center/subheading "schnaq: \"%s\""
+     :meeting.admin-center.edit.link/header "Zugang zum Admin-Center"
      :meeting.admin-center.edit.link/primer "Schicken Sie sich den Zugang zu dieser Seite per Mail zu!"
      :meeting.admin-center.edit.link.form/label "Ihre E-Mail Adresse"
      :meeting.admin-center.edit.link.form/placeholder "Eine E-Mailadresse eingeben"
      :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
-     :meeting.admin-center.edit/heading "Admin-Center"
-     :meeting.admin-center/send-link "Link verschicken"
+     :meeting.admin-center.edit/heading "schnaq editieren"
+     :meeting.admin-center.edit/send-link "Link verschicken"
+     :meeting.admin-center.invite/via-link "Link verteilen"
+     :meeting.admin-center.invite/via-mail "Per E-Mail einladen"
 
      ;; Suggestions
      :suggestions.modal/header "Eingereichte Vorschläge"
@@ -116,6 +120,8 @@
      :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
      :suggestions.modal.update/title "Änderungsvorschläge"
      :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
+     :suggestions.notification/title "Vorschläge eingereicht"
+     :suggestions.notification/body "Ihre Vorschläge wurden erfolgreich verschickt!"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "
@@ -204,13 +210,16 @@
 
      ;; Errors
      :errors/navigate-to-startpage "Zurück zur Startseite"
-     :errors/comic-relief "Ups ..."
-     :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
      :errors/generic "Es ist ein Fehler aufgetreten"
+
+     :error.generic/contact-us [:span "Sollten Sie hier landen nachdem Sie etwas auf schnaq.com angeklickt haben, geben Sie uns gerne Bescheid unter " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
+
      :error.404/heading "Diese Seite existiert nicht 🙉"
-     :error.404/body-text "Die URL der Sie gefolgt sind existiert leider nicht. Möglicherweise hat sich ein Tippfehler
+     :error.404/body "Die URL der Sie gefolgt sind existiert leider nicht. Möglicherweise hat sich ein Tippfehler
      oder ein Zeichen zu viel eingeschlichen."
-     :error.404/help-text "\uD83D\uDC50 Sollten Sie hier landen nachdem Sie etwas auf schnaq.com angeklickt haben, geben Sie uns gerne Bescheid unter "
+
+     :error.403/heading "Sie haben nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+     :error.403/body "Ihnen fehlt die Berechtigung diese Seite aufzurufen oder es handelt sich um einen Tippfehler in Ihrer URL."
 
      ;; Graph Texts
      :graph/heading "Diskussionsübersicht"
