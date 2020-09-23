@@ -74,10 +74,6 @@
      :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
      :meeting/created-success-heading "Ihr schnaq wurde erstellt!"
      :meeting/created-success-subheading "Link verteilen und loslegen"
-     :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
-     :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
-     :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
-     :meeting/educate-on-admin "Später jederzeit per Admin Link editieren!"
      :meetings/continue-with-schnaq-after-creation "Link kopiert? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
@@ -89,14 +85,27 @@
      :meeting.admin/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
      :meeting.admin/send-invites-button-text "Einladungen versenden"
      :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per Email ein"
-     :meeting.admin.notifications/emails-successfully-sent-title "Einladungen verschickt!"
-     :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Einladungen wurden erfolgreich an die Teilnehmenden versendet."
+     :meeting.admin.notifications/emails-successfully-sent-title "Mail(s) verschickt!"
+     :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Mail(s) wurden erfolgreich versendet."
      :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
      :meeting.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
 
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
      :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
+
+     ;; Admin Center
+     :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
+     :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
+     :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
+     :meeting/educate-on-admin "Später jederzeit per Admin-Center Link editieren!"
+     :meeting.admin-center.edit.link/header "Zugang zum Admin Center"
+     :meeting.admin-center.edit.link/primer "Schicken Sie sich den Zugang zu dieser Seite per Mail zu!"
+     :meeting.admin-center.edit.link.form/label "Ihre E-Mail Adresse"
+     :meeting.admin-center.edit.link.form/placeholder "Eine E-Mailadresse eingeben"
+     :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
+     :meeting.admin-center.edit/heading "Admin-Center"
+     :meeting.admin-center/send-link "Link verschicken"
 
      ;; Suggestions
      :suggestions.modal/header "Eingereichte Vorschläge"
