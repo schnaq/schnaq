@@ -2,7 +2,7 @@
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :as data]
+            [schnaq.interface.text.display-data :as data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.meeting.create :as create-view]))
 
@@ -38,6 +38,10 @@
                         {:share-hash share-hash
                          :edit-hash edit-hash}]]
             [:dispatch [:meeting/select-current new-meeting]]
+            [:dispatch [:notification/add
+                        #:notification{:title (labels :meeting/created-success-heading)
+                                       :body (labels :meeting/created-success-subheading)
+                                       :context :success}]]
             [:localstorage/write [:meeting.last-added/share-hash share-hash]]
             [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]
             [:dispatch [:agenda/clear-current]]

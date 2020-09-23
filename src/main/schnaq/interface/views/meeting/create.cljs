@@ -10,9 +10,6 @@
 (defn- new-meeting-helper
   "Creates a new meeting with the form from `create-meeting-form`."
   [title description]
-  (notify! (labels :meeting/created-success-heading)
-           (labels :meeting/created-success-subheading)
-           :success)
   (rf/dispatch
     [:meeting.creation/new
      {:meeting/title title
