@@ -83,25 +83,28 @@
     [img-text (img-path :elephant-talk)
      (labels :meetings/educate-on-link-text-subtitle)]]])
 
-(defn- educate-admin-element [share-hash edit-hash]
-  [:div.row.mb-3
-   ;; edit
-   [:div.col-md-6
-    [:div.share-link-icons
-     [img-text (img-path :elephant-erase)
-      (labels :meeting/educate-on-edit)]]
-    [:button.btn.button-secondary.float-left.my-2.w-100
-     {:role "button"
-      :on-click #(rf/dispatch [:navigation/navigate
-                               :routes.meeting/edit
-                               {:share-hash share-hash :edit-hash edit-hash}])}
-     (labels :meetings/edit-schnaq-button)]]
-   ;; admin hash
-   [:div.col-md-6.share-link-icons
-    [img-text (img-path :elephant-admin)
-     (labels :meeting/educate-on-admin)]
-    [:div.py-3
-     [copy-link-form get-edit-link "edit-hash"]]]])
+(defn- educate-admin-element
+  "Present edit-functions to user."
+  [share-hash edit-hash]
+  [:<>
+   [:section.row.mb-3
+    ;; edit
+    [:div.col-md-6
+     [:div.share-link-icons
+      [img-text (img-path :elephant-erase)
+       (labels :meeting/educate-on-edit)]]
+     [:button.btn.button-secondary.float-left.my-2.w-100
+      {:role "button"
+       :on-click #(rf/dispatch [:navigation/navigate
+                                :routes.meeting/edit
+                                {:share-hash share-hash :edit-hash edit-hash}])}
+      (labels :meetings/edit-schnaq-button)]]
+    ;; admin hash
+    [:div.col-md-6.share-link-icons
+     [img-text (img-path :elephant-admin)
+      (labels :meeting/educate-on-admin)]
+     [:div.py-3
+      [copy-link-form get-edit-link "edit-hash"]]]]])
 
 (>defn- invite-participants-form
   "A form which allows the sending of the invitation-link to several participants via E-Mail."
@@ -165,13 +168,58 @@
                                        :context :warning
                                        :stay-visible? true}]])]}))
 
+(defn- send-admin-link
+  "Send admin link via mail to the creator."
+  []
+  [:section
+   [:h5 "Admin Link per Mail schicken"]
+   [:p.lead "Lassen Sie sich den Admin-Link per Mail schicken."]])
+
+(defn- tab-builder
+  "Create a tabbed view."
+  [tab-prefix first-tab second-tab]
+  (let [tab-prefix# (str "#" tab-prefix)]
+    [:<>
+     [:nav.nav-justified
+      [:div.nav.nav-tabs {:role "tablist"}
+       [:a.nav-item.nav-link.active {:data-toggle "tab"
+                                     :href (str tab-prefix# "-home")
+                                     :role "tab"
+                                     :aria-controls (str tab-prefix "-home")
+                                     :aria-selected "true"}
+        (:link first-tab)]
+       [:a.nav-item.nav-link {:data-toggle "tab"
+                              :href (str tab-prefix# "-link")
+                              :role "tab"
+                              :aria-controls (str tab-prefix "-link")
+                              :aria-selected "false"}
+        (:link second-tab)]]]
+     [:div.tab-content.mt-4
+      [:div.tab-pane.fade.show.active
+       {:id (str tab-prefix "-home")
+        :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
+       (:view first-tab)]
+      [:div.tab-pane.fade
+       {:id (str tab-prefix "-link")
+        :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab")}
+       (:view second-tab)]]]))
+
+(defn- educate-admin-element-tabs
+  "Composing admin-related sections."
+  [share-hash edit-hash]
+  (tab-builder "admin"
+               {:link "Administration"
+                :view [educate-admin-element share-hash edit-hash]}
+               {:link "Link verschicken"
+                :view [send-admin-link share-hash edit-hash]}))
+
 (defn- after-meeting-creation-view
   "This view is presented to the user after they have created a new meeting. They should
   see the share-link and should be able to copy it easily."
   []
   (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])
         spacer [:hr.pb-4.mt-4]]
-    [:div
+    [:<>
      [base/nav-header]
      [base/header
       (labels :meeting/created-success-heading)
@@ -183,8 +231,7 @@
       [copy-link-form get-share-link "share-hash"]
       spacer
       [invite-participants-form]
-      spacer
-      [educate-admin-element share-hash edit-hash]
+      [educate-admin-element-tabs share-hash edit-hash]
       spacer
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
