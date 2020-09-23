@@ -226,12 +226,12 @@
                                        :context :warning
                                        :stay-visible? true}]])]}))
 
-(defn- send-admin-link
+(defn- send-admin-center-link
   "Send admin link via mail to the creator."
   []
   [:section
-   [:h4 "Zugang zum Admin Center"]
-   [:p.lead "Lassen Sie sich den Zugang zu dieser Seite per Mail schicken."]
+   [:h4 (labels :meeting.admin-center.link/header)]
+   [:p.lead (labels :meeting.admin-center.link/primer)]
    (let [input-id "admin-link-mail-address"]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]
@@ -258,7 +258,7 @@
                {:link "Administration"
                 :view [educate-admin-element share-hash edit-hash]}
                {:link "Link verschicken"
-                :view [send-admin-link share-hash edit-hash]}))
+                :view [send-admin-center-link share-hash edit-hash]}))
 
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
