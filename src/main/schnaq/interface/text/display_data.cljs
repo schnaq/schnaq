@@ -100,6 +100,7 @@
      :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
      :meeting/educate-on-admin "Später jederzeit zum Admin-Center zurückkehren!"
      :meeting.admin-center/heading "Admin-Center"
+     :meeting.admin-center/subheading "schnaq: \"%s\""
      :meeting.admin-center.edit.link/header "Zugang zum Admin-Center"
      :meeting.admin-center.edit.link/primer "Schicken Sie sich den Zugang zu dieser Seite per Mail zu!"
      :meeting.admin-center.edit.link.form/label "Ihre E-Mail Adresse"

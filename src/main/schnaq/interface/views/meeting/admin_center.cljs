@@ -259,7 +259,7 @@
 (defn- educate-admin-element-tabs
   "Composing admin-related sections."
   [share-hash edit-hash]
-  (tab-builder "admin"
+  (tab-builder "edit"
                {:link (labels :meeting.admin-center.edit/heading)
                 :view [educate-admin-element share-hash edit-hash]}
                {:link (labels :meeting.admin-center.edit/save-link)
@@ -277,7 +277,7 @@
      [base/nav-header]
      [base/header
       (labels :meeting.admin-center/heading)
-      title]
+      (gstring/format (labels :meeting.admin-center/subheading) title)]
      [:div.container.px-3.px-md-5.py-3.text-center
       [invite-participants-tabs]
       spacer
