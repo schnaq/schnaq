@@ -324,6 +324,19 @@
                                recipients)))
       (deny-access))))
 
+(>defn- send-admin-center-link
+  "Send URL to admin-center via mail to recipient."
+  [{:keys [body-params]}]
+  [:ring/request :ret :ring/response]
+  (let [{:keys [share-hash edit-hash recipient share-link edit-link]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (ok (merge
+            {:message "Emails sent successfully"}
+            (emails/send-mails (email-templates :edit-link/title)
+                               (format (email-templates :edit-link/body) edit-link share-link)
+                               [recipient])))
+      (deny-access))))
+
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
@@ -439,6 +452,7 @@
     (POST "/credentials/validate" [] check-credentials)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/emails/send-invites" [] send-invite-emails)
+    (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     ;; Analytics routes
     (POST "/analytics/meetings" [] number-of-meetings)
     (POST "/analytics/usernames" [] number-of-usernames)
