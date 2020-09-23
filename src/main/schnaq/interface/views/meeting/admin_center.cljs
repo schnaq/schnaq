@@ -262,7 +262,7 @@
   (tab-builder "edit"
                {:link (labels :meeting.admin-center.edit/heading)
                 :view [educate-admin-element share-hash edit-hash]}
-               {:link (labels :meeting.admin-center.edit/save-link)
+               {:link (labels :meeting.admin-center.edit/send-link)
                 :view [send-admin-center-link share-hash edit-hash]}))
 
 
