@@ -99,13 +99,13 @@
      :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
      :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
      :meeting/educate-on-admin "Später jederzeit per Admin-Center Link editieren!"
-     :meeting.admin-center.link/header "Zugang zum Admin Center"
-     :meeting.admin-center.link/primer "Schicken Sie sich den Zugang zu dieser Seite per Mail zu!"
-     :meeting.admin-center.link.form/label "Ihre E-Mail Adresse"
-     :meeting.admin-center.link.form/placeholder "Eine E-Mailadresse eingeben"
-     :meeting.admin-center.link.form/submit-button "Link verschicken"
-
-
+     :meeting.admin-center.edit.link/header "Zugang zum Admin Center"
+     :meeting.admin-center.edit.link/primer "Schicken Sie sich den Zugang zu dieser Seite per Mail zu!"
+     :meeting.admin-center.edit.link.form/label "Ihre E-Mail Adresse"
+     :meeting.admin-center.edit.link.form/placeholder "Eine E-Mailadresse eingeben"
+     :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
+     :meeting.admin-center.edit/heading "Admin-Center"
+     :meeting.admin-center/send-link "Link verschicken"
 
      ;; Suggestions
      :suggestions.modal/header "Eingereichte Vorschläge"

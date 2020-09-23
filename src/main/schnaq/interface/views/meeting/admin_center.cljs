@@ -230,8 +230,8 @@
   "Send admin link via mail to the creator."
   []
   [:section
-   [:h4 (labels :meeting.admin-center.link/header)]
-   [:p.lead (labels :meeting.admin-center.link/primer)]
+   [:h4 (labels :meeting.admin-center.edit.link/header)]
+   [:p.lead (labels :meeting.admin-center.edit.link/primer)]
    (let [input-id "admin-link-mail-address"]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]
@@ -239,25 +239,25 @@
                     (rf/dispatch [:meeting.admin/send-admin-center-link
                                   (oget e [:target :elements])]))}
       [:div.form-group
-       [:label {:for input-id} (labels :meeting.admin-center.link.form/label)]
+       [:label {:for input-id} (labels :meeting.admin-center.edit.link.form/label)]
        [:input.form-control.m-1.input-rounded
         {:id input-id
          :name "admin-center-recipient"
          :auto-complete "off"
          :required true
-         :placeholder (labels :meeting.admin-center.link.form/placeholder)}]
+         :placeholder (labels :meeting.admin-center.edit.link.form/placeholder)}]
        [:small.form-text.text-muted.float-right
         (labels :meeting.admin/addresses-privacy)]]
       [:button.btn.btn-outline-primary
-       (labels :meeting.admin-center.link.form/submit-button)]])])
+       (labels :meeting.admin-center.edit.link.form/submit-button)]])])
 
 (defn- educate-admin-element-tabs
   "Composing admin-related sections."
   [share-hash edit-hash]
   (tab-builder "admin"
-               {:link "Administration"
+               {:link (labels :meeting.admin-center.edit/heading)
                 :view [educate-admin-element share-hash edit-hash]}
-               {:link "Link verschicken"
+               {:link (labels :meeting.admin-center/send-link)
                 :view [send-admin-center-link share-hash edit-hash]}))
 
 (defn- admin-center
