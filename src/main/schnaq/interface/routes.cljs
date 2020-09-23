@@ -124,16 +124,15 @@
      :controllers [{:start (fn []
                              (rf/dispatch [:admin/set-password (js/prompt "Enter the Admin Password to see analytics")])
                              (rf/dispatch [:analytics/load-dashboard]))}]}]
-   ["invalid-link"
-    {:name :routes/invalid-link
-     :view error-views/invalid-admin-link-view-entrypoint
-     :link-text (labels :router/invalid-link)}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
      :link-text (labels :router/not-found-label)
      :controllers [{:identity #(random-uuid)
                     :start #(js-wrap/replace-url "/404/")}]}]
+   ["403/"
+    {:name :routes/forbidden-page
+     :view error-views/forbidden-page}]
    ["404/"
     {:name :routes/true-404-view
      :view error-views/true-404-entrypoint

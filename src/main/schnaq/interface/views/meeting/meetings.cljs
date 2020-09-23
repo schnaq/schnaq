@@ -100,7 +100,7 @@
   :meeting/check-admin-credentials-success
   (fn [_ [_ {:keys [valid-credentials?]}]]
     (when-not valid-credentials?
-      {:fx [[:dispatch [:navigation/navigate :routes/invalid-link]]]})))
+      {:fx [[:dispatch [:navigation/navigate :routes/forbidden-page]]]})))
 
 (rf/reg-event-db
   :meeting/save-as-last-added

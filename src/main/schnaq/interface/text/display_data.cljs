@@ -204,13 +204,16 @@
 
      ;; Errors
      :errors/navigate-to-startpage "Zurück zur Startseite"
-     :errors/comic-relief "Ups ..."
-     :errors/insufficient-access-rights "Sie haben nicht genügend Rechte um diese Seite anzusehen."
      :errors/generic "Es ist ein Fehler aufgetreten"
+
+     :error.generic/contact-us [:span "Sollten Sie hier landen nachdem Sie etwas auf schnaq.com angeklickt haben, geben Sie uns gerne Bescheid unter " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
+
      :error.404/heading "Diese Seite existiert nicht 🙉"
      :error.404/body-text "Die URL der Sie gefolgt sind existiert leider nicht. Möglicherweise hat sich ein Tippfehler
      oder ein Zeichen zu viel eingeschlichen."
-     :error.404/help-text "\uD83D\uDC50 Sollten Sie hier landen nachdem Sie etwas auf schnaq.com angeklickt haben, geben Sie uns gerne Bescheid unter "
+
+     :error.403/heading "Sie haben nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+     :error.403/body "Ihnen fehlt die Berechtigung diese Seite aufzurufen oder es handelt sich um einen Tippfehler in Ihrer URL."
 
      ;; Graph Texts
      :graph/heading "Diskussionsübersicht"
