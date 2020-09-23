@@ -11,6 +11,7 @@
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.base :as base]))
 
 (>defn- get-share-link
@@ -85,11 +86,9 @@
             :on-click (fn [e]
                         (js-wrap/prevent-default e)
                         (clipboard/copy-to-clipboard! display-content)
-                        (rf/dispatch
-                          [:notification/add
-                           #:notification{:title (labels :meeting/link-copied-heading)
-                                          :body (labels :meeting/link-copied-success)
-                                          :context :info}]))
+                        (notify! (labels :meeting/link-copied-heading)
+                                 (labels :meeting/link-copied-success)
+                                 :info))
             :data-toggle "tooltip"
             :data-placement "bottom"
             :title (labels :meeting/copy-link-tooltip)}

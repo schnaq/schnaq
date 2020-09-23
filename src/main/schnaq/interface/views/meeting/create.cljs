@@ -1,14 +1,18 @@
 (ns schnaq.interface.views.meeting.create
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :as data]
+            [schnaq.interface.text.display-data :as data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.agenda.agenda :as agenda]
+            [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.text-editor.view :as editor]))
 
 (defn- new-meeting-helper
   "Creates a new meeting with the form from `create-meeting-form`."
   [title description]
+  (notify! (labels :meeting/created-success-heading)
+           (labels :meeting/created-success-subheading)
+           :success)
   (rf/dispatch
     [:meeting.creation/new
      {:meeting/title title

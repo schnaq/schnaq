@@ -17,7 +17,7 @@
                               :on-close-fn #(rf/dispatch [:clear-error])}]}`"
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn-]]
+            [ghostwheel.core :refer [>defn- >defn]]
             [goog.string :as gstring]
             [schnaq.interface.text.display-data :refer [fa]]
             [reagent.dom]
@@ -58,6 +58,17 @@
       [:span {:aria-hidden "true"}
        [:i {:class (str " m-auto fas fa-xs " (fa :delete-icon))}]]]]
     [:div.toast-body body]]])
+
+(>defn notify!
+  "Directly dispatch a notification event, which shall immediately show up to
+  the user."
+  [title body context]
+  [:notification/title :notification/body :notification/context :ret nil?]
+  (rf/dispatch
+    [:notification/add
+     #:notification{:title title
+                    :body body
+                    :context context}]))
 
 (defn view
   "Presenting all notifications to the user."
