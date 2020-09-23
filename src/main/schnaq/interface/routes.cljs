@@ -70,7 +70,7 @@
                                 (rf/dispatch [:suggestions/send-updates (:share-hash path) (:edit-hash path)]))}]}]
       ["/created"
        {:name :routes.meeting/created
-        :view meeting-admin/admin-central-view
+        :view meeting-admin/admin-center-view
         :link-text (labels :router/meeting-created)}]]
      ["/"
       {:name :routes.meeting/show

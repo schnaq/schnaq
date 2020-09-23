@@ -21,12 +21,14 @@
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
-(>defn- get-current-url
+(>defn- get-admin-center-link
   "Building the current URL with validated path, and without extra-stuff, like
   internal hashtag-routing."
   [current-route]
   [map? :ret string?]
-  (let [path (:path current-route)
+  (let [{:keys [share-hash edit-hash]} (:path-params current-route)
+        path (reitfe/href :routes.meeting/created {:share-hash share-hash
+                                                   :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
@@ -58,7 +60,7 @@
                               :aria-controls (str tab-prefix "-link")
                               :aria-selected "false"}
         (:link second-tab)]]]
-     [:div.tab-content.mt-4
+     [:div.tab-content.mt-5
       [:div.tab-pane.fade.show.active
        {:id (str tab-prefix "-home")
         :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
@@ -169,8 +171,23 @@
          :placeholder (labels :meeting.admin/addresses-placeholder)}]
        [:small.form-text.text-muted.float-right
         (labels :meeting.admin/addresses-privacy)]
-       [:button.btn.button-primary.btn-lg.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
+       [:button.btn.button-primary.m-1 (labels :meeting.admin/send-invites-button-text)]]]]))
 
+(rf/reg-event-fx
+  :meeting.admin/send-admin-center-link
+  (fn [{:keys [db]} [_ form]]
+    (let [current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/emails/send-admin-center-link")
+                          :format (ajax/transit-request-format)
+                          :params {:recipient (oget form ["admin-center-recipient" :value])
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash
+                                   :admin-center (get-admin-center-link current-route)}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting-admin/send-email-success form]
+                          :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
   :meeting.admin/send-email-invites
@@ -187,11 +204,11 @@
                                    :edit-hash edit-hash
                                    :share-link (get-share-link current-route)}
                           :response-format (ajax/transit-response-format)
-                          :on-success [:meeting-admin/send-email-invites-success form]
+                          :on-success [:meeting-admin/send-email-success form]
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
-  :meeting-admin/send-email-invites-success
+  :meeting-admin/send-email-success
   (fn [_ [_ form {:keys [failed-sendings]}]]
     {:fx [[:dispatch [:notification/add
                       #:notification{:title (labels :meeting.admin.notifications/emails-successfully-sent-title)
@@ -213,50 +230,38 @@
   "Send admin link via mail to the creator."
   []
   [:section
-   [:h5 "Admin Link per Mail schicken"]
-   [:p.lead "Lassen Sie sich den Admin-Link per Mail schicken."]])
-
-(defn- tab-builder
-  "Create a tabbed view."
-  [tab-prefix first-tab second-tab]
-  (let [tab-prefix# (str "#" tab-prefix)]
-    [:<>
-     [:nav.nav-justified
-      [:div.nav.nav-tabs {:role "tablist"}
-       [:a.nav-item.nav-link.active {:data-toggle "tab"
-                                     :href (str tab-prefix# "-home")
-                                     :role "tab"
-                                     :aria-controls (str tab-prefix "-home")
-                                     :aria-selected "true"}
-        (:link first-tab)]
-       [:a.nav-item.nav-link {:data-toggle "tab"
-                              :href (str tab-prefix# "-link")
-                              :role "tab"
-                              :aria-controls (str tab-prefix "-link")
-                              :aria-selected "false"}
-        (:link second-tab)]]]
-     [:div.tab-content.mt-4
-      [:div.tab-pane.fade.show.active
-       {:id (str tab-prefix "-home")
-        :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
-       (:view first-tab)]
-      [:div.tab-pane.fade
-       {:id (str tab-prefix "-link")
-        :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab")}
-       (:view second-tab)]]]))
+   [:h4 "Zugang zum Admin Center"]
+   [:p.lead "Lassen Sie sich den Zugang zu dieser Seite per Mail schicken."]
+   (let [input-id "admin-link-mail-address"]
+     [:form.form.text-left.mb-5
+      {:on-submit (fn [e]
+                    (js-wrap/prevent-default e)
+                    (rf/dispatch [:meeting.admin/send-admin-center-link
+                                  (oget e [:target :elements])]))}
+      [:div.form-group
+       [:label {:for input-id} (labels :meeting.admin-center.link.form/label)]
+       [:input.form-control.m-1.input-rounded
+        {:id input-id
+         :name "admin-center-recipient"
+         :auto-complete "off"
+         :required true
+         :placeholder (labels :meeting.admin-center.link.form/placeholder)}]
+       [:small.form-text.text-muted.float-right
+        (labels :meeting.admin/addresses-privacy)]]
+      [:button.btn.btn-outline-primary
+       (labels :meeting.admin-center.link.form/submit-button)]])])
 
 (defn- educate-admin-element-tabs
   "Composing admin-related sections."
   [share-hash edit-hash]
   (tab-builder "admin"
-               {:link "Administration"
-                :view [educate-admin-element share-hash edit-hash]}
                {:link "Link verschicken"
-                :view [send-admin-link share-hash edit-hash]}))
+                :view [send-admin-link share-hash edit-hash]}
+               {:link "Administration"
+                :view [educate-admin-element share-hash edit-hash]}))
 
-(defn- after-meeting-creation-view
-  "This view is presented to the user after they have created a new meeting. They should
-  see the share-link and should be able to copy it easily."
+(defn- admin-center
+  "This view is presented to the user after they have created a new meeting."
   []
   (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])
         spacer [:hr.pb-4.mt-4]]
@@ -283,5 +288,5 @@
         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
        (labels :meetings/continue-to-schnaq-button)]]]))
 
-(defn admin-central-view []
-  [after-meeting-creation-view])
+(defn admin-center-view []
+  [admin-center])
