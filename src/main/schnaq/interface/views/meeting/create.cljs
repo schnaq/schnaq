@@ -1,10 +1,9 @@
 (ns schnaq.interface.views.meeting.create
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :as data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.agenda.agenda :as agenda]
-            [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.text-editor.view :as editor]))
 
 (defn- new-meeting-helper
@@ -18,7 +17,7 @@
       :meeting/start-date (js/Date.)}]))
 
 (defn- submit-meeting-button []
-  [:button.btn.button-primary (data/labels :meeting-create-header)])
+  [:button.btn.button-primary (labels :meeting-create-header)])
 
 (defn- meeting-title-input
   "The input and label for a new meeting-title"
@@ -28,14 +27,14 @@
     {:type "text"
      :autoComplete "off"
      :required true
-     :placeholder (data/labels :meeting-form-title-placeholder)}]])
+     :placeholder (labels :meeting-form-title-placeholder)}]])
 
 (defn create-agenda-title-attributes [agenda-num]
   {:type "text"
    :name (str "title-" agenda-num)
    :auto-complete "off"
    :required true
-   :placeholder (str (data/labels :agenda/point) (inc agenda-num))
+   :placeholder (str (labels :agenda/point) (inc agenda-num))
    :id (str "title-" agenda-num)
    :on-key-up #(agenda/new-agenda-local :title (oget % [:target :value]) agenda-num)})
 
