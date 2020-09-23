@@ -55,11 +55,6 @@
                                      :stay-visible? true
                                      :on-close-fn #(rf/dispatch [:clear-error])}]]]}))
 
-(rf/reg-sub
-  :error-occurred
-  (fn [db]
-    (:error db)))
-
 (rf/reg-event-db
   :clear-error
   (fn [db _]
