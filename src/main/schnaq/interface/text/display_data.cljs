@@ -117,6 +117,8 @@
      :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
      :suggestions.modal.update/title "Änderungsvorschläge"
      :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
+     :suggestions.notification/title "Vorschläge eingereicht"
+     :suggestions.notification/body "Ihre Vorschläge wurden erfolgreich verschickt!"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "

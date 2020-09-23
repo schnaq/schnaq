@@ -292,8 +292,8 @@
   :meeting/on-success-submit-suggestions-event
   (fn [_ [_ _]]
     {:fx [[:dispatch [:notification/add
-                      #:notification{:title "Vorschläge eingereicht"
-                                     :body "Ihre Vorschläge wurden erfolgreich verschickt!"
+                      #:notification{:title (labels :suggestions.notification/title)
+                                     :body (labels :suggestions.notification/body)
                                      :context :success}]]]}))
 
 (rf/reg-event-fx
