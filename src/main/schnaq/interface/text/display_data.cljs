@@ -105,8 +105,11 @@
      :meeting.admin-center.edit.link.form/label "Ihre E-Mail Adresse"
      :meeting.admin-center.edit.link.form/placeholder "Eine E-Mailadresse eingeben"
      :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
-     :meeting.admin-center.edit/heading "Admin-Center"
-     :meeting.admin-center/send-link "Link verschicken"
+     :meeting.admin-center.edit/heading "schnaq editieren"
+     :meeting.admin-center.edit/save-link "Link speichern"
+     :meeting.admin-center.invite/via-link "Link verteilen"
+     :meeting.admin-center.invite/via-mail "Per E-Mail einladen"
+
 
      ;; Suggestions
      :suggestions.modal/header "Eingereichte Vorschläge"

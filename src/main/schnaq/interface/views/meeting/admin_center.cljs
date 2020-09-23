@@ -171,12 +171,12 @@
   "Share link and invite via mail in a tabbed view."
   []
   (tab-builder "invite-participants"
-               {:link "Per Mail einladen"
-                :view [invite-participants-form]}
-               {:link "TeilnehmerInnen einladen"
+               {:link (labels :meeting.admin-center.invite/via-link)
                 :view [:<>
                        [educate-element]
-                       [copy-link-form get-share-link "share-hash"]]}))
+                       [copy-link-form get-share-link "share-hash"]]}
+               {:link (labels :meeting.admin-center.invite/via-mail)
+                :view [invite-participants-form]}))
 
 (rf/reg-event-fx
   :meeting.admin/send-admin-center-link
@@ -262,7 +262,7 @@
   (tab-builder "admin"
                {:link (labels :meeting.admin-center.edit/heading)
                 :view [educate-admin-element share-hash edit-hash]}
-               {:link (labels :meeting.admin-center/send-link)
+               {:link (labels :meeting.admin-center.edit/save-link)
                 :view [send-admin-center-link share-hash edit-hash]}))
 
 
