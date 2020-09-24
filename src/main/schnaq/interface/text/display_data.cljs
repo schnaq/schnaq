@@ -280,6 +280,7 @@
      :copy "fa-copy"
      :delete-icon "fa-times-circle"
      :edit "fa-edit"
+     :eraser "fa-eraser"
      :laptop "fa-laptop-code"
      :trash "fa-trash-alt"
      :users "fa-users"}))
