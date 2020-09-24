@@ -12,7 +12,8 @@
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.interface.views.base :as base]))
+            [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.common :as common]))
 
 (>defn- get-share-link
   [current-route]
@@ -32,35 +33,6 @@
                                                         :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
-
-(defn- tab-builder
-  "Create a tabbed view. Prefix must be unique on this page."
-  [tab-prefix first-tab second-tab]
-  (let [tab-prefix# (str "#" tab-prefix)]
-    [:<>
-     [:nav.nav-justified
-      [:div.nav.nav-tabs {:role "tablist"}
-       [:a.nav-item.nav-link.active {:data-toggle "tab"
-                                     :href (str tab-prefix# "-home")
-                                     :role "tab"
-                                     :aria-controls (str tab-prefix "-home")
-                                     :aria-selected "true"}
-        (:link first-tab)]
-       [:a.nav-item.nav-link {:data-toggle "tab"
-                              :href (str tab-prefix# "-link")
-                              :role "tab"
-                              :aria-controls (str tab-prefix "-link")
-                              :aria-selected "false"}
-        (:link second-tab)]]]
-     [:div.tab-content.mt-5
-      [:div.tab-pane.fade.show.active
-       {:id (str tab-prefix "-home")
-        :role "tabpanel" :aria-labelledby (str tab-prefix "-home-tab")}
-       (:view first-tab)]
-      [:div.tab-pane.fade
-       {:id (str tab-prefix "-link")
-        :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab")}
-       (:view second-tab)]]]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -170,13 +142,14 @@
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
   []
-  (tab-builder "invite-participants"
-               {:link (labels :meeting.admin-center.invite/via-link)
-                :view [:<>
-                       [educate-element]
-                       [copy-link-form get-share-link "share-hash"]]}
-               {:link (labels :meeting.admin-center.invite/via-mail)
-                :view [invite-participants-form]}))
+  (common/tab-builder
+    "invite-participants"
+    {:link (labels :meeting.admin-center.invite/via-link)
+     :view [:<>
+            [educate-element]
+            [copy-link-form get-share-link "share-hash"]]}
+    {:link (labels :meeting.admin-center.invite/via-mail)
+     :view [invite-participants-form]}))
 
 (rf/reg-event-fx
   :meeting.admin/send-admin-center-link
@@ -259,11 +232,12 @@
 (defn- educate-admin-element-tabs
   "Composing admin-related sections."
   [share-hash edit-hash]
-  (tab-builder "edit"
-               {:link (labels :meeting.admin-center.edit/heading)
-                :view [educate-admin-element share-hash edit-hash]}
-               {:link (labels :meeting.admin-center.edit/send-link)
-                :view [send-admin-center-link share-hash edit-hash]}))
+  (common/tab-builder
+    "edit"
+    {:link (labels :meeting.admin-center.edit/heading)
+     :view [educate-admin-element share-hash edit-hash]}
+    {:link (labels :meeting.admin-center.edit/send-link)
+     :view [send-admin-center-link share-hash edit-hash]}))
 
 
 ;; -----------------------------------------------------------------------------
