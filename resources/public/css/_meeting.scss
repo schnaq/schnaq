@@ -1,15 +1,15 @@
 @import 'variables';
 
 .meeting-entry {
-  background: $primary;
-  border-radius: 1.5rem;
+  background: $white;
+  border-radius: 1rem;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 4px 0 rgba(0, 0, 0, 0.19);
-  color: $white;
+  color: $text-dark;
   cursor: pointer;
 }
 
 .meeting-entry:hover {
-  background: $primary-selected;
+  background: $white-shade;
 }
 
 .meeting-entry-title {

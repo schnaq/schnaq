@@ -38,7 +38,7 @@
    ;; description
    [:div.meeting-entry-desc
     [:hr]
-    [:h6 (:agenda/description agenda)]]])
+    [markdown-parser/markdown-to-html (:agenda/description agenda)]]])
 
 
 (defn agenda-in-meeting-view
