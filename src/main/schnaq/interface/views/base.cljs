@@ -172,32 +172,34 @@
 
 (defn context-header [meeting]
   [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header
-   ;; hamburger
-   [:button.navbar-toggler
-    {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
-     :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
-     :data-html2canvas-ignore true}
-    [:span.navbar-toggler-icon]]
-   ;; menu items
-   [:div.row {:id "schnaq-navbar"
-          :class "collapse navbar-collapse"}
+
+   [:div.container
+    ;; hamburger
+    [:button.navbar-toggler
+     {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
+      :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
+      :data-html2canvas-ignore true}
+     [:span.navbar-toggler-icon]]
+    ;; menu items
+    [:div.row {:id "schnaq-navbar"
+               :class "collapse navbar-collapse"}
      ;; schnaq logo
-    [:div.col.col-2
-     [:a.navbar-brand.mx-2 {:href (reitfe/href :routes/startpage)}
-      [:img.d-inline-block.align-middle.mr-2
-       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]]
+     [:div.col.col-2
+      [:a.navbar-brand.mx-2 {:href (reitfe/href :routes/startpage)}
+       [:img.d-inline-block.align-middle.mr-2
+        {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]]
      ;; clickable title
-    [:div.col-8.px-5.text-center
-     [:div {:on-click
-            (fn []
-              (rf/dispatch [:navigation/navigate :routes.meeting/show
-                            {:share-hash (:meeting/share-hash meeting)}])
-              (rf/dispatch [:meeting/select-current meeting]))
-            :class "clickable-no-hover"}
-      [:h2.mx-5 (:meeting/title meeting)]]]
+     [:div.col-8.px-5.text-center
+      [:div {:on-click
+             (fn []
+               (rf/dispatch [:navigation/navigate :routes.meeting/show
+                             {:share-hash (:meeting/share-hash meeting)}])
+               (rf/dispatch [:meeting/select-current meeting]))
+             :class "clickable-no-hover"}
+       [:h2.mx-5 (:meeting/title meeting)]]]
      ;; name input
-    [:div.col-2.text-right
-     [username-bar-view-light]]]])
+     [:div.col-2.text-right
+      [username-bar-view-light]]]]])
 
 ;; footer
 
