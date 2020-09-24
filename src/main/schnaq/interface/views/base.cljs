@@ -197,7 +197,7 @@
                             {:share-hash (:meeting/share-hash meeting)}])
               (rf/dispatch [:meeting/select-current meeting]))
             :class "clickable-no-hover"}
-      [:h2.mx-5 (:meeting/title meeting)]]
+      [:h3.mx-5 (:meeting/title meeting)]]
      ;; name input
      [username-bar-view-light]]]])
 

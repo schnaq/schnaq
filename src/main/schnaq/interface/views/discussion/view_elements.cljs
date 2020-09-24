@@ -9,7 +9,8 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.logic :as logic]))
+            [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.interface.utils.markdown-parser :as markdown-parser]))
 
 (defn- up-down-vote
   "Add panel for up and down votes."
@@ -73,7 +74,7 @@
                                                          {:share-hash share-hash
                                                           :id (:db/id (:agenda/discussion agenda))}])}
         (:agenda/title agenda)]
-       [:p (:agenda/description agenda)]]
+       [markdown-parser/markdown-to-html (:agenda/description agenda)]]
       [:div.col-3.col-lg-1.graph-icon
        [:img.graph-icon-img.clickable-no-hover
         {:src (img-path :icon-graph) :alt (labels :graph.button/text)
