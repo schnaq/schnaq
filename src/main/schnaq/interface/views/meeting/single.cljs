@@ -38,22 +38,37 @@
   'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
   ([title subtitle share-hash on-click-back-function]
    ;; check if title is clickable and set properties accordingly
-   [:div.meeting-header.header-meeting.shadow-straight
+   [:div
     [:div.row
-     ;; arrow column
-     [:div.col-md-3.back-arrow
-      (when on-click-back-function
-        [:p {:on-click on-click-back-function}              ;; the icon itself is not clickable
-         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
-     [:div.col-md-6
-      ;[:div.container]
-      [:h1 title]
-      [:hr]
-      ;; mark down
-      [markdown-parser/markdown-to-html subtitle]]
-     ;; button column
-     [:div.col-md-3
-      [control-buttons share-hash]]]]))
+
+     [:div.col-md-2]
+
+     [:div.col-md-8.meeting-header.shadow-straight
+
+      [:div.row
+
+       ;; arrow column
+       [:div.col-md-1.back-arrow
+        (when on-click-back-function
+          [:p {:on-click on-click-back-function}            ;; the icon itself is not clickable
+           [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
+
+       [:div.col-md-10
+        [:div.container.px-4
+         [:h1 title]
+         [:hr]
+         ;; mark down
+         [markdown-parser/markdown-to-html subtitle]]]
+
+       ;; button column
+       [:div.col-md-1
+        [control-buttons share-hash]]]
+
+      ]
+
+     [:div.col]
+
+     ]]))
 
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry

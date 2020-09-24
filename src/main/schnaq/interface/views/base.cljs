@@ -64,7 +64,7 @@
 
 (defn- name-input
   "An input, where the user can set their name. Happens automatically by typing."
-  [username]
+  [username btn-class]
   [:form.form-inline
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
@@ -76,8 +76,9 @@
      :required true
      :defaultValue username
      :placeholder (labels :user.button/set-name-placeholder)}]
-   [:input.btn.btn-outline-primary.mt-1.mt-sm-0
-    {:type "submit"
+   [:input.btn.mt-1.mt-sm-0
+    {:class btn-class
+     :type "submit"
      :value (labels :user.button/set-name)}]])
 
 
@@ -96,7 +97,7 @@
    (let [username @(rf/subscribe [:user/display-name])
          show-input? @(rf/subscribe [:user/show-display-name-input?])]
      (if show-input?
-       [name-input username]
+       [name-input username button-class]
        [show-input-button username button-class]))))
 
 (defn username-bar-view-light
@@ -176,6 +177,10 @@
   [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header
 
    [:div.container
+    ;; schnaq logo
+    [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
+     [:img.d-inline-block.align-middle.mr-2
+      {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
     ;; hamburger
     [:button.navbar-toggler
      {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
@@ -183,25 +188,18 @@
       :data-html2canvas-ignore true}
      [:span.navbar-toggler-icon]]
     ;; menu items
-    [:div.row {:id "schnaq-navbar"
+    [:div {:id "schnaq-navbar"
                :class "collapse navbar-collapse"}
-     ;; schnaq logo
-     [:div.col.col-2
-      [:a.navbar-brand.mx-2 {:href (reitfe/href :routes/startpage)}
-       [:img.d-inline-block.align-middle.mr-2
-        {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]]
      ;; clickable title
-     [:div.col-8.px-5.text-center
-      [:div {:on-click
-             (fn []
-               (rf/dispatch [:navigation/navigate :routes.meeting/show
-                             {:share-hash (:meeting/share-hash meeting)}])
-               (rf/dispatch [:meeting/select-current meeting]))
-             :class "clickable-no-hover"}
-       [:h2.mx-5 (:meeting/title meeting)]]]
+     [:div.mr-auto {:on-click
+            (fn []
+              (rf/dispatch [:navigation/navigate :routes.meeting/show
+                            {:share-hash (:meeting/share-hash meeting)}])
+              (rf/dispatch [:meeting/select-current meeting]))
+            :class "clickable-no-hover"}
+      [:h2.mx-5 (:meeting/title meeting)]]
      ;; name input
-     [:div.col-2.text-right
-      [username-bar-view-light]]]]])
+     [username-bar-view-light]]]])
 
 ;; footer
 
