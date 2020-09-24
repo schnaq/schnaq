@@ -155,6 +155,7 @@
      :discussion.notification/new-content-title "Neuer Beitrag!"
      :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
      :discussion.carousel/heading "Beiträge Anderer"
+     :discussion/discuss-tooltip "Diskutieren"
 
      ;; meetings overview
      :meetings/header "Schnaqs"

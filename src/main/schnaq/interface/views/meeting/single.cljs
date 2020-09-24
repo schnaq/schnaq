@@ -9,7 +9,7 @@
 
 
 (defn- tooltip-button
-  [id content on-click-fn]
+  [id tooltip content on-click-fn]
   (reagent/create-class
     {:component-did-mount
      (fn [_] (js-wrap/tooltip (str "#" id)))
@@ -23,11 +23,12 @@
               :id id
               :data-toggle "tooltip"
               :data-placement "bottom"
-              :title (labels :agendas.button/navigate-to-suggestions)} content])}))
+              :title tooltip} content])}))
 
 (defn control-buttons [share-hash]
   [:div.text-center
    [tooltip-button "request-change"
+    (labels :agendas.button/navigate-to-suggestions)
     [:i {:class (str "m-auto fas " (fa :eraser))}]
     #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
                    {:share-hash share-hash}])]])
@@ -60,19 +61,23 @@
      [:div.col]]]))
 
 (defn- agenda-entry [agenda meeting]
-  [:div.card.meeting-entry
-   {:on-click (fn []
-                (rf/dispatch [:navigation/navigate :routes.discussion/start
-                              {:id (-> agenda :agenda/discussion :db/id)
-                               :share-hash (:meeting/share-hash meeting)}])
-                (rf/dispatch [:agenda/choose agenda]))}
+  [:div.card.meeting-entry-no-hover
    ;; title
    [:div.meeting-entry-title
     [:h4 (:agenda/title agenda)]]
    ;; description
    [:div.meeting-entry-desc
     [:hr]
-    [markdown-parser/markdown-to-html (:agenda/description agenda)]]])
+    [markdown-parser/markdown-to-html (:agenda/description agenda)]]
+   [:div.px-4
+    [tooltip-button (str "agenda-discussion-" (:agenda/point agenda))
+     (labels :discussion/discuss-tooltip)
+     [:i {:class (str "m-auto fas " (fa :comment))}]
+     (fn []
+       (rf/dispatch [:navigation/navigate :routes.discussion/start
+                     {:id (-> agenda :agenda/discussion :db/id)
+                      :share-hash (:meeting/share-hash meeting)}])
+       (rf/dispatch [:agenda/choose agenda]))]]])
 
 
 (defn agenda-in-meeting-view
