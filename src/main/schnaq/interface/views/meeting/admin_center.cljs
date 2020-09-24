@@ -103,9 +103,9 @@
 (defn img-text
   "Create one icon in a grid"
   [path-to-img heading]
-  [:div.d-flex.flex-row.p-1
+  [:<>
    [:img {:src path-to-img}]
-   [:span [:h5 heading]]])
+   [:h5 heading]])
 
 (defn- educate-element []
   [:div.row.mb-3
