@@ -94,7 +94,7 @@
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
     ;; meeting header
     [:div
-     [base/context-header current-meeting]
+     [base/meeting-header current-meeting]
      [meeting-title current-meeting]
      [:div.container.py-2
       [:div.meeting-single-rounded

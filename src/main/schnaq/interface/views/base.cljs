@@ -170,7 +170,9 @@
        ;; name input
        [username-bar-view]]]]))
 
-(defn context-header [meeting]
+(defn meeting-header
+  "Overview header for a meeting with its title as headline"
+  [meeting]
   [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header
 
    [:div.container
