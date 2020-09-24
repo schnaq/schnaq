@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.meeting.single
   (:require [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.base :as base]))
 
@@ -12,15 +13,17 @@
    ;; check if title is clickable and set properties accordingly
    [:div.meeting-header.header-meeting.shadow-straight
     [:div.row
+     ;; arrow column
      [:div.col-1.back-arrow
       (when on-click-back-function
         [:p {:on-click on-click-back-function}              ;; the icon itself is not clickable
          [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
      [:div.col-10
       [:div.container
-       [:h6 subtitle]]]
-     [:div.col-1]
-     ]]))
+       ;; mark down
+        [markdown-parser/markdown-to-html subtitle]]]
+     ;; dangling column
+     [:div.col]]]))
 
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry

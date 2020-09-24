@@ -11,6 +11,7 @@
         github-hhucn/dialog.core {:git/url "https://github.com/hhucn/dialog.core" :sha "4ac930674755ed4bf53b9d516eea62f7a75a33ac"}
         gnl/ghostwheel {:mvn/version "0.3.9"}
         http-kit/http-kit {:mvn/version "2.5.0"}
+        markdown-clj {:mvn/version "1.10.5"}
         metosin/reitit {:mvn/version "0.5.5"}
         metosin/ring-http-response {:mvn/version "0.9.1"}
         org.clojure/clojure {:mvn/version "1.10.1"}
