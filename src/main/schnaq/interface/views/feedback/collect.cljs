@@ -30,7 +30,8 @@
 (defn- form-input
   "Show a form in a modal, which is presented to the user."
   []
-  (let [with-screenshot? (reagent/atom false)]
+  (let [with-screenshot? (reagent/atom false)
+        nickname @(rf/subscribe [:user/display-name])]
     (fn []
       [:form.form
        {:on-submit
@@ -49,7 +50,8 @@
         [:label {:for "feedback-contact-name"}
          (labels :feedbacks.modal/contact-name)]
         [:input {:id "feedback-contact-name"
-                 :class-name "form-control" :type "text"
+                 :class-name "form-control"
+                 :default-value nickname
                  :placeholder (labels :feedbacks.modal/contact-name)
                  :autoFocus true :name "contact-name"}]
         [:small.form-text.text-muted
