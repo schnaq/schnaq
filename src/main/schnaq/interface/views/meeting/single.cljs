@@ -1,33 +1,33 @@
 (ns schnaq.interface.views.meeting.single
   (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]
+            [reagent.dom :as rdom]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.base :as base]
-            [reagent.core :as reagent]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 
 (defn- tooltip-button
-  [id tooltip content on-click-fn]
+  [tooltip-location tooltip content on-click-fn]
   (reagent/create-class
     {:component-did-mount
-     (fn [_] (js-wrap/tooltip (str "#" id)))
+     (fn [comp] (js-wrap/tooltip (rdom/dom-node comp)))
      :component-will-unmount
-     (fn [_]
-       (js-wrap/tooltip (str "#" id) "disable")
-       (js-wrap/tooltip (str "#" id) "dispose"))
+     (fn [comp]
+       (js-wrap/tooltip (rdom/dom-node comp) "disable")
+       (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
      :reagent-render
-     (fn [] [:button.btn.button-secondary.button-md.my-2
+     (fn [] [:button.btn.button-secondary-b-1.button-md.my-2
              {:on-click on-click-fn
-              :id id
               :data-toggle "tooltip"
-              :data-placement "bottom"
+              :data-placement tooltip-location
               :title tooltip} content])}))
 
 (defn control-buttons [share-hash]
   [:div.text-center
-   [tooltip-button "request-change"
+   [tooltip-button "bottom"
     (labels :agendas.button/navigate-to-suggestions)
     [:i {:class (str "m-auto fas " (fa :eraser))}]
     #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
@@ -69,10 +69,10 @@
    [:div.meeting-entry-desc
     [:hr]
     [markdown-parser/markdown-to-html (:agenda/description agenda)]]
-   [:div.px-4
-    [tooltip-button (str "agenda-discussion-" (:agenda/point agenda))
+   [:div.px-4.text-right
+    [tooltip-button "top"
      (labels :discussion/discuss-tooltip)
-     [:i {:class (str "m-auto fas " (fa :comment))}]
+     [:div.px-2 [:i {:class (str "m-auto fas " (fa :comment))}]]
      (fn []
        (rf/dispatch [:navigation/navigate :routes.discussion/start
                      {:id (-> agenda :agenda/discussion :db/id)

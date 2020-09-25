@@ -21,6 +21,13 @@
   }
 }
 
+.button-secondary-b-1 {
+  /* stylelint-disable */
+  @extend .button-secondary;
+  /* stylelint-enable */
+  border-radius: 1rem;
+}
+
 .button-primary {
   @include button-template;
   background-color: $primary;
