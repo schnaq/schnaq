@@ -12,7 +12,7 @@
   ([text on-change-function min-height]
    (let [mde-ref (reagent/atom nil)]
      (reagent/create-class
-       {:display-name "mde-component"
+       {:display-name "markdown-editor"
         :reagent-render (fn [] [:textarea])
         :component-did-update
         (fn [comp _argv]
@@ -22,6 +22,7 @@
             (when (and (empty? (.value @mde-ref))
                        new-text)
               (.value @mde-ref new-text))))
+        :component-will-unmount #(.value @mde-ref "")
         :component-did-mount
         (fn [comp]
           (let [newMDE (mde.
@@ -31,9 +32,8 @@
                                    :sideBySideFullscreen false
                                    :initialValue (data/labels :meeting-form-desc-placeholder)}))]
             (reset! mde-ref newMDE)
-            (when text
-              (.value @mde-ref text))
-            (.on (.-codemirror @mde-ref) "change"
+            (when text (.value newMDE text))
+            (.on (.-codemirror newMDE) "change"
                  #(on-change-function (.value @mde-ref)))))}))))
 
 (defn view-store-on-change
