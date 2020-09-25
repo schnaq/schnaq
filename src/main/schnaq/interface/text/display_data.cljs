@@ -184,7 +184,7 @@
      gesendet 🎉"
 
      :feedbacks.survey/primer
-     [:<> "Wir würden uns sehr freuen, wenn Sie bei einer
+     [:<> "Wir würden uns freuen, wenn Sie bei einer
      kleinen Umfrage teilnehmen würden. Diese wird bei Google Forms gehostet
      und unterliegt den "
       [:a {:href "https://policies.google.com/privacy"} "Datenschutzbestimmungen von Google"]
