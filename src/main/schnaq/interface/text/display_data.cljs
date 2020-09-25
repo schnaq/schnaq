@@ -183,6 +183,16 @@
      :feedbacks.notification/body "Ihr Feedback wurde erfolgreich an uns
      gesendet 🎉"
 
+     :feedbacks.survey/primer
+     [:<> "Wir würden uns freuen, wenn Sie bei einer
+     kleinen Umfrage teilnehmen würden. Diese wird bei Google Forms gehostet
+     und unterliegt den "
+      [:a {:href "https://policies.google.com/privacy"} "Datenschutzbestimmungen von Google"]
+      ". Mit der Teilnahme an der Umfrage akzeptieren Sie diese Datenschutzbestimmungen."]
+     :feedbacks.survey/checkbox "Ja, ich möchte an der Umfrage teilnehmen"
+     :feedbacks.survey/loading "Formular wird geladen..."
+     :feedbacks.survey/tab "Umfrage"
+
      ;; login
      :login/as "Hallo, "
      :login/set-name "Geben Sie Ihren Namen ein"

@@ -8,7 +8,7 @@
             [schnaq.interface.views.agenda.edit :as agenda-edit]
             [schnaq.interface.views.discussion.discussion :as discussion-views]
             [schnaq.interface.views.errors :as error-views]
-            [schnaq.interface.views.feedback :as feedback]
+            [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.meeting.admin-center :as meeting-admin]
             [schnaq.interface.views.meeting.meetings :as meeting-views]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
@@ -115,7 +115,7 @@
                         :start #(rf/dispatch [:graph/load-data-for-discussion])}]}]]]]]
    ["feedbacks"
     {:name :routes/feedbacks
-     :view feedback/feedbacks-view
+     :view feedback-admin/feedbacks-view
      :link-text (labels :router/all-feedbacks)}]
    ["analytics"
     {:name :routes/analytics

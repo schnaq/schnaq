@@ -1,18 +1,19 @@
-(ns schnaq.interface.views.feedback
+(ns schnaq.interface.views.feedback.collect
   "Add feedback options to the site."
-  (:require ["html2canvas" :as html2canvas]
-            [ajax.core :as ajax]
+  (:require [ajax.core :as ajax]
             [clojure.string :as string]
             [goog.dom :as gdom]
             [goog.string :as gstring]
-            [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.modals.modal :as modal]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.feedback.survey :as survey]
+            [schnaq.interface.views.modals.modal :as modal]
+            ["html2canvas" :as html2canvas]))
 
 (defonce screenshot-url (reagent/atom nil))
 
@@ -26,13 +27,11 @@
     (fn [e]
       (reset! screenshot-url (.toDataURL e)))))
 
-;; -----------------------------------------------------------------------------
-;; Views
-
 (defn- form-input
   "Show a form in a modal, which is presented to the user."
   []
-  (let [with-screenshot? (reagent/atom false)]
+  (let [with-screenshot? (reagent/atom false)
+        nickname @(rf/subscribe [:user/display-name])]
     (fn []
       [:form.form
        {:on-submit
@@ -51,7 +50,8 @@
         [:label {:for "feedback-contact-name"}
          (labels :feedbacks.modal/contact-name)]
         [:input {:id "feedback-contact-name"
-                 :class-name "form-control" :type "text"
+                 :class-name "form-control"
+                 :default-value nickname
                  :placeholder (labels :feedbacks.modal/contact-name)
                  :autoFocus true :name "contact-name"}]
         [:small.form-text.text-muted
@@ -83,17 +83,22 @@
        (when (and @screenshot-url @with-screenshot?)
          [:img#feedback-screenshot.img-fluid.img-thumbnail.my-2 {:src @screenshot-url}])
        [:div.modal-footer
-        [:input.btn.btn-primary {:type "submit"}]
-        [:small (labels :feedbacks.modal/disclaimer)]]])))
+        [:input.btn.btn-primary.mr-auto {:type "submit"}]
+        [:small.text-muted (labels :feedbacks.modal/disclaimer)]]])))
 
 (defn- feedback-modal
   "Create a modal to fetch user's feedback."
   []
   (modal/modal-template
     (labels :feedbacks.overview/header)
-    [:div
-     [:p (labels :feedbacks.modal/primer)]
-     [form-input]]))
+    (common/tab-builder
+      "feedback-tabs"
+      {:link (labels :feedbacks/button)
+       :view [:<>
+              [:p (labels :feedbacks.modal/primer)]
+              [form-input]]}
+      {:link (labels :feedbacks.survey/tab)
+       :view [survey/view]})))
 
 (defn button
   "Presenting the feedback button."
@@ -101,54 +106,9 @@
   [:div#feedback-wrapper.feedback-wrapper
    {:on-click (fn [_e]
                 (screenshot!)
-                (rf/dispatch [:modal {:show? true
+                (rf/dispatch [:modal {:show? true :large? true
                                       :child [feedback-modal]}]))}
    [:button.btn.btn-secondary.text-white.feedback (labels :feedbacks/button)]])
-
-(defn- list-feedbacks
-  "Shows a list of all feedback."
-  []
-  [:div#feedback-list
-   (let [feedbacks @(rf/subscribe [:feedbacks])]
-     [:div
-      [:h4 (gstring/format "Es gibt %s Rückmeldungen 🥳 !" (count feedbacks))]
-      [:table.table.table-striped
-       [:thead
-        [:tr
-         [:th {:width "20%"} (labels :feedbacks.overview/contact-name)]
-         [:th {:width "60%"} (labels :feedbacks.overview/description)]
-         [:th {:width "20%"} (labels :feedbacks/screenshot)]]]
-       [:tbody
-        (for [feedback feedbacks]
-          [:tr {:key (:db/id feedback)}
-           [:td (:feedback/contact-name feedback)
-            (when-not (string/blank? (:feedback/contact-mail feedback))
-              [:a {:href (gstring/format "mailto:%s" (:feedback/contact-mail feedback))}
-               [:i.far.fa-envelope.pl-1]])]
-           [:td (:feedback/description feedback)]
-           [:td.image
-            (when (:feedback/has-image? feedback)
-              (let [img-src (gstring/format "/media/feedbacks/screenshots/%s.png" (:db/id feedback))]
-                [:a {:href img-src}
-                 [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]])])
-
-(defn- overview
-  "Shows the page for an overview of all feedbacks."
-  []
-  (let [feedbacks @(rf/subscribe [:feedbacks])]
-    (if (nil? feedbacks)
-      (let [password (js/prompt "Enter password to see all Feedbacks")]
-        (rf/dispatch [:feedbacks/fetch password]))
-      [:div
-       [base/nav-header]
-       [base/header
-        (labels :feedbacks.overview/header)
-        (labels :feedbacks.overview/subheader)]
-       [:div.container.py-4 [list-feedbacks]]])))
-
-(defn feedbacks-view []
-  [overview])
-
 
 
 ;; -----------------------------------------------------------------------------
@@ -156,21 +116,6 @@
 (rf/reg-sub
   :feedbacks
   (fn [db _] (:feedbacks db)))
-
-(rf/reg-event-db
-  :feedbacks/store
-  (fn [db [_ all-feedbacks]] (assoc db :feedbacks all-feedbacks)))
-
-(rf/reg-event-fx
-  :feedbacks/fetch
-  (fn [_ [_ password]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (gstring/format "%s/feedbacks" (:rest-backend config))
-                        :params {:password password}
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:feedbacks/store]
-                        :on-failure [:ajax-failure]}]]}))
 
 (rf/reg-event-fx
   :feedbacks/success

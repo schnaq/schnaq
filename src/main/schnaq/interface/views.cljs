@@ -1,7 +1,7 @@
 (ns schnaq.interface.views
   (:require [re-frame.core :as rf]
             [reagent.dom]
-            [schnaq.interface.views.feedback :as feedback]
+            [schnaq.interface.views.feedback.collect :as feedback]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.modals.modal :as modal]
             [schnaq.interface.views.notifications :as notifications]))
