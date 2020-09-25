@@ -23,7 +23,7 @@
 (>defn send-mail
   "Sends a single mail to the recipient. Title and content are used as passed."
   [title content recipient]
-  [string? string? string? :ret coll?]
+  [string? string? string? :ret (? coll?)]
   (if (valid-mail recipient)
     (try
       (send-message conn {:from (:sender-address config/email)
