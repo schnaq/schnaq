@@ -19,7 +19,7 @@
        (js-wrap/tooltip (rdom/dom-node comp) "disable")
        (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
      :reagent-render
-     (fn [] [:button.btn.button-secondary-b-1.button-md.my-2
+     (fn [] [:button.button-secondary-b-1.button-md.my-2
              {:on-click on-click-fn
               :data-toggle "tooltip"
               :data-placement tooltip-location
@@ -38,27 +38,21 @@
   'title-on-click-function' is triggered when header is clicked
   'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
   ([title subtitle share-hash on-click-back-function]
-   ;; check if title is clickable and set properties accordingly
-   [:div
-    [:div.row
-     [:div.col-md-2]
-     [:div.col-md-8.meeting-header.shadow-straight
-      [:div.row
-       ;; arrow column
-       [:div.col-md-1.back-arrow
-        (when on-click-back-function
-          [:p {:on-click on-click-back-function}            ;; the icon itself is not clickable
-           [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
-       [:div.col-md-10
-        [:div.container.px-4
-         [:h1 title]
-         [:hr]
-         ;; mark down
-         [markdown-parser/markdown-to-html subtitle]]]
-       ;; button column
-       [:div.col-md-1
-        [control-buttons share-hash]]]]
-     [:div.col]]]))
+   [:div.row.meeting-header.shadow-straight
+    ;; arrow column
+    [:div.col-md-1.back-arrow
+     (when on-click-back-function
+       [:p {:on-click on-click-back-function}
+        [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
+    [:div.col-md-10
+     [:div.container.px-4
+      [:h1 title]
+      [:hr]
+      ;; mark down
+      [markdown-parser/markdown-to-html subtitle]]]
+    ;; button column
+    [:div.col-md-1
+     [control-buttons share-hash]]]))
 
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry-no-hover
@@ -69,21 +63,22 @@
    [:div.meeting-entry-desc
     [:hr]
     [markdown-parser/markdown-to-html (:agenda/description agenda)]]
-   [:div.px-4.text-right
-    [tooltip-button "top"
-     (labels :discussion/discuss-tooltip)
-     [:div.px-2 [:i {:class (str "m-auto fas " (fa :comment))}]]
-     (fn []
-       (rf/dispatch [:navigation/navigate :routes.discussion/start
-                     {:id (-> agenda :agenda/discussion :db/id)
-                      :share-hash (:meeting/share-hash meeting)}])
-       (rf/dispatch [:agenda/choose agenda]))]]])
+   [:div
+    [:button.button-secondary-b-1.button-md
+     {:title (labels :discussion/discuss-tooltip)
+      :on-click (fn []
+                  (rf/dispatch [:navigation/navigate :routes.discussion/start
+                                {:id (-> agenda :agenda/discussion :db/id)
+                                 :share-hash (:meeting/share-hash meeting)}])
+                  (rf/dispatch [:agenda/choose agenda]))}
+     [:span.pr-2 (labels :discussion/discuss)]
+     [:i {:class (str "m-auto fas " (fa :comment))}]]]])
 
 
 (defn agenda-in-meeting-view
   "The view of an agenda which gets embedded inside a meeting view."
   [meeting]
-  [:div
+  [:<>
    (let [agendas @(rf/subscribe [:current-agendas])]
      (for [agenda agendas]
        [:div.py-3 {:key (:db/id agenda)}
