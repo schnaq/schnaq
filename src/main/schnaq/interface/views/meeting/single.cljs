@@ -1,33 +1,34 @@
 (ns schnaq.interface.views.meeting.single
   (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]
+            [reagent.dom :as rdom]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.base :as base]
-            [reagent.core :as reagent]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 
 (defn- tooltip-button
-  [id content on-click-fn]
+  [tooltip-location tooltip content on-click-fn]
   (reagent/create-class
     {:component-did-mount
-     (fn [_] (js-wrap/tooltip (str "#" id)))
+     (fn [comp] (js-wrap/tooltip (rdom/dom-node comp)))
      :component-will-unmount
-     (fn [_]
-       (js-wrap/tooltip (str "#" id) "disable")
-       (js-wrap/tooltip (str "#" id) "dispose"))
+     (fn [comp]
+       (js-wrap/tooltip (rdom/dom-node comp) "disable")
+       (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
      :reagent-render
-     (fn [] [:button.btn.button-secondary.button-md.my-2
+     (fn [] [:button.button-secondary-b-1.button-md.my-2
              {:on-click on-click-fn
-              :id id
               :data-toggle "tooltip"
-              :data-placement "bottom"
-              :title (labels :agendas.button/navigate-to-suggestions)} content])}))
+              :data-placement tooltip-location
+              :title tooltip} content])}))
 
 (defn control-buttons [share-hash]
   [:div.text-center
-   [tooltip-button "request-change"
+   [tooltip-button "bottom"
+    (labels :agendas.button/navigate-to-suggestions)
     [:i {:class (str "m-auto fas " (fa :eraser))}]
     #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
                    {:share-hash share-hash}])]])
@@ -37,44 +38,47 @@
   'title-on-click-function' is triggered when header is clicked
   'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
   ([title subtitle share-hash on-click-back-function]
-   ;; check if title is clickable and set properties accordingly
-   [:div.meeting-header.header-meeting.shadow-straight
-    [:div.row
-     ;; arrow column
-     [:div.col-md-3.back-arrow
-      (when on-click-back-function
-        [:p {:on-click on-click-back-function}              ;; the icon itself is not clickable
-         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
-     [:div.col-md-6
-      ;[:div.container]
+   [:div.row.meeting-header.shadow-straight
+    ;; arrow column
+    [:div.col-md-1.back-arrow
+     (when on-click-back-function
+       [:p {:on-click on-click-back-function}
+        [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
+    [:div.col-md-10
+     [:div.container.px-4
       [:h1 title]
       [:hr]
       ;; mark down
-      [markdown-parser/markdown-to-html subtitle]]
-     ;; button column
-     [:div.col-md-3
-      [control-buttons share-hash]]]]))
+      [markdown-parser/markdown-to-html subtitle]]]
+    ;; button column
+    [:div.col-md-1
+     [control-buttons share-hash]]]))
 
 (defn- agenda-entry [agenda meeting]
-  [:div.card.meeting-entry
-   {:on-click (fn []
-                (rf/dispatch [:navigation/navigate :routes.discussion/start
-                              {:id (-> agenda :agenda/discussion :db/id)
-                               :share-hash (:meeting/share-hash meeting)}])
-                (rf/dispatch [:agenda/choose agenda]))}
+  [:div.card.meeting-entry-no-hover
    ;; title
    [:div.meeting-entry-title
     [:h4 (:agenda/title agenda)]]
    ;; description
    [:div.meeting-entry-desc
     [:hr]
-    [markdown-parser/markdown-to-html (:agenda/description agenda)]]])
+    [markdown-parser/markdown-to-html (:agenda/description agenda)]]
+   [:div
+    [:button.button-secondary-b-1.button-md
+     {:title (labels :discussion/discuss-tooltip)
+      :on-click (fn []
+                  (rf/dispatch [:navigation/navigate :routes.discussion/start
+                                {:id (-> agenda :agenda/discussion :db/id)
+                                 :share-hash (:meeting/share-hash meeting)}])
+                  (rf/dispatch [:agenda/choose agenda]))}
+     [:span.pr-2 (labels :discussion/discuss)]
+     [:i {:class (str "m-auto fas " (fa :comment))}]]]])
 
 
 (defn agenda-in-meeting-view
   "The view of an agenda which gets embedded inside a meeting view."
   [meeting]
-  [:div
+  [:<>
    (let [agendas @(rf/subscribe [:current-agendas])]
      (for [agenda agendas]
        [:div.py-3 {:key (:db/id agenda)}

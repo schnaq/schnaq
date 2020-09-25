@@ -57,8 +57,7 @@
   "Base discussion view containing a nav header, meeting title and content container."
   [meeting content]
   [:<>
-   [base/nav-header]
-   [view/discussion-header-no-subtitle meeting]
+   [base/meeting-header meeting]
    [:div.container.discussion-base
     [:div.discussion-view-rounded.shadow-straight
      content]]])
@@ -69,7 +68,11 @@
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page current-meeting
      [:<>
-      [view/agenda-header-back-arrow]
+      [view/agenda-header-back-arrow
+       (fn []
+         (rf/dispatch [:navigation/navigate :routes.meeting/show
+                       {:share-hash (:meeting/share-hash current-meeting)}])
+         (rf/dispatch [:meeting/select-current current-meeting]))]
       [view/history-view]
       [view/conclusions-list]
       [view/input-field]]]))

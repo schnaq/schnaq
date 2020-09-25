@@ -1,29 +1,36 @@
 @import 'variables';
 
-.meeting-entry {
+.meeting-entry-no-hover {
   background: $white;
   border-radius: 1rem;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 4px 0 rgba(0, 0, 0, 0.19);
   color: $text-dark;
-  cursor: pointer;
+  padding: 2rem;
 }
 
-.meeting-entry:hover {
-  background: $white-shade;
+
+.meeting-entry {
+  /* stylelint-disable */
+  @extend .meeting-entry-no-hover;
+  /* stylelint-enable */
+  cursor: pointer;
+
+  &:hover {
+    background: $white-shade;
+  }
 }
+
 
 .meeting-entry-title {
   background-color: transparent;
   border: 0;
   border-radius: 1.5rem 1.5rem 0 0;
-  padding: 2rem 2rem 0;
 }
 
 .meeting-entry-desc {
   background-color: transparent;
   border-radius: 0 0 1.5rem 1.5rem;
   box-sizing: border-box;
-  padding: 0 2rem 2rem;
 }
 
 .arrow-icon {
@@ -37,6 +44,7 @@
 
 .meeting-header {
   background-color: $white;
+  border-radius: 0 0 1rem 1rem;
   color: $text-dark;
   overflow-wrap: break-word;
   padding: 2rem 2rem 1rem;
