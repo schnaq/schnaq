@@ -123,14 +123,14 @@
       delete-agenda-fn
       (:agenda/description agenda)
       description-update-fn
-      (edit-agenda-title-attributes db-id agenda)]
-     [badge-wrapper
-      (with-meta
-        [update-suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
-        {:key (str "suggestion-badge-" (:db/id agenda))})
-      (with-meta
-        [deletion-badge agenda]
-        {:key (str "deletion-badge-" (:db/id agenda))})]]))
+      (edit-agenda-title-attributes db-id agenda)
+      [badge-wrapper
+       (with-meta
+         [update-suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
+         {:key (str "suggestion-badge-" (:db/id agenda))})
+       (with-meta
+         [deletion-badge agenda]
+         {:key (str "deletion-badge-" (:db/id agenda))})]]]))
 
 (defn- editable-meeting-info [selected-meeting]
   [:div.agenda-meeting-container.shadow-straight.text-left.p-3
