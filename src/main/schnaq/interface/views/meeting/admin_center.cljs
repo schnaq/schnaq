@@ -13,7 +13,8 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.utils.localstorage :as ls]))
 
 (>defn- get-share-link
   [current-route]
@@ -247,6 +248,9 @@
   []
   (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])
         spacer [:div.pb-5.mt-3]]
+    ;; save admin access to local storage
+    (rf/dispatch [:meetings/save-admin-access])
+    ;; display admin center
     [:<>
      [base/nav-header]
      [base/header
@@ -268,3 +272,80 @@
 
 (defn admin-center-view []
   [admin-center])
+
+;; #### Storage Helper ####
+
+(def ^:private tuple-separator ",")
+(def ^:private tuple-data #"\[(.*?)\]")
+(def ^:private hash-separator " ")
+
+(defn- parse-admin-access-string
+  "Read previously visited meetings from localstorage. E.g (ls/get-item :meetings/admin-access)
+  The string must obey the following convention '[share-1 edit-1],[share-2 edit-2]'
+  "
+  [hash-map-string]
+  (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
+        hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
+        hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
+        hashes-map (into (sorted-map) hashes-vector)]
+    hashes-map))
+
+(defn- add-admin-access-to-local-hashmap [hash-map-string share-hash edit-hash]
+  (let [admin-access (parse-admin-access-string hash-map-string)
+        new-admin-access (conj admin-access {(str share-hash) (str edit-hash)})]
+    ;; check if share hash has already admin access
+    (if-not (some #{share-hash} admin-access)
+      new-admin-access
+      admin-access)))
+
+(defn- build-admin-access-from-localstorage [share-hash edit-hash]
+  (let [local-hashes (ls/get-item :meetings/admin-access)
+        new-hashes (add-admin-access-to-local-hashmap local-hashes share-hash edit-hash)
+        hashes-tuple (map (fn [[val key]] (str "[" val " " key "]")) (seq new-hashes))
+        hashes-as-string (string/join "," hashes-tuple)]
+    hashes-as-string))
+
+(comment
+  (re-find tuple-data "[12-23 123-3]")
+  (let [ls "[share-1 edit-1],[share-2 edit-2]"
+        ;; parse from string
+        hashes (remove empty? (string/split ls (re-pattern tuple-separator)))
+        hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
+        hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
+        hashes-map (into (sorted-map) hashes-vector)
+
+        ;; parse to string
+        hashes-string (map (fn [[val key]] (str "[" val " " key "]")) (seq hashes-map))
+        hashes-as-string (string/join "," hashes-string)]
+
+    hashes-as-string)
+  )
+
+;; #### Events ####
+
+(rf/reg-event-db
+  :meetings/save-admin-access
+  (fn [db [_]]
+    (let [path-params (-> db :current-route :path-params)
+          share-hash (:share-hash path-params)
+          edit-hash (:edit-hash path-params)]
+      (rf/dispatch [:meetings.save-admin-access/to-localstorage share-hash edit-hash]))))
+
+(rf/reg-sub
+  :meetings/load-admin-access
+  (fn [db [_]]
+    (get-in db [:meetings :admin-access])))
+
+(rf/reg-event-db
+  :meetings.save-admin-access/store-hashes-from-localstorage
+  (fn [db _]
+    (assoc-in db [:meetings :admin-access]
+              (parse-admin-access-string (ls/get-item :meetings/admin-access)))))
+
+(rf/reg-event-fx
+  :meetings.save-admin-access/to-localstorage
+  (fn [_ [_ share-hash edit-hash]]
+    {:fx [[:localstorage/write
+           [:meetings/admin-access
+            (build-admin-access-from-localstorage share-hash edit-hash)]]
+          [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]]}))

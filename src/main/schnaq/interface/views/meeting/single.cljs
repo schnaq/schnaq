@@ -26,12 +26,21 @@
               :title tooltip} content])}))
 
 (defn control-buttons [share-hash]
-  [:div.text-center
-   [tooltip-button "bottom"
-    (labels :agendas.button/navigate-to-suggestions)
-    [:i {:class (str "m-auto fas " (fa :eraser))}]
-    #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
-                   {:share-hash share-hash}])]])
+  (let [admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+        edit-hash (get admin-access-map share-hash)]
+    [:div.text-center
+     (when edit-hash
+       [tooltip-button "bottom"
+        (labels :meeting/admin-center-tooltip)
+        [:i {:class (str "m-auto fas " (fa :cog))}]
+        #(rf/dispatch [:navigation/navigate
+                      :routes.meeting/admin-center
+                      {:share-hash share-hash :edit-hash edit-hash}])])
+     [tooltip-button "bottom"
+      (labels :agendas.button/navigate-to-suggestions)
+      [:i {:class (str "m-auto fas " (fa :eraser))}]
+      #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
+                     {:share-hash share-hash}])]]))
 
 (defn meeting-entry
   "Non wavy header with an optional back button.
