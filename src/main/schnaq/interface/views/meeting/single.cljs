@@ -25,16 +25,27 @@
               :data-placement tooltip-location
               :title tooltip} content])}))
 
-(defn suggestions-button
-  "The button in the meeting header that navigates to the suggestions view."
-  []
-  [:div.text-center
-   [tooltip-button "bottom"
-    (labels :agendas.button/navigate-to-suggestions)
-    [:i {:class (str "m-auto fas " (fa :eraser))}]
-    #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
-                   {:share-hash (get-in @(rf/subscribe [:navigation/current-route])
-                                        [:parameters :path :share-hash])}])]])
+(defn control-buttons []
+  (let [share-hash (get-in @(rf/subscribe [:navigation/current-route])
+                           [:parameters :path :share-hash])
+        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+        edit-hash (get admin-access-map share-hash)]
+    [:div.text-center
+     ;; admin panel button
+     (when edit-hash
+       [tooltip-button "bottom"
+        (labels :meeting/admin-center-tooltip)
+        [:i {:class (str "m-auto fas " (fa :cog))}]
+        #(rf/dispatch [:navigation/navigate
+                       :routes.meeting/admin-center
+                       {:share-hash share-hash :edit-hash edit-hash}])])
+     ;; suggestion button
+     [tooltip-button "bottom"
+      (labels :agendas.button/navigate-to-suggestions)
+      [:i {:class (str "m-auto fas " (fa :eraser))}]
+      #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
+                     {:share-hash (get-in @(rf/subscribe [:navigation/current-route])
+                                          [:parameters :path :share-hash])}])]]))
 
 (defn meeting-entry
   "Non wavy header with an optional back button.
@@ -55,7 +66,7 @@
      [markdown-parser/markdown-to-html subtitle]]]
    ;; button column
    [:div.col-md-1
-    [suggestions-button]]])
+    [control-buttons]]])
 
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry-no-hover
