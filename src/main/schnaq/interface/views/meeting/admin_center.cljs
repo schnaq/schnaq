@@ -305,22 +305,6 @@
         hashes-as-string (string/join "," hashes-tuple)]
     hashes-as-string))
 
-(comment
-  (re-find tuple-data "[12-23 123-3]")
-  (let [ls "[share-1 edit-1],[share-2 edit-2]"
-        ;; parse from string
-        hashes (remove empty? (string/split ls (re-pattern tuple-separator)))
-        hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
-        hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
-        hashes-map (into (sorted-map) hashes-vector)
-
-        ;; parse to string
-        hashes-string (map (fn [[val key]] (str "[" val " " key "]")) (seq hashes-map))
-        hashes-as-string (string/join "," hashes-string)]
-
-    hashes-as-string)
-  )
-
 ;; #### Events ####
 
 (rf/reg-event-db
