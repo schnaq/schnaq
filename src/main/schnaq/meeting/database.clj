@@ -9,7 +9,8 @@
             [schnaq.meeting.specs :as specs]
             [schnaq.test-data :as test-data]
             [schnaq.toolbelt :as toolbelt])
-  (:import (java.util Date UUID)))
+  (:import (java.util UUID Date)
+           (java.time Instant)))
 
 (def ^:private datomic-info
   (atom {:client nil
@@ -692,7 +693,7 @@
 
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
 
-(def ^:private max-time-back #inst "1971-01-01T01:01:01.000-00:00")
+(def ^:private max-time-back Instant/EPOCH)
 
 (>defn- number-of-entities-since
   "Returns the number of entities in the db since some timestamp. Default is all."
@@ -709,7 +710,7 @@
            :where [?entities ?attribute _ ?tx]
            [?tx :db/txInstant ?start-date]
            [(< ?since ?start-date)]]
-         (d/db (new-connection)) since attribute))
+         (d/db (new-connection)) (Date/from since) attribute))
      0)))
 
 (>defn- number-of-entities-with-value-since
@@ -727,7 +728,7 @@
            :where [?entities ?attribute ?value ?tx]
            [?tx :db/txInstant ?start-date]
            [(< ?since ?start-date)]]
-         (d/db (new-connection)) since attribute value))
+         (d/db (new-connection)) (Date/from since) attribute value))
      0)))
 
 (defn number-of-meetings
@@ -774,7 +775,7 @@
            [?tx :db/txInstant ?start-date]
            [(< ?since ?start-date)]
            [?statements :statement/author ?authors]]
-         (d/db (new-connection)) since))
+         (d/db (new-connection)) (Date/from since)))
      0)))
 
 (>defn statement-length-stats
@@ -790,7 +791,7 @@
                                         :where [_ :statement/content ?contents ?tx]
                                         [?tx :db/txInstant ?add-date]
                                         [(< ?since ?add-date)]]
-                                      (d/db (new-connection)) since)))
+                                      (d/db (new-connection)) (Date/from since))))
          content-count (count sorted-contents)
          max-length (count (last sorted-contents))
          min-length (count (first sorted-contents))

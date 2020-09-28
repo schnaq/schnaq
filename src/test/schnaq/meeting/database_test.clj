@@ -2,7 +2,8 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is are]]
             [dialog.discussion.database :as ddb]
             [schnaq.meeting.database :as database]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt])
+  (:import (java.time Instant)))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
@@ -131,7 +132,7 @@
     (is (= 2 (database/number-of-meetings)))
     (any-meeting-id)                                        ;; Ads any new meeting
     (is (= 3 (database/number-of-meetings)))
-    (is (zero? (database/number-of-meetings (database/now))))))
+    (is (zero? (database/number-of-meetings (Instant/now))))))
 
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
@@ -139,12 +140,12 @@
     (is (= 5 (database/number-of-usernames)))
     (database/add-user-if-not-exists "Some-Testdude")
     (is (= 6 (database/number-of-usernames)))
-    (is (zero? (database/number-of-meetings (database/now))))))
+    (is (zero? (database/number-of-meetings (Instant/now))))))
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
     (is (= 34 (database/number-of-statements)))
-    (is (zero? (database/number-of-statements (database/now))))))
+    (is (zero? (database/number-of-statements (Instant/now))))))
 
 (deftest average-number-of-agendas-test
   (testing "Test whether the average number of agendas fits."
