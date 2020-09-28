@@ -3,7 +3,7 @@
   (:require [ghostwheel.core :refer [>defn]]
             [clojure.walk :as walk])
   (:import (java.io File)
-           (org.joda.time DateTime)
+           (java.time ZonedDateTime)
            (clojure.lang PersistentArrayMap)))
 
 (>defn create-directory!
@@ -21,7 +21,7 @@
   "Returns an instant that represents the current date minus some days. Assumes systemDefault timezone."
   [days]
   [int? :ret inst?]
-  (.toDate (.minusDays (DateTime.) days)))
+  (.toInstant (.minusDays (ZonedDateTime/now) days)))
 
 (>defn pull-key-up
   "Finds any occurrence of a member of `key-name` in `coll`. Then replaced the corresponding

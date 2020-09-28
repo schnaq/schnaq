@@ -3,7 +3,8 @@
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :as data :refer [labels]]
             [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.utils.markdown-parser :as markdown-parser]))
 
 (defn- no-meetings-found
   "Show error message when no meetings were loaded."
@@ -42,7 +43,7 @@
     [:small.text-right.float-right.pb-3
      (when-let [nickname (-> meeting :meeting/author :author/nickname)]
        (common/avatar nickname 50))]
-    [:p (:meeting/description meeting)]]])
+    [markdown-parser/markdown-to-html (:meeting/description meeting)]]])
 
 (defn- meetings-list-view
   "Shows a list of all meetings."

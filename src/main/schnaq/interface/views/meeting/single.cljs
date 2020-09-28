@@ -25,43 +25,37 @@
               :data-placement tooltip-location
               :title tooltip} content])}))
 
-(defn control-buttons [share-hash]
-  (let [admin-access-map @(rf/subscribe [:meetings/load-admin-access])
-        edit-hash (get admin-access-map share-hash)]
-    [:div.text-center
-     (when edit-hash
-       [tooltip-button "bottom"
-        (labels :meeting/admin-center-tooltip)
-        [:i {:class (str "m-auto fas " (fa :cog))}]
-        #(rf/dispatch [:navigation/navigate
-                      :routes.meeting/admin-center
-                      {:share-hash share-hash :edit-hash edit-hash}])])
-     [tooltip-button "bottom"
-      (labels :agendas.button/navigate-to-suggestions)
-      [:i {:class (str "m-auto fas " (fa :eraser))}]
-      #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
-                     {:share-hash share-hash}])]]))
+(defn suggestions-button
+  "The button in the meeting header that navigates to the suggestions view."
+  []
+  [:div.text-center
+   [tooltip-button "bottom"
+    (labels :agendas.button/navigate-to-suggestions)
+    [:i {:class (str "m-auto fas " (fa :eraser))}]
+    #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
+                   {:share-hash (get-in @(rf/subscribe [:navigation/current-route])
+                                        [:parameters :path :share-hash])}])]])
 
 (defn meeting-entry
   "Non wavy header with an optional back button.
   'title-on-click-function' is triggered when header is clicked
   'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
-  ([title subtitle share-hash on-click-back-function]
-   [:div.row.meeting-header.shadow-straight
-    ;; arrow column
-    [:div.col-md-1.back-arrow
-     (when on-click-back-function
-       [:p {:on-click on-click-back-function}
-        [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
-    [:div.col-md-10
-     [:div.container.px-4
-      [:h1 title]
-      [:hr]
-      ;; mark down
-      [markdown-parser/markdown-to-html subtitle]]]
-    ;; button column
-    [:div.col-md-1
-     [control-buttons share-hash]]]))
+  [title subtitle on-click-back-function]
+  [:div.row.meeting-header.shadow-straight
+   ;; arrow column
+   [:div.col-md-1.back-arrow
+    (when on-click-back-function
+      [:p {:on-click on-click-back-function}
+       [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
+   [:div.col-md-10
+    [:div.container.px-4
+     [:h1 title]
+     [:hr]
+     ;; mark down
+     [markdown-parser/markdown-to-html subtitle]]]
+   ;; button column
+   [:div.col-md-1
+    [suggestions-button]]])
 
 (defn- agenda-entry [agenda meeting]
   [:div.card.meeting-entry-no-hover
@@ -98,7 +92,6 @@
   [meeting-entry
    (:meeting/title current-meeting)
    (:meeting/description current-meeting)
-   (:meeting/share-hash current-meeting)
    (when-not toolbelt/production?                           ;; when in dev display back button
      (fn []
        (rf/dispatch [:navigation/navigate :routes/meetings])))])

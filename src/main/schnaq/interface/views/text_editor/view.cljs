@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.text-editor.view
-  (:require ["easymde" :as mde]
+  (:require [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.text.display-data :as data]
-            [re-frame.core :as rf]))
+            ["easymde" :as mde]))
 
 (defn view
   "Mark Up Text Editor View"
@@ -12,13 +12,17 @@
   ([text on-change-function min-height]
    (let [mde-ref (reagent/atom nil)]
      (reagent/create-class
-       {:display-name "mde-component"
+       {:display-name "markdown-editor"
         :reagent-render (fn [] [:textarea])
         :component-did-update
         (fn [comp _argv]
           (let [[_ new-text _] (reagent/argv comp)]
-            (when new-text
+            ;; Update value of MDE only if the current value is empty. In all
+            ;; other cases, the `change` function of codemirror is used.
+            (when (and (empty? (.value @mde-ref))
+                       new-text)
               (.value @mde-ref new-text))))
+        :component-will-unmount #(.value @mde-ref "")
         :component-did-mount
         (fn [comp]
           (let [newMDE (mde.
@@ -28,9 +32,8 @@
                                    :sideBySideFullscreen false
                                    :initialValue (data/labels :meeting-form-desc-placeholder)}))]
             (reset! mde-ref newMDE)
-            (when text
-              (.value @mde-ref text))
-            (.on (.-codemirror @mde-ref) "change"
+            (when text (.value newMDE text))
+            (.on (.-codemirror newMDE) "change"
                  #(on-change-function (.value @mde-ref)))))}))))
 
 (defn view-store-on-change
@@ -38,7 +41,7 @@
   The value can be retrieved via subscribing to ':mde/load-content'"
   [storage-key]
   (view nil (fn [value]
-          (rf/dispatch [:mde/save-content storage-key value]))))
+              (rf/dispatch [:mde/save-content storage-key value]))))
 
 (rf/reg-event-db
   :mde/save-content
