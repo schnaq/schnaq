@@ -44,8 +44,7 @@
       (labels :agendas.button/navigate-to-suggestions)
       [:i {:class (str "m-auto fas " (fa :eraser))}]
       #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
-                     {:share-hash (get-in @(rf/subscribe [:navigation/current-route])
-                                          [:parameters :path :share-hash])}])]]))
+                     {:share-hash share-hash}])]]))
 
 (defn meeting-entry
   "Non wavy header with an optional back button.

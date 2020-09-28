@@ -248,8 +248,6 @@
   []
   (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])
         spacer [:div.pb-5.mt-3]]
-    ;; save admin access to local storage
-    (rf/dispatch [:meetings/save-admin-access])
     ;; display admin center
     [:<>
      [base/nav-header]
@@ -287,7 +285,7 @@
   (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
         hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
         hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
-        hashes-map (into (sorted-map) hashes-vector)]
+        hashes-map (into {} hashes-vector)]
     hashes-map))
 
 (defn- add-admin-access-to-local-hashmap [hash-map-string share-hash edit-hash]
@@ -306,14 +304,6 @@
     hashes-as-string))
 
 ;; #### Events ####
-
-(rf/reg-event-db
-  :meetings/save-admin-access
-  (fn [db [_]]
-    (let [path-params (-> db :current-route :path-params)
-          share-hash (:share-hash path-params)
-          edit-hash (:edit-hash path-params)]
-      (rf/dispatch [:meetings.save-admin-access/to-localstorage share-hash edit-hash]))))
 
 (rf/reg-sub
   :meetings/load-admin-access

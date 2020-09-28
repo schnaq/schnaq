@@ -68,6 +68,7 @@
      :fx [[:dispatch [:load/meetings]]
           [:dispatch [:username/from-localstorage]]
           [:dispatch [:load/last-added-meeting]]
+          [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]
           [:dispatch [:meetings.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-event-db
