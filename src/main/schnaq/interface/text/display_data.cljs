@@ -110,6 +110,7 @@
      :meeting.admin-center.edit/send-link "Link verschicken"
      :meeting.admin-center.invite/via-link "Link verteilen"
      :meeting.admin-center.invite/via-mail "Per E-Mail einladen"
+     :meeting/admin-center-tooltip "Schnaq administrieren"
 
      ;; Suggestions
      :suggestions.modal/header "Eingereichte Vorschläge"
@@ -288,6 +289,7 @@
      :arrow-right "fa-arrow-right"
      :arrow-up "fa-arrow-up"
      :carry "fa-people-carry"
+     :cog "fa-cogs"
      :comment "fa-comments"
      :copy "fa-copy"
      :delete-icon "fa-times-circle"

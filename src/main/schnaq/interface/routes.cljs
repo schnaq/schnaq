@@ -71,7 +71,13 @@
       ["/manage"
        {:name :routes.meeting/admin-center
         :view meeting-admin/admin-center-view
-        :link-text (labels :router/meeting-created)}]]
+        :link-text (labels :router/meeting-created)
+        :controllers [{:parameters {:path [:share-hash :edit-hash]}
+                       :start (fn [{:keys [path]}]
+                                ;; save admin access to local storage
+                                (rf/dispatch [:meetings.save-admin-access/to-localstorage
+                                              (:share-hash path)
+                                              (:edit-hash path)]))}]}]]
      ["/"
       {:name :routes.meeting/show
        :view meeting-single/single-meeting-view
