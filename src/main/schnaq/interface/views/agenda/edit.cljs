@@ -168,7 +168,7 @@
         edit-meeting (:meeting edit-information)
         meeting-agendas (:agendas edit-information)]
     [:<>
-     [base/nav-header]
+     [base/meeting-header edit-meeting]
      heading
      [:div.container.text-center.pb-5
       [:form {:on-submit on-submit-fn}

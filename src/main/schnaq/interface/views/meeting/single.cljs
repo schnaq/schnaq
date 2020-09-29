@@ -19,7 +19,7 @@
        (js-wrap/tooltip (rdom/dom-node comp) "disable")
        (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
      :reagent-render
-     (fn [] [:button.button-secondary-b-1.button-md.my-2
+     (fn [] [:button.button-secondary-b-1.button-md.my-2.mx-3
              {:on-click on-click-fn
               :data-toggle "tooltip"
               :data-placement tooltip-location
@@ -51,7 +51,7 @@
   'title-on-click-function' is triggered when header is clicked
   'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
   [title subtitle on-click-back-function]
-  [:div.row.meeting-header.shadow-straight
+  [:div.row.meeting-header.shadow-straight.m-0
    ;; arrow column
    [:div.col-md-1.back-arrow
     (when on-click-back-function
