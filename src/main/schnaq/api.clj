@@ -373,7 +373,7 @@
   "Returns the number of statements"
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (ok {:active-users-num (db/number-of-active-users)})
+    (ok {:active-users-num (db/number-of-active-discussion-users)})
     (deny-access)))
 
 (defn- statement-lengths-stats
@@ -399,7 +399,7 @@
                    :usernames-num (db/number-of-usernames timestamp-since)
                    :average-agendas (float (db/average-number-of-agendas timestamp-since))
                    :statements-num (db/number-of-statements timestamp-since)
-                   :active-users-num (db/number-of-active-users timestamp-since)
+                   :active-users-num (db/number-of-active-discussion-users timestamp-since)
                    :statement-length-stats (db/statement-length-stats timestamp-since)
                    :argument-type-stats (db/argument-type-stats timestamp-since)}}))
     (deny-access)))

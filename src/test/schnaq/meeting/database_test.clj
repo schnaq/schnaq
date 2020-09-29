@@ -156,12 +156,12 @@
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
     (let [cat-or-dog-id (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))]
-      (is (= 4 (database/number-of-active-users)))
+      (is (= 4 (database/number-of-active-discussion-users)))
       (database/add-user-if-not-exists "wooooggler")
-      (is (= 4 (database/number-of-active-users)))
+      (is (= 4 (database/number-of-active-discussion-users)))
       (@#'database/transact
         [(@#'ddb/prepare-new-argument cat-or-dog-id "wooooggler" "Alles doof" ["weil alles doof war"])])
-      (is (= 5 (database/number-of-active-users))))))
+      (is (= 5 (database/number-of-active-discussion-users))))))
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"
