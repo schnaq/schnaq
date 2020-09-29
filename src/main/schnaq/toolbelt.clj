@@ -2,9 +2,10 @@
   "Utility functions supporting the backend."
   (:require [ghostwheel.core :refer [>defn]]
             [clojure.walk :as walk])
-  (:import (java.io File)
-           (java.time ZonedDateTime)
-           (clojure.lang PersistentArrayMap)))
+  (:import (clojure.lang PersistentArrayMap)
+           (java.io File)
+           (java.time Instant)
+           (java.time.temporal ChronoUnit TemporalUnit)))
 
 (>defn create-directory!
   "Creates a directory in the project's path. Returns the absolut path of the
@@ -21,7 +22,7 @@
   "Returns an instant that represents the current date minus some days. Assumes systemDefault timezone."
   [days]
   [int? :ret inst?]
-  (.toInstant (.minusDays (ZonedDateTime/now) days)))
+  (.minus (Instant/now) ^Long days ^TemporalUnit ChronoUnit/DAYS))
 
 (>defn pull-key-up
   "Finds any occurrence of a member of `key-name` in `coll`. Then replaced the corresponding
