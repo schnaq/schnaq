@@ -759,24 +759,49 @@
        0
        (/ agendas meetings)))))
 
-(>defn number-of-active-users
-  "Returns the number of active users (With at least one statement)."
+(>defn active-discussion-authors
+  "Returns all authors active in a discussion during a period since the provided
+  timestamp."
+  [since]
+  [inst? :ret sequential?]
+  (flatten
+    (d/q
+      '[:find ?authors
+        :in $ ?since
+        :where [?authors :author/nickname _ ?tx]
+        [?tx :db/txInstant ?start-date]
+        [(< ?since ?start-date)]
+        [?statements :statement/author ?authors]]
+      (d/db (new-connection)) (Date/from since))))
+
+(>defn active-preparation-authors
+  "Returns all authors active in a the meeting preparation in a period since the
+  provided timestamp."
+  [since]
+  [inst? :ret sequential?]
+  (flatten
+    (d/q
+      '[:find ?authors
+        :in $ ?since
+        :where
+        (or
+          [?_suggestion :agenda.suggestion/ideator ?users ?tx]
+          [?_suggestion :meeting.suggestion/ideator ?users ?tx])
+        [?tx :db/txInstant ?start-date]
+        [(< ?since ?start-date)]
+        [?users :user/core-author ?authors]]
+      (d/db (new-connection)) (Date/from since))))
+
+(>defn number-of-active-discussion-users
+  "Returns the number of active users (With at least one statement or suggestion)."
   ([]
    [:ret int?]
-   (number-of-active-users max-time-back))
+   (number-of-active-discussion-users max-time-back))
   ([since]
    [inst? :ret int?]
-   (or
-     (ffirst
-       (d/q
-         '[:find (count ?authors)
-           :in $ ?since
-           :where [?authors :author/nickname _ ?tx]
-           [?tx :db/txInstant ?start-date]
-           [(< ?since ?start-date)]
-           [?statements :statement/author ?authors]]
-         (d/db (new-connection)) (Date/from since)))
-     0)))
+   (let [discussion-authors (active-discussion-authors since)
+         preparation-authors (active-preparation-authors since)]
+     (count (set (concat discussion-authors preparation-authors))))))
 
 (>defn statement-length-stats
   "Returns a map of stats about statement-length."
