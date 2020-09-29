@@ -290,11 +290,13 @@
 
 (rf/reg-event-fx
   :meeting/on-success-submit-suggestions-event
-  (fn [_ [_ _]]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :suggestions.notification/title)
-                                     :body (labels :suggestions.notification/body)
-                                     :context :success}]]]}))
+  (fn [{:keys [db]} [_ _]]
+    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+      {:fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :suggestions.notification/title)
+                                       :body (labels :suggestions.notification/body)
+                                       :context :success}]]
+            [:dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}]]]})))
 
 (rf/reg-event-fx
   :suggestions/submit
