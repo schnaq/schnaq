@@ -36,6 +36,11 @@
 
      :startpage.features/more-information "Mehr Informationen"
 
+     :startpage.demo.request/lead "Einfach demonstrieren lassen"
+     :startpage.demo.request/title "Demo anfordern"
+     :startpage.demo.request/body "Wenn Sie gerne sehen würden, wie man maximal gut schnaqen kann, führt Ihnen das einer unserer Gründer persönlich vor. Nutzen Sie dazu einfach den Button links und wir melden uns schnellstmöglich bei Ihnen."
+     :startpage.demo.request/button "Jetzt Demo anfordern!"
+
      :startpage.features.meeting-organisation/lead "Meetingplanung"
      :startpage.features.meeting-organisation/title "Gemeinsame Vorbereitung eines Meetings"
      :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeitenden mit in die Planung des Meetings ein! Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit bei der Besprechung."

@@ -30,26 +30,35 @@
    [:div.col-12.col-lg-5.offset-lg-1
     [:img.img-fluid {:src (img-path image-key)}]]])
 
+(defn- request-demo-section
+  "A button and some text to request a personal demo"
+  []
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-5.text-center
+    [:button.btn.button-secondary.font-150.mb-5 (labels :startpage.demo.request/button)]]
+   [:div.col-12.col-lg-6.offset-lg-1
+    [build-feature-text-box :startpage.demo.request]]])
+
 (defn- meeting-organisation
   "Featuring meeting-organisation with an image."
   []
-  (feature-row-image-right
-    :startpage.features/meeting-organisation
-    :startpage.features.meeting-organisation))
+  [feature-row-image-right
+   :startpage.features/meeting-organisation
+   :startpage.features.meeting-organisation])
 
 (defn- structured-discussions
   "Overview of structured discussions."
   []
-  (feature-row-image-left
-    :startpage.features/sample-discussion
-    :startpage.features.discussion))
+  [feature-row-image-left
+   :startpage.features/sample-discussion
+   :startpage.features.discussion])
 
 (defn- graph-visualization
   "Feature box showcasing the graph."
   []
-  (feature-row-image-right
-    :startpage.features/discussion-graph
-    :startpage.features.graph))
+  [feature-row-image-right
+   :startpage.features/discussion-graph
+   :startpage.features.graph])
 
 
 ;; -----------------------------------------------------------------------------
@@ -58,6 +67,7 @@
   "Collection of feature rows."
   []
   [:section.pt-5
+   [request-demo-section]
    [meeting-organisation]
    [structured-discussions]
    [graph-visualization]])
