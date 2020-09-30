@@ -1,5 +1,8 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [re-frame.core :as rf]
+  (:require [ajax.core :as ajax]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
@@ -42,7 +45,11 @@
     {:on-submit
      (fn [e]
        (js-wrap/prevent-default e)
-       (js/alert "Hello, bitte noch implementieren"))}
+       (rf/dispatch [:startpage.demo.request/send
+                     (oget e [:target :elements :requester-name :value])
+                     (oget e [:target :elements :requester-contact :value])
+                     (oget e [:target :elements :requester-company :value])
+                     (oget e [:target :elements :requester-phone :value])]))}
     [:div.form-group
      [:label {:for "demo-requester-name"}
       (labels :startpage.demo.request.modal.name/label)]
@@ -77,6 +84,29 @@
     [:div.modal-footer
      [:input.btn.btn-primary.mr-auto {:type "submit"}]
      [:small.text-muted (labels :feedbacks.modal/disclaimer)]]]])
+
+(rf/reg-event-fx
+  :startpage.demo.request/send
+  (fn [_ [_ name email company phone]]
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/emails/request-demo")
+                        :params {:name name
+                                 :email email
+                                 :company company
+                                 :phone phone}
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:startpage.demo.request/send-success]
+                        :on-failure [:ajax-failure]}]]}))
+
+(rf/reg-event-fx
+  :startpage.demo.request/send-success
+  (fn [_ _]
+    {:fx [[:dispatch [:modal {:show? false :child nil}]]
+          [:dispatch [:notification/add
+                      #:notification{:title (labels :startpage.demo.request.send.notification/title)
+                                     :body (labels :startpage.demo.request.send.notification/body)
+                                     :context :success}]]]}))
 
 (defn- request-demo-section
   "A button and some text to request a personal demo"
