@@ -338,6 +338,17 @@
               [recipient])))
       (deny-access))))
 
+(>defn- request-demo
+  "A user requests a demonstration via email."
+  [{:keys [body-params]}]
+  [:ring/request :ret :ring/response]
+  (let [{:keys [name email company phone]} body-params]
+    (emails/send-mails
+      (email-templates :demo-request/title)
+      (format (email-templates :demo-request/body) name email company phone)
+      ["info@dialogo.io"])
+    (ok {:message "Demo requested."})))
+
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
@@ -454,6 +465,7 @@
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
+    (POST "/emails/request-demo" [] request-demo)
     ;; Analytics routes
     (POST "/analytics/meetings" [] number-of-meetings)
     (POST "/analytics/usernames" [] number-of-usernames)
