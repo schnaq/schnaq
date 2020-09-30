@@ -1,6 +1,9 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.text.display-data :refer [labels img-path]]
-            [schnaq.interface.views.common :as common]))
+  (:require [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.modals.modal :as modal]))
 
 (defn- build-feature-text-box
   "Composing the text-part of a feature-row. Takes a `text-namespace` which
@@ -30,12 +33,60 @@
    [:div.col-12.col-lg-5.offset-lg-1
     [:img.img-fluid {:src (img-path image-key)}]]])
 
+(defn- request-demo-modal
+  "A modal which the user can use to request a demo"
+  []
+  [modal/modal-template
+   "Persönliche Demo anfordern"
+   [:form.form
+    {:on-submit
+     (fn [e]
+       (js-wrap/prevent-default e)
+       (js/alert "Hello, bitte noch implementieren"))}
+    [:div.form-group
+     [:label {:for "demo-requester-name"}
+      (labels :startpage.demo.request.modal.name/label)]
+     [:input {:id "demo-requester-name"
+              :class-name "form-control"
+              :placeholder (labels :startpage.demo.request.modal.name/placeholder)
+              :required true
+              :autoFocus true :name "requester-name"}]]
+    [:div.form-group.pb-2
+     [:label {:for "demo-requester-contact"}
+      (labels :startpage.demo.request.modal.email/label)]
+     [:input {:id "demo-requester-contact" :name "requester-contact"
+              :class-name "form-control" :type "email"
+              :required true
+              :placeholder (labels :startpage.demo.request.modal.email/placeholder)}]]
+    [:div.form-group
+     [:label {:for "demo-requester-company"}
+      (labels :startpage.demo.request.modal.company/label)]
+     [:input {:id "demo-requester-company" :name "requester-company"
+              :class-name "form-control"
+              :placeholder (labels :startpage.demo.request.modal.company/placeholder)}]
+     [:small.form-text.text-muted
+      (labels :feedbacks.modal/optional)]]
+    [:div.form-group
+     [:label {:for "demo-requester-phone"}
+      (labels :startpage.demo.request.modal.phone/label)]
+     [:input {:id "demo-requester-phone" :name "requester-phone"
+              :class-name "form-control" :type "tel"
+              :placeholder (labels :startpage.demo.request.modal.phone/placeholder)}]
+     [:small.form-text.text-muted
+      (labels :feedbacks.modal/optional)]]
+    [:div.modal-footer
+     [:input.btn.btn-primary.mr-auto {:type "submit"}]
+     [:small.text-muted (labels :feedbacks.modal/disclaimer)]]]])
+
 (defn- request-demo-section
   "A button and some text to request a personal demo"
   []
   [:div.row.align-items-center.feature-row
    [:div.col-12.col-lg-5.text-center
-    [:button.btn.button-secondary.font-150.mb-5 (labels :startpage.demo.request/button)]]
+    [:button.btn.button-secondary.font-150.mb-5
+     {:on-click #(rf/dispatch [:modal {:show? true :large? false
+                                       :child [request-demo-modal]}])}
+     (labels :startpage.demo.request/button)]]
    [:div.col-12.col-lg-6.offset-lg-1
     [build-feature-text-box :startpage.demo.request]]])
 
