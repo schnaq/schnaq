@@ -97,7 +97,7 @@
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
                         :on-success [:startpage.demo.request/send-success]
-                        :on-failure [:ajax-failure]}]]}))
+                        :on-failure [:startpage.demo.request/send-failure]}]]}))
 
 (rf/reg-event-fx
   :startpage.demo.request/send-success
@@ -107,6 +107,14 @@
                       #:notification{:title (labels :startpage.demo.request.send.notification/title)
                                      :body (labels :startpage.demo.request.send.notification/body)
                                      :context :success}]]]}))
+
+(rf/reg-event-fx
+  :startpage.demo.request/send-failure
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :startpage.demo.request.send.notification/failed-title)
+                                     :body (labels :startpage.demo.request.send.notification/failed-body)
+                                     :context :alert}]]]}))
 
 (defn- request-demo-section
   "A button and some text to request a personal demo"

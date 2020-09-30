@@ -50,6 +50,8 @@
      :startpage.demo.request.modal.phone/placeholder "0 1234 56789"
      :startpage.demo.request.send.notification/title "Anfrage versendet!"
      :startpage.demo.request.send.notification/body "Es wird sich schnellstmöglich jemand bei Ihnen melden."
+     :startpage.demo.request.send.notification/failed-title "Anfrage fehlgeschlagen!"
+     :startpage.demo.request.send.notification/failed-body "Etwas ist schief gelaufen. Überprüfen Sie Ihre Eingaben und versuchen Sie es bitte erneut."
 
      :startpage.features.meeting-organisation/lead "Meetingplanung"
      :startpage.features.meeting-organisation/title "Gemeinsame Vorbereitung eines Meetings"
