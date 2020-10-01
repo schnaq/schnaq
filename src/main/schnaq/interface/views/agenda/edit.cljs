@@ -125,11 +125,13 @@
   [modal/modal-template
    (labels :suggestions.modal.delete/title)
    [:<>
-    [:p (labels :suggestions.modal/primer)]
+    [:p (labels :suggestions.modal/primer-delete)]
     [:ul
      (for [suggestion suggestions]
        [:li {:key (:db/id suggestion)}
-        (:agenda.suggestion/ideator suggestion)])]]])
+        (:agenda.suggestion/ideator suggestion)])]
+    [:button.btn.btn-danger.btn-large
+     [:i {:class (str "far " (fa :trash))}] " " (labels :suggestions.modal.delete/button)]]])
 
 (defn- deletion-badge
   "Badge containing the wishes of users to delete the agenda point."

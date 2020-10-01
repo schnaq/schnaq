@@ -131,6 +131,8 @@
      ;; Suggestions
      :suggestions.modal/header "Eingereichte Vorschläge"
      :suggestions.modal/primer "Einige TeilnehmerInnen haben Ihnen Vorschläge zu Ihrem schnaq gegeben."
+     :suggestions.modal/primer-delete "Folgende TeilnehmerInnen schlagen die Löschung des Agendapunktes vor."
+     :suggestions.modal.delete/button "Entgültig löschen"
      :suggestions.modal.table/nickname "Nickname"
      :suggestions.modal.table/suggestion-title "Titel"
      :suggestions.modal.table/suggestion-description "Beschreibung"
