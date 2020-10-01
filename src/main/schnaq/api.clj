@@ -116,12 +116,21 @@
       (deny-access))))
 
 (defn- update-single-agenda!
-  "Update a single agenda, when the credentials are right."
+  "Update a single agenda, when the credentials are valid."
   [{:keys [body-params]}]
   (let [{:keys [agenda share-hash edit-hash]} body-params
         new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description])]
     (if (valid-credentials? share-hash edit-hash)
-      (ok (suggestions/update-agenda new-agenda share-hash))
+      (ok (suggestions/update-agenda! new-agenda share-hash))
+      (deny-access))))
+
+(defn- delete-agenda!
+  "Deletes a single agenda, when the credentials are valid."
+  [{:keys [body-params]}]
+  (let [{:keys [agenda-id share-hash edit-hash]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (do (db/delete-agendas [agenda-id] (:db/id (db/meeting-by-hash share-hash)))
+          (ok {:message "Deletion executed."}))
       (deny-access))))
 
 (defn- update-meeting-info!
@@ -132,7 +141,7 @@
         new-meeting (assoc (select-keys meeting [:db/id :meeting/title :meeting/description])
                       :meeting/author author)]
     (if (valid-credentials? share-hash edit-hash)
-      (ok (suggestions/update-meeting new-meeting share-hash))
+      (ok (suggestions/update-meeting! new-meeting share-hash))
       (deny-access))))
 
 (defn- meeting-suggestions
@@ -473,6 +482,7 @@
     (GET "/ping" [] ping)
     (GET "/start-discussion/:discussion-id" [] start-discussion)
     (GET "/statement-infos" [] statement-infos)
+    (POST "/agenda/delete" [] delete-agenda!)
     (POST "/agenda/update" [] update-single-agenda!)
     (POST "/author/add" [] add-author)
     (POST "/continue-discussion" [] continue-discussion)

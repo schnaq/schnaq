@@ -37,19 +37,18 @@
     (filter does-agenda-suggestion-change-anything? suggestions)
     user-id))
 
-(>defn update-agenda
+(>defn update-agenda!
   "Updates an agenda, only if the share-hash matches the :db/id of the agenda. Otherwise just returns
   the agenda."
   [new-agenda share-hash]
   [map? :meeting/share-hash :ret map?]
   (let [meeting-id (:db/id (db/meeting-by-hash share-hash))
         old-agenda (db/agenda (:db/id new-agenda))]
-    (if (and (= (:db/id old-agenda) (:db/id new-agenda))
-             (= meeting-id (:db/id (:agenda/meeting old-agenda))))
+    (if (= meeting-id (:db/id (:agenda/meeting old-agenda)))
       (db/agenda (db/update-agenda new-agenda))
       new-agenda)))
 
-(>defn update-meeting
+(>defn update-meeting!
   "Updates meeting information and returns the newly updated meeting."
   [new-meeting share-hash]
   [map? :meeting/share-hash :ret map?]

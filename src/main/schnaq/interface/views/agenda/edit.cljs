@@ -131,7 +131,33 @@
        [:li {:key (:db/id suggestion)}
         (:agenda.suggestion/ideator suggestion)])]
     [:button.btn.btn-danger.btn-large
+     {:on-click #(rf/dispatch [:suggestion.agenda/delete (first suggestions)])}
      [:i {:class (str "far " (fa :trash))}] " " (labels :suggestions.modal.delete/button)]]])
+
+(rf/reg-event-fx
+  :suggestion.agenda/delete
+  (fn [{:keys [db]} [_ suggestion]]
+    (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
+          {:agenda.suggestion/keys [agenda]} suggestion]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/agenda/delete")
+                          :params {:agenda-id (:db/id agenda)
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:suggestion.agenda/delete-success (:db/id agenda)]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :suggestion.agenda/delete-success
+  (fn [{:keys [db]} [_ agenda-id _response]]
+    {:db (update-in db [:edit-meeting :agendas] (fn [as] (remove #(= (:db/id %) agenda-id) as)))
+     :fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :suggestions.agenda/delete-title)
+                                     :body (labels :suggestions.agenda/delete-body)
+                                     :context :success}]]
+          [:modal {:show? false :child nil}]]}))
 
 (defn- deletion-badge
   "Badge containing the wishes of users to delete the agenda point."
