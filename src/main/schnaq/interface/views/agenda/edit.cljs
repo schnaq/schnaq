@@ -31,8 +31,45 @@
          [:td (get-value "description")]
          [:td.text-center
           [:button.btn.btn-success
+           {:on-click #(rf/dispatch [:suggestions.update/accept suggestion suggestion-type])}
            [:i {:class (str "far " (fa :check))
                 :style {:font-size "150%"}}]]]]))]])
+
+(rf/reg-event-fx
+  :suggestions.update/accept
+  (fn [_ [_ suggestion suggestion-type]]
+    (if (= suggestion-type :agenda.suggestion)
+      {:fx [[:dispatch [:suggestion.update.agenda/accept suggestion]]]}
+      {:fx [[:dispatch [:suggestion.update.meeting/accept suggestion]]]})))
+
+(rf/reg-event-fx
+  :suggestion.update.agenda/accept
+  (fn [{:keys [db]} [_ suggestion]]
+    (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
+          {:agenda.suggestion/keys [agenda title description]} suggestion
+          new-agenda {:db/id (:db/id agenda)
+                      :agenda/title title
+                      :agenda/description description}]
+      (println new-agenda)
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/agenda/update")
+                          :params {:agenda new-agenda
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:suggestion.update.agenda/success]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :suggestion.update.agenda/success
+  (fn [_ [_ response]]
+    {:fx [[:dispatch [:agenda/update-edit-form :agenda/title (:db/id response) (:agenda/title response)]]
+          [:dispatch [:agenda/update-edit-form :agenda/description (:db/id response) (:agenda/description response)]]
+          [:dispatch [:notification/add
+                      #:notification{:title (labels :suggestions.update.agenda/success-title)
+                                     :body (labels :suggestions.update.agenda/success-body)
+                                     :context :success}]]]}))
 
 (defn- suggestions-modal
   "Open a modal containing the suggested changes."

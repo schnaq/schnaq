@@ -140,6 +140,8 @@
      :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
      :suggestions.notification/title "Vorschläge eingereicht"
      :suggestions.notification/body "Ihre Vorschläge wurden erfolgreich verschickt!"
+     :suggestions.update.agenda/success-title "Vorschlag übernommen"
+     :suggestions.update.agenda/success-body "Der Vorschlag wurde übernommen und ist für alle TeilnehmerInnen sichtbar."
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "

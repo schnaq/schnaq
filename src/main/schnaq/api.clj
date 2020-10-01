@@ -479,14 +479,15 @@
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     ;; Analytics routes
-    (POST "/analytics" [] all-stats)))
-(POST "/analytics/active-users" [] number-of-active-users)
-(POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
-(POST "/analytics/argument-types" [] argument-type-stats)
-(POST "/analytics/meetings" [] number-of-meetings)
-(POST "/analytics/statement-lengths" [] statement-lengths-stats)
-(POST "/analytics/statements" [] number-of-statements)
-(POST "/analytics/usernames" [] number-of-usernames)
+    (POST "/analytics" [] all-stats)
+    (POST "/analytics/active-users" [] number-of-active-users)
+    (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
+    (POST "/analytics/argument-types" [] argument-type-stats)
+    (POST "/analytics/meetings" [] number-of-meetings)
+    (POST "/analytics/statement-lengths" [] statement-lengths-stats)
+    (POST "/analytics/statements" [] number-of-statements)
+    (POST "/analytics/usernames" [] number-of-usernames)))
+
 
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."

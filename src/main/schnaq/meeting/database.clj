@@ -366,7 +366,7 @@
   "Updates an agenda. Object must be complete with all required attributes."
   [agenda]
   [map? :ret int?]
-  (clean-and-update-db! (dissoc agenda :agenda/discussion) ::specs/agenda-without-discussion))
+  (clean-and-update-db! (dissoc agenda :agenda/discussion) ::specs/agenda-essentials-only))
 
 (>defn meeting-private-data
   "Return non public meeting data by id."
