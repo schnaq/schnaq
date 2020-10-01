@@ -134,6 +134,7 @@
      :suggestions.modal.table/nickname "Nickname"
      :suggestions.modal.table/suggestion-title "Titel"
      :suggestions.modal.table/suggestion-description "Beschreibung"
+     :suggestions.modal.table/suggestion-accept "Übernehmen"
      :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
      :suggestions.modal.update/title "Änderungsvorschläge"
      :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
@@ -313,4 +314,5 @@
      :eraser "fa-eraser"
      :laptop "fa-laptop-code"
      :trash "fa-trash-alt"
-     :users "fa-users"}))
+     :users "fa-users"
+     :check "fa-check-square"}))

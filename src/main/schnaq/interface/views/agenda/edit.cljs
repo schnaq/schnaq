@@ -18,16 +18,21 @@
   [:table.table
    [:thead
     [:tr
-     [:th {:width "10%"} (labels :suggestions.modal.table/nickname)]
-     [:th {:width "25%"} (labels :suggestions.modal.table/suggestion-title)]
-     [:th {:width "65%"} (labels :suggestions.modal.table/suggestion-description)]]]
+     [:th {:width "15%"} (labels :suggestions.modal.table/nickname)]
+     [:th {:width "20%"} (labels :suggestions.modal.table/suggestion-title)]
+     [:th {:width "60%"} (labels :suggestions.modal.table/suggestion-description)]
+     [:th {:width "5%"} (labels :suggestions.modal.table/suggestion-accept)]]]
    [:tbody
     (for [suggestion suggestions]
       (let [get-value #(suggestion (keyword (str (name suggestion-type) "/" %)))]
         [:tr {:key (:db/id suggestion)}
          [:td (get-value "ideator")]
          [:td (get-value "title")]
-         [:td (get-value "description")]]))]])
+         [:td (get-value "description")]
+         [:td.text-center
+          [:button.btn.btn-success
+           [:i {:class (str "far " (fa :check))
+                :style {:font-size "150%"}}]]]]))]])
 
 (defn- suggestions-modal
   "Open a modal containing the suggested changes."
