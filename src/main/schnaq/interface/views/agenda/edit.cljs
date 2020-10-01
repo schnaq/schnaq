@@ -2,14 +2,14 @@
   (:require [ajax.core :as ajax]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.agenda.agenda :as agenda]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.modals.modal :as modal]
-            [oops.core :refer [oget]]
-            [re-frame.core :as rf]
             [schnaq.interface.views.text-editor.view :as editor]))
 
 (defn- suggestions-table
