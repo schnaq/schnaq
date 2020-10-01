@@ -89,16 +89,16 @@
 (defn- feedback-modal
   "Create a modal to fetch user's feedback."
   []
-  (modal/modal-template
-    (labels :feedbacks.overview/header)
-    (common/tab-builder
-      "feedback-tabs"
-      {:link (labels :feedbacks/button)
-       :view [:<>
-              [:p (labels :feedbacks.modal/primer)]
-              [form-input]]}
-      {:link (labels :feedbacks.survey/tab)
-       :view [survey/view]})))
+  [modal/modal-template
+   (labels :feedbacks.overview/header)
+   (common/tab-builder
+     "feedback-tabs"
+     {:link (labels :feedbacks/button)
+      :view [:<>
+             [:p (labels :feedbacks.modal/primer)]
+             [form-input]]}
+     {:link (labels :feedbacks.survey/tab)
+      :view [survey/view]})])
 
 (defn button
   "Presenting the feedback button."

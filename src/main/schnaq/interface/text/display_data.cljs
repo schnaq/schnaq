@@ -36,6 +36,22 @@
 
      :startpage.features/more-information "Mehr Informationen"
 
+     :startpage.demo.request/title "Demo anfordern"
+     :startpage.demo.request/body "Wenn Sie gerne sehen würden, wie man maximal gut schnaqqen kann, führen wir Ihnen Schnaq persönlich vor. Nutzen Sie dazu einfach den Button links und wir werden uns schnellstmöglich bei Ihnen melden."
+     :startpage.demo.request/button "Jetzt Demo anfordern!"
+     :startpage.demo.request.modal.name/label "Ihr Name"
+     :startpage.demo.request.modal.name/placeholder "Mein Name"
+     :startpage.demo.request.modal.email/label "E-Mail Adresse"
+     :startpage.demo.request.modal.email/placeholder "meine@email.de"
+     :startpage.demo.request.modal.company/label "Name des Unternehmens"
+     :startpage.demo.request.modal.company/placeholder "Firmenname, falls zutreffend"
+     :startpage.demo.request.modal.phone/label "Telefon"
+     :startpage.demo.request.modal.phone/placeholder "0 1234 56789"
+     :startpage.demo.request.send.notification/title "Anfrage versendet!"
+     :startpage.demo.request.send.notification/body "Es wird sich schnellstmöglich jemand bei Ihnen melden."
+     :startpage.demo.request.send.notification/failed-title "Anfrage fehlgeschlagen!"
+     :startpage.demo.request.send.notification/failed-body "Etwas ist schief gelaufen. Überprüfen Sie Ihre Eingaben und versuchen Sie es bitte erneut."
+
      :startpage.features.meeting-organisation/lead "Meetingplanung"
      :startpage.features.meeting-organisation/title "Gemeinsame Vorbereitung eines Meetings"
      :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeitenden mit in die Planung des Meetings ein! Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit bei der Besprechung."
