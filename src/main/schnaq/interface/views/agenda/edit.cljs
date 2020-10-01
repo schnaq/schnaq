@@ -50,7 +50,6 @@
           new-agenda {:db/id (:db/id agenda)
                       :agenda/title title
                       :agenda/description description}]
-      (println new-agenda)
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/agenda/update")
                           :params {:agenda new-agenda
@@ -66,6 +65,35 @@
   (fn [_ [_ response]]
     {:fx [[:dispatch [:agenda/update-edit-form :agenda/title (:db/id response) (:agenda/title response)]]
           [:dispatch [:agenda/update-edit-form :agenda/description (:db/id response) (:agenda/description response)]]
+          [:dispatch [:notification/add
+                      #:notification{:title (labels :suggestions.update.agenda/success-title)
+                                     :body (labels :suggestions.update.agenda/success-body)
+                                     :context :success}]]]}))
+
+(rf/reg-event-fx
+  :suggestion.update.meeting/accept
+  (fn [{:keys [db]} [_ suggestion]]
+    (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
+          {:meeting.suggestion/keys [meeting title description]} suggestion
+          new-meeting {:db/id (:db/id meeting)
+                       :meeting/title title
+                       :meeting/description description}]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/meeting/info/update")
+                          :params {:meeting new-meeting
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash
+                                   :nickname (get-in db [:user :nickname] "Anonymous")}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:suggestion.update.meeting/success]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :suggestion.update.meeting/success
+  (fn [_ [_ response]]
+    {:fx [[:dispatch [:meeting/update-meeting-attribute :meeting/title (:meeting/title response)]]
+          [:dispatch [:meeting/update-meeting-attribute :meeting/description (:meeting/description response)]]
           [:dispatch [:notification/add
                       #:notification{:title (labels :suggestions.update.agenda/success-title)
                                      :body (labels :suggestions.update.agenda/success-body)

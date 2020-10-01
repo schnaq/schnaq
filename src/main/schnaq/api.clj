@@ -124,6 +124,17 @@
       (ok (suggestions/update-agenda new-agenda share-hash))
       (deny-access))))
 
+(defn- update-meeting-info!
+  "Update a single agenda, when the credentials are right."
+  [{:keys [body-params]}]
+  (let [{:keys [meeting share-hash edit-hash nickname]} body-params
+        author (db/add-user-if-not-exists nickname)
+        new-meeting (assoc (select-keys meeting [:db/id :meeting/title :meeting/description])
+                      :meeting/author author)]
+    (if (valid-credentials? share-hash edit-hash)
+      (ok (suggestions/update-meeting new-meeting share-hash))
+      (deny-access))))
+
 (defn- meeting-suggestions
   "Create suggestions for the change of a meeting."
   [request]
@@ -474,6 +485,7 @@
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
+    (POST "/meeting/info/update" [] update-meeting-info!)
     (POST "/meeting/suggestions" [] meeting-suggestions)
     (POST "/meeting/update" [] update-meeting!)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)

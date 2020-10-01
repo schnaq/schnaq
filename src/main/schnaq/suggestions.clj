@@ -48,3 +48,13 @@
              (= meeting-id (:db/id (:agenda/meeting old-agenda))))
       (db/agenda (db/update-agenda new-agenda))
       new-agenda)))
+
+(>defn update-meeting
+  "Updates meeting information and returns the newly updated meeting."
+  [new-meeting share-hash]
+  [map? :meeting/share-hash :ret map?]
+  (let [actual-meeting-id (:db/id (db/meeting-by-hash share-hash))]
+    (if (= actual-meeting-id (:db/id new-meeting))
+      (do (db/update-meeting new-meeting)
+          (db/meeting-by-hash-private share-hash))
+      new-meeting)))
