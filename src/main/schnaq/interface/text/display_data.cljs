@@ -38,7 +38,7 @@
 
      :startpage.demo.request/lead "Einfach demonstrieren lassen"
      :startpage.demo.request/title "Demo anfordern"
-     :startpage.demo.request/body "Wenn Sie gerne sehen würden, wie man maximal gut schnaqen kann, führt Ihnen das einer unserer Gründer persönlich vor. Nutzen Sie dazu einfach den Button links und wir melden uns schnellstmöglich bei Ihnen."
+     :startpage.demo.request/body "Wenn Sie gerne sehen würden, wie man maximal gut schnaqqen kann, führen wir Ihnen Schnaq persönlich vor. Nutzen Sie dazu einfach den Button links und wir werden uns schnellstmöglich bei Ihnen melden."
      :startpage.demo.request/button "Jetzt Demo anfordern!"
      :startpage.demo.request.modal.name/label "Ihr Name"
      :startpage.demo.request.modal.name/placeholder "Mein Name"
