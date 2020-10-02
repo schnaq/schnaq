@@ -17,10 +17,15 @@
         :component-did-update
         (fn [comp _argv]
           (let [[_ new-text _] (reagent/argv comp)]
-            ;; In case the update behaves weird, do not change this here but the call to
-            ;; this component.
-            (when new-text
+            ;; Update value of MDE only if the current value is empty. In all
+            ;; other cases, the `change` function of codemirror is used.
+            ;; But still update when the value in the app-db changes without anybody typing.
+            ;; (first or-clause)
+            (when (or                                       ;(not= (.value @mde-ref) new-text)
+                    (and (empty? (.value @mde-ref))
+                         new-text))
               (.value @mde-ref new-text))))
+        :component-will-unmount #(.value @mde-ref "")
         :component-did-mount
         (fn [comp]
           (let [newMDE (mde.
