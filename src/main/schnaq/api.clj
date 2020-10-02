@@ -115,6 +115,49 @@
           (ok {:text "Your schnaq has been updated."}))
       (deny-access))))
 
+(defn- update-single-agenda!
+  "Update a single agenda, when the credentials are valid."
+  [{:keys [body-params]}]
+  (let [{:keys [agenda share-hash edit-hash]} body-params
+        new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description])]
+    (if (valid-credentials? share-hash edit-hash)
+      (if-let [updated-agenda (suggestions/update-agenda! new-agenda share-hash)]
+        (ok updated-agenda)
+        (deny-access))
+      (deny-access))))
+
+(defn- delete-agenda!
+  "Deletes a single agenda, when the credentials are valid."
+  [{:keys [body-params]}]
+  (let [{:keys [agenda-id share-hash edit-hash]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (do (db/delete-agendas [agenda-id] (:db/id (db/meeting-by-hash share-hash)))
+          (ok {:message "Deletion executed."}))
+      (deny-access))))
+
+(defn- new-agenda!
+  "Creates a single new agenda, when the credentials are valid."
+  [{:keys [body-params]}]
+  (let [{:keys [agenda share-hash edit-hash]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (if-let [new-agenda (suggestions/new-agenda! agenda share-hash)]
+        (ok new-agenda)
+        (deny-access))
+      (deny-access))))
+
+(defn- update-meeting-info!
+  "Update a single agenda, when the credentials are right."
+  [{:keys [body-params]}]
+  (let [{:keys [meeting share-hash edit-hash nickname]} body-params
+        author (db/add-user-if-not-exists nickname)
+        new-meeting (assoc (select-keys meeting [:db/id :meeting/title :meeting/description])
+                      :meeting/author author)]
+    (if (valid-credentials? share-hash edit-hash)
+      (if-let [updated-meeting (suggestions/update-meeting! new-meeting share-hash)]
+        (ok updated-meeting)
+        (deny-access))
+      (deny-access))))
+
 (defn- meeting-suggestions
   "Create suggestions for the change of a meeting."
   [request]
@@ -445,38 +488,43 @@
 (def ^:private common-routes
   "Common routes for all modes."
   (routes
-    (GET "/ping" [] ping)
-    (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
-    (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
-    (GET "/meetings/by-hashes" [] meetings-by-hashes)
-    (POST "/meeting/add" [] add-meeting)
-    (POST "/meeting/update" [] update-meeting!)
-    (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
-    (POST "/meeting/suggestions" [] meeting-suggestions)
-    (POST "/author/add" [] add-author)
-    (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
+    (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+    (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
+    (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
+    (GET "/meetings/by-hashes" [] meetings-by-hashes)
+    (GET "/ping" [] ping)
     (GET "/start-discussion/:discussion-id" [] start-discussion)
     (GET "/statement-infos" [] statement-infos)
+    (POST "/agenda/delete" [] delete-agenda!)
+    (POST "/agenda/new" [] new-agenda!)
+    (POST "/agenda/update" [] update-single-agenda!)
+    (POST "/author/add" [] add-author)
     (POST "/continue-discussion" [] continue-discussion)
-    (POST "/votes/up/toggle" [] toggle-upvote-statement)
-    (POST "/votes/down/toggle" [] toggle-downvote-statement)
+    (POST "/credentials/validate" [] check-credentials)
+    (POST "/emails/request-demo" [] request-demo)
+    (POST "/emails/send-admin-center-link" [] send-admin-center-link)
+    (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/feedback/add" [] add-feedback)
     (POST "/feedbacks" [] all-feedbacks)
-    (POST "/credentials/validate" [] check-credentials)
     (POST "/graph/discussion" [] graph-data-for-agenda)
-    (POST "/emails/send-invites" [] send-invite-emails)
-    (POST "/emails/send-admin-center-link" [] send-admin-center-link)
-    (POST "/emails/request-demo" [] request-demo)
+    (POST "/meeting/add" [] add-meeting)
+    (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
+    (POST "/meeting/info/update" [] update-meeting-info!)
+    (POST "/meeting/suggestions" [] meeting-suggestions)
+    (POST "/meeting/update" [] update-meeting!)
+    (POST "/votes/down/toggle" [] toggle-downvote-statement)
+    (POST "/votes/up/toggle" [] toggle-upvote-statement)
     ;; Analytics routes
-    (POST "/analytics/meetings" [] number-of-meetings)
-    (POST "/analytics/usernames" [] number-of-usernames)
-    (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
-    (POST "/analytics/statements" [] number-of-statements)
+    (POST "/analytics" [] all-stats)
     (POST "/analytics/active-users" [] number-of-active-users)
-    (POST "/analytics/statement-lengths" [] statement-lengths-stats)
+    (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
     (POST "/analytics/argument-types" [] argument-type-stats)
-    (POST "/analytics" [] all-stats)))
+    (POST "/analytics/meetings" [] number-of-meetings)
+    (POST "/analytics/statement-lengths" [] statement-lengths-stats)
+    (POST "/analytics/statements" [] number-of-statements)
+    (POST "/analytics/usernames" [] number-of-usernames)))
+
 
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."

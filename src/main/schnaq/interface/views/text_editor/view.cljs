@@ -19,8 +19,11 @@
           (let [[_ new-text _] (reagent/argv comp)]
             ;; Update value of MDE only if the current value is empty. In all
             ;; other cases, the `change` function of codemirror is used.
-            (when (and (empty? (.value @mde-ref))
-                       new-text)
+            ;; But still update when the value in the app-db changes without anybody typing.
+            ;; (first or-clause)
+            (when (or (not= (.value @mde-ref) new-text)
+                      (and (empty? (.value @mde-ref))
+                           new-text))
               (.value @mde-ref new-text))))
         :component-will-unmount #(.value @mde-ref "")
         :component-did-mount

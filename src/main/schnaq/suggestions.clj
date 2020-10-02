@@ -36,3 +36,31 @@
   (db/suggest-agenda-updates!
     (filter does-agenda-suggestion-change-anything? suggestions)
     user-id))
+
+(>defn update-agenda!
+  "Updates an agenda, only if the share-hash matches the :db/id of the agenda."
+  [new-agenda share-hash]
+  [map? :meeting/share-hash :ret (? map?)]
+  (let [meeting-id (:db/id (db/meeting-by-hash share-hash))
+        old-agenda (db/agenda (:db/id new-agenda))]
+    (when (= meeting-id (:db/id (:agenda/meeting old-agenda)))
+      (db/agenda (db/update-agenda new-agenda)))))
+
+(>defn update-meeting!
+  "Updates meeting information and returns the newly updated meeting."
+  [new-meeting share-hash]
+  [map? :meeting/share-hash :ret (? map?)]
+  (let [actual-meeting-id (:db/id (db/meeting-by-hash share-hash))]
+    (when (= actual-meeting-id (:db/id new-meeting))
+      (db/update-meeting new-meeting)
+      (db/meeting-by-hash-private share-hash))))
+
+(>defn new-agenda!
+  "Creates a new agenda, when the meeting-id is the same as the one from the share-hash."
+  [agenda share-hash]
+  [map? :meeting/share-hash :ret (? map?)]
+  (let [actual-meeting-id (:db/id (db/meeting-by-hash share-hash))
+        agenda-meeting-id (:db/id (:agenda/meeting agenda))]
+    (when (= actual-meeting-id agenda-meeting-id)
+      (db/agenda (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda)
+                                      agenda-meeting-id)))))

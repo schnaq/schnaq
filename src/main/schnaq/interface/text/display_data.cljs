@@ -131,14 +131,21 @@
      ;; Suggestions
      :suggestions.modal/header "Eingereichte Vorschläge"
      :suggestions.modal/primer "Einige TeilnehmerInnen haben Ihnen Vorschläge zu Ihrem schnaq gegeben."
+     :suggestions.modal/primer-delete "Folgende TeilnehmerInnen schlagen die Löschung des Agendapunktes vor."
+     :suggestions.modal.delete/button "Entgültig löschen"
      :suggestions.modal.table/nickname "Nickname"
      :suggestions.modal.table/suggestion-title "Titel"
      :suggestions.modal.table/suggestion-description "Beschreibung"
+     :suggestions.modal.table/suggestion-accept "Übernehmen"
      :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
      :suggestions.modal.update/title "Änderungsvorschläge"
      :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
      :suggestions.notification/title "Vorschläge eingereicht"
      :suggestions.notification/body "Ihre Vorschläge wurden erfolgreich verschickt!"
+     :suggestions.update.agenda/success-title "Vorschlag übernommen"
+     :suggestions.update.agenda/success-body "Der Vorschlag wurde übernommen und ist für alle TeilnehmerInnen sichtbar."
+     :suggestions.agenda/delete-title "Agendapunkt gelöscht"
+     :suggestions.agenda/delete-body "Der Agendapunkt wurde erfolgreich gelöscht"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "
@@ -314,4 +321,5 @@
      :eraser "fa-eraser"
      :laptop "fa-laptop-code"
      :trash "fa-trash-alt"
-     :users "fa-users"}))
+     :users "fa-users"
+     :check "fa-check-square"}))

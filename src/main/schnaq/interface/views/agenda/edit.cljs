@@ -2,41 +2,142 @@
   (:require [ajax.core :as ajax]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.agenda.agenda :as agenda]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.modals.modal :as modal]
-            [oops.core :refer [oget]]
-            [re-frame.core :as rf]
             [schnaq.interface.views.text-editor.view :as editor]))
 
 (defn- suggestions-table
   "Show all suggestions."
-  [suggestions suggestion-type]
+  [suggestions suggestion-type addition?]
   [:table.table
    [:thead
     [:tr
-     [:th {:width "10%"} (labels :suggestions.modal.table/nickname)]
-     [:th {:width "25%"} (labels :suggestions.modal.table/suggestion-title)]
-     [:th {:width "65%"} (labels :suggestions.modal.table/suggestion-description)]]]
+     [:th {:width "15%"} (labels :suggestions.modal.table/nickname)]
+     [:th {:width "20%"} (labels :suggestions.modal.table/suggestion-title)]
+     [:th {:width "60%"} (labels :suggestions.modal.table/suggestion-description)]
+     [:th {:width "5%"} (labels :suggestions.modal.table/suggestion-accept)]]]
    [:tbody
     (for [suggestion suggestions]
       (let [get-value #(suggestion (keyword (str (name suggestion-type) "/" %)))]
         [:tr {:key (:db/id suggestion)}
          [:td (get-value "ideator")]
          [:td (get-value "title")]
-         [:td (get-value "description")]]))]])
+         [:td (get-value "description")]
+         [:td.text-center
+          [:button.btn.btn-success
+           {:on-click #(rf/dispatch [:suggestions.update/accept suggestion suggestion-type addition?])}
+           [:i {:class (str "far " (fa :check))
+                :style {:font-size "150%"}}]]]]))]])
+
+(rf/reg-event-fx
+  :suggestions.update/accept
+  (fn [_ [_ suggestion suggestion-type addition?]]
+    (if (= suggestion-type :agenda.suggestion)
+      (if addition?
+        {:fx [[:dispatch [:suggestion.new.agenda/accept suggestion]]]}
+        {:fx [[:dispatch [:suggestion.update.agenda/accept suggestion]]]})
+      {:fx [[:dispatch [:suggestion.update.meeting/accept suggestion]]]})))
+
+(rf/reg-event-fx
+  :suggestion.update.agenda/accept
+  (fn [{:keys [db]} [_ suggestion]]
+    (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
+          {:agenda.suggestion/keys [agenda title description]} suggestion
+          new-agenda {:db/id (:db/id agenda)
+                      :agenda/title title
+                      :agenda/description description}]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/agenda/update")
+                          :params {:agenda new-agenda
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:suggestion.update.agenda/success]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :suggestion.update.agenda/success
+  (fn [_ [_ response]]
+    {:fx [[:dispatch [:agenda/update-edit-form :agenda/title (:db/id response) (:agenda/title response)]]
+          [:dispatch [:agenda/update-edit-form :agenda/description (:db/id response) (:agenda/description response)]]
+          [:dispatch [:notification/add
+                      #:notification{:title (labels :suggestions.update.agenda/success-title)
+                                     :body (labels :suggestions.update.agenda/success-body)
+                                     :context :success}]]]}))
+
+(rf/reg-event-fx
+  :suggestion.new.agenda/accept
+  (fn [{:keys [db]} [_ suggestion]]
+    (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
+          {:agenda.suggestion/keys [title description meeting]} suggestion
+          new-agenda {:agenda/title title
+                      :agenda/description description
+                      :agenda/meeting meeting}]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/agenda/new")
+                          :params {:agenda new-agenda
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:suggestion.new.agenda/success]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :suggestion.new.agenda/success
+  (fn [{:keys [db]} [_ response]]
+    {:db (update-in db [:edit-meeting :agendas] conj response)
+     :fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :suggestions.update.agenda/success-title)
+                                     :body (labels :suggestions.update.agenda/success-body)
+                                     :context :success}]]]}))
+
+(rf/reg-event-fx
+  :suggestion.update.meeting/accept
+  (fn [{:keys [db]} [_ suggestion]]
+    (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
+          {:meeting.suggestion/keys [meeting title description]} suggestion
+          new-meeting {:db/id (:db/id meeting)
+                       :meeting/title title
+                       :meeting/description description}]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/meeting/info/update")
+                          :params {:meeting new-meeting
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash
+                                   :nickname (get-in db [:user :nickname] "Anonymous")}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:suggestion.update.meeting/success]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :suggestion.update.meeting/success
+  (fn [_ [_ response]]
+    {:fx [[:dispatch [:meeting/update-meeting-attribute :meeting/title (:meeting/title response)]]
+          [:dispatch [:meeting/update-meeting-attribute :meeting/description (:meeting/description response)]]
+          [:dispatch [:notification/add
+                      #:notification{:title (labels :suggestions.update.agenda/success-title)
+                                     :body (labels :suggestions.update.agenda/success-body)
+                                     :context :success}]]]}))
 
 (defn- suggestions-modal
   "Open a modal containing the suggested changes."
-  [suggestions suggestion-type modal-title]
-  [modal/modal-template
-   modal-title
-   [:<>
-    [:p (labels :suggestions.modal/primer)]
-    [suggestions-table suggestions suggestion-type]]])
+  ([suggestions suggestion-type modal-title]
+   [suggestions-modal suggestions suggestion-type modal-title false])
+  ([suggestions suggestion-type modal-title addition?]
+   [modal/modal-template
+    modal-title
+    [:<>
+     [:p (labels :suggestions.modal/primer)]
+     [suggestions-table suggestions suggestion-type addition?]]]))
 
 (defn- update-suggestions-badge
   "Show update-suggestion badge."
@@ -55,11 +156,39 @@
   [modal/modal-template
    (labels :suggestions.modal.delete/title)
    [:<>
-    [:p (labels :suggestions.modal/primer)]
+    [:p (labels :suggestions.modal/primer-delete)]
     [:ul
      (for [suggestion suggestions]
        [:li {:key (:db/id suggestion)}
-        (:agenda.suggestion/ideator suggestion)])]]])
+        (:agenda.suggestion/ideator suggestion)])]
+    [:button.btn.btn-danger.btn-large
+     {:on-click #(rf/dispatch [:suggestion.agenda/delete (first suggestions)])}
+     [:i {:class (str "far " (fa :trash))}] " " (labels :suggestions.modal.delete/button)]]])
+
+(rf/reg-event-fx
+  :suggestion.agenda/delete
+  (fn [{:keys [db]} [_ suggestion]]
+    (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
+          {:agenda.suggestion/keys [agenda]} suggestion]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/agenda/delete")
+                          :params {:agenda-id (:db/id agenda)
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:suggestion.agenda/delete-success (:db/id agenda)]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :suggestion.agenda/delete-success
+  (fn [{:keys [db]} [_ agenda-id _response]]
+    {:db (update-in db [:edit-meeting :agendas] (fn [as] (remove #(= (:db/id %) agenda-id) as)))
+     :fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :suggestions.agenda/delete-title)
+                                     :body (labels :suggestions.agenda/delete-body)
+                                     :context :success}]]
+          [:dispatch [:modal {:show? false :child nil}]]]}))
 
 (defn- deletion-badge
   "Badge containing the wishes of users to delete the agenda point."
@@ -82,7 +211,7 @@
       :on-click #(rf/dispatch [:modal {:show? true
                                        :large? true
                                        :child [suggestions-modal suggestions :agenda.suggestion
-                                               (labels :suggestions.modal.new/title)]}])}
+                                               (labels :suggestions.modal.new/title) true]}])}
      [:i {:class (str "m-auto fas " (fa :add))}] " "
      (count suggestions)]))
 
