@@ -89,30 +89,6 @@
     [img-text (img-path :elephant-talk)
      (labels :meetings/educate-on-link-text-subtitle)]]])
 
-(defn- educate-admin-element
-  "Present edit-functions to user."
-  [share-hash edit-hash]
-  [:<>
-   [:section.row.mb-3
-    ;; edit
-    [:div.col-md-6
-     [:div.share-link-icons
-      [img-text (img-path :elephant-erase)
-       (labels :meeting/educate-on-edit)]]
-     [:button.btn.button-secondary.float-left.my-2.w-100
-      {:role "button"
-       :on-click #(rf/dispatch [:navigation/navigate
-                                :routes.meeting/edit
-                                {:share-hash share-hash :edit-hash edit-hash}])}
-      (labels :meetings/edit-schnaq-button)]]
-    ;; admin hash
-    [:div.col-md-6.share-link-icons
-     [img-text (img-path :elephant-admin)
-      (labels :meeting/educate-on-admin)]
-     [:div.py-3
-      [copy-link-form get-admin-center-link "admin-center"]]]]])
-
-
 ;; -----------------------------------------------------------------------------
 
 (>defn- invite-participants-form
@@ -140,17 +116,7 @@
       [:button.btn.btn-outline-primary
        (labels :meeting.admin/send-invites-button-text)]]]))
 
-(defn- invite-participants-tabs
-  "Share link and invite via mail in a tabbed view."
-  []
-  (common/tab-builder
-    "invite-participants"
-    {:link (labels :meeting.admin-center.invite/via-link)
-     :view [:<>
-            [educate-element]
-            [copy-link-form get-share-link "share-hash"]]}
-    {:link (labels :meeting.admin-center.invite/via-mail)
-     :view [invite-participants-form]}))
+
 
 (rf/reg-event-fx
   :meeting.admin/send-admin-center-link
@@ -209,8 +175,18 @@
   "Send admin link via mail to the creator."
   []
   [:section
-   [:h4 (labels :meeting.admin-center.edit.link/header)]
    [:p.lead (labels :meeting.admin-center.edit.link/primer)]
+   [:section.row.mb-3
+    ;; elephant admin
+    [:div.col-md-6
+     [:div.share-link-icons
+      [img-text (img-path :elephant-admin)
+       (labels :meeting.admin-center.edit.link/admin)]]]
+    ;; elephant edit
+    [:div.col-md-6.share-link-icons
+     [img-text (img-path :elephant-erase)
+      (labels :meeting.admin-center.edit.link/admin-privilges)]]]
+   ;; admin mail input
    (let [input-id "admin-link-mail-address"]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]
@@ -230,23 +206,29 @@
       [:button.btn.btn-outline-primary
        (labels :meeting.admin-center.edit.link.form/submit-button)]])])
 
-(defn- educate-admin-element-tabs
-  "Composing admin-related sections."
-  [share-hash edit-hash]
+(defn- invite-participants-tabs
+  "Share link and invite via mail in a tabbed view."
+  []
   (common/tab-builder
-    "edit"
-    {:link (labels :meeting.admin-center.edit/heading)
-     :view [educate-admin-element share-hash edit-hash]}
-    {:link (labels :meeting.admin-center.edit/send-link)
-     :view [send-admin-center-link share-hash edit-hash]}))
-
+    "invite-participants"
+    ;; participants access via link
+    {:link (labels :meeting.admin-center.invite/via-link)
+     :view [:<>
+            [educate-element]
+            [copy-link-form get-share-link "share-hash"]]}
+    ;; participants access via mail
+    {:link (labels :meeting.admin-center.invite/via-mail)
+     :view [invite-participants-form]}
+    ;; admin access via mail
+    {:link (labels :meeting.admin-center.edit.link/header)
+     :view [send-admin-center-link]}))
 
 ;; -----------------------------------------------------------------------------
 
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
   []
-  (let [{:meeting/keys [share-hash edit-hash title]} @(rf/subscribe [:meeting/last-added])
+  (let [{:meeting/keys [share-hash _edit-hash title]} @(rf/subscribe [:meeting/last-added])
         spacer [:div.pb-5.mt-3]]
     ;; display admin center
     [:<>
@@ -256,8 +238,6 @@
       (gstring/format (labels :meeting.admin-center/subheading) title)]
      [:div.container.px-3.px-md-5.py-3.text-center
       [invite-participants-tabs]
-      spacer
-      [educate-admin-element-tabs share-hash edit-hash]
       spacer
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
