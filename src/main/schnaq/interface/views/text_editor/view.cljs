@@ -21,7 +21,6 @@
             (when (and new-text
                        (not= (.value @mde-ref) new-text))
               (.value @mde-ref new-text))))
-        :component-will-unmount #(.value @mde-ref "")
         :component-did-mount
         (fn [comp]
           (let [newMDE (mde.
