@@ -50,7 +50,7 @@
 (>defn update-meeting!
   "Updates meeting information and returns the newly updated meeting."
   [new-meeting share-hash]
-  [map? :meeting/share-hash :ret map?]
+  [map? :meeting/share-hash :ret (? map?)]
   (let [actual-meeting-id (:db/id (db/meeting-by-hash share-hash))]
     (when (= actual-meeting-id (:db/id new-meeting))
       (db/update-meeting new-meeting)
