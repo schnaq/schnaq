@@ -104,7 +104,7 @@
 (rf/reg-event-db
   :agenda/increase-form-num
   (fn [db _]
-    (assoc-in db [:agenda :creating :all (random-uuid)] {:title ""})))
+    (assoc-in db [:agenda :creating :all (random-uuid)] {})))
 
 (rf/reg-event-db
   :agenda/update-title

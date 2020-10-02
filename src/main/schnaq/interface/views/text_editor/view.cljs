@@ -21,9 +21,9 @@
             ;; other cases, the `change` function of codemirror is used.
             ;; But still update when the value in the app-db changes without anybody typing.
             ;; (first or-clause)
-            (when (or (not= (.value @mde-ref) new-text)
-                      (and (empty? (.value @mde-ref))
-                           new-text))
+            (when (or                                       ;(not= (.value @mde-ref) new-text)
+                    (and (empty? (.value @mde-ref))
+                         new-text))
               (.value @mde-ref new-text))))
         :component-will-unmount #(.value @mde-ref "")
         :component-did-mount
