@@ -307,6 +307,7 @@
      :carry "fa-people-carry"
      :cog "fa-cogs"
      :comment "fa-comments"
+     :comment-alt "fa-comment-alt"
      :copy "fa-copy"
      :delete-icon "fa-times-circle"
      :edit "fa-edit"
