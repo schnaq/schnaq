@@ -38,8 +38,7 @@
     user-id))
 
 (>defn update-agenda!
-  "Updates an agenda, only if the share-hash matches the :db/id of the agenda. Otherwise just returns
-  the agenda."
+  "Updates an agenda, only if the share-hash matches the :db/id of the agenda."
   [new-agenda share-hash]
   [map? :meeting/share-hash :ret (? map?)]
   (let [meeting-id (:db/id (db/meeting-by-hash share-hash))
