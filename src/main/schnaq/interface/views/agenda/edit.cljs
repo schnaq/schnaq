@@ -252,7 +252,7 @@
     [:<>
      [agenda/agenda-form
       delete-agenda-fn
-      (:agenda/description agenda)
+      agenda
       description-update-fn
       (edit-agenda-title-attributes db-id agenda)
       [badge-wrapper
@@ -264,32 +264,33 @@
          {:key (str "deletion-badge-" (:db/id agenda))})]]]))
 
 (defn- editable-meeting-info [selected-meeting]
-  [:div.agenda-meeting-container.shadow-straight.text-left.p-3
-   ;; title form
-   [:input#meeting-title.form-control.form-title.form-border-bottom.mb-2
-    {:value (:meeting/title selected-meeting)
-     :type "text"
-     :name "meeting-title"
-     :auto-complete "off"
-     :required true
-     :placeholder (labels :meeting-form-title)
-     :id (str "meeting-title-" (:db/id selected-meeting))
-     :on-change
-     #(rf/dispatch
-        [:meeting/update-meeting-attribute :meeting/title (oget % [:target :value])])}]
-   ;; description form
-   [editor/view
-    (:meeting/description selected-meeting)
-    #(rf/dispatch
-       [:meeting/update-meeting-attribute :meeting/description %])
-    nil]
-   [badge-wrapper
-    (with-meta
-      [update-suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]
-      {:key (str "suggestion-badge-" (:db/id selected-meeting))})
-    (with-meta
-      [addition-badge]
-      {:key (str "addition-badge-" (:db/id selected-meeting))})]])
+  (let [meeting-updates @(rf/subscribe [:agenda.edit/meeting-description-update])]
+    [:div.agenda-meeting-container.shadow-straight.text-left.p-3
+     ;; title form
+     [:input#meeting-title.form-control.form-title.form-border-bottom.mb-2
+      {:value (:meeting/title selected-meeting)
+       :type "text"
+       :name "meeting-title"
+       :auto-complete "off"
+       :required true
+       :placeholder (labels :meeting-form-title)
+       :id (str "meeting-title-" (:db/id selected-meeting))
+       :on-change
+       #(rf/dispatch
+          [:meeting/update-meeting-attribute :meeting/title (oget % [:target :value])])}]
+     ;; description form
+     [editor/view
+      (:meeting/description selected-meeting)
+      #(rf/dispatch
+         [:meeting/update-meeting-attribute :meeting/description %])
+      meeting-updates]
+     [badge-wrapper
+      (with-meta
+        [update-suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]
+        {:key (str "suggestion-badge-" (:db/id selected-meeting))})
+      (with-meta
+        [addition-badge]
+        {:key (str "addition-badge-" (:db/id selected-meeting))})]]))
 
 (>defn- editable-meeting-template
   "Can be used to present an editable meeting in different views. Customize the heading
@@ -368,13 +369,18 @@
 
 (rf/reg-sub
   :agenda.edit/agenda-description-update
-  (fn [db _]
-    (-> db :edit-meeting-updates :agenda-descriptions)))
+  (fn [db [_ id]]
+    (get-in db [:edit-meeting-updates :agenda-descriptions id])))
 
 (rf/reg-event-db
   :agenda.edit/set-agenda-description-update
   (fn [db [_ id value]]
-    (assoc-in db [:edit-meeting-updates :agenda-description id] value)))
+    (assoc-in db [:edit-meeting-updates :agenda-descriptions id] value)))
+
+(rf/reg-event-db
+  :agenda.edit/reset-edit-updates
+  (fn [db _]
+    (assoc db :edit-meeting-updates {})))
 
 ;; delete agenda events
 

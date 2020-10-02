@@ -44,7 +44,7 @@
      (let [delete-agenda-fn #(rf/dispatch [:agenda/delete-temporary suffix])
            update-description-fn (fn [value] (agenda/new-agenda-local :description value suffix))]
        [:div {:key suffix}
-        [agenda/agenda-form delete-agenda-fn (:description agenda) update-description-fn (create-agenda-title-attributes suffix)]]))])
+        [agenda/agenda-form delete-agenda-fn agenda update-description-fn (create-agenda-title-attributes suffix)]]))])
 
 (defn view []
   (let [temporary-agendas @(rf/subscribe [:agendas.temporary/all])

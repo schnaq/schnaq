@@ -19,7 +19,8 @@
           (let [[_ _ _ text-update _] (reagent/argv comp)]
             ;; Update value of MDE only if the current value is different to the current one.
             (when text-update
-              (.value @mde-ref text-update))))
+              (.value @mde-ref text-update)
+              (rf/dispatch [:agenda.edit/reset-edit-updates]))))
         :component-did-mount
         (fn [comp]
           (let [newMDE (mde.

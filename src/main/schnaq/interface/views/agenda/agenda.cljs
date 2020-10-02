@@ -27,10 +27,11 @@
 (defn agenda-form
   "A form for creating a new agenda. The new agenda is automatically saved in the
   app-state according to the suffix."
-  ([delete-fn description description-submit-fn title-attributes]
-   (agenda-form delete-fn description description-submit-fn title-attributes nil))
-  ([delete-fn description description-submit-fn title-attributes children]
-   (let [min-description-height "150px"]
+  ([delete-fn agenda description-submit-fn title-attributes]
+   (agenda-form delete-fn agenda description-submit-fn title-attributes nil))
+  ([delete-fn agenda description-submit-fn title-attributes children]
+   (let [min-description-height "150px"
+         agenda-updates @(rf/subscribe [:agenda.edit/agenda-description-update (:db/id agenda)])]
      [:<>
       [:div.agenda-line]
       [:div.agenda-point.shadow-straight.pb-3
@@ -45,7 +46,7 @@
            [:i.clickable {:class (str "m-auto fas fa-2x " (data/fa :delete-icon))}]]]]]
        ;; description
        [:div.text-left
-        [editor/view description description-submit-fn nil min-description-height]]
+        [editor/view (:agenda/description agenda) description-submit-fn agenda-updates min-description-height]]
        children]])))
 
 (defn add-agenda-button [number-of-forms add-event]
