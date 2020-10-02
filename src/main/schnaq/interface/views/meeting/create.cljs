@@ -29,25 +29,25 @@
      :required true
      :placeholder (labels :meeting-form-title-placeholder)}]])
 
-(defn create-agenda-title-attributes [agenda-num]
+(defn- create-agenda-title-attributes [suffix]
   {:type "text"
-   :name (str "title-" agenda-num)
+   :name (str "title-" suffix)
    :auto-complete "off"
    :required true
-   :placeholder (str (labels :agenda/point) (inc agenda-num))
-   :id (str "title-" agenda-num)
-   :on-key-up #(agenda/new-agenda-local :title (oget % [:target :value]) agenda-num)})
+   :placeholder (labels :agenda/point)
+   :id (str "title-" suffix)
+   :on-key-up #(agenda/new-agenda-local :title (oget % [:target :value]) suffix)})
 
-(defn agendas [number-of-forms]
+(defn- agendas [all-agendas]
   [:<>
-   (for [agenda-num (range number-of-forms)]
-     (let [delete-agenda-fn #(rf/dispatch [:agenda/delete-temporary agenda-num])
-           update-description-fn (fn [value] (agenda/new-agenda-local :description value agenda-num))]
-       [:div {:key agenda-num}
-        [agenda/agenda-form delete-agenda-fn "" update-description-fn (create-agenda-title-attributes agenda-num)]]))])
+   (for [[suffix agenda] all-agendas]
+     (let [delete-agenda-fn #(rf/dispatch [:agenda/delete-temporary suffix])
+           update-description-fn (fn [value] (agenda/new-agenda-local :description value suffix))]
+       [:div {:key suffix}
+        [agenda/agenda-form delete-agenda-fn (:description agenda) update-description-fn (create-agenda-title-attributes suffix)]]))])
 
 (defn view []
-  (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])
+  (let [temporary-agendas @(rf/subscribe [:agendas.temporary/all])
         description-storage-key :meeting.create/description]
     [:div.container.py-3
      [:form
@@ -60,7 +60,7 @@
        [meeting-title-input]
        [editor/view-store-on-change description-storage-key]]
       [:div.agenda-container.text-center
-       [agendas number-of-forms]
+       [agendas temporary-agendas]
        [:div.agenda-line]
-       [agenda/add-agenda-button number-of-forms :agenda/increase-form-num]
+       [agenda/add-agenda-button (count temporary-agendas) :agenda/increase-form-num]
        [submit-meeting-button]]]]))

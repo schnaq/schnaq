@@ -104,29 +104,27 @@
 (rf/reg-event-db
   :agenda/increase-form-num
   (fn [db _]
-    (update-in db [:agenda :number-of-forms] inc)))
+    (assoc-in db [:agenda :creating :all (random-uuid)] {})))
 
 (rf/reg-event-db
   :agenda/update-title
   (fn [db [_ content suffix]]
-    (assoc-in db [:agenda :all suffix :title] content)))
+    (assoc-in db [:agenda :creating :all suffix :title] content)))
 
 (rf/reg-event-db
   :agenda/update-description
   (fn [db [_ content suffix]]
-    (assoc-in db [:agenda :all suffix :description] content)))
+    (assoc-in db [:agenda :creating :all suffix :description] content)))
 
 (rf/reg-event-db
   :agenda/reset-temporary-entries
   (fn [db _]
-    (assoc db :agenda {})))
+    (assoc-in db [:agenda :creating :all] [])))
 
 (rf/reg-event-db
   :agenda/delete-temporary
   (fn [db [_ suffix]]
-    (-> db
-        (update-in [:agenda :number-of-forms] dec)
-        (update-in [:agenda :all] dissoc suffix))))
+    (update-in db [:agenda :creating :all] dissoc suffix)))
 
 (rf/reg-event-db
   :agenda/choose
@@ -141,9 +139,9 @@
 ;; #### Subs ####
 
 (rf/reg-sub
-  :agenda/number-of-forms
+  :agendas.temporary/all
   (fn [db _]
-    (-> db :agenda :number-of-forms)))
+    (get-in db [:agenda :creating :all] [])))
 
 (rf/reg-sub
   :current-agendas
