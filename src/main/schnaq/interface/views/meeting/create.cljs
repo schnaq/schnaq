@@ -44,7 +44,7 @@
      (let [delete-agenda-fn #(rf/dispatch [:agenda/delete-temporary agenda-num])
            update-description-fn (fn [value] (agenda/new-agenda-local :description value agenda-num))]
        [:div {:key agenda-num}
-        [agenda/agenda-form delete-agenda-fn nil update-description-fn (create-agenda-title-attributes agenda-num)]]))])
+        [agenda/agenda-form delete-agenda-fn "" update-description-fn (create-agenda-title-attributes agenda-num)]]))])
 
 (defn view []
   (let [number-of-forms @(rf/subscribe [:agenda/number-of-forms])
