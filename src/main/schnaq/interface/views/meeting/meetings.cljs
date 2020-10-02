@@ -69,7 +69,7 @@
   :meeting.creation/new
   (fn [{:keys [db]} [_ {:meeting/keys [title description] :as new-meeting}]]
     (let [nickname (get-in db [:user :name] "Anonymous")
-          agendas (get-in db [:agenda :all] [])
+          agendas (get-in db [:agenda :creating :all] [])
           stub-agendas [{:title title
                          :description description}]
           agendas-to-send (if (zero? (count agendas)) stub-agendas (vals agendas))]
