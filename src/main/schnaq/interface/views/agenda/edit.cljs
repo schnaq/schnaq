@@ -67,6 +67,7 @@
   (fn [_ [_ response]]
     {:fx [[:dispatch [:agenda/update-edit-form :agenda/title (:db/id response) (:agenda/title response)]]
           [:dispatch [:agenda/update-edit-form :agenda/description (:db/id response) (:agenda/description response)]]
+          [:dispatch [:agenda.edit/set-agenda-description-update (:db/id response) (:agenda/description response)]]
           [:dispatch [:notification/add
                       #:notification{:title (labels :suggestions.update.agenda/success-title)
                                      :body (labels :suggestions.update.agenda/success-body)
@@ -123,6 +124,7 @@
   (fn [_ [_ response]]
     {:fx [[:dispatch [:meeting/update-meeting-attribute :meeting/title (:meeting/title response)]]
           [:dispatch [:meeting/update-meeting-attribute :meeting/description (:meeting/description response)]]
+          [:dispatch [:agenda.edit/set-meeting-description-update (:meeting/description response)]]
           [:dispatch [:notification/add
                       #:notification{:title (labels :suggestions.update.agenda/success-title)
                                      :body (labels :suggestions.update.agenda/success-body)
@@ -279,7 +281,8 @@
    [editor/view
     (:meeting/description selected-meeting)
     #(rf/dispatch
-       [:meeting/update-meeting-attribute :meeting/description %])]
+       [:meeting/update-meeting-attribute :meeting/description %])
+    nil]
    [badge-wrapper
     (with-meta
       [update-suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]
@@ -345,12 +348,33 @@
   (fn [db [_ agendas]]
     (assoc db :edit-meeting {:agendas agendas
                              :meeting (get-in db [:meeting :selected])
-                             :delete-agendas #{}})))
+                             :delete-agendas #{}}
+              :edit-meeting-updates {})))
 
 (rf/reg-sub
   :agenda/current-edit-info
   (fn [db _]
     (:edit-meeting db)))
+
+(rf/reg-sub
+  :agenda.edit/meeting-description-update
+  (fn [db _]
+    (-> db :edit-meeting-updates :meeting-description)))
+
+(rf/reg-event-db
+  :agenda.edit/set-meeting-description-update
+  (fn [db [_ value]]
+    (assoc-in db [:edit-meeting-updates :meeting-description] value)))
+
+(rf/reg-sub
+  :agenda.edit/agenda-description-update
+  (fn [db _]
+    (-> db :edit-meeting-updates :agenda-descriptions)))
+
+(rf/reg-event-db
+  :agenda.edit/set-agenda-description-update
+  (fn [db [_ id value]]
+    (assoc-in db [:edit-meeting-updates :agenda-description id] value)))
 
 ;; delete agenda events
 
