@@ -76,9 +76,10 @@
   :suggestion.new.agenda/accept
   (fn [{:keys [db]} [_ suggestion]]
     (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
-          {:agenda.suggestion/keys [title description]} suggestion
+          {:agenda.suggestion/keys [title description meeting]} suggestion
           new-agenda {:agenda/title title
-                      :agenda/description description}]
+                      :agenda/description description
+                      :agenda/meeting meeting}]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/agenda/new")
                           :params {:agenda new-agenda
@@ -86,8 +87,17 @@
                                    :edit-hash edit-hash}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
-                          :on-success [:suggestion.update.agenda/success]
+                          :on-success [:suggestion.new.agenda/success]
                           :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :suggestion.new.agenda/success
+  (fn [{:keys [db]} [_ response]]
+    {:db (update-in db [:edit-meeting :agendas] conj response)
+     :fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :suggestions.update.agenda/success-title)
+                                     :body (labels :suggestions.update.agenda/success-body)
+                                     :context :success}]]]}))
 
 (rf/reg-event-fx
   :suggestion.update.meeting/accept

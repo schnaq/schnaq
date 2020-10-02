@@ -57,3 +57,13 @@
       (do (db/update-meeting new-meeting)
           (db/meeting-by-hash-private share-hash))
       new-meeting)))
+
+(>defn new-agenda!
+  "Creates a new agenda, when the meeting-id is the same as the one from the share-hash."
+  [agenda share-hash]
+  [map? :meeting/share-hash :ret (? map?)]
+  (let [actual-meeting-id (:db/id (db/meeting-by-hash share-hash))
+        agenda-meeting-id (:db/id (:agenda/meeting agenda))]
+    (when (= actual-meeting-id agenda-meeting-id)
+      (db/agenda (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda)
+                                      agenda-meeting-id)))))

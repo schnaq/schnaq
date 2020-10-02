@@ -133,6 +133,16 @@
           (ok {:message "Deletion executed."}))
       (deny-access))))
 
+(defn- new-agenda!
+  "Creates a single new agenda, when the credentials are valid."
+  [{:keys [body-params]}]
+  (let [{:keys [agenda share-hash edit-hash]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (if-let [new-agenda (suggestions/new-agenda! agenda share-hash)]
+        (ok new-agenda)
+        (deny-access))
+      (deny-access))))
+
 (defn- update-meeting-info!
   "Update a single agenda, when the credentials are right."
   [{:keys [body-params]}]
@@ -483,6 +493,7 @@
     (GET "/start-discussion/:discussion-id" [] start-discussion)
     (GET "/statement-infos" [] statement-infos)
     (POST "/agenda/delete" [] delete-agenda!)
+    (POST "/agenda/new" [] new-agenda!)
     (POST "/agenda/update" [] update-single-agenda!)
     (POST "/author/add" [] add-author)
     (POST "/continue-discussion" [] continue-discussion)
