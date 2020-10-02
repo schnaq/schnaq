@@ -31,18 +31,27 @@
         admin-access-map @(rf/subscribe [:meetings/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
     [:div.text-center
-     ;; admin panel button
+     ;; check for admin privileges
      (when edit-hash
-       [tooltip-button "bottom"
-        (labels :meeting/admin-center-tooltip)
-        [:i {:class (str "m-auto fas " (fa :cog))}]
-        #(rf/dispatch [:navigation/navigate
-                       :routes.meeting/admin-center
-                       {:share-hash share-hash :edit-hash edit-hash}])])
+       [:<>
+        ;; admin panel button
+        [tooltip-button "bottom"
+         (labels :meeting/admin-center-tooltip)
+         [:i {:class (str "m-auto fas " (fa :cog))}]
+         #(rf/dispatch [:navigation/navigate
+                        :routes.meeting/admin-center
+                        {:share-hash share-hash :edit-hash edit-hash}])]
+        ;; edit button
+        [tooltip-button "bottom"
+         (labels :meetings/edit-schnaq-button)
+         [:i {:class (str "m-auto fas " (fa :eraser))}]
+         #(rf/dispatch [:navigation/navigate
+                        :routes.meeting/edit
+                        {:share-hash share-hash :edit-hash edit-hash}])]])
      ;; suggestion button
      [tooltip-button "bottom"
       (labels :agendas.button/navigate-to-suggestions)
-      [:i {:class (str "m-auto fas " (fa :eraser))}]
+      [:i {:class (str "m-auto fas " (fa :comment-alt))}]
       #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
                      {:share-hash share-hash}])]]))
 
