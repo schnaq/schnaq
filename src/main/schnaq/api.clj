@@ -121,7 +121,9 @@
   (let [{:keys [agenda share-hash edit-hash]} body-params
         new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description])]
     (if (valid-credentials? share-hash edit-hash)
-      (ok (suggestions/update-agenda! new-agenda share-hash))
+      (if-let [updated-agenda (suggestions/update-agenda! new-agenda share-hash)]
+        (ok updated-agenda)
+        (deny-access))
       (deny-access))))
 
 (defn- delete-agenda!
@@ -151,7 +153,9 @@
         new-meeting (assoc (select-keys meeting [:db/id :meeting/title :meeting/description])
                       :meeting/author author)]
     (if (valid-credentials? share-hash edit-hash)
-      (ok (suggestions/update-meeting! new-meeting share-hash))
+      (if-let [updated-meeting (suggestions/update-meeting! new-meeting share-hash)]
+        (ok updated-meeting)
+        (deny-access))
       (deny-access))))
 
 (defn- meeting-suggestions
