@@ -14,7 +14,7 @@
 
 (defn- suggestions-table
   "Show all suggestions."
-  [suggestions suggestion-type]
+  [suggestions suggestion-type addition?]
   [:table.table
    [:thead
     [:tr
@@ -31,15 +31,17 @@
          [:td (get-value "description")]
          [:td.text-center
           [:button.btn.btn-success
-           {:on-click #(rf/dispatch [:suggestions.update/accept suggestion suggestion-type])}
+           {:on-click #(rf/dispatch [:suggestions.update/accept suggestion suggestion-type addition?])}
            [:i {:class (str "far " (fa :check))
                 :style {:font-size "150%"}}]]]]))]])
 
 (rf/reg-event-fx
   :suggestions.update/accept
-  (fn [_ [_ suggestion suggestion-type]]
+  (fn [_ [_ suggestion suggestion-type addition?]]
     (if (= suggestion-type :agenda.suggestion)
-      {:fx [[:dispatch [:suggestion.update.agenda/accept suggestion]]]}
+      (if addition?
+        {:fx [[:dispatch [:suggestion.new.agenda/accept suggestion]]]}
+        {:fx [[:dispatch [:suggestion.update.agenda/accept suggestion]]]})
       {:fx [[:dispatch [:suggestion.update.meeting/accept suggestion]]]})))
 
 (rf/reg-event-fx
@@ -69,6 +71,23 @@
                       #:notification{:title (labels :suggestions.update.agenda/success-title)
                                      :body (labels :suggestions.update.agenda/success-body)
                                      :context :success}]]]}))
+
+(rf/reg-event-fx
+  :suggestion.new.agenda/accept
+  (fn [{:keys [db]} [_ suggestion]]
+    (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
+          {:agenda.suggestion/keys [title description]} suggestion
+          new-agenda {:agenda/title title
+                      :agenda/description description}]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/agenda/new")
+                          :params {:agenda new-agenda
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:suggestion.update.agenda/success]
+                          :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
   :suggestion.update.meeting/accept
@@ -101,12 +120,14 @@
 
 (defn- suggestions-modal
   "Open a modal containing the suggested changes."
-  [suggestions suggestion-type modal-title]
-  [modal/modal-template
-   modal-title
-   [:<>
-    [:p (labels :suggestions.modal/primer)]
-    [suggestions-table suggestions suggestion-type]]])
+  ([suggestions suggestion-type modal-title]
+   [suggestions-modal suggestions suggestion-type modal-title false])
+  ([suggestions suggestion-type modal-title addition?]
+   [modal/modal-template
+    modal-title
+    [:<>
+     [:p (labels :suggestions.modal/primer)]
+     [suggestions-table suggestions suggestion-type addition?]]]))
 
 (defn- update-suggestions-badge
   "Show update-suggestion badge."
@@ -157,7 +178,7 @@
                       #:notification{:title (labels :suggestions.agenda/delete-title)
                                      :body (labels :suggestions.agenda/delete-body)
                                      :context :success}]]
-          [:modal {:show? false :child nil}]]}))
+          [:dispatch [:modal {:show? false :child nil}]]]}))
 
 (defn- deletion-badge
   "Badge containing the wishes of users to delete the agenda point."
@@ -180,7 +201,7 @@
       :on-click #(rf/dispatch [:modal {:show? true
                                        :large? true
                                        :child [suggestions-modal suggestions :agenda.suggestion
-                                               (labels :suggestions.modal.new/title)]}])}
+                                               (labels :suggestions.modal.new/title) true]}])}
      [:i {:class (str "m-auto fas " (fa :add))}] " "
      (count suggestions)]))
 
