@@ -90,7 +90,7 @@
      :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
      :meeting/created-success-heading "Ihr schnaq wurde erstellt!"
      :meeting/created-success-subheading "Nun können Sie den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
-     :meetings/continue-with-schnaq-after-creation "Link kopiert? Legen Sie los!"
+     :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
      :meetings.suggestions/header "Vorschläge einreichen"
