@@ -75,6 +75,19 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "Referring (new) agenda to an existing meeting"}
+   ;; Meeting Feedback (NOT user Feedback for schnaq)
+   {:db/ident :meeting.feedback/ideator
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The user giving the feedback"}
+   {:db/ident :meeting.feedback/content
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The content of the feedback"}
+   {:db/ident :meeting.feedback/meeting
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "For which meeting is the feedback?"}
 
    ;; Valid suggestion types on an agenda
    {:db/ident :agenda.suggestion.type/update}

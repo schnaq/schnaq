@@ -146,6 +146,12 @@
      :suggestions.update.agenda/success-body "Der Vorschlag wurde übernommen und ist für alle TeilnehmerInnen sichtbar."
      :suggestions.agenda/delete-title "Agendapunkt gelöscht"
      :suggestions.agenda/delete-body "Der Agendapunkt wurde erfolgreich gelöscht"
+     :suggestion.feedback/label "Zusätzliches Feedback"
+     :suggestions.feedback/title "Feedback zum Meeting"
+     :suggestions.feedback/primer "Folgendes Feedback wurde zu diesem Meeting im Vorfeld abgegeben."
+     :suggestions.feedback.table/nickname "Nickname"
+     :suggestions.feedback.table/content "Feedback"
+     :suggestions.feedback/header "Freitext-Feedback"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "
@@ -316,10 +322,10 @@
      :comment "fa-comments"
      :comment-alt "fa-comment-alt"
      :copy "fa-copy"
+     :check "fa-check-square"
      :delete-icon "fa-times-circle"
      :edit "fa-edit"
      :eraser "fa-eraser"
      :laptop "fa-laptop-code"
      :trash "fa-trash-alt"
-     :users "fa-users"
-     :check "fa-check-square"}))
+     :users "fa-users"}))

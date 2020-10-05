@@ -85,3 +85,9 @@
   :form/should-clear
   (fn [_ [_ form-elements]]
     {:fx [[:form/clear form-elements]]}))
+
+(rf/reg-event-db
+  :no-op
+  ;; For the times where you need an on-success handler that does nothing
+  (fn [db _]
+    db))

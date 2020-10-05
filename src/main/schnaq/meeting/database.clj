@@ -835,3 +835,35 @@
    {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
     :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
     :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))
+
+(>defn add-meeting-feedback
+  "Adds a new meeting-feedback entity. Returns the entities id."
+  [feedback meeting-id user-id]
+  [string? int? int? :ret int?]
+  (get-in
+    (transact [{:db/id "temp-meeting-feedback"
+                :meeting.feedback/ideator user-id
+                :meeting.feedback/content feedback
+                :meeting.feedback/meeting meeting-id}])
+    [:tempids "temp-meeting-feedback"]))
+
+(def ^:private meeting-feedback-pattern
+  [:db/id
+   :meeting.feedback/content
+   :meeting.feedback/meeting
+   {:meeting.feedback/ideator [{:user/core-author [:author/nickname]}]}])
+
+(>defn meeting-feedback-for
+  "Returns all meeting-feedback for a certain meeting."
+  [share-hash]
+  [:meeting/share-hash :ret sequential?]
+  (->
+    (d/q
+      '[:find (pull ?feedback meeting-feedback-pattern)
+        :in $ ?share-hash meeting-feedback-pattern
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?feedback :meeting.feedback/meeting ?meeting]]
+      (d/db (new-connection)) share-hash meeting-feedback-pattern)
+    (toolbelt/pull-key-up :user/core-author)
+    (toolbelt/pull-key-up :author/nickname)
+    flatten))

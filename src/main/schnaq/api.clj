@@ -171,6 +171,17 @@
     (db/suggest-agenda-deletion! delete-agendas user-id)
     (created "" {:message "Successfully created suggestions!"})))
 
+(defn- add-suggestion-feedback
+  "Adds new feedback regarding a meeting."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash nickname feedback]} body-params
+        user-id (db/add-user-if-not-exists nickname)
+        meeting-id (:db/id (db/meeting-by-hash share-hash))]
+    (if-not (string/blank? feedback)
+      (ok {:message "Feedback created"
+           :feedback/id (db/add-meeting-feedback feedback meeting-id user-id)})
+      (bad-request {:error "You can not submit blank feedback."}))))
+
 (>defn- load-meeting-suggestions
   "Return all suggestions for a given meeting by its share hash."
   [{:keys [route-params]}]
@@ -178,9 +189,11 @@
   (let [{:keys [share-hash edit-hash]} route-params]
     (if (valid-credentials? share-hash edit-hash)
       (let [agenda-suggestions (group-by :agenda.suggestion/type (db/all-agenda-suggestions share-hash))
-            meeting-suggestions (db/all-meeting-suggestions share-hash)]
+            meeting-suggestions (db/all-meeting-suggestions share-hash)
+            meeting-feedback (db/meeting-feedback-for share-hash)]
         (ok (assoc agenda-suggestions
-              :meeting.suggestions/all meeting-suggestions)))
+              :meeting.suggestions/all meeting-suggestions
+              :meeting.feedback/feedback meeting-feedback)))
       (deny-access))))
 
 (defn- add-author
@@ -511,6 +524,7 @@
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
     (POST "/meeting/info/update" [] update-meeting-info!)
+    (POST "/meeting/feedback" [] add-suggestion-feedback)
     (POST "/meeting/suggestions" [] meeting-suggestions)
     (POST "/meeting/update" [] update-meeting!)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
