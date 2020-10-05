@@ -189,9 +189,11 @@
   (let [{:keys [share-hash edit-hash]} route-params]
     (if (valid-credentials? share-hash edit-hash)
       (let [agenda-suggestions (group-by :agenda.suggestion/type (db/all-agenda-suggestions share-hash))
-            meeting-suggestions (db/all-meeting-suggestions share-hash)]
+            meeting-suggestions (db/all-meeting-suggestions share-hash)
+            meeting-feedback (db/meeting-feedback-for share-hash)]
         (ok (assoc agenda-suggestions
-              :meeting.suggestions/all meeting-suggestions)))
+              :meeting.suggestions/all meeting-suggestions
+              :meeting.feedback meeting-feedback)))
       (deny-access))))
 
 (defn- add-author
