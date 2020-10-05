@@ -310,9 +310,8 @@
        [editable-meeting-info edit-meeting]
        [:div.container
         (for [agenda meeting-agendas]
-          (do (println (str (:db/id agenda) "-" current-route))
-              [:div {:key (str (:db/id agenda) "-" current-route)}
-               [agenda-view agenda]]))
+          [:div {:key (str (:db/id agenda) "-" current-route)}
+           [agenda-view agenda]])
         [:div.agenda-line]
         [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
         [submit-edit-button]]]]]))
