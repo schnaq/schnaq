@@ -851,7 +851,7 @@
   [:db/id
    :meeting.feedback/content
    :meeting.feedback/meeting
-   {:meeting.feedback/ideator {:user/core-author [:author/nickname]}}])
+   {:meeting.feedback/ideator [{:user/core-author [:author/nickname]}]}])
 
 (>defn meeting-feedback-for
   "Returns all meeting-feedback for a certain meeting."
