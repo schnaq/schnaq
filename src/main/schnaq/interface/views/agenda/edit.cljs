@@ -299,7 +299,8 @@
   [:re-frame/component fn? :ret :re-frame/component]
   (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
         edit-meeting (:meeting edit-information)
-        meeting-agendas (:agendas edit-information)]
+        meeting-agendas (:agendas edit-information)
+        current-route @(rf/subscribe [:navigation/current-view])]
     [:<>
      [base/meeting-header edit-meeting]
      heading
@@ -309,8 +310,9 @@
        [editable-meeting-info edit-meeting]
        [:div.container
         (for [agenda meeting-agendas]
-          [:div {:key (:db/id agenda)}
-           [agenda-view agenda]])
+          (do (println (str (:db/id agenda) "-" current-route))
+              [:div {:key (str (:db/id agenda) "-" current-route)}
+               [agenda-view agenda]]))
         [:div.agenda-line]
         [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
         [submit-edit-button]]]]]))
@@ -485,7 +487,7 @@
           (assoc-in [:suggestions :agendas :new] new)))))
 
 (rf/reg-event-fx
-  :suggestions/send-updates
+  :suggestions/get-updates
   (fn [_ [_ share-hash edit-hash]]
     {:fx [[:http-xhrio {:method :get
                         :uri (gstring/format "%s/meeting/suggestions/%s/%s"

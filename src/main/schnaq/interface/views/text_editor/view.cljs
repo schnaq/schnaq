@@ -21,9 +21,10 @@
             (when text-update
               (.value @mde-ref text-update)
               (rf/dispatch [:agenda.edit/reset-edit-updates]))
-            ;; Update with the initial-text, when value is not set (for lazy laoded content)
+            ;; Update with the initial-text, when value is not set (for lazy loaded content)
             (when (and initial-text (empty? (.value @mde-ref)))
               (.value @mde-ref initial-text))))
+        :component-will-unmount #(.value @mde-ref "")
         :component-did-mount
         (fn [comp]
           (let [newMDE (mde.
