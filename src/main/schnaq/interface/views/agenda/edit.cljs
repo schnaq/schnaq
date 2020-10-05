@@ -292,29 +292,31 @@
         [addition-badge]
         {:key (str "addition-badge-" (:db/id selected-meeting))})]]))
 
-(>defn- editable-meeting-template
+(defn- editable-meeting-template
   "Can be used to present an editable meeting in different views. Customize the heading
   and on-submit-function to your liking."
-  [heading on-submit-fn]
-  [:re-frame/component fn? :ret :re-frame/component]
-  (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
-        edit-meeting (:meeting edit-information)
-        meeting-agendas (:agendas edit-information)
-        current-route @(rf/subscribe [:navigation/current-view])]
-    [:<>
-     [base/meeting-header edit-meeting]
-     heading
-     [:div.container.text-center.pb-5
-      [:form {:on-submit on-submit-fn}
-       ;; meeting title and description
-       [editable-meeting-info edit-meeting]
-       [:div.container
-        (for [agenda meeting-agendas]
-          [:div {:key (str (:db/id agenda) "-" current-route)}
-           [agenda-view agenda]])
-        [:div.agenda-line]
-        [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
-        [submit-edit-button]]]]]))
+  ([heading on-submit-fn]
+   [editable-meeting-template heading on-submit-fn [:span ""]])
+  ([heading on-submit-fn extras]
+   (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
+         edit-meeting (:meeting edit-information)
+         meeting-agendas (:agendas edit-information)
+         current-route @(rf/subscribe [:navigation/current-view])]
+     [:<>
+      [base/meeting-header edit-meeting]
+      heading
+      [:div.container.text-center.pb-5
+       [:form {:on-submit on-submit-fn}
+        ;; meeting title and description
+        [editable-meeting-info edit-meeting]
+        [:div.container
+         (for [agenda meeting-agendas]
+           [:div {:key (str (:db/id agenda) "-" current-route)}
+            [agenda-view agenda]])
+         [:div.agenda-line]
+         [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
+         extras
+         [submit-edit-button]]]]])))
 
 (defn- edit-view []
   [editable-meeting-template
@@ -326,6 +328,18 @@
 (defn agenda-edit-view []
   [edit-view])
 
+(defn- suggestion-feedback-input
+  []
+  [:<>
+   [:hr]
+   [:div.text-left.pb-3
+    [:label.text-left.form-title.text-gray-700 {:for "free-feedback"} (labels :suggestion.feedback/label)] [:br]
+    [:textarea.form-control.form-round.shadow-straight
+     {:rows 3
+      :required false
+      :id "free-feedback"}]
+    [:br]]])
+
 (defn- suggestion-view []
   [editable-meeting-template
    [base/header
@@ -333,7 +347,9 @@
     (labels :meetings.suggestions/subheader)]
    (fn [e]
      (js-wrap/prevent-default e)
-     (rf/dispatch [:suggestions/submit]))])
+     ;; TODO hier auch feedback-form abschicken
+     (rf/dispatch [:suggestions/submit]))
+   [suggestion-feedback-input]])
 
 (defn agenda-suggestion-view []
   [suggestion-view])

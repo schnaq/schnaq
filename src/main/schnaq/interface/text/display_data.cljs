@@ -146,6 +146,7 @@
      :suggestions.update.agenda/success-body "Der Vorschlag wurde übernommen und ist für alle TeilnehmerInnen sichtbar."
      :suggestions.agenda/delete-title "Agendapunkt gelöscht"
      :suggestions.agenda/delete-body "Der Agendapunkt wurde erfolgreich gelöscht"
+     :suggestion.feedback/label "Zusätzliches Feedback"
 
      ;; Create Agenda
      :agenda/desc-for "Beschreibung für Agendapunkt "
