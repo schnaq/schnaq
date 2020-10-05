@@ -361,13 +361,13 @@
 (defn- suggestion-feedback-input
   []
   [:<>
-   [:div.text-left.pb-3
-    [:label.text-left.form-title.text-gray-700 {:for "free-feedback"} (labels :suggestion.feedback/label)] [:br]
+   [:div.text-left.pb-5
+    [:label.text-left.form-title.text-gray-700 {:for "free-feedback"}
+     [:p.mb-0 (labels :suggestion.feedback/label)]]
     [:textarea.form-control.form-round.shadow-straight
      {:rows 4
       :required false
-      :id "free-feedback"}]
-    [:br]]])
+      :id "free-feedback"}]]])
 
 (defn- suggestion-view []
   [editable-meeting-template
