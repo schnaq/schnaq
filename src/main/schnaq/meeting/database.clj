@@ -835,3 +835,14 @@
    {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
     :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
     :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))
+
+(>defn add-meeting-feedback
+  "Adds a new meeting-feedback entity. Returns the entities id."
+  [feedback meeting-id user-id]
+  [string? int? int? :ret int?]
+  (get-in
+    (transact [{:db/id "temp-meeting-feedback"
+                :meeting.feedback/ideator user-id
+                :meeting.feedback/content feedback
+                :meeting.feedback/meeting meeting-id}])
+    [:tempids "temp-meeting-feedback"]))
