@@ -339,7 +339,7 @@
        [:form {:on-submit on-submit-fn}
         ;; meeting title and description
         [editable-meeting-info edit-meeting]
-        [:div.container
+        [:div
          (for [agenda meeting-agendas]
            [:div {:key (str (:db/id agenda) "-" current-route)}
             [agenda-view agenda]])
