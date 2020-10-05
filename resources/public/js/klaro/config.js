@@ -68,6 +68,7 @@ var klaroConfig = {
       },
       consentNotice: {
         description: 'Helfen Sie uns bei der Weiterentwicklung dieses Produkts! Indem Sie anonymisierte Nutzungsanalysen erlauben, können wir die Verwendung unserer Webanwendung besser nachvollziehen. Ihre Daten werden stets vertraulich behandelt. Die Daten werden zu folgenden Zwecken erfasst: {purposes}',
+        learnMore: "Lassen Sie mich wählen",
       },
       acceptSelected: 'Ausgewählten zustimmen',
       ok: "Zustimmen",
@@ -86,6 +87,7 @@ var klaroConfig = {
       },
       consentNotice: {
         description: 'Please support the development of this product by accepting usage statistics. They enable us to verify the way you are using this software. All data is stored on our own servers. We are collecting the data for the following purposes: {purposes}',
+        learnMore: 'Let me choose',
       },
       matomo: {
         description: 'Collecting of visitor statistics for enhancing the website',
