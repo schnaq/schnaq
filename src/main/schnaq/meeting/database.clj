@@ -846,3 +846,23 @@
                 :meeting.feedback/content feedback
                 :meeting.feedback/meeting meeting-id}])
     [:tempids "temp-meeting-feedback"]))
+
+(def ^:private meeting-feedback-pattern
+  [:db/id
+   :meeting.feedback/content
+   :meeting.feedback/meeting
+   {:meeting.feedback/ideator {:user/core-author [:author/nickname]}}])
+
+(>defn meeting-feedback-for
+  "Returns all meeting-feedback for a certain meeting."
+  [share-hash]
+  [:meeting/share-hash :ret map?]
+  (->
+    (d/q
+      '[:find (pull ?feedback meeting-feedback-pattern)
+        :in $ ?share-hash meeting-feedback-pattern
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?feedback :meeting.feedback/meeting ?meeting]]
+      (d/db (new-connection)) share-hash meeting-feedback-pattern)
+    (toolbelt/pull-key-up :user/core-author)
+    (toolbelt/pull-key-up :author/nickname)))
