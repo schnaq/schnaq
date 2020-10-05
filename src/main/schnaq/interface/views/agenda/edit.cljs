@@ -361,7 +361,6 @@
 (defn- suggestion-feedback-input
   []
   [:<>
-   [:hr]
    [:div.text-left.pb-3
     [:label.text-left.form-title.text-gray-700 {:for "free-feedback"} (labels :suggestion.feedback/label)] [:br]
     [:textarea.form-control.form-round.shadow-straight
