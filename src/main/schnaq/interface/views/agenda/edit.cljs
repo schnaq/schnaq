@@ -335,7 +335,7 @@
    [:div.text-left.pb-3
     [:label.text-left.form-title.text-gray-700 {:for "free-feedback"} (labels :suggestion.feedback/label)] [:br]
     [:textarea.form-control.form-round.shadow-straight
-     {:rows 3
+     {:rows 4
       :required false
       :id "free-feedback"}]
     [:br]]])
@@ -347,12 +347,27 @@
     (labels :meetings.suggestions/subheader)]
    (fn [e]
      (js-wrap/prevent-default e)
-     ;; TODO hier auch feedback-form abschicken
+     (rf/dispatch [:suggestions.feedback/submit (oget e [:target :elements "free-feedback" :value])])
      (rf/dispatch [:suggestions/submit]))
    [suggestion-feedback-input]])
 
 (defn agenda-suggestion-view []
   [suggestion-view])
+
+(rf/reg-event-fx
+  :suggestions.feedback/submit
+  (fn [{:keys [db]} [_ feedback-text]]
+    (let [nickname (get-in db [:user :name] "Anonymous")
+          share-hash (get-in db [:current-route :path-params :share-hash])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/meeting/feedback")
+                          :params {:share-hash share-hash
+                                   :feedback feedback-text
+                                   :nickname nickname}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:no-op]
+                          :on-failure [:ajax-failure]}]]})))
 
 ;; load agendas events
 
