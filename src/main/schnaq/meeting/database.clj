@@ -856,7 +856,7 @@
 (>defn meeting-feedback-for
   "Returns all meeting-feedback for a certain meeting."
   [share-hash]
-  [:meeting/share-hash :ret map?]
+  [:meeting/share-hash :ret sequential?]
   (->
     (d/q
       '[:find (pull ?feedback meeting-feedback-pattern)

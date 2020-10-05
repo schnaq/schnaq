@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.agenda.edit
   (:require [ajax.core :as ajax]
-            [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -167,6 +166,22 @@
      {:on-click #(rf/dispatch [:suggestion.agenda/delete (first suggestions)])}
      [:i {:class (str "far " (fa :trash))}] " " (labels :suggestions.modal.delete/button)]]])
 
+(defn- meeting-feedback-modal [feedback]
+  [modal/modal-template
+   (labels :suggestions.feedback/title)
+   [:<>
+    [:p (labels :suggestions.feedback/primer)]
+    [:table.table
+     [:thead
+      [:tr
+       [:th {:width "30%"} (labels :suggestions.feedback.table/nickname)]
+       [:th {:width "70%"} (labels :suggestions.feedback.table/content)]]]
+     [:tbody
+      (for [single-feedback feedback]
+        [:tr {:key (:db/id single-feedback)}
+         [:td (:meeting.feedback/ideator single-feedback)]
+         [:td (:meeting.feedback/content single-feedback)]])]]]])
+
 (rf/reg-event-fx
   :suggestion.agenda/delete
   (fn [{:keys [db]} [_ suggestion]]
@@ -216,6 +231,18 @@
                                                (labels :suggestions.modal.new/title) true]}])}
      [:i {:class (str "m-auto fas " (fa :add))}] " "
      (count suggestions)]))
+
+(defn- feedback-badge
+  "Badge indicating free-text feedback from users."
+  [meeting-id]
+  (when-let [feedback @(rf/subscribe [:suggestions/feedback meeting-id])]
+    [:span.badge.badge-pill.mr-2.badge-clickable.clickable
+     {:title (labels :suggestions.feedback/header)
+      :on-click #(rf/dispatch [:modal {:show? true
+                                       :large? true
+                                       :child [meeting-feedback-modal feedback]}])}
+     [:i {:class (str "m-auto fas " (fa :comment))}] " "
+     (count feedback)]))
 
 (defn- badge-wrapper
   "Wrap all the badges!"
@@ -290,7 +317,10 @@
         {:key (str "suggestion-badge-" (:db/id selected-meeting))})
       (with-meta
         [addition-badge]
-        {:key (str "addition-badge-" (:db/id selected-meeting))})]]))
+        {:key (str "addition-badge-" (:db/id selected-meeting))})
+      (with-meta
+        [feedback-badge (:db/id selected-meeting)]
+        {:key (str "feedback-badge-" (:db/id selected-meeting))})]]))
 
 (defn- editable-meeting-template
   "Can be used to present an editable meeting in different views. Customize the heading
@@ -508,10 +538,13 @@
 (rf/reg-event-db
   :suggestions/for-meeting-success
   (fn [db [_ {:keys [agenda.suggestion.type/update agenda.suggestion.type/new
-                     agenda.suggestion.type/delete meeting.suggestions/all]}]]
-    (let [group-by-agenda-id #(get-in % [:agenda.suggestion/agenda :db/id])]
+                     agenda.suggestion.type/delete meeting.suggestions/all
+                     meeting.feedback/feedback]}]]
+    (let [group-by-agenda-id #(get-in % [:agenda.suggestion/agenda :db/id])
+          meeting-id (:db/id (:meeting.suggestion/meeting (first all)))]
       (-> db
-          (assoc-in [:suggestions :meetings (:db/id (:meeting.suggestion/meeting (first all)))] all)
+          (assoc-in [:suggestions :feedback meeting-id] feedback)
+          (assoc-in [:suggestions :meetings meeting-id] all)
           (assoc-in [:suggestions :agendas :updates] (group-by group-by-agenda-id update))
           (assoc-in [:suggestions :agendas :delete] (group-by group-by-agenda-id delete))
           (assoc-in [:suggestions :agendas :new] new)))))
@@ -546,4 +579,9 @@
   :suggestions/agenda-new
   (fn [db _]
     (get-in db [:suggestions :agendas :new])))
+
+(rf/reg-sub
+  :suggestions/feedback
+  (fn [db [_ meeting-id]]
+    (get-in db [:suggestions :feedback meeting-id])))
 

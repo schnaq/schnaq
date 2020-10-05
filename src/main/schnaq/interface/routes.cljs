@@ -93,9 +93,7 @@
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))
-                      :stop (fn []
-                              (println "In reset updates")
-                              (rf/dispatch [:agenda.edit/reset-edit-updates]))}]}]
+                      :stop #(rf/dispatch [:agenda.edit/reset-edit-updates])}]}]
      ["/agenda"
       ["/:id"
        {:parameters {:path {:id int?}}

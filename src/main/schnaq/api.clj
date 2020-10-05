@@ -193,7 +193,7 @@
             meeting-feedback (db/meeting-feedback-for share-hash)]
         (ok (assoc agenda-suggestions
               :meeting.suggestions/all meeting-suggestions
-              :meeting.feedback meeting-feedback)))
+              :meeting.feedback/feedback meeting-feedback)))
       (deny-access))))
 
 (defn- add-author
