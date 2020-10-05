@@ -27,7 +27,7 @@ var klaroConfig = {
   //cookieDomain: '.github.com',
 
   // Put a link to your privacy policy here (relative or absolute).
-  privacyPolicy: '/datenschutz',
+  privacyPolicy: 'https://disqtec.com/datenschutz',
 
   // Defines the default state for applications (true=enabled by default).
   default: false,
@@ -64,10 +64,10 @@ var klaroConfig = {
       consentModal: {
         title: 'Persönliche Einstellungen zu Cookies auf unserer Webseite',
         description:
-          'Wir nutzen Cookies, um Ihnen die bestmögliche Nutzung unserer Webseite zu ermöglichen und unsere Kommunikation mit Ihnen zu verbessern. Wir berücksichtigen hierbei Ihre Präferenzen und verarbeiten Daten für Marketing und Analytics nur, wenn Sie explizit Ihr Einverständnis geben. Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen.',
+          'Wir nutzen Cookies, um Ihnen die bestmögliche Nutzung unserer Webseite zu ermöglichen und unsere Kommunikation mit Ihnen zu verbessern. Wir berücksichtigen hierbei Ihre Präferenzen und verarbeiten Daten für Marketing und Analytics nur, wenn Sie explizit Ihr Einverständnis geben. Lehnen Sie die Nutzung ab, wird ein notwendiger Cookie erstellt, der Ihre Ablehnung festhält und Ihnen dieses Popup nicht wieder präsentiert. Sie können Ihre Entscheidungen jederzeit mit Wirkung für die Zukunft widerrufen.',
       },
       consentNotice: {
-        description: 'Helfen Sie uns bei der Weiterentwicklung dieses Produkts! Indem Sie unsere Cookies erlauben, können wir Ihr Verhalten innerhalb unserer Webanwendung besser nachvollziehen. Ihre Daten werden stets vertraulich behandelt. Die Daten werden zu folgenden Zwecken erfasst: {purposes}',
+        description: 'Helfen Sie uns bei der Weiterentwicklung dieses Produkts! Indem Sie anonymisierte Nutzungsanalysen erlauben, können wir die Verwendung unserer Webanwendung besser nachvollziehen. Ihre Daten werden stets vertraulich behandelt. Die Daten werden zu folgenden Zwecken erfasst: {purposes}',
       },
       acceptSelected: 'Ausgewählten zustimmen',
       ok: "Zustimmen",
@@ -82,10 +82,10 @@ var klaroConfig = {
     en: {
       consentModal: {
         description:
-          'We use cookies to enable you the best possible use of our website and to improve our communication with you. We take your preferences into account and process data for marketing and analytics only if you explicitly give your consent. You can withdraw your consent at any time with effect for the future.',
+          'We use cookies to enable you the best possible use of our website and to improve our communication with you. We take your preferences into account and process data for marketing and analytics only if you explicitly give your consent. Your denial results in a necessary cookie remembering your decision not showing you this message anymore. You can withdraw your consent at any time with effect for the future.',
       },
       consentNotice: {
-        description: 'Please support the development of this product by accepting Cookies on this site. They enable us to verify the way you are using this software. All data is stored on our own servers. We are collecting the data for the following purposes: {purposes}',
+        description: 'Please support the development of this product by accepting usage statistics. They enable us to verify the way you are using this software. All data is stored on our own servers. We are collecting the data for the following purposes: {purposes}',
       },
       matomo: {
         description: 'Collecting of visitor statistics for enhancing the website',
