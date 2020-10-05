@@ -865,4 +865,5 @@
         [?feedback :meeting.feedback/meeting ?meeting]]
       (d/db (new-connection)) share-hash meeting-feedback-pattern)
     (toolbelt/pull-key-up :user/core-author)
-    (toolbelt/pull-key-up :author/nickname)))
+    (toolbelt/pull-key-up :author/nickname)
+    flatten))

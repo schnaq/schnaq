@@ -280,3 +280,14 @@
         7 (into #{} agenda-ids)
         ;; We transact 3 attributes, so we expect 4 datoms (one for every attribute and one for the transaction)
         4 #{(first agenda-ids)}))))
+
+(deftest meeting-suggestions-add-get-test
+  (testing "Test the writing and reading of meeting-feedback."
+    (let [user-id (database/add-user-if-not-exists "Wegi")
+          meeting-hash "89eh32hoas-2983ud"
+          meeting-id (:db/id (database/meeting-by-hash meeting-hash))
+          feedback "Hör mal gut zu mein Freundchen, das ist nicht gut so!"]
+      (is (= 0 (count (database/meeting-feedback-for meeting-hash))))
+      (database/add-meeting-feedback feedback meeting-id user-id)
+      (is (= 1 (count (database/meeting-feedback-for meeting-hash))))
+      (is (= feedback (:meeting.feedback/content (first (database/meeting-feedback-for meeting-hash))))))))
