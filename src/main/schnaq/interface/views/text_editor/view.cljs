@@ -16,11 +16,15 @@
         :reagent-render (fn [] [:textarea])
         :component-did-update
         (fn [comp _argv]
-          (let [[_ _ _ text-update _] (reagent/argv comp)]
+          (let [[_ initial-text _ text-update _] (reagent/argv comp)]
             ;; Update value of MDE only if the current value is different to the current one.
             (when text-update
               (.value @mde-ref text-update)
-              (rf/dispatch [:agenda.edit/reset-edit-updates]))))
+              (rf/dispatch [:agenda.edit/reset-edit-updates]))
+            ;; Update with the initial-text, when value is not set (for lazy loaded content)
+            (when (and initial-text (empty? (.value @mde-ref)))
+              (.value @mde-ref initial-text))))
+        :component-will-unmount #(.value @mde-ref "")
         :component-did-mount
         (fn [comp]
           (let [newMDE (mde.

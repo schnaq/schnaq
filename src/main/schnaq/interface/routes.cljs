@@ -67,7 +67,8 @@
         :controllers [{:parameters {:path [:share-hash :edit-hash]}
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:agenda/load-for-edit (:share-hash path)])
-                                (rf/dispatch [:suggestions/send-updates (:share-hash path) (:edit-hash path)]))}]}]
+                                (rf/dispatch [:suggestions/get-updates (:share-hash path) (:edit-hash path)]))
+                       :stop #(rf/dispatch [:agenda.edit/reset-edit-updates])}]}]
       ["/manage"
        {:name :routes.meeting/admin-center
         :view meeting-admin/admin-center-view
@@ -91,7 +92,10 @@
        :view agenda-edit/agenda-suggestion-view
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))}]}]
+                               (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))
+                      :stop (fn []
+                              (println "In reset updates")
+                              (rf/dispatch [:agenda.edit/reset-edit-updates]))}]}]
      ["/agenda"
       ["/:id"
        {:parameters {:path {:id int?}}
