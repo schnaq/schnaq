@@ -339,14 +339,13 @@
        [:form {:on-submit on-submit-fn}
         ;; meeting title and description
         [editable-meeting-info edit-meeting]
-        [:div
-         (for [agenda meeting-agendas]
-           [:div {:key (str (:db/id agenda) "-" current-route)}
-            [agenda-view agenda]])
-         [:div.agenda-line]
-         [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
-         extras
-         [submit-edit-button]]]]])))
+        (for [agenda meeting-agendas]
+          [:div {:key (str (:db/id agenda) "-" current-route)}
+           [agenda-view agenda]])
+        [:div.agenda-line]
+        [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
+        extras
+        [submit-edit-button]]]])))
 
 (defn- edit-view []
   [editable-meeting-template
