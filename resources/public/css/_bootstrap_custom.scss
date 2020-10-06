@@ -1,23 +1,35 @@
 @import 'variables';
-@import '../../../node_modules/bootstrap/scss/bootstrap';
 
-.btn-white {
-  @include button-variant($white, darken($white, 7.5%), darken($white, 10%), lighten($white, 5%), lighten($white, 10%), darken($white, 30%));
+// Additional colors. Defaults are primary, secondary, ... and here you can add
+// your own color styles.
+//
+// I.e.: If you add the key "indigo" to this map, there will also be btn-indigo
+// etc. available for use.
+$theme-colors: (
+  'white': $white
+);
 
-  a {
-    color: $black;
-  }
-}
+
+// -----------------------------------------------------------------------------
 
 .btn-outline-white {
-  @include button-outline-variant($white, #222222, lighten($white, 5%), $white);
-
   a {
     color: $white;
-
   }
 
-  a:hover {
+  &:hover a {
     color: $black;
   }
 }
+
+.btn-white {
+  a {
+    color: $black;
+  }
+
+  &:hover a {
+    color: $black;
+  }
+}
+
+@import '../../../node_modules/bootstrap/scss/bootstrap';
