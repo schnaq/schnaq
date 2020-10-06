@@ -285,11 +285,12 @@
             (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
       (bad-request {:error "The link you followed was invalid"}))))
 
-
 (defn- continue-discussion
   "Dispatches the wire-received events to the dialog.core backend."
   [{:keys [body-params]}]
-  (let [[reaction args] (processors/with-canonical-usernames (:payload body-params))
+  (let [[reaction args] (processors/with-canonical-usernames
+                          (:payload body-params)
+                          (:current-nickname body-params))
         meeting-hash (:meeting-hash body-params)
         discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? meeting-hash discussion-id)
