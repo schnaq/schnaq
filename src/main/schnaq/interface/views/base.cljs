@@ -189,14 +189,14 @@
      [:span.navbar-toggler-icon]]
     ;; menu items
     [:div {:id "schnaq-navbar"
-               :class "collapse navbar-collapse"}
+           :class "collapse navbar-collapse"}
      ;; clickable title
      [:div.mr-auto {:on-click
-            (fn []
-              (rf/dispatch [:navigation/navigate :routes.meeting/show
-                            {:share-hash (:meeting/share-hash meeting)}])
-              (rf/dispatch [:meeting/select-current meeting]))
-            :class "clickable-no-hover"}
+                    (fn []
+                      (rf/dispatch [:navigation/navigate :routes.meeting/show
+                                    {:share-hash (:meeting/share-hash meeting)}])
+                      (rf/dispatch [:meeting/select-current meeting]))
+                    :class "clickable-no-hover"}
       [:h3.mx-5 (:meeting/title meeting)]]
      ;; name input
      [username-bar-view-light]]]])
