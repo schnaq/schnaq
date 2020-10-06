@@ -11,10 +11,10 @@
             [ajax.core :as ajax]))
 
 (defn- header-animation
-  "Display header animation video"
+  "Display header animation video."
   []
-  [:div.col-lg-6
-   [:video.w-100.startpage-animation {:autoplay "true" :loop "true" :muted "true"}
+  [:section.col-lg-6
+   [:video.w-100.startpage-animation {:auto-play true :loop true :muted true}
     [:source {:src (img-path :animation-discussion) :type "video/webm"}]
     [:source {:src (img-path :animation-discussion-mp4) :type "video/mp4"}]]])
 
