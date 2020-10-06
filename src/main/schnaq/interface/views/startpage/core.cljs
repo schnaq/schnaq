@@ -14,7 +14,9 @@
   "Display header animation video"
   []
   [:div.col-lg-6
-   [:img.w-100 {:src (img-path :animation-discussion)}]])
+   [:video.w-100.startpage-animation {:autoplay "true" :loop "true" :muted "true"}
+    [:source {:src (img-path :animation-discussion) :type "video/webm"}]
+    [:source {:src (img-path :animation-discussion-mp4) :type "video/mp4"}]]])
 
 (defn- header []
   [base/header
