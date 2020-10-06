@@ -19,7 +19,7 @@ Rufen Sie folgende Adresse auf, um Ihren schnaq zu administrieren:\n\n%s\n\n" em
      :demo-request/title "Demo Anfrage!"
      :demo-request/body
      (str "Hallo,\n
-%s hat eine Demo für sein Unternehmen angefragt.\n
+%s hat eine Demo für ein Unternehmen angefragt.\n
 E-Mail: %s\n
 Firma (optional): %s\n
 Telefon (optional): %s")}))
