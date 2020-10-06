@@ -251,11 +251,13 @@
 (rf/reg-event-fx
   :discussion/continue-http-call
   (fn [{:keys [db]} [_ payload]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
+          nickname (get-in db [:user :name])]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/continue-discussion")
                           :format (ajax/transit-request-format)
                           :params {:payload payload
+                                   :current-nickname nickname
                                    :meeting-hash share-hash
                                    :discussion-id id}
                           :response-format (ajax/transit-response-format)

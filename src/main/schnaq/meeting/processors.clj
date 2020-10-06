@@ -1,8 +1,9 @@
 (ns schnaq.meeting.processors
-  (:require [clojure.walk :as walk]
-            [schnaq.meeting.database :as db]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.walk :as walk]
+            [ghostwheel.core :refer [>defn]]
             [schnaq.discussion :as discussion]
-            [ghostwheel.core :refer [>defn]])
+            [schnaq.meeting.database :as db])
   (:import (clojure.lang PersistentArrayMap)))
 
 (>defn with-votes
@@ -28,8 +29,7 @@
 
 (>defn with-canonical-usernames
   "Enriches a step-vector with canonical :user/nickname."
-  [[step args]]
-  [vector? :ret vector?]
-  (let [username (:user/nickname args)
-        new-args (assoc args :user/nickname (db/canonical-username username))]
+  [[step args] current-nickname]
+  [(s/tuple keyword? coll?) :author/nickname :ret (s/tuple keyword? coll?)]
+  (let [new-args (assoc args :user/nickname (db/canonical-username current-nickname))]
     [step new-args]))
