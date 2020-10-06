@@ -385,13 +385,14 @@
   "Send URL to admin-center via mail to recipient."
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash recipient admin-center]} body-params]
+  (let [{:keys [share-hash edit-hash recipient admin-center]} body-params
+        meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
     (if (valid-credentials? share-hash edit-hash)
       (ok (merge
             {:message "Emails sent successfully"}
             (emails/send-mails
-              (email-templates :admin-center/title)
-              (format (email-templates :admin-center/body) admin-center)
+              (format (email-templates :admin-center/title) meeting-title)
+              (format (email-templates :admin-center/body) meeting-title admin-center)
               [recipient])))
       (deny-access))))
 
