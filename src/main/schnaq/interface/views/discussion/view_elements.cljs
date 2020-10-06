@@ -3,14 +3,13 @@
             [ghostwheel.core :refer [>defn-]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.utils.markdown-parser :as markdown-parser]))
+            [schnaq.interface.views.discussion.logic :as logic]))
 
 (defn- up-down-vote
   "Add panel for up and down votes."
