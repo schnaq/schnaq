@@ -288,7 +288,8 @@
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-    {:animation-discussion "/animations/animation_discussion.gif"
+    {:animation-discussion "/animations/animation_discussion.webm"
+     :animation-discussion-mp4 "/animations/animation_discussion.mp4"
      :elephant-admin "/imgs/elephants/admin.png"
      :elephant-erase "/imgs/elephants/erase.png"
      :elephant-share "/imgs/elephants/share.png"
