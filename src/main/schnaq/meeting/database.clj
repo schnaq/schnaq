@@ -439,6 +439,7 @@
    :agenda/title
    :agenda/description
    :agenda/meeting
+   :agenda/rank
    :agenda/discussion])
 
 (>defn agenda

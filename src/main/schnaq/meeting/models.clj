@@ -107,6 +107,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The meeting the agenda belongs to"}
+   {:db/ident :agenda/rank
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "The rank of the agenda. e.g. a rank of 1 means its the first Agenda-Point"}
    {:db/ident :agenda/discussion
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
