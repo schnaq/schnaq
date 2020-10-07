@@ -108,7 +108,8 @@
     (if (valid-credentials? (:meeting/share-hash meeting) (:meeting/edit-hash meeting))
       (do (db/update-meeting (assoc updated-meeting :meeting/author user-id))
           (doseq [agenda new-agendas]
-            (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
+            (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda)
+                                 (:agenda/meeting agenda) (:agenda/rank agenda)))
           (doseq [agenda updated-agendas]
             (db/update-agenda agenda))
           (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
@@ -609,4 +610,3 @@
   :end)
 
 ;; TODO suggestions müssen noch für den rank geupdated werden
-;; TODO Edit muss rank Veränderungen unterstützen
