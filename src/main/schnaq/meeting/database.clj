@@ -416,7 +416,7 @@
    [:agenda/title (? string?) int? :ret int?]
    (add-agenda-point title description meeting-id 1))
   ([title description meeting-id rank]
-   [[:agenda/title (? string?) int? :agenda/rank :ret int?]]
+   [:agenda/title (? string?) int? :agenda/rank :ret int?]
    (when (and (s/valid? :agenda/title title)
               (s/valid? int? meeting-id))
      (let [raw-agenda {:db/id "temp-id"
