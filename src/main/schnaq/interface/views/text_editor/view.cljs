@@ -8,9 +8,13 @@
 (defn view
   "Mark Up Text Editor View"
   ([initial-text on-change-function text-update]
-   (view initial-text on-change-function text-update "300px"))
+   [view initial-text on-change-function text-update "300px"])
   ([initial-text on-change-function _text-update min-height]
-   (let [mde-ref (reagent/atom nil)]
+   (let [mde-ref (reagent/atom nil)
+         ;; Needed to not write an empty value to the db on unmount. Otherwise writing
+         ;; an empty string to the db will cause an empty agenda form to appear. The empty
+         ;; string is needed to not implicitly carry the text over to another view.
+         unmounting? (reagent/atom false)]
      (reagent/create-class
        {:display-name "markdown-editor"
         :reagent-render (fn [] [:textarea])
@@ -24,7 +28,9 @@
             ;; Update with the initial-text, when value is not set (for lazy loaded content)
             (when (and initial-text (empty? (.value @mde-ref)))
               (.value @mde-ref initial-text))))
-        :component-will-unmount #(.value @mde-ref "")
+        :component-will-unmount (fn []
+                                  (reset! unmounting? true)
+                                  (.value @mde-ref ""))
         :component-did-mount
         (fn [comp]
           (let [newMDE (mde.
@@ -34,9 +40,12 @@
                                    :sideBySideFullscreen false
                                    :initialValue (data/labels :meeting-form-desc-placeholder)}))]
             (reset! mde-ref newMDE)
-            (when initial-text (.value newMDE initial-text))
+            (when initial-text (.value @mde-ref initial-text))
             (.on (.-codemirror newMDE) "change"
-                 #(on-change-function (.value @mde-ref)))))}))))
+                 (fn [_e]
+                   (when-not @unmounting?
+                     (on-change-function (.value @mde-ref)))
+                   (reset! unmounting? false)))))}))))
 
 (defn view-store-on-change
   "Mark Up Editor View which automatically stores its content in the local db.

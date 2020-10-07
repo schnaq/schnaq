@@ -123,7 +123,7 @@
 (rf/reg-event-db
   :agenda/reset-temporary-entries
   (fn [db _]
-    (assoc-in db [:agenda :creating :all] [])))
+    (assoc-in db [:agenda :creating :all] {})))
 
 (rf/reg-event-db
   :agenda/delete-temporary
@@ -145,7 +145,7 @@
 (rf/reg-sub
   :agendas.temporary/all
   (fn [db _]
-    (get-in db [:agenda :creating :all] [])))
+    (get-in db [:agenda :creating :all] {})))
 
 (rf/reg-sub
   :current-agendas

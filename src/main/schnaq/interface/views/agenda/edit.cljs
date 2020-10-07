@@ -440,7 +440,8 @@
 (rf/reg-event-db
   :agenda.edit/reset-edit-updates
   (fn [db _]
-    (assoc db :edit-meeting-updates {})))
+    (assoc db :edit-meeting-updates {}
+              :edit-meeting {})))
 
 ;; delete agenda events
 
