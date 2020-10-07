@@ -75,10 +75,11 @@
         :link-text (labels :router/meeting-created)
         :controllers [{:parameters {:path [:share-hash :edit-hash]}
                        :start (fn [{:keys [path]}]
-                                ;; save admin access to local storage
-                                (rf/dispatch [:meetings.save-admin-access/to-localstorage
-                                              (:share-hash path)
-                                              (:edit-hash path)]))}]}]]
+                                (let [share-hash (:share-hash path)
+                                      edit-hash (:edit-hash path)]
+                                  (rf/dispatch [:meeting/load-by-hash-as-admin share-hash edit-hash])
+                                  (rf/dispatch [:meetings.save-admin-access/to-localstorage
+                                                share-hash edit-hash])))}]}]]
      ["/"
       {:name :routes.meeting/show
        :view meeting-single/single-meeting-view
