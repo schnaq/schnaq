@@ -408,7 +408,7 @@
 (rf/reg-event-db
   :agenda/load-for-edit-success
   (fn [db [_ agendas]]
-    (assoc db :edit-meeting {:agendas agendas
+    (assoc db :edit-meeting {:agendas (sort-by :agenda/rank agendas)
                              :meeting (get-in db [:meeting :selected])
                              :delete-agendas #{}}
               :edit-meeting-updates {})))
@@ -460,11 +460,15 @@
 (rf/reg-event-db
   :agenda/add-edit-form
   (fn [db _]
-    (update-in db [:edit-meeting :agendas]
-               #(concat % [{:db/id (str (random-uuid))
-                            :agenda/title ""
-                            :agenda/description ""
-                            :agenda/meeting (get-in db [:edit-meeting :meeting :db/id])}]))))
+    (let [all-temp-agendas (get-in db [:edit-meeting :agendas])
+          all-ranks (conj (map :agenda/rank all-temp-agendas) 0)
+          biggest-rank (apply max all-ranks)]
+      (update-in db [:edit-meeting :agendas]
+                 #(concat % [{:db/id (str (random-uuid))
+                              :agenda/title ""
+                              :agenda/description ""
+                              :agenda/rank (inc biggest-rank)
+                              :agenda/meeting (get-in db [:edit-meeting :meeting :db/id])}])))))
 
 ;; update agenda
 
