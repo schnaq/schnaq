@@ -150,7 +150,7 @@
 (rf/reg-sub
   :current-agendas
   (fn [db _]
-    (get-in db [:agendas :current])))
+    (sort-by :agenda/rank (get-in db [:agendas :current]))))
 
 (rf/reg-sub
   :chosen-agenda
