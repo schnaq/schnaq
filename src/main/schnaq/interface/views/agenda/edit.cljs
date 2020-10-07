@@ -387,15 +387,16 @@
   (fn [{:keys [db]} [_ feedback-text]]
     (let [nickname (get-in db [:user :name] "Anonymous")
           share-hash (get-in db [:current-route :path-params :share-hash])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/meeting/feedback")
-                          :params {:share-hash share-hash
-                                   :feedback feedback-text
-                                   :nickname nickname}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:no-op]
-                          :on-failure [:ajax-failure]}]]})))
+      (when-not (gstring/isEmptyString feedback-text)
+        {:fx [[:http-xhrio {:method :post
+                            :uri (str (:rest-backend config) "/meeting/feedback")
+                            :params {:share-hash share-hash
+                                     :feedback feedback-text
+                                     :nickname nickname}
+                            :format (ajax/transit-request-format)
+                            :response-format (ajax/transit-response-format)
+                            :on-success [:no-op]
+                            :on-failure [:ajax-failure]}]]}))))
 
 ;; load agendas events
 
