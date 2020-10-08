@@ -73,9 +73,6 @@
                                      :body (labels :suggestions.update.agenda/success-body)
                                      :context :success}]]]}))
 
-;; TODO see if new and update can be generalized
-;; TODO accepting update suggestions breaks view
-
 (rf/reg-event-fx
   :suggestion.new.agenda/accept
   (fn [{:keys [db]} [_ suggestion]]
@@ -241,8 +238,8 @@
 
 (defn- feedback-badge
   "Badge indicating free-text feedback from users."
-  [meeting-id]
-  (when-let [feedback @(rf/subscribe [:suggestions/feedback meeting-id])]
+  []
+  (when-let [feedback @(rf/subscribe [:suggestions/feedback])]
     [:span.badge.badge-pill.mr-2.badge-clickable.clickable
      {:title (labels :suggestions.feedback/header)
       :on-click #(rf/dispatch [:modal {:show? true
@@ -326,7 +323,7 @@
         [addition-badge]
         {:key (str "addition-badge-" (:db/id selected-meeting))})
       (with-meta
-        [feedback-badge (:db/id selected-meeting)]
+        [feedback-badge]
         {:key (str "feedback-badge-" (:db/id selected-meeting))})]]))
 
 (defn- editable-meeting-template
@@ -449,7 +446,8 @@
   :agenda.edit/reset-edit-updates
   (fn [db _]
     (assoc db :edit-meeting-updates {}
-              :edit-meeting {})))
+              :edit-meeting {}
+              :suggestions {})))
 
 ;; delete agenda events
 
@@ -554,7 +552,7 @@
     (let [group-by-agenda-id #(get-in % [:agenda.suggestion/agenda :db/id])
           meeting-id (:db/id (:meeting.suggestion/meeting (first all)))]
       (-> db
-          (assoc-in [:suggestions :feedback meeting-id] feedback)
+          (assoc-in [:suggestions :feedback] feedback)
           (assoc-in [:suggestions :meetings meeting-id] all)
           (assoc-in [:suggestions :agendas :updates] (group-by group-by-agenda-id update))
           (assoc-in [:suggestions :agendas :delete] (group-by group-by-agenda-id delete))
@@ -593,6 +591,6 @@
 
 (rf/reg-sub
   :suggestions/feedback
-  (fn [db [_ meeting-id]]
-    (get-in db [:suggestions :feedback meeting-id])))
+  (fn [db _]
+    (get-in db [:suggestions :feedback])))
 
