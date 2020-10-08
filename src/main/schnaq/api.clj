@@ -120,7 +120,7 @@
   "Update a single agenda, when the credentials are valid."
   [{:keys [body-params]}]
   (let [{:keys [agenda share-hash edit-hash]} body-params
-        new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description])]
+        new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description :agenda/rank])]
     (if (valid-credentials? share-hash edit-hash)
       (if-let [updated-agenda (suggestions/update-agenda! new-agenda share-hash)]
         (ok updated-agenda)

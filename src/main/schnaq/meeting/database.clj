@@ -285,6 +285,7 @@
    :agenda.suggestion/title
    :agenda.suggestion/description
    :agenda.suggestion/type
+   :agenda.suggestion/rank
    {:agenda.suggestion/agenda [:db/id]}
    {:agenda.suggestion/meeting [:db/id]}
    {:agenda.suggestion/ideator [{:user/core-author [:author/nickname]}]}])

@@ -47,10 +47,11 @@
   :suggestion.update.agenda/accept
   (fn [{:keys [db]} [_ suggestion]]
     (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
-          {:agenda.suggestion/keys [agenda title description]} suggestion
+          {:agenda.suggestion/keys [agenda title description rank]} suggestion
           new-agenda {:db/id (:db/id agenda)
                       :agenda/title title
-                      :agenda/description description}]
+                      :agenda/description description
+                      :agenda/rank rank}]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/agenda/update")
                           :params {:agenda new-agenda
@@ -72,14 +73,18 @@
                                      :body (labels :suggestions.update.agenda/success-body)
                                      :context :success}]]]}))
 
+;; TODO see if new and update can be generalized
+;; TODO accepting update suggestions breaks view
+
 (rf/reg-event-fx
   :suggestion.new.agenda/accept
   (fn [{:keys [db]} [_ suggestion]]
     (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
-          {:agenda.suggestion/keys [title description meeting]} suggestion
+          {:agenda.suggestion/keys [title description meeting rank]} suggestion
           new-agenda {:agenda/title title
                       :agenda/description description
-                      :agenda/meeting meeting}]
+                      :agenda/meeting meeting
+                      :agenda/rank rank}]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/agenda/new")
                           :params {:agenda new-agenda
@@ -93,11 +98,13 @@
 (rf/reg-event-fx
   :suggestion.new.agenda/success
   (fn [{:keys [db]} [_ response]]
-    {:db (update-in db [:edit-meeting :agendas] conj response)
-     :fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :suggestions.update.agenda/success-title)
-                                     :body (labels :suggestions.update.agenda/success-body)
-                                     :context :success}]]]}))
+    (let [new-agendas (conj (get-in db [:edit-meeting :agendas]) response)
+          sorted-agendas (sort-by :agenda/rank new-agendas)]
+      {:db (assoc-in db [:edit-meeting :agendas] sorted-agendas)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :suggestions.update.agenda/success-title)
+                                       :body (labels :suggestions.update.agenda/success-body)
+                                       :context :success}]]]})))
 
 (rf/reg-event-fx
   :suggestion.update.meeting/accept
