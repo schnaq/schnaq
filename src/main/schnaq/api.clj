@@ -91,7 +91,7 @@
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
-    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id) agendas)
+    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %)) agendas)
     (created "" {:new-meeting created-meeting})))
 
 (defn- update-meeting!
@@ -108,7 +108,8 @@
     (if (valid-credentials? (:meeting/share-hash meeting) (:meeting/edit-hash meeting))
       (do (db/update-meeting (assoc updated-meeting :meeting/author user-id))
           (doseq [agenda new-agendas]
-            (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda) (:agenda/meeting agenda)))
+            (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda)
+                                 (:agenda/meeting agenda) (:agenda/rank agenda)))
           (doseq [agenda updated-agendas]
             (db/update-agenda agenda))
           (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
@@ -119,7 +120,7 @@
   "Update a single agenda, when the credentials are valid."
   [{:keys [body-params]}]
   (let [{:keys [agenda share-hash edit-hash]} body-params
-        new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description])]
+        new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description :agenda/rank])]
     (if (valid-credentials? share-hash edit-hash)
       (if-let [updated-agenda (suggestions/update-agenda! new-agenda share-hash)]
         (ok updated-agenda)

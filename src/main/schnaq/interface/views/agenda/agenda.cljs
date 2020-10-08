@@ -105,7 +105,10 @@
 (rf/reg-event-db
   :agenda/increase-form-num
   (fn [db _]
-    (assoc-in db [:agenda :creating :all (random-uuid)] {})))
+    (let [all-temp-agendas (vals (get-in db [:agenda :creating :all]))
+          all-ranks (conj (map :agenda/rank all-temp-agendas) 0)
+          biggest-rank (apply max all-ranks)]
+      (assoc-in db [:agenda :creating :all (random-uuid)] {:agenda/rank (inc biggest-rank)}))))
 
 (rf/reg-event-db
   :agenda/update-title
@@ -147,7 +150,7 @@
 (rf/reg-sub
   :current-agendas
   (fn [db _]
-    (get-in db [:agendas :current])))
+    (sort-by :agenda/rank (get-in db [:agendas :current]))))
 
 (rf/reg-sub
   :chosen-agenda

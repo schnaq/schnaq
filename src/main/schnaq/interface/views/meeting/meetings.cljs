@@ -71,7 +71,8 @@
     (let [nickname (get-in db [:user :name] "Anonymous")
           agendas (get-in db [:agenda :creating :all] [])
           stub-agendas [{:title title
-                         :description description}]
+                         :description description
+                         :agenda/rank 1}]
           agendas-to-send (if (zero? (count agendas)) stub-agendas (vals agendas))]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/meeting/add")

@@ -33,10 +33,11 @@
 (s/def :agenda/description ::non-blank-string)
 (s/def :agenda/meeting ::entity-reference)
 (s/def :agenda/discussion ::entity-reference)
+(s/def :agenda/rank pos-int?)
 (s/def ::agenda (s/keys :req [:agenda/title :agenda/meeting :agenda/discussion]
-                        :opt [:agenda/description]))
+                        :opt [:agenda/description :agenda/rank]))
 (s/def ::agenda-essentials-only (s/keys :req [:agenda/title]
-                                        :opt [:agenda/description]))
+                                        :opt [:agenda/description :agenda/rank]))
 
 (s/def :author/nickname ::non-blank-string)
 

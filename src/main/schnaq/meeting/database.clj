@@ -197,13 +197,14 @@
 
 (defn- build-update-agenda-suggestion
   [user-id agenda-suggestion]
-  (let [{:keys [db/id agenda/title agenda/description]} (clean-nil-vals agenda-suggestion)]
+  (let [{:keys [db/id agenda/title agenda/description agenda/rank]} (clean-nil-vals agenda-suggestion)]
     (when (and (int? id)
                (s/valid? ::specs/non-blank-string title)
                (or (nil? description) (string? description)))
       (let [raw-suggestion {:agenda.suggestion/agenda id
                             :agenda.suggestion/ideator user-id
                             :agenda.suggestion/title title
+                            :agenda.suggestion/rank rank
                             :agenda.suggestion/type :agenda.suggestion.type/update}]
         (if description
           (assoc raw-suggestion :agenda.suggestion/description description)
@@ -218,11 +219,12 @@
 
 (defn- build-new-agenda-suggestion
   [user-id meeting-id agenda-suggestion]
-  (let [{:keys [agenda/title agenda/description]} (clean-nil-vals agenda-suggestion)]
+  (let [{:keys [agenda/title agenda/description agenda/rank]} (clean-nil-vals agenda-suggestion)]
     (when (and (s/valid? ::specs/non-blank-string title)
                (or (nil? description) (string? description)))
       (let [raw-suggestion {:agenda.suggestion/ideator user-id
                             :agenda.suggestion/title title
+                            :agenda.suggestion/rank rank
                             :agenda.suggestion/type :agenda.suggestion.type/new
                             :agenda.suggestion/meeting meeting-id}]
         (if description
@@ -283,6 +285,7 @@
    :agenda.suggestion/title
    :agenda.suggestion/description
    :agenda.suggestion/type
+   :agenda.suggestion/rank
    {:agenda.suggestion/agenda [:db/id]}
    {:agenda.suggestion/meeting [:db/id]}
    {:agenda.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
@@ -412,33 +415,38 @@
   "Add an agenda to the database.
   A discussion is automatically created for the agenda-point.
   Returns the discussion-id of the newly created discussion."
-  [title description meeting-id]
-  [:agenda/title (? string?) int? :ret int?]
-  (when (and (s/valid? :agenda/title title)
-             (s/valid? int? meeting-id))
-    (let [raw-agenda {:db/id "temp-id"
-                      :agenda/title title
-                      :agenda/meeting meeting-id
-                      :agenda/discussion
-                      {:db/id "whatever-forget-it"
-                       :discussion/title title
-                       :discussion/states [:discussion.state/open]
-                       :discussion/starting-arguments []}}
-          agenda (if (and description (s/valid? :agenda/description description))
-                   (merge-with merge
-                               raw-agenda
-                               {:agenda/description description
-                                :agenda/discussion {:discussion/description description}})
-                   raw-agenda)]
-      (get-in
-        (transact [agenda])
-        [:tempids "temp-id"]))))
+  ([title description meeting-id]
+   [:agenda/title (? string?) int? :ret int?]
+   (add-agenda-point title description meeting-id 1))
+  ([title description meeting-id rank]
+   [:agenda/title (? string?) int? :agenda/rank :ret int?]
+   (when (and (s/valid? :agenda/title title)
+              (s/valid? int? meeting-id))
+     (let [raw-agenda {:db/id "temp-id"
+                       :agenda/title title
+                       :agenda/meeting meeting-id
+                       :agenda/rank rank
+                       :agenda/discussion
+                       {:db/id "whatever-forget-it"
+                        :discussion/title title
+                        :discussion/states [:discussion.state/open]
+                        :discussion/starting-arguments []}}
+           agenda (if (and description (s/valid? :agenda/description description))
+                    (merge-with merge
+                                raw-agenda
+                                {:agenda/description description
+                                 :agenda/discussion {:discussion/description description}})
+                    raw-agenda)]
+       (get-in
+         (transact [agenda])
+         [:tempids "temp-id"])))))
 
 (def ^:private agenda-pattern
   [:db/id
    :agenda/title
    :agenda/description
    :agenda/meeting
+   :agenda/rank
    :agenda/discussion])
 
 (>defn agenda

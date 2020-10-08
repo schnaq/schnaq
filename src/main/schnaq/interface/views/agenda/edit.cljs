@@ -47,10 +47,11 @@
   :suggestion.update.agenda/accept
   (fn [{:keys [db]} [_ suggestion]]
     (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
-          {:agenda.suggestion/keys [agenda title description]} suggestion
+          {:agenda.suggestion/keys [agenda title description rank]} suggestion
           new-agenda {:db/id (:db/id agenda)
                       :agenda/title title
-                      :agenda/description description}]
+                      :agenda/description description
+                      :agenda/rank rank}]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/agenda/update")
                           :params {:agenda new-agenda
@@ -76,10 +77,11 @@
   :suggestion.new.agenda/accept
   (fn [{:keys [db]} [_ suggestion]]
     (let [{:keys [share-hash edit-hash]} (-> db :current-route :path-params)
-          {:agenda.suggestion/keys [title description meeting]} suggestion
+          {:agenda.suggestion/keys [title description meeting rank]} suggestion
           new-agenda {:agenda/title title
                       :agenda/description description
-                      :agenda/meeting meeting}]
+                      :agenda/meeting meeting
+                      :agenda/rank rank}]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/agenda/new")
                           :params {:agenda new-agenda
@@ -93,11 +95,13 @@
 (rf/reg-event-fx
   :suggestion.new.agenda/success
   (fn [{:keys [db]} [_ response]]
-    {:db (update-in db [:edit-meeting :agendas] conj response)
-     :fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :suggestions.update.agenda/success-title)
-                                     :body (labels :suggestions.update.agenda/success-body)
-                                     :context :success}]]]}))
+    (let [new-agendas (conj (get-in db [:edit-meeting :agendas]) response)
+          sorted-agendas (sort-by :agenda/rank new-agendas)]
+      {:db (assoc-in db [:edit-meeting :agendas] sorted-agendas)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :suggestions.update.agenda/success-title)
+                                       :body (labels :suggestions.update.agenda/success-body)
+                                       :context :success}]]]})))
 
 (rf/reg-event-fx
   :suggestion.update.meeting/accept
@@ -234,8 +238,8 @@
 
 (defn- feedback-badge
   "Badge indicating free-text feedback from users."
-  [meeting-id]
-  (when-let [feedback @(rf/subscribe [:suggestions/feedback meeting-id])]
+  []
+  (when-let [feedback @(rf/subscribe [:suggestions/feedback])]
     [:span.badge.badge-pill.mr-2.badge-clickable.clickable
      {:title (labels :suggestions.feedback/header)
       :on-click #(rf/dispatch [:modal {:show? true
@@ -319,7 +323,7 @@
         [addition-badge]
         {:key (str "addition-badge-" (:db/id selected-meeting))})
       (with-meta
-        [feedback-badge (:db/id selected-meeting)]
+        [feedback-badge]
         {:key (str "feedback-badge-" (:db/id selected-meeting))})]]))
 
 (defn- editable-meeting-template
@@ -387,15 +391,16 @@
   (fn [{:keys [db]} [_ feedback-text]]
     (let [nickname (get-in db [:user :name] "Anonymous")
           share-hash (get-in db [:current-route :path-params :share-hash])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/meeting/feedback")
-                          :params {:share-hash share-hash
-                                   :feedback feedback-text
-                                   :nickname nickname}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:no-op]
-                          :on-failure [:ajax-failure]}]]})))
+      (when-not (gstring/isEmptyString feedback-text)
+        {:fx [[:http-xhrio {:method :post
+                            :uri (str (:rest-backend config) "/meeting/feedback")
+                            :params {:share-hash share-hash
+                                     :feedback feedback-text
+                                     :nickname nickname}
+                            :format (ajax/transit-request-format)
+                            :response-format (ajax/transit-response-format)
+                            :on-success [:no-op]
+                            :on-failure [:ajax-failure]}]]}))))
 
 ;; load agendas events
 
@@ -407,7 +412,7 @@
 (rf/reg-event-db
   :agenda/load-for-edit-success
   (fn [db [_ agendas]]
-    (assoc db :edit-meeting {:agendas agendas
+    (assoc db :edit-meeting {:agendas (sort-by :agenda/rank agendas)
                              :meeting (get-in db [:meeting :selected])
                              :delete-agendas #{}}
               :edit-meeting-updates {})))
@@ -440,6 +445,13 @@
 (rf/reg-event-db
   :agenda.edit/reset-edit-updates
   (fn [db _]
+    (assoc db :edit-meeting-updates {}
+              :edit-meeting {}
+              :suggestions {})))
+
+(rf/reg-event-db
+  :agenda.edit/reset-editor-update-flag
+  (fn [db _]
     (assoc db :edit-meeting-updates {})))
 
 ;; delete agenda events
@@ -458,11 +470,15 @@
 (rf/reg-event-db
   :agenda/add-edit-form
   (fn [db _]
-    (update-in db [:edit-meeting :agendas]
-               #(concat % [{:db/id (str (random-uuid))
-                            :agenda/title ""
-                            :agenda/description ""
-                            :agenda/meeting (get-in db [:edit-meeting :meeting :db/id])}]))))
+    (let [all-temp-agendas (get-in db [:edit-meeting :agendas])
+          all-ranks (conj (map :agenda/rank all-temp-agendas) 0)
+          biggest-rank (apply max all-ranks)]
+      (update-in db [:edit-meeting :agendas]
+                 #(concat % [{:db/id (str (random-uuid))
+                              :agenda/title ""
+                              :agenda/description ""
+                              :agenda/rank (inc biggest-rank)
+                              :agenda/meeting (get-in db [:edit-meeting :meeting :db/id])}])))))
 
 ;; update agenda
 
@@ -470,11 +486,12 @@
   :agenda/update-edit-form
   (fn [db [_ attribute id new-val]]
     (let [has-id? #(= id (:db/id %))
-          update-fn (fn [coll] (map #(if (has-id? %)
-                                       ;; update attribute of agenda
-                                       (assoc % attribute new-val)
-                                       ;; do not update agenda
-                                       %) coll))]
+          update-fn (fn [coll] (sort-by :agenda/rank
+                                        (map #(if (has-id? %)
+                                                ;; update attribute of agenda
+                                                (assoc % attribute new-val)
+                                                ;; do not update agenda
+                                                %) coll)))]
       (update-in db [:edit-meeting :agendas] update-fn))))
 
 ;; update title
@@ -541,7 +558,7 @@
     (let [group-by-agenda-id #(get-in % [:agenda.suggestion/agenda :db/id])
           meeting-id (:db/id (:meeting.suggestion/meeting (first all)))]
       (-> db
-          (assoc-in [:suggestions :feedback meeting-id] feedback)
+          (assoc-in [:suggestions :feedback] feedback)
           (assoc-in [:suggestions :meetings meeting-id] all)
           (assoc-in [:suggestions :agendas :updates] (group-by group-by-agenda-id update))
           (assoc-in [:suggestions :agendas :delete] (group-by group-by-agenda-id delete))
@@ -580,6 +597,6 @@
 
 (rf/reg-sub
   :suggestions/feedback
-  (fn [db [_ meeting-id]]
-    (get-in db [:suggestions :feedback meeting-id])))
+  (fn [db _]
+    (get-in db [:suggestions :feedback])))
 
