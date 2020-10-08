@@ -449,6 +449,11 @@
               :edit-meeting {}
               :suggestions {})))
 
+(rf/reg-event-db
+  :agenda.edit/reset-editor-update-flag
+  (fn [db _]
+    (assoc db :edit-meeting-updates {})))
+
 ;; delete agenda events
 
 (rf/reg-event-db
@@ -481,11 +486,12 @@
   :agenda/update-edit-form
   (fn [db [_ attribute id new-val]]
     (let [has-id? #(= id (:db/id %))
-          update-fn (fn [coll] (map #(if (has-id? %)
-                                       ;; update attribute of agenda
-                                       (assoc % attribute new-val)
-                                       ;; do not update agenda
-                                       %) coll))]
+          update-fn (fn [coll] (sort-by :agenda/rank
+                                        (map #(if (has-id? %)
+                                                ;; update attribute of agenda
+                                                (assoc % attribute new-val)
+                                                ;; do not update agenda
+                                                %) coll)))]
       (update-in db [:edit-meeting :agendas] update-fn))))
 
 ;; update title

@@ -24,7 +24,7 @@
             ;; Update value of MDE only if the current value is different to the current one.
             (when text-update
               (.value @mde-ref text-update)
-              (rf/dispatch [:agenda.edit/reset-edit-updates]))
+              (rf/dispatch [:agenda.edit/reset-editor-update-flag]))
             ;; Update with the initial-text, when value is not set (for lazy loaded content)
             (when (and initial-text (empty? (.value @mde-ref)))
               (.value @mde-ref initial-text))))
