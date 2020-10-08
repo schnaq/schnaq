@@ -261,14 +261,19 @@
       (are [total-datoms input]
         (= total-datoms (count (:tx-data (database/suggest-new-agendas! input user-id meeting-id))))
         1 [{}]
+        7 [{:agenda/title "Neuer Title"
+            :agenda/description "Whatup bruh"
+            :agenda/rank 1}]
         6 [{:agenda/title "Neuer Title"
-            :agenda/description "Whatup bruh"}]
-        5 [{:agenda/title "Neuer Title"}]
-        1 [{:agenda/description "Whatup bruh"}]
-        11 [{:agenda/title "Neuer Title"
-             :agenda/description "Whatup bruh"}
+            :agenda/rank 1}]
+        1 [{:agenda/description "Whatup bruh"
+            :agenda/rank 1}]
+        13 [{:agenda/title "Neuer Title"
+             :agenda/description "Whatup bruh"
+             :agenda/rank 1}
             {:agenda/title "Neuer Title 2"
-             :agenda/description "Whatup bruh 2"}]))))
+             :agenda/description "Whatup bruh 2"
+             :agenda/rank 2}]))))
 
 (deftest suggest-agenda-deletion!-test
   (testing "Create a delete agenda suggestion entity."
