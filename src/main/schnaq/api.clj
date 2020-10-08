@@ -608,5 +608,3 @@
   (-main)
   (stop-server)
   :end)
-
-;; TODO suggestions müssen noch für den rank geupdated werden

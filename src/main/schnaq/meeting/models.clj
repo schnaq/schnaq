@@ -67,6 +67,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "New title for agenda"}
+   {:db/ident :agenda.suggestion/rank
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "New rank for the suggestion"}
    {:db/ident :agenda.suggestion/type
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one

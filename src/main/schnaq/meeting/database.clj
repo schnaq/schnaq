@@ -197,13 +197,14 @@
 
 (defn- build-update-agenda-suggestion
   [user-id agenda-suggestion]
-  (let [{:keys [db/id agenda/title agenda/description]} (clean-nil-vals agenda-suggestion)]
+  (let [{:keys [db/id agenda/title agenda/description agenda/rank]} (clean-nil-vals agenda-suggestion)]
     (when (and (int? id)
                (s/valid? ::specs/non-blank-string title)
                (or (nil? description) (string? description)))
       (let [raw-suggestion {:agenda.suggestion/agenda id
                             :agenda.suggestion/ideator user-id
                             :agenda.suggestion/title title
+                            :agenda.suggestion/rank rank
                             :agenda.suggestion/type :agenda.suggestion.type/update}]
         (if description
           (assoc raw-suggestion :agenda.suggestion/description description)
@@ -218,11 +219,12 @@
 
 (defn- build-new-agenda-suggestion
   [user-id meeting-id agenda-suggestion]
-  (let [{:keys [agenda/title agenda/description]} (clean-nil-vals agenda-suggestion)]
+  (let [{:keys [agenda/title agenda/description agenda/rank]} (clean-nil-vals agenda-suggestion)]
     (when (and (s/valid? ::specs/non-blank-string title)
                (or (nil? description) (string? description)))
       (let [raw-suggestion {:agenda.suggestion/ideator user-id
                             :agenda.suggestion/title title
+                            :agenda.suggestion/rank rank
                             :agenda.suggestion/type :agenda.suggestion.type/new
                             :agenda.suggestion/meeting meeting-id}]
         (if description
