@@ -73,12 +73,10 @@
 
 (defn graph-agenda-header [agenda share-hash]
   ;; meeting header
-  [base/discussion-header
-   (:agenda/title agenda)
-   nil
-   (fn [] (rf/dispatch [:navigation/navigate :routes.discussion/start
-                        {:share-hash share-hash
-                         :id (:db/id (:agenda/discussion agenda))}]))])
+  (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.discussion/start
+                                        {:share-hash share-hash
+                                         :id (:db/id (:agenda/discussion agenda))}]))]
+    [base/discussion-header (:agenda/title agenda) "" go-back-fn go-back-fn]))
 
 (defn- graph-view
   "The core Graph visualization wrapper."
