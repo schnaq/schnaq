@@ -3,8 +3,8 @@
             [schnaq.interface.text.display-data :refer [labels img-path video]]
             [re-frame.core :as rf]))
 
-(defn text-box
-  "Text box with title and a body"
+(defn- text-box
+  "Text box with title and a body."
   [title body]
   [:article.feature-text-box.pb-5
    [:h1 (labels title)]
@@ -35,7 +35,7 @@
      [:source {:src (video vide-key-webm) :type "video/mp4"}]]]])
 
 (defn- call-to-action-row
-  "Call to action row with button"
+  "Call to action row with button."
   []
   [:div.row.align-items-center.feature-row
    [:div.col-12.col-lg-6
