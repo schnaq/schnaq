@@ -62,6 +62,9 @@
      :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
      :startpage.features.graph/body "Sehen Sie die Argumente Ihrer Mitarbeitenden. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
 
+     :how-to.startpage/title "Wie benutze ich schnaq?"
+     :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq zu bedienen haben? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
+     :how-to.startpage/button "Wie schnaqqe ich?"
      :how-to.title "Wie benutze ich schnaq?"
      :how-to.why/title "Wozu dient schnaq?"
      :how-to.why/body "Schnaq dient dazu Meetings und andere Treffen im Voraus mit den Teilnehmenden zu planen und zu diskutieren."
@@ -71,6 +74,8 @@
      :how-to.agenda/body "Sie können mehrere Agendapunkte anlegen um ihr schnaq granularer zu planen und um Themen einzelnd zu diskutieren."
      :how-to.admin/title "Teilnehmende einladen"
      :how-to.admin/body "Teilnehmende können entweder per Link oder Mail eingeladen werden. Weitere Admins laden Sie über den Admin Zugang ein. Administrierende können ebenfalls Teilnehmende einladen oder das schnaq editieren."
+     :how-to.call-to-action/title "Genug gequatscht, jetzt wird geschnaqqt!"
+     :how-to.call-to-action/body "Starten Sie jetzt ihr schnaq bequem mit einem Klick! Laden Sie Teilnehmende ein und diskutieren Sie Vorschläge untereinander. Kollaborative Vorbereitung ohne Hürden, ganz einfach gemacht."
 
 
      :startpage.early-adopter/title "Neugierig geworden?"
