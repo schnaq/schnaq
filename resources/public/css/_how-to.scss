@@ -1,0 +1,27 @@
+.how-to-container {
+  /* stylelint-disable */
+  @extend .container;
+  /* stylelint-enable */
+  box-shadow: $regular-shadow;
+  max-width: 1600px;
+  width: 100%;
+}
+
+.how-to-video-row {
+  padding-bottom: 10rem;
+  padding-top: 10rem;
+}
+
+.chat-background {
+  background-image: url('../imgs/backrgound/background_clutter.svg');
+}
+
+.bubble-background {
+  background-image: url('../imgs/backrgound/bubble-fade.svg');
+  background-repeat: no-repeat;
+}
+
+.taskbar-background {
+  background-color: #fff;
+  border-radius: 20px 20px 0 0;
+}

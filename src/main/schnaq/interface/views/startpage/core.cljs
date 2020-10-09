@@ -177,20 +177,38 @@
                       #:notification{:title (labels :startpage.demo.request.send.notification/failed-title)
                                      :body (labels :startpage.demo.request.send.notification/failed-body)
                                      :context :alert}]]]}))
+(defn- button-with-text-section
+  "A button and text to navigate to the demo section"
+  [button-label fn-navigation title body]
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-5.text-center
+    [:button.btn.button-secondary.font-150.mb-5
+     {:on-click fn-navigation}
+     (labels button-label)]]
+   [:div.col-12.col-lg-6.offset-lg-1
+    [:article.feature-text-box.pb-5
+     [:h5 (labels title)]
+     [:p (labels body)]]]])
 
 (defn- request-demo-section
   "A button and some text to request a personal demo"
   []
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-5.text-center
-    [:button.btn.button-secondary.font-150.mb-5
-     {:on-click #(rf/dispatch [:modal {:show? true :large? false
-                                       :child [request-demo-modal]}])}
-     (labels :startpage.demo.request/button)]]
-   [:div.col-12.col-lg-6.offset-lg-1
-    [:article.feature-text-box.pb-5
-     [:h5 (labels :startpage.demo.request/title)]
-     [:p (labels :startpage.demo.request/body)]]]])
+  [button-with-text-section
+   :startpage.demo.request/button
+   #(rf/dispatch [:modal {:show? true :large? false
+                          :child [request-demo-modal]}])
+   :startpage.demo.request/title
+   :startpage.demo.request/body])
+
+(defn- how-to-section
+  "A button and text to navigate to the demo section"
+  []
+  [button-with-text-section
+   :how-to.startpage/button
+   #(rf/dispatch [:navigation/navigate :routes/how-to])
+   :how-to.startpage/title
+   :how-to.startpage/body])
+
 
 
 ;; -----------------------------------------------------------------------------
@@ -207,6 +225,7 @@
       [start-schnaq-button]]]
     [icons-grid]
     [request-demo-section]
+    [how-to-section]
     [usage-of-schnaq-heading]
     [startpage-features/feature-rows]]
    [early-adopters]
