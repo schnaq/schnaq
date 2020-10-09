@@ -1,35 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 28.25">
-    <defs>
-        <style>
-            .cls-1{isolation:isolate;}.cls-2{fill:#fff;}.cls-3{fill:#f2f2f2;}.cls-4{mask:url(#mask);}.cls-5{opacity:0.12;mix-blend-mode:multiply;}.cls-6{fill:#ed1c24;}.cls-7{fill:#fbb03b;}.cls-8{fill:#39b54a;}.cls-9{filter:url(#luminosity-invert);}
-        </style>
-        <filter id="luminosity-invert" color-interpolation-filters="sRGB">
-            <feColorMatrix values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0"/>
-        </filter>
-        <mask id="mask" x="77" y="2.76" width="416" height="22">
-            <g class="cls-9">
-                <g transform="translate(0 -156.24)">
-                    <image width="416" height="22" transform="translate(77 159)"
-                           xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaAAAAAWCAYAAACG0kiFAAAACXBIWXMAAAsSAAALEgHS3X78AAADxElEQVR4Xu3dS0/qXBiG4afl1AItESxgCAEMYjBx4v//BU7EaMQYiSdUQCOgVA6rhz340hWqePiys/dg+1wJE2gXwzttXxYKAB9ERER/mfrVAURERH9C9KsDdnZ2kM/noes6YrEYVFWFoihQ1XC7FEX5YAUiIvqX+H74xpnnefB9H67rQgiB2WyGwWCAk5OTD1b4j4IPbsHt7u6iWq2iVqvBsiwYhoFEIoFIJAJVVWWAGB4iop/J93358jwPjuNgNpvBtm30+31cXl7i5uYGh4eHK89/dwW0tbWFzc1NbG9vo1KpoFQqIZvNIpVKQdM0RKNReRUEMEBERD/V2wAJIbBYLDCZTPD09IRarYarqysUi0VcXFzg7OwsdH4oQPV6HXt7e2g2m9jc3ES5XIZlWchkMjI+kUgEiqIwPEREJG/HeZ4nIzSbzTAej1EsFmFZFrLZLNbW1uB5Hs7Pz+W5oQBVq1U0Gg00m01Uq1VsbGwgk8lA13VEo1FGh4iIPuX7PhzHgWmaME0Tuq4jHo9DCIGHh4fVAWo0GqjX66hUKiiXyyiVSsjlctA0beWXEBERvaUoCmKxGEzTRDweh6IocBwHo9EIg8EAt7e3OD09BbA0hp3P52FZFizLQi6Xk7fdiIiI/i9FUaDrOjKZDHK5HAqFAorFItbX1+UxMkDJZBKGYcA0TaTTacaHiIh+m6ZpSKfTME0ThmEglUrJz2SAotEoEokE4vE4YrEYIpHIysWIiIi+K2iLpmlymC0gAxRMtgUj1hw4ICKi3/VZW2SAgh8ROY4D13Xhed7KxYiIiL4r+I1Q0JXltsgABbPb0+kU0+kUQoiVixEREX2XEALz+Vz2ZbktMkC2bWM0GmE4HOL5+RmTyQSu665ckIiI6Cuu68K2bYzHYwyHQ4xGI9i2LT+XT4OC+exCoQDTNJFIJAAAhmEgFovxmRAREX2bEAKTyQSPj4/o9Xq4u7tDt9tFv9+Xx8gAdTodGIYhR7BVVYUQAtPplDthExHRO8u7Ygc7YgfzBNPpFKPRCPf39+h0Omi32zg+Pkan05HnhLbiabVaMiZCCLy8vCCbzSKZTIZ2wv5oSo4hIiL69739O4bgvWDYYD6fw7ZtDIdDdLtdtNtt7O/vo9Vqhc55txv2wcEBfN/H6+srer2eDFA8Hg8FCGBwiIh+uiBGywESQshnP9fX1zg6OnoXH+CT/wOq1+soFApIpVKh+CwHSC7CEBER/Shvr4KCAAURWiwWsG0bvV4vdNtt2YcBIiIi+pPC0wRERER/yS+YA6u+uv+gKwAAAABJRU5ErkJggg=="/>
-                </g>
-            </g>
-        </mask>
-    </defs>
-    <g class="cls-1">
-        <g id="Layer_1">
-            <g id="Taskbar">
-                <path class="cls-2" d="M512,184.49H0V165.55a9.31,9.31,0,0,1,9.31-9.31H502.69a9.31,9.31,0,0,1,9.31,9.31Z"
-                      transform="translate(0 -156.24)"/>
-                <rect class="cls-3" x="79" y="5.58" width="412" height="17.08" rx="8.54"/>
-                <g class="cls-4">
-                    <g class="cls-5">
-                        <rect x="79" y="5.58" width="412" height="17.08" rx="8.54"/>
-                    </g>
-                </g>
-                <circle class="cls-6" cx="18" cy="14.13" r="6"/>
-                <circle class="cls-7" cx="34" cy="14.13" r="6"/>
-                <circle class="cls-8" cx="50" cy="14.13" r="6"/>
-            </g>
-        </g>
-    </g>
-</svg>
+version https://git-lfs.github.com/spec/v1
+oid sha256:0b4287d76acc6d0542d0c245815598963d88fa42a49f660e37205ed405a10bd9
+size 3115
