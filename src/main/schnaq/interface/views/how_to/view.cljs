@@ -16,7 +16,7 @@
   [:div.row.align-items-center.feature-row
    [:div.col-12.col-lg-6
     [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true}
+    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true :playsinline true}
      [:source {:src (video video-key-webm) :type "video/webm"}]
      [:source {:src (video vide-key-webm) :type "video/mp4"}]]]
    [:div.col-12.col-lg-5.offset-lg-1
@@ -30,7 +30,7 @@
     [text-box title body]]
    [:div.col-12.col-lg-6.offset-lg-1
     [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true}
+    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true :playsinline true}
      [:source {:src (video video-key-webm) :type "video/webm"}]
      [:source {:src (video vide-key-webm) :type "video/mp4"}]]]])
 
@@ -43,7 +43,7 @@
      :how-to.call-to-action/title
      :how-to.call-to-action/body]]
    [:div.col-12.col-lg-6.text-center
-    [:button.button-secondary.font-200.p-5
+    [:button.button-secondary.font-200
      {:type "button"
       :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
      (labels :startpage.button/create-schnaq)]]])
