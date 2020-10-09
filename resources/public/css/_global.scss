@@ -86,3 +86,9 @@ h6 {
 .text-gray-700 {
   color: $gray-700;
 }
+
+@media (min-width: 2560px) {
+  .container {
+    max-width: 1600px;
+  }
+}
