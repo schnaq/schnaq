@@ -13,6 +13,7 @@
             [schnaq.interface.views.meeting.meetings :as meeting-views]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.meeting.single :as meeting-single]
+            [schnaq.interface.views.how-to.view :as how-to]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.graph.view :as graph-view]))
 
@@ -33,6 +34,10 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
+   ["how-to"
+    {:name :routes/how-to
+     :view how-to/view
+     :link-text (labels :routes/how-to)}]
    ["meetings"
     {:controllers [{:start (fn [_]
                              (rf/dispatch [:username/open-dialog]))}]}
