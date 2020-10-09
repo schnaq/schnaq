@@ -38,7 +38,7 @@
                                    :minHeight min-height
                                    :spellChecker false
                                    :sideBySideFullscreen false
-                                   :initialValue (data/labels :meeting-form-desc-placeholder)}))]
+                                   :placeholder (data/labels :meeting-form-description-placeholder)}))]
             (reset! mde-ref newMDE)
             (when initial-text (.value @mde-ref initial-text))
             (.on (.-codemirror newMDE) "change"

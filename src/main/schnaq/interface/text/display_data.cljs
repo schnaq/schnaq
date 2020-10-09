@@ -81,7 +81,7 @@
      :meeting-form-title "Titel"
      :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
      :meeting-form-description "Beschreibung"
-     :meeting-form-description-placeholder "Worum geht es in Ihrem schnaq?"
+     :meeting-form-description-placeholder "Dauer: X Minuten\n\nThema"
      :meeting-form-end-date "Datum"
      :meeting-form-end-time "Uhrzeit"
      :meeting/copy-share-link "Link kopieren:"
