@@ -171,7 +171,7 @@
 (defn- button-with-text-section
   "A button and text to navigate to the demo section"
   [button-label fn-navigation title body]
-  [:div.row.align-items-center.feature-row
+  [:div.row.align-items-center.feature-row.mt-3
    [:div.col-12.col-lg-5.text-center
     [:button.btn.button-secondary.font-150.mb-5
      {:on-click fn-navigation}
@@ -200,31 +200,36 @@
    :how-to.startpage/title
    :how-to.startpage/body])
 
+(defn- value-prop-card
+  "A single value proposition-card"
+  [title description image-path alt-text]
+  [:div.card
+   [:img.card-img-top {:src image-path :alt alt-text}]
+   [:div.card-body.d-flex.flex-column
+    [:h5.card-title title]
+    [:p.card-text description]
+    [:div.text-center.mt-auto
+     [:button.btn.button-primary [:p.card-text [:small (labels :startpage.value-cards.button/text)]]]]]])
+
 (defn- value-prop-cards
   "Cards displaying the different value propositions."
   []
-  [:div.card-deck.mt-5
-   [:div.card
-    [:img.card-img-top {:src "imgs/stock/discussion.jpeg" :alt "Card image cap"}]
-    [:div.card-body.d-flex.flex-column
-     [:h5.card-title "Diskussionen führen"]
-     [:p.card-text "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer."]
-     [:div.text-center.mt-auto
-      [:button.btn.button-primary [:p.card-text [:small "Mehr erfahren"]]]]]]
-   [:div.card
-    [:img.card-img-top {:src "imgs/stock/meeting.jpeg" :alt "Card image cap"}]
-    [:div.card-body.d-flex.flex-column
-     [:h5.card-title "Meetings optimieren"]
-     [:p.card-text "This card has supporting text below as a natural lead-in to additional content."]
-     [:div.text-center.mt-auto
-      [:button.btn.button-primary [:p.card-text [:small "Mehr erfahren"]]]]]]
-   [:div.card
-    [:img.card-img-top {:src "imgs/stock/knowledge.jpeg" :alt "Card image cap"}]
-    [:div.card-body.d-flex.flex-column
-     [:h5.card-title "Wissen generieren"]
-     [:p.card-text "This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action."]
-     [:div.text-center.mt-auto
-      [:button.btn.button-primary [:p.card-text [:small "Mehr erfahren"]]]]]]])
+  [:div.card-deck.my-5
+   [value-prop-card
+    (labels :startpage.value-cards.discussion/title)
+    (labels :startpage.value-cards.discussion/description)
+    (img-path :startpage.value-cards.discussion/image)
+    (labels :startpage.value-cards.discussion/alt-text)]
+   [value-prop-card
+    (labels :startpage.value-cards.meetings/title)
+    (labels :startpage.value-cards.meetings/description)
+    (img-path :startpage.value-cards.meetings/image)
+    (labels :startpage.value-cards.meetings/alt-text)]
+   [value-prop-card
+    (labels :startpage.value-cards.knowledge/title)
+    (labels :startpage.value-cards.knowledge/description)
+    (img-path :startpage.value-cards.knowledge/image)
+    (labels :startpage.value-cards.knowledge/alt-text)]])
 
 ;; -----------------------------------------------------------------------------
 

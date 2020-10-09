@@ -19,18 +19,22 @@
 
      :startpage.heading-list/community "Meetingziele kollaborativ festlegen"
      :startpage.heading-list/exchange "Informationen gezielt austauschen"
-     :startpage.heading-list/reports "Zeit sparen durch fokussierte Meetings"
+     :startpage.heading-list/reports "Strukturiert Wissen festhalten"
      :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
      :startpage.under-construction/body "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
 
      :startpage.button/create-schnaq "Jetzt einen schnaq starten!"
 
-     :startpage.grid/innovative "Zielgerichtet"
-     :startpage.grid/innovative-body "Meetings mit einer klaren Agenda sind produktiver"
-     :startpage.grid/communicative "Kommunikativ"
-     :startpage.grid/communicative-body "Lassen Sie alle WissensträgerInnen zu Wort kommen"
-     :startpage.grid/cooperative "Kooperativ"
-     :startpage.grid/cooperative-body "Gemeinsame Planung fördert die aktive Teilnahme an Meetings"
+     :startpage.value-cards.discussion/title "Diskussionen führen"
+     :startpage.value-cards.discussion/description "Es ist nicht einfach über das Internet miteinander zu Diskutieren ohne sich schnell verloren zu fühlen. Mit schnaq können Sie strukturierte Diskussionen führen, und dabei leicht den Überblick über die Argumente und konktroverse Themen behalten."
+     :startpage.value-cards.discussion/alt-text "Ein Symbolbild einer Sprechblase"
+     :startpage.value-cards.meetings/title "Meetings optimieren"
+     :startpage.value-cards.meetings/description "Vor allem seitdem die Arbeitswelt verteilter geworden ist, hetzt man von einem (digitalen) Meeting zum anderen. Damit die Vor- und Nachbereitung nicht mehr zur Nebensache wird, gibt es schnaq. Sparen Sie Arbeitszeit und optimieren sie die Ergebnisse Ihrer Meetings."
+     :startpage.value-cards.meetings/alt-text "Menschen in einem Meeting, eine Frau redet gerade"
+     :startpage.value-cards.knowledge/title "Wissen generieren"
+     :startpage.value-cards.knowledge/description "Oft fragt man sich ob ehemals getroffene Entscheidungen oder generiertes Wissen noch aktuell sind. Mit schnaq wird nicht nur das Ergebniss, sondern auch die Wissensgenerierung festgehalten. Damit lässt sich in der Zukunft leicht nachvollziehen weshalb welche Entscheidungen getroffen wurden, und ob Wissen noch zeitgemäß ist."
+     :startpage.value-cards.knowledge/alt-text "Etliche Klebezettel auf einer Wand"
+     :startpage.value-cards.button/text "Mehr erfahren"
 
      :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
 
@@ -324,7 +328,10 @@
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
      :startpage.features/sample-discussion "/imgs/startpage/discussion_elearning.png"
-     :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"}))
+     :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
+     :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
+     :startpage.value-cards.meetings/image "/imgs/stock/meeting.jpeg"
+     :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"}))
 
 (defn video
   "Returns an video path"
