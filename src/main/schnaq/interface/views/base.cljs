@@ -33,18 +33,6 @@
      more]]
    [wavy-curve]])
 
-;; grid icons
-
-(defn icon-in-grid
-  "Create one icon in a grid"
-  [icon heading subheading]
-  [:div.col-lg-4
-   [:div {:class "features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3"}
-    [:div.features-icons-icon.d-flex
-     [:i {:class (str "m-auto text-primary fas fa-4x " icon)}]]
-    [:h3 heading]
-    [:p.lead.mb-0 subheading]]])
-
 (defn img-bullet-subtext
   "Create one icon in a grid"
   [path-to-img heading subheading]

@@ -47,16 +47,6 @@
                             (labels :startpage.under-construction/heading)
                             (labels :startpage.under-construction/body))])
 
-(defn- icons-grid
-  "Display features in a grid."
-  []
-  [:section.features-icons.text-center
-   [:div.container
-    [:div.row
-     (base/icon-in-grid (fa :laptop) (labels :startpage.grid/innovative) (labels :startpage.grid/innovative-body))
-     (base/icon-in-grid (fa :comment) (labels :startpage.grid/communicative) (labels :startpage.grid/communicative-body))
-     (base/icon-in-grid (fa :carry) (labels :startpage.grid/cooperative) (labels :startpage.grid/cooperative-body))]]])
-
 (defn- usage-of-schnaq-heading
   "Heading introducing the features of schnaq."
   []
@@ -250,7 +240,6 @@
       [start-schnaq-button]]]
     (when-not toolbelt/production?
       [value-prop-cards])
-    [icons-grid]
     [request-demo-section]
     [how-to-section]
     [usage-of-schnaq-heading]
