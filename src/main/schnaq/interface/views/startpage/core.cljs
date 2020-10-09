@@ -1,14 +1,15 @@
 (ns schnaq.interface.views.startpage.core
   "Defining the startpage of schnaq."
-  (:require [schnaq.interface.views.base :as base]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.views.startpage.features :as startpage-features]
-            [re-frame.core :as rf]
+  (:require [ajax.core :as ajax]
             [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.config :as config]
+            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.views.base :as base]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modals.modal :as modal]
-            [ajax.core :as ajax]))
+            [schnaq.interface.views.startpage.features :as startpage-features]))
 
 (defn- header-animation
   "Display header animation video."
@@ -209,7 +210,31 @@
    :how-to.startpage/title
    :how-to.startpage/body])
 
-
+(defn- value-prop-cards
+  "Cards displaying the different value propositions."
+  []
+  [:div.card-deck.mt-5
+   [:div.card
+    [:img.card-img-top {:src "imgs/stock/discussion.jpeg" :alt "Card image cap"}]
+    [:div.card-body.d-flex.flex-column
+     [:h5.card-title "Diskussionen führen"]
+     [:p.card-text "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer."]
+     [:div.text-center.mt-auto
+      [:button.btn.button-primary [:p.card-text [:small "Mehr erfahren"]]]]]]
+   [:div.card
+    [:img.card-img-top {:src "imgs/stock/meeting.jpeg" :alt "Card image cap"}]
+    [:div.card-body.d-flex.flex-column
+     [:h5.card-title "Meetings optimieren"]
+     [:p.card-text "This card has supporting text below as a natural lead-in to additional content."]
+     [:div.text-center.mt-auto
+      [:button.btn.button-primary [:p.card-text [:small "Mehr erfahren"]]]]]]
+   [:div.card
+    [:img.card-img-top {:src "imgs/stock/knowledge.jpeg" :alt "Card image cap"}]
+    [:div.card-body.d-flex.flex-column
+     [:h5.card-title "Wissen generieren"]
+     [:p.card-text "This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action."]
+     [:div.text-center.mt-auto
+      [:button.btn.button-primary [:p.card-text [:small "Mehr erfahren"]]]]]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -223,6 +248,8 @@
       [under-construction]]
      [:div.col-12.col-lg-6.text-center
       [start-schnaq-button]]]
+    (when-not toolbelt/production?
+      [value-prop-cards])
     [icons-grid]
     [request-demo-section]
     [how-to-section]
