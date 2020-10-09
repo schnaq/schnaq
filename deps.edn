@@ -25,7 +25,7 @@
         ring-middleware-format/ring-middleware-format {:mvn/version "0.7.4"}
         ring/ring {:mvn/version "1.8.2"}
         ring/ring-defaults {:mvn/version "0.3.2"}
-        thheller/shadow-cljs {:mvn/version "2.11.4"}}
+        thheller/shadow-cljs {:mvn/version "2.11.5"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
@@ -50,7 +50,7 @@
 
            :uberjar
            {:extra-deps
-            {seancorfield/depstar {:mvn/version "1.1.117"}
+            {seancorfield/depstar {:mvn/version "1.1.126"}
              com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
             :main-opts ["-m" "hf.depstar.uberjar"
                         "target/schnaq-standalone.jar" "--verbose"]}
