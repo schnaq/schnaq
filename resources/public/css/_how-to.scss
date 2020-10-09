@@ -1,12 +1,3 @@
-.how-to-container {
-  /* stylelint-disable */
-  @extend .container;
-  /* stylelint-enable */
-  box-shadow: $regular-shadow;
-  max-width: 1600px;
-  width: 100%;
-}
-
 .how-to-video-row {
   padding-bottom: 10rem;
   padding-top: 10rem;

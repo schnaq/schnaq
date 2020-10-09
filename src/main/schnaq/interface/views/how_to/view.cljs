@@ -81,7 +81,7 @@
    [base/nav-header]
    [base/header
     (labels :how-to.title)]
-   [:div.how-to-container.chat-background.py-5
+   [:div.container.chat-background.py-5
     ;; how to videos
     [:div.pb-5.bubble-background [why]]
     [:div.how-to-video-row [create]]
