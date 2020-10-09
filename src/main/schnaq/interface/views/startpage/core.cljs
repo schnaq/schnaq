@@ -1,14 +1,15 @@
 (ns schnaq.interface.views.startpage.core
   "Defining the startpage of schnaq."
-  (:require [schnaq.interface.views.base :as base]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.views.startpage.features :as startpage-features]
-            [re-frame.core :as rf]
+  (:require [ajax.core :as ajax]
             [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.config :as config]
+            [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.views.base :as base]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modals.modal :as modal]
-            [ajax.core :as ajax]))
+            [schnaq.interface.views.startpage.features :as startpage-features]))
 
 (defn- header-animation
   "Display header animation video."
@@ -45,16 +46,6 @@
    (base/img-bullet-subtext (img-path :icon-crane)
                             (labels :startpage.under-construction/heading)
                             (labels :startpage.under-construction/body))])
-
-(defn- icons-grid
-  "Display features in a grid."
-  []
-  [:section.features-icons.text-center
-   [:div.container
-    [:div.row
-     (base/icon-in-grid (fa :laptop) (labels :startpage.grid/innovative) (labels :startpage.grid/innovative-body))
-     (base/icon-in-grid (fa :comment) (labels :startpage.grid/communicative) (labels :startpage.grid/communicative-body))
-     (base/icon-in-grid (fa :carry) (labels :startpage.grid/cooperative) (labels :startpage.grid/cooperative-body))]]])
 
 (defn- usage-of-schnaq-heading
   "Heading introducing the features of schnaq."
@@ -180,13 +171,13 @@
 (defn- button-with-text-section
   "A button and text to navigate to the demo section"
   [button-label fn-navigation title body]
-  [:div.row.align-items-center.feature-row
+  [:div.row.align-items-center.feature-row.mt-5
    [:div.col-12.col-lg-5.text-center
     [:button.btn.button-secondary.font-150.mb-5
      {:on-click fn-navigation}
      (labels button-label)]]
    [:div.col-12.col-lg-6.offset-lg-1
-    [:article.feature-text-box.pb-5
+    [:article.feature-text-box.pb-3
      [:h5 (labels title)]
      [:p (labels body)]]]])
 
@@ -209,7 +200,36 @@
    :how-to.startpage/title
    :how-to.startpage/body])
 
+(defn- value-prop-card
+  "A single value proposition-card"
+  [title description image-path alt-text]
+  [:div.card
+   [:img.card-img-top {:src image-path :alt alt-text}]
+   [:div.card-body.d-flex.flex-column
+    [:h5.card-title title]
+    [:p.card-text description]
+    [:div.text-center.mt-auto
+     [:button.btn.button-primary [:p.card-text [:small (labels :startpage.value-cards.button/text)]]]]]])
 
+(defn- value-prop-cards
+  "Cards displaying the different value propositions."
+  []
+  [:div.card-deck.my-5
+   [value-prop-card
+    (labels :startpage.value-cards.discussion/title)
+    (labels :startpage.value-cards.discussion/description)
+    (img-path :startpage.value-cards.discussion/image)
+    (labels :startpage.value-cards.discussion/alt-text)]
+   [value-prop-card
+    (labels :startpage.value-cards.meetings/title)
+    (labels :startpage.value-cards.meetings/description)
+    (img-path :startpage.value-cards.meetings/image)
+    (labels :startpage.value-cards.meetings/alt-text)]
+   [value-prop-card
+    (labels :startpage.value-cards.knowledge/title)
+    (labels :startpage.value-cards.knowledge/description)
+    (img-path :startpage.value-cards.knowledge/image)
+    (labels :startpage.value-cards.knowledge/alt-text)]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -223,7 +243,8 @@
       [under-construction]]
      [:div.col-12.col-lg-6.text-center
       [start-schnaq-button]]]
-    [icons-grid]
+    (when-not toolbelt/production?
+      [value-prop-cards])
     [request-demo-section]
     [how-to-section]
     [usage-of-schnaq-heading]
