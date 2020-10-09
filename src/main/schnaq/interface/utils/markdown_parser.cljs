@@ -7,7 +7,9 @@
   "Takes unrendered markdown and enriches special forms like timeboxes with markdown-chars."
   [markdown]
   [string? :ret string?]
-  (gstring/replaceAll markdown "Dauer: " "![Uhr Symbol](/imgs/clock.png) "))
+  (if markdown
+    (gstring/replaceAll markdown "Dauer: " "![Uhr Symbol](/imgs/clock.png) ")
+    markdown))
 
 (defn markdown-to-html [markdown]
   [:div
