@@ -171,13 +171,13 @@
 (defn- button-with-text-section
   "A button and text to navigate to the demo section"
   [button-label fn-navigation title body]
-  [:div.row.align-items-center.feature-row.mt-3
+  [:div.row.align-items-center.feature-row.mt-5
    [:div.col-12.col-lg-5.text-center
     [:button.btn.button-secondary.font-150.mb-5
      {:on-click fn-navigation}
      (labels button-label)]]
    [:div.col-12.col-lg-6.offset-lg-1
-    [:article.feature-text-box.pb-5
+    [:article.feature-text-box.pb-3
      [:h5 (labels title)]
      [:p (labels body)]]]])
 
