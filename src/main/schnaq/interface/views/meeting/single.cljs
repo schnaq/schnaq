@@ -8,7 +8,6 @@
             [schnaq.interface.views.base :as base]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
-
 (defn- tooltip-button
   [tooltip-location tooltip content on-click-fn]
   (reagent/create-class

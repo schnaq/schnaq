@@ -9,6 +9,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modals.modal :as modal]
+            [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.features :as startpage-features]))
 
 (defn- header-animation
@@ -18,18 +19,6 @@
    [:video.w-100.startpage-animation {:auto-play true :loop true :muted true :plays-inline true}
     [:source {:src (img-path :animation-discussion) :type "video/webm"}]
     [:source {:src (img-path :animation-discussion-mp4) :type "video/mp4"}]]])
-
-(defn- header []
-  [base/header
-   (labels :startpage/heading)
-   (labels :startpage/subheading)
-   [:div.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
-    [:div.row
-     [:div.col-lg-6.icon-bullets
-      (base/icon-bullet (img-path :icon-community) (labels :startpage.heading-list/community))
-      (base/icon-bullet (img-path :icon-robot) (labels :startpage.heading-list/exchange))
-      (base/icon-bullet (img-path :icon-reports) (labels :startpage.heading-list/reports))]
-     [header-animation]]]])
 
 (defn- start-schnaq-button
   "Tell user to create a schnaq now."
@@ -233,24 +222,35 @@
 
 ;; -----------------------------------------------------------------------------
 
+(def ^:private header
+  {:page/heading (labels :startpage/heading)
+   :page/subheading (labels :startpage/subheading)
+   :page/more-for-heading
+   [:div.row.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
+    [:div.col-lg-6.icon-bullets
+     (base/icon-bullet (img-path :icon-community) (labels :startpage.heading-list/community))
+     (base/icon-bullet (img-path :icon-robot) (labels :startpage.heading-list/exchange))
+     (base/icon-bullet (img-path :icon-reports) (labels :startpage.heading-list/reports))]
+    [header-animation]]})
+
 (defn- startpage-content []
-  [:<>
-   [base/nav-header]
-   [header]
-   [:section.container
-    [:div.row.mt-5
-     [:div.col-12.col-lg-6.pb-3.pb-lg-0
-      [under-construction]]
-     [:div.col-12.col-lg-6.text-center
-      [start-schnaq-button]]]
-    (when-not toolbelt/production?
-      [value-prop-cards])
-    [request-demo-section]
-    [how-to-section]
-    [usage-of-schnaq-heading]
-    [startpage-features/feature-rows]]
-   [early-adopters]
-   [subscribe-to-mailinglist]])
+  (pages/with-nav-and-header
+    header
+    [:<>
+     [:section.container
+      [:div.row.mt-5
+       [:div.col-12.col-lg-6.pb-3.pb-lg-0
+        [under-construction]]
+       [:div.col-12.col-lg-6.text-center
+        [start-schnaq-button]]]
+      (when-not toolbelt/production?
+        [value-prop-cards])
+      [request-demo-section]
+      [how-to-section]
+      [usage-of-schnaq-heading]
+      [startpage-features/feature-rows]]
+     [early-adopters]
+     [subscribe-to-mailinglist]]))
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
