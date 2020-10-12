@@ -58,10 +58,20 @@
   [:<>
    [base/nav-header]
    [:div.container.my-4
-    [:h2.text-center.pb-3 "Sparen Sie Arbeitszeit durch strukturierte Meetings"]
+    [:h2.text-center.pb-4 "Sparen Sie Arbeitszeit durch strukturierte Meetings"]
     [feature-row-image-right
      :feature.meetings/hero-image
-     :feature.meetings]]])
+     :feature.meetings]
+    [:h3.text-center.pb-4 "Schnaq für Meetings einsetzen"]
+    [feature-row-image-left
+     :feature.meetings/schedule-meetings
+     :feature.meetings.schedule]
+    [feature-row-image-right
+     :startpage.features/sample-discussion
+     :feature.meetings.discuss]
+    [feature-row-image-left
+     :startpage.features/admin-center
+     :feature.meetings.admin-center]]])
 
 
 ;; -----------------------------------------------------------------------------
