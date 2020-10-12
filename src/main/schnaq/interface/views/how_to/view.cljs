@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.how-to.view
-  (:require [schnaq.interface.views.base :as base]
-            [schnaq.interface.text.display-data :refer [labels img-path video]]
-            [re-frame.core :as rf]))
+  (:require [schnaq.interface.text.display-data :refer [labels img-path video]]
+            [re-frame.core :as rf]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- text-box
   "Text box with title and a body."
@@ -16,7 +16,7 @@
   [:div.row.align-items-center.feature-row
    [:div.col-12.col-lg-6
     [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true :playsinline "true"}
+    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true :plays-inline true}
      [:source {:src (video video-key-webm) :type "video/webm"}]
      [:source {:src (video vide-key-webm) :type "video/mp4"}]]]
    [:div.col-12.col-lg-5.offset-lg-1
@@ -30,7 +30,7 @@
     [text-box title body]]
    [:div.col-12.col-lg-6.offset-lg-1
     [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true :playsinline "true"}
+    [:video.w-100.how-to-animations {:auto-play true :loop true :muted true :plays-inline true}
      [:source {:src (video video-key-webm) :type "video/webm"}]
      [:source {:src (video vide-key-webm) :type "video/mp4"}]]]])
 
@@ -77,18 +77,16 @@
    :how-to.why/body])
 
 (defn- content []
-  [:<>
-   [base/nav-header]
-   [base/header
-    (labels :how-to.title)]
-   [:div.container.chat-background.py-5
-    ;; how to videos
-    [:div.pb-5.bubble-background [why]]
-    [:div.how-to-video-row [create]]
-    [:div.how-to-video-row [agenda]]
-    [:div.how-to-video-row [admin]]
-    ;; start schnaq
-    [call-to-action-row]]])
+  (pages/with-nav-and-header
+    {:page/heading (labels :how-to/title)}
+    [:div.container.chat-background.py-5
+     ;; how to videos
+     [:div.pb-5.bubble-background [why]]
+     [:div.how-to-video-row [create]]
+     [:div.how-to-video-row [agenda]]
+     [:div.how-to-video-row [admin]]
+     ;; start schnaq
+     [call-to-action-row]]))
 
 (defn view []
   [content])

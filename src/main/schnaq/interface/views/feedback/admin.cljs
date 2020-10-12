@@ -4,7 +4,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.pages :as pages]
             [ajax.core :as ajax]))
 
 (defn- list-feedbacks
@@ -41,12 +41,9 @@
     (if (nil? feedbacks)
       (let [password (js/prompt "Enter password to see all Feedbacks")]
         (rf/dispatch [:feedbacks/fetch password]))
-      [:<>
-       [base/nav-header]
-       [base/header
-        (labels :feedbacks.overview/header)
-        (labels :feedbacks.overview/subheader)]
-       [:div.container.py-4 [list-feedbacks]]])))
+      (pages/with-nav-and-header {:page/heading (labels :feedbacks.overview/header)
+                                  :page/subheading (labels :feedbacks.overview/subheader)}
+                                 [:div.container.py-4 [list-feedbacks]]))))
 
 (defn feedbacks-view []
   [overview])

@@ -95,7 +95,7 @@
      :how-to.startpage/title "Wie benutze ich schnaq?"
      :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
      :how-to.startpage/button "Wie schnaqqe ich?"
-     :how-to.title "Wie benutze ich schnaq?"
+     :how-to/title "Wie benutze ich schnaq?"
      :how-to.why/title "Wozu dient schnaq?"
      :how-to.why/body "Schnaq dient dazu Meetings und andere Treffen im Voraus mit den Teilnehmenden zu planen und zu diskutieren."
      :how-to.create/title "schnaq erstellen"
@@ -234,8 +234,8 @@
      :discussion/discuss-tooltip "Diskutieren Sie mit anderen über diesen Agendapunkt."
 
      ;; meetings overview
-     :meetings/header "Schnaqs"
-     :meetings/subheader "Ihre aktuellen Schnaqs"
+     :meetings/header "Übersicht Ihrer schnaqs"
+     :meetings/subheader "Auf diese schnaqs haben Sie Zugriff"
 
      ;; Feedbacks
      :feedbacks.overview/header "Rückmeldungen"
@@ -275,6 +275,7 @@
      :login/set-name "Geben Sie Ihren Namen ein"
 
      ;; analytics
+     :analytics/heading "Analytics"
      :analytics/overall-meetings "Schnaqs erstellt"
      :analytics/user-numbers "Usernamen angelegt"
      :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Schnaq"

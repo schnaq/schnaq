@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.startpage.features
   (:require [schnaq.interface.text.display-data :refer [labels img-path]]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- build-feature-text-box
   "Composing the text-part of a feature-row. Takes a `text-namespace` which
@@ -55,36 +55,35 @@
 (defn- features-meeting
   "A site demonstrating the features of schnaqs meeting capabilities."
   []
-  [:<>
-   [base/nav-header]
-   [base/header (labels :feature.meetings/lead)]
-   [:div.container.py-4
-    [:h2.text-center.pb-4 (labels :feature.meetings/features-heading)]
-    [feature-row-image-right
-     :feature.meetings/hero-image
-     :feature.meetings]
-    [:h3.text-center.pb-4 (labels :feature.meetings/features-subheading)]
-    [feature-row-image-left
-     :feature.meetings/schedule-meetings
-     :feature.meetings.schedule]
-    [feature-row-image-right
-     :startpage.features/sample-discussion
-     :feature.meetings.discuss]
-    [feature-row-image-left
-     :startpage.features/admin-center
-     :feature.meetings.admin-center]
-    [:section.feature-text-box
-     [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
-     [:p (labels :feature.meetings/tbd-lead)]
-     [:ul
-      [:li (labels :feature.meetings.tbd/teams)]
-      [:li (labels :feature.meetings.tbd/outlook)]
-      [:li (labels :feature.meetings.tbd/protocols)]
-      [:li (labels :feature.meetings.tbd/prereads)]
-      [:li (labels :feature.meetings.tbd/assignments)]
-      [:li (labels :feature.meetings.tbd/timeboxing)]
-      [:li (labels :feature.meetings.tbd/task-tracking)]]
-     [:p (labels :feature.meetings/feedback)]]]])
+  (pages/with-nav-and-header
+    {:page/heading (labels :feature.meetings/lead)}
+    [:div.container.py-4
+     [:h2.text-center.pb-4 (labels :feature.meetings/features-heading)]
+     [feature-row-image-right
+      :feature.meetings/hero-image
+      :feature.meetings]
+     [:h3.text-center.pb-4 (labels :feature.meetings/features-subheading)]
+     [feature-row-image-left
+      :feature.meetings/schedule-meetings
+      :feature.meetings.schedule]
+     [feature-row-image-right
+      :startpage.features/sample-discussion
+      :feature.meetings.discuss]
+     [feature-row-image-left
+      :startpage.features/admin-center
+      :feature.meetings.admin-center]
+     [:section.feature-text-box
+      [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
+      [:p (labels :feature.meetings/tbd-lead)]
+      [:ul
+       [:li (labels :feature.meetings.tbd/teams)]
+       [:li (labels :feature.meetings.tbd/outlook)]
+       [:li (labels :feature.meetings.tbd/protocols)]
+       [:li (labels :feature.meetings.tbd/prereads)]
+       [:li (labels :feature.meetings.tbd/assignments)]
+       [:li (labels :feature.meetings.tbd/timeboxing)]
+       [:li (labels :feature.meetings.tbd/task-tracking)]]
+      [:p (labels :feature.meetings/feedback)]]]))
 
 
 ;; -----------------------------------------------------------------------------

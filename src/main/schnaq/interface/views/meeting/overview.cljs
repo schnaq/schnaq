@@ -1,10 +1,10 @@
 (ns schnaq.interface.views.meeting.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :as data :refer [labels]]
-            [schnaq.interface.views.base :as base]
+            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.utils.markdown-parser :as markdown-parser]))
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- no-meetings-found
   "Show error message when no meetings were loaded."
@@ -36,7 +36,7 @@
      [:div.col-lg-11.px-3
       [:h3 (:meeting/title meeting)]]
      [:div.col-lg-1
-      [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-right))}]]]]
+      [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-right))}]]]]
    ;; description / body
    [:div.meeting-entry-desc
     [:hr]
@@ -62,12 +62,11 @@
   meetings."
   [subscription-key]
   [keyword? :ret vector?]
-  [:<>
-   [base/nav-header]
-   [base/header
-    (data/labels :meetings/header)]
-   [:div.container.py-4
-    [meetings-list-view subscription-key]]])
+  (pages/with-nav-and-header
+    {:page/heading (labels :meetings/header)
+     :page/subheading (labels :meetings/subheader)}
+    [:div.container.py-4
+     [meetings-list-view subscription-key]]))
 
 (defn meeting-view-entry
   "Render all meetings."
