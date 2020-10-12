@@ -57,6 +57,7 @@
   []
   [:<>
    [base/nav-header]
+   [base/header (labels :feature.meetings/lead)]
    [:div.container.py-4
     [:h2.text-center.pb-4 (labels :feature.meetings/features-heading)]
     [feature-row-image-right
