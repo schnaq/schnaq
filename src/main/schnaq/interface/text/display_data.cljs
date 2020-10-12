@@ -65,6 +65,8 @@
      :startpage.features.graph/lead "Übersicht"
      :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
      :startpage.features.graph/body "Sehen Sie die Argumente Ihrer Mitarbeitenden. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
+
+     ;; Meeting Feature Page
      :feature.meetings/lead "Organisierte Meetings mit schnaq"
      :feature.meetings/title "Mitarbeiter:innen Aktivieren, Zeit sparen"
      :feature.meetings/body "Schnaq lässt sich nutzen um Meetings effizient vorzubereiten, alle Teilnehmer:innen während dem Meeting zu unterstützen und erlaubt eine Nachbereitung des Meetings. Damit werden alle Teilnehmer:innen aktiviert, Arbeitszeit eingespart, und Ergebnisse effizienter erzielt."
@@ -77,6 +79,18 @@
      :feature.meetings.admin-center/lead "Accounts nicht nötig"
      :feature.meetings.admin-center/title "Verwalten Sie schnaq ohne zusätzliche Accounts"
      :feature.meetings.admin-center/body "Schnaq lässt sich bequem durch gesicherte Links verwalten. Sie benötigen keine weiteren Accounts, sondern lediglich einen Browser. So können Sie von überall auf schnaq und Ihre Meetings zugreifen. Im Admin-Center können Sie ihr Meeting administrieren und alle wichtigen Aktionen von überall ausführen."
+     :feature.meetings/heading "Sparen Sie Arbeitszeit durch strukturierte Meetings"
+     :feature.meetings/features-subheading "Schnaq für Meetings einsetzen"
+     :feature.meetings/tbd-subheading "More to come..."
+     :feature.meetings/tbd-lead "Werden Sie early Adopter und genießen Sie folgende Features als erste, sobald diese Verfügbar sind:"
+     :feature.meetings.tbd/teams "Integration mit MS Teams und Slack"
+     :feature.meetings.tbd/outlook "Outlook-Export"
+     :feature.meetings.tbd/protocols "Kollaborative Protokollführung im Meeting"
+     :feature.meetings.tbd/prereads "Dateianhänge / Prereads während der Agendaerstellung"
+     :feature.meetings.tbd/assignments "Personenzuteilung für einzelne Agendapunkte"
+     :feature.meetings.tbd/timeboxing "Timeboxing während des Meetings"
+     :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
+     :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular rechts."
 
      :how-to.startpage/title "Wie benutze ich schnaq?"
      :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."

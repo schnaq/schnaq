@@ -58,11 +58,11 @@
   [:<>
    [base/nav-header]
    [:div.container.py-4
-    [:h2.text-center.pb-4 "Sparen Sie Arbeitszeit durch strukturierte Meetings"]
+    [:h2.text-center.pb-4 (labels :feature.meetings/features-heading)]
     [feature-row-image-right
      :feature.meetings/hero-image
      :feature.meetings]
-    [:h3.text-center.pb-4 "Schnaq für Meetings einsetzen"]
+    [:h3.text-center.pb-4 (labels :feature.meetings/features-subheading)]
     [feature-row-image-left
      :feature.meetings/schedule-meetings
      :feature.meetings.schedule]
@@ -72,17 +72,18 @@
     [feature-row-image-left
      :startpage.features/admin-center
      :feature.meetings.admin-center]
-    [:h3.text-center.pb-4 "More to come..."]
-    [:p "Werden Sie early Adopter und genießen Sie folgende Features als erste, sobald diese Verfügbar sind:"]
-    [:ul
-     [:li "Integration mit MS Teams und Slack"]
-     [:li "Outlook-Export"]
-     [:li "Kollaborative Protokollführung im Meeting"]
-     [:li "Dateianhänge / Prereads während der Agendaerstellung"]
-     [:li "Personenzuteilung für einzelne Agendapunkte"]
-     [:li "Timeboxing während des Meetings"]
-     [:li "Übertragung der Ergebnisse in Task-Tracker"]]
-    [:p "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular rechts."]]])
+    [:section.feature-text-box
+     [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
+     [:p (labels :feature.meetings/tbd-lead)]
+     [:ul
+      [:li (labels :feature.meetings.tbd/teams)]
+      [:li (labels :feature.meetings.tbd/outlook)]
+      [:li (labels :feature.meetings.tbd/protocols)]
+      [:li (labels :feature.meetings.tbd/prereads)]
+      [:li (labels :feature.meetings.tbd/assignments)]
+      [:li (labels :feature.meetings.tbd/timeboxing)]
+      [:li (labels :feature.meetings.tbd/task-tracking)]]
+     [:p (labels :feature.meetings/feedback)]]]])
 
 
 ;; -----------------------------------------------------------------------------
