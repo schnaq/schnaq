@@ -309,5 +309,5 @@
                                   (first (remove #(= (:agenda/title %) "Top 2")
                                                  (database/agendas-by-meeting-hash meeting-hash))))
           graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash-2)))]
-      (is (= 23 (database/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
-      (is (= 5 (database/number-of-statements-for-discussion (:db/id graph-discussion)))))))
+      (is (= 27 (database/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
+      (is (= 7 (database/number-of-statements-for-discussion (:db/id graph-discussion)))))))
