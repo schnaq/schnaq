@@ -15,6 +15,7 @@
             [schnaq.interface.views.meeting.single :as meeting-single]
             [schnaq.interface.views.how-to.view :as how-to]
             [schnaq.interface.views.startpage.core :as startpage-views]
+            [schnaq.interface.views.startpage.features :as features-views]
             [schnaq.interface.views.graph.view :as graph-view]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
@@ -34,6 +35,10 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
+   ["meeting-features"
+    {:name :routes.features/meetings
+     :view features-views/meeting-features-view
+     :link-text (labels :router.features/meetings)}]
    ["how-to"
     {:name :routes/how-to
      :view how-to/view
