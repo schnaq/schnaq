@@ -249,6 +249,7 @@
      :login/set-name "Geben Sie Ihren Namen ein"
 
      ;; analytics
+     :analytics/heading "Analytics"
      :analytics/overall-meetings "Schnaqs erstellt"
      :analytics/user-numbers "Usernamen angelegt"
      :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Schnaq"

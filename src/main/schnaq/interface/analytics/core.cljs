@@ -6,7 +6,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.pages :as pages]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]))
 
@@ -56,25 +56,26 @@
 (defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
   []
-  [:div
-   [base/nav-header]
-   (let [meetings-num @(rf/subscribe [:analytics/number-of-meetings-overall])
-         usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
-         average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])
-         statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
-         active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
-         statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
-         argument-types @(rf/subscribe [:analytics/argument-type-stats])]
-     [:div.container.px-5.py-3
-      [analytics-controls]
-      [:div.card-columns
-       [analytics-card (labels :analytics/overall-meetings) meetings-num]
-       [analytics-card (labels :analytics/user-numbers) usernames-num]
-       [analytics-card (labels :analytics/average-agendas-title) average-agendas]
-       [analytics-card (labels :analytics/statements-num-title) statements-num]
-       [analytics-card (labels :analytics/active-users-num-title) active-users-num]
-       [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
-       [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])])
+  (pages/with-nav-and-header
+    {:page/heading (labels :analytics/heading)}
+    [:<>
+     (let [meetings-num @(rf/subscribe [:analytics/number-of-meetings-overall])
+           usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
+           average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])
+           statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
+           active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
+           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
+           argument-types @(rf/subscribe [:analytics/argument-type-stats])]
+       [:div.container.px-5.py-3
+        [analytics-controls]
+        [:div.card-columns
+         [analytics-card (labels :analytics/overall-meetings) meetings-num]
+         [analytics-card (labels :analytics/user-numbers) usernames-num]
+         [analytics-card (labels :analytics/average-agendas-title) average-agendas]
+         [analytics-card (labels :analytics/statements-num-title) statements-num]
+         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
+         [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
+         [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])]))
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])

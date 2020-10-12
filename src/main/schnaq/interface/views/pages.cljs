@@ -12,7 +12,7 @@
 
 (>defn with-nav-and-header
   "Default page with header and curly wave."
-  [{:page/keys [heading subheading]} & body]
+  [{:page/keys [heading subheading]} body]
   [::page-headings (s/+ vector?) :ret vector?]
   [:<>
    [base/nav-header]
