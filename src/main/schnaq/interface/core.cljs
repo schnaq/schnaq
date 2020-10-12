@@ -32,6 +32,7 @@
             [schnaq.interface.views.meeting.visited]
             [schnaq.interface.views.modals.modal]
             [schnaq.interface.views.notifications]
+            [schnaq.interface.views.pages]
             [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]
             [schnaq.meeting.specs]
