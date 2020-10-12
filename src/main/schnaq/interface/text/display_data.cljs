@@ -208,8 +208,8 @@
      :discussion/discuss-tooltip "Diskutieren Sie mit anderen über diesen Agendapunkt."
 
      ;; meetings overview
-     :meetings/header "Schnaqs"
-     :meetings/subheader "Ihre aktuellen Schnaqs"
+     :meetings/header "Übersicht Ihrer schnaqs"
+     :meetings/subheader "Auf diese schnaqs haben Sie Zugriff"
 
      ;; Feedbacks
      :feedbacks.overview/header "Rückmeldungen"
