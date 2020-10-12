@@ -65,6 +65,10 @@
      :startpage.features.graph/lead "Übersicht"
      :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
      :startpage.features.graph/body "Sehen Sie die Argumente Ihrer Mitarbeitenden. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
+     :feature.meetings/lead "Organisierte Meetings mit schnaq"
+     :feature.meetings/title "Mitarbeiter Aktivieren, Zeit sparen"
+     :feature.meetings/body "Schnaq lässt sich nutzen um Meetings effizient vorzubereiten, alle Teilnehmenden während dem Meeting zu unterstützen und erlaubt eine Nachbereitung des Meetings. Damit werden alle Teilnehmenden aktiviert, Arbeitszeit eingespart, und Ergebnisse effizienter erzielt."
+
 
      :how-to.startpage/title "Wie benutze ich schnaq?"
      :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
@@ -332,7 +336,8 @@
      :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
      :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
      :startpage.value-cards.meetings/image "/imgs/stock/meeting.jpeg"
-     :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"}))
+     :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
+     :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero.jpeg"}))
 
 (defn video
   "Returns an video path"

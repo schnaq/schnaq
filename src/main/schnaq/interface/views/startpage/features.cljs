@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.startpage.features
   (:require [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]))
 
 (defn- build-feature-text-box
@@ -54,8 +55,13 @@
 (defn- features-meeting
   "A site demonstrating the features of schnaqs meeting capabilities."
   []
-  [:div.container
-   [:p "Woo hier gehts ab"]])
+  [:<>
+   [base/nav-header]
+   [:div.container.my-4
+    [:h2.text-center.pb-3 "Sparen Sie Arbeitszeit durch strukturierte Meetings"]
+    [feature-row-image-right
+     :feature.meetings/hero-image
+     :feature.meetings]]])
 
 
 ;; -----------------------------------------------------------------------------
