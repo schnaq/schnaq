@@ -3,23 +3,17 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :as data :refer [labels]]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.meeting.create :as create-view]))
-
+            [schnaq.interface.views.meeting.create :as create-view]
+            [schnaq.interface.views.pages :as pages]))
 
 ;; #### Views ####
-
-(defn- header []
-  [base/header
-   (data/labels :meeting-create-header)])
 
 (defn create-meeting-view
   "A view with a form that creates a meeting and optional agendas."
   []
-  [:div#create-meeting-form
-   [base/nav-header]
-   [header]
-   [create-view/view]])
+  (pages/with-nav-and-header
+    {:page/heading (data/labels :meeting-create-header)}
+    [create-view/view]))
 
 ;; #### Events ####
 
