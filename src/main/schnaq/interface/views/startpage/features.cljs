@@ -57,7 +57,7 @@
   []
   [:<>
    [base/nav-header]
-   [:div.container.my-4
+   [:div.container.py-4
     [:h2.text-center.pb-4 "Sparen Sie Arbeitszeit durch strukturierte Meetings"]
     [feature-row-image-right
      :feature.meetings/hero-image
@@ -71,7 +71,18 @@
      :feature.meetings.discuss]
     [feature-row-image-left
      :startpage.features/admin-center
-     :feature.meetings.admin-center]]])
+     :feature.meetings.admin-center]
+    [:h3.text-center.pb-4 "More to come..."]
+    [:p "Werden Sie early Adopter und genießen Sie folgende Features als erste, sobald diese Verfügbar sind:"]
+    [:ul
+     [:li "Integration mit MS Teams und Slack"]
+     [:li "Outlook-Export"]
+     [:li "Kollaborative Protokollführung im Meeting"]
+     [:li "Dateianhänge / Prereads während der Agendaerstellung"]
+     [:li "Personenzuteilung für einzelne Agendapunkte"]
+     [:li "Timeboxing während des Meetings"]
+     [:li "Übertragung der Ergebnisse in Task-Tracker"]]
+    [:p "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular rechts."]]])
 
 
 ;; -----------------------------------------------------------------------------
