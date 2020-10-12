@@ -359,7 +359,7 @@
      :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
      :startpage.value-cards.meetings/image "/imgs/stock/meeting.jpeg"
      :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
-     :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero.jpeg"
+     :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
      :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
 
