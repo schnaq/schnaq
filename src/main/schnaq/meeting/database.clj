@@ -466,6 +466,22 @@
            [?meeting :meeting/share-hash ?hash]]
          (d/db (new-connection)) hash agenda-pattern)))
 
+(>defn number-of-statements-for-discussion
+  "Returns number of statements for a discussion-id."
+  [discussion-id]
+  [int? :ret int?]
+  (or
+    (ffirst
+      (d/q
+        '[:find (count ?statements)
+          :in $ ?discussion-id
+          :where [?arguments :argument/discussions ?discussion-id]
+          (or
+            [?arguments :argument/premises ?statements]
+            [?arguments :argument/conclusion ?statements])]
+        (d/db (new-connection)) discussion-id))
+    0))
+
 (defn agenda-by-discussion-id
   "Returns an agenda which has the corresponding `discussion-id`."
   [discussion-id]

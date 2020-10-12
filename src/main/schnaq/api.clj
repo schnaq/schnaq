@@ -245,8 +245,12 @@
 (defn- agendas-by-meeting-hash
   "Returns all agendas of a meeting, that matches the share-hash."
   [req]
-  (let [meeting-hash (get-in req [:route-params :hash])]
-    (ok (db/agendas-by-meeting-hash meeting-hash))))
+  (let [meeting-hash (get-in req [:route-params :hash])
+        agendas (db/agendas-by-meeting-hash meeting-hash)
+        meta-agendas (map #(assoc %
+                             :agenda.meta/num-statements
+                             (db/number-of-statements-for-discussion (:agenda/discussion %))) agendas)]
+    (ok meta-agendas)))
 
 (defn- agenda-by-meeting-hash-and-discussion-id
   "Returns the agenda tied to a certain discussion-id."
