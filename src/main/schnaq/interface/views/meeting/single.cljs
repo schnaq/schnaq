@@ -77,24 +77,27 @@
     [control-buttons]]])
 
 (defn- agenda-entry [agenda meeting]
-  [:div.card.meeting-entry-no-hover
-   ;; title
-   [:div.meeting-entry-title
-    [:h4 (:agenda/title agenda)]]
-   ;; description
-   [:div.meeting-entry-desc
-    [:hr]
-    [markdown-parser/markdown-to-html (:agenda/description agenda)]]
-   [:div
-    [:button.button-secondary-b-1.button-md
-     {:title (labels :discussion/discuss-tooltip)
-      :on-click (fn []
-                  (rf/dispatch [:navigation/navigate :routes.discussion/start
-                                {:id (-> agenda :agenda/discussion :db/id)
-                                 :share-hash (:meeting/share-hash meeting)}])
-                  (rf/dispatch [:agenda/choose agenda]))}
-     [:span.pr-2 (labels :discussion/discuss)]
-     [:i {:class (str "m-auto fas " (fa :comment))}]]]])
+  (let [statement-nums @(rf/subscribe [:agenda.meta/statement-num])]
+    [:div.card.meeting-entry-no-hover
+     ;; title
+     [:div.meeting-entry-title
+      [:h4 (:agenda/title agenda)]]
+     ;; description
+     [:div.meeting-entry-desc
+      [:hr]
+      [markdown-parser/markdown-to-html (:agenda/description agenda)]]
+     [:div
+      [:button.button-secondary-b-1.button-md
+       {:title (labels :discussion/discuss-tooltip)
+        :on-click (fn []
+                    (rf/dispatch [:navigation/navigate :routes.discussion/start
+                                  {:id (-> agenda :agenda/discussion :db/id)
+                                   :share-hash (:meeting/share-hash meeting)}])
+                    (rf/dispatch [:agenda/choose agenda]))}
+       [:span.pr-2 (labels :discussion/discuss)]
+       " (" [:span (get statement-nums (:db/id agenda))] " "
+       [:i {:class (str "m-auto fas " (fa :comment))}]
+       ")"]]]))
 
 
 (defn agenda-in-meeting-view
