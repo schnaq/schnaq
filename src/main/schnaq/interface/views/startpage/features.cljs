@@ -51,6 +51,12 @@
    :startpage.features/discussion-graph
    :startpage.features.graph])
 
+(defn- features-meeting
+  "A site demonstrating the features of schnaqs meeting capabilities."
+  []
+  [:div.container
+   [:p "Woo hier gehts ab"]])
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -61,3 +67,6 @@
    [meeting-organisation]
    [structured-discussions]
    [graph-visualization]])
+
+(defn meeting-features-view []
+  [features-meeting])
