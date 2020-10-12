@@ -66,6 +66,32 @@
      :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
      :startpage.features.graph/body "Sehen Sie die Argumente Ihrer Mitarbeitenden. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
 
+     ;; Meeting Feature Page
+     :feature.meetings/lead "Organisierte Meetings mit schnaq"
+     :feature.meetings/title "Mitarbeiter:innen aktivieren, Zeit sparen"
+     :feature.meetings/body "Schnaq lässt sich nutzen, um Meetings effizient vorzubereiten, alle Teilnehmer:innen während dem Meeting zu unterstützen und erlaubt eine Nachbereitung des Meetings. Damit werden alle Teilnehmer:innen aktiviert, Arbeitszeit eingespart und Ergebnisse effizienter erzielt."
+     :feature.meetings.schedule/lead "Gezielte Vorbereitung"
+     :feature.meetings.schedule/title "Agenda kollaborativ vorbereiten"
+     :feature.meetings.schedule/body "Bereiten Sie eine erste Version der Agenda vor. Die Agenda und angehängte vorbereitende Materialien werden per E-Mail und Kalendereinladung an alle Teilnehmer:innen verteilt. Durch schnaq können alle Kolleg:innen Änderungsvorschläge und Ergänzungen für einzelne Agendapunkte vorschlagen, die von der Meetingersteller:in angenommen werden können."
+     :feature.meetings.discuss/lead "Strittige Punkte klären"
+     :feature.meetings.discuss/title "Diskutieren Sie unklare Punkte im Vorhinein"
+     :feature.meetings.discuss/body "Bei Punkten, die nicht klar umrissen sind, bietet sich eine Online-Diskussion. Diese kann man direkt über die vorgeschlagenen Agendapunkte erreichen und ad-hoc erledigen. Die Diskussion kann der Ausrichtung einer Agenda dienen, aber auch der Klärung von offenen Punkten, bei denen nicht klar ist, wie die Agenda gestaltet werden sollte. Dies geschieht strukturiert und asynchron, so dass alle Mitarbeiter:innen teilnehmen können. Das Ergebnis sind fokussierte Meetings."
+     :feature.meetings.admin-center/lead "Accounts nicht notwendig"
+     :feature.meetings.admin-center/title "Verwalten Sie schnaq ohne zusätzliche Accounts"
+     :feature.meetings.admin-center/body "Schnaq lässt sich bequem durch gesicherte Links verwalten. Sie benötigen keine weiteren Accounts, sondern lediglich einen Browser. So können Sie von überall auf schnaq und Ihre Meetings zugreifen. Im Admin-Center können Sie Ihr Meeting administrieren und alle wichtigen Aktionen von überall ausführen."
+     :feature.meetings/heading "Sparen Sie Arbeitszeit durch strukturierte Meetings"
+     :feature.meetings/features-subheading "Schnaq für Meetings einsetzen"
+     :feature.meetings/tbd-subheading "More to come..."
+     :feature.meetings/tbd-lead "Werden Sie Early Adopter und genießen Sie folgende Features als erste, sobald diese Verfügbar sind:"
+     :feature.meetings.tbd/teams "Integration mit MS Teams und Slack"
+     :feature.meetings.tbd/outlook "Outlook-Export"
+     :feature.meetings.tbd/protocols "Kollaborative Protokollführung im Meeting"
+     :feature.meetings.tbd/prereads "Dateianhänge / Prereads während der Agendaerstellung"
+     :feature.meetings.tbd/assignments "Personenzuteilung für einzelne Agendapunkte"
+     :feature.meetings.tbd/timeboxing "Timeboxing während des Meetings"
+     :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
+     :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
+
      :how-to.startpage/title "Wie benutze ich schnaq?"
      :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
      :how-to.startpage/button "Wie schnaqqe ich?"
@@ -302,7 +328,8 @@
      :router/invalid-link "Fehlerseite"
      :router/true-404-view "404 Fehlerseite"
      :router/not-found-label "Not Found route redirect"
-     :router/graph-view "Graph View"}))
+     :router/graph-view "Graph View"
+     :router.features/meetings "Meeting Features"}))
 
 
 (defn img-path
@@ -332,7 +359,10 @@
      :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
      :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
      :startpage.value-cards.meetings/image "/imgs/stock/meeting.jpeg"
-     :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"}))
+     :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
+     :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
+     :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
+     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
 
 (defn video
   "Returns an video path"

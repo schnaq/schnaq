@@ -191,14 +191,16 @@
 
 (defn- value-prop-card
   "A single value proposition-card"
-  [title description image-path alt-text]
+  [title description image-path alt-text show-more-fn]
   [:div.card
    [:img.card-img-top {:src image-path :alt alt-text}]
    [:div.card-body.d-flex.flex-column
     [:h5.card-title title]
     [:p.card-text description]
     [:div.text-center.mt-auto
-     [:button.btn.button-primary [:p.card-text [:small (labels :startpage.value-cards.button/text)]]]]]])
+     [:button.btn.button-primary
+      {:on-click show-more-fn}
+      [:p.card-text [:small (labels :startpage.value-cards.button/text)]]]]]])
 
 (defn- value-prop-cards
   "Cards displaying the different value propositions."
@@ -208,17 +210,20 @@
     (labels :startpage.value-cards.discussion/title)
     (labels :startpage.value-cards.discussion/description)
     (img-path :startpage.value-cards.discussion/image)
-    (labels :startpage.value-cards.discussion/alt-text)]
+    (labels :startpage.value-cards.discussion/alt-text)
+    #()]
    [value-prop-card
     (labels :startpage.value-cards.meetings/title)
     (labels :startpage.value-cards.meetings/description)
     (img-path :startpage.value-cards.meetings/image)
-    (labels :startpage.value-cards.meetings/alt-text)]
+    (labels :startpage.value-cards.meetings/alt-text)
+    #(rf/dispatch [:navigation/navigate :routes.features/meetings])]
    [value-prop-card
     (labels :startpage.value-cards.knowledge/title)
     (labels :startpage.value-cards.knowledge/description)
     (img-path :startpage.value-cards.knowledge/image)
-    (labels :startpage.value-cards.knowledge/alt-text)]])
+    (labels :startpage.value-cards.knowledge/alt-text)
+    #()]])
 
 ;; -----------------------------------------------------------------------------
 
