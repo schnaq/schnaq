@@ -11,10 +11,9 @@
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]))
 
 (>defn- get-share-link
