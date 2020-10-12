@@ -478,7 +478,8 @@
           :where [?arguments :argument/discussions ?discussion-id]
           (or
             [?arguments :argument/premises ?statements]
-            [?arguments :argument/conclusion ?statements])]
+            [?arguments :argument/conclusion ?statements])
+          [?statements :statement/content _]]
         (d/db (new-connection)) discussion-id))
     0))
 
