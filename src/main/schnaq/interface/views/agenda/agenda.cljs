@@ -94,7 +94,7 @@
 
 (rf/reg-event-db
   :agenda/set-current
-  (fn [db [_ agendas]]
+  (fn [db [_ {:keys [agendas]}]]
     (assoc-in db [:agendas :current] agendas)))
 
 (rf/reg-event-db

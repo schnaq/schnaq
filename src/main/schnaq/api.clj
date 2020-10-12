@@ -247,10 +247,12 @@
   [req]
   (let [meeting-hash (get-in req [:route-params :hash])
         agendas (db/agendas-by-meeting-hash meeting-hash)
-        meta-agendas (map #(assoc %
-                             :agenda.meta/num-statements
-                             (db/number-of-statements-for-discussion (:agenda/discussion %))) agendas)]
-    (ok meta-agendas)))
+        meta-info
+        (into {}
+              (map #(vector (:db/id %)
+                            (db/number-of-statements-for-discussion (:db/id (:agenda/discussion %)))) agendas))]
+    (ok {:agendas agendas
+         :meta-info meta-info})))
 
 (defn- agenda-by-meeting-hash-and-discussion-id
   "Returns the agenda tied to a certain discussion-id."
