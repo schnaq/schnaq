@@ -6,7 +6,8 @@
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.base :as base]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]))
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.localstorage :as ls]))
 
 (defn- tooltip-button
   [tooltip-location tooltip content on-click-fn]
@@ -76,7 +77,11 @@
     [control-buttons]]])
 
 (defn- agenda-entry [agenda meeting]
-  (let [statement-nums @(rf/subscribe [:agenda.meta/statement-num])]
+  (let [old-statements-nums-map @(rf/subscribe [:agendas/load-statement-nums])
+        statements-nums-map @(rf/subscribe [:agenda.meta/statement-num])
+        old-statement-num (js/parseInt (get old-statements-nums-map (str (:db/id agenda)) 0))
+        statement-num (get statements-nums-map (:db/id agenda))
+        new? (not (= old-statement-num statement-num))]
     [:div.card.meeting-entry-no-hover
      ;; title
      [:div.meeting-entry-title
@@ -94,9 +99,10 @@
                                    :share-hash (:meeting/share-hash meeting)}])
                     (rf/dispatch [:agenda/choose agenda]))}
        [:span.pr-2 (labels :discussion/discuss)]
-       [:span.badge.badge-pill.badge-transparent (get statement-nums (:db/id agenda)) " "
-        [:i {:class (str "m-auto fas " (fa :comment))}]]]]]))
-
+       [:span.badge.badge-pill.badge-transparent statement-num " "
+        (if new?
+          [:i.primary-light-color {:class (str "m-auto fas " (fa :comment))}]
+          [:i {:class (str "m-auto fas " (fa :comment))}])]]]]))
 
 (defn agenda-in-meeting-view
   "The view of an agenda which gets embedded inside a meeting view."
@@ -131,3 +137,25 @@
   "Show a single meeting and all its Agendas."
   []
   [single-meeting])
+
+;; subs
+
+(rf/reg-sub
+  :agendas/load-statement-nums
+  (fn [db [_]]
+    (get-in db [:agendas :statement-nums])))
+
+(rf/reg-event-db
+  :agendas.save-statement-nums/store-hashes-from-localstorage
+  (fn [db _]
+    (assoc-in db [:agendas :statement-nums]
+              (ls/parse-hash-map-string (ls/get-item :agendas/statement-nums)))))
+
+(rf/reg-event-fx
+  :agenda.statement-nums/to-localstorage
+  (fn [_ [_]]
+    (let [statements-nums-map @(rf/subscribe [:agenda.meta/statement-num])]
+      {:fx [[:localstorage/write
+             [:agendas/statement-nums
+              (ls/build-hash-map-from-localstorage statements-nums-map :agendas/statement-nums)]]
+            [:dispatch [:agendas.save-statement-nums/store-hashes-from-localstorage]]]})))

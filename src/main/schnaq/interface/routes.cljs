@@ -97,7 +97,9 @@
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:agenda/load-agendas (:share-hash path)]))
-                      :stop #(rf/dispatch [:agenda/clear-current])}]}]
+                      :stop (fn []
+                              (rf/dispatch [:agenda.statement-nums/to-localstorage])
+                              (rf/dispatch [:agenda/clear-current]))}]}]
      ["/suggestions"
       {:name :routes.meeting/suggestions
        :view agenda-edit/agenda-suggestion-view
