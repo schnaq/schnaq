@@ -371,8 +371,7 @@
   "Returns all feedbacks from the db."
   [{:keys [body-params]}]
   (if (valid-password? (:password body-params))
-    (ok (->> (db/all-feedbacks)
-             (map first)))
+    (ok (db/all-feedbacks))
     (unauthorized)))
 
 (>defn- send-invite-emails

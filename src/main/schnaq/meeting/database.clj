@@ -340,13 +340,16 @@
   (clean-and-add-to-db! feedback ::specs/feedback))
 
 (defn all-feedbacks
-  "Return complete feedbacks from database."
+  "Return complete feedbacks from database, sorted by descending timestamp."
   []
-  (d/q
-    '[:find (pull ?feedback [*])
-      :where [?feedback :feedback/description]]
-    (d/db (new-connection))))
-
+  (map first
+       (sort-by
+         second toolbelt/comp-compare
+         (d/q
+           '[:find (pull ?feedback [*]) ?ts
+             :where [?feedback :feedback/description _ ?tx]
+             [?tx :db/txInstant ?ts]]
+           (d/db (new-connection))))))
 
 ;; -----------------------------------------------------------------------------
 ;; Meetings
