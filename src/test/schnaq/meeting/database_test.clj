@@ -300,3 +300,14 @@
       (database/add-meeting-feedback feedback meeting-id user-id)
       (is (= 1 (count (database/meeting-feedback-for meeting-hash))))
       (is (= feedback (:meeting.feedback/content (first (database/meeting-feedback-for meeting-hash))))))))
+
+(deftest number-of-statements-for-discussion
+  (testing "Is the number of agendas returned correct?"
+    (let [meeting-hash "89eh32hoas-2983ud"
+          meeting-hash-2 "graph-hash"
+          cat-or-dog-discussion (:agenda/discussion
+                                  (first (remove #(= (:agenda/title %) "Top 2")
+                                                 (database/agendas-by-meeting-hash meeting-hash))))
+          graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash-2)))]
+      (is (= 27 (database/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
+      (is (= 7 (database/number-of-statements-for-discussion (:db/id graph-discussion)))))))

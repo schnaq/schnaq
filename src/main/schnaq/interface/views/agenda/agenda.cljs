@@ -94,8 +94,15 @@
 
 (rf/reg-event-db
   :agenda/set-current
-  (fn [db [_ agendas]]
-    (assoc-in db [:agendas :current] agendas)))
+  (fn [db [_ {:keys [agendas meta-info]}]]
+    (assoc-in
+      (assoc-in db [:agendas :current] agendas)
+      [:agendas :meta :statement-num] meta-info)))
+
+(rf/reg-sub
+  :agenda.meta/statement-num
+  (fn [db _]
+    (get-in db [:agendas :meta :statement-num])))
 
 (rf/reg-event-db
   :agenda/clear-current

@@ -411,7 +411,7 @@
 
 (rf/reg-event-db
   :agenda/load-for-edit-success
-  (fn [db [_ agendas]]
+  (fn [db [_ {:keys [agendas]}]]
     (assoc db :edit-meeting {:agendas (sort-by :agenda/rank agendas)
                              :meeting (get-in db [:meeting :selected])
                              :delete-agendas #{}}
