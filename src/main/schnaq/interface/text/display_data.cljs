@@ -329,7 +329,8 @@
      :router/true-404-view "404 Fehlerseite"
      :router/not-found-label "Not Found route redirect"
      :router/graph-view "Graph View"
-     :router.features/meetings "Meeting Features"}))
+     :router.features/meetings "Meeting Features"
+     :router.features/discussion "Diskussionsfeatures"}))
 
 
 (defn img-path

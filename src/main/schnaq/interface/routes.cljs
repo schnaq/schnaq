@@ -39,6 +39,10 @@
     {:name :routes.features/meetings
      :view features-views/meeting-features-view
      :link-text (labels :router.features/meetings)}]
+   ["discussion-features"
+    {:name :routes.features/discussions
+     :view features-views/discussion-features-view
+     :link-text (labels :router.features/discussion)}]
    ["how-to"
     {:name :routes/how-to
      :view how-to/view

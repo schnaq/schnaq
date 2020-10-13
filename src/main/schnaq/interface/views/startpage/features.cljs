@@ -85,6 +85,39 @@
        [:li (labels :feature.meetings.tbd/task-tracking)]]
       [:p (labels :feature.meetings/feedback)]]]))
 
+(defn- features-discussion
+  "A site demonstrating the features of schnaqs discussion capabilities."
+  []
+  (pages/with-nav-and-header
+    {:page/heading (labels :feature.meetings/lead)}
+    [:div.container.py-4
+     [:h2.text-center.pb-4 (labels :feature.meetings/features-heading)]
+     [feature-row-image-right
+      :feature.meetings/hero-image
+      :feature.meetings]
+     [:h3.text-center.pb-4 (labels :feature.meetings/features-subheading)]
+     [feature-row-image-left
+      :feature.meetings/schedule-meetings
+      :feature.meetings.schedule]
+     [feature-row-image-right
+      :startpage.features/sample-discussion
+      :feature.meetings.discuss]
+     [feature-row-image-left
+      :startpage.features/admin-center
+      :feature.meetings.admin-center]
+     [:section.feature-text-box
+      [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
+      [:p (labels :feature.meetings/tbd-lead)]
+      [:ul
+       [:li (labels :feature.meetings.tbd/teams)]
+       [:li (labels :feature.meetings.tbd/outlook)]
+       [:li (labels :feature.meetings.tbd/protocols)]
+       [:li (labels :feature.meetings.tbd/prereads)]
+       [:li (labels :feature.meetings.tbd/assignments)]
+       [:li (labels :feature.meetings.tbd/timeboxing)]
+       [:li (labels :feature.meetings.tbd/task-tracking)]]
+      [:p (labels :feature.meetings/feedback)]]]))
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -98,3 +131,6 @@
 
 (defn meeting-features-view []
   [features-meeting])
+
+(defn discussion-features-view []
+  [features-discussion])
