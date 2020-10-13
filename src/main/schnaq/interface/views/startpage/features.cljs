@@ -58,7 +58,6 @@
   (pages/with-nav-and-header
     {:page/heading (labels :feature.meetings/lead)}
     [:div.container.py-4
-     [:h2.text-center.pb-4 (labels :feature.meetings/features-heading)]
      [feature-row-image-right
       :feature.meetings/hero-image
       :feature.meetings]
@@ -85,6 +84,37 @@
        [:li (labels :feature.meetings.tbd/task-tracking)]]
       [:p (labels :feature.meetings/feedback)]]]))
 
+(defn- features-discussion
+  "A site demonstrating the features of schnaqs discussion capabilities."
+  []
+  (pages/with-nav-and-header
+    {:page/heading (labels :feature.discussions/lead)}
+    [:div.container.py-4
+     [feature-row-image-right
+      :feature.discussions/hero-image
+      :feature.discussions]
+     [:h3.text-center.pb-4 (labels :feature.discussions/features-subheading)]
+     [feature-row-image-left
+      :feature.discussions/create-discussion-spaces
+      :feature.discussions.spaces]
+     [feature-row-image-right
+      :startpage.features/sample-discussion
+      :feature.discussions.discuss]
+     [feature-row-image-left
+      :startpage.features/discussion-graph
+      :feature.discussions.graph]
+     [:section.feature-text-box
+      [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
+      [:p (labels :feature.meetings/tbd-lead)]
+      [:ul
+       [:li (labels :feature.discussions.tbd/reports)]
+       [:li (labels :feature.discussions.tbd/wikis)]
+       [:li (labels :feature.discussions.tbd/ideas)]
+       [:li (labels :feature.discussions.tbd/navigation)]
+       [:li (labels :feature.discussions.tbd/connect)]
+       [:li (labels :feature.discussions.tbd/bot)]]
+      [:p (labels :feature.meetings/feedback)]]]))
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -98,3 +128,6 @@
 
 (defn meeting-features-view []
   [features-meeting])
+
+(defn discussion-features-view []
+  [features-discussion])

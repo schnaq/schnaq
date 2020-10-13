@@ -211,7 +211,7 @@
     (labels :startpage.value-cards.discussion/description)
     (img-path :startpage.value-cards.discussion/image)
     (labels :startpage.value-cards.discussion/alt-text)
-    #()]
+    #(rf/dispatch [:navigation/navigate :routes.features/discussions])]
    [value-prop-card
     (labels :startpage.value-cards.meetings/title)
     (labels :startpage.value-cards.meetings/description)
