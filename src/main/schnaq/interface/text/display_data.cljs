@@ -75,7 +75,7 @@
      :feature.meetings.schedule/body "Bereiten Sie eine erste Version der Agenda vor. Die Agenda und angehängte vorbereitende Materialien werden per E-Mail und Kalendereinladung an alle Teilnehmer:innen verteilt. Durch schnaq können alle Kolleg:innen Änderungsvorschläge und Ergänzungen für einzelne Agendapunkte vorschlagen, die von der Meetingersteller:in angenommen werden können."
      :feature.meetings.discuss/lead "Strittige Punkte klären"
      :feature.meetings.discuss/title "Diskutieren Sie unklare Punkte im Vorhinein"
-     :feature.meetings.discuss/body "Bei Punkten, die nicht klar umrissen sind, bietet sich eine Online-Diskussion. Diese kann man direkt über die vorgeschlagenen Agendapunkte erreichen und ad-hoc erledigen. Die Diskussion kann der Ausrichtung einer Agenda dienen, aber auch der Klärung von offenen Punkten, bei denen nicht klar ist, wie die Agenda gestaltet werden sollte. Dies geschieht strukturiert und asynchron, so dass alle Mitarbeiter:innen teilnehmen können. Das Ergebnis sind fokussierte Meetings."
+     :feature.meetings.discuss/body "Bei Punkten, die nicht klar umrissen sind, bietet sich eine Online-Diskussion an. Diese kann man direkt über die vorgeschlagenen Agendapunkte erreichen und ad-hoc erledigen. Die Diskussion kann der Ausrichtung einer Agenda dienen, aber auch der Klärung von offenen Punkten, bei denen nicht klar ist, wie die Agenda gestaltet werden sollte. Dies geschieht strukturiert und asynchron, so dass alle Mitarbeiter:innen teilnehmen können. Das Ergebnis sind fokussierte Meetings."
      :feature.meetings.admin-center/lead "Accounts nicht notwendig"
      :feature.meetings.admin-center/title "Verwalten Sie schnaq ohne zusätzliche Accounts"
      :feature.meetings.admin-center/body "Schnaq lässt sich bequem durch gesicherte Links verwalten. Sie benötigen keine weiteren Accounts, sondern lediglich einen Browser. So können Sie von überall auf schnaq und Ihre Meetings zugreifen. Im Admin-Center können Sie Ihr Meeting administrieren und alle wichtigen Aktionen von überall ausführen."
@@ -91,6 +91,27 @@
      :feature.meetings.tbd/timeboxing "Timeboxing während des Meetings"
      :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
      :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
+
+     :feature.discussions/lead "Strukturierte Diskussionen mit Kolleg:innen und Kunden"
+     :feature.discussions/title "Strukturierte Diskussionen für strukturierte Ergebnisse"
+     :feature.discussions/body "Mit schnaq kann man strukturierte Diskussionen online und ohne weitere Gerätschaften führen. Wir haben langjährige Forschungsergebnisse genutzt um eine optimale Diskussionsform zu entwickeln, die sturkturierte Diskussionen hervorruft. Die Ergebnisse der Diskussionen lassen sich strukturiert und automatisch in graphischer Form aufbereiten und erlauben so die Nachvollziehbarkeit einer Diskussion auf einen Blick. Wertvoll für alle Entscheider:innen und deren Teams."
+     :feature.discussions/features-subheading "Schnaq als Diskussionsplatform"
+     :feature.discussions.spaces/lead "Egal ob Brainstorming oder Diskussion"
+     :feature.discussions.spaces/title "Schaffen Sie Platz für Diskussionen"
+     :feature.discussions.spaces/body "Erstellen Sie Diskussionsthemen, die Sie ihren Teams einfach per Link zugänglich machen können. Die eingeladenen Kolleg:innen können den geschaffenen Raum nutzen um zeitversetzt und online miteinander zu diskutieren und ihr Wissen einfließen zu lassen."
+     :feature.discussions.discuss/lead "Einfach online Diskussion"
+     :feature.discussions.discuss/title "Strukturierter Austausch per schnaq"
+     :feature.discussions.discuss/body "Das Interface von schnaq-Diskussionen basiert auf wissenschaftlichen Erkentnissen aus der Diskussionsforschung. Die Teilnehmer:innen werden dabei immer angeleitet sachliche und begründete Beiträge abzugeben. Dadurch bleiben Diskussionen und auf ihnen basierende Entscheidungen leicht nachvollziehbar."
+     :feature.discussions.graph/lead "Alles auf einen Blick"
+     :feature.discussions.graph/title "Graphische Aufbereitung der Diskussion"
+     :feature.discussions.graph/body "Alle Diskussionen werden automatisiert graphisch aufbereitet. So bekommt man sofort einen Überblick bezüglich stark diskutierter Bereiche, dem Zusammenhang der Beiträge und kontroversen Standpunkten innerhalb der Diskussion. Durch die graphische Aufbereitung lassen sich Entscheidungen bequem und einfach visualisieren."
+     :feature.discussions.tbd/reports "Automatisierte Zusammenfassungen der Diskussionen"
+     :feature.discussions.tbd/wikis "Anbindung an Wiki-Systeme wie Confluence"
+     :feature.discussions.tbd/ideas "Automatisierte Benachrichtigungen, wenn Themen diskutiert hat, die abonniert wurden"
+     :feature.discussions.tbd/navigation "Innovative Navigation durch große Diskussionen"
+     :feature.discussions.tbd/connect "Anbindung an MS Teams, Slack und Co."
+     :feature.discussions.tbd/bot "AI-basierte Hinweise, welche Bereiche weiteren Input benötigen"
+
 
      :how-to.startpage/title "Wie benutze ich schnaq?"
      :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
@@ -363,6 +384,8 @@
      :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
      :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
      :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
+     :feature.discussions/hero-image "/imgs/stock/discussion_landing_hero.jpeg"
+     :feature.discussions/create-discussion-spaces "/imgs/startpage/features/discussion-agendas.png"
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
 
 (defn video

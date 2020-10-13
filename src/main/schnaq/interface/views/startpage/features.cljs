@@ -58,7 +58,6 @@
   (pages/with-nav-and-header
     {:page/heading (labels :feature.meetings/lead)}
     [:div.container.py-4
-     [:h2.text-center.pb-4 (labels :feature.meetings/features-heading)]
      [feature-row-image-right
       :feature.meetings/hero-image
       :feature.meetings]
@@ -89,33 +88,31 @@
   "A site demonstrating the features of schnaqs discussion capabilities."
   []
   (pages/with-nav-and-header
-    {:page/heading (labels :feature.meetings/lead)}
+    {:page/heading (labels :feature.discussions/lead)}
     [:div.container.py-4
-     [:h2.text-center.pb-4 (labels :feature.meetings/features-heading)]
      [feature-row-image-right
-      :feature.meetings/hero-image
-      :feature.meetings]
-     [:h3.text-center.pb-4 (labels :feature.meetings/features-subheading)]
+      :feature.discussions/hero-image
+      :feature.discussions]
+     [:h3.text-center.pb-4 (labels :feature.discussions/features-subheading)]
      [feature-row-image-left
-      :feature.meetings/schedule-meetings
-      :feature.meetings.schedule]
+      :feature.discussions/create-discussion-spaces
+      :feature.discussions.spaces]
      [feature-row-image-right
       :startpage.features/sample-discussion
-      :feature.meetings.discuss]
+      :feature.discussions.discuss]
      [feature-row-image-left
-      :startpage.features/admin-center
-      :feature.meetings.admin-center]
+      :startpage.features/discussion-graph
+      :feature.discussions.graph]
      [:section.feature-text-box
       [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
       [:p (labels :feature.meetings/tbd-lead)]
       [:ul
-       [:li (labels :feature.meetings.tbd/teams)]
-       [:li (labels :feature.meetings.tbd/outlook)]
-       [:li (labels :feature.meetings.tbd/protocols)]
-       [:li (labels :feature.meetings.tbd/prereads)]
-       [:li (labels :feature.meetings.tbd/assignments)]
-       [:li (labels :feature.meetings.tbd/timeboxing)]
-       [:li (labels :feature.meetings.tbd/task-tracking)]]
+       [:li (labels :feature.discussions.tbd/reports)]
+       [:li (labels :feature.discussions.tbd/wikis)]
+       [:li (labels :feature.discussions.tbd/ideas)]
+       [:li (labels :feature.discussions.tbd/navigation)]
+       [:li (labels :feature.discussions.tbd/connect)]
+       [:li (labels :feature.discussions.tbd/bot)]]
       [:p (labels :feature.meetings/feedback)]]]))
 
 
