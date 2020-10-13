@@ -41,7 +41,7 @@
      :startpage.features/more-information "Mehr Informationen"
 
      :startpage.demo.request/title "Demo anfordern"
-     :startpage.demo.request/body "Wenn Sie gerne sehen würden, wie man maximal gut schnaqqen kann, führen wir Ihnen Schnaq persönlich vor. Nutzen Sie dazu einfach den Button links und wir werden uns schnellstmöglich bei Ihnen melden."
+     :startpage.demo.request/body "Wenn Sie gerne sehen würden, wie man maximal gut schnaqqen kann, führen wir Ihnen Schnaq persönlich vor. Nutzen Sie dazu einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
      :startpage.demo.request/button "Jetzt Demo anfordern!"
      :startpage.demo.request.modal.name/label "Ihr Name"
      :startpage.demo.request.modal.name/placeholder "Mein Name"
