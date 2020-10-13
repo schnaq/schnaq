@@ -95,9 +95,8 @@
                                    :share-hash (:meeting/share-hash meeting)}])
                     (rf/dispatch [:agenda/choose agenda]))}
        [:span.pr-2 (labels :discussion/discuss)]
-       " (" [:span (get statement-nums (:db/id agenda))] " "
-       [:i {:class (str "m-auto fas " (fa :comment))}]
-       ")"]]]))
+       [:span.badge.badge-pill.badge-transparent (get statement-nums (:db/id agenda)) " "
+        [:i {:class (str "m-auto fas " (fa :comment))}]]]]]))
 
 
 (defn agenda-in-meeting-view
