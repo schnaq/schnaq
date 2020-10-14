@@ -268,5 +268,5 @@
   (fn [_ [_ share-hash edit-hash]]
     {:fx [[:localstorage/write
            [:meetings/admin-access
-            (ls/build-hash-map-from-localstorage share-hash edit-hash :meetings/admin-access)]]
+            (ls/add-key-value-and-build-map-from-localstorage share-hash edit-hash :meetings/admin-access)]]
           [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]]}))

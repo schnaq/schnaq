@@ -79,7 +79,7 @@
 (defn- agenda-entry [agenda meeting]
   (let [old-statements-nums-map @(rf/subscribe [:agendas/load-statement-nums])
         statements-nums-map @(rf/subscribe [:agenda.meta/statement-num])
-        old-statement-num (js/parseInt (get old-statements-nums-map (str (:db/id agenda)) 0))
+        old-statement-num (get old-statements-nums-map (str (:db/id agenda)) 0)
         statement-num (get statements-nums-map (:db/id agenda))
         new? (not (= old-statement-num statement-num))]
     [:div.card.meeting-entry-no-hover
@@ -143,7 +143,9 @@
 (rf/reg-sub
   :agendas/load-statement-nums
   (fn [db [_]]
-    (get-in db [:agendas :statement-nums])))
+    (let [string-value-hash-map (get-in db [:agendas :statement-nums])
+          int-values (map (fn [[key value]] {key (js/parseInt value)}) string-value-hash-map)]
+      (into {} int-values))))
 
 (rf/reg-event-db
   :agendas.save-statement-nums/store-hashes-from-localstorage
@@ -157,5 +159,5 @@
     (let [statements-nums-map @(rf/subscribe [:agenda.meta/statement-num])]
       {:fx [[:localstorage/write
              [:agendas/statement-nums
-              (ls/build-hash-map-from-localstorage statements-nums-map :agendas/statement-nums)]]
+              (ls/add-hash-map-and-build-map-from-localstorage statements-nums-map :agendas/statement-nums)]]
             [:dispatch [:agendas.save-statement-nums/store-hashes-from-localstorage]]]})))
