@@ -75,7 +75,7 @@
      hashes-as-string))
 
   ([key value local-storage-key]
-   "build and insert key value pair into an existing local storage hashmap.
+   "Build and insert key value pair into an existing local storage hashmap.
    Does not override the key if it is present"
    (let [local-hashes (get-item local-storage-key)
          new-hashes (add-key-value-to-local-hashmap local-hashes key value)
