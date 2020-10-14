@@ -26,6 +26,7 @@
             [schnaq.interface.views.feedback.survey]
             [schnaq.interface.views.graph.view]
             [schnaq.interface.views.meeting.admin-center]
+            [schnaq.interface.views.meeting.calendar-invite]
             [schnaq.interface.views.meeting.meetings]
             [schnaq.interface.views.meeting.overview]
             [schnaq.interface.views.meeting.single]

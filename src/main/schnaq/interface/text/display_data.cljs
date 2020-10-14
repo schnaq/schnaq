@@ -92,6 +92,9 @@
      :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
      :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
 
+     ;; calendar invitation
+     :calendar-invitation/title "Termin festlegen und teilen"
+
      :feature.discussions/lead "Strukturierte Diskussionen mit Kolleg:innen und Kunden"
      :feature.discussions/title "Strukturierte Diskussionen für strukturierte Ergebnisse"
      :feature.discussions/body "Mit schnaq können strukturierte Diskussionen online und ohne weitere Gerätschaften geführt werden. Wir haben Ergebnisse aus unserer langjährigen Forschung genutzt, um eine optimale Diskussionsform zu entwickeln, die strukturierte Diskussionen ermöglicht. Die Ergebnisse der Diskussionen lassen sich strukturiert und automatisch in graphischer Form aufbereiten und erlauben so die Nachvollziehbarkeit einer Diskussion auf einen Blick. Wertvolle Informationen für alle Entscheider:innen und deren Teams!"
@@ -158,6 +161,7 @@
      :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
+     :meetings/share-calendar-invite "Kalendareinladung versenden"
      :meetings.suggestions/header "Vorschläge einreichen"
      :meetings.suggestions/subheader "Die erstellende Person kann die Vorschläge einsehen und berücksichtigen"
 
@@ -409,6 +413,7 @@
      :arrow-left "fa-arrow-left"
      :arrow-right "fa-arrow-right"
      :arrow-up "fa-arrow-up"
+     :calendar "fa-calendar-plus"
      :carry "fa-people-carry"
      :cog "fa-cogs"
      :comment "fa-comments"
