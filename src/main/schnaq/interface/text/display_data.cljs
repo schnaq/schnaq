@@ -32,7 +32,7 @@
      :startpage.value-cards.meetings/description "Vor allem seitdem die Arbeitswelt verteilter geworden ist, hetzt man von einem (digitalen) Meeting zum anderen. Damit die Vor- und Nachbereitung nicht mehr zur Nebensache wird, gibt es schnaq. Sparen Sie Arbeitszeit und optimieren sie die Ergebnisse Ihrer Meetings."
      :startpage.value-cards.meetings/alt-text "Menschen in einem Meeting, eine Frau redet gerade"
      :startpage.value-cards.knowledge/title "Wissen generieren"
-     :startpage.value-cards.knowledge/description "Oft fragt man sich ob ehemals getroffene Entscheidungen oder generiertes Wissen noch aktuell sind. Mit schnaq wird nicht nur das Ergebniss, sondern auch die Wissensgenerierung festgehalten. Damit lässt sich in der Zukunft leicht nachvollziehen weshalb welche Entscheidungen getroffen wurden, und ob Wissen noch zeitgemäß ist."
+     :startpage.value-cards.knowledge/description "Oft fragt man sich ob ehemals getroffene Entscheidungen oder generiertes Wissen noch aktuell sind. Mit schnaq wird nicht nur das Ergebnis, sondern auch die Wissensgenerierung festgehalten. Damit lässt sich in der Zukunft leicht nachvollziehen weshalb welche Entscheidungen getroffen wurden, und ob Wissen noch zeitgemäß ist."
      :startpage.value-cards.knowledge/alt-text "Etliche Klebezettel auf einer Wand"
      :startpage.value-cards.button/text "Mehr erfahren"
 
@@ -111,6 +111,8 @@
      :feature.discussions.tbd/navigation "Innovative Navigation durch große Diskussionen"
      :feature.discussions.tbd/connect "Anbindung an MS Teams, Slack und Co."
      :feature.discussions.tbd/bot "AI-basierte Hinweise, welche Bereiche weiteren Input benötigen"
+
+     :feature.knowledge/lead ""
 
      :how-to.startpage/title "Wie benutze ich schnaq?"
      :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
