@@ -6,6 +6,7 @@
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.meeting.calendar-invite :as calendar-invite]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]))
 
@@ -47,7 +48,13 @@
          [:i {:class (str "m-auto fas " (fa :eraser))}]
          #(rf/dispatch [:navigation/navigate
                         :routes.meeting/edit
-                        {:share-hash share-hash :edit-hash edit-hash}])]])
+                        {:share-hash share-hash :edit-hash edit-hash}])]
+        ;; share calendar invite
+        [tooltip-button "bottom"
+         (labels :meetings/share-calendar-invite)
+         [:i {:class (str "m-auto fas " (fa :calendar))}]
+         #(rf/dispatch [:modal {:show? true :large? false
+                                :child [calendar-invite/modal]}])]])
      ;; suggestion button
      [tooltip-button "bottom"
       (labels :agendas.button/navigate-to-suggestions)
@@ -71,7 +78,10 @@
      [:h1 title]
      [:hr]
      ;; mark down
-     [markdown-parser/markdown-to-html subtitle]]]
+     [markdown-parser/markdown-to-html subtitle]
+     ;; todo test invite modal
+     [calendar-invite/modal]
+     ]]
    ;; button column
    [:div.col-md-1
     [control-buttons]]])
