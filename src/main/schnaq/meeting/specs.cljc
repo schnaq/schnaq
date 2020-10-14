@@ -6,6 +6,42 @@
 ;; Frontend only
 #?(:cljs (s/def :re-frame/component vector?))
 
+;; Discussion
+(s/def :discussion/title string?)
+(s/def :discussion/description string?)
+(s/def :discussion/states
+  (s/coll-of #{:discussion.state/open :discussion.state/closed
+               :discussion.state/private :discussion.state/deleted}
+             :distinct true))
+(s/def :discussion/starting-arguments (s/coll-of ::argument))
+(s/def ::discussion (s/keys :req [:discussion/title :discussion/description
+                                  :discussion/states :discussion/starting-arguments]))
+
+;; Author
+(s/def :author/nickname string?)
+(s/def ::author (s/keys :req [:author/nickname]))
+
+;; Statement
+(s/def :statement/content string?)
+(s/def :statement/version number?)
+(s/def :statement/author ::author)
+(s/def ::statement
+  (s/keys :req [:statement/content :statement/version :statement/author]))
+
+;; Argument
+(s/def :argument/type
+  #{:argument.type/attack :argument.type/support :argument.type/undercut})
+(s/def :argument/version number?)
+(s/def :argument/author ::author)
+(s/def :argument/conclusion (s/or :statement ::statement
+                                  :argument ::argument))
+(s/def :argument/premises (s/coll-of ::statement))
+(s/def :argument/discussions (s/coll-of ::discussion))
+(s/def ::argument
+  (s/keys :req [:argument/author :argument/premises :argument/conclusion
+                :argument/type :argument/version]
+          :opt [:argument/discussions]))
+
 ;; Common
 (s/def :db/id (s/or :transacted number? :temporary any?))
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))
@@ -19,7 +55,7 @@
 (s/def :meeting/start-date inst?)
 (s/def :meeting/end-date inst?)
 (s/def :meeting/author (s/or :reference ::entity-reference
-                             :author :dialog.discussion.models/author))
+                             :author ::author))
 (s/def ::meeting (s/keys :req [:meeting/title :meeting/author
                                :meeting/share-hash
                                :meeting/start-date :meeting/end-date]

@@ -14,9 +14,3 @@
   (db/init!)
   (dialog/init! {:datomic config/datomic
                  :name config/db-name}))
-
-(comment
-  (-main)
-  (db/delete-database!)
-  (dialog/load-testdata!)
-  :end)
