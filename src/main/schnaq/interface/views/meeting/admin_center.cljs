@@ -249,37 +249,6 @@
 (defn admin-center-view []
   [admin-center])
 
-;; #### Storage Helper ####
-
-(def ^:private tuple-separator ",")
-(def ^:private tuple-data #"\[(.*?)\]")
-(def ^:private hash-separator " ")
-
-(defn- parse-admin-access-string
-  "Read previously visited meetings from localstorage. E.g (ls/get-item :meetings/admin-access)
-  The string must obey the following convention '[share-1 edit-1],[share-2 edit-2]'
-  "
-  [hash-map-string]
-  (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
-        hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
-        hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
-        hashes-map (into {} hashes-vector)]
-    hashes-map))
-
-(defn- add-admin-access-to-local-hashmap [hash-map-string share-hash edit-hash]
-  (let [admin-access (parse-admin-access-string hash-map-string)
-        new-admin-access (conj admin-access {(str share-hash) (str edit-hash)})]
-    ;; check if share hash has already admin access
-    (if-not (some #{share-hash} admin-access)
-      new-admin-access
-      admin-access)))
-
-(defn- build-admin-access-from-localstorage [share-hash edit-hash]
-  (let [local-hashes (ls/get-item :meetings/admin-access)
-        new-hashes (add-admin-access-to-local-hashmap local-hashes share-hash edit-hash)
-        hashes-tuple (map (fn [[val key]] (str "[" val " " key "]")) (seq new-hashes))
-        hashes-as-string (string/join "," hashes-tuple)]
-    hashes-as-string))
 
 ;; #### Events ####
 
@@ -292,12 +261,12 @@
   :meetings.save-admin-access/store-hashes-from-localstorage
   (fn [db _]
     (assoc-in db [:meetings :admin-access]
-              (parse-admin-access-string (ls/get-item :meetings/admin-access)))))
+              (ls/parse-hash-map-string (ls/get-item :meetings/admin-access)))))
 
 (rf/reg-event-fx
   :meetings.save-admin-access/to-localstorage
   (fn [_ [_ share-hash edit-hash]]
     {:fx [[:localstorage/write
            [:meetings/admin-access
-            (build-admin-access-from-localstorage share-hash edit-hash)]]
+            (ls/add-key-value-and-build-map-from-localstorage share-hash edit-hash :meetings/admin-access)]]
           [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]]}))

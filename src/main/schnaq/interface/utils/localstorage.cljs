@@ -37,3 +37,48 @@
   [key]
   [keyword? :ret nil?]
   (.removeItem (.-localStorage js/window) (stringify key)))
+
+;; #### Hashmap Storage Helper ####
+
+(def ^:private tuple-separator ",")
+(def ^:private tuple-data #"\[(.*?)\]")
+(def ^:private hash-separator " ")
+
+(defn parse-hash-map-string
+  "Read previously visited meetings from localstorage. E.g (ls/get-item :meetings/admin-access)
+  The string must obey the following convention '[share-1 edit-1],[share-2 edit-2]'"
+  [hash-map-string]
+  (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
+        hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
+        hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
+        hashes-map (into {} hashes-vector)]
+    hashes-map))
+
+(defn- add-key-value-to-local-hashmap
+  [hash-map-string key value]
+  (let [parsed-hash-map (parse-hash-map-string hash-map-string)
+        new-hash-map (conj parsed-hash-map {(str key) (str value)})]
+    ;; check if key is already in hash map
+    (if-not (some #{key} parsed-hash-map)
+      new-hash-map
+      parsed-hash-map)))
+
+(defn add-hash-map-and-build-map-from-localstorage
+  "Build and insert hashmap into an existing local storage hashmap."
+  [hash-map local-storage-key]
+  (let [local-hashes-as-string (get-item local-storage-key)
+        local-hash-map (parse-hash-map-string local-hashes-as-string)
+        new-hash-map (merge local-hash-map hash-map)
+        hashes-tuple (map (fn [[val key]] (str "[" val " " key "]")) (seq new-hash-map))
+        hashes-as-string (string/join "," hashes-tuple)]
+    hashes-as-string))
+
+(defn add-key-value-and-build-map-from-localstorage
+  "build and insert key value pair into an existing local storage hashmap.
+  Does not override the key if it is present"
+  [key value local-storage-key]
+  (let [local-hashes (get-item local-storage-key)
+        new-hashes (add-key-value-to-local-hashmap local-hashes key value)
+        hashes-tuple (map (fn [[val key]] (str "[" val " " key "]")) (seq new-hashes))
+        hashes-as-string (string/join "," hashes-tuple)]
+    hashes-as-string))
