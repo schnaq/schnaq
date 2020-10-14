@@ -1,4 +1,5 @@
-(ns schnaq.interface.text.display-data)
+(ns schnaq.interface.text.display-data
+  (:require [re-frame.core :as rf]))
 
 
 (defn labels
@@ -82,7 +83,7 @@
      :feature.meetings/heading "Sparen Sie Arbeitszeit durch strukturierte Meetings"
      :feature.meetings/features-subheading "Schnaq für Meetings einsetzen"
      :feature.meetings/tbd-subheading "More to come..."
-     :feature.meetings/tbd-lead "Werden Sie Early Adopter und genießen Sie folgende Features als erste, sobald diese verfügbar sind:"
+     :feature.meetings/tbd-lead "Werden Sie Early Adopter:in und genießen Sie folgende Features als erste, sobald diese verfügbar sind:"
      :feature.meetings.tbd/teams "Integration mit MS Teams und Slack"
      :feature.meetings.tbd/outlook "Outlook-Export"
      :feature.meetings.tbd/protocols "Kollaborative Protokollführung im Meeting"
@@ -112,7 +113,26 @@
      :feature.discussions.tbd/connect "Anbindung an MS Teams, Slack und Co."
      :feature.discussions.tbd/bot "AI-basierte Hinweise, welche Bereiche weiteren Input benötigen"
 
-     :feature.knowledge/lead ""
+     :feature.knowledge/lead "Wissensdatenbanken anlegen"
+     :feature.knowledge/subheading "Entscheidungsfindungsprozesse nachhaltig aufbereiten"
+     :feature.knowledge.general/lead "Nachhaltige Wissensaufbereitung"
+     :feature.knowledge.general/title "Wissen greifbar machen"
+     :feature.knowledge.general/body "Kommunikation ist der Schlüssel zum Erfolg. Jede Meinung sollte gehört werden können, damit im Anschluss eine qualifizierte Entscheidung gefasst werden können. Um diese Meinungen und Argumente auch später wieder verfügbar zu haben, bietet schnaq die Möglichkeit zur strukturierten Erfassung und Aufbereitung von Diskussionen. Diese Aufbereitung kann zur späteren Wiedervorlage Aufschluss über die ursprünglichen Gedanken zu verschiedenen Thematiken liefern."
+     :feature.knowledge/features-subheading "Schnaq als Wissensdatenbank"
+     :feature.knowledge.discussions/lead "Entscheidungsfindung"
+     :feature.knowledge.discussions/title "Am Anfang steht der Diskurs"
+     :feature.knowledge.discussions/body [:<> "Durch verteilte " [:a {:href "javascript:;" :on-click #(rf/dispatch [:navigation/navigate :routes.features/discussions])} " strukturierte Diskussionen"] " kann die Basis für einen Entscheidungsfindungsprozess geschaffen werden. Alle Mitglieder:innen im Team können ihre Expertise in die Diskussion einfließen lassen, die dann als Grundlage für firmenweite Entscheidungen verwendet werden kann."]
+     :feature.knowledge.database/lead "Entscheidungen nachvollziehen"
+     :feature.knowledge.database/title "\"Warum haben wir uns nochmal darauf geeinigt?\""
+     :feature.knowledge.database/body "Bewahren Sie Ihre Entscheidungen und Diskussionen auf und ermöglichen Sie so ein späteres Nachvollziehen der Gedankengänge. Häufig fragt man sich schon nach Tagen, manchmal auch nach Monaten nach dem Sinn einer Entscheidung und hat so die Möglichkeit die einzelnen Diskussionspunkte genau nachzuvollziehen."
+     :feature.knowledge.change-of-facts/lead "Hat sich etwas geändert?"
+     :feature.knowledge.change-of-facts/title "Neue Faktenlage beachten"
+     :feature.knowledge.change-of-facts/body "Es kommt natürlich vor, dass neue Argumente eine vorherige Entscheidung beeinflussen können. Mit schnaq können Sie die neuen Argumente in diese Diskussionen einfließen lassen und erneut evaluieren, um so gegebenenfalls zu einem veränderten Ergebnis zu kommen."
+     :feature.knowledge.tbd/wiki "Einbindung in bestehende Wiki-Systeme (bspw. Confluence)"
+     :feature.knowledge.tbd/search "Suchen in Diskussionen"
+     :feature.knowledge.tbd/evaluation "Automatische Evaluation welche Argumente nun angenommen und welche abgelehnt werden müssten"
+     :feature.knowledge.tbd/live-changes "Live Veränderungen der Diskussionsgrundlage mitverfolgen"
+     :feature.knowledge.tbd/changes-over-time "Sehen Sie welche Argumente wann hinzugefügt wurden und sehen Sie den Einfluss, den diese Argumente auf die vorherige Diskussion hatte"
 
      :how-to.startpage/title "Wie benutze ich schnaq?"
      :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
@@ -387,6 +407,8 @@
      :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
      :feature.discussions/hero-image "/imgs/stock/discussion_landing_hero.jpeg"
      :feature.discussions/create-discussion-spaces "/imgs/startpage/features/discussion-agendas.png"
+     :feature.knowledge/hero-image "/imgs/stock/library_500w.jpg"
+     :feature.knowledge/overview "/imgs/startpage/features/schnaqs-uebersicht_500w.png"
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
 
 (defn video
