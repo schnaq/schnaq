@@ -7,7 +7,6 @@
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modals.modal :as modal]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.features :as startpage-features]))
@@ -248,8 +247,7 @@
         [under-construction]]
        [:div.col-12.col-lg-6.text-center
         [start-schnaq-button]]]
-      (when-not toolbelt/production?
-        [value-prop-cards])
+      [value-prop-cards]
       [request-demo-section]
       [how-to-section]
       [usage-of-schnaq-heading]
