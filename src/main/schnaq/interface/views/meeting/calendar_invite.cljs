@@ -1,81 +1,50 @@
 (ns schnaq.interface.views.meeting.calendar-invite
-  (:require [reagent-forms.core :refer [bind-fields]]
+  (:require ["jquery" :as jquery]
+            ["jquery-datetimepicker"]
+            [goog.string :as gstring]
+            [oops.core :refer [oget+]]
+            [re-frame.core :as re-frame]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.modals.modal :as modal]
-            [re-frame.core :as re-frame]))
+            [reagent.core :as reagent]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [clojure.string :as string]))
 
+(def ^:private allowed-times
+  "Create allowed times for the datepicker."
+  (for [hours ["00" "01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12"
+               "13" "14" "15" "16" "17" "18" "19" "20" "21" "22" "23"]
+        minutes ["00" "10" "20" "30" "40" "50"]]
+    (gstring/format "%s:%s" hours minutes)))
 
-; Functions that will be called by each individual form field with an id and a value
-(def events
-  {:get (fn [path] @(re-frame/subscribe [:value path]))
-   :save! (fn [path value] (re-frame/dispatch [:set-value path value]))
-   :update! (fn [path save-fn value]
-              ; save-fn should accept two arguments: old-value, new-value
-              (re-frame/dispatch [:update-value save-fn path value]))
-   :calendar-invite (fn [] @(re-frame/subscribe [:calendar-invite]))})
+(defn- parse-date
+  "Takes a datetime-string from jQuery DateTimePicker and converts it to edn."
+  [datetime-string]
+  (let [[date time] (string/split datetime-string #" ")
+        [year month day] (map js/parseInt (string/split date #"/"))
+        [hour minute] (map js/parseInt (string/split time #":"))]
+    {:year year :month month :day day
+     :hour hour :minute minute}))
 
 (defn modal []
-  (let [input-id "participant-email-addresses"]
-    [modal/modal-template (labels :calendar-invitation/title)
-     [bind-fields
-      [:form.form
-
-       {:on-submit
-        (fn [_e] (println "foo"))}
-
-       [:div.input-group.date.datepicker.clickable
-        {:field :datepicker
-         :id :date
-         :date-format (fn [date]
-                        (str (.getDate date) "."
-                             (inc (.getMonth date)) "."
-                             (.getFullYear date)))
-         :save-fn (fn [current-date {:keys [year month day]}]
-                    (if current-date
-                      (doto (js/Date.)
-                        (.setFullYear year)
-                        (.setMonth (dec month))
-                        (.setDate day)
-                        (.setHours (.getHours current-date))
-                        (.setMinutes (.getMinutes current-date)))
-                      (js/Date. year (dec month) day)))
-         :auto-close? true}]
-
-       [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
-       [:textarea.form-control.m-1.input-rounded
-        {:id input-id
-         :name "participant-addresses" :wrap "soft" :rows 3
-         :auto-complete "off"
-         :required true
-         :placeholder (labels :meeting.admin/addresses-placeholder)}]
-
-       [:button.btn.btn-outline-primary
-        (labels :meeting.admin/send-invites-button-text)]
-       ] events]]))
-
-;; re-frame events
-(re-frame/reg-event-db
-  :init
-  (fn [_ _]
-    {:calendar-invite {}}))
-
-(re-frame/reg-sub
-  :calendar-invite
-  (fn [db _]
-    (:calendar-invite db)))
-
-(re-frame/reg-sub
-  :value
-  :<- [:calendar-invite]
-  (fn [calendar-invite [_ path]]
-    (get-in calendar-invite path)))
-
-(re-frame/reg-event-db
-  :set-value
-  (fn [db [_ path value]]
-    (assoc-in db (into [:calendar-invite] path) value)))
-
-(re-frame/reg-event-db
-  :update-value
-  (fn [db [_ f path value]]
-    (update-in db (into [:calendar-invite] path) f value)))
+  (reagent/create-class
+    (let [datepicker-id "datetime-calendar-invite"]
+      {:component-did-mount
+       (fn [] (.datetimepicker
+                (jquery (str "#" datepicker-id))
+                (clj->js {:allowTimes allowed-times})))
+       :reagent-render
+       (fn []
+         [modal/modal-template (labels :calendar-invitation/title)
+          [:<>
+           [:form.form {:on-submit (fn [e]
+                                     (js-wrap/prevent-default e)
+                                     (prn (oget+ e [:target :elements datepicker-id :value])))}
+            [:div.form-group
+             [:label {:for datepicker-id} "Startzeit wählen"]
+             [:input.form-control
+              {:id datepicker-id :type "text" :aria-describedby datepicker-id
+               :required true}]]
+            [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+             {:type "submit"
+              :value "Abschicken"}]]]])})))
