@@ -82,7 +82,6 @@
        (fn [this]
          (let [root-node (rdom/dom-node this)
                controversy-vals (:controversy-values graph)
-               _ (println graph)
                data (clj->js (update graph :nodes #(convert-nodes-for-vis % controversy-vals)))
                options (clj->js {:width (str width)
                                  :height (str height)})]
