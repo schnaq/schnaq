@@ -35,14 +35,19 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
-   ["meeting-features"
-    {:name :routes.features/meetings
-     :view features-views/meeting-features-view
-     :link-text (labels :router.features/meetings)}]
-   ["discussion-features"
-    {:name :routes.features/discussions
-     :view features-views/discussion-features-view
-     :link-text (labels :router.features/discussion)}]
+   ["features"
+    ["/meetings"
+     {:name :routes.features/meetings
+      :view features-views/meeting-features-view
+      :link-text (labels :router.features/meetings)}]
+    ["/discussions"
+     {:name :routes.features/discussions
+      :view features-views/discussion-features-view
+      :link-text (labels :router.features/discussion)}]
+    ["/knowledge"
+     {:name :routes.features/knowledge
+      :view features-views/knowledge-features-view
+      :link-text (labels :router.features/discussion)}]]
    ["how-to"
     {:name :routes/how-to
      :view how-to/view

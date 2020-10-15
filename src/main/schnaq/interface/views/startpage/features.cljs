@@ -115,6 +115,37 @@
        [:li (labels :feature.discussions.tbd/bot)]]
       [:p (labels :feature.meetings/feedback)]]]))
 
+(defn- features-knowledge
+  "Presenting the idea of knowledge aggregation."
+  []
+  (pages/with-nav-and-header
+    {:page/heading (labels :feature.knowledge/lead)
+     :page/subheading (labels :feature.knowledge/subheading)}
+    [:div.container.py-4
+     [feature-row-image-right
+      :feature.knowledge/hero-image
+      :feature.knowledge.general]
+     [:h3.text-center.pb-4 (labels :feature.knowledge/features-subheading)]
+     [feature-row-image-left
+      :startpage.features/sample-discussion
+      :feature.knowledge.discussions]
+     [feature-row-image-right
+      :feature.knowledge/overview
+      :feature.knowledge.database]
+     [feature-row-image-left
+      :startpage.features/discussion-graph
+      :feature.knowledge.change-of-facts]
+     [:section.feature-text-box
+      [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
+      [:p (labels :feature.meetings/tbd-lead)]
+      [:ul
+       [:li (labels :feature.knowledge.tbd/wiki)]
+       [:li (labels :feature.knowledge.tbd/search)]
+       [:li (labels :feature.knowledge.tbd/evaluation)]
+       [:li (labels :feature.knowledge.tbd/live-changes)]
+       [:li (labels :feature.knowledge.tbd/changes-over-time)]]
+      [:p (labels :feature.meetings/feedback)]]]))
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -131,3 +162,6 @@
 
 (defn discussion-features-view []
   [features-discussion])
+
+(defn knowledge-features-view []
+  [features-knowledge])
