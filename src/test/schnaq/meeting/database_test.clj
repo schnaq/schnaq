@@ -301,7 +301,7 @@
       (is (= 1 (count (database/meeting-feedback-for meeting-hash))))
       (is (= feedback (:meeting.feedback/content (first (database/meeting-feedback-for meeting-hash))))))))
 
-(deftest number-of-statements-for-discussion
+(deftest number-of-statements-for-discussion-test
   (testing "Is the number of agendas returned correct?"
     (let [meeting-hash "89eh32hoas-2983ud"
           meeting-hash-2 "graph-hash"
@@ -311,3 +311,14 @@
           graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash-2)))]
       (is (= 27 (database/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
       (is (= 7 (database/number-of-statements-for-discussion (:db/id graph-discussion)))))))
+
+(deftest starting-conclusions-by-discussion-test
+  (testing "Whether starting arguments are returned correctly"
+    (let [meeting-hash "graph-hash"
+          discussion-id
+          (->> meeting-hash
+               database/agendas-by-meeting-hash
+               first
+               :agenda/discussion :db/id)
+          starting-conclusions (database/starting-conclusions-by-discussion discussion-id)]
+      (is (= 2 (count starting-conclusions))))))
