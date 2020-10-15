@@ -46,7 +46,7 @@
   [map? sequential? :ret sequential?]
   (map
     #(let [controversy-score (get controversy-map (:id %))]
-       (if (< 35 controversy-score 70)
+       (if (< 35 controversy-score 65)
          (-> %
              (assoc-in [:color :border] "#fab907")
              (assoc-in [:color :highlight :border] "#fab907")
