@@ -39,6 +39,11 @@
   [data]
   (d/transact (new-connection) {:tx-data data}))
 
+(defn- query
+  "Shorthand to not type out the same first param every time"
+  [query-vector & args]
+  (apply d/q query-vector (d/db (new-connection)) args))
+
 (defn- create-discussion-schema
   "Creates the schema for discussions inside the database."
   [connection]
@@ -895,3 +900,29 @@
     (toolbelt/pull-key-up :user/core-author)
     (toolbelt/pull-key-up :author/nickname)
     flatten))
+
+;; Dialog.core outfactor. Should Probably go into its own namespace on next refactor.
+
+(def ^:private statement-pattern
+  "Representation of a statement. Oftentimes used in a Datalog pull pattern."
+  [:db/id
+   :statement/content
+   :statement/version
+   {:statement/author [:author/nickname]}])
+
+(>defn starting-conclusions-by-discussion
+  "Query all conclusions belonging to starting-arguments of a certain discussion."
+  [discussion-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (flatten
+    (query
+      '[:find (pull ?starting-conclusions statement-pattern)
+        :in $ ?discussion-id statement-pattern
+        :where [?discussion-id :discussion/starting-arguments ?starting-arguments]
+        [?starting-arguments :argument/conclusion ?starting-conclusions]]
+      discussion-id statement-pattern)))
+
+
+(comment
+  (starting-conclusions-by-discussion 79164837200483)
+  )

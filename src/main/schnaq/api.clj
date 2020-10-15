@@ -612,4 +612,7 @@
   "Start the server from here"
   (-main)
   (stop-server)
+  ;; TODO Route for getting starting-conclusions
+  ;; TODO Route for posting A starting argument
+  ;; TODO On-Click in the frontend needs to build a dialog.core map
   :end)
