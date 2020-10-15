@@ -71,13 +71,16 @@
 
 (deftest update-controversy-map-test
   (testing "Update of a controversy-map"
-    (let [edges [{:to 123 :type :argument.type/support} {:to 1234 :type :argument.type/support}
-                 {:to 1234 :type :argument.type/attack} {:to 1235 :type :argument.type/starting}]
-          con-map (@#'discussion/update-controversy-map {} edges)]
-      (is (= {123 {:positive 1}
-              1234 {:positive 1
-                    :negative 1}}
-             con-map)))))
+    (let [edge-1 {:to 123 :type :argument.type/support}
+          edge-2 {:to 1234 :type :argument.type/attack}
+          edge-3 {:to 1235 :type :argument.type/starting}]
+      (are [x y]
+        (= x (@#'discussion/update-controversy-map {} y))
+        {123 {:positive 1}} edge-1
+        {1234 {:negative 1}} edge-2
+        {} edge-3)
+      (is (= {123 {:positive 2}} (@#'discussion/update-controversy-map {123 {:positive 1}}
+                                   {:to 123 :type :argument.type/support}))))))
 
 (deftest single-controversy-val-test
   (testing "Calculate a single controversy-value"
