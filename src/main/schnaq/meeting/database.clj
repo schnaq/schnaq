@@ -921,3 +921,45 @@
         :where [?discussion-id :discussion/starting-arguments ?starting-arguments]
         [?starting-arguments :argument/conclusion ?starting-conclusions]]
       discussion-id statement-pattern)))
+
+(>defn- pack-premises
+  "Packs premises into a statement-structure."
+  [premises author-nickname]
+  [(s/coll-of :statement/content) :author/nickname
+   :ret (s/coll-of map?)]
+  (mapv (fn [premise] {:db/id (str "premise-" premise)
+                       :statement/author [:author/nickname author-nickname]
+                       :statement/content premise
+                       :statement/version 1})
+        premises))
+
+(>defn- prepare-new-argument
+  "Prepares a new argument for transaction. Optionally sets a temporary id."
+  ([discussion-id author-nickname conclusion premises temporary-id]
+   [number? :author/nickname :statement/content (s/coll-of :statement/content) :db/id
+    :ret map?]
+   (merge
+     (prepare-new-argument discussion-id author-nickname conclusion premises)
+     {:db/id temporary-id}))
+  ([discussion-id author-nickname conclusion premises]
+   [number? :author/nickname :statement/content (s/coll-of :statement/content)
+    :ret map?]
+   {:argument/author [:author/nickname author-nickname]
+    :argument/premises (pack-premises premises author-nickname)
+    :argument/conclusion {:db/id (str "conclusion-" conclusion)
+                          :statement/author [:author/nickname author-nickname]
+                          :statement/content conclusion
+                          :statement/version 1}
+    :argument/version 1
+    :argument/type :argument.type/support
+    :argument/discussions [discussion-id]}))
+
+(>defn add-new-starting-argument!
+  "Creates a new starting argument in a discussion."
+  [discussion-id author-nickname conclusion premises]
+  [number? :author/nickname :statement/content (s/coll-of :statement/content)
+   :ret associative?]
+  (let [new-argument (prepare-new-argument discussion-id author-nickname conclusion premises "add/starting-argument")
+        temporary-id (:db/id new-argument)]
+    (transact [new-argument
+               [:db/add discussion-id :discussion/starting-arguments temporary-id]])))
