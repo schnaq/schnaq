@@ -416,6 +416,17 @@
       (bad-request {:message "Ihre Anfrage konnte nicht bearbeitet werden, bitte versuchen Sie es erneut."}))))
 
 ;; -----------------------------------------------------------------------------
+;; Discussion
+
+(defn- get-starting-conclusions
+  "Return all starting-conclusions of a certain discussion if share-hash fits."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id]} body-params]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:starting-conclusions (db/starting-conclusions-by-discussion discussion-id)})
+      (deny-access "You are not allowed to view this discussion."))))
+
+;; -----------------------------------------------------------------------------
 ;; Analytics
 
 (defn- number-of-meetings
@@ -523,6 +534,7 @@
     (POST "/author/add" [] add-author)
     (POST "/continue-discussion" [] continue-discussion)
     (POST "/credentials/validate" [] check-credentials)
+    (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
