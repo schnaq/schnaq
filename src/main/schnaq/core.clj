@@ -14,3 +14,7 @@
   (db/init!)
   (dialog/init! {:datomic config/datomic
                  :name config/db-name}))
+
+(comment
+  (-main)
+  :end)
