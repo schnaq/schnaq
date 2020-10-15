@@ -49,7 +49,8 @@
        (if (< 35 controversy-score 70)
          (-> %
              (assoc-in [:color :border] "#fab907")
-             (assoc-in [:color :highlight :border] "#fab907"))
+             (assoc-in [:color :highlight :border] "#fab907")
+             (assoc-in [:color :hover :border] "#fab907"))
          %))
     nodes))
 
