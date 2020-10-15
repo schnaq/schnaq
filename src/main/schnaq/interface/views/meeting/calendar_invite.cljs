@@ -1,14 +1,13 @@
 (ns schnaq.interface.views.meeting.calendar-invite
   (:require ["jquery" :as jquery]
-            ["jquery-datetimepicker"]
+            [clojure.string :as string]
             [goog.string :as gstring]
             [oops.core :refer [oget+]]
             [re-frame.core :as re-frame]
-            [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.modals.modal :as modal]
             [reagent.core :as reagent]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [clojure.string :as string]))
+            [schnaq.interface.views.modals.modal :as modal]))
 
 (def ^:private allowed-times
   "Create allowed times for the datepicker."
@@ -44,7 +43,7 @@
              [:label {:for datepicker-id} "Startzeit wählen"]
              [:input.form-control
               {:id datepicker-id :type "text" :aria-describedby datepicker-id
-               :required true}]]
+               :required true :auto-complete "off"}]]
             [:input.btn.btn-outline-primary.mt-1.mt-sm-0
              {:type "submit"
               :value "Abschicken"}]]]])})))

@@ -2,6 +2,7 @@
   (:require ["@fortawesome/fontawesome-free/js/all.js"]
             ["bootstrap"]
             ["jquery"]
+            ["jquery-datetimepicker"]
             [day8.re-frame.http-fx]
             [goog.dom :as gdom]
             [goog.string :as gstring]
