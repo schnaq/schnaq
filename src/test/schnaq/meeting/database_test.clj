@@ -137,9 +137,9 @@
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (= 5 (database/number-of-usernames)))
-    (database/add-user-if-not-exists "Some-Testdude")
     (is (= 6 (database/number-of-usernames)))
+    (database/add-user-if-not-exists "Some-Testdude")
+    (is (= 7 (database/number-of-usernames)))
     (is (zero? (database/number-of-meetings (Instant/now))))))
 
 (deftest number-of-statements-test
@@ -366,6 +366,6 @@
           graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash)))
           _ (database/add-new-starting-argument! (:db/id graph-discussion) nickname conclusion premises)
           starting-conclusions (database/starting-conclusions-by-discussion (:db/id graph-discussion))]
-      (testing "Must have two more arguments than the vanilla set and one more starting conclusion"
-        (is (= 9 (database/number-of-statements-for-discussion (:db/id graph-discussion))))
+      (testing "Must have three more statements than the vanilla set and one more starting conclusion"
+        (is (= 10 (database/number-of-statements-for-discussion (:db/id graph-discussion))))
         (is (= 3 (count starting-conclusions)))))))
