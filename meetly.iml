@@ -25,6 +25,7 @@
     <orderEntry type="library" name="Deps: ring/ring-devel:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.3" level="project" />
+    <orderEntry type="library" name="Deps: reagent-forms:0.5.44" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.logging:0.5.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/ring-http-response:0.9.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.44" level="project" />
@@ -135,7 +136,7 @@
     <orderEntry type="library" name="Deps: com.google.guava/failureaccess:1.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/guava:28.2-android" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.xml:0.0.8" level="project" />
-    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:ab19a6" level="project" />
+    <orderEntry type="library" name="Deps: github-hhucn/dialog.core:dfe348" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-schema:0.5.6" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.truffle/truffle-api:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: borkdude/dynaload:0.2.2" level="project" />
