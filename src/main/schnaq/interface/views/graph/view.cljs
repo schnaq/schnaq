@@ -26,21 +26,40 @@
   "Add colors depending on node type."
   [nodes]
   [sequential? :ret sequential?]
-  (map #(assoc % :color (case (:type %)
-                          :argument.type/starting "#4cacf4"
-                          :argument.type/support "#1292ee"
-                          :argument.type/attack "#ff772d"
-                          :argument.type/undercut "#ff772d"
-                          :agenda "#4cacf4"
-                          "#1292ee"))
-       nodes))
+  (map
+    #(let [color (case (:type %)
+                   :argument.type/starting "#4cacf4"
+                   :argument.type/support "#1292ee"
+                   :argument.type/attack "#ff772d"
+                   :argument.type/undercut "#ff772d"
+                   :agenda "#4cacf4"
+                   "#1292ee")]
+       (assoc % :color {:background color
+                        :highlight {:background color}
+                        :hover {:background color}
+                        :border color}))
+    nodes))
+
+(>defn- mark-controversy
+  "Marks controversy in nodes."
+  [controversy-map nodes]
+  [map? sequential? :ret sequential?]
+  (map
+    #(let [controversy-score (get controversy-map (:id %))]
+       (if (< 35 controversy-score 70)
+         (-> %
+             (assoc-in [:color :border] "#fab907")
+             (assoc-in [:color :highlight :border] "#fab907"))
+         %))
+    nodes))
 
 (>defn- convert-nodes-for-vis
   "Converts the nodes received from backend specifically for viz."
-  [nodes]
-  [sequential? :ret sequential?]
+  [nodes controversy-values]
+  [sequential? map? :ret sequential?]
   (->> nodes
        node-types->colors
+       (mark-controversy controversy-values)
        (map #(merge % {:shape "box"
                        :shapeProperties {:borderRadius 12}
                        :widthConstraint {:minimum 50
@@ -61,14 +80,17 @@
        :component-did-mount
        (fn [this]
          (let [root-node (rdom/dom-node this)
-               data (clj->js (update graph :nodes #(convert-nodes-for-vis %)))
+               controversy-vals (:controversy-values graph)
+               _ (println graph)
+               data (clj->js (update graph :nodes #(convert-nodes-for-vis % controversy-vals)))
                options (clj->js {:width (str width)
                                  :height (str height)})]
            (reset! vis-object (vis/Network. root-node data options))))
        :component-did-update
        (fn [this _argv]
          (let [[_ new-graph] (reagent/argv this)
-               new-data (clj->js (update new-graph :nodes #(convert-nodes-for-vis %)))]
+               controversy-vals (:controversy-values new-graph)
+               new-data (clj->js (update new-graph :nodes #(convert-nodes-for-vis % controversy-vals)))]
            (reset! vis-object (.setData @vis-object new-data))))})))
 
 (defn graph-agenda-header [agenda share-hash]
