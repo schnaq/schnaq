@@ -356,3 +356,16 @@
       (is (contains? with-id :argument/version))
       (is (contains? with-id :argument/type))
       (is (contains? with-id :argument/discussions)))))
+
+(deftest add-new-starting-argument!-test
+  (testing "Test the creation of a valid argument-entity from strings"
+    (let [premises ["What a beautifull day" "Hello test"]
+          conclusion "Wow look at this"
+          nickname "Test-person"
+          meeting-hash "graph-hash"
+          graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash)))
+          _ (database/add-new-starting-argument! (:db/id graph-discussion) nickname conclusion premises)
+          starting-conclusions (database/starting-conclusions-by-discussion (:db/id graph-discussion))]
+      (testing "Must have two more arguments than the vanilla set and one more starting conclusion"
+        (is (= 9 (database/number-of-statements-for-discussion (:db/id graph-discussion))))
+        (is (= 3 (count starting-conclusions)))))))
