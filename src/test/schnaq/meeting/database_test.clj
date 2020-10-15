@@ -1,7 +1,9 @@
 (ns schnaq.meeting.database-test
-  (:require [clojure.test :refer [deftest testing use-fixtures is are]]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.test :refer [deftest testing use-fixtures is are]]
             [dialog.discussion.database :as ddb]
             [schnaq.meeting.database :as database]
+            [schnaq.meeting.specs :as specs]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.time Instant)))
 
@@ -322,3 +324,10 @@
                :agenda/discussion :db/id)
           starting-conclusions (database/starting-conclusions-by-discussion discussion-id)]
       (is (= 2 (count starting-conclusions))))))
+
+(deftest pack-premises-test
+  (testing "Test the creation of statement-entities from strings"
+    (let [premises ["What a beautifull day" "Hello test"]
+          nickname "Test-person"
+          premise-entities (database/pack-premises premises nickname)]
+      (is (= '(true true) (map #(s/valid? ::specs/statement %) premise-entities))))))
