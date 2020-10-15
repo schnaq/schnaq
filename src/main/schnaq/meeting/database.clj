@@ -921,7 +921,3 @@
         :where [?discussion-id :discussion/starting-arguments ?starting-arguments]
         [?starting-arguments :argument/conclusion ?starting-conclusions]]
       discussion-id statement-pattern)))
-
-(comment
-  (starting-conclusions-by-discussion 79164837200483)
-  )

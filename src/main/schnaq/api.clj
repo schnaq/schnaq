@@ -423,7 +423,10 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash discussion-id]} body-params]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:starting-conclusions (db/starting-conclusions-by-discussion discussion-id)})
+      (ok {:starting-conclusions
+           (-> (db/starting-conclusions-by-discussion discussion-id)
+               processors/with-votes
+               (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id)))})
       (deny-access "You are not allowed to view this discussion."))))
 
 ;; -----------------------------------------------------------------------------
@@ -624,7 +627,6 @@
   "Start the server from here"
   (-main)
   (stop-server)
-  ;; TODO Route for getting starting-conclusions
   ;; TODO Route for posting A starting argument
   ;; TODO On-Click in the frontend needs to build a dialog.core map
   :end)

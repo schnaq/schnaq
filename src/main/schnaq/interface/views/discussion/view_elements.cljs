@@ -206,9 +206,8 @@
       [:div.up-down-vote
        [up-down-vote statement]]]]]))
 
-(defn conclusions-list []
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-        conclusions @(rf/subscribe [:starting-conclusions])]
+(defn conclusions-list [conclusions]
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div
      [:div#conclusions-list.mobile-container
       (for [conclusion conclusions]
