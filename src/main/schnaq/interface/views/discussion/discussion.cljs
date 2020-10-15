@@ -339,12 +339,6 @@
                 (:present/undercuts present-args))))))
 
 (rf/reg-sub
-  :allow-new-argument?
-  :<- [:discussion-steps]
-  (fn [steps]
-    (some #(= % :starting-argument/new) steps)))
-
-(rf/reg-sub
   :allow-rebut-support?
   :<- [:discussion-steps]
   (fn [steps _]
