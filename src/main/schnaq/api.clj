@@ -427,7 +427,17 @@
            (-> (db/starting-conclusions-by-discussion discussion-id)
                processors/with-votes
                (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id)))})
-      (deny-access "You are not allowed to view this discussion."))))
+      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+
+(defn- add-starting-argument!
+  "Adds a new starting argument to a discussion."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id premises conclusion nickname]} body-params
+        author-id (db/author-id-by-nickname nickname)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (do (db/add-new-starting-argument! discussion-id author-id conclusion premises)
+        (ok {:message "Argument added"}))
+      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
@@ -538,6 +548,7 @@
     (POST "/continue-discussion" [] continue-discussion)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
+    (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
