@@ -223,7 +223,7 @@
     (labels :startpage.value-cards.knowledge/description)
     (img-path :startpage.value-cards.knowledge/image)
     (labels :startpage.value-cards.knowledge/alt-text)
-    #()]])
+    #(rf/dispatch [:navigation/navigate :routes.features/knowledge])]])
 
 ;; -----------------------------------------------------------------------------
 
