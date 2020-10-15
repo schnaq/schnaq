@@ -520,12 +520,15 @@
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)
-        discussion-id (:discussion-id body-params)
-        statements (db/all-statements-for-discussion discussion-id)
-        starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)]
+        discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
-                   :edges (discussion/links-for-agenda statements starting-arguments discussion-id)}})
+      (let [statements (db/all-statements-for-discussion discussion-id)
+            starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)
+            edges (discussion/links-for-agenda statements starting-arguments discussion-id)
+            controversy-vals (discussion/calculate-controversy edges)]
+        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
+                     :edges edges
+                     :controversy-values controversy-vals}}))
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
 
 ;; -----------------------------------------------------------------------------
