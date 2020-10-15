@@ -1,9 +1,7 @@
 (ns schnaq.meeting.database-test
-  (:require [clojure.spec.alpha :as s]
-            [clojure.test :refer [deftest testing use-fixtures is are]]
+  (:require [clojure.test :refer [deftest testing use-fixtures is are]]
             [dialog.discussion.database :as ddb]
             [schnaq.meeting.database :as database]
-            [schnaq.meeting.specs :as specs]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.time Instant)))
 
@@ -329,5 +327,32 @@
   (testing "Test the creation of statement-entities from strings"
     (let [premises ["What a beautifull day" "Hello test"]
           nickname "Test-person"
-          premise-entities (database/pack-premises premises nickname)]
-      (is (= '(true true) (map #(s/valid? ::specs/statement %) premise-entities))))))
+          premise-entities (@#'database/pack-premises premises nickname)]
+      (is (= [{:db/id "premise-What a beautifull day",
+               :statement/author [:author/nickname nickname],
+               :statement/content (first premises),
+               :statement/version 1}
+              {:db/id "premise-Hello test",
+               :statement/author [:author/nickname nickname],
+               :statement/content (second premises),
+               :statement/version 1}]
+             premise-entities)))))
+
+(deftest prepare-new-argument-test
+  (testing "Test the creation of a valid argument-entity from strings"
+    (let [premises ["What a beautifull day" "Hello test"]
+          conclusion "Wow look at this"
+          nickname "Test-person"
+          meeting-hash "graph-hash"
+          discussion-id
+          (->> meeting-hash
+               database/agendas-by-meeting-hash
+               first
+               :agenda/discussion :db/id)
+          with-id (@#'database/prepare-new-argument discussion-id nickname conclusion premises "temp-id-here")]
+      (is (contains? with-id :argument/premises))
+      (is (contains? with-id :argument/conclusion))
+      (is (contains? with-id :argument/author))
+      (is (contains? with-id :argument/version))
+      (is (contains? with-id :argument/type))
+      (is (contains? with-id :argument/discussions)))))
