@@ -117,7 +117,7 @@
      :feature.knowledge/subheading "Entscheidungsfindungsprozesse nachhaltig aufbereiten"
      :feature.knowledge.general/lead "Nachhaltige Wissensaufbereitung"
      :feature.knowledge.general/title "Wissen greifbar machen"
-     :feature.knowledge.general/body "Kommunikation ist der Schlüssel zum Erfolg. Jede Meinung sollte gehört werden können, damit im Anschluss eine qualifizierte Entscheidung gefasst werden können. Um diese Meinungen und Argumente auch später wieder verfügbar zu haben, bietet schnaq die Möglichkeit zur strukturierten Erfassung und Aufbereitung von Diskussionen. Diese Aufbereitung kann zur späteren Wiedervorlage Aufschluss über die ursprünglichen Gedanken zu verschiedenen Thematiken liefern."
+     :feature.knowledge.general/body "Kommunikation ist der Schlüssel zum Erfolg. Jede Meinung sollte gehört werden können, damit im Anschluss eine qualifizierte Entscheidung gefasst werden kann. Um diese Meinungen und Argumente auch später wieder verfügbar zu haben, bietet schnaq die Möglichkeit zur strukturierten Erfassung und Aufbereitung von Diskussionen. Diese Aufbereitung kann zur späteren Wiedervorlage Aufschluss über die ursprünglichen Gedanken zu verschiedenen Thematiken liefern."
      :feature.knowledge/features-subheading "Schnaq als Wissensdatenbank"
      :feature.knowledge.discussions/lead "Entscheidungsfindung"
      :feature.knowledge.discussions/title "Am Anfang steht der Diskurs"
