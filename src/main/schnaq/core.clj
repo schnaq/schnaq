@@ -17,6 +17,4 @@
 
 (comment
   (-main)
-  (db/delete-database!)
-  (dialog/load-testdata!)
   :end)

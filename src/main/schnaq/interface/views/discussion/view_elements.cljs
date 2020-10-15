@@ -96,7 +96,7 @@
   []
   [:form
    {:on-submit (fn [e] (js-wrap/prevent-default e)
-                 (rf/dispatch [:discussion/continue :starting-argument/new
+                 (rf/dispatch [:discussion.add.argument/starting
                                (oget e [:target :elements])]))}
    [:textarea.form-control.discussion-text-input.mb-5
     {:name "conclusion-text" :wrap "soft" :rows 2
@@ -111,14 +111,39 @@
    [:div.text-center.button-spacing-top
     [:button.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
 
-(defn input-field []
-  (let [allow-new-argument? @(rf/subscribe [:allow-new-argument?])]
-    [:div.discussion-primary-background
-     (when allow-new-argument?
-       [:div
-        [:div.mb-5 [:h5 (labels :discussion/create-argument-heading)]]
-        [input-starting-argument-form]])]))
+(rf/reg-event-fx
+  :discussion.add.argument/starting
+  (fn [{:keys [db]} [_ form]]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
+          nickname (get-in db [:user :name] "Anonymous")
+          conclusion-text (oget form [:conclusion-text :value])
+          premise-text (oget form [:premise-text :value])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/arguments/starting/add")
+                          :format (ajax/transit-request-format)
+                          :params {:conclusion conclusion-text
+                                   :premises [premise-text]
+                                   :nickname nickname
+                                   :share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.add.argument/starting-success form]
+                          :on-failure [:ajax-failure]}]]})))
 
+(rf/reg-event-fx
+  :discussion.add.argument/starting-success
+  (fn [_ [_ form new-starting-conclusions]]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :discussion.notification/new-content-title)
+                                     :body (labels :discussion.notification/new-content-body)
+                                     :context :success}]]
+          [:dispatch [:discussion.query.conclusions/set-starting new-starting-conclusions]]
+          [:form/clear form]]}))
+
+(defn input-field []
+  [:div.discussion-primary-background
+   [:div.mb-5 [:h5 (labels :discussion/create-argument-heading)]]
+   [input-starting-argument-form]])
 
 (defn input-form
   "Text input for adding a statement"
@@ -206,9 +231,8 @@
       [:div.up-down-vote
        [up-down-vote statement]]]]]))
 
-(defn conclusions-list []
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-        conclusions @(rf/subscribe [:starting-conclusions])]
+(defn conclusions-list [conclusions]
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div
      [:div#conclusions-list.mobile-container
       (for [conclusion conclusions]

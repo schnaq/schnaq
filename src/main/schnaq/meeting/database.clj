@@ -39,6 +39,11 @@
   [data]
   (d/transact (new-connection) {:tx-data data}))
 
+(defn- query
+  "Shorthand to not type out the same first param every time"
+  [query-vector & args]
+  (apply d/q query-vector (d/db (new-connection)) args))
+
 (defn- create-discussion-schema
   "Creates the schema for discussions inside the database."
   [connection]
@@ -895,3 +900,67 @@
     (toolbelt/pull-key-up :user/core-author)
     (toolbelt/pull-key-up :author/nickname)
     flatten))
+
+;; Dialog.core outfactor. Should Probably go into its own namespace on next refactor.
+
+(def ^:private statement-pattern
+  "Representation of a statement. Oftentimes used in a Datalog pull pattern."
+  [:db/id
+   :statement/content
+   :statement/version
+   {:statement/author [:author/nickname]}])
+
+(>defn starting-conclusions-by-discussion
+  "Query all conclusions belonging to starting-arguments of a certain discussion."
+  [discussion-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (flatten
+    (query
+      '[:find (pull ?starting-conclusions statement-pattern)
+        :in $ ?discussion-id statement-pattern
+        :where [?discussion-id :discussion/starting-arguments ?starting-arguments]
+        [?starting-arguments :argument/conclusion ?starting-conclusions]]
+      discussion-id statement-pattern)))
+
+(>defn- pack-premises
+  "Packs premises into a statement-structure."
+  [premises author-id]
+  [(s/coll-of :statement/content) :db/id
+   :ret (s/coll-of map?)]
+  (mapv (fn [premise] {:db/id (str "premise-" premise)
+                       :statement/author author-id
+                       :statement/content premise
+                       :statement/version 1})
+        premises))
+
+(>defn- prepare-new-argument
+  "Prepares a new argument for transaction. Optionally sets a temporary id."
+  ([discussion-id author-id conclusion premises temporary-id]
+   [number? :db/id :statement/content (s/coll-of :statement/content) :db/id
+    :ret map?]
+   (merge
+     (prepare-new-argument discussion-id author-id conclusion premises)
+     {:db/id temporary-id}))
+  ([discussion-id author-id conclusion premises]
+   [number? :db/id :statement/content (s/coll-of :statement/content)
+    :ret map?]
+   {:argument/author author-id
+    :argument/premises (pack-premises premises author-id)
+    :argument/conclusion {:db/id (str "conclusion-" conclusion)
+                          :statement/author author-id
+                          :statement/content conclusion
+                          :statement/version 1}
+    :argument/version 1
+    :argument/type :argument.type/support
+    :argument/discussions [discussion-id]}))
+
+(>defn add-new-starting-argument!
+  "Creates a new starting argument in a discussion."
+  [discussion-id author-id conclusion premises]
+  [number? :db/id :statement/content (s/coll-of :statement/content)
+   :ret associative?]
+  (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
+        temporary-id (:db/id new-argument)]
+    (get-in (transact [new-argument
+                       [:db/add discussion-id :discussion/starting-arguments temporary-id]])
+            [:tempids temporary-id])))

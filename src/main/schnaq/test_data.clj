@@ -47,7 +47,9 @@
    {:db/id "user/rambo"
     :user/core-author {:db/id "author/rambo" :author/nickname "Christian"}}
    {:db/id "user/stinky"
-    :user/core-author {:db/id "author/stinky" :author/nickname "Der miese Peter"}}])
+    :user/core-author {:db/id "author/stinky" :author/nickname "Der miese Peter"}}
+   {:db/id "user/test-person"
+    :user/core-author {:db/id "author/test-person" :author/nickname "Test-person"}}])
 
 (def ^:private cat-or-dog-statements
   [{:db/id "statement/get-dog"

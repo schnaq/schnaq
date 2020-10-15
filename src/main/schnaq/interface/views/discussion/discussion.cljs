@@ -74,8 +74,31 @@
                        {:share-hash (:meeting/share-hash current-meeting)}])
          (rf/dispatch [:meeting/select-current current-meeting]))]
       [view/history-view]
-      [view/conclusions-list]
+      [view/conclusions-list @(rf/subscribe [:discussion.conclusions/starting])]
       [view/input-field]]]))
+
+(rf/reg-event-fx
+  :discussion.query.conclusions/starting
+  (fn [{:keys [db]} _]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/conclusions/starting")
+                          :format (ajax/transit-request-format)
+                          :params {:share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.query.conclusions/set-starting]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-db
+  :discussion.query.conclusions/set-starting
+  (fn [db [_ {:keys [starting-conclusions]}]]
+    (assoc-in db [:discussion :conclusions :starting] starting-conclusions)))
+
+(rf/reg-sub
+  :discussion.conclusions/starting
+  (fn [db _]
+    (get-in db [:discussion :conclusions :starting] [])))
 
 (defn discussion-start-view-entrypoint []
   [discussion-start-view])
@@ -88,12 +111,13 @@
         current-step (logic/deduce-step steps)
         current-meeting @(rf/subscribe [:meeting/selected])
         allow-new? @(rf/subscribe [:allow-rebut-support?])
-        premises @(rf/subscribe [:premises-and-undercuts-to-select])]
+        premises @(rf/subscribe [:premises-and-undercuts-to-select])
+        conclusions @(rf/subscribe [:starting-conclusions])]
     [discussion-base-page current-meeting
      [:<>
       [view/agenda-header-back-arrow #(rf/dispatch [:discussion.history/time-travel])]
       [view/history-view]
-      [view/conclusions-list]
+      [view/conclusions-list conclusions]
       [view/input-footer allow-new? (add-input-form current-step)]
       [carousel/carousel-element premises]]]))
 
@@ -313,12 +337,6 @@
       (let [present-args (logic/args-for-reaction steps args :premises/select)]
         (concat (:present/premises present-args)
                 (:present/undercuts present-args))))))
-
-(rf/reg-sub
-  :allow-new-argument?
-  :<- [:discussion-steps]
-  (fn [steps]
-    (some #(= % :starting-argument/new) steps)))
 
 (rf/reg-sub
   :allow-rebut-support?

@@ -137,9 +137,9 @@
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (= 5 (database/number-of-usernames)))
-    (database/add-user-if-not-exists "Some-Testdude")
     (is (= 6 (database/number-of-usernames)))
+    (database/add-user-if-not-exists "Some-Testdude")
+    (is (= 7 (database/number-of-usernames)))
     (is (zero? (database/number-of-meetings (Instant/now))))))
 
 (deftest number-of-statements-test
@@ -301,7 +301,7 @@
       (is (= 1 (count (database/meeting-feedback-for meeting-hash))))
       (is (= feedback (:meeting.feedback/content (first (database/meeting-feedback-for meeting-hash))))))))
 
-(deftest number-of-statements-for-discussion
+(deftest number-of-statements-for-discussion-test
   (testing "Is the number of agendas returned correct?"
     (let [meeting-hash "89eh32hoas-2983ud"
           meeting-hash-2 "graph-hash"
@@ -311,3 +311,61 @@
           graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash-2)))]
       (is (= 27 (database/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
       (is (= 7 (database/number-of-statements-for-discussion (:db/id graph-discussion)))))))
+
+(deftest starting-conclusions-by-discussion-test
+  (testing "Whether starting arguments are returned correctly"
+    (let [meeting-hash "graph-hash"
+          discussion-id
+          (->> meeting-hash
+               database/agendas-by-meeting-hash
+               first
+               :agenda/discussion :db/id)
+          starting-conclusions (database/starting-conclusions-by-discussion discussion-id)]
+      (is (= 2 (count starting-conclusions))))))
+
+(deftest pack-premises-test
+  (testing "Test the creation of statement-entities from strings"
+    (let [premises ["What a beautifull day" "Hello test"]
+          author-id (database/author-id-by-nickname "Test-person")
+          premise-entities (@#'database/pack-premises premises author-id)]
+      (is (= [{:db/id "premise-What a beautifull day",
+               :statement/author author-id,
+               :statement/content (first premises),
+               :statement/version 1}
+              {:db/id "premise-Hello test",
+               :statement/author author-id,
+               :statement/content (second premises),
+               :statement/version 1}]
+             premise-entities)))))
+
+(deftest prepare-new-argument-test
+  (testing "Test the creation of a valid argument-entity from strings"
+    (let [premises ["What a beautifull day" "Hello test"]
+          conclusion "Wow look at this"
+          author-id (database/author-id-by-nickname "Test-person")
+          meeting-hash "graph-hash"
+          discussion-id
+          (->> meeting-hash
+               database/agendas-by-meeting-hash
+               first
+               :agenda/discussion :db/id)
+          with-id (@#'database/prepare-new-argument discussion-id author-id conclusion premises "temp-id-here")]
+      (is (contains? with-id :argument/premises))
+      (is (contains? with-id :argument/conclusion))
+      (is (contains? with-id :argument/author))
+      (is (contains? with-id :argument/version))
+      (is (contains? with-id :argument/type))
+      (is (contains? with-id :argument/discussions)))))
+
+(deftest add-new-starting-argument!-test
+  (testing "Test the creation of a valid argument-entity from strings"
+    (let [premises ["What a beautifull day" "Hello test"]
+          conclusion "Wow look at this"
+          author-id (database/author-id-by-nickname "Test-person")
+          meeting-hash "graph-hash"
+          graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash)))
+          _ (database/add-new-starting-argument! (:db/id graph-discussion) author-id conclusion premises)
+          starting-conclusions (database/starting-conclusions-by-discussion (:db/id graph-discussion))]
+      (testing "Must have three more statements than the vanilla set and one more starting conclusion"
+        (is (= 10 (database/number-of-statements-for-discussion (:db/id graph-discussion))))
+        (is (= 3 (count starting-conclusions)))))))

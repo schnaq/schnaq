@@ -150,4 +150,76 @@
    {:db/ident :feedback/has-image?
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one
-    :db/doc "Indicate wether a user provided an image."}])
+    :db/doc "Indicate wether a user provided an image."}
+
+   ;; Statement
+   {:db/ident :statement/author
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The author of the statement"}
+   {:db/ident :statement/content
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The text-content of the statement"}
+   {:db/ident :statement/version
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "The version of the statement. Always positive"}
+   ;; Author
+   {:db/ident :author/nickname
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "The nickname of an author"}
+   ;; Argument Types
+   {:db/ident :argument.type/support}
+   {:db/ident :argument.type/attack}
+   {:db/ident :argument.type/undercut}
+   ;; Argument
+   {:db/ident :argument/author
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The author of an argument"}
+   {:db/ident :argument/premises
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The premises of an argument constituting a premise-group."}
+   {:db/ident :argument/type
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The type of the arguments edge"}
+   {:db/ident :argument/conclusion
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The conclusion of an argument"}
+   {:db/ident :argument/version
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "The version of an argument"}
+   {:db/ident :argument/discussions
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The discussions in which the argument is used"}
+   ;; Discussion States
+   {:db/ident :discussion.state/open}
+   {:db/ident :discussion.state/closed}
+   {:db/ident :discussion.state/private}
+   {:db/ident :discussion.state/deleted}
+   ;; Deletion is a marker. We don't really delete anything from datomic
+   ;; Discussion
+   {:db/ident :discussion/title
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The title / heading of a discussion. This should be system-widely unique."}
+   {:db/ident :discussion/description
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The topic description of a discussion"}
+   {:db/ident :discussion/states
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The states the discussion is in"}
+   {:db/ident :discussion/starting-arguments
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The arguments at the source of the discussion-graph"}])

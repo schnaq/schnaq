@@ -416,6 +416,34 @@
       (bad-request {:message "Ihre Anfrage konnte nicht bearbeitet werden, bitte versuchen Sie es erneut."}))))
 
 ;; -----------------------------------------------------------------------------
+;; Discussion
+
+(defn- starting-conclusions-with-processors
+  "Returns starting conclusions for a discussion, with processors applied."
+  [discussion-id]
+  (-> (db/starting-conclusions-by-discussion discussion-id)
+      processors/with-votes
+      (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
+
+(defn- get-starting-conclusions
+  "Return all starting-conclusions of a certain discussion if share-hash fits."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id]} body-params]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)})
+      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+
+(defn- add-starting-argument!
+  "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id premises conclusion nickname]} body-params
+        author-id (db/author-id-by-nickname nickname)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (do (db/add-new-starting-argument! discussion-id author-id conclusion premises)
+          (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
+      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+
+;; -----------------------------------------------------------------------------
 ;; Analytics
 
 (defn- number-of-meetings
@@ -523,6 +551,8 @@
     (POST "/author/add" [] add-author)
     (POST "/continue-discussion" [] continue-discussion)
     (POST "/credentials/validate" [] check-credentials)
+    (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
+    (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
