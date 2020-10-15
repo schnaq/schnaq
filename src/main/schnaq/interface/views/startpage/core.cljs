@@ -7,7 +7,6 @@
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modals.modal :as modal]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.features :as startpage-features]))
@@ -243,13 +242,13 @@
     header
     [:<>
      [:section.container
-      [:div.row.mt-5
+      [:div.row {:style {:padding-top "5rem"}}
        [:div.col-12.col-lg-6.pb-3.pb-lg-0
         [under-construction]]
        [:div.col-12.col-lg-6.text-center
         [start-schnaq-button]]]
-      (when-not toolbelt/production?
-        [value-prop-cards])
+      [:section.py-5
+       [value-prop-cards]]
       [request-demo-section]
       [how-to-section]
       [usage-of-schnaq-heading]
