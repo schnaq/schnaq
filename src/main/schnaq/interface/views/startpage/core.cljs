@@ -242,12 +242,13 @@
     header
     [:<>
      [:section.container
-      [:div.row.mt-5
+      [:div.row {:style {:padding-top "5rem"}}
        [:div.col-12.col-lg-6.pb-3.pb-lg-0
         [under-construction]]
        [:div.col-12.col-lg-6.text-center
         [start-schnaq-button]]]
-      [value-prop-cards]
+      [:section.py-5
+       [value-prop-cards]]
       [request-demo-section]
       [how-to-section]
       [usage-of-schnaq-heading]
