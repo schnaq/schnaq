@@ -233,16 +233,15 @@
 
 (defn conclusions-list [conclusions]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
-    [:div
-     [:div#conclusions-list.mobile-container
-      (for [conclusion conclusions]
-        [:div {:key (:db/id conclusion)
-               :on-click (fn [_e]
-                           (rf/dispatch [:discussion/continue :starting-conclusions/select conclusion])
-                           (rf/dispatch [:navigation/navigate :routes.discussion/continue
-                                         {:id (:id path-params)
-                                          :share-hash (:share-hash path-params)}]))}
-         [statement-bubble conclusion :neutral]])]]))
+    [:div#conclusions-list.mobile-container
+     (for [conclusion conclusions]
+       [:div {:key (:db/id conclusion)
+              :on-click (fn [_e]
+                          (rf/dispatch [:discussion/continue :starting-conclusions/select conclusion])
+                          (rf/dispatch [:navigation/navigate :routes.discussion/continue
+                                        {:id (:id path-params)
+                                         :share-hash (:share-hash path-params)}]))}
+        [statement-bubble conclusion :neutral]])]))
 
 (defn history-view
   "Displays the statements it took to get to where the user is."
