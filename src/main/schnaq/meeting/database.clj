@@ -924,30 +924,30 @@
 
 (>defn- pack-premises
   "Packs premises into a statement-structure."
-  [premises author-nickname]
-  [(s/coll-of :statement/content) :author/nickname
+  [premises author-id]
+  [(s/coll-of :statement/content) :db/id
    :ret (s/coll-of map?)]
   (mapv (fn [premise] {:db/id (str "premise-" premise)
-                       :statement/author [:author/nickname author-nickname]
+                       :statement/author author-id
                        :statement/content premise
                        :statement/version 1})
         premises))
 
 (>defn- prepare-new-argument
   "Prepares a new argument for transaction. Optionally sets a temporary id."
-  ([discussion-id author-nickname conclusion premises temporary-id]
-   [number? :author/nickname :statement/content (s/coll-of :statement/content) :db/id
+  ([discussion-id author-id conclusion premises temporary-id]
+   [number? :db/id :statement/content (s/coll-of :statement/content) :db/id
     :ret map?]
    (merge
-     (prepare-new-argument discussion-id author-nickname conclusion premises)
+     (prepare-new-argument discussion-id author-id conclusion premises)
      {:db/id temporary-id}))
-  ([discussion-id author-nickname conclusion premises]
-   [number? :author/nickname :statement/content (s/coll-of :statement/content)
+  ([discussion-id author-id conclusion premises]
+   [number? :db/id :statement/content (s/coll-of :statement/content)
     :ret map?]
-   {:argument/author [:author/nickname author-nickname]
-    :argument/premises (pack-premises premises author-nickname)
+   {:argument/author author-id
+    :argument/premises (pack-premises premises author-id)
     :argument/conclusion {:db/id (str "conclusion-" conclusion)
-                          :statement/author [:author/nickname author-nickname]
+                          :statement/author author-id
                           :statement/content conclusion
                           :statement/version 1}
     :argument/version 1
@@ -956,10 +956,10 @@
 
 (>defn add-new-starting-argument!
   "Creates a new starting argument in a discussion."
-  [discussion-id author-nickname conclusion premises]
+  [discussion-id author-id conclusion premises]
   [number? :author/nickname :statement/content (s/coll-of :statement/content)
    :ret associative?]
-  (let [new-argument (prepare-new-argument discussion-id author-nickname conclusion premises "add/starting-argument")
+  (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
         temporary-id (:db/id new-argument)]
     (transact [new-argument
                [:db/add discussion-id :discussion/starting-arguments temporary-id]])))
