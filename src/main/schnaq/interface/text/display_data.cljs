@@ -1,6 +1,5 @@
 (ns schnaq.interface.text.display-data
-  (:require [re-frame.core :as rf]))
-
+  "Texts used as labels in the whole application.")
 
 (defn labels
   "Returns a label as String for a given identifier"
@@ -122,7 +121,6 @@
      :feature.knowledge.discussions/lead "Entscheidungsfindung"
      :feature.knowledge.discussions/title "Am Anfang steht das Brainstorming"
      :feature.knowledge.discussions/body "Offline entstehen die besten Ideen auf den Gängen oder in der Kaffeepause – schnaq bildet diese lockeren Diskussionen ab, ganz ohne 15 zeitraubende E-Mails oder 20 Chatnachrichten zu benötigen. Beim Brainstorming mit schnaq können alle Teammitglieder:innen gehört werden und ihre Ideen festhalten. Durch diesen kreativen Prozess können Ideen entstehen und festgehalten werden, die wertvoll für das Unternehmen sind – sogar wenn man nicht zusammen im Büro sitzt."
-     ;[:<> "Durch verteilte " [:a {:href "javascript:;" :on-click #(rf/dispatch [:navigation/navigate :routes.features/discussions])} " strukturierte Diskussionen"] " kann die Basis für einen Entscheidungsfindungsprozess geschaffen werden. Alle Mitglieder:innen im Team können ihre Expertise in die Diskussion einfließen lassen, die dann als Grundlage für firmenweite Entscheidungen verwendet werden kann."]
 
      :feature.knowledge.database/lead "Nachvollziehbarkeit"
      :feature.knowledge.database/title "Zentrale Anlaufstelle für Ideen und Entscheidungen"
