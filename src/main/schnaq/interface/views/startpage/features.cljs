@@ -143,7 +143,8 @@
        [:li (labels :feature.knowledge.tbd/search)]
        [:li (labels :feature.knowledge.tbd/evaluation)]
        [:li (labels :feature.knowledge.tbd/live-changes)]
-       [:li (labels :feature.knowledge.tbd/changes-over-time)]]
+       [:li (labels :feature.knowledge.tbd/changes-over-time)]
+       [:li (labels :feature.knowledge.tbd/accounts)]]
       [:p (labels :feature.meetings/feedback)]]]))
 
 
