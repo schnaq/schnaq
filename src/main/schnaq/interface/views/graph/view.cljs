@@ -6,7 +6,7 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :refer [config] :as conf]
             [schnaq.interface.views.base :as base]))
 
 (defn- wrap-line
@@ -46,7 +46,9 @@
   [map? sequential? :ret sequential?]
   (map
     #(let [controversy-score (get controversy-map (:id %))]
-       (if (< 35 controversy-score 65)
+       (if (< (- 100 conf/graph-controversy-upper-bound)
+              controversy-score
+              conf/graph-controversy-upper-bound)
          (-> %
              (assoc-in [:color :border] "#fab907")
              (assoc-in [:color :highlight :border] "#fab907")
