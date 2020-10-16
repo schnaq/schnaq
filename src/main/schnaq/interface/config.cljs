@@ -9,3 +9,5 @@
 (def config
   {:rest-backend api-url
    :environment environment})
+
+(def graph-controversy-upper-bound 65)

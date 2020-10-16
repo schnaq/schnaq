@@ -1,5 +1,5 @@
 (ns schnaq.discussion-test
-  (:require [clojure.test :refer [use-fixtures is deftest testing]]
+  (:require [clojure.test :refer [use-fixtures is deftest testing are]]
             [dialog.discussion.database :as ddb]
             [schnaq.discussion :as discussion]
             [schnaq.meeting.database :as db]
@@ -68,3 +68,36 @@
           links (discussion/links-for-agenda statements starting-arguments discussion-id)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (count links)))))))
+
+(deftest update-controversy-map-test
+  (testing "Update of a controversy-map"
+    (let [edge-1 {:to 123 :type :argument.type/support}
+          edge-2 {:to 1234 :type :argument.type/attack}
+          edge-3 {:to 1235 :type :argument.type/starting}]
+      (are [x y]
+        (= x (@#'discussion/update-controversy-map {} y))
+        {123 {:positive 1}} edge-1
+        {1234 {:negative 1}} edge-2
+        {} edge-3)
+      (is (= {123 {:positive 2}} (@#'discussion/update-controversy-map {123 {:positive 1}}
+                                   {:to 123 :type :argument.type/support}))))))
+
+(deftest single-controversy-val-test
+  (testing "Calculate a single controversy-value"
+    (let [con-vals-1 {:positive 1}
+          con-vals-2 {:negative 1}
+          con-vals-3 {:positive 1
+                      :negative 1}]
+      (are [x y]
+        (= x (@#'discussion/single-controversy-val y))
+        0 con-vals-1
+        100.0 con-vals-2
+        50.0 con-vals-3))))
+
+(deftest calculate-controversy-test
+  (testing "Test the creation of a controversy-map"
+    (let [edges [{:to 123 :type :argument.type/support} {:to 1234 :type :argument.type/support}
+                 {:to 1234 :type :argument.type/attack} {:to 1235 :type :argument.type/starting}]]
+      (is (= {123 0
+              1234 50.0}
+             (discussion/calculate-controversy edges))))))
