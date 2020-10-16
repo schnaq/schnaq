@@ -44,7 +44,7 @@
      {:name :routes.features/discussions
       :view features-views/discussion-features-view
       :link-text (labels :router.features/discussion)}]
-    ["/knowledge"
+    ["/brainstorming"
      {:name :routes.features/knowledge
       :view features-views/knowledge-features-view
       :link-text (labels :router.features/discussion)}]]
