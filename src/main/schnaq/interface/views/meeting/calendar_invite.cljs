@@ -13,23 +13,21 @@
             [schnaq.interface.views.modals.modal :as modal]))
 
 (def ^:private ical-template
-  (string/replace
-    "BEGIN:VCALENDAR
-     VERSION:2.0
-     PRODID:%s//schnaq.com
-     METHOD:PUBLISH
-     BEGIN:VEVENT
-     UID:%s
-     LOCATION:%s
-     SUMMARY:schnaq %s
-     DESCRIPTION:%s
-     CLASS:PUBLIC
-     DTSTART:%s
-     DTEND:%s
-     DTSTAMP:%s
-     END:VEVENT
-     END:VCALENDAR"
-    #" " ""))
+  "BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:%s//schnaq.com
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:%s
+LOCATION:%s
+SUMMARY:schnaq %s
+DESCRIPTION:%s
+CLASS:PUBLIC
+DTSTART:%s
+DTEND:%s
+DTSTAMP:%s
+END:VEVENT
+END:VCALENDAR")
 
 (defn- create-ics
   "Create ics calendar entry."
