@@ -68,10 +68,6 @@ END:VCALENDAR")
   (let [from-jquery-datepicker (tformat/formatter "YYYY/MM/dd HH:mm")]
     (tformat/parse from-jquery-datepicker datetime-string)))
 
-(comment
-  (time/default-time-zone)
-  (time/to-default-time-zone (time/now))
-  nil)
 
 (defn modal []
   (reagent/create-class
