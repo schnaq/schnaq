@@ -1,7 +1,10 @@
 (ns schnaq.interface.views.common
-  (:require [cljs.spec.alpha :as s]
+  (:require ["jdenticon" :as jdenticon]
+            [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
-            ["jdenticon" :as jdenticon]))
+            [goog.string :as gstring]
+            [oops.core :refer [oget]]
+            [reitit.frontend.easy :as reitfe]))
 
 (>defn avatar
   "Create an image based on the nickname."
@@ -61,3 +64,22 @@
           {:id (str tab-prefix "-link-3")
            :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-3")}
           (:view third-tab)])]])))
+
+(>defn get-share-link
+  [current-route]
+  [map? :ret string?]
+  (let [share-hash (-> current-route :path-params :share-hash)
+        path (reitfe/href :routes.meeting/show {:share-hash share-hash})
+        location (oget js/window :location)]
+    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
+
+(>defn get-admin-center-link
+  "Building the current URL with validated path, and without extra-stuff, like
+  internal hashtag-routing."
+  [current-route]
+  [map? :ret string?]
+  (let [{:keys [share-hash edit-hash]} (:path-params current-route)
+        path (reitfe/href :routes.meeting/admin-center {:share-hash share-hash
+                                                        :edit-hash edit-hash})
+        location (oget js/window :location)]
+    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
