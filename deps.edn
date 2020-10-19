@@ -2,6 +2,7 @@
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
+        com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/client-pro {:mvn/version "0.9.63"}
         com.draines/postal {:mvn/version "2.0.3"}
         compojure/compojure {:mvn/version "1.6.2"}

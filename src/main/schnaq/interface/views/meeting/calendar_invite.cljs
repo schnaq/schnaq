@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.meeting.calendar-invite
   (:require ["jquery" :as jquery]
+            [cljs-time.core :as time]
             [clojure.string :as string]
             [goog.string :as gstring]
             [oops.core :refer [oget+]]
@@ -16,33 +17,45 @@
         minutes ["00" "10" "20" "30" "40" "50"]]
     (gstring/format "%s:%s" hours minutes)))
 
-(defn- parse-date
+(defn- element->datetimepicker!
+  "Converts a dom element to a jquery datetimepicker."
+  [id]
+  (.datetimepicker
+    (jquery id)
+    (clj->js {:allowTimes allowed-times})))
+
+(defn- parse-datetime
   "Takes a datetime-string from jQuery DateTimePicker and converts it to edn."
   [datetime-string]
   (let [[date time] (string/split datetime-string #" ")
         [year month day] (map js/parseInt (string/split date #"/"))
         [hour minute] (map js/parseInt (string/split time #":"))]
-    {:year year :month month :day day
-     :hour hour :minute minute}))
+    (when (and year month day hour minute)
+      (time/date-time year month day hour minute))))
 
 (defn modal []
   (reagent/create-class
-    (let [datepicker-id "datetime-calendar-invite"]
+    (let [start-date-id "calendar-start-invite"
+          end-date-id "calendar-end-invite"]
       {:component-did-mount
-       (fn [] (.datetimepicker
-                (jquery (str "#" datepicker-id))
-                (clj->js {:allowTimes allowed-times})))
+       (fn [] (element->datetimepicker! (str "#" start-date-id))
+         (element->datetimepicker! (str "#" end-date-id)))
        :reagent-render
        (fn []
          [modal/modal-template (labels :calendar-invitation/title)
           [:<>
            [:form.form {:on-submit (fn [e]
                                      (js-wrap/prevent-default e)
-                                     (prn (oget+ e [:target :elements datepicker-id :value])))}
+                                     (prn (oget+ e [:target :elements start-date-id :value])))}
             [:div.form-group
-             [:label {:for datepicker-id} "Startzeit wählen"]
+             [:label {:for start-date-id} "Startzeit wählen"]
              [:input.form-control
-              {:id datepicker-id :type "text" :aria-describedby datepicker-id
+              {:id start-date-id :type "text" :aria-describedby start-date-id
+               :required true :auto-complete "off"}]]
+            [:div.form-group
+             [:label {:for end-date-id} "Endzeit wählen"]
+             [:input.form-control
+              {:id end-date-id :type "text" :aria-describedby end-date-id
                :required true :auto-complete "off"}]]
             [:input.btn.btn-outline-primary.mt-1.mt-sm-0
              {:type "submit"

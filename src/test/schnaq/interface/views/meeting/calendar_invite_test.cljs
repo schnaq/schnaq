@@ -1,8 +1,12 @@
 (ns schnaq.interface.views.meeting.calendar-invite-test
   (:require [cljs.test :refer [deftest testing is are]]
-            [schnaq.interface.views.meeting.calendar-invite :refer [parse-date]]))
+            [cljs-time.core :as time]
+            [schnaq.interface.views.meeting.calendar-invite :refer [parse-datetime]]))
 
-(deftest parse-date-test
+(deftest parse-datetime-test
   (testing "Parsing valid strings results in valid data, surprise!"
-    (is (= {:year 2020, :month 10, :day 15, :hour 13, :minute 37}
-           (parse-date "2020/10/15 13:37")))))
+    (is (time/equal? (time/date-time 2020 10 15 13 37)
+                     (parse-datetime "2020/10/15 13:37")))
+    (is (nil? (parse-datetime "")))
+    (is (nil? (parse-datetime "2020/10/15")))))
+
