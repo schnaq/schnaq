@@ -94,7 +94,9 @@
      :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
 
      ;; calendar invitation
-     :calendar-invitation/title "Termin festlegen und teilen"
+     :calendar-invitation/title "Termin festlegen und herunterladen"
+     :calendar-invitation/download-button "Termin herunterladen"
+     :calendar-invitation/date-error "Das Ende des Meetings darf nicht vor dem Start liegen."
 
      :feature.discussions/lead "Strukturierte Diskussionen mit Kolleg:innen und Kunden"
      :feature.discussions/title "Strukturierte Diskussionen für strukturierte Ergebnisse"
