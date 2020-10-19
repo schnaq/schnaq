@@ -4,12 +4,40 @@
             [cljs-time.format :as tformat]
             [clojure.string :as string]
             [goog.string :as gstring]
-            [oops.core :refer [oget+]]
-            [re-frame.core :as re-frame]
+            [oops.core :refer [oget+ oset!]]
+            [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.modals.modal :as modal]))
+
+(def ^:private ical-template
+  (string/replace
+    "BEGIN:VCALENDAR
+     VERSION:2.0
+     PRODID:%s//schnaq.com
+     METHOD:PUBLISH
+     BEGIN:VEVENT
+     UID:%s
+     LOCATION:%s
+     SUMMARY:schnaq %s
+     DESCRIPTION:%s
+     CLASS:PUBLIC
+     DTSTART:%s
+     DTEND:%s
+     DTSTAMP:%s
+     END:VEVENT
+     END:VCALENDAR"
+    #" " ""))
+
+(defn- create-ics
+  "Create ics calendar entry."
+  [username title description schnaq-link start end]
+  (let [unparser (partial tformat/unparse (tformat/formatters :basic-date-time-no-ms))]
+    (gstring/format ical-template
+                    username username schnaq-link title (or description "")
+                    (unparser start) (unparser end) (unparser (time/now)))))
 
 (def ^:private allowed-times
   "Create allowed times for the datepicker."
@@ -26,7 +54,8 @@
     (clj->js {:allowTimes allowed-times})))
 
 (defn- parse-datetime
-  "Takes a datetime-string from jQuery DateTimePicker and converts it to edn."
+  "Takes a datetime-string from jQuery DateTimePicker and creates a cljs-time
+  object."
   [datetime-string]
   (let [from-jquery-datepicker (tformat/formatter "YYYY/MM/dd HH:mm")]
     (tformat/parse from-jquery-datepicker datetime-string)))
@@ -40,21 +69,36 @@
          (element->datetimepicker! (str "#" end-date-id)))
        :reagent-render
        (fn []
-         [modal/modal-template (labels :calendar-invitation/title)
-          [:<>
-           [:form.form {:on-submit (fn [e]
-                                     (js-wrap/prevent-default e)
-                                     (prn (oget+ e [:target :elements start-date-id :value])))}
-            [:div.form-group
-             [:label {:for start-date-id} "Startzeit wählen"]
-             [:input.form-control
-              {:id start-date-id :type "text" :aria-describedby start-date-id
-               :required true :auto-complete "off"}]]
-            [:div.form-group
-             [:label {:for end-date-id} "Endzeit wählen"]
-             [:input.form-control
-              {:id end-date-id :type "text" :aria-describedby end-date-id
-               :required true :auto-complete "off"}]]
-            [:input.btn.btn-outline-primary.mt-1.mt-sm-0
-             {:type "submit"
-              :value "Abschicken"}]]]])})))
+         (let [{:meeting/keys [title description]} @(rf/subscribe [:meeting/selected])
+               username @(rf/subscribe [:user/display-name])
+               current-route @(rf/subscribe [:navigation/current-route])
+               share-link (common/get-share-link current-route)]
+           [modal/modal-template (labels :calendar-invitation/title)
+            [:<>
+             [:form.form
+              {:on-submit
+               (fn [e]
+                 (js-wrap/prevent-default e)
+                 (let [start (parse-datetime (oget+ e [:target :elements start-date-id :value]))
+                       end (parse-datetime (oget+ e [:target :elements end-date-id :value]))]
+                   (if (time/before? end start)
+                     (js/alert (labels :calendar-invitation/date-error))
+                     (let [ics (create-ics username title description share-link start end)
+                           uri-content (str "data:application/octet-stream," (js/encodeURIComponent ics))
+                           anchor (.createElement js/document "a")]
+                       (oset! anchor [:href] uri-content)
+                       (oset! anchor [:download] "calendar.ics")
+                       (.click anchor)))))}
+              [:div.form-group
+               [:label {:for start-date-id} "Startzeit wählen"]
+               [:input.form-control
+                {:id start-date-id :type "text" :aria-describedby start-date-id
+                 :required true :auto-complete "off"}]]
+              [:div.form-group
+               [:label {:for end-date-id} "Endzeit wählen"]
+               [:input.form-control
+                {:id end-date-id :type "text" :aria-describedby end-date-id
+                 :required true :auto-complete "off"}]]
+              [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+               {:type "submit"
+                :value (labels :calendar-invitation/download-button)}]]]]))})))
