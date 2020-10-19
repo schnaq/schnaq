@@ -144,7 +144,7 @@
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
-    (is (= 34 (database/number-of-statements)))
+    (is (= 38 (database/number-of-statements)))
     (is (zero? (database/number-of-statements (Instant/now))))))
 
 (deftest average-number-of-agendas-test
@@ -175,9 +175,9 @@
 (deftest argument-type-stats-test
   (testing "Statistics about argument types should be working."
     (let [stats (database/argument-type-stats)]
-      (is (= 6 (:attacks stats)))
-      (is (= 14 (:supports stats)))
-      (is (= 8 (:undercuts stats))))))
+      (is (= 7 (:attacks stats)))
+      (is (= 15 (:supports stats)))
+      (is (= 9 (:undercuts stats))))))
 
 (deftest update-agenda-test
   (testing "Whether the new agenda is added correctly"
