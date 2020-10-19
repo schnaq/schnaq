@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.meeting.calendar-invite
   (:require ["jquery" :as jquery]
             [cljs-time.core :as time]
+            [cljs-time.format :as tformat]
             [clojure.string :as string]
             [goog.string :as gstring]
             [oops.core :refer [oget+]]
@@ -27,11 +28,8 @@
 (defn- parse-datetime
   "Takes a datetime-string from jQuery DateTimePicker and converts it to edn."
   [datetime-string]
-  (let [[date time] (string/split datetime-string #" ")
-        [year month day] (map js/parseInt (string/split date #"/"))
-        [hour minute] (map js/parseInt (string/split time #":"))]
-    (when (and year month day hour minute)
-      (time/date-time year month day hour minute))))
+  (let [from-jquery-datepicker (tformat/formatter "YYYY/MM/dd HH:mm")]
+    (tformat/parse from-jquery-datepicker datetime-string)))
 
 (defn modal []
   (reagent/create-class

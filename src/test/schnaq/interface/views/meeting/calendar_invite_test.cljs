@@ -6,7 +6,5 @@
 (deftest parse-datetime-test
   (testing "Parsing valid strings results in valid data, surprise!"
     (is (time/equal? (time/date-time 2020 10 15 13 37)
-                     (parse-datetime "2020/10/15 13:37")))
-    (is (nil? (parse-datetime "")))
-    (is (nil? (parse-datetime "2020/10/15")))))
+                     (parse-datetime "2020/10/15 13:37")))))
 
