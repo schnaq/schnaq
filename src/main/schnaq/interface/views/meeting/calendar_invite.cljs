@@ -2,7 +2,6 @@
   (:require ["jquery" :as jquery]
             [cljs-time.core :as time]
             [cljs-time.format :as tformat]
-            [clojure.string :as string]
             [goog.string :as gstring]
             [oops.core :refer [oget+ oset!]]
             [re-frame.core :as rf]
