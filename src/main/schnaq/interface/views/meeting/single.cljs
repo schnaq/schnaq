@@ -78,10 +78,8 @@
      [:h1 title]
      [:hr]
      ;; mark down
-     [markdown-parser/markdown-to-html subtitle]
-     ;; todo test invite modal
-     [calendar-invite/modal]
-     ]]
+     [markdown-parser/markdown-to-html subtitle]]]
+
    ;; button column
    [:div.col-md-1
     [control-buttons]]])
@@ -100,7 +98,7 @@
      [:div.meeting-entry-desc
       [:hr]
       [markdown-parser/markdown-to-html (:agenda/description agenda)]]
-     [:div
+     [:<>
       [:button.button-secondary-b-1.button-md
        {:title (labels :discussion/discuss-tooltip)
         :on-click (fn []
