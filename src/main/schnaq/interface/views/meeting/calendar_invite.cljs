@@ -20,7 +20,7 @@ METHOD:PUBLISH
 BEGIN:VEVENT
 UID:%s
 LOCATION:%s
-SUMMARY:schnaq %s
+SUMMARY:schnaq: \"%s\"
 DESCRIPTION:%s
 CLASS:PUBLIC
 DTSTART:%s
@@ -51,12 +51,28 @@ END:VCALENDAR")
     (jquery id)
     (clj->js {:allowTimes allowed-times})))
 
+(defn- datetime-add-timezone-difference
+  "Takes current time zone of the client, and adds / subtracts the difference to
+  the UTC timezone to it.
+  Necessary, because the datetime of jquery-datetimepicker is of UTC and does
+  not respect the user's location / settings."
+  [datetime]
+  (let [[sign hours] (-> (time/default-time-zone) :offset)
+        sign-fn (if (= :+ sign) time/minus time/plus)]
+    (time/to-default-time-zone
+      (sign-fn datetime (time/hours hours)))))
+
 (defn- parse-datetime
   "Takes a datetime-string from jQuery DateTimePicker and creates a cljs-time
   object."
   [datetime-string]
   (let [from-jquery-datepicker (tformat/formatter "YYYY/MM/dd HH:mm")]
     (tformat/parse from-jquery-datepicker datetime-string)))
+
+(comment
+  (time/default-time-zone)
+  (time/to-default-time-zone (time/now))
+  nil)
 
 (defn modal []
   (reagent/create-class
@@ -77,8 +93,10 @@ END:VCALENDAR")
               {:on-submit
                (fn [e]
                  (js-wrap/prevent-default e)
-                 (let [start (parse-datetime (oget+ e [:target :elements start-date-id :value]))
-                       end (parse-datetime (oget+ e [:target :elements end-date-id :value]))]
+                 (let [start (datetime-add-timezone-difference
+                               (parse-datetime (oget+ e [:target :elements start-date-id :value])))
+                       end (datetime-add-timezone-difference
+                             (parse-datetime (oget+ e [:target :elements end-date-id :value])))]
                    (if (time/before? end start)
                      (js/alert (labels :calendar-invitation/date-error))
                      (let [ics (create-ics username title description share-link start end)
