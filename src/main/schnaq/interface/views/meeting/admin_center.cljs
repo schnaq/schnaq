@@ -6,7 +6,6 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
@@ -15,28 +14,6 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]))
-
-(>defn- get-share-link
-  [current-route]
-  [map? :ret string?]
-  (let [share-hash (-> current-route :path-params :share-hash)
-        path (reitfe/href :routes.meeting/show {:share-hash share-hash})
-        location (oget js/window :location)]
-    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
-
-(>defn- get-admin-center-link
-  "Building the current URL with validated path, and without extra-stuff, like
-  internal hashtag-routing."
-  [current-route]
-  [map? :ret string?]
-  (let [{:keys [share-hash edit-hash]} (:path-params current-route)
-        path (reitfe/href :routes.meeting/admin-center {:share-hash share-hash
-                                                        :edit-hash edit-hash})
-        location (oget js/window :location)]
-    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
-
-
-;; -----------------------------------------------------------------------------
 
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
@@ -129,7 +106,7 @@
                           :params {:recipient (oget form ["admin-center-recipient" :value])
                                    :share-hash share-hash
                                    :edit-hash edit-hash
-                                   :admin-center (get-admin-center-link current-route)}
+                                   :admin-center (common/get-admin-center-link current-route)}
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting-admin/send-email-success form]
                           :on-failure [:ajax-failure]}]]})))
@@ -147,7 +124,7 @@
                           :params {:recipients recipients
                                    :share-hash share-hash
                                    :edit-hash edit-hash
-                                   :share-link (get-share-link current-route)}
+                                   :share-link (common/get-share-link current-route)}
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting-admin/send-email-success form]
                           :on-failure [:ajax-failure]}]]})))
@@ -215,7 +192,7 @@
     {:link (labels :meeting.admin-center.invite/via-link)
      :view [:<>
             [educate-element]
-            [copy-link-form get-share-link "share-hash"]]}
+            [copy-link-form common/get-share-link "share-hash"]]}
     ;; participants access via mail
     {:link (labels :meeting.admin-center.invite/via-mail)
      :view [invite-participants-form]}
