@@ -14,17 +14,19 @@
      :nav-meeting-agenda "Agenda erzeugen"
 
      ;; Startpage
-     :startpage/heading "Nie wieder langwierige Meetings ohne Ziel!"
-     :startpage/subheading "Schnaq strukturiert Meetings und bringt sie auf den Punkt"
+     :startpage/heading "Qualifizierte Brainstormings"
+     :startpage/subheading "Schnaq ermöglicht nachhaltigen Gedankenaustausch"
 
-     :startpage.heading-list/community "Meetingziele kollaborativ festlegen"
-     :startpage.heading-list/exchange "Informationen gezielt austauschen"
-     :startpage.heading-list/reports "Strukturiert Wissen festhalten"
+     :startpage.heading-list/community "Gemeinsame Brainstormings"
+     :startpage.heading-list/exchange "Ideen strukturiert diskutieren"
+     :startpage.heading-list/reports "Entscheidungen gemeinsam treffen"
      :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
-     :startpage.under-construction/body "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
+     :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"
 
      :startpage.button/create-schnaq "Jetzt einen schnaq starten!"
 
+     :startpage.value-cards/heading "Weitere Anwendungsgebiete"
+     :startpage.value-cards/lead "Strukturierte Diskussionen werden in vielen Gebieten benötigt. Hier finden Sie weitere Beispiele."
      :startpage.value-cards.discussion/title "Diskussionen führen"
      :startpage.value-cards.discussion/description "Es ist nicht einfach über das Internet miteinander zu Diskutieren ohne sich schnell verloren zu fühlen. Mit schnaq können Sie strukturierte Diskussionen führen, und dabei leicht den Überblick über die Argumente und konktroverse Themen behalten."
      :startpage.value-cards.discussion/alt-text "Ein Symbolbild einer Sprechblase"
@@ -41,7 +43,7 @@
      :startpage.features/more-information "Mehr Informationen"
 
      :startpage.demo.request/title "Demo anfordern"
-     :startpage.demo.request/body "Wenn Sie gerne sehen würden, wie man maximal gut schnaqqen kann, führen wir Ihnen Schnaq persönlich vor. Nutzen Sie dazu einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
+     :startpage.demo.request/body "Möchten Sie erfahren wie Sie Ihrem Unternehmenswissen ein Langzeitgedächtnis verleihen? Wir führen Ihnen Schnaq dazu gerne persönlich vor. Nutzen Sie einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
      :startpage.demo.request/button "Jetzt Demo anfordern!"
      :startpage.demo.request.modal.name/label "Ihr Name"
      :startpage.demo.request.modal.name/placeholder "Mein Name"
@@ -56,15 +58,15 @@
      :startpage.demo.request.send.notification/failed-title "Anfrage fehlgeschlagen!"
      :startpage.demo.request.send.notification/failed-body "Etwas ist schief gelaufen. Überprüfen Sie Ihre Eingaben und versuchen Sie es bitte erneut."
 
-     :startpage.features.meeting-organisation/lead "Meetingplanung"
-     :startpage.features.meeting-organisation/title "Gemeinsame Vorbereitung eines Meetings"
-     :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeitenden mit in die Planung des Meetings ein! Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit bei der Besprechung."
+     :startpage.features.meeting-organisation/lead "Gemeinsam Arbeiten"
+     :startpage.features.meeting-organisation/title "Kollaborativer Meinungsaustausch"
+     :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeiter:innen mit in Diskussionen ein! Aktivieren Sie ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit in Ihrem Team. Brainstorming-Sessions sind kreative Prozesse, in denen die Diversität Ihres Teams sehr gut zur Geltung kommt und zu wunderbaren Ergebnissen führt."
      :startpage.features.discussion/lead "Strukturierte Diskussionen"
-     :startpage.features.discussion/title "Produktiver Austausch"
-     :startpage.features.discussion/body "Durch strukturierten Meinungsaustausch können Entscheidungen und Ideen fundiert ausgetauscht und gebildet werden. Um genau das zu lösen, bieten wir eine dialogbasierte Diskussionslösung für Ihr Team. Bessere Vorbereitung durch vorherigen Austausch!"
-     :startpage.features.graph/lead "Übersicht"
-     :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
-     :startpage.features.graph/body "Sehen Sie die Argumente Ihrer Mitarbeitenden. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
+     :startpage.features.discussion/title "Nachhaltiger Austausch"
+     :startpage.features.discussion/body "Brainstorming-Sessions sind Teil der kreativen Arbeit in vielen Teams. Im Nachgang lässt sich aber nur schwer nachvollziehen, was die einzelnen Teilnehmer:innen beigetragen haben. Durch die strukturierte Erfassung im verteilten Brainstorming werden die Aussagen so zusammengefügt, dass sie auch nach einer längeren Zeit wieder nachvollzogen werden können."
+     :startpage.features.graph/lead "Übersichtliche Darstellung"
+     :startpage.features.graph/title "Mindmaps!"
+     :startpage.features.graph/body "Alle Beiträge der Teilnehmer:innen werden automatisch in einer Mindmap angeordnet und können dann nachvollzogen werden. Sehen Sie alle Zusammenhänge und beobachten Sie die gesamte Ideen- und Entscheidungsfindung in einer interaktiven Mindmap."
 
      ;; Meeting Feature Page
      :feature.meetings/lead "Organisierte Meetings mit schnaq"
@@ -91,6 +93,10 @@
      :feature.meetings.tbd/timeboxing "Timeboxing während des Meetings"
      :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
      :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
+     :features.privacy/lead "EU-Konformes Vorgehen"
+     :features.privacy/title "Datenschutz ist uns wichtig!"
+     :features.privacy/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid haben, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf DSGVO-Konform zu agieren und sämtliche Daten sicher auf europäischen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+
 
      ;; calendar invitation
      :calendar-invitation/title "Termin festlegen und herunterladen"
@@ -143,22 +149,22 @@
      :feature.knowledge.tbd/accounts "Integration in bestehende Kommunikationssysteme (bspw. Slack, MS Teams, ...)"
 
      :how-to.startpage/title "Wie benutze ich schnaq?"
-     :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
+     :how-to.startpage/body "Sie möchten schnaq nutzen, sind aber unsicher wie die Bedienung funktioniert? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
      :how-to.startpage/button "Wie schnaqqe ich?"
      :how-to/title "Wie benutze ich schnaq?"
      :how-to.why/title "Wozu dient schnaq?"
-     :how-to.why/body "Schnaq dient dazu Meetings und andere Treffen im Voraus mit den Teilnehmenden zu planen und zu diskutieren."
+     :how-to.why/body "Schnaq dient dazu Meetings und andere Treffen im Voraus mit den Teilnehmer:innen zu planen und zu diskutieren."
      :how-to.create/title "schnaq erstellen"
      :how-to.create/body "Legen Sie zuerst einen schnaq an. Geben Sie Ihrem schnaq danach einen Titel und eine Beschreibung. Sie können auch Bilder und Dokumente verlinken."
      :how-to.agenda/title "Agenda erstellen"
      :how-to.agenda/body "Sie können mehrere Agendapunkte anlegen, um Ihren schnaq granularer zu planen und um Themen einzeln zu diskutieren."
-     :how-to.admin/title "Teilnehmende einladen"
-     :how-to.admin/body "Teilnehmende können entweder per Link oder Mail eingeladen werden. Weitere Admins laden Sie über den Admin Zugang ein. Administrierende können ebenfalls Teilnehmende einladen oder den schnaq editieren."
+     :how-to.admin/title "Teilnehmer:innen einladen"
+     :how-to.admin/body "Teilnehmer:innen können entweder per Link oder Mail eingeladen werden. Weitere Admins laden Sie über den Admin Zugang ein. Administrator:innen können ebenfalls Teilnehmer:innen einladen oder den schnaq editieren."
      :how-to.call-to-action/title "Genug gequatscht, jetzt wird geschnaqqt!"
-     :how-to.call-to-action/body "Starten Sie jetzt Ihren schnaq bequem mit einem Klick! Laden Sie Teilnehmende ein und diskutieren Sie Vorschläge untereinander. Kollaborative Vorbereitung ohne Hürden, ganz einfach gemacht."
+     :how-to.call-to-action/body "Starten Sie jetzt Ihren schnaq bequem mit einem Klick! Laden Sie Teilnehmer:innen ein und diskutieren Sie Vorschläge untereinander. Kollaborative Vorbereitung ohne Hürden, ganz einfach gemacht."
 
      :startpage.early-adopter/title "Neugierig geworden?"
-     :startpage.early-adopter/body "Nutzen Sie exklusiv jetzt schon schnaq.com und zählen Sie damit zu unseren Early Adoptern."
+     :startpage.early-adopter/body "Nutzen Sie exklusiv während der Beta-Phase schnaq.com und zählen Sie damit zu den Vorreitern."
      :startpage.early-adopter.buttons/join-schnaq "Beispielschnaq ansehen"
      :startpage.early-adopter/or "oder"
 
@@ -192,11 +198,11 @@
      :meetings.suggestions/header "Vorschläge einreichen"
      :meetings.suggestions/subheader "Die erstellende Person kann die Vorschläge einsehen und berücksichtigen"
 
-     :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmenden"
+     :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmer:innen"
      :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
      :meeting.admin/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
      :meeting.admin/send-invites-button-text "Einladungen versenden"
-     :meeting.admin/send-invites-heading "Laden Sie die Teilnehmenden per E-Mail ein"
+     :meeting.admin/send-invites-heading "Laden Sie die Teilnehmer:innen per E-Mail ein"
      :meeting.admin.notifications/emails-successfully-sent-title "Mail(s) verschickt!"
      :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Mail(s) wurden erfolgreich versendet."
      :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
@@ -217,7 +223,7 @@
      :meeting.admin-center.edit.link/primer "Administration ist Arbeit, lassen Sie sich helfen!"
      :meeting.admin-center.edit.link/admin "Zugang zum Admin-Center per Mail"
      :meeting.admin-center.edit.link/admin-privilges "Editieren und Vorschläge verwalten"
-     :meeting.admin-center.edit.link.form/label "E-Mail Adresse der Administrierenden"
+     :meeting.admin-center.edit.link.form/label "E-Mail Adresse der Administrator:innen"
      :meeting.admin-center.edit.link.form/placeholder "Eine E-Mailadresse eingeben"
      :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
      :meeting.admin-center.invite/via-link "Link verteilen"
@@ -227,7 +233,7 @@
      ;; Suggestions
      :suggestions.modal/header "Eingereichte Vorschläge"
      :suggestions.modal/primer "Einige TeilnehmerInnen haben Ihnen Vorschläge zu Ihrem schnaq gegeben."
-     :suggestions.modal/primer-delete "Folgende TeilnehmerInnen schlagen die Löschung des Agendapunktes vor."
+     :suggestions.modal/primer-delete "Folgende Teilnehmer:innen schlagen die Löschung des Agendapunktes vor."
      :suggestions.modal.delete/button "Entgültig löschen"
      :suggestions.modal.table/nickname "Nickname"
      :suggestions.modal.table/suggestion-title "Titel"
@@ -277,7 +283,7 @@
      :discussion/create-starting-premise-action "Beitrag hinzufügen"
      :discussion/others-think "Andere denken folgendes:"
      :discussion/undercut-bubble-intro "Der letzte Beitrag hat nichts mit dem vorherigen zu tun. Begründung:"
-     :discussion.badges/user-overview "Alle Teilnehmenden"
+     :discussion.badges/user-overview "Alle Teilnehmer:innen"
      :discussion.notification/new-content-title "Neuer Beitrag!"
      :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
      :discussion.carousel/heading "Beiträge Anderer"
@@ -345,7 +351,7 @@
      :user.set-name/dialog-body "Um an Diskussionen teilzunehmen ist es notwendig, dass Sie einen Namen eingeben."
      :user.set-name/dialog-button "Wie möchten Sie genannt werden?"
      :user.set-name.modal/header "Geben Sie einen Namen ein"
-     :user.set-name.modal/primer "Der Name wird den anderen Teilnehmenden im schnaq angezeigt."
+     :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
 
      ;; Errors
      :errors/navigate-to-startpage "Zurück zur Startseite"
@@ -453,5 +459,6 @@
      :edit "fa-edit"
      :eraser "fa-eraser"
      :laptop "fa-laptop-code"
+     :shield "fa-shield-alt"
      :trash "fa-trash-alt"
      :users "fa-users"}))

@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.text.display-data :refer [labels img-path]]
+  (:require [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]))
 
@@ -147,6 +147,17 @@
        [:li (labels :feature.knowledge.tbd/accounts)]]
       [:p (labels :feature.meetings/feedback)]]]))
 
+(defn- data-privacy
+  "A section which describes, what we do with data care."
+  []
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-5
+    [:p.display-1.text-center.text-primary [:i {:class (str "m-auto fas fa-lg " (fa :shield))}]]]
+   [:div.col-12.col-lg-6.offset-lg-1
+    [:article.feature-text-box.pb-5
+     [:p.lead.mb-1 (labels :features.privacy/lead)]
+     [:h5 (labels :features.privacy/title)]
+     [:p (labels :features.privacy/body)]]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -156,7 +167,8 @@
   [:section.pt-5
    [meeting-organisation]
    [structured-discussions]
-   [graph-visualization]])
+   [graph-visualization]
+   [data-privacy]])
 
 (defn meeting-features-view []
   [features-meeting])
