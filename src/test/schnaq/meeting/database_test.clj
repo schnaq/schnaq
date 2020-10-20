@@ -397,3 +397,13 @@
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/attack (:argument/type new-attack))))))
+
+(deftest set-argument-as-starting!-test
+  (testing "Sets a new argument as a starting argument."
+    (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
+          author-id (database/author-id-by-nickname "Wegi")
+          starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          new-attack (database/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
+                                                 "This is a new attack")]
+      (database/set-argument-as-starting! (:db/id simple-discussion) (:db/id new-attack))
+      (is (= 2 (count (database/all-arguments-for-conclusion (:db/id starting-conclusion))))))))

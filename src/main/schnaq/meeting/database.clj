@@ -1032,3 +1032,9 @@
           (new-premises-for-statement! discussion-id author-id statement-id attacking-string :argument.type/attack)
           [:tempids (str "argument-" attacking-string)])]
     (d/pull (d/db (new-connection)) argument-pattern argument-id)))
+
+(>defn set-argument-as-starting!
+  "Sets an existing argument as a starting-argument."
+  [discussion-id argument-id]
+  [:db/id :db/id :ret associative?]
+  (transact [[:db/add discussion-id :discussion/starting-arguments argument-id]]))
