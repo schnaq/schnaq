@@ -169,7 +169,7 @@
   [(s/coll-of ::specs/argument) :ret (s/coll-of ::specs/statement)]
   (flatten
     (map (fn [args]
-           (map (fn [premise] (assoc premise :meta/argument.type (:argument/type args)))
+           (map (fn [premise] (assoc premise :meta/argument-type (:argument/type args)))
                 (:argument/premises args)))
          arguments)))
 
@@ -183,7 +183,7 @@
   "Annotates undercut-statements with proper meta-information."
   [statements]
   [(s/coll-of ::specs/statement) :ret (s/coll-of ::specs/statement)]
-  (map #(assoc % :meta/argument.type :argument.type/undercut) statements))
+  (map #(assoc % :meta/argument-type :argument.type/undercut) statements))
 
 (>defn premises-undercutting-argument-with-premise-id
   "Return all statements that are used to undercut an argument where `statement-id`
