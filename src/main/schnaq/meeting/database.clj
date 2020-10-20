@@ -984,17 +984,16 @@
                        [:db/add discussion-id :discussion/starting-arguments temporary-id]])
             [:tempids temporary-id])))
 
-;; TODO write tests
 (defn all-arguments-for-conclusion
   "Get all arguments for a given conclusion."
   [conclusion-id]
-  (toolbelt/pull-key-up
-    (query
-      '[:find (pull ?arguments argument-pattern)
-        :in $ argument-pattern ?conclusion
-        :where [?arguments :argument/conclusion ?conclusion]]
-      argument-pattern conclusion-id)
-    :argument/type))
+  (-> (query
+        '[:find (pull ?arguments argument-pattern)
+          :in $ argument-pattern ?conclusion
+          :where [?arguments :argument/conclusion ?conclusion]]
+        argument-pattern conclusion-id)
+      (toolbelt/pull-key-up :db/ident)
+      flatten))
 
 ;; TODO write tests
 (defn statements-undercutting-premise

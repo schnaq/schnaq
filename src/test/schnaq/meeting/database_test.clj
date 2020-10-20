@@ -129,9 +129,9 @@
 
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
-    (is (= 2 (database/number-of-meetings)))
-    (any-meeting-id)                                        ;; Ads any new meeting
     (is (= 3 (database/number-of-meetings)))
+    (any-meeting-id)                                        ;; Ads any new meeting
+    (is (= 4 (database/number-of-meetings)))
     (is (zero? (database/number-of-meetings (Instant/now))))))
 
 (deftest number-of-usernames-test
@@ -149,7 +149,7 @@
 
 (deftest average-number-of-agendas-test
   (testing "Test whether the average number of agendas fits."
-    (is (= 3/2 (database/average-number-of-agendas)))
+    (is (= 4/3 (database/average-number-of-agendas)))
     (any-meeting-id)
     (is (= 1 (database/average-number-of-agendas)))))
 
@@ -369,3 +369,12 @@
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 10 (database/number-of-statements-for-discussion (:db/id graph-discussion))))
         (is (= 3 (count starting-conclusions)))))))
+
+(deftest all-arguments-for-conclusion-test
+  (testing "Get arguments, that have a certain conclusion"
+    (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
+          starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          simple-argument (first (database/all-arguments-for-conclusion (:db/id starting-conclusion)))
+          _ (println simple-argument)]
+      (is (= "Man denkt viel nach dabei" (-> simple-argument :argument/premises first :statement/content)))
+      (is (= "Brainstorming ist total wichtig" (-> simple-argument :argument/conclusion :statement/content))))))
