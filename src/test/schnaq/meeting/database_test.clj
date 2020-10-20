@@ -403,8 +403,8 @@
     (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
           author-id (database/author-id-by-nickname "Wegi")
           starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
-          new-attack (database/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
-                                                 "This is a new support")]
+          new-attack (database/support-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
+                                                  "This is a new support")]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/support (:db/ident (:argument/type new-attack)))))))
