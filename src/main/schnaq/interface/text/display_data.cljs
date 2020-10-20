@@ -58,15 +58,15 @@
      :startpage.demo.request.send.notification/failed-title "Anfrage fehlgeschlagen!"
      :startpage.demo.request.send.notification/failed-body "Etwas ist schief gelaufen. Überprüfen Sie Ihre Eingaben und versuchen Sie es bitte erneut."
 
-     :startpage.features.meeting-organisation/lead "Meetingplanung"
-     :startpage.features.meeting-organisation/title "Gemeinsame Vorbereitung eines Meetings"
-     :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeitenden mit in die Planung des Meetings ein! Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit bei der Besprechung."
+     :startpage.features.meeting-organisation/lead "Gemeinsam Arbeiten"
+     :startpage.features.meeting-organisation/title "Kollaborativer Meinungsaustausch"
+     :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeiter:innen mit in Diskussionen ein! Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit in Ihrem Team. Brainstorming-Sessions sind kreative Prozesse, in denen die Diversität Ihres Teams sehr gut zur Geltung kommt und zu wunderbaren Ergebnissen führen kann."
      :startpage.features.discussion/lead "Strukturierte Diskussionen"
-     :startpage.features.discussion/title "Produktiver Austausch"
-     :startpage.features.discussion/body "Durch strukturierten Meinungsaustausch können Entscheidungen und Ideen fundiert ausgetauscht und gebildet werden. Um genau das zu lösen, bieten wir eine dialogbasierte Diskussionslösung für Ihr Team. Bessere Vorbereitung durch vorherigen Austausch!"
-     :startpage.features.graph/lead "Übersicht"
-     :startpage.features.graph/title "Automatische Diskussionsaufbereitung"
-     :startpage.features.graph/body "Sehen Sie die Argumente Ihrer Mitarbeitenden. Erkennen Sie Zusammenhänge, kontroverse Diskussionspunkte oder Probleme, auf denen Sie dann im nachfolgenden Meeting genau drauf eingehen können. Fokussieren Sie sich auf die wirklich zu besprechenden Punkte und reduzieren Sie so die Länge von Meetings."
+     :startpage.features.discussion/title "Nachhaltiger Austausch"
+     :startpage.features.discussion/body "Brainstorming-Sessions sind Teil der kreativen Arbeit in vielen Teams. Im Nachgang lässt sich aber nur schwer nachvollziehen, was die einzelnen Teilnehmer:innen beigetragen haben. Durch die strukturierte Erfassung im verteilten Brainstorming werden die Aussagen so zusammengefügt, dass sie auch nach einer längeren Zeit wieder nachvollzogen werden können."
+     :startpage.features.graph/lead "Übersichtliche Darstellung"
+     :startpage.features.graph/title "Mindmaps!"
+     :startpage.features.graph/body "Alle Beiträge der Teilnehmer:innen werden automatisch in einer Mindmap angeordnet und können dann nachvollzogen werden. Sehen Sie alle Zusammenhänge und beobachten Sie die gesamte Ideen- und Entscheidungsfindung in einer interaktiven Mindmap."
 
      ;; Meeting Feature Page
      :feature.meetings/lead "Organisierte Meetings mit schnaq"

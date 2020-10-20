@@ -159,9 +159,9 @@
 (defn- button-with-text-section
   "A button and text to navigate to the demo section"
   [button-label fn-navigation title body]
-  [:div.row.align-items-center.feature-row.mt-5
+  [:div.row.align-items-center.feature-row
    [:div.col-12.col-lg-5.text-center
-    [:button.btn.button-secondary.font-150.mb-5
+    [:button.btn.button-secondary.font-150
      {:on-click fn-navigation}
      (labels button-label)]]
    [:div.col-12.col-lg-6.offset-lg-1
@@ -246,7 +246,7 @@
     header
     [:<>
      [:section.container
-      [:div.row {:style {:padding-top "5rem"}}
+      [:div.row {:style {:padding "5rem 0"}}
        [:div.col-12.col-lg-6.pb-3.pb-lg-0
         [under-construction]]
        [:div.col-12.col-lg-6.text-center
