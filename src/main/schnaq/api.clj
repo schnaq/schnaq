@@ -465,6 +465,12 @@
         (ok {:new-starting-argument new-argument}))
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
+(defn- react-to-any-statement!
+  "Adds a support, attack or undercut regarding a certain statement."
+  [{:keys [body-params]}]
+  ;; TODO
+  )
+
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
@@ -579,6 +585,7 @@
     (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
+    (POST "/discussion/react-to/statement" [] react-to-any-statement!)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
