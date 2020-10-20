@@ -252,9 +252,9 @@
        [:div.col-12.col-lg-6.text-center
         [start-schnaq-button]]]
       [request-demo-section]
-      [how-to-section]
       [usage-of-schnaq-heading]
-      [startpage-features/feature-rows]]
+      [startpage-features/feature-rows]
+      [how-to-section]]
      [early-adopters]
      [:section.container.py-5
       [value-prop-cards]]

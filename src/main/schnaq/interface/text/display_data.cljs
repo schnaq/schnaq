@@ -21,7 +21,7 @@
      :startpage.heading-list/exchange "Ideen strukturiert diskutieren"
      :startpage.heading-list/reports "Entscheidungen gemeinsam treffen"
      :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
-     :startpage.under-construction/body "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
+     :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"
 
      :startpage.button/create-schnaq "Jetzt einen schnaq starten!"
 
@@ -43,7 +43,7 @@
      :startpage.features/more-information "Mehr Informationen"
 
      :startpage.demo.request/title "Demo anfordern"
-     :startpage.demo.request/body "Wenn Sie gerne sehen würden, wie man maximal gut schnaqqen kann, führen wir Ihnen Schnaq persönlich vor. Nutzen Sie dazu einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
+     :startpage.demo.request/body "Möchten Sie erfahren wie Sie Ihrem Unternehmenswissen ein Langzeitgedächtnis verleihen? Wir führen Ihnen Schnaq dazu gerne persönlich vor. Nutzen Sie einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
      :startpage.demo.request/button "Jetzt Demo anfordern!"
      :startpage.demo.request.modal.name/label "Ihr Name"
      :startpage.demo.request.modal.name/placeholder "Mein Name"
@@ -60,7 +60,7 @@
 
      :startpage.features.meeting-organisation/lead "Gemeinsam Arbeiten"
      :startpage.features.meeting-organisation/title "Kollaborativer Meinungsaustausch"
-     :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeiter:innen mit in Diskussionen ein! Aktivieren Sie so ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit in Ihrem Team. Brainstorming-Sessions sind kreative Prozesse, in denen die Diversität Ihres Teams sehr gut zur Geltung kommt und zu wunderbaren Ergebnissen führen kann."
+     :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeiter:innen mit in Diskussionen ein! Aktivieren Sie ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit in Ihrem Team. Brainstorming-Sessions sind kreative Prozesse, in denen die Diversität Ihres Teams sehr gut zur Geltung kommt und zu wunderbaren Ergebnissen führt."
      :startpage.features.discussion/lead "Strukturierte Diskussionen"
      :startpage.features.discussion/title "Nachhaltiger Austausch"
      :startpage.features.discussion/body "Brainstorming-Sessions sind Teil der kreativen Arbeit in vielen Teams. Im Nachgang lässt sich aber nur schwer nachvollziehen, was die einzelnen Teilnehmer:innen beigetragen haben. Durch die strukturierte Erfassung im verteilten Brainstorming werden die Aussagen so zusammengefügt, dass sie auch nach einer längeren Zeit wieder nachvollzogen werden können."
@@ -145,7 +145,7 @@
      :feature.knowledge.tbd/accounts "Integration in bestehende Kommunikationssysteme (bspw. Slack, MS Teams, ...)"
 
      :how-to.startpage/title "Wie benutze ich schnaq?"
-     :how-to.startpage/body "Sie möchten losschnaqqen, sind aber unsicher wie Sie schnaq bedienen können? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
+     :how-to.startpage/body "Sie möchten schnaq nutzen, sind aber unsicher wie die Bedienung funktioniert? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
      :how-to.startpage/button "Wie schnaqqe ich?"
      :how-to/title "Wie benutze ich schnaq?"
      :how-to.why/title "Wozu dient schnaq?"
@@ -160,7 +160,7 @@
      :how-to.call-to-action/body "Starten Sie jetzt Ihren schnaq bequem mit einem Klick! Laden Sie Teilnehmer:innen ein und diskutieren Sie Vorschläge untereinander. Kollaborative Vorbereitung ohne Hürden, ganz einfach gemacht."
 
      :startpage.early-adopter/title "Neugierig geworden?"
-     :startpage.early-adopter/body "Nutzen Sie exklusiv jetzt schon schnaq.com und zählen Sie damit zu unseren Early Adoptern."
+     :startpage.early-adopter/body "Nutzen Sie exklusiv während der Beta-Phase schnaq.com und zählen Sie damit zu den Vorreitern."
      :startpage.early-adopter.buttons/join-schnaq "Beispielschnaq ansehen"
      :startpage.early-adopter/or "oder"
 
