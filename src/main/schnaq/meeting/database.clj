@@ -1023,15 +1023,27 @@
           :argument/discussions [discussion-id]}]]
     (transact new-arguments)))
 
+(>defn- react-to-statement!
+  "Create a new statement reacting to another statement. Returns the newly created argument."
+  [discussion-id author-id statement-id reacting-string reaction]
+  [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
+  (let [argument-id
+        (get-in
+          (new-premises-for-statement! discussion-id author-id statement-id reacting-string reaction)
+          [:tempids (str "argument-" reacting-string)])]
+    (d/pull (d/db (new-connection)) argument-pattern argument-id)))
+
 (>defn attack-statement!
   "Create a new statement attacking another statement. Returns the newly created argument."
   [discussion-id author-id statement-id attacking-string]
   [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
-  (let [argument-id
-        (get-in
-          (new-premises-for-statement! discussion-id author-id statement-id attacking-string :argument.type/attack)
-          [:tempids (str "argument-" attacking-string)])]
-    (d/pull (d/db (new-connection)) argument-pattern argument-id)))
+  (react-to-statement! discussion-id author-id statement-id attacking-string :argument.type/attack))
+
+(>defn support-statement!
+  "Create a new statement supporting another statement. Returns the newly created argument."
+  [discussion-id author-id statement-id supporting-string]
+  [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
+  (react-to-statement! discussion-id author-id statement-id supporting-string :argument.type/support))
 
 (>defn set-argument-as-starting!
   "Sets an existing argument as a starting-argument."
