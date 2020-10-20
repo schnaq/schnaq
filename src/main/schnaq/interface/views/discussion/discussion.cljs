@@ -222,7 +222,7 @@
   (fn [{:keys [discussion-steps discussion-step-args db]} [reaction premise]]
     (let [old-args (logic/args-for-reaction discussion-steps discussion-step-args reaction)
           new-args (assoc old-args :statement/selected premise)
-          attitude (logic/arg-type->attitude (:meta/argument.type premise))
+          attitude (logic/arg-type->attitude (:meta/argument-type premise))
           options (get-in db [:discussion :options :all])]
       {:fx [[:dispatch [:discussion.history/push options premise attitude]]
             [:dispatch [:discussion/continue-http-call [reaction new-args]]]]})))

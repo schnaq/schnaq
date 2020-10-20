@@ -433,6 +433,15 @@
       (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)})
       (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
 
+(defn- get-statements-for-conclusion
+  "Return all premises and fitting undercut-premises for a given statement."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id selected-statement]} body-params]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:premises (discussion/premises-for-conclusion-id selected-statement)
+           :undercuts (discussion/premises-undercutting-argument-with-premise-id selected-statement)})
+      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+
 (defn- add-starting-argument!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
@@ -554,8 +563,9 @@
     (POST "/author/add" [] add-author)
     (POST "/continue-discussion" [] continue-discussion)
     (POST "/credentials/validate" [] check-credentials)
-    (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
+    (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
+    (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)

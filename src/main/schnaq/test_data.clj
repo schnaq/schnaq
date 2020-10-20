@@ -380,7 +380,60 @@
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}])
 
+(def ^:private simple-discussion
+  [{:db/id "meeting/simple"
+    :meeting/title "Wir wollen simple Meetings"
+    :meeting/description "Das ist ein simples meeting"
+    :meeting/start-date #inst "2019-10-01T01:01:01.000-00:00"
+    :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
+    :meeting/share-hash "simple-hash"
+    :meeting/author "user/wegi"}
+   {:db/id "agenda/simple-agenda"
+    :agenda/title "Simple top"
+    :agenda/description "Simple top top"
+    :agenda/discussion "discussion/simple"
+    :agenda/rank 1
+    :agenda/meeting "meeting/simple"}
+   {:db/id "discussion/simple"
+    :discussion/title "Simple Discussion"
+    :discussion/description "A very simple discussion"
+    :discussion/states [:discussion.state/open]
+    :discussion/starting-arguments ["argument/simple-start"]}
+   {:db/id "argument/simple-start"
+    :argument/author "author/rambo"
+    :argument/premises [{:db/id "statement/denken"
+                         :statement/author "author/rambo"
+                         :statement/content "Man denkt viel nach dabei"
+                         :statement/version 1}]
+    :argument/conclusion {:db/id "statement/brainstorm"
+                          :statement/author "author/rambo"
+                          :statement/content "Brainstorming ist total wichtig"
+                          :statement/version 1}
+    :argument/version 1
+    :argument/type :argument.type/support
+    :argument/discussions ["discussion/simple"]}
+   {:db/id "argument/denken-nix-brainstorm"
+    :argument/author "author/schredder"
+    :argument/premises [{:db/id "statement/denken-nix-brainstorm"
+                         :statement/author "author/rambo"
+                         :statement/content "Brainstorm hat nichts mit aktiv denken zu tun"
+                         :statement/version 1}]
+    :argument/conclusion "argument/simple-start"
+    :argument/version 1
+    :argument/type :argument.type/undercut
+    :argument/discussions ["discussion/simple"]}
+   {:db/id "argument/denken-tut-weh"
+    :argument/author "author/schredder"
+    :argument/premises [{:db/id "statement/denken-tut-weh"
+                         :statement/author "author/rambo"
+                         :statement/content "Denken sorgt nur für Kopfschmerzen. Lieber den Donaldo machen!"
+                         :statement/version 1}]
+    :argument/conclusion "statement/denken"
+    :argument/version 1
+    :argument/type :argument.type/attack
+    :argument/discussions ["discussion/simple"]}])
+
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-arguments
           cat-or-dog-discussion meetings agendas
-          graph-discussion))
+          graph-discussion simple-discussion))

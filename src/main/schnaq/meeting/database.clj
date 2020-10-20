@@ -910,6 +910,25 @@
    :statement/version
    {:statement/author [:author/nickname]}])
 
+(def ^:private argument-pattern
+  "Defines the default pattern for arguments. Oftentimes used in pull-patterns
+  in a Datalog query bind the data to this structure."
+  [:db/id
+   :argument/version
+   {:argument/author [:author/nickname]}
+   {:argument/type [:db/ident]}
+   {:argument/premises statement-pattern}
+   {:argument/conclusion
+    (conj statement-pattern
+          :argument/version
+          {:argument/author [:author/nickname]}
+          {:argument/type [:db/ident]}
+          {:argument/premises [:db/id
+                               :statement/content
+                               :statement/version
+                               {:statement/author [:author/nickname]}]}
+          {:argument/conclusion statement-pattern})}])
+
 (>defn starting-conclusions-by-discussion
   "Query all conclusions belonging to starting-arguments of a certain discussion."
   [discussion-id]
@@ -964,3 +983,27 @@
     (get-in (transact [new-argument
                        [:db/add discussion-id :discussion/starting-arguments temporary-id]])
             [:tempids temporary-id])))
+
+(defn all-arguments-for-conclusion
+  "Get all arguments for a given conclusion."
+  [conclusion-id]
+  (-> (query
+        '[:find (pull ?arguments argument-pattern)
+          :in $ argument-pattern ?conclusion
+          :where [?arguments :argument/conclusion ?conclusion]]
+        argument-pattern conclusion-id)
+      (toolbelt/pull-key-up :db/ident)
+      flatten))
+
+(defn statements-undercutting-premise
+  "Return all statements that are used to undercut an argument where `statement-id`
+  is used as one of the premises in the undercut argument."
+  [statement-id]
+  (flatten
+    (query
+      '[:find (pull ?undercutting-statements statement-pattern)
+        :in $ statement-pattern ?statement-id
+        :where [?arguments :argument/premises ?statement-id]
+        [?undercutting-arguments :argument/conclusion ?arguments]
+        [?undercutting-arguments :argument/premises ?undercutting-statements]]
+      statement-pattern statement-id)))

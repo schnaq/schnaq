@@ -206,14 +206,14 @@
 (defn statement-bubble
   "A single bubble of a statement to be used ubiquitously."
   ([statement]
-   [statement-bubble statement (logic/arg-type->attitude (:meta/argument.type statement))])
+   [statement-bubble statement (logic/arg-type->attitude (:meta/argument-type statement))])
   ([{:keys [statement/content] :as statement} attitude]
    [:div.statement-outer
     [:div.row
      ;; bubble content
      [:div.col-12.col-md-11.px-0
       [:div.statement {:class (str "statement-" (name attitude))}
-       (when (= :argument.type/undercut (:meta/argument.type statement))
+       (when (= :argument.type/undercut (:meta/argument-type statement))
          [:p.small (labels :discussion/undercut-bubble-intro)])
        ;; content
        [:div.statement-content

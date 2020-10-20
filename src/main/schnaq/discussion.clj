@@ -2,7 +2,8 @@
   (:require [clojure.spec.alpha :as s]
             [dialog.discussion.database :as dialog-db]
             [ghostwheel.core :refer [>defn >defn-]]
-            [schnaq.meeting.database :as db]))
+            [schnaq.meeting.database :as db]
+            [schnaq.meeting.specs :as specs]))
 
 (>defn- premise-ids
   "Return all premise-ids of a single argument."
@@ -160,3 +161,34 @@
     #(assoc %1 (key %2) (single-controversy-val (val %2)))
     {}
     (reduce update-controversy-map {} edges)))
+
+(>defn- build-meta-premises
+  "Builds a meta-premise with additional information for the frontend out of a
+  list of arguments."
+  [arguments]
+  [(s/coll-of ::specs/argument) :ret (s/coll-of ::specs/statement)]
+  (flatten
+    (map (fn [args]
+           (map (fn [premise] (assoc premise :meta/argument-type (:argument/type args)))
+                (:argument/premises args)))
+         arguments)))
+
+(>defn premises-for-conclusion-id
+  "Builds all meta-premises for a given conclusion."
+  [conclusion-id]
+  [number? :ret (s/coll-of ::specs/statement)]
+  (build-meta-premises (db/all-arguments-for-conclusion conclusion-id)))
+
+(>defn- annotate-undercut-premise-meta
+  "Annotates undercut-statements with proper meta-information."
+  [statements]
+  [(s/coll-of ::specs/statement) :ret (s/coll-of ::specs/statement)]
+  (map #(assoc % :meta/argument-type :argument.type/undercut) statements))
+
+(>defn premises-undercutting-argument-with-premise-id
+  "Return all statements that are used to undercut an argument where `statement-id`
+  is used as one of the premises in the undercut argument. Return values are enriched
+  with meta-information."
+  [statement-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (annotate-undercut-premise-meta (db/statements-undercutting-premise statement-id)))
