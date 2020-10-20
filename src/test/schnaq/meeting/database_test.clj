@@ -130,7 +130,7 @@
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
     (is (= 3 (database/number-of-meetings)))
-    (any-meeting-id)                                        ;; Ads any new meeting
+    (any-meeting-id)                                        ;; Adds any new meeting
     (is (= 4 (database/number-of-meetings)))
     (is (zero? (database/number-of-meetings (Instant/now))))))
 
