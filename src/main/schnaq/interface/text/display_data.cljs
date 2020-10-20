@@ -93,6 +93,10 @@
      :feature.meetings.tbd/timeboxing "Timeboxing während des Meetings"
      :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
      :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
+     :features.privacy/lead "EU-Konformes Vorgehen"
+     :features.privacy/title "Datenschutz ist uns wichtig!"
+     :features.privacy/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid haben, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf DSGVO-Konform zu agieren und sämtliche Daten sicher auf europäischen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+
 
      ;; calendar invitation
      :calendar-invitation/title "Termin festlegen und herunterladen"
@@ -455,5 +459,6 @@
      :edit "fa-edit"
      :eraser "fa-eraser"
      :laptop "fa-laptop-code"
+     :shield "fa-shield-alt"
      :trash "fa-trash-alt"
      :users "fa-users"}))
