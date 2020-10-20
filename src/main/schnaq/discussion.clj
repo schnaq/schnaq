@@ -162,7 +162,6 @@
     {}
     (reduce update-controversy-map {} edges)))
 
-;; TODO write tests
 (>defn- build-meta-premises
   "Builds a meta-premise with additional information for the frontend out of a
   list of arguments."
