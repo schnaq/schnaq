@@ -458,10 +458,12 @@
   (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:new-starting-argument
-           (if (= :attack reaction)
-             (db/attack-statement! discussion-id author-id conclusion-id premise)
-             :add-support)})
+      (let [new-argument (if (= :attack reaction)
+                           (db/attack-statement! discussion-id author-id conclusion-id premise)
+                           ;; TODO
+                           :add-support)]
+        (db/set-argument-as-starting! discussion-id (:db/id new-argument))
+        (ok {:new-starting-argument new-argument}))
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
 ;; -----------------------------------------------------------------------------
