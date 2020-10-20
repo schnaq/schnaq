@@ -374,7 +374,16 @@
   (testing "Get arguments, that have a certain conclusion"
     (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
           starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
-          simple-argument (first (database/all-arguments-for-conclusion (:db/id starting-conclusion)))
-          _ (println simple-argument)]
+          simple-argument (first (database/all-arguments-for-conclusion (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (-> simple-argument :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> simple-argument :argument/conclusion :statement/content))))))
+
+(deftest statements-undercutting-premise-test
+  (testing "Get arguments, that are undercutting an argument with a certain premise"
+    (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
+          starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          simple-argument (first (database/all-arguments-for-conclusion (:db/id starting-conclusion)))
+          premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
+          desired-statement (first (database/statements-undercutting-premise premise-to-undercut-id))
+          _ (println desired-statement)]
+      (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (-> desired-statement :statement/content))))))

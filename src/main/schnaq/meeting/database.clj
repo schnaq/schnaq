@@ -995,15 +995,15 @@
       (toolbelt/pull-key-up :db/ident)
       flatten))
 
-;; TODO write tests
 (defn statements-undercutting-premise
   "Return all statements that are used to undercut an argument where `statement-id`
   is used as one of the premises in the undercut argument."
   [statement-id]
-  (query
-    '[:find (pull ?undercutting-statements statement-pattern)
-      :in $ statement-pattern ?statement-id
-      :where [?arguments :argument/premises ?statement-id]
-      [?undercutting-arguments :argument/conclusion ?arguments]
-      [?undercutting-arguments :argument/premises ?undercutting-statements]]
-    statement-pattern statement-id))
+  (flatten
+    (query
+      '[:find (pull ?undercutting-statements statement-pattern)
+        :in $ statement-pattern ?statement-id
+        :where [?arguments :argument/premises ?statement-id]
+        [?undercutting-arguments :argument/conclusion ?arguments]
+        [?undercutting-arguments :argument/premises ?undercutting-statements]]
+      statement-pattern statement-id)))
