@@ -11,7 +11,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-java:1.0.343" level="project" />
     <orderEntry type="library" name="Deps: com.google.elemental2/elemental2-core:1.0.0-RC1" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-middleware:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-middleware:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.json:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/clojure:1.10.1" level="project" />
     <orderEntry type="library" name="Deps: thheller/shadow-cljsjs:0.0.21" level="project" />
@@ -35,7 +35,7 @@
     <orderEntry type="library" name="Deps: com.datomic/client-api:0.8.54" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.js/js:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/ring-swagger-ui:3.25.3" level="project" />
-    <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-databind:2.11.2" level="project" />
+    <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-databind:2.11.3" level="project" />
     <orderEntry type="library" name="Deps: expound:0.8.6" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/spec.alpha:0.2.187" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.cli:1.0.194" level="project" />
@@ -57,7 +57,6 @@
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: Local com.datomic/dev-local (dev-local.jar)" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.common/wildfly-common:1.5.2.Final" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect/hmac-authn:0.1.195" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha-cloverage:1.0.63" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react-dom:16.13.0-0" level="project" />
     <orderEntry type="library" name="Deps: re-frame-utils:0.1.0" level="project" />
@@ -92,15 +91,15 @@
     <orderEntry type="library" name="Deps: com.google.jsinterop/jsinterop-annotations:1.0.2" level="project" />
     <orderEntry type="library" name="Deps: fipp:0.6.23" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.logging/jboss-logging:3.4.1.Final" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-swagger:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-swagger:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: com.wsscode/spec-inspec:1.0.0-alpha2" level="project" />
-    <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-core:2.11.2" level="project" />
+    <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-core:2.11.3" level="project" />
     <orderEntry type="library" name="Deps: markdown-clj:1.10.5" level="project" />
     <orderEntry type="library" name="Deps: org.yaml/snakeyaml:1.24" level="project" />
     <orderEntry type="library" name="Deps: aero:1.1.6" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm:7.1" level="project" />
     <orderEntry type="library" name="Deps: cljs-ajax:0.8.1" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-ring:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-ring:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/tools.namespace:0.0-237" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react:16.13.0-0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpcore:4.4.13" level="project" />
@@ -110,7 +109,7 @@
     <orderEntry type="library" name="Deps: com.datomic/client-pro:0.9.63" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-js:0.8.861" level="project" />
     <orderEntry type="library" name="Deps: clj-tuple:0.2.2" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-core:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-core:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/javax.mail:1.5.5" level="project" />
     <orderEntry type="library" name="Deps: zprint:0.5.1" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/truss:1.5.0" level="project" />
@@ -118,13 +117,12 @@
     <orderEntry type="library" name="Deps: ring/ring-headers:0.3.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library-third-party:0.0-20191016-6ae1f72f" level="project" />
     <orderEntry type="library" name="Deps: ring-middleware-format:0.7.4" level="project" />
-    <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-annotations:2.11.2" level="project" />
+    <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-annotations:2.11.3" level="project" />
     <orderEntry type="library" name="Deps: hiccup:1.0.5" level="project" />
     <orderEntry type="library" name="Deps: cloverage:1.2.0" level="project" />
     <orderEntry type="library" name="Deps: binaryage/env-config:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: riddley:0.2.0" level="project" />
     <orderEntry type="library" name="Deps: progrock:0.1.2" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect/http-client:0.1.105" level="project" />
     <orderEntry type="library" name="Deps: com.google.javascript/closure-compiler-externs:v20200830" level="project" />
     <orderEntry type="library" name="Deps: org.javassist/javassist:3.18.1-GA" level="project" />
     <orderEntry type="library" name="Deps: org.checkerframework/checker-compat-qual:2.5.5" level="project" />
@@ -138,7 +136,7 @@
     <orderEntry type="library" name="Deps: com.google.guava/guava:28.2-android" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.xml:0.0.8" level="project" />
     <orderEntry type="library" name="Deps: github-hhucn/dialog.core:ab19a6" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-schema:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-schema:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.truffle/truffle-api:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: borkdude/dynaload:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: binaryage/devtools:1.0.2" level="project" />
@@ -148,12 +146,12 @@
     <orderEntry type="library" name="Deps: org.msgpack/msgpack:0.6.12" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client-impl-shared:0.8.80" level="project" />
     <orderEntry type="library" name="Deps: orchestra:2020.07.12-1" level="project" />
-    <orderEntry type="library" name="Deps: borkdude/edamame:0.0.11-alpha.13" level="project" />
+    <orderEntry type="library" name="Deps: borkdude/edamame:0.0.11-alpha.15" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.js/js-scriptengine:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.threads/jboss-threads:3.1.0.Final" level="project" />
     <orderEntry type="library" name="Deps: com.google.j2objc/j2objc-annotations:1.3" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/timbre:4.10.0" level="project" />
-    <orderEntry type="library" name="Deps: metosin/malli:0.0.1-20200924.063109-27" level="project" />
+    <orderEntry type="library" name="Deps: metosin/malli:0.2.0" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-clj:1.0.324" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/query-support:0.8.27" level="project" />
     <orderEntry type="library" name="Deps: args4j:2.0.26" level="project" />
@@ -166,7 +164,7 @@
     <orderEntry type="library" name="Deps: gnl/ghostwheel.unghost:0.3.9" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-codec:1.1.2" level="project" />
     <orderEntry type="library" name="Deps: thheller/shadow-client:1.3.3" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-malli:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-malli:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpclient:4.5.6" level="project" />
     <orderEntry type="library" name="Deps: metosin/schema-tools:0.12.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.rrb-vector:0.1.1" level="project" />
@@ -178,14 +176,13 @@
     <orderEntry type="library" name="Deps: net.java.dev.jna/jna:3.2.2" level="project" />
     <orderEntry type="library" name="Deps: cheshire:5.10.0" level="project" />
     <orderEntry type="library" name="Deps: tigris:0.1.2" level="project" />
-    <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-client:9.4.27.v20200227" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-sieppari:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-sieppari:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-io:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.reader:1.3.3" level="project" />
     <orderEntry type="library" name="Deps: org.tcrawley/dynapath:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: javax.servlet/javax.servlet-api:3.1.0" level="project" />
     <orderEntry type="library" name="Deps: potemkin:0.4.5" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-http:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-http:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: nrepl:0.7.0" level="project" />
     <orderEntry type="library" name="Deps: binaryage/oops:0.7.0" level="project" />
     <orderEntry type="library" name="Deps: clj-stacktrace:0.2.8" level="project" />
@@ -193,14 +190,14 @@
     <orderEntry type="library" name="Deps: org.jboss.xnio/xnio-api:3.8.0.Final" level="project" />
     <orderEntry type="library" name="Deps: com.google.javascript/closure-compiler-unshaded:v20200830" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/test.check:1.1.0" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-frontend:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-frontend:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-analysis:7.1" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-spec:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-spec:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: metosin/jsonista:0.2.7" level="project" />
     <orderEntry type="library" name="Deps: com.google.protobuf/protobuf-java:3.11.1" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-swagger-ui:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-swagger-ui:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: javax.mail/javax.mail-api:1.5.5" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-servlet:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.memoize:1.0.236" level="project" />
     <orderEntry type="library" name="Deps: hawk:0.2.11" level="project" />
@@ -210,7 +207,7 @@
     <orderEntry type="library" name="Deps: cider/piggieback:0.5.0" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: com.google.code.findbugs/jsr305:3.0.2" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-dev:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-dev:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-core:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.cache:1.0.207" level="project" />
     <orderEntry type="library" name="Deps: meta-merge:1.0.0" level="project" />
@@ -226,7 +223,7 @@
     <orderEntry type="library" name="Deps: javax.xml.bind/jaxb-api:2.3.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/sieppari:0.0.0-alpha13" level="project" />
     <orderEntry type="library" name="Deps: com.google.code.gson/gson:2.7" level="project" />
-    <orderEntry type="library" name="Deps: metosin/reitit-interceptors:0.5.6" level="project" />
+    <orderEntry type="library" name="Deps: metosin/reitit-interceptors:0.5.9" level="project" />
     <orderEntry type="library" name="Deps: http-kit:2.5.0" level="project" />
   </component>
 </module>
