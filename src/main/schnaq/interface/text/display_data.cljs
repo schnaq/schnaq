@@ -14,17 +14,19 @@
      :nav-meeting-agenda "Agenda erzeugen"
 
      ;; Startpage
-     :startpage/heading "Nie wieder langwierige Meetings ohne Ziel!"
-     :startpage/subheading "Schnaq strukturiert Meetings und bringt sie auf den Punkt"
+     :startpage/heading "Qualifizierte Brainstormings"
+     :startpage/subheading "Schnaq ermöglicht nachhaltigen Gedankenaustausch"
 
-     :startpage.heading-list/community "Meetingziele kollaborativ festlegen"
-     :startpage.heading-list/exchange "Informationen gezielt austauschen"
-     :startpage.heading-list/reports "Strukturiert Wissen festhalten"
+     :startpage.heading-list/community "Gemeinsame Brainstormings"
+     :startpage.heading-list/exchange "Ideen strukturiert diskutieren"
+     :startpage.heading-list/reports "Entscheidungen gemeinsam treffen"
      :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
      :startpage.under-construction/body "schnaq befindet sich in einer Beta-Phase und Feedback ist uns wichtig!"
 
      :startpage.button/create-schnaq "Jetzt einen schnaq starten!"
 
+     :startpage.value-cards/heading "Weitere Anwendungsgebiete"
+     :startpage.value-cards/lead "Strukturierte Diskussionen werden in vielen Gebieten benötigt. Hier finden Sie weitere Beispiele."
      :startpage.value-cards.discussion/title "Diskussionen führen"
      :startpage.value-cards.discussion/description "Es ist nicht einfach über das Internet miteinander zu Diskutieren ohne sich schnell verloren zu fühlen. Mit schnaq können Sie strukturierte Diskussionen führen, und dabei leicht den Überblick über die Argumente und konktroverse Themen behalten."
      :startpage.value-cards.discussion/alt-text "Ein Symbolbild einer Sprechblase"

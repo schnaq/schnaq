@@ -204,25 +204,29 @@
 (defn- value-prop-cards
   "Cards displaying the different value propositions."
   []
-  [:div.card-deck.my-5
-   [value-prop-card
-    (labels :startpage.value-cards.discussion/title)
-    (labels :startpage.value-cards.discussion/description)
-    (img-path :startpage.value-cards.discussion/image)
-    (labels :startpage.value-cards.discussion/alt-text)
-    #(rf/dispatch [:navigation/navigate :routes.features/discussions])]
-   [value-prop-card
-    (labels :startpage.value-cards.meetings/title)
-    (labels :startpage.value-cards.meetings/description)
-    (img-path :startpage.value-cards.meetings/image)
-    (labels :startpage.value-cards.meetings/alt-text)
-    #(rf/dispatch [:navigation/navigate :routes.features/meetings])]
-   [value-prop-card
-    (labels :startpage.value-cards.knowledge/title)
-    (labels :startpage.value-cards.knowledge/description)
-    (img-path :startpage.value-cards.knowledge/image)
-    (labels :startpage.value-cards.knowledge/alt-text)
-    #(rf/dispatch [:navigation/navigate :routes.features/knowledge])]])
+  [:<>
+   [:div.text-center
+    [:h4 (labels :startpage.value-cards/heading)]
+    [:p.lead (labels :startpage.value-cards/lead)]]
+   [:div.card-deck.mb-5
+    [value-prop-card
+     (labels :startpage.value-cards.discussion/title)
+     (labels :startpage.value-cards.discussion/description)
+     (img-path :startpage.value-cards.discussion/image)
+     (labels :startpage.value-cards.discussion/alt-text)
+     #(rf/dispatch [:navigation/navigate :routes.features/discussions])]
+    [value-prop-card
+     (labels :startpage.value-cards.meetings/title)
+     (labels :startpage.value-cards.meetings/description)
+     (img-path :startpage.value-cards.meetings/image)
+     (labels :startpage.value-cards.meetings/alt-text)
+     #(rf/dispatch [:navigation/navigate :routes.features/meetings])]
+    [value-prop-card
+     (labels :startpage.value-cards.knowledge/title)
+     (labels :startpage.value-cards.knowledge/description)
+     (img-path :startpage.value-cards.knowledge/image)
+     (labels :startpage.value-cards.knowledge/alt-text)
+     #(rf/dispatch [:navigation/navigate :routes.features/knowledge])]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -247,13 +251,13 @@
         [under-construction]]
        [:div.col-12.col-lg-6.text-center
         [start-schnaq-button]]]
-      [:section.py-5
-       [value-prop-cards]]
       [request-demo-section]
       [how-to-section]
       [usage-of-schnaq-heading]
       [startpage-features/feature-rows]]
      [early-adopters]
+     [:section.container.py-5
+      [value-prop-cards]]
      [subscribe-to-mailinglist]]))
 
 (defn startpage-view
