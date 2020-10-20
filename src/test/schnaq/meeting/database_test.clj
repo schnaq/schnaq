@@ -384,6 +384,5 @@
           starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
           simple-argument (first (database/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
-          desired-statement (first (database/statements-undercutting-premise premise-to-undercut-id))
-          _ (println desired-statement)]
-      (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (-> desired-statement :statement/content))))))
+          desired-statement (first (database/statements-undercutting-premise premise-to-undercut-id))]
+      (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (:statement/content desired-statement))))))

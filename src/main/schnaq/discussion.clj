@@ -173,26 +173,22 @@
                 (:argument/premises args)))
          arguments)))
 
-;; TODO write tests
 (>defn premises-for-conclusion-id
   "Builds all meta-premises for a given conclusion."
   [conclusion-id]
   [number? :ret (s/coll-of ::specs/statement)]
   (build-meta-premises (db/all-arguments-for-conclusion conclusion-id)))
 
-;; TODO write tests
 (>defn- annotate-undercut-premise-meta
   "Annotates undercut-statements with proper meta-information."
   [statements]
   [(s/coll-of ::specs/statement) :ret (s/coll-of ::specs/statement)]
   (map #(assoc % :meta/argument.type :argument.type/undercut) statements))
 
-;; TODO write tests
-(>defn premises-undercutting-argument-with-conclusion-id
+(>defn premises-undercutting-argument-with-premise-id
   "Return all statements that are used to undercut an argument where `statement-id`
   is used as one of the premises in the undercut argument. Return values are enriched
   with meta-information."
   [statement-id]
   [:db/id :ret (s/coll-of ::specs/statement)]
-  (annotate-undercut-premise-meta
-    (map first (db/statements-undercutting-premise statement-id))))
+  (annotate-undercut-premise-meta (db/statements-undercutting-premise statement-id)))
