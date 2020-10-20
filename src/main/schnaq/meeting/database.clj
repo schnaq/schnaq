@@ -1007,3 +1007,28 @@
         [?undercutting-arguments :argument/conclusion ?arguments]
         [?undercutting-arguments :argument/premises ?undercutting-statements]]
       statement-pattern statement-id)))
+
+(>defn- new-premises-for-statement!
+  "Creates a new argument based on a statement, which is used as conclusion."
+  [discussion-id author-id new-conclusion-id new-statement-string argument-type]
+  [:db/id :db/id :db/id :statement/content :argument/type
+   :ret associative?]
+  (let [new-arguments
+        [{:db/id (str "argument-" new-statement-string)
+          :argument/author author-id
+          :argument/premises (pack-premises [new-statement-string] author-id)
+          :argument/conclusion new-conclusion-id
+          :argument/version 1
+          :argument/type argument-type
+          :argument/discussions [discussion-id]}]]
+    (transact new-arguments)))
+
+(>defn attack-statement!
+  "Create a new statement attacking another statement. Returns the newly created argument."
+  [discussion-id author-id statement-id attacking-string]
+  [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
+  (let [argument-id
+        (get-in
+          (new-premises-for-statement! discussion-id author-id statement-id attacking-string :argument.type/attack)
+          [:tempids (str "argument-" attacking-string)])]
+    (d/pull (d/db (new-connection)) argument-pattern argument-id)))

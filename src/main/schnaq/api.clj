@@ -452,6 +452,18 @@
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
+(defn- react-to-starting-statement!
+  "Adds a support or attack to a starting conclusion."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
+        author-id (db/author-id-by-nickname nickname)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:new-starting-argument
+           (if (= :attack reaction)
+             (db/attack-statement! discussion-id author-id conclusion-id premise)
+             :add-support)})
+      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
@@ -565,6 +577,7 @@
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
+    (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
