@@ -1026,7 +1026,7 @@
 (>defn- react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
   [discussion-id author-id statement-id reacting-string reaction]
-  [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
+  [:db/id :db/id :db/id :statement/content keyword? :ret ::specs/argument]
   (let [argument-id
         (get-in
           (new-premises-for-statement! discussion-id author-id statement-id reacting-string reaction)
