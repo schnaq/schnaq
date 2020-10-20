@@ -460,8 +460,7 @@
     (if (valid-discussion-hash? share-hash discussion-id)
       (let [new-argument (if (= :attack reaction)
                            (db/attack-statement! discussion-id author-id conclusion-id premise)
-                           ;; TODO
-                           :add-support)]
+                           (db/support-statement! discussion-id author-id conclusion-id premise))]
         (db/set-argument-as-starting! discussion-id (:db/id new-argument))
         (ok {:new-starting-argument new-argument}))
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
