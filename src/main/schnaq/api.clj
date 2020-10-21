@@ -466,10 +466,16 @@
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
 (defn- react-to-any-statement!
-  "Adds a support, attack or undercut regarding a certain statement."
+  "Adds a support or attack regarding a certain statement."
   [{:keys [body-params]}]
-  ;; TODO
-  )
+  (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
+        author-id (db/author-id-by-nickname nickname)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:new-starting-argument
+           (if (= :attack reaction)
+             (db/attack-statement! discussion-id author-id conclusion-id premise)
+             (db/support-statement! discussion-id author-id conclusion-id premise))})
+      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
