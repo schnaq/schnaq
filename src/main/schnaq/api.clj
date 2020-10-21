@@ -477,6 +477,15 @@
              (db/support-statement! discussion-id author-id conclusion-id premise))})
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
+(defn- undercut-argument!
+  "Adds an undercut for an argument."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id selected previous-id nickname premise]} body-params
+        author-id (db/author-id-by-nickname nickname)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      :todo                                                 ;;TODO
+      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
@@ -592,6 +601,7 @@
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
     (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+    (POST "/discussion/statement/undercut" [] undercut-argument!)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)

@@ -236,6 +236,11 @@
           (assoc raw-suggestion :agenda.suggestion/description description)
           raw-suggestion)))))
 
+(defn fast-pull
+  "Pulls any entity with star-syntax and current db."
+  [id]
+  (d/pull (d/db (new-connection)) '[*] id))
+
 (>defn- suggest-agenda-generic!
   "Transacts multiple new suggestion entities."
   [agenda-suggestions builder-fn]
@@ -929,6 +934,14 @@
                                {:statement/author [:author/nickname]}]}
           {:argument/conclusion statement-pattern})}])
 
+(def ^:private discussion-pattern
+  "Representation of a discussion. Oftentimes used in a Datalog pull pattern."
+  [:db/id
+   :discussion/title
+   :discussion/description
+   {:discussion/states [:db/ident]}
+   {:discussion/starting-arguments argument-pattern}])
+
 (>defn starting-conclusions-by-discussion
   "Query all conclusions belonging to starting-arguments of a certain discussion."
   [discussion-id]
@@ -1008,11 +1021,75 @@
         [?undercutting-arguments :argument/premises ?undercutting-statements]]
       statement-pattern statement-id)))
 
+(>defn all-discussions-by-title
+  "Query all discussions based on the title. Could possible be multiple
+  entities."
+  [title]
+  [string? :ret (s/coll-of ::specs/discussion)]
+  (flatten
+    (query
+      '[:find (pull ?discussions discussion-pattern)
+        :in $ discussion-pattern ?title
+        :where [?discussions :discussion/title ?title]]
+      discussion-pattern title)))
+
+(defn all-arguments-for-discussion
+  "Returns all arguments belonging to a discussion, identified by discussion id."
+  [discussion-id]
+  (flatten
+    (query
+      '[:find (pull ?discussion-arguments argument-pattern)
+        :in $ argument-pattern ?discussion-id
+        :where [?discussion-arguments :argument/discussions ?discussion-id]]
+      argument-pattern discussion-id)))
+
+(>defn statements-by-content
+  "Returns all statements that have the matching `content`."
+  [content]
+  [:statement/content
+   :ret (s/coll-of ::specs/statement)]
+  (map first
+       (let [db (d/db (new-connection))]
+         (d/q
+           '[:find (pull ?statements statement-pattern)
+             :in $ statement-pattern ?content
+             :where [?statements :statement/content ?content]]
+           db statement-pattern content))))
+
+(>defn argument-id-by-premise-conclusion
+  "Return the ID of an argument, which has at least the corresponding premise and
+  conclusion. If multiple are applicable, return any of them."
+  [premise-id conclusion-id]
+  [number? number? :ret (s/nilable number?)]
+  (:db/id
+    (ffirst
+      (query
+        '[:find (pull ?argument argument-pattern)
+          :in $ argument-pattern ?premise-id ?conclusion-id
+          :where [?argument :argument/premises ?premise-id]
+          [?argument :argument/conclusion ?conclusion-id]]
+        argument-pattern premise-id conclusion-id))))
+
+(>defn argument-id-by-undercut-and-premise
+  "Returns one argument that has a premise `undercut-premise-id` and which has a conclusion
+  that has a premise which contains `conclusion-premise-id`. Basically identifies an undercut by the premise
+  and the conclusions premise."
+  [undercut-premise-id conclusion-premise-id]
+  [:db/id :db/id :ret :db/id]
+  (:db/id
+    (ffirst
+      (query
+        '[:find (pull ?undercut argument-pattern)
+          :in $ argument-pattern ?undercut-premise-id ?conclusion-premise-id
+          :where [?undercut :argument/premises ?undercut-premise-id]
+          [?undercut :argument/conclusion ?undercutted-argument]
+          [?undercutted-argument :argument/premises ?conclusion-premise-id]]
+        argument-pattern undercut-premise-id conclusion-premise-id))))
+
 (>defn- new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
   [discussion-id author-id new-conclusion-id new-statement-string argument-type]
-  [:db/id :db/id :db/id :statement/content :argument/type
-   :ret associative?]
+  [:db/id :db/id :db/id :statement/content :argument/type :ret associative?]
   (let [new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author author-id

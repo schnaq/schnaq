@@ -192,3 +192,12 @@
   [statement-id]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (annotate-undercut-premise-meta (db/statements-undercutting-premise statement-id)))
+
+(>defn argument-id-for-undercut
+  "Determine the argument-id from a premise and conclusion."
+  [selected previous-id]
+  [associative? :db/id :ret :db/id]
+  (let [undercut-id-fn (if (= :argument.type/undercut (:meta/argument-type selected))
+                         db/argument-id-by-undercut-and-premise
+                         db/argument-id-by-premise-conclusion)]
+    (undercut-id-fn (:db/id selected) previous-id)))
