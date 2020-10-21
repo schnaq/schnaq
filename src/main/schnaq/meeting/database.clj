@@ -1122,6 +1122,22 @@
   [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! discussion-id author-id statement-id supporting-string :argument.type/support))
 
+(>defn undercut-argument!
+  "Undercut an argument and store it to the database."
+  [discussion-id author-id argument-id premises]
+  [number? :db/id :db/id (s/coll-of :statement/content) :ret ::specs/argument]
+  (let [argument-id (get-in
+                      (transact
+                        [{:db/id (str "new-undercut-" discussion-id)
+                          :argument/author author-id
+                          :argument/premises (pack-premises premises author-id)
+                          :argument/conclusion argument-id
+                          :argument/version 1
+                          :argument/type :argument.type/undercut
+                          :argument/discussions [discussion-id]}])
+                      [:tempids (str "new-undercut-" discussion-id)])]
+    (d/pull (d/db (new-connection)) argument-pattern argument-id)))
+
 (>defn set-argument-as-starting!
   "Sets an existing argument as a starting-argument."
   [discussion-id argument-id]
