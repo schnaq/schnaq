@@ -6,7 +6,7 @@
             [schnaq.interface.views.agenda.agenda :as agenda]
             [schnaq.interface.views.text-editor.view :as editor]))
 
-(defn- new-meeting-helper
+(defn new-meeting-helper
   "Creates a new meeting with the form from `create-meeting-form`."
   [title description type]
   (rf/dispatch
@@ -17,10 +17,10 @@
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
       :meeting/start-date (js/Date.)}]))
 
-(defn- submit-meeting-button []
+(defn submit-meeting-button []
   [:button.btn.button-primary (labels :meeting-create-header)])
 
-(defn- meeting-title-input
+(defn meeting-title-input
   "The input and label for a new meeting-title"
   []
   [:<>
