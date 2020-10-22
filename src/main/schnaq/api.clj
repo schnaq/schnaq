@@ -58,12 +58,6 @@
   ([message]
    (forbidden {:error message})))
 
-(defn- fetch-meetings
-  "Fetches meetings from the db and preparse them for transit via JSON."
-  []
-  (->> (db/all-meetings)
-       (map first)))
-
 (defn- ping
   "Route to ping the API. Used in our monitoring system."
   [_]
@@ -72,7 +66,7 @@
 (defn- all-meetings
   "Returns all meetings from the db."
   [_req]
-  (ok (fetch-meetings)))
+  (ok (db/all-meetings)))
 
 (defn- add-hashes-to-meeting
   "Enrich meeting by its hashes."
