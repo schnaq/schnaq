@@ -103,6 +103,31 @@
 (defn discussion-start-view-entrypoint []
   [discussion-start-view])
 
+(defn- single-conclusion
+  "Show a single conclusion for presentation after selection."
+  [conclusion]
+  [:div#conclusions-list.mobile-container
+   {:key (:db/id conclusion)
+    :on-click (fn [_e] nil)}
+   [view/statement-bubble conclusion :neutral]])
+
+(defn- present-starting-conclusions
+  []
+  (let [selected-conclusion @(rf/subscribe [:discussion.conclusions/selected])
+        current-premises @(rf/subscribe [:discussion.premises/current])]
+    [discussion-base-page :current-meeting
+     [:<>
+      [single-conclusion selected-conclusion]
+      [view/input-footer [add-starting-premises-form]]
+      [carousel/carousel-element current-premises]]]))
+
+;; TODO hard reload des Schrittes muss funktionieren
+;; TODO input-footer muss an das richtige Backend weiter leiten
+
+(defn selected-starting-conclusion []
+  "The view after a user has selected a starting-conclusion."
+  [present-starting-conclusions])
+
 (defn- discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.
   This view dispatches to the correct discussion-steps sub-views."

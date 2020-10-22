@@ -122,22 +122,28 @@
         :controllers [{:parameters {:path [:share-hash :id]}
                        :start (fn [{:keys [path]}]
                                 (rf/dispatch [:agenda/load-chosen (:share-hash path) (:id path)]))}]}
-       ["/start"
-        {:controllers [{:parameters {:path [:share-hash :id]}
-                        :start (fn []
-                                 (rf/dispatch [:discussion/start])
-                                 (rf/dispatch [:discussion.history/clear])
-                                 (rf/dispatch [:discussion.query.conclusions/starting]))}]
-         :name :routes.discussion/start
-         :view discussion-views/discussion-start-view-entrypoint
-         :link-text (labels :router/start-discussion)}]
-       ["/continue"
-        {:name :routes.discussion/continue
-         :view discussion-views/discussion-loop-view-entrypoint
-         :link-text (labels :router/continue-discussion)
-         :controllers [{:parameters {:path [:id :share-hash]}
-                        :start (fn [{:keys [path]}]
-                                 (rf/dispatch [:discussion/handle-hard-reload (:id path) (:share-hash path)]))}]}]
+       ["/discussion"
+        ["/start"
+         [""
+          {:controllers [{:parameters {:path [:share-hash :id]}
+                          :start (fn []
+                                   (rf/dispatch [:discussion/start])
+                                   (rf/dispatch [:discussion.history/clear])
+                                   (rf/dispatch [:discussion.query.conclusions/starting]))}]
+           :name :routes.discussion/start
+           :view discussion-views/discussion-start-view-entrypoint
+           :link-text (labels :router/start-discussion)}]
+         ["/statement/:statement-id"
+          {:name :routes.discussion.start/statement
+           :parameters {:path {:statement-id int?}}
+           :view discussion-views/selected-starting-conclusion}]]
+        ["/continue"
+         {:name :routes.discussion/continue
+          :view discussion-views/discussion-loop-view-entrypoint
+          :link-text (labels :router/continue-discussion)
+          :controllers [{:parameters {:path [:id :share-hash]}
+                         :start (fn [{:keys [path]}]
+                                  (rf/dispatch [:discussion/handle-hard-reload (:id path) (:share-hash path)]))}]}]]
        ["/graph"
         {:name :routes/graph-view
          :view graph-view/graph-view-entrypoint

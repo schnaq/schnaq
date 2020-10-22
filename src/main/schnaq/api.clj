@@ -438,8 +438,8 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash discussion-id selected-statement]} body-params]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:premises (discussion/premises-for-conclusion-id selected-statement)
-           :undercuts (discussion/premises-undercutting-argument-with-premise-id selected-statement)})
+      (ok {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
+           :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))})
       (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
 
 (defn- add-starting-argument!

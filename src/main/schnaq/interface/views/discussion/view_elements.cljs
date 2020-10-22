@@ -83,10 +83,13 @@
                        {:id (-> agenda :agenda/discussion :db/id)
                         :share-hash share-hash}])}]]]]))
 
-(defn input-footer [allow-new? content]
-  (when allow-new?
-    [:div.discussion-primary-background
-     content]))
+(defn input-footer
+  ([content]
+   [input-footer true content])
+  ([allow-new? content]
+   (when allow-new?
+     [:div.discussion-primary-background
+      content])))
 
 ;; text input
 
@@ -231,16 +234,45 @@
       [:div.up-down-vote
        [up-down-vote statement]]]]]))
 
+(rf/reg-event-fx
+  :discussion.select/conclusion
+  (fn [{:keys [db]} [_ conclusion]]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+      {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
+       :fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/statements/for-conclusion")
+                          :format (ajax/transit-request-format)
+                          :params {:selected-statement conclusion
+                                   :share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.premises/set-current]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-db
+  :discussion.premises/set-current
+  (fn [db [_ {:keys [premises undercuts]}]]
+    (assoc-in db [:discussion :premises :current] (concat premises undercuts))))
+
+(rf/reg-sub
+  :discussion.premises/current
+  (fn [db _]
+    (get-in db [:discussion :premises :current] [])))
+
+(rf/reg-sub
+  :discussion.conclusions/selected
+  (fn [db _]
+    (get-in db [:discussion :conclusions :selected])))
+
 (defn conclusions-list [conclusions]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div#conclusions-list.mobile-container
      (for [conclusion conclusions]
        [:div {:key (:db/id conclusion)
               :on-click (fn [_e]
-                          (rf/dispatch [:discussion/continue :starting-conclusions/select conclusion])
-                          (rf/dispatch [:navigation/navigate :routes.discussion/continue
-                                        {:id (:id path-params)
-                                         :share-hash (:share-hash path-params)}]))}
+                          (rf/dispatch [:discussion.select/conclusion conclusion])
+                          (rf/dispatch [:navigation/navigate :routes.discussion.start/statement
+                                        (assoc path-params :statement-id (:db/id conclusion))]))}
         [statement-bubble conclusion :neutral]])]))
 
 (defn history-view
