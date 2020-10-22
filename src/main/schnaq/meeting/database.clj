@@ -942,6 +942,12 @@
    {:discussion/states [:db/ident]}
    {:discussion/starting-arguments argument-pattern}])
 
+(>defn get-statement
+  "Returns the statement given an id."
+  [statement-id]
+  [:db/id :ret ::specs/statement]
+  (d/pull (d/db (new-connection)) statement-pattern statement-id))
+
 (>defn starting-conclusions-by-discussion
   "Query all conclusions belonging to starting-arguments of a certain discussion."
   [discussion-id]

@@ -136,7 +136,10 @@
          ["/statement/:statement-id"
           {:name :routes.discussion.start/statement
            :parameters {:path {:statement-id int?}}
-           :view discussion-views/selected-starting-conclusion}]]
+           :view discussion-views/selected-starting-conclusion
+           :controllers [{:parameters {:path [:share-hash :id :statement-id]}
+                          :start (fn []
+                                   (rf/dispatch [:discussion.query.statement/by-id]))}]}]]
         ["/continue"
          {:name :routes.discussion/continue
           :view discussion-views/discussion-loop-view-entrypoint

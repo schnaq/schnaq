@@ -442,6 +442,19 @@
            :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))})
       (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
 
+(defn- get-statement-info
+  "Return the sought after conclusion (by id) and the following premises / undercuts."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id statement-id]} body-params]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:conclusion (-> statement-id
+                           db/get-statement
+                           processors/with-votes
+                           (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id)))
+           :premises (discussion/premises-for-conclusion-id statement-id)
+           :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)})
+      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+
 (defn- add-starting-argument!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
@@ -601,6 +614,7 @@
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
     (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+    (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statement/undercut" [] undercut-argument!)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (POST "/emails/request-demo" [] request-demo)

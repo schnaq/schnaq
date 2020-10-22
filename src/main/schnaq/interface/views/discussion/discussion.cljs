@@ -121,7 +121,6 @@
       [view/input-footer [add-starting-premises-form]]
       [carousel/carousel-element current-premises]]]))
 
-;; TODO hard reload des Schrittes muss funktionieren
 ;; TODO input-footer muss an das richtige Backend weiter leiten
 
 (defn selected-starting-conclusion []

@@ -235,6 +235,27 @@
        [up-down-vote statement]]]]]))
 
 (rf/reg-event-fx
+  :discussion.query.statement/by-id
+  (fn [{:keys [db]} _]
+    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/statement/info")
+                          :format (ajax/transit-request-format)
+                          :params {:statement-id statement-id
+                                   :share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.query.statement/by-id-success]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-db
+  :discussion.query.statement/by-id-success
+  (fn [db [_ {:keys [conclusion premises undercuts]}]]
+    (->
+      (assoc-in db [:discussion :conclusions :selected] conclusion)
+      (assoc-in [:discussion :premises :current] (concat premises undercuts)))))
+
+(rf/reg-event-fx
   :discussion.select/conclusion
   (fn [{:keys [db]} [_ conclusion]]
     (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
