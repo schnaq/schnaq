@@ -8,7 +8,7 @@
 (defn- create-brainstorm []
   (pages/with-nav-and-header
     {:page/heading (labels :brainstorm/heading)}
-    [:div.container.py-3
+    [:div.container.py-3.mt-3
      [:form
       {:on-submit (fn [e]
                     (let [title (oget e [:target :elements :meeting-title :value])]
