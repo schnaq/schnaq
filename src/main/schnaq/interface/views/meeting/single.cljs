@@ -4,9 +4,8 @@
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.meeting.calendar-invite :as calendar-invite]
-            [schnaq.interface.utils.localstorage :as ls]))
+            [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.views.base :as base]))
 
 (defn- navigate-to-discussion
   "Load the discussion to the currently selected agenda."

@@ -6,7 +6,6 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.discussion.carousel :as carousel]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.discussion.view-elements :as view]
