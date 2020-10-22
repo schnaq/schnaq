@@ -56,7 +56,7 @@
    ["brainstorm"
     {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     ["/create"
-     {:name :routes.brainstorming/create
+     {:name :routes.brainstorm/create
       :view brainstorm-create/create-brainstorm-view
       :link-text (labels :router/create-brainstorm)}]]
    ["meetings"
