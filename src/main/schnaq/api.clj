@@ -452,6 +452,40 @@
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
+(defn- react-to-starting-statement!
+  "Adds a support or attack to a starting conclusion."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
+        author-id (db/author-id-by-nickname nickname)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (let [new-argument (if (= :attack reaction)
+                           (db/attack-statement! discussion-id author-id conclusion-id premise)
+                           (db/support-statement! discussion-id author-id conclusion-id premise))]
+        (db/set-argument-as-starting! discussion-id (:db/id new-argument))
+        (ok {:new-starting-argument new-argument}))
+      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+
+(defn- react-to-any-statement!
+  "Adds a support or attack regarding a certain statement."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
+        author-id (db/author-id-by-nickname nickname)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:new-argument
+           (if (= :attack reaction)
+             (db/attack-statement! discussion-id author-id conclusion-id premise)
+             (db/support-statement! discussion-id author-id conclusion-id premise))})
+      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+
+(defn- undercut-argument!
+  "Adds an undercut for an argument."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id selected previous-id nickname premise]} body-params
+        author-id (db/author-id-by-nickname nickname)]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)})
+      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
@@ -565,6 +599,9 @@
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
+    (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
+    (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+    (POST "/discussion/statement/undercut" [] undercut-argument!)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
