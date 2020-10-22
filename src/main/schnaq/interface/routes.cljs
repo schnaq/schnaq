@@ -6,6 +6,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.agenda.edit :as agenda-edit]
+            [schnaq.interface.views.brainstorm.create :as brainstorm-create]
             [schnaq.interface.views.discussion.discussion :as discussion-views]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
@@ -52,9 +53,14 @@
     {:name :routes/how-to
      :view how-to/view
      :link-text (labels :routes/how-to)}]
+   ["brainstorm"
+    {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
+    ["/create"
+     {:name :routes.brainstorming/create
+      :view brainstorm-create/create-brainstorm-view
+      :link-text (labels :router/create-brainstorm)}]]
    ["meetings"
-    {:controllers [{:start (fn [_]
-                             (rf/dispatch [:username/open-dialog]))}]}
+    {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     (when-not toolbelt/production?
       [""
        {:name :routes/meetings
