@@ -6,15 +6,15 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.view-elements :as view]
             [schnaq.meeting.specs :as specs]
-            [reagent.dom :as rdom]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [reagent.dom :as rdom]))
 
 (defn- carousel-indicators
   "Display indicators as circles at bottom"
   [id# statements]
   [:ol.carousel-indicators.carousel-indicator-custom
    ;; get number of statements and set the first element as selected
-   [:li.active {:key (str "indicator-" (:db/id (nth statements 0)))
+   [:li.active {:key (str "indicator-active-" (:db/id (nth statements 0)))
                 :data-target id#
                 :data-slide-to 0}]
    (for [[index statement] (map-indexed vector (rest statements))]
@@ -85,4 +85,4 @@
        (labels :discussion.carousel/heading)]
       [statement-carousel statements
        (fn [premise]
-         #(rf/dispatch [:discussion/continue :premises/select premise]))]]]))
+         #(rf/dispatch [:discussion.statement/select premise]))]]]))

@@ -103,26 +103,31 @@
 (defn- single-conclusion
   "Show a single conclusion for presentation after selection."
   [conclusion]
-  [:div#conclusions-list.mobile-container
+  [:div.mobile-container
    {:key (:db/id conclusion)
     :on-click (fn [_e] nil)}
    [view/statement-bubble conclusion :neutral]])
 
-(defn- present-starting-conclusions
-  []
+;; TODO erfolgreiche Added notifications wieder aktivieren
+;; TODO Undercuts wieder ermöglichen
+
+(defn- present-conclusion-view
+  [add-form]
   (let [selected-conclusion @(rf/subscribe [:discussion.conclusions/selected])
         current-premises @(rf/subscribe [:discussion.premises/current])]
     [discussion-base-page :current-meeting
      [:<>
       [single-conclusion selected-conclusion]
-      [view/input-footer [add-starting-premises-form]]
+      [view/input-footer add-form]
       [carousel/carousel-element current-premises]]]))
-
-;; TODO draufklicken im Karussel nutzt noch continue-discussion
 
 (defn selected-starting-conclusion []
   "The view after a user has selected a starting-conclusion."
-  [present-starting-conclusions])
+  [present-conclusion-view [add-starting-premises-form]])
+
+(defn selected-conclusion []
+  "The view after a user has selected a starting-conclusion."
+  [present-conclusion-view [add-premise-form]])
 
 (defn- discussion-loop-view
   "The view that is shown when the discussion goes on after the bootstrap.

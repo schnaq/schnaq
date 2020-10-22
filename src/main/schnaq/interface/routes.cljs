@@ -133,20 +133,20 @@
            :name :routes.discussion/start
            :view discussion-views/discussion-start-view-entrypoint
            :link-text (labels :router/start-discussion)}]
-         ["/statement/:statement-id"
+         ["/selected/:statement-id"
           {:name :routes.discussion.start/statement
            :parameters {:path {:statement-id int?}}
            :view discussion-views/selected-starting-conclusion
            :controllers [{:parameters {:path [:share-hash :id :statement-id]}
                           :start (fn []
                                    (rf/dispatch [:discussion.query.statement/by-id]))}]}]]
-        ["/continue"
-         {:name :routes.discussion/continue
-          :view discussion-views/discussion-loop-view-entrypoint
-          :link-text (labels :router/continue-discussion)
-          :controllers [{:parameters {:path [:id :share-hash]}
-                         :start (fn [{:keys [path]}]
-                                  (rf/dispatch [:discussion/handle-hard-reload (:id path) (:share-hash path)]))}]}]]
+        ["/selected/:statement-id"
+         {:name :routes.discussion.select/statement
+          :parameters {:path {:statement-id int?}}
+          :view discussion-views/selected-conclusion
+          :controllers [{:parameters {:path [:share-hash :id :statement-id]}
+                         :start (fn []
+                                  (rf/dispatch [:discussion.query.statement/by-id]))}]}]]
        ["/graph"
         {:name :routes/graph-view
          :view graph-view/graph-view-entrypoint

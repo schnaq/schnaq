@@ -256,6 +256,14 @@
       (assoc-in [:discussion :premises :current] (concat premises undercuts)))))
 
 (rf/reg-event-fx
+  :discussion.statement/select
+  (fn [{:keys [db]} [_ statement]]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+      {:fx [[:dispatch [:discussion.select/conclusion statement]]
+            [:dispatch [:navigation/navigate :routes.discussion.select/statement
+                        {:id id :share-hash share-hash :statement-id (:db/id statement)}]]]})))
+
+(rf/reg-event-fx
   :discussion.select/conclusion
   (fn [{:keys [db]} [_ conclusion]]
     (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
