@@ -1114,7 +1114,9 @@
         (get-in
           (new-premises-for-statement! discussion-id author-id statement-id reacting-string reaction)
           [:tempids (str "argument-" reacting-string)])]
-    (d/pull (d/db (new-connection)) argument-pattern argument-id)))
+    (toolbelt/pull-key-up
+      (d/pull (d/db (new-connection)) argument-pattern argument-id)
+      :db/ident)))
 
 (>defn attack-statement!
   "Create a new statement attacking another statement. Returns the newly created argument."

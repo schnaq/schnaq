@@ -396,7 +396,7 @@
                                                  "This is a new attack")]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/attack (:db/ident (:argument/type new-attack)))))))
+      (is (= :argument.type/attack (:argument/type new-attack))))))
 
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
@@ -407,7 +407,7 @@
                                                   "This is a new support")]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/support (:db/ident (:argument/type new-attack)))))))
+      (is (= :argument.type/support (:argument/type new-attack))))))
 
 (deftest set-argument-as-starting!-test
   (testing "Sets a new argument as a starting argument."

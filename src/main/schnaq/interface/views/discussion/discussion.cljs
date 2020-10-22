@@ -14,18 +14,15 @@
 (defn- add-starting-premises-form
   "Either support or attack a starting-conclusion with the users own premise."
   []
-  (let [all-steps @(rf/subscribe [:discussion-steps])
-        all-args @(rf/subscribe [:discussion-step-args])
-        new-statement-args (logic/args-for-reaction all-steps all-args :starting-support/new)]
-    [:form
-     {:on-submit (fn [e] (js-wrap/prevent-default e)
-                   (logic/submit-new-starting-premise new-statement-args (oget e [:target :elements])))}
-     ;; radio support
-     [view/radio-button "for-radio-starting" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
-     ;; radio attack
-     [view/radio-button "against-radio-starting" "premise-choice" "against-radio" :discussion/add-premise-against false]
-     ;; input form
-     [view/input-form]]))
+  [:form
+   {:on-submit (fn [e] (js-wrap/prevent-default e)
+                 (logic/submit-new-starting-premise (oget e [:target :elements])))}
+   ;; radio support
+   [view/radio-button "for-radio-starting" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
+   ;; radio attack
+   [view/radio-button "against-radio-starting" "premise-choice" "against-radio" :discussion/add-premise-against false]
+   ;; input form
+   [view/input-form]])
 
 (defn- add-premise-form
   "Either support or attack or undercut with the users own premise."
@@ -121,7 +118,8 @@
       [view/input-footer [add-starting-premises-form]]
       [carousel/carousel-element current-premises]]]))
 
-;; TODO input-footer muss an das richtige Backend weiter leiten
+;; TODO im Karusell fehlen Meta-Informationen
+;; TODO draufklicken im Karussel nutzt noch continue-discussion
 
 (defn selected-starting-conclusion []
   "The view after a user has selected a starting-conclusion."
