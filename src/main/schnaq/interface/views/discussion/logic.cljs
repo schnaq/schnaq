@@ -89,14 +89,43 @@
     (rf/dispatch [:discussion.reaction.starting/send reaction new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
+(rf/reg-event-fx
+  :discussion.reaction.statement/send
+  (fn [{:keys [db]} [_ reaction new-premise]]
+    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])
+          nickname (get-in db [:user :name] "Anonymous")]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/react-to/statement")
+                          :format (ajax/transit-request-format)
+                          :params {:share-hash share-hash
+                                   :discussion-id id
+                                   :conclusion-id statement-id
+                                   :nickname nickname
+                                   :premise new-premise
+                                   :reaction reaction}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.reaction.statement/added]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-db
+  :discussion.reaction.statement/added
+  (fn [db [_ response]]
+    (let [new-argument (:new-argument response)
+          new-premise (-> new-argument
+                          :argument/premises
+                          first
+                          (assoc :meta/argument-type (:argument/type new-argument)))]
+      (update-in db [:discussion :premises :current]
+                 conj new-premise))))
+
 (defn submit-new-premise
   "Submits a newly created premise as an undercut, rebut or support."
-  [[support-args rebut-args undercut-args] form]
+  [form]
   (let [new-text-element (oget form [:premise-text])
         new-text (oget new-text-element [:value])
         choice (oget form [:premise-choice :value])]
     (case choice
-      "against-radio" (rf/dispatch [:discussion/continue :rebut/new (assoc rebut-args :new/rebut new-text)])
-      "for-radio" (rf/dispatch [:discussion/continue :support/new (assoc support-args :new/support new-text)])
-      "undercut-radio" (rf/dispatch [:discussion/continue :undercut/new (assoc undercut-args :new/undercut new-text)]))
+      "against-radio" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
+      "for-radio" (rf/dispatch [:discussion.reaction.statement/send :support new-text])
+      "undercut-radio" (rf/dispatch [:discussion/continue :undercut/new (assoc {:whatever :foo} :new/undercut new-text)]))
     (rf/dispatch [:form/should-clear [new-text-element]])))

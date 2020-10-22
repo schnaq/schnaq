@@ -27,22 +27,18 @@
 (defn- add-premise-form
   "Either support or attack or undercut with the users own premise."
   []
-  (let [all-steps @(rf/subscribe [:discussion-steps])
-        all-args @(rf/subscribe [:discussion-step-args])
-        support-args (logic/args-for-reaction all-steps all-args :support/new)
-        rebut-args (logic/args-for-reaction all-steps all-args :rebut/new)
-        undercut-args (logic/args-for-reaction all-steps all-args :undercut/new)]
-    [:form
-     {:on-submit (fn [e] (js-wrap/prevent-default e)
-                   (logic/submit-new-premise [support-args rebut-args undercut-args] (oget e [:target :elements])))}
-     ;; support
-     [view/radio-button "for-radio" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
-     ;; attack
-     [view/radio-button "against-radio" "premise-choice" "against-radio" :discussion/add-premise-against false]
-     ;; undercut
-     [view/radio-button "undercut-radio" "premise-choice" "undercut-radio" :discussion/add-undercut false]
-     ;; input form
-     [view/input-form]]))
+  [:form
+   {:on-submit (fn [e]
+                 (js-wrap/prevent-default e)
+                 (logic/submit-new-premise (oget e [:target :elements])))}
+   ;; support
+   [view/radio-button "for-radio" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
+   ;; attack
+   [view/radio-button "against-radio" "premise-choice" "against-radio" :discussion/add-premise-against false]
+   ;; undercut
+   [view/radio-button "undercut-radio" "premise-choice" "undercut-radio" :discussion/add-undercut false]
+   ;; input form
+   [view/input-form]])
 
 (defn- add-input-form [state]
   (case state
