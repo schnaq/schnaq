@@ -1,10 +1,9 @@
 (ns schnaq.interface.views.meeting.admin-buttons
-  (:require [reagent.core :as reagent]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.text.display-data :refer [labels fa]]
-
+  (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.meeting.calendar-invite :as calendar-invite]))
 
 (defn tooltip-button
