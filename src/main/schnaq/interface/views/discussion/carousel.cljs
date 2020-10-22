@@ -85,4 +85,6 @@
        (labels :discussion.carousel/heading)]
       [statement-carousel statements
        (fn [premise]
-         #(rf/dispatch [:discussion.statement/select premise]))]]]))
+         (fn []
+           (rf/dispatch [:discussion.history/push premise])
+           (rf/dispatch [:discussion.statement/select premise])))]]]))

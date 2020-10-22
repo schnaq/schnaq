@@ -248,12 +248,13 @@
                           :on-success [:discussion.query.statement/by-id-success]
                           :on-failure [:ajax-failure]}]]})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :discussion.query.statement/by-id-success
-  (fn [db [_ {:keys [conclusion premises undercuts]}]]
-    (->
-      (assoc-in db [:discussion :conclusions :selected] conclusion)
-      (assoc-in [:discussion :premises :current] (concat premises undercuts)))))
+  (fn [{:keys [db]} [_ {:keys [conclusion premises undercuts]}]]
+    {:db (->
+           (assoc-in db [:discussion :conclusions :selected] conclusion)
+           (assoc-in [:discussion :premises :current] (concat premises undercuts)))
+     :fx [[:dispatch [:discussion.history/push conclusion]]]}))
 
 (rf/reg-event-fx
   :discussion.statement/select
@@ -293,13 +294,16 @@
   (fn [db _]
     (get-in db [:discussion :conclusions :selected])))
 
-(defn conclusions-list [conclusions]
+(defn conclusions-list
+  "Displays a list of conclusions."
+  [conclusions]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div#conclusions-list.mobile-container
      (for [conclusion conclusions]
        [:div {:key (:db/id conclusion)
               :on-click (fn [_e]
                           (rf/dispatch [:discussion.select/conclusion conclusion])
+                          (rf/dispatch [:discussion.history/push conclusion])
                           (rf/dispatch [:navigation/navigate :routes.discussion.start/statement
                                         (assoc path-params :statement-id (:db/id conclusion))]))}
         [statement-bubble conclusion :neutral]])]))
@@ -310,10 +314,11 @@
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
     [:div#discussion-history.mobile-container
-     (for [[count [statement attitude]] indexed-history]
-       [:div {:key (:db/id statement)
+     (for [[count statement] indexed-history]
+       [:div {:key (str "history-" (:db/id statement))
+              ;; TODO fix on-click function
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
-        [statement-bubble statement attitude]])]))
+        [statement-bubble statement]])]))
 
 
 (rf/reg-event-fx

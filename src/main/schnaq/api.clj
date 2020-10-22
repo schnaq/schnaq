@@ -490,10 +490,12 @@
   (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:new-argument
-           (if (= :attack reaction)
-             (db/attack-statement! discussion-id author-id conclusion-id premise)
-             (db/support-statement! discussion-id author-id conclusion-id premise))})
+      (ok (with-statement-meta
+            {:new-argument
+             (if (= :attack reaction)
+               (db/attack-statement! discussion-id author-id conclusion-id premise)
+               (db/support-statement! discussion-id author-id conclusion-id premise))}
+            discussion-id))
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
 (defn- undercut-argument!
@@ -502,7 +504,9 @@
   (let [{:keys [share-hash discussion-id selected previous-id nickname premise]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)})
+      (ok (with-statement-meta
+            {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)}
+            discussion-id))
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
 ;; -----------------------------------------------------------------------------

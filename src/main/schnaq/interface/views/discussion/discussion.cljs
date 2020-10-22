@@ -96,24 +96,22 @@
 (defn discussion-start-view-entrypoint []
   [discussion-start-view])
 
-(defn- single-conclusion
-  "Show a single conclusion for presentation after selection."
-  [conclusion]
-  [:div.mobile-container
-   {:key (:db/id conclusion)
-    :on-click (fn [_e] nil)}
-   [view/statement-bubble conclusion :neutral]])
-
 ;; TODO erfolgreiche Added notifications wieder aktivieren
 ;; TODO Undercuts wieder ermöglichen
 
 (defn- present-conclusion-view
   [add-form]
-  (let [selected-conclusion @(rf/subscribe [:discussion.conclusions/selected])
-        current-premises @(rf/subscribe [:discussion.premises/current])]
+  (let [current-premises @(rf/subscribe [:discussion.premises/current])
+        current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page :current-meeting
      [:<>
-      [single-conclusion selected-conclusion]
+      [view/agenda-header-back-arrow
+       (fn []
+         ;; TODO hier granularer zurück gehen
+         (rf/dispatch [:navigation/navigate :routes.meeting/show
+                       {:share-hash (:meeting/share-hash current-meeting)}])
+         (rf/dispatch [:meeting/select-current current-meeting]))]
+      [view/history-view]
       [view/input-footer add-form]
       [carousel/carousel-element current-premises]]]))
 
@@ -122,7 +120,7 @@
   [present-conclusion-view [add-starting-premises-form]])
 
 (defn selected-conclusion []
-  "The view after a user has selected a starting-conclusion."
+  "The view after a user has selected any conclusion."
   [present-conclusion-view [add-premise-form]])
 
 (defn- discussion-loop-view
@@ -148,14 +146,25 @@
 
 ;; #### Events ####
 
+(defn- rewind-history
+  "Rewinds a history until the last time statement-id was current."
+  [history statement-id]
+  (loop [history history]
+    (if (or (= (:db/id (last history)) statement-id)
+            (empty? history))
+      (vec history)
+      (recur (butlast history)))))
+
 (rf/reg-event-db
   :discussion.history/push
-  (fn [db [_ steps statement attitude]]
-    (let [newest-entry (-> db :history :full-context :statement peek first)]
-      (if (and statement (not= newest-entry statement))
-        (update-in db [:history :full-context] conj {:statement [statement attitude]
-                                                     :options steps})
-        db))))
+  ;; IMPORTANT: Since we do not control what happens at the back button, pushing anything
+  ;; that is already present in the history, will rewind the history to said place.
+  (fn [db [_ statement]]
+    (let [all-entries (-> db :history :full-context)
+          history-ids (into #{} (map :db/id all-entries))]
+      (if (and statement (contains? history-ids (:db/id statement)))
+        (assoc-in db [:history :full-context] (rewind-history all-entries (:db/id statement)))
+        (update-in db [:history :full-context] conj statement)))))
 
 (rf/reg-event-db
   :discussion.history/clear
@@ -367,15 +376,9 @@
     (some #{:starting-support/new :support/new} steps)))
 
 (rf/reg-sub
-  :discussion-history/full
+  :discussion-history
   (fn [db _]
     (get-in db [:history :full-context])))
-
-(rf/reg-sub
-  :discussion-history
-  :<- [:discussion-history/full]
-  (fn [history _]
-    (map :statement history)))
 
 (rf/reg-sub
   :local-votes
