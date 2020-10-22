@@ -1,11 +1,12 @@
 (ns schnaq.interface.views.discussion.carousel
-  (:require [cljs.spec.alpha :as s]
+  (:require ["jquery" :as jquery]
+            [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [reagent.core :as reagent]
             [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.discussion.view-elements :as view]
             [schnaq.meeting.specs :as specs]
+            [reagent.dom :as rdom]
             [re-frame.core :as rf]))
 
 (defn- carousel-indicators
@@ -28,14 +29,13 @@
    ;; set first indexed element as selected
    (map-indexed
      (fn [index premise]
-       (let [params {:key (:db/id premise)
-                     :data-pause true}
-             content [:div.premise-carousel-item
-                      {:on-click (on-click premise)}
+       (let [content [:div.premise-carousel-item
+                      {:on-click (on-click premise)
+                       :data-pause true}
                       [view/statement-bubble premise]]]
          (if (zero? index)
-           [:div.carousel-item.active params content]
-           [:div.carousel-item params content])))
+           [:div.carousel-item.active {:key (:db/id premise)} content]
+           [:div.carousel-item {:key (:db/id premise)} content])))
      statements)])
 
 (defn- statement-carousel-div
@@ -61,30 +61,16 @@
   and sets the current element as selected statement"
   [statements on-click]
   (let [id "carouselIndicators"
-        id# (str "#" id)
-        statements-atom (reagent/atom statements)
-        ;; selected-statement is used for demonstration purposes here. It may be unnecessary on
-        ;; the next discussion-flow rework.
-        selected-statement (reagent/atom nil)
-        event-name "slid.bs.carousel"
-        listener-fn #(let [index (js-wrap/element-index "div.active")
-                           active-statement (nth @statements-atom index)]
-                       (reset! selected-statement active-statement))]
+        statements-atom (reagent/atom statements)]
     (reagent/create-class
       {:reagent-render
        (fn [] [statement-carousel-div id @statements-atom on-click])
-       :component-did-mount
-       (fn [_comp]
-         ;; on select function for current carousel element
-         (js-wrap/add-listener id# event-name listener-fn))
        :component-did-update
        (fn [this _argv]
          (let [[_ new-statements _] (reagent/argv this)]
            (reset! statements-atom new-statements)
-           (js-wrap/remove-listener id# event-name)
-           (js-wrap/add-listener id# event-name listener-fn)))
-       :component-will-unmount
-       (fn [] (js-wrap/remove-listener id# event-name))
+           ;; Fix for double active elements when adding statements dynamically
+           (.removeClass (jquery ".carousel-item:not(:first)") "active")))
        :display-name "carousel-component"})))
 
 (>defn carousel-element

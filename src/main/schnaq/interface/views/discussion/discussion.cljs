@@ -119,7 +119,6 @@
       [carousel/carousel-element current-premises]]]))
 
 ;; TODO draufklicken im Karussel nutzt noch continue-discussion
-;; TODO wenn man ein statement ins karussel packt, während des gescrollt ist, bricht das
 
 (defn selected-starting-conclusion []
   "The view after a user has selected a starting-conclusion."
