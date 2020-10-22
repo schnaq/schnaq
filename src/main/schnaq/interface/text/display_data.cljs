@@ -23,8 +23,6 @@
      :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
      :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"
 
-     :startpage.button/create-schnaq "Jetzt einen schnaq starten!"
-
      :startpage.value-cards/heading "Weitere Anwendungsgebiete"
      :startpage.value-cards/lead "Strukturierte Diskussionen werden in vielen Gebieten benötigt. Hier finden Sie weitere Beispiele."
      :startpage.value-cards.discussion/title "Diskussionen führen"
@@ -210,6 +208,7 @@
 
      ;; Brainstorming time
      :brainstorm/heading "Brainstorm anlegen"
+     :brainstorm.buttons/start-now "Jetzt ein Brainstorming starten"
 
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
