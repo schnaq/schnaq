@@ -23,22 +23,25 @@
    [view/radio-button "against-radio-starting" "premise-choice" "against-radio" :discussion/add-premise-against false]
    ;; input form
    [view/input-form]])
-
+;; TODO undercuts bei den premises sollten nur stehen, wenn in der history auch entsprechend zwei oder mehr items sind
 (defn- add-premise-form
   "Either support or attack or undercut with the users own premise."
   []
-  [:form
-   {:on-submit (fn [e]
-                 (js-wrap/prevent-default e)
-                 (logic/submit-new-premise (oget e [:target :elements])))}
-   ;; support
-   [view/radio-button "for-radio" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
-   ;; attack
-   [view/radio-button "against-radio" "premise-choice" "against-radio" :discussion/add-premise-against false]
-   ;; undercut
-   [view/radio-button "undercut-radio" "premise-choice" "undercut-radio" :discussion/add-undercut false]
-   ;; input form
-   [view/input-form]])
+  (let [history @(rf/subscribe [:discussion-history])]
+    [:form
+     {:on-submit (fn [e]
+                   (js-wrap/prevent-default e)
+                   (logic/submit-new-premise (oget e [:target :elements])))}
+     ;; support
+     [view/radio-button "for-radio" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
+     ;; attack
+     [view/radio-button "against-radio" "premise-choice" "against-radio" :discussion/add-premise-against false]
+     ;; undercut
+     ;; Only show undercut, when there are at least two items in the history (otherwise we can not undercut anything)
+     (when (< 1 (count history))
+       [view/radio-button "undercut-radio" "premise-choice" "undercut-radio" :discussion/add-undercut false])
+     ;; input form
+     [view/input-form]]))
 
 (defn- add-input-form [state]
   (case state
@@ -97,7 +100,6 @@
   [discussion-start-view])
 
 ;; TODO erfolgreiche Added notifications wieder aktivieren
-;; TODO Undercuts wieder ermöglichen
 
 (defn- present-conclusion-view
   [add-form]

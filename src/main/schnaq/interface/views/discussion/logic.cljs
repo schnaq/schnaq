@@ -107,6 +107,25 @@
                           :on-success [:discussion.reaction.statement/added]
                           :on-failure [:ajax-failure]}]]})))
 
+(rf/reg-event-fx
+  :discussion.undercut.statement/send
+  (fn [{:keys [db]} [_ new-premise]]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
+          history (get-in db [:history :full-context] [])
+          nickname (get-in db [:user :name] "Anonymous")]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/argument/undercut")
+                          :format (ajax/transit-request-format)
+                          :params {:share-hash share-hash
+                                   :discussion-id id
+                                   :selected (last history)
+                                   :nickname nickname
+                                   :premise new-premise
+                                   :previous-id (:db/id (nth history (- (count history) 2)))}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.reaction.statement/added]
+                          :on-failure [:ajax-failure]}]]})))
+
 (rf/reg-event-db
   :discussion.reaction.statement/added
   (fn [db [_ response]]
@@ -127,5 +146,5 @@
     (case choice
       "against-radio" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
       "for-radio" (rf/dispatch [:discussion.reaction.statement/send :support new-text])
-      "undercut-radio" (rf/dispatch [:discussion/continue :undercut/new (assoc {:whatever :foo} :new/undercut new-text)]))
+      "undercut-radio" (rf/dispatch [:discussion.undercut.statement/send new-text]))
     (rf/dispatch [:form/should-clear [new-text-element]])))

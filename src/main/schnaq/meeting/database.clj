@@ -995,8 +995,7 @@
 (>defn add-new-starting-argument!
   "Creates a new starting argument in a discussion."
   [discussion-id author-id conclusion premises]
-  [number? :db/id :statement/content (s/coll-of :statement/content)
-   :ret associative?]
+  [number? :db/id :statement/content (s/coll-of :statement/content) :ret associative?]
   (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
         temporary-id (:db/id new-argument)]
     (get-in (transact [new-argument
@@ -1144,7 +1143,9 @@
                           :argument/type :argument.type/undercut
                           :argument/discussions [discussion-id]}])
                       [:tempids (str "new-undercut-" discussion-id)])]
-    (d/pull (d/db (new-connection)) argument-pattern argument-id)))
+    (toolbelt/pull-key-up
+      (d/pull (d/db (new-connection)) argument-pattern argument-id)
+      :db/ident)))
 
 (>defn set-argument-as-starting!
   "Sets an existing argument as a starting-argument."
