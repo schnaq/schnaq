@@ -437,7 +437,9 @@
      :how-to.agenda/webm "/animations/howto/Agenda.webm"
      :how-to.agenda/mp4 "/animations/howto/Agenda.mp4"
      :how-to.admin/webm "/animations/howto/Admin.webm"
-     :how-to.admin/mp4 "/animations/howto/Admin.mp4"}))
+     :how-to.admin/mp4 "/animations/howto/Admin.mp4"
+     :start-page.work-together/webm "/animations/WorkTogether.webm"
+     :start-page.work-together/mp4 "/animations/WorkTogether.mp4"}))
 
 (defn fa
   "Returns an fontawesome icon id as String for a given identifier"

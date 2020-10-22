@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.text.display-data :refer [labels fa img-path]]
+  (:require [schnaq.interface.text.display-data :refer [labels fa img-path video]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]))
 
@@ -31,11 +31,23 @@
    [:div.col-12.col-lg-5.offset-lg-1
     [:img.img-fluid {:src (img-path image-key)}]]])
 
+(defn- feature-row-video-right
+  "Feature row where the video is located on the right side."
+  [video-key-webm vide-key-webm text-namespace]
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-6
+    [build-feature-text-box text-namespace]]
+   [:div.col-12.col-lg-6
+    [:video.w-100.feature-animations {:auto-play true :loop true :muted true :plays-inline true}
+     [:source {:src (video video-key-webm) :type "video/webm"}]
+     [:source {:src (video vide-key-webm) :type "video/mp4"}]]]])
+
 (defn- meeting-organisation
   "Featuring meeting-organisation with an image."
   []
-  [feature-row-image-right
-   :startpage.features/meeting-organisation
+  [feature-row-video-right
+   :start-page.work-together/webm
+   :start-page.work-together/mp4
    :startpage.features.meeting-organisation])
 
 (defn- structured-discussions
