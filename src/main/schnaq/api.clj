@@ -418,12 +418,17 @@
 ;; -----------------------------------------------------------------------------
 ;; Discussion
 
+(defn- with-statement-meta
+  "Returns a data structure, where all statements have been enhanced with meta-information."
+  [data discussion-id]
+  (-> data
+      processors/with-votes
+      (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
+
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [discussion-id]
-  (-> (db/starting-conclusions-by-discussion discussion-id)
-      processors/with-votes
-      (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
+  (with-statement-meta (db/starting-conclusions-by-discussion discussion-id) discussion-id))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -438,8 +443,10 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash discussion-id selected-statement]} body-params]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
-           :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))})
+      (ok (with-statement-meta
+            {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
+             :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
+            discussion-id))
       (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
 
 (defn- get-statement-info
@@ -447,12 +454,11 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash discussion-id statement-id]} body-params]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:conclusion (-> statement-id
-                           db/get-statement
-                           processors/with-votes
-                           (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id)))
-           :premises (discussion/premises-for-conclusion-id statement-id)
-           :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)})
+      (ok (with-statement-meta
+            {:conclusion (db/get-statement statement-id)
+             :premises (discussion/premises-for-conclusion-id statement-id)
+             :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
+            discussion-id))
       (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
 
 (defn- add-starting-argument!
@@ -475,7 +481,7 @@
                            (db/attack-statement! discussion-id author-id conclusion-id premise)
                            (db/support-statement! discussion-id author-id conclusion-id premise))]
         (db/set-argument-as-starting! discussion-id (:db/id new-argument))
-        (ok {:new-starting-argument new-argument}))
+        (ok (with-statement-meta {:new-starting-argument new-argument} discussion-id)))
       (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
 
 (defn- react-to-any-statement!
