@@ -10,6 +10,15 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]))
 
+(defn- navigate-to-discussion
+  "Load the discussion to the currently selected agenda."
+  [agenda meeting]
+  (when-not (nil? agenda)
+    (rf/dispatch [:navigation/navigate :routes.discussion/start
+                  {:id (-> agenda :agenda/discussion :db/id)
+                   :share-hash (:meeting/share-hash meeting)}])
+    (rf/dispatch [:agenda/choose agenda])))
+
 (defn- tooltip-button
   [tooltip-location tooltip content on-click-fn]
   (reagent/create-class
@@ -101,11 +110,7 @@
      [:<>
       [:button.button-secondary-b-1.button-md
        {:title (labels :discussion/discuss-tooltip)
-        :on-click (fn []
-                    (rf/dispatch [:navigation/navigate :routes.discussion/start
-                                  {:id (-> agenda :agenda/discussion :db/id)
-                                   :share-hash (:meeting/share-hash meeting)}])
-                    (rf/dispatch [:agenda/choose agenda]))}
+        :on-click #(navigate-to-discussion agenda meeting)}
        [:span.pr-2 (labels :discussion/discuss)]
        [:span.badge.badge-pill.badge-transparent statement-num " "
         (if new?
@@ -117,9 +122,11 @@
   [meeting]
   [:<>
    (let [agendas @(rf/subscribe [:current-agendas])]
-     (for [agenda agendas]
-       [:div.py-3 {:key (:db/id agenda)}
-        [agenda-entry agenda meeting]]))])
+     (if (= :meeting.type/brainstorm (:meeting/type meeting))
+       (navigate-to-discussion (first agendas) meeting)
+       (for [agenda agendas]
+         [:div.py-3 {:key (:db/id agenda)}
+          [agenda-entry agenda meeting]])))])
 
 (defn- meeting-title [current-meeting]
   ;; meeting header
