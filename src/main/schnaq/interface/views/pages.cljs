@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.pages
   "Defining page-layouts."
   (:require [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn]]
+            [ghostwheel.core :refer [>defn >defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [schnaq.interface.views.base :as base]

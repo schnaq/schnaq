@@ -9,7 +9,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="polyfill" level="application" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-java:1.0.343" level="project" />
     <orderEntry type="library" name="Deps: com.google.elemental2/elemental2-core:1.0.0-RC1" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-middleware:0.5.10" level="project" />
@@ -58,7 +57,6 @@
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: Local com.datomic/dev-local (dev-local.jar)" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.common/wildfly-common:1.5.2.Final" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect/hmac-authn:0.1.195" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha-cloverage:1.0.63" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react-dom:16.13.0-0" level="project" />
     <orderEntry type="library" name="Deps: re-frame-utils:0.1.0" level="project" />
@@ -125,7 +123,6 @@
     <orderEntry type="library" name="Deps: binaryage/env-config:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: riddley:0.2.0" level="project" />
     <orderEntry type="library" name="Deps: progrock:0.1.2" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect/http-client:0.1.105" level="project" />
     <orderEntry type="library" name="Deps: com.google.javascript/closure-compiler-externs:v20200830" level="project" />
     <orderEntry type="library" name="Deps: org.javassist/javassist:3.18.1-GA" level="project" />
     <orderEntry type="library" name="Deps: org.checkerframework/checker-compat-qual:2.5.5" level="project" />
@@ -179,7 +176,6 @@
     <orderEntry type="library" name="Deps: net.java.dev.jna/jna:3.2.2" level="project" />
     <orderEntry type="library" name="Deps: cheshire:5.10.0" level="project" />
     <orderEntry type="library" name="Deps: tigris:0.1.2" level="project" />
-    <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-client:9.4.27.v20200227" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-sieppari:0.5.10" level="project" />
     <orderEntry type="library" name="Deps: com.andrewmcveigh/cljs-time:0.5.2" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-io:9.4.31.v20200723" level="project" />
