@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.base
-  (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :as data :refer [labels img-path]]
             [schnaq.interface.views.brainstorm.tools :as btools]
