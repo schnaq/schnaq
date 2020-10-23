@@ -5,7 +5,6 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]))
 
-
 (>defn calculate-votes
   "Calculates the votes without needing to reload."
   [statement vote-type vote-store]
@@ -15,21 +14,6 @@
                                 [:meta/downvotes :down])
         vote-change (get-in vote-store [db-key (:db/id statement)] 0)]
     (+ (internal-key statement) vote-change)))
-
-(defn index-of
-  "Returns the index of the first occurrence of `elem` in `coll` if its present and
-  nil if not."
-  [coll elem]
-  (when coll
-    (let [maybe-index (.indexOf coll elem)]
-      (when-not (= maybe-index -1)
-        maybe-index))))
-
-(defn args-for-reaction
-  "Returns the args for a certain reaction."
-  [all-steps all-args reaction]
-  (when-let [idx (index-of all-steps reaction)]
-    (nth all-args idx)))
 
 (defn arg-type->attitude
   "Returns an attitude deduced from an argument-type."

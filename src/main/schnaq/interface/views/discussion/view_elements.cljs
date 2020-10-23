@@ -7,7 +7,6 @@
             [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
-            [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.logic :as logic]))
 
@@ -30,32 +29,6 @@
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
-
-
-;; discussion header
-
-(defn discussion-header [current-meeting]
-  ;; meeting header
-  [base/discussion-header
-   (:meeting/title current-meeting)
-   (:meeting/description current-meeting)
-   (fn []
-     (rf/dispatch [:navigation/navigate :routes.meeting/show
-                   {:share-hash (:meeting/share-hash current-meeting)}])
-     (rf/dispatch [:meeting/select-current current-meeting]))])
-
-(defn discussion-header-no-subtitle [current-meeting]
-  ;; meeting header
-  [base/discussion-header
-   (:meeting/title current-meeting)
-   nil
-   (fn []
-     (rf/dispatch [:navigation/navigate :routes.meeting/show
-                   {:share-hash (:meeting/share-hash current-meeting)}])
-     (rf/dispatch [:meeting/select-current current-meeting]))])
-
-
-;; discussion loop box
 
 (defn agenda-header-back-arrow [on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
@@ -90,8 +63,6 @@
    (when allow-new?
      [:div.discussion-primary-background
       content])))
-
-;; text input
 
 (defn- input-starting-argument-form
   "A form, which allows the input of a complete argument.
@@ -160,8 +131,6 @@
    ;; add button
    [:div.text-center.button-spacing-top
     [:button.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
-
-;; selection
 
 (defn radio-button
   "Radio Button helper function. This function creates a radio button."
@@ -354,7 +323,6 @@
       :switched (update-in
                   (update-in db [:votes :up id] inc)
                   [:votes :down id] dec))))
-
 
 (rf/reg-event-db
   :downvote-success
