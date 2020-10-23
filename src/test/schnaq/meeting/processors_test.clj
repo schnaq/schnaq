@@ -30,16 +30,3 @@
       (is (contains? author-names "Wegi"))
       (is (contains? author-names "Der Schredder"))
       (is (= "foo" (:statement/content processed-structure))))))
-
-(deftest with-canonical-usernames-test
-  (testing "Tests whether arguments are correctly enriched."
-    (is (= [:starting-argument/new
-            {:discussion/id 87960930222185, :user/nickname "Wegi"}]
-           (processors/with-canonical-usernames
-             [:starting-argument/new
-              {:discussion/id 87960930222185}]
-             "WeGi")
-           (processors/with-canonical-usernames
-             [:starting-argument/new
-              {:discussion/id 87960930222185}]
-             "WEGI")))))

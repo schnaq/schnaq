@@ -5,7 +5,6 @@
             [compojure.core :refer [GET POST routes]]
             [compojure.route :as route]
             [dialog.discussion.database :as dialog-db]
-            [dialog.engine.core :as dialog]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
             [ring.middleware.cors :refer [wrap-cors]]
@@ -277,36 +276,6 @@
     (if (valid-discussion-hash? meeting-hash discussion-id)
       (ok (discussion/sub-discussion-information statement-id (dialog-db/all-arguments-for-discussion discussion-id)))
       (bad-request {:error "The link you followed was invalid."}))))
-
-(defn- start-discussion
-  "Start a new discussion for an agenda point."
-  [req]
-  (let [discussion-id (Long/valueOf ^String (get-in req [:route-params :discussion-id]))
-        username (get-in req [:query-params "username"])
-        meeting-hash (get-in req [:query-params "meeting-hash"])]
-    (if (valid-discussion-hash? meeting-hash discussion-id)
-      (ok (->
-            (dialog/start-discussion {:discussion/id discussion-id
-                                      :user/nickname (db/canonical-username username)})
-            processors/with-votes
-            (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
-      (bad-request {:error "The link you followed was invalid"}))))
-
-(defn- continue-discussion
-  "Dispatches the wire-received events to the dialog.core backend."
-  [{:keys [body-params]}]
-  (let [[reaction args] (processors/with-canonical-usernames
-                          (:payload body-params)
-                          (:current-nickname body-params))
-        meeting-hash (:meeting-hash body-params)
-        discussion-id (:discussion-id body-params)]
-    (if (valid-discussion-hash? meeting-hash discussion-id)
-      (ok (->
-            (dialog/continue-discussion reaction args)
-            processors/with-votes
-            (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
-      (bad-request {:error "The link you followed was invalid"}))))
-
 
 ;; -----------------------------------------------------------------------------
 ;; Votes
@@ -612,13 +581,11 @@
     (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/ping" [] ping)
-    (GET "/start-discussion/:discussion-id" [] start-discussion)
     (GET "/statement-infos" [] statement-infos)
     (POST "/agenda/delete" [] delete-agenda!)
     (POST "/agenda/new" [] new-agenda!)
     (POST "/agenda/update" [] update-single-agenda!)
     (POST "/author/add" [] add-author)
-    (POST "/continue-discussion" [] continue-discussion)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/argument/undercut" [] undercut-argument!)
     (POST "/discussion/arguments/starting/add" [] add-starting-argument!)

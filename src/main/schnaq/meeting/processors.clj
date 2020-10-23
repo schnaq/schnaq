@@ -1,6 +1,5 @@
 (ns schnaq.meeting.processors
-  (:require [clojure.spec.alpha :as s]
-            [clojure.walk :as walk]
+  (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.discussion :as discussion]
             [schnaq.meeting.database :as db])
@@ -26,10 +25,3 @@
        (assoc % :meta/sub-discussion-info (discussion/sub-discussion-information (:db/id %) all-arguments))
        %)
     data))
-
-(>defn with-canonical-usernames
-  "Enriches a step-vector with canonical :user/nickname."
-  [[step args] current-nickname]
-  [(s/tuple keyword? coll?) :author/nickname :ret (s/tuple keyword? coll?)]
-  (let [new-args (assoc args :user/nickname (db/canonical-username current-nickname))]
-    [step new-args]))
