@@ -74,7 +74,8 @@
 
 (>defn carousel-element
   "Build a carousel. Can either be for conclusions in the beginning of a
-  discussion or for premises in all other cases."
+  discussion or for premises in all other cases. Undercuts are only shown, when
+  there are at least two statements in the history (they do not make sense otherwise)."
   [statements]
   [(s/coll-of ::specs/statement) :ret :re-frame/component]
   (let [history-count (count @(rf/subscribe [:discussion-history]))
