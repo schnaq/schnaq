@@ -397,7 +397,7 @@
             {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
              :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
             discussion-id))
-      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+      (deny-access "Sie haben nicht genügend Rechte, um diese Diskussion zu betrachten."))))
 
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following premises / undercuts."
