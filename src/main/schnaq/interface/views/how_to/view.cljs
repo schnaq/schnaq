@@ -45,8 +45,8 @@
    [:div.col-12.col-lg-6.text-center
     [:button.button-secondary.font-200
      {:type "button"
-      :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
-     (labels :startpage.button/create-schnaq)]]])
+      :on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
+     (labels :brainstorm.buttons/start-now)]]])
 
 (defn- admin []
   [feature-row-video-left

@@ -8,6 +8,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.logic :as logic]))
 
@@ -57,31 +58,36 @@
 
 ;; discussion loop box
 
-(defn agenda-header-back-arrow [on-click-back-function]
+(defn agenda-header-back-arrow [meeting on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         {:keys [meeting/share-hash]} @(rf/subscribe [:meeting/selected])]
     [:div.discussion-primary-background
      [:div.row
       ;; back arrow
-      [:div.col-1.back-arrow
-       (when on-click-back-function
-         [:p {:on-click on-click-back-function}
-          [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
+      (when-not (btools/is-brainstorm? meeting)
+        [:div.col-1.back-arrow
+         (when on-click-back-function
+           [:p {:on-click on-click-back-function}
+            [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])])
       ;; title
       [:div.col-8.col-lg-10
-       [:h2.clickable-no-hover {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
-                                                         {:share-hash share-hash
-                                                          :id (:db/id (:agenda/discussion agenda))}])}
+       [:h2.clickable-no-hover
+        {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
+                                  {:share-hash share-hash
+                                   :id (:db/id (:agenda/discussion agenda))}])}
         (:agenda/title agenda)]
        [markdown-parser/markdown-to-html (:agenda/description agenda)]]
-      [:div.col-3.col-lg-1.graph-icon
-       [:img.graph-icon-img.clickable-no-hover
-        {:src (img-path :icon-graph) :alt (labels :graph.button/text)
-         :title (labels :graph.button/text)
-         :on-click #(rf/dispatch
-                      [:navigation/navigate :routes/graph-view
-                       {:id (-> agenda :agenda/discussion :db/id)
-                        :share-hash share-hash}])}]]]]))
+      (let [classes "col-3 col-lg-1 graph-icon"]
+        [:div {:class (if (btools/is-brainstorm? meeting)
+                        (str classes " offset-1")
+                        classes)}
+         [:img.graph-icon-img.clickable-no-hover
+          {:src (img-path :icon-graph) :alt (labels :graph.button/text)
+           :title (labels :graph.button/text)
+           :on-click #(rf/dispatch
+                        [:navigation/navigate :routes/graph-view
+                         {:id (-> agenda :agenda/discussion :db/id)
+                          :share-hash share-hash}])}]])]]))
 
 (defn input-footer [allow-new? content]
   (when allow-new?

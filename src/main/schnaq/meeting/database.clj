@@ -118,6 +118,7 @@
    :meeting/title
    :meeting/start-date
    :meeting/end-date
+   :meeting/type
    :meeting/description
    :meeting/share-hash
    {:meeting/author author-pattern}])
@@ -393,22 +394,27 @@
 (defn all-meetings
   "Shows all meetings currently in the db."
   []
-  (d/q
-    '[:find (pull ?meetings meeting-pattern-public)
-      :in $ meeting-pattern-public
-      :where [?meetings :meeting/title _]]
-    (d/db (new-connection)) meeting-pattern-public))
+  (->
+    (d/q
+      '[:find (pull ?meetings meeting-pattern-public)
+        :in $ meeting-pattern-public
+        :where [?meetings :meeting/title _]]
+      (d/db (new-connection)) meeting-pattern-public)
+    (toolbelt/pull-key-up :db/ident)
+    flatten))
 
 (>defn meeting-by-hash-generic
   "Generic meeting by hash method, outputs according to pattern."
   [hash pattern]
   [string? sequential? :ret map?]
-  (ffirst
+  (->
     (d/q
       '[:find (pull ?meeting pattern)
         :in $ ?hash pattern
         :where [?meeting :meeting/share-hash ?hash]]
-      (d/db (new-connection)) hash pattern)))
+      (d/db (new-connection)) hash pattern)
+    ffirst
+    (toolbelt/pull-key-up :db/ident)))
 
 (defn meeting-by-hash
   "Returns the meeting corresponding to the share hash."
@@ -990,7 +996,7 @@
   "Creates a new starting argument in a discussion."
   [discussion-id author-id conclusion premises]
   [number? :db/id :statement/content (s/coll-of :statement/content)
-   :ret associative?]
+   :ret number?]
   (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
         temporary-id (:db/id new-argument)]
     (get-in (transact [new-argument

@@ -6,20 +6,21 @@
             [schnaq.interface.views.agenda.agenda :as agenda]
             [schnaq.interface.views.text-editor.view :as editor]))
 
-(defn- new-meeting-helper
+(defn new-meeting-helper
   "Creates a new meeting with the form from `create-meeting-form`."
-  [title description]
+  [title description type]
   (rf/dispatch
     [:meeting.creation/new
      {:meeting/title title
       :meeting/description description
+      :meeting/type type
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
       :meeting/start-date (js/Date.)}]))
 
-(defn- submit-meeting-button []
+(defn submit-meeting-button []
   [:button.btn.button-primary (labels :meeting-create-header)])
 
-(defn- meeting-title-input
+(defn meeting-title-input
   "The input and label for a new meeting-title"
   []
   [:<>
@@ -46,6 +47,9 @@
        [:div {:key suffix}
         [agenda/agenda-form delete-agenda-fn agenda update-description-fn (create-agenda-title-attributes suffix)]]))])
 
+
+;; -----------------------------------------------------------------------------
+
 (defn view []
   (let [temporary-agendas @(rf/subscribe [:agendas.temporary/all])
         description-storage-key :meeting.create/description]
@@ -55,7 +59,7 @@
                     (let [title (oget e [:target :elements :meeting-title :value])
                           description @(rf/subscribe [:mde/load-content description-storage-key])]
                       (js-wrap/prevent-default e)
-                      (new-meeting-helper title description)))}
+                      (new-meeting-helper title description :meeting.type/meeting)))}
       [:div.agenda-meeting-container.shadow-straight.text-left.p-3
        [meeting-title-input]
        [editor/view-store-on-change description-storage-key]]

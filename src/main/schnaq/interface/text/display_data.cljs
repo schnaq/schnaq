@@ -23,8 +23,6 @@
      :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
      :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"
 
-     :startpage.button/create-schnaq "Jetzt einen schnaq starten!"
-
      :startpage.value-cards/heading "Weitere Anwendungsgebiete"
      :startpage.value-cards/lead "Strukturierte Diskussionen werden in vielen Gebieten benötigt. Hier finden Sie weitere Beispiele."
      :startpage.value-cards.discussion/title "Diskussionen führen"
@@ -208,6 +206,10 @@
      :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
      :meeting.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
 
+     ;; Brainstorming time
+     :brainstorm/heading "Brainstorm anlegen"
+     :brainstorm.buttons/start-now "Jetzt ein Brainstorming starten"
+
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
      :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
@@ -374,6 +376,7 @@
      :router/all-meetings "Alle schnaqs"
      :router/all-feedbacks "Alle Feedbacks"
      :router/create-meeting "Schnaq anlegen"
+     :router/create-brainstorm "Brainstorm anlegen"
      :router/meeting-created "Zuletzt angelegter schnaq"
      :router/my-schnaqs "Meine schnaqs"
      :router/show-single-meeting "Schnaq anzeigen"
