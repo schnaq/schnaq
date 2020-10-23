@@ -475,3 +475,15 @@
      :shield "fa-shield-alt"
      :trash "fa-trash-alt"
      :users "fa-users"}))
+
+(defn colors
+  "Color definitions according to our css styles."
+  [identifier]
+  (identifier
+    {:blue/dark "#052740"
+     :blue/default "#1292ee"
+     :blue/light "#4cacf4"
+     :blue/selected "#0181dd"
+     :orange/default "#ff772d"
+     :orange/selected "#fe661e"
+     :white "#ffffff"}))
