@@ -78,13 +78,17 @@
   discussion or for premises in all other cases."
   [statements]
   [(s/coll-of ::specs/statement) :ret :re-frame/component]
-  (when (seq statements)
-    [:div.container.px-0
-     [:div.carousel-wrapper.inner-shadow-straight
-      [:p.display-6.carousel-header.discussion-primary-background
-       (labels :discussion.carousel/heading)]
-      [statement-carousel statements
-       (fn [premise]
-         (fn []
-           (rf/dispatch [:discussion.history/push premise])
-           (rf/dispatch [:discussion.statement/select premise])))]]]))
+  (let [history-count (count @(rf/subscribe [:discussion-history]))
+        shown-statements (if (> history-count 1)
+                           statements
+                           (remove #(= :argument.type/undercut (:meta/argument-type %)) statements))]
+    (when (seq shown-statements)
+      [:div.container.px-0
+       [:div.carousel-wrapper.inner-shadow-straight
+        [:p.display-6.carousel-header.discussion-primary-background
+         (labels :discussion.carousel/heading)]
+        [statement-carousel shown-statements
+         (fn [premise]
+           (fn []
+             (rf/dispatch [:discussion.history/push premise])
+             (rf/dispatch [:discussion.statement/select premise])))]]])))

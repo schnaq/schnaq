@@ -23,7 +23,7 @@
    [view/radio-button "against-radio-starting" "premise-choice" "against-radio" :discussion/add-premise-against false]
    ;; input form
    [view/input-form]])
-;; TODO undercuts bei den premises sollten nur stehen, wenn in der history auch entsprechend zwei oder mehr items sind
+
 (defn- add-premise-form
   "Either support or attack or undercut with the users own premise."
   []

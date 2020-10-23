@@ -995,7 +995,7 @@
 (>defn add-new-starting-argument!
   "Creates a new starting argument in a discussion."
   [discussion-id author-id conclusion premises]
-  [number? :db/id :statement/content (s/coll-of :statement/content) :ret associative?]
+  [number? :db/id :statement/content (s/coll-of :statement/content) :ret :db/id]
   (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
         temporary-id (:db/id new-argument)]
     (get-in (transact [new-argument
