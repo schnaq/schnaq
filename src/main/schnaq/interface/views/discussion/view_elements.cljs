@@ -289,9 +289,9 @@
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
     [:div#discussion-history.mobile-container
-     (for [[count statement] indexed-history]
+     (for [[index statement] indexed-history]
        [:div {:key (str "history-" (:db/id statement))
-              :on-click #(rf/dispatch [:discussion.history/time-travel count])}
+              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
         [statement-bubble statement]])]))
 
 (rf/reg-event-fx
