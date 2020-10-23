@@ -66,16 +66,17 @@
                           :on-success [:discussion.reaction.starting/added]
                           :on-failure [:ajax-failure]}]]})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :discussion.reaction.starting/added
-  (fn [db [_ response]]
+  (fn [{:keys [db]} [_ response]]
     (let [new-starting-argument (:new-starting-argument response)
           new-premise (-> new-starting-argument
                           :argument/premises
                           first
                           (assoc :meta/argument-type (:argument/type new-starting-argument)))]
-      (update-in db [:discussion :premises :current]
-                 conj new-premise))))
+      {:db (update-in db [:discussion :premises :current]
+                      conj new-premise)
+       :fx [[:dispatch [:notification/new-content]]]})))
 
 (defn submit-new-starting-premise
   "Takes a form input and submits a reaction to a starting conclusion."
@@ -126,16 +127,17 @@
                           :on-success [:discussion.reaction.statement/added]
                           :on-failure [:ajax-failure]}]]})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :discussion.reaction.statement/added
-  (fn [db [_ response]]
+  (fn [{:keys [db]} [_ response]]
     (let [new-argument (:new-argument response)
           new-premise (-> new-argument
                           :argument/premises
                           first
                           (assoc :meta/argument-type (:argument/type new-argument)))]
-      (update-in db [:discussion :premises :current]
-                 conj new-premise))))
+      {:db (update-in db [:discussion :premises :current]
+                      conj new-premise)
+       :fx [[:dispatch [:notification/new-content]]]})))
 
 (defn submit-new-premise
   "Submits a newly created premise as an undercut, rebut or support."

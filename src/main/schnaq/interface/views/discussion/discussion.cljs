@@ -99,8 +99,6 @@
 (defn discussion-start-view-entrypoint []
   [discussion-start-view])
 
-;; TODO erfolgreiche Added notifications wieder aktivieren
-
 (defn- present-conclusion-view
   [add-form]
   (let [current-premises @(rf/subscribe [:discussion.premises/current])
@@ -189,7 +187,7 @@
           {:fx [[:dispatch [:discussion.history/clear]]
                 [:dispatch [:navigation/navigate :routes.discussion/start {:id id :share-hash share-hash}]]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
-           :fx [[:dispatch [:navigation/navigate :routes.discussion.start/statement
+           :fx [[:dispatch [:navigation/navigate :routes.discussion.select/statement
                             {:id id :share-hash share-hash :statement-id (:db/id (last after-time-travel))}]]]})))))
 
 (rf/reg-event-fx
@@ -212,8 +210,7 @@
     {:db (-> db
              (assoc-in [:discussion :options :all] response)
              (assoc-in [:discussion :options :steps] (map first response))
-             (assoc-in [:discussion :options :args] (map second response)))
-     :fx [[:dispatch [:notification/new-content]]]}))
+             (assoc-in [:discussion :options :args] (map second response)))}))
 
 ;; This and the following events serve as the multimethod-equivalent in the frontend
 ;; for stepping through the discussion.
@@ -270,13 +267,11 @@
 
 (rf/reg-event-fx
   :notification/new-content
-  (fn [{:keys [db]} _]
-    (when (:added/new-content? db)
-      {:db (assoc db :added/new-content? false)
-       :fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :discussion.notification/new-content-title)
-                                       :body (labels :discussion.notification/new-content-body)
-                                       :context :success}]]]})))
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :discussion.notification/new-content-title)
+                                     :body (labels :discussion.notification/new-content-body)
+                                     :context :success}]]]}))
 
 (rf/reg-event-fx
   :starting-rebut/new
