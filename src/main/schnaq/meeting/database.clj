@@ -1042,26 +1042,24 @@
 (defn all-arguments-for-discussion
   "Returns all arguments belonging to a discussion, identified by discussion id."
   [discussion-id]
-  (toolbelt/pull-key-up
-    (flatten
-      (query
+  (-> (query
         '[:find (pull ?discussion-arguments argument-pattern)
           :in $ argument-pattern ?discussion-id
           :where [?discussion-arguments :argument/discussions ?discussion-id]]
-        argument-pattern discussion-id))
-    :db/ident))
+        argument-pattern discussion-id)
+      flatten
+      (toolbelt/pull-key-up :db/ident)))
 
 (defn starting-arguments-by-discussion
   "Deep-Query all starting-arguments of a certain discussion."
   [discussion-id]
-  (toolbelt/pull-key-up
-    (flatten
-      (query
+  (-> (query
         '[:find (pull ?starting-arguments argument-pattern)
           :in $ argument-pattern ?discussion-id
           :where [?discussion-id :discussion/starting-arguments ?starting-arguments]]
-        argument-pattern discussion-id))
-    :db/ident))
+        argument-pattern discussion-id)
+      flatten
+      (toolbelt/pull-key-up :db/ident)))
 
 (>defn statements-by-content
   "Returns all statements that have the matching `content`."
