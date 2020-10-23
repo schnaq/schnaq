@@ -1,10 +1,12 @@
 (ns schnaq.interface.views.base
-  (:require [schnaq.interface.text.display-data :as data :refer [labels img-path]]
+  (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.text.display-data :as data :refer [labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [oops.core :refer [oget]]
-            [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]))
+            [schnaq.interface.views.brainstorm.tools :as btools]
+            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
 
 (defn wavy-curve
   "Define a wavy curve."
@@ -161,33 +163,35 @@
 
 (defn meeting-header
   "Overview header for a meeting with its title as headline"
-  [meeting]
-  [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header
-
-   [:div.container
-    ;; schnaq logo
-    [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
-     [:img.d-inline-block.align-middle.mr-2
-      {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
-    ;; hamburger
-    [:button.navbar-toggler
-     {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
-      :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
-      :data-html2canvas-ignore true}
-     [:span.navbar-toggler-icon]]
-    ;; menu items
-    [:div {:id "schnaq-navbar"
-           :class "collapse navbar-collapse"}
-     ;; clickable title
-     [:div.mr-auto {:on-click
-                    (fn []
-                      (rf/dispatch [:navigation/navigate :routes.meeting/show
-                                    {:share-hash (:meeting/share-hash meeting)}])
-                      (rf/dispatch [:meeting/select-current meeting]))
-                    :class "clickable-no-hover"}
-      [:h3.mx-5 (:meeting/title meeting)]]
-     ;; name input
-     [username-bar-view-light]]]])
+  [{:meeting/keys [title share-hash] :as meeting}]
+  (let [admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+        edit-hash (get admin-access-map share-hash)]
+    [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header
+     [:div.container
+      ;; schnaq logo
+      [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
+       [:img.d-inline-block.align-middle.mr-2
+        {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
+      ;; hamburger
+      [:button.navbar-toggler
+       {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
+        :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
+        :data-html2canvas-ignore true}
+       [:span.navbar-toggler-icon]]
+      ;; menu items
+      [:div {:id "schnaq-navbar" :class "collapse navbar-collapse"}
+       ;; clickable title
+       [:div.mr-auto.clickable-no-hover
+        {:on-click
+         (fn []
+           (rf/dispatch [:navigation/navigate :routes.meeting/show
+                         {:share-hash share-hash}])
+           (rf/dispatch [:meeting/select-current meeting]))}
+        [:h3.mx-5 title]]
+       (when (and edit-hash (btools/is-brainstorm? meeting))
+         [admin-buttons/admin-center share-hash edit-hash])
+       ;; name input
+       [username-bar-view-light]]]]))
 
 ;; footer
 

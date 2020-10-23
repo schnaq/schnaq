@@ -17,6 +17,7 @@
             [schnaq.interface.views :as views]
             [schnaq.interface.views.agenda.agenda]
             [schnaq.interface.views.agenda.edit]
+            [schnaq.interface.views.brainstorm.create]
             [schnaq.interface.views.common]
             [schnaq.interface.views.discussion.discussion]
             [schnaq.interface.views.discussion.logic]

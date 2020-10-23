@@ -25,8 +25,8 @@
   [:section
    [:button.button-call-to-action
     {:type "button"
-     :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
-    (labels :startpage.button/create-schnaq)]])
+     :on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
+    (labels :brainstorm.buttons/start-now)]])
 
 (defn- under-construction
   []
@@ -63,8 +63,8 @@
      [:p.pt-4 (labels :startpage.early-adopter/or)]
      [:button.button-secondary
       {:type "button"
-       :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
-      (labels :startpage.button/create-schnaq)]]]
+       :on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
+      (labels :brainstorm.buttons/start-now)]]]
    [base/wavy-curve "scale(1.5,1)"]])
 
 (defn- subscribe-to-mailinglist

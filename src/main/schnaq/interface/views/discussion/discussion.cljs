@@ -1,14 +1,15 @@
 (ns schnaq.interface.views.discussion.discussion
-  (:require [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
-            [ajax.core :as ajax]
+  (:require [ajax.core :as ajax]
             [oops.core :refer [oget]]
+            [re-frame.core :as rf]
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.base :as base]
             [schnaq.interface.views.discussion.carousel :as carousel]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.discussion.view-elements :as view]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.base :as base]))
+            [vimsical.re-frame.cofx.inject :as inject]))
 
 (defn- add-starting-premises-form
   "Either support or attack a starting-conclusion with the users own premise."
@@ -58,6 +59,7 @@
     [discussion-base-page current-meeting
      [:<>
       [view/agenda-header-back-arrow
+       current-meeting
        (fn []
          (rf/dispatch [:navigation/navigate :routes.meeting/show
                        {:share-hash (:meeting/share-hash current-meeting)}])

@@ -31,6 +31,12 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
+   {:db/ident :meeting/type
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Set type of a meeting"}
+   {:db/ident :meeting.type/meeting}
+   {:db/ident :meeting.type/brainstorm}
 
    ;; Suggesting changes to a meeting
    {:db/ident :meeting.suggestion/meeting
