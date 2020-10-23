@@ -18,7 +18,7 @@
       :meeting/start-date (js/Date.)}]))
 
 (defn submit-meeting-button []
-  [:button.btn.button-primary (labels :meeting-create-header)])
+  [:button.btn.button-primary (labels :common/save)])
 
 (defn meeting-title-input
   "The input and label for a new meeting-title"

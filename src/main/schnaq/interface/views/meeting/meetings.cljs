@@ -2,7 +2,7 @@
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :as data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.meeting.create :as create-view]
             [schnaq.interface.views.pages :as pages]))
 
@@ -12,7 +12,7 @@
   "A view with a form that creates a meeting and optional agendas."
   []
   (pages/with-nav-and-header
-    {:page/heading (data/labels :meeting-create-header)}
+    {:page/heading (labels :meeting-create-header)}
     [create-view/view]))
 
 ;; #### Events ####

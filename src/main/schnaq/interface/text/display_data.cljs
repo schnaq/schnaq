@@ -6,8 +6,11 @@
   [identifier]
   (identifier
     {
+     ;; Common
+     :common/save "Speichern"
+
      ;; navbar labels
-     :nav-startpage "Home"
+     :nav/startpage "Home"
      :nav/schnaqs "Schnaqs"
      :nav.schnaqs/show-all "Alle schnaqs"
      :nav.schnaqs/create-meeting "Meeting vorbereiten"
@@ -176,8 +179,11 @@
      :footer.buttons/legal-note "Impressum"
      :footer.buttons/privacy "Datenschutz"
 
-     ;; create schnaq
-     :meeting-create-header "schnaq erstellen"
+     ;; Create schnaqs
+     :schnaqs/create "schnaq anlegen"
+
+     ;; Create meeting
+     :meeting-create-header "Meeting vorbereiten"
      :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
      :meeting-form-title "Titel"
      :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
