@@ -3,10 +3,9 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :as data :refer [labels img-path]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.brainstorm.tools :as btools]
-            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
+            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
+            [schnaq.interface.views.navbar :as navbar]))
 
 (defn wavy-curve
   "Define a wavy curve."
@@ -50,51 +49,6 @@
    [:div [:img {:src path-to-img}]]
    [:div [:span text]]])
 
-;; name entry
-
-(defn- name-input
-  "An input, where the user can set their name. Happens automatically by typing."
-  [username btn-class]
-  [:form.form-inline
-   {:on-submit (fn [e]
-                 (js-wrap/prevent-default e)
-                 (rf/dispatch [:user/set-display-name (oget e [:target :elements :name-input :value])]))}
-   [:input#name-input.form-control.form-round-05.py-1.mr-sm-2
-    {:type "text"
-     :name "name-input"
-     :autoFocus true
-     :required true
-     :defaultValue username
-     :placeholder (labels :user.button/set-name-placeholder)}]
-   [:input.btn.mt-1.mt-sm-0
-    {:class btn-class
-     :type "submit"
-     :value (labels :user.button/set-name)}]])
-
-
-(defn show-input-button
-  "A button triggering the showing of the name field."
-  [username button-class]
-  [:button.btn {:class button-class
-                :on-click #(rf/dispatch [:user/show-display-name-input])} username])
-
-(defn username-bar-view
-  "A bar containing all user related utilities and information."
-  ([]
-   (username-bar-view "btn-outline-primary"))
-
-  ([button-class]
-   (let [username @(rf/subscribe [:user/display-name])
-         show-input? @(rf/subscribe [:user/show-display-name-input?])]
-     (if show-input?
-       [name-input username button-class]
-       [show-input-button username button-class]))))
-
-(defn username-bar-view-light
-  []
-  (username-bar-view "btn-outline-light"))
-
-
 ;; discussion loop header
 
 (defn discussion-header
@@ -122,44 +76,6 @@
           :class "clickable-no-hover"})
        [:h2 title]
        [:h6 subtitle]]]]]))
-
-;; nav header
-
-(defn nav-header []
-  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
-        visited-hashes @(rf/subscribe [:meetings.visited/all-hashes])]
-    ;; collapsable navbar
-    [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
-     ;; logo
-     [:div.container
-      [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
-       [:img.d-inline-block.align-middle.mr-2
-        {:src (img-path :logo) :width "150" :alt "schnaq logo"}]]
-      ;; hamburger
-      [:button.navbar-toggler
-       {:type "button" :data-toggle "collapse" :data-target "#schnaq-navbar"
-        :aria-controls "schnaq-navbar" :aria-expanded "false" :aria-label "Toggle navigation"
-        :data-html2canvas-ignore true}
-       [:span.navbar-toggler-icon]]
-      ;; menu items
-      [:div {:id "schnaq-navbar"
-             :class "collapse navbar-collapse"}
-       [:ul.navbar-nav.mr-auto
-        ;; navigation items
-        (when-not toolbelt/production?
-          [:li.nav-item [:a.nav-link {:href (reitfe/href :routes/meetings)} (labels :nav-meeting)]])
-        [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meeting/create)} (labels :nav-meeting-create)]]
-        (when-not (empty? visited-hashes)
-          [:li.nav-item [:a.nav-link {:href (reitfe/href :routes.meetings/my-schnaqs)} (labels :router/my-schnaqs)]])
-        (when-not (nil? edit-hash)
-          [:li.nav-item
-           [:div.nav-link.clickable
-            {:on-click #(rf/dispatch [:navigation/navigate
-                                      :routes.meeting/admin-center
-                                      {:share-hash share-hash :edit-hash edit-hash}])}
-            (labels :router/meeting-created)]])]
-       ;; name input
-       [username-bar-view]]]]))
 
 (defn meeting-header
   "Overview header for a meeting with its title as headline"
@@ -191,7 +107,7 @@
        (when (and edit-hash (btools/is-brainstorm? meeting))
          [admin-buttons/admin-center share-hash edit-hash])
        ;; name input
-       [username-bar-view-light]]]]))
+       [navbar/username-bar-view-light]]]]))
 
 ;; footer
 

@@ -8,9 +8,11 @@
     {
      ;; navbar labels
      :nav-startpage "Home"
-     :nav-example "Examples"
-     :nav-meeting "Alle schnaqs"
-     :nav-meeting-create "Schnaq erstellen"
+     :nav/schnaqs "Schnaqs"
+     :nav.schnaqs/show-all "Alle schnaqs"
+     :nav.schnaqs/create-meeting "Meeting vorbereiten"
+     :nav.schnaqs/create-brainstorm "Brainstorm anlegen"
+     :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
      :nav-meeting-agenda "Agenda erzeugen"
 
      ;; Startpage
