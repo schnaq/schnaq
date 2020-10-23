@@ -16,7 +16,7 @@
    [:p (labels :schnaqs.not-found/alert-body)]
    [:div.btn.btn-outline-primary
     {:on-click #(rf/dispatch [:navigation/navigate :routes.meeting/create])}
-    (labels :nav-meeting-create)]])
+    (labels :nav.schnaqs/create-meeting)]])
 
 
 ;; -----------------------------------------------------------------------------

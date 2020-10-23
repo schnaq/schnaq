@@ -4,7 +4,8 @@
             [ghostwheel.core :refer [>defn >defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
-            [schnaq.interface.views.base :as base]))
+            [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.navbar :as navbar]))
 
 (s/def :page/heading string?)
 (s/def :page/subheading (s/? string?))
@@ -26,6 +27,6 @@
   [::page-headings (s/+ vector?) :ret vector?]
   (set-website-title! heading)
   [:<>
-   [base/nav-header]
+   [navbar/navbar]
    [base/header heading subheading more-for-heading]
    body])

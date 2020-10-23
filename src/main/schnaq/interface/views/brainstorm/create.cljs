@@ -16,7 +16,7 @@
                       (meeting-create/new-meeting-helper title nil :meeting.type/brainstorm)))}
       [:div.agenda-meeting-container.shadow-straight.p-3
        [meeting-create/meeting-title-input]]
-      [:div.pt-3
+      [:div.pt-3.text-center
        [meeting-create/submit-meeting-button]]]]))
 
 (defn create-brainstorm-view []
