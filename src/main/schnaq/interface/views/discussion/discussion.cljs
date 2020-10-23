@@ -8,8 +8,7 @@
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.discussion.carousel :as carousel]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.discussion.view-elements :as view]
-            [vimsical.re-frame.cofx.inject :as inject]))
+            [schnaq.interface.views.discussion.view-elements :as view]))
 
 (defn- add-starting-premises-form
   "Either support or attack a starting-conclusion with the users own premise."

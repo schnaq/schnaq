@@ -7,7 +7,6 @@
             [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
-            [schnaq.interface.views.base :as base]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.logic :as logic]))
@@ -32,7 +31,7 @@
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
 
-(defn agenda-header-back-arrow [on-click-back-function]
+(defn agenda-header-back-arrow [meeting on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         {:keys [meeting/share-hash]} @(rf/subscribe [:meeting/selected])]
     [:div.discussion-primary-background
