@@ -319,7 +319,6 @@
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
         [statement-bubble statement]])]))
 
-
 (rf/reg-event-fx
   :discussion/toggle-upvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
