@@ -265,18 +265,6 @@
                   (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s."
                           discussion-id meeting-hash)}))))
 
-(defn- statement-infos
-  "Returns additional information regarding a statement. Currently queries every time anew.
-  This could be made way more efficient with a cache or an optimized graph traversal for the whole
-  discussion. It is not needed yet though."
-  [req]
-  (let [discussion-id (Long/valueOf ^String (get-in req [:query-params "discussion-id"]))
-        meeting-hash (get-in req [:query-params "meeting-hash"])
-        statement-id (Long/valueOf ^String (get-in req [:query-params "statement-id"]))]
-    (if (valid-discussion-hash? meeting-hash discussion-id)
-      (ok (discussion/sub-discussion-information statement-id (dialog-db/all-arguments-for-discussion discussion-id)))
-      (bad-request {:error "The link you followed was invalid."}))))
-
 ;; -----------------------------------------------------------------------------
 ;; Votes
 
@@ -581,7 +569,6 @@
     (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/ping" [] ping)
-    (GET "/statement-infos" [] statement-infos)
     (POST "/agenda/delete" [] delete-agenda!)
     (POST "/agenda/new" [] new-agenda!)
     (POST "/agenda/update" [] update-single-agenda!)
