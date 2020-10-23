@@ -30,6 +30,8 @@
 (s/def :ring/route-params map?)
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
 
+(def ^:private invalid-rights-message "Sie haben nicht genügend Rechte, um diese Diskussion zu betrachten.")
+
 (>defn- valid-password?
   "Check if the password is a valid."
   [password]
@@ -386,7 +388,7 @@
   (let [{:keys [share-hash discussion-id]} body-params]
     (if (valid-discussion-hash? share-hash discussion-id)
       (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)})
-      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+      (deny-access invalid-rights-message))))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
@@ -397,7 +399,7 @@
             {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
              :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
             discussion-id))
-      (deny-access "Sie haben nicht genügend Rechte, um diese Diskussion zu betrachten."))))
+      (deny-access invalid-rights-message))))
 
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following premises / undercuts."
@@ -409,7 +411,7 @@
              :premises (discussion/premises-for-conclusion-id statement-id)
              :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
             discussion-id))
-      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+      (deny-access invalid-rights-message))))
 
 (defn- add-starting-argument!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
@@ -419,7 +421,7 @@
     (if (valid-discussion-hash? share-hash discussion-id)
       (do (db/add-new-starting-argument! discussion-id author-id conclusion premises)
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
-      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+      (deny-access invalid-rights-message))))
 
 (defn- react-to-starting-statement!
   "Adds a support or attack to a starting conclusion."
@@ -432,7 +434,7 @@
                            (db/support-statement! discussion-id author-id conclusion-id premise))]
         (db/set-argument-as-starting! discussion-id (:db/id new-argument))
         (ok (with-statement-meta {:new-starting-argument new-argument} discussion-id)))
-      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+      (deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
@@ -446,7 +448,7 @@
                (db/attack-statement! discussion-id author-id conclusion-id premise)
                (db/support-statement! discussion-id author-id conclusion-id premise))}
             discussion-id))
-      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+      (deny-access invalid-rights-message))))
 
 (defn- undercut-argument!
   "Adds an undercut for an argument."
@@ -457,7 +459,7 @@
       (ok (with-statement-meta
             {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)}
             discussion-id))
-      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+      (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
