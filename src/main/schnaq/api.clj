@@ -4,7 +4,6 @@
             [clojure.string :as string]
             [compojure.core :refer [GET POST routes]]
             [compojure.route :as route]
-            [dialog.discussion.database :as dialog-db]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
             [ring.middleware.cors :refer [wrap-cors]]
@@ -380,7 +379,7 @@
   [data discussion-id]
   (-> data
       processors/with-votes
-      (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
+      (processors/with-sub-discussion-information (db/all-arguments-for-discussion discussion-id))))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
@@ -546,7 +545,7 @@
         discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? share-hash discussion-id)
       (let [statements (db/all-statements-for-discussion discussion-id)
-            starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)
+            starting-arguments (db/starting-arguments-by-discussion discussion-id)
             edges (discussion/links-for-agenda statements starting-arguments discussion-id)
             controversy-vals (discussion/calculate-controversy edges)]
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)

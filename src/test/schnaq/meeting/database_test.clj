@@ -429,7 +429,9 @@
   (testing "Should return valid arguments for valid discussion."
     (let [cat-or-dog-id (:db/id (first (database/all-discussions-by-title "Cat or Dog?")))]
       (is (empty? (database/all-arguments-for-discussion -1)))
-      (is (seq (database/all-arguments-for-discussion cat-or-dog-id))))))
+      (is (seq (database/all-arguments-for-discussion cat-or-dog-id)))
+      (is (contains? #{:argument.type/undercut :argument.type/support :argument.type/attack}
+                     (:argument/type (rand-nth (database/all-arguments-for-discussion cat-or-dog-id))))))))
 
 (deftest statements-by-content-test
   (testing "Statements are identified by identical content."
@@ -458,3 +460,13 @@
           premise (:db/id (first (:argument/premises any-argument)))
           conclusion (:db/id (:argument/conclusion any-argument))]
       (is (= (:db/id any-argument) (database/argument-id-by-premise-conclusion premise conclusion))))))
+
+(deftest starting-arguments-by-discussion-test
+  (testing "Should return all starting-arguments from a discussion."
+    (let [cat-or-dog-id (:db/id (first (database/all-discussions-by-title "Cat or Dog?")))
+          simple-discussion (:db/id (first (database/all-discussions-by-title "Simple Discussion")))
+          graph-discussion (:db/id (first (database/all-discussions-by-title "Wetter Graph")))]
+      (are [result discussion] (= result (count (database/starting-arguments-by-discussion discussion)))
+                               7 cat-or-dog-id
+                               1 simple-discussion
+                               2 graph-discussion))))
