@@ -110,12 +110,14 @@
       [view/input-footer add-form]
       [carousel/carousel-element current-premises]]]))
 
-(defn selected-starting-conclusion []
+(defn selected-starting-conclusion
   "The view after a user has selected a starting-conclusion."
+  []
   [present-conclusion-view [add-starting-premises-form]])
 
-(defn selected-conclusion []
+(defn selected-conclusion
   "The view after a user has selected any conclusion."
+  []
   [present-conclusion-view [add-premise-form]])
 
 (defn- rewind-history

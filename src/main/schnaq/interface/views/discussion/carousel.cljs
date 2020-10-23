@@ -2,12 +2,11 @@
   (:require ["jquery" :as jquery]
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
+            [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.view-elements :as view]
-            [schnaq.meeting.specs :as specs]
-            [re-frame.core :as rf]
-            [reagent.dom :as rdom]))
+            [schnaq.meeting.specs :as specs]))
 
 (defn- carousel-indicators
   "Display indicators as circles at bottom"
