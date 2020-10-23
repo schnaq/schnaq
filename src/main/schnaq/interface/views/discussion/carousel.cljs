@@ -13,7 +13,7 @@
   [id# statements]
   [:ol.carousel-indicators.carousel-indicator-custom
    ;; get number of statements and set the first element as selected
-   [:li.active {:key (str "indicator-active-" (:db/id (nth statements 0)))
+   [:li.active {:key (str "indicator-active-" (:db/id (first statements)))
                 :data-target id#
                 :data-slide-to 0}]
    (for [[index statement] (map-indexed vector (rest statements))]
