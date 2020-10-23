@@ -316,7 +316,6 @@
     [:div#discussion-history.mobile-container
      (for [[count statement] indexed-history]
        [:div {:key (str "history-" (:db/id statement))
-              ;; TODO fix on-click function
               :on-click #(rf/dispatch [:discussion.history/time-travel count])}
         [statement-bubble statement]])]))
 

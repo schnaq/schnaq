@@ -187,7 +187,8 @@
           {:fx [[:dispatch [:discussion.history/clear]]
                 [:dispatch [:navigation/navigate :routes.discussion/start {:id id :share-hash share-hash}]]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
-           :fx [[:dispatch [:discussion.steps/set-current (:options (nth before-time-travel keep-n))]]]})))))
+           :fx [[:dispatch [:navigation/navigate :routes.discussion.start/statement
+                            {:id id :share-hash share-hash :statement-id (:db/id (last after-time-travel))}]]]})))))
 
 (rf/reg-event-fx
   :discussion/start
