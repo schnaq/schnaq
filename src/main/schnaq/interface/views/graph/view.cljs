@@ -7,6 +7,7 @@
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config] :as conf]
+            [schnaq.interface.text.display-data :refer [colors]]
             [schnaq.interface.views.base :as base]))
 
 (defn- wrap-line
@@ -28,12 +29,12 @@
   [sequential? :ret sequential?]
   (map
     #(let [color (case (:type %)
-                   :argument.type/starting "#4cacf4"
-                   :argument.type/support "#1292ee"
-                   :argument.type/attack "#ff772d"
-                   :argument.type/undercut "#ff772d"
-                   :agenda "#4cacf4"
-                   "#1292ee")]
+                   :argument.type/starting (colors :blue/light)
+                   :argument.type/support (colors :blue/light)
+                   :argument.type/attack (colors :orange/default)
+                   :argument.type/undercut (colors :orange/default)
+                   :agenda (colors :blue/default)
+                   (colors :blue/default))]
        (assoc % :color {:background color
                         :highlight {:background color}
                         :hover {:background color}
