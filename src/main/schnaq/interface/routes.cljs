@@ -127,7 +127,6 @@
          [""
           {:controllers [{:parameters {:path [:share-hash :id]}
                           :start (fn []
-                                   (rf/dispatch [:discussion/start])
                                    (rf/dispatch [:discussion.history/clear])
                                    (rf/dispatch [:discussion.query.conclusions/starting]))}]
            :name :routes.discussion/start

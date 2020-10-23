@@ -16,15 +16,6 @@
         vote-change (get-in vote-store [db-key (:db/id statement)] 0)]
     (+ (internal-key statement) vote-change)))
 
-
-(defn deduce-step
-  "Deduces the current discussion-loop step by the available options."
-  [options]
-  (cond
-    (some #{:starting-support/new} options) :starting-conclusions/select
-    (some #{:undercut/new} options) :select-or-react
-    :else :default))
-
 (defn index-of
   "Returns the index of the first occurrence of `elem` in `coll` if its present and
   nil if not."
