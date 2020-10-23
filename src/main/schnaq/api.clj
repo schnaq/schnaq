@@ -4,8 +4,6 @@
             [clojure.string :as string]
             [compojure.core :refer [GET POST routes]]
             [compojure.route :as route]
-            [dialog.discussion.database :as dialog-db]
-            [dialog.engine.core :as dialog]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
             [ring.middleware.cors :refer [wrap-cors]]
@@ -31,6 +29,8 @@
 (s/def :ring/body-params map?)
 (s/def :ring/route-params map?)
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
+
+(def ^:private invalid-rights-message "Sie haben nicht genügend Rechte, um diese Diskussion zu betrachten.")
 
 (>defn- valid-password?
   "Check if the password is a valid."
@@ -260,48 +260,6 @@
                   (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s."
                           discussion-id meeting-hash)}))))
 
-(defn- statement-infos
-  "Returns additional information regarding a statement. Currently queries every time anew.
-  This could be made way more efficient with a cache or an optimized graph traversal for the whole
-  discussion. It is not needed yet though."
-  [req]
-  (let [discussion-id (Long/valueOf ^String (get-in req [:query-params "discussion-id"]))
-        meeting-hash (get-in req [:query-params "meeting-hash"])
-        statement-id (Long/valueOf ^String (get-in req [:query-params "statement-id"]))]
-    (if (valid-discussion-hash? meeting-hash discussion-id)
-      (ok (discussion/sub-discussion-information statement-id (dialog-db/all-arguments-for-discussion discussion-id)))
-      (bad-request {:error "The link you followed was invalid."}))))
-
-(defn- start-discussion
-  "Start a new discussion for an agenda point."
-  [req]
-  (let [discussion-id (Long/valueOf ^String (get-in req [:route-params :discussion-id]))
-        username (get-in req [:query-params "username"])
-        meeting-hash (get-in req [:query-params "meeting-hash"])]
-    (if (valid-discussion-hash? meeting-hash discussion-id)
-      (ok (->
-            (dialog/start-discussion {:discussion/id discussion-id
-                                      :user/nickname (db/canonical-username username)})
-            processors/with-votes
-            (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
-      (bad-request {:error "The link you followed was invalid"}))))
-
-(defn- continue-discussion
-  "Dispatches the wire-received events to the dialog.core backend."
-  [{:keys [body-params]}]
-  (let [[reaction args] (processors/with-canonical-usernames
-                          (:payload body-params)
-                          (:current-nickname body-params))
-        meeting-hash (:meeting-hash body-params)
-        discussion-id (:discussion-id body-params)]
-    (if (valid-discussion-hash? meeting-hash discussion-id)
-      (ok (->
-            (dialog/continue-discussion reaction args)
-            processors/with-votes
-            (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
-      (bad-request {:error "The link you followed was invalid"}))))
-
-
 ;; -----------------------------------------------------------------------------
 ;; Votes
 
@@ -412,12 +370,17 @@
 ;; -----------------------------------------------------------------------------
 ;; Discussion
 
+(defn- with-statement-meta
+  "Returns a data structure, where all statements have been enhanced with meta-information."
+  [data discussion-id]
+  (-> data
+      processors/with-votes
+      (processors/with-sub-discussion-information (db/all-arguments-for-discussion discussion-id))))
+
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [discussion-id]
-  (-> (db/starting-conclusions-by-discussion discussion-id)
-      processors/with-votes
-      (processors/with-sub-discussion-information (dialog-db/all-arguments-for-discussion discussion-id))))
+  (with-statement-meta (db/starting-conclusions-by-discussion discussion-id) discussion-id))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -425,16 +388,30 @@
   (let [{:keys [share-hash discussion-id]} body-params]
     (if (valid-discussion-hash? share-hash discussion-id)
       (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)})
-      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+      (deny-access invalid-rights-message))))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [body-params]}]
   (let [{:keys [share-hash discussion-id selected-statement]} body-params]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:premises (discussion/premises-for-conclusion-id selected-statement)
-           :undercuts (discussion/premises-undercutting-argument-with-premise-id selected-statement)})
-      (deny-access "Sie haben ungenügende Rechte um diese Diskussion zu betrachten."))))
+      (ok (with-statement-meta
+            {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
+             :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
+            discussion-id))
+      (deny-access invalid-rights-message))))
+
+(defn- get-statement-info
+  "Return the sought after conclusion (by id) and the following premises / undercuts."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash discussion-id statement-id]} body-params]
+    (if (valid-discussion-hash? share-hash discussion-id)
+      (ok (with-statement-meta
+            {:conclusion (db/get-statement statement-id)
+             :premises (discussion/premises-for-conclusion-id statement-id)
+             :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
+            discussion-id))
+      (deny-access invalid-rights-message))))
 
 (defn- add-starting-argument!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
@@ -444,7 +421,7 @@
     (if (valid-discussion-hash? share-hash discussion-id)
       (do (db/add-new-starting-argument! discussion-id author-id conclusion premises)
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
-      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+      (deny-access invalid-rights-message))))
 
 (defn- react-to-starting-statement!
   "Adds a support or attack to a starting conclusion."
@@ -456,8 +433,8 @@
                            (db/attack-statement! discussion-id author-id conclusion-id premise)
                            (db/support-statement! discussion-id author-id conclusion-id premise))]
         (db/set-argument-as-starting! discussion-id (:db/id new-argument))
-        (ok {:new-starting-argument new-argument}))
-      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+        (ok (with-statement-meta {:new-starting-argument new-argument} discussion-id)))
+      (deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
@@ -465,11 +442,13 @@
   (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:new-argument
-           (if (= :attack reaction)
-             (db/attack-statement! discussion-id author-id conclusion-id premise)
-             (db/support-statement! discussion-id author-id conclusion-id premise))})
-      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+      (ok (with-statement-meta
+            {:new-argument
+             (if (= :attack reaction)
+               (db/attack-statement! discussion-id author-id conclusion-id premise)
+               (db/support-statement! discussion-id author-id conclusion-id premise))}
+            discussion-id))
+      (deny-access invalid-rights-message))))
 
 (defn- undercut-argument!
   "Adds an undercut for an argument."
@@ -477,8 +456,10 @@
   (let [{:keys [share-hash discussion-id selected previous-id nickname premise]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)})
-      (deny-access "Sie haben nicht genügend Rechte um ein Argument in dieser Diskussion einzutragen."))))
+      (ok (with-statement-meta
+            {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)}
+            discussion-id))
+      (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
@@ -560,7 +541,7 @@
         discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? share-hash discussion-id)
       (let [statements (db/all-statements-for-discussion discussion-id)
-            starting-arguments (dialog-db/starting-arguments-by-discussion discussion-id)
+            starting-arguments (db/starting-arguments-by-discussion discussion-id)
             edges (discussion/links-for-agenda statements starting-arguments discussion-id)
             controversy-vals (discussion/calculate-controversy edges)]
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
@@ -583,19 +564,17 @@
     (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/ping" [] ping)
-    (GET "/start-discussion/:discussion-id" [] start-discussion)
-    (GET "/statement-infos" [] statement-infos)
     (POST "/agenda/delete" [] delete-agenda!)
     (POST "/agenda/new" [] new-agenda!)
     (POST "/agenda/update" [] update-single-agenda!)
     (POST "/author/add" [] add-author)
-    (POST "/continue-discussion" [] continue-discussion)
     (POST "/credentials/validate" [] check-credentials)
+    (POST "/discussion/argument/undercut" [] undercut-argument!)
     (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
     (POST "/discussion/react-to/statement" [] react-to-any-statement!)
-    (POST "/discussion/statement/undercut" [] undercut-argument!)
+    (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)

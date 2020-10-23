@@ -1,6 +1,5 @@
 (ns schnaq.core
   (:require [clojure.spec.test.alpha :as spec-test]
-            [dialog.discussion.database :as dialog]
             [schnaq.config :as config]
             [schnaq.meeting.database :as db]))
 
@@ -11,9 +10,7 @@
 (defn -main []
   (when-not production-mode?
     (spec-test/instrument))
-  (db/init!)
-  (dialog/init! {:datomic config/datomic
-                 :name config/db-name}))
+  (db/init!))
 
 (comment
   (-main)

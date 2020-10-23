@@ -1,7 +1,6 @@
 (ns schnaq.meeting.database-test
   (:require [clojure.test :refer [deftest testing use-fixtures is are]]
-            [dialog.discussion.database :as ddb]
-            [schnaq.meeting.database :as database]
+            [schnaq.meeting.database :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.time Instant)))
 
@@ -10,162 +9,164 @@
 
 (defn- any-meeting-id
   []
-  (database/add-meeting {:meeting/title "Bla"
-                         :meeting/start-date (database/now)
-                         :meeting/end-date (database/now)
-                         :meeting/share-hash "aklsuzd98-234da-123d"
-                         :meeting/author (database/add-user-if-not-exists "Wegi")}))
+  (db/add-meeting {:meeting/title "Bla"
+                   :meeting/start-date (db/now)
+                   :meeting/end-date (db/now)
+                   :meeting/share-hash "aklsuzd98-234da-123d"
+                   :meeting/author (db/add-user-if-not-exists "Wegi")}))
 
 (deftest up-and-downvotes-test
   (testing "Tests whether setting up and downvotes works properly."
-    (let [cat-or-dog (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))
+    (let [cat-or-dog (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
           some-statements (map #(-> % :argument/premises first :db/id)
-                               (ddb/all-arguments-for-discussion cat-or-dog))
+                               (db/all-arguments-for-discussion cat-or-dog))
           author-1 "Test-1"
           author-2 "Test-2"]
-      (database/add-user-if-not-exists author-1)
-      (database/add-user-if-not-exists author-2)
-      (database/upvote-statement! (first some-statements) author-1)
-      (database/downvote-statement! (second some-statements) author-1)
-      (database/upvote-statement! (first some-statements) author-2)
-      (is (database/did-user-upvote-statement (first some-statements) author-1))
-      (is (database/did-user-downvote-statement (second some-statements) author-1))
-      (is (= 2 (database/upvotes-for-statement (first some-statements))))
-      (is (= 1 (database/downvotes-for-statement (second some-statements))))
-      (is (= 0 (database/downvotes-for-statement (first some-statements))))
+      (db/add-user-if-not-exists author-1)
+      (db/add-user-if-not-exists author-2)
+      (db/upvote-statement! (first some-statements) author-1)
+      (db/downvote-statement! (second some-statements) author-1)
+      (db/upvote-statement! (first some-statements) author-2)
+      (is (db/did-user-upvote-statement (first some-statements) author-1))
+      (is (db/did-user-downvote-statement (second some-statements) author-1))
+      (is (= 2 (db/upvotes-for-statement (first some-statements))))
+      (is (= 1 (db/downvotes-for-statement (second some-statements))))
+      (is (= 0 (db/downvotes-for-statement (first some-statements))))
       ;; No up- and downvote for the same statement by the same user!
-      (database/downvote-statement! (first some-statements) author-1)
-      (is (= 1 (database/upvotes-for-statement (first some-statements))))
-      (is (= 1 (database/downvotes-for-statement (first some-statements))))
+      (db/downvote-statement! (first some-statements) author-1)
+      (is (= 1 (db/upvotes-for-statement (first some-statements))))
+      (is (= 1 (db/downvotes-for-statement (first some-statements))))
       ;; Remove the up and downvotes now
-      (database/remove-downvote! (first some-statements) author-1)
-      (database/remove-upvote! (first some-statements) author-2)
-      (is (= 0 (database/upvotes-for-statement (first some-statements))))
-      (is (= 0 (database/downvotes-for-statement (first some-statements)))))))
+      (db/remove-downvote! (first some-statements) author-1)
+      (db/remove-upvote! (first some-statements) author-2)
+      (is (= 0 (db/upvotes-for-statement (first some-statements))))
+      (is (= 0 (db/downvotes-for-statement (first some-statements)))))))
 
 (deftest valid-statement-id-and-meeting?-test
   (testing "Test the function that checks whether a statement belongs to a certain meeting."
-    (let [meeting (database/add-meeting {:meeting/title "test-meet"
-                                         :meeting/description "whatever"
-                                         :meeting/start-date (database/now)
-                                         :meeting/end-date (database/now)
-                                         :meeting/share-hash "Wegi-ist-der-schönste"
-                                         :meeting/author (database/add-user-if-not-exists "Wegi")})
-          agenda (database/add-agenda-point "Hi" "Beschreibung" meeting)
-          discussion (:db/id (:agenda/discussion (database/agenda agenda)))
-          _ (ddb/add-new-starting-argument! discussion "Christian" "this is sparta" ["foo" "bar" "baz"])
-          argument (first (ddb/starting-arguments-by-discussion discussion))
+    (let [meeting (db/add-meeting {:meeting/title "test-meet"
+                                   :meeting/description "whatever"
+                                   :meeting/start-date (db/now)
+                                   :meeting/end-date (db/now)
+                                   :meeting/share-hash "Wegi-ist-der-schönste"
+                                   :meeting/author (db/add-user-if-not-exists "Wegi")})
+          agenda (db/add-agenda-point "Hi" "Beschreibung" meeting)
+          discussion (:db/id (:agenda/discussion (db/agenda agenda)))
+          christian-id (db/author-id-by-nickname "Christian")
+          _ (db/add-new-starting-argument! discussion christian-id "this is sparta" ["foo" "bar" "baz"])
+          argument (first (db/starting-arguments-by-discussion discussion))
           conclusion-id (:db/id (:argument/conclusion argument))
           premise-id (:db/id (first (:argument/premises argument)))]
-      (is (database/check-valid-statement-id-and-meeting conclusion-id "Wegi-ist-der-schönste"))
-      (is (database/check-valid-statement-id-and-meeting premise-id "Wegi-ist-der-schönste")))))
+      (is (db/check-valid-statement-id-and-meeting conclusion-id "Wegi-ist-der-schönste"))
+      (is (db/check-valid-statement-id-and-meeting premise-id "Wegi-ist-der-schönste")))))
 
 (deftest clean-db-vals-test
   (testing "Test whether nil values are properly cleaned from a map."
     (let [no-change-map {:foo :bar
                          :baz :bam}
-          time-map {:bar (database/now)}]
-      (is (= no-change-map (@#'database/clean-db-vals no-change-map)))
-      (is (= 2 (count (@#'database/clean-db-vals (merge no-change-map {:unwished-for nil})))))
-      (is (= {} (@#'database/clean-db-vals {})))
-      (is (= {} (@#'database/clean-db-vals {:foo ""})))
-      (is (= time-map (@#'database/clean-db-vals time-map))))))
+          time-map {:bar (db/now)}]
+      (is (= no-change-map (@#'db/clean-db-vals no-change-map)))
+      (is (= 2 (count (@#'db/clean-db-vals (merge no-change-map {:unwished-for nil})))))
+      (is (= {} (@#'db/clean-db-vals {})))
+      (is (= {} (@#'db/clean-db-vals {:foo ""})))
+      (is (= time-map (@#'db/clean-db-vals time-map))))))
 
 (deftest add-meeting-test
   (testing "Test whether meetings are properly added"
     (let [minimal-meeting {:meeting/title "Bla"
-                           :meeting/start-date (database/now)
-                           :meeting/end-date (database/now)
+                           :meeting/start-date (db/now)
+                           :meeting/end-date (db/now)
                            :meeting/share-hash "aklsuzd98-234da-123d"
-                           :meeting/author (database/add-user-if-not-exists "Wegi")}]
-      (is (number? (database/add-meeting minimal-meeting)))
-      (is (number? (database/add-meeting (assoc minimal-meeting :meeting/description "some description"))))
-      (is (nil? (database/add-meeting (assoc minimal-meeting :meeting/description 123)))))))
+                           :meeting/author (db/add-user-if-not-exists "Wegi")}]
+      (is (number? (db/add-meeting minimal-meeting)))
+      (is (number? (db/add-meeting (assoc minimal-meeting :meeting/description "some description"))))
+      (is (nil? (db/add-meeting (assoc minimal-meeting :meeting/description 123)))))))
 
 (deftest add-agenda-point-test
   (testing "Check whether agendas are added correctly"
     (let [some-meeting (any-meeting-id)]
-      (is (number? (database/add-agenda-point "Alles gut" "hier" some-meeting)))
-      (is (nil? (database/add-agenda-point 123 nil some-meeting)))
-      (is (nil? (database/add-agenda-point "Meeting-kaputt" nil "was ist das?")))
-      (is (number? (database/add-agenda-point "Kaputte description wird ignoriert" 123 some-meeting))))))
+      (is (number? (db/add-agenda-point "Alles gut" "hier" some-meeting)))
+      (is (nil? (db/add-agenda-point 123 nil some-meeting)))
+      (is (nil? (db/add-agenda-point "Meeting-kaputt" nil "was ist das?")))
+      (is (number? (db/add-agenda-point "Kaputte description wird ignoriert" 123 some-meeting))))))
 
 (deftest add-user-test
   (testing "Check for correct user-addition"
-    (is (number? (database/add-user "Gib ihm!")))
-    (is (nil? (database/add-user :nono-string)))))
+    (is (number? (db/add-user "Gib ihm!")))
+    (is (nil? (db/add-user :nono-string)))))
 
 (deftest add-feedback-test
   (testing "Valid feedbacks should be stored."
     (let [feedback {:feedback/description "Very good stuff 👍 Would use again"
                     :feedback/contact-mail "christian@dialogo.io"
                     :feedback/has-image? false}]
-      (is (zero? (count (database/all-feedbacks))))
-      (is (number? (database/add-feedback! feedback)))
-      (is (= 1 (count (database/all-feedbacks)))))))
+      (is (zero? (count (db/all-feedbacks))))
+      (is (number? (db/add-feedback! feedback)))
+      (is (= 1 (count (db/all-feedbacks)))))))
 
 (deftest add-user-if-not-exists-test
   (testing "Test the function to add a new user if they do not exist."
-    (let [new-user (database/add-user-if-not-exists "For Sure a new User that does Not exist")]
+    (let [new-user (db/add-user-if-not-exists "For Sure a new User that does Not exist")]
       (is (int? new-user))
-      (is (= new-user (database/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
+      (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
 
 (deftest user-by-nickname-test
   (testing "Tests whether the user is correctly found, disregarding case."
-    (let [wegi (database/user-by-nickname "Wegi")]
+    (let [wegi (db/user-by-nickname "Wegi")]
       (is (int? wegi))
-      (is (= wegi (database/user-by-nickname "WeGi")
-             (database/user-by-nickname "wegi")
-             (database/user-by-nickname "wegI"))))))
+      (is (= wegi (db/user-by-nickname "WeGi")
+             (db/user-by-nickname "wegi")
+             (db/user-by-nickname "wegI"))))))
 
 (deftest canonical-username-test
   (testing "Test whether the canonical username is returned."
-    (is (= "Wegi" (database/canonical-username "WEGI")
-           (database/canonical-username "WeGi")))
-    (is (= "Der Schredder" (database/canonical-username "DER schredder")))))
+    (is (= "Wegi" (db/canonical-username "WEGI")
+           (db/canonical-username "WeGi")))
+    (is (= "Der Schredder" (db/canonical-username "DER schredder")))))
 
 
 ;; Tests for the analytics part
 
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
-    (is (= 3 (database/number-of-meetings)))
+    (is (= 3 (db/number-of-meetings)))
     (any-meeting-id)                                        ;; Adds any new meeting
-    (is (= 4 (database/number-of-meetings)))
-    (is (zero? (database/number-of-meetings (Instant/now))))))
+    (is (= 4 (db/number-of-meetings)))
+    (is (zero? (db/number-of-meetings (Instant/now))))))
 
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (= 6 (database/number-of-usernames)))
-    (database/add-user-if-not-exists "Some-Testdude")
-    (is (= 7 (database/number-of-usernames)))
-    (is (zero? (database/number-of-meetings (Instant/now))))))
+    (is (= 6 (db/number-of-usernames)))
+    (db/add-user-if-not-exists "Some-Testdude")
+    (is (= 7 (db/number-of-usernames)))
+    (is (zero? (db/number-of-meetings (Instant/now))))))
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
-    (is (= 38 (database/number-of-statements)))
-    (is (zero? (database/number-of-statements (Instant/now))))))
+    (is (= 38 (db/number-of-statements)))
+    (is (zero? (db/number-of-statements (Instant/now))))))
 
 (deftest average-number-of-agendas-test
   (testing "Test whether the average number of agendas fits."
-    (is (= 4/3 (database/average-number-of-agendas)))
+    (is (= 4/3 (db/average-number-of-agendas)))
     (any-meeting-id)
-    (is (= 1 (database/average-number-of-agendas)))))
+    (is (= 1 (db/average-number-of-agendas)))))
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
-    (let [cat-or-dog-id (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))]
-      (is (= 4 (database/number-of-active-discussion-users)))
-      (database/add-user-if-not-exists "wooooggler")
-      (is (= 4 (database/number-of-active-discussion-users)))
-      (@#'database/transact
-        [(@#'ddb/prepare-new-argument cat-or-dog-id "wooooggler" "Alles doof" ["weil alles doof war"])])
-      (is (= 5 (database/number-of-active-discussion-users))))))
+    (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))]
+      (is (= 4 (db/number-of-active-discussion-users)))
+      (let [_ (db/add-user-if-not-exists "wooooggler")
+            woggler-id (db/author-id-by-nickname "wooooggler")]
+        (is (= 4 (db/number-of-active-discussion-users)))
+        (@#'db/transact
+          [(@#'db/prepare-new-argument cat-or-dog-id woggler-id "Alles doof" ["weil alles doof war"])]))
+      (is (= 5 (db/number-of-active-discussion-users))))))
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"
-    (let [stats (database/statement-length-stats)]
+    (let [stats (db/statement-length-stats)]
       (is (< (:min stats) (:max stats)))
       (is (< (:min stats) (:median stats)))
       (is (> (:max stats) (:median stats)))
@@ -174,7 +175,7 @@
 
 (deftest argument-type-stats-test
   (testing "Statistics about argument types should be working."
-    (let [stats (database/argument-type-stats)]
+    (let [stats (db/argument-type-stats)]
       (is (= 7 (:attacks stats)))
       (is (= 15 (:supports stats)))
       (is (= 9 (:undercuts stats))))))
@@ -182,61 +183,61 @@
 (deftest update-agenda-test
   (testing "Whether the new agenda is added correctly"
     (let [meeting-id (any-meeting-id)
-          meeting (database/meeting-private-data meeting-id)
-          agenda-id (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)
+          meeting (db/meeting-private-data meeting-id)
+          agenda-id (db/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)
           agenda {:db/id agenda-id
                   :agenda/title "Hallo i bims"
                   :agenda/description "Sparkasse Marketing"
                   :agenda/meeting meeting-id
-                  :agenda/discussion (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))}
-          old-agenda (first (database/agendas-by-meeting-hash (:meeting/share-hash meeting)))
-          _ (database/update-agenda agenda)
-          new-agenda (first (database/agendas-by-meeting-hash (:meeting/share-hash meeting)))]
+                  :agenda/discussion (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))}
+          old-agenda (first (db/agendas-by-meeting-hash (:meeting/share-hash meeting)))
+          _ (db/update-agenda agenda)
+          new-agenda (first (db/agendas-by-meeting-hash (:meeting/share-hash meeting)))]
       (is (= "Hallo i bims nicht" (:agenda/title old-agenda)))
       (is (= "Lolkasse Lolberg" (:agenda/description old-agenda)))
       (is (= "Hallo i bims" (:agenda/title new-agenda)))
       (is (= "Sparkasse Marketing" (:agenda/description new-agenda)))
       ;; In buggy cases the following update would throw an exception
-      (database/update-agenda (assoc agenda :agenda/description "")))))
+      (db/update-agenda (assoc agenda :agenda/description "")))))
 
 (deftest delete-agendas-test
   (testing "Agendas need to delete properly, when they belong to the authorized meeting-id."
     (let [meeting-id (any-meeting-id)
-          agenda-id (database/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)]
-      (is (= meeting-id (get-in (database/agenda agenda-id) [:agenda/meeting :db/id])))
+          agenda-id (db/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)]
+      (is (= meeting-id (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))
       (testing "Invalid delete should do nothing"
-        (database/delete-agendas [agenda-id] (inc meeting-id))
-        (is (= meeting-id (get-in (database/agenda agenda-id) [:agenda/meeting :db/id]))))
+        (db/delete-agendas [agenda-id] (inc meeting-id))
+        (is (= meeting-id (get-in (db/agenda agenda-id) [:agenda/meeting :db/id]))))
       (testing "Agenda should be gone"
-        (database/delete-agendas [agenda-id] meeting-id)
-        (is (nil? (get-in (database/agenda agenda-id) [:agenda/meeting :db/id])))))))
+        (db/delete-agendas [agenda-id] meeting-id)
+        (is (nil? (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))))))
 
 (deftest all-statements-for-discussion-test
   (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
-    (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Wetter Graph")))
-          statements (database/all-statements-for-discussion discussion-id)]
+    (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
+          statements (db/all-statements-for-discussion discussion-id)]
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
 
 (deftest suggest-meeting-updates!-test
   (testing "Create a new suggest-meeting-update entity."
-    (let [user-id (database/add-user-if-not-exists "Christian")
-          meeting-id (:db/id (database/meeting-by-hash "89eh32hoas-2983ud"))]
-      (is (nil? (database/suggest-meeting-updates! {} user-id)))
-      (is (int? (database/suggest-meeting-updates! {:db/id meeting-id
-                                                    :meeting/title "Neuer Title"
-                                                    :meeting/description "Whatup bruh"}
-                                                   user-id)))
-      (is (int? (database/suggest-meeting-updates! {:db/id meeting-id
-                                                    :meeting/title "Neuer Title"}
-                                                   user-id))))))
+    (let [user-id (db/add-user-if-not-exists "Christian")
+          meeting-id (:db/id (db/meeting-by-hash "89eh32hoas-2983ud"))]
+      (is (nil? (db/suggest-meeting-updates! {} user-id)))
+      (is (int? (db/suggest-meeting-updates! {:db/id meeting-id
+                                              :meeting/title "Neuer Title"
+                                              :meeting/description "Whatup bruh"}
+                                             user-id)))
+      (is (int? (db/suggest-meeting-updates! {:db/id meeting-id
+                                              :meeting/title "Neuer Title"}
+                                             user-id))))))
 
 (deftest suggest-agenda-updates!-test
   (testing "Create a new update-agenda suggestion entity."
-    (let [user-id (database/add-user-if-not-exists "Christian")
-          agenda-ids (map :db/id (database/agendas-by-meeting-hash "89eh32hoas-2983ud"))]
+    (let [user-id (db/add-user-if-not-exists "Christian")
+          agenda-ids (map :db/id (db/agendas-by-meeting-hash "89eh32hoas-2983ud"))]
       (are [expected input-suggestions]
-        (= expected (count (:tx-data (database/suggest-agenda-updates! input-suggestions user-id))))
+        (= expected (count (:tx-data (db/suggest-agenda-updates! input-suggestions user-id))))
         1 [{}]
         ;; We transact 5 attributes, so we expect 6 datoms (one for every attribute and one for the transaction
         7 [{:db/id (first agenda-ids)
@@ -260,10 +261,10 @@
 
 (deftest suggest-new-agendas!-test
   (testing "Create a new agenda suggestion entity."
-    (let [user-id (database/add-user-if-not-exists "Christian")
-          meeting-id (:db/id (database/meeting-by-hash "89eh32hoas-2983ud"))]
+    (let [user-id (db/add-user-if-not-exists "Christian")
+          meeting-id (:db/id (db/meeting-by-hash "89eh32hoas-2983ud"))]
       (are [total-datoms input]
-        (= total-datoms (count (:tx-data (database/suggest-new-agendas! input user-id meeting-id))))
+        (= total-datoms (count (:tx-data (db/suggest-new-agendas! input user-id meeting-id))))
         1 [{}]
         7 [{:agenda/title "Neuer Title"
             :agenda/description "Whatup bruh"
@@ -281,10 +282,10 @@
 
 (deftest suggest-agenda-deletion!-test
   (testing "Create a delete agenda suggestion entity."
-    (let [user-id (database/add-user-if-not-exists "Christian")
-          agenda-ids (map :db/id (database/agendas-by-meeting-hash "89eh32hoas-2983ud"))]
+    (let [user-id (db/add-user-if-not-exists "Christian")
+          agenda-ids (map :db/id (db/agendas-by-meeting-hash "89eh32hoas-2983ud"))]
       (are [total-datoms input]
-        (= total-datoms (count (:tx-data (database/suggest-agenda-deletion! input user-id))))
+        (= total-datoms (count (:tx-data (db/suggest-agenda-deletion! input user-id))))
         1 #{}
         7 (into #{} agenda-ids)
         ;; We transact 3 attributes, so we expect 4 datoms (one for every attribute and one for the transaction)
@@ -292,14 +293,14 @@
 
 (deftest meeting-suggestions-add-get-test
   (testing "Test the writing and reading of meeting-feedback."
-    (let [user-id (database/add-user-if-not-exists "Wegi")
+    (let [user-id (db/add-user-if-not-exists "Wegi")
           meeting-hash "89eh32hoas-2983ud"
-          meeting-id (:db/id (database/meeting-by-hash meeting-hash))
+          meeting-id (:db/id (db/meeting-by-hash meeting-hash))
           feedback "Hör mal gut zu mein Freundchen, das ist nicht gut so!"]
-      (is (= 0 (count (database/meeting-feedback-for meeting-hash))))
-      (database/add-meeting-feedback feedback meeting-id user-id)
-      (is (= 1 (count (database/meeting-feedback-for meeting-hash))))
-      (is (= feedback (:meeting.feedback/content (first (database/meeting-feedback-for meeting-hash))))))))
+      (is (= 0 (count (db/meeting-feedback-for meeting-hash))))
+      (db/add-meeting-feedback feedback meeting-id user-id)
+      (is (= 1 (count (db/meeting-feedback-for meeting-hash))))
+      (is (= feedback (:meeting.feedback/content (first (db/meeting-feedback-for meeting-hash))))))))
 
 (deftest number-of-statements-for-discussion-test
   (testing "Is the number of agendas returned correct?"
@@ -307,27 +308,27 @@
           meeting-hash-2 "graph-hash"
           cat-or-dog-discussion (:agenda/discussion
                                   (first (remove #(= (:agenda/title %) "Top 2")
-                                                 (database/agendas-by-meeting-hash meeting-hash))))
-          graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash-2)))]
-      (is (= 27 (database/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
-      (is (= 7 (database/number-of-statements-for-discussion (:db/id graph-discussion)))))))
+                                                 (db/agendas-by-meeting-hash meeting-hash))))
+          graph-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash meeting-hash-2)))]
+      (is (= 27 (db/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
+      (is (= 7 (db/number-of-statements-for-discussion (:db/id graph-discussion)))))))
 
 (deftest starting-conclusions-by-discussion-test
   (testing "Whether starting arguments are returned correctly"
     (let [meeting-hash "graph-hash"
           discussion-id
           (->> meeting-hash
-               database/agendas-by-meeting-hash
+               db/agendas-by-meeting-hash
                first
                :agenda/discussion :db/id)
-          starting-conclusions (database/starting-conclusions-by-discussion discussion-id)]
+          starting-conclusions (db/starting-conclusions-by-discussion discussion-id)]
       (is (= 2 (count starting-conclusions))))))
 
 (deftest pack-premises-test
   (testing "Test the creation of statement-entities from strings"
     (let [premises ["What a beautifull day" "Hello test"]
-          author-id (database/author-id-by-nickname "Test-person")
-          premise-entities (@#'database/pack-premises premises author-id)]
+          author-id (db/author-id-by-nickname "Test-person")
+          premise-entities (@#'db/pack-premises premises author-id)]
       (is (= [{:db/id "premise-What a beautifull day",
                :statement/author author-id,
                :statement/content (first premises),
@@ -342,14 +343,14 @@
   (testing "Test the creation of a valid argument-entity from strings"
     (let [premises ["What a beautifull day" "Hello test"]
           conclusion "Wow look at this"
-          author-id (database/author-id-by-nickname "Test-person")
+          author-id (db/author-id-by-nickname "Test-person")
           meeting-hash "graph-hash"
           discussion-id
           (->> meeting-hash
-               database/agendas-by-meeting-hash
+               db/agendas-by-meeting-hash
                first
                :agenda/discussion :db/id)
-          with-id (@#'database/prepare-new-argument discussion-id author-id conclusion premises "temp-id-here")]
+          with-id (@#'db/prepare-new-argument discussion-id author-id conclusion premises "temp-id-here")]
       (is (contains? with-id :argument/premises))
       (is (contains? with-id :argument/conclusion))
       (is (contains? with-id :argument/author))
@@ -361,100 +362,112 @@
   (testing "Test the creation of a valid argument-entity from strings"
     (let [premises ["What a beautifull day" "Hello test"]
           conclusion "Wow look at this"
-          author-id (database/author-id-by-nickname "Test-person")
+          author-id (db/author-id-by-nickname "Test-person")
           meeting-hash "graph-hash"
-          graph-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash meeting-hash)))
-          _ (database/add-new-starting-argument! (:db/id graph-discussion) author-id conclusion premises)
-          starting-conclusions (database/starting-conclusions-by-discussion (:db/id graph-discussion))]
+          graph-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash meeting-hash)))
+          _ (db/add-new-starting-argument! (:db/id graph-discussion) author-id conclusion premises)
+          starting-conclusions (db/starting-conclusions-by-discussion (:db/id graph-discussion))]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
-        (is (= 10 (database/number-of-statements-for-discussion (:db/id graph-discussion))))
+        (is (= 10 (db/number-of-statements-for-discussion (:db/id graph-discussion))))
         (is (= 3 (count starting-conclusions)))))))
 
 (deftest all-arguments-for-conclusion-test
   (testing "Get arguments, that have a certain conclusion"
-    (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
-          simple-argument (first (database/all-arguments-for-conclusion (:db/id starting-conclusion)))]
+    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
+          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (-> simple-argument :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> simple-argument :argument/conclusion :statement/content))))))
 
 (deftest statements-undercutting-premise-test
   (testing "Get arguments, that are undercutting an argument with a certain premise"
-    (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
-          simple-argument (first (database/all-arguments-for-conclusion (:db/id starting-conclusion)))
+    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
+          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
-          desired-statement (first (database/statements-undercutting-premise premise-to-undercut-id))]
+          desired-statement (first (db/statements-undercutting-premise premise-to-undercut-id))]
       (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (:statement/content desired-statement))))))
 
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
-    (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
-          author-id (database/author-id-by-nickname "Wegi")
-          starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
-          new-attack (database/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
-                                                 "This is a new attack")]
+    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
+          author-id (db/author-id-by-nickname "Wegi")
+          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          new-attack (db/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
+                                           "This is a new attack")]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/attack (:db/ident (:argument/type new-attack)))))))
+      (is (= :argument.type/attack (:argument/type new-attack))))))
 
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
-    (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
-          author-id (database/author-id-by-nickname "Wegi")
-          starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
-          new-attack (database/support-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
-                                                  "This is a new support")]
+    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
+          author-id (db/author-id-by-nickname "Wegi")
+          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          new-attack (db/support-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
+                                            "This is a new support")]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/support (:db/ident (:argument/type new-attack)))))))
+      (is (= :argument.type/support (:argument/type new-attack))))))
 
 (deftest set-argument-as-starting!-test
   (testing "Sets a new argument as a starting argument."
-    (let [simple-discussion (:agenda/discussion (first (database/agendas-by-meeting-hash "simple-hash")))
-          author-id (database/author-id-by-nickname "Wegi")
-          starting-conclusion (first (database/starting-conclusions-by-discussion (:db/id simple-discussion)))
-          new-attack (database/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
-                                                 "This is a new attack")]
-      (database/set-argument-as-starting! (:db/id simple-discussion) (:db/id new-attack))
-      (is (= 2 (count (database/all-arguments-for-conclusion (:db/id starting-conclusion))))))))
+    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
+          author-id (db/author-id-by-nickname "Wegi")
+          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          new-attack (db/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
+                                           "This is a new attack")]
+      (db/set-argument-as-starting! (:db/id simple-discussion) (:db/id new-attack))
+      (is (= 2 (count (db/all-arguments-for-conclusion (:db/id starting-conclusion))))))))
 
 (deftest all-discussions-by-title-test
   (testing "Should return discussions if title matches at least one discussion."
-    (is (empty? (database/all-discussions-by-title "")))
-    (is (empty? (database/all-discussions-by-title "👾")))
-    (is (seq (database/all-discussions-by-title "Cat or Dog?")))))
+    (is (empty? (db/all-discussions-by-title "")))
+    (is (empty? (db/all-discussions-by-title "👾")))
+    (is (seq (db/all-discussions-by-title "Cat or Dog?")))))
 
 (deftest all-arguments-for-discussion-test
   (testing "Should return valid arguments for valid discussion."
-    (let [cat-or-dog-id (:db/id (first (database/all-discussions-by-title "Cat or Dog?")))]
-      (is (empty? (database/all-arguments-for-discussion -1)))
-      (is (seq (database/all-arguments-for-discussion cat-or-dog-id))))))
+    (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))]
+      (is (empty? (db/all-arguments-for-discussion -1)))
+      (is (seq (db/all-arguments-for-discussion cat-or-dog-id)))
+      (is (contains? #{:argument.type/undercut :argument.type/support :argument.type/attack}
+                     (:argument/type (rand-nth (db/all-arguments-for-discussion cat-or-dog-id))))))))
 
 (deftest statements-by-content-test
   (testing "Statements are identified by identical content."
-    (is (= 1 (count (database/statements-by-content "dogs can act as watchdogs"))))
-    (is (= 1 (count (database/statements-by-content "we have no use for a watchdog"))))
-    (is (empty? (database/statements-by-content "foo-baar-ajshdjkahsjdkljsadklja")))))
+    (is (= 1 (count (db/statements-by-content "dogs can act as watchdogs"))))
+    (is (= 1 (count (db/statements-by-content "we have no use for a watchdog"))))
+    (is (empty? (db/statements-by-content "foo-baar-ajshdjkahsjdkljsadklja")))))
 
 (deftest argument-id-by-undercut-and-premise-test
   (testing "See whether the right argument can be identified by providing undercuts premise and
   the premise of its conclusion."
-    (let [undercut-id (:db/id (first (database/statements-by-content "we have no use for a watchdog")))
-          conclusion-premise-id (:db/id (first (database/statements-by-content "dogs can act as watchdogs")))
-          result (database/argument-id-by-undercut-and-premise undercut-id conclusion-premise-id)
-          result-conclusion-id (:db/id (:argument/conclusion (database/fast-pull result)))
-          result-con-con-id (:db/id (:argument/conclusion (database/fast-pull result-conclusion-id)))
-          result-con-con (:statement/content (database/fast-pull result-con-con-id))]
+    (let [undercut-id (:db/id (first (db/statements-by-content "we have no use for a watchdog")))
+          conclusion-premise-id (:db/id (first (db/statements-by-content "dogs can act as watchdogs")))
+          result (db/argument-id-by-undercut-and-premise undercut-id conclusion-premise-id)
+          result-conclusion-id (:db/id (:argument/conclusion (db/fast-pull result)))
+          result-con-con-id (:db/id (:argument/conclusion (db/fast-pull result-conclusion-id)))
+          result-con-con (:statement/content (db/fast-pull result-con-con-id))]
       (is (= "we should get a dog" result-con-con)))))
 
 (deftest argument-id-by-premise-conclusion-test
   (testing "See if the argument with corresponding premise and conclusion can be found"
-    (is (nil? (database/argument-id-by-premise-conclusion 123 1234)))
-    (let [cat-or-dog-id (:db/id (first (database/all-discussions-by-title "Cat or Dog?")))
+    (is (nil? (db/argument-id-by-premise-conclusion 123 1234)))
+    (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
           any-argument (first (filter
                                 #(not= :argument.type/undercut (:argument/type %))
-                                (database/all-arguments-for-discussion cat-or-dog-id)))
+                                (db/all-arguments-for-discussion cat-or-dog-id)))
           premise (:db/id (first (:argument/premises any-argument)))
           conclusion (:db/id (:argument/conclusion any-argument))]
-      (is (= (:db/id any-argument) (database/argument-id-by-premise-conclusion premise conclusion))))))
+      (is (= (:db/id any-argument) (db/argument-id-by-premise-conclusion premise conclusion))))))
+
+(deftest starting-arguments-by-discussion-test
+  (testing "Should return all starting-arguments from a discussion."
+    (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
+          simple-discussion (:db/id (first (db/all-discussions-by-title "Simple Discussion")))
+          graph-discussion (:db/id (first (db/all-discussions-by-title "Wetter Graph")))]
+      (are [result discussion] (= result (count (db/starting-arguments-by-discussion discussion)))
+                               7 cat-or-dog-id
+                               1 simple-discussion
+                               2 graph-discussion))))

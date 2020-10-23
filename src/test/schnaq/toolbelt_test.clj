@@ -1,6 +1,6 @@
 (ns schnaq.toolbelt-test
   (:require [clojure.test :refer [deftest testing are is]]
-            [dialog.test.toolbelt :as test-toolbelt]
+            [schnaq.test.toolbelt :as test-toolbelt]
             [schnaq.toolbelt :refer [pull-key-up]]))
 
 (deftest pull-key-up-test

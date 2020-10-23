@@ -2,7 +2,6 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [datomic.client.api :as d]
-            [dialog.discussion.database :as dialog]
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.config :as config]
             [schnaq.meeting.models :as models]
@@ -84,8 +83,7 @@
    (create-discussion-schema (new-connection))))
 
 (defn init-and-seed!
-  "Initializing the datomic database and feeding it with test-data for the
-  dialog.core.
+  "Initializing the datomic database and feeding it with test-data.
   If no parameters are provided, the function reads its configuration from the
   config-namespace."
   ([]
@@ -93,7 +91,6 @@
                     :name config/db-name}))
   ([config]
    (init! config)
-   (dialog/init! config)
    (transact test-data/schnaq-test-data)))
 
 
@@ -599,7 +596,7 @@
       (d/db (new-connection)) discussion-id graph-statement-pattern)))
 
 (>defn add-user-if-not-exists
-  "Adds an author if they do not exist yet. Returns the (new) user-id."
+  "Adds an author and user if they do not exist yet. Returns the (new) user-id."
   [nickname]
   [:author/nickname :ret int?]
   (if-let [user-id (user-by-nickname nickname)]
@@ -948,6 +945,12 @@
    {:discussion/states [:db/ident]}
    {:discussion/starting-arguments argument-pattern}])
 
+(>defn get-statement
+  "Returns the statement given an id."
+  [statement-id]
+  [:db/id :ret ::specs/statement]
+  (d/pull (d/db (new-connection)) statement-pattern statement-id))
+
 (>defn starting-conclusions-by-discussion
   "Query all conclusions belonging to starting-arguments of a certain discussion."
   [discussion-id]
@@ -974,14 +977,12 @@
 (>defn- prepare-new-argument
   "Prepares a new argument for transaction. Optionally sets a temporary id."
   ([discussion-id author-id conclusion premises temporary-id]
-   [number? :db/id :statement/content (s/coll-of :statement/content) :db/id
-    :ret map?]
+   [:db/id :db/id :statement/content (s/coll-of :statement/content) :db/id :ret map?]
    (merge
      (prepare-new-argument discussion-id author-id conclusion premises)
      {:db/id temporary-id}))
   ([discussion-id author-id conclusion premises]
-   [number? :db/id :statement/content (s/coll-of :statement/content)
-    :ret map?]
+   [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret map?]
    {:argument/author author-id
     :argument/premises (pack-premises premises author-id)
     :argument/conclusion {:db/id (str "conclusion-" conclusion)
@@ -995,8 +996,7 @@
 (>defn add-new-starting-argument!
   "Creates a new starting argument in a discussion."
   [discussion-id author-id conclusion premises]
-  [number? :db/id :statement/content (s/coll-of :statement/content)
-   :ret number?]
+  [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret :db/id]
   (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
         temporary-id (:db/id new-argument)]
     (get-in (transact [new-argument
@@ -1042,12 +1042,24 @@
 (defn all-arguments-for-discussion
   "Returns all arguments belonging to a discussion, identified by discussion id."
   [discussion-id]
-  (flatten
-    (query
-      '[:find (pull ?discussion-arguments argument-pattern)
-        :in $ argument-pattern ?discussion-id
-        :where [?discussion-arguments :argument/discussions ?discussion-id]]
-      argument-pattern discussion-id)))
+  (-> (query
+        '[:find (pull ?discussion-arguments argument-pattern)
+          :in $ argument-pattern ?discussion-id
+          :where [?discussion-arguments :argument/discussions ?discussion-id]]
+        argument-pattern discussion-id)
+      flatten
+      (toolbelt/pull-key-up :db/ident)))
+
+(defn starting-arguments-by-discussion
+  "Deep-Query all starting-arguments of a certain discussion."
+  [discussion-id]
+  (-> (query
+        '[:find (pull ?starting-arguments argument-pattern)
+          :in $ argument-pattern ?discussion-id
+          :where [?discussion-id :discussion/starting-arguments ?starting-arguments]]
+        argument-pattern discussion-id)
+      flatten
+      (toolbelt/pull-key-up :db/ident)))
 
 (>defn statements-by-content
   "Returns all statements that have the matching `content`."
@@ -1114,7 +1126,9 @@
         (get-in
           (new-premises-for-statement! discussion-id author-id statement-id reacting-string reaction)
           [:tempids (str "argument-" reacting-string)])]
-    (d/pull (d/db (new-connection)) argument-pattern argument-id)))
+    (toolbelt/pull-key-up
+      (d/pull (d/db (new-connection)) argument-pattern argument-id)
+      :db/ident)))
 
 (>defn attack-statement!
   "Create a new statement attacking another statement. Returns the newly created argument."
@@ -1142,7 +1156,9 @@
                           :argument/type :argument.type/undercut
                           :argument/discussions [discussion-id]}])
                       [:tempids (str "new-undercut-" discussion-id)])]
-    (d/pull (d/db (new-connection)) argument-pattern argument-id)))
+    (toolbelt/pull-key-up
+      (d/pull (d/db (new-connection)) argument-pattern argument-id)
+      :db/ident)))
 
 (>defn set-argument-as-starting!
   "Sets an existing argument as a starting-argument."

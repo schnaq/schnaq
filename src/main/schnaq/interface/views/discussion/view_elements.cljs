@@ -7,7 +7,6 @@
             [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
-            [schnaq.interface.views.base :as base]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.logic :as logic]))
@@ -31,32 +30,6 @@
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
-
-
-;; discussion header
-
-(defn discussion-header [current-meeting]
-  ;; meeting header
-  [base/discussion-header
-   (:meeting/title current-meeting)
-   (:meeting/description current-meeting)
-   (fn []
-     (rf/dispatch [:navigation/navigate :routes.meeting/show
-                   {:share-hash (:meeting/share-hash current-meeting)}])
-     (rf/dispatch [:meeting/select-current current-meeting]))])
-
-(defn discussion-header-no-subtitle [current-meeting]
-  ;; meeting header
-  [base/discussion-header
-   (:meeting/title current-meeting)
-   nil
-   (fn []
-     (rf/dispatch [:navigation/navigate :routes.meeting/show
-                   {:share-hash (:meeting/share-hash current-meeting)}])
-     (rf/dispatch [:meeting/select-current current-meeting]))])
-
-
-;; discussion loop box
 
 (defn agenda-header-back-arrow [meeting on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
@@ -89,12 +62,13 @@
                          {:id (-> agenda :agenda/discussion :db/id)
                           :share-hash share-hash}])}]])]]))
 
-(defn input-footer [allow-new? content]
-  (when allow-new?
-    [:div.discussion-primary-background
-     content]))
-
-;; text input
+(defn input-footer
+  ([content]
+   [input-footer true content])
+  ([allow-new? content]
+   (when allow-new?
+     [:div.discussion-primary-background
+      content])))
 
 (defn- input-starting-argument-form
   "A form, which allows the input of a complete argument.
@@ -163,8 +137,6 @@
    ;; add button
    [:div.text-center.button-spacing-top
     [:button.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
-
-;; selection
 
 (defn radio-button
   "Radio Button helper function. This function creates a radio button."
@@ -237,16 +209,78 @@
       [:div.up-down-vote
        [up-down-vote statement]]]]]))
 
-(defn conclusions-list [conclusions]
+(rf/reg-event-fx
+  :discussion.query.statement/by-id
+  (fn [{:keys [db]} _]
+    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/statement/info")
+                          :format (ajax/transit-request-format)
+                          :params {:statement-id statement-id
+                                   :share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.query.statement/by-id-success]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :discussion.query.statement/by-id-success
+  (fn [{:keys [db]} [_ {:keys [conclusion premises undercuts]}]]
+    {:db (->
+           (assoc-in db [:discussion :conclusions :selected] conclusion)
+           (assoc-in [:discussion :premises :current] (concat premises undercuts)))
+     :fx [[:dispatch [:discussion.history/push conclusion]]]}))
+
+(rf/reg-event-fx
+  :discussion.statement/select
+  (fn [{:keys [db]} [_ statement]]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+      {:fx [[:dispatch [:discussion.select/conclusion statement]]
+            [:dispatch [:navigation/navigate :routes.discussion.select/statement
+                        {:id id :share-hash share-hash :statement-id (:db/id statement)}]]]})))
+
+(rf/reg-event-fx
+  :discussion.select/conclusion
+  (fn [{:keys [db]} [_ conclusion]]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+      {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
+       :fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/statements/for-conclusion")
+                          :format (ajax/transit-request-format)
+                          :params {:selected-statement conclusion
+                                   :share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.premises/set-current]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-db
+  :discussion.premises/set-current
+  (fn [db [_ {:keys [premises undercuts]}]]
+    (assoc-in db [:discussion :premises :current] (concat premises undercuts))))
+
+(rf/reg-sub
+  :discussion.premises/current
+  (fn [db _]
+    (get-in db [:discussion :premises :current] [])))
+
+(rf/reg-sub
+  :discussion.conclusions/selected
+  (fn [db _]
+    (get-in db [:discussion :conclusions :selected])))
+
+(defn conclusions-list
+  "Displays a list of conclusions."
+  [conclusions]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div#conclusions-list.mobile-container
      (for [conclusion conclusions]
        [:div {:key (:db/id conclusion)
               :on-click (fn [_e]
-                          (rf/dispatch [:discussion/continue :starting-conclusions/select conclusion])
-                          (rf/dispatch [:navigation/navigate :routes.discussion/continue
-                                        {:id (:id path-params)
-                                         :share-hash (:share-hash path-params)}]))}
+                          (rf/dispatch [:discussion.select/conclusion conclusion])
+                          (rf/dispatch [:discussion.history/push conclusion])
+                          (rf/dispatch [:navigation/navigate :routes.discussion.start/statement
+                                        (assoc path-params :statement-id (:db/id conclusion))]))}
         [statement-bubble conclusion :neutral]])]))
 
 (defn history-view
@@ -255,11 +289,10 @@
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
     [:div#discussion-history.mobile-container
-     (for [[count [statement attitude]] indexed-history]
-       [:div {:key (:db/id statement)
-              :on-click #(rf/dispatch [:discussion.history/time-travel count])}
-        [statement-bubble statement attitude]])]))
-
+     (for [[index statement] indexed-history]
+       [:div {:key (str "history-" (:db/id statement))
+              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+        [statement-bubble statement]])]))
 
 (rf/reg-event-fx
   :discussion/toggle-upvote
@@ -296,7 +329,6 @@
       :switched (update-in
                   (update-in db [:votes :up id] inc)
                   [:votes :down id] dec))))
-
 
 (rf/reg-event-db
   :downvote-success

@@ -2,7 +2,6 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [clojure.test :refer [deftest testing is are use-fixtures]]
-            [dialog.discussion.database :as dialog-db]
             [schnaq.api :as api]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.specs :as specs]
@@ -109,7 +108,7 @@
   (testing "Check if share hash matches discussion id"
     (let [valid-discussion-hash? @#'api/valid-discussion-hash?
           meeting-share-hash "89eh32hoas-2983ud"
-          discussion-id (:db/id (first (dialog-db/all-discussions-by-title "Cat or Dog?")))]
+          discussion-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))]
       (is (not (valid-discussion-hash? "wugilugi" discussion-id)))
       (is (not (valid-discussion-hash? "" discussion-id)))
       (is (valid-discussion-hash? meeting-share-hash discussion-id)))))
@@ -118,7 +117,7 @@
   (testing "Check if graph data is correct"
     (let [graph-data-for-agenda @#'api/graph-data-for-agenda
           share-hash "89eh32hoas-2983ud"
-          discussion-id (:db/id (first (dialog-db/all-discussions-by-title "Cat or Dog?")))
+          discussion-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
           request {:body-params {:share-hash share-hash
                                  :discussion-id discussion-id}}
           bad-request {:body-params {:share-hash "123"
