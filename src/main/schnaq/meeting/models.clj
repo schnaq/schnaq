@@ -125,7 +125,7 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
-    :db/doc "The author of dialog.core that corresponds to this user."}
+    :db/doc "The author of a discussion that corresponds to this user."}
    {:db/ident :user/upvotes
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many

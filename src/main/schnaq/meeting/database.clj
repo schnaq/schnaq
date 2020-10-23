@@ -2,7 +2,6 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [datomic.client.api :as d]
-            [dialog.discussion.database :as dialog]
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.config :as config]
             [schnaq.meeting.models :as models]
@@ -84,8 +83,7 @@
    (create-discussion-schema (new-connection))))
 
 (defn init-and-seed!
-  "Initializing the datomic database and feeding it with test-data for the
-  dialog.core.
+  "Initializing the datomic database and feeding it with test-data.
   If no parameters are provided, the function reads its configuration from the
   config-namespace."
   ([]
@@ -93,7 +91,6 @@
                     :name config/db-name}))
   ([config]
    (init! config)
-   (dialog/init! config)
    (transact test-data/schnaq-test-data)))
 
 
@@ -593,7 +590,7 @@
       (d/db (new-connection)) discussion-id graph-statement-pattern)))
 
 (>defn add-user-if-not-exists
-  "Adds an author if they do not exist yet. Returns the (new) user-id."
+  "Adds an author and user if they do not exist yet. Returns the (new) user-id."
   [nickname]
   [:author/nickname :ret int?]
   (if-let [user-id (user-by-nickname nickname)]
@@ -974,14 +971,12 @@
 (>defn- prepare-new-argument
   "Prepares a new argument for transaction. Optionally sets a temporary id."
   ([discussion-id author-id conclusion premises temporary-id]
-   [number? :db/id :statement/content (s/coll-of :statement/content) :db/id
-    :ret map?]
+   [:db/id :db/id :statement/content (s/coll-of :statement/content) :db/id :ret map?]
    (merge
      (prepare-new-argument discussion-id author-id conclusion premises)
      {:db/id temporary-id}))
   ([discussion-id author-id conclusion premises]
-   [number? :db/id :statement/content (s/coll-of :statement/content)
-    :ret map?]
+   [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret map?]
    {:argument/author author-id
     :argument/premises (pack-premises premises author-id)
     :argument/conclusion {:db/id (str "conclusion-" conclusion)
@@ -995,7 +990,7 @@
 (>defn add-new-starting-argument!
   "Creates a new starting argument in a discussion."
   [discussion-id author-id conclusion premises]
-  [number? :db/id :statement/content (s/coll-of :statement/content) :ret :db/id]
+  [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret :db/id]
   (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
         temporary-id (:db/id new-argument)]
     (get-in (transact [new-argument

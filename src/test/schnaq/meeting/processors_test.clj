@@ -1,6 +1,6 @@
 (ns schnaq.meeting.processors-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
-            [dialog.discussion.database :as ddb]
+            [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
@@ -9,8 +9,8 @@
 
 (deftest with-votes-processor-test
   (testing "Result should have all statements enriched with votes-metadata"
-    (let [cat-or-dog (:db/id (first (ddb/all-discussions-by-title "Cat or Dog?")))
-          enriched-data (processors/with-votes (ddb/starting-arguments-by-discussion cat-or-dog))
+    (let [cat-or-dog (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
+          enriched-data (processors/with-votes (db/starting-arguments-by-discussion cat-or-dog))
           statements-only (filter #(contains? % :statement/version) enriched-data)
           upvotes-only (filter number? (map :meta/upvotes statements-only))
           downvotes-only (filter number? (map :meta/downvotes statements-only))]
@@ -18,9 +18,9 @@
 
 (deftest with-sub-discussion-information-test
   (testing "Testing enrichment with sub-discussion-information."
-    (let [discussion-id (:db/id (first (ddb/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          arguments (ddb/all-arguments-for-discussion discussion-id)
-          root-id (:db/id (:argument/conclusion (first (ddb/starting-arguments-by-discussion discussion-id))))
+    (let [discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
+          arguments (db/all-arguments-for-discussion discussion-id)
+          root-id (:db/id (:argument/conclusion (first (db/starting-arguments-by-discussion discussion-id))))
           processed-structure (processors/with-sub-discussion-information {:statement/content "foo"
                                                                            :db/id root-id} arguments)
           infos (:meta/sub-discussion-info processed-structure)
