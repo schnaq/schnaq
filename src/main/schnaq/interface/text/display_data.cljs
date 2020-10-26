@@ -471,8 +471,11 @@
      :delete-icon "fa-times-circle"
      :edit "fa-edit"
      :eraser "fa-eraser"
+     :flask "fa-flask"
+     :heart "fa-heart"
      :laptop "fa-laptop-code"
      :shield "fa-shield-alt"
+     :terminal "fa-terminal"
      :trash "fa-trash-alt"
      :users "fa-users"}))
 

@@ -1,7 +1,10 @@
 @import 'variables';
 
+$a-tags: 'a, a:active, a:hover, a:visited';
+
 footer {
   background-color: $blue-dark;
+  color: $gray-300;
   min-height: 15vh;
   padding: 2rem 0;
 
@@ -16,5 +19,10 @@ footer {
     @include media-breakpoint-down(md) {
       width: 12rem;
     }
+  }
+
+  #{$a-tags} {
+    color: $gray-300;
+    text-decoration: underline;
   }
 }

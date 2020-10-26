@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.base
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :as data :refer [labels img-path]]
+            [schnaq.interface.text.display-data :as data :refer [labels img-path fa]]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar :as navbar]))
@@ -116,13 +116,12 @@
   [:footer
    [:div.container
     [:div.row
-     [:div.col-md-4.col-12
+     [:div.col-md-6.col-12
       [:img.footer-schnaqqifant
        {:src (img-path :logo-white)}]
-      [:div.lead.text-white.font-italic.pb-1
-       (labels :startpage/heading)]
-      [:small.text-white "\u00A9 DisqTec 2020"]]
-     [:div.col-md-8.col-12.text-center.text-md-right.pt-3.pt-md-0
+      [:div.lead.font-italic.pb-1
+       (labels :startpage/heading)]]
+     [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0
       [:ul.list-inline
        [:li.list-inline-item.btn.btn-outline-white
         [:a {:href "https://disqtec.com/ueber-uns"}
@@ -132,4 +131,13 @@
          (labels :footer.buttons/legal-note)]]
        [:li.list-inline-item.btn.btn-outline-white
         [:a {:href "https://disqtec.com/datenschutz"}
-         (labels :footer.buttons/privacy)]]]]]]])
+         (labels :footer.buttons/privacy)]]]]]
+    [:p.pt-3
+     [:i {:class (str "fas " (fa :terminal))}]
+     " Entwickelt mit "
+     [:i {:class (str "m-auto fas " (fa :flask))}]
+     " in Düsseldorf, Germany. "
+     "© " [:a {:href "https://disqtec.com"
+               :target :_blank} "DisqTec"]
+     " "
+     (.getFullYear (js/Date.))]]])
