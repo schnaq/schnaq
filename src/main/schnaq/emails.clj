@@ -33,8 +33,9 @@
                                   :content content}]})
       (info "Sent mail to" recipient)
       (Thread/sleep 100)
-      (catch Exception _
+      (catch Exception exception
         (error "Failed to send mail to" recipient)
+        (error exception)
         (swap! failed-sendings conj recipient)))
     (swap! failed-sendings conj recipient)))
 

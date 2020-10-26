@@ -330,13 +330,15 @@
   "Expects a list of recipients and the meeting which shall be send."
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash recipients share-link]} body-params]
+  (let [{:keys [share-hash edit-hash recipients share-link]} body-params
+        meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
     (if (valid-credentials? share-hash edit-hash)
       (ok (merge
             {:message "Emails sent successfully"}
-            (emails/send-mails (email-templates :invitation/title)
-                               (format (email-templates :invitation/body) share-link)
-                               recipients)))
+            (emails/send-mails
+              (format (email-templates :invitation/title) meeting-title)
+              (format (email-templates :invitation/body) meeting-title share-link)
+              recipients)))
       (deny-access))))
 
 (>defn- send-admin-center-link
