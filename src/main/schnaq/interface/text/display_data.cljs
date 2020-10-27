@@ -31,10 +31,10 @@
      :startpage.value-cards/heading "Weitere Anwendungsgebiete"
      :startpage.value-cards/lead "Strukturierte Diskussionen werden in vielen Gebieten benötigt. Hier finden Sie weitere Beispiele."
      :startpage.value-cards.discussion/title "Diskussionen führen"
-     :startpage.value-cards.discussion/description "Es ist nicht einfach über das Internet miteinander zu Diskutieren ohne sich schnell verloren zu fühlen. Mit schnaq können Sie strukturierte Diskussionen führen, und dabei leicht den Überblick über die Argumente und konktroverse Themen behalten."
+     :startpage.value-cards.discussion/description "Es ist nicht einfach über das Internet miteinander zu Diskutieren, ohne sich schnell verloren zu fühlen. Mit schnaq können Sie strukturierte Diskussionen führen, und dabei leicht den Überblick über die Argumente und kontroverse Themen behalten."
      :startpage.value-cards.discussion/alt-text "Ein Symbolbild einer Sprechblase"
      :startpage.value-cards.meetings/title "Meetings optimieren"
-     :startpage.value-cards.meetings/description "Vor allem seitdem die Arbeitswelt verteilter geworden ist, hetzt man von einem (digitalen) Meeting zum anderen. Damit die Vor- und Nachbereitung nicht mehr zur Nebensache wird, gibt es schnaq. Sparen Sie Arbeitszeit und optimieren sie die Ergebnisse Ihrer Meetings."
+     :startpage.value-cards.meetings/description "Vor allem seitdem die Arbeitswelt verteilter geworden ist, hetzt man von einem (digitalen) Meeting zum anderen. Damit die Vor- und Nachbereitung nicht mehr zur Nebensache wird, gibt es schnaq. Sparen Sie Arbeitszeit und optimieren Sie die Ergebnisse Ihrer Meetings."
      :startpage.value-cards.meetings/alt-text "Menschen in einem Meeting, eine Frau redet gerade"
      :startpage.value-cards.knowledge/title "Brainstorming und Wissensgenerierung"
      :startpage.value-cards.knowledge/description "Nutzen Sie schnaq, um Ihr Team nachdenken und diskutieren zu lassen. Automatisch wird eine MindMap der Beiträge erstellt, die dann analysiert werden kann und das Ergebnis der Session darstellt. Perfekt für Brainstorming-Sitzungen!"
@@ -46,7 +46,7 @@
      :startpage.features/more-information "Mehr Informationen"
 
      :startpage.demo.request/title "Demo anfordern"
-     :startpage.demo.request/body "Möchten Sie erfahren wie Sie Ihrem Unternehmenswissen ein Langzeitgedächtnis verleihen? Wir führen Ihnen Schnaq dazu gerne persönlich vor. Nutzen Sie einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
+     :startpage.demo.request/body "Möchten Sie erfahren, wie Sie Ihrem Unternehmenswissen ein Langzeitgedächtnis verleihen? Wir führen Ihnen Schnaq dazu gerne persönlich vor. Nutzen Sie einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
      :startpage.demo.request/button "Jetzt Demo anfordern!"
      :startpage.demo.request.modal.name/label "Ihr Name"
      :startpage.demo.request.modal.name/placeholder "Mein Name"
@@ -98,7 +98,7 @@
      :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
      :features.privacy/lead "EU-Konformes Vorgehen"
      :features.privacy/title "Datenschutz ist uns wichtig!"
-     :features.privacy/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid haben, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf DSGVO-Konform zu agieren und sämtliche Daten sicher auf europäischen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+     :features.privacy/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO-Konform zu agieren und sämtliche Daten sicher auf europäischen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
 
 
      ;; calendar invitation
@@ -152,7 +152,7 @@
      :feature.knowledge.tbd/accounts "Integration in bestehende Kommunikationssysteme (bspw. Slack, MS Teams, ...)"
 
      :how-to.startpage/title "Wie benutze ich schnaq?"
-     :how-to.startpage/body "Sie möchten schnaq nutzen, sind aber unsicher wie die Bedienung funktioniert? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
+     :how-to.startpage/body "Sie möchten schnaq nutzen, sind aber unsicher, wie die Bedienung funktioniert? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
      :how-to.startpage/button "Wie schnaqqe ich?"
      :how-to/title "Wie benutze ich schnaq?"
      :how-to.why/title "Wozu dient schnaq?"
