@@ -98,7 +98,7 @@
   (let [current-premises @(rf/subscribe [:discussion.premises/current])
         current-meeting @(rf/subscribe [:meeting/selected])
         current-route @(rf/subscribe [:navigation/current-route])]
-    [discussion-base-page :current-meeting
+    [discussion-base-page current-meeting
      [:<>
       [view/agenda-header-back-arrow
        (fn []
