@@ -127,6 +127,9 @@
         [:a {:href "https://disqtec.com/ueber-uns"}
          (labels :footer.buttons/about-us)]]
        [:li.list-inline-item.btn.btn-outline-white
+        [:a {:href "https://schnaq.com/blog/"}
+         (labels :nav/blog)]]
+       [:li.list-inline-item.btn.btn-outline-white
         [:a {:href "https://disqtec.com/impressum"}
          (labels :footer.buttons/legal-note)]]
        [:li.list-inline-item.btn.btn-outline-white
