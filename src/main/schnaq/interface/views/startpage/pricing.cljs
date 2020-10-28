@@ -44,6 +44,27 @@
    [free-tier-card]
    [business-tier-card]])
 
+(defn- feature-card
+  [title description]
+  [:div.card.text-center.feature-card.shadow-sm
+   [:p.card-text.font-weight-bold title]
+   [:p description]])
+
+(defn- schnaq-features
+  "List all features that are making schnaq a good deal."
+  []
+  [:div.mt-2
+   [:h3.text-center "Schnaq Abonnement Vorteile"]
+   [:div.card-deck
+    [feature-card "Unbegrenzte Teilnehmer:innen" "Lassen Sie so viele Mitarbeiter:innen wie Sie möchten kooperieren. *"]
+    [feature-card "Unbegrenzte Teams" "Die Anzahl der Teams die Sie erstellen können ist unlimitiert. *"]
+    [feature-card "App-Integration" "Verknüpfen Sie schnaq leicht mit Ihrem Slack, MS Teams, Confluence …"]]
+   [:div.card-deck.mt-2
+    [feature-card "Automatische Analysen" "Die Beiträge werden automatisch Analysiert und für alle Teilnehmer:innen aufbereitet."]
+    [feature-card "Priority Support" "Ihre Fragen und anliegen wandern sofort an die Spitze der Liste. *"]
+    [feature-card "Interaktive Mindmap" "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."]]
+   [:p.text-sm.text-muted "* Gilt nur für Business-Abonnement"]])
+
 (defn- pricing-page
   "A full page depicting our pricing and related items."
   []
@@ -52,7 +73,8 @@
     :page/subheading "Schnaq Abonnement"}
    [:div.container
     [pricing-box]
-    [trial-box]]])
+    [trial-box]
+    [schnaq-features]]])
 
 (defn pricing-view
   "The pricing view."

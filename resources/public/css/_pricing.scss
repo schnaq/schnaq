@@ -13,3 +13,13 @@
     box-shadow: $hover-shadow;
   }
 }
+
+.feature-card {
+  background-color: rgba($secondary, 0.7);
+  border-radius: 0.5em;
+  padding: 0.5em 0;
+
+  p {
+    margin-bottom: 0;
+  }
+}
