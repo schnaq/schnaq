@@ -1,0 +1,15 @@
+@import 'variables';
+
+.trial-box {
+  background-color: $blue-dark;
+  border-radius: 1.5rem;
+  box-shadow: $regular-shadow;
+  color: $white;
+  display: inline-block;
+  max-width: 400px;
+  padding: 1em;
+
+  &:hover {
+    box-shadow: $hover-shadow;
+  }
+}

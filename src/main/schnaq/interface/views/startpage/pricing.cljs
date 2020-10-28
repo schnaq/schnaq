@@ -31,8 +31,11 @@
 
 (defn- trial-box
   []
-  [:div.trial-box
-   "Trial abschließen"])
+  [:div.d-flex.justify-content-center.py-4
+   [:div.trial-box.text-center.button-dark
+    [:p.display-6.font-weight-bold "30 Tage Business testen"]
+    [:p "Keine Kreditkarte nötig! Jederzeit kündbar."]
+    [:p.text-sm.text-muted "Verfügbar ab 01.01.2021"]]])
 
 (defn- pricing-box
   "A box displaying the different subscription tiers we offer."
@@ -47,7 +50,7 @@
   [pages/with-nav-and-header
    {:page/heading "Einmal schnaqqen, alles wissen!"
     :page/subheading "Schnaq Abonnement"}
-   [:section.container
+   [:div.container
     [pricing-box]
     [trial-box]]])
 
