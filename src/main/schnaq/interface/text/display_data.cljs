@@ -220,7 +220,10 @@
      :privacy/subheading "Wir erklären es Ihnen gerne!"
      :privacy.made-in-germany/lead "EU-Konformes Vorgehen"
      :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
-     :privacy.made-in-germany/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO-Konform zu agieren und sämtliche Daten sicher auf europäischen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+     :privacy.made-in-germany/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf deutschen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+     :privacy.personal-data/lead "Welche Daten werden erhoben?"
+     :privacy.personal-data/title "Persönliche Daten"
+     :privacy.personal-data/body [:<> [:p "Nur technisch notwendigen Daten werden erhoben. Es findet keine Auswertung über persönliche Daten statt und Ihr Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn Sie dem zustimmen. "] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Einstellungen prüfen"]]]
 
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
@@ -483,7 +486,9 @@
      :shield "fa-shield-alt"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
-     :users "fa-users"}))
+     :user/group "fa-users"
+     :user/lock "fa-user-lock"
+     :user/shield "fa-user-shield"}))
 
 (defn colors
   "Color definitions according to our css styles."

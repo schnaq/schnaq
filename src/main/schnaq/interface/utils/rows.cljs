@@ -59,3 +59,10 @@
   (row-builder-text-left
     [build-text-box text-namespace]
     [:p.display-1.text-center.text-primary icon]))
+
+(defn icon-left
+  "Build a row with text on the right side and the icon on the left side."
+  [icon text-namespace]
+  (row-builder-text-right
+    [:p.display-1.text-center.text-primary icon]
+    [build-text-box text-namespace]))

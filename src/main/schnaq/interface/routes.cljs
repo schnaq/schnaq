@@ -15,6 +15,7 @@
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.meeting.single :as meeting-single]
             [schnaq.interface.views.how-to.view :as how-to]
+            [schnaq.interface.views.privacy :as privacy]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.features :as features-views]
             [schnaq.interface.views.graph.view :as graph-view]))
@@ -52,13 +53,17 @@
    ["how-to"
     {:name :routes/how-to
      :view how-to/view
-     :link-text (labels :routes/how-to)}]
+     :link-text (labels :router/how-to)}]
    ["brainstorm"
     {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     ["/create"
      {:name :routes.brainstorm/create
       :view brainstorm-create/create-brainstorm-view
       :link-text (labels :router/create-brainstorm)}]]
+   ["privacy"
+    {:name :routes/privacy
+     :view privacy/view
+     :link-text (labels :router/privacy)}]
    ["meetings"
     {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     (when-not toolbelt/production?
