@@ -162,7 +162,7 @@
     ;; elephant edit
     [:div.col-md-6.share-link-icons
      [img-text (img-path :elephant-erase)
-      (labels :meeting.admin-center.edit.link/admin-privilges)]]]
+      (labels :meeting.admin-center.edit.link/admin-privileges)]]]
    ;; admin mail input
    (let [input-id "admin-link-mail-address"]
      [:form.form.text-left.mb-5

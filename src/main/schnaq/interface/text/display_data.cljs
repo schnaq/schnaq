@@ -97,10 +97,6 @@
      :feature.meetings.tbd/timeboxing "Timeboxing während des Meetings"
      :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
      :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
-     :features.privacy/lead "EU-Konformes Vorgehen"
-     :features.privacy/title "Datenschutz ist uns wichtig!"
-     :features.privacy/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO-Konform zu agieren und sämtliche Daten sicher auf europäischen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
-
 
      ;; calendar invitation
      :calendar-invitation/title "Termin festlegen und herunterladen"
@@ -201,7 +197,7 @@
      :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
-     :meetings/share-calendar-invite "Kalendareinladung versenden"
+     :meetings/share-calendar-invite "Kalendereinladung versenden"
      :meetings.suggestions/header "Vorschläge einreichen"
      :meetings.suggestions/subheader "Die erstellende Person kann die Vorschläge einsehen und berücksichtigen"
 
@@ -219,6 +215,13 @@
      :brainstorm/heading "Brainstorm anlegen"
      :brainstorm.buttons/start-now "Jetzt ein Brainstorming starten"
 
+     ;; Privacy Page
+     :privacy/heading "Was geschieht mit Ihren Daten?"
+     :privacy/subheading "Wir erklären es Ihnen gerne!"
+     :privacy.made-in-germany/lead "EU-Konformes Vorgehen"
+     :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
+     :privacy.made-in-germany/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO-Konform zu agieren und sämtliche Daten sicher auf europäischen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
      :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
@@ -233,7 +236,7 @@
      :meeting.admin-center.edit.link/header "Zugang zum Admin-Center"
      :meeting.admin-center.edit.link/primer "Administration ist Arbeit, lassen Sie sich helfen!"
      :meeting.admin-center.edit.link/admin "Zugang zum Admin-Center per Mail"
-     :meeting.admin-center.edit.link/admin-privilges "Editieren und Vorschläge verwalten"
+     :meeting.admin-center.edit.link/admin-privileges "Editieren und Vorschläge verwalten"
      :meeting.admin-center.edit.link.form/label "E-Mail Adresse der Administrator:innen"
      :meeting.admin-center.edit.link.form/placeholder "Eine E-Mailadresse eingeben"
      :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
@@ -245,7 +248,7 @@
      :suggestions.modal/header "Eingereichte Vorschläge"
      :suggestions.modal/primer "Einige TeilnehmerInnen haben Ihnen Vorschläge zu Ihrem schnaq gegeben."
      :suggestions.modal/primer-delete "Folgende Teilnehmer:innen schlagen die Löschung des Agendapunktes vor."
-     :suggestions.modal.delete/button "Entgültig löschen"
+     :suggestions.modal.delete/button "Endgültig löschen"
      :suggestions.modal.table/nickname "Nickname"
      :suggestions.modal.table/suggestion-title "Titel"
      :suggestions.modal.table/suggestion-description "Beschreibung"
@@ -382,24 +385,25 @@
      :graph.button/text "Zeige Diskussionsgraphen an"
 
      ;; Route Link Texts
-     :router/all-meetings "Alle schnaqs"
+     :router.features/discussion "Diskussionsfeatures"
+     :router.features/meetings "Meeting Features"
      :router/all-feedbacks "Alle Feedbacks"
-     :router/create-meeting "Schnaq anlegen"
+     :router/all-meetings "Alle schnaqs"
+     :router/analytics "Analyse-Dashboard"
+     :router/continue-discussion "Führe Besprechung fort"
      :router/create-brainstorm "Brainstorm anlegen"
+     :router/create-meeting "Schnaq anlegen"
+     :router/graph-view "Graph View"
+     :router/how-to "Wie benutze ich schnaq?"
+     :router/invalid-link "Fehlerseite"
      :router/meeting-created "Zuletzt angelegter schnaq"
      :router/my-schnaqs "Meine schnaqs"
+     :router/not-found-label "Not Found route redirect"
+     :router/privacy "Datenschutz"
      :router/show-single-meeting "Schnaq anzeigen"
      :router/start-discussion "Starte Besprechung"
-     :router/continue-discussion "Führe Besprechung fort"
      :router/startpage "Startseite"
-     :router/how-to "Wie benutze ich schnaq?"
-     :router/analytics "Analyse-Dashboard"
-     :router/invalid-link "Fehlerseite"
-     :router/true-404-view "404 Fehlerseite"
-     :router/not-found-label "Not Found route redirect"
-     :router/graph-view "Graph View"
-     :router.features/meetings "Meeting Features"
-     :router.features/discussion "Diskussionsfeatures"}))
+     :router/true-404-view "404 Fehlerseite"}))
 
 
 (defn img-path
@@ -422,6 +426,7 @@
      :icon-robot "/imgs/robot.svg"
      :logo "/imgs/Schnaq-Logo.svg"
      :logo-white "/imgs/Schnaq-Logo-White.svg"
+     :privacy/made-in-germany "/imgs/privacy/shield.jpg"
      :schnaqqifant/original "/imgs/schnaqqifant.svg"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
