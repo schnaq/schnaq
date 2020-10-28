@@ -119,5 +119,8 @@
           [:div.dropdown-divider]
           [last-added-schnaq-link share-hash edit-hash]
           [my-schnaqs-link visited-hashes]
-          [all-schnaqs-link]]]]
+          [all-schnaqs-link]]]
+        [:li.nav-item
+         [:a.nav-link {:href "/blog/" :role "button"}
+          (labels :nav/blog)]]]
        [username-bar-view]]]]))

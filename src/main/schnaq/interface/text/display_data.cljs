@@ -17,6 +17,7 @@
      :nav.schnaqs/create-brainstorm "Brainstorm anlegen"
      :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
      :nav-meeting-agenda "Agenda erzeugen"
+     :nav/blog "Artikel"
 
      ;; Startpage
      :startpage/heading "Qualifizierte Brainstormings"
