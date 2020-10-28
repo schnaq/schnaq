@@ -4,7 +4,7 @@ $a-tags: 'a, a:active, a:hover, a:visited';
 
 footer {
   background-color: $blue-dark;
-  color: $gray-300;
+  color: $gray-100;
   min-height: 15vh;
   padding: 2rem 0;
 
@@ -22,7 +22,6 @@ footer {
   }
 
   #{$a-tags} {
-    color: $gray-300;
-    text-decoration: underline;
+    color: $gray-100;
   }
 }
