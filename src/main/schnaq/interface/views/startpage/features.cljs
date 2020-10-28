@@ -1,12 +1,12 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.text.display-data :refer [labels fa img-path video]]
-            [schnaq.interface.views.common :as common]
+  (:require [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- meeting-organisation
   "Featuring meeting-organisation with an image."
   []
-  [common/feature-row-video-right
+  [rows/video-right
    :start-page.work-together/webm
    :start-page.work-together/mp4
    :startpage.features.meeting-organisation])
@@ -14,14 +14,14 @@
 (defn- structured-discussions
   "Overview of structured discussions."
   []
-  [common/feature-row-image-left
+  [rows/image-left
    :startpage.features/sample-discussion
    :startpage.features.discussion])
 
 (defn- graph-visualization
   "Feature box showcasing the graph."
   []
-  [common/feature-row-image-right
+  [rows/image-right
    :startpage.features/discussion-graph
    :startpage.features.graph])
 
@@ -31,17 +31,17 @@
   (pages/with-nav-and-header
     {:page/heading (labels :feature.meetings/lead)}
     [:div.container.py-4
-     [common/feature-row-image-right
+     [rows/image-right
       :feature.meetings/hero-image
       :feature.meetings]
      [:h3.text-center.pb-4 (labels :feature.meetings/features-subheading)]
-     [common/feature-row-image-left
+     [rows/image-left
       :feature.meetings/schedule-meetings
       :feature.meetings.schedule]
-     [common/feature-row-image-right
+     [rows/image-right
       :startpage.features/sample-discussion
       :feature.meetings.discuss]
-     [common/feature-row-image-left
+     [rows/image-left
       :startpage.features/admin-center
       :feature.meetings.admin-center]
      [:section.feature-text-box
@@ -63,17 +63,17 @@
   (pages/with-nav-and-header
     {:page/heading (labels :feature.discussions/lead)}
     [:div.container.py-4
-     [common/feature-row-image-right
+     [rows/image-right
       :feature.discussions/hero-image
       :feature.discussions]
      [:h3.text-center.pb-4 (labels :feature.discussions/features-subheading)]
-     [common/feature-row-image-left
+     [rows/image-left
       :feature.discussions/create-discussion-spaces
       :feature.discussions.spaces]
-     [common/feature-row-image-right
+     [rows/image-right
       :startpage.features/sample-discussion
       :feature.discussions.discuss]
-     [common/feature-row-image-left
+     [rows/image-left
       :startpage.features/discussion-graph
       :feature.discussions.graph]
      [:section.feature-text-box
@@ -95,17 +95,17 @@
     {:page/heading (labels :feature.knowledge/lead)
      :page/subheading (labels :feature.knowledge/subheading)}
     [:div.container.py-4
-     [common/feature-row-image-right
+     [rows/image-right
       :feature.knowledge/hero-image
       :feature.knowledge.general]
      [:h3.text-center.pb-4 (labels :feature.knowledge/features-subheading)]
-     [common/feature-row-image-left
+     [rows/image-left
       :startpage.features/sample-discussion
       :feature.knowledge.discussions]
-     [common/feature-row-image-right
+     [rows/image-right
       :feature.knowledge/overview
       :feature.knowledge.database]
-     [common/feature-row-image-left
+     [rows/image-left
       :startpage.features/discussion-graph
       :feature.knowledge.change-of-facts]
      [:section.feature-text-box
@@ -120,17 +120,6 @@
        [:li (labels :feature.knowledge.tbd/accounts)]]
       [:p (labels :feature.meetings/feedback)]]]))
 
-(defn- data-privacy
-  "A section which describes, what we do with data care."
-  []
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-5
-    [:p.display-1.text-center.text-primary [:i {:class (str "m-auto fas fa-lg " (fa :shield))}]]]
-   [:div.col-12.col-lg-6.offset-lg-1
-    [:article.feature-text-box.pb-5
-     [:p.lead.mb-1 (labels :features.privacy/lead)]
-     [:h5 (labels :features.privacy/title)]
-     [:p (labels :features.privacy/body)]]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -140,8 +129,7 @@
   [:section.pt-5
    [meeting-organisation]
    [structured-discussions]
-   [graph-visualization]
-   [data-privacy]])
+   [graph-visualization]])
 
 (defn meeting-features-view []
   [features-meeting])
