@@ -399,7 +399,8 @@
      :router/not-found-label "Not Found route redirect"
      :router/graph-view "Graph View"
      :router.features/meetings "Meeting Features"
-     :router.features/discussion "Diskussionsfeatures"}))
+     :router.features/discussion "Diskussionsfeatures"
+     :router/pricing "Preise"}))
 
 
 (defn img-path
