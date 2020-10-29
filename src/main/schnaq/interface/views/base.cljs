@@ -123,18 +123,21 @@
        (labels :startpage/heading)]]
      [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0
       [:ul.list-inline
-       [:li.list-inline-item.btn.btn-outline-white
-        [:a {:href "https://disqtec.com/ueber-uns"}
+       [:li.list-inline-item
+        [:a.btn.btn-outline-white {:href "https://disqtec.com/ueber-uns"}
          (labels :footer.buttons/about-us)]]
-       [:li.list-inline-item.btn.btn-outline-white
-        [:a {:href "https://schnaq.com/blog/"}
+       [:li.list-inline-item
+        [:a.btn.btn-outline-white
+         {:href "https://schnaq.com/blog/"}
          (labels :nav/blog)]]
-       [:li.list-inline-item.btn.btn-outline-white
-        [:a {:href "https://disqtec.com/impressum"}
+       [:li.list-inline-item
+        [:a.btn.btn-outline-white
+         {:href "https://disqtec.com/impressum"}
          (labels :footer.buttons/legal-note)]]
-       [:li.list-inline-item.btn.btn-outline-white
-        [:a {:href "https://disqtec.com/datenschutz"}
-         (labels :footer.buttons/privacy)]]]]]
+       [:li.list-inline-item
+        [:a.btn.btn-outline-white
+         {:role "button" :href (reitfe/href :routes/privacy)}
+         (labels :router/privacy)]]]]]
     [:p.pt-3
      [:i {:class (str "fas " (fa :terminal))}]
      " Entwickelt mit "
