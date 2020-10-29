@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.startpage.pricing
-  (:require [schnaq.interface.views.pages :as pages]))
+  (:require [schnaq.interface.text.display-data :refer [img-path]]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- free-tier-card
   []
@@ -22,7 +23,7 @@
     [:p.card-text "Ob 10 oder 50 Nutzer:innen - der Preis ist der gleiche.
       Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle
       die strukturiert Wissen sammeln möchten."]
-    [:p.card-text.text-center [:span.display-2 "99 €"] [:span "/ Monat"]]
+    [:p.card-text.text-center [:span.display-2 "79 €"] [:span "/ Monat"]]
     [:p.text-muted.text-center "zzgl. MwSt."]
     [:p.text-muted.text-center "Bei jährlicher Zahlweise im Voraus 15% Rabatt"]
     [:div.text-center.mt-auto
@@ -61,24 +62,48 @@
     [feature-card "App-Integration" "Verknüpfen Sie schnaq leicht mit Ihrem Slack, MS Teams, Confluence …"]]
    [:div.card-deck.mt-2
     [feature-card "Automatische Analysen" "Die Beiträge werden automatisch Analysiert und für alle Teilnehmer:innen aufbereitet."]
-    [feature-card "Priority Support" "Ihre Fragen und anliegen wandern sofort an die Spitze der Liste. *"]
+    [feature-card "Wissensdatenbank" "Sammeln Sie erarbeitetes Wissen und Ideen an einem Ort."]
     [feature-card "Interaktive Mindmap" "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."]]
    [:p.text-sm.text-muted "* Gilt nur für Business-Abonnement"]])
 
+;; TODO bei kleineren devices andere rows
 (defn- comparison
   "Show that we are cheaper than user-based alternatives. Also drop important search keyword
   'schnaq vergleich <some competitors>'"
   []
   [:div.py-5
-   "Attlassian, Forum-Software, Miro"
-   [:h1.text-center "Wir wachsen mit Ihnen. Sie sparen mehr!"]
+   [:h1.text-center.pb-1 "Sie wachsen weiter - Sie sparen mehr!"]
    [:div.row
     [:div.col-5.ml-auto.comparison-box.shadow-sm
      [:div.row.pt-3
-      [:div.col-3 "Logo"]
-      [:div.col-9 "schnaq 99€ yadda yadda"]]]
+      [:div.col-3
+       [:img.img-fluid.pricing-logo {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
+      [:div.col-9
+       [:h3 "schnaq"]
+       [:p.display-6 "79 € pro Monat für ihr Unternehmen"]]]]
     [:div.col-2.ml-auto.text-center "Vs."]
-    [:div.col-5.ml-auto.comparison-box.shadow-sm "andere dude aufgeteilt"]]])
+    [:div.col-5.ml-auto.shadow-sm
+     [:div.row.pt-3.comparison-box
+      [:div.col-3
+       [:img.img-fluid.pricing-logo {:src (img-path :pricing.others/miro) :alt "miro logo"}]]
+      [:div.col-9
+       [:h3 "Miro"]
+       [:p [:span.display-6 "6,80 € pro Monat pro Nutzer:in"] [:br]
+        "Brainstorming Software"]]]
+     [:div.row.pt-3.mt-3.comparison-box
+      [:div.col-3
+       [:img.img-fluid.pricing-logo {:src (img-path :pricing.others/loomio) :alt "loomio logo"}]]
+      [:div.col-9
+       [:h3 "Loomio"]
+       [:p [:span.display-6 "2,60 € pro Monat pro Nutzer:in"] [:br]
+        "Kooperative Entscheidungsfindung"]]]
+     [:div.row.pt-3.mt-3.comparison-box
+      [:div.col-3
+       [:img.img-fluid.pricing-logo {:src (img-path :pricing.others/confluence) :alt "confluence logo"}]]
+      [:div.col-9
+       [:h3 "Confluence"]
+       [:p [:span.display-6 "4,30 € pro Monat pro Nutzer:in"] [:br]
+        "Wissensablage"]]]]]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
