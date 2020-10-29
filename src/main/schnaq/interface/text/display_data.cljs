@@ -398,6 +398,87 @@
      :graph/heading "Diskussionsübersicht"
      :graph.button/text "Zeige Diskussionsgraphen an"
 
+     ;; Pricing Page
+     :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der
+     perfekte Einstieg in strukturierte Wissensgenerierung."
+     :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu 5 Nutzer:innen pro Team"
+     :pricing.free-tier/call-to-action "Kostenfrei loslegen"
+     :pricing.business-tier/description "Ob 10 oder 50 Nutzer:innen – der Preis ist der gleiche.
+      Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle,
+      die strukturiert Wissen sammeln möchten."
+     :pricing.units/per-month "/ Monat"
+     :pricing.notes/with-vat "zzgl. MwSt."
+     :pricing.notes/yearly-rebate "Bei jährlicher Zahlweise im Voraus 15% Rabatt"
+     :pricing.business-tier/call-to-action "Verfügbar ab 01.01.2021"
+     :pricing.trial/call-to-action "30 Tage Business testen"
+     :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
+     :pricing.trial.temporary/deactivation "Verfügbar ab 01.01.2021"
+     :pricing.features/heading "Schnaq-Abonnement Vorteile"
+     :pricing.features.user-numbers/heading "Unbegrenzte Teilnehmer:innen"
+     :pricing.features.user-numbers/content "Lassen Sie so viele Mitarbeiter:innen, wie Sie möchten, kooperieren. *"
+     :pricing.features.team-numbers/heading "Unbegrenzte Teams"
+     :pricing.features.team-numbers/content "Die Anzahl der Teams, die Sie erstellen können, ist unlimitiert. *"
+     :pricing.features.app-integration/heading "App-Integration"
+     :pricing.features.app-integration/content "Verknüpfen Sie schnaq leicht mit Ihrem Slack, MS Teams, Confluence …"
+     :pricing.features.analysis/heading "Automatische Analysen"
+     :pricing.features.analysis/content "Die Beiträge werden automatisch analysiert und für alle Teilnehmer:innen aufbereitet."
+     :pricing.features.knowledge-db/heading "Wissensdatenbank"
+     :pricing.features.knowledge-db/content "Sammeln Sie erarbeitetes Wissen und Ideen an einem Ort."
+     :pricing.features.mindmap/heading "Interaktive Mindmap"
+     :pricing.features.mindmap/content "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."
+     :pricing.features/disclaimer "* Gilt nur für Business-Abonnement"
+     :pricing.competitors/per-month-per-user " € pro Monat pro Nutzer:in"
+     :pricing.comparison/heading "Sie wachsen weiter – Sie sparen mehr!"
+     :pricing.comparison/subheading "Egal wie groß Ihr Team wird, der Preis bleibt der Gleiche.
+   So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."
+     :pricing.comparison.schnaq/price-point "79 € pro Monat für Ihr Unternehmen"
+     :pricing.comparison.schnaq/brainstorm "Brainstorming"
+     :pricing.comparison.schnaq/decision-making "Entscheidungsfindung"
+     :pricing.comparison.schnaq/knowledge-db "Wissensdatenbank"
+     :pricing.comparison.schnaq/async "Asynchrone Kommunikation"
+     :pricing.comparison.schnaq/mindmap "Mindmapping"
+     :pricing.comparison.schnaq/analysis "Ergebnisanalyse"
+     :pricing.comparison.schnaq/flatrate " Flatrate im Monat"
+     :pricing.comparison.schnaq/person-20 "79 € für 20 Personen"
+     :pricing.comparison.schnaq/person-50 "79 € für 50 Personen"
+     :pricing.comparison.schnaq/person-100 "79 € für 100 Personen …"
+     :pricing.comparison/compared-to [:span "Verglichen" [:br] "mit"]
+     :pricing.comparison.miro/description "Brainstorming Software"
+     :pricing.comparison.loomio/description "Kooperative Entscheidungsfindung"
+     :pricing.comparison.confluence/description "Wissensdatenbank"
+     :pricing.comparison.competitor/person-10 " im Monat für 10 Personen"
+     :pricing.comparison.competitor/person-20 "247 € für 20 Personen"
+     :pricing.comparison.competitor/person-50 "685 € für 50 Personen"
+     :pricing.comparison.competitor/person-100 "1370 € für 100 Personen …"
+     :pricing.faq/heading "Häufig gestellte Fragen zu schnaq Abos"
+     :pricing.faq.terminate/heading "Kann ich jederzeit kündigen?"
+     :pricing.faq.terminate/body
+     [:<> [:span.text-primary "Ja! "] "Sie können" [:span.text-primary " jeden Monat"] " kündigen,
+     wenn Sie die monatliche Zahlweise gewählt haben. Wenn Sie die jährliche Zahlweise
+     wählen, können Sie zum Ablauf des Abonnementjahres kündigen."]
+     :pricing.faq.extra-price/heading "Muss ich für mehr Leute extra bezahlen?"
+     :pricing.faq.extra-price/body
+     [:<> [:span.text-primary "Nein, "] "Sie können" [:span.text-primary " beliebig viele Personen "]
+      " zu Ihrer Organisation hinzufügen. Jedes Unternehmen, Verein,
+      Bildungseinrichtung, usw. braucht " [:span.text-primary "nur ein Abonnement."]]
+     :pricing.faq.trial-time/heading "Verlängert sich der Testzeitraum automatisch?"
+     :pricing.faq.trial-time/body
+     [:<> [:span.text-primary "Nein, "] "wenn ihr Testzeitraum endet, können Sie" [:span.text-primary " aktiv entscheiden"]
+      ", ob Sie Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchten.
+      Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] ", auch nach dem Testzeitraum."]
+     :pricing.faq.longer-trial/heading "Kann ich den Business-Tarif länger testen?"
+     :pricing.faq.longer-trial/body
+     [:<> [:span.text-primary "Ja! "] "Schreiben Sie uns einfach eine " [:span.text-primary " E-Mail"] " an "
+      [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
+     :pricing.faq.privacy/heading "Wer hat Zugriff auf meine Daten?"
+     :pricing.faq.privacy/body-1
+     [:<> "Jede Person, die Sie Ihrem Unternehmen hinzufügen, kann potentiell auf die hinterlegten Daten zugreifen."
+      "Technisch werden Ihre Daten vollständig sicher auf"
+      [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
+     :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
+     :pricing.faq.privacy/body-3 " finden Sie mehr Informationen"
+     :pricing/headline "Schnaq Abonnement"
+
      ;; Route Link Texts
      :router.features/discussion "Diskussionsfeatures"
      :router.features/meetings "Meeting Features"
@@ -417,7 +498,15 @@
      :router/show-single-meeting "Schnaq anzeigen"
      :router/start-discussion "Starte Besprechung"
      :router/startpage "Startseite"
-     :router/true-404-view "404 Fehlerseite"}))
+     :router/how-to "Wie benutze ich schnaq?"
+     :router/analytics "Analyse-Dashboard"
+     :router/invalid-link "Fehlerseite"
+     :router/true-404-view "404 Fehlerseite"
+     :router/not-found-label "Not Found route redirect"
+     :router/graph-view "Graph View"
+     :router.features/meetings "Meeting Features"
+     :router.features/discussion "Diskussionsfeatures"
+     :router/pricing "Preise"}))
 
 
 (defn img-path
@@ -449,6 +538,9 @@
      :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
      :startpage.value-cards.meetings/image "/imgs/stock/meeting.jpeg"
      :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
+     :pricing.others/miro "imgs/startpage/pricing/miro.png"
+     :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
+     :pricing.others/confluence "imgs/startpage/pricing/confluence.jpeg"
      :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
      :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
      :feature.discussions/hero-image "/imgs/stock/discussion_landing_hero.jpeg"
@@ -490,6 +582,7 @@
      :cookie/complete "fa-cookie"
      :copy "fa-copy"
      :check "fa-check-square"
+     :check-double "fa-check-double"
      :delete-icon "fa-times-circle"
      :edit "fa-edit"
      :eraser "fa-eraser"

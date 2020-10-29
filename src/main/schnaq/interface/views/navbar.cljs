@@ -125,6 +125,9 @@
           [:div.dropdown-divider]
           [last-added-schnaq-link share-hash edit-hash]
           [my-schnaqs-link visited-hashes]
-          [all-schnaqs-link]]]]
+          [all-schnaqs-link]]]
+        [:li.nav-item
+         [:a.nav-link {:role "button" :href (reitfe/href :routes/pricing)}
+          (labels :router/pricing)]]]
        [blog-link]
        [username-bar-view]]]]))

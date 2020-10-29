@@ -242,23 +242,23 @@
     [header-animation]]})
 
 (defn- startpage-content []
-  (pages/with-nav-and-header
-    header
-    [:<>
-     [:section.container
-      [:div.row {:style {:padding "5rem 0"}}
-       [:div.col-12.col-lg-6.pb-3.pb-lg-0
-        [under-construction]]
-       [:div.col-12.col-lg-6.text-center
-        [start-schnaq-button]]]
-      [request-demo-section]
-      [usage-of-schnaq-heading]
-      [startpage-features/feature-rows]
-      [how-to-section]]
-     [early-adopters]
-     [:section.container.py-5
-      [value-prop-cards]]
-     [subscribe-to-mailinglist]]))
+  [pages/with-nav-and-header
+   header
+   [:<>
+    [:section.container
+     [:div.row {:style {:padding "5rem 0"}}
+      [:div.col-12.col-lg-6.pb-3.pb-lg-0
+       [under-construction]]
+      [:div.col-12.col-lg-6.text-center
+       [start-schnaq-button]]]
+     [request-demo-section]
+     [usage-of-schnaq-heading]
+     [startpage-features/feature-rows]
+     [how-to-section]]
+    [early-adopters]
+    [:section.container.py-5
+     [value-prop-cards]]
+    [subscribe-to-mailinglist]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

@@ -18,6 +18,7 @@
             [schnaq.interface.views.privacy :as privacy]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.features :as features-views]
+            [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.graph.view :as graph-view]))
 
 ;; It is important to note, that we navigate by not calling /meetings for example,
@@ -50,6 +51,10 @@
      {:name :routes.features/knowledge
       :view features-views/knowledge-features-view
       :link-text (labels :router.features/discussion)}]]
+   ["pricing"
+    {:name :routes/pricing
+     :view pricing-view/pricing-view
+     :link-text (labels :router/pricing)}]
    ["how-to"
     {:name :routes/how-to
      :view how-to/view
