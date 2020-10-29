@@ -230,9 +230,11 @@
                                  [:p "Im Unterschied zu herkömmlichen Cookies verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von Ihnen an uns zurückschickt. Schauen Sie selbst, welche Daten das genau sind, indem Sie auf den Button klicken."]]
      :privacy.localstorage/show-data "Ihre Daten anzeigen"
      :privacy.localstorage.notification/title "Diese Daten hat Ihr Browser gespeichert"
-     :privacy.localstorage.notification/body "\"Kryptische\" Zeichenketten sind die Zugangscodes zu Ihren schnaqs."
+     :privacy.localstorage.notification/body "Hinweis: \"Kryptische\" Zeichenketten sind die Zugangscodes zu Ihren schnaqs."
      :privacy.localstorage.notification/confirmation "Wollen Sie Ihre Daten wirklich löschen?"
      :privacy.localstorage.notification/delete-button "Daten löschen"
+     :privacy.link-to-privacy/lead "Mehr Informationen finden Sie in unserer ausführlichen "
+     :privacy.link-to-privacy/privacy "Datenschutzerklärung"
 
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."

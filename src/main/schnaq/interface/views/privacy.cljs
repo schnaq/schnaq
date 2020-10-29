@@ -2,21 +2,12 @@
   "Page explaining our privacy and how we are storing data."
   (:require ["jquery" :as jquery]
             [cljs.pprint :refer [pprint]]
+            [goog.string :as gstring]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]))
-
-(defn- dsgvo-row []
-  [rows/icon-right
-   [:i {:class (str "m-auto fas fa-lg " (fa :shield))}]
-   :privacy.made-in-germany])
-
-(defn- personal-data-row []
-  [rows/icon-left
-   [:i {:class (str "m-auto fas fa-lg " (fa :user/lock))}]
-   :privacy.personal-data])
 
 (defn- localstorage-explanation []
   (notify!
@@ -33,6 +24,16 @@
     :info
     true))
 
+(defn- dsgvo-row []
+  [rows/icon-right
+   [:i {:class (str "m-auto fas fa-lg " (fa :shield))}]
+   :privacy.made-in-germany])
+
+(defn- personal-data-row []
+  [rows/icon-left
+   [:i {:class (str "m-auto fas fa-lg " (fa :user/lock))}]
+   :privacy.personal-data])
+
 (defn- localstorage-row
   "Explaining localstorage."
   []
@@ -45,6 +46,14 @@
             (labels :privacy.localstorage/show-data)]]]
     :privacy.localstorage]])
 
+(defn- link-to-privacy []
+  [:section.text-center.pb-5
+   [:p.lead
+    (gstring/format "%s " (labels :privacy.link-to-privacy/lead))
+    [:a {:href "https://disqtec.com/datenschutz"}
+     (labels :privacy.link-to-privacy/privacy)]
+    "."]])
+
 (defn- page []
   (pages/with-nav-and-header
     {:page/heading (labels :privacy/heading)
@@ -52,7 +61,8 @@
     [:section.container
      [dsgvo-row]
      [personal-data-row]
-     [localstorage-row]]))
+     [localstorage-row]
+     [link-to-privacy]]))
 
 
 ;; -----------------------------------------------------------------------------
