@@ -128,6 +128,9 @@
           [all-schnaqs-link]]]
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/pricing)}
-          (labels :router/pricing)]]]
+          (labels :router/pricing)]]
+        [:li.nav-item
+         [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
+          (labels :router/privacy)]]]
        [blog-link]
        [username-bar-view]]]]))
