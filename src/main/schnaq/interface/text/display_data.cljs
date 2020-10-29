@@ -223,7 +223,16 @@
      :privacy.made-in-germany/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf deutschen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
      :privacy.personal-data/lead "Welche Daten werden erhoben?"
      :privacy.personal-data/title "Persönliche Daten"
-     :privacy.personal-data/body [:<> [:p "Nur technisch notwendigen Daten werden erhoben. Es findet keine Auswertung über persönliche Daten statt und Ihr Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn Sie dem zustimmen. "] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Einstellungen prüfen"]]]
+     :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und Ihr Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn Sie dem zustimmen. "] [:p "Wenn Sie uns unterstützen wollen und der anonymisierten Analyse zustimmen, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Einstellungen prüfen"]]]
+     :privacy.localstorage/lead "Welche Daten schicke ich an die Server?"
+     :privacy.localstorage/title "Datenaustausch"
+     :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten zu Ihnen auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicken Sie auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in Ihrem Browser (im LocalStorage) abgespeichert. Besuchen Sie dann schnaq erneut, schickt Ihr Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ können Sie sich die Zugangslinks per E-Mail schicken lassen und halten so alle für den Betrieb notwendigen Daten selbst in der Hand."]
+                                 [:p "Im Unterschied zu herkömmlichen Cookies verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von Ihnen an uns zurückschickt. Schauen Sie selbst, welche Daten das genau sind, indem Sie auf den Button klicken."]]
+     :privacy.localstorage/show-data "Ihre Daten anzeigen"
+     :privacy.localstorage.notification/title "Diese Daten hat Ihr Browser gespeichert"
+     :privacy.localstorage.notification/body "\"Kryptische\" Zeichenketten sind die Zugangscodes zu Ihren schnaqs."
+     :privacy.localstorage.notification/confirmation "Wollen Sie Ihre Daten wirklich löschen?"
+     :privacy.localstorage.notification/delete-button "Daten löschen"
 
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
@@ -475,6 +484,8 @@
      :cog "fa-cogs"
      :comment "fa-comments"
      :comment-alt "fa-comment-alt"
+     :cookie/bite "fa-cookie-bite"
+     :cookie/complete "fa-cookie"
      :copy "fa-copy"
      :check "fa-check-square"
      :delete-icon "fa-times-circle"
