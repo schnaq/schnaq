@@ -10,7 +10,7 @@
     [:article.feature-text-box.pb-5
      [:p.lead.mb-1 (labels (prepend-namespace :lead))]
      [:h5 (labels (prepend-namespace :title))]
-     [:p (labels (prepend-namespace :body))]]))
+     [:section (labels (prepend-namespace :body))]]))
 
 (defn- row-builder-text-right
   "Generic builder to align text and asset. Here, text is on the right
@@ -58,11 +58,11 @@
   [icon text-namespace]
   (row-builder-text-left
     [build-text-box text-namespace]
-    [:p.display-1.text-center.text-primary icon]))
+    [:div.display-1.text-center.text-primary icon]))
 
 (defn icon-left
   "Build a row with text on the right side and the icon on the left side."
   [icon text-namespace]
   (row-builder-text-right
-    [:p.display-1.text-center.text-primary icon]
+    [:div.display-1.text-center.text-primary icon]
     [build-text-box text-namespace]))
