@@ -433,7 +433,7 @@
      :pricing.comparison.competitor/person-20 "247 € für 20 Personen"
      :pricing.comparison.competitor/person-50 "685 € für 50 Personen"
      :pricing.comparison.competitor/person-100 "1370 € für 100 Personen …"
-     :pricing.faq/heading "Häufig Gestellte Fragen zu schnaq Abos"
+     :pricing.faq/heading "Häufig gestellte Fragen zu schnaq Abos"
      :pricing.faq.terminate/heading "Kann ich jederzeit kündigen?"
      :pricing.faq.terminate/body
      [:span [:span.text-primary "Ja! "] "Sie können" [:span.text-primary " jeden Monat"] " kündigen,
@@ -444,11 +444,11 @@
      [:span [:span.text-primary "Nein, "] "Sie können" [:span.text-primary " beliebig viele Personen "]
       " zu Ihrer Organisation hinzufügen. Jedes Unternehmen, Verein,
       Bildungseinrichtung, usw. braucht " [:span.text-primary "nur ein Abonnement."]]
-     :pricing.faq.trial-time/heading "Verlängert sich der Test-Zeitraum automatisch?"
+     :pricing.faq.trial-time/heading "Verlängert sich der Testzeitraum automatisch?"
      :pricing.faq.trial-time/body
-     [:span [:span.text-primary "Nein, "] "wenn ihr Test-Zeitraum endet können Sie" [:span.text-primary " aktiv Entscheiden "]
+     [:span [:span.text-primary "Nein, "] "wenn ihr Testzeitraum endet können Sie" [:span.text-primary " aktiv entscheiden "]
       " ob Sie Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchten.
-      Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] " auch nach dem Test-Zeitraum."]
+      Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] " auch nach dem Testzeitraum."]
      :pricing.faq.longer-trial/heading "Kann ich den Testzeitraum verlängern?"
      :pricing.faq.longer-trial/body
      [:span [:span.text-primary "Ja! "] "Schreiben Sie uns einfach eine " [:span.text-primary " E-Mail"] " an "
