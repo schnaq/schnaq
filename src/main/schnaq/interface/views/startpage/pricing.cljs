@@ -77,16 +77,15 @@
    [:h2.text-center.pb-1.display-4 "Sie wachsen weiter – Sie sparen mehr!"]
    [:h3.text-center.display-6 "Egal wie groß Ihr Team wird, der Preis bleibt der Gleiche.
    So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."]
-   [:div.row.pt-4.d-flex
-    [:div.col-5.ml-auto.comparison-box.shadow-sm
-     [:div.row.pt-3
+   [:div.row.pt-4.d-flex.mx-1.mx-lg-0
+    [:div.col-12.col-lg-5.p-0
+     [:div.row.comparison-box.shadow-sm.p-2
       [:div.col-3.d-flex
        [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
       [:div.col-9
        [:h3 "schnaq"]
-       [:p.display-6 "79 € pro Monat für Ihr Unternehmen"]]]
-     [:div.row
-      [:div.col-12
+       [:p.display-6 "79 € pro Monat für Ihr Unternehmen"]]
+      [:div.col-12.mb-4
        [:hr]
        [:ul.fa-ul.display-6.pricing-checklist
         [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Brainstorming"]
@@ -94,42 +93,43 @@
         [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Wissensdatenbank"]
         [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Asynchrone Kommunikation"]
         [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Mindmapping"]
-        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Ergebnisanalyse"]]]]]
-    [:div.col-2.ml-auto.text-center.align-self-center
+        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Ergebnisanalyse"]]]]
+     [:div.row.comparison-box.shadow-sm.mt-3
+      [:div.col-12
+       [:p.text-center.py-2 [:span.display-6 [:span.display-5 "79 €"] " Flatrate im Monat"] [:br]
+        "79 € für 20 Personen" [:br]
+        "79 € für 50 Personen" [:br]
+        "79 € für 100 Personen …"]]]]
+    [:div.col-12.col-lg-2.text-center.align-self-center
      [:p.pricing-vs.font-weight-bold "Compared" [:br] "to"]]
-    [:div.col-5.ml-auto
-     [:div.row.pt-3.comparison-box.shadow-sm
-      [:div.col-3
-       [:img.img-fluid.pricing-logo {:src (img-path :pricing.others/miro) :alt "miro logo"}]]
+    [:div.col-12.col-lg-5.p-0
+     [:div.row.py-2.comparison-box.shadow-sm
+      [:div.col-3.d-flex
+       [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :pricing.others/miro) :alt "miro logo"}]]
       [:div.col-9
        [:h3 "Miro"]
        [:p [:span.display-6 "6,80 € pro Monat pro Nutzer:in"] [:br]
         "Brainstorming Software"]]]
-     [:div.row.pt-3.mt-3.comparison-box.shadow-sm
-      [:div.col-3
-       [:img.img-fluid.pricing-logo {:src (img-path :pricing.others/loomio) :alt "loomio logo"}]]
+     [:div.row.py-2.mt-3.comparison-box.shadow-sm
+      [:div.col-3.d-flex
+       [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :pricing.others/loomio) :alt "loomio logo"}]]
       [:div.col-9
        [:h3 "Loomio"]
        [:p [:span.display-6 "2,60 € pro Monat pro Nutzer:in"] [:br]
         "Kooperative Entscheidungsfindung"]]]
-     [:div.row.pt-3.mt-3.comparison-box.shadow-sm
-      [:div.col-3
-       [:img.img-fluid.pricing-logo {:src (img-path :pricing.others/confluence) :alt "confluence logo"}]]
+     [:div.row.py-2.mt-3.comparison-box.shadow-sm
+      [:div.col-3.d-flex
+       [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :pricing.others/confluence) :alt "confluence logo"}]]
       [:div.col-9
        [:h3 "Confluence"]
        [:p [:span.display-6 "4,30 € pro Monat pro Nutzer:in"] [:br]
-        "Wissensablage"]]]]]
-   [:div.row.pt-2
-    [:div.col-5.comparison-box.shadow-sm
-     [:p.text-center.pt-2 [:span.display-6 [:span.display-5 "79 €"] " Flatrate im Monat"] [:br]
-      "79 € für 20 Personen" [:br]
-      "79 € für 50 Personen" [:br]
-      "79 € für 100 Personen …"]]
-    [:div.col-5.ml-auto.comparison-box.shadow-sm
-     [:p.text-center.pt-2 [:span.display-6 [:span.display-5 "137 €"] " im Monat für 10 Personen"] [:br]
-      "247 € für 20 Personen" [:br]
-      "685 € für 50 Personen" [:br]
-      "1370 € für 100 Personen …"]]]])
+        "Wissensablage"]]]
+     [:div.row.comparison-box.shadow-sm.mt-3
+      [:div.col-12
+       [:p.text-center.py-2 [:span.display-6 [:span.display-5 "137 €"] " im Monat für 10 Personen"] [:br]
+        "247 € für 20 Personen" [:br]
+        "685 € für 50 Personen" [:br]
+        "1370 € für 100 Personen …"]]]]]])
 
 (defn- faq
   "Question, which are asked often and alleviate fears of subscribing."
