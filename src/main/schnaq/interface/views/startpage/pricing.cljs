@@ -73,6 +73,8 @@
   []
   [:div.py-5
    [:h1.text-center.pb-1 "Sie wachsen weiter - Sie sparen mehr!"]
+   [:h3.text-center.display-6 "Egal wie groß Ihr Team wird, der Preis bleibt der gleiche.
+   So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."]
    [:div.row
     [:div.col-5.ml-auto.comparison-box.shadow-sm
      [:div.row.pt-3
