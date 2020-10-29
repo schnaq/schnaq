@@ -77,11 +77,11 @@
    [:h2.text-center.pb-1.display-4 "Sie wachsen weiter – Sie sparen mehr!"]
    [:h3.text-center.display-6 "Egal wie groß Ihr Team wird, der Preis bleibt der Gleiche.
    So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."]
-   [:div.row.pt-4
+   [:div.row.pt-4.d-flex
     [:div.col-5.ml-auto.comparison-box.shadow-sm
      [:div.row.pt-3
       [:div.col-3.d-flex
-       [:img.img-fluid.pricing-logo.d-align-self-center {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
+       [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
       [:div.col-9
        [:h3 "schnaq"]
        [:p.display-6 "79 € pro Monat für Ihr Unternehmen"]]]
@@ -95,7 +95,8 @@
         [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Asynchrone Kommunikation"]
         [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Mindmapping"]
         [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Ergebnisanalyse"]]]]]
-    [:div.col-2.ml-auto.text-center "Vs."]
+    [:div.col-2.ml-auto.text-center.align-self-center
+     [:p.pricing-vs.font-weight-bold "Compared" [:br] "to"]]
     [:div.col-5.ml-auto
      [:div.row.pt-3.comparison-box.shadow-sm
       [:div.col-3
