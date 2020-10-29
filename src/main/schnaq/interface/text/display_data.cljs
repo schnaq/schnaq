@@ -387,7 +387,7 @@
      :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu 5 Nutzer:innen pro Team"
      :pricing.free-tier/call-to-action "Kostenfrei loslegen"
      :pricing.business-tier/description "Ob 10 oder 50 Nutzer:innen – der Preis ist der gleiche.
-      Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle
+      Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle,
       die strukturiert Wissen sammeln möchten."
      :pricing.units/per-month "/ Monat"
      :pricing.notes/with-vat "zzgl. MwSt."
@@ -396,15 +396,15 @@
      :pricing.trial/call-to-action "30 Tage Business testen"
      :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
      :pricing.trial.temporary/deactivation "Verfügbar ab 01.01.2021"
-     :pricing.features/heading "Schnaq Abonnement Vorteile"
+     :pricing.features/heading "Schnaq-Abonnement Vorteile"
      :pricing.features.user-numbers/heading "Unbegrenzte Teilnehmer:innen"
-     :pricing.features.user-numbers/content "Lassen Sie so viele Mitarbeiter:innen wie Sie möchten kooperieren. *"
+     :pricing.features.user-numbers/content "Lassen Sie so viele Mitarbeiter:innen, wie Sie möchten, kooperieren. *"
      :pricing.features.team-numbers/heading "Unbegrenzte Teams"
-     :pricing.features.team-numbers/content "Die Anzahl der Teams die Sie erstellen können ist unlimitiert. *"
+     :pricing.features.team-numbers/content "Die Anzahl der Teams, die Sie erstellen können, ist unlimitiert. *"
      :pricing.features.app-integration/heading "App-Integration"
      :pricing.features.app-integration/content "Verknüpfen Sie schnaq leicht mit Ihrem Slack, MS Teams, Confluence …"
      :pricing.features.analysis/heading "Automatische Analysen"
-     :pricing.features.analysis/content "Die Beiträge werden automatisch Analysiert und für alle Teilnehmer:innen aufbereitet."
+     :pricing.features.analysis/content "Die Beiträge werden automatisch analysiert und für alle Teilnehmer:innen aufbereitet."
      :pricing.features.knowledge-db/heading "Wissensdatenbank"
      :pricing.features.knowledge-db/content "Sammeln Sie erarbeitetes Wissen und Ideen an einem Ort."
      :pricing.features.mindmap/heading "Interaktive Mindmap"
@@ -436,28 +436,28 @@
      :pricing.faq/heading "Häufig gestellte Fragen zu schnaq Abos"
      :pricing.faq.terminate/heading "Kann ich jederzeit kündigen?"
      :pricing.faq.terminate/body
-     [:span [:span.text-primary "Ja! "] "Sie können" [:span.text-primary " jeden Monat"] " kündigen,
+     [:<> [:span.text-primary "Ja! "] "Sie können" [:span.text-primary " jeden Monat"] " kündigen,
      wenn Sie die monatliche Zahlweise gewählt haben. Wenn Sie die jährliche Zahlweise
      wählen, können Sie zum Ablauf des Abonnementjahres kündigen."]
      :pricing.faq.extra-price/heading "Muss ich für mehr Leute extra bezahlen?"
      :pricing.faq.extra-price/body
-     [:span [:span.text-primary "Nein, "] "Sie können" [:span.text-primary " beliebig viele Personen "]
+     [:<> [:span.text-primary "Nein, "] "Sie können" [:span.text-primary " beliebig viele Personen "]
       " zu Ihrer Organisation hinzufügen. Jedes Unternehmen, Verein,
       Bildungseinrichtung, usw. braucht " [:span.text-primary "nur ein Abonnement."]]
      :pricing.faq.trial-time/heading "Verlängert sich der Testzeitraum automatisch?"
      :pricing.faq.trial-time/body
-     [:span [:span.text-primary "Nein, "] "wenn ihr Testzeitraum endet können Sie" [:span.text-primary " aktiv entscheiden "]
-      " ob Sie Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchten.
-      Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] " auch nach dem Testzeitraum."]
+     [:<> [:span.text-primary "Nein, "] "wenn ihr Testzeitraum endet, können Sie" [:span.text-primary " aktiv entscheiden"]
+      ", ob Sie Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchten.
+      Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] ", auch nach dem Testzeitraum."]
      :pricing.faq.longer-trial/heading "Kann ich den Business-Tarif länger testen?"
      :pricing.faq.longer-trial/body
-     [:span [:span.text-primary "Ja! "] "Schreiben Sie uns einfach eine " [:span.text-primary " E-Mail"] " an "
+     [:<> [:span.text-primary "Ja! "] "Schreiben Sie uns einfach eine " [:span.text-primary " E-Mail"] " an "
       [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
      :pricing.faq.privacy/heading "Wer hat Zugriff auf meine Daten?"
      :pricing.faq.privacy/body-1
-     [:span "Jede Person die Sie Ihrem Unternehmen hinzufügen kann potentiell auf die hinterlegten Daten zugreifen."
+     [:<> "Jede Person, die Sie Ihrem Unternehmen hinzufügen, kann potentiell auf die hinterlegten Daten zugreifen."
       "Technisch werden Ihre Daten vollständig sicher auf"
-      [:span.text-primary " deutschen Servern und DSGVO-Konform"] " abgespeichert. Auf unserer "]
+      [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
      :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
      :pricing.faq.privacy/body-3 " finden Sie mehr Informationen"
      :pricing/headline "Schnaq Abonnement"
