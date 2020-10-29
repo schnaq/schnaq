@@ -5,14 +5,14 @@
   []
   [:div.card.shadow-sm
    [:div.card-body.d-flex.flex-column
-    [:h3.card-title.text-center "Gratis"]
-    [:p.card-text "Für kleine Teams und private Zwecke. Der gratis Plan ist der
+    [:h3.card-title.text-center "Starter"]
+    [:p.card-text "Für kleine Teams und private Zwecke. Der Starter Plan ist der
      perfekte Einstieg in strukturierte Wissensgenerierung."]
     [:p.card-text.text-center.display-2 "0 €"]
     [:p.text-muted.text-center "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu 5 Nutzer:innen pro Team"]
     [:div.text-center.mt-auto
      [:button.btn.button-primary
-      [:p.card-text "Gratis loslegen"]]]]])
+      [:p.card-text "Kostenfrei loslegen"]]]]])
 
 (defn- business-tier-card
   []
