@@ -1,29 +1,39 @@
 @import 'variables';
 
+.tier-card {
+  border: 0;
+}
+
 .trial-box {
   background-color: $blue-dark;
   border-radius: 1.5rem;
-  box-shadow: $regular-shadow;
   color: $white;
   display: inline-block;
   max-width: 400px;
   padding: 1em;
 
   &:hover {
-    box-shadow: $hover-shadow;
+    background-color: lighten($blue-dark, 10%);
+    box-shadow: $hover-shadow !important;
   }
 }
 
 .feature-card {
   background-color: rgba($secondary, 0.7);
   background-image: url('../imgs/schnaqqifant.svg');
-  background-position: 105% 120%;
+  background-position: 105% 110%;
   background-repeat: no-repeat;
   background-size: 50px auto;
+  border: 0;
   border-radius: 0.5em;
-  padding: 0.5em 0;
+  padding: 0.5em;
 
   p {
     margin-bottom: 0;
   }
+}
+
+.comparison-box {
+  background-color: $white;
+  border-radius: 0.5rem;
 }

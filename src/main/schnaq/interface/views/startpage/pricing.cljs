@@ -3,7 +3,7 @@
 
 (defn- free-tier-card
   []
-  [:div.card.shadow-sm
+  [:div.card.shadow-sm.tier-card
    [:div.card-body.d-flex.flex-column
     [:h3.card-title.text-center "Starter"]
     [:p.card-text "Für kleine Teams und private Zwecke. Der Starter Plan ist der
@@ -16,7 +16,7 @@
 
 (defn- business-tier-card
   []
-  [:div.card.shadow-sm
+  [:div.card.shadow-sm.tier-card
    [:div.card-body.d-flex.flex-column
     [:h3.card-title.text-center "Business"]
     [:p.card-text "Ob 10 oder 50 Nutzer:innen - der Preis ist der gleiche.
@@ -32,7 +32,7 @@
 (defn- trial-box
   []
   [:div.d-flex.justify-content-center.py-4
-   [:div.trial-box.text-center.button-dark
+   [:div.trial-box.text-center.button-dark.shadow-sm
     [:p.display-6.font-weight-bold "30 Tage Business testen"]
     [:p "Keine Kreditkarte nötig! Jederzeit kündbar."]
     [:p.text-sm.text-muted "Verfügbar ab 01.01.2021"]]])
@@ -40,13 +40,13 @@
 (defn- pricing-box
   "A box displaying the different subscription tiers we offer."
   []
-  [:div.card-deck
+  [:div.card-deck.pt-3
    [free-tier-card]
    [business-tier-card]])
 
 (defn- feature-card
   [title description]
-  [:div.card.text-center.feature-card.shadow-sm
+  [:div.card.text-center.feature-card.shadow-sm.mb-1
    [:p.card-text.font-weight-bold title]
    [:p description]])
 
@@ -65,6 +65,21 @@
     [feature-card "Interaktive Mindmap" "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."]]
    [:p.text-sm.text-muted "* Gilt nur für Business-Abonnement"]])
 
+(defn- comparison
+  "Show that we are cheaper than user-based alternatives. Also drop important search keyword
+  'schnaq vergleich <some competitors>'"
+  []
+  [:div.py-5
+   "Attlassian, Forum-Software, Miro"
+   [:h1.text-center "Wir wachsen mit Ihnen. Sie sparen mehr!"]
+   [:div.row
+    [:div.col-5.ml-auto.comparison-box.shadow-sm
+     [:div.row.pt-3
+      [:div.col-3 "Logo"]
+      [:div.col-9 "schnaq 99€ yadda yadda"]]]
+    [:div.col-2.ml-auto.text-center "Vs."]
+    [:div.col-5.ml-auto.comparison-box.shadow-sm "andere dude aufgeteilt"]]])
+
 (defn- pricing-page
   "A full page depicting our pricing and related items."
   []
@@ -74,7 +89,8 @@
    [:div.container
     [pricing-box]
     [trial-box]
-    [schnaq-features]]])
+    [schnaq-features]
+    [comparison]]])
 
 (defn pricing-view
   "The pricing view."
