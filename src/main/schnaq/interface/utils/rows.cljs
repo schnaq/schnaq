@@ -1,6 +1,6 @@
 (ns schnaq.interface.utils.rows
   (:require [schnaq.interface.views.common :as common]
-            [schnaq.interface.text.display-data :refer [labels fa img-path video]]))
+            [schnaq.interface.text.display-data :refer [labels img-path video]]))
 
 (defn- build-text-box
   "Composing the text-part of a feature-row. Takes a `text-namespace` which

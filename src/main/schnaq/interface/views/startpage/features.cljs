@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.text.display-data :refer [labels fa]]
+  (:require [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]))
 

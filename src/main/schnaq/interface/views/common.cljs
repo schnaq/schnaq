@@ -4,8 +4,7 @@
             [ghostwheel.core :refer [>defn]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
-            [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels fa img-path video]]))
+            [reitit.frontend.easy :as reitfe]))
 
 (>defn avatar
   "Create an image based on the nickname."

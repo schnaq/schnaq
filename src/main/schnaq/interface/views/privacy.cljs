@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.privacy
   "Page explaining our privacy and how we are storing data."
-  (:require ["jquery" :as jquery]
-            [cljs.pprint :refer [pprint]]
+  (:require [cljs.pprint :refer [pprint]]
             [goog.string :as gstring]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.localstorage :as ls]
