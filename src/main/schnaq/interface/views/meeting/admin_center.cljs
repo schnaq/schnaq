@@ -38,7 +38,8 @@
                         (clipboard/copy-to-clipboard! display-content)
                         (notify! (labels :meeting/link-copied-heading)
                                  (labels :meeting/link-copied-success)
-                                 :info))
+                                 :info
+                                 false))
             :data-toggle "tooltip"
             :data-placement "bottom"
             :title (labels :meeting/copy-link-tooltip)}

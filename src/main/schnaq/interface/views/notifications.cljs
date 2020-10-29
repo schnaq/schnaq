@@ -62,12 +62,14 @@
 (>defn notify!
   "Directly dispatch a notification event, which shall immediately show up to
   the user."
-  [title body context]
-  [:notification/title :notification/body :notification/context :ret nil?]
+  [title body context stay-visible?]
+  [:notification/title :notification/body :notification/context :notification/stay-visible?
+   :ret nil?]
   (rf/dispatch
     [:notification/add
      #:notification{:title title
                     :body body
+                    :stay-visible? stay-visible?
                     :context context}]))
 
 (defn view
