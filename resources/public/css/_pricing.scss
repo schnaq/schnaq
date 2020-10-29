@@ -1,0 +1,56 @@
+@import 'variables';
+
+.tier-card {
+  border: 0;
+  border-radius: 0.5em;
+}
+
+.trial-box {
+  background-color: $blue-dark;
+  border-radius: 1.5rem;
+  color: $white;
+  display: inline-block;
+  max-width: 400px;
+  padding: 1em;
+
+  &:hover {
+    background-color: lighten($blue-dark, 10%);
+    box-shadow: $hover-shadow !important;
+  }
+}
+
+.feature-card {
+  background-color: rgba($secondary, 0.2);
+  border-radius: 0.5em;
+  padding: 0.5em;
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.comparison-box {
+  background-color: $white;
+  border-radius: 0.5rem;
+}
+
+.pricing-logo {
+  max-height: 100px;
+}
+
+.pricing-checklist {
+  padding-top: 1em;
+
+  li span {
+    color: $primary;
+  }
+}
+
+.pricing-vs {
+  background: $blue-dark;
+  border-radius: 50%;
+  color: $white;
+  display: inline-block;
+  padding: 1em;
+}
+
