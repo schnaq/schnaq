@@ -473,6 +473,7 @@
      :comment-alt "fa-comment-alt"
      :copy "fa-copy"
      :check "fa-check-square"
+     :check-double "fa-check-double"
      :delete-icon "fa-times-circle"
      :edit "fa-edit"
      :eraser "fa-eraser"

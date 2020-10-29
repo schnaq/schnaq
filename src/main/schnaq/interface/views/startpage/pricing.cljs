@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.startpage.pricing
-  (:require [schnaq.interface.text.display-data :refer [img-path]]
+  (:require [schnaq.interface.text.display-data :refer [img-path fa labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- free-tier-card
@@ -82,7 +82,17 @@
        [:img.img-fluid.pricing-logo {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
       [:div.col-9
        [:h3 "schnaq"]
-       [:p.display-6 "79 € pro Monat für ihr Unternehmen"]]]]
+       [:p.display-6 "79 € pro Monat für Ihr Unternehmen"]]]
+     [:div.row
+      [:div.col-12
+       [:hr]
+       [:ul.fa-ul.display-6.pricing-checklist
+        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Brainstorming"]
+        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Entscheidungsfindung"]
+        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Wissensdatenbank"]
+        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Asynchrone Kommunikation"]
+        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Mindmapping"]
+        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Ergebnisanalyse"]]]]]
     [:div.col-2.ml-auto.text-center "Vs."]
     [:div.col-5.ml-auto.shadow-sm
      [:div.row.pt-3.comparison-box

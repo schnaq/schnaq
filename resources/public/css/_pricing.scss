@@ -41,3 +41,11 @@
 .pricing-logo {
   max-height: 100px;
 }
+
+.pricing-checklist {
+  padding-top: 1em;
+
+  li span {
+    color: $primary;
+  }
+}
