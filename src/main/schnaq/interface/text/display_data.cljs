@@ -449,7 +449,7 @@
      [:span [:span.text-primary "Nein, "] "wenn ihr Testzeitraum endet können Sie" [:span.text-primary " aktiv entscheiden "]
       " ob Sie Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchten.
       Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] " auch nach dem Testzeitraum."]
-     :pricing.faq.longer-trial/heading "Kann ich den Testzeitraum verlängern?"
+     :pricing.faq.longer-trial/heading "Kann ich den Business-Tarif länger testen?"
      :pricing.faq.longer-trial/body
      [:span [:span.text-primary "Ja! "] "Schreiben Sie uns einfach eine " [:span.text-primary " E-Mail"] " an "
       [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
