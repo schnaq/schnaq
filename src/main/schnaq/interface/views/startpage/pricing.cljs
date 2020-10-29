@@ -169,8 +169,8 @@
     [:p.display-6.text-center.pb-3
      "Jede Person die Sie Ihrem Unternehmen hinzufügen kann potentiell auf die hinterlegten Daten zugreifen."
      "Technisch werden Ihre Daten vollständig sicher auf"
-     [:span.text-primary " deutschen Servern und DSGVO-Konform"] " abgespeichert. Mehr Informationen
-     dazu finden Sie auf unserer " [:a {:href (reititfe/href :routes/privacy)} "Datenschutzsseite."]]]])
+     [:span.text-primary " deutschen Servern und DSGVO-Konform"] " abgespeichert. Auf unserer "
+     [:a {:href (reititfe/href :routes/privacy)} "Seite zur Datensicherheit"] " finden Sie mehr Informationen"]]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
