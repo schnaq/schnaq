@@ -8,36 +8,33 @@
   [:div.card.shadow-sm.tier-card
    [:div.card-body.d-flex.flex-column
     [:h3.card-title.text-center "Starter"]
-    [:p.card-text "Für kleine Teams und private Zwecke. Der Starter Plan ist der
-     perfekte Einstieg in strukturierte Wissensgenerierung."]
+    [:p.card-text (labels :pricing.free-tier/description)]
     [:p.card-text.text-center.display-2 "0 €"]
-    [:p.text-muted.text-center "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu 5 Nutzer:innen pro Team"]
+    [:p.text-muted.text-center (labels :pricing.free-tier/beta-notice)]
     [:div.text-center.mt-auto
      [:button.btn.button-primary
-      [:p.card-text "Kostenfrei loslegen"]]]]])
+      [:p.card-text (labels :pricing.free-tier/call-to-action)]]]]])
 
 (defn- business-tier-card
   []
   [:div.card.shadow-sm.tier-card
    [:div.card-body.d-flex.flex-column
     [:h3.card-title.text-center "Business"]
-    [:p.card-text "Ob 10 oder 50 Nutzer:innen – der Preis ist der gleiche.
-      Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle
-      die strukturiert Wissen sammeln möchten."]
-    [:p.card-text.text-center [:span.display-2 "79 €"] [:span "/ Monat"]]
-    [:p.text-muted.text-center "zzgl. MwSt."]
-    [:p.text-muted.text-center "Bei jährlicher Zahlweise im Voraus 15% Rabatt"]
+    [:p.card-text (labels :pricing.business-tier/description)]
+    [:p.card-text.text-center [:span.display-2 "79 €"] [:span (labels :pricing.units/per-month)]]
+    [:p.text-muted.text-center (labels :pricing.notes/with-vat)]
+    [:p.text-muted.text-center (labels :pricing.notes/yearly-rebate)]
     [:div.text-center.mt-auto
      [:button.btn.button-primary {:disabled true}
-      [:p.card-text "Verfügbar ab 01.01.2021"]]]]])
+      [:p.card-text (labels :pricing.business-tier/call-to-action)]]]]])
 
 (defn- trial-box
   []
   [:div.d-flex.justify-content-center.py-5
    [:div.trial-box.text-center.button-dark.shadow-sm
-    [:p.display-6.font-weight-bold "30 Tage Business testen"]
-    [:p "Keine Kreditkarte nötig! Jederzeit kündbar."]
-    [:p.text-sm.text-muted "Verfügbar ab 01.01.2021"]]])
+    [:p.display-6.font-weight-bold (labels :pricing.trial/call-to-action)]
+    [:p (labels :pricing.trial/description)]
+    [:p.text-sm.text-muted (labels :pricing.trial.temporary/deactivation)]]])
 
 (defn- pricing-box
   "A box displaying the different subscription tiers we offer."
@@ -56,16 +53,16 @@
   "List all features that are making schnaq a good deal."
   []
   [:div.my-3
-   [:h3.text-center "Schnaq Abonnement Vorteile"]
+   [:h3.text-center (labels :pricing.features/heading)]
    [:div.card-deck
-    [feature-card "Unbegrenzte Teilnehmer:innen" "Lassen Sie so viele Mitarbeiter:innen wie Sie möchten kooperieren. *"]
-    [feature-card "Unbegrenzte Teams" "Die Anzahl der Teams die Sie erstellen können ist unlimitiert. *"]
-    [feature-card "App-Integration" "Verknüpfen Sie schnaq leicht mit Ihrem Slack, MS Teams, Confluence …"]]
+    [feature-card (labels :pricing.features.user-numbers/heading) (labels :pricing.features.user-numbers/content)]
+    [feature-card (labels :pricing.features.team-numbers/heading) (labels :pricing.features.team-numbers/content)]
+    [feature-card (labels :pricing.features.app-integration/heading) (labels :pricing.features.app-integration/content)]]
    [:div.card-deck.mt-2
-    [feature-card "Automatische Analysen" "Die Beiträge werden automatisch Analysiert und für alle Teilnehmer:innen aufbereitet."]
-    [feature-card "Wissensdatenbank" "Sammeln Sie erarbeitetes Wissen und Ideen an einem Ort."]
-    [feature-card "Interaktive Mindmap" "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."]]
-   [:p.text-sm.text-muted "* Gilt nur für Business-Abonnement"]])
+    [feature-card (labels :pricing.features.analysis/heading) (labels :pricing.features.analysis/content)]
+    [feature-card (labels :pricing.features.knowledge-db/heading) (labels :pricing.features.knowledge-db/content)]
+    [feature-card (labels :pricing.features.mindmap/heading) (labels :pricing.features.mindmap/content)]]
+   [:p.text-sm.text-muted (labels :pricing.features/disclaimer)]])
 
 (defn- double-check-item
   "List-item with custom double-check bullet-point."
@@ -80,7 +77,7 @@
     [:img.img-fluid.pricing-logo.align-self-center {:src (img-path img-key) :alt (str name " logo")}]]
    [:div.col-9
     [:h3 name]
-    [:p [:span.display-6 (str price " € pro Monat pro Nutzer:in")] [:br]
+    [:p [:span.display-6 (str price (labels :pricing.competitors/per-month-per-user))] [:br]
      description]]])
 
 (defn- comparison
@@ -88,9 +85,8 @@
   'schnaq vergleich <some competitors>'"
   []
   [:div.py-5
-   [:h2.text-center.pb-1.display-4 "Sie wachsen weiter – Sie sparen mehr!"]
-   [:h3.text-center.display-6 "Egal wie groß Ihr Team wird, der Preis bleibt der Gleiche.
-   So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."]
+   [:h2.text-center.pb-1.display-4 (labels :pricing.comparison/heading)]
+   [:h3.text-center.display-6 (labels :pricing.comparison/subheading)]
    [:div.row.pt-4.d-flex.mx-1.mx-lg-0
     [:div.col-12.col-lg-5.p-0
      [:div.row.comparison-box.shadow-sm.p-2
@@ -98,81 +94,70 @@
        [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
       [:div.col-9
        [:h3 "schnaq"]
-       [:p.display-6 "79 € pro Monat für Ihr Unternehmen"]]
+       [:p.display-6 (labels :pricing.comparison.schnaq/price-point)]]
       [:div.col-12.mb-4
        [:hr]
        [:ul.fa-ul.display-6.pricing-checklist
-        [double-check-item "Brainstorming"]
-        [double-check-item "Entscheidungsfindung"]
-        [double-check-item "Wissensdatenbank"]
-        [double-check-item "Asynchrone Kommunikation"]
-        [double-check-item "Mindmapping"]
-        [double-check-item "Ergebnisanalyse"]]]]
+        [double-check-item (labels :pricing.comparison.schnaq/brainstorm)]
+        [double-check-item (labels :pricing.comparison.schnaq/decision-making)]
+        [double-check-item (labels :pricing.comparison.schnaq/knowledge-db)]
+        [double-check-item (labels :pricing.comparison.schnaq/async)]
+        [double-check-item (labels :pricing.comparison.schnaq/mindmap)]
+        [double-check-item (labels :pricing.comparison.schnaq/analysis)]]]]
      [:div.row.comparison-box.shadow-sm.mt-3
       [:div.col-12
-       [:p.text-center.py-2 [:span.display-6 [:span.display-5 "79 €"] " Flatrate im Monat"] [:br]
-        "79 € für 20 Personen" [:br]
-        "79 € für 50 Personen" [:br]
-        "79 € für 100 Personen …"]]]]
+       [:p.text-center.py-2 [:span.display-6 [:span.display-5 "79 €"] (labels :pricing.comparison.schnaq/flatrate)] [:br]
+        (labels :pricing.comparison.schnaq/person-20) [:br]
+        (labels :pricing.comparison.schnaq/person-50) [:br]
+        (labels :pricing.comparison.schnaq/person-100)]]]]
     [:div.col-12.col-lg-2.text-center.align-self-center
-     [:p.pricing-vs.font-weight-bold "Compared" [:br] "to"]]
+     [:p.pricing-vs.font-weight-bold.mt-3 (labels :pricing.comparison/compared-to)]]
     [:div.col-12.col-lg-5.p-0
-     [competitor-box "Miro" :pricing.others/miro "6,80" "Brainstorming Software"]
-     [competitor-box "Loomio" :pricing.others/loomio "2,60" "Kooperative Entscheidungsfindung"]
-     [competitor-box "Confluence" :pricing.others/confluence "4,30" "Wissensdatenbank"]
+     [competitor-box "Miro" :pricing.others/miro "6,80" (labels :pricing.comparison.miro/description)]
+     [competitor-box "Loomio" :pricing.others/loomio "2,60" (labels :pricing.comparison.loomio/description)]
+     [competitor-box "Confluence" :pricing.others/confluence "4,30" (labels :pricing.comparison.confluence/description)]
      [:div.row.comparison-box.shadow-sm.mt-3
       [:div.col-12
-       [:p.text-center.py-2 [:span.display-6 [:span.display-5 "137 €"] " im Monat für 10 Personen"] [:br]
-        "247 € für 20 Personen" [:br]
-        "685 € für 50 Personen" [:br]
-        "1370 € für 100 Personen …"]]]]]])
+       [:p.text-center.py-2 [:span.display-6 [:span.display-5 "137 €"] (labels :pricing.comparison.competitor/person-10)]
+        [:br]
+        (labels :pricing.comparison.competitor/person-20) [:br]
+        (labels :pricing.comparison.competitor/person-50) [:br]
+        (labels :pricing.comparison.competitor/person-100)]]]]]])
 
 (defn- faq
   "Question, which are asked often and alleviate fears of subscribing."
   []
   [:div.py-5
-   [:h2.text-center.display-4.pb-5 "Häufig Gestellte Fragen zu schnaq Abos"]
+   [:h2.text-center.display-4.pb-5 (labels :pricing.faq/heading)]
    [:section
     [:h3.text-center.display-5.font-weight-bold.text-dark-blue
-     "Kann ich jederzeit kündigen?"]
-    [:p.display-6.text-center.pb-3
-     [:span.text-primary "Ja! "] "Sie können" [:span.text-primary " jeden Monat"] " kündigen,
-     wenn Sie die monatliche Zahlweise gewählt haben. Wenn Sie die jährliche Zahlweise
-     wählen, können Sie zum Ablauf des Abonnementjahres kündigen."]]
+     (labels :pricing.faq.terminate/heading)]
+    [:p.display-6.text-center.pb-3 (labels :pricing.faq.terminate/body)]]
    [:section
     [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
-     "Muss ich für mehr Leute extra bezahlen?"]
-    [:p.display-6.text-center.pb-3
-     [:span.text-primary "Nein, "] "Sie können" [:span.text-primary " beliebig viele Personen "]
-     " zu Ihrer Organisation hinzufügen. Jedes Unternehmen, Verein,
-     Bildungseinrichtung, usw. braucht " [:span.text-primary "nur ein Abonnement."]]]
+     (labels :pricing.faq.extra-price/heading)]
+    [:p.display-6.text-center.pb-3 (labels :pricing.faq.extra-price/body)]]
    [:section
     [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
-     "Verlängert sich der Test-Zeitraum automatisch?"]
-    [:p.display-6.text-center.pb-3
-     [:span.text-primary "Nein, "] "wenn ihr Test-Zeitraum endet können Sie" [:span.text-primary " aktiv Entscheiden "]
-     " ob Sie Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchten.
-     Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] " auch nach dem Test-Zeitraum."]]
+     (labels :pricing.faq.trial-time/heading)]
+    [:p.display-6.text-center.pb-3 (labels :pricing.faq.trial-time/body)]]
    [:section
     [:h3.text-center.display-5.font-weight-bold.text-dark-blue
-     "Kann ich den Testzeitraum verlängern?"]
-    [:p.display-6.text-center.pb-3
-     [:span.text-primary "Ja! "] "Schreiben Sie uns einfach eine " [:span.text-primary " E-Mail"] " an "
-     [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]]
+     (labels :pricing.faq.longer-trial/heading)]
+    [:p.display-6.text-center.pb-3 (labels :pricing.faq.longer-trial/body)]]
    [:section
     [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
-     "Wer hat Zugriff auf meine Daten?"]
+     (labels :pricing.faq.privacy/heading)]
     [:p.display-6.text-center.pb-3
-     "Jede Person die Sie Ihrem Unternehmen hinzufügen kann potentiell auf die hinterlegten Daten zugreifen."
-     "Technisch werden Ihre Daten vollständig sicher auf"
-     [:span.text-primary " deutschen Servern und DSGVO-Konform"] " abgespeichert. Auf unserer "
-     [:a {:href (reititfe/href :routes/privacy)} "Seite zur Datensicherheit"] " finden Sie mehr Informationen"]]])
+     (labels :pricing.faq.privacy/body-1)
+     [:a {:href (reititfe/href :routes/privacy)} (labels :pricing.faq.privacy/body-2)]
+     (labels :pricing.faq.privacy/body-3)]]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
   []
   [pages/with-nav-and-header
-   {:page/heading [:span.d-block.text-center "Schnaq Abonnement"]}
+   {:page/heading [:span.d-block.text-center (labels :pricing/headline)]}
    [:div.container
     [pricing-box]
     [trial-box]
