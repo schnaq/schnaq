@@ -494,20 +494,12 @@
      :router/meeting-created "Zuletzt angelegter schnaq"
      :router/my-schnaqs "Meine schnaqs"
      :router/not-found-label "Not Found route redirect"
+     :router/pricing "Preise"
      :router/privacy "Datenschutz"
      :router/show-single-meeting "Schnaq anzeigen"
      :router/start-discussion "Starte Besprechung"
      :router/startpage "Startseite"
-     :router/how-to "Wie benutze ich schnaq?"
-     :router/analytics "Analyse-Dashboard"
-     :router/invalid-link "Fehlerseite"
-     :router/true-404-view "404 Fehlerseite"
-     :router/not-found-label "Not Found route redirect"
-     :router/graph-view "Graph View"
-     :router.features/meetings "Meeting Features"
-     :router.features/discussion "Diskussionsfeatures"
-     :router/pricing "Preise"}))
-
+     :router/true-404-view "404 Fehlerseite"}))
 
 (defn img-path
   "Returns an image path as String for a given identifier"
