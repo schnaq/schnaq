@@ -67,8 +67,22 @@
     [feature-card "Interaktive Mindmap" "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."]]
    [:p.text-sm.text-muted "* Gilt nur für Business-Abonnement"]])
 
-;; TODO bei kleineren devices andere rows
-;; TODO vs. stylen
+(defn- double-check-item
+  "List-item with custom double-check bullet-point."
+  [text]
+  [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] text])
+
+(defn- competitor-box
+  "Comparison box for a competitor."
+  [name img-key price description]
+  [:div.row.py-2.mb-3.comparison-box.shadow-sm
+   [:div.col-3.d-flex
+    [:img.img-fluid.pricing-logo.align-self-center {:src (img-path img-key) :alt (str name " logo")}]]
+   [:div.col-9
+    [:h3 name]
+    [:p [:span.display-6 (str price " € pro Monat pro Nutzer:in")] [:br]
+     description]]])
+
 (defn- comparison
   "Show that we are cheaper than user-based alternatives. Also drop important search keyword
   'schnaq vergleich <some competitors>'"
@@ -88,12 +102,12 @@
       [:div.col-12.mb-4
        [:hr]
        [:ul.fa-ul.display-6.pricing-checklist
-        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Brainstorming"]
-        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Entscheidungsfindung"]
-        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Wissensdatenbank"]
-        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Asynchrone Kommunikation"]
-        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Mindmapping"]
-        [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] "Ergebnisanalyse"]]]]
+        [double-check-item "Brainstorming"]
+        [double-check-item "Entscheidungsfindung"]
+        [double-check-item "Wissensdatenbank"]
+        [double-check-item "Asynchrone Kommunikation"]
+        [double-check-item "Mindmapping"]
+        [double-check-item "Ergebnisanalyse"]]]]
      [:div.row.comparison-box.shadow-sm.mt-3
       [:div.col-12
        [:p.text-center.py-2 [:span.display-6 [:span.display-5 "79 €"] " Flatrate im Monat"] [:br]
@@ -103,27 +117,9 @@
     [:div.col-12.col-lg-2.text-center.align-self-center
      [:p.pricing-vs.font-weight-bold "Compared" [:br] "to"]]
     [:div.col-12.col-lg-5.p-0
-     [:div.row.py-2.comparison-box.shadow-sm
-      [:div.col-3.d-flex
-       [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :pricing.others/miro) :alt "miro logo"}]]
-      [:div.col-9
-       [:h3 "Miro"]
-       [:p [:span.display-6 "6,80 € pro Monat pro Nutzer:in"] [:br]
-        "Brainstorming Software"]]]
-     [:div.row.py-2.mt-3.comparison-box.shadow-sm
-      [:div.col-3.d-flex
-       [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :pricing.others/loomio) :alt "loomio logo"}]]
-      [:div.col-9
-       [:h3 "Loomio"]
-       [:p [:span.display-6 "2,60 € pro Monat pro Nutzer:in"] [:br]
-        "Kooperative Entscheidungsfindung"]]]
-     [:div.row.py-2.mt-3.comparison-box.shadow-sm
-      [:div.col-3.d-flex
-       [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :pricing.others/confluence) :alt "confluence logo"}]]
-      [:div.col-9
-       [:h3 "Confluence"]
-       [:p [:span.display-6 "4,30 € pro Monat pro Nutzer:in"] [:br]
-        "Wissensablage"]]]
+     [competitor-box "Miro" :pricing.others/miro "6,80" "Brainstorming Software"]
+     [competitor-box "Loomio" :pricing.others/loomio "2,60" "Kooperative Entscheidungsfindung"]
+     [competitor-box "Confluence" :pricing.others/confluence "4,30" "Wissensdatenbank"]
      [:div.row.comparison-box.shadow-sm.mt-3
       [:div.col-12
        [:p.text-center.py-2 [:span.display-6 [:span.display-5 "137 €"] " im Monat für 10 Personen"] [:br]
