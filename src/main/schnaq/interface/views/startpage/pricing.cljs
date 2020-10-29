@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.startpage.pricing
-  (:require [schnaq.interface.text.display-data :refer [img-path fa labels]]
+  (:require [reitit.frontend.easy :as reititfe]
+            [schnaq.interface.text.display-data :refer [img-path fa labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- free-tier-card
@@ -73,7 +74,7 @@
   'schnaq vergleich <some competitors>'"
   []
   [:div.py-5
-   [:h1.text-center.pb-1 "Sie wachsen weiter – Sie sparen mehr!"]
+   [:h2.text-center.pb-1.display-4 "Sie wachsen weiter – Sie sparen mehr!"]
    [:h3.text-center.display-6 "Egal wie groß Ihr Team wird, der Preis bleibt der Gleiche.
    So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."]
    [:div.row.pt-4
@@ -119,7 +120,7 @@
         "Wissensablage"]]]]]
    [:div.row.pt-2
     [:div.col-5.comparison-box.shadow-sm
-     [:p.text-center.pt-2 [:span.display-6 [:span.display-5 "79 €"] " im Monat für 10 Personen"] [:br]
+     [:p.text-center.pt-2 [:span.display-6 [:span.display-5 "79 €"] " Flatrate im Monat"] [:br]
       "79 € für 20 Personen" [:br]
       "79 € für 50 Personen" [:br]
       "79 € für 100 Personen …"]]
@@ -128,6 +129,47 @@
       "247 € für 20 Personen" [:br]
       "685 € für 50 Personen" [:br]
       "1370 € für 100 Personen …"]]]])
+
+(defn- faq
+  "Question, which are asked often and alleviate fears of subscribing."
+  []
+  [:div.py-5
+   [:h2.text-center.display-4.pb-5 "Häufig Gestellte Fragen zu schnaq Abos"]
+   [:section
+    [:h3.text-center.display-5.font-weight-bold.text-dark-blue
+     "Kann ich jederzeit kündigen?"]
+    [:p.display-6.text-center.pb-3
+     [:span.text-primary "Ja! "] "Sie können" [:span.text-primary " jeden Monat"] " kündigen,
+     wenn Sie die monatliche Zahlweise gewählt haben. Wenn Sie die jährliche Zahlweise
+     wählen, können Sie zum Ablauf des Abonnementjahres kündigen."]]
+   [:section
+    [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
+     "Muss ich für mehr Leute extra bezahlen?"]
+    [:p.display-6.text-center.pb-3
+     [:span.text-primary "Nein, "] "Sie können" [:span.text-primary " beliebig viele Personen "]
+     " zu Ihrer Organisation hinzufügen. Jedes Unternehmen, Verein,
+     Bildungseinrichtung, usw. braucht " [:span.text-primary "nur ein Abonnement."]]]
+   [:section
+    [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
+     "Verlängert sich der Test-Zeitraum automatisch?"]
+    [:p.display-6.text-center.pb-3
+     [:span.text-primary "Nein, "] "wenn ihr Test-Zeitraum endet können Sie" [:span.text-primary " aktiv Entscheiden "]
+     " ob Sie Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchten.
+     Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] " auch nach dem Test-Zeitraum."]]
+   [:section
+    [:h3.text-center.display-5.font-weight-bold.text-dark-blue
+     "Kann ich den Testzeitraum verlängern?"]
+    [:p.display-6.text-center.pb-3
+     [:span.text-primary "Ja! "] "Schreiben Sie uns einfach eine " [:span.text-primary " E-Mail"] " an "
+     [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]]
+   [:section
+    [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
+     "Wer hat Zugriff auf meine Daten?"]
+    [:p.display-6.text-center.pb-3
+     "Jede Person die Sie Ihrem Unternehmen hinzufügen kann potentiell auf die hinterlegten Daten zugreifen."
+     "Technisch werden Ihre Daten vollständig sicher auf"
+     [:span.text-primary " deutschen Servern und DSGVO-Konform"] " abgespeichert. Mehr Informationen
+     dazu finden Sie auf unserer " [:a {:href (reititfe/href :routes/privacy)} "Datenschutzsseite."]]]])
 
 (defn- pricing-page
   "A full page depicting our pricing and related items."
@@ -138,7 +180,8 @@
     [pricing-box]
     [trial-box]
     [schnaq-features]
-    [comparison]]])
+    [comparison]
+    [faq]]])
 
 (defn pricing-view
   "The pricing view."
