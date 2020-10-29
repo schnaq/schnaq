@@ -20,7 +20,7 @@
   [:div.card.shadow-sm.tier-card
    [:div.card-body.d-flex.flex-column
     [:h3.card-title.text-center "Business"]
-    [:p.card-text "Ob 10 oder 50 Nutzer:innen - der Preis ist der gleiche.
+    [:p.card-text "Ob 10 oder 50 Nutzer:innen – der Preis ist der gleiche.
       Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle
       die strukturiert Wissen sammeln möchten."]
     [:p.card-text.text-center [:span.display-2 "79 €"] [:span "/ Monat"]]
@@ -32,7 +32,7 @@
 
 (defn- trial-box
   []
-  [:div.d-flex.justify-content-center.py-4
+  [:div.d-flex.justify-content-center.py-5
    [:div.trial-box.text-center.button-dark.shadow-sm
     [:p.display-6.font-weight-bold "30 Tage Business testen"]
     [:p "Keine Kreditkarte nötig! Jederzeit kündbar."]
@@ -54,7 +54,7 @@
 (defn- schnaq-features
   "List all features that are making schnaq a good deal."
   []
-  [:div.mt-2
+  [:div.my-3
    [:h3.text-center "Schnaq Abonnement Vorteile"]
    [:div.card-deck
     [feature-card "Unbegrenzte Teilnehmer:innen" "Lassen Sie so viele Mitarbeiter:innen wie Sie möchten kooperieren. *"]
@@ -73,14 +73,14 @@
   'schnaq vergleich <some competitors>'"
   []
   [:div.py-5
-   [:h1.text-center.pb-1 "Sie wachsen weiter - Sie sparen mehr!"]
-   [:h3.text-center.display-6 "Egal wie groß Ihr Team wird, der Preis bleibt der gleiche.
+   [:h1.text-center.pb-1 "Sie wachsen weiter – Sie sparen mehr!"]
+   [:h3.text-center.display-6 "Egal wie groß Ihr Team wird, der Preis bleibt der Gleiche.
    So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."]
-   [:div.row.pt-2
+   [:div.row.pt-4
     [:div.col-5.ml-auto.comparison-box.shadow-sm
      [:div.row.pt-3
-      [:div.col-3
-       [:img.img-fluid.pricing-logo {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
+      [:div.col-3.d-flex
+       [:img.img-fluid.pricing-logo.d-align-self-center {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
       [:div.col-9
        [:h3 "schnaq"]
        [:p.display-6 "79 € pro Monat für Ihr Unternehmen"]]]
@@ -117,7 +117,7 @@
        [:h3 "Confluence"]
        [:p [:span.display-6 "4,30 € pro Monat pro Nutzer:in"] [:br]
         "Wissensablage"]]]]]
-   [:div.row.pt-1
+   [:div.row.pt-2
     [:div.col-5.comparison-box.shadow-sm
      [:p.text-center.pt-2 [:span.display-6 [:span.display-5 "79 €"] " im Monat für 10 Personen"] [:br]
       "79 € für 20 Personen" [:br]
@@ -133,8 +133,7 @@
   "A full page depicting our pricing and related items."
   []
   [pages/with-nav-and-header
-   {:page/heading "Einmal schnaqqen, alles wissen!"
-    :page/subheading "Schnaq Abonnement"}
+   {:page/heading [:span.d-block.text-center "Schnaq Abonnement"]}
    [:div.container
     [pricing-box]
     [trial-box]
