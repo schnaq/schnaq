@@ -15,4 +15,4 @@
 (def periodic-update-time
   "Define how many times should the client query the server for live updates.
   Time must be in milliseconds."
-  1000)
+  3000)
