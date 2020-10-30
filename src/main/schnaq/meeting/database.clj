@@ -482,26 +482,28 @@
            [?meeting :meeting/share-hash ?hash]]
          (d/db (new-connection)) hash agenda-pattern)))
 
-(>defn all-statements
+(>defn- all-statements
   "Returns all statements belonging to a discussion"
   [discussion-id]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (distinct
     (concat
-      (d/q
-        '[:find (pull ?statements statement-pattern)
-          :in $ ?discussion-id statement-pattern
-          :where [?arguments :argument/discussions ?discussion-id]
-          [?statements :statement/version _]
-          (or
-            [?arguments :argument/conclusion ?statements]
-            [?arguments :argument/premises ?statements])]
-        (d/db (new-connection)) discussion-id graph-statement-pattern)
-      (d/q
-        '[:find (pull ?statements statement-pattern)
-          :in $ ?discussion-id statement-pattern
-          :where [?discussion-id :discussion/starting-statements ?statements]]
-        (d/db (new-connection)) discussion-id graph-statement-pattern))))
+      (flatten
+        (d/q
+          '[:find (pull ?statements statement-pattern)
+            :in $ ?discussion-id statement-pattern
+            :where [?arguments :argument/discussions ?discussion-id]
+            [?statements :statement/version _]
+            (or
+              [?arguments :argument/conclusion ?statements]
+              [?arguments :argument/premises ?statements])]
+          (d/db (new-connection)) discussion-id graph-statement-pattern))
+      (flatten
+        (d/q
+          '[:find (pull ?statements statement-pattern)
+            :in $ ?discussion-id statement-pattern
+            :where [?discussion-id :discussion/starting-statements ?statements]]
+          (d/db (new-connection)) discussion-id graph-statement-pattern)))))
 
 (>defn number-of-statements-for-discussion
   "Returns number of statements for a discussion-id."
