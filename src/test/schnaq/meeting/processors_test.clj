@@ -16,7 +16,7 @@
           upvotes-only (filter number? (map :meta/upvotes statements-only))
           downvotes-only (filter number? (map :meta/downvotes statements-only))]
       (is (= (count statements-only) (count upvotes-only) (count downvotes-only)))
-      (is (= 0 (count wrongly-asserted-meta))))))
+      (is (zero? (count wrongly-asserted-meta))))))
 
 (deftest with-sub-discussion-information-test
   (testing "Testing enrichment with sub-discussion-information."

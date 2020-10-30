@@ -31,7 +31,7 @@
       (is (db/did-user-downvote-statement (second some-statements) author-1))
       (is (= 2 (db/upvotes-for-statement (first some-statements))))
       (is (= 1 (db/downvotes-for-statement (second some-statements))))
-      (is (= 0 (db/downvotes-for-statement (first some-statements))))
+      (is (zero? (db/downvotes-for-statement (first some-statements))))
       ;; No up- and downvote for the same statement by the same user!
       (db/downvote-statement! (first some-statements) author-1)
       (is (= 1 (db/upvotes-for-statement (first some-statements))))
@@ -39,8 +39,8 @@
       ;; Remove the up and downvotes now
       (db/remove-downvote! (first some-statements) author-1)
       (db/remove-upvote! (first some-statements) author-2)
-      (is (= 0 (db/upvotes-for-statement (first some-statements))))
-      (is (= 0 (db/downvotes-for-statement (first some-statements)))))))
+      (is (zero? (db/upvotes-for-statement (first some-statements))))
+      (is (zero? (db/downvotes-for-statement (first some-statements)))))))
 
 (deftest valid-statement-id-and-meeting?-test
   (testing "Test the function that checks whether a statement belongs to a certain meeting."
@@ -295,7 +295,7 @@
           meeting-hash "89eh32hoas-2983ud"
           meeting-id (:db/id (db/meeting-by-hash meeting-hash))
           feedback "Hör mal gut zu mein Freundchen, das ist nicht gut so!"]
-      (is (= 0 (count (db/meeting-feedback-for meeting-hash))))
+      (is (zero? (count (db/meeting-feedback-for meeting-hash))))
       (db/add-meeting-feedback feedback meeting-id user-id)
       (is (= 1 (count (db/meeting-feedback-for meeting-hash))))
       (is (= feedback (:meeting.feedback/content (first (db/meeting-feedback-for meeting-hash))))))))

@@ -14,6 +14,6 @@
                       :down {321 1}}
           calculate-votes @#'d/calculate-votes]
       (is (= 4 (calculate-votes statement-1 :upvotes vote-store)))
-      (is (= 0 (calculate-votes statement-2 :upvotes vote-store)))
+      (is (zero? (calculate-votes statement-2 :upvotes vote-store)))
       (is (= 1 (calculate-votes statement-1 :downvotes vote-store)))
       (is (= 2 (calculate-votes statement-2 :downvotes vote-store))))))
