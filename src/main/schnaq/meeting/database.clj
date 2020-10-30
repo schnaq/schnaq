@@ -120,10 +120,11 @@
    :meeting/share-hash
    {:meeting/author author-pattern}])
 
-(def ^:private graph-statement-pattern
+(def ^:private statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
-   [:statement/content :as :content]
+   :statement/content
+   :statement/version
    {:statement/author [:author/nickname]}])
 
 (def ^:private meeting-pattern
@@ -497,13 +498,13 @@
             (or
               [?arguments :argument/conclusion ?statements]
               [?arguments :argument/premises ?statements])]
-          (d/db (new-connection)) discussion-id graph-statement-pattern))
+          (d/db (new-connection)) discussion-id statement-pattern))
       (flatten
         (d/q
           '[:find (pull ?statements statement-pattern)
             :in $ ?discussion-id statement-pattern
             :where [?discussion-id :discussion/starting-statements ?statements]]
-          (d/db (new-connection)) discussion-id graph-statement-pattern)))))
+          (d/db (new-connection)) discussion-id statement-pattern)))))
 
 (>defn number-of-statements-for-discussion
   "Returns number of statements for a discussion-id."
@@ -596,7 +597,7 @@
     (fn [[statement & _]]
       {:author (-> statement :statement/author :author/nickname)
        :id (:db/id statement)
-       :label (:content statement)})
+       :label (:statement/content statement)})
     (all-statements discussion-id)))
 
 (>defn add-user-if-not-exists
@@ -1021,19 +1022,6 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions [discussion-id]}))
-
-;; TODO remove this at once!
-(>defn add-new-starting-argument!
-  "DEPRECATED. Use `add-starting-statement!` instead.
-
-  Creates a new starting argument in a discussion."
-  [discussion-id author-id conclusion premises]
-  [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret :db/id]
-  (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
-        temporary-id (:db/id new-argument)]
-    (get-in (transact [new-argument
-                       [:db/add discussion-id :discussion/starting-arguments temporary-id]])
-            [:tempids temporary-id])))
 
 (defn- build-new-statement
   "Builds a new statement for transaction."

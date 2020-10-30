@@ -417,13 +417,13 @@
             discussion-id))
       (deny-access invalid-rights-message))))
 
-(defn- add-starting-argument!
+(defn- add-starting-statement!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id premises conclusion nickname]} body-params
+  (let [{:keys [share-hash discussion-id statement nickname]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (do (db/add-new-starting-argument! discussion-id author-id conclusion premises)
+      (do (db/add-starting-statement! discussion-id author-id statement)
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
       (deny-access invalid-rights-message))))
 
@@ -574,12 +574,12 @@
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/argument/undercut" [] undercut-argument!)
-    (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
     (POST "/discussion/react-to/statement" [] react-to-any-statement!)
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
+    (POST "/discussion/statements/starting/add" [] add-starting-statement!)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
@@ -651,7 +651,7 @@
   (let [port (:port config/api)
         allowed-origins [allowed-origin]
         allowed-origins' (if schnaq-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
-    ; Run the server with Ring.defaults middleware
+    ; Run the server with Ring.defaults middle-ware
     (schnaq-core/-main)
     (reset! current-server
             (server/run-server

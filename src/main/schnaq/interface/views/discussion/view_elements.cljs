@@ -70,60 +70,52 @@
      [:div.discussion-primary-background
       content])))
 
-(defn- input-starting-argument-form
-  "A form, which allows the input of a complete argument.
-  (Premise and Conclusion as statements)"
+(defn- input-starting-statement-form
+  "A form, which allows the input of a starting-statement."
   []
   [:form
    {:on-submit (fn [e] (js-wrap/prevent-default e)
-                 (rf/dispatch [:discussion.add.argument/starting
+                 (rf/dispatch [:discussion.add.statement/starting
                                (oget e [:target :elements])]))}
    [:textarea.form-control.discussion-text-input.mb-5
-    {:name "conclusion-text" :wrap "soft" :rows 2
+    {:name "statement-text" :wrap "soft" :rows 2
      :auto-complete "off"
      :required true
      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-   [:textarea.form-control.discussion-text-input.mb-1
-    {:name "premise-text" :wrap "soft" :rows 2
-     :auto-complete "off"
-     :required true
-     :placeholder (labels :discussion/add-argument-premise-placeholder)}]
    [:div.text-center.button-spacing-top
     [:button.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
 
 (rf/reg-event-fx
-  :discussion.add.argument/starting
+  :discussion.add.statement/starting
   (fn [{:keys [db]} [_ form]]
     (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
           nickname (get-in db [:user :name] "Anonymous")
-          conclusion-text (oget form [:conclusion-text :value])
-          premise-text (oget form [:premise-text :value])]
+          statement-text (oget form [:statement-text :value])]
       {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/arguments/starting/add")
+                          :uri (str (:rest-backend config) "/discussion/statements/starting/add")
                           :format (ajax/transit-request-format)
-                          :params {:conclusion conclusion-text
-                                   :premises [premise-text]
+                          :params {:statement statement-text
                                    :nickname nickname
                                    :share-hash share-hash
                                    :discussion-id id}
                           :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.add.argument/starting-success form]
+                          :on-success [:discussion.add.statement/starting-success form]
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
-  :discussion.add.argument/starting-success
-  (fn [_ [_ form new-starting-conclusions]]
+  :discussion.add.statement/starting-success
+  (fn [_ [_ form new-starting-statements]]
     {:fx [[:dispatch [:notification/add
                       #:notification{:title (labels :discussion.notification/new-content-title)
                                      :body (labels :discussion.notification/new-content-body)
                                      :context :success}]]
-          [:dispatch [:discussion.query.conclusions/set-starting new-starting-conclusions]]
+          [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
           [:form/clear form]]}))
 
 (defn input-field []
   [:div.discussion-primary-background
    [:div.mb-5 [:h5 (labels :discussion/create-argument-heading)]]
-   [input-starting-argument-form]])
+   [input-starting-statement-form]])
 
 (defn input-form
   "Text input for adding a statement"

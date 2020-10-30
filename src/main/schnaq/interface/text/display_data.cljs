@@ -298,11 +298,9 @@
      ;; Discussion Language
      :discussion/agree "Zustimmung"
      :discussion/disagree "Ablehnung"
-     :discussion/create-argument-action "Meinung hinzufügen"
+     :discussion/create-argument-action "Beitrag hinzufügen"
      :discussion/create-argument-heading "Eigene Meinung abgeben / Informationen hinzufügen"
      :discussion/add-argument-conclusion-placeholder "Das denke ich darüber."
-     :discussion/add-argument-premise-placeholder "Und das ist meine Begründung dafür."
-     :discussion/add-starting-premise-placeholder "weil..."
      :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
      :discussion/add-premise-against "Ich habe einen Grund dagegen"
      :discussion/add-undercut "Die letzten beiden Aussagen passen nicht zusammen"
