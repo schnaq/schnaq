@@ -1,3 +1,8 @@
 {:lint-as {ghostwheel.core/>defn clojure.core/defn
            ghostwheel.core/>defn- clojure.core/defn}
- :linters {:single-key-in {:level :warning}}}
+ :linters {:single-key-in {:level :warning}
+           :deprecated-var
+           {:exclude
+            {schnaq.meeting.database/starting-conclusions-by-discussion
+             {:defs [schnaq.meeting.database/starting-conclusions-by-discussion]
+              :namespaces [schnaq.api]}}}}}
