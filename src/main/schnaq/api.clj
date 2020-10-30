@@ -382,7 +382,9 @@
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [discussion-id]
-  (with-statement-meta (db/starting-conclusions-by-discussion discussion-id) discussion-id))
+  (let [deprecated-starters (db/starting-conclusions-by-discussion discussion-id)
+        starting-statements (db/starting-statements discussion-id)]
+    (with-statement-meta (concat starting-statements deprecated-starters) discussion-id)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
