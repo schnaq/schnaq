@@ -140,16 +140,17 @@
                                 (rf/dispatch [:agenda/load-chosen (:share-hash path) (:id path)]))}]}
        ["/discussion"
         ["/start"
-         {:controllers [{:parameters {:path [:share-hash :id]}
-                         :start (fn []
-                                  (rf/dispatch [:discussion.history/clear])
-                                  (rf/dispatch [:updates.periodic/starting-conclusions true])
-                                  (rf/dispatch [:discussion.query.conclusions/starting]))
+         [""
+          {:controllers [{:parameters {:path [:share-hash :id]}
+                          :start (fn []
+                                   (rf/dispatch [:discussion.history/clear])
+                                   (rf/dispatch [:updates.periodic/starting-conclusions true])
+                                   (rf/dispatch [:discussion.query.conclusions/starting]))
                           :stop (fn []
                                   (rf/dispatch [:updates.periodic/starting-conclusions false]))}]
-          :name :routes.discussion/start
-          :view discussion-views/discussion-start-view-entrypoint
-          :link-text (labels :router/start-discussion)}]
+           :name :routes.discussion/start
+           :view discussion-views/discussion-start-view-entrypoint
+           :link-text (labels :router/start-discussion)}]]
         ["/selected/:statement-id"
          {:name :routes.discussion.select/statement
           :parameters {:path {:statement-id int?}}
