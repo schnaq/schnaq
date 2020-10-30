@@ -960,10 +960,8 @@
   (d/pull (d/db (new-connection)) statement-pattern statement-id))
 
 (>defn starting-conclusions-by-discussion
-  "DEPRECATED.
-  Use `starting-statements` instead.
-
-  Query all conclusions belonging to starting-arguments of a certain discussion."
+  {:deprecated "Use `starting-statements` instead"
+   :doc "Query all conclusions belonging to starting-arguments of a certain discussion."}
   [discussion-id]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (flatten
