@@ -1,7 +1,7 @@
 (ns schnaq.interface.utils.localstorage
-  (:require [ghostwheel.core :refer [>defn >defn- ?]]
-            [cljs.spec.alpha :as s]
-            [clojure.string :as string]))
+  (:require [cljs.spec.alpha :as s]
+            [clojure.string :as string]
+            [ghostwheel.core :refer [>defn >defn- ?]]))
 
 (>defn- keyword->string
   "Takes (namespaced) keywords and creates a string. Optionally is prefixed with
@@ -37,6 +37,24 @@
   [key]
   [keyword? :ret nil?]
   (.removeItem (.-localStorage js/window) (stringify key)))
+
+(>defn localstorage->map
+  "Dump complete content of localstorage into a map. Removes debug data from
+  re-frame-10x."
+  []
+  [:ret map?]
+  (into {}
+        (for [i (range (.-length (.-localStorage js/window)))
+              :let [k (.key (.-localStorage js/window) i)
+                    v (get-item k)]
+              :when (not (string/starts-with? k "day8.re-frame-10x"))]
+          [k v])))
+
+(>defn clear!
+  "Delete all information stored in the LocalStorage."
+  []
+  [:ret nil?]
+  (.clear (.-localStorage js/window)))
 
 ;; #### Hashmap Storage Helper ####
 

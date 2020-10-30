@@ -97,10 +97,6 @@
      :feature.meetings.tbd/timeboxing "Timeboxing während des Meetings"
      :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
      :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
-     :features.privacy/lead "EU-Konformes Vorgehen"
-     :features.privacy/title "Datenschutz ist uns wichtig!"
-     :features.privacy/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO-Konform zu agieren und sämtliche Daten sicher auf europäischen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
-
 
      ;; calendar invitation
      :calendar-invitation/title "Termin festlegen und herunterladen"
@@ -201,7 +197,7 @@
      :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Legen Sie los!"
      :meetings/continue-to-schnaq-button "Zum schnaq"
      :meetings/edit-schnaq-button "schnaq editieren"
-     :meetings/share-calendar-invite "Kalendareinladung versenden"
+     :meetings/share-calendar-invite "Kalendereinladung versenden"
      :meetings.suggestions/header "Vorschläge einreichen"
      :meetings.suggestions/subheader "Die erstellende Person kann die Vorschläge einsehen und berücksichtigen"
 
@@ -219,6 +215,27 @@
      :brainstorm/heading "Brainstorm anlegen"
      :brainstorm.buttons/start-now "Jetzt ein Brainstorming starten"
 
+     ;; Privacy Page
+     :privacy/heading "Was geschieht mit Ihren Daten?"
+     :privacy/subheading "Wir erklären es Ihnen gerne!"
+     :privacy.made-in-germany/lead "EU-Konformes Vorgehen"
+     :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
+     :privacy.made-in-germany/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf deutschen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+     :privacy.personal-data/lead "Welche Daten werden erhoben?"
+     :privacy.personal-data/title "Persönliche Daten"
+     :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und Ihr Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn Sie dem zustimmen. "] [:p "Wenn Sie uns unterstützen wollen und der anonymisierten Analyse zustimmen, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Einstellungen prüfen"]]]
+     :privacy.localstorage/lead "Welche Daten schicke ich an die Server?"
+     :privacy.localstorage/title "Datenaustausch"
+     :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten zu Ihnen auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicken Sie auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in Ihrem Browser (im LocalStorage) abgespeichert. Besuchen Sie dann schnaq erneut, schickt Ihr Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ können Sie sich die Zugangslinks per E-Mail schicken lassen und halten so alle für den Betrieb notwendigen Daten selbst in der Hand."]
+                                 [:p "Im Unterschied zu herkömmlichen Cookies verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von Ihnen an uns zurückschickt. Schauen Sie selbst, welche Daten das genau sind, indem Sie auf den Button klicken."]]
+     :privacy.localstorage/show-data "Ihre Daten anzeigen"
+     :privacy.localstorage.notification/title "Diese Daten hat Ihr Browser gespeichert"
+     :privacy.localstorage.notification/body "Hinweis: \"Kryptische\" Zeichenketten sind die Zugangscodes zu Ihren schnaqs."
+     :privacy.localstorage.notification/confirmation "Wollen Sie Ihre Daten wirklich löschen?"
+     :privacy.localstorage.notification/delete-button "Daten löschen"
+     :privacy.link-to-privacy/lead "Mehr Informationen finden Sie in unserer ausführlichen "
+     :privacy.link-to-privacy/privacy "Datenschutzerklärung"
+
      ;; schnaqs not found
      :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
      :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
@@ -233,7 +250,7 @@
      :meeting.admin-center.edit.link/header "Zugang zum Admin-Center"
      :meeting.admin-center.edit.link/primer "Administration ist Arbeit, lassen Sie sich helfen!"
      :meeting.admin-center.edit.link/admin "Zugang zum Admin-Center per Mail"
-     :meeting.admin-center.edit.link/admin-privilges "Editieren und Vorschläge verwalten"
+     :meeting.admin-center.edit.link/admin-privileges "Editieren und Vorschläge verwalten"
      :meeting.admin-center.edit.link.form/label "E-Mail Adresse der Administrator:innen"
      :meeting.admin-center.edit.link.form/placeholder "Eine E-Mailadresse eingeben"
      :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
@@ -245,7 +262,7 @@
      :suggestions.modal/header "Eingereichte Vorschläge"
      :suggestions.modal/primer "Einige TeilnehmerInnen haben Ihnen Vorschläge zu Ihrem schnaq gegeben."
      :suggestions.modal/primer-delete "Folgende Teilnehmer:innen schlagen die Löschung des Agendapunktes vor."
-     :suggestions.modal.delete/button "Entgültig löschen"
+     :suggestions.modal.delete/button "Endgültig löschen"
      :suggestions.modal.table/nickname "Nickname"
      :suggestions.modal.table/suggestion-title "Titel"
      :suggestions.modal.table/suggestion-description "Beschreibung"
@@ -463,26 +480,26 @@
      :pricing/headline "Schnaq Abonnement"
 
      ;; Route Link Texts
-     :router/all-meetings "Alle schnaqs"
+     :router.features/discussion "Diskussionsfeatures"
+     :router.features/meetings "Meeting Features"
      :router/all-feedbacks "Alle Feedbacks"
-     :router/create-meeting "Schnaq anlegen"
+     :router/all-meetings "Alle schnaqs"
+     :router/analytics "Analyse-Dashboard"
+     :router/continue-discussion "Führe Besprechung fort"
      :router/create-brainstorm "Brainstorm anlegen"
+     :router/create-meeting "Schnaq anlegen"
+     :router/graph-view "Graph View"
+     :router/how-to "Wie benutze ich schnaq?"
+     :router/invalid-link "Fehlerseite"
      :router/meeting-created "Zuletzt angelegter schnaq"
      :router/my-schnaqs "Meine schnaqs"
+     :router/not-found-label "Not Found route redirect"
+     :router/pricing "Preise"
+     :router/privacy "Datenschutz"
      :router/show-single-meeting "Schnaq anzeigen"
      :router/start-discussion "Starte Besprechung"
-     :router/continue-discussion "Führe Besprechung fort"
      :router/startpage "Startseite"
-     :router/how-to "Wie benutze ich schnaq?"
-     :router/analytics "Analyse-Dashboard"
-     :router/invalid-link "Fehlerseite"
-     :router/true-404-view "404 Fehlerseite"
-     :router/not-found-label "Not Found route redirect"
-     :router/graph-view "Graph View"
-     :router.features/meetings "Meeting Features"
-     :router.features/discussion "Diskussionsfeatures"
-     :router/pricing "Preise"}))
-
+     :router/true-404-view "404 Fehlerseite"}))
 
 (defn img-path
   "Returns an image path as String for a given identifier"
@@ -504,6 +521,7 @@
      :icon-robot "/imgs/robot.svg"
      :logo "/imgs/Schnaq-Logo.svg"
      :logo-white "/imgs/Schnaq-Logo-White.svg"
+     :privacy/made-in-germany "/imgs/privacy/shield.jpg"
      :schnaqqifant/original "/imgs/schnaqqifant.svg"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
@@ -552,6 +570,8 @@
      :cog "fa-cogs"
      :comment "fa-comments"
      :comment-alt "fa-comment-alt"
+     :cookie/bite "fa-cookie-bite"
+     :cookie/complete "fa-cookie"
      :copy "fa-copy"
      :check "fa-check-square"
      :check-double "fa-check-double"
@@ -564,7 +584,9 @@
      :shield "fa-shield-alt"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
-     :users "fa-users"}))
+     :user/group "fa-users"
+     :user/lock "fa-user-lock"
+     :user/shield "fa-user-shield"}))
 
 (defn colors
   "Color definitions according to our css styles."

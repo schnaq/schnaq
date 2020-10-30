@@ -178,7 +178,7 @@
        :title (labels :discussion.badges/user-overview)
        :data-html true
        :data-content (build-author-list (get-in statement [:meta/sub-discussion-info :authors]))}
-      [:i {:class (str "m-auto fas " (fa :users))}] " "
+      [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (-> statement :meta/sub-discussion-info :authors count)]]))
 
 (defn statement-bubble

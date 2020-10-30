@@ -38,7 +38,8 @@
                         (clipboard/copy-to-clipboard! display-content)
                         (notify! (labels :meeting/link-copied-heading)
                                  (labels :meeting/link-copied-success)
-                                 :info))
+                                 :info
+                                 false))
             :data-toggle "tooltip"
             :data-placement "bottom"
             :title (labels :meeting/copy-link-tooltip)}
@@ -162,7 +163,7 @@
     ;; elephant edit
     [:div.col-md-6.share-link-icons
      [img-text (img-path :elephant-erase)
-      (labels :meeting.admin-center.edit.link/admin-privilges)]]]
+      (labels :meeting.admin-center.edit.link/admin-privileges)]]]
    ;; admin mail input
    (let [input-id "admin-link-mail-address"]
      [:form.form.text-left.mb-5
