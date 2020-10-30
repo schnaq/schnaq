@@ -478,6 +478,8 @@
      :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
      :pricing.faq.privacy/body-3 " finden Sie mehr Informationen"
      :pricing/headline "Schnaq Abonnement"
+     :pricing.newsletter/lead "Werden Sie sofort informiert, wenn das Abonnement live geht: "
+     :pricing.newsletter/name "DisqTec Newsletter."
 
      ;; Route Link Texts
      :router.features/discussion "Diskussionsfeatures"

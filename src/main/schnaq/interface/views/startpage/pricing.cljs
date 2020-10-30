@@ -39,9 +39,13 @@
 (defn- pricing-box
   "A box displaying the different subscription tiers we offer."
   []
-  [:div.card-deck.pt-3
-   [free-tier-card]
-   [business-tier-card]])
+  [:<>
+   [:div.card-deck.pt-3
+    [free-tier-card]
+    [business-tier-card]]
+   [:p.text-dark-blue.display-6.text-center.pt-2
+    (labels :pricing.newsletter/lead)
+    [:a {:href "https://disqtec.com/newsletter"} (labels :pricing.newsletter/name)]]])
 
 (defn- feature-card
   [title description]
