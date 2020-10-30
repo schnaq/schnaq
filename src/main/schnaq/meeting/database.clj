@@ -446,7 +446,7 @@
                        {:db/id "whatever-forget-it"
                         :discussion/title title
                         :discussion/states [:discussion.state/open]
-                        :discussion/starting-arguments []}}
+                        :discussion/starting-statements []}}
            agenda (if (and description (s/valid? :agenda/description description))
                     (merge-with merge
                                 raw-agenda
