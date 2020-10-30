@@ -313,17 +313,6 @@
       (is (= 27 (db/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
       (is (= 7 (db/number-of-statements-for-discussion (:db/id graph-discussion)))))))
 
-(deftest starting-conclusions-by-discussion-test
-  (testing "Whether starting arguments are returned correctly"
-    (let [meeting-hash "graph-hash"
-          discussion-id
-          (->> meeting-hash
-               db/agendas-by-meeting-hash
-               first
-               :agenda/discussion :db/id)
-          starting-conclusions (db/starting-conclusions-by-discussion discussion-id)]
-      (is (= 2 (count starting-conclusions))))))
-
 (deftest pack-premises-test
   (testing "Test the creation of statement-entities from strings"
     (let [premises ["What a beautifull day" "Hello test"]
@@ -462,12 +451,12 @@
           conclusion (:db/id (:argument/conclusion any-argument))]
       (is (= (:db/id any-argument) (db/argument-id-by-premise-conclusion premise conclusion))))))
 
-(deftest starting-arguments-by-discussion-test
-  (testing "Should return all starting-arguments from a discussion."
+(deftest starting-statements-test
+  (testing "Should return all starting-statements from a discussion."
     (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
           simple-discussion (:db/id (first (db/all-discussions-by-title "Simple Discussion")))
           graph-discussion (:db/id (first (db/all-discussions-by-title "Wetter Graph")))]
-      (are [result discussion] (= result (count (db/starting-arguments-by-discussion discussion)))
-                               7 cat-or-dog-id
+      (are [result discussion] (= result (count (db/starting-statements discussion)))
+                               3 cat-or-dog-id
                                1 simple-discussion
                                2 graph-discussion))))

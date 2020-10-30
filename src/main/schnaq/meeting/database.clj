@@ -943,7 +943,8 @@
    :discussion/title
    :discussion/description
    {:discussion/states [:db/ident]}
-   {:discussion/starting-arguments argument-pattern}])
+   {:discussion/starting-arguments argument-pattern}
+   {:discussion/starting-statements statement-pattern}])
 
 (>defn get-statement
   "Returns the statement given an id."
@@ -952,7 +953,10 @@
   (d/pull (d/db (new-connection)) statement-pattern statement-id))
 
 (>defn starting-conclusions-by-discussion
-  "Query all conclusions belonging to starting-arguments of a certain discussion."
+  "DEPRECATED.
+  Use `starting-statements` instead.
+
+  Query all conclusions belonging to starting-arguments of a certain discussion."
   [discussion-id]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (flatten
@@ -961,6 +965,17 @@
         :in $ ?discussion-id statement-pattern
         :where [?discussion-id :discussion/starting-arguments ?starting-arguments]
         [?starting-arguments :argument/conclusion ?starting-conclusions]]
+      discussion-id statement-pattern)))
+
+(>defn starting-statements
+  "Returns all starting-statements belonging to a discussion."
+  [discussion-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (flatten
+    (query
+      '[:find (pull ?statements statement-pattern)
+        :in $ ?discussion-id statement-pattern
+        :where [?discussion-id :discussion/starting-statements ?statements]]
       discussion-id statement-pattern)))
 
 (>defn- pack-premises
@@ -1050,6 +1065,7 @@
       flatten
       (toolbelt/pull-key-up :db/ident)))
 
+;; TODO refactor this out
 (defn starting-arguments-by-discussion
   "Deep-Query all starting-arguments of a certain discussion."
   [discussion-id]
