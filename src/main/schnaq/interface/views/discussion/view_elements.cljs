@@ -33,15 +33,17 @@
 
 (defn agenda-header-back-arrow [meeting on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
-        {:keys [meeting/share-hash]} @(rf/subscribe [:meeting/selected])]
+        {:keys [meeting/share-hash]} meeting
+        current-view (-> @(rf/subscribe [:navigation/current-route]) :data :name)]
     [:div.discussion-primary-background
      [:div.row
       ;; back arrow
-      (when-not (btools/is-brainstorm? meeting)
-        [:div.col-1.back-arrow
+      [:div.col-1.back-arrow
+       (when-not (and (btools/is-brainstorm? meeting)
+                      (= :routes.discussion/start current-view))
          (when on-click-back-function
            [:p {:on-click on-click-back-function}
-            [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])])
+            [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]))]
       ;; title
       [:div.col-8.col-lg-10
        [:h2.clickable-no-hover
@@ -50,17 +52,14 @@
                                    :id (:db/id (:agenda/discussion agenda))}])}
         (:agenda/title agenda)]
        [markdown-parser/markdown-to-html (:agenda/description agenda)]]
-      (let [classes "col-3 col-lg-1 graph-icon"]
-        [:div {:class (if (btools/is-brainstorm? meeting)
-                        (str classes " offset-1")
-                        classes)}
-         [:img.graph-icon-img.clickable-no-hover
-          {:src (img-path :icon-graph) :alt (labels :graph.button/text)
-           :title (labels :graph.button/text)
-           :on-click #(rf/dispatch
-                        [:navigation/navigate :routes/graph-view
-                         {:id (-> agenda :agenda/discussion :db/id)
-                          :share-hash share-hash}])}]])]]))
+      [:div.col-3.col-lg-1.graph-icon
+       [:img.graph-icon-img.clickable-no-hover
+        {:src (img-path :icon-graph) :alt (labels :graph.button/text)
+         :title (labels :graph.button/text)
+         :on-click #(rf/dispatch
+                      [:navigation/navigate :routes/graph-view
+                       {:id (-> agenda :agenda/discussion :db/id)
+                        :share-hash share-hash}])}]]]]))
 
 (defn input-footer
   ([content]
@@ -271,7 +270,7 @@
               :on-click (fn [_e]
                           (rf/dispatch [:discussion.select/conclusion conclusion])
                           (rf/dispatch [:discussion.history/push conclusion])
-                          (rf/dispatch [:navigation/navigate :routes.discussion.start/statement
+                          (rf/dispatch [:navigation/navigate :routes.discussion.select/statement
                                         (assoc path-params :statement-id (:db/id conclusion))]))}
         [statement-bubble conclusion :neutral]])]))
 

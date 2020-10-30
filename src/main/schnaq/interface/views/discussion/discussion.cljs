@@ -96,17 +96,11 @@
 (defn- present-conclusion-view
   [add-form]
   (let [current-premises @(rf/subscribe [:discussion.premises/current])
-        current-meeting @(rf/subscribe [:meeting/selected])
-        current-route @(rf/subscribe [:navigation/current-route])]
+        current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page current-meeting
      [:<>
-      [view/agenda-header-back-arrow
-       (fn []
-         (if (= :routes.discussion.start/statement (-> current-route :data :name))
-           (rf/dispatch [:navigation/navigate :routes.discussion/start
-                         {:share-hash (:meeting/share-hash current-meeting)
-                          :id (-> current-route :parameters :path :id)}])
-           (rf/dispatch [:discussion.history/time-travel 1])))]
+      [view/agenda-header-back-arrow current-meeting
+       #(rf/dispatch [:discussion.history/time-travel 1])]
       [view/history-view]
       [view/input-footer add-form]
       [carousel/carousel-element current-premises]]]))
