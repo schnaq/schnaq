@@ -482,23 +482,32 @@
            [?meeting :meeting/share-hash ?hash]]
          (d/db (new-connection)) hash agenda-pattern)))
 
-;; TODO this does not look at starting-statements
+(>defn all-statements
+  "Returns all statements belonging to a discussion"
+  [discussion-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (distinct
+    (concat
+      (d/q
+        '[:find (pull ?statements statement-pattern)
+          :in $ ?discussion-id statement-pattern
+          :where [?arguments :argument/discussions ?discussion-id]
+          [?statements :statement/version _]
+          (or
+            [?arguments :argument/conclusion ?statements]
+            [?arguments :argument/premises ?statements])]
+        (d/db (new-connection)) discussion-id graph-statement-pattern)
+      (d/q
+        '[:find (pull ?statements statement-pattern)
+          :in $ ?discussion-id statement-pattern
+          :where [?discussion-id :discussion/starting-statements ?statements]]
+        (d/db (new-connection)) discussion-id graph-statement-pattern))))
+
 (>defn number-of-statements-for-discussion
   "Returns number of statements for a discussion-id."
   [discussion-id]
   [int? :ret int?]
-  (or
-    (ffirst
-      (d/q
-        '[:find (count ?statements)
-          :in $ ?discussion-id
-          :where [?arguments :argument/discussions ?discussion-id]
-          (or
-            [?arguments :argument/premises ?statements]
-            [?arguments :argument/conclusion ?statements])
-          [?statements :statement/content _]]
-        (d/db (new-connection)) discussion-id))
-    0))
+  (count (all-statements discussion-id)))
 
 (defn agenda-by-discussion-id
   "Returns an agenda which has the corresponding `discussion-id`."
@@ -577,8 +586,7 @@
   (:author/nickname
     (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
 
-;; TODO this should incoorporate starting-statements
-(>defn all-statements-for-discussion
+(>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
   [discussion-id]
   [int? :ret sequential?]
@@ -587,17 +595,7 @@
       {:author (-> statement :statement/author :author/nickname)
        :id (:db/id statement)
        :label (:content statement)})
-    (d/q
-      '[:find (pull ?statements statement-pattern)
-        :in $ ?discussion-id statement-pattern
-        :where [?arguments :argument/discussions ?discussion-id]
-        (or-join [?statements]
-                 [?discussion-id :discussion/starting-statements ?statements]
-                 (and [?statements :statement/version _]
-                      (or
-                        [?arguments :argument/conclusion ?statements]
-                        [?arguments :argument/premises ?statements])))]
-      (d/db (new-connection)) discussion-id graph-statement-pattern)))
+    (all-statements discussion-id)))
 
 (>defn add-user-if-not-exists
   "Adds an author and user if they do not exist yet. Returns the (new) user-id."

@@ -544,7 +544,7 @@
   (let [share-hash (:share-hash body-params)
         discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (let [statements (db/all-statements-for-discussion discussion-id)
+      (let [statements (db/all-statements-for-graph discussion-id)
             starting-statements (db/starting-statements discussion-id)
             edges (discussion/links-for-agenda statements starting-statements discussion-id)
             controversy-vals (discussion/calculate-controversy edges)]

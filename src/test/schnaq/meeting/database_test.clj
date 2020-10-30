@@ -213,7 +213,7 @@
 (deftest all-statements-for-discussion-test
   (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
-          statements (db/all-statements-for-discussion discussion-id)]
+          statements (db/all-statements-for-graph discussion-id)]
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
 
