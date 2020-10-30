@@ -482,6 +482,7 @@
            [?meeting :meeting/share-hash ?hash]]
          (d/db (new-connection)) hash agenda-pattern)))
 
+;; TODO this does not look at starting-statements
 (>defn number-of-statements-for-discussion
   "Returns number of statements for a discussion-id."
   [discussion-id]
@@ -576,6 +577,7 @@
   (:author/nickname
     (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
 
+;; TODO this should incoorporate starting-statements
 (>defn all-statements-for-discussion
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
   [discussion-id]
@@ -589,10 +591,12 @@
       '[:find (pull ?statements statement-pattern)
         :in $ ?discussion-id statement-pattern
         :where [?arguments :argument/discussions ?discussion-id]
-        [?statements :statement/version _]
-        (or
-          [?arguments :argument/conclusion ?statements]
-          [?arguments :argument/premises ?statements])]
+        (or-join [?statements]
+                 [?discussion-id :discussion/starting-statements ?statements]
+                 (and [?statements :statement/version _]
+                      (or
+                        [?arguments :argument/conclusion ?statements]
+                        [?arguments :argument/premises ?statements])))]
       (d/db (new-connection)) discussion-id graph-statement-pattern)))
 
 (>defn add-user-if-not-exists
@@ -1008,14 +1012,37 @@
     :argument/type :argument.type/support
     :argument/discussions [discussion-id]}))
 
+;; TODO remove this at once!
 (>defn add-new-starting-argument!
-  "Creates a new starting argument in a discussion."
+  "DEPRECATED. Use `add-starting-statement!` instead.
+
+  Creates a new starting argument in a discussion."
   [discussion-id author-id conclusion premises]
   [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret :db/id]
   (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
         temporary-id (:db/id new-argument)]
     (get-in (transact [new-argument
                        [:db/add discussion-id :discussion/starting-arguments temporary-id]])
+            [:tempids temporary-id])))
+
+(defn- build-new-statement
+  "Builds a new statement for transaction."
+  ([author-id content]
+   (build-new-statement author-id content (str "conclusion-" content)))
+  ([author-id content temp-id]
+   {:db/id temp-id
+    :statement/author author-id
+    :statement/content content
+    :statement/version 1}))
+
+(>defn add-starting-statement!
+  "Adds a new starting-statement and returns the newly created id."
+  [discussion-id author-id statement-content]
+  [:db/id :db/id :statement/content :ret :db/id]
+  (let [new-statement (build-new-statement author-id statement-content "add/starting-argument")
+        temporary-id (:db/id new-statement)]
+    (get-in (transact [new-statement
+                       [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
 
 (defn all-arguments-for-conclusion

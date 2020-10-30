@@ -53,10 +53,8 @@
           agenda (db/add-agenda-point "Hi" "Beschreibung" meeting)
           discussion (:db/id (:agenda/discussion (db/agenda agenda)))
           christian-id (db/author-id-by-nickname "Christian")
-          _ (db/add-new-starting-argument! discussion christian-id "this is sparta" ["foo" "bar" "baz"])
-          starting-statements (db/starting-statements discussion)
-          first-id (:db/id (:argument/conclusion (first starting-statements)))
-          second-id (:db/id (first (:argument/premises (second starting-statements))))]
+          first-id (db/add-starting-statement! discussion christian-id "this is sparta")
+          second-id (db/add-starting-statement! discussion christian-id "this is kreta")]
       (is (db/check-valid-statement-id-and-meeting first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-and-meeting second-id "Wegi-ist-der-schönste")))))
 
@@ -347,18 +345,17 @@
       (is (contains? with-id :argument/type))
       (is (contains? with-id :argument/discussions)))))
 
-(deftest add-new-starting-argument!-test
+(deftest add-starting-statement!-test
   (testing "Test the creation of a valid argument-entity from strings"
-    (let [premises ["What a beautifull day" "Hello test"]
-          conclusion "Wow look at this"
+    (let [statement "Wow look at this"
           author-id (db/author-id-by-nickname "Test-person")
           meeting-hash "graph-hash"
           graph-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash meeting-hash)))
-          _ (db/add-new-starting-argument! (:db/id graph-discussion) author-id conclusion premises)
-          starting-conclusions (db/starting-statements (:db/id graph-discussion))]
+          _ (db/add-starting-statement! (:db/id graph-discussion) author-id statement)
+          starting-statements (db/starting-statements (:db/id graph-discussion))]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
-        (is (= 10 (db/number-of-statements-for-discussion (:db/id graph-discussion))))
-        (is (= 3 (count starting-conclusions)))))))
+        (is (= 8 (db/number-of-statements-for-discussion (:db/id graph-discussion))))
+        (is (= 3 (count starting-statements)))))))
 
 (deftest all-arguments-for-conclusion-test
   (testing "Get arguments, that have a certain conclusion"
