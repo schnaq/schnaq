@@ -307,22 +307,19 @@
     :discussion/title "Cat or Dog?"
     :discussion/description "Should a person looking for a pet rather buy a dog or a cat?"
     :discussion/states [:discussion.state/open]
-    :discussion/starting-arguments ["argument/watchdogs" "argument/tedious-dogs"
-                                    "argument/both-is-fine" "argument/hate"
-                                    "argument/independent-cats" "argument/no-taxes"
-                                    "argument/moody-cats"]}
+    :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]}
    {:db/id "discussion/tapir-or-ameisenbaer"
     :discussion/title "Tapir oder Ameisenbär?"
     :discussion/description "What do what do"
     :discussion/states [:discussion.state/open]
-    :discussion/starting-arguments ["argument/tedious-dogs"]}])
+    :discussion/starting-statements ["statement/get-dog"]}])
 
 (def ^:private graph-discussion
   [{:db/id "discussion/graph"
     :discussion/title "Wetter Graph"
     :discussion/description "Der Graph muss korrekt sein"
     :discussion/states [:discussion.state/open]
-    :discussion/starting-arguments ["argument/warm" "argument/foo"]}
+    :discussion/starting-statements ["statement/warm" "statement/foo"]}
    {:db/id "argument/warm"
     :argument/author "author/rambo"
     :argument/premises [{:db/id "statement/GrossFoo"
@@ -398,7 +395,7 @@
     :discussion/title "Simple Discussion"
     :discussion/description "A very simple discussion"
     :discussion/states [:discussion.state/open]
-    :discussion/starting-arguments ["argument/simple-start"]}
+    :discussion/starting-statements ["statement/brainstorm"]}
    {:db/id "argument/simple-start"
     :argument/author "author/rambo"
     :argument/premises [{:db/id "statement/denken"

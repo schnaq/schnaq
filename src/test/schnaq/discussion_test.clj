@@ -11,9 +11,9 @@
   (testing "Test whether all undercut descendants are found in a sub-discussion."
     (let [undercuts-for-root @#'discussion/undercuts-for-root
           discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          starting-argument (first (db/starting-arguments-by-discussion discussion-id))
-          root-statement (first (:argument/premises starting-argument))
           all-arguments (db/all-arguments-for-discussion discussion-id)
+          matching-argument (first (filter #(= :argument.type/attack (:argument/type %)) all-arguments))
+          root-statement (first (:argument/premises matching-argument))
           matching-undercut (first (undercuts-for-root (:db/id root-statement) all-arguments))]
       (is (= "going for a walk with the dog every day is good for social interaction and physical exercise"
              (-> matching-undercut :argument/premises first :statement/content)))
@@ -24,7 +24,7 @@
   (testing "Test whether all direct children are found."
     (let [direct-children @#'discussion/direct-children
           discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          root-id (:db/id (:argument/conclusion (first (db/starting-arguments-by-discussion discussion-id))))
+          root-id (:db/id (first (db/starting-statements discussion-id)))
           all-arguments (db/all-arguments-for-discussion discussion-id)
           children (direct-children root-id all-arguments)]
       (is (= 2 (count children)))
@@ -34,7 +34,7 @@
   (testing "Test information regarding sub-discussions."
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
           arguments (db/all-arguments-for-discussion discussion-id)
-          root-id (:db/id (:argument/conclusion (first (db/starting-arguments-by-discussion discussion-id))))
+          root-id (:db/id (first (db/starting-statements discussion-id)))
           infos (discussion/sub-discussion-information root-id arguments)
           author-names (into #{} (map :author/nickname (:authors infos)))]
       (is (= 3 (:sub-statements infos)))
@@ -47,10 +47,10 @@
   (testing "Validate data for graph nodes."
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
           share-hash "89eh32hoas-2983ud"
-          statements (db/all-statements-for-discussion discussion-id)
+          statements (db/all-statements-for-graph discussion-id)
           contents (set (map :content statements))
-          starting-arguments (db/starting-arguments-by-discussion discussion-id)
-          nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
+          starting-statements (db/starting-statements discussion-id)
+          nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
           statement-nodes (filter #(= "statement" (:type %)) nodes)]
       (testing "Nodes contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (dec (count nodes)))))
@@ -62,9 +62,9 @@
 (deftest links-for-agenda-test
   (testing "Validate data for graph links"
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
-          statements (db/all-statements-for-discussion discussion-id)
-          starting-arguments (db/starting-arguments-by-discussion discussion-id)
-          links (discussion/links-for-agenda statements starting-arguments discussion-id)]
+          statements (db/all-statements-for-graph discussion-id)
+          starting-statements (db/starting-statements discussion-id)
+          links (discussion/links-for-agenda statements starting-statements discussion-id)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (count links)))))))
 
@@ -104,7 +104,7 @@
 (deftest premises-for-conclusion-id-test
   (testing "Get arguments (with meta-information), that have a certain conclusion"
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           meta-premise (first (discussion/premises-for-conclusion-id (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
       (is (= :argument.type/support (:meta/argument-type meta-premise))))))
@@ -112,7 +112,7 @@
 (deftest premises-undercutting-argument-with-conclusion-id-test
   (testing "Get annotated premises, that are undercutting an argument with a certain premise"
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
           desired-statement (first (discussion/premises-undercutting-argument-with-premise-id premise-to-undercut-id))]

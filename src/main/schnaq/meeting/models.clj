@@ -228,4 +228,9 @@
    {:db/ident :discussion/starting-arguments
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc "The arguments at the source of the discussion-graph"}])
+    :db/doc "DEPRECATED: Use starting-conclusions for new data instead.
+    The arguments at the source of the discussion-graph"}
+   {:db/ident :discussion/starting-statements
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The statements at the source of the discussion-graph"}])

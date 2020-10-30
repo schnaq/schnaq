@@ -24,48 +24,6 @@
     :else "neutral"))
 
 (rf/reg-event-fx
-  :discussion.reaction.starting/send
-  (fn [{:keys [db]} [_ reaction new-premise]]
-    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])
-          nickname (get-in db [:user :name] "Anonymous")]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/react-to/starting")
-                          :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash
-                                   :discussion-id id
-                                   :conclusion-id statement-id
-                                   :nickname nickname
-                                   :premise new-premise
-                                   :reaction reaction}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.reaction.starting/added]
-                          :on-failure [:ajax-failure]}]]})))
-
-(rf/reg-event-fx
-  :discussion.reaction.starting/added
-  (fn [{:keys [db]} [_ response]]
-    (let [new-starting-argument (:new-starting-argument response)
-          new-premise (-> new-starting-argument
-                          :argument/premises
-                          first
-                          (assoc :meta/argument-type (:argument/type new-starting-argument)))]
-      {:db (update-in db [:discussion :premises :current]
-                      conj new-premise)
-       :fx [[:dispatch [:notification/new-content]]]})))
-
-(defn submit-new-starting-premise
-  "Takes a form input and submits a reaction to a starting conclusion."
-  [form]
-  (let [new-text-element (oget form [:premise-text])
-        new-text (oget new-text-element [:value])
-        choice (oget form [:premise-choice :value])
-        reaction (if (= choice "against-radio")
-                   :attack
-                   :support)]
-    (rf/dispatch [:discussion.reaction.starting/send reaction new-text])
-    (rf/dispatch [:form/should-clear [new-text-element]])))
-
-(rf/reg-event-fx
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ reaction new-premise]]
     (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])

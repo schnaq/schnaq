@@ -14,8 +14,10 @@
                :discussion.state/private :discussion.state/deleted}
              :distinct true))
 (s/def :discussion/starting-arguments (s/coll-of ::argument))
+(s/def :discussion/starting-statements (s/coll-of ::statement))
 (s/def ::discussion (s/keys :req [:discussion/title :discussion/description
-                                  :discussion/states :discussion/starting-arguments]))
+                                  :discussion/states]
+                            :opt [:discussion/starting-arguments :discussion/starting-statements]))
 
 ;; Author
 (s/def :author/nickname string?)

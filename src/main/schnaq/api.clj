@@ -382,7 +382,9 @@
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [discussion-id]
-  (with-statement-meta (db/starting-conclusions-by-discussion discussion-id) discussion-id))
+  (let [deprecated-starters (db/starting-conclusions-by-discussion discussion-id)
+        starting-statements (db/starting-statements discussion-id)]
+    (with-statement-meta (concat starting-statements deprecated-starters) discussion-id)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -415,27 +417,14 @@
             discussion-id))
       (deny-access invalid-rights-message))))
 
-(defn- add-starting-argument!
+(defn- add-starting-statement!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id premises conclusion nickname]} body-params
+  (let [{:keys [share-hash discussion-id statement nickname]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (do (db/add-new-starting-argument! discussion-id author-id conclusion premises)
+      (do (db/add-starting-statement! discussion-id author-id statement)
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
-      (deny-access invalid-rights-message))))
-
-(defn- react-to-starting-statement!
-  "Adds a support or attack to a starting conclusion."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
-        author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (let [new-argument (if (= :attack reaction)
-                           (db/attack-statement! discussion-id author-id conclusion-id premise)
-                           (db/support-statement! discussion-id author-id conclusion-id premise))]
-        (db/set-argument-as-starting! discussion-id (:db/id new-argument))
-        (ok (with-statement-meta {:new-starting-argument new-argument} discussion-id)))
       (deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
@@ -542,11 +531,11 @@
   (let [share-hash (:share-hash body-params)
         discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (let [statements (db/all-statements-for-discussion discussion-id)
-            starting-arguments (db/starting-arguments-by-discussion discussion-id)
-            edges (discussion/links-for-agenda statements starting-arguments discussion-id)
+      (let [statements (db/all-statements-for-graph discussion-id)
+            starting-statements (db/starting-statements discussion-id)
+            edges (discussion/links-for-agenda statements starting-statements discussion-id)
             controversy-vals (discussion/calculate-controversy edges)]
-        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
+        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
                      :edges edges
                      :controversy-values controversy-vals}}))
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
@@ -572,12 +561,11 @@
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/argument/undercut" [] undercut-argument!)
-    (POST "/discussion/arguments/starting/add" [] add-starting-argument!)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
-    (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
     (POST "/discussion/react-to/statement" [] react-to-any-statement!)
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
+    (POST "/discussion/statements/starting/add" [] add-starting-statement!)
     (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
@@ -649,7 +637,7 @@
   (let [port (:port config/api)
         allowed-origins [allowed-origin]
         allowed-origins' (if schnaq-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
-    ; Run the server with Ring.defaults middleware
+    ; Run the server with Ring.defaults middle-ware
     (schnaq-core/-main)
     (reset! current-server
             (server/run-server

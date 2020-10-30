@@ -120,16 +120,16 @@
    :meeting/share-hash
    {:meeting/author author-pattern}])
 
-(def ^:private graph-statement-pattern
+(def ^:private statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
-   [:statement/content :as :content]
+   :statement/content
+   :statement/version
    {:statement/author [:author/nickname]}])
 
 (def ^:private meeting-pattern
   "Has all meeting information, including sensitive ones."
   (conj meeting-pattern-public :meeting/edit-hash))
-
 
 ;; ##### Input functions #####
 (defn now [] (Date.))
@@ -446,7 +446,7 @@
                        {:db/id "whatever-forget-it"
                         :discussion/title title
                         :discussion/states [:discussion.state/open]
-                        :discussion/starting-arguments []}}
+                        :discussion/starting-statements []}}
            agenda (if (and description (s/valid? :agenda/description description))
                     (merge-with merge
                                 raw-agenda
@@ -482,22 +482,34 @@
            [?meeting :meeting/share-hash ?hash]]
          (d/db (new-connection)) hash agenda-pattern)))
 
+(>defn- all-statements
+  "Returns all statements belonging to a discussion"
+  [discussion-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (distinct
+    (concat
+      (flatten
+        (d/q
+          '[:find (pull ?statements statement-pattern)
+            :in $ ?discussion-id statement-pattern
+            :where [?arguments :argument/discussions ?discussion-id]
+            [?statements :statement/version _]
+            (or
+              [?arguments :argument/conclusion ?statements]
+              [?arguments :argument/premises ?statements])]
+          (d/db (new-connection)) discussion-id statement-pattern))
+      (flatten
+        (d/q
+          '[:find (pull ?statements statement-pattern)
+            :in $ ?discussion-id statement-pattern
+            :where [?discussion-id :discussion/starting-statements ?statements]]
+          (d/db (new-connection)) discussion-id statement-pattern)))))
+
 (>defn number-of-statements-for-discussion
   "Returns number of statements for a discussion-id."
   [discussion-id]
   [int? :ret int?]
-  (or
-    (ffirst
-      (d/q
-        '[:find (count ?statements)
-          :in $ ?discussion-id
-          :where [?arguments :argument/discussions ?discussion-id]
-          (or
-            [?arguments :argument/premises ?statements]
-            [?arguments :argument/conclusion ?statements])
-          [?statements :statement/content _]]
-        (d/db (new-connection)) discussion-id))
-    0))
+  (count (all-statements discussion-id)))
 
 (defn agenda-by-discussion-id
   "Returns an agenda which has the corresponding `discussion-id`."
@@ -576,24 +588,16 @@
   (:author/nickname
     (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
 
-(>defn all-statements-for-discussion
+(>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
   [discussion-id]
   [int? :ret sequential?]
   (map
-    (fn [[statement & _]]
+    (fn [statement]
       {:author (-> statement :statement/author :author/nickname)
        :id (:db/id statement)
-       :label (:content statement)})
-    (d/q
-      '[:find (pull ?statements statement-pattern)
-        :in $ ?discussion-id statement-pattern
-        :where [?arguments :argument/discussions ?discussion-id]
-        [?statements :statement/version _]
-        (or
-          [?arguments :argument/conclusion ?statements]
-          [?arguments :argument/premises ?statements])]
-      (d/db (new-connection)) discussion-id graph-statement-pattern)))
+       :label (:statement/content statement)})
+    (all-statements discussion-id)))
 
 (>defn add-user-if-not-exists
   "Adds an author and user if they do not exist yet. Returns the (new) user-id."
@@ -711,17 +715,27 @@
   "Checks whether the statement-id matches the meeting-hash."
   [statement-id meeting-hash]
   [number? string? :ret (? number?)]
-  (ffirst
-    (d/q
-      '[:find ?meeting
-        :in $ ?statement ?hash
-        :where (or [?argument :argument/premises ?statement]
-                   [?argument :argument/conclusion ?statement])
-        [?argument :argument/discussions ?discussion]
-        [?agenda :agenda/discussion ?discussion]
-        [?agenda :agenda/meeting ?meeting]
-        [?meeting :meeting/share-hash ?hash]]
-      (d/db (new-connection)) statement-id meeting-hash)))
+  (or
+    (ffirst
+      (d/q
+        '[:find ?meeting
+          :in $ ?statement ?hash
+          :where (or [?argument :argument/premises ?statement]
+                     [?argument :argument/conclusion ?statement])
+          [?argument :argument/discussions ?discussion]
+          [?agenda :agenda/discussion ?discussion]
+          [?agenda :agenda/meeting ?meeting]
+          [?meeting :meeting/share-hash ?hash]]
+        (d/db (new-connection)) statement-id meeting-hash))
+    (ffirst
+      (d/q
+        '[:find ?meeting
+          :in $ ?statement ?hash
+          :where [?discussion :discussion/starting-statements ?statement]
+          [?agenda :agenda/discussion ?discussion]
+          [?agenda :agenda/meeting ?meeting]
+          [?meeting :meeting/share-hash ?hash]]
+        (d/db (new-connection)) statement-id meeting-hash))))
 
 (>defn delete-agendas
   "Remove all agendas. Check for id belonging to a meeting before removing."
@@ -911,13 +925,6 @@
 
 ;; Dialog.core outfactor. Should Probably go into its own namespace on next refactor.
 
-(def ^:private statement-pattern
-  "Representation of a statement. Oftentimes used in a Datalog pull pattern."
-  [:db/id
-   :statement/content
-   :statement/version
-   {:statement/author [:author/nickname]}])
-
 (def ^:private argument-pattern
   "Defines the default pattern for arguments. Oftentimes used in pull-patterns
   in a Datalog query bind the data to this structure."
@@ -943,7 +950,8 @@
    :discussion/title
    :discussion/description
    {:discussion/states [:db/ident]}
-   {:discussion/starting-arguments argument-pattern}])
+   {:discussion/starting-arguments argument-pattern}
+   {:discussion/starting-statements statement-pattern}])
 
 (>defn get-statement
   "Returns the statement given an id."
@@ -952,7 +960,8 @@
   (d/pull (d/db (new-connection)) statement-pattern statement-id))
 
 (>defn starting-conclusions-by-discussion
-  "Query all conclusions belonging to starting-arguments of a certain discussion."
+  {:deprecated "Use `starting-statements` instead"
+   :doc "Query all conclusions belonging to starting-arguments of a certain discussion."}
   [discussion-id]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (flatten
@@ -961,6 +970,17 @@
         :in $ ?discussion-id statement-pattern
         :where [?discussion-id :discussion/starting-arguments ?starting-arguments]
         [?starting-arguments :argument/conclusion ?starting-conclusions]]
+      discussion-id statement-pattern)))
+
+(>defn starting-statements
+  "Returns all starting-statements belonging to a discussion."
+  [discussion-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (flatten
+    (query
+      '[:find (pull ?statements statement-pattern)
+        :in $ ?discussion-id statement-pattern
+        :where [?discussion-id :discussion/starting-statements ?statements]]
       discussion-id statement-pattern)))
 
 (>defn- pack-premises
@@ -993,14 +1013,24 @@
     :argument/type :argument.type/support
     :argument/discussions [discussion-id]}))
 
-(>defn add-new-starting-argument!
-  "Creates a new starting argument in a discussion."
-  [discussion-id author-id conclusion premises]
-  [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret :db/id]
-  (let [new-argument (prepare-new-argument discussion-id author-id conclusion premises "add/starting-argument")
-        temporary-id (:db/id new-argument)]
-    (get-in (transact [new-argument
-                       [:db/add discussion-id :discussion/starting-arguments temporary-id]])
+(defn- build-new-statement
+  "Builds a new statement for transaction."
+  ([author-id content]
+   (build-new-statement author-id content (str "conclusion-" content)))
+  ([author-id content temp-id]
+   {:db/id temp-id
+    :statement/author author-id
+    :statement/content content
+    :statement/version 1}))
+
+(>defn add-starting-statement!
+  "Adds a new starting-statement and returns the newly created id."
+  [discussion-id author-id statement-content]
+  [:db/id :db/id :statement/content :ret :db/id]
+  (let [new-statement (build-new-statement author-id statement-content "add/starting-argument")
+        temporary-id (:db/id new-statement)]
+    (get-in (transact [new-statement
+                       [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
 
 (defn all-arguments-for-conclusion
@@ -1046,17 +1076,6 @@
         '[:find (pull ?discussion-arguments argument-pattern)
           :in $ argument-pattern ?discussion-id
           :where [?discussion-arguments :argument/discussions ?discussion-id]]
-        argument-pattern discussion-id)
-      flatten
-      (toolbelt/pull-key-up :db/ident)))
-
-(defn starting-arguments-by-discussion
-  "Deep-Query all starting-arguments of a certain discussion."
-  [discussion-id]
-  (-> (query
-        '[:find (pull ?starting-arguments argument-pattern)
-          :in $ argument-pattern ?discussion-id
-          :where [?discussion-id :discussion/starting-arguments ?starting-arguments]]
         argument-pattern discussion-id)
       flatten
       (toolbelt/pull-key-up :db/ident)))
@@ -1159,9 +1178,3 @@
     (toolbelt/pull-key-up
       (d/pull (d/db (new-connection)) argument-pattern argument-id)
       :db/ident)))
-
-(>defn set-argument-as-starting!
-  "Sets an existing argument as a starting-argument."
-  [discussion-id argument-id]
-  [:db/id :db/id :ret associative?]
-  (transact [[:db/add discussion-id :discussion/starting-arguments argument-id]]))
