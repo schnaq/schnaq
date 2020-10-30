@@ -212,7 +212,7 @@
         (db/delete-agendas [agenda-id] meeting-id)
         (is (nil? (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))))))
 
-(deftest all-statements-for-discussion-test
+(deftest all-statements-for-graph-test
   (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
           statements (db/all-statements-for-graph discussion-id)]
