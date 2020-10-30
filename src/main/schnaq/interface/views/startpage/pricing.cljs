@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.startpage.pricing
-  (:require [reitit.frontend.easy :as reititfe]
+  (:require [re-frame.core :as rf]
+            [reitit.frontend.easy :as reititfe]
             [schnaq.interface.text.display-data :refer [img-path fa labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -13,6 +14,7 @@
     [:p.text-muted.text-center (labels :pricing.free-tier/beta-notice)]
     [:div.text-center.mt-auto
      [:button.btn.button-primary
+      {:on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
       [:p.card-text (labels :pricing.free-tier/call-to-action)]]]]])
 
 (defn- business-tier-card
@@ -39,9 +41,13 @@
 (defn- pricing-box
   "A box displaying the different subscription tiers we offer."
   []
-  [:div.card-deck.pt-3
-   [free-tier-card]
-   [business-tier-card]])
+  [:<>
+   [:div.card-deck.pt-3
+    [free-tier-card]
+    [business-tier-card]]
+   [:p.text-dark-blue.display-6.text-center.pt-2
+    (labels :pricing.newsletter/lead)
+    [:a {:href "https://disqtec.com/newsletter"} (labels :pricing.newsletter/name)]]])
 
 (defn- feature-card
   [title description]
