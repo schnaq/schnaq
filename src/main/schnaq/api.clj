@@ -427,19 +427,6 @@
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
       (deny-access invalid-rights-message))))
 
-(defn- react-to-starting-statement!
-  "Adds a support or attack to a starting conclusion."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
-        author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (let [new-argument (if (= :attack reaction)
-                           (db/attack-statement! discussion-id author-id conclusion-id premise)
-                           (db/support-statement! discussion-id author-id conclusion-id premise))]
-        (db/set-argument-as-starting! discussion-id (:db/id new-argument))
-        (ok (with-statement-meta {:new-starting-argument new-argument} discussion-id)))
-      (deny-access invalid-rights-message))))
-
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
   [{:keys [body-params]}]
@@ -575,7 +562,6 @@
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/argument/undercut" [] undercut-argument!)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
-    (POST "/discussion/react-to/starting" [] react-to-starting-statement!)
     (POST "/discussion/react-to/statement" [] react-to-any-statement!)
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)

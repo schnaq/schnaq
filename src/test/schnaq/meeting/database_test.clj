@@ -398,16 +398,6 @@
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/support (:argument/type new-attack))))))
 
-(deftest set-argument-as-starting!-test
-  (testing "Sets a new argument as a starting argument."
-    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          author-id (db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
-          new-attack (db/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
-                                           "This is a new attack")]
-      (db/set-argument-as-starting! (:db/id simple-discussion) (:db/id new-attack))
-      (is (= 2 (count (db/all-arguments-for-conclusion (:db/id starting-conclusion))))))))
-
 (deftest all-discussions-by-title-test
   (testing "Should return discussions if title matches at least one discussion."
     (is (empty? (db/all-discussions-by-title "")))

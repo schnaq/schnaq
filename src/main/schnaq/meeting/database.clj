@@ -1188,9 +1188,3 @@
     (toolbelt/pull-key-up
       (d/pull (d/db (new-connection)) argument-pattern argument-id)
       :db/ident)))
-
-(>defn set-argument-as-starting!
-  "Sets an existing argument as a starting-argument."
-  [discussion-id argument-id]
-  [:db/id :db/id :ret associative?]
-  (transact [[:db/add discussion-id :discussion/starting-arguments argument-id]]))
