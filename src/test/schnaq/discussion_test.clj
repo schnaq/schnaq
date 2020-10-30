@@ -24,7 +24,7 @@
   (testing "Test whether all direct children are found."
     (let [direct-children @#'discussion/direct-children
           discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          root-id (:db/id (:argument/conclusion (first (db/starting-arguments-by-discussion discussion-id))))
+          root-id (:db/id (first (db/starting-statements discussion-id)))
           all-arguments (db/all-arguments-for-discussion discussion-id)
           children (direct-children root-id all-arguments)]
       (is (= 2 (count children)))
@@ -34,7 +34,7 @@
   (testing "Test information regarding sub-discussions."
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
           arguments (db/all-arguments-for-discussion discussion-id)
-          root-id (:db/id (:argument/conclusion (first (db/starting-arguments-by-discussion discussion-id))))
+          root-id (:db/id (first (db/starting-statements discussion-id)))
           infos (discussion/sub-discussion-information root-id arguments)
           author-names (into #{} (map :author/nickname (:authors infos)))]
       (is (= 3 (:sub-statements infos)))

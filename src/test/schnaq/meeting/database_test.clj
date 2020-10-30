@@ -54,11 +54,11 @@
           discussion (:db/id (:agenda/discussion (db/agenda agenda)))
           christian-id (db/author-id-by-nickname "Christian")
           _ (db/add-new-starting-argument! discussion christian-id "this is sparta" ["foo" "bar" "baz"])
-          argument (first (db/starting-arguments-by-discussion discussion))
-          conclusion-id (:db/id (:argument/conclusion argument))
-          premise-id (:db/id (first (:argument/premises argument)))]
-      (is (db/check-valid-statement-id-and-meeting conclusion-id "Wegi-ist-der-schönste"))
-      (is (db/check-valid-statement-id-and-meeting premise-id "Wegi-ist-der-schönste")))))
+          starting-statements (db/starting-statements discussion)
+          first-id (:db/id (:argument/conclusion (first starting-statements)))
+          second-id (:db/id (first (:argument/premises (second starting-statements))))]
+      (is (db/check-valid-statement-id-and-meeting first-id "Wegi-ist-der-schönste"))
+      (is (db/check-valid-statement-id-and-meeting second-id "Wegi-ist-der-schönste")))))
 
 (deftest clean-db-vals-test
   (testing "Test whether nil values are properly cleaned from a map."
