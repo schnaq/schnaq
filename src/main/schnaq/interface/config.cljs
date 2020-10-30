@@ -11,3 +11,8 @@
    :environment environment})
 
 (def graph-controversy-upper-bound 65)
+
+(def periodic-update-time
+  "Define how many times should the client query the server for live updates.
+  Time must be in milliseconds."
+  3000)
