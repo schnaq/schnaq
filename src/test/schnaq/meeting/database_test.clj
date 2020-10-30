@@ -355,7 +355,7 @@
           meeting-hash "graph-hash"
           graph-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash meeting-hash)))
           _ (db/add-new-starting-argument! (:db/id graph-discussion) author-id conclusion premises)
-          starting-conclusions (db/starting-conclusions-by-discussion (:db/id graph-discussion))]
+          starting-conclusions (db/starting-statements (:db/id graph-discussion))]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 10 (db/number-of-statements-for-discussion (:db/id graph-discussion))))
         (is (= 3 (count starting-conclusions)))))))
@@ -363,7 +363,7 @@
 (deftest all-arguments-for-conclusion-test
   (testing "Get arguments, that have a certain conclusion"
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (-> simple-argument :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> simple-argument :argument/conclusion :statement/content))))))
@@ -371,7 +371,7 @@
 (deftest statements-undercutting-premise-test
   (testing "Get arguments, that are undercutting an argument with a certain premise"
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
           desired-statement (first (db/statements-undercutting-premise premise-to-undercut-id))]
@@ -381,7 +381,7 @@
   (testing "Add a new attacking statement to a discussion"
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
           author-id (db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           new-attack (db/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
                                            "This is a new attack")]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
@@ -392,7 +392,7 @@
   (testing "Add a new supporting statement to a discussion"
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
           author-id (db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           new-attack (db/support-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
                                             "This is a new support")]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
@@ -403,7 +403,7 @@
   (testing "Sets a new argument as a starting argument."
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
           author-id (db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           new-attack (db/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
                                            "This is a new attack")]
       (db/set-argument-as-starting! (:db/id simple-discussion) (:db/id new-attack))

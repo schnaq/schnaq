@@ -104,7 +104,7 @@
 (deftest premises-for-conclusion-id-test
   (testing "Get arguments (with meta-information), that have a certain conclusion"
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           meta-premise (first (discussion/premises-for-conclusion-id (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
       (is (= :argument.type/support (:meta/argument-type meta-premise))))))
@@ -112,7 +112,7 @@
 (deftest premises-undercutting-argument-with-conclusion-id-test
   (testing "Get annotated premises, that are undercutting an argument with a certain premise"
     (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-conclusions-by-discussion (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
           simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
           desired-statement (first (discussion/premises-undercutting-argument-with-premise-id premise-to-undercut-id))]
