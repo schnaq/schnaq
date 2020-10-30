@@ -131,7 +131,6 @@
   "Has all meeting information, including sensitive ones."
   (conj meeting-pattern-public :meeting/edit-hash))
 
-
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
@@ -925,13 +924,6 @@
     flatten))
 
 ;; Dialog.core outfactor. Should Probably go into its own namespace on next refactor.
-
-(def ^:private statement-pattern
-  "Representation of a statement. Oftentimes used in a Datalog pull pattern."
-  [:db/id
-   :statement/content
-   :statement/version
-   {:statement/author [:author/nickname]}])
 
 (def ^:private argument-pattern
   "Defines the default pattern for arguments. Oftentimes used in pull-patterns
