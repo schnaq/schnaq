@@ -54,7 +54,9 @@
           discussion (:db/id (:agenda/discussion (db/agenda agenda)))
           christian-id (db/author-id-by-nickname "Christian")
           first-id (db/add-starting-statement! discussion christian-id "this is sparta")
-          second-id (db/add-starting-statement! discussion christian-id "this is kreta")]
+          second-id (db/add-starting-statement! discussion christian-id "this is kreta")
+          _ (println first-id)
+          _ (println second-id)]
       (is (db/check-valid-statement-id-and-meeting first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-and-meeting second-id "Wegi-ist-der-schönste")))))
 

@@ -713,17 +713,27 @@
   "Checks whether the statement-id matches the meeting-hash."
   [statement-id meeting-hash]
   [number? string? :ret (? number?)]
-  (ffirst
-    (d/q
-      '[:find ?meeting
-        :in $ ?statement ?hash
-        :where (or [?argument :argument/premises ?statement]
-                   [?argument :argument/conclusion ?statement])
-        [?argument :argument/discussions ?discussion]
-        [?agenda :agenda/discussion ?discussion]
-        [?agenda :agenda/meeting ?meeting]
-        [?meeting :meeting/share-hash ?hash]]
-      (d/db (new-connection)) statement-id meeting-hash)))
+  (or
+    (ffirst
+      (d/q
+        '[:find ?meeting
+          :in $ ?statement ?hash
+          :where (or [?argument :argument/premises ?statement]
+                     [?argument :argument/conclusion ?statement])
+          [?argument :argument/discussions ?discussion]
+          [?agenda :agenda/discussion ?discussion]
+          [?agenda :agenda/meeting ?meeting]
+          [?meeting :meeting/share-hash ?hash]]
+        (d/db (new-connection)) statement-id meeting-hash))
+    (ffirst
+      (d/q
+        '[:find ?meeting
+          :in $ ?statement ?hash
+          :where [?discussion :discussion/starting-statements ?statement]
+          [?agenda :agenda/discussion ?discussion]
+          [?agenda :agenda/meeting ?meeting]
+          [?meeting :meeting/share-hash ?hash]]
+        (d/db (new-connection)) statement-id meeting-hash))))
 
 (>defn delete-agendas
   "Remove all agendas. Check for id belonging to a meeting before removing."
