@@ -10,19 +10,6 @@
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.discussion.view-elements :as view]))
 
-(defn- add-starting-premises-form
-  "Either support or attack a starting-conclusion with the users own premise."
-  []
-  [:form
-   {:on-submit (fn [e] (js-wrap/prevent-default e)
-                 (logic/submit-new-starting-premise (oget e [:target :elements])))}
-   ;; radio support
-   [view/radio-button "for-radio-starting" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
-   ;; radio attack
-   [view/radio-button "against-radio-starting" "premise-choice" "against-radio" :discussion/add-premise-against false]
-   ;; input form
-   [view/input-form]])
-
 (defn- add-premise-form
   "Either support or attack or undercut with the users own premise."
   []
@@ -104,11 +91,6 @@
       [view/history-view]
       [view/input-footer add-form]
       [carousel/carousel-element current-premises]]]))
-
-(defn selected-starting-conclusion
-  "The view after a user has selected a starting-conclusion."
-  []
-  [present-conclusion-view [add-starting-premises-form]])
 
 (defn selected-conclusion
   "The view after a user has selected any conclusion."
