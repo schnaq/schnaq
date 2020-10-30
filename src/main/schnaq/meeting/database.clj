@@ -594,7 +594,7 @@
   [discussion-id]
   [int? :ret sequential?]
   (map
-    (fn [[statement & _]]
+    (fn [statement]
       {:author (-> statement :statement/author :author/nickname)
        :id (:db/id statement)
        :label (:statement/content statement)})
