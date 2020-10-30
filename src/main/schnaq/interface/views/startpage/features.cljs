@@ -28,7 +28,7 @@
 (defn- features-meeting
   "A site demonstrating the features of schnaqs meeting capabilities."
   []
-  (pages/with-nav-and-header
+  [pages/with-nav-and-header
     {:page/heading (labels :feature.meetings/lead)}
     [:div.container.py-4
      [rows/image-right
@@ -55,12 +55,12 @@
        [:li (labels :feature.meetings.tbd/assignments)]
        [:li (labels :feature.meetings.tbd/timeboxing)]
        [:li (labels :feature.meetings.tbd/task-tracking)]]
-      [:p (labels :feature.meetings/feedback)]]]))
+      [:p (labels :feature.meetings/feedback)]]]])
 
 (defn- features-discussion
   "A site demonstrating the features of schnaqs discussion capabilities."
   []
-  (pages/with-nav-and-header
+  [pages/with-nav-and-header
     {:page/heading (labels :feature.discussions/lead)}
     [:div.container.py-4
      [rows/image-right
@@ -86,12 +86,12 @@
        [:li (labels :feature.discussions.tbd/navigation)]
        [:li (labels :feature.discussions.tbd/connect)]
        [:li (labels :feature.discussions.tbd/bot)]]
-      [:p (labels :feature.meetings/feedback)]]]))
+      [:p (labels :feature.meetings/feedback)]]]])
 
 (defn- features-knowledge
   "Presenting the idea of knowledge aggregation."
   []
-  (pages/with-nav-and-header
+  [pages/with-nav-and-header
     {:page/heading (labels :feature.knowledge/lead)
      :page/subheading (labels :feature.knowledge/subheading)}
     [:div.container.py-4
@@ -118,7 +118,7 @@
        [:li (labels :feature.knowledge.tbd/live-changes)]
        [:li (labels :feature.knowledge.tbd/changes-over-time)]
        [:li (labels :feature.knowledge.tbd/accounts)]]
-      [:p (labels :feature.meetings/feedback)]]]))
+      [:p (labels :feature.meetings/feedback)]]]])
 
 
 ;; -----------------------------------------------------------------------------
