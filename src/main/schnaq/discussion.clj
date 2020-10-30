@@ -106,11 +106,11 @@
 
 (>defn- agenda-links
   "Creates links from an starting argument to an agenda node."
-  [discussion-id starting-arguments]
+  [discussion-id starting-statements]
   [int? sequential? :ret set?]
-  (set (map (fn [argument] {:from (-> argument :argument/conclusion :db/id)
+  (set (map (fn [statement] {:from (:db/id statement)
                             :to discussion-id
-                            :type :argument.type/starting}) starting-arguments)))
+                            :type :argument.type/starting}) starting-statements)))
 
 (>defn nodes-for-agenda
   "Returns all nodes for a discussion including its agenda."
@@ -121,12 +121,12 @@
 
 (>defn links-for-agenda
   "Creates all links for a discussion with its agenda as root."
-  [statements starting-arguments discussion-id]
+  [statements starting-statements discussion-id]
   [sequential? sequential? int? :ret sequential?]
   (let [arguments (db/all-arguments-for-discussion discussion-id)]
     (concat
       (create-links statements arguments)
-      (agenda-links discussion-id starting-arguments))))
+      (agenda-links discussion-id starting-statements))))
 
 (>defn- update-controversy-map
   "Updates controversy-map with the contents from a single edge."

@@ -63,8 +63,8 @@
   (testing "Validate data for graph links"
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
           statements (db/all-statements-for-discussion discussion-id)
-          starting-arguments (db/starting-arguments-by-discussion discussion-id)
-          links (discussion/links-for-agenda statements starting-arguments discussion-id)]
+          starting-statements (db/starting-statements discussion-id)
+          links (discussion/links-for-agenda statements starting-statements discussion-id)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (count links)))))))
 

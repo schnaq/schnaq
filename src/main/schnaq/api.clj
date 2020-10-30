@@ -544,9 +544,11 @@
   (let [share-hash (:share-hash body-params)
         discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? share-hash discussion-id)
+      ;; TODO remove starting-arguments
       (let [statements (db/all-statements-for-discussion discussion-id)
             starting-arguments (db/starting-arguments-by-discussion discussion-id)
-            edges (discussion/links-for-agenda statements starting-arguments discussion-id)
+            starting-statements (db/starting-statements discussion-id)
+            edges (discussion/links-for-agenda statements starting-statements discussion-id)
             controversy-vals (discussion/calculate-controversy edges)]
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
                      :edges edges
