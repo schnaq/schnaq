@@ -72,25 +72,24 @@
 
 (>defn- create-node
   "Adds a type to the node.
-  Checks if the node is a starting argument.
-  If the current node is no starting argument checks if the current node is present as a premise in an argument.
+  Checks if the node is a starting statement.
+  If the current node is no starting statement checks if the current node is present as a premise in an argument.
   If so add the type of the argument to the node."
-  [statement arguments starting-conclusions]
+  [statement arguments starting-statements]
   [map? sequential? set? :ret map?]
   (let [statement-id (:id statement)
         premise (first (filter #((set (premise-ids %)) statement-id) arguments))]
-    (if (starting-conclusions statement-id)
+    (if (contains? starting-statements statement-id)
       (assoc statement :type :argument.type/starting)
       (assoc statement :type (:argument/type premise)))))
 
 (>defn- create-nodes
   "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
-  [statements discussion-id starting-arguments]
+  [statements discussion-id starting-statements]
   [sequential? int? sequential? :ret sequential?]
   (let [arguments (db/all-arguments-for-discussion discussion-id)
-        starting-conclusions (into #{} (map #(-> % :argument/conclusion :db/id) starting-arguments))]
-    (map #(create-node % arguments starting-conclusions) statements)))
-
+        starting-statement-ids (into #{} (map :db/id starting-statements))]
+    (map #(create-node % arguments starting-statement-ids) statements)))
 
 (>defn- agenda-node
   "Creates node data for an agenda point."
@@ -109,14 +108,14 @@
   [discussion-id starting-statements]
   [int? sequential? :ret set?]
   (set (map (fn [statement] {:from (:db/id statement)
-                            :to discussion-id
-                            :type :argument.type/starting}) starting-statements)))
+                             :to discussion-id
+                             :type :argument.type/starting}) starting-statements)))
 
 (>defn nodes-for-agenda
   "Returns all nodes for a discussion including its agenda."
-  [statements starting-arguments discussion-id share-hash]
+  [statements starting-statements discussion-id share-hash]
   [sequential? sequential? int? :meeting/share-hash :ret sequential?]
-  (conj (create-nodes statements discussion-id starting-arguments)
+  (conj (create-nodes statements discussion-id starting-statements)
         (agenda-node discussion-id share-hash)))
 
 (>defn links-for-agenda

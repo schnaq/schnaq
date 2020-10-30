@@ -1065,18 +1065,6 @@
       flatten
       (toolbelt/pull-key-up :db/ident)))
 
-;; TODO refactor this out
-(defn starting-arguments-by-discussion
-  "Deep-Query all starting-arguments of a certain discussion."
-  [discussion-id]
-  (-> (query
-        '[:find (pull ?starting-arguments argument-pattern)
-          :in $ argument-pattern ?discussion-id
-          :where [?discussion-id :discussion/starting-arguments ?starting-arguments]]
-        argument-pattern discussion-id)
-      flatten
-      (toolbelt/pull-key-up :db/ident)))
-
 (>defn statements-by-content
   "Returns all statements that have the matching `content`."
   [content]

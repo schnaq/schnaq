@@ -11,9 +11,9 @@
   (testing "Test whether all undercut descendants are found in a sub-discussion."
     (let [undercuts-for-root @#'discussion/undercuts-for-root
           discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          starting-argument (first (db/starting-arguments-by-discussion discussion-id))
-          root-statement (first (:argument/premises starting-argument))
           all-arguments (db/all-arguments-for-discussion discussion-id)
+          matching-argument (first (filter #(= :argument.type/attack (:argument/type %)) all-arguments))
+          root-statement (first (:argument/premises matching-argument))
           matching-undercut (first (undercuts-for-root (:db/id root-statement) all-arguments))]
       (is (= "going for a walk with the dog every day is good for social interaction and physical exercise"
              (-> matching-undercut :argument/premises first :statement/content)))
@@ -49,8 +49,8 @@
           share-hash "89eh32hoas-2983ud"
           statements (db/all-statements-for-discussion discussion-id)
           contents (set (map :content statements))
-          starting-arguments (db/starting-arguments-by-discussion discussion-id)
-          nodes (discussion/nodes-for-agenda statements starting-arguments discussion-id share-hash)
+          starting-statements (db/starting-statements discussion-id)
+          nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
           statement-nodes (filter #(= "statement" (:type %)) nodes)]
       (testing "Nodes contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (dec (count nodes)))))
