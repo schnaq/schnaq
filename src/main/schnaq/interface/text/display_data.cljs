@@ -21,11 +21,7 @@
 
      ;; Startpage
      :startpage/heading "Qualifizierte Brainstormings"
-     :startpage/subheading "Schnaq ermöglicht nachhaltigen Gedankenaustausch"
 
-     :startpage.heading-list/community "Gemeinsame Brainstormings"
-     :startpage.heading-list/exchange "Ideen strukturiert diskutieren"
-     :startpage.heading-list/reports "Entscheidungen gemeinsam treffen"
      :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
      :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"
 

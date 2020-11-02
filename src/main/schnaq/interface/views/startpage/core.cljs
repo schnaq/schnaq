@@ -225,7 +225,6 @@
 
 (def ^:private header
   {:page/heading (labels :startpage/heading)
-   ;; :page/subheading (labels :startpage/subheading)
    :page/more-for-heading
    [:div.row.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
     [:div.col-lg-6
