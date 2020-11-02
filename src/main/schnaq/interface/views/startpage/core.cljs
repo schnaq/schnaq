@@ -28,13 +28,6 @@
      :on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
     (labels :brainstorm.buttons/start-now)]])
 
-(defn- under-construction
-  []
-  [:div.icon-bullets-larger
-   (base/img-bullet-subtext (img-path :icon-crane)
-                            (labels :startpage.under-construction/heading)
-                            (labels :startpage.under-construction/body))])
-
 (defn- usage-of-schnaq-heading
   "Heading introducing the features of schnaq."
   []
@@ -232,13 +225,12 @@
 
 (def ^:private header
   {:page/heading (labels :startpage/heading)
-   :page/subheading (labels :startpage/subheading)
+   ;; :page/subheading (labels :startpage/subheading)
    :page/more-for-heading
    [:div.row.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
-    [:div.col-lg-6.icon-bullets
-     (base/icon-bullet (img-path :icon-community) (labels :startpage.heading-list/community))
-     (base/icon-bullet (img-path :icon-robot) (labels :startpage.heading-list/exchange))
-     (base/icon-bullet (img-path :icon-reports) (labels :startpage.heading-list/reports))]
+    [:div.col-lg-6
+     [:h3.pb-5 "Schon wieder den Faden verloren? Ideenaustausch besser strukturieren mit schnaq!"]
+     [start-schnaq-button]]
     [header-animation]]})
 
 (defn- startpage-content []
@@ -246,11 +238,6 @@
    header
    [:<>
     [:section.container
-     [:div.row {:style {:padding "5rem 0"}}
-      [:div.col-12.col-lg-6.pb-3.pb-lg-0
-       [under-construction]]
-      [:div.col-12.col-lg-6.text-center
-       [start-schnaq-button]]]
      [request-demo-section]
      [usage-of-schnaq-heading]
      [startpage-features/feature-rows]
