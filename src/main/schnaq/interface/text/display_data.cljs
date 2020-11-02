@@ -214,6 +214,7 @@
      ;; Brainstorming time
      :brainstorm/heading "Brainstorm anlegen"
      :brainstorm.buttons/start-now "Jetzt ein Brainstorming starten"
+     :brainstorm.create.button/save "Brainstorming starten!"
 
      ;; Privacy Page
      :privacy/heading "Was geschieht mit Ihren Daten?"
