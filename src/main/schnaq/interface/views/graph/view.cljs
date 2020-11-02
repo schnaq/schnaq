@@ -79,7 +79,7 @@
         height (* 0.75 (.-innerHeight js/window))
         _node-size 200]
     (reagent/create-class
-      {:display-name "D3-Visualization of Discussion Graph"
+      {:display-name "Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:div#graph])
        :component-did-mount
        (fn [this]
@@ -97,7 +97,6 @@
            (reset! vis-object (.setData @vis-object new-data))))})))
 
 (defn graph-agenda-header [agenda share-hash]
-  ;; meeting header
   (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.discussion/start
                                         {:share-hash share-hash
                                          :id (:db/id (:agenda/discussion agenda))}]))]
@@ -108,7 +107,7 @@
   []
   (let [current-agenda @(rf/subscribe [:chosen-agenda])
         {:keys [meeting/share-hash]} @(rf/subscribe [:meeting/selected])]
-    [:div
+    [:<>
      [graph-agenda-header current-agenda share-hash]
      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
        [graph-canvas graph])]))
