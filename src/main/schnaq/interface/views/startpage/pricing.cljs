@@ -163,7 +163,8 @@
   "A full page depicting our pricing and related items."
   []
   [pages/with-nav-and-header
-   {:page/heading [:span.d-block.text-center (labels :pricing/headline)]}
+   {:page/title (labels :pricing/headline)
+    :page/heading [:span.d-block.text-center (labels :pricing/headline)]}
    [:div.container
     [pricing-box]
     [trial-box]
