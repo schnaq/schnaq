@@ -42,12 +42,6 @@
     [:p.h4 heading]
     [:p subheading]]])
 
-
-(defn icon-bullet [path-to-img text]
-  [:div.d-flex.flex-row.p-1
-   [:div [:img {:src path-to-img}]]
-   [:div [:span text]]])
-
 ;; discussion loop header
 
 (defn discussion-header
