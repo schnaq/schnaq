@@ -44,7 +44,7 @@
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page current-meeting
      [:<>
-      [view/agenda-header-back-arrow
+      [view/agenda-header-with-back-arrow
        current-meeting
        (fn []
          (rf/dispatch [:navigation/navigate :routes.meeting/show
@@ -87,7 +87,7 @@
         current-meeting @(rf/subscribe [:meeting/selected])]
     [discussion-base-page current-meeting
      [:<>
-      [view/agenda-header-back-arrow current-meeting
+      [view/agenda-header-with-back-arrow current-meeting
        #(rf/dispatch [:discussion.history/time-travel 1])]
       [view/history-view]
       [view/input-footer add-form]

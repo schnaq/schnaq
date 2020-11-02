@@ -31,10 +31,11 @@
       [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
        (logic/calculate-votes statement :downvotes votes)]]]))
 
-(defn agenda-header-back-arrow [meeting on-click-back-function]
+(defn agenda-header-with-back-arrow [meeting on-click-back-function]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         {:keys [meeting/share-hash]} meeting
         current-view (-> @(rf/subscribe [:navigation/current-route]) :data :name)]
+    (common/set-website-title! (:agenda/title agenda))
     [:div.discussion-primary-background
      [:div.row
       ;; back arrow
