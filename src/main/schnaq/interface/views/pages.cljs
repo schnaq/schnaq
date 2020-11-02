@@ -7,11 +7,12 @@
             [schnaq.interface.views.navbar :as navbar]))
 
 (s/def :page/heading string?)
-(s/def :page/subheading (s/? string?))
+(s/def :page/subheading string?)
+(s/def :page/title string?)
 (s/def :page/more-for-heading vector?)
 (s/def ::page-headings
   (s/keys :req [:page/heading]
-          :opt [:page/subheading :page/more-for-heading]))
+          :opt [:page/subheading :page/title :page/more-for-heading]))
 
 (>defn with-nav-and-header
   "Default page with header and curly wave."
