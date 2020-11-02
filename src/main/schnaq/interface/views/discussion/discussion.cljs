@@ -67,10 +67,11 @@
                           :on-success [:discussion.query.conclusions/set-starting]
                           :on-failure [:ajax-failure]}]]})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :discussion.query.conclusions/set-starting
-  (fn [db [_ {:keys [starting-conclusions]}]]
-    (assoc-in db [:discussion :conclusions :starting] starting-conclusions)))
+  (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
+    {:db (assoc-in db [:discussion :conclusions :starting] starting-conclusions)
+     :fx [[:dispatch [:votes.local/reset]]]}))
 
 (rf/reg-sub
   :discussion.conclusions/starting
@@ -151,6 +152,12 @@
   :discussion-history
   (fn [db _]
     (get-in db [:history :full-context])))
+
+(rf/reg-event-db
+  :votes.local/reset
+  (fn [db _]
+    (assoc db :votes {:up {}
+                      :down {}})))
 
 (rf/reg-sub
   :local-votes
