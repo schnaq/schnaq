@@ -104,12 +104,19 @@
      :type :agenda}))
 
 (>defn- agenda-links
-  "Creates links from an starting argument to an agenda node."
+  "Creates links from an starting statement to an agenda node."
   [discussion-id starting-statements]
   [int? sequential? :ret set?]
-  (set (map (fn [statement] {:from (:db/id statement)
-                             :to discussion-id
-                             :type :argument.type/starting}) starting-statements)))
+  ;; Legacy support for starting-arguments. Safely delete when those discussions are not in use anymore.
+  (let [starting-arguments (db/starting-arguments-by-discussion discussion-id)
+        starting-argument-links (set (map (fn [argument] {:from (-> argument :argument/conclusion :db/id)
+                                  :to discussion-id
+                                  :type :argument.type/starting}) starting-arguments))]
+    (concat
+      (map (fn [statement] {:from (:db/id statement)
+                            :to discussion-id
+                            :type :argument.type/starting}) starting-statements)
+      starting-argument-links)))
 
 (>defn nodes-for-agenda
   "Returns all nodes for a discussion including its agenda."

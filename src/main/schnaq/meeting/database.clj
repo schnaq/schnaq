@@ -972,6 +972,19 @@
         [?starting-arguments :argument/conclusion ?starting-conclusions]]
       discussion-id statement-pattern)))
 
+(defn starting-arguments-by-discussion
+  {:deprecated "2020-11-03"
+   :doc "Do not use this function anymore in production.
+   Deep-Query all starting-arguments of a certain discussion."}
+  [discussion-id]
+  (-> (query
+        '[:find (pull ?starting-arguments argument-pattern)
+          :in $ argument-pattern ?discussion-id
+          :where [?discussion-id :discussion/starting-arguments ?starting-arguments]]
+        argument-pattern discussion-id)
+      flatten
+      (toolbelt/pull-key-up :db/ident)))
+
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
   [discussion-id]
