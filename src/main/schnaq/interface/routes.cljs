@@ -162,7 +162,11 @@
          :view graph-view/graph-view-entrypoint
          :link-text (labels :router/graph-view)
          :controllers [{:identity (fn [] (random-uuid))
-                        :start #(rf/dispatch [:graph/load-data-for-discussion])}]}]]]]]
+                        :start (fn []
+                                 (rf/dispatch [:updates.periodic/graph true])
+                                 (rf/dispatch [:graph/load-data-for-discussion]))
+                        :stop (fn []
+                                (rf/dispatch [:updates.periodic/graph false]))}]}]]]]]
    ["feedbacks"
     {:name :routes/feedbacks
      :view feedback-admin/feedbacks-view

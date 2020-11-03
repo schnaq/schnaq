@@ -30,6 +30,15 @@
   (loop-builder
     :updates.periodic/starting-conclusions? update-starting-conclusions))
 
+(defn- update-graph
+  "Call events to update the graph."
+  []
+  (rf/dispatch [:graph/load-data-for-discussion]))
+
+(defn- loop-update-graph!
+  "Define loop to periodically update graph."
+  []
+  (loop-builder :updates.periodic/graph? update-graph))
 
 ;; -----------------------------------------------------------------------------
 ;; Init
@@ -39,7 +48,8 @@
   called here once to start the endless loop."
   []
   (log/info "Preparing periodic updates of discussion entities...")
-  (loop-update-starting-conclusions!))
+  (loop-update-starting-conclusions!)
+  (loop-update-graph!))
 
 
 ;; -----------------------------------------------------------------------------
@@ -54,3 +64,13 @@
   :updates.periodic/starting-conclusions
   (fn [db [_ trigger?]]
     (assoc-in db [:updates/periodic :conclusions/starting?] trigger?)))
+
+(rf/reg-sub
+  :updates.periodic/graph?
+  (fn [db _]
+    (get-in db [:updates/periodic :graph] false)))
+
+(rf/reg-event-db
+  :updates.periodic/graph
+  (fn [db [_ trigger?]]
+    (assoc-in db [:updates/periodic :graph] trigger?)))
