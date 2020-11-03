@@ -20,7 +20,7 @@
      :nav/blog "Zum Blog"
 
      ;; Startpage
-     :startpage/heading "Qualifizierte Brainstormings"
+     :startpage/heading "Wer braucht schon Whiteboards?"
 
      :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
      :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"
