@@ -3,7 +3,7 @@
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [goog.string :as gstring]
-            [oops.core :refer [oget]]
+            [oops.core :refer [oget oset!]]
             [reitit.frontend.easy :as reitfe]))
 
 (>defn avatar
@@ -83,3 +83,10 @@
                                                         :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
+
+(>defn set-website-title!
+  "Set a document's website title."
+  [title]
+  [string? :ret nil?]
+  (let [new-title (gstring/format "schnaq - %s" title)]
+    (oset! js/document [:title] new-title)))

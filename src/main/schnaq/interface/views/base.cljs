@@ -3,6 +3,7 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :as data :refer [labels img-path fa]]
             [schnaq.interface.views.brainstorm.tools :as btools]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar :as navbar]))
 
@@ -55,6 +56,7 @@
    [discussion-header title subtitle title-on-click-function nil])
 
   ([title subtitle title-on-click-function on-click-back-function]
+   (common/set-website-title! title)
    ;; check if title is clickable and set properties accordingly
    [:div.meeting-header.header-custom.shadow-straight
     [:div.row
