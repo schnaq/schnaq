@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.graph.view
-  (:require ["vis-network" :as vis]
+  (:require ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
             [ajax.core :as ajax]
+            [clojure.set :as set]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
@@ -73,8 +74,11 @@
 
 (defn- graph-canvas
   "Visualization of Discussion Graph."
-  [graph]
-  (let [vis-object (reagent/atom nil)
+  [{:keys [nodes edges controversy-values]}]
+  (let [nodes-vis (reagent/atom (DataSet.))
+        edges-vis (reagent/atom (DataSet.))
+        nodes-store (reagent/atom nodes)
+        edges-store (reagent/atom edges)
         width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
         _node-size 200]
@@ -83,18 +87,25 @@
        :reagent-render (fn [_graph] [:div#graph])
        :component-did-mount
        (fn [this]
+         (.add @nodes-vis (clj->js (convert-nodes-for-vis nodes controversy-values)))
+         (.add @edges-vis (clj->js edges))
          (let [root-node (rdom/dom-node this)
-               controversy-vals (:controversy-values graph)
-               data (clj->js (update graph :nodes #(convert-nodes-for-vis % controversy-vals)))
+               data #js {:nodes @nodes-vis
+                         :edges @edges-vis}
                options (clj->js {:width (str width)
                                  :height (str height)})]
-           (reset! vis-object (vis/Network. root-node data options))))
+           (Network. root-node data options)))
        :component-did-update
        (fn [this _argv]
-         (let [[_ new-graph] (reagent/argv this)
-               controversy-vals (:controversy-values new-graph)
-               new-data (clj->js (update new-graph :nodes #(convert-nodes-for-vis % controversy-vals)))]
-           (reset! vis-object (.setData @vis-object new-data))))})))
+         (let [[_ {:keys [nodes edges controversy-values]}] (reagent/argv this)
+               new-nodes (set/difference (set nodes) (set @nodes-store))
+               new-edges (set/difference (set edges) (set @edges-store))]
+           (.add @nodes-vis (clj->js (convert-nodes-for-vis new-nodes controversy-values)))
+           (.add @edges-vis (clj->js new-edges))
+           (reset! nodes-store nodes)
+           (reset! edges-store edges)))
+       :component-will-unmount
+       (fn [_this] (rf/dispatch [:graph/set-current nil]))})))
 
 (defn graph-agenda-header [agenda share-hash]
   (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.discussion/start
