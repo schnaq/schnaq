@@ -31,7 +31,7 @@
          [:td.text-center
           [:button.btn.btn-success
            {:on-click #(rf/dispatch [:suggestions.update/accept suggestion suggestion-type addition?])}
-           [:i {:class (str "far " (fa :check))
+           [:i {:class (str "far " (fa :check/square))
                 :style {:font-size "150%"}}]]]]))]])
 
 (rf/reg-event-fx

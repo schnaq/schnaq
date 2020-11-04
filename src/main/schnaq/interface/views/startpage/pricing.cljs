@@ -70,10 +70,10 @@
     [feature-card (labels :pricing.features.mindmap/heading) (labels :pricing.features.mindmap/content)]]
    [:p.text-sm.text-muted (labels :pricing.features/disclaimer)]])
 
-(defn- double-check-item
-  "List-item with custom double-check bullet-point."
+(defn- check-item
+  "List-item with checkmark bullet-point."
   [text]
-  [:li [:span.fa-li [:i {:class (str "fas " (fa :check-double))}]] text])
+  [:li [:span.fa-li [:i {:class (str "fas " (fa :check/normal))}]] text])
 
 (defn- competitor-box
   "Comparison box for a competitor."
@@ -104,12 +104,12 @@
       [:div.col-12.mb-4
        [:hr]
        [:ul.fa-ul.display-6.pricing-checklist
-        [double-check-item (labels :pricing.comparison.schnaq/brainstorm)]
-        [double-check-item (labels :pricing.comparison.schnaq/decision-making)]
-        [double-check-item (labels :pricing.comparison.schnaq/knowledge-db)]
-        [double-check-item (labels :pricing.comparison.schnaq/async)]
-        [double-check-item (labels :pricing.comparison.schnaq/mindmap)]
-        [double-check-item (labels :pricing.comparison.schnaq/analysis)]]]]
+        [check-item (labels :pricing.comparison.schnaq/brainstorm)]
+        [check-item (labels :pricing.comparison.schnaq/decision-making)]
+        [check-item (labels :pricing.comparison.schnaq/knowledge-db)]
+        [check-item (labels :pricing.comparison.schnaq/async)]
+        [check-item (labels :pricing.comparison.schnaq/mindmap)]
+        [check-item (labels :pricing.comparison.schnaq/analysis)]]]]
      [:div.row.comparison-box.shadow-sm.mt-3
       [:div.col-12
        [:p.text-center.py-2 [:span.display-6 [:span.display-5 "79 €"] (labels :pricing.comparison.schnaq/flatrate)] [:br]
