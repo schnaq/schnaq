@@ -156,7 +156,7 @@
   "Badges that display additional discussion info."
   [statement]
   (let [popover-id (str "debater-popover-" (:db/id statement))]
-    [:p.mt-3
+    [:p.mb-0.mt-md-3
      [:span.badge.badge-pill.badge-transparent.mr-2
       [:i {:class (str "m-auto fas " (fa :comment))}] " "
       (-> statement :meta/sub-discussion-info :sub-statements)]

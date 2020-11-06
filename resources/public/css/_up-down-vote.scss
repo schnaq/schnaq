@@ -25,10 +25,10 @@
   padding: 1rem 0 0;
 
   @include media-breakpoint-down(sm) {
-    border-radius: 0 0 2rem 2rem;
+    border-radius: 0 0 1rem 1rem;
     min-height: 0;
-    min-width: 4rem;
-    padding: 0.25rem 0 0;
+    min-width: 3rem;
+    padding: 0;
   }
 }
 

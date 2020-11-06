@@ -7,7 +7,7 @@
   padding: 0.5rem 1rem;
 
   @include media-breakpoint-down(sm) {
-    padding: 1rem;
+    padding: 0 0.8rem;
   }
 }
 
@@ -18,12 +18,16 @@
   padding: 0.5em 1rem;
 
   @include media-breakpoint-down(sm) {
-    border-radius: 2rem;
+    border-radius: 1rem;
   }
 }
 
 .statement-content {
   padding: 1rem;
+
+  @include media-breakpoint-down(sm) {
+    padding: 0 0.5rem;
+  }
 }
 
 .statement-agree {
@@ -115,7 +119,7 @@
   padding-top: 1em;
 
   @include media-breakpoint-down(sm) {
-    padding: 1rem 0;
+    padding: 0.5rem 0 1rem;
   }
 }
 
