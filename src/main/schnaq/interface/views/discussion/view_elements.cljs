@@ -82,7 +82,7 @@
      :auto-complete "off"
      :required true
      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-   [:div.text-center.button-spacing-top
+   [:div.text-center.py-3
     [:button.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
 
 (rf/reg-event-fx
@@ -120,20 +120,20 @@
 (defn input-form
   "Text input for adding a statement"
   []
-  [:div.mt-4
+  [:div.mt-2
    [:textarea.form-control.discussion-text-input.mb-1
     {:name "premise-text" :wrap "soft" :rows 2
      :auto-complete "off"
      :required true
      :placeholder (labels :discussion/premise-placeholder)}]
    ;; add button
-   [:div.text-center.button-spacing-top
+   [:div.text-center.py-3
     [:button.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
 
 (defn radio-button
   "Radio Button helper function. This function creates a radio button."
   [id name value label checked?]
-  [:div.custom-control.custom-radio.my-2
+  [:div.custom-control.custom-radio.my-1
    [:input.custom-control-input.custom-radio-button
     {:type "radio"
      :id id
