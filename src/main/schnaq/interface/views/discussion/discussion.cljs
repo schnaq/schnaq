@@ -50,7 +50,6 @@
          (rf/dispatch [:navigation/navigate :routes.meeting/show
                        {:share-hash (:meeting/share-hash current-meeting)}])
          (rf/dispatch [:meeting/select-current current-meeting]))]
-      [view/history-view]
       [view/conclusions-list @(rf/subscribe [:discussion.conclusions/starting])]
       [view/input-field]]]))
 
