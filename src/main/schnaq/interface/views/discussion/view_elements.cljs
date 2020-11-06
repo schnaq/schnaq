@@ -77,7 +77,7 @@
    {:on-submit (fn [e] (js-wrap/prevent-default e)
                  (rf/dispatch [:discussion.add.statement/starting
                                (oget e [:target :elements])]))}
-   [:textarea.form-control.discussion-text-input.mb-5
+   [:textarea.form-control.discussion-text-input
     {:name "statement-text" :wrap "soft" :rows 2
      :auto-complete "off"
      :required true
@@ -114,7 +114,7 @@
 
 (defn input-field []
   [:div.discussion-primary-background
-   [:div.mb-5 [:h5 (labels :discussion/create-argument-heading)]]
+   [:div.mb-2 [:h5 (labels :discussion/create-argument-heading)]]
    [input-starting-statement-form]])
 
 (defn input-form
