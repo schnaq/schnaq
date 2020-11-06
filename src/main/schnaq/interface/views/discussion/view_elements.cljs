@@ -39,15 +39,15 @@
     [:div.discussion-primary-background
      [:div.row
       ;; back arrow
-      [:div.col-1.back-arrow
+      [:div.col-1.back-arrow.text-center
        (when-not (and (btools/is-brainstorm? meeting)
                       (= :routes.discussion/start current-view))
          (when on-click-back-function
-           [:p {:on-click on-click-back-function}
+           [:p.m-auto {:on-click on-click-back-function}
             [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]))]
       ;; title
-      [:div.col-8.col-lg-10
-       [:h2.clickable-no-hover
+      [:div.col-8.col-lg-10.d-flex
+       [:h2.clickable-no-hover.align-self-center
         {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
                                   {:share-hash share-hash
                                    :id (:db/id (:agenda/discussion agenda))}])}
@@ -265,7 +265,7 @@
   "Displays a list of conclusions."
   [conclusions]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
-    [:div#conclusions-list.mobile-container
+    [:div.conclusions-list.mobile-container
      (for [conclusion conclusions]
        [:div {:key (:db/id conclusion)
               :on-click (fn [_e]
@@ -280,7 +280,7 @@
   []
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-    [:div#discussion-history.mobile-container
+    [:div.discussion-history.mobile-container
      (for [[index statement] indexed-history]
        [:div {:key (str "history-" (:db/id statement))
               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
