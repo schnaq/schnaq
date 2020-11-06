@@ -156,7 +156,7 @@
   "Badges that display additional discussion info."
   [statement]
   (let [popover-id (str "debater-popover-" (:db/id statement))]
-    [:p.my-0
+    [:p.mt-3
      [:span.badge.badge-pill.badge-transparent.mr-2
       [:i {:class (str "m-auto fas " (fa :comment))}] " "
       (-> statement :meta/sub-discussion-info :sub-statements)]
@@ -182,20 +182,18 @@
     [:div.row
      ;; bubble content
      [:div.col-12.col-md-11.px-0
-      [:div.statement {:class (str "statement-" (name attitude))}
+      [:div.row.statement {:class (str "statement-" (name attitude))}
        (when (= :argument.type/undercut (:meta/argument-type statement))
-         [:p.small (labels :discussion/undercut-bubble-intro)])
+         [:div.col-12
+          [:p.small (labels :discussion/undercut-bubble-intro)]])
        ;; content
-       [:div.statement-content
-        [:p.my-0 content]]
-       ;; additional Info
-       [:div.row.px-3
-        [:div.col-5.align-self-end
-         [extra-discussion-info-badges statement]]
-        [:div.col-7
-         ;; avatar
-         [:small.text-right.float-right
-          (common/avatar (-> statement :statement/author :author/nickname) 50)]]]]]
+       [:div.col-10.statement-content
+        [:p.my-0 content]
+        [extra-discussion-info-badges statement]]
+       [:div.col-2
+        ;; avatar
+        [:span
+         [common/avatar (-> statement :statement/author :author/nickname) 50]]]]]
      ;; up-down-votes
      [:div.col-12.col-md-1.px-0
       [:div.up-down-vote
