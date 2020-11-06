@@ -16,7 +16,7 @@
   box-shadow: $regular-shadow;
   color: $white;
   min-height: 9rem;
-  padding: 1rem;
+  padding: 0.5em 1rem;
 
   @include media-breakpoint-down(sm) {
     border-radius: 2rem;
@@ -24,7 +24,7 @@
 }
 
 .statement-content {
-  padding: 2rem 1rem 1rem;
+  padding: 1rem;
 }
 
 .statement-agree {
