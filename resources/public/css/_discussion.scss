@@ -4,10 +4,10 @@
   background: transparent;
   border: 0;
   color: $white;
-  padding: 2rem 1rem;
+  padding: 0.5rem 1rem;
 
   @include media-breakpoint-down(sm) {
-    padding: 1rem;
+    padding: 0 0.8rem;
   }
 }
 
@@ -15,16 +15,19 @@
   border-radius: 2rem 0.5rem 0.5rem 2rem;
   box-shadow: $regular-shadow;
   color: $white;
-  min-height: 9rem;
-  padding: 1rem;
+  padding: 0.5em 1rem;
 
   @include media-breakpoint-down(sm) {
-    border-radius: 2rem;
+    border-radius: 1rem;
   }
 }
 
 .statement-content {
-  padding: 2rem 1rem 1rem;
+  padding: 1rem;
+
+  @include media-breakpoint-down(sm) {
+    padding: 0 0.5rem;
+  }
 }
 
 .statement-agree {
@@ -69,7 +72,7 @@
 .discussion-primary-background {
   background: $primary;
   color: $white;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .statement-single {
@@ -113,9 +116,15 @@
 
 .discussion-base.container {
   padding-bottom: 2rem;
-  padding-top: 2rem;
+  padding-top: 1em;
 
   @include media-breakpoint-down(sm) {
-    padding: 1rem 0;
+    padding: 0.5rem 0 1rem;
   }
+}
+
+.conclusions-list,
+.discussion-history {
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
 }

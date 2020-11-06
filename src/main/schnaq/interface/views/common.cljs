@@ -10,10 +10,10 @@
   "Create an image based on the nickname."
   [display-name size]
   [string? number? :ret vector?]
-  [:div.d-flex.flex-row
-   [:div.avatar-name.mr-4.align-self-end display-name]
-   [:div.avatar-image.img-thumbnail.schnaq-rounded.align-self-end.p-0
-    {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size)}}]])
+  [:div.text-center.mt-3
+   [:div.avatar-image.m-auto.schnaq-rounded.p-0
+    {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}]
+   [:p.small.mt-1 display-name]])
 
 (>defn add-namespace-to-keyword
   "Prepend a namespace to a keyword. Replaces existing namespace with new

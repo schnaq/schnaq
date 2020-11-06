@@ -39,15 +39,15 @@
     [:div.discussion-primary-background
      [:div.row
       ;; back arrow
-      [:div.col-1.back-arrow
+      [:div.col-1.back-arrow.text-center
        (when-not (and (btools/is-brainstorm? meeting)
                       (= :routes.discussion/start current-view))
          (when on-click-back-function
-           [:p {:on-click on-click-back-function}
+           [:p.m-auto {:on-click on-click-back-function}
             [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]))]
       ;; title
-      [:div.col-8.col-lg-10
-       [:h2.clickable-no-hover
+      [:div.col-8.col-lg-10.d-flex
+       [:h2.clickable-no-hover.align-self-center
         {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
                                   {:share-hash share-hash
                                    :id (:db/id (:agenda/discussion agenda))}])}
@@ -77,12 +77,12 @@
    {:on-submit (fn [e] (js-wrap/prevent-default e)
                  (rf/dispatch [:discussion.add.statement/starting
                                (oget e [:target :elements])]))}
-   [:textarea.form-control.discussion-text-input.mb-5
+   [:textarea.form-control.discussion-text-input
     {:name "statement-text" :wrap "soft" :rows 2
      :auto-complete "off"
      :required true
      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-   [:div.text-center.button-spacing-top
+   [:div.text-center.py-3
     [:button.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
 
 (rf/reg-event-fx
@@ -114,26 +114,26 @@
 
 (defn input-field []
   [:div.discussion-primary-background
-   [:div.mb-5 [:h5 (labels :discussion/create-argument-heading)]]
+   [:div.mb-2 [:h5 (labels :discussion/create-argument-heading)]]
    [input-starting-statement-form]])
 
 (defn input-form
   "Text input for adding a statement"
   []
-  [:div.mt-4
+  [:div.mt-2
    [:textarea.form-control.discussion-text-input.mb-1
     {:name "premise-text" :wrap "soft" :rows 2
      :auto-complete "off"
      :required true
      :placeholder (labels :discussion/premise-placeholder)}]
    ;; add button
-   [:div.text-center.button-spacing-top
+   [:div.text-center.py-3
     [:button.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
 
 (defn radio-button
   "Radio Button helper function. This function creates a radio button."
   [id name value label checked?]
-  [:div.custom-control.custom-radio.my-2
+  [:div.custom-control.custom-radio.my-1
    [:input.custom-control-input.custom-radio-button
     {:type "radio"
      :id id
@@ -156,7 +156,7 @@
   "Badges that display additional discussion info."
   [statement]
   (let [popover-id (str "debater-popover-" (:db/id statement))]
-    [:p.my-0
+    [:p.mb-0.mt-md-3
      [:span.badge.badge-pill.badge-transparent.mr-2
       [:i {:class (str "m-auto fas " (fa :comment))}] " "
       (-> statement :meta/sub-discussion-info :sub-statements)]
@@ -181,21 +181,19 @@
    [:div.statement-outer
     [:div.row
      ;; bubble content
-     [:div.col-12.col-md-11.px-0
-      [:div.statement {:class (str "statement-" (name attitude))}
+     [:div.col-12.col-md-11
+      [:div.row.statement {:class (str "statement-" (name attitude))}
        (when (= :argument.type/undercut (:meta/argument-type statement))
-         [:p.small (labels :discussion/undercut-bubble-intro)])
+         [:div.col-12
+          [:p.small (labels :discussion/undercut-bubble-intro)]])
        ;; content
-       [:div.statement-content
-        [:p.my-0 content]]
-       ;; additional Info
-       [:div.row.px-3
-        [:div.col-5.align-self-end
-         [extra-discussion-info-badges statement]]
-        [:div.col-7
-         ;; avatar
-         [:small.text-right.float-right
-          (common/avatar (-> statement :statement/author :author/nickname) 50)]]]]]
+       [:div.col-10.statement-content
+        [:p.my-0 content]
+        [extra-discussion-info-badges statement]]
+       [:div.col-2
+        ;; avatar
+        [:span
+         [common/avatar (-> statement :statement/author :author/nickname) 50]]]]]
      ;; up-down-votes
      [:div.col-12.col-md-1.px-0
       [:div.up-down-vote
@@ -265,7 +263,7 @@
   "Displays a list of conclusions."
   [conclusions]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
-    [:div#conclusions-list.mobile-container
+    [:div.conclusions-list.mobile-container
      (for [conclusion conclusions]
        [:div {:key (:db/id conclusion)
               :on-click (fn [_e]
@@ -280,7 +278,7 @@
   []
   (let [history @(rf/subscribe [:discussion-history])
         indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-    [:div#discussion-history.mobile-container
+    [:div.discussion-history.mobile-container
      (for [[index statement] indexed-history]
        [:div {:key (str "history-" (:db/id statement))
               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
