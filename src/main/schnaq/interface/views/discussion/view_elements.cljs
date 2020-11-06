@@ -181,7 +181,7 @@
    [:div.statement-outer
     [:div.row
      ;; bubble content
-     [:div.col-12.col-md-11.px-0
+     [:div.col-12.col-md-11
       [:div.row.statement {:class (str "statement-" (name attitude))}
        (when (= :argument.type/undercut (:meta/argument-type statement))
          [:div.col-12

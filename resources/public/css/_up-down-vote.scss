@@ -1,7 +1,7 @@
 @import 'variables';
 
 .up-down-vote {
-  max-width: 5rem;
+  max-width: 4.5rem;
   padding: 0.5rem 0;
 
   @include media-breakpoint-down(sm) {
@@ -18,14 +18,14 @@
 }
 
 .vote {
-  border-radius: 0.25rem 2rem 2rem 0.25rem;
+  border-radius: 0 2rem 2rem 0;
   box-shadow: $regular-shadow;
   cursor: pointer;
-  min-height: 4rem;
-  padding: 1.25rem 0 0;
+  min-height: 3.5rem;
+  padding: 1rem 0 0;
 
   @include media-breakpoint-down(sm) {
-    border-radius: 0.25rem 0.25rem 2rem 2rem;
+    border-radius: 0 0 2rem 2rem;
     min-height: 0;
     min-width: 4rem;
     padding: 0.25rem 0 0;
