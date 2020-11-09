@@ -823,10 +823,9 @@
     (d/q
       '[:find ?authors
         :in $ ?since
-        :where [?authors :author/nickname _ ?tx]
+        :where [?statements :statement/author ?authors ?tx]
         [?tx :db/txInstant ?start-date]
-        [(< ?since ?start-date)]
-        [?statements :statement/author ?authors]]
+        [(< ?since ?start-date)]]
       (d/db (new-connection)) (Date/from since))))
 
 (>defn active-preparation-authors
