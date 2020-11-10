@@ -86,6 +86,8 @@
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
     (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %)) agendas)
+    (log/info (:db/ident (:meeting/type created-meeting)) " Meeting Created: " meeting-id " - "
+              (:meeting/title created-meeting))
     (created "" {:new-meeting created-meeting})))
 
 (defn- update-meeting!
@@ -107,6 +109,7 @@
           (doseq [agenda updated-agendas]
             (db/update-agenda agenda))
           (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
+          (log/info "Meeting has been updated: " meeting-id)
           (ok {:text "Your schnaq has been updated."}))
       (deny-access))))
 
@@ -117,7 +120,8 @@
         new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description :agenda/rank])]
     (if (valid-credentials? share-hash edit-hash)
       (if-let [updated-agenda (suggestions/update-agenda! new-agenda share-hash)]
-        (ok updated-agenda)
+        (do (log/info "Updated agenda: " (:db/id updated-agenda) (:agenda/title updated-agenda))
+            (ok updated-agenda))
         (deny-access))
       (deny-access))))
 
@@ -127,6 +131,7 @@
   (let [{:keys [agenda-id share-hash edit-hash]} body-params]
     (if (valid-credentials? share-hash edit-hash)
       (do (db/delete-agendas [agenda-id] (:db/id (db/meeting-by-hash share-hash)))
+          (log/info "Deleted agenda: " agenda-id)
           (ok {:message "Deletion executed."}))
       (deny-access))))
 
@@ -136,12 +141,13 @@
   (let [{:keys [agenda share-hash edit-hash]} body-params]
     (if (valid-credentials? share-hash edit-hash)
       (if-let [new-agenda (suggestions/new-agenda! agenda share-hash)]
-        (ok new-agenda)
+        (do (log/info "Created new agenda: " (:db/id new-agenda))
+            (ok new-agenda))
         (deny-access))
       (deny-access))))
 
 (defn- update-meeting-info!
-  "Update a single agenda, when the credentials are right."
+  "Update a meeting, when the credentials are right."
   [{:keys [body-params]}]
   (let [{:keys [meeting share-hash edit-hash nickname]} body-params
         author (db/add-user-if-not-exists nickname)
@@ -149,7 +155,8 @@
                       :meeting/author author)]
     (if (valid-credentials? share-hash edit-hash)
       (if-let [updated-meeting (suggestions/update-meeting! new-meeting share-hash)]
-        (ok updated-meeting)
+        (do (log/info "Updated a meeting: " (:db/id updated-meeting))
+            (ok updated-meeting))
         (deny-access))
       (deny-access))))
 
@@ -164,6 +171,7 @@
     (suggestions/new-agenda-updates-suggestion updated-agendas user-id)
     (db/suggest-new-agendas! new-agendas user-id (:db/id meeting))
     (db/suggest-agenda-deletion! delete-agendas user-id)
+    (log/info "User: " nickname " created new suggestions for meeting")
     (created "" {:message "Successfully created suggestions!"})))
 
 (defn- add-suggestion-feedback
@@ -173,8 +181,10 @@
         user-id (db/add-user-if-not-exists nickname)
         meeting-id (:db/id (db/meeting-by-hash share-hash))]
     (if-not (string/blank? feedback)
-      (ok {:message "Feedback created"
-           :feedback/id (db/add-meeting-feedback feedback meeting-id user-id)})
+      (do
+        (log/info "User: " nickname " gave feedback for a meeting")
+        (ok {:message "Feedback created"
+             :feedback/id (db/add-meeting-feedback feedback meeting-id user-id)}))
       (bad-request {:error "You can not submit blank feedback."}))))
 
 (>defn- load-meeting-suggestions
@@ -270,6 +280,7 @@
     (let [nickname (db/canonical-username nickname)
           vote (check-vote-fn statement-id nickname)
           counter-vote (counter-check-vote-fn statement-id nickname)]
+      (log/debug "Triggered Vote on Statement by " nickname)
       (if vote
         (do (remove-vote-fn statement-id nickname)
             (ok {:operation :removed}))
@@ -317,6 +328,7 @@
         feedback-id (db/add-feedback! feedback)
         screenshot (:screenshot body-params)]
     (save-screenshot-if-provided! screenshot "resources/public/media/feedbacks/screenshots" feedback-id)
+    (log/info "Schnaq Feedback created")
     (created "" {:feedback feedback})))
 
 (defn- all-feedbacks
@@ -333,12 +345,13 @@
   (let [{:keys [share-hash edit-hash recipients share-link]} body-params
         meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
     (if (valid-credentials? share-hash edit-hash)
-      (ok (merge
-            {:message "Emails sent successfully"}
-            (emails/send-mails
-              (format (email-templates :invitation/title) meeting-title)
-              (format (email-templates :invitation/body) meeting-title share-link)
-              recipients)))
+      (do (log/debug "Invite Emails for some meeting sent")
+          (ok (merge
+                {:message "Emails sent successfully"}
+                (emails/send-mails
+                  (format (email-templates :invitation/title) meeting-title)
+                  (format (email-templates :invitation/body) meeting-title share-link)
+                  recipients))))
       (deny-access))))
 
 (>defn- send-admin-center-link
@@ -348,12 +361,13 @@
   (let [{:keys [share-hash edit-hash recipient admin-center]} body-params
         meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
     (if (valid-credentials? share-hash edit-hash)
-      (ok (merge
-            {:message "Emails sent successfully"}
-            (emails/send-mails
-              (format (email-templates :admin-center/title) meeting-title)
-              (format (email-templates :admin-center/body) meeting-title admin-center)
-              [recipient])))
+      (do (log/debug "Send admin link for meeting " meeting-title " via E-Mail")
+          (ok (merge
+                {:message "Emails sent successfully"}
+                (emails/send-mails
+                  (format (email-templates :admin-center/title) meeting-title)
+                  (format (email-templates :admin-center/body) meeting-title admin-center)
+                  [recipient]))))
       (deny-access))))
 
 (>defn- request-demo
@@ -366,7 +380,8 @@
                                     (format (email-templates :demo-request/body) name email company phone)
                                     ["info@dialogo.io"])]
     (if (empty? failed-sendings)
-      (ok {:message "Demo requested."})
+      (do (log/info "Demonstration requested")
+          (ok {:message "Demo requested."}))
       (bad-request {:message "Ihre Anfrage konnte nicht bearbeitet werden, bitte versuchen Sie es erneut."}))))
 
 ;; -----------------------------------------------------------------------------
@@ -424,6 +439,7 @@
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
       (do (db/add-starting-statement! discussion-id author-id statement)
+          (log/info "Starting statement added for discussion " discussion-id)
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
       (deny-access invalid-rights-message))))
 
@@ -433,12 +449,13 @@
   (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok (with-statement-meta
-            {:new-argument
-             (if (= :attack reaction)
-               (db/attack-statement! discussion-id author-id conclusion-id premise)
-               (db/support-statement! discussion-id author-id conclusion-id premise))}
-            discussion-id))
+      (do (log/info "Statement added as reaction for discussion " discussion-id)
+          (ok (with-statement-meta
+                {:new-argument
+                 (if (= :attack reaction)
+                   (db/attack-statement! discussion-id author-id conclusion-id premise)
+                   (db/support-statement! discussion-id author-id conclusion-id premise))}
+                discussion-id)))
       (deny-access invalid-rights-message))))
 
 (defn- undercut-argument!
@@ -447,9 +464,10 @@
   (let [{:keys [share-hash discussion-id selected previous-id nickname premise]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (ok (with-statement-meta
-            {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)}
-            discussion-id))
+      (do (log/info "Undercut added for discussion " discussion-id)
+          (ok (with-statement-meta
+                {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)}
+                discussion-id)))
       (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------

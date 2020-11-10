@@ -7,7 +7,8 @@
             [schnaq.meeting.models :as models]
             [schnaq.meeting.specs :as specs]
             [schnaq.test-data :as test-data]
-            [schnaq.toolbelt :as toolbelt])
+            [schnaq.toolbelt :as toolbelt]
+            [taoensso.timbre :as log])
   (:import (java.util UUID Date)
            (java.time Instant)))
 
@@ -605,7 +606,8 @@
   [:author/nickname :ret int?]
   (if-let [user-id (user-by-nickname nickname)]
     user-id
-    (add-user nickname)))
+    (do (log/info "Added a new user: " nickname)
+        (add-user nickname))))
 
 (>defn all-author-names
   "Returns the names of all authors."
