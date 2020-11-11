@@ -81,7 +81,7 @@
         edges-store (reagent/atom edges)
         width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
-        _node-size 200]
+        spring-length 200]
     (reagent/create-class
       {:display-name "Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:div#graph])
@@ -93,7 +93,8 @@
                data #js {:nodes @nodes-vis
                          :edges @edges-vis}
                options (clj->js {:width (str width)
-                                 :height (str height)})]
+                                 :height (str height)
+                                 :physics {:barnesHut {:springLength spring-length}}})]
            (Network. root-node data options)))
        :component-did-update
        (fn [this _argv]
