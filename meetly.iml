@@ -138,7 +138,7 @@
     <orderEntry type="library" name="Deps: borkdude/dynaload:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: binaryage/devtools:1.0.2" level="project" />
     <orderEntry type="library" name="Deps: net.cgrand/macrovich:0.2.1" level="project" />
-    <orderEntry type="library" name="Deps: re-frame:1.1.1" level="project" />
+    <orderEntry type="library" name="Deps: re-frame:1.1.2" level="project" />
     <orderEntry type="library" name="Deps: reagent:1.0.0-alpha2" level="project" />
     <orderEntry type="library" name="Deps: org.msgpack/msgpack:0.6.12" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client-impl-shared:0.8.80" level="project" />
