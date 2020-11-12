@@ -237,7 +237,6 @@
   [source-node all-nodes links]
   [:db/id sequential? sequential? :ret sequential?]
   (let [indexed-nodes (into {} (map #(vector (:id %) %) all-nodes))]
-    (println indexed-nodes)
     (map #(vector (:type %) (get indexed-nodes (:from %)))
          (filter #(= source-node (:to %)) links))))
 
@@ -252,15 +251,18 @@
            text ""
            level 0]
       (if (empty? queue)
+        ;; We're done here, give the finished text back
         text
-        (let [[relation first-statement] (first queue)
-              updated-text (next-line text level first-statement relation)
-              statements-to-add (nodes-after (or (:db/id first-statement) (:id first-statement))
-                                             all-nodes links)
-              ;; TODO missing a marker for staying at the same level currently...
-              updated-level (if (empty? statements-to-add) (max 0 (dec level)) (inc level))
-              updated-q (concat statements-to-add (rest queue))]
-          (recur updated-q updated-text updated-level))))))
+        ;; Otherwise either toss the level up marker, or do the recursive algo
+        (if (= :level-up-marker (first queue))
+          (recur (rest queue) text (dec level))
+          (let [[relation first-statement] (first queue)
+                updated-text (next-line text level first-statement relation)
+                statements-to-add (nodes-after (or (:db/id first-statement) (:id first-statement))
+                                               all-nodes links)]
+            (if (empty? statements-to-add)
+              (recur (rest queue) updated-text level)
+              (recur (concat statements-to-add [:level-up-marker] (rest queue)) updated-text (inc level)))))))))
 
 (comment
   (generate-text-export 74766790689705)
