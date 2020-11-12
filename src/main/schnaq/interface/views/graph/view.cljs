@@ -80,7 +80,8 @@
         nodes-store (reagent/atom nodes)
         edges-store (reagent/atom edges)
         width (.-innerWidth js/window)
-        height (* 0.75 (.-innerHeight js/window))]
+        height (* 0.75 (.-innerHeight js/window))
+        route-params (get-in @(rf/subscribe [:navigation/current-route]) [:parameters :path])]
     (reagent/create-class
       {:display-name "Visualization of Discussion Graph"
        :reagent-render (fn [_graph] [:div#graph])
@@ -94,7 +95,11 @@
                options (clj->js {:width (str width)
                                  :height (str height)
                                  :physics {:barnesHut {:avoidOverlap 0.02}}})]
-           (Network. root-node data options)))
+           (.on (Network. root-node data options) "doubleClick"
+                (fn [properties]
+                  (let [node-id (first (get (js->clj properties) "nodes"))]
+                    (rf/dispatch [:navigation/navigate :routes.discussion.select/statement
+                                  (assoc route-params :statement-id node-id)]))))))
        :component-did-update
        (fn [this _argv]
          (let [[_ {:keys [nodes edges controversy-values]}] (reagent/argv this)
