@@ -215,18 +215,15 @@
   (let [argument-id (argument-id-for-undercut selected previous-id)]
     (db/undercut-argument! discussion-id author-id argument-id [premise-string])))
 
-;; TODO possibly get all nodes not prepared for the graph for this (to avoid the ors)
 (defn- next-line
   "Builds the next line of a node in txt representation."
   [old-text level node relation]
   (let [relation-symbol (case relation
-                          :argument.type/attack "–"
-                          :argument.type/undercut "–"
-                          :argument.type/support "+"
+                          :argument.type/attack "– "
+                          :argument.type/undercut "– "
+                          :argument.type/support "+ "
                           "")]
-    (str old-text "\n" (str/join (repeat level "..")) relation-symbol
-         (or (:statement/content node)
-             (:label node)))))
+    (str old-text "\n" (str/join (repeat level "  ")) relation-symbol (:label node))))
 
 (>defn- nodes-after
   "Delivers all nodes which in the graph of the discussion come after `source-node`.
@@ -234,20 +231,24 @@
   being the first element.
 
   E.g. [:argument.type/attack {:db/id …}]"
-  [source-node all-nodes links]
+  [source-node all-statements links]
   [:db/id sequential? sequential? :ret sequential?]
-  (let [indexed-nodes (into {} (map #(vector (:id %) %) all-nodes))]
-    (map #(vector (:type %) (get indexed-nodes (:from %)))
-         (filter #(= source-node (:to %)) links))))
+  (let [indexed-nodes (into {} (map #(vector (:id %) %) all-statements))
+        bla
+        (map #(vector (:type %) (get indexed-nodes (:from %)))
+             (filter #(= source-node (:to %)) links))]
+    bla))
 
 (>defn generate-text-export
   "Generates a textual representation of the discussion-data."
-  [discussion-id]
-  [:db/id :ret string?]
-  (let [all-nodes (db/all-statements-for-graph discussion-id)
+  [discussion-id share-hash]
+  [:db/id string? :ret string?]
+  (let [statements (db/all-statements-for-graph discussion-id)
         starting-statements (db/starting-statements discussion-id)
+        all-nodes (nodes-for-agenda statements starting-statements discussion-id share-hash)
+        starting-nodes (filter #(= :argument.type/starting (:type %)) all-nodes)
         links (links-for-agenda all-nodes starting-statements discussion-id)]
-    (loop [queue (map #(vector "" %) starting-statements)
+    (loop [queue (map #(vector "" %) starting-nodes)
            text ""
            level 0]
       (if (empty? queue)
@@ -258,12 +259,11 @@
           (recur (rest queue) text (dec level))
           (let [[relation first-statement] (first queue)
                 updated-text (next-line text level first-statement relation)
-                statements-to-add (nodes-after (or (:db/id first-statement) (:id first-statement))
-                                               all-nodes links)]
+                statements-to-add (nodes-after (:id first-statement) all-nodes links)]
             (if (empty? statements-to-add)
               (recur (rest queue) updated-text level)
               (recur (concat statements-to-add [:level-up-marker] (rest queue)) updated-text (inc level)))))))))
 
 (comment
-  (generate-text-export 74766790689705)
+  (generate-text-export 74766790689705 "4c8b485b-7179-4a1a-815f-be95f0c1e571")
   :end)

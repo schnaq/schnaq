@@ -483,7 +483,7 @@
            [?meeting :meeting/share-hash ?hash]]
          (d/db (new-connection)) hash agenda-pattern)))
 
-(>defn- all-statements
+(>defn all-statements
   "Returns all statements belonging to a discussion"
   [discussion-id]
   [:db/id :ret (s/coll-of ::specs/statement)]
