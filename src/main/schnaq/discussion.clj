@@ -263,7 +263,3 @@
             (if (empty? statements-to-add)
               (recur (rest queue) updated-text level)
               (recur (concat statements-to-add [:level-up-marker] (rest queue)) updated-text (inc level)))))))))
-
-(comment
-  (generate-text-export 74766790689705 "4c8b485b-7179-4a1a-815f-be95f0c1e571")
-  :end)
