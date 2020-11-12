@@ -1,5 +1,6 @@
 (ns schnaq.discussion
   (:require [clojure.spec.alpha :as s]
+            [clojure.string :as str]
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.specs :as specs]))
@@ -110,8 +111,8 @@
   ;; Legacy support for starting-arguments. Safely delete when those discussions are not in use anymore.
   (let [starting-arguments (db/starting-arguments-by-discussion discussion-id)
         starting-argument-links (set (map (fn [argument] {:from (-> argument :argument/conclusion :db/id)
-                                  :to discussion-id
-                                  :type :argument.type/starting}) starting-arguments))]
+                                                          :to discussion-id
+                                                          :type :argument.type/starting}) starting-arguments))]
     (concat
       (map (fn [statement] {:from (:db/id statement)
                             :to discussion-id
@@ -213,3 +214,54 @@
   [::specs/statement :db/id :statement/content :db/id :db/id :ret ::specs/argument]
   (let [argument-id (argument-id-for-undercut selected previous-id)]
     (db/undercut-argument! discussion-id author-id argument-id [premise-string])))
+
+;; TODO possibly get all nodes not prepared for the graph for this (to avoid the ors)
+(defn- next-line
+  "Builds the next line of a node in txt representation."
+  [old-text level node relation]
+  (let [relation-symbol (case relation
+                          :argument.type/attack "–"
+                          :argument.type/undercut "–"
+                          :argument.type/support "+"
+                          "")]
+    (str old-text "\n" (str/join (repeat level "..")) relation-symbol
+         (or (:statement/content node)
+             (:label node)))))
+
+(>defn- nodes-after
+  "Delivers all nodes which in the graph of the discussion come after `source-node`.
+  Returns nodes as a list of tuples with the type of the link leading to the node
+  being the first element.
+
+  E.g. [:argument.type/attack {:db/id …}]"
+  [source-node all-nodes links]
+  [:db/id sequential? sequential? :ret sequential?]
+  (let [indexed-nodes (into {} (map #(vector (:id %) %) all-nodes))]
+    (println indexed-nodes)
+    (map #(vector (:type %) (get indexed-nodes (:from %)))
+         (filter #(= source-node (:to %)) links))))
+
+(>defn generate-text-export
+  "Generates a textual representation of the discussion-data."
+  [discussion-id]
+  [:db/id :ret string?]
+  (let [all-nodes (db/all-statements-for-graph discussion-id)
+        starting-statements (db/starting-statements discussion-id)
+        links (links-for-agenda all-nodes starting-statements discussion-id)]
+    (loop [queue (map #(vector "" %) starting-statements)
+           text ""
+           level 0]
+      (if (empty? queue)
+        text
+        (let [[relation first-statement] (first queue)
+              updated-text (next-line text level first-statement relation)
+              statements-to-add (nodes-after (or (:db/id first-statement) (:id first-statement))
+                                             all-nodes links)
+              ;; TODO missing a marker for staying at the same level currently...
+              updated-level (if (empty? statements-to-add) (max 0 (dec level)) (inc level))
+              updated-q (concat statements-to-add (rest queue))]
+          (recur updated-q updated-text updated-level))))))
+
+(comment
+  (generate-text-export 74766790689705)
+  :end)
