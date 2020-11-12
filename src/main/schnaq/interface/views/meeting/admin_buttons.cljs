@@ -38,8 +38,12 @@
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
   [[ok response]]
-  (if ok
+  (when ok
     (file-download/export-data (:string-representation response))))
+
+(defn- show-error
+  [& _not-needed]
+  (rf/dispatch [:ajax-failure (labels :error/export-failed)]))
 
 (defn txt-export
   "Request a txt-export of the discussion."
@@ -52,7 +56,8 @@
                                                  :discussion-id discussion-id
                                                  :edit-hash edit-hash}
                                         :response-format (ajax/transit-response-format)
-                                        :handler create-txt-download-handler})]
+                                        :handler create-txt-download-handler
+                                        :error-handler show-error})]
     [tooltip-button "bottom" (labels :meeting/admin-center-export)
      [:i {:class (str "fas " (fa :file-download))}]
      #(request-fn)]))

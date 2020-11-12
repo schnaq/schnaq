@@ -8,6 +8,7 @@
     {
      ;; Common
      :common/save "Speichern"
+     :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
 
      ;; navbar labels
      :nav/startpage "Home"
