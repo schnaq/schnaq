@@ -5,6 +5,7 @@
             [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.file-download :as file-download]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.meeting.calendar-invite :as calendar-invite]))
 
@@ -38,7 +39,7 @@
   "Receives the export apis answer and creates a download."
   [[ok response]]
   (if ok
-    (println (:string-representation response))))
+    (file-download/export-data (:string-representation response))))
 
 (defn txt-export
   "Request a txt-export of the discussion."
