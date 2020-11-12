@@ -1,7 +1,9 @@
 (ns schnaq.interface.views.meeting.admin-buttons
-  (:require [re-frame.core :as rf]
+  (:require [ajax.core :as ajax]
+            [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.meeting.calendar-invite :as calendar-invite]))
@@ -31,6 +33,28 @@
    #(rf/dispatch [:navigation/navigate
                   :routes.meeting/admin-center
                   {:share-hash share-hash :edit-hash edit-hash}])])
+
+(defn- create-txt-download-handler
+  "Receives the export apis answer and creates a download."
+  [[ok response]]
+  (if ok
+    (println (:string-representation response))))
+
+(defn txt-export
+  "Request a txt-export of the discussion."
+  [share-hash edit-hash]
+  (let [discussion-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :id])
+        request-fn #(ajax/ajax-request {:method :get
+                                        :uri (str (:rest-backend config) "/export/txt")
+                                        :format (ajax/transit-request-format)
+                                        :params {:share-hash share-hash
+                                                 :discussion-id discussion-id
+                                                 :edit-hash edit-hash}
+                                        :response-format (ajax/transit-response-format)
+                                        :handler create-txt-download-handler})]
+    [tooltip-button "bottom" (labels :meeting/admin-center-export)
+     [:i {:class (str "fas " (fa :file-download))}]
+     #(request-fn)]))
 
 (defn edit
   "Button to enter edit-mode."

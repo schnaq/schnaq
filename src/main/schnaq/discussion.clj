@@ -107,7 +107,7 @@
 (>defn- agenda-links
   "Creates links from an starting statement to an agenda node."
   [discussion-id starting-statements]
-  [int? sequential? :ret set?]
+  [int? sequential? :ret sequential?]
   ;; Legacy support for starting-arguments. Safely delete when those discussions are not in use anymore.
   (let [starting-arguments (db/starting-arguments-by-discussion discussion-id)
         starting-argument-links (set (map (fn [argument] {:from (-> argument :argument/conclusion :db/id)

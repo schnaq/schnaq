@@ -253,6 +253,7 @@
      :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
      :meeting.admin-center.invite/via-link "Link verteilen"
      :meeting.admin-center.invite/via-mail "Per E-Mail einladen"
+     :meeting/admin-center-export "Diskussion als Textdatei runterladen"
      :meeting/admin-center-tooltip "Schnaq administrieren"
 
      ;; Suggestions
@@ -576,6 +577,7 @@
      :delete-icon "fa-times-circle"
      :edit "fa-edit"
      :eraser "fa-eraser"
+     :file-download "fa-file-download"
      :flask "fa-flask"
      :heart "fa-heart"
      :laptop "fa-laptop-code"

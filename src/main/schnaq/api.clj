@@ -560,8 +560,10 @@
 
 (defn- export-txt-data
   "Exports the discussion data as a string."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash edit-hash discussion-id]} body-params]
+  [{:keys [params] :as foo}]
+  (println foo)
+  (let [{:keys [share-hash edit-hash discussion-id]} params
+        discussion-id (Long/parseLong discussion-id)]
     (if (and (valid-credentials? share-hash edit-hash)
              (valid-discussion-hash? share-hash discussion-id))
       (ok {:string-representation (discussion/generate-text-export discussion-id share-hash)})
