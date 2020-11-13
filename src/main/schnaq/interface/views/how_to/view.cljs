@@ -77,16 +77,16 @@
    :how-to.why/body])
 
 (defn- content []
-  (pages/with-nav-and-header
-    {:page/heading (labels :how-to/title)}
-    [:div.container.chat-background.py-5
-     ;; how to videos
-     [:div.pb-5.bubble-background [why]]
-     [:div.how-to-video-row [create]]
-     [:div.how-to-video-row [agenda]]
-     [:div.how-to-video-row [admin]]
-     ;; start schnaq
-     [call-to-action-row]]))
+  [pages/with-nav-and-header
+   {:page/heading (labels :how-to/title)}
+   [:div.container.chat-background.py-5
+    ;; how to videos
+    [:div.pb-5.bubble-background [why]]
+    [:div.how-to-video-row [create]]
+    [:div.how-to-video-row [agenda]]
+    [:div.how-to-video-row [admin]]
+    ;; start schnaq
+    [call-to-action-row]]])
 
 (defn view []
   [content])

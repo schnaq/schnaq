@@ -62,11 +62,11 @@
   meetings."
   [subscription-key]
   [keyword? :ret vector?]
-  (pages/with-nav-and-header
-    {:page/heading (labels :meetings/header)
-     :page/subheading (labels :meetings/subheader)}
-    [:div.container.py-4
-     [meetings-list-view subscription-key]]))
+  [pages/with-nav-and-header
+   {:page/heading (labels :meetings/header)
+    :page/subheading (labels :meetings/subheader)}
+   [:div.container.py-4
+    [meetings-list-view subscription-key]]])
 
 (defn meeting-view-entry
   "Render all meetings."
