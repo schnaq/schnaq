@@ -34,7 +34,10 @@
   [:db/id string? :ret string?]
   (let [statements (db/all-statements-for-graph discussion-id)
         starting-statements (db/starting-statements discussion-id)
-        all-nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
+        legacy-starting-arguments (map :argument/conclusion
+                                       (db/starting-arguments-by-discussion discussion-id))
+        starting-set-with-legacy (distinct (concat starting-statements legacy-starting-arguments))
+        all-nodes (discussion/nodes-for-agenda statements starting-set-with-legacy discussion-id share-hash)
         starting-nodes (filter #(= :argument.type/starting (:type %)) all-nodes)
         links (discussion/links-for-agenda all-nodes starting-statements discussion-id)]
     (loop [queue (map #(vector "" %) starting-nodes)

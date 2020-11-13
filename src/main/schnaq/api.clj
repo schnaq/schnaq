@@ -566,7 +566,8 @@
         discussion-id (Long/parseLong discussion-id)]
     (if (and (valid-credentials? share-hash edit-hash)
              (valid-discussion-hash? share-hash discussion-id))
-      (ok {:string-representation (export/generate-text-export discussion-id share-hash)})
+      (do (log/info "User is generating a txt export for discussion " discussion-id)
+          (ok {:string-representation (export/generate-text-export discussion-id share-hash)}))
       (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
