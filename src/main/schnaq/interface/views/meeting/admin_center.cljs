@@ -209,20 +209,20 @@
   (let [{:meeting/keys [share-hash _edit-hash title]} @(rf/subscribe [:meeting/last-added])
         spacer [:div.pb-5.mt-3]]
     ;; display admin center
-    (pages/with-nav-and-header
-      {:page/heading (labels :meeting.admin-center/heading)
-       :page/subheading (gstring/format (labels :meeting.admin-center/subheading) title)}
-      [:div.container.px-3.px-md-5.py-3.text-center
-       [invite-participants-tabs]
-       spacer
-       ;; stop image and hint to copy the link
-       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
-       [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
-       ;; go to meeting button
-       [:button.btn.button-primary.btn-lg.center-block.mb-5
-        {:role "button"
-         :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
-        (labels :meetings/continue-to-schnaq-button)]])))
+    [pages/with-nav-and-header
+     {:page/heading (labels :meeting.admin-center/heading)
+      :page/subheading (gstring/format (labels :meeting.admin-center/subheading) title)}
+     [:div.container.px-3.px-md-5.py-3.text-center
+      [invite-participants-tabs]
+      spacer
+      ;; stop image and hint to copy the link
+      [:div.single-image [:img {:src (img-path :elephant-stop)}]]
+      [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
+      ;; go to meeting button
+      [:button.btn.button-primary.btn-lg.center-block.mb-5
+       {:role "button"
+        :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
+       (labels :meetings/continue-to-schnaq-button)]]]))
 
 (defn admin-center-view []
   [admin-center])
