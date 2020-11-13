@@ -11,9 +11,9 @@
 (defn create-meeting-view
   "A view with a form that creates a meeting and optional agendas."
   []
-  (pages/with-nav-and-header
-    {:page/heading (labels :meeting-create-header)}
-    [create-view/view]))
+  [pages/with-nav-and-header
+   {:page/heading (labels :meeting-create-header)}
+   [create-view/view]])
 
 ;; #### Events ####
 

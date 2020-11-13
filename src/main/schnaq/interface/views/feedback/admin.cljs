@@ -41,9 +41,9 @@
     (if (nil? feedbacks)
       (let [password (js/prompt "Enter password to see all Feedbacks")]
         (rf/dispatch [:feedbacks/fetch password]))
-      (pages/with-nav-and-header {:page/heading (labels :feedbacks.overview/header)
+      [pages/with-nav-and-header {:page/heading (labels :feedbacks.overview/header)
                                   :page/subheading (labels :feedbacks.overview/subheader)}
-                                 [:div.container.py-4 [list-feedbacks]]))))
+       [:div.container.py-4 [list-feedbacks]]])))
 
 (defn feedbacks-view []
   [overview])
