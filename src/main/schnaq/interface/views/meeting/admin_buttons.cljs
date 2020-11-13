@@ -59,9 +59,10 @@
                                         :response-format (ajax/transit-response-format)
                                         :handler (partial create-txt-download-handler title)
                                         :error-handler show-error})]
-    [tooltip-button "bottom" (labels :meeting/admin-center-export)
-     [:i {:class (str "fas " (fa :file-download))}]
-     #(request-fn)]))
+    (when discussion-id
+      [tooltip-button "bottom" (labels :meeting/admin-center-export)
+       [:i {:class (str "fas " (fa :file-download))}]
+       #(request-fn)])))
 
 (defn edit
   "Button to enter edit-mode."
