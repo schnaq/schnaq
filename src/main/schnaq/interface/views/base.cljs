@@ -101,7 +101,7 @@
         [:h3.mx-5 title]]
        (when (and edit-hash (btools/is-brainstorm? meeting))
          [:<>
-          [admin-buttons/txt-export share-hash edit-hash]
+          [admin-buttons/txt-export share-hash edit-hash title]
           [admin-buttons/admin-center share-hash edit-hash]])
        ;; name input
        [navbar/username-bar-view-light]]]]))
