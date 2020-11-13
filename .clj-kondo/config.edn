@@ -8,4 +8,4 @@
               :namespaces [schnaq.api]}
              schnaq.meeting.database/starting-arguments-by-discussion
              {:defs [schnaq.meeting.database/starting-arguments-by-discussion]
-              :namespaces [schnaq.discussion]}}}}}
+              :namespaces [schnaq.discussion schnaq.export]}}}}}
