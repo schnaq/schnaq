@@ -1,6 +1,5 @@
 (ns schnaq.discussion
   (:require [clojure.spec.alpha :as s]
-            [clojure.string :as str]
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.specs :as specs]))
