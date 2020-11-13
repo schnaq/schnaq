@@ -14,6 +14,7 @@
             [schnaq.core :as schnaq-core]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
+            [schnaq.export :as export]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
             [schnaq.suggestions :as suggestions]
@@ -565,7 +566,7 @@
         discussion-id (Long/parseLong discussion-id)]
     (if (and (valid-credentials? share-hash edit-hash)
              (valid-discussion-hash? share-hash discussion-id))
-      (ok {:string-representation (discussion/generate-text-export discussion-id share-hash)})
+      (ok {:string-representation (export/generate-text-export discussion-id share-hash)})
       (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
