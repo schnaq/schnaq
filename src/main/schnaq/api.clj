@@ -14,6 +14,7 @@
             [schnaq.core :as schnaq-core]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
+            [schnaq.export :as export]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
             [schnaq.suggestions :as suggestions]
@@ -558,6 +559,16 @@
                      :controversy-values controversy-vals}}))
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
 
+(defn- export-txt-data
+  "Exports the discussion data as a string."
+  [{:keys [params]}]
+  (let [{:keys [share-hash edit-hash discussion-id]} params
+        discussion-id (Long/parseLong discussion-id)]
+    (if (and (valid-credentials? share-hash edit-hash)
+             (valid-discussion-hash? share-hash discussion-id))
+      (ok {:string-representation (export/generate-text-export discussion-id share-hash)})
+      (deny-access invalid-rights-message))))
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 
@@ -569,6 +580,7 @@
   (routes
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
+    (GET "/export/txt" [] export-txt-data)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
