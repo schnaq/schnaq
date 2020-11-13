@@ -206,15 +206,14 @@
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
   []
-  (let [{:meeting/keys [share-hash title]} @(rf/subscribe [:meeting/last-added])
-        spacer [:div.pb-5.mt-3]]
+  (let [{:meeting/keys [share-hash title]} @(rf/subscribe [:meeting/last-added])]
     ;; display admin center
     [pages/with-nav-and-header
      {:page/heading (labels :meeting.admin-center/heading)
       :page/subheading (gstring/format (labels :meeting.admin-center/subheading) title)}
      [:div.container.px-3.px-md-5.py-3.text-center
       [invite-participants-tabs]
-      spacer
+      [:div.pb-5.mt-3]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :elephant-stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
