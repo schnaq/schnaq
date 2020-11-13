@@ -206,7 +206,7 @@
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
   []
-  (let [{:meeting/keys [share-hash _edit-hash title]} @(rf/subscribe [:meeting/last-added])
+  (let [{:meeting/keys [share-hash title]} @(rf/subscribe [:meeting/last-added])
         spacer [:div.pb-5.mt-3]]
     ;; display admin center
     [pages/with-nav-and-header
