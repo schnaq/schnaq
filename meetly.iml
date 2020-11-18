@@ -24,7 +24,7 @@
     <orderEntry type="library" name="Deps: com.bhauman/cljs-test-display:0.1.1" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.3.4" level="project" />
-    <orderEntry type="library" name="Deps: com.draines/postal:2.0.3" level="project" />
+    <orderEntry type="library" name="Deps: com.draines/postal:2.0.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.logging:0.5.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/ring-http-response:0.9.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.44" level="project" />
@@ -43,7 +43,6 @@
     <orderEntry type="library" name="Deps: compojure:1.6.2" level="project" />
     <orderEntry type="library" name="Deps: commons-fileupload:1.4" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-ssl:0.3.0" level="project" />
-    <orderEntry type="library" name="Deps: javax.activation/activation:1.1" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-http:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/http-fx:0.2.1" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-util:9.4.31.v20200723" level="project" />
@@ -108,7 +107,6 @@
     <orderEntry type="library" name="Deps: com.cognitect/transit-js:0.8.861" level="project" />
     <orderEntry type="library" name="Deps: clj-tuple:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-core:0.5.10" level="project" />
-    <orderEntry type="library" name="Deps: com.sun.mail/javax.mail:1.5.5" level="project" />
     <orderEntry type="library" name="Deps: zprint:0.5.1" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/truss:1.6.0" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client:0.8.111" level="project" />
@@ -191,10 +189,10 @@
     <orderEntry type="library" name="Deps: metosin/reitit-frontend:0.5.10" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-analysis:7.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-spec:0.5.10" level="project" />
+    <orderEntry type="library" name="Deps: com.sun.activation/jakarta.activation:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/jsonista:0.2.7" level="project" />
     <orderEntry type="library" name="Deps: com.google.protobuf/protobuf-java:3.11.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-swagger-ui:0.5.10" level="project" />
-    <orderEntry type="library" name="Deps: javax.mail/javax.mail-api:1.5.5" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit:0.5.10" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-servlet:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.memoize:1.0.236" level="project" />
@@ -203,6 +201,7 @@
     <orderEntry type="library" name="Deps: ring:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.priority-map:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: cider/piggieback:0.5.0" level="project" />
+    <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: com.google.code.findbugs/jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-dev:0.5.10" level="project" />

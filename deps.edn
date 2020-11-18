@@ -4,7 +4,7 @@
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/client-pro {:mvn/version "0.9.63"}
-        com.draines/postal {:mvn/version "2.0.3"}
+        com.draines/postal {:mvn/version "2.0.4"}
         com.taoensso/timbre {:mvn/version "5.1.0"}
         compojure/compojure {:mvn/version "1.6.2"}
         day8.re-frame/http-fx {:mvn/version "0.2.1"}
@@ -51,7 +51,7 @@
 
            :uberjar
            {:extra-deps
-            {seancorfield/depstar {:mvn/version "1.1.133"}
+            {seancorfield/depstar {:mvn/version "1.1.136"}
              com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
             :main-opts ["-m" "hf.depstar.uberjar"
                         "target/schnaq-standalone.jar" "--verbose"]}
