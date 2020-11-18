@@ -255,7 +255,8 @@
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
     (if (valid-credentials? share-hash edit-hash)
       (if (db/statements-belong-to-discussion? statement-ids share-hash)
-        (ok {:deletion (db/delete-statements statement-ids)})
+        (do (db/delete-statements! statement-ids)
+            (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
       (deny-access "You do not have the rights to access this action."))))
 
