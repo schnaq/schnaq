@@ -184,22 +184,50 @@
       [:button.btn.btn-outline-primary
        (labels :meeting.admin-center.edit.link.form/submit-button)]])])
 
+(>defn- administrate-discussion
+  "A form which allows removing single statements from the discussion."
+  []
+  [:ret :re-frame/component]
+  (let [input-id "participant-email-addresses"]
+    [:<>
+     [:h4.mt-4 (labels :meeting.admin/send-invites-heading)]
+     [:form.form.text-left.mb-5
+      {:on-submit (fn [e]
+                    (js-wrap/prevent-default e)
+                    (rf/dispatch [:meeting.admin/send-email-invites
+                                  (oget e [:target :elements])]))}
+      [:div.form-group
+       [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
+       [:textarea.form-control.m-1.input-rounded
+        {:id input-id
+         :name "participant-addresses" :wrap "soft" :rows 3
+         :auto-complete "off"
+         :required true
+         :placeholder (labels :meeting.admin/addresses-placeholder)}]
+       [:small.form-text.text-muted.float-right
+        (labels :meeting.admin/addresses-privacy)]]
+      [:button.btn.btn-outline-primary
+       (labels :meeting.admin/send-invites-button-text)]]]))
+
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
   []
-  (common/tab-builder
-    "invite-participants"
-    ;; participants access via link
-    {:link (labels :meeting.admin-center.invite/via-link)
-     :view [:<>
-            [educate-element]
-            [copy-link-form common/get-share-link "share-hash"]]}
-    ;; participants access via mail
-    {:link (labels :meeting.admin-center.invite/via-mail)
-     :view [invite-participants-form]}
-    ;; admin access via mail
-    {:link (labels :meeting.admin-center.edit.link/header)
-     :view [send-admin-center-link]}))
+  [common/tab-builder
+   "invite-participants"
+   ;; participants access via link
+   {:link (labels :meeting.admin-center.invite/via-link)
+    :view [:<>
+           [educate-element]
+           [copy-link-form common/get-share-link "share-hash"]]}
+   ;; participants access via mail
+   {:link (labels :meeting.admin-center.invite/via-mail)
+    :view [invite-participants-form]}
+   ;; admin access via mail
+   {:link (labels :meeting.admin-center.edit.link/header)
+    :view [send-admin-center-link]}
+   ;; manage discussion / delete posts
+   {:link (labels :meeting.admin-center.edit/administrate)
+    :view [administrate-discussion]}])
 
 ;; -----------------------------------------------------------------------------
 

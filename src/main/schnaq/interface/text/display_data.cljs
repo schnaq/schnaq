@@ -254,6 +254,7 @@
      :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
      :meeting.admin-center.invite/via-link "Link verteilen"
      :meeting.admin-center.invite/via-mail "Per E-Mail einladen"
+     :meeting.admin-center.edit/administrate "Diskussion administrieren"
      :meeting/admin-center-export "Diskussion als Textdatei runterladen"
      :meeting/admin-center-tooltip "Schnaq administrieren"
 
