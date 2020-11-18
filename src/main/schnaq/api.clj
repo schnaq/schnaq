@@ -247,6 +247,18 @@
                                            edit-hash)})
       (deny-access "You provided the wrong hashes to access this schnaq."))))
 
+(defn- delete-statements!
+  "Deletes the passed list of statements if the admin-rights are fitting.
+  Important: Needs to check whether the statement-id really belongs to the meeting with
+  the passed edit-hash."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash edit-hash statement-ids]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (if (db/statements-belong-to-discussion? statement-ids share-hash)
+        (ok {:deletion (db/delete-statements statement-ids)})
+        (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
+      (deny-access "You do not have the rights to access this action."))))
+
 (defn- agendas-by-meeting-hash
   "Returns all agendas of a meeting, that matches the share-hash."
   [req]
@@ -586,6 +598,7 @@
     (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/ping" [] ping)
+    (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/agenda/delete" [] delete-agenda!)
     (POST "/agenda/new" [] new-agenda!)
     (POST "/agenda/update" [] update-single-agenda!)
