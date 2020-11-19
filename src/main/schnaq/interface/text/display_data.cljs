@@ -203,10 +203,16 @@
      :meeting.admin/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
      :meeting.admin/send-invites-button-text "Einladungen versenden"
      :meeting.admin/send-invites-heading "Laden Sie die Teilnehmer:innen per E-Mail ein"
+     :meeting.admin/delete-statements-heading "Löschen Sie folgende Beiträge"
+     :meeting.admin/statements-label "Statement-IDs, die gelöscht werden"
+     :meeting.admin/statement-id-placeholder "Statement IDs getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
+     :meeting.admin/delete-statements-button-text "Beiträge endgültig löschen"
      :meeting.admin.notifications/emails-successfully-sent-title "Mail(s) verschickt!"
      :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Mail(s) wurden erfolgreich versendet."
      :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
      :meeting.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
+     :meeting.admin.notifications/statements-deleted-title "Nachrichten gelöscht!"
+     :meeting.admin.notifications/statements-deleted-lead "Die von Ihnen gewählten Nachrichten wurden erfolgreich gelöscht."
 
      ;; Brainstorming time
      :brainstorm/heading "Brainstorm anlegen"
@@ -254,6 +260,7 @@
      :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
      :meeting.admin-center.invite/via-link "Link verteilen"
      :meeting.admin-center.invite/via-mail "Per E-Mail einladen"
+     :meeting.admin-center.edit/administrate "Diskussion administrieren"
      :meeting/admin-center-export "Diskussion als Textdatei runterladen"
      :meeting/admin-center-tooltip "Schnaq administrieren"
 

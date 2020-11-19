@@ -171,7 +171,7 @@
   "Builds a meta-premise with additional information for the frontend out of a
   list of arguments."
   [arguments]
-  [(s/coll-of ::specs/argument) :ret (s/coll-of ::specs/statement)]
+  [sequential? :ret (s/coll-of ::specs/statement)]
   (flatten
     (map (fn [args]
            (map (fn [premise] (assoc premise :meta/argument-type (:argument/type args)))

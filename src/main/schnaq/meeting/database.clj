@@ -997,6 +997,36 @@
         :where [?discussion-id :discussion/starting-statements ?statements]]
       discussion-id statement-pattern)))
 
+(defn- discussions-by-share-hash
+  "Returns all discussions which can be reached by a certain share-hash."
+  [share-hash]
+  (flatten
+    (query
+      '[:find ?discussions
+        :in $ ?share-hash
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?agenda :agenda/meeting ?meeting]
+        [?agenda :agenda/discussion ?discussions]]
+      share-hash)))
+
+(>defn statements-belong-to-discussion?
+  "Returns whether the statements belong to a discussion identified by the share-hash."
+  [statement-ids share-hash]
+  [sequential? :meeting/share-hash :ret boolean?]
+  (let [all-discussions (discussions-by-share-hash share-hash)
+        reachable-statements (->> all-discussions
+                                  (map all-statements)
+                                  flatten
+                                  (map :db/id)
+                                  set)]
+    (every? #(contains? reachable-statements %) statement-ids)))
+
+(>defn delete-statements!
+  "Deletes all statements, without explicitly checking anything."
+  [statement-ids]
+  [(s/coll-of :db/id) :ret associative?]
+  (transact (mapv #(vector :db/retractEntity %) statement-ids)))
+
 (>defn- pack-premises
   "Packs premises into a statement-structure."
   [premises author-id]

@@ -25,8 +25,8 @@
 (defn tab-builder
   "Create a tabbed view. Prefix must be unique on this page."
   ([tab-prefix first-tab second-tab]
-   (tab-builder tab-prefix first-tab second-tab nil))
-  ([tab-prefix first-tab second-tab third-tab]
+   (tab-builder tab-prefix first-tab second-tab nil nil))
+  ([tab-prefix first-tab second-tab third-tab fourth-tab]
    (let [tab-prefix# (str "#" tab-prefix)]
      [:<>
       [:nav.nav-justified
@@ -49,7 +49,14 @@
                                  :role "tab"
                                  :aria-controls (str tab-prefix "-link-3")
                                  :aria-selected "false"}
-           (:link third-tab)])]]
+           (:link third-tab)])
+        (when fourth-tab
+          [:a.nav-item.nav-link {:data-toggle "tab"
+                                 :href (str tab-prefix# "-link-4")
+                                 :role "tab"
+                                 :aria-controls (str tab-prefix "-link-4")
+                                 :aria-selected "false"}
+           (:link fourth-tab)])]]
       [:div.tab-content.mt-5
        [:div.tab-pane.fade.show.active
         {:id (str tab-prefix "-home")
@@ -63,7 +70,12 @@
          [:div.tab-pane.fade
           {:id (str tab-prefix "-link-3")
            :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-3")}
-          (:view third-tab)])]])))
+          (:view third-tab)])
+       (when fourth-tab
+         [:div.tab-pane.fade
+          {:id (str tab-prefix "-link-4")
+           :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-4")}
+          (:view fourth-tab)])]])))
 
 (>defn get-share-link
   [current-route]

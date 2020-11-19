@@ -113,6 +113,32 @@
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
+  :meeting.admin/delete-statements
+  (fn [{:keys [db]} [_ form]]
+    (let [raw-statements (oget form ["statement-ids" :value])
+          statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
+          current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/admin/statements/delete")
+                          :format (ajax/transit-request-format)
+                          :params {:statement-ids statement-ids
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting-admin/delete-statements-success form]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  :meeting-admin/delete-statements-success
+  (fn [_ [_ form _return]]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :meeting.admin.notifications/statements-deleted-title)
+                                     :body (labels :meeting.admin.notifications/statements-deleted-lead)
+                                     :context :success}]]
+          [:form/clear form]]}))
+
+(rf/reg-event-fx
   :meeting.admin/send-email-invites
   (fn [{:keys [db]} [_ form]]
     (let [raw-emails (oget form ["participant-addresses" :value])
@@ -184,22 +210,48 @@
       [:button.btn.btn-outline-primary
        (labels :meeting.admin-center.edit.link.form/submit-button)]])])
 
+(>defn- administrate-discussion
+  "A form which allows removing single statements from the discussion."
+  []
+  [:ret :re-frame/component]
+  (let [input-id "participant-email-addresses"]
+    [:<>
+     [:h4.mt-4 (labels :meeting.admin/delete-statements-heading)]
+     [:form.form.text-left.mb-5
+      {:on-submit (fn [e]
+                    (js-wrap/prevent-default e)
+                    (rf/dispatch [:meeting.admin/delete-statements
+                                  (oget e [:target :elements])]))}
+      [:div.form-group
+       [:label.m-1 {:for input-id} (labels :meeting.admin/statements-label)]
+       [:textarea.form-control.m-1.input-rounded
+        {:id input-id
+         :name "statement-ids" :wrap "soft" :rows 3
+         :auto-complete "off"
+         :required true
+         :placeholder (labels :meeting.admin/statement-id-placeholder)}]]
+      [:button.btn.btn-outline-primary
+       (labels :meeting.admin/delete-statements-button-text)]]]))
+
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
   []
-  (common/tab-builder
-    "invite-participants"
-    ;; participants access via link
-    {:link (labels :meeting.admin-center.invite/via-link)
-     :view [:<>
-            [educate-element]
-            [copy-link-form common/get-share-link "share-hash"]]}
-    ;; participants access via mail
-    {:link (labels :meeting.admin-center.invite/via-mail)
-     :view [invite-participants-form]}
-    ;; admin access via mail
-    {:link (labels :meeting.admin-center.edit.link/header)
-     :view [send-admin-center-link]}))
+  [common/tab-builder
+   "invite-participants"
+   ;; participants access via link
+   {:link (labels :meeting.admin-center.invite/via-link)
+    :view [:<>
+           [educate-element]
+           [copy-link-form common/get-share-link "share-hash"]]}
+   ;; participants access via mail
+   {:link (labels :meeting.admin-center.invite/via-mail)
+    :view [invite-participants-form]}
+   ;; admin access via mail
+   {:link (labels :meeting.admin-center.edit.link/header)
+    :view [send-admin-center-link]}
+   ;; manage discussion / delete posts
+   {:link (labels :meeting.admin-center.edit/administrate)
+    :view [administrate-discussion]}])
 
 ;; -----------------------------------------------------------------------------
 
