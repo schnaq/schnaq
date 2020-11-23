@@ -173,6 +173,16 @@
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (-> statement :meta/sub-discussion-info :authors count)]]))
 
+(defn- delete-clicker
+  "Give admin the ability to delete a statement."
+  []
+  [:span.badge.badge-pill.badge-transparent.badge-clickable
+   {:tabIndex 30
+    :on-click (fn [e] (js-wrap/stop-propagation e)
+                (js/alert "DELETE!"))
+    :title (labels :discussion.badges/delete-statement)}
+   [:i {:class (str "m-auto fas " (fa :trash))}] (labels :discussion.badges/delete-statement)])
+
 (defn statement-bubble
   "A single bubble of a statement to be used ubiquitously."
   ([edit-hash statement]
@@ -191,7 +201,7 @@
         [:p.my-0 content]
         [extra-discussion-info-badges statement]
         (when edit-hash
-          [:p "Admin!"])]
+          [delete-clicker])]
        [:div.col-2
         ;; avatar
         [:span
