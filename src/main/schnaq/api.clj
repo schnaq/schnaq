@@ -453,7 +453,7 @@
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
       (do (db/add-starting-statement! discussion-id author-id statement)
-          (log/info "Starting statement added for discussion " discussion-id)
+          (log/info "Starting statement added for discussion" discussion-id)
           (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
       (deny-access invalid-rights-message))))
 
@@ -463,7 +463,7 @@
   (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (do (log/info "Statement added as reaction for discussion " discussion-id)
+      (do (log/info "Statement added as reaction for discussion" discussion-id)
           (ok (with-statement-meta
                 {:new-argument
                  (if (= :attack reaction)
@@ -478,7 +478,7 @@
   (let [{:keys [share-hash discussion-id selected previous-id nickname premise]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion-hash? share-hash discussion-id)
-      (do (log/info "Undercut added for discussion " discussion-id)
+      (do (log/info "Undercut added for discussion" discussion-id)
           (ok (with-statement-meta
                 {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)}
                 discussion-id)))
@@ -579,7 +579,7 @@
         discussion-id (Long/parseLong discussion-id)]
     (if (and (valid-credentials? share-hash edit-hash)
              (valid-discussion-hash? share-hash discussion-id))
-      (do (log/info "User is generating a txt export for discussion " discussion-id)
+      (do (log/info "User is generating a txt export for discussion" discussion-id)
           (ok {:string-representation (export/generate-text-export discussion-id share-hash)}))
       (deny-access invalid-rights-message))))
 
