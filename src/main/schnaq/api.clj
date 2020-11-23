@@ -405,7 +405,7 @@
   "Returns a data structure, where all statements have been enhanced with meta-information."
   [data discussion-id]
   (-> data
-      processors/hide-deleted-statements
+      processors/hide-deleted-statement-content
       processors/with-votes
       (processors/with-sub-discussion-information (db/all-arguments-for-discussion discussion-id))))
 

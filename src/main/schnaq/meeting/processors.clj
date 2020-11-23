@@ -16,7 +16,7 @@
        %)
     data))
 
-(>defn hide-deleted-statements
+(>defn hide-deleted-statement-content
   "For all statements, that have a deleted? flag, hide them."
   [data]
   [any? :ret any?]
