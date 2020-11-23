@@ -16,6 +16,16 @@
        %)
     data))
 
+(>defn hide-deleted-statements
+  "For all statements, that have a deleted? flag, hide them."
+  [data]
+  [any? :ret any?]
+  (walk/postwalk
+    #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content) (:statement/deleted? %))
+       (assoc % :statement/content "[deleted]")
+       %)
+    data))
+
 (>defn with-sub-discussion-information
   "Enrich every statement map with its vote-counts."
   [data all-arguments]

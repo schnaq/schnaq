@@ -126,6 +126,7 @@
   [:db/id
    :statement/content
    :statement/version
+   :statement/deleted?
    {:statement/author [:author/nickname]}])
 
 (def ^:private meeting-pattern
@@ -597,7 +598,7 @@
     (fn [statement]
       {:author (-> statement :statement/author :author/nickname)
        :id (:db/id statement)
-       :label (:statement/content statement)})
+       :label (if (:statement/deleted? statement) "[deleted]" (:statement/content statement))})
     (all-statements discussion-id)))
 
 (>defn add-user-if-not-exists
