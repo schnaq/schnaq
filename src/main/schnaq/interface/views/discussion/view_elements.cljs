@@ -175,9 +175,9 @@
 
 (defn statement-bubble
   "A single bubble of a statement to be used ubiquitously."
-  ([statement]
-   [statement-bubble statement (logic/arg-type->attitude (:meta/argument-type statement))])
-  ([{:keys [statement/content] :as statement} attitude]
+  ([edit-hash statement]
+   [statement-bubble edit-hash statement (logic/arg-type->attitude (:meta/argument-type statement))])
+  ([edit-hash {:keys [statement/content] :as statement} attitude]
    [:div.statement-outer
     [:div.row
      ;; bubble content
@@ -189,7 +189,9 @@
        ;; content
        [:div.col-10.statement-content
         [:p.my-0 content]
-        [extra-discussion-info-badges statement]]
+        [extra-discussion-info-badges statement]
+        (when edit-hash
+          [:p "Admin!"])]
        [:div.col-2
         ;; avatar
         [:span
@@ -261,8 +263,10 @@
 
 (defn conclusions-list
   "Displays a list of conclusions."
-  [conclusions]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
+  [conclusions share-hash]
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
+        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+        edit-hash (get admin-access-map share-hash)]
     [:div.conclusions-list.mobile-container
      (for [conclusion conclusions]
        [:div {:key (:db/id conclusion)
@@ -271,18 +275,20 @@
                           (rf/dispatch [:discussion.history/push conclusion])
                           (rf/dispatch [:navigation/navigate :routes.discussion.select/statement
                                         (assoc path-params :statement-id (:db/id conclusion))]))}
-        [statement-bubble conclusion :neutral]])]))
+        [statement-bubble edit-hash conclusion :neutral]])]))
 
 (defn history-view
   "Displays the statements it took to get to where the user is."
-  []
+  [share-hash]
   (let [history @(rf/subscribe [:discussion-history])
-        indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
+        indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)
+        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+        edit-hash (get admin-access-map share-hash)]
     [:div.discussion-history.mobile-container
      (for [[index statement] indexed-history]
        [:div {:key (str "history-" (:db/id statement))
               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-        [statement-bubble statement]])]))
+        [statement-bubble edit-hash statement]])]))
 
 (rf/reg-event-fx
   :discussion/toggle-upvote
