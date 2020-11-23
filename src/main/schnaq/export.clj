@@ -9,8 +9,8 @@
   before a new starting-conclusion is detected."
   [old-text level node relation]
   (let [relation-symbol (case relation
-                          :argument.type/attack "– "
-                          :argument.type/undercut "– "
+                          :argument.type/attack "- "
+                          :argument.type/undercut "- "
                           :argument.type/support "+ "
                           "")
         spacing (if (zero? level) "\n\n" "\n")
