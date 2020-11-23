@@ -1,5 +1,5 @@
 (ns schnaq.export
-  (:require [clojure.string :as str]
+  (:require [clojure.string :as string]
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.meeting.database :as db]
             [schnaq.discussion :as discussion]))
@@ -14,7 +14,7 @@
                           :argument.type/support "+ "
                           "")
         spacing (if (zero? level) "\n\n" "\n")
-        next-line (str (str/join (repeat level "  ")) relation-symbol (:label node))]
+        next-line (str (string/join (repeat level "  ")) relation-symbol (:label node))]
     (str old-text spacing next-line)))
 
 (>defn- nodes-after
