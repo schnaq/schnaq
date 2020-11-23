@@ -1025,7 +1025,7 @@
   "Deletes all statements, without explicitly checking anything."
   [statement-ids]
   [(s/coll-of :db/id) :ret associative?]
-  (transact (mapv #(vector :db/retractEntity %) statement-ids)))
+  (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))
 
 (>defn- pack-premises
   "Packs premises into a statement-structure."

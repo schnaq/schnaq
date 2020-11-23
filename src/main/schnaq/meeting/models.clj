@@ -171,6 +171,10 @@
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
     :db/doc "The version of the statement. Always positive"}
+   {:db/ident :statement/deleted?
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db/doc "A marker whether the statement has been marked as deleted."}
    ;; Author
    {:db/ident :author/nickname
     :db/valueType :db.type/string
