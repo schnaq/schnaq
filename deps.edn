@@ -33,7 +33,7 @@
 
  :aliases {:test {:extra-paths ["src/test"]
                   :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.700"}
-                               lambdaisland/kaocha-cloverage {:mvn/version "1.0.63"}
+                               lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}
                                com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]
