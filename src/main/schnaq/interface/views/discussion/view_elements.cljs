@@ -175,11 +175,11 @@
 
 (defn- delete-clicker
   "Give admin the ability to delete a statement."
-  []
+  [statement edit-hash]
   [:span.badge.badge-pill.badge-transparent.badge-clickable
    {:tabIndex 30
     :on-click (fn [e] (js-wrap/stop-propagation e)
-                (js/alert "DELETE!"))
+                (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
     :title (labels :discussion.badges/delete-statement)}
    [:i {:class (str "m-auto fas " (fa :trash))}] (labels :discussion.badges/delete-statement)])
 
@@ -201,7 +201,7 @@
         [:p.my-0 content]
         [extra-discussion-info-badges statement]
         (when edit-hash
-          [delete-clicker])]
+          [delete-clicker statement edit-hash])]
        [:div.col-2
         ;; avatar
         [:span

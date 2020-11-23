@@ -113,21 +113,32 @@
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
+  :discussion.delete/statement
+  (fn [{:keys [db]} [_ statement-id edit-hash]]
+    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+      {:fx [[:dispatch [:meeting.admin/delete-statements-template [statement-id] share-hash edit-hash]]]})))
+
+(rf/reg-event-fx
   :meeting.admin/delete-statements
   (fn [{:keys [db]} [_ form]]
     (let [raw-statements (oget form ["statement-ids" :value])
           statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
           current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/admin/statements/delete")
-                          :format (ajax/transit-request-format)
-                          :params {:statement-ids statement-ids
-                                   :share-hash share-hash
-                                   :edit-hash edit-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:meeting-admin/delete-statements-success form]
-                          :on-failure [:ajax-failure]}]]})))
+      {:fx [[:dispatch [:meeting.admin/delete-statements-template statement-ids share-hash edit-hash form]]]})))
+
+(rf/reg-event-fx
+  :meeting.admin/delete-statements-template
+  (fn [_ [_ statement-ids share-hash edit-hash maybe-form]]
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/admin/statements/delete")
+                        :format (ajax/transit-request-format)
+                        :params {:statement-ids statement-ids
+                                 :share-hash share-hash
+                                 :edit-hash edit-hash}
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:meeting-admin/delete-statements-success maybe-form]
+                        :on-failure [:ajax-failure]}]]}))
 
 (rf/reg-event-fx
   :meeting-admin/delete-statements-success
@@ -136,7 +147,7 @@
                       #:notification{:title (labels :meeting.admin.notifications/statements-deleted-title)
                                      :body (labels :meeting.admin.notifications/statements-deleted-lead)
                                      :context :success}]]
-          [:form/clear form]]}))
+          (when form [:form/clear form])]}))
 
 (rf/reg-event-fx
   :meeting.admin/send-email-invites
