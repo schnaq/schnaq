@@ -23,7 +23,7 @@
 
 (defn- carousel-content
   "Display statement-bubbles inside a carousel."
-  [statements on-click]
+  [statements edit-hash on-click]
   [:div.carousel-inner
    ;; set first indexed element as selected
    (map-indexed
@@ -31,7 +31,7 @@
        (let [content [:div.premise-carousel-item
                       {:on-click (on-click premise)
                        :data-pause true}
-                      [view/statement-bubble premise]]]
+                      [view/statement-bubble edit-hash premise]]]
          (if (zero? index)
            [:div.carousel-item.active {:key (:db/id premise)} content]
            [:div.carousel-item {:key (:db/id premise)} content])))
@@ -39,14 +39,14 @@
 
 (defn- statement-carousel-div
   "The div containing the carousel element."
-  [id statement on-click]
+  [id statement edit-hash on-click]
   (let [id# (str "#" id)]
     [:div.carousel.slide {:data-ride "carousel" :id id
                           :data-interval "false"}
      ;; indicator
      [carousel-indicators id# statement]
      ;; content
-     [carousel-content statement on-click]
+     [carousel-content statement edit-hash on-click]
      ;; interface elements
      [:a.carousel-control-prev {:href id# :role "button" :data-slide "prev"}
       [:span.carousel-control-prev-icon {:aria-hidden "true"}]
@@ -58,12 +58,12 @@
 (defn- statement-carousel
   "reagent component to launch a carousel which does not spin
   and sets the current element as selected statement"
-  [statements on-click]
+  [statements edit-hash on-click]
   (let [id "carouselIndicators"
         statements-atom (reagent/atom statements)]
     (reagent/create-class
       {:reagent-render
-       (fn [] [statement-carousel-div id @statements-atom on-click])
+       (fn [] [statement-carousel-div id @statements-atom edit-hash on-click])
        :component-did-update
        (fn [this _argv]
          (let [[_ new-statements _] (reagent/argv this)]
@@ -76,18 +76,20 @@
   "Build a carousel. Can either be for conclusions in the beginning of a
   discussion or for premises in all other cases. Undercuts are only shown, when
   there are at least two statements in the history (they do not make sense otherwise)."
-  [statements]
-  [(s/coll-of ::specs/statement) :ret :re-frame/component]
+  [statements share-hash]
+  [(s/coll-of ::specs/statement) string? :ret :re-frame/component]
   (let [history-count (count @(rf/subscribe [:discussion-history]))
         shown-statements (if (> history-count 1)
                            statements
-                           (remove #(= :argument.type/undercut (:meta/argument-type %)) statements))]
+                           (remove #(= :argument.type/undercut (:meta/argument-type %)) statements))
+        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+        edit-hash (get admin-access-map share-hash)]
     (when (seq shown-statements)
       [:div.container.px-0
        [:div.carousel-wrapper.inner-shadow-straight
         [:p.display-6.carousel-header.discussion-primary-background
          (labels :discussion.carousel/heading)]
-        [statement-carousel shown-statements
+        [statement-carousel shown-statements edit-hash
          (fn [premise]
            (fn []
              (rf/dispatch [:discussion.history/push premise])

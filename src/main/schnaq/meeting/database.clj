@@ -126,6 +126,7 @@
   [:db/id
    :statement/content
    :statement/version
+   :statement/deleted?
    {:statement/author [:author/nickname]}])
 
 (def ^:private meeting-pattern
@@ -597,7 +598,7 @@
     (fn [statement]
       {:author (-> statement :statement/author :author/nickname)
        :id (:db/id statement)
-       :label (:statement/content statement)})
+       :label (if (:statement/deleted? statement) "[deleted]" (:statement/content statement))})
     (all-statements discussion-id)))
 
 (>defn add-user-if-not-exists
@@ -1025,7 +1026,7 @@
   "Deletes all statements, without explicitly checking anything."
   [statement-ids]
   [(s/coll-of :db/id) :ret associative?]
-  (transact (mapv #(vector :db/retractEntity %) statement-ids)))
+  (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))
 
 (>defn- pack-premises
   "Packs premises into a statement-structure."

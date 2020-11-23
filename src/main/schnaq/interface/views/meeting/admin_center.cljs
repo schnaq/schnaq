@@ -94,8 +94,6 @@
       [:button.btn.btn-outline-primary
        (labels :meeting.admin/send-invites-button-text)]]]))
 
-
-
 (rf/reg-event-fx
   :meeting.admin/send-admin-center-link
   (fn [{:keys [db]} [_ form]]
@@ -130,6 +128,7 @@
                           :on-failure [:ajax-failure]}]]})))
 
 (rf/reg-event-fx
+  ;; Deletion success from admin center
   :meeting-admin/delete-statements-success
   (fn [_ [_ form _return]]
     {:fx [[:dispatch [:notification/add
@@ -137,6 +136,57 @@
                                      :body (labels :meeting.admin.notifications/statements-deleted-lead)
                                      :context :success}]]
           [:form/clear form]]}))
+
+(rf/reg-event-fx
+  :discussion.delete/statement
+  (fn [{:keys [db]} [_ statement-id edit-hash]]
+    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/admin/statements/delete")
+                          :format (ajax/transit-request-format)
+                          :params {:statement-ids [statement-id]
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:meeting-admin/delete-statement-success statement-id]
+                          :on-failure [:ajax-failure]}]]})))
+
+(rf/reg-event-fx
+  ;; Success event of deletion live in discussion - not from admin panel
+  :meeting-admin/delete-statement-success
+  (fn [_ [_ statement-id _return]]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :meeting.admin.notifications/statements-deleted-title)
+                                     :body (labels :meeting.admin.notifications/statements-deleted-lead)
+                                     :context :success}]]
+          [:dispatch [:discussion.delete/purge-stores statement-id]]]}))
+
+(rf/reg-event-db
+  ;; Delete a statement-id from conclusions-list, history and carousels
+  :discussion.delete/purge-stores
+  (fn [db [_ statement-id]]
+    (let [delete-fn (fn [coll]
+                      (mapv #(if (= statement-id (:db/id %))
+                               (assoc % :statement/content "[deleted]")
+                               %)
+                            coll))]
+      (-> db
+          (update-in [:discussion :conclusions :starting] delete-fn)
+          (update-in [:discussion :premises :current] delete-fn)
+          (update-in [:history :full-context] delete-fn)))))
+
+(rf/reg-event-fx
+  :meeting.admin/delete-statements-template
+  (fn [_ [_ statement-ids share-hash edit-hash maybe-form]]
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/admin/statements/delete")
+                        :format (ajax/transit-request-format)
+                        :params {:statement-ids statement-ids
+                                 :share-hash share-hash
+                                 :edit-hash edit-hash}
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:meeting-admin/delete-statements-success maybe-form]
+                        :on-failure [:ajax-failure]}]]}))
 
 (rf/reg-event-fx
   :meeting.admin/send-email-invites

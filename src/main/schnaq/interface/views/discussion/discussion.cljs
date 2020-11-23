@@ -50,7 +50,8 @@
          (rf/dispatch [:navigation/navigate :routes.meeting/show
                        {:share-hash (:meeting/share-hash current-meeting)}])
          (rf/dispatch [:meeting/select-current current-meeting]))]
-      [view/conclusions-list @(rf/subscribe [:discussion.conclusions/starting])]
+      [view/conclusions-list @(rf/subscribe [:discussion.conclusions/starting])
+       (:meeting/share-hash current-meeting)]
       [view/input-field]]]))
 
 (rf/reg-event-fx
@@ -88,9 +89,9 @@
      [:<>
       [view/agenda-header-with-back-arrow current-meeting
        #(rf/dispatch [:discussion.history/time-travel 1])]
-      [view/history-view]
+      [view/history-view (:meeting/share-hash current-meeting)]
       [view/input-footer add-form]
-      [carousel/carousel-element current-premises]]]))
+      [carousel/carousel-element current-premises (:meeting/share-hash current-meeting)]]]))
 
 (defn selected-conclusion
   "The view after a user has selected any conclusion."
