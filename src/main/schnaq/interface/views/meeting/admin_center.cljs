@@ -163,16 +163,17 @@
 
 (rf/reg-event-db
   ;; Delete a statement-id from conclusions-list, history and carousels
-  ;;TODO update of carousel seems still broken
   :discussion.delete/purge-stores
   (fn [db [_ statement-id]]
-    (let [remove-fn (fn [coll] (remove #(= statement-id (:db/id %)) coll))
-          old-history (get-in db [:history :full-context])
-          updated-history (vec (remove-fn old-history))]
+    (let [delete-fn (fn [coll]
+                      (mapv #(if (= statement-id (:db/id %))
+                               (assoc % :statement/content "[deleted]")
+                               %)
+                            coll))]
       (-> db
-          (update-in [:discussion :conclusions :starting] remove-fn)
-          (update-in [:discussion :premises :current] remove-fn)
-          (assoc-in [:history :full-context] updated-history)))))
+          (update-in [:discussion :conclusions :starting] delete-fn)
+          (update-in [:discussion :premises :current] delete-fn)
+          (update-in [:history :full-context] delete-fn)))))
 
 (rf/reg-event-fx
   :meeting.admin/delete-statements-template
