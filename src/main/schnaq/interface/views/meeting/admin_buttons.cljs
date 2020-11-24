@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.meeting.admin-buttons
   (:require [ajax.core :as ajax]
+            [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
@@ -40,7 +41,7 @@
   [title [ok response]]
   (when ok
     (file-download/export-data
-      (str title "\n----------" (:string-representation response)))))
+      (gstring/format "# %s\n%s" title (:string-representation response)))))
 
 (defn- show-error
   [& _not-needed]
