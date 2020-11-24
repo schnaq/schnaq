@@ -6,7 +6,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -100,7 +100,7 @@
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
       {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/emails/send-admin-center-link")
+                          :uri (str (:rest-backend config/config) "/emails/send-admin-center-link")
                           :format (ajax/transit-request-format)
                           :params {:recipient (oget form ["admin-center-recipient" :value])
                                    :share-hash share-hash
@@ -118,7 +118,7 @@
           current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
       {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/admin/statements/delete")
+                          :uri (str (:rest-backend config/config) "/admin/statements/delete")
                           :format (ajax/transit-request-format)
                           :params {:statement-ids statement-ids
                                    :share-hash share-hash
@@ -142,7 +142,7 @@
   (fn [{:keys [db]} [_ statement-id edit-hash]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])]
       {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/admin/statements/delete")
+                          :uri (str (:rest-backend config/config) "/admin/statements/delete")
                           :format (ajax/transit-request-format)
                           :params {:statement-ids [statement-id]
                                    :share-hash share-hash
@@ -167,7 +167,7 @@
   (fn [db [_ statement-id]]
     (let [delete-fn (fn [coll]
                       (mapv #(if (= statement-id (:db/id %))
-                               (assoc % :statement/content "[deleted]")
+                               (assoc % :statement/content config/deleted-statement-text)
                                %)
                             coll))]
       (-> db
@@ -179,7 +179,7 @@
   :meeting.admin/delete-statements-template
   (fn [_ [_ statement-ids share-hash edit-hash maybe-form]]
     {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config) "/admin/statements/delete")
+                        :uri (str (:rest-backend config/config) "/admin/statements/delete")
                         :format (ajax/transit-request-format)
                         :params {:statement-ids statement-ids
                                  :share-hash share-hash
@@ -196,7 +196,7 @@
           current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
       {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/emails/send-invites")
+                          :uri (str (:rest-backend config/config) "/emails/send-invites")
                           :format (ajax/transit-request-format)
                           :params {:recipients recipients
                                    :share-hash share-hash

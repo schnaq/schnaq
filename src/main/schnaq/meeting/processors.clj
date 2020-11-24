@@ -1,6 +1,7 @@
 (ns schnaq.meeting.processors
   (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
+            [schnaq.config :as config]
             [schnaq.discussion :as discussion]
             [schnaq.meeting.database :as db])
   (:import (clojure.lang PersistentArrayMap)))
@@ -22,7 +23,7 @@
   [any? :ret any?]
   (walk/postwalk
     #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content) (:statement/deleted? %))
-       (assoc % :statement/content "[deleted]")
+       (assoc % :statement/content config/deleted-statement-text)
        %)
     data))
 
