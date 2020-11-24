@@ -179,9 +179,12 @@
   [:span.badge.badge-pill.badge-transparent.badge-clickable
    {:tabIndex 30
     :on-click (fn [e] (js-wrap/stop-propagation e)
-                (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
+                (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
+                  (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
     :title (labels :discussion.badges/delete-statement)}
-   [:i {:class (str "m-auto fas " (fa :trash))}] (labels :discussion.badges/delete-statement)])
+   [:i {:class (str "m-auto fas " (fa :trash))}]
+   " "
+   (labels :discussion.badges/delete-statement)])
 
 (defn statement-bubble
   "A single bubble of a statement to be used ubiquitously."
