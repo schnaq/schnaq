@@ -1,7 +1,8 @@
 (ns schnaq.interface.text.display-data
   "Texts used as labels in the whole application."
-  (:require [schnaq.interface.config :refer [user-language]]
-            [taoensso.tempura :refer [tr]]))
+  (:require [schnaq.interface.config :refer [default-locale]]
+            [taoensso.tempura :refer [tr]]
+            [re-frame.core :as rf]))
 
 (def ^:private translations
   {:en {:brainstorm.buttons/start-now "Start a brainstorming!"
@@ -515,8 +516,8 @@
   "Get a localized resource for the requested key. Returns either a string or a hiccup
   element. Optionally tempura parameters can be passed."
   [resource-key & params]
-  (let [default-lang :de]
-    (tr {:dict translations} [@user-language default-lang] [resource-key] (vec params))))
+  (let [current-lang @(rf/subscribe [:current-locale])]
+    (tr {:dict translations} [current-lang default-locale] [resource-key] (vec params))))
 
 (defn img-path
   "Returns an image path as String for a given identifier"
