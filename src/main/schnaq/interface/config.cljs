@@ -12,6 +12,8 @@
   {:rest-backend api-url
    :environment environment})
 
+(def user-language (atom :de))
+
 (def graph-controversy-upper-bound 65)
 
 (def periodic-update-time

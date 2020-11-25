@@ -14,6 +14,7 @@
             [schnaq.interface.events]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.routes]
+            [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.updates :as updates]
             [schnaq.interface.views :as views]
             [schnaq.interface.views.agenda.agenda]
@@ -75,6 +76,7 @@
   []
   (navigation/init-routes!)
   (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
+  (language/init-language)
   (render)                                                  ;; mount the application's ui into '<div id="app" />'
   (say-hello)
   (updates/init-periodic-updates))

@@ -2,8 +2,9 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (defn- name-input
@@ -36,7 +37,7 @@
 (defn username-bar-view
   "A bar containing all user related utilities and information."
   ([]
-   (username-bar-view "btn-outline-primary"))
+   [username-bar-view "btn-outline-primary"])
 
   ([button-class]
    (let [username @(rf/subscribe [:user/display-name])
@@ -47,7 +48,7 @@
 
 (defn username-bar-view-light
   []
-  (username-bar-view "btn-outline-light"))
+  [username-bar-view "btn-outline-light"])
 
 
 ;; -----------------------------------------------------------------------------
@@ -84,9 +85,10 @@
                           :nav.schnaqs/show-all)))
 
 (defn- blog-link []
-  [:ul.navbar-nav.ml-auto
+  [:ul.navbar-nav
    [:li.nav-item.mx-lg-4
     [:a.nav-link {:href "https://schnaq.com/blog/" :role "button"}
+     [:i {:class (str "far " (fa :newspaper))}] " "
      (labels :nav/blog)]]])
 
 
@@ -129,5 +131,16 @@
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
           (labels :router/privacy)]]]
+       (when-not toolbelt/production?
+         [:ul.navbar-nav.dropdown.ml-auto
+          [:a#schnaq-dropdown.nav-link.dropdown-toggle
+           {:href "#" :role "button" :data-toggle "dropdown"
+            :aria-haspopup "true" :aria-expanded "false"}
+           [:i {:class (str "far " (fa :flag))}] " " (labels :common/language)]
+          [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
+           [:a.dropdown-item
+            {:on-click #(language/set-language :en)} "English"]
+           [:a.dropdown-item
+            {:on-click #(language/set-language :de)} "Deutsch"]]])
        [blog-link]
        [username-bar-view]]]]))
