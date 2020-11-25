@@ -5,9 +5,11 @@
 
 (def ^:private translations
   {:en {:brainstorm.buttons/start-now "Start a brainstorming!"
-        :startpage.under-construction/heading "Currently in Open Beta!"}
+        :startpage.under-construction/heading "Currently in Open Beta!"
+        :common/language "Language"}
    :de {;; Common
         :common/save "Speichern"
+        :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
 
         ;; navbar labels
@@ -595,10 +597,12 @@
      :edit "fa-edit"
      :eraser "fa-eraser"
      :file-download "fa-file-download"
+     :flag "fa-flag"
      :flask "fa-flask"
      :heart "fa-heart"
      :language "fa-language"
      :laptop "fa-laptop-code"
+     :newspaper "fa-newspaper"
      :shield "fa-shield-alt"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"

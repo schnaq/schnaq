@@ -88,6 +88,7 @@
   [:ul.navbar-nav
    [:li.nav-item.mx-lg-4
     [:a.nav-link {:href "https://schnaq.com/blog/" :role "button"}
+     [:i {:class (str "far " (fa :newspaper))}] " "
      (labels :nav/blog)]]])
 
 
@@ -135,7 +136,7 @@
           [:a#schnaq-dropdown.nav-link.dropdown-toggle
            {:href "#" :role "button" :data-toggle "dropdown"
             :aria-haspopup "true" :aria-expanded "false"}
-           [:i {:class (str "fas fa-2x " (fa :language))}]]
+           [:i {:class (str "far " (fa :flag))}] " " (labels :common/language)]
           [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
            [:a.dropdown-item
             {:on-click #(language/set-language :en)} "English"]
