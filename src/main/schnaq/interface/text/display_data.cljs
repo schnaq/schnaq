@@ -596,6 +596,7 @@
      :file-download "fa-file-download"
      :flask "fa-flask"
      :heart "fa-heart"
+     :language "fa-language"
      :laptop "fa-laptop-code"
      :shield "fa-shield-alt"
      :terminal "fa-terminal"
