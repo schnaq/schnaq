@@ -2,7 +2,8 @@
   (:require [cljs.pprint :refer [pprint]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels img-path]]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [taoensso.timbre :as log]))
 
 (defn not-found-view-stub []
   [])
@@ -54,6 +55,15 @@
                                      :context :danger
                                      :stay-visible? true
                                      :on-close-fn #(rf/dispatch [:clear-error])}]]]}))
+
+(rf/reg-event-fx
+  :ajax.error/to-console
+  (fn [_ [_ failure]]
+    {:fx [[:console.log/error failure]]}))
+
+(rf/reg-fx
+  :console.log/error
+  (fn [error] (log/error error)))
 
 (rf/reg-event-db
   :clear-error
