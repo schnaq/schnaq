@@ -19,8 +19,9 @@
   [base/footer])
 
 (defn root []
-  [:div#root
-   [base-page]
-   [footer]
-   [feedback/button]
-   [notifications/view]])
+  (let [language @(rf/subscribe [:current-locale])]
+    [:div#root {:key language}
+     [base-page]
+     [footer]
+     [feedback/button]
+     [notifications/view]]))

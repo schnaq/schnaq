@@ -93,12 +93,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- reload-and-change-locale
-  "Changes the locale and then reloads the current page."
-  [locale]
-  (language/set-language locale)
-  (.reload js/location))
-
 (defn navbar
   "Navbar definition for the default pages."
   []
@@ -143,8 +137,8 @@
          [:i {:class (str "fas fa-2x " (fa :language))}]]
         [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
          [:a.dropdown-item
-          {:on-click #(reload-and-change-locale :en)} "English"]
+          {:on-click #(language/set-language :en)} "English"]
          [:a.dropdown-item
-          {:on-click #(reload-and-change-locale :de)} "Deutsch"]]]
+          {:on-click #(language/set-language :de)} "Deutsch"]]]
        [blog-link]
        [username-bar-view]]]]))

@@ -4,7 +4,8 @@
             [taoensso.tempura :refer [tr]]))
 
 (def ^:private translations
-  {:en {:brainstorm.buttons/start-now "Schwargenhundbargen!!!!"}
+  {:en {:brainstorm.buttons/start-now "Start a brainstorming!"
+        :startpage.under-construction/heading "Currently in Open Beta!"}
    :de {;; Common
         :common/save "Speichern"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."

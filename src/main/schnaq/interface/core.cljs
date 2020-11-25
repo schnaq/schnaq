@@ -74,9 +74,9 @@
 (defn init
   "Entrypoint into the application."
   []
-  (language/init-language)
   (navigation/init-routes!)
   (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
+  (language/init-language)
   (render)                                                  ;; mount the application's ui into '<div id="app" />'
   (say-hello)
   (updates/init-periodic-updates))
