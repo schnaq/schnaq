@@ -6,6 +6,8 @@
 (goog-define build-hash "dev")
 (goog-define demo-discussion-link "https://schnaq.com/meetings/3e4c1f44-721e-48e0-88f6-dc81528cf08f/")
 
+(def deleted-statement-text "[deleted]")
+
 (def config
   {:rest-backend api-url
    :environment environment})

@@ -24,6 +24,8 @@
 (def build-hash
   (or (System/getenv "BUILD_HASH") "dev"))
 
+(def deleted-statement-text "[deleted]")
+
 (def email
   {:sender-address (or (System/getenv "EMAIL_SENDER_ADDRESS") "noreply@dialogo.io")
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")

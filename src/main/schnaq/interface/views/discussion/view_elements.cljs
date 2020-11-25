@@ -152,15 +152,29 @@
     (apply str (map #(str "<li>" (:author/nickname %) "</li>") authors))
     "</ul>"))
 
+(defn- delete-clicker
+  "Give admin the ability to delete a statement."
+  [statement edit-hash]
+  (when-not (:statement/deleted? statement)
+    [:span.badge.badge-pill.badge-transparent.badge-clickable
+     {:tabIndex 30
+      :on-click (fn [e] (js-wrap/stop-propagation e)
+                  (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
+                    (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
+      :title (labels :discussion.badges/delete-statement)}
+     [:i {:class (str "m-auto fas " (fa :trash))}]
+     " "
+     (labels :discussion.badges/delete-statement)]))
+
 (defn- extra-discussion-info-badges
   "Badges that display additional discussion info."
-  [statement]
+  [statement edit-hash]
   (let [popover-id (str "debater-popover-" (:db/id statement))]
     [:p.mb-0.mt-md-3
-     [:span.badge.badge-pill.badge-transparent.mr-2
+     [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       [:i {:class (str "m-auto fas " (fa :comment))}] " "
       (-> statement :meta/sub-discussion-info :sub-statements)]
-     [:span.badge.badge-pill.badge-transparent.badge-clickable
+     [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       {:id popover-id
        :data-toggle "popover"
        :data-trigger "focus"
@@ -171,17 +185,9 @@
        :data-html true
        :data-content (build-author-list (get-in statement [:meta/sub-discussion-info :authors]))}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
-      (-> statement :meta/sub-discussion-info :authors count)]]))
-
-(defn- delete-clicker
-  "Give admin the ability to delete a statement."
-  [statement edit-hash]
-  [:span.badge.badge-pill.badge-transparent.badge-clickable
-   {:tabIndex 30
-    :on-click (fn [e] (js-wrap/stop-propagation e)
-                (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
-    :title (labels :discussion.badges/delete-statement)}
-   [:i {:class (str "m-auto fas " (fa :trash))}] (labels :discussion.badges/delete-statement)])
+      (-> statement :meta/sub-discussion-info :authors count)]
+     (when edit-hash
+       [delete-clicker statement edit-hash])]))
 
 (defn statement-bubble
   "A single bubble of a statement to be used ubiquitously."
@@ -199,9 +205,7 @@
        ;; content
        [:div.col-10.statement-content
         [:p.my-0 content]
-        [extra-discussion-info-badges statement]
-        (when edit-hash
-          [delete-clicker statement edit-hash])]
+        [extra-discussion-info-badges statement edit-hash]]
        [:div.col-2
         ;; avatar
         [:span

@@ -598,7 +598,9 @@
     (fn [statement]
       {:author (-> statement :statement/author :author/nickname)
        :id (:db/id statement)
-       :label (if (:statement/deleted? statement) "[deleted]" (:statement/content statement))})
+       :label (if (:statement/deleted? statement)
+                config/deleted-statement-text
+                (:statement/content statement))})
     (all-statements discussion-id)))
 
 (>defn add-user-if-not-exists
