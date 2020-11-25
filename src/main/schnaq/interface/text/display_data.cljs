@@ -1,8 +1,7 @@
 (ns schnaq.interface.text.display-data
   "Texts used as labels in the whole application."
   (:require [schnaq.interface.config :refer [user-language]]
-            [taoensso.tempura :refer [tr]]
-            [re-frame.core :as rf]))
+            [taoensso.tempura :refer [tr]]))
 
 (def ^:private translations
   {:en {:brainstorm.buttons/start-now "Start a brainstorming!"
