@@ -85,6 +85,7 @@
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-util:7.1" level="project" />
+    <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.jsinterop/jsinterop-annotations:1.0.2" level="project" />
     <orderEntry type="library" name="Deps: fipp:0.6.23" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.logging/jboss-logging:3.4.1.Final" level="project" />

@@ -2,8 +2,10 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.core :refer [clear-cache-and-render!]]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (defn- name-input
@@ -92,6 +94,12 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn- reload-and-change-locale
+  "Changes the locale and then reloads the current page."
+  [locale]
+  (language/set-language locale)
+  (.reload js/location))
+
 (defn navbar
   "Navbar definition for the default pages."
   []
@@ -126,6 +134,12 @@
           [last-added-schnaq-link share-hash edit-hash]
           [my-schnaqs-link visited-hashes]
           [all-schnaqs-link]]]
+        [:li.nav-item
+         [:p.nav-link
+          {:on-click #(reload-and-change-locale :en)} "Englisch"]]
+        [:li.nav-item
+         [:p.nav-link
+          {:on-click #(reload-and-change-locale :de)} "Deutsch"]]
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
           (labels :router/privacy)]]]
