@@ -12,7 +12,7 @@
   {:rest-backend api-url
    :environment environment})
 
-(def default-locale :de)
+(def user-language (atom :de))
 
 (def graph-controversy-upper-bound 65)
 
