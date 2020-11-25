@@ -65,7 +65,7 @@
                                    :discussion-id id}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.query.conclusions/set-starting]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+                          :on-failure [:ajax.error/to-console]}]]})))
 
 (rf/reg-event-fx
   :discussion.query.conclusions/set-starting
