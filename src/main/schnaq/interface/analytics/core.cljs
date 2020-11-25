@@ -107,7 +107,7 @@
                                 :days-since days-since}
                        :response-format (ajax/transit-response-format)
                        :on-success [on-success-event]
-                       :on-failure [:ajax-failure]}]]}))
+                       :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-event-fx
   :analytics/load-all-with-time

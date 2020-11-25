@@ -57,7 +57,7 @@
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
                         :on-success [:meeting/select-current]
-                        :on-failure [:ajax-failure]}]]}))
+                        :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-event-fx
   :meeting.creation/new
@@ -76,7 +76,7 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting.creation/added-continue-with-agendas]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :meeting/check-admin-credentials
@@ -88,7 +88,7 @@
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
                         :on-success [:meeting/check-admin-credentials-success]
-                        :on-failure [:ajax-failure]}]]}))
+                        :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-event-fx
   ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
@@ -111,7 +111,7 @@
 (rf/reg-event-fx
   :meeting/error-remove-hashes
   (fn [_ [_ response]]
-    {:fx [[:dispatch [:ajax-failure response]]
+    {:fx [[:dispatch [:ajax.error/as-notification response]]
           [:localstorage/remove [:meeting.last-added/edit-hash]]
           [:localstorage/remove [:meeting.last-added/share-hash]]]}))
 

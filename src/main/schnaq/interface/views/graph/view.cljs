@@ -142,7 +142,7 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:graph/set-current]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/to-console]}]]})))
 
 (rf/reg-event-db
   :graph/set-current
