@@ -60,7 +60,7 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:suggestion.update.agenda/success]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :suggestion.update.agenda/success
@@ -90,7 +90,7 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:suggestion.new.agenda/success]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :suggestion.new.agenda/success
@@ -120,7 +120,7 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:suggestion.update.meeting/success]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :suggestion.update.meeting/success
@@ -199,7 +199,7 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:suggestion.agenda/delete-success (:db/id agenda)]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :suggestion.agenda/delete-success
@@ -400,7 +400,7 @@
                             :format (ajax/transit-request-format)
                             :response-format (ajax/transit-response-format)
                             :on-success [:no-op]
-                            :on-failure [:ajax-failure]}]]}))))
+                            :on-failure [:ajax.error/as-notification]}]]}))))
 
 ;; load agendas events
 
@@ -516,7 +516,7 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting/on-success-submit-changes-event finalized-changes]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :meeting/on-success-submit-changes-event
@@ -548,7 +548,7 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting/on-success-submit-suggestions-event]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-db
   :suggestions/for-meeting-success
@@ -573,7 +573,7 @@
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
                         :on-success [:suggestions/for-meeting-success]
-                        :on-failure [:ajax-failure]}]]}))
+                        :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-sub
   :suggestions/meeting

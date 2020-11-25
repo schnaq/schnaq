@@ -108,7 +108,7 @@
                                    :admin-center (common/get-admin-center-link current-route)}
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting-admin/send-email-success form]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :meeting.admin/delete-statements
@@ -125,7 +125,7 @@
                                    :edit-hash edit-hash}
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting-admin/delete-statements-success form]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   ;; Deletion success from admin center
@@ -149,7 +149,7 @@
                                    :edit-hash edit-hash}
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting-admin/delete-statement-success statement-id]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   ;; Success event of deletion live in discussion - not from admin panel
@@ -186,7 +186,7 @@
                                  :edit-hash edit-hash}
                         :response-format (ajax/transit-response-format)
                         :on-success [:meeting-admin/delete-statements-success maybe-form]
-                        :on-failure [:ajax-failure]}]]}))
+                        :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-event-fx
   :meeting.admin/send-email-invites
@@ -204,7 +204,7 @@
                                    :share-link (common/get-share-link current-route)}
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting-admin/send-email-success form]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :meeting-admin/send-email-success

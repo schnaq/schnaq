@@ -44,7 +44,7 @@
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
-  :ajax-failure
+  :ajax.error/as-notification
   (fn [{:keys [db]} [_ failure]]
     {:db (assoc db :error {:ajax failure})
      :fx [[:dispatch [:notification/add
