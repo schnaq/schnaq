@@ -2,7 +2,6 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.core :refer [clear-cache-and-render!]]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.language :as language]
