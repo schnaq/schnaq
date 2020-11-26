@@ -79,7 +79,44 @@
         :startpage.features.graph/lead "Simple overview"
         :startpage.features.graph/title "Mindmaps!"
         :startpage.features.graph/body "All your coworkers statements are automatically sorted into a mindmap.
-        See all connections and statements neatly organized at one glance."}
+        See all connections and statements neatly organized at one glance."
+
+        ;; Meeting Feature Page
+        :feature.meetings/lead "Structured meetings with schnaq"
+        :feature.meetings/title "Activate coworkers, save time!"
+        :feature.meetings/body "You can use schnaq to effectively prepare meetings, support all participants
+        during the meeting and also for debriefing after the fact. This way you can activate all participants,
+        save work time and produce results more efficiently."
+        :feature.meetings.schedule/lead "Targeted preparation"
+        :feature.meetings.schedule/title "Prepare the agenda collaboratively"
+        :feature.meetings.schedule/body "You can start by preparing a first version of a meeting agenda.
+        After you invite all meeting participants per mail or calendar invite, they can see the agenda, primers, one-pagers at one glance.
+        They can also request to change, delete or add agenda points through schnaq and thus help you create a more productive meeting."
+        :feature.meetings.discuss/lead "Discuss beforehand"
+        :feature.meetings.discuss/title "Resolve controversial opinions before the meeting"
+        :feature.meetings.discuss/body "Unclear points can be discussed beforehand to gain clarity.
+        You can reach the discussion directly through the agenda. Use the discussion to clarify an agenda or to
+        discuss things that do not belong in the meeting directly. The discussion is automatically structured and
+        distributed. The participants do not need to be online at the same time. This way all coworkers are included.
+        The result are laser-focused meetings."
+        :feature.meetings.admin-center/lead "Not accounts needed"
+        :feature.meetings.admin-center/title "Use schnaq without yet another account"
+        :feature.meetings.admin-center/body "You can use schnaq solely through the secure links we generate.
+        No need for extra accounts, all you need is a web-browser.
+        Access schnaq from anywhere. There is also a special admin-link which lets you administer the meeting
+        without any fuss."
+        :feature.meetings/heading "Save work time by preparing your meetings with schnaq"
+        :feature.meetings/features-subheading "Use schnaq for meetings"
+        :feature.meetings/tbd-subheading "More to come…"
+        :feature.meetings/tbd-lead "Become a pioneer and be the first to experience the upcoming features:"
+        :feature.meetings.tbd/teams "Integration into MS Teams and Slack"
+        :feature.meetings.tbd/outlook "Outlook export"
+        :feature.meetings.tbd/protocols "Collaborative protocol generation during meetings"
+        :feature.meetings.tbd/prereads "One pagers and pre-reads for agenda points, including check-ins"
+        :feature.meetings.tbd/assignments "Assignment of duty per agenda"
+        :feature.meetings.tbd/timeboxing "Timeboxing during the meeting"
+        :feature.meetings.tbd/task-tracking "Transfer results into a task-tracker"
+        :feature.meetings/feedback "Do you have more wishes or feature ideas? Contact us through the feedback form on the right side."}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
