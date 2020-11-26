@@ -262,7 +262,63 @@
         :meeting.admin.notifications/sending-failed-title "Error during mail delivery!"
         :meeting.admin.notifications/sending-failed-lead "The following invitations could not be delivered: "
         :meeting.admin.notifications/statements-deleted-title "Statements deleted!"
-        :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."}
+        :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
+
+        ;; Brainstorming time
+        :brainstorm/heading "Start brainstorming"
+        :brainstorm.buttons/start-now "Start brainstorming now"
+        :brainstorm.create.button/save "Create new brainstorming!"
+
+        ;; Privacy Page
+        :privacy/heading "What happens to your data?"
+        :privacy/subheading "We lead you through it step by step!"
+        :privacy.made-in-germany/lead "EU-regulation conformity"
+        :privacy.made-in-germany/title "Data privacy is important to us!"
+        :privacy.made-in-germany/body "The development team of schnaq consists of developers that are tired of misuse of private
+        data. This is why we take special care to be GDPR compliant and to save all data securely on german servers.
+        We do not exchange any data with other companies without absolute need and making it completely clear."
+        :privacy.personal-data/lead "Which data is saved?"
+        :privacy.personal-data/title "Personal data"
+        :privacy.personal-data/body
+        [:<> [:p "Per default we only save data that is needed to operate the service. There is no analysis of personal data, and anonymous data of your behaviour on our website is only collected, when you explicitly allow us to do so. "]
+         [:p "If you want to support us and allow the analysis, we collect the data with Matomo and save it on our german servers. Matomo is a free and self-hosted alternative to commercial options for website analytics . We do not exchange this data with third parties."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Check your settings"]]]
+        :privacy.localstorage/lead "What data do I send to the server?"
+        :privacy.localstorage/title "Data exchange"
+        :privacy.localstorage/body
+        [:<> [:p "schnaq has no need for accounts. This way no personal data about you is saved on the server. Most of the interactions work through links. When you click on a link a part of it (the so called hash) is stored in your browser (in the localStorage). As soon as you go to schnaq.com again, your browser sends this hash back and you gain access to your created schnaqs. Alternatively you can send the links to yourself via email. This way you have all the data in your own hands."]
+         [:p "In difference to website-cookies we use the localstorage, which only saves data that is needed for the application to function for you.
+         You can see the data in your localstorage by clicking the following button."]]
+        :privacy.localstorage/show-data "Show my data"
+        :privacy.localstorage.notification/title "This data is saved by your browser"
+        :privacy.localstorage.notification/body "Tip: \"Cryptic\" strings of characters are the codes that allow you to view schnaqs."
+        :privacy.localstorage.notification/confirmation "Do you really want to delete the data?"
+        :privacy.localstorage.notification/delete-button "Delete data"
+        :privacy.link-to-privacy/lead "More information can be found in the comprehensive "
+        :privacy.link-to-privacy/privacy "Privacy notice"
+
+        ;; schnaqs not found
+        :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs where found."
+        :schnaqs.not-found/alert-body "Invite people to your first schnaq after you created it."
+
+        ;; Admin Center
+        :meeting/educate-on-link-text "Share the link below with your coworkers."
+        :meetings/educate-on-link-text-subtitle "Everybody with possession of the link can participate."
+        :meeting/educate-on-edit "Want to change the name or description?"
+        :meeting/educate-on-admin "Go back to the admin center at any time!"
+        :meeting.admin-center/heading "Admin-center"
+        :meeting.admin-center/subheading "schnaq: \"%s\""
+        :meeting.admin-center.edit.link/header "Entry to the admin-center"
+        :meeting.admin-center.edit.link/primer "Administration takes work, let others help!"
+        :meeting.admin-center.edit.link/admin "Entry to admin-center via email"
+        :meeting.admin-center.edit.link/admin-privileges "Edit and administer suggestions"
+        :meeting.admin-center.edit.link.form/label "Email address of the administrators"
+        :meeting.admin-center.edit.link.form/placeholder "Enter an email address"
+        :meeting.admin-center.edit.link.form/submit-button "Send link"
+        :meeting.admin-center.invite/via-link "Distribute link"
+        :meeting.admin-center.invite/via-mail "Invite via email"
+        :meeting.admin-center.edit/administrate "Administrate discussion"
+        :meeting/admin-center-export "Download discussion as a text-file"
+        :meeting/admin-center-tooltip "Administrate schnaq"}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
