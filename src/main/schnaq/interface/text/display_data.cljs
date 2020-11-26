@@ -220,7 +220,49 @@
 
         :footer.buttons/about-us "About us"
         :footer.buttons/legal-note "Impress"
-        :footer.buttons/privacy "Privacy Notice"}
+        :footer.buttons/privacy "Privacy Notice"
+
+        ;; Create schnaqs
+        :schnaqs/create "Create schnaq"
+
+        ;; Create meeting
+        :meeting-create-header "Prepare Meeting"
+        :meeting-create-subheader "Give your schnaq a name and description"
+        :meeting-form-title "Title"
+        :meeting-form-title-placeholder "What should the name of your meeting be?"
+        :meeting-form-description "Description"
+        :meeting-form-description-placeholder "Length: X Minutes\n\nTopic"
+        :meeting-form-end-date "Date"
+        :meeting-form-end-time "Time"
+        :meeting/copy-share-link "Copy Link:"
+        :meeting/copy-link-tooltip "Click here to copy your link"
+        :meeting/link-copied-heading "Link copied"
+        :meeting/link-copied-success "The link was copied to your clipboard!"
+        :meeting/created-success-heading "Your schnaq was created!"
+        :meeting/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
+        :meetings/continue-with-schnaq-after-creation "Invited Everybody? Lets go!"
+        :meetings/continue-to-schnaq-button "To the schnaq"
+        :meetings/edit-schnaq-button "Edit schnaq"
+        :meetings/share-calendar-invite "Send calendar invites"
+        :meetings.suggestions/header "Add suggestions"
+        :meetings.suggestions/subheader "The administrators are able to see and accept or deny the suggestions"
+
+        :meeting.admin/addresses-label "Email addresses of the participants"
+        :meeting.admin/addresses-placeholder "Email addresses separated by a newline or space."
+        :meeting.admin/addresses-privacy "These addresses are only used to send the invitation emails and are deleted from our
+        servers immediately afterwards."
+        :meeting.admin/send-invites-button-text "Send invitations"
+        :meeting.admin/send-invites-heading "Invite pariticipants via email"
+        :meeting.admin/delete-statements-heading "Delete the following statements"
+        :meeting.admin/statements-label "Statement-IDs, that will be deleted"
+        :meeting.admin/statement-id-placeholder "Statement IDs separated by a space or newline."
+        :meeting.admin/delete-statements-button-text "Delete statements immediately"
+        :meeting.admin.notifications/emails-successfully-sent-title "Mails sent!"
+        :meeting.admin.notifications/emails-successfully-sent-body-text "Your invitations were sent successfully."
+        :meeting.admin.notifications/sending-failed-title "Error during mail delivery!"
+        :meeting.admin.notifications/sending-failed-lead "The following invitations could not be delivered: "
+        :meeting.admin.notifications/statements-deleted-title "Statements deleted!"
+        :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
