@@ -152,7 +152,43 @@
         :feature.discussions.tbd/ideas "Subscribe to topics of interest and get notified when they are discussed by your coworkers"
         :feature.discussions.tbd/navigation "Innovative navigation through discussions"
         :feature.discussions.tbd/connect "Integration into MS Teams, Slack and co"
-        :feature.discussions.tbd/bot "AI-based hints which topics and standpoints need attention"}
+        :feature.discussions.tbd/bot "AI-based hints which topics and standpoints need attention"
+
+        :feature.knowledge/lead "Collect Knowledge in Brainstorms"
+        :feature.knowledge/subheading "Sustainably enhance decision making processes"
+        :feature.knowledge.general/lead "Sustainable knowledge generation"
+        :feature.knowledge.general/title "Make ideas and knowledge tangible"
+        :feature.knowledge.general/body "Communication is a key to success.
+        Every opinion should be heard and used to make an informed decision.
+        Schnaq provides structured discussions, to make opinions and arguments available and understandable after the fact.
+        You can use past discussions to experience and deeply understand the process that lead to decisions."
+        :feature.knowledge/features-subheading "Schnaq for idea generation 💡"
+        :feature.knowledge.discussions/lead "Upgrade your decisionmaking"
+        :feature.knowledge.discussions/title "Start with a brainstorming"
+        :feature.knowledge.discussions/body "Offline the best ideas often come naturally during smalltalk or on a coffee break –
+        schnaq helps you simulate loose discussions, without the need for 15 emails or 20 chat messages.
+        During a brainstorming with schnaq all coworkers can be heard equally.
+        This way ideas that are valuable for the company can be discovered continually – even without the need to share office space."
+
+        :feature.knowledge.database/lead "Reproducibility"
+        :feature.knowledge.database/title "A central application for Ideas and Knowledge"
+        :feature.knowledge.database/body "Keep discussions and ideas that originated in a brainstorm for future reference.
+        Often the need arises to understand past decisions and processes. Even after month it is possible to dig in and understand
+        them with schnaq. We provide a single store of ideas and knowledge."
+
+        :feature.knowledge.change-of-facts/lead "Graphical processing"
+        :feature.knowledge.change-of-facts/title "MindMaps!"
+        :feature.knowledge.change-of-facts/body "All ideas are automatically structured in clear graphical format.
+        Take a look at the generated mindmap and immediately understand what the participants talked about.
+        Controversial standpoints and topics are highlighted automatically. This way you immediately know what topics
+        need more attention and discussion."
+
+        :feature.knowledge.tbd/wiki "Integration in knowledge-stores (i.e. Confluence)"
+        :feature.knowledge.tbd/search "Comfortable search through all your ideas, discussions and knowledge"
+        :feature.knowledge.tbd/evaluation "\"What if?\" Mark arguments as invalid and the system shows you whether your results are still valid"
+        :feature.knowledge.tbd/live-changes "Monitor how the discussion changes in real-time"
+        :feature.knowledge.tbd/changes-over-time "Time-travel to any point in the discussion to understand the process even more"
+        :feature.knowledge.tbd/accounts "Integration in other communication systems (e.g. Slack, MS Teams, …)"}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
