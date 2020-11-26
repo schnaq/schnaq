@@ -355,7 +355,62 @@
         :agenda/edit-subtitle "Edit description and agenda points"
         :agenda/edit-button "Save changes"
 
-        :agendas.button/navigate-to-suggestions "Create change suggestions"}
+        :agendas.button/navigate-to-suggestions "Create change suggestions"
+
+        ;; Discussion Language
+        :discussion/agree "Agree"
+        :discussion/disagree "Disagree"
+        :discussion/create-argument-action "Add statement"
+        :discussion/create-argument-heading "Add own opinion / information"
+        :discussion/add-argument-conclusion-placeholder "I think that…"
+        :discussion/add-premise-supporting "I want to support the statement"
+        :discussion/add-premise-against "I disagree…"
+        :discussion/add-undercut "The last two statements are not connected"
+        :discussion/reason-nudge "What do you think about this?"
+        :discussion/premise-placeholder "I think…"
+        :discussion/create-starting-premise-action "Add statement"
+        :discussion/others-think "Others think the following:"
+        :discussion/undercut-bubble-intro "The last statement is not connected to the previous. The reason being…"
+        :discussion.badges/user-overview "All participants"
+        :discussion.badges/delete-statement "Delete statement"
+        :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
+        :discussion.notification/new-content-title "New statement!"
+        :discussion.notification/new-content-body "Your statement was added successfully!"
+        :discussion.carousel/heading "Statements of others"
+        :discussion/discuss "Discuss"
+        :discussion/discuss-tooltip "Discuss this agenda point with others"
+
+        ;; meetings overview
+        :meetings/header "Overview of your schnaqs"
+        :meetings/subheader "These are the schnaqs that you are part of"
+
+        ;; Feedbacks
+        :feedbacks.overview/header "Feedbacks"
+        :feedbacks.overview/subheader "All feedbacks"
+        :feedbacks.overview/description "Description"
+        :feedbacks.overview/contact-name "From"
+        :feedbacks.overview/contact-mail "E-Mail"
+        :feedbacks/button "Feedback"
+        :feedbacks/screenshot "Screenshot"
+        :feedbacks.modal/primer "Feedback is important! we are happy about any kind of feedback. 🥳
+        Leave us a comment and thereby help to improve this software. Thank you and dankeschön!"
+        :feedbacks.modal/contact-name "Your Name"
+        :feedbacks.modal/contact-mail "Email Address"
+        :feedbacks.modal/description "Your feedback"
+        :feedbacks.modal/optional "Optional"
+        :feedbacks.modal/screenshot "Add screenshot?"
+        :feedbacks.modal/disclaimer "Your data is only saved on our german servers and not exchanged with any third party."
+        :feedbacks.notification/title "Thank you for your feedback!"
+        :feedbacks.notification/body "Your feedback reached us safely 🎉"
+
+        :feedbacks.survey/primer
+        [:<> "We would be extremely happy if you could participate in a small survey.
+        The survey is hosted through Google Forms. Find their  "
+         [:a {:href "https://policies.google.com/privacy"} "privacy policy here."]
+         " By participating you accept their privacy policy."]
+        :feedbacks.survey/checkbox "Yes, I want to participate in the survey."
+        :feedbacks.survey/loading "The form is being loaded…"
+        :feedbacks.survey/tab "Survey"}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
