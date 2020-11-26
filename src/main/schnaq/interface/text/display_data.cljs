@@ -4,9 +4,76 @@
             [taoensso.tempura :refer [tr]]))
 
 (def ^:private translations
-  {:en {:brainstorm.buttons/start-now "Start a brainstorming!"
-        :startpage.under-construction/heading "Currently in Open Beta!"
-        :common/language "Language"}
+  {:en {;; Common
+        :common/save "Save"
+        :common/language "Language"
+        :error/export-failed "Export failed. Please try again later."
+
+        ;; navbar labels
+        :nav/startpage "Home"
+        :nav/schnaqs "Schnaqs"
+        :nav.schnaqs/show-all "All schnaqs"
+        :nav.schnaqs/create-meeting "Prepare meeting"
+        :nav.schnaqs/create-brainstorm "Create brainstorm"
+        :nav.schnaqs/last-added "Last created schnaq"
+        :nav-meeting-agenda "Create Agenda"
+        :nav/blog "Blog"
+
+        ;; Startpage
+        :startpage/heading "Who needs whiteboards?"
+        :startpage/subheading "Lost your train of thought again? Structure your teams discourse with schnaq!"
+
+        :startpage.under-construction/heading "Ongoing Construction!"
+        :startpage.under-construction/body "schnaq is currently in a free of charge beta phase. Your feedback is very important for further development!"
+
+        :startpage.value-cards/heading "More applications!"
+        :startpage.value-cards/lead "Structured discussions can have many applications. Take a look at a few examples."
+        :startpage.value-cards.discussion/title "Lead a discussion"
+        :startpage.value-cards.discussion/description "Discussing topics with multiple people over the Internet is hard. Its easy to
+        feel lost. With schnaq you can structure your discussions and keep an eye on arguments and controversies with a single glance."
+        :startpage.value-cards.discussion/alt-text "A symbolic representation of a speech-bubble"
+        :startpage.value-cards.meetings/title "Optimize Meetings"
+        :startpage.value-cards.meetings/description "Modern work got more distributed and we are finding ourselves jumping
+        from one (digital) meeting to the next. Its hard to find time for proper preparation and debriefings.
+        This is where schnaq helps you save time and streamline your meetings."
+        :startpage.value-cards.meetings/alt-text "A group of people having a meeting."
+        :startpage.value-cards.knowledge/title "Brainstorming and idea generation"
+        :startpage.value-cards.knowledge/description "Use schnaq to let your team discuss and generate new ideas.
+        An automatic Mindmap is generated from all statements. Furthermore, the statements are analyzed and summarized
+        for all participants. Perfect for your next brainstorming session!"
+        :startpage.value-cards.knowledge/alt-text "Several Sticky-Notes on a wall"
+        :startpage.value-cards.button/text "More details"
+
+        ;; TODO continue here
+        :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
+
+        :startpage.features/more-information "Mehr Informationen"
+
+        :startpage.demo.request/title "Demo anfordern"
+        :startpage.demo.request/body "Möchten Sie erfahren, wie Sie Ihrem Unternehmenswissen ein Langzeitgedächtnis verleihen? Wir führen Ihnen Schnaq dazu gerne persönlich vor. Nutzen Sie einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
+        :startpage.demo.request/button "Jetzt Demo anfordern!"
+        :startpage.demo.request.modal.name/label "Ihr Name"
+        :startpage.demo.request.modal.name/placeholder "Mein Name"
+        :startpage.demo.request.modal.email/label "E-Mail Adresse"
+        :startpage.demo.request.modal.email/placeholder "meine@email.de"
+        :startpage.demo.request.modal.company/label "Name des Unternehmens"
+        :startpage.demo.request.modal.company/placeholder "Firmenname, falls zutreffend"
+        :startpage.demo.request.modal.phone/label "Telefon"
+        :startpage.demo.request.modal.phone/placeholder "0 1234 56789"
+        :startpage.demo.request.send.notification/title "Anfrage versendet!"
+        :startpage.demo.request.send.notification/body "Es wird sich schnellstmöglich jemand bei Ihnen melden."
+        :startpage.demo.request.send.notification/failed-title "Anfrage fehlgeschlagen!"
+        :startpage.demo.request.send.notification/failed-body "Etwas ist schief gelaufen. Überprüfen Sie Ihre Eingaben und versuchen Sie es bitte erneut."
+
+        :startpage.features.meeting-organisation/lead "Gemeinsam Arbeiten"
+        :startpage.features.meeting-organisation/title "Kollaborativer Meinungsaustausch"
+        :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeiter:innen mit in Diskussionen ein! Aktivieren Sie ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit in Ihrem Team. Brainstorming-Sessions sind kreative Prozesse, in denen die Diversität Ihres Teams sehr gut zur Geltung kommt und zu wunderbaren Ergebnissen führt."
+        :startpage.features.discussion/lead "Strukturierte Diskussionen"
+        :startpage.features.discussion/title "Nachhaltiger Austausch"
+        :startpage.features.discussion/body "Brainstorming-Sessions sind Teil der kreativen Arbeit in vielen Teams. Im Nachgang lässt sich aber nur schwer nachvollziehen, was die einzelnen Teilnehmer:innen beigetragen haben. Durch die strukturierte Erfassung im verteilten Brainstorming werden die Aussagen so zusammengefügt, dass sie auch nach einer längeren Zeit wieder nachvollzogen werden können."
+        :startpage.features.graph/lead "Übersichtliche Darstellung"
+        :startpage.features.graph/title "Mindmaps!"
+        :startpage.features.graph/body "Alle Beiträge der Teilnehmer:innen werden automatisch in einer Mindmap angeordnet und können dann nachvollzogen werden. Sehen Sie alle Zusammenhänge und beobachten Sie die gesamte Ideen- und Entscheidungsfindung in einer interaktiven Mindmap."}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
@@ -24,6 +91,7 @@
 
         ;; Startpage
         :startpage/heading "Wer braucht schon Whiteboards?"
+        :startpage/subheading "Schon wieder den Faden verloren? Ideenaustausch besser strukturieren mit schnaq!"
 
         :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
         :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"

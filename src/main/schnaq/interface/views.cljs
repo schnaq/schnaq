@@ -7,9 +7,9 @@
             [schnaq.interface.views.notifications :as notifications]))
 
 (defn- base-page
-  []
+  [language]
   (let [current-route @(rf/subscribe [:navigation/current-route])]
-    [:div.base-wrapper
+    [:div.base-wrapper {:key language}
      (when current-route
        [:<>
         [modal/modal]
@@ -21,7 +21,7 @@
 (defn root []
   (let [language @(rf/subscribe [:current-locale])]
     [:div#root {:key language}
-     [base-page]
+     [base-page language]
      [footer]
      [feedback/button]
      [notifications/view]]))

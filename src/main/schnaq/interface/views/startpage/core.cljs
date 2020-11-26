@@ -228,7 +228,7 @@
    :page/more-for-heading
    [:div.row.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
     [:div.col-lg-6
-     [:h3.pb-5 "Schon wieder den Faden verloren? Ideenaustausch besser strukturieren mit schnaq!"]
+     [:h3.pb-5 (labels :startpage/subheading)]
      [start-schnaq-button]]
     [header-animation]]})
 
