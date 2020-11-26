@@ -188,7 +188,39 @@
         :feature.knowledge.tbd/evaluation "\"What if?\" Mark arguments as invalid and the system shows you whether your results are still valid"
         :feature.knowledge.tbd/live-changes "Monitor how the discussion changes in real-time"
         :feature.knowledge.tbd/changes-over-time "Time-travel to any point in the discussion to understand the process even more"
-        :feature.knowledge.tbd/accounts "Integration in other communication systems (e.g. Slack, MS Teams, …)"}
+        :feature.knowledge.tbd/accounts "Integration in other communication systems (e.g. Slack, MS Teams, …)"
+
+        :how-to.startpage/title "How do I use schnaq?"
+        :how-to.startpage/body "You want to use schnaq, but need a little guidance?
+        We created a comprehensive guide, which includes short videos to make your start a little bit easier."
+        :how-to.startpage/button "How to schnaq?"
+        :how-to/title "How do I use schnaq?"
+        :how-to.why/title "What is schnaq for?"
+        :how-to.why/body "Schnaq can be used to plan meetings with your coworkers and discuss important or unclear points beforehand."
+        :how-to.create/title "Creating a schnaq"
+        :how-to.create/body "Press the create schnaq button. Enter a title and a description. In this step you are also able to link to Videos and pictures."
+        :how-to.agenda/title "Create Agenda"
+        :how-to.agenda/body "Use multiple agenda points – one for each topic you would like to discuss."
+        :how-to.admin/title "Invite participants"
+        :how-to.admin/body "You can either use the send email feature or distribute the meeting-link by yourself.
+        Share the admin link to give other people administrative access.
+        All administrators are able to invite participants and edit the schnaq."
+        :how-to.call-to-action/title "Enough talk, let's schnaq!"
+        :how-to.call-to-action/body "Start your own schnaq with a click!
+        Invite participants and let them discuss preemptively. Collaboratively enhance your next meeting."
+
+        :startpage.early-adopter/title "Curious?"
+        :startpage.early-adopter/body "Use schnaq during the ongoing beta phase and be a pioneer in your team."
+        :startpage.early-adopter.buttons/join-schnaq "Look at example schnaq"
+        :startpage.early-adopter/or "or"
+
+        :startpage.mailing-list/title "Request more Information on schnaq"
+        :startpage.mailing-list/body "Get regular updates regarding schnaq and other DisqTec products."
+        :startpage.mailing-list/button "Subscribe to newsletter"
+
+        :footer.buttons/about-us "About us"
+        :footer.buttons/legal-note "Impress"
+        :footer.buttons/privacy "Privacy Notice"}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
