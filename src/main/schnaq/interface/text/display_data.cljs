@@ -99,7 +99,7 @@
         discuss things that do not belong in the meeting directly. The discussion is automatically structured and
         distributed. The participants do not need to be online at the same time. This way all coworkers are included.
         The result are laser-focused meetings."
-        :feature.meetings.admin-center/lead "Not accounts needed"
+        :feature.meetings.admin-center/lead "No accounts needed"
         :feature.meetings.admin-center/title "Use schnaq without yet another account"
         :feature.meetings.admin-center/body "You can use schnaq solely through the secure links we generate.
         No need for extra accounts, all you need is a web-browser.
@@ -116,7 +116,43 @@
         :feature.meetings.tbd/assignments "Assignment of duty per agenda"
         :feature.meetings.tbd/timeboxing "Timeboxing during the meeting"
         :feature.meetings.tbd/task-tracking "Transfer results into a task-tracker"
-        :feature.meetings/feedback "Do you have more wishes or feature ideas? Contact us through the feedback form on the right side."}
+        :feature.meetings/feedback "Do you have more wishes or feature ideas? Contact us through the feedback form on the right side."
+
+        ;; calendar invitation
+        :calendar-invitation/title "Schedule meeting"
+        :calendar-invitation/download-button "Download date as .ical"
+        :calendar-invitation/date-error "The end of the meeting can not be before the beginning."
+
+        :feature.discussions/lead "Structured discussions with coworkers and customers"
+        :feature.discussions/title "Structured discussions for structured results"
+        :feature.discussions/body "Schnaq allows you to lead structured discussions on the Internet – no special software needed.
+        We used the results of yearlong scientific work to design the discussion according to cutting-edge standards.
+        The results of any discussion are automatically structured and provide a graphical representation that deepens
+        the understanding of the discussed topics.
+        Valuable insights for leaders and their teams!"
+        :feature.discussions/features-subheading "Schnaq as a platform for discussions"
+        :feature.discussions.spaces/lead "Brainstorming or Discussion? – Doesn't matter"
+        :feature.discussions.spaces/title "Make room for deep discussions"
+        :feature.discussions.spaces/body "Create rooms for discussions about any topic, which you can share via a secured link.
+        The invited persons can use the room to share their unique knowledge and discuss in a structured manner. Distributed over
+        time and space."
+        :feature.discussions.discuss/lead "Discuss online easily"
+        :feature.discussions.discuss/title "Structured exchanges with schnaq"
+        :feature.discussions.discuss/body "The schnaq interface is based on scientific findings the co-founders made.
+        The interface encourages the participants to keep on topic and be factual.
+        This way the discussion-results are comprehensible even to people not participating."
+        :feature.discussions.graph/lead "Everything at a glance"
+        :feature.discussions.graph/title "Graphical presentation of the discussion"
+        :feature.discussions.graph/body "All discussions are automatically graphically processed.
+        This way it is easy to get an overview of strongly discussed sub-topics, the connection between topic or points, and
+        controversies.
+        The graphical processing allows to easily justify decisions and results."
+        :feature.discussions.tbd/reports "Automated summary of the discussion"
+        :feature.discussions.tbd/wikis "Integration into knowledge-stores, like Confluence"
+        :feature.discussions.tbd/ideas "Subscribe to topics of interest and get notified when they are discussed by your coworkers"
+        :feature.discussions.tbd/navigation "Innovative navigation through discussions"
+        :feature.discussions.tbd/connect "Integration into MS Teams, Slack and co"
+        :feature.discussions.tbd/bot "AI-based hints which topics and standpoints need attention"}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
