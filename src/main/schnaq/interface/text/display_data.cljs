@@ -318,7 +318,44 @@
         :meeting.admin-center.invite/via-mail "Invite via email"
         :meeting.admin-center.edit/administrate "Administrate discussion"
         :meeting/admin-center-export "Download discussion as a text-file"
-        :meeting/admin-center-tooltip "Administrate schnaq"}
+        :meeting/admin-center-tooltip "Administrate schnaq"
+
+        ;; Suggestions
+        :suggestions.modal/header "Suggestions of others"
+        :suggestions.modal/primer "Some participants left suggestions fo your meeting."
+        :suggestions.modal/primer-delete "The following participants propose to delete the agenda-point."
+        :suggestions.modal.delete/button "Delete now!"
+        :suggestions.modal.table/nickname "Nickname"
+        :suggestions.modal.table/suggestion-title "Title"
+        :suggestions.modal.table/suggestion-description "Description"
+        :suggestions.modal.table/suggestion-accept "Accept"
+        :suggestions.modal.delete/title "Deletion requests for this agenda point"
+        :suggestions.modal.update/title "Change suggestions for this agenda point"
+        :suggestions.modal.new/title "Suggestions for new agenda points"
+        :suggestions.notification/title "Suggestion added"
+        :suggestions.notification/body "Your suggestions were added successfully"
+        :suggestions.update.agenda/success-title "Suggestion added"
+        :suggestions.update.agenda/success-body "The suggestion was accepted and can be viewed by the participants."
+        :suggestions.agenda/delete-title "Agenda point deleted"
+        :suggestions.agenda/delete-body "The agenda point was deleted successfully"
+        :suggestion.feedback/label "Additional feedback"
+        :suggestions.feedback/title "Feedback regarding the meeting"
+        :suggestions.feedback/primer "The following feedback was given regarding the meeting"
+        :suggestions.feedback.table/nickname "Nickname"
+        :suggestions.feedback.table/content "Feedback"
+        :suggestions.feedback/header "Freeform feedback"
+
+        ;; Create Agenda
+        :agenda/desc-for "Description for agenda point "
+        :agenda/point "Agenda point "
+        :agenda.create/optional-agenda "Add agenda point"
+
+        ;; Edit Agenda
+        :agenda/edit-title "Edit schnaq"
+        :agenda/edit-subtitle "Edit description and agenda points"
+        :agenda/edit-button "Save changes"
+
+        :agendas.button/navigate-to-suggestions "Create change suggestions"}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
