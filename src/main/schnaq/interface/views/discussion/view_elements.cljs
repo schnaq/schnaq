@@ -100,7 +100,7 @@
                                    :discussion-id id}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.add.statement/starting-success form]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :discussion.add.statement/starting-success
@@ -227,7 +227,7 @@
                                    :discussion-id id}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.query.statement/by-id-success]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :discussion.query.statement/by-id-success
@@ -258,7 +258,7 @@
                                    :discussion-id id}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.premises/set-current]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-db
   :discussion.premises/set-current
@@ -315,7 +315,7 @@
                                  :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
                         :response-format (ajax/transit-response-format)
                         :on-success [:upvote-success statement]
-                        :on-failure [:ajax-failure]}]]}))
+                        :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-event-fx
   :discussion/toggle-downvote
@@ -328,7 +328,7 @@
                                  :meeting-hash (-> db :meeting :selected :meeting/share-hash)}
                         :response-format (ajax/transit-response-format)
                         :on-success [:downvote-success statement]
-                        :on-failure [:ajax-failure]}]]}))
+                        :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-event-db
   :upvote-success

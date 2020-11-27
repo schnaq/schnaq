@@ -39,7 +39,7 @@
                                    :reaction reaction}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.reaction.statement/added]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :discussion.undercut.statement/send
@@ -58,7 +58,7 @@
                                    :previous-id (:db/id (nth history (- (count history) 2)))}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.reaction.statement/added]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :discussion.reaction.statement/added

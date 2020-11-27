@@ -70,4 +70,4 @@
                             :format (ajax/transit-request-format)
                             :response-format (ajax/transit-response-format)
                             :on-success [:meeting.visited/store-from-backend]
-                            :on-failure [:ajax-failure]}]]}))))
+                            :on-failure [:ajax.error/to-console]}]]}))))

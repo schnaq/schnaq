@@ -45,7 +45,7 @@
 
 (defn- show-error
   [& _not-needed]
-  (rf/dispatch [:ajax-failure (labels :error/export-failed)]))
+  (rf/dispatch [:ajax.error/as-notification (labels :error/export-failed)]))
 
 (defn txt-export
   "Request a txt-export of the discussion."

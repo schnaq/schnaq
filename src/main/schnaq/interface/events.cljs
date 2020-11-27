@@ -51,7 +51,7 @@
                           :timeout 10000
                           :response-format (ajax/transit-response-format)
                           :on-success [:init-from-backend]
-                          :on-failure [:ajax-failure]}]]})))
+                          :on-failure [:ajax.error/to-console]}]]})))
 
 (rf/reg-event-fx
   :load/last-added-meeting
