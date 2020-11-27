@@ -534,7 +534,29 @@
         :pricing.faq.privacy/body-3 " for more information."
         :pricing/headline "Schnaq subscription"
         :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live: "
-        :pricing.newsletter/name "DisqTec newsletter."}
+        :pricing.newsletter/name "DisqTec newsletter."
+
+        ;; Route Link Texts
+        :router.features/discussion "Discussion features"
+        :router.features/meetings "Meeting features"
+        :router/all-feedbacks "All feedbacks"
+        :router/all-meetings "All schnaqs"
+        :router/analytics "Analytics dashboard"
+        :router/continue-discussion "Continue discussion"
+        :router/create-brainstorm "Create brainstorming"
+        :router/create-meeting "Create schnaq"
+        :router/graph-view "Graph view"
+        :router/how-to "How do I use schnaq?"
+        :router/invalid-link "Error page"
+        :router/meeting-created "Last created schnaq"
+        :router/my-schnaqs "My schnaqs"
+        :router/not-found-label "Not found route redirect"
+        :router/pricing "Prices"
+        :router/privacy "Privacy policy"
+        :router/show-single-meeting "Show schnaq"
+        :router/start-discussion "Start discussion"
+        :router/startpage "Startpage"
+        :router/true-404-view "404 error page"}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
