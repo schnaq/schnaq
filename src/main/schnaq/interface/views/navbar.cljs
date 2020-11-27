@@ -137,9 +137,9 @@
           :aria-haspopup "true" :aria-expanded "false"}
          [:i {:class (str "far " (fa :flag))}] " " (labels :common/language)]
         [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
-         [:a.dropdown-item
-          {:on-click #(language/set-language :en) :href "#"} "English"]
-         [:a.dropdown-item
-          {:on-click #(language/set-language :de) :href "#"} "Deutsch"]]]
+         [:button.dropdown-item
+          {:on-click #(language/set-language :en)} "English"]
+         [:button.dropdown-item
+          {:on-click #(language/set-language :de)} "Deutsch"]]]
        [blog-link]
        [username-bar-view]]]]))
