@@ -221,6 +221,7 @@
         :footer.buttons/about-us "About us"
         :footer.buttons/legal-note "Impress"
         :footer.buttons/privacy "Privacy Notice"
+        :footer.tagline/developed-with " Developed with "
 
         ;; Create schnaqs
         :schnaqs/create "Create schnaq"
@@ -725,6 +726,7 @@
         :footer.buttons/about-us "Über uns"
         :footer.buttons/legal-note "Impressum"
         :footer.buttons/privacy "Datenschutz"
+        :footer.tagline/developed-with " Entwickelt mit "
 
         ;; Create schnaqs
         :schnaqs/create "schnaq anlegen"

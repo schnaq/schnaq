@@ -223,28 +223,27 @@
 
 ;; -----------------------------------------------------------------------------
 
-(def ^:private header
-  {:page/heading (labels :startpage/heading)
-   :page/more-for-heading
-   [:div.row.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
-    [:div.col-lg-6
-     [:h3.pb-5 (labels :startpage/subheading)]
-     [start-schnaq-button]]
-    [header-animation]]})
-
 (defn- startpage-content []
-  [pages/with-nav-and-header
-   header
-   [:<>
-    [:section.container
-     [request-demo-section]
-     [usage-of-schnaq-heading]
-     [startpage-features/feature-rows]
-     [how-to-section]]
-    [early-adopters]
-    [:section.container.py-5
-     [value-prop-cards]]
-    [subscribe-to-mailinglist]]])
+  (let [header
+        {:page/heading (labels :startpage/heading)
+         :page/more-for-heading
+         [:div.row.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
+          [:div.col-lg-6
+           [:h3.pb-5 (labels :startpage/subheading)]
+           [start-schnaq-button]]
+          [header-animation]]}]
+    [pages/with-nav-and-header
+     header
+     [:<>
+      [:section.container
+       [request-demo-section]
+       [usage-of-schnaq-heading]
+       [startpage-features/feature-rows]
+       [how-to-section]]
+      [early-adopters]
+      [:section.container.py-5
+       [value-prop-cards]]
+      [subscribe-to-mailinglist]]]))
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

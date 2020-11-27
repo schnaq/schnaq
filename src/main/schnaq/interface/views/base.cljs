@@ -139,7 +139,7 @@
          (labels :router/privacy)]]]]]
     [:p.pt-3
      [:i {:class (str "fas " (fa :terminal))}]
-     " Entwickelt mit "
+     (labels :footer.tagline/developed-with)
      [:i {:class (str "m-auto fas " (fa :flask))}]
      " in Düsseldorf, Germany. "
      "© " [:a {:href "https://disqtec.com"
