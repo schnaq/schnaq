@@ -138,8 +138,8 @@
          [:i {:class (str "far " (fa :flag))}] " " (labels :common/language)]
         [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
          [:a.dropdown-item
-          {:on-click #(language/set-language :en)} "English"]
+          {:on-click #(language/set-language :en) :href "#"} "English"]
          [:a.dropdown-item
-          {:on-click #(language/set-language :de)} "Deutsch"]]]
+          {:on-click #(language/set-language :de) :href "#"} "Deutsch"]]]
        [blog-link]
        [username-bar-view]]]]))
