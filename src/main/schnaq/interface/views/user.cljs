@@ -17,7 +17,7 @@
                                   :format (ajax/transit-request-format)
                                   :response-format (ajax/transit-response-format)
                                   :on-success [:user/hide-display-name-input username]
-                                  :on-failure [:ajax-failure]}]]}
+                                  :on-failure [:ajax.error/as-notification]}]]}
               (not= "Anonymous" username) (update :fx conj [:localstorage/write [:username username]])))))
 
 (rf/reg-sub

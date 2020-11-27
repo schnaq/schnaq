@@ -137,5 +137,5 @@
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:feedbacks/success]
-                          :on-failure [:ajax-failure]}]
+                          :on-failure [:ajax.error/as-notification]}]
             [:form/clear form-elements]]})))
