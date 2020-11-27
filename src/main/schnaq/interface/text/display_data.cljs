@@ -4,9 +4,559 @@
             [taoensso.tempura :refer [tr]]))
 
 (def ^:private translations
-  {:en {:brainstorm.buttons/start-now "Start a brainstorming!"
-        :startpage.under-construction/heading "Currently in Open Beta!"
-        :common/language "Language"}
+  {:en {;; Common
+        :common/save "Save"
+        :common/language "Language"
+        :error/export-failed "Export failed. Please try again later."
+
+        ;; navbar labels
+        :nav/startpage "Home"
+        :nav/schnaqs "Schnaqs"
+        :nav.schnaqs/show-all "All schnaqs"
+        :nav.schnaqs/create-meeting "Prepare meeting"
+        :nav.schnaqs/create-brainstorm "Create brainstorm"
+        :nav.schnaqs/last-added "Last created schnaq"
+        :nav-meeting-agenda "Create Agenda"
+        :nav/blog "Blog"
+
+        ;; Startpage
+        :startpage/heading "Who needs whiteboards?"
+        :startpage/subheading "Lost your train of thought again? Structure your teams discourse with schnaq!"
+
+        :startpage.under-construction/heading "Ongoing Construction!"
+        :startpage.under-construction/body "schnaq is currently in a free of charge beta phase. Your feedback is very important for further development!"
+
+        :startpage.value-cards/heading "More applications!"
+        :startpage.value-cards/lead "Structured discussions can have many applications. Take a look at a few examples."
+        :startpage.value-cards.discussion/title "Lead a discussion"
+        :startpage.value-cards.discussion/description "Discussing topics with multiple people over the Internet is hard. Its easy to
+        feel lost. With schnaq you can structure your discussions and keep an eye on arguments and controversies with a single glance."
+        :startpage.value-cards.discussion/alt-text "A symbolic representation of a speech-bubble"
+        :startpage.value-cards.meetings/title "Optimize Meetings"
+        :startpage.value-cards.meetings/description "Modern work got more distributed and we are finding ourselves jumping
+        from one (digital) meeting to the next. Its hard to find time for proper preparation and debriefings.
+        This is where schnaq helps you save time and streamline your meetings."
+        :startpage.value-cards.meetings/alt-text "A group of people having a meeting."
+        :startpage.value-cards.knowledge/title "Brainstorming and idea generation"
+        :startpage.value-cards.knowledge/description "Use schnaq to let your team discuss and generate new ideas.
+        An automatic Mindmap is generated from all statements. Furthermore, the statements are analyzed and summarized
+        for all participants. Perfect for your next brainstorming session!"
+        :startpage.value-cards.knowledge/alt-text "Several Sticky-Notes on a wall"
+        :startpage.value-cards.button/text "More details"
+        :startpage.usage/lead "What do I use schnaq for?"
+
+        :startpage.features/more-information "More information"
+
+        :startpage.demo.request/title "Request a demo"
+        :startpage.demo.request/body "Do you want to know how you can boost innovation at your company?
+        We will demonstrate schnaq personally. Just use the button on the left and we will get back to you as fast as possible."
+        :startpage.demo.request/button "Request a demo now!"
+        :startpage.demo.request.modal.name/label "Your name"
+        :startpage.demo.request.modal.name/placeholder "My name"
+        :startpage.demo.request.modal.email/label "E-Mail Address"
+        :startpage.demo.request.modal.email/placeholder "my@email.com"
+        :startpage.demo.request.modal.company/label "Company name"
+        :startpage.demo.request.modal.company/placeholder "Company name, if any"
+        :startpage.demo.request.modal.phone/label "Phone #"
+        :startpage.demo.request.modal.phone/placeholder "0 1234 56789"
+        :startpage.demo.request.send.notification/title "Request sent!"
+        :startpage.demo.request.send.notification/body "We will get back to you as soon as possible."
+        :startpage.demo.request.send.notification/failed-title "Request failed!"
+        :startpage.demo.request.send.notification/failed-body "Something went wrong. Please check your input and try again."
+
+        :startpage.features.meeting-organisation/lead "Work together"
+        :startpage.features.meeting-organisation/title "Collaborative exchange of ideas"
+        :startpage.features.meeting-organisation/body "Include all team members in the discussion and activate unused resources!
+        This way you achieve have happy coworkers and a productive work environment.
+        Brainstorming sessions are creative processes where the diverse members of your team can contribute their strengths
+        and achieve wonderful results."
+        :startpage.features.discussion/lead "Structured discussions"
+        :startpage.features.discussion/title "Lasting exchange of thoughts"
+        :startpage.features.discussion/body "Exchanges of ideas are an integral part of working in a creative team.
+        But it is hard to understand after the fact, what everyone contributed and what the intention behind the process was.
+        Through the structured capture of your coworker's statements, we can automatically generate graphical representations
+        which help you understand what was said and done."
+        :startpage.features.graph/lead "Simple overview"
+        :startpage.features.graph/title "Mindmaps!"
+        :startpage.features.graph/body "All your coworkers statements are automatically sorted into a mindmap.
+        See all connections and statements neatly organized at one glance."
+
+        ;; Meeting Feature Page
+        :feature.meetings/lead "Structured meetings with schnaq"
+        :feature.meetings/title "Activate coworkers, save time!"
+        :feature.meetings/body "You can use schnaq to effectively prepare meetings, support all participants
+        during the meeting and also for debriefing after the fact. This way you can activate all participants,
+        save work time and produce results more efficiently."
+        :feature.meetings.schedule/lead "Targeted preparation"
+        :feature.meetings.schedule/title "Prepare the agenda collaboratively"
+        :feature.meetings.schedule/body "You can start by preparing a first version of a meeting agenda.
+        After you invite all meeting participants via mail or calendar invite, they can see the agenda, primers, one-pagers at one glance.
+        They can also request to change, delete or add agenda points through schnaq and thus help you create a more productive meeting."
+        :feature.meetings.discuss/lead "Discuss beforehand"
+        :feature.meetings.discuss/title "Resolve controversial opinions before the meeting"
+        :feature.meetings.discuss/body "Unclear points can be discussed beforehand to gain clarity.
+        You can reach the discussion directly through the agenda. Use the discussion to clarify an agenda or to
+        discuss things that do not belong in the meeting directly. The discussion is automatically structured and
+        distributed. The participants do not need to be online at the same time. This way all coworkers are included.
+        The result are laser-focused meetings."
+        :feature.meetings.admin-center/lead "No accounts needed"
+        :feature.meetings.admin-center/title "Use schnaq without yet another account"
+        :feature.meetings.admin-center/body "You can use schnaq solely through the secure links we generate.
+        No need for extra accounts, all you need is a web-browser.
+        Access schnaq from anywhere. There is also a special admin-link which lets you administer the meeting
+        without any fuss."
+        :feature.meetings/heading "Save work time by preparing your meetings with schnaq"
+        :feature.meetings/features-subheading "Use schnaq for meetings"
+        :feature.meetings/tbd-subheading "More to come…"
+        :feature.meetings/tbd-lead "Become a pioneer and be the first to experience the upcoming features:"
+        :feature.meetings.tbd/teams "Integration into MS Teams and Slack"
+        :feature.meetings.tbd/outlook "Outlook export"
+        :feature.meetings.tbd/protocols "Collaborative protocol generation during meetings"
+        :feature.meetings.tbd/prereads "One pagers and pre-reads for agenda points, including check-ins"
+        :feature.meetings.tbd/assignments "Assignment of duty per agenda"
+        :feature.meetings.tbd/timeboxing "Timeboxing during the meeting"
+        :feature.meetings.tbd/task-tracking "Transfer results into a task-tracker"
+        :feature.meetings/feedback "Do you have more wishes or feature ideas? Contact us through the feedback form on the right side."
+
+        ;; calendar invitation
+        :calendar-invitation/title "Schedule meeting"
+        :calendar-invitation/download-button "Download date as .ical"
+        :calendar-invitation/date-error "The end of the meeting can not be before the beginning."
+
+        :feature.discussions/lead "Structured discussions with coworkers and customers"
+        :feature.discussions/title "Structured discussions for structured results"
+        :feature.discussions/body "Schnaq allows you to lead structured discussions on the Internet – no special software needed.
+        We used the results of yearlong scientific work to design the discussion according to cutting-edge standards.
+        The results of any discussion are automatically structured and provide a graphical representation that deepens
+        the understanding of the discussed topics.
+        Valuable insights for leaders and their teams!"
+        :feature.discussions/features-subheading "Schnaq as a platform for discussions"
+        :feature.discussions.spaces/lead "Brainstorming or Discussion? – Doesn't matter"
+        :feature.discussions.spaces/title "Make room for deep discussions"
+        :feature.discussions.spaces/body "Create rooms for discussions about any topic, which you can share via a secured link.
+        The invited persons can use the room to share their unique knowledge and discuss in a structured manner. Distributed over
+        time and space."
+        :feature.discussions.discuss/lead "Discuss online easily"
+        :feature.discussions.discuss/title "Structured exchanges with schnaq"
+        :feature.discussions.discuss/body "The schnaq interface is based on scientific findings the co-founders made.
+        The interface encourages the participants to keep on topic and be factual.
+        This way the discussion-results are comprehensible even to people not participating."
+        :feature.discussions.graph/lead "Everything at a glance"
+        :feature.discussions.graph/title "Graphical presentation of the discussion"
+        :feature.discussions.graph/body "All discussions are automatically graphically processed.
+        This way it is easy to get an overview of strongly discussed sub-topics, the connection between topic or points, and
+        controversies.
+        The graphical processing allows to easily justify decisions and results."
+        :feature.discussions.tbd/reports "Automated summary of the discussion"
+        :feature.discussions.tbd/wikis "Integration into knowledge-stores, like Confluence"
+        :feature.discussions.tbd/ideas "Subscribe to topics of interest and get notified when they are discussed by your coworkers"
+        :feature.discussions.tbd/navigation "Innovative navigation through discussions"
+        :feature.discussions.tbd/connect "Integration into MS Teams, Slack and co"
+        :feature.discussions.tbd/bot "AI-based hints which topics and standpoints need attention"
+
+        :feature.knowledge/lead "Collect Knowledge in Brainstorms"
+        :feature.knowledge/subheading "Sustainably enhance decision making processes"
+        :feature.knowledge.general/lead "Sustainable knowledge generation"
+        :feature.knowledge.general/title "Make ideas and knowledge tangible"
+        :feature.knowledge.general/body "Communication is a key to success.
+        Every opinion should be heard and used to make an informed decision.
+        Schnaq provides structured discussions, to make opinions and arguments available and understandable after the fact.
+        You can use past discussions to experience and deeply understand the process that lead to decisions."
+        :feature.knowledge/features-subheading "Schnaq for idea generation 💡"
+        :feature.knowledge.discussions/lead "Upgrade your decision making"
+        :feature.knowledge.discussions/title "Start with a brainstorming"
+        :feature.knowledge.discussions/body "Offline the best ideas often come naturally during smalltalk or on a coffee break –
+        schnaq helps you simulate loose discussions, without the need for 15 emails or 20 chat messages.
+        During a brainstorming with schnaq all coworkers can be heard equally.
+        This way ideas that are valuable for the company can be discovered continually – even without the need to share office space."
+
+        :feature.knowledge.database/lead "Reproducibility"
+        :feature.knowledge.database/title "A central application for Ideas and Knowledge"
+        :feature.knowledge.database/body "Keep discussions and ideas that originated in a brainstorm for future reference.
+        Often the need arises to understand past decisions and processes. Even after months it is possible to dig in and understand
+        them with schnaq. We provide a single store of ideas and knowledge."
+
+        :feature.knowledge.change-of-facts/lead "Graphical processing"
+        :feature.knowledge.change-of-facts/title "MindMaps!"
+        :feature.knowledge.change-of-facts/body "All ideas are automatically structured in clear graphical format.
+        Take a look at the generated mindmap and immediately understand what the participants talked about.
+        Controversial standpoints and topics are highlighted automatically. This way you immediately know what topics
+        need more attention and discussion."
+
+        :feature.knowledge.tbd/wiki "Integration in knowledge-stores (e.g. Confluence)"
+        :feature.knowledge.tbd/search "Comfortable search through all your ideas, discussions and knowledge"
+        :feature.knowledge.tbd/evaluation "\"What if?\" Mark arguments as invalid and the system shows you whether your results are still valid"
+        :feature.knowledge.tbd/live-changes "Monitor how the discussion changes in real-time"
+        :feature.knowledge.tbd/changes-over-time "Time-travel to any point in the discussion to understand the process even more"
+        :feature.knowledge.tbd/accounts "Integration in other communication systems (e.g. Slack, MS Teams, …)"
+
+        :how-to.startpage/title "How do I use schnaq?"
+        :how-to.startpage/body "You want to use schnaq, but need a little guidance?
+        We created a comprehensive guide, which includes short videos to make your start a little bit easier."
+        :how-to.startpage/button "How to schnaq?"
+        :how-to/title "How do I use schnaq?"
+        :how-to.why/title "What is schnaq for?"
+        :how-to.why/body "Schnaq can be used to plan meetings with your coworkers and discuss important or unclear points beforehand."
+        :how-to.create/title "Creating a schnaq"
+        :how-to.create/body "Press the create schnaq button. Enter a title and a description. In this step you are also able to link to Videos and pictures."
+        :how-to.agenda/title "Create Agenda"
+        :how-to.agenda/body "Use multiple agenda points – one for each topic you would like to discuss."
+        :how-to.admin/title "Invite participants"
+        :how-to.admin/body "You can either use the send email feature or distribute the meeting-link by yourself.
+        Share the admin link to give other people administrative access.
+        All administrators are able to invite participants and edit the schnaq."
+        :how-to.call-to-action/title "Enough talk, let's schnaq!"
+        :how-to.call-to-action/body "Start your own schnaq with a click!
+        Invite participants and let them discuss preemptively. Collaboratively enhance your next meeting."
+
+        :startpage.early-adopter/title "Curious?"
+        :startpage.early-adopter/body "Use schnaq during the ongoing beta phase and be a pioneer in your team."
+        :startpage.early-adopter.buttons/join-schnaq "Look at example schnaq"
+        :startpage.early-adopter/or "or"
+
+        :startpage.mailing-list/title "Request more Information on schnaq"
+        :startpage.mailing-list/body "Get regular updates regarding schnaq and other DisqTec products."
+        :startpage.mailing-list/button "Subscribe to newsletter"
+
+        :footer.buttons/about-us "About us"
+        :footer.buttons/legal-note "Impress"
+        :footer.buttons/privacy "Privacy Notice"
+
+        ;; Create schnaqs
+        :schnaqs/create "Create schnaq"
+
+        ;; Create meeting
+        :meeting-create-header "Prepare Meeting"
+        :meeting-create-subheader "Give your schnaq a name and description"
+        :meeting-form-title "Title"
+        :meeting-form-title-placeholder "What should the name of your meeting be?"
+        :meeting-form-description "Description"
+        :meeting-form-description-placeholder "Length: X Minutes\n\nTopic"
+        :meeting-form-end-date "Date"
+        :meeting-form-end-time "Time"
+        :meeting/copy-share-link "Copy Link:"
+        :meeting/copy-link-tooltip "Click here to copy your link"
+        :meeting/link-copied-heading "Link copied"
+        :meeting/link-copied-success "The link was copied to your clipboard!"
+        :meeting/created-success-heading "Your schnaq was created!"
+        :meeting/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
+        :meetings/continue-with-schnaq-after-creation "Invited Everybody? Lets go!"
+        :meetings/continue-to-schnaq-button "To the schnaq"
+        :meetings/edit-schnaq-button "Edit schnaq"
+        :meetings/share-calendar-invite "Send calendar invites"
+        :meetings.suggestions/header "Add suggestions"
+        :meetings.suggestions/subheader "The administrators are able to see and accept or deny the suggestions"
+
+        :meeting.admin/addresses-label "Email addresses of the participants"
+        :meeting.admin/addresses-placeholder "Email addresses separated by a newline or space."
+        :meeting.admin/addresses-privacy "These addresses are only used to send the invitation emails and are deleted from our
+        servers immediately afterwards."
+        :meeting.admin/send-invites-button-text "Send invitations"
+        :meeting.admin/send-invites-heading "Invite participants via email"
+        :meeting.admin/delete-statements-heading "Delete the following statements"
+        :meeting.admin/statements-label "Statement-IDs, that will be deleted"
+        :meeting.admin/statement-id-placeholder "Statement IDs separated by a space or newline."
+        :meeting.admin/delete-statements-button-text "Delete statements immediately"
+        :meeting.admin.notifications/emails-successfully-sent-title "Mails sent!"
+        :meeting.admin.notifications/emails-successfully-sent-body-text "Your invitations were sent successfully."
+        :meeting.admin.notifications/sending-failed-title "Error during mail delivery!"
+        :meeting.admin.notifications/sending-failed-lead "The following invitations could not be delivered: "
+        :meeting.admin.notifications/statements-deleted-title "Statements deleted!"
+        :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
+
+        ;; Brainstorming time
+        :brainstorm/heading "Start brainstorming"
+        :brainstorm.buttons/start-now "Start brainstorming now"
+        :brainstorm.create.button/save "Create new brainstorming!"
+
+        ;; Privacy Page
+        :privacy/heading "What happens to your data?"
+        :privacy/subheading "We lead you through it step by step!"
+        :privacy.made-in-germany/lead "EU-regulation conformity"
+        :privacy.made-in-germany/title "Data privacy is important to us!"
+        :privacy.made-in-germany/body "The development team of schnaq consists of developers that are tired of misuse of private
+        data. This is why we take special care to be GDPR compliant and to save all data securely on german servers.
+        We do not exchange any data with other companies without absolute need and making it completely clear."
+        :privacy.personal-data/lead "Which data is saved?"
+        :privacy.personal-data/title "Personal data"
+        :privacy.personal-data/body
+        [:<> [:p "Per default we only save data that is needed to operate the service. There is no analysis of personal data, and anonymous data of your behavior on our website is only collected, when you explicitly allow us to do so. "]
+         [:p "If you want to support us and allow the analysis, we collect the data with Matomo and save it on our german servers. Matomo is a free and self-hosted alternative to commercial options for website analytics . We do not exchange this data with third parties."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Check your settings"]]]
+        :privacy.localstorage/lead "What data do I send to the server?"
+        :privacy.localstorage/title "Data exchange"
+        :privacy.localstorage/body
+        [:<> [:p "schnaq has no need for accounts. This way no personal data about you is saved on the server. Most of the interactions work through links. When you click on a link a part of it (the so called hash) is stored in your browser (in the localStorage). As soon as you go to schnaq.com again, your browser sends this hash back and you gain access to your created schnaqs. Alternatively you can send the links to yourself via email. This way you have all the data in your own hands."]
+         [:p "In difference to website-cookies we use the localStorage, which only saves data that is needed for the application to function for you.
+         You can see the data in your localStorage by clicking the following button."]]
+        :privacy.localstorage/show-data "Show my data"
+        :privacy.localstorage.notification/title "This data is saved by your browser"
+        :privacy.localstorage.notification/body "Tip: \"Cryptic\" strings of characters are the codes that allow you to view schnaqs."
+        :privacy.localstorage.notification/confirmation "Do you really want to delete the data?"
+        :privacy.localstorage.notification/delete-button "Delete data"
+        :privacy.link-to-privacy/lead "More information can be found in the comprehensive "
+        :privacy.link-to-privacy/privacy "Privacy notice"
+
+        ;; schnaqs not found
+        :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
+        :schnaqs.not-found/alert-body "Invite people to your first schnaq after you created it."
+
+        ;; Admin Center
+        :meeting/educate-on-link-text "Share the link below with your coworkers."
+        :meetings/educate-on-link-text-subtitle "Everybody with possession of the link can participate."
+        :meeting/educate-on-edit "Want to change the name or description?"
+        :meeting/educate-on-admin "Go back to the admin center at any time!"
+        :meeting.admin-center/heading "Admin-Center"
+        :meeting.admin-center/subheading "schnaq: \"%s\""
+        :meeting.admin-center.edit.link/header "Entry to the admin-center"
+        :meeting.admin-center.edit.link/primer "Administration takes work, let others help!"
+        :meeting.admin-center.edit.link/admin "Entry to admin-center via email"
+        :meeting.admin-center.edit.link/admin-privileges "Edit and administer suggestions"
+        :meeting.admin-center.edit.link.form/label "Email address of the administrators"
+        :meeting.admin-center.edit.link.form/placeholder "Enter an email address"
+        :meeting.admin-center.edit.link.form/submit-button "Send link"
+        :meeting.admin-center.invite/via-link "Distribute link"
+        :meeting.admin-center.invite/via-mail "Invite via email"
+        :meeting.admin-center.edit/administrate "Administrate discussion"
+        :meeting/admin-center-export "Download discussion as a text-file"
+        :meeting/admin-center-tooltip "Administrate schnaq"
+
+        ;; Suggestions
+        :suggestions.modal/header "Suggestions of others"
+        :suggestions.modal/primer "Some participants left suggestions fo your meeting."
+        :suggestions.modal/primer-delete "The following participants propose to delete the agenda-point."
+        :suggestions.modal.delete/button "Delete now!"
+        :suggestions.modal.table/nickname "Nickname"
+        :suggestions.modal.table/suggestion-title "Title"
+        :suggestions.modal.table/suggestion-description "Description"
+        :suggestions.modal.table/suggestion-accept "Accept"
+        :suggestions.modal.delete/title "Deletion requests for this agenda point"
+        :suggestions.modal.update/title "Change suggestions for this agenda point"
+        :suggestions.modal.new/title "Suggestions for new agenda points"
+        :suggestions.notification/title "Suggestion added"
+        :suggestions.notification/body "Your suggestions were added successfully"
+        :suggestions.update.agenda/success-title "Suggestion added"
+        :suggestions.update.agenda/success-body "The suggestion was accepted and can be viewed by the participants."
+        :suggestions.agenda/delete-title "Agenda point deleted"
+        :suggestions.agenda/delete-body "The agenda point was deleted successfully"
+        :suggestion.feedback/label "Additional feedback"
+        :suggestions.feedback/title "Feedback regarding the meeting"
+        :suggestions.feedback/primer "The following feedback was given regarding the meeting"
+        :suggestions.feedback.table/nickname "Nickname"
+        :suggestions.feedback.table/content "Feedback"
+        :suggestions.feedback/header "Freeform feedback"
+
+        ;; Create Agenda
+        :agenda/desc-for "Description for agenda point "
+        :agenda/point "Agenda point "
+        :agenda.create/optional-agenda "Add agenda point"
+
+        ;; Edit Agenda
+        :agenda/edit-title "Edit schnaq"
+        :agenda/edit-subtitle "Edit description and agenda points"
+        :agenda/edit-button "Save changes"
+
+        :agendas.button/navigate-to-suggestions "Create change suggestions"
+
+        ;; Discussion Language
+        :discussion/agree "Agree"
+        :discussion/disagree "Disagree"
+        :discussion/create-argument-action "Add statement"
+        :discussion/create-argument-heading "Add own opinion / information"
+        :discussion/add-argument-conclusion-placeholder "I think that…"
+        :discussion/add-premise-supporting "I want to support the statement"
+        :discussion/add-premise-against "I disagree…"
+        :discussion/add-undercut "The last two statements are not connected"
+        :discussion/reason-nudge "What do you think about this?"
+        :discussion/premise-placeholder "I think…"
+        :discussion/create-starting-premise-action "Add statement"
+        :discussion/others-think "Others think the following:"
+        :discussion/undercut-bubble-intro "The last statement is not connected to the previous. The reason being…"
+        :discussion.badges/user-overview "All participants"
+        :discussion.badges/delete-statement "Delete statement"
+        :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
+        :discussion.notification/new-content-title "New statement!"
+        :discussion.notification/new-content-body "Your statement was added successfully!"
+        :discussion.carousel/heading "Statements of others"
+        :discussion/discuss "Discuss"
+        :discussion/discuss-tooltip "Discuss this agenda point with others"
+
+        ;; meetings overview
+        :meetings/header "Overview of your schnaqs"
+        :meetings/subheader "These are the schnaqs that you are part of"
+
+        ;; Feedbacks
+        :feedbacks.overview/header "Feedbacks"
+        :feedbacks.overview/subheader "All feedbacks"
+        :feedbacks.overview/description "Description"
+        :feedbacks.overview/contact-name "From"
+        :feedbacks.overview/contact-mail "E-Mail"
+        :feedbacks/button "Feedback"
+        :feedbacks/screenshot "Screenshot"
+        :feedbacks.modal/primer "Feedback is important! we are happy about any kind of feedback. 🥳
+        Leave us a comment and thereby help to improve this software. Thank you and dankeschön!"
+        :feedbacks.modal/contact-name "Your Name"
+        :feedbacks.modal/contact-mail "Email Address"
+        :feedbacks.modal/description "Your Feedback"
+        :feedbacks.modal/optional "Optional"
+        :feedbacks.modal/screenshot "Add screenshot?"
+        :feedbacks.modal/disclaimer "Your data is only saved on our german servers and not exchanged with any third party."
+        :feedbacks.notification/title "Thank you for your feedback!"
+        :feedbacks.notification/body "Your feedback reached us safely 🎉"
+
+        :feedbacks.survey/primer
+        [:<> "We would be extremely happy if you could participate in a small survey.
+        The survey is hosted through Google Forms. Find their  "
+         [:a {:href "https://policies.google.com/privacy"} "privacy policy here."]
+         " By participating, you accept their privacy policy."]
+        :feedbacks.survey/checkbox "Yes, I want to participate in the survey."
+        :feedbacks.survey/loading "The form is being loaded…"
+        :feedbacks.survey/tab "Survey"
+
+        ;; login
+        :login/as "Hello, "
+        :login/set-name "Enter your name"
+
+        ;; analytics
+        :analytics/heading "Analytics"
+        :analytics/overall-meetings "Schnaqs created"
+        :analytics/user-numbers "Usernames created"
+        :analytics/average-agendas-title "Average number of agendas / schnaq"
+        :analytics/statements-num-title "# of statements"
+        :analytics/active-users-num-title "Active users"
+        :analytics/statement-lengths-title "Length of statements"
+        :analytics/argument-types-title "Argument types"
+        :analytics/fetch-data-button "Retrieving data…"
+
+        ;; User related
+        :user.button/set-name "Save name"
+        :user.button/set-name-placeholder "Your name"
+        :user.button/success-body "Name saved successfully"
+        :user.set-name/dialog-header "Hello 👋"
+        :user.set-name/dialog-lead "Good to see you!"
+        :user.set-name/dialog-body "To be able to participate in discussions, enter a name."
+        :user.set-name/dialog-button "How do you want to be called?"
+        :user.set-name.modal/header "Please, enter a name"
+        :user.set-name.modal/primer "The name will be visible to other participants of the schnaq."
+
+        ;; Errors
+        :errors/navigate-to-startpage "Back to the home page"
+        :errors/generic "An error occurred"
+
+        :error.generic/contact-us
+        [:<> "Did you end up here after clicking something on schnaq.com? Give us a hint at " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
+
+        :error.404/heading "This site does not exist 🙉"
+        :error.404/body "The URL that you followed does not exist. Maybe there is a typo."
+
+        :error.403/heading "You do not have the rights to view this site 🧙‍♂️"
+        :error.403/body "You either have insufficient rights to view this site, or a typo happened."
+
+        ;; Graph Texts
+        :graph/heading "Discussion overview"
+        :graph.button/text "Show discussion graph"
+
+        ;; Pricing Page
+        :pricing.free-tier/description "For small teams and private parties. The starter plan is the perfect entry
+         into structured idea generation."
+        :pricing.free-tier/beta-notice "This plan will be still available after the beta-phase for teams of up to 5 members."
+        :pricing.free-tier/call-to-action "Start free of charge"
+        :pricing.business-tier/description "Whether 10 or 50 members – the price stays the same.
+      Perfect for companies, clubs, educational institutions and everyone looking to structure their knowledge."
+        :pricing.units/per-month "/ month"
+        :pricing.notes/with-vat "incl. VAT"
+        :pricing.notes/yearly-rebate "15% discount when paid yearly in advance"
+        :pricing.business-tier/call-to-action "Available from 01.01.2021"
+        :pricing.trial/call-to-action "Test business 30 days free of charge"
+        :pricing.trial/description "No credit card needed! Cancel anytime."
+        :pricing.trial.temporary/deactivation "Available from 01.01.2021"
+        :pricing.features/heading "Schnaq subscription advantages"
+        :pricing.features.user-numbers/heading "Unlimited member accounts"
+        :pricing.features.user-numbers/content "Set no bounds for how many people can collaborate. *"
+        :pricing.features.team-numbers/heading "Unlimited number of teams"
+        :pricing.features.team-numbers/content "Create as many teams as are needed for your projects. *"
+        :pricing.features.app-integration/heading "App integration"
+        :pricing.features.app-integration/content "Connect schnaq easily to your Slack, MS Teams, Confluence …"
+        :pricing.features.analysis/heading "Automatic Analyses"
+        :pricing.features.analysis/content "All discussions are automatically analyzed and presented to the participants."
+        :pricing.features.knowledge-db/heading "Knowledge database"
+        :pricing.features.knowledge-db/content "Collect all your knowledge in one spot."
+        :pricing.features.mindmap/heading "Interactive mindmap"
+        :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
+        :pricing.features/disclaimer "* Applies only to business plan"
+        :pricing.competitors/per-month-per-user " € per month per user"
+        :pricing.comparison/heading "You continue growing – you continue saving!"
+        :pricing.comparison/subheading "No matter how much your team grows, the price stays the same.
+   Take a look how the price of schnaq compares to Miro + Loomio + Confluence together."
+        :pricing.comparison.schnaq/price-point "79 € per month for your company"
+        :pricing.comparison.schnaq/brainstorm "Brainstorming"
+        :pricing.comparison.schnaq/decision-making "Decision making"
+        :pricing.comparison.schnaq/knowledge-db "Knowledge database"
+        :pricing.comparison.schnaq/async "Asynchronous communication"
+        :pricing.comparison.schnaq/mindmap "Mindmapping"
+        :pricing.comparison.schnaq/analysis "Result analysis"
+        :pricing.comparison.schnaq/flatrate " Flat per Month"
+        :pricing.comparison.schnaq/person-20 "79 € for 20 users"
+        :pricing.comparison.schnaq/person-50 "79 € for 50 users"
+        :pricing.comparison.schnaq/person-100 "79 € for 100 users …"
+        :pricing.comparison/compared-to [:<> "Compared" [:br] "to"]
+        :pricing.comparison.miro/description "Brainstorming software"
+        :pricing.comparison.loomio/description "Cooperative decision making"
+        :pricing.comparison.confluence/description "Knowledge database"
+        :pricing.comparison.competitor/person-10 " per month for 10 users"
+        :pricing.comparison.competitor/person-20 "247 € for 20 users"
+        :pricing.comparison.competitor/person-50 "685 € for 50 users"
+        :pricing.comparison.competitor/person-100 "1370 € for 100 users …"
+        :pricing.faq/heading "Frequently asked questions regarding schnaq subscriptions"
+        :pricing.faq.terminate/heading "Can I cancel anytime?"
+        :pricing.faq.terminate/body
+        [:<> [:span.text-primary "Yes! "] "You are able to cancel" [:span.text-primary " every month"] ",
+     if you are paying monthly. If you are paying yearly, you can cancel at the end of the subscription year."]
+        :pricing.faq.extra-price/heading "Do I need to pay extra for more seats?"
+        :pricing.faq.extra-price/body
+        [:<> [:span.text-primary "No, "] "you can add" [:span.text-primary " unlimited accounts "]
+         " to your organization. Every company, club,
+         educational institution, etc. only needs " [:span.text-primary "one subscription."]]
+        :pricing.faq.trial-time/heading "Is my trial-subscription automatically converted into a paid one?"
+        :pricing.faq.trial-time/body
+        [:<> [:span.text-primary "No, "] "when your trial ends, you can" [:span.text-primary " actively decide"]
+         ", whether you want to add payment data and continue using the business plan.
+         The " [:span.text-primary "starter plan stays free of charge"] ", after a possible trial."]
+        :pricing.faq.longer-trial/heading "Can I trial the business plan a little bit longer?"
+        :pricing.faq.longer-trial/body
+        [:<> [:span.text-primary "Sure! "] "Simply write us an " [:span.text-primary " Email"] " at "
+         [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
+        :pricing.faq.privacy/heading "Who can access my data?"
+        :pricing.faq.privacy/body-1
+        [:<> "Any Person who is added to your organization and to corresponding teams can see their data."
+         "From a technical standpoint the data is securely saved on"
+         [:span.text-primary " german Servers in a GDPR compliant"] " manner. See the "]
+        :pricing.faq.privacy/body-2 "Privacy notice page"
+        :pricing.faq.privacy/body-3 " for more information."
+        :pricing/headline "Schnaq subscription"
+        :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live: "
+        :pricing.newsletter/name "DisqTec newsletter."
+
+        ;; Route Link Texts
+        :router.features/discussion "Discussion features"
+        :router.features/meetings "Meeting features"
+        :router/all-feedbacks "All feedbacks"
+        :router/all-meetings "All schnaqs"
+        :router/analytics "Analytics dashboard"
+        :router/continue-discussion "Continue discussion"
+        :router/create-brainstorm "Create brainstorming"
+        :router/create-meeting "Create schnaq"
+        :router/graph-view "Graph view"
+        :router/how-to "How do I use schnaq?"
+        :router/invalid-link "Error page"
+        :router/meeting-created "Last created schnaq"
+        :router/my-schnaqs "My schnaqs"
+        :router/not-found-label "Not found route redirect"
+        :router/pricing "Prices"
+        :router/privacy "Privacy policy"
+        :router/show-single-meeting "Show schnaq"
+        :router/start-discussion "Start discussion"
+        :router/startpage "Startpage"
+        :router/true-404-view "404 error page"}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
@@ -24,6 +574,7 @@
 
         ;; Startpage
         :startpage/heading "Wer braucht schon Whiteboards?"
+        :startpage/subheading "Schon wieder den Faden verloren? Ideenaustausch besser strukturieren mit schnaq!"
 
         :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
         :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"

@@ -131,16 +131,15 @@
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
           (labels :router/privacy)]]]
-       (when-not toolbelt/production?
-         [:ul.navbar-nav.dropdown.ml-auto
-          [:a#schnaq-dropdown.nav-link.dropdown-toggle
-           {:href "#" :role "button" :data-toggle "dropdown"
-            :aria-haspopup "true" :aria-expanded "false"}
-           [:i {:class (str "far " (fa :flag))}] " " (labels :common/language)]
-          [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
-           [:a.dropdown-item
-            {:on-click #(language/set-language :en)} "English"]
-           [:a.dropdown-item
-            {:on-click #(language/set-language :de)} "Deutsch"]]])
+       [:ul.navbar-nav.dropdown.ml-auto
+        [:a#schnaq-dropdown.nav-link.dropdown-toggle
+         {:href "#" :role "button" :data-toggle "dropdown"
+          :aria-haspopup "true" :aria-expanded "false"}
+         [:i {:class (str "far " (fa :flag))}] " " (labels :common/language)]
+        [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
+         [:a.dropdown-item
+          {:on-click #(language/set-language :en)} "English"]
+         [:a.dropdown-item
+          {:on-click #(language/set-language :de)} "Deutsch"]]]
        [blog-link]
        [username-bar-view]]]]))

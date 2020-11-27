@@ -55,13 +55,13 @@
 
 (defn- page []
   [pages/with-nav-and-header
-    {:page/heading (labels :privacy/heading)
-     :page/subheading (labels :privacy/subheading)}
-    [:section.container
-     [dsgvo-row]
-     [personal-data-row]
-     [localstorage-row]
-     [link-to-privacy]]])
+   {:page/heading (labels :privacy/heading)
+    :page/subheading (labels :privacy/subheading)}
+   [:section.container
+    [dsgvo-row]
+    [personal-data-row]
+    [localstorage-row]
+    [link-to-privacy]]])
 
 
 
