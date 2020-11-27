@@ -449,7 +449,92 @@
         :error.404/body "The URL that you followed does not exist. Maybe there is a typo."
 
         :error.403/heading "You do not have the rights to view this site 🧙‍♂️"
-        :error.403/body "You either have insufficient rights to view this site, or a typo happened."}
+        :error.403/body "You either have insufficient rights to view this site, or a typo happened."
+
+        ;; Graph Texts
+        :graph/heading "Discussion overview"
+        :graph.button/text "Show discussion graph"
+
+        ;; Pricing Page
+        :pricing.free-tier/description "For small teams and private parties. The starter plan is the perfect entry
+         into structured idea generation."
+        :pricing.free-tier/beta-notice "This plan will be still available after the beta-phase for teams of up to 5 members."
+        :pricing.free-tier/call-to-action "Start free of charge"
+        :pricing.business-tier/description "Whether 10 or 50 members – the price stays the same.
+      Perfect for companies, clubs, educational institutions and everyone looking to structure their knowledge."
+        :pricing.units/per-month "/ month"
+        :pricing.notes/with-vat "incl. VAT"
+        :pricing.notes/yearly-rebate "15% discount when paid yearly in advance"
+        :pricing.business-tier/call-to-action "Available from 01.01.2021"
+        :pricing.trial/call-to-action "Test business 30 days free of charge"
+        :pricing.trial/description "No credit card needed! Cancel anytime."
+        :pricing.trial.temporary/deactivation "Available from 01.01.2021"
+        :pricing.features/heading "Schnaq subscription advantages"
+        :pricing.features.user-numbers/heading "Unlimited member accounts"
+        :pricing.features.user-numbers/content "Set no bounds for how many people can collaborate. *"
+        :pricing.features.team-numbers/heading "Unlimited number of teams"
+        :pricing.features.team-numbers/content "Create as many teams as are needed for your projects. *"
+        :pricing.features.app-integration/heading "App integration"
+        :pricing.features.app-integration/content "Connect schnaq easily to your Slack, MS Teams, Confluence …"
+        :pricing.features.analysis/heading "Automatic Analyses"
+        :pricing.features.analysis/content "All discussions are automatically analyzed and presented to the participants."
+        :pricing.features.knowledge-db/heading "Knowledge database"
+        :pricing.features.knowledge-db/content "Collect all your knowledge in one spot."
+        :pricing.features.mindmap/heading "Interactive mindmap"
+        :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
+        :pricing.features/disclaimer "* Applies only to business plan"
+        :pricing.competitors/per-month-per-user " € per month per user"
+        :pricing.comparison/heading "You continue growing – you continue saving!"
+        :pricing.comparison/subheading "No matter how much your team grows, the price stays the same.
+   Take a look how the price of schnaq compares to Miro + Loomio + Confluence together."
+        :pricing.comparison.schnaq/price-point "79 € per month for your company"
+        :pricing.comparison.schnaq/brainstorm "Brainstorming"
+        :pricing.comparison.schnaq/decision-making "Decision making"
+        :pricing.comparison.schnaq/knowledge-db "Knowledge database"
+        :pricing.comparison.schnaq/async "Asynchronous communication"
+        :pricing.comparison.schnaq/mindmap "Mindmapping"
+        :pricing.comparison.schnaq/analysis "Result analysis"
+        :pricing.comparison.schnaq/flatrate " Flat per Monat"
+        :pricing.comparison.schnaq/person-20 "79 € for 20 users"
+        :pricing.comparison.schnaq/person-50 "79 € for 50 users"
+        :pricing.comparison.schnaq/person-100 "79 € for 100 users …"
+        :pricing.comparison/compared-to [:span "Compared" [:br] "to"]
+        :pricing.comparison.miro/description "Brainstorming software"
+        :pricing.comparison.loomio/description "Cooperative decision making"
+        :pricing.comparison.confluence/description "Knowledge database"
+        :pricing.comparison.competitor/person-10 " per month for 10 users"
+        :pricing.comparison.competitor/person-20 "247 € for 20 users"
+        :pricing.comparison.competitor/person-50 "685 € for 50 users"
+        :pricing.comparison.competitor/person-100 "1370 € for 100 users …"
+        :pricing.faq/heading "Frequently asked questions regarding schnaq subscriptions"
+        :pricing.faq.terminate/heading "Can I cancel anytime?"
+        :pricing.faq.terminate/body
+        [:<> [:span.text-primary "Yes! "] "You are able to cancel" [:span.text-primary " every month"] ",
+     if you are paying monthly. If you are paying yearly you can cancel at the end of the subscription year."]
+        :pricing.faq.extra-price/heading "Do I need to pay extra for more seats?"
+        :pricing.faq.extra-price/body
+        [:<> [:span.text-primary "No, "] "you can add" [:span.text-primary " unlimited accounts "]
+         " to your organization. Every company, club,
+         educational institution, etc. only needs " [:span.text-primary "one subscription."]]
+        :pricing.faq.trial-time/heading "Is my trial-subscription automatically converted into a paid one?"
+        :pricing.faq.trial-time/body
+        [:<> [:span.text-primary "No, "] "when your trial ends, you can" [:span.text-primary " actively decide"]
+         ", whether you want to add payment data and continue using the business plan.
+         The " [:span.text-primary "starter plan stays free of charge"] ", after a possible trial."]
+        :pricing.faq.longer-trial/heading "Can I trial the business plan a little bit longer?"
+        :pricing.faq.longer-trial/body
+        [:<> [:span.text-primary "Sure! "] "Simply write us an " [:span.text-primary " Email"] " at "
+         [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
+        :pricing.faq.privacy/heading "Who can access my data?"
+        :pricing.faq.privacy/body-1
+        [:<> "Any Person who is added to your organization and to corresponding teams can see their data."
+         "From a technical standpoint the data is securely saved on"
+         [:span.text-primary " german Servers in a GDPR comliant"] " manner. See the "]
+        :pricing.faq.privacy/body-2 "Privacy notice page"
+        :pricing.faq.privacy/body-3 " for more information."
+        :pricing/headline "Schnaq subscription"
+        :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live: "
+        :pricing.newsletter/name "DisqTec newsletter."}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
