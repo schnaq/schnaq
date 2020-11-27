@@ -20,15 +20,15 @@
         :nav/blog "Blog"
 
         ;; Startpage
-        :startpage/heading "Who needs whiteboards?"
-        :startpage/subheading "Lost your train of thought again? Structure your teams discourse with schnaq!"
+        :startpage/heading "Who needs Whiteboards?"
+        :startpage/subheading "Lost your train of thought again? Structure your team's discourse with schnaq!"
 
         :startpage.under-construction/heading "Ongoing Construction!"
         :startpage.under-construction/body "schnaq is currently in a free of charge beta phase. Your feedback is very important for further development!"
 
-        :startpage.value-cards/heading "More applications!"
+        :startpage.value-cards/heading "More Applications!"
         :startpage.value-cards/lead "Structured discussions can have many applications. Take a look at a few examples."
-        :startpage.value-cards.discussion/title "Lead a discussion"
+        :startpage.value-cards.discussion/title "Conduct a Discussion"
         :startpage.value-cards.discussion/description "Discussing topics with multiple people over the Internet is hard. Its easy to
         feel lost. With schnaq you can structure your discussions and keep an eye on arguments and controversies with a single glance."
         :startpage.value-cards.discussion/alt-text "A symbolic representation of a speech-bubble"
@@ -37,7 +37,7 @@
         from one (digital) meeting to the next. Its hard to find time for proper preparation and debriefings.
         This is where schnaq helps you save time and streamline your meetings."
         :startpage.value-cards.meetings/alt-text "A group of people having a meeting."
-        :startpage.value-cards.knowledge/title "Brainstorming and idea generation"
+        :startpage.value-cards.knowledge/title "Brainstorming and Idea Generation"
         :startpage.value-cards.knowledge/description "Use schnaq to let your team discuss and generate new ideas.
         An automatic Mindmap is generated from all statements. Furthermore, the statements are analyzed and summarized
         for all participants. Perfect for your next brainstorming session!"
@@ -47,10 +47,10 @@
 
         :startpage.features/more-information "More information"
 
-        :startpage.demo.request/title "Request a demo"
+        :startpage.demo.request/title "Request a Demo"
         :startpage.demo.request/body "Do you want to know how you can boost innovation at your company?
         We will demonstrate schnaq personally. Just use the button on the left and we will get back to you as fast as possible."
-        :startpage.demo.request/button "Request a demo now!"
+        :startpage.demo.request/button "Request a Demo!"
         :startpage.demo.request.modal.name/label "Your name"
         :startpage.demo.request.modal.name/placeholder "My name"
         :startpage.demo.request.modal.email/label "E-Mail Address"
@@ -65,24 +65,24 @@
         :startpage.demo.request.send.notification/failed-body "Something went wrong. Please check your input and try again."
 
         :startpage.features.meeting-organisation/lead "Work together"
-        :startpage.features.meeting-organisation/title "Collaborative exchange of ideas"
+        :startpage.features.meeting-organisation/title "Collaborative Exchange of Ideas"
         :startpage.features.meeting-organisation/body "Include all team members in the discussion and activate unused resources!
         This way you achieve have happy coworkers and a productive work environment.
         Brainstorming sessions are creative processes where the diverse members of your team can contribute their strengths
         and achieve wonderful results."
-        :startpage.features.discussion/lead "Structured discussions"
-        :startpage.features.discussion/title "Lasting exchange of thoughts"
+        :startpage.features.discussion/lead "Structured Discussions"
+        :startpage.features.discussion/title "Lasting Exchange of Thoughts"
         :startpage.features.discussion/body "Exchanges of ideas are an integral part of working in a creative team.
         But it is hard to understand after the fact, what everyone contributed and what the intention behind the process was.
         Through the structured capture of your coworker's statements, we can automatically generate graphical representations
         which help you understand what was said and done."
-        :startpage.features.graph/lead "Simple overview"
+        :startpage.features.graph/lead "Simple Overview"
         :startpage.features.graph/title "Mindmaps!"
         :startpage.features.graph/body "All your coworkers statements are automatically sorted into a mindmap.
         See all connections and statements neatly organized at one glance."
 
         ;; Meeting Feature Page
-        :feature.meetings/lead "Structured meetings with schnaq"
+        :feature.meetings/lead "Structured Meetings with schnaq"
         :feature.meetings/title "Activate coworkers, save time!"
         :feature.meetings/body "You can use schnaq to effectively prepare meetings, support all participants
         during the meeting and also for debriefing after the fact. This way you can activate all participants,
@@ -266,9 +266,9 @@
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
 
         ;; Brainstorming time
-        :brainstorm/heading "Start brainstorming"
-        :brainstorm.buttons/start-now "Start brainstorming now"
-        :brainstorm.create.button/save "Create new brainstorming!"
+        :brainstorm/heading "Start Brainstorming"
+        :brainstorm.buttons/start-now "Start Brainstorming now"
+        :brainstorm.create.button/save "Create new Brainstorming!"
 
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
@@ -279,12 +279,12 @@
         data. This is why we take special care to be GDPR compliant and to save all data securely on german servers.
         We do not exchange any data with other companies without absolute need and making it completely clear."
         :privacy.personal-data/lead "Which data is saved?"
-        :privacy.personal-data/title "Personal data"
+        :privacy.personal-data/title "Personal Data"
         :privacy.personal-data/body
         [:<> [:p "Per default we only save data that is needed to operate the service. There is no analysis of personal data, and anonymous data of your behavior on our website is only collected, when you explicitly allow us to do so. "]
          [:p "If you want to support us and allow the analysis, we collect the data with Matomo and save it on our german servers. Matomo is a free and self-hosted alternative to commercial options for website analytics . We do not exchange this data with third parties."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Check your settings"]]]
         :privacy.localstorage/lead "What data do I send to the server?"
-        :privacy.localstorage/title "Data exchange"
+        :privacy.localstorage/title "Data Exchange"
         :privacy.localstorage/body
         [:<> [:p "schnaq has no need for accounts. This way no personal data about you is saved on the server. Most of the interactions work through links. When you click on a link a part of it (the so called hash) is stored in your browser (in the localStorage). As soon as you go to schnaq.com again, your browser sends this hash back and you gain access to your created schnaqs. Alternatively you can send the links to yourself via email. This way you have all the data in your own hands."]
          [:p "In difference to website-cookies we use the localStorage, which only saves data that is needed for the application to function for you.
@@ -310,14 +310,14 @@
         :meeting.admin-center/subheading "schnaq: \"%s\""
         :meeting.admin-center.edit.link/header "Entry to the admin-center"
         :meeting.admin-center.edit.link/primer "Administration takes work, let others help!"
-        :meeting.admin-center.edit.link/admin "Entry to admin-center via email"
+        :meeting.admin-center.edit.link/admin "Entry to Admin-Center via Email"
         :meeting.admin-center.edit.link/admin-privileges "Edit and administer suggestions"
         :meeting.admin-center.edit.link.form/label "Email address of the administrators"
         :meeting.admin-center.edit.link.form/placeholder "Enter an email address"
         :meeting.admin-center.edit.link.form/submit-button "Send link"
-        :meeting.admin-center.invite/via-link "Distribute link"
-        :meeting.admin-center.invite/via-mail "Invite via email"
-        :meeting.admin-center.edit/administrate "Administrate discussion"
+        :meeting.admin-center.invite/via-link "Distribute Link"
+        :meeting.admin-center.invite/via-mail "Invite via Email"
+        :meeting.admin-center.edit/administrate "Administrate Discussion"
         :meeting/admin-center-export "Download discussion as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
 
@@ -361,7 +361,7 @@
         ;; Discussion Language
         :discussion/agree "Agree"
         :discussion/disagree "Disagree"
-        :discussion/create-argument-action "Add statement"
+        :discussion/create-argument-action "Add Statement"
         :discussion/create-argument-heading "Add own opinion / information"
         :discussion/add-argument-conclusion-placeholder "I think that…"
         :discussion/add-premise-supporting "I want to support the statement"
@@ -369,7 +369,7 @@
         :discussion/add-undercut "The last two statements are not connected"
         :discussion/reason-nudge "What do you think about this?"
         :discussion/premise-placeholder "I think…"
-        :discussion/create-starting-premise-action "Add statement"
+        :discussion/create-starting-premise-action "Add Statement"
         :discussion/others-think "Others think the following:"
         :discussion/undercut-bubble-intro "The last statement is not connected to the previous. The reason being…"
         :discussion.badges/user-overview "All participants"
@@ -377,7 +377,7 @@
         :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
         :discussion.notification/new-content-title "New statement!"
         :discussion.notification/new-content-body "Your statement was added successfully!"
-        :discussion.carousel/heading "Statements of others"
+        :discussion.carousel/heading "Statements of Others"
         :discussion/discuss "Discuss"
         :discussion/discuss-tooltip "Discuss this agenda point with others"
 
@@ -453,7 +453,7 @@
         :error.403/body "You either have insufficient rights to view this site, or a typo happened."
 
         ;; Graph Texts
-        :graph/heading "Discussion overview"
+        :graph/heading "Discussion Overview"
         :graph.button/text "Show discussion graph"
 
         ;; Pricing Page
@@ -479,7 +479,7 @@
         :pricing.features.app-integration/content "Connect schnaq easily to your Slack, MS Teams, Confluence …"
         :pricing.features.analysis/heading "Automatic Analyses"
         :pricing.features.analysis/content "All discussions are automatically analyzed and presented to the participants."
-        :pricing.features.knowledge-db/heading "Knowledge database"
+        :pricing.features.knowledge-db/heading "Knowledge Database"
         :pricing.features.knowledge-db/content "Collect all your knowledge in one spot."
         :pricing.features.mindmap/heading "Interactive mindmap"
         :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
@@ -543,8 +543,8 @@
         :router/all-feedbacks "All feedbacks"
         :router/all-meetings "All schnaqs"
         :router/analytics "Analytics dashboard"
-        :router/continue-discussion "Continue discussion"
-        :router/create-brainstorm "Create brainstorming"
+        :router/continue-discussion "Continue Discussion"
+        :router/create-brainstorm "Create Brainstorming"
         :router/create-meeting "Create schnaq"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
