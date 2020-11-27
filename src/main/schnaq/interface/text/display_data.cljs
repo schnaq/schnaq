@@ -74,7 +74,7 @@
         :startpage.features.discussion/title "Lasting exchange of thoughts"
         :startpage.features.discussion/body "Exchanges of ideas are an integral part of working in a creative team.
         But it is hard to understand after the fact, what everyone contributed and what the intention behind the process was.
-        Through the structured capture of your coworkers statements, we can automatically generate graphical representations
+        Through the structured capture of your coworker's statements, we can automatically generate graphical representations
         which help you understand what was said and done."
         :startpage.features.graph/lead "Simple overview"
         :startpage.features.graph/title "Mindmaps!"
@@ -90,7 +90,7 @@
         :feature.meetings.schedule/lead "Targeted preparation"
         :feature.meetings.schedule/title "Prepare the agenda collaboratively"
         :feature.meetings.schedule/body "You can start by preparing a first version of a meeting agenda.
-        After you invite all meeting participants per mail or calendar invite, they can see the agenda, primers, one-pagers at one glance.
+        After you invite all meeting participants via mail or calendar invite, they can see the agenda, primers, one-pagers at one glance.
         They can also request to change, delete or add agenda points through schnaq and thus help you create a more productive meeting."
         :feature.meetings.discuss/lead "Discuss beforehand"
         :feature.meetings.discuss/title "Resolve controversial opinions before the meeting"
@@ -163,7 +163,7 @@
         Schnaq provides structured discussions, to make opinions and arguments available and understandable after the fact.
         You can use past discussions to experience and deeply understand the process that lead to decisions."
         :feature.knowledge/features-subheading "Schnaq for idea generation 💡"
-        :feature.knowledge.discussions/lead "Upgrade your decisionmaking"
+        :feature.knowledge.discussions/lead "Upgrade your decision making"
         :feature.knowledge.discussions/title "Start with a brainstorming"
         :feature.knowledge.discussions/body "Offline the best ideas often come naturally during smalltalk or on a coffee break –
         schnaq helps you simulate loose discussions, without the need for 15 emails or 20 chat messages.
@@ -173,7 +173,7 @@
         :feature.knowledge.database/lead "Reproducibility"
         :feature.knowledge.database/title "A central application for Ideas and Knowledge"
         :feature.knowledge.database/body "Keep discussions and ideas that originated in a brainstorm for future reference.
-        Often the need arises to understand past decisions and processes. Even after month it is possible to dig in and understand
+        Often the need arises to understand past decisions and processes. Even after months it is possible to dig in and understand
         them with schnaq. We provide a single store of ideas and knowledge."
 
         :feature.knowledge.change-of-facts/lead "Graphical processing"
@@ -183,7 +183,7 @@
         Controversial standpoints and topics are highlighted automatically. This way you immediately know what topics
         need more attention and discussion."
 
-        :feature.knowledge.tbd/wiki "Integration in knowledge-stores (i.e. Confluence)"
+        :feature.knowledge.tbd/wiki "Integration in knowledge-stores (e.g. Confluence)"
         :feature.knowledge.tbd/search "Comfortable search through all your ideas, discussions and knowledge"
         :feature.knowledge.tbd/evaluation "\"What if?\" Mark arguments as invalid and the system shows you whether your results are still valid"
         :feature.knowledge.tbd/live-changes "Monitor how the discussion changes in real-time"
@@ -252,7 +252,7 @@
         :meeting.admin/addresses-privacy "These addresses are only used to send the invitation emails and are deleted from our
         servers immediately afterwards."
         :meeting.admin/send-invites-button-text "Send invitations"
-        :meeting.admin/send-invites-heading "Invite pariticipants via email"
+        :meeting.admin/send-invites-heading "Invite participants via email"
         :meeting.admin/delete-statements-heading "Delete the following statements"
         :meeting.admin/statements-label "Statement-IDs, that will be deleted"
         :meeting.admin/statement-id-placeholder "Statement IDs separated by a space or newline."
@@ -280,14 +280,14 @@
         :privacy.personal-data/lead "Which data is saved?"
         :privacy.personal-data/title "Personal data"
         :privacy.personal-data/body
-        [:<> [:p "Per default we only save data that is needed to operate the service. There is no analysis of personal data, and anonymous data of your behaviour on our website is only collected, when you explicitly allow us to do so. "]
+        [:<> [:p "Per default we only save data that is needed to operate the service. There is no analysis of personal data, and anonymous data of your behavior on our website is only collected, when you explicitly allow us to do so. "]
          [:p "If you want to support us and allow the analysis, we collect the data with Matomo and save it on our german servers. Matomo is a free and self-hosted alternative to commercial options for website analytics . We do not exchange this data with third parties."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Check your settings"]]]
         :privacy.localstorage/lead "What data do I send to the server?"
         :privacy.localstorage/title "Data exchange"
         :privacy.localstorage/body
         [:<> [:p "schnaq has no need for accounts. This way no personal data about you is saved on the server. Most of the interactions work through links. When you click on a link a part of it (the so called hash) is stored in your browser (in the localStorage). As soon as you go to schnaq.com again, your browser sends this hash back and you gain access to your created schnaqs. Alternatively you can send the links to yourself via email. This way you have all the data in your own hands."]
-         [:p "In difference to website-cookies we use the localstorage, which only saves data that is needed for the application to function for you.
-         You can see the data in your localstorage by clicking the following button."]]
+         [:p "In difference to website-cookies we use the localStorage, which only saves data that is needed for the application to function for you.
+         You can see the data in your localStorage by clicking the following button."]]
         :privacy.localstorage/show-data "Show my data"
         :privacy.localstorage.notification/title "This data is saved by your browser"
         :privacy.localstorage.notification/body "Tip: \"Cryptic\" strings of characters are the codes that allow you to view schnaqs."
@@ -297,7 +297,7 @@
         :privacy.link-to-privacy/privacy "Privacy notice"
 
         ;; schnaqs not found
-        :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs where found."
+        :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
         :schnaqs.not-found/alert-body "Invite people to your first schnaq after you created it."
 
         ;; Admin Center
@@ -305,7 +305,7 @@
         :meetings/educate-on-link-text-subtitle "Everybody with possession of the link can participate."
         :meeting/educate-on-edit "Want to change the name or description?"
         :meeting/educate-on-admin "Go back to the admin center at any time!"
-        :meeting.admin-center/heading "Admin-center"
+        :meeting.admin-center/heading "Admin-Center"
         :meeting.admin-center/subheading "schnaq: \"%s\""
         :meeting.admin-center.edit.link/header "Entry to the admin-center"
         :meeting.admin-center.edit.link/primer "Administration takes work, let others help!"
@@ -396,7 +396,7 @@
         Leave us a comment and thereby help to improve this software. Thank you and dankeschön!"
         :feedbacks.modal/contact-name "Your Name"
         :feedbacks.modal/contact-mail "Email Address"
-        :feedbacks.modal/description "Your feedback"
+        :feedbacks.modal/description "Your Feedback"
         :feedbacks.modal/optional "Optional"
         :feedbacks.modal/screenshot "Add screenshot?"
         :feedbacks.modal/disclaimer "Your data is only saved on our german servers and not exchanged with any third party."
@@ -407,7 +407,7 @@
         [:<> "We would be extremely happy if you could participate in a small survey.
         The survey is hosted through Google Forms. Find their  "
          [:a {:href "https://policies.google.com/privacy"} "privacy policy here."]
-         " By participating you accept their privacy policy."]
+         " By participating, you accept their privacy policy."]
         :feedbacks.survey/checkbox "Yes, I want to participate in the survey."
         :feedbacks.survey/loading "The form is being loaded…"
         :feedbacks.survey/tab "Survey"
@@ -440,10 +440,10 @@
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
-        :errors/generic "An error occured"
+        :errors/generic "An error occurred"
 
         :error.generic/contact-us
-        [:span "Did you end up here after clicking something on schnaq.com? Give us a hint at " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
+        [:<> "Did you end up here after clicking something on schnaq.com? Give us a hint at " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
 
         :error.404/heading "This site does not exist 🙉"
         :error.404/body "The URL that you followed does not exist. Maybe there is a typo."
@@ -494,11 +494,11 @@
         :pricing.comparison.schnaq/async "Asynchronous communication"
         :pricing.comparison.schnaq/mindmap "Mindmapping"
         :pricing.comparison.schnaq/analysis "Result analysis"
-        :pricing.comparison.schnaq/flatrate " Flat per Monat"
+        :pricing.comparison.schnaq/flatrate " Flat per Month"
         :pricing.comparison.schnaq/person-20 "79 € for 20 users"
         :pricing.comparison.schnaq/person-50 "79 € for 50 users"
         :pricing.comparison.schnaq/person-100 "79 € for 100 users …"
-        :pricing.comparison/compared-to [:span "Compared" [:br] "to"]
+        :pricing.comparison/compared-to [:<> "Compared" [:br] "to"]
         :pricing.comparison.miro/description "Brainstorming software"
         :pricing.comparison.loomio/description "Cooperative decision making"
         :pricing.comparison.confluence/description "Knowledge database"
@@ -510,7 +510,7 @@
         :pricing.faq.terminate/heading "Can I cancel anytime?"
         :pricing.faq.terminate/body
         [:<> [:span.text-primary "Yes! "] "You are able to cancel" [:span.text-primary " every month"] ",
-     if you are paying monthly. If you are paying yearly you can cancel at the end of the subscription year."]
+     if you are paying monthly. If you are paying yearly, you can cancel at the end of the subscription year."]
         :pricing.faq.extra-price/heading "Do I need to pay extra for more seats?"
         :pricing.faq.extra-price/body
         [:<> [:span.text-primary "No, "] "you can add" [:span.text-primary " unlimited accounts "]
@@ -529,7 +529,7 @@
         :pricing.faq.privacy/body-1
         [:<> "Any Person who is added to your organization and to corresponding teams can see their data."
          "From a technical standpoint the data is securely saved on"
-         [:span.text-primary " german Servers in a GDPR comliant"] " manner. See the "]
+         [:span.text-primary " german Servers in a GDPR compliant"] " manner. See the "]
         :pricing.faq.privacy/body-2 "Privacy notice page"
         :pricing.faq.privacy/body-3 " for more information."
         :pricing/headline "Schnaq subscription"
