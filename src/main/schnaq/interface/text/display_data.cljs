@@ -410,7 +410,46 @@
          " By participating you accept their privacy policy."]
         :feedbacks.survey/checkbox "Yes, I want to participate in the survey."
         :feedbacks.survey/loading "The form is being loaded…"
-        :feedbacks.survey/tab "Survey"}
+        :feedbacks.survey/tab "Survey"
+
+        ;; login
+        :login/as "Hello, "
+        :login/set-name "Enter your name"
+
+        ;; analytics
+        :analytics/heading "Analytics"
+        :analytics/overall-meetings "Schnaqs created"
+        :analytics/user-numbers "Usernames created"
+        :analytics/average-agendas-title "Average number of agendas / schnaq"
+        :analytics/statements-num-title "# of statements"
+        :analytics/active-users-num-title "Active users"
+        :analytics/statement-lengths-title "Length of statements"
+        :analytics/argument-types-title "Argument types"
+        :analytics/fetch-data-button "Retrieving data…"
+
+        ;; User related
+        :user.button/set-name "Save name"
+        :user.button/set-name-placeholder "Your name"
+        :user.button/success-body "Name saved successfully"
+        :user.set-name/dialog-header "Hello 👋"
+        :user.set-name/dialog-lead "Good to see you!"
+        :user.set-name/dialog-body "To be able to participate in discussions, enter a name."
+        :user.set-name/dialog-button "How do you want to be called?"
+        :user.set-name.modal/header "Please, enter a name"
+        :user.set-name.modal/primer "The name will be visible to other participants of the schnaq."
+
+        ;; Errors
+        :errors/navigate-to-startpage "Back to the home page"
+        :errors/generic "An error occured"
+
+        :error.generic/contact-us
+        [:span "Did you end up here after clicking something on schnaq.com? Give us a hint at " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
+
+        :error.404/heading "This site does not exist 🙉"
+        :error.404/body "The URL that you followed does not exist. Maybe there is a typo."
+
+        :error.403/heading "You do not have the rights to view this site 🧙‍♂️"
+        :error.403/body "You either have insufficient rights to view this site, or a typo happened."}
    :de {;; Common
         :common/save "Speichern"
         :common/language "Sprache"
