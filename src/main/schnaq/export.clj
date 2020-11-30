@@ -14,7 +14,9 @@
                           :argument.type/support "+ "
                           "")
         spacing (if (zero? level) "\n\n" "\n")
-        next-line (str (string/join (repeat level "  ")) relation-symbol (:label node))]
+        ;; Indent multiline-text correctly. Additional level is to compensate for relation-symbol
+        indented-label (string/replace (:label node) #"\n" (str "\n" (string/join (repeat (inc level) "  "))))
+        next-line (str (string/join (repeat level "  ")) relation-symbol indented-label)]
     (str old-text spacing next-line)))
 
 (>defn- nodes-after
