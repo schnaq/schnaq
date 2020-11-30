@@ -49,14 +49,13 @@
 
 (defn txt-export
   "Request a txt-export of the discussion."
-  [share-hash edit-hash title]
+  [share-hash title]
   (let [discussion-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :id])
         request-fn #(ajax/ajax-request {:method :get
                                         :uri (str (:rest-backend config) "/export/txt")
                                         :format (ajax/transit-request-format)
                                         :params {:share-hash share-hash
-                                                 :discussion-id discussion-id
-                                                 :edit-hash edit-hash}
+                                                 :discussion-id discussion-id}
                                         :response-format (ajax/transit-response-format)
                                         :handler (partial create-txt-download-handler title)
                                         :error-handler show-error})]

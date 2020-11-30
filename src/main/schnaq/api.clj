@@ -576,10 +576,9 @@
 (defn- export-txt-data
   "Exports the discussion data as a string."
   [{:keys [params]}]
-  (let [{:keys [share-hash edit-hash discussion-id]} params
+  (let [{:keys [share-hash discussion-id]} params
         discussion-id (Long/parseLong discussion-id)]
-    (if (and (valid-credentials? share-hash edit-hash)
-             (valid-discussion-hash? share-hash discussion-id))
+    (if (valid-discussion-hash? share-hash discussion-id)
       (do (log/info "User is generating a txt export for discussion" discussion-id)
           (ok {:string-representation (export/generate-text-export discussion-id share-hash)}))
       (deny-access invalid-rights-message))))
