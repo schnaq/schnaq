@@ -428,6 +428,11 @@
         :analytics/argument-types-title "Argument types"
         :analytics/fetch-data-button "Retrieving data…"
 
+        ;; Testimonials
+        :testimonials/heading "Testimonials"
+        :testimonials.doctronic/quote "We observe the development of schnaq with great interest for our own use and for the use of our customers."
+        :testimonials.doctronic/author "Ingo Küper, Managing Director doctronic GmbH & Co. KG"
+
         ;; User related
         :user.button/set-name "Save name"
         :user.button/set-name-placeholder "Your name"
@@ -800,7 +805,7 @@
         :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
 
         ;; Admin Center
-        :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren KollegInnen."
+        :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren Kolleg:innen."
         :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
         :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
         :meeting/educate-on-admin "Später jederzeit zum Admin-Center zurückkehren!"
@@ -930,6 +935,11 @@
         :analytics/statement-lengths-title "Beitragslängen"
         :analytics/argument-types-title "Argumenttypen"
         :analytics/fetch-data-button "Hole Daten"
+
+        ;; Testimonials
+        :testimonials/heading "Stimmen aus der Wirtschaft"
+        :testimonials.doctronic/quote "Wir beobachten die Entwicklung von schnaq mit großem Interesse für den eigenen Einsatz und für den Einsatz bei unseren Kunden."
+        :testimonials.doctronic/author "Ingo Küper, Geschäftsführer doctronic GmbH & Co. KG"
 
         ;; User related
         :user.button/set-name "Name speichern"
@@ -1100,6 +1110,7 @@
      :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
      :startpage.value-cards.meetings/image "/imgs/stock/meeting.jpeg"
      :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
+     :testimonials/doctronic "/imgs/testimonials/doctronic.png"
      :pricing.others/miro "imgs/startpage/pricing/miro.png"
      :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
      :pricing.others/confluence "imgs/startpage/pricing/confluence.jpeg"
