@@ -9,7 +9,8 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.modals.modal :as modal]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.startpage.features :as startpage-features]))
+            [schnaq.interface.views.startpage.features :as startpage-features]
+            [schnaq.interface.views.startpage.testimonials :as testimonials]))
 
 (defn- header-animation
   "Display header animation video."
@@ -239,7 +240,8 @@
        [request-demo-section]
        [usage-of-schnaq-heading]
        [startpage-features/feature-rows]
-       [how-to-section]]
+       [how-to-section]
+       [testimonials/view]]
       [early-adopters]
       [:section.container.py-5
        [value-prop-cards]]
