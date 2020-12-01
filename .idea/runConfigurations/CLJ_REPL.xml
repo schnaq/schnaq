@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CLJ REPL" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
-    <module name="meetly" />
+    <module name="schnaq" />
     <setting name="replType" value="NREPL" />
     <setting name="execution" value="DEPS" />
     <setting name="jvmArgs" value="-Dghostwheel.enabled=true" />
