@@ -429,7 +429,7 @@
         :analytics/fetch-data-button "Retrieving data…"
 
         ;; Testimonials
-        :testimonials/heading "Voices from the Business World"
+        :testimonials/heading "Testimonials"
         :testimonials.doctronic/quote "We observe the development of schnaq with great interest for our own use and for the use of our customers."
         :testimonials.doctronic/author "Ingo Küper, Managing Director doctronic GmbH & Co. KG"
 
