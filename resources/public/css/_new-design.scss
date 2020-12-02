@@ -1,0 +1,50 @@
+@import 'variables';
+
+.topic-view-rounded {
+  background: $white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  padding: 0;
+
+  @include media-breakpoint-down(sm) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
+.line-divider {
+  background: $gray-200;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 0.01rem;
+  text-align: center;
+}
+
+.discussion-light-background {
+  background: $white;
+  color: $gray-900;
+  padding: 1rem;
+}
+
+.discussion-text-input-bubble {
+  background: $gray-300;
+  border: 0;
+  border-bottom: 2px solid $white;
+  border-radius: 2rem;
+  color: $gray-900;
+  padding: 0.5rem 2rem;
+  resize: none;
+
+  &:focus {
+    background: $gray-200;
+    border: 0;
+    border-bottom: 2px solid $white;
+    box-shadow: none;
+    color: $gray-900;
+  }
+
+  &::placeholder {
+    color: $gray-600;
+  }
+}
+
