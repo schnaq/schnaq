@@ -26,24 +26,43 @@
   padding: 1rem;
 }
 
-.discussion-text-input-bubble {
-  background: $gray-300;
+.discussion-input-container {
+  background: $gray-200;
   border: 0;
   border-bottom: 2px solid $white;
   border-radius: 2rem;
-  color: $gray-900;
   padding: 0.5rem 2rem;
+}
+
+.primary-icon-button {
+  background: transparent;
+  border: 0;
+  color: $primary;
+  outline: none;
+
+  &:hover {
+    color: $primary-selected;
+  }
+
+  &:focus {
+    border: 0;
+    outline: none;
+  }
+}
+
+.discussion-text-input-area {
+  background: transparent;
+  border: 0;
   resize: none;
 
   &:focus {
-    background: $gray-200;
-    border: 0;
-    border-bottom: 2px solid $white;
+    background: transparent;
     box-shadow: none;
     color: $gray-900;
   }
 
   &::placeholder {
+    background: transparent;
     color: $gray-600;
   }
 }

@@ -1,16 +1,15 @@
 (ns schnaq.interface.views.discussion.new-view
-  (:require [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.text.display-data :refer [labels img-path #_fa]]
+            [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.discussion.view-elements :as view]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
-            [schnaq.interface.views.navbar :as navbar]
-            ))
+            [schnaq.interface.views.navbar :as navbar]))
 
 
 (defn- meeting-header
@@ -61,16 +60,29 @@
 (defn- input-starting-statement-form
   "A form, which allows the input of a starting-statement."
   []
-  [:form
-   {:on-submit (fn [e] (js-wrap/prevent-default e)
-                 (rf/dispatch [:discussion.add.statement/starting
-                               (oget e [:target :elements])]))}
-   [:input.form-control.discussion-text-input-bubble
-    {:name "statement-text" :wrap "soft" :rows 1
-     :auto-complete "off"
-     :required true
-     :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]])
-
+  (let [input-id "textinput-statement"]
+    [:form
+     {:on-submit (fn [e] (js-wrap/prevent-default e)
+                   (rf/dispatch [:discussion.add.statement/starting
+                                 (oget e [:target :elements])]))}
+     [:div.discussion-input-container.w-100
+      [:div.d-flex.flex-row
+       [:textarea.form-control.discussion-text-input-area.w-100
+        {:id input-id
+         :name "statement-text" :wrap "soft" :rows 1
+         :auto-complete "off"
+         :onInput (fn [_element]
+                    ;; first reset input then set height +1px in order to prevent scrolling
+                    (let [input (.getElementById js/document input-id)]
+                      (oset! input [:style :height] "0.5rem")
+                      (oset! input [:style :height] (str (+ 1 (oget input [:scrollHeight])) "px"))))
+         :required true
+         :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+       ;; submit icon button
+       [:button.primary-icon-button
+        {:type "submit"
+         :title (labels :discussion/create-argument-action)}
+        [:i {:class (str "m-auto fas " (fa :plane))}]]]]]))
 
 (defn- topic-bubble [meeting]
   (let [agenda @(rf/subscribe [:chosen-agenda])

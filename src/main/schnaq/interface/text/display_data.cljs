@@ -1167,6 +1167,7 @@
      :language "fa-language"
      :laptop "fa-laptop-code"
      :newspaper "fa-newspaper"
+     :plane "fa-paper-plane"
      :shield "fa-shield-alt"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
