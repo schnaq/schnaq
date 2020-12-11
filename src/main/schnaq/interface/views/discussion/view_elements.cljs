@@ -162,15 +162,13 @@
                   (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
                     (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
       :title (labels :discussion.badges/delete-statement)}
-     [:i {:class (str "m-auto fas " (fa :trash))}]
-     " "
-     (labels :discussion.badges/delete-statement)]))
+     [:i {:class (str "m-auto fas " (fa :trash))}]]))
 
-(defn- extra-discussion-info-badges
+(defn extra-discussion-info-badges
   "Badges that display additional discussion info."
   [statement edit-hash]
   (let [popover-id (str "debater-popover-" (:db/id statement))]
-    [:p.mb-0.mt-md-3
+    [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       [:i {:class (str "m-auto fas " (fa :comment))}] " "
       (-> statement :meta/sub-discussion-info :sub-statements)]
@@ -205,8 +203,9 @@
        ;; content
        [:div.col-10.statement-content
         [:p.my-0 content]
-        [extra-discussion-info-badges statement edit-hash]]
-       [:div.col-2
+        [:div.mt-md-3
+         [extra-discussion-info-badges statement edit-hash]]]
+       [:div.col-2.pt-3
         ;; avatar
         [:span
          [common/avatar (-> statement :statement/author :author/nickname) 50]]]]]

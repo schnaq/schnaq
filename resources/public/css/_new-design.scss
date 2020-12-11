@@ -2,13 +2,23 @@
 
 .topic-view-rounded {
   background: $white;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   overflow: hidden;
   padding: 0;
 
   @include media-breakpoint-down(sm) {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+}
+
+.card-view-rounded {
+  border: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+
+  &:hover {
+    background: $white-shade;
   }
 }
 

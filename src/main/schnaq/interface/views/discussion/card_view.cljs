@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.discussion.new-view
+(ns schnaq.interface.views.discussion.card-view
   (:require [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
@@ -7,7 +7,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.views.brainstorm.tools :as btools]
-            [schnaq.interface.views.discussion.view-elements :as view]
+            [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar :as navbar]))
 
@@ -15,7 +15,7 @@
 (defn- meeting-header
   "Overview header for a meeting with a name input"
   []
-  [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header
+  [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header.shadow-straight-light
    ;; schnaq logo
    [:a.navbar-brand.mr-auto {:href (reitfe/href :routes/startpage)}
     [:img.d-inline-block.align-middle.mr-2
@@ -34,13 +34,12 @@
                  [:navigation/navigate :routes/graph-view
                   {:id (-> agenda :agenda/discussion :db/id)
                    :share-hash share-hash}])}])
-;;; text input
 
 (defn- input-starting-statement-form
   "A form, which allows the input of a starting-statement."
   []
   (let [input-id "textinput-statement"]
-    [:form
+    [:form.my-2
      {:on-submit (fn [e] (js-wrap/prevent-default e)
                    (rf/dispatch [:discussion.add.statement/starting
                                  (oget e [:target :elements])]))}
@@ -68,33 +67,27 @@
         {:meeting/keys [share-hash]} meeting
         {:meeting/keys [title]} meeting
         admin-access-map @(rf/subscribe [:meetings/load-admin-access])
-        edit-hash (get admin-access-map share-hash)
-        ]
+        edit-hash (get admin-access-map share-hash)]
     (common/set-website-title! (:agenda/title agenda))
-    [:div.topic-view-rounded
+    [:div.topic-view-rounded.shadow-straight-light.mt-4
      [:div.discussion-light-background
       [:div.row
        ;; graph
-       [:div.col-3.col-lg-1.graph-icon
+       [:div.col-2.graph-icon
         [graph-buton agenda share-hash]]
        ;; title
-       [:div.col-6.col-lg-10
-        [:h2.clickable-no-hover.align-self-center.my-4
-         {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
-                                   {:share-hash share-hash
-                                    :id (:db/id (:agenda/discussion agenda))}])}
+       [:div.col-8
+        [:h2.align-self-center.my-4
          (:agenda/title agenda)]
         [markdown-parser/markdown-to-html (:agenda/description agenda)]
         [:div.line-divider.my-4]
-        [input-starting-statement-form]
-        ]
+        [input-starting-statement-form]]
        ;; information
-       [:div.col-3.col-lg-1.p-0
-        (when (and edit-hash (btools/is-brainstorm? meeting))
-          [admin-buttons/admin-center share-hash edit-hash])
-        [admin-buttons/txt-export share-hash title]
-        ]]]]))
-
+       [:div.col-2.p-0
+        [:div.float-right
+         (when (and edit-hash (btools/is-brainstorm? meeting))
+           [admin-buttons/admin-center share-hash edit-hash])
+         [admin-buttons/txt-export share-hash title]]]]]]))
 
 (defn- topic-view [current-meeting]
   [:<>
@@ -104,7 +97,7 @@
       (rf/dispatch [:navigation/navigate :routes.meeting/show
                     {:share-hash (:meeting/share-hash current-meeting)}])
       (rf/dispatch [:meeting/select-current current-meeting]))]
-   [view/conclusions-list @(rf/subscribe [:discussion.conclusions/starting])
+   [cards/conclusion-cards-list @(rf/subscribe [:discussion.conclusions/starting])
     (:meeting/share-hash current-meeting)]])
 
 (defn- discussion-start-view

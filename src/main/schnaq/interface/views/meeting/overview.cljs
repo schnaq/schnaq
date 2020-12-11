@@ -40,7 +40,7 @@
    ;; description / body
    [:div.meeting-entry-desc
     [:hr]
-    [:small.text-right.float-right.pb-3
+    [:small.text-right.float-right.py-3
      (when-let [nickname (-> meeting :meeting/author :author/nickname)]
        (common/avatar nickname 50))]
     [markdown-parser/markdown-to-html (:meeting/description meeting)]]])

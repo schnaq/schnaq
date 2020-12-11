@@ -32,6 +32,10 @@ h6 {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 4px 0 rgba(0, 0, 0, 0.19);
 }
 
+.shadow-straight-light {
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.05), 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
 .inner-shadow-straight {
   box-shadow: inset 1px 2px 0 rgba(0, 0, 0, 0.2);
 }
