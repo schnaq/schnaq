@@ -41,7 +41,7 @@
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         admin-access-map @(rf/subscribe [:meetings/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
-    [:div.card-columns.py-5
+    [:div.card-columns.my-3.my-md-5
      (for [conclusion conclusions]
        [:div {:key (:db/id conclusion)
               :on-click (fn [_e]
