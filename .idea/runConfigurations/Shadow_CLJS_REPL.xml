@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Shadow-CLJS REPL" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
     <module name="meetly" />
@@ -7,5 +8,7 @@
     <setting name="configType" value="SPECIFY" />
     <setting name="fixLineNumbers" value="false" />
     <method v="2" />
+    <setting name="displayName" value="Shadow-CLJS REPL" />
   </configuration>
 </component>
+
