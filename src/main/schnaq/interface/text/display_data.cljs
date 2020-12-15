@@ -32,11 +32,6 @@
         :startpage.value-cards.discussion/description "Discussing topics with multiple people over the Internet is hard. Its easy to
         feel lost. With schnaq you can structure your discussions and keep an eye on arguments and controversies with a single glance."
         :startpage.value-cards.discussion/alt-text "A symbolic representation of a speech-bubble"
-        :startpage.value-cards.meetings/title "Optimize Meetings"
-        :startpage.value-cards.meetings/description "Modern work got more distributed and we are finding ourselves jumping
-        from one (digital) meeting to the next. Its hard to find time for proper preparation and debriefings.
-        This is where schnaq helps you save time and streamline your meetings."
-        :startpage.value-cards.meetings/alt-text "A group of people having a meeting."
         :startpage.value-cards.knowledge/title "Brainstorming and Idea Generation"
         :startpage.value-cards.knowledge/description "Use schnaq to let your team discuss and generate new ideas.
         An automatic Mindmap is generated from all statements. Furthermore, the statements are analyzed and summarized
@@ -81,42 +76,7 @@
         :startpage.features.graph/body "All your coworkers statements are automatically sorted into a mindmap.
         See all connections and statements neatly organized at one glance."
 
-        ;; Meeting Feature Page
-        :feature.meetings/lead "Structured Meetings with schnaq"
-        :feature.meetings/title "Activate coworkers, save time!"
-        :feature.meetings/body "You can use schnaq to effectively prepare meetings, support all participants
-        during the meeting and also for debriefing after the fact. This way you can activate all participants,
-        save work time and produce results more efficiently."
-        :feature.meetings.schedule/lead "Targeted preparation"
-        :feature.meetings.schedule/title "Prepare the agenda collaboratively"
-        :feature.meetings.schedule/body "You can start by preparing a first version of a meeting agenda.
-        After you invite all meeting participants via mail or calendar invite, they can see the agenda, primers, one-pagers at one glance.
-        They can also request to change, delete or add agenda points through schnaq and thus help you create a more productive meeting."
-        :feature.meetings.discuss/lead "Discuss beforehand"
-        :feature.meetings.discuss/title "Resolve controversial opinions before the meeting"
-        :feature.meetings.discuss/body "Unclear points can be discussed beforehand to gain clarity.
-        You can reach the discussion directly through the agenda. Use the discussion to clarify an agenda or to
-        discuss things that do not belong in the meeting directly. The discussion is automatically structured and
-        distributed. The participants do not need to be online at the same time. This way all coworkers are included.
-        The result are laser-focused meetings."
-        :feature.meetings.admin-center/lead "No accounts needed"
-        :feature.meetings.admin-center/title "Use schnaq without yet another account"
-        :feature.meetings.admin-center/body "You can use schnaq solely through the secure links we generate.
-        No need for extra accounts, all you need is a web-browser.
-        Access schnaq from anywhere. There is also a special admin-link which lets you administer the meeting
-        without any fuss."
-        :feature.meetings/heading "Save work time by preparing your meetings with schnaq"
-        :feature.meetings/features-subheading "Use schnaq for meetings"
-        :feature.meetings/tbd-subheading "More to come…"
-        :feature.meetings/tbd-lead "Become a pioneer and be the first to experience the upcoming features:"
-        :feature.meetings.tbd/teams "Integration into MS Teams and Slack"
-        :feature.meetings.tbd/outlook "Outlook export"
-        :feature.meetings.tbd/protocols "Collaborative protocol generation during meetings"
-        :feature.meetings.tbd/prereads "One pagers and pre-reads for agenda points, including check-ins"
-        :feature.meetings.tbd/assignments "Assignment of duty per agenda"
-        :feature.meetings.tbd/timeboxing "Timeboxing during the meeting"
-        :feature.meetings.tbd/task-tracking "Transfer results into a task-tracker"
-        :feature.meetings/feedback "Do you have more wishes or feature ideas? Contact us through the feedback form on the right side."
+        :features/feedback "Do you have more wishes or feature ideas? Contact us through the feedback form on the right side."
 
         ;; calendar invitation
         :calendar-invitation/title "Schedule meeting"
@@ -544,7 +504,6 @@
 
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
-        :router.features/meetings "Meeting features"
         :router/all-feedbacks "All feedbacks"
         :router/all-meetings "All schnaqs"
         :router/analytics "Analytics dashboard"
@@ -572,7 +531,6 @@
         :nav/startpage "Home"
         :nav/schnaqs "Schnaqs"
         :nav.schnaqs/show-all "Alle schnaqs"
-        :nav.schnaqs/create-meeting "Meeting vorbereiten"
         :nav.schnaqs/create-brainstorm "Brainstorm anlegen"
         :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
         :nav-meeting-agenda "Agenda erzeugen"
@@ -590,9 +548,6 @@
         :startpage.value-cards.discussion/title "Diskussionen führen"
         :startpage.value-cards.discussion/description "Es ist nicht einfach über das Internet miteinander zu Diskutieren, ohne sich schnell verloren zu fühlen. Mit schnaq können Sie strukturierte Diskussionen führen, und dabei leicht den Überblick über die Argumente und kontroverse Themen behalten."
         :startpage.value-cards.discussion/alt-text "Ein Symbolbild einer Sprechblase"
-        :startpage.value-cards.meetings/title "Meetings optimieren"
-        :startpage.value-cards.meetings/description "Vor allem seitdem die Arbeitswelt verteilter geworden ist, hetzt man von einem (digitalen) Meeting zum anderen. Damit die Vor- und Nachbereitung nicht mehr zur Nebensache wird, gibt es schnaq. Sparen Sie Arbeitszeit und optimieren Sie die Ergebnisse Ihrer Meetings."
-        :startpage.value-cards.meetings/alt-text "Menschen in einem Meeting, eine Frau redet gerade"
         :startpage.value-cards.knowledge/title "Brainstorming und Wissensgenerierung"
         :startpage.value-cards.knowledge/description "Nutzen Sie schnaq, um Ihr Team nachdenken und diskutieren zu lassen. Automatisch wird eine MindMap der Beiträge erstellt, die dann analysiert werden kann und das Ergebnis der Session darstellt. Perfekt für Brainstorming-Sitzungen!"
         :startpage.value-cards.knowledge/alt-text "Etliche Klebezettel auf einer Wand"
@@ -628,31 +583,7 @@
         :startpage.features.graph/title "Mindmaps!"
         :startpage.features.graph/body "Alle Beiträge der Teilnehmer:innen werden automatisch in einer Mindmap angeordnet und können dann nachvollzogen werden. Sehen Sie alle Zusammenhänge und beobachten Sie die gesamte Ideen- und Entscheidungsfindung in einer interaktiven Mindmap."
 
-        ;; Meeting Feature Page
-        :feature.meetings/lead "Organisierte Meetings mit schnaq"
-        :feature.meetings/title "Mitarbeiter:innen aktivieren, Zeit sparen"
-        :feature.meetings/body "Schnaq lässt sich nutzen, um Meetings effizient vorzubereiten, alle Teilnehmer:innen während dem Meeting zu unterstützen und erlaubt eine Nachbereitung des Meetings. Damit werden alle Teilnehmer:innen aktiviert, Arbeitszeit eingespart und Ergebnisse effizienter erzielt."
-        :feature.meetings.schedule/lead "Gezielte Vorbereitung"
-        :feature.meetings.schedule/title "Agenda kollaborativ vorbereiten"
-        :feature.meetings.schedule/body "Bereiten Sie eine erste Version der Agenda vor. Die Agenda und angehängte vorbereitende Materialien werden per E-Mail und Kalendereinladung an alle Teilnehmer:innen verteilt. Durch schnaq können alle Kolleg:innen Änderungsvorschläge und Ergänzungen für einzelne Agendapunkte vorschlagen, die von der Meetingersteller:in angenommen werden können."
-        :feature.meetings.discuss/lead "Strittige Punkte klären"
-        :feature.meetings.discuss/title "Diskutieren Sie unklare Punkte im Vorhinein"
-        :feature.meetings.discuss/body "Bei Punkten, die nicht klar umrissen sind, bietet sich eine Online-Diskussion an. Diese kann man direkt über die vorgeschlagenen Agendapunkte erreichen und ad-hoc erledigen. Die Diskussion kann der Ausrichtung einer Agenda dienen, aber auch der Klärung von offenen Punkten, bei denen nicht klar ist, wie die Agenda gestaltet werden sollte. Dies geschieht strukturiert und asynchron, so dass alle Mitarbeiter:innen teilnehmen können. Das Ergebnis sind fokussierte Meetings."
-        :feature.meetings.admin-center/lead "Accounts nicht notwendig"
-        :feature.meetings.admin-center/title "Verwalten Sie schnaq ohne zusätzliche Accounts"
-        :feature.meetings.admin-center/body "Schnaq lässt sich bequem durch gesicherte Links verwalten. Sie benötigen keine weiteren Accounts, sondern lediglich einen Browser. So können Sie von überall auf schnaq und Ihre Meetings zugreifen. Im Admin-Center können Sie Ihr Meeting administrieren und alle wichtigen Aktionen von überall ausführen."
-        :feature.meetings/heading "Sparen Sie Arbeitszeit durch strukturierte Meetings"
-        :feature.meetings/features-subheading "Schnaq für Meetings einsetzen"
-        :feature.meetings/tbd-subheading "More to come..."
-        :feature.meetings/tbd-lead "Werden Sie Early Adopter:in und genießen Sie folgende Features als erste, sobald diese verfügbar sind:"
-        :feature.meetings.tbd/teams "Integration mit MS Teams und Slack"
-        :feature.meetings.tbd/outlook "Outlook-Export"
-        :feature.meetings.tbd/protocols "Kollaborative Protokollführung im Meeting"
-        :feature.meetings.tbd/prereads "Dateianhänge / Prereads während der Agendaerstellung"
-        :feature.meetings.tbd/assignments "Personenzuteilung für einzelne Agendapunkte"
-        :feature.meetings.tbd/timeboxing "Timeboxing während des Meetings"
-        :feature.meetings.tbd/task-tracking "Übertragung der Ergebnisse in Task-Tracker"
-        :feature.meetings/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
+        :features/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
 
         ;; calendar invitation
         :calendar-invitation/title "Termin festlegen und herunterladen"
@@ -1054,13 +985,11 @@
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
-        :router.features/meetings "Meeting Features"
         :router/all-feedbacks "Alle Feedbacks"
         :router/all-meetings "Alle schnaqs"
         :router/analytics "Analyse-Dashboard"
         :router/continue-discussion "Führe Besprechung fort"
         :router/create-brainstorm "Brainstorm anlegen"
-        :router/create-meeting "Schnaq anlegen"
         :router/graph-view "Graph View"
         :router/how-to "Wie benutze ich schnaq?"
         :router/invalid-link "Fehlerseite"
@@ -1108,7 +1037,6 @@
      :startpage.features/sample-discussion "/imgs/startpage/discussion_elearning.png"
      :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
      :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
-     :startpage.value-cards.meetings/image "/imgs/stock/meeting.jpeg"
      :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
      :testimonials/doctronic "/imgs/testimonials/doctronic.png"
      :pricing.others/miro "imgs/startpage/pricing/miro.png"

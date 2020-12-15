@@ -62,10 +62,6 @@
   (create-dropdown-item (reitfe/href :routes.brainstorm/create)
                         :nav.schnaqs/create-brainstorm))
 
-(defn- create-meeting-link []
-  (create-dropdown-item (reitfe/href :routes.meeting/create)
-                        :nav.schnaqs/create-meeting))
-
 (defn- last-added-schnaq-link [share-hash edit-hash]
   (when-not (nil? edit-hash)
     [:div.dropdown-item.clickable
@@ -123,7 +119,6 @@
           (labels :nav/schnaqs)]
          [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
           [create-brainstorm-link]
-          [create-meeting-link]
           [:div.dropdown-divider]
           [last-added-schnaq-link share-hash edit-hash]
           [my-schnaqs-link visited-hashes]
