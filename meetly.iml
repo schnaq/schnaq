@@ -36,7 +36,7 @@
     <orderEntry type="library" name="Deps: org.graalvm.js/js:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/ring-swagger-ui:3.25.3" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-databind:2.11.3" level="project" />
-    <orderEntry type="library" name="Deps: expound:0.8.6" level="project" />
+    <orderEntry type="library" name="Deps: expound:0.8.7" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/spec.alpha:0.2.187" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.cli:1.0.194" level="project" />
     <orderEntry type="library" name="Deps: mvxcvi/puget:1.1.2" level="project" />
