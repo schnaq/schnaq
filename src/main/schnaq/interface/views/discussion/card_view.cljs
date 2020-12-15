@@ -46,86 +46,81 @@
 
 (defn- input-starting-statement-form
   "A form, which allows the input of a starting-statement."
-  []
-  (let [input-id "textinput-statement"]
-    [:form.my-2
-     {:on-submit (fn [e] (js-wrap/prevent-default e)
-                   (rf/dispatch [:discussion.add.statement/starting
-                                 (oget e [:target :elements])]))}
-     [:div.discussion-input-container.w-100
-      [:div.d-flex.flex-row
-       [:textarea.form-control.discussion-text-input-area.w-100
-        {:id input-id
-         :name "statement-text" :wrap "soft" :rows 1
-         :auto-complete "off"
-         :onInput (fn [_element]
-                    ;; first reset input then set height +1px in order to prevent scrolling
-                    (let [input (gdom/getElement input-id)]
-                      (toolbelt/height-to-scrollheight! input)))
-         :required true
-         :data-dynamic-height true
-         :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-       ;; submit icon button
-       [:button.primary-icon-button
-        {:type "submit"
-         :title (labels :discussion/create-argument-action)}
-        [:i {:class (str "m-auto fas " (fa :plane))}]]]]]))
+  [textarea-id]
+  [:form.my-2
+   {:on-submit (fn [e] (js-wrap/prevent-default e)
+                 (rf/dispatch [:discussion.add.statement/starting
+                               (oget e [:target :elements])]))}
+   [:div.discussion-input-container.w-100
+    [:div.d-flex.flex-row
+     [:textarea.form-control.discussion-text-input-area.w-100
+      {:id textarea-id
+       :name "statement-text" :wrap "soft" :rows 1
+       :auto-complete "off"
+       :onInput (fn [_event]
+                  ;; first reset input then set height +1px in order to prevent scrolling
+                  (let [input (gdom/getElement textarea-id)]
+                    (toolbelt/height-to-scrollheight! input)))
+       :required true
+       :data-dynamic-height true
+       :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+     ;; submit icon button
+     [:button.primary-icon-button
+      {:type "submit"
+       :title (labels :discussion/create-argument-action)}
+      [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
-  [agenda]
+  [agenda input-element-id]
   [:<>
    [:h2.align-self-center.my-4
     (:agenda/title agenda)]
    [markdown-parser/markdown-to-html (:agenda/description agenda)]
    [:div.line-divider.my-4]
-   [input-starting-statement-form]])
+   [input-starting-statement-form input-element-id]])
 
 (defn- topic-bubble-mobile
-  [meeting title agenda share-hash edit-hash]
-  [:<>
-   [:div.row
-    ;; graph
-    [:div.col-6.graph-icon
-     [graph-button agenda share-hash]]
-    ;; settings
-    [:div.col-6.p-0
-     [settings-element meeting title share-hash edit-hash]]]
-   ;; title
-   [title-and-input-element agenda]])
-
-(defn- topic-bubble-desktop
-  [meeting title agenda share-hash edit-hash]
-  [:div.row
-   ;; graph
-   [:div.col-2.graph-icon
-    [graph-button agenda share-hash]]
-   ;; title
-   [:div.col-8
-    [title-and-input-element agenda]]
-   ;; settings
-   [:div.col-2.p-0
-    [settings-element meeting title share-hash edit-hash]]])
-
-(defn- topic-bubble [{:meeting/keys [share-hash title] :as meeting}]
+  [{:meeting/keys [share-hash title] :as meeting}]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         admin-access-map @(rf/subscribe [:meetings/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
+    [:<>
+     [:div.row
+      ;; graph
+      [:div.col-6.graph-icon
+       [graph-button agenda share-hash]]
+      ;; settings
+      [:div.col-6.p-0
+       [settings-element meeting title share-hash edit-hash]]]
+     ;; title
+     [title-and-input-element agenda "input-statement-id-mobile"]]))
+
+(defn- topic-bubble-desktop
+  [{:meeting/keys [share-hash title] :as meeting}]
+  (let [agenda @(rf/subscribe [:chosen-agenda])
+        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+        edit-hash (get admin-access-map share-hash)]
+    [:div.row
+     ;; graph
+     [:div.col-2.graph-icon
+      [graph-button agenda share-hash]]
+     ;; title
+     [:div.col-8
+      [title-and-input-element agenda "input-statement-id-desktop"]]
+     ;; settings
+     [:div.col-2.p-0
+      [settings-element meeting title share-hash edit-hash]]]))
+
+(defn- topic-bubble [content]
+  (let [agenda @(rf/subscribe [:chosen-agenda])]
     (common/set-website-title! (:agenda/title agenda))
     [:div.topic-view-rounded.shadow-straight-light.mt-md-4
-     [:div.discussion-light-background
-      [toolbelt/desktop-mobile-switch
-       [topic-bubble-desktop meeting title agenda share-hash edit-hash]
-       [topic-bubble-mobile meeting title agenda share-hash edit-hash]]]]))
+     [:div.discussion-light-background content]]))
 
-(defn- topic-view [current-meeting]
+(defn- topic-view [current-meeting topic-content]
   [:<>
-   [topic-bubble
-    current-meeting
-    (fn []
-      (rf/dispatch [:navigation/navigate :routes.meeting/show
-                    {:share-hash (:meeting/share-hash current-meeting)}])
-      (rf/dispatch [:meeting/select-current current-meeting]))]
+   [topic-bubble topic-content]
    [cards/conclusion-cards-list @(rf/subscribe [:discussion.conclusions/starting])
     (:meeting/share-hash current-meeting)]])
 
@@ -137,16 +132,19 @@
 
 (defn- discussion-start-view-desktop
   [current-meeting]
-  [:container-fluid
+  [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-1.py-4
      [history-view]]
     [:div.col-10.py-4.px-0
-     [topic-view current-meeting]]]])
+     [topic-view current-meeting
+      [topic-bubble-desktop current-meeting]]]]])
 
 (defn- discussion-start-view-mobile
   [current-meeting]
-  [:div.container-fluid [topic-view current-meeting]])
+  [:<>
+   [topic-view current-meeting
+    [topic-bubble-mobile current-meeting]]])
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
@@ -154,7 +152,7 @@
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
     [:<>
      [card-meeting-header current-meeting]
-     [:div.container-fluid
+     [:div.container-fluid.px-0
       [toolbelt/desktop-mobile-switch
        [discussion-start-view-desktop current-meeting]
        [discussion-start-view-mobile current-meeting]]]]))
