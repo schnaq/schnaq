@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.card-view
-  (:require [oops.core :refer [oget oset!]]
+  (:require [goog.dom :as gdom]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.views.common :as common]
@@ -11,7 +12,6 @@
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar :as navbar]))
-
 
 (defn- card-meeting-header
   "Overview header for a meeting with a name input"
@@ -60,10 +60,10 @@
          :auto-complete "off"
          :onInput (fn [_element]
                     ;; first reset input then set height +1px in order to prevent scrolling
-                    (let [input (.getElementById js/document input-id)]
-                      (oset! input [:style :height] "0.5rem")
-                      (oset! input [:style :height] (str (+ 1 (oget input [:scrollHeight])) "px"))))
+                    (let [input (gdom/getElement input-id)]
+                      (toolbelt/height-to-scrollheight! input)))
          :required true
+         :data-dynamic-height true
          :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
        ;; submit icon button
        [:button.primary-icon-button
