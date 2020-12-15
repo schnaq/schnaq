@@ -1,0 +1,100 @@
+@import 'variables';
+
+.topic-view-rounded {
+  background: $white;
+  border-radius: 1rem;
+  overflow: hidden;
+  padding: 0;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
+}
+
+.card-view-rounded {
+  border: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
+
+  &:hover {
+    background: $white-shade;
+  }
+}
+
+.card-history {
+  border: 0;
+  border-radius: 1rem;
+  min-height: 5rem;
+  min-width: 5rem;
+  overflow: hidden;
+  padding: 0.5rem;
+
+  &:hover {
+    background: $white-shade;
+  }
+}
+
+.card-history-home {
+  background: $white;
+  color: $gray-900;
+}
+
+.line-divider {
+  background: $gray-200;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 0.01rem;
+  text-align: center;
+}
+
+.discussion-light-background {
+  background: $white;
+  color: $gray-900;
+  padding: 1rem;
+}
+
+.discussion-input-container {
+  background: $gray-200;
+  border: 0;
+  border-bottom: 2px solid $white;
+  border-radius: 2rem;
+  padding: 0.5rem 2rem;
+}
+
+.primary-icon-button {
+  background: transparent;
+  border: 0;
+  color: $primary;
+  outline: none;
+
+  &:hover {
+    color: $primary-selected;
+  }
+
+  &:focus {
+    border: 0;
+    outline: none;
+  }
+}
+
+.discussion-text-input-area {
+  background: transparent;
+  border: 0;
+  resize: none;
+
+  &:focus {
+    background: transparent;
+    box-shadow: none;
+    color: $gray-900;
+  }
+
+  &::placeholder {
+    background: transparent;
+    color: $gray-600;
+  }
+}
+

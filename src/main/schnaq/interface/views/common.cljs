@@ -10,7 +10,7 @@
   "Create an image based on the nickname."
   [display-name size]
   [string? number? :ret vector?]
-  [:div.text-center.mt-3
+  [:div.text-center
    [:div.avatar-image.m-auto.schnaq-rounded.p-0
     {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}]
    [:p.small.mt-1 display-name]])
