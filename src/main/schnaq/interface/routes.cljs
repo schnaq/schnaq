@@ -40,10 +40,6 @@
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
    ["features"
-    ["/meetings"
-     {:name :routes.features/meetings
-      :view features-views/meeting-features-view
-      :link-text (labels :router.features/meetings)}]
     ["/discussions"
      {:name :routes.features/discussions
       :view features-views/discussion-features-view
@@ -83,6 +79,7 @@
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]
     ["/create"
+     ;;TODO delete this view next
      {:name :routes.meeting/create
       :view meeting-views/create-meeting-view
       :link-text (labels :router/create-meeting)}]

@@ -210,12 +210,6 @@
      (labels :startpage.value-cards.discussion/alt-text)
      #(rf/dispatch [:navigation/navigate :routes.features/discussions])]
     [value-prop-card
-     (labels :startpage.value-cards.meetings/title)
-     (labels :startpage.value-cards.meetings/description)
-     (img-path :startpage.value-cards.meetings/image)
-     (labels :startpage.value-cards.meetings/alt-text)
-     #(rf/dispatch [:navigation/navigate :routes.features/meetings])]
-    [value-prop-card
      (labels :startpage.value-cards.knowledge/title)
      (labels :startpage.value-cards.knowledge/description)
      (img-path :startpage.value-cards.knowledge/image)
