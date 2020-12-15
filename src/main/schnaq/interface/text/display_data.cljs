@@ -1164,6 +1164,7 @@
      :flag "fa-flag"
      :flask "fa-flask"
      :heart "fa-heart"
+     :home "fa-home"
      :language "fa-language"
      :laptop "fa-laptop-code"
      :newspaper "fa-newspaper"

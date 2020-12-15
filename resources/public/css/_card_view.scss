@@ -25,6 +25,24 @@
   }
 }
 
+.card-history {
+  border: 0;
+  border-radius: 1rem;
+  min-height: 5rem;
+  min-width: 5rem;
+  overflow: hidden;
+  padding: 0.5rem;
+
+  &:hover {
+    background: $white-shade;
+  }
+}
+
+.card-history-home {
+  background: $white;
+  color: $gray-900;
+}
+
 .line-divider {
   background: $gray-200;
   margin-left: auto;

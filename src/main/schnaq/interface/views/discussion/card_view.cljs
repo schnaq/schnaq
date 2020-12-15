@@ -129,11 +129,18 @@
    [cards/conclusion-cards-list @(rf/subscribe [:discussion.conclusions/starting])
     (:meeting/share-hash current-meeting)]])
 
+(defn- history-view
+  "Histroy view displayed in the left column in the desktop view."
+  []
+  [:div.card-history.card-history-home.clickable.mt-md-4.i
+   {:class (str "fas " (fa :home))}])
+
 (defn- discussion-start-view-desktop
   [current-meeting]
   [:container-fluid
    [:div.row.px-0.mx-0
-    [:div.col-1]
+    [:div.col-1.py-4
+     [history-view]]
     [:div.col-10.py-4.px-0
      [topic-view current-meeting]]]])
 
