@@ -147,7 +147,7 @@
   (let [current-meeting @(rf/subscribe [:meeting/selected])]
     [:<>
      [card-meeting-header current-meeting]
-     [:container-fluid
+     [:div.container-fluid
       [toolbelt/desktop-mobile-switch
        [discussion-start-view-desktop current-meeting]
        [discussion-start-view-mobile current-meeting]]]]))
