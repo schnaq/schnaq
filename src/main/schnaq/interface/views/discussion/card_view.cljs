@@ -135,8 +135,7 @@
    [:div.row.px-0.mx-0
     [:div.col-1]
     [:div.col-10.py-4.px-0
-     [topic-view current-meeting]]
-    [:div.col-1]]])
+     [topic-view current-meeting]]]])
 
 (defn- discussion-start-view-mobile
   [current-meeting]
