@@ -139,7 +139,7 @@
 
 (defn- discussion-start-view-mobile
   [current-meeting]
-  [:container-fluid [topic-view current-meeting]])
+  [:div.container-fluid [topic-view current-meeting]])
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
