@@ -198,18 +198,6 @@
       ;; In buggy cases the following update would throw an exception
       (db/update-agenda (assoc agenda :agenda/description "")))))
 
-(deftest delete-agendas-test
-  (testing "Agendas need to delete properly, when they belong to the authorized meeting-id."
-    (let [meeting-id (any-meeting-id)
-          agenda-id (db/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)]
-      (is (= meeting-id (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))
-      (testing "Invalid delete should do nothing"
-        (db/delete-agendas [agenda-id] (inc meeting-id))
-        (is (= meeting-id (get-in (db/agenda agenda-id) [:agenda/meeting :db/id]))))
-      (testing "Agenda should be gone"
-        (db/delete-agendas [agenda-id] meeting-id)
-        (is (nil? (get-in (db/agenda agenda-id) [:agenda/meeting :db/id])))))))
-
 (deftest all-statements-for-graph-test
   (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))

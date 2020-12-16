@@ -2,9 +2,7 @@
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.meeting.create :as create-view]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.text.display-data :refer [labels]]))
 
 ;; #### Events ####
 

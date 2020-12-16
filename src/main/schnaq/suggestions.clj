@@ -5,6 +5,7 @@
             [clojure.string :as string]))
 
 (>defn new-meeting-suggestion
+  ;; todo del
   "Adds a new meeting suggestions, if it has any changes."
   [suggestion user-id]
   [map? :db/id :ret (? :db/id)]
@@ -30,6 +31,7 @@
                        (not (string/blank? (:agenda/description suggestion)))))))))
 
 (>defn new-agenda-updates-suggestion
+  ;; todo del
   "Adds agenda-suggestions, if they represent changes."
   [suggestions user-id]
   [(s/coll-of map?) :db/id :ret any?]
@@ -38,6 +40,7 @@
     user-id))
 
 (>defn update-agenda!
+  ;; todo del
   "Updates an agenda, only if the share-hash matches the :db/id of the agenda."
   [new-agenda share-hash]
   [map? :meeting/share-hash :ret (? map?)]
@@ -47,6 +50,7 @@
       (db/agenda (db/update-agenda new-agenda)))))
 
 (>defn update-meeting!
+  ;; todo del
   "Updates meeting information and returns the newly updated meeting."
   [new-meeting share-hash]
   [map? :meeting/share-hash :ret (? map?)]
@@ -56,6 +60,7 @@
       (db/meeting-by-hash-private share-hash))))
 
 (>defn new-agenda!
+  ;; todo del
   "Creates a new agenda, when the meeting-id is the same as the one from the share-hash."
   [agenda share-hash]
   [map? :meeting/share-hash :ret (? map?)]

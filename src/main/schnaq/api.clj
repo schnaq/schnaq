@@ -17,7 +17,6 @@
             [schnaq.export :as export]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
-            [schnaq.suggestions :as suggestions]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log])
@@ -90,80 +89,6 @@
     (log/info (:db/ident (:meeting/type created-meeting)) " Meeting Created: " meeting-id " - "
               (:meeting/title created-meeting))
     (created "" {:new-meeting created-meeting})))
-
-(defn- update-single-agenda!
-  "Update a single agenda, when the credentials are valid."
-  [{:keys [body-params]}]
-  (let [{:keys [agenda share-hash edit-hash]} body-params
-        new-agenda (select-keys agenda [:db/id :agenda/title :agenda/description :agenda/rank])]
-    (if (valid-credentials? share-hash edit-hash)
-      (if-let [updated-agenda (suggestions/update-agenda! new-agenda share-hash)]
-        (do (log/info "Updated agenda: " (:db/id updated-agenda) (:agenda/title updated-agenda))
-            (ok updated-agenda))
-        (deny-access))
-      (deny-access))))
-
-(defn- delete-agenda!
-  "Deletes a single agenda, when the credentials are valid."
-  [{:keys [body-params]}]
-  (let [{:keys [agenda-id share-hash edit-hash]} body-params]
-    (if (valid-credentials? share-hash edit-hash)
-      (do (db/delete-agendas [agenda-id] (:db/id (db/meeting-by-hash share-hash)))
-          (log/info "Deleted agenda: " agenda-id)
-          (ok {:message "Deletion executed."}))
-      (deny-access))))
-
-(defn- new-agenda!
-  "Creates a single new agenda, when the credentials are valid."
-  [{:keys [body-params]}]
-  (let [{:keys [agenda share-hash edit-hash]} body-params]
-    (if (valid-credentials? share-hash edit-hash)
-      (if-let [new-agenda (suggestions/new-agenda! agenda share-hash)]
-        (do (log/info "Created new agenda: " (:db/id new-agenda))
-            (ok new-agenda))
-        (deny-access))
-      (deny-access))))
-
-(defn- update-meeting-info!
-  "Update a meeting, when the credentials are right."
-  [{:keys [body-params]}]
-  (let [{:keys [meeting share-hash edit-hash nickname]} body-params
-        author (db/add-user-if-not-exists nickname)
-        new-meeting (assoc (select-keys meeting [:db/id :meeting/title :meeting/description])
-                      :meeting/author author)]
-    (if (valid-credentials? share-hash edit-hash)
-      (if-let [updated-meeting (suggestions/update-meeting! new-meeting share-hash)]
-        (do (log/info "Updated a meeting: " (:db/id updated-meeting))
-            (ok updated-meeting))
-        (deny-access))
-      (deny-access))))
-
-(defn- meeting-suggestions
-  "Create suggestions for the change of a meeting."
-  [request]
-  (let [{:keys [meeting agendas delete-agendas nickname]} (:body-params request)
-        user-id (db/add-user-if-not-exists nickname)
-        updated-agendas (filter :agenda/discussion agendas)
-        new-agendas (remove :agenda/discussion agendas)]
-    (suggestions/new-meeting-suggestion meeting user-id)
-    (suggestions/new-agenda-updates-suggestion updated-agendas user-id)
-    (db/suggest-new-agendas! new-agendas user-id (:db/id meeting))
-    (db/suggest-agenda-deletion! delete-agendas user-id)
-    (log/info "User: " nickname " created new suggestions for meeting")
-    (created "" {:message "Successfully created suggestions!"})))
-
-(defn- add-suggestion-feedback
-  "Adds new feedback regarding a meeting."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash nickname feedback]} body-params
-        user-id (db/add-user-if-not-exists nickname)
-        meeting-id (:db/id (db/meeting-by-hash share-hash))]
-    (if-not (string/blank? feedback)
-      (do
-        (log/info "User: " nickname " gave feedback for a meeting")
-        (ok {:message "Feedback created"
-             :feedback/id (db/add-meeting-feedback feedback meeting-id user-id)}))
-      (bad-request {:error "You can not submit blank feedback."}))))
 
 (defn- add-author
   "Adds an author to the database."
@@ -562,9 +487,6 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/ping" [] ping)
     (POST "/admin/statements/delete" [] delete-statements!)
-    (POST "/agenda/delete" [] delete-agenda!)               ;; todo del
-    (POST "/agenda/new" [] new-agenda!)                     ;; todo del
-    (POST "/agenda/update" [] update-single-agenda!)        ;; todo del
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/argument/undercut" [] undercut-argument!)
@@ -581,9 +503,6 @@
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
-    (POST "/meeting/info/update" [] update-meeting-info!)   ;; todo del
-    (POST "/meeting/feedback" [] add-suggestion-feedback)   ;; todo del
-    (POST "/meeting/suggestions" [] meeting-suggestions)    ;; todo del
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     ;; Analytics routes

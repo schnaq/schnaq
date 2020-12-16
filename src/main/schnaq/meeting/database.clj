@@ -259,12 +259,14 @@
   (suggest-agenda-generic! agenda-suggestions (partial build-update-agenda-suggestion user-id)))
 
 (>defn suggest-new-agendas!
+  ;; todo del
   "Creates suggestions for new agendas."
   [agenda-suggestions user-id meeting-id]
   [(s/coll-of map?) :db/id :db/id :ret any?]
   (suggest-agenda-generic! agenda-suggestions (partial build-new-agenda-suggestion user-id meeting-id)))
 
 (>defn suggest-agenda-deletion!
+  ;; todo del
   [agenda-ids user-id]
   [::delete-agenda-suggestion-inputs :db/id :ret any?]
   (suggest-agenda-generic! agenda-ids (partial build-delete-agenda-suggestion user-id)))
@@ -689,6 +691,7 @@
         (d/db (new-connection)) statement-id meeting-hash))))
 
 (>defn delete-agendas
+  ;; todo remove
   "Remove all agendas. Check for id belonging to a meeting before removing."
   [agenda-ids meeting-id]
   [(s/coll-of int?) int? :ret (? map?)]
@@ -842,6 +845,7 @@
     :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))
 
 (>defn add-meeting-feedback
+  ;; todo del
   "Adds a new meeting-feedback entity. Returns the entities id."
   [feedback meeting-id user-id]
   [string? int? int? :ret int?]
