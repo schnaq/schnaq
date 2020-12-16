@@ -5,7 +5,6 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.agenda.edit :as agenda-edit]
             [schnaq.interface.views.brainstorm.create :as brainstorm-create]
             [schnaq.interface.views.discussion.card-view :as discussion-new-view]
             [schnaq.interface.views.discussion.discussion :as discussion-views]
@@ -109,13 +108,6 @@
                       :stop (fn []
                               (rf/dispatch [:agenda.statement-nums/to-localstorage])
                               (rf/dispatch [:agenda/clear-current]))}]}]
-     ["/suggestions"
-      {:name :routes.meeting/suggestions
-       :view agenda-edit/agenda-suggestion-view
-       :controllers [{:parameters {:path [:share-hash]}
-                      :start (fn [{:keys [path]}]
-                               (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))
-                      :stop #(rf/dispatch [:agenda.edit/reset-edit-updates])}]}]
      ["/agenda"
       ["/:id"
        {:parameters {:path {:id int?}}

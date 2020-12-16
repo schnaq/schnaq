@@ -187,7 +187,6 @@
 
         ;; Create meeting
         :meeting-create-subheader "Give your schnaq a name and description"
-        :meeting-form-title "Title"
         :meeting-form-title-placeholder "What should the name of your meeting be?"
         :meeting-form-description "Description"
         :meeting-form-description-placeholder "Length: X Minutes\n\nTopic"
@@ -203,8 +202,6 @@
         :meetings/continue-to-schnaq-button "To the schnaq"
         :meetings/edit-schnaq-button "Edit schnaq"
         :meetings/share-calendar-invite "Send calendar invites"
-        :meetings.suggestions/header "Add suggestions"
-        :meetings.suggestions/subheader "The administrators are able to see and accept or deny the suggestions"
 
         :meeting.admin/addresses-label "Email addresses of the participants"
         :meeting.admin/addresses-placeholder "Email addresses separated by a newline or space."
@@ -291,13 +288,10 @@
         :suggestions.modal.delete/title "Deletion requests for this agenda point"
         :suggestions.modal.update/title "Change suggestions for this agenda point"
         :suggestions.modal.new/title "Suggestions for new agenda points"
-        :suggestions.notification/title "Suggestion added"
-        :suggestions.notification/body "Your suggestions were added successfully"
         :suggestions.update.agenda/success-title "Suggestion added"
         :suggestions.update.agenda/success-body "The suggestion was accepted and can be viewed by the participants."
         :suggestions.agenda/delete-title "Agenda point deleted"
         :suggestions.agenda/delete-body "The agenda point was deleted successfully"
-        :suggestion.feedback/label "Additional feedback"
         :suggestions.feedback/title "Feedback regarding the meeting"
         :suggestions.feedback/primer "The following feedback was given regarding the meeting"
         :suggestions.feedback.table/nickname "Nickname"
@@ -306,11 +300,7 @@
 
         ;; Create Agenda
         :agenda/desc-for "Description for agenda point "
-        :agenda/point "Agenda point "
         :agenda.create/optional-agenda "Add agenda point"
-
-        ;; Edit Agenda
-        :agenda/edit-button "Save changes"
 
         :agendas.button/navigate-to-suggestions "Create change suggestions"
 
@@ -663,7 +653,6 @@
 
         ;; Create meeting
         :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
-        :meeting-form-title "Titel"
         :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
         :meeting-form-description "Beschreibung"
         :meeting-form-description-placeholder "Dauer: X Minuten\n\nThema"
@@ -679,8 +668,6 @@
         :meetings/continue-to-schnaq-button "Zum schnaq"
         :meetings/edit-schnaq-button "schnaq editieren"
         :meetings/share-calendar-invite "Kalendereinladung versenden"
-        :meetings.suggestions/header "Vorschläge einreichen"
-        :meetings.suggestions/subheader "Die erstellende Person kann die Vorschläge einsehen und berücksichtigen"
 
         :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmer:innen"
         :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
@@ -760,13 +747,10 @@
         :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
         :suggestions.modal.update/title "Änderungsvorschläge"
         :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
-        :suggestions.notification/title "Vorschläge eingereicht"
-        :suggestions.notification/body "Ihre Vorschläge wurden erfolgreich verschickt!"
         :suggestions.update.agenda/success-title "Vorschlag übernommen"
         :suggestions.update.agenda/success-body "Der Vorschlag wurde übernommen und ist für alle TeilnehmerInnen sichtbar."
         :suggestions.agenda/delete-title "Agendapunkt gelöscht"
         :suggestions.agenda/delete-body "Der Agendapunkt wurde erfolgreich gelöscht"
-        :suggestion.feedback/label "Zusätzliches Feedback"
         :suggestions.feedback/title "Feedback zum Meeting"
         :suggestions.feedback/primer "Folgendes Feedback wurde zu diesem Meeting im Vorfeld abgegeben."
         :suggestions.feedback.table/nickname "Nickname"
@@ -775,11 +759,7 @@
 
         ;; Create Agenda
         :agenda/desc-for "Beschreibung für Agendapunkt "
-        :agenda/point "Agendapunkt "
         :agenda.create/optional-agenda "Agenda hinzufügen"
-
-        ;; Edit Agenda
-        :agenda/edit-button "Änderungen speichern"
 
         :agendas.button/navigate-to-suggestions "Änderungsvorschläge erstellen"
 

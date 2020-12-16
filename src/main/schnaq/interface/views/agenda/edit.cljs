@@ -1,15 +1,11 @@
 (ns schnaq.interface.views.agenda.edit
   (:require [ajax.core :as ajax]
-            [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.agenda.agenda :as agenda]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.modals.modal :as modal]
-            [schnaq.interface.views.text-editor.view :as editor]))
+            [schnaq.interface.views.modals.modal :as modal]))
 
 (defn- suggestions-table
   "Show all suggestions."
@@ -145,6 +141,7 @@
      [suggestions-table suggestions suggestion-type addition?]]]))
 
 (defn- update-suggestions-badge
+  ;; todo del
   "Show update-suggestion badge."
   [selected-entity subscription-key suggestions-namespace]
   (when-let [suggestions @(rf/subscribe [subscription-key (:db/id selected-entity)])]
@@ -212,6 +209,7 @@
           [:dispatch [:modal {:show? false :child nil}]]]}))
 
 (defn- deletion-badge
+  ;; todo del
   "Badge containing the wishes of users to delete the agenda point."
   [agenda]
   (when-let [delete-suggestions @(rf/subscribe [:suggestions/agenda-delete (:db/id agenda)])]
@@ -224,6 +222,7 @@
      (count delete-suggestions)]))
 
 (defn- addition-badge
+  ;; todo del
   "Badge indicating an addition of an agenda point to the meeting."
   []
   (when-let [suggestions @(rf/subscribe [:suggestions/agenda-new])]
@@ -237,6 +236,7 @@
      (count suggestions)]))
 
 (defn- feedback-badge
+  ;; todo del
   "Badge indicating free-text feedback from users."
   []
   (when-let [feedback @(rf/subscribe [:suggestions/feedback])]
@@ -247,147 +247,6 @@
                                        :child [meeting-feedback-modal feedback]}])}
      [:i {:class (str "m-auto fas " (fa :comment))}] " "
      (count feedback)]))
-
-(defn- badge-wrapper
-  "Wrap all the badges!"
-  [& badges]
-  (when (= :routes.meeting/edit @(rf/subscribe [:navigation/current-view]))
-    [:div.my-0.p-2.display-6.text-left
-     badges]))
-
-
-;; -----------------------------------------------------------------------------
-
-(defn- submit-edit-button []
-  [:button.btn.button-primary (labels :agenda/edit-button)])
-
-(defn edit-agenda-title-attributes [db-id agenda]
-  {:type "text"
-   :name "title"
-   :auto-complete "off"
-   :required true
-   :placeholder (labels :agenda/point)
-   :value (:agenda/title agenda)
-   :id (str "title-" db-id)
-   :on-change #(rf/dispatch [:agenda/update-edit-form :agenda/title db-id (oget % [:target :value])])})
-
-(defn- agenda-view [agenda]
-  (let [db-id (:db/id agenda)
-        delete-agenda-fn #(rf/dispatch [:agenda/delete (:db/id agenda)])
-        description-update-fn #(rf/dispatch [:agenda/update-edit-form :agenda/description db-id %])]
-    [:<>
-     [agenda/agenda-form
-      delete-agenda-fn
-      agenda
-      description-update-fn
-      (edit-agenda-title-attributes db-id agenda)
-      [badge-wrapper
-       (with-meta
-         [update-suggestions-badge agenda :suggestions/agenda-updates :agenda.suggestion]
-         {:key (str "suggestion-badge-" (:db/id agenda))})
-       (with-meta
-         [deletion-badge agenda]
-         {:key (str "deletion-badge-" (:db/id agenda))})]]]))
-
-(defn- editable-meeting-info [selected-meeting]
-  (let [meeting-updates @(rf/subscribe [:agenda.edit/meeting-description-update])]
-    [:div.agenda-meeting-container.shadow-straight.text-left.p-3
-     ;; title form
-     [:input#meeting-title.form-control.form-title.form-border-bottom.mb-2
-      {:value (:meeting/title selected-meeting)
-       :type "text"
-       :name "meeting-title"
-       :auto-complete "off"
-       :required true
-       :placeholder (labels :meeting-form-title)
-       :id (str "meeting-title-" (:db/id selected-meeting))
-       :on-change
-       #(rf/dispatch
-          [:meeting/update-meeting-attribute :meeting/title (oget % [:target :value])])}]
-     ;; description form
-     [editor/view
-      (:meeting/description selected-meeting)
-      #(rf/dispatch
-         [:meeting/update-meeting-attribute :meeting/description %])
-      meeting-updates]
-     [badge-wrapper
-      (with-meta
-        [update-suggestions-badge selected-meeting :suggestions/meeting :meeting.suggestion]
-        {:key (str "suggestion-badge-" (:db/id selected-meeting))})
-      (with-meta
-        [addition-badge]
-        {:key (str "addition-badge-" (:db/id selected-meeting))})
-      (with-meta
-        [feedback-badge]
-        {:key (str "feedback-badge-" (:db/id selected-meeting))})]]))
-
-(defn- editable-meeting-template
-  "Can be used to present an editable meeting in different views. Customize the heading
-  and on-submit-function to your liking."
-  ([heading on-submit-fn]
-   [editable-meeting-template heading on-submit-fn [:span ""]])
-  ([heading on-submit-fn extras]
-   (let [edit-information @(rf/subscribe [:agenda/current-edit-info])
-         edit-meeting (:meeting edit-information)
-         meeting-agendas (:agendas edit-information)
-         current-route @(rf/subscribe [:navigation/current-view])]
-     [:<>
-      [base/meeting-header edit-meeting]
-      heading
-      [:div.container.text-center.pb-5
-       [:form {:on-submit on-submit-fn}
-        ;; meeting title and description
-        [editable-meeting-info edit-meeting]
-        (for [agenda meeting-agendas]
-          [:div {:key (str (:db/id agenda) "-" current-route)}
-           [agenda-view agenda]])
-        [:div.agenda-line]
-        [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
-        extras
-        [submit-edit-button]]]])))
-
-(defn- suggestion-feedback-input
-  []
-  [:<>
-   [:div.text-left.pb-5
-    [:label.text-left.form-title.text-gray-700 {:for "free-feedback"}
-     [:p.mb-0 (labels :suggestion.feedback/label)]]
-    [:textarea.form-control.form-round.shadow-straight
-     {:rows 4
-      :required false
-      :id "free-feedback"}]]])
-
-(defn- suggestion-view []
-  [editable-meeting-template
-   [base/header
-    (labels :meetings.suggestions/header)
-    (labels :meetings.suggestions/subheader)]
-   (fn [e]
-     (js-wrap/prevent-default e)
-     (rf/dispatch [:suggestions.feedback/submit (oget e [:target :elements "free-feedback" :value])])
-     (rf/dispatch [:suggestions/submit]))
-   [suggestion-feedback-input]])
-
-(defn agenda-suggestion-view []
-  [suggestion-view])
-
-(rf/reg-event-fx
-  :suggestions.feedback/submit
-  (fn [{:keys [db]} [_ feedback-text]]
-    (let [nickname (get-in db [:user :name] "Anonymous")
-          share-hash (get-in db [:current-route :path-params :share-hash])]
-      (when-not (gstring/isEmptyString feedback-text)
-        {:fx [[:http-xhrio {:method :post
-                            :uri (str (:rest-backend config) "/meeting/feedback")
-                            :params {:share-hash share-hash
-                                     :feedback feedback-text
-                                     :nickname nickname}
-                            :format (ajax/transit-request-format)
-                            :response-format (ajax/transit-response-format)
-                            :on-success [:no-op]
-                            :on-failure [:ajax.error/as-notification]}]]}))))
-
-;; load agendas events
 
 (rf/reg-event-fx
   :agenda/load-for-edit
@@ -403,11 +262,7 @@
               :edit-meeting-updates {})))
 
 (rf/reg-sub
-  :agenda/current-edit-info
-  (fn [db _]
-    (:edit-meeting db)))
-
-(rf/reg-sub
+  ;; todo del
   :agenda.edit/meeting-description-update
   (fn [db _]
     (-> db :edit-meeting-updates :meeting-description)))
@@ -428,27 +283,9 @@
     (assoc-in db [:edit-meeting-updates :agenda-descriptions id] value)))
 
 (rf/reg-event-db
-  :agenda.edit/reset-edit-updates
-  (fn [db _]
-    (assoc db :edit-meeting-updates {}
-              :edit-meeting {}
-              :suggestions {})))
-
-(rf/reg-event-db
   :agenda.edit/reset-editor-update-flag
   (fn [db _]
     (assoc db :edit-meeting-updates {})))
-
-;; delete agenda events
-
-(rf/reg-event-db
-  :agenda/delete
-  (fn [db [_ agenda-id]]
-    (let [delete-fn (fn [agendas] (remove #(= agenda-id (:db/id %)) agendas))]
-      (cond-> db
-              true (update-in [:edit-meeting :agendas] delete-fn)
-              ;; We do not need to remove temporary agendas in the backend
-              (int? agenda-id) (update-in [:edit-meeting :delete-agendas] conj agenda-id)))))
 
 ;; add agenda form event
 
@@ -485,32 +322,6 @@
   :meeting/update-meeting-attribute
   (fn [db [_ attribute new-val]]
     (update-in db [:edit-meeting :meeting] assoc attribute new-val)))
-
-(rf/reg-event-fx
-  :meeting/on-success-submit-suggestions-event
-  (fn [{:keys [db]} [_ _]]
-    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
-      {:fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :suggestions.notification/title)
-                                       :body (labels :suggestions.notification/body)
-                                       :context :success}]]
-            [:dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}]]]})))
-
-(rf/reg-event-fx
-  :suggestions/submit
-  (fn [{:keys [db]} _]
-    (let [edit-meeting (:edit-meeting db)
-          nickname (-> db :user :name)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/meeting/suggestions")
-                          :params {:meeting (:meeting edit-meeting)
-                                   :agendas (:agendas edit-meeting)
-                                   :delete-agendas (:delete-agendas edit-meeting)
-                                   :nickname nickname}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:meeting/on-success-submit-suggestions-event]
-                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-sub
   :suggestions/meeting

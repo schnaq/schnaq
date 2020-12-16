@@ -582,8 +582,8 @@
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
     (POST "/meeting/info/update" [] update-meeting-info!)
-    (POST "/meeting/feedback" [] add-suggestion-feedback)
-    (POST "/meeting/suggestions" [] meeting-suggestions)
+    (POST "/meeting/feedback" [] add-suggestion-feedback)   ;; todo del
+    (POST "/meeting/suggestions" [] meeting-suggestions)    ;; todo del
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     ;; Analytics routes

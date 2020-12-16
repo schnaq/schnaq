@@ -14,6 +14,7 @@
     attributes]])
 
 (defn agenda-form
+  ;; todo del
   "A form for creating a new agenda. The new agenda is automatically saved in the
   app-state according to the suffix."
   ([delete-fn agenda description-submit-fn title-attributes]
@@ -39,6 +40,7 @@
        children]])))
 
 (defn add-agenda-button [number-of-forms add-event]
+  ;; todo del
   (let [zero-agendas? (or (nil? number-of-forms) (zero? number-of-forms))]
     [:div.mb-5
      [:div.p-0
