@@ -51,10 +51,7 @@
                                    :meeting/share-hash "Wegi-ist-der-schönste"
                                    :meeting/author (db/add-user-if-not-exists "Wegi")})
           agenda (db/add-agenda-point "Hi" "Beschreibung" meeting)
-          discussion (-> (db/fast-pull agenda)
-                         :agenda/discussion
-                         db/fast-pull
-                         :db/id)
+          discussion (:agenda/discussion (db/fast-pull agenda))
           christian-id (db/author-id-by-nickname "Christian")
           first-id (db/add-starting-statement! discussion christian-id "this is sparta")
           second-id (db/add-starting-statement! discussion christian-id "this is kreta")]
