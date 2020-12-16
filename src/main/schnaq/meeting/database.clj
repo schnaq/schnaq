@@ -278,13 +278,6 @@
    :agenda/rank
    :agenda/discussion])
 
-(>defn agenda
-  ;; todo del
-  "Return agenda data by id."
-  [id]
-  [int? :ret ::specs/agenda]
-  (d/pull (d/db (new-connection)) agenda-pattern id))
-
 (defn agendas-by-meeting-hash
   "Return all agendas belonging to a certain meeting. Ready for the wire."
   [hash]
@@ -554,16 +547,6 @@
           [?meeting :meeting/share-hash ?hash]]
         (d/db (new-connection)) statement-id meeting-hash))))
 
-(>defn delete-agendas
-  ;; todo remove
-  "Remove all agendas. Check for id belonging to a meeting before removing."
-  [agenda-ids meeting-id]
-  [(s/coll-of int?) int? :ret (? map?)]
-  (let [corresponding-meetings (map #(d/pull (d/db (new-connection)) [:agenda/meeting] %) agenda-ids)
-        checked-agendas (filter #(= meeting-id (get-in % [:agenda/meeting :db/id])) corresponding-meetings)]
-    (when (= (count corresponding-meetings) (count checked-agendas))
-      (transact (mapv #(vector :db/retractEntity %) agenda-ids)))))
-
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
 
 (def ^:private max-time-back Instant/EPOCH)
@@ -707,40 +690,6 @@
    {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
     :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
     :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))
-
-(>defn add-meeting-feedback
-  ;; todo del
-  "Adds a new meeting-feedback entity. Returns the entities id."
-  [feedback meeting-id user-id]
-  [string? int? int? :ret int?]
-  (get-in
-    (transact [{:db/id "temp-meeting-feedback"
-                :meeting.feedback/ideator user-id
-                :meeting.feedback/content feedback
-                :meeting.feedback/meeting meeting-id}])
-    [:tempids "temp-meeting-feedback"]))
-
-(def ^:private meeting-feedback-pattern
-  [:db/id
-   :meeting.feedback/content
-   :meeting.feedback/meeting
-   {:meeting.feedback/ideator [{:user/core-author [:author/nickname]}]}])
-
-(>defn meeting-feedback-for
-  ;; todo del
-  "Returns all meeting-feedback for a certain meeting."
-  [share-hash]
-  [:meeting/share-hash :ret sequential?]
-  (->
-    (d/q
-      '[:find (pull ?feedback meeting-feedback-pattern)
-        :in $ ?share-hash meeting-feedback-pattern
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?feedback :meeting.feedback/meeting ?meeting]]
-      (d/db (new-connection)) share-hash meeting-feedback-pattern)
-    (toolbelt/pull-key-up :user/core-author)
-    (toolbelt/pull-key-up :author/nickname)
-    flatten))
 
 ;; Dialog.core outfactor. Should Probably go into its own namespace on next refactor.
 

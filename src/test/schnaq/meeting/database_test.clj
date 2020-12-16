@@ -185,17 +185,6 @@
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
 
-(deftest meeting-suggestions-add-get-test
-  (testing "Test the writing and reading of meeting-feedback."
-    (let [user-id (db/add-user-if-not-exists "Wegi")
-          meeting-hash "89eh32hoas-2983ud"
-          meeting-id (:db/id (db/meeting-by-hash meeting-hash))
-          feedback "Hör mal gut zu mein Freundchen, das ist nicht gut so!"]
-      (is (zero? (count (db/meeting-feedback-for meeting-hash))))
-      (db/add-meeting-feedback feedback meeting-id user-id)
-      (is (= 1 (count (db/meeting-feedback-for meeting-hash))))
-      (is (= feedback (:meeting.feedback/content (first (db/meeting-feedback-for meeting-hash))))))))
-
 (deftest number-of-statements-for-discussion-test
   (testing "Is the number of agendas returned correct?"
     (let [meeting-hash "89eh32hoas-2983ud"
