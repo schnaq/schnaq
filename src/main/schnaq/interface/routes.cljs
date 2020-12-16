@@ -12,7 +12,6 @@
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.meeting.admin-center :as meeting-admin]
-            [schnaq.interface.views.meeting.meetings :as meeting-views]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.meeting.single :as meeting-single]
             [schnaq.interface.views.how-to.view :as how-to]
@@ -78,11 +77,6 @@
       :view meetings-overview/meeting-view-visited
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]
-    ["/create"
-     ;;TODO delete this view next
-     {:name :routes.meeting/create
-      :view meeting-views/create-meeting-view
-      :link-text (labels :router/create-meeting)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}

@@ -5,7 +5,6 @@
 
 (def ^:private translations
   {:en {;; Common
-        :common/save "Save"
         :common/language "Language"
         :error/export-failed "Export failed. Please try again later."
 
@@ -187,7 +186,6 @@
         :schnaqs/create "Create schnaq"
 
         ;; Create meeting
-        :meeting-create-header "Prepare Meeting"
         :meeting-create-subheader "Give your schnaq a name and description"
         :meeting-form-title "Title"
         :meeting-form-title-placeholder "What should the name of your meeting be?"
@@ -509,7 +507,6 @@
         :router/analytics "Analytics dashboard"
         :router/continue-discussion "Continue Discussion"
         :router/create-brainstorm "Create Brainstorming"
-        :router/create-meeting "Create schnaq"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
         :router/invalid-link "Error page"
@@ -523,7 +520,6 @@
         :router/startpage "Startpage"
         :router/true-404-view "404 error page"}
    :de {;; Common
-        :common/save "Speichern"
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
 
@@ -668,7 +664,6 @@
         :schnaqs/create "schnaq anlegen"
 
         ;; Create meeting
-        :meeting-create-header "Meeting vorbereiten"
         :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
         :meeting-form-title "Titel"
         :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"

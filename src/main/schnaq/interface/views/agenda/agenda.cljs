@@ -150,6 +150,7 @@
 ;; #### Subs ####
 
 (rf/reg-sub
+  ;; TODO löschkandidat
   :agendas.temporary/all
   (fn [db _]
     (get-in db [:agenda :creating :all] {})))

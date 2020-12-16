@@ -48,6 +48,7 @@
                    (reset! unmounting? false)))))}))))
 
 (defn view-store-on-change
+  ;; TODO löschkandidat
   "Mark Up Editor View which automatically stores its content in the local db.
   The value can be retrieved via subscribing to ':mde/load-content'"
   [storage-key]
@@ -63,5 +64,6 @@
 
 (rf/reg-sub
   :mde/load-content
+  ;; TODO löschkandidat
   (fn [db [_ storage-key]]
     (get-in db [:mde storage-key])))
