@@ -51,7 +51,10 @@
                                    :meeting/share-hash "Wegi-ist-der-schönste"
                                    :meeting/author (db/add-user-if-not-exists "Wegi")})
           agenda (db/add-agenda-point "Hi" "Beschreibung" meeting)
-          discussion (:db/id (:agenda/discussion (db/agenda agenda)))
+          discussion (-> (db/fast-pull agenda)
+                         :agenda/discussion
+                         db/fast-pull
+                         :db/id)
           christian-id (db/author-id-by-nickname "Christian")
           first-id (db/add-starting-statement! discussion christian-id "this is sparta")
           second-id (db/add-starting-statement! discussion christian-id "this is kreta")]
@@ -178,104 +181,12 @@
       (is (= 15 (:supports stats)))
       (is (= 9 (:undercuts stats))))))
 
-(deftest update-agenda-test
-  (testing "Whether the new agenda is added correctly"
-    (let [meeting-id (any-meeting-id)
-          meeting (db/meeting-private-data meeting-id)
-          agenda-id (db/add-agenda-point "Hallo i bims nicht" "Lolkasse Lolberg" meeting-id)
-          agenda {:db/id agenda-id
-                  :agenda/title "Hallo i bims"
-                  :agenda/description "Sparkasse Marketing"
-                  :agenda/meeting meeting-id
-                  :agenda/discussion (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))}
-          old-agenda (first (db/agendas-by-meeting-hash (:meeting/share-hash meeting)))
-          _ (db/update-agenda agenda)
-          new-agenda (first (db/agendas-by-meeting-hash (:meeting/share-hash meeting)))]
-      (is (= "Hallo i bims nicht" (:agenda/title old-agenda)))
-      (is (= "Lolkasse Lolberg" (:agenda/description old-agenda)))
-      (is (= "Hallo i bims" (:agenda/title new-agenda)))
-      (is (= "Sparkasse Marketing" (:agenda/description new-agenda)))
-      ;; In buggy cases the following update would throw an exception
-      (db/update-agenda (assoc agenda :agenda/description "")))))
-
 (deftest all-statements-for-graph-test
   (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
           statements (db/all-statements-for-graph discussion-id)]
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
-
-(deftest suggest-meeting-updates!-test
-  (testing "Create a new suggest-meeting-update entity."
-    (let [user-id (db/add-user-if-not-exists "Christian")
-          meeting-id (:db/id (db/meeting-by-hash "89eh32hoas-2983ud"))]
-      (is (nil? (db/suggest-meeting-updates! {} user-id)))
-      (is (int? (db/suggest-meeting-updates! {:db/id meeting-id
-                                              :meeting/title "Neuer Title"
-                                              :meeting/description "Whatup bruh"}
-                                             user-id)))
-      (is (int? (db/suggest-meeting-updates! {:db/id meeting-id
-                                              :meeting/title "Neuer Title"}
-                                             user-id))))))
-
-(deftest suggest-agenda-updates!-test
-  (testing "Create a new update-agenda suggestion entity."
-    (let [user-id (db/add-user-if-not-exists "Christian")
-          agenda-ids (map :db/id (db/agendas-by-meeting-hash "89eh32hoas-2983ud"))]
-      (are [expected input-suggestions]
-        (= expected (count (:tx-data (db/suggest-agenda-updates! input-suggestions user-id))))
-        1 [{}]
-        ;; We transact 5 attributes, so we expect 6 datoms (one for every attribute and one for the transaction
-        7 [{:db/id (first agenda-ids)
-            :agenda/title "Neuer Title"
-            :agenda/description "Whatup bruh"
-            :agenda/rank 1}]
-        6 [{:db/id (first agenda-ids)
-            :agenda/title "Neuer Title"
-            :agenda/rank 1}]
-        ;; When title is missing, do not transact any attributes
-        1 [{:db/id (first agenda-ids)
-            :agenda/description "Whatup bruh"}]
-        13 [{:db/id (first agenda-ids)
-             :agenda/title "Neuer Title"
-             :agenda/description "Whatup bruh"
-             :agenda/rank 1}
-            {:db/id (second agenda-ids)
-             :agenda/title "Neuer Title 2"
-             :agenda/description "Whatup bruh 2"
-             :agenda/rank 2}]))))
-
-(deftest suggest-new-agendas!-test
-  (testing "Create a new agenda suggestion entity."
-    (let [user-id (db/add-user-if-not-exists "Christian")
-          meeting-id (:db/id (db/meeting-by-hash "89eh32hoas-2983ud"))]
-      (are [total-datoms input]
-        (= total-datoms (count (:tx-data (db/suggest-new-agendas! input user-id meeting-id))))
-        1 [{}]
-        7 [{:agenda/title "Neuer Title"
-            :agenda/description "Whatup bruh"
-            :agenda/rank 1}]
-        6 [{:agenda/title "Neuer Title"
-            :agenda/rank 1}]
-        1 [{:agenda/description "Whatup bruh"
-            :agenda/rank 1}]
-        13 [{:agenda/title "Neuer Title"
-             :agenda/description "Whatup bruh"
-             :agenda/rank 1}
-            {:agenda/title "Neuer Title 2"
-             :agenda/description "Whatup bruh 2"
-             :agenda/rank 2}]))))
-
-(deftest suggest-agenda-deletion!-test
-  (testing "Create a delete agenda suggestion entity."
-    (let [user-id (db/add-user-if-not-exists "Christian")
-          agenda-ids (map :db/id (db/agendas-by-meeting-hash "89eh32hoas-2983ud"))]
-      (are [total-datoms input]
-        (= total-datoms (count (:tx-data (db/suggest-agenda-deletion! input user-id))))
-        1 #{}
-        7 (into #{} agenda-ids)
-        ;; We transact 3 attributes, so we expect 4 datoms (one for every attribute and one for the transaction)
-        4 #{(first agenda-ids)}))))
 
 (deftest meeting-suggestions-add-get-test
   (testing "Test the writing and reading of meeting-feedback."

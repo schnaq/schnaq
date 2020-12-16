@@ -145,11 +145,10 @@
                           (string/blank? (second %))))
                    data)))
 
-(>defn- clean-nil-vals
-  "Removes all entries from a map that have a value of nil."
-  [data]
-  [associative? :ret associative?]
-  (into {} (remove #(nil? (second %)) data)))
+(defn fast-pull
+  "Pulls any entity with star-syntax and current db."
+  [id]
+  (d/pull (d/db (new-connection)) '[*] id))
 
 (>defn- clean-and-add-to-db!
   "Removes empty strings and nil values from map before transacting it to the
@@ -164,131 +163,6 @@
       (get-in
         (transact [(assoc clean-entity :db/id identifier)])
         [:tempids identifier]))))
-
-(>defn clean-and-update-db!
-  "Removes empty strings and nil values from map before transacting it to the
-  database. Checks if the specification still matches. If true, transact the
-  entity."
-  [entity spec]
-  [associative? keyword? :ret int?]
-  (let [clean-entity (clean-db-vals entity)]
-    (when (s/valid? spec clean-entity)
-      (transact [clean-entity])
-      (:db/id entity))))
-
-
-;; -----------------------------------------------------------------------------
-;; Suggestions
-
-(>defn suggest-meeting-updates!
-  ;; todo del
-  "Creates a new suggestion for a meeting update."
-  [meeting-suggestion user-id]
-  [map? :db/id :ret :db/id]
-  (let [{:keys [db/id meeting/title meeting/description]} (clean-nil-vals meeting-suggestion)]
-    (when (and (int? id)
-               (s/valid? ::specs/non-blank-string title)
-               (or (nil? description) (string? description)))
-      (let [raw-suggestion {:db/id "temporary-suggestion"
-                            :meeting.suggestion/ideator user-id
-                            :meeting.suggestion/meeting id
-                            :meeting.suggestion/title title}]
-        (get-in
-          (transact [(if description
-                       (assoc raw-suggestion :meeting.suggestion/description description)
-                       raw-suggestion)])
-          [:tempids "temporary-suggestion"])))))
-
-(s/def ::delete-agenda-suggestion-inputs (s/coll-of :db/id))
-
-(defn- build-update-agenda-suggestion
-  [user-id agenda-suggestion]
-  (let [{:keys [db/id agenda/title agenda/description agenda/rank]} (clean-nil-vals agenda-suggestion)]
-    (when (and (int? id)
-               (s/valid? ::specs/non-blank-string title)
-               (or (nil? description) (string? description)))
-      (let [raw-suggestion {:agenda.suggestion/agenda id
-                            :agenda.suggestion/ideator user-id
-                            :agenda.suggestion/title title
-                            :agenda.suggestion/rank rank
-                            :agenda.suggestion/type :agenda.suggestion.type/update}]
-        (if description
-          (assoc raw-suggestion :agenda.suggestion/description description)
-          raw-suggestion)))))
-
-(defn- build-delete-agenda-suggestion
-  [user-id agenda-id]
-  (when (s/valid? :db/id agenda-id)
-    {:agenda.suggestion/agenda agenda-id
-     :agenda.suggestion/ideator user-id
-     :agenda.suggestion/type :agenda.suggestion.type/delete}))
-
-(defn- build-new-agenda-suggestion
-  [user-id meeting-id agenda-suggestion]
-  (let [{:keys [agenda/title agenda/description agenda/rank]} (clean-nil-vals agenda-suggestion)]
-    (when (and (s/valid? ::specs/non-blank-string title)
-               (or (nil? description) (string? description)))
-      (let [raw-suggestion {:agenda.suggestion/ideator user-id
-                            :agenda.suggestion/title title
-                            :agenda.suggestion/rank rank
-                            :agenda.suggestion/type :agenda.suggestion.type/new
-                            :agenda.suggestion/meeting meeting-id}]
-        (if description
-          (assoc raw-suggestion :agenda.suggestion/description description)
-          raw-suggestion)))))
-
-(defn fast-pull
-  "Pulls any entity with star-syntax and current db."
-  [id]
-  (d/pull (d/db (new-connection)) '[*] id))
-
-(>defn- suggest-agenda-generic!
-  "Transacts multiple new suggestion entities."
-  [agenda-suggestions builder-fn]
-  [(s/or :entity (s/coll-of map?)
-         :id (s/coll-of :db/id)) fn? :ret any?]
-  (->> agenda-suggestions
-       (map builder-fn)
-       (remove nil?)
-       (into [])
-       transact))
-
-(>defn suggest-agenda-updates!
-  ;; todo del
-  "Creates new suggestions for agenda updates."
-  [agenda-suggestions user-id]
-  [(s/coll-of map?) :db/id :ret any?]
-  (suggest-agenda-generic! agenda-suggestions (partial build-update-agenda-suggestion user-id)))
-
-(>defn suggest-new-agendas!
-  ;; todo del
-  "Creates suggestions for new agendas."
-  [agenda-suggestions user-id meeting-id]
-  [(s/coll-of map?) :db/id :db/id :ret any?]
-  (suggest-agenda-generic! agenda-suggestions (partial build-new-agenda-suggestion user-id meeting-id)))
-
-(>defn suggest-agenda-deletion!
-  ;; todo del
-  [agenda-ids user-id]
-  [::delete-agenda-suggestion-inputs :db/id :ret any?]
-  (suggest-agenda-generic! agenda-ids (partial build-delete-agenda-suggestion user-id)))
-
-(def ^:private meeting-suggestion-pattern
-  [:db/id
-   {:meeting.suggestion/meeting [:db/id]}
-   :meeting.suggestion/title
-   :meeting.suggestion/description
-   {:meeting.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
-
-(def ^:private agenda-suggestion-pattern
-  [:db/id
-   :agenda.suggestion/title
-   :agenda.suggestion/description
-   :agenda.suggestion/type
-   :agenda.suggestion/rank
-   {:agenda.suggestion/agenda [:db/id]}
-   {:agenda.suggestion/meeting [:db/id]}
-   {:agenda.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks
@@ -320,21 +194,6 @@
   [meeting]
   [map? :ret int?]
   (clean-and-add-to-db! meeting ::specs/meeting))
-
-(>defn update-meeting
-  ;; todo del
-  "Updates a meeting. Returns the id of the newly updated meeting.
-  Automatically cleans input. Update of hashes is not allowed."
-  [meeting]
-  [map? :ret int?]
-  (clean-and-update-db! meeting ::specs/meeting-without-hashes))
-
-(>defn update-agenda
-  ;; todo del
-  "Updates an agenda. Object must be complete with all required attributes."
-  [agenda]
-  [map? :ret int?]
-  (clean-and-update-db! (dissoc agenda :agenda/discussion) ::specs/agenda-essentials-only))
 
 (>defn meeting-private-data
   "Return non public meeting data by id."
