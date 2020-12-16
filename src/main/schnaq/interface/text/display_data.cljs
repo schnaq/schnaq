@@ -189,7 +189,6 @@
         :meeting-create-subheader "Give your schnaq a name and description"
         :meeting-form-title-placeholder "What should the name of your meeting be?"
         :meeting-form-description "Description"
-        :meeting-form-description-placeholder "Length: X Minutes\n\nTopic"
         :meeting-form-end-date "Date"
         :meeting-form-end-time "Time"
         :meeting/copy-share-link "Copy Link:"
@@ -278,7 +277,6 @@
 
         ;; Create Agenda
         :agenda/desc-for "Description for agenda point "
-        :agenda.create/optional-agenda "Add agenda point"
 
         :agendas.button/navigate-to-suggestions "Create change suggestions"
 
@@ -633,7 +631,6 @@
         :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
         :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
         :meeting-form-description "Beschreibung"
-        :meeting-form-description-placeholder "Dauer: X Minuten\n\nThema"
         :meeting-form-end-date "Datum"
         :meeting-form-end-time "Uhrzeit"
         :meeting/copy-share-link "Link kopieren:"
@@ -715,7 +712,6 @@
 
         ;; Create Agenda
         :agenda/desc-for "Beschreibung für Agendapunkt "
-        :agenda.create/optional-agenda "Agenda hinzufügen"
 
         :agendas.button/navigate-to-suggestions "Änderungsvorschläge erstellen"
 
