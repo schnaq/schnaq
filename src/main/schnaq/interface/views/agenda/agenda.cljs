@@ -7,18 +7,6 @@
             [schnaq.interface.views.text-editor.view :as editor]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
-(defn new-agenda-local
-  ;; TODO löschen
-  "This function formats the agenda-form input and saves it locally to the db until
-  the discussion is created fully. `field` can be `title` or `description`."
-  [field content suffix]
-  (case field
-    :title (rf/dispatch [:agenda/update-title content suffix])
-    :description (rf/dispatch [:agenda/update-description content suffix])))
-
-(defn new-agenda-description-keyword [numbered-suffix]
-  (keyword (str "meeting.create/agenda/" numbered-suffix "/description")))
-
 (defn- agenda-title-input
   [attributes]
   [:<>
@@ -119,25 +107,9 @@
       (assoc-in db [:agenda :creating :all (random-uuid)] {:agenda/rank (inc biggest-rank)}))))
 
 (rf/reg-event-db
-  :agenda/update-title
-  (fn [db [_ content suffix]]
-    (assoc-in db [:agenda :creating :all suffix :title] content)))
-
-(rf/reg-event-db
-  :agenda/update-description
-  (fn [db [_ content suffix]]
-    (assoc-in db [:agenda :creating :all suffix :description] content)))
-
-(rf/reg-event-db
   :agenda/reset-temporary-entries
   (fn [db _]
     (assoc-in db [:agenda :creating :all] {})))
-
-(rf/reg-event-db
-  ;; TODO löschen
-  :agenda/delete-temporary
-  (fn [db [_ suffix]]
-    (update-in db [:agenda :creating :all] dissoc suffix)))
 
 (rf/reg-event-db
   :agenda/choose
@@ -150,12 +122,6 @@
     (assoc-in db [:agenda :chosen] response)))
 
 ;; #### Subs ####
-
-(rf/reg-sub
-  ;; TODO löschkandidat
-  :agendas.temporary/all
-  (fn [db _]
-    (get-in db [:agenda :creating :all] {})))
 
 (rf/reg-sub
   :current-agendas
