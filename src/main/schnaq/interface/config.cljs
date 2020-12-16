@@ -4,7 +4,7 @@
 (goog-define api-url "http://localhost:3000")
 (goog-define environment "development")
 (goog-define build-hash "dev")
-(goog-define demo-discussion-link "https://schnaq.com/meetings/3e4c1f44-721e-48e0-88f6-dc81528cf08f/")
+(goog-define demo-discussion-link "https://schnaq.com/meetings/ce682862-9ca2-49c8-af44-d6bf484fb87c/agenda/92358976736052/discussion/start")
 
 (def deleted-statement-text "[deleted]")
 
