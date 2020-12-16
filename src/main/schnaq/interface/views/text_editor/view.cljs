@@ -46,24 +46,3 @@
                    (when-not @unmounting?
                      (on-change-function (.value @mde-ref)))
                    (reset! unmounting? false)))))}))))
-
-(defn view-store-on-change
-  ;; TODO löschkandidat
-  "Mark Up Editor View which automatically stores its content in the local db.
-  The value can be retrieved via subscribing to ':mde/load-content'"
-  [storage-key]
-  (view nil
-        (fn [value]
-          (rf/dispatch [:mde/save-content storage-key value]))
-        nil))
-
-(rf/reg-event-db
-  :mde/save-content
-  (fn [db [_ storage-key value]]
-    (assoc-in db [:mde storage-key] value)))
-
-(rf/reg-sub
-  :mde/load-content
-  ;; TODO löschkandidat
-  (fn [db [_ storage-key]]
-    (get-in db [:mde storage-key])))
