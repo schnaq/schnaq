@@ -562,9 +562,9 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/ping" [] ping)
     (POST "/admin/statements/delete" [] delete-statements!)
-    (POST "/agenda/delete" [] delete-agenda!)
-    (POST "/agenda/new" [] new-agenda!)
-    (POST "/agenda/update" [] update-single-agenda!)
+    (POST "/agenda/delete" [] delete-agenda!)               ;; todo del
+    (POST "/agenda/new" [] new-agenda!)                     ;; todo del
+    (POST "/agenda/update" [] update-single-agenda!)        ;; todo del
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/argument/undercut" [] undercut-argument!)
@@ -581,7 +581,7 @@
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/meeting/add" [] add-meeting)
     (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
-    (POST "/meeting/info/update" [] update-meeting-info!)
+    (POST "/meeting/info/update" [] update-meeting-info!)   ;; todo del
     (POST "/meeting/feedback" [] add-suggestion-feedback)   ;; todo del
     (POST "/meeting/suggestions" [] meeting-suggestions)    ;; todo del
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
