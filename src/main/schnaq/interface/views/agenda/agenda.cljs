@@ -8,6 +8,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn new-agenda-local
+  ;; TODO löschen
   "This function formats the agenda-form input and saves it locally to the db until
   the discussion is created fully. `field` can be `title` or `description`."
   [field content suffix]
@@ -133,6 +134,7 @@
     (assoc-in db [:agenda :creating :all] {})))
 
 (rf/reg-event-db
+  ;; TODO löschen
   :agenda/delete-temporary
   (fn [db [_ suffix]]
     (update-in db [:agenda :creating :all] dissoc suffix)))
