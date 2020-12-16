@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.meeting.create
-  (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]))
 
 (defn new-meeting-helper
