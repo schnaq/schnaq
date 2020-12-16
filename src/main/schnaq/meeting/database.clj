@@ -181,6 +181,7 @@
 ;; Suggestions
 
 (>defn suggest-meeting-updates!
+  ;; todo del
   "Creates a new suggestion for a meeting update."
   [meeting-suggestion user-id]
   [map? :db/id :ret :db/id]
@@ -253,6 +254,7 @@
        transact))
 
 (>defn suggest-agenda-updates!
+  ;; todo del
   "Creates new suggestions for agenda updates."
   [agenda-suggestions user-id]
   [(s/coll-of map?) :db/id :ret any?]
@@ -320,6 +322,7 @@
   (clean-and-add-to-db! meeting ::specs/meeting))
 
 (>defn update-meeting
+  ;; todo del
   "Updates a meeting. Returns the id of the newly updated meeting.
   Automatically cleans input. Update of hashes is not allowed."
   [meeting]
@@ -327,6 +330,7 @@
   (clean-and-update-db! meeting ::specs/meeting-without-hashes))
 
 (>defn update-agenda
+  ;; todo del
   "Updates an agenda. Object must be complete with all required attributes."
   [agenda]
   [map? :ret int?]
@@ -416,6 +420,7 @@
    :agenda/discussion])
 
 (>defn agenda
+  ;; todo del
   "Return agenda data by id."
   [id]
   [int? :ret ::specs/agenda]
