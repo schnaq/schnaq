@@ -276,20 +276,6 @@
    :meeting.suggestion/description
    {:meeting.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
 
-(defn all-meeting-suggestions
-  "Return all suggestions for a meeting."
-  [share-hash]
-  (-> (d/q
-        '[:find (pull ?meeting-suggestion meeting-suggestion-pattern)
-          :in $ ?share-hash meeting-suggestion-pattern
-          :where [?meeting :meeting/share-hash ?share-hash]
-          [?agendas :agenda/meeting ?meeting]
-          [?meeting-suggestion :meeting.suggestion/meeting ?meeting]]
-        (d/db (new-connection)) share-hash meeting-suggestion-pattern)
-      (toolbelt/pull-key-up :user/core-author)
-      (toolbelt/pull-key-up :author/nickname)
-      flatten))
-
 (def ^:private agenda-suggestion-pattern
   [:db/id
    :agenda.suggestion/title
@@ -299,46 +285,6 @@
    {:agenda.suggestion/agenda [:db/id]}
    {:agenda.suggestion/meeting [:db/id]}
    {:agenda.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
-
-(defn- all-new-agenda-suggestions
-  "New agenda suggestions don't have an existing agenda id. This function
-  returns them separately."
-  [share-hash]
-  (->
-    (d/q
-      '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
-        :in $ ?share-hash agenda-suggestion-pattern
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda-suggestions :agenda.suggestion/meeting ?meeting]
-        [?agenda-suggestions :agenda.suggestion/type :agenda.suggestion.type/new]]
-      (d/db (new-connection)) share-hash agenda-suggestion-pattern)
-    (toolbelt/pull-key-up :db/ident)
-    (toolbelt/pull-key-up :user/core-author)
-    (toolbelt/pull-key-up :author/nickname)
-    flatten))
-
-(defn- all-update-and-delete-agenda-suggestions
-  "Return all update- and delete-suggestions concerning an agenda for a given
-  meeting's share-hash."
-  [share-hash]
-  (-> (d/q
-        '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
-          :in $ ?share-hash agenda-suggestion-pattern
-          :where [?meeting :meeting/share-hash ?share-hash]
-          [?agendas :agenda/meeting ?meeting]
-          [?agenda-suggestions :agenda.suggestion/agenda ?agendas]]
-        (d/db (new-connection)) share-hash agenda-suggestion-pattern)
-      (toolbelt/pull-key-up :db/ident)
-      (toolbelt/pull-key-up :user/core-author)
-      (toolbelt/pull-key-up :author/nickname)
-      flatten))
-
-(defn all-agenda-suggestions
-  "Return all suggestions for a given meeting share-hash."
-  [share-hash]
-  (concat (all-update-and-delete-agenda-suggestions share-hash)
-          (all-new-agenda-suggestions share-hash)))
-
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks
@@ -913,6 +859,7 @@
    {:meeting.feedback/ideator [{:user/core-author [:author/nickname]}]}])
 
 (>defn meeting-feedback-for
+  ;; todo del
   "Returns all meeting-feedback for a certain meeting."
   [share-hash]
   [:meeting/share-hash :ret sequential?]

@@ -91,29 +91,6 @@
               (:meeting/title created-meeting))
     (created "" {:new-meeting created-meeting})))
 
-(defn- update-meeting!
-  "Updates a meeting and its agendas."
-  [{:keys [body-params]}]
-  (let [nickname (:nickname body-params)
-        user-id (db/add-user-if-not-exists nickname)
-        meeting (:meeting body-params)
-        ;; Do not let the user modify arbitrary db/id's
-        meeting-id (-> meeting :meeting/share-hash db/meeting-by-hash :db/id)
-        updated-meeting (assoc (select-keys meeting [:meeting/title :meeting/description]) :db/id meeting-id)
-        updated-agendas (filter :agenda/discussion (:agendas body-params))
-        new-agendas (remove :agenda/discussion (:agendas body-params))]
-    (if (valid-credentials? (:meeting/share-hash meeting) (:meeting/edit-hash meeting))
-      (do (db/update-meeting (assoc updated-meeting :meeting/author user-id))
-          (doseq [agenda new-agendas]
-            (db/add-agenda-point (:agenda/title agenda) (:agenda/description agenda)
-                                 (:agenda/meeting agenda) (:agenda/rank agenda)))
-          (doseq [agenda updated-agendas]
-            (db/update-agenda agenda))
-          (db/delete-agendas (:delete-agendas body-params) (:db/id meeting))
-          (log/info "Meeting has been updated: " meeting-id)
-          (ok {:text "Your schnaq has been updated."}))
-      (deny-access))))
-
 (defn- update-single-agenda!
   "Update a single agenda, when the credentials are valid."
   [{:keys [body-params]}]
@@ -187,20 +164,6 @@
         (ok {:message "Feedback created"
              :feedback/id (db/add-meeting-feedback feedback meeting-id user-id)}))
       (bad-request {:error "You can not submit blank feedback."}))))
-
-(>defn- load-meeting-suggestions
-  "Return all suggestions for a given meeting by its share hash."
-  [{:keys [route-params]}]
-  [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash]} route-params]
-    (if (valid-credentials? share-hash edit-hash)
-      (let [agenda-suggestions (group-by :agenda.suggestion/type (db/all-agenda-suggestions share-hash))
-            meeting-suggestions (db/all-meeting-suggestions share-hash)
-            meeting-feedback (db/meeting-feedback-for share-hash)]
-        (ok (assoc agenda-suggestions
-              :meeting.suggestions/all meeting-suggestions
-              :meeting.feedback/feedback meeting-feedback)))
-      (deny-access))))
 
 (defn- add-author
   "Adds an author to the database."
@@ -596,7 +559,6 @@
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/export/txt" [] export-txt-data)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
-    (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions) ; TODO löschen
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/ping" [] ping)
     (POST "/admin/statements/delete" [] delete-statements!)
@@ -622,7 +584,6 @@
     (POST "/meeting/info/update" [] update-meeting-info!)
     (POST "/meeting/feedback" [] add-suggestion-feedback)
     (POST "/meeting/suggestions" [] meeting-suggestions)
-    (POST "/meeting/update" [] update-meeting!)             ;; todo del
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     ;; Analytics routes
@@ -634,7 +595,6 @@
     (POST "/analytics/statement-lengths" [] statement-lengths-stats)
     (POST "/analytics/statements" [] number-of-statements)
     (POST "/analytics/usernames" [] number-of-usernames)))
-
 
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."
