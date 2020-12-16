@@ -88,14 +88,6 @@
                       :start (fn [{:keys [path]}]
                                (let [{:keys [share-hash edit-hash]} path]
                                  (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
-      ["/edit"
-       {:name :routes.meeting/edit
-        :view agenda-edit/agenda-edit-view
-        :controllers [{:parameters {:path [:share-hash :edit-hash]}
-                       :start (fn [{:keys [path]}]
-                                (rf/dispatch [:agenda/load-for-edit (:share-hash path)])
-                                (rf/dispatch [:suggestions/get-updates (:share-hash path) (:edit-hash path)]))
-                       :stop #(rf/dispatch [:agenda.edit/reset-edit-updates])}]}]
       ["/manage"
        {:name :routes.meeting/admin-center
         :view meeting-admin/admin-center-view

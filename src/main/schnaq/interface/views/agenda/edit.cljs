@@ -258,11 +258,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- edit-header []
-  [base/header
-   (labels :agenda/edit-title)
-   (labels :agenda/edit-subtitle)])
-
 (defn- submit-edit-button []
   [:button.btn.button-primary (labels :agenda/edit-button)])
 
@@ -350,16 +345,6 @@
         [agenda/add-agenda-button (count meeting-agendas) :agenda/add-edit-form]
         extras
         [submit-edit-button]]]])))
-
-(defn- edit-view []
-  [editable-meeting-template
-   [edit-header]
-   (fn [e]
-     (js-wrap/prevent-default e)
-     (rf/dispatch [:meeting/submit-changes]))])
-
-(defn agenda-edit-view []
-  [edit-view])
 
 (defn- suggestion-feedback-input
   []
@@ -501,29 +486,6 @@
   (fn [db [_ attribute new-val]]
     (update-in db [:edit-meeting :meeting] assoc attribute new-val)))
 
-;; submit changes
-
-(rf/reg-event-fx
-  :meeting/submit-changes
-  (fn [{:keys [db]} _]
-    (let [edit-meeting (:edit-meeting db)
-          edit-hash (get-in db [:current-route :path-params :edit-hash])
-          finalized-changes (assoc-in edit-meeting [:meeting :meeting/edit-hash] edit-hash)
-          nickname (-> db :user :name)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/meeting/update")
-                          :params (assoc finalized-changes :nickname nickname)
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:meeting/on-success-submit-changes-event finalized-changes]
-                          :on-failure [:ajax.error/as-notification]}]]})))
-
-(rf/reg-event-fx
-  :meeting/on-success-submit-changes-event
-  (fn [_ [_ {:keys [meeting]} _response]]
-    {:fx [[:dispatch [:meeting/select-current meeting]]
-          [:dispatch [:navigation/navigate :routes.meeting/show {:share-hash (:meeting/share-hash meeting)}]]]}))
-
 (rf/reg-event-fx
   :meeting/on-success-submit-suggestions-event
   (fn [{:keys [db]} [_ _]]
@@ -549,31 +511,6 @@
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting/on-success-submit-suggestions-event]
                           :on-failure [:ajax.error/as-notification]}]]})))
-
-(rf/reg-event-db
-  :suggestions/for-meeting-success
-  (fn [db [_ {:keys [agenda.suggestion.type/update agenda.suggestion.type/new
-                     agenda.suggestion.type/delete meeting.suggestions/all
-                     meeting.feedback/feedback]}]]
-    (let [group-by-agenda-id #(get-in % [:agenda.suggestion/agenda :db/id])
-          meeting-id (:db/id (:meeting.suggestion/meeting (first all)))]
-      (-> db
-          (assoc-in [:suggestions :feedback] feedback)
-          (assoc-in [:suggestions :meetings meeting-id] all)
-          (assoc-in [:suggestions :agendas :updates] (group-by group-by-agenda-id update))
-          (assoc-in [:suggestions :agendas :delete] (group-by group-by-agenda-id delete))
-          (assoc-in [:suggestions :agendas :new] new)))))
-
-(rf/reg-event-fx
-  :suggestions/get-updates
-  (fn [_ [_ share-hash edit-hash]]
-    {:fx [[:http-xhrio {:method :get
-                        :uri (gstring/format "%s/meeting/suggestions/%s/%s"
-                                             (:rest-backend config) share-hash edit-hash)
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:suggestions/for-meeting-success]
-                        :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-sub
   :suggestions/meeting

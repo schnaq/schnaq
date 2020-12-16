@@ -596,7 +596,7 @@
     (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/export/txt" [] export-txt-data)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
-    (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions)
+    (GET "/meeting/suggestions/:share-hash/:edit-hash" [] load-meeting-suggestions) ; TODO löschen
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/ping" [] ping)
     (POST "/admin/statements/delete" [] delete-statements!)
@@ -622,7 +622,7 @@
     (POST "/meeting/info/update" [] update-meeting-info!)
     (POST "/meeting/feedback" [] add-suggestion-feedback)
     (POST "/meeting/suggestions" [] meeting-suggestions)
-    (POST "/meeting/update" [] update-meeting!)
+    (POST "/meeting/update" [] update-meeting!)             ;; todo del
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     ;; Analytics routes

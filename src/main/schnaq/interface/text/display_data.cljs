@@ -310,8 +310,6 @@
         :agenda.create/optional-agenda "Add agenda point"
 
         ;; Edit Agenda
-        :agenda/edit-title "Edit schnaq"
-        :agenda/edit-subtitle "Edit description and agenda points"
         :agenda/edit-button "Save changes"
 
         :agendas.button/navigate-to-suggestions "Create change suggestions"
@@ -781,8 +779,6 @@
         :agenda.create/optional-agenda "Agenda hinzufügen"
 
         ;; Edit Agenda
-        :agenda/edit-title "Schnaq editieren"
-        :agenda/edit-subtitle "Beschreibung und Agendapunkte editieren"
         :agenda/edit-button "Änderungen speichern"
 
         :agendas.button/navigate-to-suggestions "Änderungsvorschläge erstellen"
