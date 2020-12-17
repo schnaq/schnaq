@@ -569,6 +569,17 @@
          (d/db (new-connection)) (Date/from since) attribute))
      0)))
 
+(>defn last-meeting
+  "Returns the timestamp of the last meeting created."
+  []
+  [:ret inst?]
+  (ffirst
+    (d/q
+      '[:find (max ?created-time)
+        :where [?meetings :meeting/type :meeting.type/meeting ?tx]
+        [?tx :db/txInstant ?created-time]]
+      (d/db (new-connection)))))
+
 (>defn- number-of-entities-with-value-since
   "Returns the number of entities in the db since some timestamp. Default is all."
   ([attribute value]

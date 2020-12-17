@@ -348,6 +348,7 @@
         :analytics/active-users-num-title "Active users"
         :analytics/statement-lengths-title "Length of statements"
         :analytics/argument-types-title "Argument types"
+        :analytics/last-meeting-created-title "Last meeting created at"
         :analytics/fetch-data-button "Retrieving data…"
 
         ;; Testimonials
@@ -788,6 +789,7 @@
         :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
         :analytics/statement-lengths-title "Beitragslängen"
         :analytics/argument-types-title "Argumenttypen"
+        :analytics/last-meeting-created-title "Letztes Meeting erstellt am"
         :analytics/fetch-data-button "Hole Daten"
 
         ;; Testimonials

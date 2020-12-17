@@ -383,6 +383,13 @@
     (ok {:meetings-num (db/number-of-meetings)})
     (deny-access)))
 
+(defn- last-meeting-date
+  "Returns the date of the last meeting created."
+  [{:keys [body-params]}]
+  (if (valid-password? (:password body-params))
+    (ok {:last-created (db/last-meeting)})
+    (deny-access)))
+
 (defn- number-of-usernames
   "Returns the number of all meetings."
   [{:keys [body-params]}]
@@ -511,6 +518,7 @@
     (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
     (POST "/analytics/argument-types" [] argument-type-stats)
     (POST "/analytics/meetings" [] number-of-meetings)
+    (POST "/analytics/last-meetings" [] last-meeting-date)
     (POST "/analytics/statement-lengths" [] statement-lengths-stats)
     (POST "/analytics/statements" [] number-of-statements)
     (POST "/analytics/usernames" [] number-of-usernames)))

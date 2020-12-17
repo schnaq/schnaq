@@ -65,7 +65,10 @@
           statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
           active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
-          argument-types @(rf/subscribe [:analytics/argument-type-stats])]
+          argument-types @(rf/subscribe [:analytics/argument-type-stats])
+          last-meeting @(rf/subscribe [:analytics/last-meeting-created])
+          last-meeting-date (str (.getDate last-meeting) "." (.getMonth last-meeting) "."
+                                 (.getFullYear last-meeting))]
       [:div.container.px-5.py-3
        [analytics-controls]
        [:div.card-columns
@@ -74,6 +77,7 @@
         [analytics-card (labels :analytics/average-agendas-title) average-agendas]
         [analytics-card (labels :analytics/statements-num-title) statements-num]
         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
+        [analytics-card (labels :analytics/last-meeting-created-title) last-meeting-date]
         [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
         [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])]])
 
@@ -91,7 +95,8 @@
           [:dispatch [:analytics/load-statements-num]]
           [:dispatch [:analytics/load-active-users]]
           [:dispatch [:analytics/load-statement-length-stats]]
-          [:dispatch [:analytics/load-argument-type-stats]]]}))
+          [:dispatch [:analytics/load-argument-type-stats]]
+          [:dispatch [:analytics/load-last-meeting-date]]]}))
 
 (>defn fetch-with-password
   "Fetches something from an endpoint with the password."
@@ -118,6 +123,11 @@
   :analytics/load-meeting-num
   (fn [{:keys [db]} _]
     (fetch-with-password db "/analytics/meetings" :analytics/meeting-num-loaded)))
+
+(rf/reg-event-fx
+  :analytics/load-last-meeting-date
+  (fn [{:keys [db]} _]
+    (fetch-with-password db "/analytics/last-meetings" :analytics/last-meeting-created-success)))
 
 (rf/reg-event-fx
   :analytics/load-usernames-num
@@ -185,6 +195,11 @@
     (assoc-in db [:analytics :arguments :types] argument-type-stats)))
 
 (rf/reg-event-db
+  :analytics/last-meeting-created-success
+  (fn [db [_ {:keys [last-created]}]]
+    (assoc-in db [:analytics :meetings :last-created] last-created)))
+
+(rf/reg-event-db
   :analytics/all-stats-loaded
   (fn [db [_ {:keys [stats]}]]
     (assoc db :analytics {:meetings-num {:overall (:meetings-num stats)}
@@ -231,3 +246,8 @@
   :analytics/argument-type-stats
   (fn [db _]
     (get-in db [:analytics :arguments :types])))
+
+(rf/reg-sub
+  :analytics/last-meeting-created
+  (fn [db _]
+    (get-in db [:analytics :meetings :last-created])))
