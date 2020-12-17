@@ -5,7 +5,6 @@
 
 (def ^:private translations
   {:en {;; Common
-        :common/save "Save"
         :common/language "Language"
         :error/export-failed "Export failed. Please try again later."
 
@@ -187,12 +186,9 @@
         :schnaqs/create "Create schnaq"
 
         ;; Create meeting
-        :meeting-create-header "Prepare Meeting"
         :meeting-create-subheader "Give your schnaq a name and description"
-        :meeting-form-title "Title"
         :meeting-form-title-placeholder "What should the name of your meeting be?"
         :meeting-form-description "Description"
-        :meeting-form-description-placeholder "Length: X Minutes\n\nTopic"
         :meeting-form-end-date "Date"
         :meeting-form-end-time "Time"
         :meeting/copy-share-link "Copy Link:"
@@ -205,8 +201,6 @@
         :meetings/continue-to-schnaq-button "To the schnaq"
         :meetings/edit-schnaq-button "Edit schnaq"
         :meetings/share-calendar-invite "Send calendar invites"
-        :meetings.suggestions/header "Add suggestions"
-        :meetings.suggestions/subheader "The administrators are able to see and accept or deny the suggestions"
 
         :meeting.admin/addresses-label "Email addresses of the participants"
         :meeting.admin/addresses-placeholder "Email addresses separated by a newline or space."
@@ -281,40 +275,8 @@
         :meeting/admin-center-export "Download discussion as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
 
-        ;; Suggestions
-        :suggestions.modal/header "Suggestions of others"
-        :suggestions.modal/primer "Some participants left suggestions fo your meeting."
-        :suggestions.modal/primer-delete "The following participants propose to delete the agenda-point."
-        :suggestions.modal.delete/button "Delete now!"
-        :suggestions.modal.table/nickname "Nickname"
-        :suggestions.modal.table/suggestion-title "Title"
-        :suggestions.modal.table/suggestion-description "Description"
-        :suggestions.modal.table/suggestion-accept "Accept"
-        :suggestions.modal.delete/title "Deletion requests for this agenda point"
-        :suggestions.modal.update/title "Change suggestions for this agenda point"
-        :suggestions.modal.new/title "Suggestions for new agenda points"
-        :suggestions.notification/title "Suggestion added"
-        :suggestions.notification/body "Your suggestions were added successfully"
-        :suggestions.update.agenda/success-title "Suggestion added"
-        :suggestions.update.agenda/success-body "The suggestion was accepted and can be viewed by the participants."
-        :suggestions.agenda/delete-title "Agenda point deleted"
-        :suggestions.agenda/delete-body "The agenda point was deleted successfully"
-        :suggestion.feedback/label "Additional feedback"
-        :suggestions.feedback/title "Feedback regarding the meeting"
-        :suggestions.feedback/primer "The following feedback was given regarding the meeting"
-        :suggestions.feedback.table/nickname "Nickname"
-        :suggestions.feedback.table/content "Feedback"
-        :suggestions.feedback/header "Freeform feedback"
-
         ;; Create Agenda
         :agenda/desc-for "Description for agenda point "
-        :agenda/point "Agenda point "
-        :agenda.create/optional-agenda "Add agenda point"
-
-        ;; Edit Agenda
-        :agenda/edit-title "Edit schnaq"
-        :agenda/edit-subtitle "Edit description and agenda points"
-        :agenda/edit-button "Save changes"
 
         :agendas.button/navigate-to-suggestions "Create change suggestions"
 
@@ -386,6 +348,7 @@
         :analytics/active-users-num-title "Active users"
         :analytics/statement-lengths-title "Length of statements"
         :analytics/argument-types-title "Argument types"
+        :analytics/last-meeting-created-title "Last meeting created at"
         :analytics/fetch-data-button "Retrieving data…"
 
         ;; Testimonials
@@ -509,7 +472,6 @@
         :router/analytics "Analytics dashboard"
         :router/continue-discussion "Continue Discussion"
         :router/create-brainstorm "Create Brainstorming"
-        :router/create-meeting "Create schnaq"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
         :router/invalid-link "Error page"
@@ -523,7 +485,6 @@
         :router/startpage "Startpage"
         :router/true-404-view "404 error page"}
    :de {;; Common
-        :common/save "Speichern"
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
 
@@ -668,12 +629,9 @@
         :schnaqs/create "schnaq anlegen"
 
         ;; Create meeting
-        :meeting-create-header "Meeting vorbereiten"
         :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
-        :meeting-form-title "Titel"
         :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
         :meeting-form-description "Beschreibung"
-        :meeting-form-description-placeholder "Dauer: X Minuten\n\nThema"
         :meeting-form-end-date "Datum"
         :meeting-form-end-time "Uhrzeit"
         :meeting/copy-share-link "Link kopieren:"
@@ -686,8 +644,6 @@
         :meetings/continue-to-schnaq-button "Zum schnaq"
         :meetings/edit-schnaq-button "schnaq editieren"
         :meetings/share-calendar-invite "Kalendereinladung versenden"
-        :meetings.suggestions/header "Vorschläge einreichen"
-        :meetings.suggestions/subheader "Die erstellende Person kann die Vorschläge einsehen und berücksichtigen"
 
         :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmer:innen"
         :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
@@ -755,40 +711,8 @@
         :meeting/admin-center-export "Diskussion als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
 
-        ;; Suggestions
-        :suggestions.modal/header "Eingereichte Vorschläge"
-        :suggestions.modal/primer "Einige TeilnehmerInnen haben Ihnen Vorschläge zu Ihrem schnaq gegeben."
-        :suggestions.modal/primer-delete "Folgende Teilnehmer:innen schlagen die Löschung des Agendapunktes vor."
-        :suggestions.modal.delete/button "Endgültig löschen"
-        :suggestions.modal.table/nickname "Nickname"
-        :suggestions.modal.table/suggestion-title "Titel"
-        :suggestions.modal.table/suggestion-description "Beschreibung"
-        :suggestions.modal.table/suggestion-accept "Übernehmen"
-        :suggestions.modal.delete/title "Löschanfragen zu diesem Agendapunkt"
-        :suggestions.modal.update/title "Änderungsvorschläge"
-        :suggestions.modal.new/title "Vorschläge folgende neuen Agendapunkte hinzuzufügen"
-        :suggestions.notification/title "Vorschläge eingereicht"
-        :suggestions.notification/body "Ihre Vorschläge wurden erfolgreich verschickt!"
-        :suggestions.update.agenda/success-title "Vorschlag übernommen"
-        :suggestions.update.agenda/success-body "Der Vorschlag wurde übernommen und ist für alle TeilnehmerInnen sichtbar."
-        :suggestions.agenda/delete-title "Agendapunkt gelöscht"
-        :suggestions.agenda/delete-body "Der Agendapunkt wurde erfolgreich gelöscht"
-        :suggestion.feedback/label "Zusätzliches Feedback"
-        :suggestions.feedback/title "Feedback zum Meeting"
-        :suggestions.feedback/primer "Folgendes Feedback wurde zu diesem Meeting im Vorfeld abgegeben."
-        :suggestions.feedback.table/nickname "Nickname"
-        :suggestions.feedback.table/content "Feedback"
-        :suggestions.feedback/header "Freitext-Feedback"
-
         ;; Create Agenda
         :agenda/desc-for "Beschreibung für Agendapunkt "
-        :agenda/point "Agendapunkt "
-        :agenda.create/optional-agenda "Agenda hinzufügen"
-
-        ;; Edit Agenda
-        :agenda/edit-title "Schnaq editieren"
-        :agenda/edit-subtitle "Beschreibung und Agendapunkte editieren"
-        :agenda/edit-button "Änderungen speichern"
 
         :agendas.button/navigate-to-suggestions "Änderungsvorschläge erstellen"
 
@@ -865,6 +789,7 @@
         :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
         :analytics/statement-lengths-title "Beitragslängen"
         :analytics/argument-types-title "Argumenttypen"
+        :analytics/last-meeting-created-title "Letztes Meeting erstellt am"
         :analytics/fetch-data-button "Hole Daten"
 
         ;; Testimonials

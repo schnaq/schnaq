@@ -145,11 +145,10 @@
                           (string/blank? (second %))))
                    data)))
 
-(>defn- clean-nil-vals
-  "Removes all entries from a map that have a value of nil."
-  [data]
-  [associative? :ret associative?]
-  (into {} (remove #(nil? (second %)) data)))
+(defn fast-pull
+  "Pulls any entity with star-syntax and current db."
+  [id]
+  (d/pull (d/db (new-connection)) '[*] id))
 
 (>defn- clean-and-add-to-db!
   "Removes empty strings and nil values from map before transacting it to the
@@ -164,181 +163,6 @@
       (get-in
         (transact [(assoc clean-entity :db/id identifier)])
         [:tempids identifier]))))
-
-(>defn clean-and-update-db!
-  "Removes empty strings and nil values from map before transacting it to the
-  database. Checks if the specification still matches. If true, transact the
-  entity."
-  [entity spec]
-  [associative? keyword? :ret int?]
-  (let [clean-entity (clean-db-vals entity)]
-    (when (s/valid? spec clean-entity)
-      (transact [clean-entity])
-      (:db/id entity))))
-
-
-;; -----------------------------------------------------------------------------
-;; Suggestions
-
-(>defn suggest-meeting-updates!
-  "Creates a new suggestion for a meeting update."
-  [meeting-suggestion user-id]
-  [map? :db/id :ret :db/id]
-  (let [{:keys [db/id meeting/title meeting/description]} (clean-nil-vals meeting-suggestion)]
-    (when (and (int? id)
-               (s/valid? ::specs/non-blank-string title)
-               (or (nil? description) (string? description)))
-      (let [raw-suggestion {:db/id "temporary-suggestion"
-                            :meeting.suggestion/ideator user-id
-                            :meeting.suggestion/meeting id
-                            :meeting.suggestion/title title}]
-        (get-in
-          (transact [(if description
-                       (assoc raw-suggestion :meeting.suggestion/description description)
-                       raw-suggestion)])
-          [:tempids "temporary-suggestion"])))))
-
-(s/def ::delete-agenda-suggestion-inputs (s/coll-of :db/id))
-
-(defn- build-update-agenda-suggestion
-  [user-id agenda-suggestion]
-  (let [{:keys [db/id agenda/title agenda/description agenda/rank]} (clean-nil-vals agenda-suggestion)]
-    (when (and (int? id)
-               (s/valid? ::specs/non-blank-string title)
-               (or (nil? description) (string? description)))
-      (let [raw-suggestion {:agenda.suggestion/agenda id
-                            :agenda.suggestion/ideator user-id
-                            :agenda.suggestion/title title
-                            :agenda.suggestion/rank rank
-                            :agenda.suggestion/type :agenda.suggestion.type/update}]
-        (if description
-          (assoc raw-suggestion :agenda.suggestion/description description)
-          raw-suggestion)))))
-
-(defn- build-delete-agenda-suggestion
-  [user-id agenda-id]
-  (when (s/valid? :db/id agenda-id)
-    {:agenda.suggestion/agenda agenda-id
-     :agenda.suggestion/ideator user-id
-     :agenda.suggestion/type :agenda.suggestion.type/delete}))
-
-(defn- build-new-agenda-suggestion
-  [user-id meeting-id agenda-suggestion]
-  (let [{:keys [agenda/title agenda/description agenda/rank]} (clean-nil-vals agenda-suggestion)]
-    (when (and (s/valid? ::specs/non-blank-string title)
-               (or (nil? description) (string? description)))
-      (let [raw-suggestion {:agenda.suggestion/ideator user-id
-                            :agenda.suggestion/title title
-                            :agenda.suggestion/rank rank
-                            :agenda.suggestion/type :agenda.suggestion.type/new
-                            :agenda.suggestion/meeting meeting-id}]
-        (if description
-          (assoc raw-suggestion :agenda.suggestion/description description)
-          raw-suggestion)))))
-
-(defn fast-pull
-  "Pulls any entity with star-syntax and current db."
-  [id]
-  (d/pull (d/db (new-connection)) '[*] id))
-
-(>defn- suggest-agenda-generic!
-  "Transacts multiple new suggestion entities."
-  [agenda-suggestions builder-fn]
-  [(s/or :entity (s/coll-of map?)
-         :id (s/coll-of :db/id)) fn? :ret any?]
-  (->> agenda-suggestions
-       (map builder-fn)
-       (remove nil?)
-       (into [])
-       transact))
-
-(>defn suggest-agenda-updates!
-  "Creates new suggestions for agenda updates."
-  [agenda-suggestions user-id]
-  [(s/coll-of map?) :db/id :ret any?]
-  (suggest-agenda-generic! agenda-suggestions (partial build-update-agenda-suggestion user-id)))
-
-(>defn suggest-new-agendas!
-  "Creates suggestions for new agendas."
-  [agenda-suggestions user-id meeting-id]
-  [(s/coll-of map?) :db/id :db/id :ret any?]
-  (suggest-agenda-generic! agenda-suggestions (partial build-new-agenda-suggestion user-id meeting-id)))
-
-(>defn suggest-agenda-deletion!
-  [agenda-ids user-id]
-  [::delete-agenda-suggestion-inputs :db/id :ret any?]
-  (suggest-agenda-generic! agenda-ids (partial build-delete-agenda-suggestion user-id)))
-
-(def ^:private meeting-suggestion-pattern
-  [:db/id
-   {:meeting.suggestion/meeting [:db/id]}
-   :meeting.suggestion/title
-   :meeting.suggestion/description
-   {:meeting.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
-
-(defn all-meeting-suggestions
-  "Return all suggestions for a meeting."
-  [share-hash]
-  (-> (d/q
-        '[:find (pull ?meeting-suggestion meeting-suggestion-pattern)
-          :in $ ?share-hash meeting-suggestion-pattern
-          :where [?meeting :meeting/share-hash ?share-hash]
-          [?agendas :agenda/meeting ?meeting]
-          [?meeting-suggestion :meeting.suggestion/meeting ?meeting]]
-        (d/db (new-connection)) share-hash meeting-suggestion-pattern)
-      (toolbelt/pull-key-up :user/core-author)
-      (toolbelt/pull-key-up :author/nickname)
-      flatten))
-
-(def ^:private agenda-suggestion-pattern
-  [:db/id
-   :agenda.suggestion/title
-   :agenda.suggestion/description
-   :agenda.suggestion/type
-   :agenda.suggestion/rank
-   {:agenda.suggestion/agenda [:db/id]}
-   {:agenda.suggestion/meeting [:db/id]}
-   {:agenda.suggestion/ideator [{:user/core-author [:author/nickname]}]}])
-
-(defn- all-new-agenda-suggestions
-  "New agenda suggestions don't have an existing agenda id. This function
-  returns them separately."
-  [share-hash]
-  (->
-    (d/q
-      '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
-        :in $ ?share-hash agenda-suggestion-pattern
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda-suggestions :agenda.suggestion/meeting ?meeting]
-        [?agenda-suggestions :agenda.suggestion/type :agenda.suggestion.type/new]]
-      (d/db (new-connection)) share-hash agenda-suggestion-pattern)
-    (toolbelt/pull-key-up :db/ident)
-    (toolbelt/pull-key-up :user/core-author)
-    (toolbelt/pull-key-up :author/nickname)
-    flatten))
-
-(defn- all-update-and-delete-agenda-suggestions
-  "Return all update- and delete-suggestions concerning an agenda for a given
-  meeting's share-hash."
-  [share-hash]
-  (-> (d/q
-        '[:find (pull ?agenda-suggestions agenda-suggestion-pattern)
-          :in $ ?share-hash agenda-suggestion-pattern
-          :where [?meeting :meeting/share-hash ?share-hash]
-          [?agendas :agenda/meeting ?meeting]
-          [?agenda-suggestions :agenda.suggestion/agenda ?agendas]]
-        (d/db (new-connection)) share-hash agenda-suggestion-pattern)
-      (toolbelt/pull-key-up :db/ident)
-      (toolbelt/pull-key-up :user/core-author)
-      (toolbelt/pull-key-up :author/nickname)
-      flatten))
-
-(defn all-agenda-suggestions
-  "Return all suggestions for a given meeting share-hash."
-  [share-hash]
-  (concat (all-update-and-delete-agenda-suggestions share-hash)
-          (all-new-agenda-suggestions share-hash)))
-
 
 ;; -----------------------------------------------------------------------------
 ;; Feedbacks
@@ -370,19 +194,6 @@
   [meeting]
   [map? :ret int?]
   (clean-and-add-to-db! meeting ::specs/meeting))
-
-(>defn update-meeting
-  "Updates a meeting. Returns the id of the newly updated meeting.
-  Automatically cleans input. Update of hashes is not allowed."
-  [meeting]
-  [map? :ret int?]
-  (clean-and-update-db! meeting ::specs/meeting-without-hashes))
-
-(>defn update-agenda
-  "Updates an agenda. Object must be complete with all required attributes."
-  [agenda]
-  [map? :ret int?]
-  (clean-and-update-db! (dissoc agenda :agenda/discussion) ::specs/agenda-essentials-only))
 
 (>defn meeting-private-data
   "Return non public meeting data by id."
@@ -466,12 +277,6 @@
    :agenda/meeting
    :agenda/rank
    :agenda/discussion])
-
-(>defn agenda
-  "Return agenda data by id."
-  [id]
-  [int? :ret ::specs/agenda]
-  (d/pull (d/db (new-connection)) agenda-pattern id))
 
 (defn agendas-by-meeting-hash
   "Return all agendas belonging to a certain meeting. Ready for the wire."
@@ -742,15 +547,6 @@
           [?meeting :meeting/share-hash ?hash]]
         (d/db (new-connection)) statement-id meeting-hash))))
 
-(>defn delete-agendas
-  "Remove all agendas. Check for id belonging to a meeting before removing."
-  [agenda-ids meeting-id]
-  [(s/coll-of int?) int? :ret (? map?)]
-  (let [corresponding-meetings (map #(d/pull (d/db (new-connection)) [:agenda/meeting] %) agenda-ids)
-        checked-agendas (filter #(= meeting-id (get-in % [:agenda/meeting :db/id])) corresponding-meetings)]
-    (when (= (count corresponding-meetings) (count checked-agendas))
-      (transact (mapv #(vector :db/retractEntity %) agenda-ids)))))
-
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
 
 (def ^:private max-time-back Instant/EPOCH)
@@ -772,6 +568,17 @@
            [(< ?since ?start-date)]]
          (d/db (new-connection)) (Date/from since) attribute))
      0)))
+
+(>defn last-meeting
+  "Returns the timestamp of the last meeting created."
+  []
+  [:ret inst?]
+  (ffirst
+    (d/q
+      '[:find (max ?created-time)
+        :where [?meetings :meeting/type :meeting.type/meeting ?tx]
+        [?tx :db/txInstant ?created-time]]
+      (d/db (new-connection)))))
 
 (>defn- number-of-entities-with-value-since
   "Returns the number of entities in the db since some timestamp. Default is all."
@@ -894,38 +701,6 @@
    {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
     :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
     :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))
-
-(>defn add-meeting-feedback
-  "Adds a new meeting-feedback entity. Returns the entities id."
-  [feedback meeting-id user-id]
-  [string? int? int? :ret int?]
-  (get-in
-    (transact [{:db/id "temp-meeting-feedback"
-                :meeting.feedback/ideator user-id
-                :meeting.feedback/content feedback
-                :meeting.feedback/meeting meeting-id}])
-    [:tempids "temp-meeting-feedback"]))
-
-(def ^:private meeting-feedback-pattern
-  [:db/id
-   :meeting.feedback/content
-   :meeting.feedback/meeting
-   {:meeting.feedback/ideator [{:user/core-author [:author/nickname]}]}])
-
-(>defn meeting-feedback-for
-  "Returns all meeting-feedback for a certain meeting."
-  [share-hash]
-  [:meeting/share-hash :ret sequential?]
-  (->
-    (d/q
-      '[:find (pull ?feedback meeting-feedback-pattern)
-        :in $ ?share-hash meeting-feedback-pattern
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?feedback :meeting.feedback/meeting ?meeting]]
-      (d/db (new-connection)) share-hash meeting-feedback-pattern)
-    (toolbelt/pull-key-up :user/core-author)
-    (toolbelt/pull-key-up :author/nickname)
-    flatten))
 
 ;; Dialog.core outfactor. Should Probably go into its own namespace on next refactor.
 

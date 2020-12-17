@@ -5,14 +5,12 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.agenda.edit :as agenda-edit]
             [schnaq.interface.views.brainstorm.create :as brainstorm-create]
             [schnaq.interface.views.discussion.card-view :as discussion-new-view]
             [schnaq.interface.views.discussion.discussion :as discussion-views]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.meeting.admin-center :as meeting-admin]
-            [schnaq.interface.views.meeting.meetings :as meeting-views]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.meeting.single :as meeting-single]
             [schnaq.interface.views.how-to.view :as how-to]
@@ -78,11 +76,6 @@
       :view meetings-overview/meeting-view-visited
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]
-    ["/create"
-     ;;TODO delete this view next
-     {:name :routes.meeting/create
-      :view meeting-views/create-meeting-view
-      :link-text (labels :router/create-meeting)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
@@ -94,14 +87,6 @@
                       :start (fn [{:keys [path]}]
                                (let [{:keys [share-hash edit-hash]} path]
                                  (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
-      ["/edit"
-       {:name :routes.meeting/edit
-        :view agenda-edit/agenda-edit-view
-        :controllers [{:parameters {:path [:share-hash :edit-hash]}
-                       :start (fn [{:keys [path]}]
-                                (rf/dispatch [:agenda/load-for-edit (:share-hash path)])
-                                (rf/dispatch [:suggestions/get-updates (:share-hash path) (:edit-hash path)]))
-                       :stop #(rf/dispatch [:agenda.edit/reset-edit-updates])}]}]
       ["/manage"
        {:name :routes.meeting/admin-center
         :view meeting-admin/admin-center-view
@@ -123,13 +108,6 @@
                       :stop (fn []
                               (rf/dispatch [:agenda.statement-nums/to-localstorage])
                               (rf/dispatch [:agenda/clear-current]))}]}]
-     ["/suggestions"
-      {:name :routes.meeting/suggestions
-       :view agenda-edit/agenda-suggestion-view
-       :controllers [{:parameters {:path [:share-hash]}
-                      :start (fn [{:keys [path]}]
-                               (rf/dispatch [:agenda/load-for-edit (:share-hash path)]))
-                      :stop #(rf/dispatch [:agenda.edit/reset-edit-updates])}]}]
      ["/agenda"
       ["/:id"
        {:parameters {:path {:id int?}}

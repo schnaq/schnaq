@@ -1,6 +1,5 @@
 (ns schnaq.api-test
   (:require [clojure.spec.alpha :as s]
-            [clojure.string :as string]
             [clojure.test :refer [deftest testing is are use-fixtures]]
             [schnaq.api :as api]
             [schnaq.meeting.database :as db]
@@ -20,71 +19,6 @@
                                                       :agendas []}})]
       (is (= 201 (:status response)))
       (is (s/valid? ::specs/meeting (-> response :body :new-meeting))))))
-
-(deftest update-meeting-test
-  (testing "Test whether a meeting updates correctly"
-    (let [new-title "foo Neu"
-          new-author "Der Schredder"
-          old-share-hash "abbada"
-          old-edit-hash "Scooby Doo"
-          old-meeting-id (db/add-meeting {:meeting/title "foo"
-                                          :meeting/share-hash old-share-hash
-                                          :meeting/edit-hash old-edit-hash
-                                          :meeting/start-date (db/now)
-                                          :meeting/end-date (db/now)
-                                          :meeting/author (db/add-user-if-not-exists "Wegi")})
-          old-meeting (db/meeting-private-data old-meeting-id)
-          update-meeting @#'api/update-meeting!
-          new-meeting-request {:body-params {:nickname new-author
-                                             :meeting {:db/id old-meeting-id
-                                                       :meeting/title new-title
-                                                       :meeting/share-hash old-share-hash
-                                                       :meeting/edit-hash old-edit-hash
-                                                       :meeting/start-date (db/now)
-                                                       :meeting/end-date (db/now)}
-                                             :agendas []}}
-          update-response (update-meeting new-meeting-request)
-          new-meeting (db/meeting-private-data old-meeting-id)]
-      (testing "Check response status"
-        (is (= 200 (:status update-response)))
-        (is (string? (-> update-response :body :text))))
-      (testing "Check if title and author have been updated"
-        (is (not= (:meeting/title old-meeting) (:meeting/title new-meeting)))
-        (is (not= (:meeting/author old-meeting) (:meeting/author new-meeting))))
-      (testing "Check if title and author have been updated correctly"
-        (is (= new-title (:meeting/title new-meeting)))
-        (is (= (db/user-by-nickname new-author) (:db/id (:meeting/author new-meeting)))))
-      (testing "Check whether forbidden attributes stayed the same"
-        (is (= old-share-hash (:meeting/share-hash new-meeting)))
-        (is (= old-edit-hash (:meeting/edit-hash new-meeting)))))))
-
-(deftest update-meeting-invalid-test
-  (testing "Test if invalid credentials are caught"
-    (let [new-title "foo Neu"
-          new-author "Der Schredder"
-          old-share-hash "abbada"
-          old-edit-hash "Scooby Doo"
-          old-meeting-id (db/add-meeting {:meeting/title "foo"
-                                          :meeting/share-hash old-share-hash
-                                          :meeting/edit-hash old-edit-hash
-                                          :meeting/start-date (db/now)
-                                          :meeting/end-date (db/now)
-                                          :meeting/author (db/add-user-if-not-exists "Wegi")})
-          update-meeting @#'api/update-meeting!
-          new-meeting-request {:body-params {:nickname new-author
-                                             :meeting {:db/id old-meeting-id
-                                                       :meeting/title new-title
-                                                       :meeting/share-hash old-share-hash
-                                                       :meeting/edit-hash "i am invalid xD"
-                                                       :meeting/start-date (db/now)
-                                                       :meeting/end-date (db/now)}
-                                             :agendas []}}
-          update-response (update-meeting new-meeting-request)
-          new-meeting (db/meeting-private-data old-meeting-id)]
-      (is (= old-share-hash (:meeting/share-hash new-meeting)))
-      (is (= old-edit-hash (:meeting/edit-hash new-meeting)))
-      (is (= 403 (:status update-response)))
-      (is (not (string/blank? (-> update-response :body :error)))))))
 
 (deftest check-credentials-test
   (testing "Check if credentials are verified correctly."

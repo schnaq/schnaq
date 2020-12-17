@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CLJ REPL" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
     <module name="schnaq" />
@@ -11,7 +10,5 @@
     <setting name="aliases" value="run-server,test" />
     <setting name="fixLineNumbers" value="false" />
     <method v="2" />
-    <setting name="displayName" value="CLJ REPL" />
   </configuration>
 </component>
-

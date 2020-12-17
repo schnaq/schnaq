@@ -42,62 +42,76 @@
    {:db/ident :meeting.suggestion/meeting
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "Suggestion for a meeting"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    Suggestion for a meeting"}
    {:db/ident :meeting.suggestion/ideator
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "The user making the suggestion"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    The user making the suggestion"}
    {:db/ident :meeting.suggestion/title
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "Suggestion to change title of a meeting"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    Suggestion to change title of a meeting"}
    {:db/ident :meeting.suggestion/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "Suggestion to change description of a meeting"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    Suggestion to change description of a meeting"}
 
    ;; Suggesting agenda update
    {:db/ident :agenda.suggestion/agenda
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "Suggestion to change agenda"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    Suggestion to change agenda"}
    {:db/ident :agenda.suggestion/ideator
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "The user making the suggestion"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    The user making the suggestion"}
    {:db/ident :agenda.suggestion/title
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "New title for agenda"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    New title for agenda"}
    {:db/ident :agenda.suggestion/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "New title for agenda"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    New title for agenda"}
    {:db/ident :agenda.suggestion/rank
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
-    :db/doc "New rank for the suggestion"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    New rank for the suggestion"}
    {:db/ident :agenda.suggestion/type
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "Indicate the update on the agenda"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    Indicate the update on the agenda"}
    {:db/ident :agenda.suggestion/meeting
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "Referring (new) agenda to an existing meeting"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    Referring (new) agenda to an existing meeting"}
    ;; Meeting Feedback (NOT user Feedback for schnaq)
    {:db/ident :meeting.feedback/ideator
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "The user giving the feedback"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    The user giving the feedback"}
    {:db/ident :meeting.feedback/content
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "The content of the feedback"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    The content of the feedback"}
    {:db/ident :meeting.feedback/meeting
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "For which meeting is the feedback?"}
+    :db/doc "DEPRECATED: Do not use in new code.
+    For which meeting is the feedback?"}
 
    ;; Valid suggestion types on an agenda
    {:db/ident :agenda.suggestion.type/update}
@@ -108,24 +122,29 @@
    {:db/ident :agenda/title
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "The short title of the Agenda-Point"}
+    :db/doc "DEPRECATED: Do not use agenda-points in new code.
+    The short title of the Agenda-Point"}
    {:db/ident :agenda/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "A description of the point"}
+    :db/doc "DEPRECATED: Do not use agenda-points in new code.
+    A description of the point"}
    {:db/ident :agenda/meeting
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "The meeting the agenda belongs to"}
+    :db/doc "DEPRECATED: Do not use agenda-points in new code.
+    The meeting the agenda belongs to"}
    {:db/ident :agenda/rank
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
-    :db/doc "The rank of the agenda. e.g. a rank of 1 means its the first Agenda-Point"}
+    :db/doc "DEPRECATED: Do not use agenda-points in new code.
+    The rank of the agenda. e.g. a rank of 1 means its the first Agenda-Point"}
    {:db/ident :agenda/discussion
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
-    :db/doc "An id belonging to the (foreign) discussion represented by this agenda"}
+    :db/doc "DEPRECATED: Do not use agenda-points in new code.
+    An id belonging to the (foreign) discussion represented by this agenda"}
    ;; User
    {:db/ident :user/core-author
     :db/valueType :db.type/ref
