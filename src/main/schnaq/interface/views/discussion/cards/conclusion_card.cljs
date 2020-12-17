@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.discussion.conclusion-card
+(ns schnaq.interface.views.discussion.cards.conclusion-card
   (:require [re-frame.core :as rf]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.text.display-data :refer [#_labels fa #_img-path]]

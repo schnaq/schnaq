@@ -5,3 +5,52 @@
   border-color: $secondary;
   color: $white;
 }
+
+.hover-primary {
+  background-color: $primary;
+
+  &:hover {
+    background-color: $primary-selected;
+  }
+}
+
+.hover-white {
+  background-color: $white;
+
+  &:hover {
+    background-color: $white-shade;
+  }
+}
+
+.hover-secondary {
+  background-color: $secondary;
+
+  &:hover {
+    background-color: $secondary-selected;
+  }
+}
+
+.radio-toolbar input[type='radio'] {
+  display: none;
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+
+.radio-toolbar label {
+  border: 1px transparent;
+  border-radius: 2rem;
+  color: $white;
+  display: inline-block;
+  height: 1.75rem;
+  overflow: hidden;
+  padding: 0.1rem;
+  text-align: center;
+  width: 1.75rem;
+}
+
+
+.radio-toolbar input[type='radio']:checked + label {
+  box-shadow: $hover-shadow;
+  color: $white;
+}

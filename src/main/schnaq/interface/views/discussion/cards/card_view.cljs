@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.discussion.card-view
+(ns schnaq.interface.views.discussion.cards.card-view
   (:require [goog.dom :as gdom]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -9,7 +9,8 @@
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.brainstorm.tools :as btools]
-            [schnaq.interface.views.discussion.conclusion-card :as cards]
+            [schnaq.interface.views.discussion.cards.conclusion-card :as cards]
+            [schnaq.interface.views.discussion.cards.conclusions :as conclusion]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar :as navbar]))
 
@@ -124,18 +125,12 @@
    [cards/conclusion-cards-list @(rf/subscribe [:discussion.conclusions/starting])
     (:meeting/share-hash current-meeting)]])
 
-(defn- history-view
-  "Histroy view displayed in the left column in the desktop view."
-  []
-  [:div.card-history.card-history-home.clickable.mt-md-4.i
-   {:class (str "fas " (fa :home))}])
-
 (defn- discussion-start-view-desktop
   [current-meeting]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-1.py-4
-     [history-view]]
+     [conclusion/history-view current-meeting]]
     [:div.col-10.py-4.px-0
      [topic-view current-meeting
       [topic-bubble-desktop current-meeting]]]]])
@@ -159,3 +154,6 @@
 
 (defn discussion-start-view-entrypoint []
   [discussion-start-view])
+
+(defn selected-conclusion []
+  [conclusion/selected-conclusion])

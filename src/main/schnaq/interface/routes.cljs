@@ -7,8 +7,7 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.agenda.edit :as agenda-edit]
             [schnaq.interface.views.brainstorm.create :as brainstorm-create]
-            [schnaq.interface.views.discussion.card-view :as discussion-new-view]
-            [schnaq.interface.views.discussion.discussion :as discussion-views]
+            [schnaq.interface.views.discussion.cards.card-view :as discussion-card-view]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.meeting.admin-center :as meeting-admin]
@@ -146,12 +145,12 @@
                          :stop (fn []
                                  (rf/dispatch [:updates.periodic/starting-conclusions false]))}]
           :name :routes.discussion/start
-          :view discussion-new-view/discussion-start-view-entrypoint
+          :view discussion-card-view/discussion-start-view-entrypoint
           :link-text (labels :router/start-discussion)}]
         ["/selected/:statement-id"
          {:name :routes.discussion.select/statement
           :parameters {:path {:statement-id int?}}
-          :view discussion-views/selected-conclusion
+          :view discussion-card-view/selected-conclusion
           :controllers [{:parameters {:path [:share-hash :id :statement-id]}
                          :start (fn []
                                   (rf/dispatch [:discussion.query.statement/by-id]))}]}]]
