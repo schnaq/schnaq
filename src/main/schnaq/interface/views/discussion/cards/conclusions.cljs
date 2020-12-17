@@ -2,6 +2,8 @@
   (:require [goog.dom :as gdom]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reagent.core :as reagent]
+            [reagent.dom :as rdom]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.base :as base]
@@ -11,7 +13,8 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]
 
-            [schnaq.interface.views.discussion.logic :as logic]))
+            [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.interface.views.discussion.view-elements :as view-elements]))
 
 (defn history-view
   "Histroy view displayed in the left column in the desktop view."
@@ -73,12 +76,28 @@
        :title (labels :discussion/create-argument-action)}
       [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
 
+(defn tooltip-div
+  [tooltip-location tooltip content]
+  (reagent/create-class
+    {:component-did-mount
+     (fn [comp] (js-wrap/tooltip (rdom/dom-node comp)))
+     :component-will-unmount
+     (fn [comp]
+       (js-wrap/tooltip (rdom/dom-node comp) "disable")
+       (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
+     :reagent-render
+     (fn [] [:div.h-100
+             {:data-toggle "tooltip"
+              :data-placement tooltip-location
+              :title tooltip} content])}))
+
 (defn radio-button
   "Radio Button helper function. This function creates a radio button."
   [id name value label hint color-class checked?]
   [:<>
    [:input {:id id :type "radio" :name name :value value :default-checked checked?}]
-   [:label.mx-1.my-1 {:class color-class :for id} label]])
+   [:label.mx-1.my-1 {:class color-class :for id}
+    [tooltip-div "bottom" hint label]]])
 
 (defn radio-buttons []
   [:div.radio-toolbar
@@ -91,7 +110,7 @@
     ;; neutral
     [radio-button
      "neutral-radio" "premise-choice" "for-radio"
-     [:i {:class (str "m-auto fas " (fa :plus))}]
+     [:i {:class (str "m-auto fas " (fa :comment))}]
      (labels :discussion/add-premise-supporting) "hover-white" true]
     ;; attack
     [radio-button
@@ -135,10 +154,9 @@
    [input-reaction-statement-form input-element-id]])
 
 (defn- topic-bubble-desktop
-  [{:meeting/keys [share-hash name] :as meeting} title]
+  [meeting title info-content]
   (let [agenda @(rf/subscribe [:chosen-agenda])
-        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
-        edit-hash (get admin-access-map share-hash)]
+        share-hash (:meeting/share-hash meeting)]
     [:div.row
      ;; graph
      [:div.col-2.graph-icon
@@ -148,7 +166,7 @@
       [title-and-input-element "input-statement-id-desktop" title]]
      ;; settings
      [:div.col-2.p-0
-      #_[settings-element meeting name share-hash edit-hash]]]))
+      info-content]]))
 
 (defn- topic-bubble [content]
   (let [agenda @(rf/subscribe [:chosen-agenda])]
@@ -164,7 +182,7 @@
 
 
 (defn- discussion-step-view-desktop
-  [current-meeting history conclusions title]
+  [current-meeting history conclusions title info-content]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-1.py-4
@@ -172,7 +190,13 @@
     [:div.col-10.py-4.px-0
      [topic-view current-meeting
       conclusions
-      [topic-bubble-desktop current-meeting title]]]]])
+      [topic-bubble-desktop current-meeting title info-content]]]]])
+
+
+(defn- info-content-conclusion [statement edit-hash]
+  [:div.ml-5
+   [:div (cards/up-down-vote-breaking statement)]
+   [:div [view-elements/extra-discussion-info-badges statement edit-hash]]])
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
@@ -181,14 +205,14 @@
         current-meeting @(rf/subscribe [:meeting/selected])
         history @(rf/subscribe [:discussion-history])
         current-conclusion (last history)
-        title (:statement/content current-conclusion)]
-
+        title (:statement/content current-conclusion)
+        info-content [info-content-conclusion current-conclusion (:meeting/edit-hash current-meeting)]]
     [:<>
      [base/meeting-header current-meeting]
      [:div.container-fluid.px-0
       [toolbelt/desktop-mobile-switch
-       [discussion-step-view-desktop current-meeting history current-premises title]
-       [discussion-step-view-desktop current-meeting history current-premises title]]]]))
+       [discussion-step-view-desktop current-meeting history current-premises title info-content]
+       [discussion-step-view-desktop current-meeting history current-premises title info-content]]]]))
 
 (defn selected-conclusion []
   [discussion-start-view])
