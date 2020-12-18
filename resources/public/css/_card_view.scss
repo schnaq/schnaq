@@ -11,7 +11,7 @@
   }
 }
 
-.card-view-rounded {
+.card-rounded {
   border: 0;
   border-radius: 1rem;
   overflow: hidden;
@@ -19,6 +19,11 @@
   @include media-breakpoint-down(sm) {
     border-radius: 0;
   }
+}
+
+.card-view {
+  background: $white;
+  margin-left: 0.5rem;
 
   &:hover {
     background: $white-shade;
@@ -98,3 +103,14 @@
   }
 }
 
+.statement-card-agree {
+  background: $primary;
+}
+
+.statement-card-disagree {
+  background: $secondary;
+}
+
+.statement-card-neutral {
+  background: $white-shade;
+}

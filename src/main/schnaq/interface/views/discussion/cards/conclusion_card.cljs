@@ -44,13 +44,15 @@
       [:h6 [:i {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]]]
      [:h6.ml-1.pt-1 (logic/calculate-votes statement :downvotes votes)]]))
 
-(defn- statement-card [edit-hash {:keys [statement/content] :as statement}]
-  [:div.card.card-view-rounded.clickable.shadow-straight-light
-   [:div.card-body.py-0
+(defn- statement-card
+  [edit-hash {:keys [statement/content] :as statement} attitude]
+  [:div.card.card-rounded.clickable.shadow-straight-light
+   {:class (str "statement-card-" (name attitude))}
+   [:div.card-view.card-body.py-0
     [:div.row.pt-4
      [:div.col-10 [:p.my-0 content]]
      [:div.col-2 [common/avatar (-> statement :statement/author :author/nickname) 50]]]
-    [:div.row.mb-2
+    [:div.row.pb-2
      [:div.col-6 [view-elements/extra-discussion-info-badges statement edit-hash]]
      [:div.col-6 [up-down-vote statement]]]]])
 
@@ -68,4 +70,4 @@
                           (rf/dispatch [:discussion.history/push conclusion])
                           (rf/dispatch [:navigation/navigate :routes.discussion.select/statement
                                         (assoc path-params :statement-id (:db/id conclusion))]))}
-        [statement-card edit-hash conclusion :neutral]])]))
+        [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]])]))
