@@ -32,7 +32,8 @@
   E.g. after submitting of a form all dynamic height fields will be reset to one line."
   [fields]
   (doseq [field fields]
-    (when (oget field [:dataset :dynamicHeight])
+    ;; ? : nil if not present
+    (when (oget field [:dataset :?dynamicHeight])
       (height-to-scrollheight! field))))
 
 (>defn reset-form-fields!
