@@ -30,6 +30,7 @@
   }
 }
 
+/* stylelint-disable */
 .radio-toolbar input[type='radio'] {
   display: none;
   opacity: 0;
@@ -54,3 +55,6 @@
   box-shadow: $hover-shadow;
   color: $white;
 }
+
+/* stylelint-enable */
+

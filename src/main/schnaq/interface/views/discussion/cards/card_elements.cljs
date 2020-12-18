@@ -26,7 +26,7 @@
      {:class (str "fas " (fa :home))}]])
   ([current-meeting history]
    (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-     [:div
+     [:<>
       ;; home button
       [history-view current-meeting]
       ;; history
@@ -214,5 +214,5 @@
   "Badges and up/down-votes to be displayed in the right of the topic bubble."
   [statement edit-hash]
   [:div.ml-5
-    (cards/up-down-vote-breaking statement)
-    [view-elements/extra-discussion-info-badges statement edit-hash]])
+   (cards/up-down-vote-breaking statement)
+   [view-elements/extra-discussion-info-badges statement edit-hash]])
