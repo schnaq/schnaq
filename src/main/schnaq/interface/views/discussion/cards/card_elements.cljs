@@ -73,9 +73,9 @@
 
 (defn radio-button
   "Radio Button helper function. This function creates a radio button."
-  [id name value label hint color-class checked?]
+  [id radio-name value label hint color-class checked?]
   [:<>
-   [:input {:id id :type "radio" :name name :value value :default-checked checked?}]
+   [:input {:id id :type "radio" :name radio-name :value value :default-checked checked?}]
    [:label.mx-1.my-1 {:class color-class :for id}
     [tooltip-div "bottom" hint label]]])
 
@@ -99,15 +99,15 @@
      (labels :discussion/add-premise-against) "hover-secondary" false]]])
 
 (defn- input-form
-  "A form, which allows the input of a starting-statement."
-  [textarea-id name submit-fn radio-buttons]
+  "A basic input form with optional radio buttons"
+  [textarea-id textarea-name submit-fn radio-buttons]
   [:form.my-2
    {:on-submit submit-fn}
    [:div.discussion-input-container.w-100
     [:div.d-flex.flex-row
      [:textarea.form-control.discussion-text-input-area.w-100
       {:id textarea-id
-       :name name :wrap "soft" :rows 1
+       :name textarea-name :wrap "soft" :rows 1
        :auto-complete "off"
        :onInput (fn [_event]
                   ;; first reset input then set height +1px in order to prevent scrolling
@@ -125,7 +125,7 @@
       [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
 
 (defn input-conclusion-form
-  "A form, which allows the input of a starting-statement."
+  "A form, which allows the input of a conclusions"
   [textarea-id]
   (let [submit-fn (fn [e]
                     (js-wrap/prevent-default e)
@@ -190,12 +190,16 @@
    [cards/conclusion-cards-list conclusions (:meeting/share-hash current-meeting)]])
 
 (defn discussion-view-mobile
+  "Dicsussion view for mobile devices
+  No history but fullscreen topic bubble and conclusions"
   [current-meeting title input info-content conclusions]
   [:<>
    [topic-view current-meeting conclusions
     [topic-bubble-mobile current-meeting title input info-content]]])
 
 (defn discussion-view-desktop
+  "Discussion View for desktop devices.
+  Displays a history on the left and a topic with conclusion in its center"
   [current-meeting title input info-content conclusions history]
   [:div.container-fluid
    [:div.row.px-0.mx-0
@@ -206,7 +210,9 @@
       [topic-bubble-desktop current-meeting title input info-content]]]]])
 
 
-(defn info-content-conclusion [statement edit-hash]
+(defn info-content-conclusion
+  "Badges and up/down-votes to be displayed in the right of the topic bubble."
+  [statement edit-hash]
   [:div.ml-5
-   [:div (cards/up-down-vote-breaking statement)]
-   [:div [view-elements/extra-discussion-info-badges statement edit-hash]]])
+    (cards/up-down-vote-breaking statement)
+    [view-elements/extra-discussion-info-badges statement edit-hash]])

@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.cards.conclusion-card
   (:require [re-frame.core :as rf]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.text.display-data :refer [#_labels fa #_img-path]]
+            [schnaq.interface.text.display-data :refer [fa]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.view-elements :as view-elements]
             [schnaq.interface.views.discussion.logic :as logic]))
