@@ -31,12 +31,13 @@
 }
 
 .card-history {
+  background: $white;
   border: 0;
   border-radius: 1rem;
-  min-height: 5rem;
-  min-width: 5rem;
+  height: 5rem;
   overflow: hidden;
-  padding: 0.5rem;
+  padding: 1rem;
+  width: 5rem;
 
   &:hover {
     background: $white-shade;
@@ -44,8 +45,16 @@
 }
 
 .card-history-home {
+
   background: $white;
-  color: $gray-900;
+  border: 0;
+  border-radius: 1rem;
+  color: $gray-700;
+  min-height: 5rem;
+  min-width: 5rem;
+  overflow: hidden;
+  padding: 1rem;
+
 }
 
 .line-divider {
@@ -105,12 +114,24 @@
 
 .statement-card-agree {
   background: $primary;
+
+  &:hover {
+    background: $primary-selected;
+  }
 }
 
 .statement-card-disagree {
   background: $secondary;
+
+  &:hover {
+    background: $secondary-selected;
+  }
 }
 
 .statement-card-neutral {
   background: $white-shade;
+
+  &:hover {
+    background: $white;
+  }
 }
