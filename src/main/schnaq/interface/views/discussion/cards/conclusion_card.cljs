@@ -1,11 +1,30 @@
-(ns schnaq.interface.views.discussion.conclusion-card
+(ns schnaq.interface.views.discussion.cards.conclusion-card
   (:require [re-frame.core :as rf]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.text.display-data :refer [#_labels fa #_img-path]]
+            [schnaq.interface.text.display-data :refer [fa]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.view-elements :as view-elements]
             [schnaq.interface.views.discussion.logic :as logic]))
 
+(defn up-down-vote-breaking
+  "Add panel for up and down votes."
+  [statement]
+  (let [votes @(rf/subscribe [:local-votes])]
+    [:div.float-right
+     [:div.d-flex.flex-row
+      [:div.vote-box.up-vote.text-center
+       {:on-click (fn [e]
+                    (js-wrap/stop-propagation e)
+                    (rf/dispatch [:discussion/toggle-upvote statement]))}
+       [:h6 [:i {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]]]
+      [:h6.ml-1.mr-3.pt-1 (logic/calculate-votes statement :upvotes votes)]]
+     [:div.d-flex.flex-row
+      [:div.vote-box.down-vote.text-center.align-bottom
+       {:on-click (fn [e]
+                    (js-wrap/stop-propagation e)
+                    (rf/dispatch [:discussion/toggle-downvote statement]))}
+       [:h6 [:i {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]]]
+      [:h6.ml-1.pt-1 (logic/calculate-votes statement :downvotes votes)]]]))
 
 (defn- up-down-vote
   "Add panel for up and down votes."
