@@ -27,7 +27,7 @@
         ring-middleware-format/ring-middleware-format {:mvn/version "0.7.4"}
         ring/ring {:mvn/version "1.8.2"}
         ring/ring-defaults {:mvn/version "0.3.2"}
-        thheller/shadow-cljs {:mvn/version "2.11.8"}}
+        thheller/shadow-cljs {:mvn/version "2.11.9"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
