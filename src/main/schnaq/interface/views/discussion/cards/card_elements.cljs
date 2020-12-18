@@ -22,7 +22,7 @@
                       (rf/dispatch [:navigation/navigate :routes.meeting/show
                                     {:share-hash share-hash}])
                       (rf/dispatch [:meeting/select-current current-meeting]))}
-    [:div.card-history.card-history-home.clickable.mt-md-4.i
+    [:div.card-history-home.clickable.mt-md-4.i
      {:class (str "fas " (fa :home))}]])
   ([current-meeting history]
    (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
@@ -34,8 +34,9 @@
         [:div {:key (str "history-" (:db/id statement))
                :on-click #(rf/dispatch [:discussion.history/time-travel index])}
 
-         [:div.card-history.card-history-home.clickable.mt-md-4.i
-          {:class (str "fas " (fa :plane))}]])])))
+         [:div.card-history.clickable.mt-md-4
+          {:class (str "statement-card-" (name (logic/arg-type->attitude (:meta/argument-type statement))))}
+          [common/avatar (-> statement :statement/author :author/nickname) 30]]])])))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
