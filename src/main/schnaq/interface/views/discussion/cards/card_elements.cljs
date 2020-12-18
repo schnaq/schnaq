@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.discussion.cards.conclusions
+(ns schnaq.interface.views.discussion.cards.card-elements
   (:require [goog.dom :as gdom]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
@@ -6,15 +6,13 @@
             [reagent.dom :as rdom]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.base :as base]
-
-
-            [schnaq.interface.views.discussion.cards.conclusion-card :as cards]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
-
+            [schnaq.interface.views.discussion.cards.conclusion-card :as cards]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.discussion.view-elements :as view-elements]))
+            [schnaq.interface.views.discussion.view-elements :as view-elements]
+            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
 
 (defn history-view
   "Histroy view displayed in the left column in the desktop view."
@@ -39,7 +37,6 @@
          [:div.card-history.card-history-home.clickable.mt-md-4.i
           {:class (str "fas " (fa :plane))}]])])))
 
-
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [agenda share-hash]
@@ -51,30 +48,13 @@
                   {:id (-> agenda :agenda/discussion :db/id)
                    :share-hash share-hash}])}])
 
-(defn- input-starting-statement-form
-  "A form, which allows the input of a starting-statement."
-  [textarea-id]
-  [:form.my-2
-   {:on-submit (fn [e] (js-wrap/prevent-default e)
-                 (rf/dispatch [:discussion.add.statement/starting (oget e [:target :elements])]))}
-   [:div.discussion-input-container.w-100
-    [:div.d-flex.flex-row
-     [:textarea.form-control.discussion-text-input-area.w-100
-      {:id textarea-id
-       :name "statement-text" :wrap "soft" :rows 1
-       :auto-complete "off"
-       :onInput (fn [_event]
-                  ;; first reset input then set height +1px in order to prevent scrolling
-                  (let [input (gdom/getElement textarea-id)]
-                    (toolbelt/height-to-scrollheight! input)))
-       :required true
-       :data-dynamic-height true
-       :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-     ;; submit icon button
-     [:button.primary-icon-button
-      {:type "submit"
-       :title (labels :discussion/create-argument-action)}
-      [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
+(defn settings-element
+  "Element containing settings buttons"
+  [{:meeting/keys [share-hash title] :as meeting} edit-hash]
+  [:div.float-right
+   (when (and edit-hash (btools/is-brainstorm? meeting))
+     [admin-buttons/admin-center share-hash edit-hash])
+   [admin-buttons/txt-export share-hash title]])
 
 (defn tooltip-div
   [tooltip-location tooltip content]
@@ -99,37 +79,35 @@
    [:label.mx-1.my-1 {:class color-class :for id}
     [tooltip-div "bottom" hint label]]])
 
-(defn radio-buttons []
+(defn radio-buttons [textarea-id]
   [:div.radio-toolbar
    [:div.d-flex.flex-row.px-3
     ;; support
     [radio-button
-     "for-radio" "premise-choice" "for-radio"
+     (str textarea-id "for-radio") "premise-choice" "for-radio"
      [:i {:class (str "m-auto fas " (fa :plus))}]
      (labels :discussion/add-premise-supporting) "hover-primary" false]
     ;; neutral
     [radio-button
-     "neutral-radio" "premise-choice" "for-radio"
+     (str textarea-id "neutral-radio") "premise-choice" "for-radio"
      [:i {:class (str "m-auto fas " (fa :comment))}]
      (labels :discussion/add-premise-supporting) "hover-white" true]
     ;; attack
     [radio-button
-     "against-radio" "premise-choice" "against-radio"
+     (str textarea-id "against-radio") "premise-choice" "against-radio"
      [:i {:class (str "m-auto fas " (fa :minus))}]
      (labels :discussion/add-premise-against) "hover-secondary" false]]])
 
-(defn- input-reaction-statement-form
+(defn- input-form
   "A form, which allows the input of a starting-statement."
-  [textarea-id]
+  [textarea-id name submit-fn radio-buttons]
   [:form.my-2
-   {:on-submit (fn [e]
-                 (js-wrap/prevent-default e)
-                 (logic/submit-new-premise (oget e [:target :elements])))}
+   {:on-submit submit-fn}
    [:div.discussion-input-container.w-100
     [:div.d-flex.flex-row
      [:textarea.form-control.discussion-text-input-area.w-100
       {:id textarea-id
-       :name "premise-text" :wrap "soft" :rows 1
+       :name name :wrap "soft" :rows 1
        :auto-complete "off"
        :onInput (fn [_event]
                   ;; first reset input then set height +1px in order to prevent scrolling
@@ -138,23 +116,40 @@
        :required true
        :data-dynamic-height true
        :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-     [radio-buttons]
+     ;; reaction type
+     radio-buttons
      ;; submit icon button
      [:button.primary-icon-button
       {:type "submit"
        :title (labels :discussion/create-argument-action)}
       [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
 
+(defn input-conclusion-form
+  "A form, which allows the input of a starting-statement."
+  [textarea-id]
+  (let [submit-fn (fn [e]
+                    (js-wrap/prevent-default e)
+                    (logic/submit-new-premise (oget e [:target :elements])))]
+    [input-form textarea-id "premise-text" submit-fn [radio-buttons textarea-id]]))
+
+(defn input-starting-statement-form
+  "A form, which allows the input of a starting-statement."
+  [textarea-id]
+  (let [submit-fn (fn [e] (js-wrap/prevent-default e)
+                    (rf/dispatch [:discussion.add.statement/starting
+                                  (oget e [:target :elements])]))]
+    [input-form textarea-id "statement-text" submit-fn nil]))
+
 (defn- title-and-input-element
   "Element containing Title and textarea input"
-  [input-element-id title]
+  [title input]
   [:<>
    [:h2.align-self-center.my-4 title]
    [:div.line-divider.my-4]
-   [input-reaction-statement-form input-element-id]])
+   input])
 
 (defn- topic-bubble-desktop
-  [meeting title info-content]
+  [meeting title input info-content]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         share-hash (:meeting/share-hash meeting)]
     [:div.row
@@ -163,10 +158,25 @@
       [graph-button agenda share-hash]]
      ;; title
      [:div.col-8
-      [title-and-input-element "input-statement-id-desktop" title]]
+      [title-and-input-element title input]]
      ;; settings
      [:div.col-2.p-0
       info-content]]))
+
+(defn- topic-bubble-mobile
+  [meeting title input info-content]
+  (let [agenda @(rf/subscribe [:chosen-agenda])
+        share-hash (:meeting/share-hash meeting)]
+    [:<>
+     [:div.row
+      ;; graph
+      [:div.col-6.graph-icon
+       [graph-button agenda share-hash]]
+      ;; settings
+      [:div.col-6.p-0
+       info-content]]
+     ;; title
+     [title-and-input-element title input]]))
 
 (defn- topic-bubble [content]
   (let [agenda @(rf/subscribe [:chosen-agenda])]
@@ -179,40 +189,24 @@
    [topic-bubble topic-content]
    [cards/conclusion-cards-list conclusions (:meeting/share-hash current-meeting)]])
 
+(defn discussion-view-mobile
+  [current-meeting title input info-content conclusions]
+  [:<>
+   [topic-view current-meeting conclusions
+    [topic-bubble-mobile current-meeting title input info-content]]])
 
-
-(defn- discussion-step-view-desktop
-  [current-meeting history conclusions title info-content]
+(defn discussion-view-desktop
+  [current-meeting title input info-content conclusions history]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-1.py-4
      [history-view current-meeting history]]
     [:div.col-10.py-4.px-0
-     [topic-view current-meeting
-      conclusions
-      [topic-bubble-desktop current-meeting title info-content]]]]])
+     [topic-view current-meeting conclusions
+      [topic-bubble-desktop current-meeting title input info-content]]]]])
 
 
-(defn- info-content-conclusion [statement edit-hash]
+(defn info-content-conclusion [statement edit-hash]
   [:div.ml-5
    [:div (cards/up-down-vote-breaking statement)]
    [:div [view-elements/extra-discussion-info-badges statement edit-hash]]])
-
-(defn- discussion-start-view
-  "The first step after starting a discussion."
-  []
-  (let [current-premises @(rf/subscribe [:discussion.premises/current])
-        current-meeting @(rf/subscribe [:meeting/selected])
-        history @(rf/subscribe [:discussion-history])
-        current-conclusion (last history)
-        title (:statement/content current-conclusion)
-        info-content [info-content-conclusion current-conclusion (:meeting/edit-hash current-meeting)]]
-    [:<>
-     [base/meeting-header current-meeting]
-     [:div.container-fluid.px-0
-      [toolbelt/desktop-mobile-switch
-       [discussion-step-view-desktop current-meeting history current-premises title info-content]
-       [discussion-step-view-desktop current-meeting history current-premises title info-content]]]]))
-
-(defn selected-conclusion []
-  [discussion-start-view])
