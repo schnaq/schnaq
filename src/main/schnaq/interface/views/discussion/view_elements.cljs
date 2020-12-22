@@ -32,6 +32,7 @@
        (logic/calculate-votes statement :downvotes votes)]]]))
 
 (defn agenda-header-with-back-arrow [meeting on-click-back-function]
+  ;; todo del
   (let [agenda @(rf/subscribe [:chosen-agenda])
         {:keys [meeting/share-hash]} meeting
         current-view (-> @(rf/subscribe [:navigation/current-route]) :data :name)]
@@ -63,6 +64,7 @@
                         :share-hash share-hash}])}]]]]))
 
 (defn input-footer
+  ;; todo del
   ([content]
    [input-footer true content])
   ([allow-new? content]
@@ -113,11 +115,13 @@
           [:form/clear form]]}))
 
 (defn input-field []
+  ;; todo del
   [:div.discussion-primary-background
    [:div.mb-2 [:h5 (labels :discussion/create-argument-heading)]]
    [input-starting-statement-form]])
 
 (defn input-form
+  ;; todo del
   "Text input for adding a statement"
   []
   [:div.mt-2
@@ -131,6 +135,7 @@
     [:button.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
 
 (defn radio-button
+  ;; todo del
   "Radio Button helper function. This function creates a radio button."
   [id name value label checked?]
   [:div.custom-control.custom-radio.my-1
@@ -275,6 +280,7 @@
     (get-in db [:discussion :conclusions :selected])))
 
 (defn conclusions-list
+  ;; todo del
   "Displays a list of conclusions."
   [conclusions share-hash]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
@@ -291,6 +297,7 @@
         [statement-bubble edit-hash conclusion :neutral]])]))
 
 (defn history-view
+  ;; todo del
   "Displays the statements it took to get to where the user is."
   [share-hash]
   (let [history @(rf/subscribe [:discussion-history])

@@ -3,56 +3,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.discussion.carousel :as carousel]
-            [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.discussion.view-elements :as view]))
-
-(defn- add-premise-form
-  "Either support or attack or undercut with the users own premise."
-  []
-  (let [history @(rf/subscribe [:discussion-history])]
-    [:form
-     {:on-submit (fn [e]
-                   (js-wrap/prevent-default e)
-                   (logic/submit-new-premise (oget e [:target :elements])))}
-     ;; support
-     [view/radio-button "for-radio" "premise-choice" "for-radio" :discussion/add-premise-supporting true]
-     ;; attack
-     [view/radio-button "against-radio" "premise-choice" "against-radio" :discussion/add-premise-against false]
-     ;; undercut
-     ;; Only show undercut, when there are at least two items in the history (otherwise we can not undercut anything)
-     (when (< 1 (count history))
-       [view/radio-button "undercut-radio" "premise-choice" "undercut-radio" :discussion/add-undercut false])
-     ;; input form
-     [view/input-form]]))
-
-(defn- discussion-base-page
-  "Base discussion view containing a nav header, meeting title and content container."
-  [meeting content]
-  [:<>
-   [base/meeting-header meeting]
-   [:div.container.discussion-base
-    [:div.discussion-view-rounded.shadow-straight
-     content]]])
-
-(defn- discussion-start-view
-  "The first step after starting a discussion."
-  []
-  (let [current-meeting @(rf/subscribe [:meeting/selected])]
-    [discussion-base-page current-meeting
-     [:<>
-      [view/agenda-header-with-back-arrow
-       current-meeting
-       (fn []
-         (rf/dispatch [:navigation/navigate :routes.meeting/show
-                       {:share-hash (:meeting/share-hash current-meeting)}])
-         (rf/dispatch [:meeting/select-current current-meeting]))]
-      [view/conclusions-list @(rf/subscribe [:discussion.conclusions/starting])
-       (:meeting/share-hash current-meeting)]
-      [view/input-field]]]))
+            [schnaq.interface.text.display-data :refer [labels]]))
 
 (rf/reg-event-fx
   :discussion.query.conclusions/starting
@@ -77,26 +28,6 @@
   :discussion.conclusions/starting
   (fn [db _]
     (get-in db [:discussion :conclusions :starting] [])))
-
-(defn discussion-start-view-entrypoint []
-  [discussion-start-view])
-
-(defn- present-conclusion-view
-  [add-form]
-  (let [current-premises @(rf/subscribe [:discussion.premises/current])
-        current-meeting @(rf/subscribe [:meeting/selected])]
-    [discussion-base-page current-meeting
-     [:<>
-      [view/agenda-header-with-back-arrow current-meeting
-       #(rf/dispatch [:discussion.history/time-travel 1])]
-      [view/history-view (:meeting/share-hash current-meeting)]
-      [view/input-footer add-form]
-      [carousel/carousel-element current-premises (:meeting/share-hash current-meeting)]]]))
-
-(defn selected-conclusion
-  "The view after a user has selected any conclusion."
-  []
-  [present-conclusion-view [add-premise-form]])
 
 (defn- rewind-history
   "Rewinds a history until the last time statement-id was current."

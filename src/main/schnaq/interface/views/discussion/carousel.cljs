@@ -73,6 +73,7 @@
        :display-name "carousel-component"})))
 
 (>defn carousel-element
+  ;; todo del
   "Build a carousel. Can either be for conclusions in the beginning of a
   discussion or for premises in all other cases. Undercuts are only shown, when
   there are at least two statements in the history (they do not make sense otherwise)."
