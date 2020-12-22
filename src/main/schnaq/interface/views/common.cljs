@@ -11,7 +11,8 @@
   [display-name size]
   [string? number? :ret vector?]
   [:div.avatar-image.m-auto.schnaq-rounded.p-0
-   {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}])
+   {:title display-name
+    :dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}])
 
 (>defn avatar-with-nickname
   "Create an image based on the nickname and also print the nickname."
