@@ -6,6 +6,11 @@
             [schnaq.interface.views.discussion.view-elements :as view-elements]
             [schnaq.interface.views.discussion.logic :as logic]))
 
+(rf/reg-sub
+  :local-votes
+  (fn [db _]
+    (get db :votes)))
+
 (defn up-down-vote-breaking
   "Add panel for up and down votes."
   [statement]

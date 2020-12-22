@@ -1,33 +1,5 @@
-(ns schnaq.interface.views.discussion.discussion
-  (:require [ajax.core :as ajax]
-            [oops.core :refer [oget]]
-            [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels]]))
-
-(rf/reg-event-fx
-  :discussion.query.conclusions/starting
-  (fn [{:keys [db]} _]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/conclusions/starting")
-                          :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash
-                                   :discussion-id id}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.query.conclusions/set-starting]
-                          :on-failure [:ajax.error/to-console]}]]})))
-
-(rf/reg-event-fx
-  :discussion.query.conclusions/set-starting
-  (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
-    {:db (assoc-in db [:discussion :conclusions :starting] starting-conclusions)
-     :fx [[:dispatch [:votes.local/reset]]]}))
-
-(rf/reg-sub
-  :discussion.conclusions/starting
-  (fn [db _]
-    (get-in db [:discussion :conclusions :starting] [])))
+(ns schnaq.interface.views.discussion.history
+  (:require [re-frame.core :as rf]))
 
 (defn- rewind-history
   "Rewinds a history until the last time statement-id was current."
@@ -71,26 +43,7 @@
            :fx [[:dispatch [:navigation/navigate :routes.discussion.select/statement
                             {:id id :share-hash share-hash :statement-id (:db/id (last after-time-travel))}]]]})))))
 
-(rf/reg-event-fx
-  :notification/new-content
-  (fn [_ _]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :discussion.notification/new-content-title)
-                                     :body (labels :discussion.notification/new-content-body)
-                                     :context :success}]]]}))
-
 (rf/reg-sub
   :discussion-history
   (fn [db _]
     (get-in db [:history :full-context])))
-
-(rf/reg-event-db
-  :votes.local/reset
-  (fn [db _]
-    (assoc db :votes {:up {}
-                      :down {}})))
-
-(rf/reg-sub
-  :local-votes
-  (fn [db _]
-    (get db :votes)))

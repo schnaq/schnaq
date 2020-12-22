@@ -7,33 +7,6 @@
             [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
-(rf/reg-event-fx
-  :discussion.add.statement/starting
-  (fn [{:keys [db]} [_ form]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
-          nickname (get-in db [:user :name] "Anonymous")
-          statement-text (oget form [:statement-text :value])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/statements/starting/add")
-                          :format (ajax/transit-request-format)
-                          :params {:statement statement-text
-                                   :nickname nickname
-                                   :share-hash share-hash
-                                   :discussion-id id}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.add.statement/starting-success form]
-                          :on-failure [:ajax.error/as-notification]}]]})))
-
-(rf/reg-event-fx
-  :discussion.add.statement/starting-success
-  (fn [_ [_ form new-starting-statements]]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :discussion.notification/new-content-title)
-                                     :body (labels :discussion.notification/new-content-body)
-                                     :context :success}]]
-          [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
-          [:form/clear form]]}))
-
 (>defn- build-author-list
   "Build a nicely formatted string of a html list containing the authors from a sequence."
   [authors]

@@ -3,7 +3,8 @@
             [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]))
+            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.text.display-data :refer [labels]]))
 
 (>defn calculate-votes
   "Calculates the votes without needing to reload."
@@ -43,6 +44,7 @@
 
 (rf/reg-event-fx
   :discussion.undercut.statement/send
+  ;; todo del
   (fn [{:keys [db]} [_ new-premise]]
     (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
           history (get-in db [:history :full-context] [])
@@ -72,6 +74,14 @@
                       conj new-premise)
        :fx [[:dispatch [:notification/new-content]]]})))
 
+(rf/reg-event-fx
+  :notification/new-content
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :discussion.notification/new-content-title)
+                                     :body (labels :discussion.notification/new-content-body)
+                                     :context :success}]]]}))
+
 (defn submit-new-premise
   "Submits a newly created premise as an undercut, rebut or support."
   [form]
@@ -80,6 +90,5 @@
         choice (oget form [:premise-choice :value])]
     (case choice
       "against-radio" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
-      "for-radio" (rf/dispatch [:discussion.reaction.statement/send :support new-text])
-      "undercut-radio" (rf/dispatch [:discussion.undercut.statement/send new-text]))
+      "for-radio" (rf/dispatch [:discussion.reaction.statement/send :support new-text]))
     (rf/dispatch [:form/should-clear [new-text-element]])))

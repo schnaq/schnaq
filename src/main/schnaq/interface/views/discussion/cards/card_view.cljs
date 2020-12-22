@@ -47,6 +47,11 @@
        [:h6.text-center.py-1 (labels :common/history)]
        [elements/history-view meeting history]]]]))
 
+(rf/reg-sub
+  :discussion.conclusions/starting
+  (fn [db _]
+    (get-in db [:discussion :conclusions :starting] [])))
+
 (defn- discussion-start-view
   "The first step after starting a discussion."
   []
