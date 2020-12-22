@@ -43,9 +43,8 @@
 (defn- discussion-start-view
   "The first step after starting a discussion."
   []
-  (let [{:meeting/keys [edit-hash title] :as current-meeting} @(rf/subscribe [:meeting/selected])
+  (let [{:meeting/keys [title] :as current-meeting} @(rf/subscribe [:meeting/selected])
         current-starting @(rf/subscribe [:discussion.conclusions/starting])
-        settings-content [elements/settings-element current-meeting edit-hash]
         input-desktop [elements/input-starting-statement-form "input-statement-id-desktop"]
         input-mobile [elements/input-starting-statement-form "input-statement-id-mobile"]]
     [:<>
@@ -55,8 +54,7 @@
        [elements/discussion-view-desktop
         current-meeting title input-desktop current-starting nil]
        [elements/discussion-view-mobile
-        current-meeting title input-mobile
-        settings-content current-starting]]]]))
+        current-meeting title input-mobile current-starting]]]]))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
@@ -66,8 +64,6 @@
         history @(rf/subscribe [:discussion-history])
         current-conclusion (last history)
         title (:statement/content current-conclusion)
-        info-content [elements/info-content-conclusion
-                      current-conclusion (:meeting/edit-hash current-meeting)]
         input-desktop [elements/input-conclusion-form "input-statement-id-desktop"]
         input-mobile [elements/input-conclusion-form "input-statement-id-mobile"]]
     [:<>
@@ -77,8 +73,7 @@
        [elements/discussion-view-desktop
         current-meeting title input-desktop current-premises history]
        [elements/discussion-view-mobile
-        current-meeting title input-mobile
-        info-content current-premises]]]]))
+        current-meeting title input-mobile current-premises]]]]))
 
 (defn discussion-start-view-entrypoint []
   [discussion-start-view])

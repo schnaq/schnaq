@@ -163,17 +163,14 @@
       [title-and-input-element title input]]]))
 
 (defn- topic-bubble-mobile
-  [meeting title input info-content]
+  [meeting title input]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         share-hash (:meeting/share-hash meeting)]
     [:<>
      [:div.row
       ;; graph
-      [:div.col-6.graph-icon
-       [graph-button agenda share-hash]]
-      ;; settings
-      [:div.col-6.p-0
-       info-content]]
+      [:div.col-12.graph-icon
+       [graph-button agenda share-hash]]]
      ;; title
      [title-and-input-element title input]]))
 
@@ -191,10 +188,10 @@
 (defn discussion-view-mobile
   "Dicsussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
-  [current-meeting title input info-content conclusions]
+  [current-meeting title input conclusions]
   [:<>
    [topic-view current-meeting conclusions
-    [topic-bubble-mobile current-meeting title input info-content]]])
+    [topic-bubble-mobile current-meeting title input]]])
 
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
