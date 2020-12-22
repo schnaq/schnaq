@@ -301,8 +301,6 @@
         :discussion.notification/new-content-title "New statement!"
         :discussion.notification/new-content-body "Your statement was added successfully!"
         :discussion.carousel/heading "Statements of Others"
-        :discussion/discuss "Discuss"
-        :discussion/discuss-tooltip "Discuss this agenda point with others"
 
         ;; meetings overview
         :meetings/header "Overview of your schnaqs"
@@ -738,8 +736,6 @@
         :discussion.notification/new-content-title "Neuer Beitrag!"
         :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
         :discussion.carousel/heading "Beiträge Anderer"
-        :discussion/discuss "Diskutieren"
-        :discussion/discuss-tooltip "Diskutieren Sie mit anderen über diesen Agendapunkt."
 
         ;; meetings overview
         :meetings/header "Übersicht Ihrer schnaqs"
