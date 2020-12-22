@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.discussion.cards.card-elements
+(ns schnaq.interface.views.discussion.card-elements
   (:require [ajax.core :as ajax]
             [goog.dom :as gdom]
             [oops.core :refer [oget]]
@@ -11,7 +11,7 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.cards.conclusion-card :as cards]
+            [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))

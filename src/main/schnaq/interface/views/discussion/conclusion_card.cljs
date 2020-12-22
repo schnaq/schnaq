@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.discussion.cards.conclusion-card
+(ns schnaq.interface.views.discussion.conclusion-card
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
