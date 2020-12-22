@@ -10,16 +10,16 @@
   "Add panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
-    [:div.float-right
-     [:div.d-flex.flex-row
-      [:div.vote-box.up-vote.text-center
+    [:<>
+     [:div.d-flex
+      [:div.vote-box.up-vote
        {:on-click (fn [e]
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-upvote statement]))}
        [:h6 [:i {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]]]
-      [:h6.ml-1.mr-3.pt-1 (logic/calculate-votes statement :upvotes votes)]]
-     [:div.d-flex.flex-row
-      [:div.vote-box.down-vote.text-center.align-bottom
+      [:h6.ml-1.pt-1 (logic/calculate-votes statement :upvotes votes)]]
+     [:div.d-flex
+      [:div.vote-box.down-vote.align-bottom
        {:on-click (fn [e]
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-downvote statement]))}
@@ -58,9 +58,9 @@
   [:div.card.card-rounded.clickable.shadow-straight-light
    {:class (str "statement-card-" (name attitude))}
    [:div.card-view.card-body.py-0.pb-1
-    [:div.row.pt-4
-     [:div.col-10 [:p content]]
-     [:div.col-2 [up-down-vote statement]]]
+    [:div.d-flex.pt-3
+     [:div.mr-auto [:p content]]
+     [:div.pb-2 [up-down-vote-breaking statement]]]
     [:div.d-flex
      [:div.mr-auto [view-elements/extra-discussion-info-badges statement edit-hash]]
      [:div.float-right [user-info (-> statement :statement/author :author/nickname) 32]]]]])
