@@ -6,6 +6,7 @@
 (def ^:private translations
   {:en {;; Common
         :common/language "Language"
+        :common/history "History"
         :error/export-failed "Export failed. Please try again later."
 
         ;; navbar labels
@@ -486,6 +487,7 @@
         :router/true-404-view "404 error page"}
    :de {;; Common
         :common/language "Sprache"
+        :common/history "Verlauf"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
 
         ;; navbar labels

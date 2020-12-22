@@ -18,10 +18,11 @@
   "Histroy view displayed in the left column in the desktop view."
   ([{:meeting/keys [share-hash] :as current-meeting}]
    ;; home button
-   [:div {:on-click (fn []
-                      (rf/dispatch [:navigation/navigate :routes.meeting/show
-                                    {:share-hash share-hash}])
-                      (rf/dispatch [:meeting/select-current current-meeting]))}
+   [:div.d-inline-block.d-md-block.pr-2.pr-md-0
+    {:on-click (fn []
+                 (rf/dispatch [:navigation/navigate :routes.meeting/show
+                               {:share-hash share-hash}])
+                 (rf/dispatch [:meeting/select-current current-meeting]))}
     [:div.card-history-home.clickable.mt-md-4.i
      {:class (str "fas " (fa :home))}]])
   ([current-meeting history]
@@ -31,12 +32,13 @@
       [history-view current-meeting]
       ;; history
       (for [[index statement] indexed-history]
-        [:div {:key (str "history-" (:db/id statement))
-               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-
-         [:div.card-history.clickable.mt-md-4
-          {:class (str "statement-card-" (name (logic/arg-type->attitude (:meta/argument-type statement))))}
-          [common/avatar (-> statement :statement/author :author/nickname) 30]]])])))
+        [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark
+         {:key (str "history-" (:db/id statement))
+          :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+         (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+           [:div.card-history.clickable.mt-md-4
+            {:class (str "statement-card-" attitude " mobile-attitude-" attitude)}
+            [common/avatar (-> statement :statement/author :author/nickname) 30]])])])))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
@@ -146,7 +148,9 @@
   "Element containing Title and textarea input"
   [title input]
   [:<>
-   [:h2.align-self-center.my-4 title]
+   [toolbelt/desktop-mobile-switch
+    [:h2.align-self-center.my-4 title]
+    [:h2.align-self-center.my-4.display-6 title]]
    [:div.line-divider.my-4]
    input])
 
