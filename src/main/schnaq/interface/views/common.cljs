@@ -7,12 +7,18 @@
             [reitit.frontend.easy :as reitfe]))
 
 (>defn avatar
-  "Create an image based on the nickname."
+  "Get a user's avatar."
+  [display-name size]
+  [string? number? :ret vector?]
+  [:div.avatar-image.m-auto.schnaq-rounded.p-0
+   {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}])
+
+(>defn avatar-with-nickname
+  "Create an image based on the nickname and also print the nickname."
   [display-name size]
   [string? number? :ret vector?]
   [:div.text-center
-   [:div.avatar-image.m-auto.schnaq-rounded.p-0
-    {:dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}]
+   [avatar display-name size]
    [:p.small.mt-1 display-name]])
 
 (>defn add-namespace-to-keyword

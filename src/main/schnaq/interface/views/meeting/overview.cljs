@@ -42,7 +42,7 @@
     [:hr]
     [:small.text-right.float-right.py-3
      (when-let [nickname (-> meeting :meeting/author :author/nickname)]
-       (common/avatar nickname 50))]
+       [common/avatar-with-nickname nickname 50])]
     [markdown-parser/markdown-to-html (:meeting/description meeting)]]])
 
 (defn- meetings-list-view

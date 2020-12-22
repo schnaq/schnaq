@@ -38,7 +38,7 @@
          (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
            [:div.card-history.clickable.mt-md-4
             {:class (str "statement-card-" attitude " mobile-attitude-" attitude)}
-            [common/avatar (-> statement :statement/author :author/nickname) 30]])])])))
+            [common/avatar-with-nickname (-> statement :statement/author :author/nickname) 30]])])])))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
