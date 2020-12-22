@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.meeting.single
   (:require [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.text.display-data :refer [fa]]
             [schnaq.interface.utils.markdown-parser :as markdown-parser]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.utils.toolbelt :as toolbelt]
