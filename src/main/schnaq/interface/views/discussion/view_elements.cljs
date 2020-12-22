@@ -5,87 +5,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa img-path]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.markdown-parser :as markdown-parser]
-            [schnaq.interface.views.brainstorm.tools :as btools]
-            [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.logic :as logic]))
-
-(defn- up-down-vote
-  "Add panel for up and down votes."
-  [statement]
-  (let [votes @(rf/subscribe [:local-votes])]
-    [:<>
-     [:div.vote.up-vote.text-center
-      ;; Prevent activating the time travel or deep dive
-      {:on-click (fn [e]
-                   (js-wrap/stop-propagation e)
-                   (rf/dispatch [:discussion/toggle-upvote statement]))}
-      [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]
-       (logic/calculate-votes statement :upvotes votes)]]
-
-     [:div.vote.down-vote.text-center
-      {:on-click (fn [e]
-                   (js-wrap/stop-propagation e)
-                   (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:h6 [:i.pr-1 {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]
-       (logic/calculate-votes statement :downvotes votes)]]]))
-
-(defn agenda-header-with-back-arrow [meeting on-click-back-function]
-  ;; todo del
-  (let [agenda @(rf/subscribe [:chosen-agenda])
-        {:keys [meeting/share-hash]} meeting
-        current-view (-> @(rf/subscribe [:navigation/current-route]) :data :name)]
-    (common/set-website-title! (:agenda/title agenda))
-    [:div.discussion-primary-background
-     [:div.row
-      ;; back arrow
-      [:div.col-1.back-arrow.text-center
-       (when-not (and (btools/is-brainstorm? meeting)
-                      (= :routes.discussion/start current-view))
-         (when on-click-back-function
-           [:p.m-auto {:on-click on-click-back-function}
-            [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]))]
-      ;; title
-      [:div.col-8.col-lg-10.d-flex
-       [:h2.clickable-no-hover.align-self-center
-        {:on-click #(rf/dispatch [:navigation/navigate :routes.discussion/start
-                                  {:share-hash share-hash
-                                   :id (:db/id (:agenda/discussion agenda))}])}
-        (:agenda/title agenda)]
-       [markdown-parser/markdown-to-html (:agenda/description agenda)]]
-      [:div.col-3.col-lg-1.graph-icon
-       [:img.graph-icon-img.clickable-no-hover
-        {:src (img-path :icon-graph) :alt (labels :graph.button/text)
-         :title (labels :graph.button/text)
-         :on-click #(rf/dispatch
-                      [:navigation/navigate :routes/graph-view
-                       {:id (-> agenda :agenda/discussion :db/id)
-                        :share-hash share-hash}])}]]]]))
-
-(defn input-footer
-  ;; todo del
-  ([content]
-   [input-footer true content])
-  ([allow-new? content]
-   (when allow-new?
-     [:div.discussion-primary-background
-      content])))
-
-(defn- input-starting-statement-form
-  "A form, which allows the input of a starting-statement."
-  []
-  [:form
-   {:on-submit (fn [e] (js-wrap/prevent-default e)
-                 (rf/dispatch [:discussion.add.statement/starting
-                               (oget e [:target :elements])]))}
-   [:textarea.form-control.discussion-text-input
-    {:name "statement-text" :wrap "soft" :rows 2
-     :auto-complete "off"
-     :required true
-     :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-   [:div.text-center.py-3
-    [:button.button-secondary {:type "submit"} (labels :discussion/create-argument-action)]]])
+            [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (rf/reg-event-fx
   :discussion.add.statement/starting
@@ -113,40 +33,6 @@
                                      :context :success}]]
           [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
           [:form/clear form]]}))
-
-(defn input-field []
-  ;; todo del
-  [:div.discussion-primary-background
-   [:div.mb-2 [:h5 (labels :discussion/create-argument-heading)]]
-   [input-starting-statement-form]])
-
-(defn input-form
-  ;; todo del
-  "Text input for adding a statement"
-  []
-  [:div.mt-2
-   [:textarea.form-control.discussion-text-input.mb-1
-    {:name "premise-text" :wrap "soft" :rows 2
-     :auto-complete "off"
-     :required true
-     :placeholder (labels :discussion/premise-placeholder)}]
-   ;; add button
-   [:div.text-center.py-3
-    [:button.button-secondary {:type "submit"} (labels :discussion/create-starting-premise-action)]]])
-
-(defn radio-button
-  ;; todo del
-  "Radio Button helper function. This function creates a radio button."
-  [id name value label checked?]
-  [:div.custom-control.custom-radio.my-1
-   [:input.custom-control-input.custom-radio-button
-    {:type "radio"
-     :id id
-     :name name
-     :value value
-     :default-checked checked?}]
-   [:label.custom-control-label.custom-radio-button-label.clickable
-    {:for id} (labels label)]])
 
 (>defn- build-author-list
   "Build a nicely formatted string of a html list containing the authors from a sequence."
@@ -192,33 +78,6 @@
      (when edit-hash
        [delete-clicker statement edit-hash])]))
 
-(defn statement-bubble
-  "A single bubble of a statement to be used ubiquitously."
-  ([edit-hash statement]
-   [statement-bubble edit-hash statement (logic/arg-type->attitude (:meta/argument-type statement))])
-  ([edit-hash {:keys [statement/content] :as statement} attitude]
-   [:div.statement-outer
-    [:div.row
-     ;; bubble content
-     [:div.col-12.col-md-11
-      [:div.row.statement {:class (str "statement-" (name attitude))}
-       (when (= :argument.type/undercut (:meta/argument-type statement))
-         [:div.col-12
-          [:p.small (labels :discussion/undercut-bubble-intro)]])
-       ;; content
-       [:div.col-10.statement-content
-        [:p.my-0 content]
-        [:div.mt-md-3
-         [extra-discussion-info-badges statement edit-hash]]]
-       [:div.col-2.pt-3
-        ;; avatar
-        [:span
-         [common/avatar (-> statement :statement/author :author/nickname) 50]]]]]
-     ;; up-down-votes
-     [:div.col-12.col-md-1.px-0
-      [:div.up-down-vote
-       [up-down-vote statement]]]]]))
-
 (rf/reg-event-fx
   :discussion.query.statement/by-id
   (fn [{:keys [db]} _]
@@ -240,15 +99,6 @@
            (assoc-in db [:discussion :conclusions :selected] conclusion)
            (assoc-in [:discussion :premises :current] (concat premises undercuts)))
      :fx [[:dispatch [:discussion.history/push conclusion]]]}))
-
-(rf/reg-event-fx
-  ;; todo del
-  :discussion.statement/select
-  (fn [{:keys [db]} [_ statement]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
-      {:fx [[:dispatch [:discussion.select/conclusion statement]]
-            [:dispatch [:navigation/navigate :routes.discussion.select/statement
-                        {:id id :share-hash share-hash :statement-id (:db/id statement)}]]]})))
 
 (rf/reg-event-fx
   :discussion.select/conclusion
@@ -279,37 +129,6 @@
   :discussion.conclusions/selected
   (fn [db _]
     (get-in db [:discussion :conclusions :selected])))
-
-(defn conclusions-list
-  ;; todo del
-  "Displays a list of conclusions."
-  [conclusions share-hash]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
-        edit-hash (get admin-access-map share-hash)]
-    [:div.conclusions-list.mobile-container
-     (for [conclusion conclusions]
-       [:div {:key (:db/id conclusion)
-              :on-click (fn [_e]
-                          (rf/dispatch [:discussion.select/conclusion conclusion])
-                          (rf/dispatch [:discussion.history/push conclusion])
-                          (rf/dispatch [:navigation/navigate :routes.discussion.select/statement
-                                        (assoc path-params :statement-id (:db/id conclusion))]))}
-        [statement-bubble edit-hash conclusion :neutral]])]))
-
-(defn history-view
-  ;; todo del
-  "Displays the statements it took to get to where the user is."
-  [share-hash]
-  (let [history @(rf/subscribe [:discussion-history])
-        indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)
-        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
-        edit-hash (get admin-access-map share-hash)]
-    [:div.discussion-history.mobile-container
-     (for [[index statement] indexed-history]
-       [:div {:key (str "history-" (:db/id statement))
-              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-        [statement-bubble edit-hash statement]])]))
 
 (rf/reg-event-fx
   :discussion/toggle-upvote
