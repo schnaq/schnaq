@@ -27,9 +27,7 @@
        [:<>
         [admin-buttons/admin-center share-hash edit-hash]
         [admin-buttons/edit share-hash edit-hash]
-        [admin-buttons/calendar-invite share-hash edit-hash]])
-     ;; suggestion button
-     [admin-buttons/provide-suggestion share-hash]]))
+        [admin-buttons/calendar-invite share-hash edit-hash]])]))
 
 (defn meeting-entry
   "Non wavy header with an optional back button.

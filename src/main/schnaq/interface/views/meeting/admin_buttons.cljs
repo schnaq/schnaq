@@ -82,12 +82,3 @@
    [:i {:class (str "m-auto fas " (fa :calendar))}]
    #(rf/dispatch [:modal {:show? true :large? false
                           :child [calendar-invite/modal]}])])
-
-(defn provide-suggestion
-  "Button to add suggestions."
-  [share-hash]
-  [tooltip-button "bottom"
-   (labels :agendas.button/navigate-to-suggestions)
-   [:i {:class (str "m-auto fas " (fa :comment-alt))}]
-   #(rf/dispatch [:navigation/navigate :routes.meeting/suggestions
-                  {:share-hash share-hash}])])

@@ -276,19 +276,11 @@
         :meeting/admin-center-export "Download discussion as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
 
-        ;; Create Agenda
-        :agenda/desc-for "Description for agenda point "
-
-        :agendas.button/navigate-to-suggestions "Create change suggestions"
-
         ;; Discussion Language
         :discussion/create-argument-action "Add Statement"
         :discussion/add-argument-conclusion-placeholder "I think that…"
         :discussion/add-premise-supporting "I want to support the statement"
         :discussion/add-premise-against "I disagree…"
-        :discussion/add-undercut "The last two statements are not connected"
-        :discussion/reason-nudge "What do you think about this?"
-        :discussion/others-think "Others think the following:"
         :discussion.badges/user-overview "All participants"
         :discussion.badges/delete-statement "Delete statement"
         :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
@@ -704,19 +696,11 @@
         :meeting/admin-center-export "Diskussion als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
 
-        ;; Create Agenda
-        :agenda/desc-for "Beschreibung für Agendapunkt "
-
-        :agendas.button/navigate-to-suggestions "Änderungsvorschläge erstellen"
-
         ;; Discussion Language
         :discussion/create-argument-action "Beitrag hinzufügen"
         :discussion/add-argument-conclusion-placeholder "Das denke ich darüber."
         :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
         :discussion/add-premise-against "Ich habe einen Grund dagegen"
-        :discussion/add-undercut "Die letzten beiden Aussagen passen nicht zusammen"
-        :discussion/reason-nudge "Was denken Sie darüber?"
-        :discussion/others-think "Andere denken folgendes:"
         :discussion.badges/user-overview "Alle Teilnehmer:innen"
         :discussion.badges/delete-statement "Beitrag löschen"
         :discussion.badges/delete-statement-confirmation "Wollen Sie den Beitrag wirklich löschen?"
