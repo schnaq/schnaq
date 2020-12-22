@@ -18,7 +18,7 @@
   "Histroy view displayed in the left column in the desktop view."
   ([{:meeting/keys [share-hash] :as current-meeting}]
    ;; home button
-   [:div.d-inline-block.d-md-block.pr-1.pr-md-0
+   [:div.d-inline-block.d-md-block.pr-2.pr-md-0
     {:on-click (fn []
                  (rf/dispatch [:navigation/navigate :routes.meeting/show
                                {:share-hash share-hash}])
@@ -32,13 +32,13 @@
       [history-view current-meeting]
       ;; history
       (for [[index statement] indexed-history]
-        [:div.d-inline-block.d-md-block.pr-1.pr-md-0.text-dark
+        [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark
          {:key (str "history-" (:db/id statement))
           :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-
-         [:div.card-history.clickable.mt-md-4
-          {:class (str "statement-card-" (name (logic/arg-type->attitude (:meta/argument-type statement))))}
-          [common/avatar (-> statement :statement/author :author/nickname) 30]]])])))
+         (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+           [:div.card-history.clickable.mt-md-4
+            {:class (str "statement-card-" attitude " mobile-attitude-" attitude)}
+            [common/avatar (-> statement :statement/author :author/nickname) 30]])])])))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"

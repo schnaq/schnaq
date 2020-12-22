@@ -39,6 +39,12 @@
   padding: 1rem;
   width: 4.5rem;
 
+  @include media-breakpoint-down(sm) {
+    height: 3rem;
+    padding: 0.3rem 0.2rem;
+    width: 3rem;
+  }
+
   &:hover {
     background: $white-shade;
   }
@@ -53,6 +59,16 @@
   min-width: 4.5rem;
   overflow: hidden;
   padding: 1rem;
+
+  @include media-breakpoint-down(sm) {
+    min-height: 3rem;
+    min-width: 3rem;
+    padding: 0.3rem;
+  }
+}
+
+.mobile-history {
+  padding: 0.5em 0.5em 0;
 }
 
 .line-divider {
@@ -107,6 +123,26 @@
   &::placeholder {
     background: transparent;
     color: $gray-600;
+  }
+}
+
+.mobile-attitude-agree {
+  @include media-breakpoint-down(sm) {
+    background: $white !important;
+    border-color: $primary;
+    border-style: none none none solid;
+    border-width: 5px;
+    box-shadow: $left-shadow;
+  }
+}
+
+.mobile-attitude-disagree {
+  @include media-breakpoint-down(sm) {
+    background: $white !important;
+    border-color: $secondary;
+    border-style: none none none solid;
+    border-width: 5px;
+    box-shadow: $left-shadow;
   }
 }
 

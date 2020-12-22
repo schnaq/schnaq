@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.cards.card-view
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [img-path]]
+            [schnaq.interface.text.display-data :refer [img-path labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.discussion.cards.card-elements :as elements]
@@ -42,8 +42,10 @@
         [admin-buttons/admin-center share-hash edit-hash])
       ;; name input
       [navbar/username-bar-view-light]
-      [:div.d-md-none [:hr]]
-      [:div.d-md-none [elements/history-view meeting history]]]]))
+      [:div.d-md-none.mobile-history
+       [:hr]
+       [:h6.text-center.py-1 (labels :common/history)]
+       [elements/history-view meeting history]]]]))
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
