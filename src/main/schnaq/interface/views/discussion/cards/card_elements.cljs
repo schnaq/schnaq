@@ -218,6 +218,6 @@
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the right of the topic bubble."
   [statement edit-hash]
-  [:div
+  [:<>
    [cards/up-down-vote-breaking statement]
    [view-elements/extra-discussion-info-badges statement edit-hash]])

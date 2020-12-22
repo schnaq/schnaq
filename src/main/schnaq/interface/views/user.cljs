@@ -1,9 +1,19 @@
 (ns schnaq.interface.views.user
   (:require [ajax.core :as ajax]
             [clojure.string :as clj-string]
+            [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.common :as common]))
+
+(defn- user-info
+  "User info box containing relevant information for discussions."
+  [username avatar-size]
+  [:div.p-1 {:style {:width "100px"}}
+   [:div.d-flex.flex-row.align-items-center
+    [:div [common/avatar username avatar-size]]
+    [:div.pl-2.pb-1 {:style {:line-height ".9rem"}}
+     [:small username]]]])
 
 (rf/reg-event-fx
   :user/set-display-name
