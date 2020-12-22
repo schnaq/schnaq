@@ -88,7 +88,7 @@
      (str textarea-id "for-radio") "premise-choice" "for-radio"
      [:i {:class (str "m-auto fas " (fa :plus))}]
      (labels :discussion/add-premise-supporting) "hover-primary" false]
-    (if-not toolbelt/production?
+    (when-not toolbelt/production?
       ;; neutral
       [radio-button
        (str textarea-id "neutral-radio") "premise-choice" "for-radio"
