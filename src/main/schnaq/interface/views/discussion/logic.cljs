@@ -43,26 +43,6 @@
                           :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
-  :discussion.undercut.statement/send
-  ;; todo del
-  (fn [{:keys [db]} [_ new-premise]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
-          history (get-in db [:history :full-context] [])
-          nickname (get-in db [:user :name] "Anonymous")]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/argument/undercut")
-                          :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash
-                                   :discussion-id id
-                                   :selected (last history)
-                                   :nickname nickname
-                                   :premise new-premise
-                                   :previous-id (:db/id (nth history (- (count history) 2)))}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.reaction.statement/added]
-                          :on-failure [:ajax.error/as-notification]}]]})))
-
-(rf/reg-event-fx
   :discussion.reaction.statement/added
   (fn [{:keys [db]} [_ response]]
     (let [new-argument (:new-argument response)
