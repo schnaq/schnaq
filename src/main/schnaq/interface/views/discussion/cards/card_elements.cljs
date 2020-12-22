@@ -146,7 +146,9 @@
   "Element containing Title and textarea input"
   [title input]
   [:<>
-   [:h2.align-self-center.my-4 title]
+   [toolbelt/desktop-mobile-switch
+    [:h2.align-self-center.my-4 title]
+    [:h2.align-self-center.my-4.display-6 title]]
    [:div.line-divider.my-4]
    input])
 
