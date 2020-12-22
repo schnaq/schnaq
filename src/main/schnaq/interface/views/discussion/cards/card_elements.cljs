@@ -33,12 +33,12 @@
       ;; history
       (for [[index statement] indexed-history]
         [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark
-         {:key (str "history-" (:db/id statement))
-          :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+         {:key (str "history-" (:db/id statement))}
          (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
            [:div.card-history.clickable.mt-md-4
-            {:class (str "statement-card-" attitude " mobile-attitude-" attitude)}
-            [common/avatar-with-nickname (-> statement :statement/author :author/nickname) 30]])])])))
+            {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
+             :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+            [common/avatar (-> statement :statement/author :author/nickname) 42]])])])))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
