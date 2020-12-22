@@ -44,17 +44,26 @@
       [:h6 [:i {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]]]
      [:h6.ml-1.pt-1 (logic/calculate-votes statement :downvotes votes)]]))
 
+(defn- user-info
+  "User info box containing relevant information for discussions."
+  [username avatar-size]
+  [:div.p-1 {:style {:width "100px"}}
+   [:div.d-flex.flex-row.align-items-center
+    [:div [common/avatar username avatar-size]]
+    [:div.pl-2.pb-1 {:style {:line-height ".9rem"}}
+     [:small username]]]])
+
 (defn- statement-card
   [edit-hash {:keys [statement/content] :as statement} attitude]
   [:div.card.card-rounded.clickable.shadow-straight-light
    {:class (str "statement-card-" (name attitude))}
-   [:div.card-view.card-body.py-0
+   [:div.card-view.card-body.py-0.pb-1
     [:div.row.pt-4
-     [:div.col-10 [:p.my-0 content]]
-     [:div.col-2 [common/avatar-with-nickname (-> statement :statement/author :author/nickname) 50]]]
-    [:div.row.pb-2
-     [:div.col-6 [view-elements/extra-discussion-info-badges statement edit-hash]]
-     [:div.col-6 [up-down-vote statement]]]]])
+     [:div.col-10 [:p content]]
+     [:div.col-2 [up-down-vote statement]]]
+    [:div.d-flex
+     [:div.mr-auto [view-elements/extra-discussion-info-badges statement edit-hash]]
+     [:div.float-right [user-info (-> statement :statement/author :author/nickname)]]]]])
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
