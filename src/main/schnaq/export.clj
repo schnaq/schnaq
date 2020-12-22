@@ -11,11 +11,12 @@
   style of the export."
   [statement level]
   [string? number? :ret string?]
-  (let [left-space (str "\n" (string/join (repeat (inc level) "  ")))]
+  (let [left-space (str "\n" (string/join (repeat (inc level) "  ")))
+        splitted-and-trimmed (->> (string/split-lines statement)
+                                  (map string/trim))]
     (if (zero? level)
-      (string/replace statement #"\n\n" "\n")
-      (->> (string/split-lines statement)
-           (string/join left-space)))))
+      (->> splitted-and-trimmed (remove empty?) (string/join "\n"))
+      (string/join left-space splitted-and-trimmed))))
 
 (defn- next-line
   "Builds the next line of a node in text representation. Adds an empty line
