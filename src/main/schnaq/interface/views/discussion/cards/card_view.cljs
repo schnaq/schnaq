@@ -33,7 +33,9 @@
           (rf/dispatch [:navigation/navigate :routes.meeting/show
                         {:share-hash share-hash}])
           (rf/dispatch [:meeting/select-current meeting]))}
-       [:h3.mx-5 title]]
+       [toolbelt/desktop-mobile-switch
+        [:h3.mx-5 title]
+        [:h3.mx-5.display-6 title]]]
       [admin-buttons/txt-export share-hash title]
       (when (and edit-hash (btools/is-brainstorm? meeting))
         [admin-buttons/admin-center share-hash edit-hash])
