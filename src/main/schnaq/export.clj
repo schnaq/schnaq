@@ -6,12 +6,16 @@
 
 (>defn- indent-multi-paragraph-statement
   "Removes empty lines at the end of a statement and indents them correctly in
-  the case of a 'valid' multi-line statement with paragraphs."
+  the case of a 'valid' multi-line statement with paragraphs. Starting
+  conclusions can't have an empty line, otherwise it would break the complete
+  style of the export."
   [statement level]
   [string? number? :ret string?]
   (let [left-space (str "\n" (string/join (repeat (inc level) "  ")))]
-    (->> (string/split-lines statement)
-         (string/join left-space))))
+    (if (zero? level)
+      (string/replace statement #"\n\n" "\n")
+      (->> (string/split-lines statement)
+           (string/join left-space)))))
 
 (defn- next-line
   "Builds the next line of a node in text representation. Adds an empty line
