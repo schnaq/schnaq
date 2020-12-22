@@ -53,8 +53,7 @@
      [:div.container-fluid.px-0
       [toolbelt/desktop-mobile-switch
        [elements/discussion-view-desktop
-        current-meeting title input-desktop
-        settings-content current-starting nil]
+        current-meeting title input-desktop current-starting nil]
        [elements/discussion-view-mobile
         current-meeting title input-mobile
         settings-content current-starting]]]]))
@@ -76,8 +75,7 @@
      [:div.container-fluid.px-0
       [toolbelt/desktop-mobile-switch
        [elements/discussion-view-desktop
-        current-meeting title input-desktop
-        info-content current-premises history]
+        current-meeting title input-desktop current-premises history]
        [elements/discussion-view-mobile
         current-meeting title input-mobile
         info-content current-premises]]]]))

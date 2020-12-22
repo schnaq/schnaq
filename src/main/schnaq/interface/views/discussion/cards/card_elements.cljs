@@ -151,7 +151,7 @@
    input])
 
 (defn- topic-bubble-desktop
-  [meeting title input info-content]
+  [meeting title input]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         share-hash (:meeting/share-hash meeting)]
     [:div.row
@@ -159,11 +159,8 @@
      [:div.col-2.graph-icon
       [graph-button agenda share-hash]]
      ;; title
-     [:div.col-8
-      [title-and-input-element title input]]
-     ;; settings
-     [:div.col-2.p-0
-      info-content]]))
+     [:div.col-10
+      [title-and-input-element title input]]]))
 
 (defn- topic-bubble-mobile
   [meeting title input info-content]
@@ -202,14 +199,14 @@
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [current-meeting title input info-content conclusions history]
+  [current-meeting title input conclusions history]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-1.py-4
      [history-view current-meeting history]]
     [:div.col-10.py-4.px-0
      [topic-view current-meeting conclusions
-      [topic-bubble-desktop current-meeting title input info-content]]]]])
+      [topic-bubble-desktop current-meeting title input]]]]])
 
 
 (defn info-content-conclusion
