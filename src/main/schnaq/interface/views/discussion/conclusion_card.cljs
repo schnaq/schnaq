@@ -104,7 +104,7 @@
    [:div.card-view.card-body.py-0
     [:div.row.pt-4
      [:div.col-10 [:p.my-0 content]]
-     [:div.col-2 [common/avatar (-> statement :statement/author :author/nickname) 50]]]
+     [:div.col-2 [common/avatar-with-nickname (-> statement :statement/author :author/nickname) 50]]]
     [:div.row.pb-2
      [:div.col-6 [badges/extra-discussion-info-badges statement edit-hash]]
      [:div.col-6 [up-down-vote statement]]]]])

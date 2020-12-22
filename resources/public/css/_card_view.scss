@@ -146,7 +146,12 @@
   }
 }
 
+@mixin statement-card {
+  white-space: pre-line;
+}
+
 .statement-card-agree {
+  @include statement-card;
   background: $primary;
 
   &:hover {
@@ -155,6 +160,7 @@
 }
 
 .statement-card-disagree {
+  @include statement-card;
   background: $secondary;
 
   &:hover {
@@ -163,6 +169,7 @@
 }
 
 .statement-card-neutral {
+  @include statement-card;
   background: $white-shade;
 
   &:hover {

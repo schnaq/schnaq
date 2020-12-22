@@ -4,6 +4,20 @@
             [schnaq.meeting.database :as db]
             [schnaq.discussion :as discussion]))
 
+(>defn- indent-multi-paragraph-statement
+  "Removes empty lines at the end of a statement and indents them correctly in
+  the case of a 'valid' multi-line statement with paragraphs. Starting
+  conclusions can't have an empty line, otherwise it would break the complete
+  style of the export."
+  [statement level]
+  [string? number? :ret string?]
+  (let [left-space (str "\n" (string/join (repeat (inc level) "  ")))
+        splitted-and-trimmed (->> (string/split-lines statement)
+                                  (map string/trim))]
+    (if (zero? level)
+      (->> splitted-and-trimmed (remove empty?) (string/join "\n"))
+      (string/join left-space splitted-and-trimmed))))
+
 (defn- next-line
   "Builds the next line of a node in text representation. Adds an empty line
   before a new starting-conclusion is detected."
@@ -15,7 +29,7 @@
                           "")
         spacing (if (zero? level) "\n\n" "\n")
         ;; Indent multiline-text correctly. Additional level is to compensate for relation-symbol
-        indented-label (string/replace (:label node) #"\n" (str "\n" (string/join (repeat (inc level) "  "))))
+        indented-label (indent-multi-paragraph-statement (:label node) level)
         next-line (str (string/join (repeat level "  ")) relation-symbol indented-label)]
     (str old-text spacing next-line)))
 
