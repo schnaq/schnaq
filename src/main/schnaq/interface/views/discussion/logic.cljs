@@ -72,3 +72,25 @@
       "against-radio" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
       "for-radio" (rf/dispatch [:discussion.reaction.statement/send :support new-text]))
     (rf/dispatch [:form/should-clear [new-text-element]])))
+
+(rf/reg-event-fx
+  :discussion.query.statement/by-id
+  (fn [{:keys [db]} _]
+    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/statement/info")
+                          :format (ajax/transit-request-format)
+                          :params {:statement-id statement-id
+                                   :share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.query.statement/by-id-success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(rf/reg-event-fx
+  :discussion.query.statement/by-id-success
+  (fn [{:keys [db]} [_ {:keys [conclusion premises undercuts]}]]
+    {:db (->
+           (assoc-in db [:discussion :conclusions :selected] conclusion)
+           (assoc-in [:discussion :premises :current] (concat premises undercuts)))
+     :fx [[:dispatch [:discussion.history/push conclusion]]]}))

@@ -12,8 +12,8 @@
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.cards.conclusion-card :as cards]
+            [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.discussion.view-elements :as view-elements]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
 
 (defn history-view
@@ -275,4 +275,4 @@
   [statement edit-hash]
   [:div.ml-5
    (cards/up-down-vote-breaking statement)
-   [view-elements/extra-discussion-info-badges statement edit-hash]])
+   [badges/extra-discussion-info-badges statement edit-hash]])

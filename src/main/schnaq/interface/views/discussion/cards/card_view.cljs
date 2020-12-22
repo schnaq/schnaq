@@ -70,6 +70,11 @@
         current-meeting title input-mobile
         nil current-starting]]]]))
 
+(rf/reg-sub
+  :discussion.premises/current
+  (fn [db _]
+    (get-in db [:discussion :premises :current] [])))
+
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
   []
