@@ -63,7 +63,7 @@
      [:div.col-2 [up-down-vote statement]]]
     [:div.d-flex
      [:div.mr-auto [view-elements/extra-discussion-info-badges statement edit-hash]]
-     [:div.float-right [user-info (-> statement :statement/author :author/nickname)]]]]])
+     [:div.float-right [user-info (-> statement :statement/author :author/nickname) 32]]]]])
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
