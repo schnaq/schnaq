@@ -301,28 +301,6 @@
     (is (= 1 (count (db/statements-by-content "we have no use for a watchdog"))))
     (is (empty? (db/statements-by-content "foo-baar-ajshdjkahsjdkljsadklja")))))
 
-(deftest argument-id-by-undercut-and-premise-test
-  (testing "See whether the right argument can be identified by providing undercuts premise and
-  the premise of its conclusion."
-    (let [undercut-id (:db/id (first (db/statements-by-content "we have no use for a watchdog")))
-          conclusion-premise-id (:db/id (first (db/statements-by-content "dogs can act as watchdogs")))
-          result (db/argument-id-by-undercut-and-premise undercut-id conclusion-premise-id)
-          result-conclusion-id (:db/id (:argument/conclusion (db/fast-pull result)))
-          result-con-con-id (:db/id (:argument/conclusion (db/fast-pull result-conclusion-id)))
-          result-con-con (:statement/content (db/fast-pull result-con-con-id))]
-      (is (= "we should get a dog" result-con-con)))))
-
-(deftest argument-id-by-premise-conclusion-test
-  (testing "See if the argument with corresponding premise and conclusion can be found"
-    (is (nil? (db/argument-id-by-premise-conclusion 123 1234)))
-    (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
-          any-argument (first (filter
-                                #(not= :argument.type/undercut (:argument/type %))
-                                (db/all-arguments-for-discussion cat-or-dog-id)))
-          premise (:db/id (first (:argument/premises any-argument)))
-          conclusion (:db/id (:argument/conclusion any-argument))]
-      (is (= (:db/id any-argument) (db/argument-id-by-premise-conclusion premise conclusion))))))
-
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."
     (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))

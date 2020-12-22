@@ -67,8 +67,9 @@
           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
           argument-types @(rf/subscribe [:analytics/argument-type-stats])
           last-meeting @(rf/subscribe [:analytics/last-meeting-created])
-          last-meeting-date (str (.getDate last-meeting) "." (inc (.getMonth last-meeting)) "."
-                                 (.getFullYear last-meeting))]
+          last-meeting-date (if last-meeting (str (.getDate last-meeting) "." (inc (.getMonth last-meeting)) "."
+                                                  (.getFullYear last-meeting))
+                                             "None")]
       [:div.container.px-5.py-3
        [analytics-controls]
        [:div.card-columns

@@ -915,36 +915,6 @@
              :where [?statements :statement/content ?content]]
            db statement-pattern content))))
 
-(>defn argument-id-by-premise-conclusion
-  "Return the ID of an argument, which has at least the corresponding premise and
-  conclusion. If multiple are applicable, return any of them."
-  [premise-id conclusion-id]
-  [number? number? :ret (s/nilable number?)]
-  (:db/id
-    (ffirst
-      (query
-        '[:find (pull ?argument argument-pattern)
-          :in $ argument-pattern ?premise-id ?conclusion-id
-          :where [?argument :argument/premises ?premise-id]
-          [?argument :argument/conclusion ?conclusion-id]]
-        argument-pattern premise-id conclusion-id))))
-
-(>defn argument-id-by-undercut-and-premise
-  "Returns one argument that has a premise `undercut-premise-id` and which has a conclusion
-  that has a premise which contains `conclusion-premise-id`. Basically identifies an undercut by the premise
-  and the conclusions premise."
-  [undercut-premise-id conclusion-premise-id]
-  [:db/id :db/id :ret :db/id]
-  (:db/id
-    (ffirst
-      (query
-        '[:find (pull ?undercut argument-pattern)
-          :in $ argument-pattern ?undercut-premise-id ?conclusion-premise-id
-          :where [?undercut :argument/premises ?undercut-premise-id]
-          [?undercut :argument/conclusion ?undercutted-argument]
-          [?undercutted-argument :argument/premises ?conclusion-premise-id]]
-        argument-pattern undercut-premise-id conclusion-premise-id))))
-
 (>defn- new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
   [discussion-id author-id new-conclusion-id new-statement-string argument-type]
@@ -982,21 +952,3 @@
   [discussion-id author-id statement-id supporting-string]
   [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! discussion-id author-id statement-id supporting-string :argument.type/support))
-
-(>defn undercut-argument!
-  "Undercut an argument and store it to the database."
-  [discussion-id author-id argument-id premises]
-  [number? :db/id :db/id (s/coll-of :statement/content) :ret ::specs/argument]
-  (let [argument-id (get-in
-                      (transact
-                        [{:db/id (str "new-undercut-" discussion-id)
-                          :argument/author author-id
-                          :argument/premises (pack-premises premises author-id)
-                          :argument/conclusion argument-id
-                          :argument/version 1
-                          :argument/type :argument.type/undercut
-                          :argument/discussions [discussion-id]}])
-                      [:tempids (str "new-undercut-" discussion-id)])]
-    (toolbelt/pull-key-up
-      (d/pull (d/db (new-connection)) argument-pattern argument-id)
-      :db/ident)))

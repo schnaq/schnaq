@@ -6,7 +6,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.brainstorm.create :as brainstorm-create]
-            [schnaq.interface.views.discussion.cards.card-view :as discussion-card-view]
+            [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.meeting.admin-center :as meeting-admin]
