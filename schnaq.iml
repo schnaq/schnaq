@@ -44,7 +44,7 @@
     <orderEntry type="library" name="Deps: commons-fileupload:1.4" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-ssl:0.3.0" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-http:9.4.31.v20200723" level="project" />
-    <orderEntry type="library" name="Deps: day8.re-frame/http-fx:0.2.1" level="project" />
+    <orderEntry type="library" name="Deps: day8.re-frame/http-fx:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-util:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/encore:3.4.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/spec-tools:0.10.4" level="project" />
@@ -69,7 +69,7 @@
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.264" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20191016-6ae1f72f" level="project" />
     <orderEntry type="library" name="Deps: io.aviso/pretty:0.1.37" level="project" />
-    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.9" level="project" />
+    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.10" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.sdk/graal-sdk:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: rewrite-clj:0.6.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/clojurescript:1.10.773" level="project" />
@@ -138,7 +138,7 @@
     <orderEntry type="library" name="Deps: binaryage/devtools:1.0.2" level="project" />
     <orderEntry type="library" name="Deps: net.cgrand/macrovich:0.2.1" level="project" />
     <orderEntry type="library" name="Deps: re-frame:1.1.2" level="project" />
-    <orderEntry type="library" name="Deps: reagent:1.0.0-rc1" level="project" />
+    <orderEntry type="library" name="Deps: reagent:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: org.msgpack/msgpack:0.6.12" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client-impl-shared:0.8.80" level="project" />
     <orderEntry type="library" name="Deps: orchestra:2020.07.12-1" level="project" />
