@@ -88,11 +88,12 @@
      (str textarea-id "for-radio") "premise-choice" "for-radio"
      [:i {:class (str "m-auto fas " (fa :plus))}]
      (labels :discussion/add-premise-supporting) "hover-primary" false]
-    ;; neutral
-    [radio-button
-     (str textarea-id "neutral-radio") "premise-choice" "for-radio"
-     [:i {:class (str "m-auto fas " (fa :comment))}]
-     (labels :discussion/add-premise-supporting) "hover-white" true]
+    (when-not toolbelt/production?
+      ;; neutral
+      [radio-button
+       (str textarea-id "neutral-radio") "premise-choice" "for-radio"
+       [:i {:class (str "m-auto fas " (fa :comment))}]
+       (labels :discussion/add-premise-supporting) "hover-white" true])
     ;; attack
     [radio-button
      (str textarea-id "against-radio") "premise-choice" "against-radio"
