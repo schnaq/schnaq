@@ -300,7 +300,6 @@
         :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
         :discussion.notification/new-content-title "New statement!"
         :discussion.notification/new-content-body "Your statement was added successfully!"
-        :discussion.carousel/heading "Statements of Others"
 
         ;; meetings overview
         :meetings/header "Overview of your schnaqs"
@@ -735,7 +734,6 @@
         :discussion.badges/delete-statement-confirmation "Wollen Sie den Beitrag wirklich löschen?"
         :discussion.notification/new-content-title "Neuer Beitrag!"
         :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
-        :discussion.carousel/heading "Beiträge Anderer"
 
         ;; meetings overview
         :meetings/header "Übersicht Ihrer schnaqs"

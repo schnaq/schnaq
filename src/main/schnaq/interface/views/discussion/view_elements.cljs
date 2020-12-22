@@ -242,6 +242,7 @@
      :fx [[:dispatch [:discussion.history/push conclusion]]]}))
 
 (rf/reg-event-fx
+  ;; todo del
   :discussion.statement/select
   (fn [{:keys [db]} [_ statement]]
     (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
