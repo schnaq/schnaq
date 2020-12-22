@@ -151,7 +151,7 @@
    input])
 
 (defn- topic-bubble-desktop
-  [meeting title input]
+  [meeting title input info-content]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         share-hash (:meeting/share-hash meeting)]
     [:div.row
@@ -159,18 +159,24 @@
      [:div.col-2.graph-icon
       [graph-button agenda share-hash]]
      ;; title
-     [:div.col-10
-      [title-and-input-element title input]]]))
+     [:div.col-8
+      [title-and-input-element title input]]
+     ;; settings
+     [:div.col-2.p-0
+      info-content]]))
 
 (defn- topic-bubble-mobile
-  [meeting title input]
+  [meeting title input info-content]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         share-hash (:meeting/share-hash meeting)]
     [:<>
      [:div.row
       ;; graph
-      [:div.col-12.graph-icon
-       [graph-button agenda share-hash]]]
+      [:div.col-6.graph-icon
+       [graph-button agenda share-hash]]
+      ;; settings
+      [:div.col-6.p-0
+       info-content]]
      ;; title
      [title-and-input-element title input]]))
 
@@ -188,22 +194,22 @@
 (defn discussion-view-mobile
   "Dicsussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
-  [current-meeting title input conclusions]
+  [current-meeting title input info-content conclusions]
   [:<>
    [topic-view current-meeting conclusions
-    [topic-bubble-mobile current-meeting title input]]])
+    [topic-bubble-mobile current-meeting title input info-content]]])
 
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [current-meeting title input conclusions history]
+  [current-meeting title input info-content conclusions history]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-1.py-4
      [history-view current-meeting history]]
     [:div.col-10.py-4.px-0
      [topic-view current-meeting conclusions
-      [topic-bubble-desktop current-meeting title input]]]]])
+      [topic-bubble-desktop current-meeting title input info-content]]]]])
 
 
 (defn info-content-conclusion
