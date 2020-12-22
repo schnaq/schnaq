@@ -12,7 +12,8 @@
   "Overview header for a meeting with a name input"
   [{:meeting/keys [title share-hash] :as meeting}]
   (let [admin-access-map @(rf/subscribe [:meetings/load-admin-access])
-        edit-hash (get admin-access-map share-hash)]
+        edit-hash (get admin-access-map share-hash)
+        history @(rf/subscribe [:discussion-history])]
     [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header.shadow-straight-light
      ;; schnaq logo
      [:a.navbar-brand.mr-auto {:href (reitfe/href :routes/startpage)}
@@ -40,7 +41,9 @@
       (when (and edit-hash (btools/is-brainstorm? meeting))
         [admin-buttons/admin-center share-hash edit-hash])
       ;; name input
-      [navbar/username-bar-view-light]]]))
+      [navbar/username-bar-view-light]
+      [:div.d-md-none [:hr]]
+      [:div.d-md-none [elements/history-view meeting history]]]]))
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
