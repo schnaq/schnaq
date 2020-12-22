@@ -15,16 +15,16 @@
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
 
 (defn history-view
-  "Histroy view displayed in the left column in the desktop view."
+  "History view displayed in the left column in the desktop view."
   ([{:meeting/keys [share-hash] :as current-meeting}]
    ;; home button
    [:div.d-inline-block.d-md-block.pr-2.pr-md-0
-    {:on-click (fn []
-                 (rf/dispatch [:navigation/navigate :routes.meeting/show
-                               {:share-hash share-hash}])
-                 (rf/dispatch [:meeting/select-current current-meeting]))}
-    [:div.card-history-home.clickable.mt-md-4.i
-     {:class (str "fas " (fa :home))}]])
+    [:span
+     {:on-click (fn []
+                  (rf/dispatch [:navigation/navigate :routes.meeting/show
+                                {:share-hash share-hash}])
+                  (rf/dispatch [:meeting/select-current current-meeting]))}
+     [:i {:class (str "card-history-home clickable mt-md-4 fas " (fa :home))}]]])
   ([current-meeting history]
    (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
      [:<>
@@ -33,12 +33,12 @@
       ;; history
       (for [[index statement] indexed-history]
         [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark
-         {:key (str "history-" (:db/id statement))
-          :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+         {:key (str "history-" (:db/id statement))}
          (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
            [:div.card-history.clickable.mt-md-4
-            {:class (str "statement-card-" attitude " mobile-attitude-" attitude)}
-            [common/avatar (-> statement :statement/author :author/nickname) 30]])])])))
+            {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
+             :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+            [common/avatar (-> statement :statement/author :author/nickname) 42]])])])))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"

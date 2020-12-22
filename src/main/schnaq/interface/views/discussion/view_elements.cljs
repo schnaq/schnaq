@@ -207,8 +207,7 @@
          [extra-discussion-info-badges statement edit-hash]]]
        [:div.col-2.pt-3
         ;; avatar
-        [:span
-         [common/avatar (-> statement :statement/author :author/nickname) 50]]]]]
+        [common/avatar-with-nickname (-> statement :statement/author :author/nickname) 50]]]]
      ;; up-down-votes
      [:div.col-12.col-md-1.px-0
       [:div.up-down-vote
