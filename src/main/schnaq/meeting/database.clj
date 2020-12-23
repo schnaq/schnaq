@@ -291,32 +291,38 @@
 
 (>defn all-statements
   "Returns all statements belonging to a discussion"
-  [discussion-id]
-  [:db/id :ret (s/coll-of ::specs/statement)]
+  [share-hash]
+  [:meeting/share-hash :ret (s/coll-of ::specs/statement)]
   (distinct
     (concat
       (flatten
         (d/q
           '[:find (pull ?statements statement-pattern)
-            :in $ ?discussion-id statement-pattern
-            :where [?arguments :argument/discussions ?discussion-id]
-            [?statements :statement/version _]
+            :in $ ?share-hash statement-pattern
+            :where [?meeting :meeting/share-hash ?share-hash]
+            [?agenda :agenda/meeting ?meeting]
+            [?agenda :agenda/discussion ?discussion]
+            [?arguments :argument/discussions ?discussion]
             (or
               [?arguments :argument/conclusion ?statements]
-              [?arguments :argument/premises ?statements])]
-          (d/db (new-connection)) discussion-id statement-pattern))
+              [?arguments :argument/premises ?statements])
+            [?statements :statement/version _]]
+          (d/db (new-connection)) share-hash statement-pattern))
       (flatten
         (d/q
           '[:find (pull ?statements statement-pattern)
-            :in $ ?discussion-id statement-pattern
-            :where [?discussion-id :discussion/starting-statements ?statements]]
-          (d/db (new-connection)) discussion-id statement-pattern)))))
+            :in $ ?share-hash statement-pattern
+            :where [?meeting :meeting/share-hash ?share-hash]
+            [?agenda :agenda/meeting ?meeting]
+            [?agenda :agenda/discussion ?discussion]
+            [?discussion :discussion/starting-statements ?statements]]
+          (d/db (new-connection)) share-hash statement-pattern)))))
 
 (>defn number-of-statements-for-discussion
   "Returns number of statements for a discussion-id."
-  [discussion-id]
-  [int? :ret int?]
-  (count (all-statements discussion-id)))
+  [share-hash]
+  [:meeting/share-hash :ret int?]
+  (count (all-statements share-hash)))
 
 (defn agenda-by-discussion-id
   "Returns an agenda which has the corresponding `discussion-id`."
@@ -397,8 +403,8 @@
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
-  [discussion-id]
-  [int? :ret sequential?]
+  [share-hash]
+  [:meeting/share-hash :ret sequential?]
   (map
     (fn [statement]
       {:author (-> statement :statement/author :author/nickname)
@@ -406,7 +412,7 @@
        :label (if (:statement/deleted? statement)
                 config/deleted-statement-text
                 (:statement/content statement))})
-    (all-statements discussion-id)))
+    (all-statements share-hash)))
 
 (>defn add-user-if-not-exists
   "Adds an author and user if they do not exist yet. Returns the (new) user-id."
@@ -758,12 +764,15 @@
   {:deprecated "2020-11-03"
    :doc "Do not use this function anymore in production.
    Deep-Query all starting-arguments of a certain discussion."}
-  [discussion-id]
+  [share-hash]
   (-> (query
         '[:find (pull ?starting-arguments argument-pattern)
-          :in $ argument-pattern ?discussion-id
-          :where [?discussion-id :discussion/starting-arguments ?starting-arguments]]
-        argument-pattern discussion-id)
+          :in $ argument-pattern ?share-hash
+          :where [?meeting :meeting/share-hash ?share-hash]
+          [?agenda :agenda/meeting ?meeting]
+          [?agenda :agenda/discussion ?discussion]
+          [?discussion :discussion/starting-arguments ?starting-arguments]]
+        argument-pattern share-hash)
       flatten
       (toolbelt/pull-key-up :db/ident)))
 
@@ -804,18 +813,6 @@
         [?agenda :agenda/meeting ?meeting]
         [?agenda :agenda/discussion ?discussions]]
       share-hash)))
-
-(>defn statements-belong-to-discussion?
-  "Returns whether the statements belong to a discussion identified by the share-hash."
-  [statement-ids share-hash]
-  [sequential? :meeting/share-hash :ret boolean?]
-  (let [all-discussions (discussions-by-share-hash share-hash)
-        reachable-statements (->> all-discussions
-                                  (map all-statements)
-                                  flatten
-                                  (map :db/id)
-                                  set)]
-    (every? #(contains? reachable-statements %) statement-ids)))
 
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."

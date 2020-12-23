@@ -147,7 +147,7 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
     (if (valid-credentials? share-hash edit-hash)
-      (if (db/statements-belong-to-discussion? statement-ids share-hash)
+      (if (db/check-valid-statement-id-and-meeting statement-ids share-hash)
         (do (db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
@@ -161,7 +161,7 @@
         meta-info
         (into {}
               (map #(vector (:db/id %)
-                            (db/number-of-statements-for-discussion (:db/id (:agenda/discussion %)))) agendas))]
+                            (db/number-of-statements-for-discussion meeting-hash)) agendas))]
     (ok {:agendas agendas
          :meta-info meta-info})))
 
@@ -455,26 +455,26 @@
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [body-params]}]
-  (let [share-hash (:share-hash body-params)
-        discussion-id (:discussion-id body-params)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (let [statements (db/all-statements-for-graph discussion-id)
+  (let [share-hash (:share-hash body-params)]
+    (if (valid-hash? share-hash)
+      (let [statements (db/all-statements-for-graph share-hash)
             starting-statements (db/starting-statements share-hash)
-            edges (discussion/links-for-agenda statements starting-statements discussion-id share-hash)
+            edges (discussion/links-for-agenda statements starting-statements share-hash)
             controversy-vals (discussion/calculate-controversy edges)]
-        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
+        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
                      :edges edges
                      :controversy-values controversy-vals}}))
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
 
 (defn- export-txt-data
+  ;; todo kick discussion-id
   "Exports the discussion data as a string."
   [{:keys [params]}]
   (let [{:keys [share-hash discussion-id]} params
         discussion-id (Long/parseLong discussion-id)]
     (if (valid-discussion-hash? share-hash discussion-id)
       (do (log/info "User is generating a txt export for discussion" discussion-id)
-          (ok {:string-representation (export/generate-text-export discussion-id share-hash)}))
+          (ok {:string-representation (export/generate-text-export share-hash)}))
       (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------

@@ -45,15 +45,14 @@
 
 (deftest nodes-for-agenda-test
   (testing "Validate data for graph nodes."
-    (let [discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          share-hash "89eh32hoas-2983ud"
+    (let [share-hash "cat-dog-hash"
           share-hash-tapir-only "ameisenbär-hash"
-          statements (db/all-statements-for-graph discussion-id)
+          statements (db/all-statements-for-graph share-hash)
           contents (set (map :content statements))
           starting-statements (db/starting-statements share-hash-tapir-only)
-          nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
+          nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
           statement-nodes (filter #(= "statement" (:type %)) nodes)]
-      (testing "Nodes contains agenda as data thus containing one more element than the statements."
+      (testing "Nodes contain agenda as data thus containing one more element than the statements."
         (is (= (count statements) (dec (count nodes)))))
       (testing "Only one agenda point."
         (is (= 1 (count (filter #(= :agenda (:type %)) nodes)))))
@@ -62,11 +61,10 @@
 
 (deftest links-for-agenda-test
   (testing "Validate data for graph links"
-    (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
-          share-hash "graph-hash"
-          statements (db/all-statements-for-graph discussion-id)
+    (let [share-hash "graph-hash"
+          statements (db/all-statements-for-graph share-hash)
           starting-statements (db/starting-statements share-hash)
-          links (discussion/links-for-agenda statements starting-statements discussion-id share-hash)]
+          links (discussion/links-for-agenda statements starting-statements share-hash)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (count links)))))))
 

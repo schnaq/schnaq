@@ -93,46 +93,45 @@
 
 (>defn- agenda-node
   "Creates node data for an agenda point."
-  [discussion-id meeting-hash]
-  [int? string? :ret map?]
-  (let [agenda (db/agenda-by-discussion-id discussion-id)
-        meeting (db/meeting-by-hash meeting-hash)
+  [meeting-hash]
+  [:meeting/share-hash :ret map?]
+  (let [meeting (db/meeting-by-hash meeting-hash)
         author (db/user (-> meeting :meeting/author :db/id))]
-    {:id (:db/id (:agenda/discussion agenda))
-     :label (:agenda/title agenda)
+    {:id meeting-hash
+     :label (:meeting/title meeting)
      :author (:author/nickname (:user/core-author author))
      :type :agenda}))
 
 (>defn- agenda-links
   "Creates links from an starting statement to an agenda node."
-  [discussion-id starting-statements]
-  [int? sequential? :ret sequential?]
+  [share-hash starting-statements]
+  [:meeting/share-hash sequential? :ret sequential?]
   ;; Legacy support for starting-arguments. Safely delete when those discussions are not in use anymore.
-  (let [starting-arguments (db/starting-arguments-by-discussion discussion-id)
+  (let [starting-arguments (db/starting-arguments-by-discussion share-hash)
         starting-argument-links (set (map (fn [argument] {:from (-> argument :argument/conclusion :db/id)
-                                                          :to discussion-id
+                                                          :to share-hash
                                                           :type :argument.type/starting}) starting-arguments))]
     (concat
       (map (fn [statement] {:from (:db/id statement)
-                            :to discussion-id
+                            :to share-hash
                             :type :argument.type/starting}) starting-statements)
       starting-argument-links)))
 
 (>defn nodes-for-agenda
   "Returns all nodes for a discussion including its agenda."
-  [statements starting-statements discussion-id share-hash]
-  [sequential? sequential? int? :meeting/share-hash :ret sequential?]
+  [statements starting-statements share-hash]
+  [sequential? sequential? :meeting/share-hash :ret sequential?]
   (conj (create-nodes statements share-hash starting-statements)
-        (agenda-node discussion-id share-hash)))
+        (agenda-node share-hash)))
 
 (>defn links-for-agenda
   "Creates all links for a discussion with its agenda as root."
-  [statements starting-statements discussion-id share-hash]
-  [sequential? sequential? int? :meeting/share-hash :ret sequential?]
+  [statements starting-statements share-hash]
+  [sequential? sequential? :meeting/share-hash :ret sequential?]
   (let [arguments (db/all-arguments-for-discussion share-hash)]
     (concat
       (create-links statements arguments)
-      (agenda-links discussion-id starting-statements))))
+      (agenda-links share-hash starting-statements))))
 
 (>defn- update-controversy-map
   "Updates controversy-map with the contents from a single edge."

@@ -180,21 +180,17 @@
 
 (deftest all-statements-for-graph-test
   (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
-    (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
-          statements (db/all-statements-for-graph discussion-id)]
+    (let [graph-hash "graph-hash"
+          statements (db/all-statements-for-graph graph-hash)]
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
 
 (deftest number-of-statements-for-discussion-test
   (testing "Is the number of agendas returned correct?"
-    (let [meeting-hash "89eh32hoas-2983ud"
-          meeting-hash-2 "graph-hash"
-          cat-or-dog-discussion (:agenda/discussion
-                                  (first (remove #(= (:agenda/title %) "Top 2")
-                                                 (db/agendas-by-meeting-hash meeting-hash))))
-          graph-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash meeting-hash-2)))]
-      (is (= 27 (db/number-of-statements-for-discussion (:db/id cat-or-dog-discussion))))
-      (is (= 7 (db/number-of-statements-for-discussion (:db/id graph-discussion)))))))
+    (let [cat-dog-hash "cat-dog-hash"
+          graph-hash "graph-hash"]
+      (is (= 27 (db/number-of-statements-for-discussion cat-dog-hash)))
+      (is (= 7 (db/number-of-statements-for-discussion graph-hash))))))
 
 (deftest pack-premises-test
   (testing "Test the creation of statement-entities from strings"
@@ -235,11 +231,10 @@
     (let [statement "Wow look at this"
           author-id (db/author-id-by-nickname "Test-person")
           meeting-hash "graph-hash"
-          graph-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash meeting-hash)))
           _ (db/add-starting-statement! meeting-hash author-id statement)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
-        (is (= 8 (db/number-of-statements-for-discussion (:db/id graph-discussion))))
+        (is (= 8 (db/number-of-statements-for-discussion meeting-hash)))
         (is (= 3 (count starting-statements)))))))
 
 (deftest all-arguments-for-conclusion-test
