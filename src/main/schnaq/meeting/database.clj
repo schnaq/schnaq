@@ -793,6 +793,18 @@
         [?agenda :agenda/discussion ?discussions]]
       share-hash)))
 
+(defn- discussion-by-share-hash
+  "Returns one discussion which can be reached by a certain share-hash. (Brainstorm only ever have one)"
+  [share-hash]
+  (ffirst
+    (query
+      '[:find ?discussions
+        :in $ ?share-hash
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?agenda :agenda/meeting ?meeting]
+        [?agenda :agenda/discussion ?discussions]]
+      share-hash)))
+
 (>defn statements-belong-to-discussion?
   "Returns whether the statements belong to a discussion identified by the share-hash."
   [statement-ids share-hash]
@@ -926,9 +938,10 @@
 
 (>defn- new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
-  [discussion-id author-id new-conclusion-id new-statement-string argument-type]
-  [:db/id :db/id :db/id :statement/content :argument/type :ret associative?]
-  (let [new-arguments
+  [share-hash author-id new-conclusion-id new-statement-string argument-type]
+  [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
+  (let [discussion-id (discussion-by-share-hash share-hash)
+        new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author author-id
           :argument/premises (pack-premises [new-statement-string] author-id)
@@ -940,11 +953,11 @@
 
 (>defn- react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
-  [discussion-id author-id statement-id reacting-string reaction]
-  [:db/id :db/id :db/id :statement/content keyword? :ret ::specs/argument]
+  [share-hash author-id statement-id reacting-string reaction]
+  [:meeting/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
   (let [argument-id
         (get-in
-          (new-premises-for-statement! discussion-id author-id statement-id reacting-string reaction)
+          (new-premises-for-statement! share-hash author-id statement-id reacting-string reaction)
           [:tempids (str "argument-" reacting-string)])]
     (toolbelt/pull-key-up
       (d/pull (d/db (new-connection)) argument-pattern argument-id)
@@ -952,12 +965,12 @@
 
 (>defn attack-statement!
   "Create a new statement attacking another statement. Returns the newly created argument."
-  [discussion-id author-id statement-id attacking-string]
-  [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! discussion-id author-id statement-id attacking-string :argument.type/attack))
+  [share-hash author-id statement-id attacking-string]
+  [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
+  (react-to-statement! share-hash author-id statement-id attacking-string :argument.type/attack))
 
 (>defn support-statement!
   "Create a new statement supporting another statement. Returns the newly created argument."
-  [discussion-id author-id statement-id supporting-string]
-  [:db/id :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! discussion-id author-id statement-id supporting-string :argument.type/support))
+  [share-hash author-id statement-id supporting-string]
+  [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
+  (react-to-statement! share-hash author-id statement-id supporting-string :argument.type/support))

@@ -360,15 +360,15 @@
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
+  (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (do (log/info "Statement added as reaction for discussion" discussion-id)
+    (if (db/check-valid-statement-id-and-meeting conclusion-id share-hash)
+      (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (with-statement-meta
                 {:new-argument
                  (if (= :attack reaction)
-                   (db/attack-statement! discussion-id author-id conclusion-id premise)
-                   (db/support-statement! discussion-id author-id conclusion-id premise))}
+                   (db/attack-statement! share-hash author-id conclusion-id premise)
+                   (db/support-statement! share-hash author-id conclusion-id premise))}
                 share-hash)))
       (deny-access invalid-rights-message))))
 

@@ -262,10 +262,9 @@
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
     (let [share-hash "simple-hash"
-          simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
           author-id (db/author-id-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
+          new-attack (db/attack-statement! share-hash author-id (:db/id starting-conclusion)
                                            "This is a new attack")]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
@@ -274,10 +273,9 @@
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
     (let [share-hash "simple-hash"
-          simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
           author-id (db/author-id-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/support-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
+          new-attack (db/support-statement! share-hash author-id (:db/id starting-conclusion)
                                             "This is a new support")]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))

@@ -27,13 +27,12 @@
 (rf/reg-event-fx
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ reaction new-premise]]
-    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])
+    (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])
           nickname (get-in db [:user :name] "Anonymous")]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/discussion/react-to/statement")
                           :format (ajax/transit-request-format)
                           :params {:share-hash share-hash
-                                   :discussion-id id
                                    :conclusion-id statement-id
                                    :nickname nickname
                                    :premise new-premise
