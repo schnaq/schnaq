@@ -23,8 +23,9 @@
 (deftest direct-children-test
   (testing "Test whether all direct children are found."
     (let [direct-children @#'discussion/direct-children
+          share-hash "ameisenbär-hash"
           discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          root-id (:db/id (first (db/starting-statements discussion-id)))
+          root-id (:db/id (first (db/starting-statements share-hash)))
           all-arguments (db/all-arguments-for-discussion discussion-id)
           children (direct-children root-id all-arguments)]
       (is (= 2 (count children)))
@@ -32,9 +33,10 @@
 
 (deftest sub-discussion-information-test
   (testing "Test information regarding sub-discussions."
-    (let [discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
+    (let [share-hash "ameisenbär-hash"
+          discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
           arguments (db/all-arguments-for-discussion discussion-id)
-          root-id (:db/id (first (db/starting-statements discussion-id)))
+          root-id (:db/id (first (db/starting-statements share-hash)))
           infos (discussion/sub-discussion-information root-id arguments)
           author-names (into #{} (map :author/nickname (:authors infos)))]
       (is (= 3 (:sub-statements infos)))
@@ -47,9 +49,10 @@
   (testing "Validate data for graph nodes."
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
           share-hash "89eh32hoas-2983ud"
+          share-hash-tapir-only "ameisenbär-hash"
           statements (db/all-statements-for-graph discussion-id)
           contents (set (map :content statements))
-          starting-statements (db/starting-statements discussion-id)
+          starting-statements (db/starting-statements share-hash-tapir-only)
           nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
           statement-nodes (filter #(= "statement" (:type %)) nodes)]
       (testing "Nodes contains agenda as data thus containing one more element than the statements."
@@ -62,8 +65,9 @@
 (deftest links-for-agenda-test
   (testing "Validate data for graph links"
     (let [discussion-id (:db/id (first (db/all-discussions-by-title "Wetter Graph")))
+          share-hash "graph-hash"
           statements (db/all-statements-for-graph discussion-id)
-          starting-statements (db/starting-statements discussion-id)
+          starting-statements (db/starting-statements share-hash)
           links (discussion/links-for-agenda statements starting-statements discussion-id)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (count links)))))))
@@ -103,16 +107,16 @@
 
 (deftest premises-for-conclusion-id-test
   (testing "Get arguments (with meta-information), that have a certain conclusion"
-    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
+    (let [share-hash "simple-hash"
+          starting-conclusion (first (db/starting-statements share-hash))
           meta-premise (first (discussion/premises-for-conclusion-id (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
       (is (= :argument.type/support (:meta/argument-type meta-premise))))))
 
 (deftest premises-undercutting-argument-with-conclusion-id-test
   (testing "Get annotated premises, that are undercutting an argument with a certain premise"
-    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
+    (let [share-hash "simple-hash"
+          starting-conclusion (first (db/starting-statements share-hash))
           simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
           desired-statement (first (discussion/premises-undercutting-argument-with-premise-id premise-to-undercut-id))]

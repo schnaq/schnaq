@@ -297,17 +297,25 @@
       processors/with-votes
       (processors/with-sub-discussion-information (db/all-arguments-for-discussion discussion-id))))
 
+#_[
+   [?meeting :meeting/share-hash ?share-hash]
+   [?agenda :agenda/meeting ?meeting]
+   [?agenda :agenda/discussion ?discussion]
+   ]
+
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
-  [discussion-id]
-  (let [deprecated-starters (db/starting-conclusions-by-discussion discussion-id)
-        starting-statements (db/starting-statements discussion-id)]
+  ;; todo we be here
+  [share-hash]
+  (let [deprecated-starters (db/starting-conclusions-by-discussion share-hash)
+        starting-statements (db/starting-statements share-hash)]
     (with-statement-meta (concat starting-statements deprecated-starters) discussion-id)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id]} body-params]
+  ;; TODO this should only take share-hash, period
+  (let [{:keys [share-hash]} body-params]
     (if (valid-discussion-hash? share-hash discussion-id)
       (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)})
       (deny-access invalid-rights-message))))
@@ -336,6 +344,7 @@
       (deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
+  ;; todo anpassen an share-hash only
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
   (let [{:keys [share-hash discussion-id statement nickname]} body-params
@@ -448,7 +457,7 @@
         discussion-id (:discussion-id body-params)]
     (if (valid-discussion-hash? share-hash discussion-id)
       (let [statements (db/all-statements-for-graph discussion-id)
-            starting-statements (db/starting-statements discussion-id)
+            starting-statements (db/starting-statements share-hash)
             edges (discussion/links-for-agenda statements starting-statements discussion-id)
             controversy-vals (discussion/calculate-controversy edges)]
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)

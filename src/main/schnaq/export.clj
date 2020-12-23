@@ -50,7 +50,7 @@
   [discussion-id share-hash]
   [:db/id string? :ret string?]
   (let [statements (db/all-statements-for-graph discussion-id)
-        starting-statements (db/starting-statements discussion-id)
+        starting-statements (db/starting-statements share-hash)
         legacy-starting-arguments (map :argument/conclusion
                                        (db/starting-arguments-by-discussion discussion-id))
         starting-set-with-legacy (distinct (concat starting-statements legacy-starting-arguments))

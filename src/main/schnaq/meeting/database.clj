@@ -741,15 +741,18 @@
 (>defn starting-conclusions-by-discussion
   {:deprecated "Use `starting-statements` instead"
    :doc "Query all conclusions belonging to starting-arguments of a certain discussion."}
-  [discussion-id]
+  [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (flatten
     (query
       '[:find (pull ?starting-conclusions statement-pattern)
-        :in $ ?discussion-id statement-pattern
-        :where [?discussion-id :discussion/starting-arguments ?starting-arguments]
+        :in $ ?share-hash statement-pattern
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?agenda :agenda/meeting ?meeting]
+        [?agenda :agenda/discussion ?discussion]
+        [?discussion :discussion/starting-arguments ?starting-arguments]
         [?starting-arguments :argument/conclusion ?starting-conclusions]]
-      discussion-id statement-pattern)))
+      share-hash statement-pattern)))
 
 (defn starting-arguments-by-discussion
   {:deprecated "2020-11-03"
@@ -766,14 +769,17 @@
 
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
-  [discussion-id]
+  [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
   (flatten
     (query
       '[:find (pull ?statements statement-pattern)
-        :in $ ?discussion-id statement-pattern
-        :where [?discussion-id :discussion/starting-statements ?statements]]
-      discussion-id statement-pattern)))
+        :in $ ?share-hash statement-pattern
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?agenda :agenda/meeting ?meeting]
+        [?agenda :agenda/discussion ?discussion]
+        [?discussion :discussion/starting-statements ?statements]]
+      share-hash statement-pattern)))
 
 (defn- discussions-by-share-hash
   "Returns all discussions which can be reached by a certain share-hash."
