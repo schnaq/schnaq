@@ -27,7 +27,7 @@
                                                                            :db/id root-id} arguments)
           infos (:meta/sub-discussion-info processed-structure)
           author-names (into #{} (map :author/nickname (:authors infos)))]
-      (is (= 4 (:sub-statements infos)))
+      (is (= 3 (:sub-statements infos)))
       (is (contains? author-names "Der miese Peter"))
       (is (contains? author-names "Wegi"))
       (is (contains? author-names "Der Schredder"))

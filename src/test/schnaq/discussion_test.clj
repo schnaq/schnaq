@@ -37,7 +37,7 @@
           root-id (:db/id (first (db/starting-statements share-hash)))
           infos (discussion/sub-discussion-information root-id arguments)
           author-names (into #{} (map :author/nickname (:authors infos)))]
-      (is (= 4 (:sub-statements infos)))
+      (is (= 3 (:sub-statements infos)))
       (is (contains? author-names "Der miese Peter"))
       (is (contains? author-names "Wegi"))
       (is (contains? author-names "Der Schredder")))))
