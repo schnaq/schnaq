@@ -33,6 +33,7 @@ local_jars/
 
 ## Generated files
 .idea/**/contentModel.xml
+projectFilesBackup/
 
 ## Sensitive or high-churn files
 .idea/**/dataSources/

@@ -1,4 +1,4 @@
-{:paths ["src/main" "src-js" "src/test"]
+{:paths ["src/main" "src/test"]
  :deps {binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
@@ -50,12 +50,16 @@
             :jvm-opts ["-Dghostwheel.enabled=true"]
             :main-opts ["-m" "clj-kondo.main"]}
 
+           :dev-local
+           {:extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}
+
            :uberjar
-           {:extra-deps
-            {seancorfield/depstar {:mvn/version "1.1.136"}
-             com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
-            :main-opts ["-m" "hf.depstar.uberjar"
-                        "target/schnaq-standalone.jar" "--verbose"]}
+           {:replace-deps {seancorfield/depstar {:mvn/version "2.0.160"}}
+            :exec-fn hf.depstar/uberjar
+            :exec-args {:main-class schnaq.api
+                        :verbose true
+                        :aliases [:dev-local]
+                        :jar "target/schnaq-standalone.jar"}}
 
            :run-server {:main-opts ["-m" "schnaq.api"]
                         :extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}}}
