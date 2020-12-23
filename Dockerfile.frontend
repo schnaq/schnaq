@@ -1,4 +1,4 @@
-FROM clojure:latest AS shadow-build
+FROM clojure:openjdk-16-tools-deps-alpine AS shadow-build
 
 WORKDIR /code
 
