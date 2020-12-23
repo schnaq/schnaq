@@ -337,8 +337,8 @@
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following premises / undercuts."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id statement-id]} body-params]
-    (if (valid-discussion-hash? share-hash discussion-id)
+  (let [{:keys [share-hash statement-id]} body-params]
+    (if (db/check-valid-statement-id-and-meeting statement-id share-hash)
       (ok (with-statement-meta
             {:conclusion (db/get-statement statement-id)
              :premises (discussion/premises-for-conclusion-id statement-id)
