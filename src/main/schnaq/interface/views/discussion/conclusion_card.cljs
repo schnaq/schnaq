@@ -111,14 +111,13 @@
 (rf/reg-event-fx
   :discussion.select/conclusion
   (fn [{:keys [db]} [_ conclusion]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
       {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
        :fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/discussion/statements/for-conclusion")
                           :format (ajax/transit-request-format)
                           :params {:selected-statement conclusion
-                                   :share-hash share-hash
-                                   :discussion-id id}
+                                   :share-hash share-hash}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.premises/set-current]
                           :on-failure [:ajax.error/as-notification]}]]})))

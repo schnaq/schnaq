@@ -326,12 +326,12 @@
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id selected-statement]} body-params]
-    (if (valid-discussion-hash? share-hash discussion-id)
+  (let [{:keys [share-hash selected-statement]} body-params]
+    (if (valid-hash? share-hash)
       (ok (with-statement-meta
             {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
              :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
-            discussion-id))
+            share-hash))
       (deny-access invalid-rights-message))))
 
 (defn- get-statement-info
@@ -343,7 +343,7 @@
             {:conclusion (db/get-statement statement-id)
              :premises (discussion/premises-for-conclusion-id statement-id)
              :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
-            discussion-id))
+            share-hash))
       (deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
@@ -369,7 +369,7 @@
                  (if (= :attack reaction)
                    (db/attack-statement! discussion-id author-id conclusion-id premise)
                    (db/support-statement! discussion-id author-id conclusion-id premise))}
-                discussion-id)))
+                share-hash)))
       (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
