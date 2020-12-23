@@ -149,7 +149,7 @@
 (rf/reg-event-fx
   :discussion.add.statement/starting
   (fn [{:keys [db]} [_ form]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
+    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
           nickname (get-in db [:user :name] "Anonymous")
           statement-text (oget form [:statement-text :value])]
       {:fx [[:http-xhrio {:method :post
@@ -157,8 +157,7 @@
                           :format (ajax/transit-request-format)
                           :params {:statement statement-text
                                    :nickname nickname
-                                   :share-hash share-hash
-                                   :discussion-id id}
+                                   :share-hash share-hash}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.add.statement/starting-success form]
                           :on-failure [:ajax.error/as-notification]}]]})))

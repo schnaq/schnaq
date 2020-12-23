@@ -44,17 +44,17 @@
 
 (deftest valid-statement-id-and-meeting?-test
   (testing "Test the function that checks whether a statement belongs to a certain meeting."
-    (let [meeting (db/add-meeting {:meeting/title "test-meet"
+    (let [share-hash "Wegi-ist-der-schönste"
+          meeting (db/add-meeting {:meeting/title "test-meet"
                                    :meeting/description "whatever"
                                    :meeting/start-date (db/now)
                                    :meeting/end-date (db/now)
-                                   :meeting/share-hash "Wegi-ist-der-schönste"
+                                   :meeting/share-hash share-hash
                                    :meeting/author (db/add-user-if-not-exists "Wegi")})
-          agenda (db/add-agenda-point "Hi" "Beschreibung" meeting)
-          discussion (:db/id (:agenda/discussion (db/fast-pull agenda)))
+          _ (db/add-agenda-point "Hi" "Beschreibung" meeting)
           christian-id (db/author-id-by-nickname "Christian")
-          first-id (db/add-starting-statement! discussion christian-id "this is sparta")
-          second-id (db/add-starting-statement! discussion christian-id "this is kreta")]
+          first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
+          second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
       (is (db/check-valid-statement-id-and-meeting first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-and-meeting second-id "Wegi-ist-der-schönste")))))
 
@@ -236,7 +236,7 @@
           author-id (db/author-id-by-nickname "Test-person")
           meeting-hash "graph-hash"
           graph-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash meeting-hash)))
-          _ (db/add-starting-statement! (:db/id graph-discussion) author-id statement)
+          _ (db/add-starting-statement! meeting-hash author-id statement)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 8 (db/number-of-statements-for-discussion (:db/id graph-discussion))))

@@ -865,10 +865,11 @@
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
-  [discussion-id author-id statement-content]
-  [:db/id :db/id :statement/content :ret :db/id]
+  [share-hash author-id statement-content]
+  [:meeting/share-hash :db/id :statement/content :ret :db/id]
   (let [new-statement (build-new-statement author-id statement-content "add/starting-argument")
-        temporary-id (:db/id new-statement)]
+        temporary-id (:db/id new-statement)
+        discussion-id (discussion-by-share-hash share-hash)]
     (get-in (transact [new-statement
                        [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))

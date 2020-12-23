@@ -349,11 +349,11 @@
 (defn- add-starting-statement!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id statement nickname]} body-params
+  (let [{:keys [share-hash statement nickname]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (do (db/add-starting-statement! discussion-id author-id statement)
-          (log/info "Starting statement added for discussion" discussion-id)
+    (if (valid-hash? share-hash)
+      (do (db/add-starting-statement! share-hash author-id statement)
+          (log/info "Starting statement added for discussion" share-hash)
           (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
       (deny-access invalid-rights-message))))
 
