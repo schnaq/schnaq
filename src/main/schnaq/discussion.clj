@@ -13,7 +13,7 @@
 (>defn- undercuts-for-root
   "Find all undercuts, where root-statement is undercut. (Root is set as a premise)"
   [root-id all-arguments]
-  [int? sequential? :ret sequential?]
+  [(s/or :id int? :share-hash :meeting/share-hash) sequential? :ret sequential?]
   (let [subset-arguments (filter #((set (premise-ids %)) root-id) all-arguments)
         argument-ids (map :db/id subset-arguments)]
     (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
@@ -29,7 +29,7 @@
   "Looks up all direct children of a node. An undercut is considered a child of the premise
   of an argument."
   [root-id all-arguments]
-  [int? sequential? :ret sequential?]
+  [(s/or :id int? :share-hash :meeting/share-hash) sequential? :ret sequential?]
   (let [arguments-with-root (filter
                               #(= root-id (get-in % [:argument/conclusion :db/id]))
                               all-arguments)

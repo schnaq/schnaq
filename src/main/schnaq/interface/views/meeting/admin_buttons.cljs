@@ -50,16 +50,14 @@
 (defn txt-export
   "Request a txt-export of the discussion."
   [share-hash title]
-  (let [discussion-id (get-in @(rf/subscribe [:navigation/current-route]) [:path-params :id])
-        request-fn #(ajax/ajax-request {:method :get
+  (let [request-fn #(ajax/ajax-request {:method :get
                                         :uri (str (:rest-backend config) "/export/txt")
                                         :format (ajax/transit-request-format)
-                                        :params {:share-hash share-hash
-                                                 :discussion-id discussion-id}
+                                        :params {:share-hash share-hash}
                                         :response-format (ajax/transit-response-format)
                                         :handler (partial create-txt-download-handler title)
                                         :error-handler show-error})]
-    (when discussion-id
+    (when share-hash
       [tooltip-button "bottom" (labels :meeting/admin-center-export)
        [:i {:class (str "fas " (fa :file-download))}]
        #(request-fn)])))

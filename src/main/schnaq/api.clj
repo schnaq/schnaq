@@ -467,13 +467,11 @@
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
 
 (defn- export-txt-data
-  ;; todo kick discussion-id
   "Exports the discussion data as a string."
   [{:keys [params]}]
-  (let [{:keys [share-hash discussion-id]} params
-        discussion-id (Long/parseLong discussion-id)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (do (log/info "User is generating a txt export for discussion" discussion-id)
+  (let [{:keys [share-hash]} params]
+    (if (valid-hash? share-hash)
+      (do (log/info "User is generating a txt export for discussion" share-hash)
           (ok {:string-representation (export/generate-text-export share-hash)}))
       (deny-access invalid-rights-message))))
 
