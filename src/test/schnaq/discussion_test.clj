@@ -10,8 +10,8 @@
 (deftest undercuts-for-root-test
   (testing "Test whether all undercut descendants are found in a sub-discussion."
     (let [undercuts-for-root @#'discussion/undercuts-for-root
-          discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          all-arguments (db/all-arguments-for-discussion discussion-id)
+          share-hash "ameisenbär-hash"
+          all-arguments (db/all-arguments-for-discussion share-hash)
           matching-argument (first (filter #(= :argument.type/attack (:argument/type %)) all-arguments))
           root-statement (first (:argument/premises matching-argument))
           matching-undercut (first (undercuts-for-root (:db/id root-statement) all-arguments))]
@@ -24,9 +24,8 @@
   (testing "Test whether all direct children are found."
     (let [direct-children @#'discussion/direct-children
           share-hash "ameisenbär-hash"
-          discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
           root-id (:db/id (first (db/starting-statements share-hash)))
-          all-arguments (db/all-arguments-for-discussion discussion-id)
+          all-arguments (db/all-arguments-for-discussion share-hash)
           children (direct-children root-id all-arguments)]
       (is (= 2 (count children)))
       (is (empty? (direct-children -1 all-arguments))))))
@@ -34,8 +33,7 @@
 (deftest sub-discussion-information-test
   (testing "Test information regarding sub-discussions."
     (let [share-hash "ameisenbär-hash"
-          discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          arguments (db/all-arguments-for-discussion discussion-id)
+          arguments (db/all-arguments-for-discussion share-hash)
           root-id (:db/id (first (db/starting-statements share-hash)))
           infos (discussion/sub-discussion-information root-id arguments)
           author-names (into #{} (map :author/nickname (:authors infos)))]
@@ -68,7 +66,7 @@
           share-hash "graph-hash"
           statements (db/all-statements-for-graph discussion-id)
           starting-statements (db/starting-statements share-hash)
-          links (discussion/links-for-agenda statements starting-statements discussion-id)]
+          links (discussion/links-for-agenda statements starting-statements discussion-id share-hash)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (count links)))))))
 

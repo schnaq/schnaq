@@ -85,9 +85,9 @@
 
 (>defn- create-nodes
   "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
-  [statements discussion-id starting-statements]
-  [sequential? int? sequential? :ret sequential?]
-  (let [arguments (db/all-arguments-for-discussion discussion-id)
+  [statements share-hash starting-statements]
+  [sequential? :meeting/share-hash sequential? :ret sequential?]
+  (let [arguments (db/all-arguments-for-discussion share-hash)
         starting-statement-ids (into #{} (map :db/id starting-statements))]
     (map #(create-node % arguments starting-statement-ids) statements)))
 
@@ -122,14 +122,14 @@
   "Returns all nodes for a discussion including its agenda."
   [statements starting-statements discussion-id share-hash]
   [sequential? sequential? int? :meeting/share-hash :ret sequential?]
-  (conj (create-nodes statements discussion-id starting-statements)
+  (conj (create-nodes statements share-hash starting-statements)
         (agenda-node discussion-id share-hash)))
 
 (>defn links-for-agenda
   "Creates all links for a discussion with its agenda as root."
-  [statements starting-statements discussion-id]
-  [sequential? sequential? int? :ret sequential?]
-  (let [arguments (db/all-arguments-for-discussion discussion-id)]
+  [statements starting-statements discussion-id share-hash]
+  [sequential? sequential? int? :meeting/share-hash :ret sequential?]
+  (let [arguments (db/all-arguments-for-discussion share-hash)]
     (concat
       (create-links statements arguments)
       (agenda-links discussion-id starting-statements))))

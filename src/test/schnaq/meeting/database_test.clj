@@ -17,9 +17,9 @@
 
 (deftest up-and-downvotes-test
   (testing "Tests whether setting up and downvotes works properly."
-    (let [cat-or-dog (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
+    (let [share-hash "cat-dog-hash"
           some-statements (map #(-> % :argument/premises first :db/id)
-                               (db/all-arguments-for-discussion cat-or-dog))
+                               (db/all-arguments-for-discussion share-hash))
           author-1 "Test-1"
           author-2 "Test-2"]
       (db/add-user-if-not-exists author-1)
@@ -237,23 +237,23 @@
           meeting-hash "graph-hash"
           graph-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash meeting-hash)))
           _ (db/add-starting-statement! (:db/id graph-discussion) author-id statement)
-          starting-statements (db/starting-statements (:db/id graph-discussion))]
+          starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 8 (db/number-of-statements-for-discussion (:db/id graph-discussion))))
         (is (= 3 (count starting-statements)))))))
 
 (deftest all-arguments-for-conclusion-test
   (testing "Get arguments, that have a certain conclusion"
-    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
+    (let [share-hash "simple-hash"
+          starting-conclusion (first (db/starting-statements share-hash))
           simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (-> simple-argument :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> simple-argument :argument/conclusion :statement/content))))))
 
 (deftest statements-undercutting-premise-test
   (testing "Get arguments, that are undercutting an argument with a certain premise"
-    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
-          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
+    (let [share-hash "simple-hash"
+          starting-conclusion (first (db/starting-statements share-hash))
           simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
           desired-statement (first (db/statements-undercutting-premise premise-to-undercut-id))]
@@ -261,9 +261,10 @@
 
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
-    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
+    (let [share-hash "simple-hash"
+          simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
           author-id (db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/attack-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
                                            "This is a new attack")]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
@@ -272,9 +273,10 @@
 
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
-    (let [simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
+    (let [share-hash "simple-hash"
+          simple-discussion (:agenda/discussion (first (db/agendas-by-meeting-hash "simple-hash")))
           author-id (db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (db/starting-statements (:db/id simple-discussion)))
+          starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/support-statement! (:db/id simple-discussion) author-id (:db/id starting-conclusion)
                                             "This is a new support")]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
@@ -289,11 +291,11 @@
 
 (deftest all-arguments-for-discussion-test
   (testing "Should return valid arguments for valid discussion."
-    (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))]
-      (is (empty? (db/all-arguments-for-discussion -1)))
-      (is (seq (db/all-arguments-for-discussion cat-or-dog-id)))
+    (let [share-hash "cat-dog-hash"]
+      (is (empty? (db/all-arguments-for-discussion "non-existing-hash-1923hwudahsi")))
+      (is (seq (db/all-arguments-for-discussion share-hash)))
       (is (contains? #{:argument.type/undercut :argument.type/support :argument.type/attack}
-                     (:argument/type (rand-nth (db/all-arguments-for-discussion cat-or-dog-id))))))))
+                     (:argument/type (rand-nth (db/all-arguments-for-discussion share-hash))))))))
 
 (deftest statements-by-content-test
   (testing "Statements are identified by identical content."
@@ -303,10 +305,10 @@
 
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."
-    (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
-          simple-discussion (:db/id (first (db/all-discussions-by-title "Simple Discussion")))
-          graph-discussion (:db/id (first (db/all-discussions-by-title "Wetter Graph")))]
+    (let [cat-dog-hash "cat-dog-hash"
+          simple-hash "simple-hash"
+          graph-hash "graph-hash"]
       (are [result discussion] (= result (count (db/starting-statements discussion)))
-                               3 cat-or-dog-id
-                               1 simple-discussion
-                               2 graph-discussion))))
+                               3 cat-dog-hash
+                               1 simple-hash
+                               2 graph-hash))))

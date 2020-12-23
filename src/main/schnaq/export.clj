@@ -56,7 +56,7 @@
         starting-set-with-legacy (distinct (concat starting-statements legacy-starting-arguments))
         all-nodes (discussion/nodes-for-agenda statements starting-set-with-legacy discussion-id share-hash)
         starting-nodes (filter #(= :argument.type/starting (:type %)) all-nodes)
-        links (discussion/links-for-agenda all-nodes starting-statements discussion-id)]
+        links (discussion/links-for-agenda all-nodes starting-statements discussion-id share-hash)]
     (loop [queue (map #(vector "" %) starting-nodes)
            text ""
            level 0]

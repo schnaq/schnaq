@@ -291,11 +291,11 @@
 
 (defn- with-statement-meta
   "Returns a data structure, where all statements have been enhanced with meta-information."
-  [data discussion-id]
+  [data share-hash]
   (-> data
       processors/hide-deleted-statement-content
       processors/with-votes
-      (processors/with-sub-discussion-information (db/all-arguments-for-discussion discussion-id))))
+      (processors/with-sub-discussion-information (db/all-arguments-for-discussion share-hash))))
 
 #_[
    [?meeting :meeting/share-hash ?share-hash]
@@ -458,7 +458,7 @@
     (if (valid-discussion-hash? share-hash discussion-id)
       (let [statements (db/all-statements-for-graph discussion-id)
             starting-statements (db/starting-statements share-hash)
-            edges (discussion/links-for-agenda statements starting-statements discussion-id)
+            edges (discussion/links-for-agenda statements starting-statements discussion-id share-hash)
             controversy-vals (discussion/calculate-controversy edges)]
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
                      :edges edges

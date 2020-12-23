@@ -899,12 +899,15 @@
 
 (defn all-arguments-for-discussion
   "Returns all arguments belonging to a discussion, identified by discussion id."
-  [discussion-id]
+  [share-hash]
   (-> (query
         '[:find (pull ?discussion-arguments argument-pattern)
-          :in $ argument-pattern ?discussion-id
-          :where [?discussion-arguments :argument/discussions ?discussion-id]]
-        argument-pattern discussion-id)
+          :in $ argument-pattern ?share-hash
+          :where [?meeting :meeting/share-hash ?share-hash]
+          [?agenda :agenda/meeting ?meeting]
+          [?agenda :agenda/discussion ?discussion]
+          [?discussion-arguments :argument/discussions ?discussion-id]]
+        argument-pattern share-hash)
       flatten
       (toolbelt/pull-key-up :db/ident)))
 

@@ -9,8 +9,8 @@
 
 (deftest with-votes-processor-test
   (testing "Result should have all statements enriched with votes-metadata"
-    (let [cat-or-dog (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
-          enriched-data (processors/with-votes (db/all-arguments-for-discussion cat-or-dog))
+    (let [share-hash "cat-dog-hash"
+          enriched-data (processors/with-votes (db/all-arguments-for-discussion share-hash))
           wrongly-asserted-meta (filter :meta/upvotes enriched-data)
           statements-only (flatten (map :argument/premises enriched-data))
           upvotes-only (filter number? (map :meta/upvotes statements-only))
@@ -20,9 +20,9 @@
 
 (deftest with-sub-discussion-information-test
   (testing "Testing enrichment with sub-discussion-information."
-    (let [discussion-id (:db/id (first (db/all-discussions-by-title "Tapir oder Ameisenbär?")))
-          arguments (db/all-arguments-for-discussion discussion-id)
-          root-id (:db/id (first (db/starting-statements discussion-id)))
+    (let [share-hash "ameisenbär-hash"
+          arguments (db/all-arguments-for-discussion share-hash)
+          root-id (:db/id (first (db/starting-statements share-hash)))
           processed-structure (processors/with-sub-discussion-information {:statement/content "foo"
                                                                            :db/id root-id} arguments)
           infos (:meta/sub-discussion-info processed-structure)
