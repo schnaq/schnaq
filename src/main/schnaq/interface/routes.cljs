@@ -19,10 +19,6 @@
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.graph.view :as graph-view]))
 
-;; It is important to note, that we navigate by not calling /meetings for example,
-;; but by calling #/meetings. The anchor triggers reitit inside of re-frame instead
-;; of hard reloading and dispatching to the web-server.
-
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
 
