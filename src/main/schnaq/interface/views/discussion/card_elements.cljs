@@ -219,21 +219,21 @@
      ;; title
      [:div.col-8
       [title-and-input-element title input]]
-     ;; settings
+     ;; up-down votes and statistics
      [:div.col-2.p-0
-      info-content]]))
+      [:div.float-right info-content]]]))
 
 (defn- topic-bubble-mobile
   [meeting title input info-content]
   (let [agenda @(rf/subscribe [:chosen-agenda])
         share-hash (:meeting/share-hash meeting)]
     [:<>
-     [:div.row
+     [:div.d-flex
       ;; graph
-      [:div.col-6.graph-icon
+      [:div.graph-icon.mr-auto
        [graph-button agenda share-hash]]
       ;; settings
-      [:div.col-6.p-0
+      [:div.p-0
        info-content]]
      ;; title
      [title-and-input-element title input]]))
@@ -250,7 +250,7 @@
    [cards/conclusion-cards-list conclusions (:meeting/share-hash current-meeting)]])
 
 (defn discussion-view-mobile
-  "Dicsussion view for mobile devices
+  "Discussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
   [current-meeting title input info-content conclusions]
   [:<>
@@ -269,10 +269,9 @@
      [topic-view current-meeting conclusions
       [topic-bubble-desktop current-meeting title input info-content]]]]])
 
-
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the right of the topic bubble."
   [statement edit-hash]
-  [:div.ml-5
-   (cards/up-down-vote-breaking statement)
+  [:<>
+   [cards/up-down-vote-breaking statement]
    [badges/extra-discussion-info-badges statement edit-hash]])
