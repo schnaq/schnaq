@@ -38,6 +38,11 @@
   [string? :ret boolean?]
   (= config/admin-password password))
 
+(defn- valid-hash?
+  "Check if a schnaq-hash ist valid."
+  [share-hash]
+  (not (nil? (db/meeting-by-hash share-hash))))
+
 (>defn- valid-credentials?
   "Validate if share-hash and edit-hash match"
   [share-hash edit-hash]
@@ -305,19 +310,17 @@
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
-  ;; todo we be here
   [share-hash]
   (let [deprecated-starters (db/starting-conclusions-by-discussion share-hash)
         starting-statements (db/starting-statements share-hash)]
-    (with-statement-meta (concat starting-statements deprecated-starters) discussion-id)))
+    (with-statement-meta (concat starting-statements deprecated-starters) share-hash)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [body-params]}]
-  ;; TODO this should only take share-hash, period
   (let [{:keys [share-hash]} body-params]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)})
+    (if (valid-hash? share-hash)
+      (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
       (deny-access invalid-rights-message))))
 
 (defn- get-statements-for-conclusion
@@ -344,7 +347,6 @@
       (deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
-  ;; todo anpassen an share-hash only
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
   (let [{:keys [share-hash discussion-id statement nickname]} body-params
@@ -352,7 +354,7 @@
     (if (valid-discussion-hash? share-hash discussion-id)
       (do (db/add-starting-statement! discussion-id author-id statement)
           (log/info "Starting statement added for discussion" discussion-id)
-          (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
+          (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
       (deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
