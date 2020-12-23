@@ -3,7 +3,8 @@
             [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]))
+            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.text.display-data :refer [labels]]))
 
 (>defn calculate-votes
   "Calculates the votes without needing to reload."
@@ -42,25 +43,6 @@
                           :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
-  :discussion.undercut.statement/send
-  (fn [{:keys [db]} [_ new-premise]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
-          history (get-in db [:history :full-context] [])
-          nickname (get-in db [:user :name] "Anonymous")]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/argument/undercut")
-                          :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash
-                                   :discussion-id id
-                                   :selected (last history)
-                                   :nickname nickname
-                                   :premise new-premise
-                                   :previous-id (:db/id (nth history (- (count history) 2)))}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.reaction.statement/added]
-                          :on-failure [:ajax.error/as-notification]}]]})))
-
-(rf/reg-event-fx
   :discussion.reaction.statement/added
   (fn [{:keys [db]} [_ response]]
     (let [new-argument (:new-argument response)
@@ -72,6 +54,14 @@
                       conj new-premise)
        :fx [[:dispatch [:notification/new-content]]]})))
 
+(rf/reg-event-fx
+  :notification/new-content
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :discussion.notification/new-content-title)
+                                     :body (labels :discussion.notification/new-content-body)
+                                     :context :success}]]]}))
+
 (defn submit-new-premise
   "Submits a newly created premise as an undercut, rebut or support."
   [form]
@@ -80,6 +70,27 @@
         choice (oget form [:premise-choice :value])]
     (case choice
       "against-radio" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
-      "for-radio" (rf/dispatch [:discussion.reaction.statement/send :support new-text])
-      "undercut-radio" (rf/dispatch [:discussion.undercut.statement/send new-text]))
+      "for-radio" (rf/dispatch [:discussion.reaction.statement/send :support new-text]))
     (rf/dispatch [:form/should-clear [new-text-element]])))
+
+(rf/reg-event-fx
+  :discussion.query.statement/by-id
+  (fn [{:keys [db]} _]
+    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/statement/info")
+                          :format (ajax/transit-request-format)
+                          :params {:statement-id statement-id
+                                   :share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.query.statement/by-id-success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(rf/reg-event-fx
+  :discussion.query.statement/by-id-success
+  (fn [{:keys [db]} [_ {:keys [conclusion premises undercuts]}]]
+    {:db (->
+           (assoc-in db [:discussion :conclusions :selected] conclusion)
+           (assoc-in [:discussion :premises :current] (concat premises undercuts)))
+     :fx [[:dispatch [:discussion.history/push conclusion]]]}))

@@ -361,18 +361,6 @@
                 discussion-id)))
       (deny-access invalid-rights-message))))
 
-(defn- undercut-argument!
-  "Adds an undercut for an argument."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id selected previous-id nickname premise]} body-params
-        author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (do (log/info "Undercut added for discussion" discussion-id)
-          (ok (with-statement-meta
-                {:new-argument (discussion/add-new-undercut! selected previous-id premise author-id discussion-id)}
-                discussion-id)))
-      (deny-access invalid-rights-message))))
-
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
@@ -496,7 +484,6 @@
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
-    (POST "/discussion/argument/undercut" [] undercut-argument!)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (POST "/discussion/react-to/statement" [] react-to-any-statement!)
     (POST "/discussion/statement/info" [] get-statement-info)

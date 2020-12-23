@@ -1,10 +1,10 @@
-(ns schnaq.interface.views.discussion.cards.card-view
+(ns schnaq.interface.views.discussion.card-view
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [img-path labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.brainstorm.tools :as btools]
-            [schnaq.interface.views.discussion.cards.card-elements :as elements]
+            [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar :as navbar]))
 
@@ -47,6 +47,11 @@
        [:h6.text-center.py-1 (labels :common/history)]
        [elements/history-view meeting history]]]]))
 
+(rf/reg-sub
+  :discussion.conclusions/starting
+  (fn [db _]
+    (get-in db [:discussion :conclusions :starting] [])))
+
 (defn- discussion-start-view
   "The first step after starting a discussion."
   []
@@ -64,6 +69,11 @@
        [elements/discussion-view-mobile
         current-meeting title input-mobile
         nil current-starting]]]]))
+
+(rf/reg-sub
+  :discussion.premises/current
+  (fn [db _]
+    (get-in db [:discussion :premises :current] [])))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."

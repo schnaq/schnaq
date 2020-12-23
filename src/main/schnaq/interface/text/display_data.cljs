@@ -276,33 +276,16 @@
         :meeting/admin-center-export "Download discussion as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
 
-        ;; Create Agenda
-        :agenda/desc-for "Description for agenda point "
-
-        :agendas.button/navigate-to-suggestions "Create change suggestions"
-
         ;; Discussion Language
-        :discussion/agree "Agree"
-        :discussion/disagree "Disagree"
         :discussion/create-argument-action "Add Statement"
-        :discussion/create-argument-heading "Add own opinion / information"
         :discussion/add-argument-conclusion-placeholder "I think that…"
         :discussion/add-premise-supporting "I want to support the statement"
         :discussion/add-premise-against "I disagree…"
-        :discussion/add-undercut "The last two statements are not connected"
-        :discussion/reason-nudge "What do you think about this?"
-        :discussion/premise-placeholder "I think…"
-        :discussion/create-starting-premise-action "Add Statement"
-        :discussion/others-think "Others think the following:"
-        :discussion/undercut-bubble-intro "The last statement is not connected to the previous. The reason being…"
         :discussion.badges/user-overview "All participants"
         :discussion.badges/delete-statement "Delete statement"
         :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
         :discussion.notification/new-content-title "New statement!"
         :discussion.notification/new-content-body "Your statement was added successfully!"
-        :discussion.carousel/heading "Statements of Others"
-        :discussion/discuss "Discuss"
-        :discussion/discuss-tooltip "Discuss this agenda point with others"
 
         ;; meetings overview
         :meetings/header "Overview of your schnaqs"
@@ -713,33 +696,16 @@
         :meeting/admin-center-export "Diskussion als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
 
-        ;; Create Agenda
-        :agenda/desc-for "Beschreibung für Agendapunkt "
-
-        :agendas.button/navigate-to-suggestions "Änderungsvorschläge erstellen"
-
         ;; Discussion Language
-        :discussion/agree "Zustimmung"
-        :discussion/disagree "Ablehnung"
         :discussion/create-argument-action "Beitrag hinzufügen"
-        :discussion/create-argument-heading "Eigene Meinung abgeben / Informationen hinzufügen"
         :discussion/add-argument-conclusion-placeholder "Das denke ich darüber."
         :discussion/add-premise-supporting "Ich möchte die Aussage unterstützen"
         :discussion/add-premise-against "Ich habe einen Grund dagegen"
-        :discussion/add-undercut "Die letzten beiden Aussagen passen nicht zusammen"
-        :discussion/reason-nudge "Was denken Sie darüber?"
-        :discussion/premise-placeholder "Ich denke..."
-        :discussion/create-starting-premise-action "Beitrag hinzufügen"
-        :discussion/others-think "Andere denken folgendes:"
-        :discussion/undercut-bubble-intro "Der letzte Beitrag hat nichts mit dem vorherigen zu tun. Begründung:"
         :discussion.badges/user-overview "Alle Teilnehmer:innen"
         :discussion.badges/delete-statement "Beitrag löschen"
         :discussion.badges/delete-statement-confirmation "Wollen Sie den Beitrag wirklich löschen?"
         :discussion.notification/new-content-title "Neuer Beitrag!"
         :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
-        :discussion.carousel/heading "Beiträge Anderer"
-        :discussion/discuss "Diskutieren"
-        :discussion/discuss-tooltip "Diskutieren Sie mit anderen über diesen Agendapunkt."
 
         ;; meetings overview
         :meetings/header "Übersicht Ihrer schnaqs"

@@ -2,8 +2,6 @@
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels fa]]
-            [schnaq.interface.utils.markdown-parser :as markdown-parser]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- no-meetings-found
@@ -36,14 +34,7 @@
      [:div.col-lg-11.px-3
       [:h3 (:meeting/title meeting)]]
      [:div.col-lg-1
-      [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-right))}]]]]
-   ;; description / body
-   [:div.meeting-entry-desc
-    [:hr]
-    [:small.text-right.float-right.py-3
-     (when-let [nickname (-> meeting :meeting/author :author/nickname)]
-       [common/avatar-with-nickname nickname 50])]
-    [markdown-parser/markdown-to-html (:meeting/description meeting)]]])
+      [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-right))}]]]]])
 
 (defn- meetings-list-view
   "Shows a list of all meetings."

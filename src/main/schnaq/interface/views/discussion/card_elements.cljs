@@ -1,17 +1,19 @@
-(ns schnaq.interface.views.discussion.cards.card-elements
-  (:require [goog.dom :as gdom]
+(ns schnaq.interface.views.discussion.card-elements
+  (:require [ajax.core :as ajax]
+            [goog.dom :as gdom]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
+            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.cards.conclusion-card :as cards]
+            [schnaq.interface.views.discussion.conclusion-card :as cards]
+            [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.discussion.view-elements :as view-elements]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
 
 (defn history-view
@@ -144,6 +146,58 @@
                                   (oget e [:target :elements])]))]
     [input-form textarea-id "statement-text" submit-fn nil]))
 
+(rf/reg-event-fx
+  :discussion.add.statement/starting
+  (fn [{:keys [db]} [_ form]]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
+          nickname (get-in db [:user :name] "Anonymous")
+          statement-text (oget form [:statement-text :value])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/statements/starting/add")
+                          :format (ajax/transit-request-format)
+                          :params {:statement statement-text
+                                   :nickname nickname
+                                   :share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.add.statement/starting-success form]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(rf/reg-event-fx
+  :discussion.add.statement/starting-success
+  (fn [_ [_ form new-starting-statements]]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :discussion.notification/new-content-title)
+                                     :body (labels :discussion.notification/new-content-body)
+                                     :context :success}]]
+          [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
+          [:form/clear form]]}))
+
+(rf/reg-event-fx
+  :discussion.query.conclusions/starting
+  (fn [{:keys [db]} _]
+    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/discussion/conclusions/starting")
+                          :format (ajax/transit-request-format)
+                          :params {:share-hash share-hash
+                                   :discussion-id id}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.query.conclusions/set-starting]
+                          :on-failure [:ajax.error/to-console]}]]})))
+
+(rf/reg-event-fx
+  :discussion.query.conclusions/set-starting
+  (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
+    {:db (assoc-in db [:discussion :conclusions :starting] starting-conclusions)
+     :fx [[:dispatch [:votes.local/reset]]]}))
+
+(rf/reg-event-db
+  :votes.local/reset
+  (fn [db _]
+    (assoc db :votes {:up {}
+                      :down {}})))
+
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [title input]
@@ -220,4 +274,4 @@
   [statement edit-hash]
   [:<>
    [cards/up-down-vote-breaking statement]
-   [view-elements/extra-discussion-info-badges statement edit-hash]])
+   [badges/extra-discussion-info-badges statement edit-hash]])
