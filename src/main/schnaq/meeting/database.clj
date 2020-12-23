@@ -906,7 +906,7 @@
           :where [?meeting :meeting/share-hash ?share-hash]
           [?agenda :agenda/meeting ?meeting]
           [?agenda :agenda/discussion ?discussion]
-          [?discussion-arguments :argument/discussions ?discussion-id]]
+          [?discussion-arguments :argument/discussions ?discussion]]
         argument-pattern share-hash)
       flatten
       (toolbelt/pull-key-up :db/ident)))
