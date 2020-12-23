@@ -127,9 +127,9 @@
 
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
-    (is (= 3 (db/number-of-meetings)))
+    (is (= 5 (db/number-of-meetings)))
     (any-meeting-id)                                        ;; Adds any new meeting
-    (is (= 4 (db/number-of-meetings)))
+    (is (= 6 (db/number-of-meetings)))
     (is (zero? (db/number-of-meetings (Instant/now))))))
 
 (deftest number-of-usernames-test
@@ -147,7 +147,7 @@
 
 (deftest average-number-of-agendas-test
   (testing "Test whether the average number of agendas fits."
-    (is (= 4/3 (db/average-number-of-agendas)))
+    (is (= 6/5 (db/average-number-of-agendas)))
     (any-meeting-id)
     (is (= 1 (db/average-number-of-agendas)))))
 
