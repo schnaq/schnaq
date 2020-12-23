@@ -6,7 +6,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
-(defn- user-info
+(defn user-info
   "User info box containing relevant information for discussions."
   [username avatar-size]
   [:div.p-1 {:style {:width "100px"}}
