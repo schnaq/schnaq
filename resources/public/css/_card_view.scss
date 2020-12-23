@@ -4,7 +4,7 @@
   background: $white;
   border-radius: 1rem;
   overflow: hidden;
-  padding: 0;
+  padding: 1rem;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
@@ -82,7 +82,6 @@
 .discussion-light-background {
   background: $white;
   color: $gray-900;
-  padding: 1rem;
 }
 
 .discussion-input-container {

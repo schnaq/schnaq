@@ -63,7 +63,7 @@
   "Add panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
-    [:<>
+    [:div.float-right
      [:div.d-flex
       [:div.vote-box.up-vote
        {:on-click (fn [e]
@@ -89,8 +89,8 @@
      [:div.pb-2 [up-down-vote-breaking statement]]]
     [:div.d-flex
      [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
-     [:div.float-right [user/user-info (-> statement :statement/author :author/nickname) 32]]]]])
-
+     [:div.float-right.pb-1
+      [user/user-info (-> statement :statement/author :author/nickname) 32]]]]])
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
