@@ -9,10 +9,10 @@
 (defn user-info
   "User info box containing relevant information for discussions."
   [username avatar-size]
-  [:div.p-1 {:style {:width "100px"}}
+  [:div.user-info
    [:div.d-flex.flex-row.align-items-center
     [:div [common/avatar username avatar-size]]
-    [:div.pl-2.pb-1 {:style {:line-height ".9rem"}}
+    [:div.pl-2.pb-1.user-name
      [:small username]]]])
 
 (rf/reg-event-fx

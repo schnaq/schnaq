@@ -14,7 +14,8 @@
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
+            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
+            [schnaq.interface.views.user :as user]))
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
@@ -203,11 +204,12 @@
   [title input]
   [:<>
    [toolbelt/desktop-mobile-switch
-    [:h2.align-self-center.my-4 title]
-    [:h2.align-self-center.my-4.display-6 title]]
+    [:h2.align-self-center title]
+    [:h2.align-self-center.display-6 title]]
    [:div.line-divider.my-4]
    input])
 
+;; here
 (defn- topic-bubble-desktop
   [meeting title input info-content]
   (let [agenda @(rf/subscribe [:chosen-agenda])
@@ -220,7 +222,7 @@
      [:div.col-8
       [title-and-input-element title input]]
      ;; up-down votes and statistics
-     [:div.col-2.p-0
+     [:div.col-2.pr-3
       [:div.float-right info-content]]]))
 
 (defn- topic-bubble-mobile
@@ -274,4 +276,6 @@
   [statement edit-hash]
   [:<>
    [cards/up-down-vote-breaking statement]
-   [badges/extra-discussion-info-badges statement edit-hash]])
+   [badges/extra-discussion-info-badges statement edit-hash]
+   [:div.pt-3
+    [user/user-info (-> statement :statement/author :author/nickname) 32]]])
