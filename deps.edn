@@ -52,7 +52,7 @@
 
            :uberjar
            {:extra-deps
-            {seancorfield/depstar {:mvn/version "1.1.160"}
+            {seancorfield/depstar {:mvn/version "1.1.136"}
              com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}
             :main-opts ["-m" "hf.depstar.uberjar"
                         "target/schnaq-standalone.jar" "--verbose"]}
