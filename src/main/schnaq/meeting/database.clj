@@ -790,18 +790,6 @@
         [?discussion :discussion/starting-statements ?statements]]
       share-hash statement-pattern)))
 
-(defn- discussions-by-share-hash
-  "Returns all discussions which can be reached by a certain share-hash."
-  [share-hash]
-  (flatten
-    (query
-      '[:find ?discussions
-        :in $ ?share-hash
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion ?discussions]]
-      share-hash)))
-
 (defn- discussion-by-share-hash
   "Returns one discussion which can be reached by a certain share-hash. (Brainstorm only ever have one)"
   [share-hash]
