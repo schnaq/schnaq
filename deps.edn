@@ -54,7 +54,7 @@
            {:extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}
 
            :uberjar
-           {:replace-deps {seancorfield/depstar {:mvn/version "2.0.160"}}
+           {:replace-deps {seancorfield/depstar {:mvn/version "2.0.161"}}
             :exec-fn hf.depstar/uberjar
             :exec-args {:main-class schnaq.api
                         :verbose true
