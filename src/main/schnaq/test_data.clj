@@ -15,7 +15,23 @@
     :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
     :meeting/share-hash "graph-hash"
     :meeting/edit-hash "graph-edit-hash"
-    :meeting/author "user/mike"}])
+    :meeting/author "user/mike"}
+   {:db/id "meeting/ameisenbär"
+    :meeting/title "ameisenbär-title"
+    :meeting/description "ameisenbär-description"
+    :meeting/start-date #inst "2019-10-01T01:01:01.000-00:00"
+    :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
+    :meeting/share-hash "ameisenbär-hash"
+    :meeting/edit-hash "ameisenbär-edit-hash"
+    :meeting/author "user/mike"}
+   {:db/id "meeting/cat-dog-only"
+    :meeting/title "cat-dog-title"
+    :meeting/description "cat-dog-description"
+    :meeting/start-date #inst "2019-10-01T01:01:01.000-00:00"
+    :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
+    :meeting/share-hash "cat-dog-hash"
+    :meeting/edit-hash "cat-dog-edit-hash"
+    :meeting/author "user/wegi"}])
 
 (def ^:private agendas
   [{:db/id "agenda/first-agenda"
@@ -35,7 +51,19 @@
     :agenda/description "Description Graphical"
     :agenda/discussion "discussion/graph"
     :agenda/rank 1
-    :agenda/meeting "meeting/graph"}])
+    :agenda/meeting "meeting/graph"}
+   {:db/id "agenda/ameisenbär-agenda"
+    :agenda/title "Top 2222"
+    :agenda/description "Top 2.2222"
+    :agenda/discussion "discussion/tapir-or-ameisenbaer"
+    :agenda/rank 1
+    :agenda/meeting "meeting/ameisenbär"}
+   {:db/id "agenda/cat-dog-only"
+    :agenda/title "Top 1"
+    :agenda/description "Top 2"
+    :agenda/discussion "discussion/cat-or-dog"
+    :agenda/rank 1
+    :agenda/meeting "meeting/cat-dog-only"}])
 
 (def ^:private cat-or-dog-authors-and-users
   [{:db/id "user/wegi"

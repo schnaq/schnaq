@@ -134,11 +134,10 @@
 (rf/reg-event-fx
   :graph/load-data-for-discussion
   (fn [{:keys [db]} _]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/graph/discussion")
-                          :params {:share-hash share-hash
-                                   :discussion-id id}
+                          :params {:share-hash share-hash}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:graph/set-current]

@@ -38,6 +38,11 @@
   [string? :ret boolean?]
   (= config/admin-password password))
 
+(defn- valid-hash?
+  "Check if a schnaq-hash ist valid."
+  [share-hash]
+  (not (nil? (db/meeting-by-hash share-hash))))
+
 (>defn- valid-credentials?
   "Validate if share-hash and edit-hash match"
   [share-hash edit-hash]
@@ -142,7 +147,7 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
     (if (valid-credentials? share-hash edit-hash)
-      (if (db/statements-belong-to-discussion? statement-ids share-hash)
+      (if (db/check-valid-statement-id-and-meeting statement-ids share-hash)
         (do (db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
@@ -156,7 +161,7 @@
         meta-info
         (into {}
               (map #(vector (:db/id %)
-                            (db/number-of-statements-for-discussion (:db/id (:agenda/discussion %)))) agendas))]
+                            (db/number-of-statements-for-discussion meeting-hash)) agendas))]
     (ok {:agendas agendas
          :meta-info meta-info})))
 
@@ -291,74 +296,80 @@
 
 (defn- with-statement-meta
   "Returns a data structure, where all statements have been enhanced with meta-information."
-  [data discussion-id]
+  [data share-hash]
   (-> data
       processors/hide-deleted-statement-content
       processors/with-votes
-      (processors/with-sub-discussion-information (db/all-arguments-for-discussion discussion-id))))
+      (processors/with-sub-discussion-information (db/all-arguments-for-discussion share-hash))))
+
+#_[
+   [?meeting :meeting/share-hash ?share-hash]
+   [?agenda :agenda/meeting ?meeting]
+   [?agenda :agenda/discussion ?discussion]
+   ]
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
-  [discussion-id]
-  (let [deprecated-starters (db/starting-conclusions-by-discussion discussion-id)
-        starting-statements (db/starting-statements discussion-id)]
-    (with-statement-meta (concat starting-statements deprecated-starters) discussion-id)))
+  [share-hash]
+  (let [deprecated-starters (db/starting-conclusions-by-discussion share-hash)
+        starting-statements (db/starting-statements share-hash)]
+    (with-statement-meta (concat starting-statements deprecated-starters) share-hash)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id]} body-params]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)})
+  (let [{:keys [share-hash]} body-params]
+    (if (valid-hash? share-hash)
+      (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
       (deny-access invalid-rights-message))))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id selected-statement]} body-params]
-    (if (valid-discussion-hash? share-hash discussion-id)
+  (let [{:keys [share-hash selected-statement]} body-params]
+    (if (valid-hash? share-hash)
       (ok (with-statement-meta
             {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
              :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
-            discussion-id))
+            share-hash))
       (deny-access invalid-rights-message))))
 
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following premises / undercuts."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id statement-id]} body-params]
-    (if (valid-discussion-hash? share-hash discussion-id)
+  (let [{:keys [share-hash statement-id]} body-params]
+    (if (db/check-valid-statement-id-and-meeting statement-id share-hash)
       (ok (with-statement-meta
             {:conclusion (db/get-statement statement-id)
              :premises (discussion/premises-for-conclusion-id statement-id)
              :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
-            discussion-id))
+            share-hash))
       (deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id statement nickname]} body-params
+  (let [{:keys [share-hash statement nickname]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (do (db/add-starting-statement! discussion-id author-id statement)
-          (log/info "Starting statement added for discussion" discussion-id)
-          (ok {:starting-conclusions (starting-conclusions-with-processors discussion-id)}))
+    (if (valid-hash? share-hash)
+      (do (db/add-starting-statement! share-hash author-id statement)
+          (log/info "Starting statement added for discussion" share-hash)
+          (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
       (deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash discussion-id conclusion-id nickname premise reaction]} body-params
+  (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (do (log/info "Statement added as reaction for discussion" discussion-id)
+    (if (db/check-valid-statement-id-and-meeting conclusion-id share-hash)
+      (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (with-statement-meta
                 {:new-argument
                  (if (= :attack reaction)
-                   (db/attack-statement! discussion-id author-id conclusion-id premise)
-                   (db/support-statement! discussion-id author-id conclusion-id premise))}
-                discussion-id)))
+                   (db/attack-statement! share-hash author-id conclusion-id premise)
+                   (db/support-statement! share-hash author-id conclusion-id premise))}
+                share-hash)))
       (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
@@ -444,14 +455,13 @@
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [body-params]}]
-  (let [share-hash (:share-hash body-params)
-        discussion-id (:discussion-id body-params)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (let [statements (db/all-statements-for-graph discussion-id)
-            starting-statements (db/starting-statements discussion-id)
-            edges (discussion/links-for-agenda statements starting-statements discussion-id)
+  (let [share-hash (:share-hash body-params)]
+    (if (valid-hash? share-hash)
+      (let [statements (db/all-statements-for-graph share-hash)
+            starting-statements (db/starting-statements share-hash)
+            edges (discussion/links-for-agenda statements starting-statements share-hash)
             controversy-vals (discussion/calculate-controversy edges)]
-        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements discussion-id share-hash)
+        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
                      :edges edges
                      :controversy-values controversy-vals}}))
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
@@ -459,11 +469,10 @@
 (defn- export-txt-data
   "Exports the discussion data as a string."
   [{:keys [params]}]
-  (let [{:keys [share-hash discussion-id]} params
-        discussion-id (Long/parseLong discussion-id)]
-    (if (valid-discussion-hash? share-hash discussion-id)
-      (do (log/info "User is generating a txt export for discussion" discussion-id)
-          (ok {:string-representation (export/generate-text-export discussion-id share-hash)}))
+  (let [{:keys [share-hash]} params]
+    (if (valid-hash? share-hash)
+      (do (log/info "User is generating a txt export for discussion" share-hash)
+          (ok {:string-representation (export/generate-text-export share-hash)}))
       (deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------

@@ -150,7 +150,7 @@
 (rf/reg-event-fx
   :discussion.add.statement/starting
   (fn [{:keys [db]} [_ form]]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])
+    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
           nickname (get-in db [:user :name] "Anonymous")
           statement-text (oget form [:statement-text :value])]
       {:fx [[:http-xhrio {:method :post
@@ -158,8 +158,7 @@
                           :format (ajax/transit-request-format)
                           :params {:statement statement-text
                                    :nickname nickname
-                                   :share-hash share-hash
-                                   :discussion-id id}
+                                   :share-hash share-hash}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.add.statement/starting-success form]
                           :on-failure [:ajax.error/as-notification]}]]})))
@@ -177,12 +176,11 @@
 (rf/reg-event-fx
   :discussion.query.conclusions/starting
   (fn [{:keys [db]} _]
-    (let [{:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/discussion/conclusions/starting")
                           :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash
-                                   :discussion-id id}
+                          :params {:share-hash share-hash}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.query.conclusions/set-starting]
                           :on-failure [:ajax.error/to-console]}]]})))

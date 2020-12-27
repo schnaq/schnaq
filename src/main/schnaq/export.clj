@@ -47,16 +47,16 @@
 
 (>defn generate-text-export
   "Generates a textual representation of the discussion-data."
-  [discussion-id share-hash]
-  [:db/id string? :ret string?]
-  (let [statements (db/all-statements-for-graph discussion-id)
-        starting-statements (db/starting-statements discussion-id)
+  [share-hash]
+  [:meeting/share-hash :ret string?]
+  (let [statements (db/all-statements-for-graph share-hash)
+        starting-statements (db/starting-statements share-hash)
         legacy-starting-arguments (map :argument/conclusion
-                                       (db/starting-arguments-by-discussion discussion-id))
+                                       (db/starting-arguments-by-discussion share-hash))
         starting-set-with-legacy (distinct (concat starting-statements legacy-starting-arguments))
-        all-nodes (discussion/nodes-for-agenda statements starting-set-with-legacy discussion-id share-hash)
+        all-nodes (discussion/nodes-for-agenda statements starting-set-with-legacy share-hash)
         starting-nodes (filter #(= :argument.type/starting (:type %)) all-nodes)
-        links (discussion/links-for-agenda all-nodes starting-statements discussion-id)]
+        links (discussion/links-for-agenda all-nodes starting-statements share-hash)]
     (loop [queue (map #(vector "" %) starting-nodes)
            text ""
            level 0]

@@ -27,13 +27,12 @@
 (rf/reg-event-fx
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ reaction new-premise]]
-    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])
+    (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])
           nickname (get-in db [:user :name] "Anonymous")]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/discussion/react-to/statement")
                           :format (ajax/transit-request-format)
                           :params {:share-hash share-hash
-                                   :discussion-id id
                                    :conclusion-id statement-id
                                    :nickname nickname
                                    :premise new-premise
@@ -76,13 +75,12 @@
 (rf/reg-event-fx
   :discussion.query.statement/by-id
   (fn [{:keys [db]} _]
-    (let [{:keys [id share-hash statement-id]} (get-in db [:current-route :parameters :path])]
+    (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/discussion/statement/info")
                           :format (ajax/transit-request-format)
                           :params {:statement-id statement-id
-                                   :share-hash share-hash
-                                   :discussion-id id}
+                                   :share-hash share-hash}
                           :response-format (ajax/transit-response-format)
                           :on-success [:discussion.query.statement/by-id-success]
                           :on-failure [:ajax.error/as-notification]}]]})))

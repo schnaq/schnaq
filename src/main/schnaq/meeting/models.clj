@@ -142,7 +142,6 @@
    {:db/ident :agenda/discussion
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/identity
     :db/doc "DEPRECATED: Do not use agenda-points in new code.
     An id belonging to the (foreign) discussion represented by this agenda"}
    ;; User
