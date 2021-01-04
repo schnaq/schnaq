@@ -105,24 +105,29 @@
      [:i {:class (str "m-auto fas " (fa :minus))}]
      (labels :discussion/add-premise-against) "hover-secondary" false]]])
 
-(defn- input-form
+(defn- textarea-form [textarea-id textarea-name]
+  [:textarea.form-control.discussion-text-input-area.w-100
+   {:id textarea-id
+    :name textarea-name :wrap "soft" :rows 1
+    :auto-complete "off"
+    :onInput (fn [_event]
+               ;; first reset input then set height +1px in order to prevent scrolling
+               (let [input (gdom/getElement textarea-id)]
+                 (toolbelt/height-to-scrollheight! input)))
+    :required true
+    :data-dynamic-height true
+    :placeholder (labels :discussion/add-argument-conclusion-placeholder)}])
+
+(defn- input-form-mobile
   "A basic input form with optional radio buttons"
   [textarea-id textarea-name submit-fn radio-buttons]
   [:form.my-2
    {:on-submit submit-fn}
    [:div.discussion-input-container.w-100
-    [:div.d-flex.flex-row
-     [:textarea.form-control.discussion-text-input-area.w-100
-      {:id textarea-id
-       :name textarea-name :wrap "soft" :rows 1
-       :auto-complete "off"
-       :onInput (fn [_event]
-                  ;; first reset input then set height +1px in order to prevent scrolling
-                  (let [input (gdom/getElement textarea-id)]
-                    (toolbelt/height-to-scrollheight! input)))
-       :required true
-       :data-dynamic-height true
-       :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+    ;; text input
+    [textarea-form textarea-id textarea-name]
+    ;; statement-type and submit button row
+    [:div.d-flex.flex-row.float-right
      ;; reaction type
      radio-buttons
      ;; submit icon button
@@ -131,21 +136,53 @@
        :title (labels :discussion/create-argument-action)}
       [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
 
-(defn input-conclusion-form
+(defn input-conclusion-form-mobile
   "A form, which allows the input of a conclusions"
   [textarea-id]
   (let [submit-fn (fn [e]
                     (js-wrap/prevent-default e)
                     (logic/submit-new-premise (oget e [:target :elements])))]
-    [input-form textarea-id "premise-text" submit-fn [radio-buttons textarea-id]]))
+    [input-form-mobile textarea-id "premise-text" submit-fn [radio-buttons textarea-id]]))
 
-(defn input-starting-statement-form
+(defn input-starting-statement-form-mobile
   "A form, which allows the input of a starting-statement."
   [textarea-id]
   (let [submit-fn (fn [e] (js-wrap/prevent-default e)
                     (rf/dispatch [:discussion.add.statement/starting
                                   (oget e [:target :elements])]))]
-    [input-form textarea-id "statement-text" submit-fn nil]))
+    [input-form-mobile textarea-id "statement-text" submit-fn nil]))
+
+(defn- input-form-desktop
+  "A basic input form with optional radio buttons"
+  [textarea-id textarea-name submit-fn radio-buttons]
+  [:form.my-2
+   {:on-submit submit-fn}
+   [:div.discussion-input-container.w-100
+    [:div.d-flex.flex-row
+     [textarea-form textarea-id textarea-name]
+     ;; reaction type
+     radio-buttons
+     ;; submit icon button
+     [:button.primary-icon-button
+      {:type "submit"
+       :title (labels :discussion/create-argument-action)}
+      [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
+
+(defn input-conclusion-form-desktop
+  "A form, which allows the input of a conclusions"
+  [textarea-id]
+  (let [submit-fn (fn [e]
+                    (js-wrap/prevent-default e)
+                    (logic/submit-new-premise (oget e [:target :elements])))]
+    [input-form-desktop textarea-id "premise-text" submit-fn [radio-buttons textarea-id]]))
+
+(defn input-starting-statement-form-desktop
+  "A form, which allows the input of a starting-statement."
+  [textarea-id]
+  (let [submit-fn (fn [e] (js-wrap/prevent-default e)
+                    (rf/dispatch [:discussion.add.statement/starting
+                                  (oget e [:target :elements])]))]
+    [input-form-desktop textarea-id "statement-text" submit-fn nil]))
 
 (rf/reg-event-fx
   :discussion.add.statement/starting
