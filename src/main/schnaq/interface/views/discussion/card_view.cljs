@@ -57,8 +57,8 @@
   []
   (let [{:meeting/keys [title] :as current-meeting} @(rf/subscribe [:meeting/selected])
         current-starting @(rf/subscribe [:discussion.conclusions/starting])
-        input-desktop [elements/input-starting-statement-form "input-statement-id-desktop"]
-        input-mobile [elements/input-starting-statement-form "input-statement-id-mobile"]]
+        input-desktop [elements/input-starting-statement-form-desktop "input-statement-id-desktop"]
+        input-mobile [elements/input-starting-statement-form-mobile "input-statement-id-mobile"]]
     [:<>
      [card-meeting-header current-meeting]
      [:div.container-fluid.px-0
@@ -85,8 +85,8 @@
         title (:statement/content current-conclusion)
         info-content [elements/info-content-conclusion
                       current-conclusion (:meeting/edit-hash current-meeting)]
-        input-desktop [elements/input-conclusion-form "input-statement-id-desktop"]
-        input-mobile [elements/input-conclusion-form "input-statement-id-mobile"]]
+        input-desktop [elements/input-conclusion-form-desktop "input-statement-id-desktop"]
+        input-mobile [elements/input-conclusion-form-mobile "input-statement-id-mobile"]]
     [:<>
      [card-meeting-header current-meeting]
      [:div.container-fluid.px-0
