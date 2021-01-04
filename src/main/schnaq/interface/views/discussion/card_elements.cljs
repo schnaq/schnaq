@@ -105,6 +105,19 @@
      [:i {:class (str "m-auto fas " (fa :minus))}]
      (labels :discussion/add-premise-against) "hover-secondary" false]]])
 
+(defn- textarea-form [textarea-id textarea-name]
+  [:textarea.form-control.discussion-text-input-area.w-100
+   {:id textarea-id
+    :name textarea-name :wrap "soft" :rows 1
+    :auto-complete "off"
+    :onInput (fn [_event]
+               ;; first reset input then set height +1px in order to prevent scrolling
+               (let [input (gdom/getElement textarea-id)]
+                 (toolbelt/height-to-scrollheight! input)))
+    :required true
+    :data-dynamic-height true
+    :placeholder (labels :discussion/add-argument-conclusion-placeholder)}])
+
 (defn- input-form-mobile
   "A basic input form with optional radio buttons"
   [textarea-id textarea-name submit-fn radio-buttons]
@@ -112,17 +125,7 @@
    {:on-submit submit-fn}
    [:div.discussion-input-container.w-100
     ;; text input
-    [:textarea.form-control.discussion-text-input-area.w-100
-     {:id textarea-id
-      :name textarea-name :wrap "soft" :rows 1
-      :auto-complete "off"
-      :onInput (fn [_event]
-                 ;; first reset input then set height +1px in order to prevent scrolling
-                 (let [input (gdom/getElement textarea-id)]
-                   (toolbelt/height-to-scrollheight! input)))
-      :required true
-      :data-dynamic-height true
-      :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+    [textarea-form textarea-id textarea-name]
     ;; statement-type and submit button row
     [:div.d-flex.flex-row.float-right
      ;; reaction type
@@ -156,17 +159,7 @@
    {:on-submit submit-fn}
    [:div.discussion-input-container.w-100
     [:div.d-flex.flex-row
-     [:textarea.form-control.discussion-text-input-area.w-100
-      {:id textarea-id
-       :name textarea-name :wrap "soft" :rows 1
-       :auto-complete "off"
-       :onInput (fn [_event]
-                  ;; first reset input then set height +1px in order to prevent scrolling
-                  (let [input (gdom/getElement textarea-id)]
-                    (toolbelt/height-to-scrollheight! input)))
-       :required true
-       :data-dynamic-height true
-       :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+     [textarea-form textarea-id textarea-name]
      ;; reaction type
      radio-buttons
      ;; submit icon button
