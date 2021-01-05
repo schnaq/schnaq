@@ -268,7 +268,7 @@
     [:<>
      [:div.d-flex
       ;; graph
-      [:div.graph-icon.mr-auto
+      [:div.graph-icon.mr-auto.mb-5
        [graph-button agenda share-hash]]
       ;; settings
       [:div.p-0
