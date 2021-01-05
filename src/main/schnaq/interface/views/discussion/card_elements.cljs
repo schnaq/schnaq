@@ -21,13 +21,13 @@
   "History view displayed in the left column in the desktop view."
   ([{:meeting/keys [share-hash] :as current-meeting}]
    ;; home button
-   [:div.d-inline-block.d-md-block.pr-2.pr-md-0
-    [:span
+   [:div.d-inline-block.d-md-block.pr-2.pr-md-0.mt-4
+    [:div.clickable.card-history-home.text-center
      {:on-click (fn []
                   (rf/dispatch [:navigation/navigate :routes.meeting/show
                                 {:share-hash share-hash}])
                   (rf/dispatch [:meeting/select-current current-meeting]))}
-     [:i {:class (str "card-history-home clickable mt-md-4 fas " (fa :home))}]]])
+     [:i {:class (str "fas fa-2x " (fa :home))}]]])
   ([current-meeting history]
    (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
      [:<>
@@ -41,7 +41,8 @@
            [:div.card-history.clickable.mt-md-4
             {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-            [common/avatar (-> statement :statement/author :author/nickname) 42]])])])))
+            [:div.statement-card-content.text-center
+             [common/avatar (-> statement :statement/author :author/nickname) 42]]])])])))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
