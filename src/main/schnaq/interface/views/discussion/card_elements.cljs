@@ -22,13 +22,12 @@
   ([{:meeting/keys [share-hash] :as current-meeting}]
    ;; home button
    [:div.d-inline-block.d-md-block.pr-2.pr-md-0.mt-4
-    [:span
+    [:div.clickable.card-history-home.text-center
      {:on-click (fn []
                   (rf/dispatch [:navigation/navigate :routes.meeting/show
                                 {:share-hash share-hash}])
                   (rf/dispatch [:meeting/select-current current-meeting]))}
-     [:div.clickable.card-history-home.text-center
-      [:i {:class (str "fas fa-2x " (fa :home))}]]]])
+     [:i {:class (str "fas fa-2x " (fa :home))}]]])
   ([current-meeting history]
    (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
      [:<>
