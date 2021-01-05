@@ -23,11 +23,17 @@
 
 .card-view {
   background: $white;
-  margin-left: 0.5rem;
 
   &:hover {
     background: $white-shade;
   }
+}
+
+.card-view-type {
+  color: $gray-100;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+  padding-left: 0.25rem;
 }
 
 .card-history {
@@ -137,7 +143,6 @@
 .statement-card-content {
   background: $white;
   height: 100%;
-  padding: 0.8rem 0 0;
   white-space: pre-line;
 
   @include media-breakpoint-down(sm) {

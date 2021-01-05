@@ -83,14 +83,19 @@
   [edit-hash {:keys [statement/content] :as statement} attitude]
   [:div.card.card-rounded.clickable.shadow-straight-light
    {:class (str "statement-card-" (name attitude))}
-   [:div.card-view.card-body.py-0.pb-1
-    [:div.d-flex.pt-3
-     [:div.mr-auto [:p content]]
-     [:div.pb-2 [up-down-vote-breaking statement]]]
-    [:div.d-flex
-     [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
-     [:div.float-right.pb-1
-      [user/user-info (-> statement :statement/author :author/nickname) 32]]]]])
+   [:div.row
+    ;;
+    [:div.m-auto.pl-1
+     [:i.card-view-type {:class (str "fas " (fa :plus))}]]
+    ;;
+    [:div.card-view.card-body.py-0.pb-1
+     [:div.d-flex.pt-3
+      [:div.mr-auto [:p content]]
+      [:div.pb-2 [up-down-vote-breaking statement]]]
+     [:div.d-flex
+      [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
+      [:div.float-right.pb-1
+       [user/user-info (-> statement :statement/author :author/nickname) 32]]]]]])
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
