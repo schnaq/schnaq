@@ -42,10 +42,11 @@
         [admin-buttons/admin-center share-hash edit-hash])
       ;; name input
       [navbar/username-bar-view-light]
-      [:div.d-md-none.mobile-history
+      [:div.d-md-none
        [:hr]
-       [:h6.text-center.py-1 (labels :common/history)]
-       [elements/history-view meeting history]]]]))
+       [:h6.text-left (labels :common/history)]
+       [:div.row.px-3
+        [elements/history-view meeting history]]]]]))
 
 (rf/reg-sub
   :discussion.conclusions/starting
