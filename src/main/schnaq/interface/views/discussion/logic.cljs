@@ -24,6 +24,14 @@
     (#{:argument.type/support} arg-type) "agree"
     :else "neutral"))
 
+(defn attitude->symbol
+  "Returns an fa symbol identifier based on attitude"
+  [attitude]
+  (cond
+    (= "disagree" (str attitude)) :minus
+    (= "agree" (str attitude)) :plus
+    :else :circle))
+
 (rf/reg-event-fx
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ reaction new-premise]]

@@ -140,9 +140,10 @@
   }
 }
 
-.statement-card-content {
+.history-card-content {
   background: $white;
   height: 100%;
+  padding: 0.8rem 0 0;
   white-space: pre-line;
 
   @include media-breakpoint-down(sm) {
