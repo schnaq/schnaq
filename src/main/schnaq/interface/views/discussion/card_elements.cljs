@@ -41,7 +41,7 @@
            [:div.card-history.clickable.mt-md-4
             {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-            [:div.statement-card-content.text-center
+            [:div.history-card-content.text-center
              [common/avatar (-> statement :statement/author :author/nickname) 42]]])])])))
 
 (defn- graph-button

@@ -972,6 +972,7 @@
      :check/double "fa-check-double"
      :check/normal "fa-check"
      :check/square "fa-check-square"
+     :circle "fa-circle"
      :cog "fa-cogs"
      :comment "fa-comments"
      :comment-alt "fa-comment-alt"
