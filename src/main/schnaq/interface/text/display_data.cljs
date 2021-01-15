@@ -335,6 +335,9 @@
         :analytics/last-meeting-created-title "Last meeting created at"
         :analytics/fetch-data-button "Retrieving data…"
 
+        ;; Supporters
+        :supporters/heading "Supported by the Ministry of Economics of the State of North Rhine-Westphalia"
+
         ;; Testimonials
         :testimonials/heading "Testimonials"
         :testimonials.doctronic/quote "We observe the development of schnaq with great interest for our own use and for the use of our customers."
@@ -760,6 +763,9 @@
         :analytics/last-meeting-created-title "Letztes Meeting erstellt am"
         :analytics/fetch-data-button "Hole Daten"
 
+        ;; Supporters
+        :supporters/heading "Unterstützt vom Wirtschaftsministerium des Landes Nordrhein-Westfalen"
+
         ;; Testimonials
         :testimonials/heading "Stimmen aus der Wirtschaft"
         :testimonials.doctronic/quote "Wir beobachten die Entwicklung von schnaq mit großem Interesse für den eigenen Einsatz und für den Einsatz bei unseren Kunden."
@@ -934,7 +940,6 @@
      :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
      :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
      :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
-     :testimonials/doctronic "/imgs/testimonials/doctronic.png"
      :pricing.others/miro "imgs/startpage/pricing/miro.png"
      :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
      :pricing.others/confluence "imgs/startpage/pricing/confluence.jpeg"
