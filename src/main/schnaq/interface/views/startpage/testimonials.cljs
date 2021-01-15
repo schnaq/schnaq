@@ -17,7 +17,7 @@
    [:div.col-md-4.col-12.d-flex.align-items-center
     [:a {:href "https://doctronic.de" :target :_blank}
      [:img
-      {:src (img-path :testimonials/doctronic)
+      {:src (img-path :logos/doctronic)
        :alt "doctronic logo"}]]]])
 
 
@@ -27,6 +27,6 @@
   "Show all testimonials."
   []
   [:section.pb-5.pt-3
-   [:p.display-6.text-center.pb-4
+   [:p.h4.text-center.pb-4
     (labels :testimonials/heading)]
    [doctronic]])
