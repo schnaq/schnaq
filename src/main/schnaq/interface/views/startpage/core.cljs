@@ -216,6 +216,22 @@
      (labels :startpage.value-cards.knowledge/alt-text)
      #(rf/dispatch [:navigation/navigate :routes.features/knowledge])]]])
 
+(defn- supporters []
+  [:section.pb-5.pt-3
+   [:p.display-6.text-center
+    (labels :supporters/heading)]
+   [:div.row.text-center
+    [:div.col-md-6
+     [:a {:href "https://ignitiondus.de"}
+      [:img.w-75
+       {:src (img-path :logos/ignition)
+        :alt "ignition logo"}]]]
+    [:div.col-md-6
+     [:a {:href "https://www.digihub.de/"}
+      [:img.w-75.pt-md-4
+       {:src (img-path :logos/digihub)
+        :alt "digihub logo"}]]]]])
+
 ;; -----------------------------------------------------------------------------
 
 (defn- startpage-content []
@@ -235,11 +251,12 @@
        [usage-of-schnaq-heading]
        [startpage-features/feature-rows]
        [how-to-section]
-       [testimonials/view]]
+       [supporters]]
       [early-adopters]
-      [:section.container.py-5
-       [value-prop-cards]]
-      [subscribe-to-mailinglist]]]))
+      [:section.container
+       [value-prop-cards]
+       [subscribe-to-mailinglist]
+       [testimonials/view]]]]))
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
