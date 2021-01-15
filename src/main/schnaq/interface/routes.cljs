@@ -119,12 +119,12 @@
                          :stop (fn []
                                  (rf/dispatch [:updates.periodic/starting-conclusions false]))}]
           :name :routes.discussion/start
-          :view discussion-card-view/discussion-start-view-entrypoint
+          :view discussion-card-view/view
           :link-text (labels :router/start-discussion)}]
         ["/selected/:statement-id"
          {:name :routes.discussion.select/statement
           :parameters {:path {:statement-id int?}}
-          :view discussion-card-view/selected-conclusion
+          :view discussion-card-view/view
           :controllers [{:parameters {:path [:share-hash :id :statement-id]}
                          :start (fn []
                                   (rf/dispatch [:discussion.query.statement/by-id]))}]}]]

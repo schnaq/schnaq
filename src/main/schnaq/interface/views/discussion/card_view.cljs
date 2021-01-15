@@ -46,7 +46,7 @@
        [:hr]
        [:h6.text-left (labels :common/history)]
        [:div.row.px-3
-        [elements/history-view meeting history]]]]]))
+        [elements/history-view history]]]]]))
 
 (rf/reg-sub
   :discussion.conclusions/starting
@@ -55,21 +55,18 @@
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
-  []
-  (let [{:meeting/keys [title] :as current-meeting} @(rf/subscribe [:meeting/selected])
-        current-starting @(rf/subscribe [:discussion.conclusions/starting])
+  [{:meeting/keys [title] :as current-meeting}]
+  (let [current-starting @(rf/subscribe [:discussion.conclusions/starting])
         input-desktop [elements/input-starting-statement-form-desktop "input-statement-id-desktop"]
         input-mobile [elements/input-starting-statement-form-mobile "input-statement-id-mobile"]]
     [:<>
-     [card-meeting-header current-meeting]
-     [:div.container-fluid.px-0
-      [toolbelt/desktop-mobile-switch
-       [elements/discussion-view-desktop
-        current-meeting title input-desktop
-        nil current-starting nil]
-       [elements/discussion-view-mobile
-        current-meeting title input-mobile
-        nil current-starting]]]]))
+     [toolbelt/desktop-mobile-switch
+      [elements/discussion-view-desktop
+       current-meeting title input-desktop
+       nil current-starting nil]
+      [elements/discussion-view-mobile
+       current-meeting title input-mobile
+       nil current-starting]]]))
 
 (rf/reg-sub
   :discussion.premises/current
@@ -78,9 +75,8 @@
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
-  []
-  (let [current-meeting @(rf/subscribe [:meeting/selected])
-        current-premises @(rf/subscribe [:discussion.premises/current])
+  [current-meeting]
+  (let [current-premises @(rf/subscribe [:discussion.premises/current])
         history @(rf/subscribe [:discussion-history])
         current-conclusion (last history)
         title (:statement/content current-conclusion)
@@ -89,18 +85,23 @@
         input-desktop [elements/input-conclusion-form-desktop "input-statement-id-desktop"]
         input-mobile [elements/input-conclusion-form-mobile "input-statement-id-mobile"]]
     [:<>
+     [toolbelt/desktop-mobile-switch
+      [elements/discussion-view-desktop
+       current-meeting title input-desktop
+       info-content current-premises history]
+      [elements/discussion-view-mobile
+       current-meeting title input-mobile
+       info-content current-premises]]]))
+
+(defn- derive-view []
+  (let [current-meeting @(rf/subscribe [:meeting/selected])
+        history @(rf/subscribe [:discussion-history])]
+    [:<>
      [card-meeting-header current-meeting]
-     [:div.container-fluid.px-0
-      [toolbelt/desktop-mobile-switch
-       [elements/discussion-view-desktop
-        current-meeting title input-desktop
-        info-content current-premises history]
-       [elements/discussion-view-mobile
-        current-meeting title input-mobile
-        info-content current-premises]]]]))
+     [:div.container-fluid.px-0]
+     (if (zero? (count history))
+       [discussion-start-view current-meeting]
+       [selected-conclusion-view current-meeting])]))
 
-(defn discussion-start-view-entrypoint []
-  [discussion-start-view])
-
-(defn selected-conclusion []
-  [selected-conclusion-view])
+(defn view []
+  [derive-view])

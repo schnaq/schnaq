@@ -17,32 +17,34 @@
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.user :as user]))
 
-(defn history-view
-  "History view displayed in the left column in the desktop view."
-  ([{:meeting/keys [share-hash] :as current-meeting}]
-   ;; home button
+(defn- home-button
+  "Home button for history view"
+  ([]
+   [home-button 0])
+  ([history-length]
    [:div.d-inline-block.d-md-block.pr-2.pr-md-0.mt-md-4.pt-2.pt-md-0
     [:div.clickable.card-history-home.text-center
-     {:on-click (fn []
-                  (rf/dispatch [:navigation/navigate :routes.meeting/show
-                                {:share-hash share-hash}])
-                  (rf/dispatch [:meeting/select-current current-meeting]))}
-     [:i {:class (str "fas fa-2x " (fa :home))}]]])
-  ([current-meeting history]
-   (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-     [:<>
-      ;; home button
-      [history-view current-meeting]
-      ;; history
-      (for [[index statement] indexed-history]
-        [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
-         {:key (str "history-" (:db/id statement))}
-         (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
-           [:div.card-history.clickable.mt-md-4
-            {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
-             :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-            [:div.history-card-content.text-center
-             [common/avatar (-> statement :statement/author :author/nickname) 42]]])])])))
+     {:on-click
+      #(rf/dispatch [:discussion.history/time-travel history-length])}
+     [:i {:class (str "fas fa-2x " (fa :home))}]]]))
+
+(defn history-view
+  "History view displayed in the left column in the desktop view."
+  [history]
+  (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
+    [:<>
+     ;; home button
+     [home-button (count indexed-history)]
+     ;; history
+     (for [[index statement] indexed-history]
+       [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
+        {:key (str "history-" (:db/id statement))}
+        (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+          [:div.card-history.clickable.mt-md-4
+           {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
+            :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+           [:div.history-card-content.text-center
+            [common/avatar (-> statement :statement/author :author/nickname) 42]]])])]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
@@ -302,7 +304,7 @@
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-1.py-4
-     [history-view current-meeting history]]
+     [history-view history]]
     [:div.col-10.py-4.px-0
      [topic-view current-meeting conclusions
       [topic-bubble-desktop current-meeting title input info-content]]]]])
