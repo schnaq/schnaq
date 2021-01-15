@@ -31,9 +31,14 @@
 
 .card-view-type {
   color: $gray-100;
-  margin-left: 0.2rem;
-  margin-right: 0.2rem;
-  padding-left: 0.25rem;
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+  padding-left: 0.1rem;
+  text-align: center;
+
+  @include media-breakpoint-down(sm) {
+    padding: 0.1rem;
+  }
 }
 
 .card-history {
@@ -43,11 +48,11 @@
   height: 4.5rem;
   max-width: 4.5rem;
   overflow: hidden;
-  padding: 1rem;
+  padding: 0 0 0 0.5rem;
 
   @include media-breakpoint-down(sm) {
     height: 3rem;
-    padding: 0.3rem 0.2rem;
+    padding: 0 0 0 0.4rem;
     width: 3rem;
   }
 
@@ -157,12 +162,7 @@
 
 @mixin statement-card {
   overflow: hidden;
-  padding: 0 0 0 0.5rem;
   white-space: pre-line;
-
-  @include media-breakpoint-down(sm) {
-    padding: 0 0 0 0.4rem;
-  }
 }
 
 .statement-card-agree {

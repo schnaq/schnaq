@@ -84,8 +84,8 @@
   (let [fa-label (logic/attitude->symbol attitude)]
     [:div.card.card-rounded.clickable.shadow-straight-light
      {:class (str "statement-card-" (name attitude))}
-     [:div.row
-      [:div.m-auto.pl-1
+     [:div.d-flex.flex-row
+      [:div.m-auto
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
        [:div.d-flex.pt-3
