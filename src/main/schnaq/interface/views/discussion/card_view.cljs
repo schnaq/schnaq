@@ -98,7 +98,6 @@
         history @(rf/subscribe [:discussion-history])]
     [:<>
      [card-meeting-header current-meeting]
-     [:div.container-fluid.px-0]
      (if (zero? (count history))
        [discussion-start-view current-meeting]
        [selected-conclusion-view current-meeting])]))
