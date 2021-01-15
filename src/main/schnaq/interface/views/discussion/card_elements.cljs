@@ -19,14 +19,12 @@
 
 (defn- home-button
   "Home button for history view"
-  ([]
-   [home-button 0])
-  ([history-length]
-   [:div.d-inline-block.d-md-block.pr-2.pr-md-0.mt-md-4.pt-2.pt-md-0
-    [:div.clickable.card-history-home.text-center
-     {:on-click
-      #(rf/dispatch [:discussion.history/time-travel history-length])}
-     [:i {:class (str "fas fa-2x " (fa :home))}]]]))
+  [history-length]
+  [:div.d-inline-block.d-md-block.pr-2.pr-md-0.mt-md-4.pt-2.pt-md-0
+   [:div.clickable.card-history-home.text-center
+    {:on-click
+     #(rf/dispatch [:discussion.history/time-travel history-length])}
+    [:i {:class (str "fas fa-2x " (fa :home))}]]])
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
