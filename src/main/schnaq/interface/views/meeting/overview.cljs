@@ -64,6 +64,11 @@
   []
   [meeting-view :meetings/all])
 
+(defn public-discussions-view
+  "Render all public discussions."
+  []
+  [meeting-view :meetings/public])
+
 (defn meeting-view-visited
   "Render visited meetings."
   []

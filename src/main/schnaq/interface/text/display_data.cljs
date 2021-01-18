@@ -13,6 +13,7 @@
         :nav/startpage "Home"
         :nav/schnaqs "Schnaqs"
         :nav.schnaqs/show-all "All schnaqs"
+        :nav.schnaqs/show-all-public "All public schnaqs"
         :nav.schnaqs/create-meeting "Prepare meeting"
         :nav.schnaqs/create-brainstorm "Create brainstorm"
         :nav.schnaqs/last-added "Last created schnaq"
@@ -22,9 +23,6 @@
         ;; Startpage
         :startpage/heading "Who needs Whiteboards?"
         :startpage/subheading "Lost your train of thought again? Structure your team's discourse with schnaq!"
-
-        :startpage.under-construction/heading "Ongoing Construction!"
-        :startpage.under-construction/body "schnaq is currently in a free of charge beta phase. Your feedback is very important for further development!"
 
         :startpage.value-cards/heading "More Applications!"
         :startpage.value-cards/lead "Structured discussions can have many applications. Take a look at a few examples."
@@ -221,9 +219,12 @@
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
 
         ;; Brainstorming time
-        :brainstorm/heading "Start Brainstorming"
-        :brainstorm.buttons/start-now "schnaq now!"
-        :brainstorm.create.button/save "Create new Brainstorming!"
+        :brainstorm/heading "Start schnaq"
+        :brainstorm.buttons/start-now "Start a schnaq now"
+        :brainstorm.create.button/save "Start a new schnaq!"
+
+        ;; Discussion Creation
+        :discussion.create.public-checkbox/label "Make this discussion public"
 
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
@@ -477,7 +478,8 @@
         :router/show-single-meeting "Show schnaq"
         :router/start-discussion "Start discussion"
         :router/startpage "Startpage"
-        :router/true-404-view "404 error page"}
+        :router/true-404-view "404 error page"
+        :router/public-discussions "Public discussions"}
    :de {;; Common
         :common/language "Sprache"
         :common/history "Verlauf"
@@ -487,6 +489,7 @@
         :nav/startpage "Home"
         :nav/schnaqs "Schnaqs"
         :nav.schnaqs/show-all "Alle schnaqs"
+        :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
         :nav.schnaqs/create-brainstorm "Brainstorm anlegen"
         :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
         :nav-meeting-agenda "Agenda erzeugen"
@@ -495,9 +498,6 @@
         ;; Startpage
         :startpage/heading "Wer braucht schon Whiteboards?"
         :startpage/subheading "Schon wieder den Faden verloren? Ideenaustausch besser strukturieren mit schnaq!"
-
-        :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
-        :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"
 
         :startpage.value-cards/heading "Weitere Anwendungsgebiete"
         :startpage.value-cards/lead "Strukturierte Diskussionen werden in vielen Gebieten benötigt. Hier finden Sie weitere Beispiele."
@@ -657,9 +657,12 @@
         :meeting.admin.notifications/statements-deleted-lead "Die von Ihnen gewählten Nachrichten wurden erfolgreich gelöscht."
 
         ;; Brainstorming time
-        :brainstorm/heading "Brainstorm anlegen"
-        :brainstorm.buttons/start-now "Jetzt schnaqqen!"
-        :brainstorm.create.button/save "Brainstorming starten!"
+        :brainstorm/heading "Schnaq starten"
+        :brainstorm.buttons/start-now "Jetzt ein schnaq starten"
+        :brainstorm.create.button/save "Schnaq starten!"
+
+        ;; Discussion Creation
+        :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit Ihren Daten?"
@@ -914,7 +917,8 @@
         :router/show-single-meeting "Schnaq anzeigen"
         :router/start-discussion "Starte Besprechung"
         :router/startpage "Startseite"
-        :router/true-404-view "404 Fehlerseite"}})
+        :router/true-404-view "404 Fehlerseite"
+        :router/public-discussions "Öffentliche Diskussionen"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup

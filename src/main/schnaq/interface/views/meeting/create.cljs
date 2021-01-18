@@ -4,14 +4,15 @@
 
 (defn new-meeting-helper
   "Creates a new meeting with the form from `create-meeting-form`."
-  [title description type]
+  [title public? type]
   (rf/dispatch
     [:meeting.creation/new
      {:meeting/title title
-      :meeting/description description
+      :meeting/description nil
       :meeting/type type
       :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
-      :meeting/start-date (js/Date.)}]))
+      :meeting/start-date (js/Date.)}
+     public?]))
 
 (defn meeting-title-input
   "The input and label for a new meeting-title"
