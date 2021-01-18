@@ -32,6 +32,11 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
+   ["schnaqs/public"
+    {:name :routes/public-discussions
+     :view meetings-overview/public-discussions-view
+     :link-text (labels :router/public-discussions)
+     :controllers [{:start (fn [] (rf/dispatch [:meetings.public/load]))}]}]
    ["features"
     ["/discussions"
      {:name :routes.features/discussions

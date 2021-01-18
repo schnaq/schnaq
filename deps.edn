@@ -3,7 +3,7 @@
         binaryage/oops {:mvn/version "0.7.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
-        com.datomic/client-pro {:mvn/version "0.9.63"}
+        com.datomic/client-pro {:mvn/version "0.9.66"}
         com.draines/postal {:mvn/version "2.0.4"}
         com.taoensso/tempura {:mvn/version "1.2.1"}
         com.taoensso/timbre {:mvn/version "5.1.0"}

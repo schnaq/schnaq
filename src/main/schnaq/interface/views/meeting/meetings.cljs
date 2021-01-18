@@ -50,7 +50,7 @@
 
 (rf/reg-event-fx
   :meeting.creation/new
-  (fn [{:keys [db]} [_ {:meeting/keys [title description] :as new-meeting}]]
+  (fn [{:keys [db]} [_ {:meeting/keys [title description] :as new-meeting} public?]]
     (let [nickname (get-in db [:user :name] "Anonymous")
           agendas (get-in db [:agenda :creating :all] [])
           stub-agendas [{:title title
@@ -61,7 +61,8 @@
                           :uri (str (:rest-backend config) "/meeting/add")
                           :params {:nickname nickname
                                    :meeting new-meeting
-                                   :agendas agendas-to-send}
+                                   :agendas agendas-to-send
+                                   :public-discussion? public?}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting.creation/added-continue-with-agendas]

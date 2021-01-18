@@ -83,16 +83,16 @@
   "Adds a meeting and (optional) agendas to the database.
   Returns the newly-created meeting."
   [request]
-  (let [{:keys [meeting nickname agendas]} (:body-params request)
+  (let [{:keys [meeting nickname agendas public-discussion?]} (:body-params request)
         final-meeting (add-hashes-to-meeting meeting
                                              (.toString (UUID/randomUUID))
                                              (.toString (UUID/randomUUID)))
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
-    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %)) agendas)
+    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %) public-discussion?) agendas)
     (log/info (:db/ident (:meeting/type created-meeting)) " Meeting Created: " meeting-id " - "
-              (:meeting/title created-meeting))
+              (:meeting/title created-meeting) " – Public? " public-discussion?)
     (created "" {:new-meeting created-meeting})))
 
 (defn- add-author
@@ -127,6 +127,11 @@
         (ok {:meetings meetings})
         (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
     (bad-request {:error "Meetings could not be loaded."})))
+
+(defn- public-schnaqs
+  "Return all public meetings."
+  [_req]
+  (ok {:meetings (db/public-meetings)}))
 
 (defn- meeting-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
@@ -301,12 +306,6 @@
       processors/hide-deleted-statement-content
       processors/with-votes
       (processors/with-sub-discussion-information (db/all-arguments-for-discussion share-hash))))
-
-#_[
-   [?meeting :meeting/share-hash ?share-hash]
-   [?agenda :agenda/meeting ?meeting]
-   [?agenda :agenda/discussion ?discussion]
-   ]
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
@@ -489,6 +488,7 @@
     (GET "/export/txt" [] export-txt-data)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
+    (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
