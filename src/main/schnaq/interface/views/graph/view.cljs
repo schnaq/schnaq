@@ -98,7 +98,7 @@
            (.on (Network. root-node data options) "doubleClick"
                 (fn [properties]
                   (let [node-id (first (get (js->clj properties) "nodes"))]
-                    (rf/dispatch [:navigation/navigate :routes.discussion.select/statement
+                    (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
                                   (assoc route-params :statement-id node-id)]))))))
        :component-did-update
        (fn [this _argv]
@@ -112,19 +112,17 @@
        :component-will-unmount
        (fn [_this] (rf/dispatch [:graph/set-current nil]))})))
 
-(defn graph-agenda-header [agenda share-hash]
-  (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.discussion/start
-                                        {:share-hash share-hash
-                                         :id (:db/id (:agenda/discussion agenda))}]))]
-    [base/discussion-header (:agenda/title agenda) "" go-back-fn go-back-fn]))
+(defn graph-agenda-header [title share-hash]
+  (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                        {:share-hash share-hash}]))]
+    [base/discussion-header title "" go-back-fn go-back-fn]))
 
 (defn- graph-view
   "The core Graph visualization wrapper."
   []
-  (let [current-agenda @(rf/subscribe [:chosen-agenda])
-        {:keys [meeting/share-hash]} @(rf/subscribe [:meeting/selected])]
+  (let [{:keys [meeting/share-hash meeting/title]} @(rf/subscribe [:meeting/selected])]
     [:<>
-     [graph-agenda-header current-agenda share-hash]
+     [graph-agenda-header title share-hash]
      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
        [graph-canvas graph])]))
 

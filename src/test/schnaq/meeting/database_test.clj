@@ -185,13 +185,6 @@
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
 
-(deftest number-of-statements-for-discussion-test
-  (testing "Is the number of agendas returned correct?"
-    (let [cat-dog-hash "cat-dog-hash"
-          graph-hash "graph-hash"]
-      (is (= 27 (db/number-of-statements-for-discussion cat-dog-hash)))
-      (is (= 7 (db/number-of-statements-for-discussion graph-hash))))))
-
 (deftest pack-premises-test
   (testing "Test the creation of statement-entities from strings"
     (let [premises ["What a beautifull day" "Hello test"]
@@ -213,11 +206,7 @@
           conclusion "Wow look at this"
           author-id (db/author-id-by-nickname "Test-person")
           meeting-hash "graph-hash"
-          discussion-id
-          (->> meeting-hash
-               db/agendas-by-meeting-hash
-               first
-               :agenda/discussion :db/id)
+          discussion-id (:db/id (db/discussion-by-share-hash meeting-hash))
           with-id (@#'db/prepare-new-argument discussion-id author-id conclusion premises "temp-id-here")]
       (is (contains? with-id :argument/premises))
       (is (contains? with-id :argument/conclusion))
@@ -234,7 +223,6 @@
           _ (db/add-starting-statement! meeting-hash author-id statement)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
-        (is (= 8 (db/number-of-statements-for-discussion meeting-hash)))
         (is (= 3 (count starting-statements)))))))
 
 (deftest all-arguments-for-conclusion-test

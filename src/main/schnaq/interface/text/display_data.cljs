@@ -76,11 +76,6 @@
 
         :features/feedback "Do you have more wishes or feature ideas? Contact us through the feedback form on the right side."
 
-        ;; calendar invitation
-        :calendar-invitation/title "Schedule meeting"
-        :calendar-invitation/download-button "Download date as .ical"
-        :calendar-invitation/date-error "The end of the meeting can not be before the beginning."
-
         :feature.discussions/lead "Structured discussions with coworkers and customers"
         :feature.discussions/title "Structured discussions for structured results"
         :feature.discussions/body "Schnaq allows you to lead structured discussions on the Internet – no special software needed.
@@ -198,8 +193,6 @@
         :meeting/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
         :meetings/continue-with-schnaq-after-creation "Invited Everybody? Lets go!"
         :meetings/continue-to-schnaq-button "To the schnaq"
-        :meetings/edit-schnaq-button "Edit schnaq"
-        :meetings/share-calendar-invite "Send calendar invites"
 
         :meeting.admin/addresses-label "Email addresses of the participants"
         :meeting.admin/addresses-placeholder "Email addresses separated by a newline or space."
@@ -534,11 +527,6 @@
 
         :features/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
 
-        ;; calendar invitation
-        :calendar-invitation/title "Termin festlegen und herunterladen"
-        :calendar-invitation/download-button "Termin herunterladen"
-        :calendar-invitation/date-error "Das Ende des Meetings darf nicht vor dem Start liegen."
-
         :feature.discussions/lead "Strukturierte Diskussionen mit Kolleg:innen und Kunden"
         :feature.discussions/title "Strukturierte Diskussionen für strukturierte Ergebnisse"
         :feature.discussions/body "Mit schnaq können strukturierte Diskussionen online und ohne weitere Gerätschaften geführt werden. Wir haben Ergebnisse aus unserer langjährigen Forschung genutzt, um eine optimale Diskussionsform zu entwickeln, die strukturierte Diskussionen ermöglicht. Die Ergebnisse der Diskussionen lassen sich strukturiert und automatisch in graphischer Form aufbereiten und erlauben so die Nachvollziehbarkeit einer Diskussion auf einen Blick. Wertvolle Informationen für alle Entscheider:innen und deren Teams!"
@@ -630,8 +618,6 @@
         :meeting/created-success-subheading "Nun können Sie den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
         :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Legen Sie los!"
         :meetings/continue-to-schnaq-button "Zum schnaq"
-        :meetings/edit-schnaq-button "schnaq editieren"
-        :meetings/share-calendar-invite "Kalendereinladung versenden"
 
         :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmer:innen"
         :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."

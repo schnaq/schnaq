@@ -108,7 +108,7 @@
               :on-click (fn [_e]
                           (rf/dispatch [:discussion.select/conclusion conclusion])
                           (rf/dispatch [:discussion.history/push conclusion])
-                          (rf/dispatch [:navigation/navigate :routes.discussion.select/statement
+                          (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
                                         (assoc path-params :statement-id (:db/id conclusion))]))}
         [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]])]))
 

@@ -7,8 +7,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.file-download :as file-download]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.meeting.calendar-invite :as calendar-invite]))
+            [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn tooltip-button
   [tooltip-location tooltip content on-click-fn]
@@ -61,22 +60,3 @@
       [tooltip-button "bottom" (labels :meeting/admin-center-export)
        [:i {:class (str "fas " (fa :file-download))}]
        #(request-fn)])))
-
-(defn edit
-  "Button to enter edit-mode."
-  [share-hash edit-hash]
-  [tooltip-button "bottom"
-   (labels :meetings/edit-schnaq-button)
-   [:i {:class (str "m-auto fas " (fa :eraser))}]
-   #(rf/dispatch [:navigation/navigate
-                  :routes.meeting/edit
-                  {:share-hash share-hash :edit-hash edit-hash}])])
-
-(defn calendar-invite
-  "Button for calendar invitations."
-  []
-  [tooltip-button "bottom"
-   (labels :meetings/share-calendar-invite)
-   [:i {:class (str "m-auto fas " (fa :calendar))}]
-   #(rf/dispatch [:modal {:show? true :large? false
-                          :child [calendar-invite/modal]}])])

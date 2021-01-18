@@ -294,17 +294,6 @@
    :agenda/rank
    :agenda/discussion])
 
-(defn agendas-by-meeting-hash
-  "Return all agendas belonging to a certain meeting. Ready for the wire."
-  [hash]
-  (map first
-       (d/q
-         '[:find (pull ?agendas agenda-pattern)
-           :in $ ?hash agenda-pattern
-           :where [?agendas :agenda/meeting ?meeting]
-           [?meeting :meeting/share-hash ?hash]]
-         (d/db (new-connection)) hash agenda-pattern)))
-
 (>defn all-statements
   "Returns all statements belonging to a discussion"
   [share-hash]
@@ -334,12 +323,6 @@
             [?discussion :discussion/starting-statements ?statements]]
           (d/db (new-connection)) share-hash statement-pattern)))))
 
-(>defn number-of-statements-for-discussion
-  "Returns number of statements for a discussion-id."
-  [share-hash]
-  [:meeting/share-hash :ret int?]
-  (count (all-statements share-hash)))
-
 (defn agenda-by-discussion-id
   "Returns an agenda which has the corresponding `discussion-id`."
   [discussion-id]
@@ -349,21 +332,6 @@
         :in $ ?discussion-id agenda-pattern
         :where [?agenda :agenda/discussion ?discussion-id]]
       (d/db (new-connection)) discussion-id agenda-pattern)))
-
-(>defn agenda-by-meeting-hash-and-discussion-id
-  "Returns an agenda which fits to the provided meeting. So, we can directly
-  verify that the agenda belongs to the issue."
-  [meeting-hash discussion-id]
-  [:meeting/share-hash :agenda/discussion
-   :ret ::specs/agenda]
-  (ffirst
-    (d/q
-      '[:find (pull ?agenda agenda-pattern)
-        :in $ ?meeting-hash ?discussion-id agenda-pattern
-        :where [?meeting :meeting/share-hash ?meeting-hash]
-        [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion ?discussion-id]]
-      (d/db (new-connection)) meeting-hash discussion-id agenda-pattern)))
 
 ;; ----------------------------------------------------------------------------
 ;; user
@@ -806,7 +774,7 @@
         [?discussion :discussion/starting-statements ?statements]]
       share-hash statement-pattern)))
 
-(defn- discussion-by-share-hash
+(defn discussion-by-share-hash
   "Returns one discussion which can be reached by a certain share-hash. (Brainstorm only ever have one)"
   [share-hash]
   (ffirst
