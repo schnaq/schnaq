@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.base
   (:require [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :as data :refer [labels img-path fa]]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.text.display-data :refer [labels img-path fa]]))
 
 (defn wavy-curve
   "Define a wavy curve."

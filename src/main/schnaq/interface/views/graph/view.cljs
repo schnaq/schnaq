@@ -5,13 +5,11 @@
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
-            [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config] :as conf]
-            [schnaq.interface.text.display-data :refer [colors fa labels]]
-            [schnaq.interface.views.base :as base]
+            [schnaq.interface.text.display-data :refer [colors fa]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
 
