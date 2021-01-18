@@ -127,9 +127,8 @@
     [:div.container-fluid.bg-white.p-4.shadow-sm
      [:div.row
       [:div.col-1.back-arrow
-       (when go-back-fn
-         [:span {:on-click go-back-fn}                      ;; the icon itself is not clickable
-          [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
+       [:span {:on-click go-back-fn}                        ;; the icon itself is not clickable
+        [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]]
       [:div.col-9 [:h2 title]]
       [:div.col-2.pull-right
        [admin-buttons/graph-download-as-png (gstring/format "#%s" graph-id)]
