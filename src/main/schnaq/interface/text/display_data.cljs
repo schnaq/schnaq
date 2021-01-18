@@ -222,7 +222,7 @@
 
         ;; Brainstorming time
         :brainstorm/heading "Start Brainstorming"
-        :brainstorm.buttons/start-now "Start Brainstorming now"
+        :brainstorm.buttons/start-now "schnaq now!"
         :brainstorm.create.button/save "Create new Brainstorming!"
 
         ;; Privacy Page
@@ -452,6 +452,13 @@
         :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live: "
         :pricing.newsletter/name "DisqTec newsletter."
 
+        ;; feature list
+        :feature/what "Create discussions in one step"
+        :feature/share "Share your schnaq with friends"
+        :feature/participate "Participate whenever you want"
+        :feature/time "Don't bother with group chats, use schnaq!"
+        :feature/private-public "Create public or private schnaqs"
+
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
         :router/all-feedbacks "All feedbacks"
@@ -651,7 +658,7 @@
 
         ;; Brainstorming time
         :brainstorm/heading "Brainstorm anlegen"
-        :brainstorm.buttons/start-now "Jetzt ein Brainstorming starten"
+        :brainstorm.buttons/start-now "Jetzt schnaqqen!"
         :brainstorm.create.button/save "Brainstorming starten!"
 
         ;; Privacy Page
@@ -882,6 +889,13 @@
         :pricing.newsletter/lead "Werden Sie sofort informiert, wenn das Abonnement live geht: "
         :pricing.newsletter/name "DisqTec Newsletter."
 
+        ;; feature list
+        :feature/what "Mit einem Schritt zur Diskussion"
+        :feature/share "Teile deinen schnaq mit Freunden"
+        :feature/participate "Alle nehmen teil wann es ihnen passt"
+        :feature/time "Spar dir den Gruppenchat, den du eh nicht lies"
+        :feature/private-public "Erstelle private oder öffentliche schnaqs"
+
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
         :router/all-feedbacks "Alle Feedbacks"
@@ -980,6 +994,8 @@
      :check/double "fa-check-double"
      :check/normal "fa-check"
      :check/square "fa-check-square"
+     :clipboard "fa-clipboard-list"
+     :clock "fa-clock"
      :circle "fa-circle"
      :cog "fa-cogs"
      :comment "fa-comments"
@@ -1001,6 +1017,7 @@
      :newspaper "fa-newspaper"
      :plane "fa-paper-plane"
      :plus "fa-plus"
+     :share "fa-share-alt"
      :shield "fa-shield-alt"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"

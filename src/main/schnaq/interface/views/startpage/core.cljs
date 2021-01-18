@@ -9,14 +9,15 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.modals.modal :as modal]
             [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.startpage.call-to-actions :as cta]
             [schnaq.interface.views.startpage.features :as startpage-features]
             [schnaq.interface.views.startpage.testimonials :as testimonials]))
 
 (defn- header-animation
   "Display header animation video."
   []
-  [:section.col-lg-6
-   [:video.w-100.startpage-animation {:auto-play true :loop true :muted true :plays-inline true}
+  [:section
+   [:video.w-100.video-background-primary.startpage-animation {:auto-play true :loop true :muted true :plays-inline true}
     [:source {:src (img-path :animation-discussion) :type "video/webm"}]
     [:source {:src (img-path :animation-discussion-mp4) :type "video/mp4"}]]])
 
@@ -24,10 +25,22 @@
   "Tell user to create a schnaq now."
   []
   [:section
-   [:button.button-call-to-action
+   [:button.button-call-to-action.w-100
     {:type "button"
      :on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
     (labels :brainstorm.buttons/start-now)]])
+
+(defn- call-to-action []
+  [:div.row {:key "HeaderExtras-Bullet-Points-and-Animation"}
+   [:div.col-lg-6.pt-3.p-5
+    [header-animation]
+    [start-schnaq-button]]
+   [:div.col-lg-6.pt-5
+    [cta/bullet-point :clipboard :feature/what]
+    [cta/bullet-point :share :feature/share]
+    [cta/bullet-point :user/group :feature/participate]
+    [cta/bullet-point :clock :feature/time]
+    [cta/bullet-point :user/shield :feature/private-public]]])
 
 (defn- usage-of-schnaq-heading
   "Heading introducing the features of schnaq."
@@ -237,16 +250,12 @@
 (defn- startpage-content []
   (let [header
         {:page/heading (labels :startpage/heading)
-         :page/more-for-heading
-         [:div.row.pt-5 {:key "HeaderExtras-Bullet-Points-and-Animation"}
-          [:div.col-lg-6
-           [:h3.pb-5 (labels :startpage/subheading)]
-           [start-schnaq-button]]
-          [header-animation]]}]
+         :page/more-for-heading (labels :startpage/subheading)}]
     [pages/with-nav-and-header
      header
      [:<>
       [:section.container
+       [call-to-action]
        [request-demo-section]
        [usage-of-schnaq-heading]
        [startpage-features/feature-rows]
