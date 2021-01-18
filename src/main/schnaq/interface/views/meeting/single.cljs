@@ -11,9 +11,8 @@
   "Load the discussion to the currently selected agenda."
   [agenda meeting]
   (when-not (nil? agenda)
-    (rf/dispatch [:navigation/navigate :routes.discussion/start
-                  {:id (-> agenda :agenda/discussion :db/id)
-                   :share-hash (:meeting/share-hash meeting)}])
+    (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                  {:share-hash (:meeting/share-hash meeting)}])
     (rf/dispatch [:agenda/choose agenda])))
 
 (defn control-buttons []
