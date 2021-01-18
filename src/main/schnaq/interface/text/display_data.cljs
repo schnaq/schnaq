@@ -225,6 +225,9 @@
         :brainstorm.buttons/start-now "Start Brainstorming now"
         :brainstorm.create.button/save "Create new Brainstorming!"
 
+        ;; Discussion Creation
+        :discussion.create.public-checkbox/label "Make this discussion public"
+
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
         :privacy/subheading "We lead you through it step by step!"
@@ -653,6 +656,9 @@
         :brainstorm/heading "Brainstorm anlegen"
         :brainstorm.buttons/start-now "Jetzt ein Brainstorming starten"
         :brainstorm.create.button/save "Brainstorming starten!"
+
+        ;; Discussion Creation
+        :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit Ihren Daten?"
