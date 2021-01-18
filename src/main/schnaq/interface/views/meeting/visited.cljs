@@ -76,7 +76,7 @@
   :meetings.public/load
   (fn [_ _]
     {:fx [[:http-xhrio {:method :get
-                        :uri (str (:rest-backend config) "/meetings/public")
+                        :uri (str (:rest-backend config) "/schnaqs/public")
                         :params {}
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)

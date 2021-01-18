@@ -128,7 +128,7 @@
         (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
     (bad-request {:error "Meetings could not be loaded."})))
 
-(defn- public-meetings
+(defn- public-schnaqs
   "Return all public meetings."
   [_req]
   (ok {:meetings (db/public-meetings)}))
@@ -306,12 +306,6 @@
       processors/hide-deleted-statement-content
       processors/with-votes
       (processors/with-sub-discussion-information (db/all-arguments-for-discussion share-hash))))
-
-#_[
-   [?meeting :meeting/share-hash ?share-hash]
-   [?agenda :agenda/meeting ?meeting]
-   [?agenda :agenda/discussion ?discussion]
-   ]
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
@@ -494,7 +488,7 @@
     (GET "/export/txt" [] export-txt-data)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
-    (GET "/meetings/public" [] public-meetings)
+    (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
