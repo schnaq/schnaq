@@ -246,19 +246,21 @@
   Returns the discussion-id of the newly created discussion."
   ([title description meeting-id]
    [:agenda/title (? string?) int? :ret int?]
-   (add-agenda-point title description meeting-id 1))
-  ([title description meeting-id rank]
-   [:agenda/title (? string?) int? :agenda/rank :ret int?]
+   (add-agenda-point title description meeting-id 1 false))
+  ([title description meeting-id rank public?]
+   [:agenda/title (? string?) int? :agenda/rank boolean? :ret int?]
    (when (and (s/valid? :agenda/title title)
               (s/valid? int? meeting-id))
-     (let [raw-agenda {:db/id "temp-id"
+     (let [default-state [:discussion.state/open]
+           discussion-state (if public? (conj default-state :discussion.state/public) default-state)
+           raw-agenda {:db/id "temp-id"
                        :agenda/title title
                        :agenda/meeting meeting-id
                        :agenda/rank rank
                        :agenda/discussion
                        {:db/id "whatever-forget-it"
                         :discussion/title title
-                        :discussion/states [:discussion.state/open]
+                        :discussion/states discussion-state
                         :discussion/starting-statements []}}
            agenda (if (and description (s/valid? :agenda/description description))
                     (merge-with merge

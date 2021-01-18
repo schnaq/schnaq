@@ -83,14 +83,14 @@
   "Adds a meeting and (optional) agendas to the database.
   Returns the newly-created meeting."
   [request]
-  (let [{:keys [meeting nickname agendas]} (:body-params request)
+  (let [{:keys [meeting nickname agendas public-discussion?]} (:body-params request)
         final-meeting (add-hashes-to-meeting meeting
                                              (.toString (UUID/randomUUID))
                                              (.toString (UUID/randomUUID)))
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
-    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %)) agendas)
+    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %) public-discussion?) agendas)
     (log/info (:db/ident (:meeting/type created-meeting)) " Meeting Created: " meeting-id " - "
               (:meeting/title created-meeting))
     (created "" {:new-meeting created-meeting})))
