@@ -24,9 +24,6 @@
         :startpage/heading "Who needs Whiteboards?"
         :startpage/subheading "Lost your train of thought again? Structure your team's discourse with schnaq!"
 
-        :startpage.under-construction/heading "Ongoing Construction!"
-        :startpage.under-construction/body "schnaq is currently in a free of charge beta phase. Your feedback is very important for further development!"
-
         :startpage.value-cards/heading "More Applications!"
         :startpage.value-cards/lead "Structured discussions can have many applications. Take a look at a few examples."
         :startpage.value-cards.discussion/title "Conduct a Discussion"
@@ -494,9 +491,6 @@
         ;; Startpage
         :startpage/heading "Wer braucht schon Whiteboards?"
         :startpage/subheading "Schon wieder den Faden verloren? Ideenaustausch besser strukturieren mit schnaq!"
-
-        :startpage.under-construction/heading "Betreten der Baustelle erwünscht!"
-        :startpage.under-construction/body "schnaq befindet sich in einer kostenlosen Beta-Phase und Feedback ist uns wichtig!"
 
         :startpage.value-cards/heading "Weitere Anwendungsgebiete"
         :startpage.value-cards/lead "Strukturierte Diskussionen werden in vielen Gebieten benötigt. Hier finden Sie weitere Beispiele."

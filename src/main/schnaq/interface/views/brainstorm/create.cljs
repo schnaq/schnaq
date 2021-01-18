@@ -5,15 +5,6 @@
             [schnaq.interface.views.meeting.create :as meeting-create]
             [schnaq.interface.views.pages :as pages]))
 
-(defn- under-construction
-  []
-  [:div.icon-bullets-larger
-   [:div.p-1.text-center
-    [:div.pb-3 [:img {:src (img-path :icon-crane)}]]
-    [:<>
-     [:p.h4 (labels :startpage.under-construction/heading)]
-     [:p (labels :startpage.under-construction/body)]]]])
-
 (defn- create-brainstorm []
   [pages/with-nav-and-header
    {:page/heading (labels :brainstorm/heading)}
@@ -33,9 +24,7 @@
                                               :defaultChecked true}]
        [:label.form-check-label.display-6 {:for :public-discussion?} (labels :discussion.create.public-checkbox/label)]]
       [:div.pt-3.text-center
-       [:button.btn.button-primary (labels :brainstorm.create.button/save)]]]]
-    [:div.py-4
-     [under-construction]]]])
+       [:button.btn.button-primary (labels :brainstorm.create.button/save)]]]]]])
 
 (defn create-brainstorm-view []
   [create-brainstorm])
