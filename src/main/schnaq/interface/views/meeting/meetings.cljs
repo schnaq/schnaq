@@ -14,9 +14,8 @@
       {:db (-> db
                (assoc-in [:meeting :last-added] new-meeting)
                (update :meetings conj new-meeting))
-       :fx [[:dispatch [:navigation/navigate :routes.meeting/admin-center
-                        {:share-hash share-hash
-                         :edit-hash edit-hash}]]
+       :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
+                        {:share-hash share-hash}]]
             [:dispatch [:meeting/select-current new-meeting]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :meeting/created-success-heading)
@@ -24,8 +23,7 @@
                                        :context :success}]]
             [:localstorage/write [:meeting.last-added/share-hash share-hash]]
             [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]
-            [:dispatch [:agenda/clear-current]]
-            [:dispatch [:agenda/reset-temporary-entries]]]})))
+            [:dispatch [:meetings.save-admin-access/to-localstorage share-hash edit-hash]]]})))
 
 (rf/reg-event-fx
   :meeting/select-current
