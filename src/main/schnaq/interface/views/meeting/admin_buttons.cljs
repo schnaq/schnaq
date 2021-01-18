@@ -55,7 +55,6 @@
    (fn []
      (let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
            anchor (.createElement js/document "a")]
-       (oset! anchor [:id] "foo")
        (oset! anchor [:href] (.toDataURL canvas "image/png"))
        (oset! anchor [:download] "graph.png")
        (.click anchor)))])
