@@ -35,13 +35,13 @@
             before-time-travel (get-in db [:history :full-context])
             keep-n (- (count before-time-travel) steps-back)
             after-time-travel (vec (take keep-n before-time-travel))
-            {:keys [id share-hash]} (get-in db [:current-route :parameters :path])]
+            {:keys [share-hash]} (get-in db [:current-route :parameters :path])]
         (if (>= 0 keep-n)
           {:fx [[:dispatch [:discussion.history/clear]]
-                [:dispatch [:navigation/navigate :routes.discussion/start {:id id :share-hash share-hash}]]]}
+                [:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]]}
           {:db (assoc-in db [:history :full-context] after-time-travel)
-           :fx [[:dispatch [:navigation/navigate :routes.discussion.select/statement
-                            {:id id :share-hash share-hash :statement-id (:db/id (last after-time-travel))}]]]})))))
+           :fx [[:dispatch [:navigation/navigate :routes.schnaq.select/statement
+                            {:share-hash share-hash :statement-id (:db/id (last after-time-travel))}]]]})))))
 
 (rf/reg-sub
   :discussion-history
