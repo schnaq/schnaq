@@ -17,7 +17,7 @@
             [schnaq.interface.views.startpage.features :as features-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.graph.view :as graph-view]))
-
+;; TODO Clicken in discussion view funktioniert noch nicht
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
 
@@ -138,13 +138,7 @@
       {:name :routes.meeting/show
        :view discussion-card-view/view
        :link-text (labels :router/show-single-meeting)
-       :controllers {:parameters {:path [:share-hash]}
-                     :start (fn []
-                              (rf/dispatch [:discussion.history/clear])
-                              (rf/dispatch [:updates.periodic/starting-conclusions true])
-                              (rf/dispatch [:discussion.query.conclusions/starting]))
-                     :stop (fn []
-                             (rf/dispatch [:updates.periodic/starting-conclusions false]))}
+       :controllers schnaq-start-controllers
 
        #_[{:parameters {:path [:share-hash]}
            :start (fn [{:keys [path]}]
@@ -160,7 +154,7 @@
                                 (rf/dispatch [:agenda/load-chosen (:share-hash path) (:id path)]))}]}
        ["/discussion"
         ["/start"
-         ;; TODO DEPRECATED: Use the shorter `:routes.schnaq/start`
+         ;; DEPRECATED: Use the shorter `:routes.schnaq/start`
          {:controllers [{:parameters {:path [:share-hash :id]}
                          :start (fn []
                                   (rf/dispatch [:discussion.history/clear])
@@ -172,7 +166,7 @@
           :view discussion-card-view/view
           :link-text (labels :router/start-discussion)}]
         ["/selected/:statement-id"
-         ;; TODO DEPRECATED: Use the shorter `:routes.schnaq.select/statement`
+         ;; DEPRECATED: Use the shorter `:routes.schnaq.select/statement`
          {:name :routes.discussion.select/statement
           :parameters {:path {:statement-id int?}}
           :view discussion-card-view/view

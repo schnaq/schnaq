@@ -98,7 +98,7 @@
            (.on (Network. root-node data options) "doubleClick"
                 (fn [properties]
                   (let [node-id (first (get (js->clj properties) "nodes"))]
-                    (rf/dispatch [:navigation/navigate :routes.discussion.select/statement
+                    (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
                                   (assoc route-params :statement-id node-id)]))))))
        :component-did-update
        (fn [this _argv]
