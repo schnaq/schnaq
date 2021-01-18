@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.brainstorm.create
   (:require [oops.core :refer [oget]]
-            [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.meeting.create :as meeting-create]
             [schnaq.interface.views.pages :as pages]))
