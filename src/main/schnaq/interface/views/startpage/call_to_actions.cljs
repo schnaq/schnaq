@@ -59,15 +59,15 @@
     ; credit https://pixabay.com/illustrations/brain-leaves-sustainability-organ-5591471/
     [:div.col-lg-4
      [spotlight-element "Mein Beitrag für eine nachhaltigere Welt"
-      "https://cdn.pixabay.com/photo/2020/09/21/23/33/brain-5591471_960_720.jpg"
+      (img-path :spotlight.eco-brain)
       "https://schnaq.com/meetings/ce682862-9ca2-49c8-af44-d6bf484fb87c/agenda/92358976736052/discussion/start"]]
     ; credit https://pixabay.com/illustrations/covid-19-work-from-home-quarantine-4938932/
     [:div.col-lg-4
      [spotlight-element "Remote-Arbeiten in Zeiten von Corona"
-      "https://cdn.pixabay.com/photo/2020/03/17/04/28/covid-19-4938932_960_720.png"
+      (img-path :spotlight.home-office)
       "https://schnaq.com/meetings/ce682862-9ca2-49c8-af44-d6bf484fb87c/agenda/92358976736052/discussion/start"]]
     ; credit https://www.freeimg.net/photo/1188165/merkel-chancellor-angelamerkel-cdu
     [:div.col-lg-4
      [spotlight-element "Nächste Bundesklanzer:in"
-      "https://images.freeimg.net/rsynced_images/merkel-2906016_1280.jpg"
+      (img-path :spotlight.merkel)
       "https://schnaq.com/meetings/ce682862-9ca2-49c8-af44-d6bf484fb87c/agenda/92358976736052/discussion/start"]]]])

@@ -971,6 +971,9 @@
      :feature.discussions/create-discussion-spaces "/imgs/startpage/features/discussion-agendas.png"
      :feature.knowledge/hero-image "/imgs/stock/two_people_discussing_500w.jpg"
      :feature.knowledge/overview "/imgs/startpage/features/schnaqs-uebersicht_500w.png"
+     :spotlight.merkel "imgs/spotlight/merkel.jpg"
+     :spotlight.eco-brain "imgs/spotlight/brain.jpg"
+     :spotlight.home-office "imgs/spotlight/covid-19.png"
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
 
 (defn video
