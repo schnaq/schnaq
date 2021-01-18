@@ -13,35 +13,6 @@
             [schnaq.interface.views.startpage.features :as startpage-features]
             [schnaq.interface.views.startpage.testimonials :as testimonials]))
 
-(defn- header-animation
-  "Display header animation video."
-  []
-  [:section
-   [:video.w-100.video-background-primary.startpage-animation {:auto-play true :loop true :muted true :plays-inline true}
-    [:source {:src (img-path :animation-discussion) :type "video/webm"}]
-    [:source {:src (img-path :animation-discussion-mp4) :type "video/mp4"}]]])
-
-(defn- start-schnaq-button
-  "Tell user to create a schnaq now."
-  []
-  [:section
-   [:button.button-call-to-action.w-100
-    {:type "button"
-     :on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
-    (labels :brainstorm.buttons/start-now)]])
-
-(defn- call-to-action []
-  [:div.row {:key "HeaderExtras-Bullet-Points-and-Animation"}
-   [:div.col-lg-6.pt-3.p-5
-    [header-animation]
-    [start-schnaq-button]]
-   [:div.col-lg-6.pt-5
-    [cta/bullet-point :clipboard :feature/what]
-    [cta/bullet-point :share :feature/share]
-    [cta/bullet-point :user/group :feature/participate]
-    [cta/bullet-point :clock :feature/time]
-    [cta/bullet-point :user/shield :feature/private-public]]])
-
 (defn- usage-of-schnaq-heading
   "Heading introducing the features of schnaq."
   []
@@ -255,12 +226,13 @@
      header
      [:<>
       [:section.container
-       [call-to-action]
-       [request-demo-section]
+       [cta/features-call-to-action]
+       [cta/spotlight-discussions]
        [usage-of-schnaq-heading]
        [startpage-features/feature-rows]
        [how-to-section]
-       [supporters]]
+       [supporters]
+       [request-demo-section]]
       [early-adopters]
       [:section.container
        [value-prop-cards]

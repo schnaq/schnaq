@@ -38,6 +38,8 @@
         :startpage.value-cards.button/text "More details"
         :startpage.usage/lead "What do I use schnaq for?"
 
+        :startpage.call-to-action/discuss-spotlight-topics "Discuss hot topics"
+
         :startpage.features/more-information "More information"
 
         :startpage.demo.request/title "Request a Demo"
@@ -508,6 +510,8 @@
         :startpage.value-cards.knowledge/description "Nutzen Sie schnaq, um Ihr Team nachdenken und diskutieren zu lassen. Automatisch wird eine MindMap der Beiträge erstellt, die dann analysiert werden kann und das Ergebnis der Session darstellt. Perfekt für Brainstorming-Sitzungen!"
         :startpage.value-cards.knowledge/alt-text "Etliche Klebezettel auf einer Wand"
         :startpage.value-cards.button/text "Mehr erfahren"
+
+        :startpage.call-to-action/discuss-spotlight-topics "Diskutiere über aktuelle Themen"
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
 
