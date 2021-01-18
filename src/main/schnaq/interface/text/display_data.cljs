@@ -364,6 +364,7 @@
         ;; Graph Texts
         :graph/heading "Discussion Overview"
         :graph.button/text "Show discussion graph"
+        :graph/download-png "Download graph as image"
 
         ;; Pricing Page
         :pricing.free-tier/description "For small teams and private parties. The starter plan is the perfect entry
@@ -787,6 +788,7 @@
         ;; Graph Texts
         :graph/heading "Diskussionsübersicht"
         :graph.button/text "Zeige Diskussionsgraphen an"
+        :graph/download-png "Graph als Bild herunterladen"
 
         ;; Pricing Page
         :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der
@@ -983,6 +985,7 @@
      :file-download "fa-file-download"
      :flag "fa-flag"
      :flask "fa-flask"
+     :graph "fa-project-diagram"
      :heart "fa-heart"
      :home "fa-home"
      :language "fa-language"
