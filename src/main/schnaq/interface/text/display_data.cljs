@@ -222,9 +222,9 @@
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
 
         ;; Brainstorming time
-        :brainstorm/heading "Start Brainstorming"
-        :brainstorm.buttons/start-now "Start Brainstorming now"
-        :brainstorm.create.button/save "Create new Brainstorming!"
+        :brainstorm/heading "Start schnaq"
+        :brainstorm.buttons/start-now "Start a schnaq now"
+        :brainstorm.create.button/save "Start a new schnaq!"
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Make this discussion public"
@@ -656,9 +656,9 @@
         :meeting.admin.notifications/statements-deleted-lead "Die von Ihnen gewählten Nachrichten wurden erfolgreich gelöscht."
 
         ;; Brainstorming time
-        :brainstorm/heading "Brainstorm anlegen"
-        :brainstorm.buttons/start-now "Jetzt ein Brainstorming starten"
-        :brainstorm.create.button/save "Brainstorming starten!"
+        :brainstorm/heading "Schnaq starten"
+        :brainstorm.buttons/start-now "Jetzt ein schnaq starten"
+        :brainstorm.create.button/save "Schnaq starten!"
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
