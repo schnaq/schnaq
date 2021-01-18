@@ -148,10 +148,7 @@
                    (rf/dispatch [:agenda/clear-current]))}]}]
      ["/agenda"
       ["/:id"
-       {:parameters {:path {:id int?}}
-        :controllers [{:parameters {:path [:share-hash :id]}
-                       :start (fn [{:keys [path]}]
-                                (rf/dispatch [:agenda/load-chosen (:share-hash path) (:id path)]))}]}
+       {:parameters {:path {:id int?}}}
        ["/discussion"
         ["/start"
          ;; DEPRECATED: Use the shorter `:routes.schnaq/start`
