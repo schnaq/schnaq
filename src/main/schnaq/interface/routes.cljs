@@ -17,7 +17,7 @@
             [schnaq.interface.views.startpage.features :as features-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.graph.view :as graph-view]))
-;; TODO Clicken in discussion view funktioniert noch nicht
+
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
 
@@ -174,7 +174,7 @@
                          :start (fn []
                                   (rf/dispatch [:discussion.query.statement/by-id]))}]}]]
        ["/graph"
-        ;; TODO DEPRECATED: Use the shorter `:routes/graph-view`
+        ;; DEPRECATED: Use the shorter `:routes/graph-view`
         {:name :routes/graph-view-old
          :view graph-view/graph-view-entrypoint
          :link-text (labels :router/graph-view)

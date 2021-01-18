@@ -322,7 +322,7 @@
       ;; go to meeting button
       [:button.btn.button-primary.btn-lg.center-block.mb-5
        {:role "button"
-        :on-click #(rf/dispatch [:navigation/navigate :routes.meeting/show {:share-hash share-hash}])}
+        :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}
        (labels :meetings/continue-to-schnaq-button)]]]))
 
 (defn admin-center-view []

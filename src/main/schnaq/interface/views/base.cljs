@@ -95,7 +95,7 @@
        [:div.mr-auto.clickable-no-hover
         {:on-click
          (fn []
-           (rf/dispatch [:navigation/navigate :routes.meeting/show
+           (rf/dispatch [:navigation/navigate :routes.schnaq/start
                          {:share-hash share-hash}])
            (rf/dispatch [:meeting/select-current meeting]))}
         [:h3.mx-5 title]]
