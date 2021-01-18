@@ -38,15 +38,6 @@
       (is (not (-> failing-response :body :valid-credentials?)))
       (is (= 200 (:status failing-response))))))
 
-(deftest valid-discussion-hash?-test
-  (testing "Check if share hash matches discussion id"
-    (let [valid-discussion-hash? @#'api/valid-discussion-hash?
-          meeting-share-hash "89eh32hoas-2983ud"
-          discussion-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))]
-      (is (not (valid-discussion-hash? "wugilugi" discussion-id)))
-      (is (not (valid-discussion-hash? "" discussion-id)))
-      (is (valid-discussion-hash? meeting-share-hash discussion-id)))))
-
 (deftest graph-data-for-agenda-test
   (testing "Check if graph data is correct"
     (let [graph-data-for-agenda @#'api/graph-data-for-agenda

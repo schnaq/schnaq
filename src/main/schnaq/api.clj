@@ -50,12 +50,6 @@
   (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
     (= edit-hash (:meeting/edit-hash authenticate-meeting))))
 
-(>defn- valid-discussion-hash?
-  "Check if share hash and discussion id match."
-  [share-hash discussion-id]
-  [string? int? :ret boolean?]
-  (not (nil? (db/agenda-by-meeting-hash-and-discussion-id share-hash discussion-id))))
-
 (defn- deny-access
   "Return a 403 Forbidden to unauthorized access."
   ([]
@@ -157,31 +151,6 @@
             (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
       (deny-access "You do not have the rights to access this action."))))
-
-(defn- agendas-by-meeting-hash
-  ;; todo del
-  "Returns all agendas of a meeting, that matches the share-hash."
-  [req]
-  (let [meeting-hash (get-in req [:route-params :hash])
-        agendas (db/agendas-by-meeting-hash meeting-hash)
-        meta-info
-        (into {}
-              (map #(vector (:db/id %)
-                            (db/number-of-statements-for-discussion meeting-hash)) agendas))]
-    (ok {:agendas agendas
-         :meta-info meta-info})))
-
-(defn- agenda-by-meeting-hash-and-discussion-id
-  "Returns the agenda tied to a certain discussion-id."
-  [req]
-  (let [discussion-id (Long/valueOf ^String (-> req :route-params :discussion-id))
-        meeting-hash (-> req :route-params :meeting-hash)
-        agenda-point (db/agenda-by-meeting-hash-and-discussion-id meeting-hash discussion-id)]
-    (if agenda-point
-      (ok agenda-point)
-      (not-found {:error
-                  (format "No Agenda with discussion-id %s in the DB or the queried discussion does not belong to the meeting %s."
-                          discussion-id meeting-hash)}))))
 
 ;; -----------------------------------------------------------------------------
 ;; Votes
@@ -490,7 +459,6 @@
 (def ^:private common-routes
   "Common routes for all modes."
   (routes
-    (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id) ;; todo del
     (GET "/export/txt" [] export-txt-data)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
