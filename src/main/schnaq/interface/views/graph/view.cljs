@@ -4,12 +4,18 @@
             [clojure.set :as set]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
+            [goog.string :as gstring]
+            [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config] :as conf]
-            [schnaq.interface.text.display-data :refer [colors]]
-            [schnaq.interface.views.base :as base]))
+            [schnaq.interface.text.display-data :refer [colors fa labels]]
+            [schnaq.interface.views.base :as base]
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
+
+(def ^:private graph-id "graph")
 
 (defn- wrap-line
   "Takes a set of `nodes` and changes their labels to wrap properly after `break` characters."
@@ -84,7 +90,7 @@
         route-params (get-in @(rf/subscribe [:navigation/current-route]) [:parameters :path])]
     (reagent/create-class
       {:display-name "Visualization of Discussion Graph"
-       :reagent-render (fn [_graph] [:div#graph])
+       :reagent-render (fn [_graph] [:div {:id graph-id}])
        :component-did-mount
        (fn [this]
          (.add @nodes-vis (clj->js (convert-nodes-for-vis nodes controversy-values)))
@@ -112,10 +118,22 @@
        :component-will-unmount
        (fn [_this] (rf/dispatch [:graph/set-current nil]))})))
 
-(defn graph-agenda-header [title share-hash]
+(defn graph-agenda-header
+  "Header when displaying the graph."
+  [title share-hash]
   (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                         {:share-hash share-hash}]))]
-    [base/discussion-header title "" go-back-fn go-back-fn]))
+    (common/set-website-title! title)
+    [:div.container-fluid.bg-white.p-4.shadow-sm
+     [:div.row
+      [:div.col-1.back-arrow
+       (when go-back-fn
+         [:span {:on-click go-back-fn}                      ;; the icon itself is not clickable
+          [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]])]
+      [:div.col-9 [:h2 title]]
+      [:div.col-2.pull-right
+       [admin-buttons/graph-download-as-png (gstring/format "#%s" graph-id)]
+       [admin-buttons/txt-export share-hash title]]]]))
 
 (defn- graph-view
   "The core Graph visualization wrapper."
