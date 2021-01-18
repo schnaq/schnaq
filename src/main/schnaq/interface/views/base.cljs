@@ -35,38 +35,8 @@
   [path-to-img heading subheading]
   [:div.d-flex.flex-row.p-1
    [:div [:img {:src path-to-img}]]
-   [:<>
-    [:p.h4 heading]
-    [:p subheading]]])
-
-;; discussion loop header
-
-(defn discussion-header
-  "Non wavy header with an optional back button.
-  'title-on-click-function' is triggered when header is clicked
-  'on-click-back-function' is triggered when back button is clicked,when no on-click-back-function is provided the back button will not be displayed"
-  ([title subtitle]
-   [discussion-header title subtitle nil nil])
-
-  ([title subtitle title-on-click-function]
-   [discussion-header title subtitle title-on-click-function nil])
-
-  ([title subtitle title-on-click-function on-click-back-function]
-   (common/set-website-title! title)
-   ;; check if title is clickable and set properties accordingly
-   [:div.meeting-header.header-custom.shadow-straight
-    [:div.row
-     [:div.col-1.back-arrow
-      (when on-click-back-function
-        [:p {:on-click on-click-back-function}              ;; the icon itself is not clickable
-         [:i.arrow-icon {:class (str "m-auto fas " (data/fa :arrow-left))}]])]
-     [:div.col-8.container
-      [:div
-       (when title-on-click-function
-         {:on-click title-on-click-function
-          :class "clickable-no-hover"})
-       [:h2 title]
-       [:h6 subtitle]]]]]))
+   [:p.h4 heading]
+   [:p subheading]])
 
 (defn footer
   "Footer to display at the bottom the page."
