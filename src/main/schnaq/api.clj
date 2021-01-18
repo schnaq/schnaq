@@ -128,6 +128,11 @@
         (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
     (bad-request {:error "Meetings could not be loaded."})))
 
+(defn- public-meetings
+  "Return all public meetings."
+  [_req]
+  (ok {:meetings (db/public-meetings)}))
+
 (defn- meeting-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
   processing in the frontend."
@@ -489,6 +494,7 @@
     (GET "/export/txt" [] export-txt-data)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
+    (GET "/meetings/public" [] public-meetings)
     (GET "/ping" [] ping)
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)

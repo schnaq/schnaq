@@ -213,6 +213,20 @@
     (toolbelt/pull-key-up :db/ident)
     flatten))
 
+(defn public-meetings
+  "Returns all meetings where the discussion is public."
+  []
+  (->
+    (d/q
+      '[:find (pull ?meetings meeting-pattern-public)
+        :in $ meeting-pattern-public
+        :where [?public-discussions :discussion/states :discussion.state/public]
+        [?public-agendas :agenda/discussion ?public-discussions]
+        [?public-agendas :agenda/meeting ?meetings]]
+      (d/db (new-connection)) meeting-pattern-public)
+    (toolbelt/pull-key-up :db/ident)
+    flatten))
+
 (>defn meeting-by-hash-generic
   "Generic meeting by hash method, outputs according to pattern."
   [hash pattern]
