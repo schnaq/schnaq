@@ -46,14 +46,13 @@
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
-  [agenda share-hash]
+  [share-hash]
   [:img.graph-icon-img.clickable-no-hover
    {:src (img-path :icon-graph) :alt (labels :graph.button/text)
     :title (labels :graph.button/text)
     :on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
-                  {:id (-> agenda :agenda/discussion :db/id)
-                   :share-hash share-hash}])}])
+                  {:share-hash share-hash}])}])
 
 (defn settings-element
   "Element containing settings buttons"
@@ -248,12 +247,11 @@
 ;; here
 (defn- topic-bubble-desktop
   [meeting title input info-content]
-  (let [agenda @(rf/subscribe [:chosen-agenda])
-        share-hash (:meeting/share-hash meeting)]
+  (let [share-hash (:meeting/share-hash meeting)]
     [:div.row
      ;; graph
      [:div.col-2.graph-icon
-      [graph-button agenda share-hash]]
+      [graph-button share-hash]]
      ;; title
      [:div.col-8
       [title-and-input-element title input]]
@@ -263,13 +261,12 @@
 
 (defn- topic-bubble-mobile
   [meeting title input info-content]
-  (let [agenda @(rf/subscribe [:chosen-agenda])
-        share-hash (:meeting/share-hash meeting)]
+  (let [share-hash (:meeting/share-hash meeting)]
     [:<>
      [:div.d-flex
       ;; graph
       [:div.graph-icon.mr-auto.mb-5
-       [graph-button agenda share-hash]]
+       [graph-button share-hash]]
       ;; settings
       [:div.p-0
        info-content]]
@@ -277,8 +274,8 @@
      [title-and-input-element title input]]))
 
 (defn- topic-bubble [content]
-  (let [agenda @(rf/subscribe [:chosen-agenda])]
-    (common/set-website-title! (:agenda/title agenda))
+  (let [title (:meeting/title @(rf/subscribe [:meeting/selected]))]
+    (common/set-website-title! title)
     [:div.topic-view-rounded.shadow-straight-light.mt-md-4
      [:div.discussion-light-background content]]))
 

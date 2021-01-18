@@ -82,6 +82,7 @@
       parsed-hash-map)))
 
 (defn add-hash-map-and-build-map-from-localstorage
+  ;; todo del
   "Build and insert hashmap into an existing local storage hashmap."
   [hash-map local-storage-key]
   (let [local-hashes-as-string (get-item local-storage-key)

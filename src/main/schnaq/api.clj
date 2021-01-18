@@ -159,6 +159,7 @@
       (deny-access "You do not have the rights to access this action."))))
 
 (defn- agendas-by-meeting-hash
+  ;; todo del
   "Returns all agendas of a meeting, that matches the share-hash."
   [req]
   (let [meeting-hash (get-in req [:route-params :hash])
@@ -490,7 +491,6 @@
   "Common routes for all modes."
   (routes
     (GET "/agenda/:meeting-hash/:discussion-id" [] agenda-by-meeting-hash-and-discussion-id)
-    (GET "/agendas/by-meeting-hash/:hash" [] agendas-by-meeting-hash)
     (GET "/export/txt" [] export-txt-data)
     (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)

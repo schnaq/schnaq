@@ -73,6 +73,7 @@
        [:h6 subtitle]]]]]))
 
 (defn meeting-header
+  ;; TODO del
   "Overview header for a meeting with its title as headline"
   [{:meeting/keys [title share-hash] :as meeting}]
   (let [admin-access-map @(rf/subscribe [:meetings/load-admin-access])

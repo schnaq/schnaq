@@ -63,6 +63,7 @@
        #(request-fn)])))
 
 (defn edit
+  ;; TODO del
   "Button to enter edit-mode."
   [share-hash edit-hash]
   [tooltip-button "bottom"
@@ -73,6 +74,7 @@
                   {:share-hash share-hash :edit-hash edit-hash}])])
 
 (defn calendar-invite
+  ;; TODO del
   "Button for calendar invitations."
   []
   [tooltip-button "bottom"
