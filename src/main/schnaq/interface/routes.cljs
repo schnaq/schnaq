@@ -37,6 +37,39 @@
      :view meetings-overview/public-discussions-view
      :link-text (labels :router/public-discussions)
      :controllers [{:start (fn [] (rf/dispatch [:meetings.public/load]))}]}]
+   ["schnaq/:share-hash"
+    {:parameters {:path {:share-hash string?}}
+     :controllers [{:parameters {:path [:share-hash]}
+                    :start (fn [{:keys [path]}]
+                             (rf/dispatch [:meeting/load-by-share-hash (:share-hash path)]))}]}
+    ["/"
+     {:controllers [{:parameters {:path [:share-hash]}
+                     :start (fn []
+                              (rf/dispatch [:discussion.history/clear])
+                              (rf/dispatch [:updates.periodic/starting-conclusions true])
+                              (rf/dispatch [:discussion.query.conclusions/starting]))
+                     :stop (fn []
+                             (rf/dispatch [:updates.periodic/starting-conclusions false]))}]
+      :name :routes.schnaq/start
+      :view discussion-card-view/view
+      :link-text (labels :router/start-discussion)}]
+    ["/statement/:statement-id"
+     {:name :routes.schnaq.select/statement
+      :parameters {:path {:statement-id int?}}
+      :view discussion-card-view/view
+      :controllers [{:parameters {:path [:share-hash :statement-id]}
+                     :start (fn []
+                              (rf/dispatch [:discussion.query.statement/by-id]))}]}]
+    ["/graph"
+     {:name :routes/graph-view
+      :view graph-view/graph-view-entrypoint
+      :link-text (labels :router/graph-view)
+      :controllers [{:identity (fn [] (random-uuid))
+                     :start (fn []
+                              (rf/dispatch [:updates.periodic/graph true])
+                              (rf/dispatch [:graph/load-data-for-discussion]))
+                     :stop (fn []
+                             (rf/dispatch [:updates.periodic/graph false]))}]}]]
    ["features"
     ["/discussions"
      {:name :routes.features/discussions
@@ -116,6 +149,7 @@
                                 (rf/dispatch [:agenda/load-chosen (:share-hash path) (:id path)]))}]}
        ["/discussion"
         ["/start"
+         ;; DEPRECATED: Use the shorter `:routes.schnaq/start`
          {:controllers [{:parameters {:path [:share-hash :id]}
                          :start (fn []
                                   (rf/dispatch [:discussion.history/clear])
@@ -127,6 +161,7 @@
           :view discussion-card-view/view
           :link-text (labels :router/start-discussion)}]
         ["/selected/:statement-id"
+         ;; DEPRECATED: Use the shorter `:routes.schnaq.select/statement`
          {:name :routes.discussion.select/statement
           :parameters {:path {:statement-id int?}}
           :view discussion-card-view/view
@@ -134,7 +169,8 @@
                          :start (fn []
                                   (rf/dispatch [:discussion.query.statement/by-id]))}]}]]
        ["/graph"
-        {:name :routes/graph-view
+        ;; DEPRECATED: Use the shorter `:routes/graph-view`
+        {:name :routes/graph-view-old
          :view graph-view/graph-view-entrypoint
          :link-text (labels :router/graph-view)
          :controllers [{:identity (fn [] (random-uuid))
