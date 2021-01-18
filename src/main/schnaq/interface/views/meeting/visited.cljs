@@ -71,3 +71,24 @@
                             :response-format (ajax/transit-response-format)
                             :on-success [:meeting.visited/store-from-backend]
                             :on-failure [:ajax.error/to-console]}]]}))))
+
+(rf/reg-event-fx
+  :meetings.public/load
+  (fn [_ _]
+    {:fx [[:http-xhrio {:method :get
+                        :uri (str (:rest-backend config) "/meetings/public")
+                        :params {}
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:meeting.public/store-from-backend]
+                        :on-failure [:ajax.error/to-console]}]]}))
+
+(rf/reg-event-db
+  :meeting.public/store-from-backend
+  (fn [db [_ {:keys [meetings]}]]
+    (assoc-in db [:meetings :public] meetings)))
+
+(rf/reg-sub
+  :meetings/public
+  (fn [db _]
+    (get-in db [:meetings :public])))

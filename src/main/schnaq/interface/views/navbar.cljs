@@ -80,6 +80,10 @@
     (create-dropdown-item (reitfe/href :routes/meetings)
                           :nav.schnaqs/show-all)))
 
+(defn- all-public-schnaqs-link []
+  (create-dropdown-item (reitfe/href :routes/public-discussions)
+                        :nav.schnaqs/show-all-public))
+
 (defn- blog-link []
   [:ul.navbar-nav
    [:li.nav-item.mx-lg-4
@@ -122,6 +126,7 @@
           [:div.dropdown-divider]
           [last-added-schnaq-link share-hash edit-hash]
           [my-schnaqs-link visited-hashes]
+          [all-public-schnaqs-link]
           [all-schnaqs-link]]]
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}

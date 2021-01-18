@@ -13,6 +13,7 @@
         :nav/startpage "Home"
         :nav/schnaqs "Schnaqs"
         :nav.schnaqs/show-all "All schnaqs"
+        :nav.schnaqs/show-all-public "All public schnaqs"
         :nav.schnaqs/create-meeting "Prepare meeting"
         :nav.schnaqs/create-brainstorm "Create brainstorm"
         :nav.schnaqs/last-added "Last created schnaq"
@@ -473,7 +474,8 @@
         :router/show-single-meeting "Show schnaq"
         :router/start-discussion "Start discussion"
         :router/startpage "Startpage"
-        :router/true-404-view "404 error page"}
+        :router/true-404-view "404 error page"
+        :router/public-discussions "Public discussions"}
    :de {;; Common
         :common/language "Sprache"
         :common/history "Verlauf"
@@ -483,6 +485,7 @@
         :nav/startpage "Home"
         :nav/schnaqs "Schnaqs"
         :nav.schnaqs/show-all "Alle schnaqs"
+        :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
         :nav.schnaqs/create-brainstorm "Brainstorm anlegen"
         :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
         :nav-meeting-agenda "Agenda erzeugen"
@@ -906,7 +909,8 @@
         :router/show-single-meeting "Schnaq anzeigen"
         :router/start-discussion "Starte Besprechung"
         :router/startpage "Startseite"
-        :router/true-404-view "404 Fehlerseite"}})
+        :router/true-404-view "404 Fehlerseite"
+        :router/public-discussions "Öffentliche Diskussionen"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup

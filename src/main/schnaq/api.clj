@@ -92,7 +92,7 @@
         created-meeting (db/meeting-private-data meeting-id)]
     (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %) public-discussion?) agendas)
     (log/info (:db/ident (:meeting/type created-meeting)) " Meeting Created: " meeting-id " - "
-              (:meeting/title created-meeting))
+              (:meeting/title created-meeting) " – Public? " public-discussion?)
     (created "" {:new-meeting created-meeting})))
 
 (defn- add-author
