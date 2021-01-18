@@ -134,18 +134,11 @@
                                   (rf/dispatch [:meetings.save-admin-access/to-localstorage
                                                 share-hash edit-hash])))}]}]]
      ["/"
-      ;; TODO DEPRECATED: Do not use at all. This has the same effect as `:routes.schnaq/start`
+      ;; DEPRECATED: Do not use at all. This has the same effect as `:routes.schnaq/start`
       {:name :routes.meeting/show
        :view discussion-card-view/view
        :link-text (labels :router/show-single-meeting)
-       :controllers schnaq-start-controllers
-
-       #_[{:parameters {:path [:share-hash]}
-           :start (fn [{:keys [path]}]
-                    (rf/dispatch [:agenda/load-agendas (:share-hash path)]))
-           :stop (fn []
-                   (rf/dispatch [:agenda.statement-nums/to-localstorage])
-                   (rf/dispatch [:agenda/clear-current]))}]}]
+       :controllers schnaq-start-controllers}]
      ["/agenda"
       ["/:id"
        {:parameters {:path {:id int?}}}
