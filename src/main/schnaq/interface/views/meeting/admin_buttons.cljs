@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.meeting.admin-buttons
   (:require [ajax.core :as ajax]
             [goog.string :as gstring]
+            [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
@@ -45,6 +46,18 @@
 (defn- show-error
   [& _not-needed]
   (rf/dispatch [:ajax.error/as-notification (labels :error/export-failed)]))
+
+(defn graph-download-as-png
+  "Download the current graph as a png file."
+  [surrounding-div]
+  [tooltip-button "bottom" (labels :graph/download-png)
+   [:i {:class (str "fas " (fa :graph))}]
+   (fn []
+     (let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
+           anchor (.createElement js/document "a")]
+       (oset! anchor [:href] (.toDataURL canvas "image/png"))
+       (oset! anchor [:download] "graph.png")
+       (.click anchor)))])
 
 (defn txt-export
   "Request a txt-export of the discussion."
