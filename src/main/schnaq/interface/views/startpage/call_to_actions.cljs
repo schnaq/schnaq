@@ -33,15 +33,15 @@
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
   [:div.row {:key "HeaderExtras-Bullet-Points-and-Animation"}
-   [:div.col-lg-6.py-lg-5.pr-lg-5
+   [:div.col-lg-6.py-lg-4.pr-lg-5
     [header-animation]
     [start-schnaq-button]]
    [:div.col-lg-6.py-lg-5
     [bullet-point :clipboard :feature/what]
     [bullet-point :share :feature/share]
     [bullet-point :user/group :feature/participate]
-    [bullet-point :clock :feature/time]
-    [bullet-point :user/shield :feature/private-public]]])
+    [bullet-point :user/shield :feature/private-public]
+    [bullet-point :shield :feature/secure]]])
 
 (defn- spotlight-element [title image link]
   [:div.spotlight-discussion.clickable-no-hover

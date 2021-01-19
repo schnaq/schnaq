@@ -21,12 +21,12 @@
         :nav/blog "Blog"
 
         ;; Startpage
-        :startpage/heading "Who needs Whiteboards?"
-        :startpage/subheading "Lost your train of thought again? Structure your team's discourse with schnaq!"
+        :startpage/heading "Your personal discussion hub"
+        :startpage/subheading "Don't care about the family chat? Discuss things that interest you!"
 
         :startpage.usage/lead "What do I use schnaq for?"
 
-        :startpage.call-to-action/discuss-spotlight-topics "Discuss hot topics"
+        :startpage.call-to-action/discuss-spotlight-topics "Current highlights for you"
 
         :startpage.features/more-information "More information"
 
@@ -94,7 +94,7 @@
 
         ;; Brainstorming time
         :brainstorm/heading "Start schnaq"
-        :brainstorm.buttons/start-now "Start a schnaq now"
+        :brainstorm.buttons/start-now "Start your discussion"
         :brainstorm.create.button/save "Start a new schnaq!"
 
         ;; Discussion Creation
@@ -329,11 +329,11 @@
         :pricing.newsletter/name "DisqTec newsletter."
 
         ;; feature list
-        :feature/what "Create discussions in one step"
-        :feature/share "Share your schnaq with friends"
-        :feature/participate "Participate whenever you want"
-        :feature/time "Don't bother with group chats, use schnaq!"
-        :feature/private-public "Create public or private schnaqs"
+        :feature/what "One step to start a discussion"
+        :feature/share "Invite friends – they don't need accounts"
+        :feature/participate "Find out what others think"
+        :feature/private-public "Decide who gets to see your discussion"
+        :feature/secure "Your data is stored securely on EU servers"
 
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
@@ -371,10 +371,10 @@
         :nav/blog "Zum Blog"
 
         ;; Startpage
-        :startpage/heading "Wer braucht schon Whiteboards?"
-        :startpage/subheading "Schon wieder den Faden verloren? Ideenaustausch besser strukturieren mit schnaq!"
+        :startpage/heading "Deine Zentrale für Diskussionen"
+        :startpage/subheading "Vergiss deine Familiengruppe! Diskutiere über interessante Themen."
 
-        :startpage.call-to-action/discuss-spotlight-topics "Diskutiere über aktuelle Themen"
+        :startpage.call-to-action/discuss-spotlight-topics "Aktuelle Highlightthemen für dich"
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
 
@@ -436,7 +436,7 @@
 
         ;; Brainstorming time
         :brainstorm/heading "Schnaq starten"
-        :brainstorm.buttons/start-now "Jetzt ein schnaq starten"
+        :brainstorm.buttons/start-now "Starte deine Diskussion"
         :brainstorm.create.button/save "Schnaq starten!"
 
         ;; Discussion Creation
@@ -673,10 +673,10 @@
 
         ;; feature list
         :feature/what "Mit einem Schritt zur Diskussion"
-        :feature/share "Teile deinen schnaq mit Freunden"
-        :feature/participate "Alle nehmen teil wann es ihnen passt"
-        :feature/time "Spar dir den Gruppenchat, den du eh nicht liest"
-        :feature/private-public "Erstelle private oder öffentliche schnaqs"
+        :feature/share "Lade deine Freunde ein – keine Accounts notwendig"
+        :feature/participate "Finde heraus was andere denken"
+        :feature/private-public "Entscheide wer deine Diskussion sehen darf"
+        :feature/secure "Deine Daten sind sicher auf deutschen Servern"
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
