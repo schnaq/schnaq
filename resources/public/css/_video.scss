@@ -1,3 +1,5 @@
+@import 'variables';
+
 .startpage-animation {
   border-radius: 40px;
   overflow: hidden;
@@ -14,4 +16,9 @@
   background-color: $gray-100;
   border-radius: 20px;
   overflow: hidden;
+}
+
+.video-background-primary {
+  background-color: $primary;
+  padding: 1rem;
 }

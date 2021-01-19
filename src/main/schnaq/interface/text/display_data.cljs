@@ -38,6 +38,8 @@
         :startpage.value-cards.button/text "More details"
         :startpage.usage/lead "What do I use schnaq for?"
 
+        :startpage.call-to-action/discuss-spotlight-topics "Discuss hot topics"
+
         :startpage.features/more-information "More information"
 
         :startpage.demo.request/title "Request a Demo"
@@ -447,6 +449,13 @@
         :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live: "
         :pricing.newsletter/name "DisqTec newsletter."
 
+        ;; feature list
+        :feature/what "Create discussions in one step"
+        :feature/share "Share your schnaq with friends"
+        :feature/participate "Participate whenever you want"
+        :feature/time "Don't bother with group chats, use schnaq!"
+        :feature/private-public "Create public or private schnaqs"
+
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
         :router/all-feedbacks "All feedbacks"
@@ -495,6 +504,8 @@
         :startpage.value-cards.knowledge/description "Nutzen Sie schnaq, um Ihr Team nachdenken und diskutieren zu lassen. Automatisch wird eine MindMap der Beiträge erstellt, die dann analysiert werden kann und das Ergebnis der Session darstellt. Perfekt für Brainstorming-Sitzungen!"
         :startpage.value-cards.knowledge/alt-text "Etliche Klebezettel auf einer Wand"
         :startpage.value-cards.button/text "Mehr erfahren"
+
+        :startpage.call-to-action/discuss-spotlight-topics "Diskutiere über aktuelle Themen"
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
 
@@ -873,6 +884,13 @@
         :pricing.newsletter/lead "Werden Sie sofort informiert, wenn das Abonnement live geht: "
         :pricing.newsletter/name "DisqTec Newsletter."
 
+        ;; feature list
+        :feature/what "Mit einem Schritt zur Diskussion"
+        :feature/share "Teile deinen schnaq mit Freunden"
+        :feature/participate "Alle nehmen teil wann es ihnen passt"
+        :feature/time "Spar dir den Gruppenchat, den du eh nicht liest"
+        :feature/private-public "Erstelle private oder öffentliche schnaqs"
+
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
         :router/all-feedbacks "Alle Feedbacks"
@@ -941,6 +959,9 @@
      :feature.discussions/create-discussion-spaces "/imgs/startpage/features/discussion-agendas.png"
      :feature.knowledge/hero-image "/imgs/stock/two_people_discussing_500w.jpg"
      :feature.knowledge/overview "/imgs/startpage/features/schnaqs-uebersicht_500w.png"
+     :spotlight.merkel "imgs/spotlight/merkel.jpg"
+     :spotlight.eco-brain "imgs/spotlight/brain.jpg"
+     :spotlight.home-office "imgs/spotlight/covid-19.jpg"
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
 
 (defn video
@@ -972,6 +993,8 @@
      :check/double "fa-check-double"
      :check/normal "fa-check"
      :check/square "fa-check-square"
+     :clipboard "fa-clipboard-list"
+     :clock "fa-clock"
      :circle "fa-circle"
      :cog "fa-cogs"
      :comment "fa-comments"
@@ -994,6 +1017,7 @@
      :newspaper "fa-newspaper"
      :plane "fa-paper-plane"
      :plus "fa-plus"
+     :share "fa-share-alt"
      :shield "fa-shield-alt"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
