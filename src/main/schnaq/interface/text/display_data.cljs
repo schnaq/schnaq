@@ -369,7 +369,7 @@
 
         ;; Startpage
         :startpage/heading "Deine Zentrale für Diskussionen"
-        :startpage/subheading "Schon wieder 50 Benachrtichtigungen in der Gruppe? Diskutiere mit schnaq in Ruhe – wann du willst!"
+        :startpage/subheading "Schon wieder 50 Benachrichtigungen in der Gruppe? Diskutiere mit schnaq in Ruhe – wann du willst!"
 
         :startpage.call-to-action/discuss-spotlight-topics "Aktuelle Highlightthemen für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
@@ -382,11 +382,11 @@
         und lege direkt los."
         :startpage.features.discussion/lead "Strukturierte Diskussionen"
         :startpage.features.discussion/title "Wer am lautesten schreit hat nicht immer Recht"
-        :startpage.features.discussion/body "Jeder kennt das. Jemand zieht in einer Diskussion alle Aufmerksamkeit auf sich. Mit schnaq siehst du einfach
+        :startpage.features.discussion/body "Der Gruppenchat bimmelt seit 30 Minuten. Die Nachrichten werden immer mehr. Die Lust zu lesen immer weniger. Mit schnaq siehst du einfach
         strukturiert die Beiträge aller Teilnehmer:innen. Gehe schnell auf die Beiträge ein, die dich interessieren."
         :startpage.features.graph/lead "Übersichtliche Darstellung"
         :startpage.features.graph/title "Verliere nie wieder den Überblick"
-        :startpage.features.graph/body "Zu jeder Diskussion wird automatisch eine Mindmap erstellt. So hast du jederzeit den Überblick. Dir ist etwas interessantes aufgefallen? Spring über die Mindmap per Doppelklick direkt in die Diskussion."
+        :startpage.features.graph/body [:span "Zu jeder Diskussion wird automatisch eine Mindmap erstellt. So hast du jederzeit den Überblick. Dir ist etwas interessantes aufgefallen?" [:br] " Spring über die Mindmap per Doppelklick direkt in die Diskussion."]
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Stöbere durch öffentliche Diskussionen:"
