@@ -38,11 +38,17 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
-   ["schnaqs/public"
-    {:name :routes/public-discussions
-     :view meetings-overview/public-discussions-view
-     :link-text (labels :router/public-discussions)
-     :controllers [{:start (fn [] (rf/dispatch [:meetings.public/load]))}]}]
+   ["schnaqs"
+    ["/public"
+     {:name :routes/public-discussions
+      :view meetings-overview/public-discussions-view
+      :link-text (labels :router/public-discussions)
+      :controllers [{:start (fn [] (rf/dispatch [:meetings.public/load]))}]}]
+    ["/my"
+     {:name :routes.meetings/my-schnaqs
+      :view meetings-overview/meeting-view-visited
+      :link-text (labels :router/my-schnaqs)
+      :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]]
    ["schnaq/:share-hash"
     {:parameters {:path {:share-hash string?}}
      :controllers [{:parameters {:path [:share-hash]}
@@ -93,11 +99,6 @@
        {:name :routes/meetings
         :view meetings-overview/meeting-view-entry
         :link-text (labels :router/all-meetings)}])
-    ["/my"
-     {:name :routes.meetings/my-schnaqs
-      :view meetings-overview/meeting-view-visited
-      :link-text (labels :router/my-schnaqs)
-      :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
