@@ -146,7 +146,7 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
     (if (valid-credentials? share-hash edit-hash)
-      (if (db/check-valid-statement-id-and-meeting statement-ids share-hash)
+      (if (every? #(db/check-valid-statement-id-and-meeting % share-hash) statement-ids)
         (do (db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
