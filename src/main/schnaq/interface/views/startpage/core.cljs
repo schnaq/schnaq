@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.startpage.core
   "Defining the startpage of schnaq."
-  (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.views.base :as base]
