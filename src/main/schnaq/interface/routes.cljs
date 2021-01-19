@@ -61,7 +61,9 @@
       :view discussion-card-view/view
       :controllers [{:parameters {:path [:share-hash :statement-id]}
                      :start (fn []
-                              (rf/dispatch [:discussion.query.statement/by-id]))}]}]
+                              (rf/dispatch [:discussion.query.statement/by-id]))
+                     :stop (fn []
+                             (rf/dispatch [:visited.statement-nums/to-localstorage]))}]}]
     ["/graph"
      {:name :routes/graph-view
       :view graph-view/graph-view-entrypoint
