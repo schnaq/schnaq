@@ -99,4 +99,5 @@
     {:db (->
            (assoc-in db [:discussion :conclusions :selected] conclusion)
            (assoc-in [:discussion :premises :current] (concat premises undercuts)))
-     :fx [[:dispatch [:discussion.history/push conclusion]]]}))
+     :fx [[:dispatch [:discussion.history/push conclusion]]
+          [:dispatch [:visited/set-visited-statements conclusion]]]}))
