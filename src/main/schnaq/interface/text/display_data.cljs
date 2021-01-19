@@ -22,7 +22,7 @@
 
         ;; Startpage
         :startpage/heading "Your personal discussion hub"
-        :startpage/subheading "Don't care about the family chat? Discuss things that interest you!"
+        :startpage/subheading "The group chat is exploding with messages again? Discuss with schnaq in peace – on your own terms!"
 
         :startpage.usage/lead "What do I use schnaq for?"
 
@@ -369,12 +369,10 @@
 
         ;; Startpage
         :startpage/heading "Deine Zentrale für Diskussionen"
-        :startpage/subheading "Vergiss deine Familiengruppe! Diskutiere über interessante Themen."
+        :startpage/subheading "Schon wieder 50 Benachrtichtigungen in der Gruppe? Diskutiere mit schnaq in Ruhe – wann du willst!"
 
         :startpage.call-to-action/discuss-spotlight-topics "Aktuelle Highlightthemen für dich"
-
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
-
         :startpage.features/more-information "Mehr Informationen"
 
         :startpage.features.meeting-organisation/lead "Kollaborativer Meinungsaustausch"
