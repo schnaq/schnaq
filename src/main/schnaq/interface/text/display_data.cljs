@@ -30,26 +30,23 @@
 
         :startpage.features/more-information "More information"
 
-        :startpage.features.meeting-organisation/lead "Work together"
-        :startpage.features.meeting-organisation/title "Collaborative Exchange of Ideas"
-        :startpage.features.meeting-organisation/body "Include all team members in the discussion and activate unused resources!
-        This way you achieve have happy coworkers and a productive work environment.
-        Brainstorming sessions are creative processes where the diverse members of your team can contribute their strengths
-        and achieve wonderful results."
+        :startpage.features.meeting-organisation/lead "Collaborate"
+        :startpage.features.meeting-organisation/title "What do others think about?"
+        :startpage.features.meeting-organisation/body "Your team is not on the same page? Does your club need to make a hard decision?
+        Or do you just want to know what others think on a topic important to you? Create your discussion with schnaq and get on it."
         :startpage.features.discussion/lead "Structured Discussions"
-        :startpage.features.discussion/title "Lasting Exchange of Thoughts"
-        :startpage.features.discussion/body "Exchanges of ideas are an integral part of working in a creative team.
-        But it is hard to understand after the fact, what everyone contributed and what the intention behind the process was.
-        Through the structured capture of your coworker's statements, we can automatically generate graphical representations
-        which help you understand what was said and done."
-        :startpage.features.graph/lead "Simple Overview"
-        :startpage.features.graph/title "Mindmaps!"
-        :startpage.features.graph/body "All your coworkers statements are automatically sorted into a mindmap.
-        See all connections and statements neatly organized at one glance."
+        :startpage.features.discussion/title "The loudest voice isn't always right"
+        :startpage.features.discussion/body "You know the drill. There is always someone stealing all the attention. With schnaq
+        you can easily see the contributions of everyone. Easily address the things that you want to talk about and ignore the rest."
+        :startpage.features.graph/lead "Clear Visualization"
+        :startpage.features.graph/title "Never lose track"
+        :startpage.features.graph/body "A mindmap is automatically created for every discussion.
+        This way it's easy for you to keep track of things.
+        Did something interesting catch your attention? Just double click to jump right in through the mindmap."
 
-        :startpage.early-adopter/title "Curious?"
-        :startpage.early-adopter/body "Use schnaq during the ongoing beta phase and be a pioneer in your team."
-        :startpage.early-adopter.buttons/join-schnaq "Look at example schnaq"
+        :startpage.early-adopter/title "Gotten curious?"
+        :startpage.early-adopter/body "Browse through public discussions"
+        :startpage.early-adopter.buttons/join-schnaq "Public schnaqs"
         :startpage.early-adopter/or "or"
 
         :footer.buttons/about-us "About us"
@@ -380,19 +377,22 @@
 
         :startpage.features/more-information "Mehr Informationen"
 
-        :startpage.features.meeting-organisation/lead "Gemeinsam Arbeiten"
-        :startpage.features.meeting-organisation/title "Kollaborativer Meinungsaustausch"
-        :startpage.features.meeting-organisation/body "Binden Sie Ihre Mitarbeiter:innen mit in Diskussionen ein! Aktivieren Sie ungenutzte Ressourcen und erreichen Sie so eine höhere Zufriedenheit in Ihrem Team. Brainstorming-Sessions sind kreative Prozesse, in denen die Diversität Ihres Teams sehr gut zur Geltung kommt und zu wunderbaren Ergebnissen führt."
+        :startpage.features.meeting-organisation/lead "Kollaborativer Meinungsaustausch"
+        :startpage.features.meeting-organisation/title "Was denken andere?"
+        :startpage.features.meeting-organisation/body "Es gibt Uneinigkeiten im Team? Dein Verein muss eine Entscheidung treffen?
+        Oder möchtest du einfach wissen was andere Menschen zu Themen denken, die dir wichtig sind? Erstelle eine Diskussion mit schnaq
+        und lege direkt los."
         :startpage.features.discussion/lead "Strukturierte Diskussionen"
-        :startpage.features.discussion/title "Nachhaltiger Austausch"
-        :startpage.features.discussion/body "Brainstorming-Sessions sind Teil der kreativen Arbeit in vielen Teams. Im Nachgang lässt sich aber nur schwer nachvollziehen, was die einzelnen Teilnehmer:innen beigetragen haben. Durch die strukturierte Erfassung im verteilten Brainstorming werden die Aussagen so zusammengefügt, dass sie auch nach einer längeren Zeit wieder nachvollzogen werden können."
+        :startpage.features.discussion/title "Wer am lautesten schreit hat nicht immer Recht"
+        :startpage.features.discussion/body "Jeder kennt das. Jemand zieht in einer Diskussion alle Aufmerksamkeit auf sich. Mit schnaq siehst du einfach
+        strukturiert die Beiträge aller Teilnehmer:innen. Gehe schnell auf die Beiträge ein, die dich interessieren."
         :startpage.features.graph/lead "Übersichtliche Darstellung"
-        :startpage.features.graph/title "Mindmaps!"
-        :startpage.features.graph/body "Alle Beiträge der Teilnehmer:innen werden automatisch in einer Mindmap angeordnet und können dann nachvollzogen werden. Sehen Sie alle Zusammenhänge und beobachten Sie die gesamte Ideen- und Entscheidungsfindung in einer interaktiven Mindmap."
+        :startpage.features.graph/title "Verliere nie wieder den Überblick"
+        :startpage.features.graph/body "Zu jeder Diskussion wird automatisch eine Mindmap erstellt. So hast du jederzeit den Überblick. Dir ist etwas interessantes aufgefallen? Spring über die Mindmap per Doppelklick direkt in die Diskussion."
 
         :startpage.early-adopter/title "Neugierig geworden?"
-        :startpage.early-adopter/body "Nutzen Sie exklusiv während der Beta-Phase schnaq.com und zählen Sie damit zu den Vorreitern."
-        :startpage.early-adopter.buttons/join-schnaq "Beispielschnaq ansehen"
+        :startpage.early-adopter/body "Stöbere durch öffentliche Diskussionen:"
+        :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
         :startpage.early-adopter/or "oder"
 
         :footer.buttons/about-us "Über uns"
@@ -555,7 +555,7 @@
         :supporters/heading "Unterstützt vom Wirtschaftsministerium des Landes Nordrhein-Westfalen"
 
         ;; Testimonials
-        :testimonials/heading "Stimmen aus der Wirtschaft"
+        :testimonials/heading "Was andere über uns denken:"
         :testimonials.doctronic/quote "Wir beobachten die Entwicklung von schnaq mit großem Interesse für den eigenen Einsatz und für den Einsatz bei unseren Kunden."
         :testimonials.doctronic/author "Ingo Küper, Geschäftsführer doctronic GmbH & Co. KG"
 
