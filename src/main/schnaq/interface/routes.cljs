@@ -50,6 +50,11 @@
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]]
    ["schnaq"
+    ["/create"
+     {:name :routes.brainstorm/create
+      :view brainstorm-create/create-brainstorm-view
+      :link-text (labels :router/create-brainstorm)
+      :controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
@@ -83,12 +88,6 @@
     {:name :routes/pricing
      :view pricing-view/pricing-view
      :link-text (labels :router/pricing)}]
-   ["brainstorm"
-    {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
-    ["/create"
-     {:name :routes.brainstorm/create
-      :view brainstorm-create/create-brainstorm-view
-      :link-text (labels :router/create-brainstorm)}]]
    ["privacy"
     {:name :routes/privacy
      :view privacy/view
