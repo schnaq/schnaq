@@ -61,14 +61,14 @@
     [:div.col-lg-4
      [spotlight-element "Mein Beitrag für eine nachhaltigere Welt"
       (img-path :spotlight.eco-brain)
-      (config/spotlight-1)]]
+      config/spotlight-1]]
     ; credit https://pixabay.com/illustrations/covid-19-work-from-home-quarantine-4938932/
     [:div.col-lg-4
      [spotlight-element "Remote-Arbeiten in Zeiten von Corona"
       (img-path :spotlight.home-office)
-      (config/spotlight-2)]]
+      config/spotlight-2]]
     ; credit https://www.freeimg.net/photo/1188165/merkel-chancellor-angelamerkel-cdu
     [:div.col-lg-4
      [spotlight-element "Nächste Bundesklanzer:in"
       (img-path :spotlight.merkel)
-      (config/spotlight-3)]]]])
+      config/spotlight-3]]]])
