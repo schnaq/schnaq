@@ -47,33 +47,10 @@
         :startpage.features.graph/body "All your coworkers statements are automatically sorted into a mindmap.
         See all connections and statements neatly organized at one glance."
 
-        :how-to.startpage/title "How do I use schnaq?"
-        :how-to.startpage/body "You want to use schnaq, but need a little guidance?
-        We created a comprehensive guide, which includes short videos to make your start a little bit easier."
-        :how-to.startpage/button "How to schnaq?"
-        :how-to/title "How do I use schnaq?"
-        :how-to.why/title "What is schnaq for?"
-        :how-to.why/body "Schnaq can be used to plan meetings with your coworkers and discuss important or unclear points beforehand."
-        :how-to.create/title "Creating a schnaq"
-        :how-to.create/body "Press the create schnaq button. Enter a title and a description. In this step you are also able to link to Videos and pictures."
-        :how-to.agenda/title "Create Agenda"
-        :how-to.agenda/body "Use multiple agenda points – one for each topic you would like to discuss."
-        :how-to.admin/title "Invite participants"
-        :how-to.admin/body "You can either use the send email feature or distribute the meeting-link by yourself.
-        Share the admin link to give other people administrative access.
-        All administrators are able to invite participants and edit the schnaq."
-        :how-to.call-to-action/title "Enough talk, let's schnaq!"
-        :how-to.call-to-action/body "Start your own schnaq with a click!
-        Invite participants and let them discuss preemptively. Collaboratively enhance your next meeting."
-
         :startpage.early-adopter/title "Curious?"
         :startpage.early-adopter/body "Use schnaq during the ongoing beta phase and be a pioneer in your team."
         :startpage.early-adopter.buttons/join-schnaq "Look at example schnaq"
         :startpage.early-adopter/or "or"
-
-        :startpage.mailing-list/title "Request more Information on schnaq"
-        :startpage.mailing-list/body "Get regular updates regarding schnaq and other DisqTec products."
-        :startpage.mailing-list/button "Subscribe to newsletter"
 
         :footer.buttons/about-us "About us"
         :footer.buttons/legal-note "Impress"
@@ -413,29 +390,10 @@
         :startpage.features.graph/title "Mindmaps!"
         :startpage.features.graph/body "Alle Beiträge der Teilnehmer:innen werden automatisch in einer Mindmap angeordnet und können dann nachvollzogen werden. Sehen Sie alle Zusammenhänge und beobachten Sie die gesamte Ideen- und Entscheidungsfindung in einer interaktiven Mindmap."
 
-        :how-to.startpage/title "Wie benutze ich schnaq?"
-        :how-to.startpage/body "Sie möchten schnaq nutzen, sind aber unsicher, wie die Bedienung funktioniert? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
-        :how-to.startpage/button "Wie schnaqqe ich?"
-        :how-to/title "Wie benutze ich schnaq?"
-        :how-to.why/title "Wozu dient schnaq?"
-        :how-to.why/body "Schnaq dient dazu Meetings und andere Treffen im Voraus mit den Teilnehmer:innen zu planen und zu diskutieren."
-        :how-to.create/title "schnaq erstellen"
-        :how-to.create/body "Legen Sie zuerst einen schnaq an. Geben Sie Ihrem schnaq danach einen Titel und eine Beschreibung. Sie können auch Bilder und Dokumente verlinken."
-        :how-to.agenda/title "Agenda erstellen"
-        :how-to.agenda/body "Sie können mehrere Agendapunkte anlegen, um Ihren schnaq granularer zu planen und um Themen einzeln zu diskutieren."
-        :how-to.admin/title "Teilnehmer:innen einladen"
-        :how-to.admin/body "Teilnehmer:innen können entweder per Link oder Mail eingeladen werden. Weitere Admins laden Sie über den Admin Zugang ein. Administrator:innen können ebenfalls Teilnehmer:innen einladen oder den schnaq editieren."
-        :how-to.call-to-action/title "Genug gequatscht, jetzt wird geschnaqqt!"
-        :how-to.call-to-action/body "Starten Sie jetzt Ihren schnaq bequem mit einem Klick! Laden Sie Teilnehmer:innen ein und diskutieren Sie Vorschläge untereinander. Kollaborative Vorbereitung ohne Hürden, ganz einfach gemacht."
-
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Nutzen Sie exklusiv während der Beta-Phase schnaq.com und zählen Sie damit zu den Vorreitern."
         :startpage.early-adopter.buttons/join-schnaq "Beispielschnaq ansehen"
         :startpage.early-adopter/or "oder"
-
-        :startpage.mailing-list/title "Fordern Sie mehr Informationen zu schnaq an"
-        :startpage.mailing-list/body "Holen Sie sich regelmäßig Updates zu schnaq, DisqTec und den aktuellsten Produkten."
-        :startpage.mailing-list/button "Zum Newsletter anmelden"
 
         :footer.buttons/about-us "Über uns"
         :footer.buttons/legal-note "Impressum"
@@ -791,15 +749,7 @@
   "Returns an video path"
   [identifier]
   (identifier
-    {:how-to.why/webm "/animations/howto/Why.webm"
-     :how-to.why/mp4 "/animations/howto/Why.mp4"
-     :how-to.create/webm "/animations/howto/Create.webm"
-     :how-to.create/mp4 "/animations/howto/Create.mp4"
-     :how-to.agenda/webm "/animations/howto/Agenda.webm"
-     :how-to.agenda/mp4 "/animations/howto/Agenda.mp4"
-     :how-to.admin/webm "/animations/howto/Admin.webm"
-     :how-to.admin/mp4 "/animations/howto/Admin.mp4"
-     :start-page.work-together/webm "/animations/WorkTogether.webm"
+    {:start-page.work-together/webm "/animations/WorkTogether.webm"
      :start-page.work-together/mp4 "/animations/WorkTogether.mp4"}))
 
 (defn fa

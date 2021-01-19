@@ -42,38 +42,6 @@
       (labels :brainstorm.buttons/start-now)]]]
    [base/wavy-curve "scale(1.5,1)"]])
 
-(defn- subscribe-to-mailinglist
-  "Add possibility to subscribe to our mailing list."
-  []
-  [:section.container.text-center.subscribe-to-mailinglist
-   [:p.h4 (labels :startpage.mailing-list/title)]
-   [:p.lead.pb-3 (labels :startpage.mailing-list/body)]
-   [:a.button-primary {:href "https://disqtec.com/newsletter"
-                       :target "_blank"}
-    (labels :startpage.mailing-list/button)]])
-
-(defn- button-with-text-section
-  "A button and text to navigate to the demo section"
-  [button-label fn-navigation title body]
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-5.text-center
-    [:button.btn.button-secondary.font-150
-     {:on-click fn-navigation}
-     (labels button-label)]]
-   [:div.col-12.col-lg-6.offset-lg-1
-    [:article.feature-text-box.pb-3
-     [:h5 (labels title)]
-     [:p (labels body)]]]])
-
-(defn- how-to-section
-  "A button and text to navigate to the demo section"
-  []
-  [button-with-text-section
-   :how-to.startpage/button
-   #(rf/dispatch [:navigation/navigate :routes/how-to])
-   :how-to.startpage/title
-   :how-to.startpage/body])
-
 (defn- supporters []
   [:section.pb-5.pt-3
    [:p.display-6.text-center
@@ -104,11 +72,9 @@
        [cta/spotlight-discussions]
        [usage-of-schnaq-heading]
        [startpage-features/feature-rows]
-       [how-to-section]
        [supporters]]
       [early-adopters]
       [:section.container
-       [subscribe-to-mailinglist]
        [testimonials/view]]]]))
 
 (defn startpage-view
