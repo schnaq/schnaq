@@ -14,7 +14,6 @@
             [schnaq.interface.views.how-to.view :as how-to]
             [schnaq.interface.views.privacy :as privacy]
             [schnaq.interface.views.startpage.core :as startpage-views]
-            [schnaq.interface.views.startpage.features :as features-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.graph.view :as graph-view]))
 
@@ -72,15 +71,6 @@
                               (rf/dispatch [:graph/load-data-for-discussion]))
                      :stop (fn []
                              (rf/dispatch [:updates.periodic/graph false]))}]}]]
-   ["features"
-    ["/discussions"
-     {:name :routes.features/discussions
-      :view features-views/discussion-features-view
-      :link-text (labels :router.features/discussion)}]
-    ["/brainstorming"
-     {:name :routes.features/knowledge
-      :view features-views/knowledge-features-view
-      :link-text (labels :router.features/discussion)}]]
    ["pricing"
     {:name :routes/pricing
      :view pricing-view/pricing-view

@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.startpage.features
   (:require [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.utils.rows :as rows]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.utils.rows :as rows]))
 
 (defn- meeting-organisation
   "Featuring meeting-organisation with an image."
@@ -25,70 +24,6 @@
    :startpage.features/discussion-graph
    :startpage.features.graph])
 
-(defn- features-discussion
-  "A site demonstrating the features of schnaqs discussion capabilities."
-  []
-  [pages/with-nav-and-header
-   {:page/heading (labels :feature.discussions/lead)}
-   [:div.container.py-4
-    [rows/image-right
-     :feature.discussions/hero-image
-     :feature.discussions]
-    [:h3.text-center.pb-4 (labels :feature.discussions/features-subheading)]
-    [rows/image-left
-     :feature.discussions/create-discussion-spaces
-     :feature.discussions.spaces]
-    [rows/image-right
-     :startpage.features/sample-discussion
-     :feature.discussions.discuss]
-    [rows/image-left
-     :startpage.features/discussion-graph
-     :feature.discussions.graph]
-    [:section.feature-text-box
-     [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
-     [:p (labels :feature.meetings/tbd-lead)]
-     [:ul
-      [:li (labels :feature.discussions.tbd/reports)]
-      [:li (labels :feature.discussions.tbd/wikis)]
-      [:li (labels :feature.discussions.tbd/ideas)]
-      [:li (labels :feature.discussions.tbd/navigation)]
-      [:li (labels :feature.discussions.tbd/connect)]
-      [:li (labels :feature.discussions.tbd/bot)]]
-     [:p (labels :features/feedback)]]]])
-
-(defn- features-knowledge
-  "Presenting the idea of knowledge aggregation."
-  []
-  [pages/with-nav-and-header
-   {:page/heading (labels :feature.knowledge/lead)
-    :page/subheading (labels :feature.knowledge/subheading)}
-   [:div.container.py-4
-    [rows/image-right
-     :feature.knowledge/hero-image
-     :feature.knowledge.general]
-    [:h3.text-center.pb-4 (labels :feature.knowledge/features-subheading)]
-    [rows/image-left
-     :startpage.features/sample-discussion
-     :feature.knowledge.discussions]
-    [rows/image-right
-     :feature.knowledge/overview
-     :feature.knowledge.database]
-    [rows/image-left
-     :startpage.features/discussion-graph
-     :feature.knowledge.change-of-facts]
-    [:section.feature-text-box
-     [:h3.text-center.pb-4 (labels :feature.meetings/tbd-subheading)]
-     [:p (labels :feature.meetings/tbd-lead)]
-     [:ul
-      [:li (labels :feature.knowledge.tbd/wiki)]
-      [:li (labels :feature.knowledge.tbd/search)]
-      [:li (labels :feature.knowledge.tbd/evaluation)]
-      [:li (labels :feature.knowledge.tbd/live-changes)]
-      [:li (labels :feature.knowledge.tbd/changes-over-time)]
-      [:li (labels :feature.knowledge.tbd/accounts)]]
-     [:p (labels :features/feedback)]]]])
-
-
 ;; -----------------------------------------------------------------------------
 
 (defn feature-rows
@@ -98,9 +33,3 @@
    [meeting-organisation]
    [structured-discussions]
    [graph-visualization]])
-
-(defn discussion-features-view []
-  [features-discussion])
-
-(defn knowledge-features-view []
-  [features-knowledge])

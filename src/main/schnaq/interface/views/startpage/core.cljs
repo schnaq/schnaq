@@ -74,40 +74,6 @@
    :how-to.startpage/title
    :how-to.startpage/body])
 
-(defn- value-prop-card
-  "A single value proposition-card"
-  [title description image-path alt-text show-more-fn]
-  [:div.card
-   [:img.card-img-top {:src image-path :alt alt-text}]
-   [:div.card-body.d-flex.flex-column
-    [:h5.card-title title]
-    [:p.card-text description]
-    [:div.text-center.mt-auto
-     [:button.btn.button-primary
-      {:on-click show-more-fn}
-      [:p.card-text [:small (labels :startpage.value-cards.button/text)]]]]]])
-
-(defn- value-prop-cards
-  "Cards displaying the different value propositions."
-  []
-  [:<>
-   [:div.text-center
-    [:h4 (labels :startpage.value-cards/heading)]
-    [:p.lead (labels :startpage.value-cards/lead)]]
-   [:div.card-deck.mb-5
-    [value-prop-card
-     (labels :startpage.value-cards.discussion/title)
-     (labels :startpage.value-cards.discussion/description)
-     (img-path :startpage.value-cards.discussion/image)
-     (labels :startpage.value-cards.discussion/alt-text)
-     #(rf/dispatch [:navigation/navigate :routes.features/discussions])]
-    [value-prop-card
-     (labels :startpage.value-cards.knowledge/title)
-     (labels :startpage.value-cards.knowledge/description)
-     (img-path :startpage.value-cards.knowledge/image)
-     (labels :startpage.value-cards.knowledge/alt-text)
-     #(rf/dispatch [:navigation/navigate :routes.features/knowledge])]]])
-
 (defn- supporters []
   [:section.pb-5.pt-3
    [:p.display-6.text-center
@@ -142,7 +108,6 @@
        [supporters]]
       [early-adopters]
       [:section.container
-       [value-prop-cards]
        [subscribe-to-mailinglist]
        [testimonials/view]]]]))
 

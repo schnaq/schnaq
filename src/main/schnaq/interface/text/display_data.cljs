@@ -24,18 +24,6 @@
         :startpage/heading "Who needs Whiteboards?"
         :startpage/subheading "Lost your train of thought again? Structure your team's discourse with schnaq!"
 
-        :startpage.value-cards/heading "More Applications!"
-        :startpage.value-cards/lead "Structured discussions can have many applications. Take a look at a few examples."
-        :startpage.value-cards.discussion/title "Conduct a Discussion"
-        :startpage.value-cards.discussion/description "Discussing topics with multiple people over the Internet is hard. Its easy to
-        feel lost. With schnaq you can structure your discussions and keep an eye on arguments and controversies with a single glance."
-        :startpage.value-cards.discussion/alt-text "A symbolic representation of a speech-bubble"
-        :startpage.value-cards.knowledge/title "Brainstorming and Idea Generation"
-        :startpage.value-cards.knowledge/description "Use schnaq to let your team discuss and generate new ideas.
-        An automatic Mindmap is generated from all statements. Furthermore, the statements are analyzed and summarized
-        for all participants. Perfect for your next brainstorming session!"
-        :startpage.value-cards.knowledge/alt-text "Several Sticky-Notes on a wall"
-        :startpage.value-cards.button/text "More details"
         :startpage.usage/lead "What do I use schnaq for?"
 
         :startpage.call-to-action/discuss-spotlight-topics "Discuss hot topics"
@@ -58,75 +46,6 @@
         :startpage.features.graph/title "Mindmaps!"
         :startpage.features.graph/body "All your coworkers statements are automatically sorted into a mindmap.
         See all connections and statements neatly organized at one glance."
-
-        :features/feedback "Do you have more wishes or feature ideas? Contact us through the feedback form on the right side."
-
-        :feature.discussions/lead "Structured discussions with coworkers and customers"
-        :feature.discussions/title "Structured discussions for structured results"
-        :feature.discussions/body "Schnaq allows you to lead structured discussions on the Internet – no special software needed.
-        We used the results of yearlong scientific work to design the discussion according to cutting-edge standards.
-        The results of any discussion are automatically structured and provide a graphical representation that deepens
-        the understanding of the discussed topics.
-        Valuable insights for leaders and their teams!"
-        :feature.discussions/features-subheading "Schnaq as a platform for discussions"
-        :feature.discussions.spaces/lead "Brainstorming or Discussion? – Doesn't matter"
-        :feature.discussions.spaces/title "Make room for deep discussions"
-        :feature.discussions.spaces/body "Create rooms for discussions about any topic, which you can share via a secured link.
-        The invited persons can use the room to share their unique knowledge and discuss in a structured manner. Distributed over
-        time and space."
-        :feature.discussions.discuss/lead "Discuss online easily"
-        :feature.discussions.discuss/title "Structured exchanges with schnaq"
-        :feature.discussions.discuss/body "The schnaq interface is based on scientific findings the co-founders made.
-        The interface encourages the participants to keep on topic and be factual.
-        This way the discussion-results are comprehensible even to people not participating."
-        :feature.discussions.graph/lead "Everything at a glance"
-        :feature.discussions.graph/title "Graphical presentation of the discussion"
-        :feature.discussions.graph/body "All discussions are automatically graphically processed.
-        This way it is easy to get an overview of strongly discussed sub-topics, the connection between topic or points, and
-        controversies.
-        The graphical processing allows to easily justify decisions and results."
-        :feature.discussions.tbd/reports "Automated summary of the discussion"
-        :feature.discussions.tbd/wikis "Integration into knowledge-stores, like Confluence"
-        :feature.discussions.tbd/ideas "Subscribe to topics of interest and get notified when they are discussed by your coworkers"
-        :feature.discussions.tbd/navigation "Innovative navigation through discussions"
-        :feature.discussions.tbd/connect "Integration into MS Teams, Slack and co"
-        :feature.discussions.tbd/bot "AI-based hints which topics and standpoints need attention"
-
-        :feature.knowledge/lead "Collect Knowledge in Brainstorms"
-        :feature.knowledge/subheading "Sustainably enhance decision making processes"
-        :feature.knowledge.general/lead "Sustainable knowledge generation"
-        :feature.knowledge.general/title "Make ideas and knowledge tangible"
-        :feature.knowledge.general/body "Communication is a key to success.
-        Every opinion should be heard and used to make an informed decision.
-        Schnaq provides structured discussions, to make opinions and arguments available and understandable after the fact.
-        You can use past discussions to experience and deeply understand the process that lead to decisions."
-        :feature.knowledge/features-subheading "Schnaq for idea generation 💡"
-        :feature.knowledge.discussions/lead "Upgrade your decision making"
-        :feature.knowledge.discussions/title "Start with a brainstorming"
-        :feature.knowledge.discussions/body "Offline the best ideas often come naturally during smalltalk or on a coffee break –
-        schnaq helps you simulate loose discussions, without the need for 15 emails or 20 chat messages.
-        During a brainstorming with schnaq all coworkers can be heard equally.
-        This way ideas that are valuable for the company can be discovered continually – even without the need to share office space."
-
-        :feature.knowledge.database/lead "Reproducibility"
-        :feature.knowledge.database/title "A central application for Ideas and Knowledge"
-        :feature.knowledge.database/body "Keep discussions and ideas that originated in a brainstorm for future reference.
-        Often the need arises to understand past decisions and processes. Even after months it is possible to dig in and understand
-        them with schnaq. We provide a single store of ideas and knowledge."
-
-        :feature.knowledge.change-of-facts/lead "Graphical processing"
-        :feature.knowledge.change-of-facts/title "MindMaps!"
-        :feature.knowledge.change-of-facts/body "All ideas are automatically structured in clear graphical format.
-        Take a look at the generated mindmap and immediately understand what the participants talked about.
-        Controversial standpoints and topics are highlighted automatically. This way you immediately know what topics
-        need more attention and discussion."
-
-        :feature.knowledge.tbd/wiki "Integration in knowledge-stores (e.g. Confluence)"
-        :feature.knowledge.tbd/search "Comfortable search through all your ideas, discussions and knowledge"
-        :feature.knowledge.tbd/evaluation "\"What if?\" Mark arguments as invalid and the system shows you whether your results are still valid"
-        :feature.knowledge.tbd/live-changes "Monitor how the discussion changes in real-time"
-        :feature.knowledge.tbd/changes-over-time "Time-travel to any point in the discussion to understand the process even more"
-        :feature.knowledge.tbd/accounts "Integration in other communication systems (e.g. Slack, MS Teams, …)"
 
         :how-to.startpage/title "How do I use schnaq?"
         :how-to.startpage/body "You want to use schnaq, but need a little guidance?
@@ -478,16 +397,6 @@
         :startpage/heading "Wer braucht schon Whiteboards?"
         :startpage/subheading "Schon wieder den Faden verloren? Ideenaustausch besser strukturieren mit schnaq!"
 
-        :startpage.value-cards/heading "Weitere Anwendungsgebiete"
-        :startpage.value-cards/lead "Strukturierte Diskussionen werden in vielen Gebieten benötigt. Hier finden Sie weitere Beispiele."
-        :startpage.value-cards.discussion/title "Diskussionen führen"
-        :startpage.value-cards.discussion/description "Es ist nicht einfach über das Internet miteinander zu Diskutieren, ohne sich schnell verloren zu fühlen. Mit schnaq können Sie strukturierte Diskussionen führen, und dabei leicht den Überblick über die Argumente und kontroverse Themen behalten."
-        :startpage.value-cards.discussion/alt-text "Ein Symbolbild einer Sprechblase"
-        :startpage.value-cards.knowledge/title "Brainstorming und Wissensgenerierung"
-        :startpage.value-cards.knowledge/description "Nutzen Sie schnaq, um Ihr Team nachdenken und diskutieren zu lassen. Automatisch wird eine MindMap der Beiträge erstellt, die dann analysiert werden kann und das Ergebnis der Session darstellt. Perfekt für Brainstorming-Sitzungen!"
-        :startpage.value-cards.knowledge/alt-text "Etliche Klebezettel auf einer Wand"
-        :startpage.value-cards.button/text "Mehr erfahren"
-
         :startpage.call-to-action/discuss-spotlight-topics "Diskutiere über aktuelle Themen"
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
@@ -503,53 +412,6 @@
         :startpage.features.graph/lead "Übersichtliche Darstellung"
         :startpage.features.graph/title "Mindmaps!"
         :startpage.features.graph/body "Alle Beiträge der Teilnehmer:innen werden automatisch in einer Mindmap angeordnet und können dann nachvollzogen werden. Sehen Sie alle Zusammenhänge und beobachten Sie die gesamte Ideen- und Entscheidungsfindung in einer interaktiven Mindmap."
-
-        :features/feedback "Haben Sie weitere Wünsche? Kontaktieren Sie uns gerne über das Feedback-Formular auf der rechten Seite."
-
-        :feature.discussions/lead "Strukturierte Diskussionen mit Kolleg:innen und Kunden"
-        :feature.discussions/title "Strukturierte Diskussionen für strukturierte Ergebnisse"
-        :feature.discussions/body "Mit schnaq können strukturierte Diskussionen online und ohne weitere Gerätschaften geführt werden. Wir haben Ergebnisse aus unserer langjährigen Forschung genutzt, um eine optimale Diskussionsform zu entwickeln, die strukturierte Diskussionen ermöglicht. Die Ergebnisse der Diskussionen lassen sich strukturiert und automatisch in graphischer Form aufbereiten und erlauben so die Nachvollziehbarkeit einer Diskussion auf einen Blick. Wertvolle Informationen für alle Entscheider:innen und deren Teams!"
-        :feature.discussions/features-subheading "Schnaq als Diskussionsplattform"
-        :feature.discussions.spaces/lead "Egal ob Brainstorming oder Diskussion"
-        :feature.discussions.spaces/title "Schaffen Sie Platz für Diskussionen"
-        :feature.discussions.spaces/body "Erstellen Sie Diskussionsthemen, die Sie ihren Teams einfach per Link zugänglich machen können. Die eingeladenen Kolleg:innen können den geschaffenen Raum nutzen, um zeitversetzt und online miteinander zu diskutieren und ihr Wissen einfließen zu lassen."
-        :feature.discussions.discuss/lead "Einfach online diskutieren"
-        :feature.discussions.discuss/title "Strukturierter Austausch per schnaq"
-        :feature.discussions.discuss/body "Das Interface von schnaq-Diskussionen basiert auf wissenschaftlichen Erkenntnissen aus der Diskussionsforschung. Die Teilnehmer:innen werden dabei immer angeleitet sachliche und begründete Beiträge abzugeben. Dadurch bleiben Diskussionen und auf ihnen basierende Entscheidungen leicht nachvollziehbar."
-        :feature.discussions.graph/lead "Alles auf einen Blick"
-        :feature.discussions.graph/title "Graphische Aufbereitung der Diskussion"
-        :feature.discussions.graph/body "Alle Diskussionen werden automatisiert graphisch aufbereitet. So bekommt man sofort einen Überblick bezüglich stark diskutierter Bereiche, dem Zusammenhang der Beiträge und kontroversen Standpunkten innerhalb der Diskussion. Durch die graphische Aufbereitung lassen sich Entscheidungen bequem und einfach visualisieren."
-        :feature.discussions.tbd/reports "Automatisierte Zusammenfassungen der Diskussionen"
-        :feature.discussions.tbd/wikis "Anbindung an Wiki-Systeme, wie Confluence"
-        :feature.discussions.tbd/ideas "Automatisierte Benachrichtigungen, wenn Themen diskutiert werden, die abonniert wurden"
-        :feature.discussions.tbd/navigation "Innovative Navigation durch große Diskussionen"
-        :feature.discussions.tbd/connect "Anbindung an MS Teams, Slack und Co."
-        :feature.discussions.tbd/bot "AI-basierte Hinweise, welche Bereiche weiteren Input benötigen"
-
-        :feature.knowledge/lead "Wissen sammeln in Brainstormings"
-        :feature.knowledge/subheading "Entscheidungsfindungen nachhaltig verbessern"
-        :feature.knowledge.general/lead "Nachhaltige Wissensaufbereitung"
-        :feature.knowledge.general/title "Wissen und Ideen greifbar machen"
-        :feature.knowledge.general/body "Kommunikation ist der Schlüssel zum Erfolg. Jede Meinung sollte gehört werden können, damit im Anschluss eine qualifizierte Entscheidung gefasst werden kann. Um diese Meinungen und Argumente auch später wieder verfügbar zu haben, bietet schnaq die Möglichkeit zur strukturierten Erfassung von Ideen. Diese können später nachvollzogen werden und liefern Aufschluss über die ursprünglichen Gedanken."
-        :feature.knowledge/features-subheading "Schnaq zur Ideenfindung 💡"
-        :feature.knowledge.discussions/lead "Entscheidungsfindung"
-        :feature.knowledge.discussions/title "Am Anfang steht das Brainstorming"
-        :feature.knowledge.discussions/body "Offline entstehen die besten Ideen auf den Gängen oder in der Kaffeepause – schnaq bildet diese lockeren Diskussionen ab, ganz ohne 15 zeitraubende E-Mails oder 20 Chatnachrichten zu benötigen. Beim Brainstorming mit schnaq können alle Teammitglieder:innen gehört werden und ihre Ideen festhalten. Durch diesen kreativen Prozess können Ideen entstehen und festgehalten werden, die wertvoll für das Unternehmen sind – sogar wenn man nicht zusammen im Büro sitzt."
-
-        :feature.knowledge.database/lead "Nachvollziehbarkeit"
-        :feature.knowledge.database/title "Zentrale Anlaufstelle für Ideen und Entscheidungen"
-        :feature.knowledge.database/body "Bewahren Sie Ideen aus Brainstormings und Diskussionen auf und ermöglichen Sie so ein späteres Nachvollziehen der Gedankengänge. Häufig fragt man sich schon nach Tagen, manchmal auch nach Monaten nach dem Sinn einer Entscheidung oder einem Gedankengang und hat mit schnaq nun so die Möglichkeit die einzelnen Diskussionspunkte genau nachzuvollziehen."
-
-        :feature.knowledge.change-of-facts/lead "Graphische Darstellung"
-        :feature.knowledge.change-of-facts/title "MindMaps!"
-        :feature.knowledge.change-of-facts/body "Alle Ideen und Gedankengänge werden automatisch und sofort visuell aufbereitet. Schauen Sie sich jederzeit die generierte MindMap an und vollziehen Sie so die Gedanken Ihres Teams nach. Kontrovers diskutierte Bereiche werden für Sie automatisch hervorgehoben, sodass Sie sofort sehen können, welche Punkte weitere Klärung benötigen."
-
-        :feature.knowledge.tbd/wiki "Einbindung in bestehende Wiki-Systeme (bspw. Confluence)"
-        :feature.knowledge.tbd/search "Indexierung von Ideen, Gedanken und Diskussionen zum einfachen Finden"
-        :feature.knowledge.tbd/evaluation "\"What if?\" Blenden Sie Argumente aus und sehen Sie, wie sich die Entscheidungsfindung verändert"
-        :feature.knowledge.tbd/live-changes "Live-Veränderungen der Diskussionsgrundlage mitverfolgen"
-        :feature.knowledge.tbd/changes-over-time "Springen Sie an jeden Punkt in der Vergangenheit und schauen Sie sich die Entwicklung der Ideen an"
-        :feature.knowledge.tbd/accounts "Integration in bestehende Kommunikationssysteme (bspw. Slack, MS Teams, ...)"
 
         :how-to.startpage/title "Wie benutze ich schnaq?"
         :how-to.startpage/body "Sie möchten schnaq nutzen, sind aber unsicher, wie die Bedienung funktioniert? Wir haben eine ausführliche Anleitung mit kurzen Videos erstellt, um Ihnen den Einstieg zu erleichtern."
@@ -915,17 +777,11 @@
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
      :startpage.features/sample-discussion "/imgs/startpage/discussion_elearning.png"
      :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
-     :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
-     :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
      :pricing.others/miro "imgs/startpage/pricing/miro.png"
      :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
      :pricing.others/confluence "imgs/startpage/pricing/confluence.jpeg"
      :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
      :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
-     :feature.discussions/hero-image "/imgs/stock/discussion_landing_hero.jpeg"
-     :feature.discussions/create-discussion-spaces "/imgs/startpage/features/discussion-agendas.png"
-     :feature.knowledge/hero-image "/imgs/stock/two_people_discussing_500w.jpg"
-     :feature.knowledge/overview "/imgs/startpage/features/schnaqs-uebersicht_500w.png"
      :spotlight.merkel "imgs/spotlight/merkel.jpg"
      :spotlight.eco-brain "imgs/spotlight/brain.jpg"
      :spotlight.home-office "imgs/spotlight/covid-19.jpg"
