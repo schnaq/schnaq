@@ -900,7 +900,7 @@
         :feature/what "Mit einem Schritt zur Diskussion"
         :feature/share "Teile deinen schnaq mit Freunden"
         :feature/participate "Alle nehmen teil wann es ihnen passt"
-        :feature/time "Spar dir den Gruppenchat, den du eh nicht lies"
+        :feature/time "Spar dir den Gruppenchat, den du eh nicht liest"
         :feature/private-public "Erstelle private oder öffentliche schnaqs"
 
         ;; Route Link Texts
