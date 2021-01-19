@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.startpage.call-to-actions
-  (:require [schnaq.interface.text.display-data :refer [fa img-path labels]]
+  (:require [schnaq.interface.config :as config]
+            [schnaq.interface.text.display-data :refer [fa img-path labels]]
             [re-frame.core :as rf]))
 
 (defn- header-animation
@@ -33,15 +34,15 @@
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
   [:div.row {:key "HeaderExtras-Bullet-Points-and-Animation"}
-   [:div.col-lg-6.py-lg-5.pr-lg-5
+   [:div.col-lg-6.py-lg-4.pr-lg-5
     [header-animation]
     [start-schnaq-button]]
    [:div.col-lg-6.py-lg-5
     [bullet-point :clipboard :feature/what]
     [bullet-point :share :feature/share]
     [bullet-point :user/group :feature/participate]
-    [bullet-point :clock :feature/time]
-    [bullet-point :user/shield :feature/private-public]]])
+    [bullet-point :user/shield :feature/private-public]
+    [bullet-point :shield :feature/secure]]])
 
 (defn- spotlight-element [title image link]
   [:div.spotlight-discussion.clickable-no-hover
@@ -60,14 +61,14 @@
     [:div.col-lg-4
      [spotlight-element "Mein Beitrag für eine nachhaltigere Welt"
       (img-path :spotlight.eco-brain)
-      "https://schnaq.com/meetings/ce682862-9ca2-49c8-af44-d6bf484fb87c/agenda/92358976736052/discussion/start"]]
+      config/spotlight-1]]
     ; credit https://pixabay.com/illustrations/covid-19-work-from-home-quarantine-4938932/
     [:div.col-lg-4
      [spotlight-element "Remote-Arbeiten in Zeiten von Corona"
       (img-path :spotlight.home-office)
-      "https://schnaq.com/meetings/ce682862-9ca2-49c8-af44-d6bf484fb87c/agenda/92358976736052/discussion/start"]]
+      config/spotlight-2]]
     ; credit https://www.freeimg.net/photo/1188165/merkel-chancellor-angelamerkel-cdu
     [:div.col-lg-4
      [spotlight-element "Nächste Bundesklanzer:in"
       (img-path :spotlight.merkel)
-      "https://schnaq.com/meetings/ce682862-9ca2-49c8-af44-d6bf484fb87c/agenda/92358976736052/discussion/start"]]]])
+      config/spotlight-3]]]])
