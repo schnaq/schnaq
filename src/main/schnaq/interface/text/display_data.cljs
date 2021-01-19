@@ -382,8 +382,9 @@
         und lege direkt los."
         :startpage.features.discussion/lead "Strukturierte Diskussionen"
         :startpage.features.discussion/title "Wer am lautesten schreit hat nicht immer Recht"
-        :startpage.features.discussion/body "Der Gruppenchat bimmelt seit 30 Minuten. Die Nachrichten werden immer mehr. Die Lust zu lesen immer weniger. Mit schnaq siehst du einfach
-        strukturiert die Beiträge aller Teilnehmer:innen. Gehe schnell auf die Beiträge ein, die dich interessieren."
+        :startpage.features.discussion/body "Der Gruppenchat bimmelt seit 30 Minuten. Die Nachrichten werden immer mehr. Die Lust zu lesen immer weniger. Nur drei Nachrichten waren interessant.
+        Mit schnaq siehst du einfach strukturiert die Beiträge aller Teilnehmer:innen.
+        Gehe schnell auf die Beiträge ein, die dich interessieren."
         :startpage.features.graph/lead "Übersichtliche Darstellung"
         :startpage.features.graph/title "Verliere nie wieder den Überblick"
         :startpage.features.graph/body [:span "Zu jeder Diskussion wird automatisch eine Mindmap erstellt. So hast du jederzeit den Überblick. Dir ist etwas interessantes aufgefallen?" [:br] " Spring über die Mindmap per Doppelklick direkt in die Diskussion."]
