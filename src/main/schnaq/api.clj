@@ -252,20 +252,6 @@
                   [recipient]))))
       (deny-access))))
 
-(>defn- request-demo
-  "A user requests a demonstration via email."
-  [{:keys [body-params]}]
-  [:ring/request :ret :ring/response]
-  (let [{:keys [name email company phone]} body-params
-        {:keys [failed-sendings]} (emails/send-mails
-                                    (email-templates :demo-request/title)
-                                    (format (email-templates :demo-request/body) name email company phone)
-                                    ["info@dialogo.io"])]
-    (if (empty? failed-sendings)
-      (do (log/info "Demonstration requested")
-          (ok {:message "Demo requested."}))
-      (bad-request {:message "Ihre Anfrage konnte nicht bearbeitet werden, bitte versuchen Sie es erneut."}))))
-
 ;; -----------------------------------------------------------------------------
 ;; Discussion
 
@@ -466,7 +452,6 @@
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (POST "/discussion/statements/starting/add" [] add-starting-statement!)
-    (POST "/emails/request-demo" [] request-demo)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/feedback/add" [] add-feedback)

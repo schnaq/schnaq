@@ -42,23 +42,6 @@
 
         :startpage.features/more-information "More information"
 
-        :startpage.demo.request/title "Request a Demo"
-        :startpage.demo.request/body "Do you want to know how you can boost innovation at your company?
-        We will demonstrate schnaq personally. Just use the button on the left and we will get back to you as fast as possible."
-        :startpage.demo.request/button "Request a Demo!"
-        :startpage.demo.request.modal.name/label "Your name"
-        :startpage.demo.request.modal.name/placeholder "My name"
-        :startpage.demo.request.modal.email/label "E-Mail Address"
-        :startpage.demo.request.modal.email/placeholder "my@email.com"
-        :startpage.demo.request.modal.company/label "Company name"
-        :startpage.demo.request.modal.company/placeholder "Company name, if any"
-        :startpage.demo.request.modal.phone/label "Phone #"
-        :startpage.demo.request.modal.phone/placeholder "0 1234 56789"
-        :startpage.demo.request.send.notification/title "Request sent!"
-        :startpage.demo.request.send.notification/body "We will get back to you as soon as possible."
-        :startpage.demo.request.send.notification/failed-title "Request failed!"
-        :startpage.demo.request.send.notification/failed-body "Something went wrong. Please check your input and try again."
-
         :startpage.features.meeting-organisation/lead "Work together"
         :startpage.features.meeting-organisation/title "Collaborative Exchange of Ideas"
         :startpage.features.meeting-organisation/body "Include all team members in the discussion and activate unused resources!
@@ -510,22 +493,6 @@
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
 
         :startpage.features/more-information "Mehr Informationen"
-
-        :startpage.demo.request/title "Demo anfordern"
-        :startpage.demo.request/body "Möchten Sie erfahren, wie Sie Ihrem Unternehmenswissen ein Langzeitgedächtnis verleihen? Wir führen Ihnen Schnaq dazu gerne persönlich vor. Nutzen Sie einfach den Button und wir werden uns schnellstmöglich bei Ihnen melden."
-        :startpage.demo.request/button "Jetzt Demo anfordern!"
-        :startpage.demo.request.modal.name/label "Ihr Name"
-        :startpage.demo.request.modal.name/placeholder "Mein Name"
-        :startpage.demo.request.modal.email/label "E-Mail Adresse"
-        :startpage.demo.request.modal.email/placeholder "meine@email.de"
-        :startpage.demo.request.modal.company/label "Name des Unternehmens"
-        :startpage.demo.request.modal.company/placeholder "Firmenname, falls zutreffend"
-        :startpage.demo.request.modal.phone/label "Telefon"
-        :startpage.demo.request.modal.phone/placeholder "0 1234 56789"
-        :startpage.demo.request.send.notification/title "Anfrage versendet!"
-        :startpage.demo.request.send.notification/body "Es wird sich schnellstmöglich jemand bei Ihnen melden."
-        :startpage.demo.request.send.notification/failed-title "Anfrage fehlgeschlagen!"
-        :startpage.demo.request.send.notification/failed-body "Etwas ist schief gelaufen. Überprüfen Sie Ihre Eingaben und versuchen Sie es bitte erneut."
 
         :startpage.features.meeting-organisation/lead "Gemeinsam Arbeiten"
         :startpage.features.meeting-organisation/title "Kollaborativer Meinungsaustausch"
