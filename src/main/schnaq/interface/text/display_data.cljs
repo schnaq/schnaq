@@ -383,7 +383,7 @@
         Oder möchtest du einfach wissen was andere Menschen zu Themen denken, die dir wichtig sind? Erstelle eine Diskussion mit schnaq
         und lege direkt los."
         :startpage.features.discussion/lead "Strukturierte Diskussionen"
-        :startpage.features.discussion/title "Wer am lautesten schreit hat nicht immer Recht"
+        :startpage.features.discussion/title "Wer am lautesten schreit, hat nicht immer Recht"
         :startpage.features.discussion/body "Der Gruppenchat bimmelt seit 30 Minuten. Die Nachrichten werden immer mehr. Die Lust zu lesen immer weniger. Nur drei Nachrichten waren interessant.
         Mit schnaq siehst du einfach strukturiert die Beiträge aller Teilnehmer:innen.
         Gehe schnell auf die Beiträge ein, die dich interessieren."
@@ -676,7 +676,7 @@
         :feature/what "Mit einem Schritt zur Diskussion"
         :feature/share "Lade deine Freunde ein – keine Accounts notwendig"
         :feature/participate "Finde heraus was andere denken"
-        :feature/private-public "Entscheide wer deine Diskussion sehen darf"
+        :feature/private-public "Entscheide, wer deine Diskussion sehen darf"
         :feature/secure "Deine Daten sind sicher auf deutschen Servern"
 
         ;; Route Link Texts
