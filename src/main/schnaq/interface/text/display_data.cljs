@@ -675,7 +675,7 @@
         ;; feature list
         :feature/what "Mit einem Schritt zur Diskussion"
         :feature/share "Lade deine Freunde ein – keine Accounts notwendig"
-        :feature/participate "Finde heraus was andere denken"
+        :feature/participate "Finde heraus, was andere denken"
         :feature/private-public "Entscheide, wer deine Diskussion sehen darf"
         :feature/secure "Deine Daten sind sicher auf deutschen Servern"
 
