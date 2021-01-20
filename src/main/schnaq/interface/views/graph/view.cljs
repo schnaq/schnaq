@@ -73,7 +73,7 @@
                        :shapeProperties {:borderRadius 12}
                        :widthConstraint {:minimum 50
                                          :maximum 200}
-                       :font {:align "left"}
+                       :font {:align "left" :color "white"}
                        :margin 10}))))
 
 (defn- graph-canvas

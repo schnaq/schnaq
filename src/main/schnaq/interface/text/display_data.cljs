@@ -735,7 +735,7 @@
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
      :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"
-     :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
+     :startpage.features/discussion-graph "/imgs/startpage/sample_graph.png"
      :pricing.others/miro "imgs/startpage/pricing/miro.png"
      :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
      :pricing.others/confluence "imgs/startpage/pricing/confluence.jpeg"
@@ -750,7 +750,9 @@
   "Returns an video path"
   [identifier]
   (identifier
-    {:start-page.work-together/webm "/animations/WorkTogether.webm"
+    {:start-page.features.sample-discussion/webm "/animations/sample_discussion.webm"
+     :start-page.features.sample-discussion/mp4 "/animations/sample_discussion.mp4"
+     :start-page.work-together/webm "/animations/WorkTogether.webm"
      :start-page.work-together/mp4 "/animations/WorkTogether.mp4"}))
 
 (defn fa
