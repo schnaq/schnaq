@@ -946,7 +946,7 @@
      :schnaqqifant/original "/imgs/schnaqqifant.svg"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
-     :startpage.features/sample-discussion "/imgs/startpage/discussion_elearning.png"
+     :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"
      :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
      :startpage.value-cards.discussion/image "/imgs/stock/discussion.jpeg"
      :startpage.value-cards.knowledge/image "/imgs/stock/knowledge.jpeg"
