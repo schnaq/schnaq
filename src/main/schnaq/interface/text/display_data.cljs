@@ -734,7 +734,7 @@
      :schnaqqifant/original "/imgs/schnaqqifant.svg"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
-     :startpage.features/sample-discussion "/imgs/startpage/discussion_elearning.png"
+     :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"
      :startpage.features/discussion-graph "/imgs/startpage/discussion_graph_500px.png"
      :pricing.others/miro "imgs/startpage/pricing/miro.png"
      :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
