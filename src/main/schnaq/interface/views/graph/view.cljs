@@ -35,10 +35,10 @@
   (map
     #(let [color (case (:type %)
                    :argument.type/starting (colors :blue/light)
-                   :argument.type/support (colors :blue/light)
+                   :argument.type/support (colors :blue/default)
                    :argument.type/attack (colors :orange/default)
                    :argument.type/undercut (colors :orange/default)
-                   :agenda (colors :blue/default)
+                   :agenda (colors :white)
                    (colors :blue/default))]
        (assoc % :color {:background color
                         :highlight {:background color}
@@ -62,6 +62,20 @@
          %))
     nodes))
 
+(defn- node-content-color
+  [nodes]
+  (map
+    #(let [text-color (case (:type %)
+                        :agenda (colors :gray/dark)
+                        (colors :white))]
+       (merge % {:shape "box"
+                 :shapeProperties {:borderRadius 12}
+                 :widthConstraint {:minimum 50
+                                   :maximum 200}
+                 :font {:align "left" :color text-color}
+                 :margin 10}))
+    nodes))
+
 (>defn- convert-nodes-for-vis
   "Converts the nodes received from backend specifically for viz."
   [nodes controversy-values]
@@ -69,12 +83,7 @@
   (->> nodes
        node-types->colors
        (mark-controversy controversy-values)
-       (map #(merge % {:shape "box"
-                       :shapeProperties {:borderRadius 12}
-                       :widthConstraint {:minimum 50
-                                         :maximum 200}
-                       :font {:align "left" :color "white"}
-                       :margin 10}))))
+       (node-content-color)))
 
 (defn- graph-canvas
   "Visualization of Discussion Graph."

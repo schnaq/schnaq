@@ -811,4 +811,5 @@
      :blue/selected "#0181dd"
      :orange/default "#ff772d"
      :orange/selected "#fe661e"
+     :gray/dark "#343a40"
      :white "#ffffff"}))
