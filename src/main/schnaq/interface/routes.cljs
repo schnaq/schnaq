@@ -38,50 +38,56 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
-   ["schnaqs/public"
-    {:name :routes/public-discussions
-     :view meetings-overview/public-discussions-view
-     :link-text (labels :router/public-discussions)
-     :controllers [{:start (fn [] (rf/dispatch [:meetings.public/load]))}]}]
-   ["schnaq/:share-hash"
-    {:parameters {:path {:share-hash string?}}
-     :controllers [{:parameters {:path [:share-hash]}
-                    :start (fn [{:keys [path]}]
-                             (rf/dispatch [:meeting/load-by-share-hash (:share-hash path)]))}]}
-    ["/"
-     {:controllers schnaq-start-controllers
-      :name :routes.schnaq/start
-      :view discussion-card-view/view
-      :link-text (labels :router/start-discussion)}]
-    ["/statement/:statement-id"
-     {:name :routes.schnaq.select/statement
-      :parameters {:path {:statement-id int?}}
-      :view discussion-card-view/view
-      :controllers [{:parameters {:path [:share-hash :statement-id]}
-                     :start (fn []
-                              (rf/dispatch [:discussion.query.statement/by-id]))
-                     :stop (fn []
-                             (rf/dispatch [:visited.statement-nums/to-localstorage]))}]}]
-    ["/graph"
-     {:name :routes/graph-view
-      :view graph-view/graph-view-entrypoint
-      :link-text (labels :router/graph-view)
-      :controllers [{:identity (fn [] (random-uuid))
-                     :start (fn []
-                              (rf/dispatch [:updates.periodic/graph true])
-                              (rf/dispatch [:graph/load-data-for-discussion]))
-                     :stop (fn []
-                             (rf/dispatch [:updates.periodic/graph false]))}]}]]
+   ["schnaqs"
+    ["/public"
+     {:name :routes/public-discussions
+      :view meetings-overview/public-discussions-view
+      :link-text (labels :router/public-discussions)
+      :controllers [{:start (fn [] (rf/dispatch [:meetings.public/load]))}]}]
+    ["/my"
+     {:name :routes.meetings/my-schnaqs
+      :view meetings-overview/meeting-view-visited
+      :link-text (labels :router/my-schnaqs)
+      :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]]
+   ["schnaq"
+    ["/create"
+     {:name :routes.brainstorm/create
+      :view brainstorm-create/create-brainstorm-view
+      :link-text (labels :router/create-brainstorm)
+      :controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}]
+    ["/:share-hash"
+     {:parameters {:path {:share-hash string?}}
+      :controllers [{:parameters {:path [:share-hash]}
+                     :start (fn [{:keys [path]}]
+                              (rf/dispatch [:meeting/load-by-share-hash (:share-hash path)]))}]}
+     ["/"
+      {:controllers schnaq-start-controllers
+       :name :routes.schnaq/start
+       :view discussion-card-view/view
+       :link-text (labels :router/start-discussion)}]
+     ["/statement/:statement-id"
+      {:name :routes.schnaq.select/statement
+       :parameters {:path {:statement-id int?}}
+       :view discussion-card-view/view
+       :controllers [{:parameters {:path [:share-hash :statement-id]}
+                      :start (fn []
+                               (rf/dispatch [:discussion.query.statement/by-id]))
+                      :stop (fn []
+                              (rf/dispatch [:visited.statement-nums/to-localstorage]))}]}]
+     ["/graph"
+      {:name :routes/graph-view
+       :view graph-view/graph-view-entrypoint
+       :link-text (labels :router/graph-view)
+       :controllers [{:identity (fn [] (random-uuid))
+                      :start (fn []
+                               (rf/dispatch [:updates.periodic/graph true])
+                               (rf/dispatch [:graph/load-data-for-discussion]))
+                      :stop (fn []
+                              (rf/dispatch [:updates.periodic/graph false]))}]}]]]
    ["pricing"
     {:name :routes/pricing
      :view pricing-view/pricing-view
      :link-text (labels :router/pricing)}]
-   ["brainstorm"
-    {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
-    ["/create"
-     {:name :routes.brainstorm/create
-      :view brainstorm-create/create-brainstorm-view
-      :link-text (labels :router/create-brainstorm)}]]
    ["privacy"
     {:name :routes/privacy
      :view privacy/view
@@ -93,11 +99,6 @@
        {:name :routes/meetings
         :view meetings-overview/meeting-view-entry
         :link-text (labels :router/all-meetings)}])
-    ["/my"
-     {:name :routes.meetings/my-schnaqs
-      :view meetings-overview/meeting-view-visited
-      :link-text (labels :router/my-schnaqs)
-      :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
