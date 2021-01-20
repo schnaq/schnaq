@@ -12,9 +12,11 @@
 (defn- structured-discussions
   "Overview of structured discussions."
   []
-  [rows/image-left
-   :startpage.features/sample-discussion
-   :startpage.features.discussion])
+  [rows/video-left
+   :start-page.features.sample-discussion/webm
+   :start-page.features.sample-discussion/mp4
+   :startpage.features.discussion
+   false])
 
 (defn- graph-visualization
   "Feature box showcasing the graph."
