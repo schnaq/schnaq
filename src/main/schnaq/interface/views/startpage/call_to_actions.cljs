@@ -69,6 +69,6 @@
       config/spotlight-2]]
     ; credit https://www.freeimg.net/photo/1188165/merkel-chancellor-angelamerkel-cdu
     [:div.col-lg-4
-     [spotlight-element "Nächste Bundesklanzer:in"
+     [spotlight-element "Nächste:r Bundeskanzler:in"
       (img-path :spotlight.merkel)
       config/spotlight-3]]]])
