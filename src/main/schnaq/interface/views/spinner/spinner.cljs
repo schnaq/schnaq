@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.spinner.spinner
-  (:require      [reagent.core :as reagent]))
+  (:require [reagent.core :as reagent]))
 
 (def ^:private role-id "loading-status")
 (def ^:private spinner-is-loading? (reagent/atom false))
