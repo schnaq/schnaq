@@ -1,28 +1,37 @@
 (ns schnaq.interface.views.spinner.spinner
-  (:require      [reagent.core :as reagent]))
+  (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]))
 
 (def ^:private role-id "loading-status")
-(def ^:private spinner-is-loading? (reagent/atom false))
+#_(def ^:private spinner-is-loading? (reagent/atom false))
 
-(defn set-spinner-loading! [is-loading?]
-  (reset! spinner-is-loading? is-loading?))
+#_(defn set-spinner-loading! [is-loading?]
+    (reset! spinner-is-loading? is-loading?))
 
 
-(defn view [ & [start-spinning?]]
+(defn view []
   (reagent/create-class
-    {:display-name "Visualization of Discussion Graph"
+    {:display-name "Spinner View"
      :reagent-render
      (fn [_this]
-       (when @spinner-is-loading?
-         [:div.spinner-styling
-          [:div.spinner-border.text-primary {:role role-id}
-           [:span.sr-only "Loading..."]]]))
-     :component-did-mount
-     (fn [_this]
-       (when start-spinning?
-         (set-spinner-loading! true)))
+       (let [spinner-is-loading? @(rf/subscribe [:spinner/active?])]
+         (when spinner-is-loading?
+           [:div.spinner-styling
+            [:div.spinner-border.text-primary {:role role-id}
+             [:span.sr-only "Loading..."]]])))
      :component-will-unmount
      (fn [_this]
-       (set-spinner-loading! false))}))
+       (rf/dispatch [:spinner/active! false]))}))
 
 
+;; subs
+
+(rf/reg-sub
+  :spinner/active?
+  (fn [db _]
+    (get-in db [:spinner :active?] false)))
+
+(rf/reg-event-db
+  :spinner/active!
+  (fn [db [_ toggle]]
+    (assoc-in db [:spinner :active?] toggle)))

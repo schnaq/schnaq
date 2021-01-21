@@ -15,6 +15,7 @@
             [schnaq.interface.views.spinner.spinner :as spinner]))
 
 (def ^:private graph-id "graph")
+(def ^:private spinner-id "graph-spinner")
 
 (defn- wrap-line
   "Takes a set of `nodes` and changes their labels to wrap properly after `break` characters."
@@ -150,6 +151,7 @@
      [graph-agenda-header title share-hash]
      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
        [graph-canvas graph])
+     (rf/dispatch [:spinner/active! true])
      [spinner/view true]]))
 
 (defn graph-view-entrypoint []
@@ -170,7 +172,7 @@
 (rf/reg-event-db
   :graph/set-current
   (fn [db [_ graph-data]]
-    (spinner/set-spinner-loading! false)
+    (rf/dispatch [:spinner/active! false])
     (assoc-in db [:graph :current] graph-data)))
 
 (rf/reg-sub
