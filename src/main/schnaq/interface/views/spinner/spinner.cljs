@@ -3,11 +3,6 @@
             [reagent.core :as reagent]))
 
 (def ^:private role-id "loading-status")
-#_(def ^:private spinner-is-loading? (reagent/atom false))
-
-#_(defn set-spinner-loading! [is-loading?]
-    (reset! spinner-is-loading? is-loading?))
-
 
 (defn view []
   (reagent/create-class
