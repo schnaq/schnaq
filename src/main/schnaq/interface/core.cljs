@@ -8,6 +8,7 @@
             [re-frame.core :as rf]
             [reagent.dom]
             [schnaq.interface.analytics.core]
+            [schnaq.interface.auth]
             [schnaq.interface.config :as config]
             [schnaq.interface.effects]
             [schnaq.interface.events]
