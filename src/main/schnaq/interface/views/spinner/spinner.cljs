@@ -8,7 +8,7 @@
   (reset! spinner-is-loading? is-loading?))
 
 
-(defn view [ & [start-spinning?]]
+(defn view [& [start-spinning?]]
   (reagent/create-class
     {:display-name "Visualization of Discussion Graph"
      :reagent-render
