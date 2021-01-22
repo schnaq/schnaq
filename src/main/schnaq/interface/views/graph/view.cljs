@@ -151,8 +151,7 @@
      [graph-agenda-header title share-hash]
      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
        [graph-canvas graph])
-     (rf/dispatch [:spinner/active! true])
-     [spinner/view true]]))
+     [spinner/view]]))
 
 (defn graph-view-entrypoint []
   [graph-view])

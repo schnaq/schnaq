@@ -80,6 +80,7 @@
        :link-text (labels :router/graph-view)
        :controllers [{:identity (fn [] (random-uuid))
                       :start (fn []
+                               (rf/dispatch [:spinner/active! true])
                                (rf/dispatch [:updates.periodic/graph true])
                                (rf/dispatch [:graph/load-data-for-discussion]))
                       :stop (fn []

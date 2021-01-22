@@ -4,7 +4,11 @@
 
 (def ^:private role-id "loading-status")
 
-(defn view []
+(defn view
+  "Place a spinner on top of a view.
+    Activate spinner with (rf/dispatch [:spinner/active! true])
+    Deactivate spinner with (rf/dispatch [:spinner/active! false])"
+  []
   (reagent/create-class
     {:display-name "Spinner View"
      :reagent-render
