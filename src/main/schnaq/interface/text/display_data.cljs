@@ -586,7 +586,7 @@
 
         ;; Graph Texts
         :graph/heading "Diskussionsübersicht"
-        :graph.button/text "Zeige Diskussionsgraphen an"
+        :graph.button/text "Zum Diskussionsgraphen"
         :graph/download-png "Graph als Bild herunterladen"
 
         ;; Pricing Page
@@ -678,6 +678,10 @@
         :feature/participate "Finde heraus, was andere denken"
         :feature/private-public "Entscheide, wer deine Diskussion sehen darf"
         :feature/secure "Deine Daten sind sicher auf deutschen Servern"
+
+        ;; tooltips
+        :tooltip/history-home "Zurück zum Start"
+        :tooltip/history-statement "Zurück zum Beitrag von "
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
