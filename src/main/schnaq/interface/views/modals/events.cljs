@@ -4,4 +4,4 @@
 (rf/reg-event-db
   :modal
   (fn [db [_ data]]
-    (assoc-in db [:modal] data)))
+    (assoc db :modal data)))
