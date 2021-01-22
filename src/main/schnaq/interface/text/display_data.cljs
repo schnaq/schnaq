@@ -333,6 +333,10 @@
         :feature/private-public "Decide who gets to see your discussion"
         :feature/secure "Your data is stored securely on EU servers"
 
+        ;; tooltips
+        :tooltip/history-home "Back to start"
+        :tooltip/history-statement "Back to statement made by "
+
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
         :router/all-feedbacks "All feedbacks"
