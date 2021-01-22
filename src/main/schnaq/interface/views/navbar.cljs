@@ -3,53 +3,9 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
-
-(defn- name-input
-  "An input, where the user can set their name. Happens automatically by typing."
-  [username btn-class]
-  [:form.form-inline
-   {:on-submit
-    (fn [e] (js-wrap/prevent-default e)
-      (rf/dispatch [:user/set-display-name
-                    (oget e [:target :elements :name-input :value])]))}
-   [:input#name-input.form-control.form-round-05.py-1.mr-sm-2
-    {:type "text"
-     :name "name-input"
-     :autoFocus true
-     :required true
-     :defaultValue username
-     :placeholder (labels :user.button/set-name-placeholder)}]
-   [:input.btn.mt-1.mt-sm-0
-    {:class btn-class
-     :type "submit"
-     :value (labels :user.button/set-name)}]])
-
-(defn show-input-button
-  "A button triggering the showing of the name field."
-  [username button-class]
-  [:button.btn {:class button-class
-                :on-click #(rf/dispatch [:user/show-display-name-input])}
-   username])
-
-(defn username-bar-view
-  "A bar containing all user related utilities and information."
-  ([]
-   [username-bar-view "btn-outline-primary"])
-
-  ([button-class]
-   (let [username @(rf/subscribe [:user/display-name])
-         show-input? @(rf/subscribe [:user/show-display-name-input?])]
-     (if show-input?
-       [name-input username button-class]
-       [show-input-button username button-class]))))
-
-(defn username-bar-view-light
-  []
-  [username-bar-view "btn-outline-light"])
-
 
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
@@ -86,7 +42,7 @@
 
 (defn- blog-link []
   [:ul.navbar-nav
-   [:li.nav-item.mx-lg-4
+   [:li.nav-item
     [:a.nav-link {:href "https://schnaq.com/blog/" :role "button"}
      [:i {:class (str "far " (fa :newspaper))}] " "
      (labels :nav/blog)]]])
@@ -142,4 +98,4 @@
          [:button.dropdown-item
           {:on-click #(language/set-language :de)} "Deutsch"]]]
        [blog-link]
-       [username-bar-view]]]]))
+       [um/user-handling-dropdown "btn-outline-primary"]]]]))
