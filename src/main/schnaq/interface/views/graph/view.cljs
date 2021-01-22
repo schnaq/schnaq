@@ -15,7 +15,6 @@
             [schnaq.interface.views.spinner.spinner :as spinner]))
 
 (def ^:private graph-id "graph")
-(def ^:private spinner-id "graph-spinner")
 
 (defn- wrap-line
   "Takes a set of `nodes` and changes their labels to wrap properly after `break` characters."
