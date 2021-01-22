@@ -34,6 +34,8 @@
             [schnaq.interface.views.meeting.overview]
             [schnaq.interface.views.meeting.visited]
             [schnaq.interface.views.modals.modal]
+            [schnaq.interface.views.navbar]
+            [schnaq.interface.views.navbar.user-management]
             [schnaq.interface.views.notifications]
             [schnaq.interface.views.pages]
             [schnaq.interface.views.privacy]
