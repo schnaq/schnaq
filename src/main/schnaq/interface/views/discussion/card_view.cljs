@@ -6,7 +6,7 @@
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
-            [schnaq.interface.views.navbar :as navbar]))
+            [schnaq.interface.views.navbar.user-management :as um]))
 
 (defn- card-meeting-header
   "Overview header for a meeting with a name input"
@@ -41,7 +41,7 @@
       (when (and edit-hash (btools/is-brainstorm? meeting))
         [admin-buttons/admin-center share-hash edit-hash])
       ;; name input
-      [navbar/username-bar-view-light]
+      [um/user-handling-dropdown "btn-outline-light"]
       [:div.d-md-none
        [:hr]
        [:h6.text-left (labels :common/history)]
