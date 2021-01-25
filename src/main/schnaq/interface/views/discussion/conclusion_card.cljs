@@ -89,11 +89,7 @@
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
        [:div.d-flex.pt-3
-        [:div.mr-auto.regular-cursor
-         {:on-click (fn [event]
-                      (js-wrap/prevent-default event)
-                      (js-wrap/stop-propagation event))}
-         [:p content]]
+        [:div.mr-auto [:p content]]
         [:div.pb-2 [up-down-vote-breaking statement]]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
@@ -110,10 +106,12 @@
      (for [conclusion conclusions]
        [:div {:key (:db/id conclusion)
               :on-click (fn [_e]
-                          (rf/dispatch [:discussion.select/conclusion conclusion])
-                          (rf/dispatch [:discussion.history/push conclusion])
-                          (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
-                                        (assoc path-params :statement-id (:db/id conclusion))]))}
+                          (let [selection (.toString (.getSelection js/window))]
+                            (when (zero? (count selection))
+                              (rf/dispatch [:discussion.select/conclusion conclusion])
+                              (rf/dispatch [:discussion.history/push conclusion])
+                              (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
+                                            (assoc path-params :statement-id (:db/id conclusion))]))))}
         [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]])]))
 
 (rf/reg-event-fx
