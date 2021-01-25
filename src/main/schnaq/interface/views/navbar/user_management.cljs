@@ -61,10 +61,10 @@
       (when-not toolbelt/production?
         [:<>
          [:div.dropdown-divider]
+         (when authenticated?
+           [:a.dropdown-item {:href config/keycloak-profile-page}
+            (labels :user.profile/settings)])
          [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
           (if authenticated?
             (labels :user/logout)
-            (labels :user/login))]
-         (when authenticated?
-           [:a.dropdown-item {:href config/keycloak-profile-page}
-            (labels :user.profile/settings)])])]]))
+            (labels :user/login))]])]]))

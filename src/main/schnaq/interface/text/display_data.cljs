@@ -229,7 +229,7 @@
         :user.set-name.modal/primer "The name will be visible to other participants of the schnaq."
         :user/login "Login / Sign up"
         :user/logout "Logout"
-        :user.profile/settings "Profile Settings"
+        :user.profile/settings "Settings"
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -577,7 +577,7 @@
         :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
         :user/login "Login / Registrieren"
         :user/logout "Logout"
-        :user.profile/settings "Profileinstellungen"
+        :user.profile/settings "Einstellungen"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
