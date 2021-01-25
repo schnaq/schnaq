@@ -2,7 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 

@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.navbar
-  (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.views.navbar.user-management :as um]
