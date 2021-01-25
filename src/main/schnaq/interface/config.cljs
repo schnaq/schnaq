@@ -1,4 +1,5 @@
-(ns schnaq.interface.config)
+(ns schnaq.interface.config
+  (:require [goog.string :as gstring]))
 
 ;; Third parameter is a default value
 (goog-define api-url "http://localhost:3000")
@@ -12,7 +13,9 @@
 (goog-define keycloak-ssl-required "external")
 (goog-define keycloak-resource "development")
 (goog-define keycloak-public-client true)
-(goog-define keycloak-profile-page "https://keycloak.disqtec.com/auth/realms/development/account/#/personal-info")
+
+(def keycloak-profile-page
+  (gstring/format "https://keycloak.disqtec.com/auth/realms/%s/account/#/personal-info" keycloak-resource))
 
 (def keycloak
   {:url keycloak-auth-server-url

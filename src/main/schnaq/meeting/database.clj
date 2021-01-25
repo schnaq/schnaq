@@ -104,7 +104,7 @@
    :author/nickname])
 
 (def ^:private user-pattern
-  "Pull a user based on these atributes"
+  "Pull a user based on these attributes"
   [:db/id
    {:user/core-author [:author/nickname]}
    :user/upvotes
