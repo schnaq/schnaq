@@ -1,4 +1,4 @@
-(ns schnaq.interface.utils.tool-tip
+(ns schnaq.interface.utils.tooltip
   (:require [reagent.core :as reagent]
             [reagent.dom :as rdom]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
@@ -14,7 +14,7 @@
        (js-wrap/tooltip (rdom/dom-node comp) "disable")
        (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
      :reagent-render
-     (fn [] [:div {:data-toggle "tooltip"
-                  :data-placement tooltip-location
-                  :title tooltip}
-             content])}))
+     (fn [] [:div.h-100
+             {:data-toggle "tooltip"
+              :data-placement tooltip-location
+              :title tooltip} content])}))
