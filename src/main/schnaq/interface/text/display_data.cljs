@@ -219,6 +219,7 @@
         ;; User related
         :user.button/set-name "Save name"
         :user.button/set-name-placeholder "Your name"
+        :user.button/change-name "Change name"
         :user.button/success-body "Name saved successfully"
         :user.set-name/dialog-header "Hello 👋"
         :user.set-name/dialog-lead "Good to see you!"
@@ -226,6 +227,9 @@
         :user.set-name/dialog-button "How do you want to be called?"
         :user.set-name.modal/header "Please, enter a name"
         :user.set-name.modal/primer "The name will be visible to other participants of the schnaq."
+        :user/login "Login / Sign up"
+        :user/logout "Logout"
+        :user.profile/settings "Settings"
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -567,6 +571,7 @@
         ;; User related
         :user.button/set-name "Name speichern"
         :user.button/set-name-placeholder "Ihr Name"
+        :user.button/change-name "Namen ändern"
         :user.button/success-body "Name erfolgreich gespeichert"
         :user.set-name/dialog-header "Hallo 👋"
         :user.set-name/dialog-lead "Schön, dass Sie hier sind!"
@@ -574,6 +579,9 @@
         :user.set-name/dialog-button "Wie möchten Sie genannt werden?"
         :user.set-name.modal/header "Geben Sie einen Namen ein"
         :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
+        :user/login "Login / Registrieren"
+        :user/logout "Logout"
+        :user.profile/settings "Einstellungen"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
