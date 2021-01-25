@@ -75,8 +75,7 @@
 
 (rf/reg-event-db
   :keycloak/store-user-profile
-  (fn [db [_ {:keys [username email] :as profile}]]
-    (prn profile)
+  (fn [db [_ {:keys [username email]}]]
     (-> db
         (assoc-in [:user :name] username)
         (cond-> email
