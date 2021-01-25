@@ -236,6 +236,18 @@
                   recipients))))
       (deny-access))))
 
+(>defn- set-preview-image
+  "Set preview image"
+  [{:keys [body-params]}]
+  [:ring/request :ret :ring/response]
+  (let [{:keys [share-hash edit-hash image-url]} body-params]
+    (if (valid-credentials? share-hash edit-hash)
+      (do (log/debug (str "Set preview image" image-url))
+          (ok (merge
+                {:message "Image set"}
+                {:result "ToDo"})))
+      (deny-access))))
+
 (>defn- send-admin-center-link
   "Send URL to admin-center via mail to recipient."
   [{:keys [body-params]}]
@@ -454,6 +466,7 @@
     (POST "/discussion/statements/starting/add" [] add-starting-statement!)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
+    (POST "/preview-image/image" [] set-preview-image)
     (POST "/feedback/add" [] add-feedback)
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)

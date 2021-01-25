@@ -58,6 +58,16 @@
         ;; Create schnaqs
         :schnaqs/create "Create schnaq"
 
+        ;; Image preview
+        :schnaq.preview-image-url/placeholder "Image url"
+        :schnaq.preview-image-url/button "Add as preview image"
+        :schnaq.preview-image-url/note "We reserve the right to prohibit usage of certain content providers"
+        :schnaq.preview-image-url/label "Add a preview image to your schnaq header"
+        :schnaq.preview-image-url/successful-set "Preview image successfully set"
+        :schnaq.preview-image-url/successful-set-body "The image will be featured in this schnaq's header."
+        :schnaq.preview-image-url/failed-setting-title "Error when adding image"
+        :schnaq.preview-image-url/failed-seting-body "The image will not be used as preview image."
+
         ;; Create meeting
         :meeting-create-subheader "Give your schnaq a name and description"
         :meeting-form-title-placeholder "What should the name of your meeting be?"
@@ -411,6 +421,18 @@
 
         ;; Create schnaqs
         :schnaqs/create "schnaq anlegen"
+
+        ;; Image preview
+        :schnaq.preview-image-url/placeholder "Bild Url eingeben"
+        :schnaq.preview-image-url/button "Vorschaubild hinzufügen"
+        :schnaq.preview-image-url/note "Wir behalten uns das Recht vor nur ausgewählte Quellen zu nutzen."
+        :schnaq.preview-image-url/label "Fügen Sie Ihrem schnaq ein Vorschaubild hinzu"
+        :schnaq.preview-image-url/successful-set "Vorschaubild erfolgreich gesetzt"
+        :schnaq.preview-image-url/successful-set-body "Das Bild wird nun in der Übersicht dargestelt."
+        :schnaq.preview-image-url/failed-setting-title "Fehler beim Hinzufügen des Bildes"
+        :schnaq.preview-image-url/failed-seting-body "Das Bild wird nicht in der Vorschau genutzt."
+
+
 
         ;; Create meeting
         :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
