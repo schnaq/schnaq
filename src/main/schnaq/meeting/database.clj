@@ -216,16 +216,18 @@
 (defn public-meetings
   "Returns all meetings where the discussion is public."
   []
-  (->
+  (->>
     (d/q
-      '[:find (pull ?meetings meeting-pattern-public)
+      '[:find (pull ?meetings meeting-pattern-public) ?ts
         :in $ meeting-pattern-public
-        :where [?public-discussions :discussion/states :discussion.state/public]
+        :where [?public-discussions :discussion/states :discussion.state/public ?tx]
         [?public-agendas :agenda/discussion ?public-discussions]
-        [?public-agendas :agenda/meeting ?meetings]]
+        [?public-agendas :agenda/meeting ?meetings]
+        [?tx :db/txInstant ?ts]]
       (d/db (new-connection)) meeting-pattern-public)
-    (toolbelt/pull-key-up :db/ident)
-    flatten))
+    (#(toolbelt/pull-key-up % :db/ident))
+    (sort-by second toolbelt/comp-compare)
+    (map first)))
 
 (>defn meeting-by-hash-generic
   "Generic meeting by hash method, outputs according to pattern."
