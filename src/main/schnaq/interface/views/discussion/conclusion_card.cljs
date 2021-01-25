@@ -89,7 +89,11 @@
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
        [:div.d-flex.pt-3
-        [:div.mr-auto [:p content]]
+        [:div.mr-auto.regular-cursor
+         {:on-click (fn [event]
+                      (js-wrap/prevent-default event)
+                      (js-wrap/stop-propagation event))}
+         [:p content]]
         [:div.pb-2 [up-down-vote-breaking statement]]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]

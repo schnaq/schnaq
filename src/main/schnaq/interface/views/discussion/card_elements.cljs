@@ -9,6 +9,7 @@
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.utils.tool-tip :as tooltip]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
@@ -24,7 +25,10 @@
    [:div.clickable.card-history-home.text-center
     {:on-click
      #(rf/dispatch [:discussion.history/time-travel history-length])}
-    [:i {:class (str "fas fa-2x " (fa :home))}]]])
+    [tooltip/nested-div
+     "right"
+     (labels :tooltip/history-home)
+     [:i {:class (str "fas fa-2x " (fa :home))}]]]])
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
@@ -35,14 +39,18 @@
      [home-button (count indexed-history)]
      ;; history
      (for [[index statement] indexed-history]
-       [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
-        {:key (str "history-" (:db/id statement))}
-        (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
-          [:div.card-history.clickable.mt-md-4
-           {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
-            :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-           [:div.history-card-content.text-center
-            [common/avatar (-> statement :statement/author :author/nickname) 42]]])])]))
+       (let [nickname (-> statement :statement/author :author/nickname)]
+         [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
+          {:key (str "history-" (:db/id statement))}
+          (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+            [:div.card-history.clickable.mt-md-4
+             {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
+              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+             [:div.history-card-content.text-center
+              [tooltip/nested-div
+               "right"
+               (str (labels :tooltip/history-statement) nickname)
+               [common/avatar nickname 42]]]])]))]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
