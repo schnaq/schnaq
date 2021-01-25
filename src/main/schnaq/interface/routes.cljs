@@ -19,9 +19,6 @@
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
 
-;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
-;; components inside do regularly. So just use components here that wrap the view you
-;; want to function regularly.
 (def ^:private schnaq-start-controllers
   [{:parameters {:path [:share-hash]}
     :start (fn []
@@ -31,6 +28,9 @@
     :stop (fn []
             (rf/dispatch [:updates.periodic/starting-conclusions false]))}])
 
+;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
+;; components inside do regularly. So just use components here that wrap the view you
+;; want to function regularly.
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
