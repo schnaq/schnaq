@@ -89,7 +89,7 @@
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
        [:div.d-flex.pt-3
-        [:div.mr-auto.regular-cursor [:p content]]
+        [:div.mr-auto [:p content]]
         [:div.pb-2 [up-down-vote-breaking statement]]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
