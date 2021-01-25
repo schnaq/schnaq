@@ -413,35 +413,35 @@
         :schnaqs/create "schnaq anlegen"
 
         ;; Create meeting
-        :meeting-create-subheader "Geben Sie Ihrem schnaq einen Namen und eine Beschreibung"
-        :meeting-form-title-placeholder "Wie soll Ihr schnaq heißen?"
+        :meeting-create-subheader "Gib deinem schnaq einen Namen und eine Beschreibung"
+        :meeting-form-title-placeholder "Wie soll dein schnaq heißen?"
         :meeting-form-description "Beschreibung"
         :meeting-form-end-date "Datum"
         :meeting-form-end-time "Uhrzeit"
         :meeting/copy-share-link "Link kopieren:"
-        :meeting/copy-link-tooltip "Hier klicken um Link zu kopieren"
+        :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
         :meeting/link-copied-heading "Link kopiert"
-        :meeting/link-copied-success "Der Link wurde in Ihre Zwischenablage kopiert!"
-        :meeting/created-success-heading "Ihr schnaq wurde erstellt!"
-        :meeting/created-success-subheading "Nun können Sie den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
-        :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Legen Sie los!"
+        :meeting/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
+        :meeting/created-success-heading "Dein schnaq wurde erstellt!"
+        :meeting/created-success-subheading "Nun kannst du den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
+        :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Los geht's!"
         :meetings/continue-to-schnaq-button "Zum schnaq"
 
         :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmer:innen"
         :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
         :meeting.admin/addresses-privacy "Diese Adressen werden ausschließlich zum Mailversand genutzt und danach sofort von unseren Servern gelöscht."
         :meeting.admin/send-invites-button-text "Einladungen versenden"
-        :meeting.admin/send-invites-heading "Laden Sie die Teilnehmer:innen per E-Mail ein"
-        :meeting.admin/delete-statements-heading "Löschen Sie folgende Beiträge"
+        :meeting.admin/send-invites-heading "Lade die Teilnehmer:innen per E-Mail ein"
+        :meeting.admin/delete-statements-heading "Lösche folgende Beiträge"
         :meeting.admin/statements-label "Statement-IDs, die gelöscht werden"
         :meeting.admin/statement-id-placeholder "Statement IDs getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
         :meeting.admin/delete-statements-button-text "Beiträge endgültig löschen"
         :meeting.admin.notifications/emails-successfully-sent-title "Mail(s) verschickt!"
-        :meeting.admin.notifications/emails-successfully-sent-body-text "Ihre Mail(s) wurden erfolgreich versendet."
+        :meeting.admin.notifications/emails-successfully-sent-body-text "Deine Mail(s) wurden erfolgreich versendet."
         :meeting.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
         :meeting.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
         :meeting.admin.notifications/statements-deleted-title "Nachrichten gelöscht!"
-        :meeting.admin.notifications/statements-deleted-lead "Die von Ihnen gewählten Nachrichten wurden erfolgreich gelöscht."
+        :meeting.admin.notifications/statements-deleted-lead "Deine gewählten Nachrichten wurden erfolgreich gelöscht."
 
         ;; Brainstorming time
         :brainstorm/heading "Schnaq starten"
@@ -452,39 +452,39 @@
         :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
 
         ;; Privacy Page
-        :privacy/heading "Was geschieht mit Ihren Daten?"
-        :privacy/subheading "Wir erklären es Ihnen gerne!"
+        :privacy/heading "Was geschieht mit deinen Daten?"
+        :privacy/subheading "Wir erklären es dir gerne!"
         :privacy.made-in-germany/lead "EU-Konformes Vorgehen"
         :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
         :privacy.made-in-germany/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf deutschen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
         :privacy.personal-data/lead "Welche Daten werden erhoben?"
         :privacy.personal-data/title "Persönliche Daten"
-        :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und Ihr Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn Sie dem zustimmen. "] [:p "Wenn Sie uns unterstützen wollen und der anonymisierten Analyse zustimmen, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Einstellungen prüfen"]]]
+        :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Einstellungen prüfen"]]]
         :privacy.localstorage/lead "Welche Daten schicke ich an die Server?"
         :privacy.localstorage/title "Datenaustausch"
-        :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten zu Ihnen auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicken Sie auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in Ihrem Browser (im LocalStorage) abgespeichert. Besuchen Sie dann schnaq erneut, schickt Ihr Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ können Sie sich die Zugangslinks per E-Mail schicken lassen und halten so alle für den Betrieb notwendigen Daten selbst in der Hand."]
-                                    [:p "Im Unterschied zu herkömmlichen Cookies verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von Ihnen an uns zurückschickt. Schauen Sie selbst, welche Daten das genau sind, indem Sie auf den Button klicken."]]
-        :privacy.localstorage/show-data "Ihre Daten anzeigen"
-        :privacy.localstorage.notification/title "Diese Daten hat Ihr Browser gespeichert"
-        :privacy.localstorage.notification/body "Hinweis: \"Kryptische\" Zeichenketten sind die Zugangscodes zu Ihren schnaqs."
-        :privacy.localstorage.notification/confirmation "Wollen Sie Ihre Daten wirklich löschen?"
+        :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten von dir auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicke auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in deinem Browser (im LocalStorage) abgespeichert. Besuchst du dann schnaq erneut, schickt dein Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ kannst du dir die Zugangslinks per E-Mail schicken lassen und hältst so alle für den Betrieb notwendigen Daten selbst in der Hand."]
+                                    [:p "Im Unterschied zu herkömmlichen Cookies verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von dir an uns zurückschickt. Schaue selbst nach, welche Daten das genau sind, indem du auf den Button klickst."]]
+        :privacy.localstorage/show-data "Deine Daten anzeigen"
+        :privacy.localstorage.notification/title "Diese Daten hat dein Browser gespeichert"
+        :privacy.localstorage.notification/body "Hinweis: \"Kryptische\" Zeichenketten sind die Zugangscodes zu den schnaqs."
+        :privacy.localstorage.notification/confirmation "Möchtest du deine Daten wirklich löschen?"
         :privacy.localstorage.notification/delete-button "Daten löschen"
-        :privacy.link-to-privacy/lead "Mehr Informationen finden Sie in unserer ausführlichen "
+        :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen "
         :privacy.link-to-privacy/privacy "Datenschutzerklärung"
 
         ;; schnaqs not found
-        :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen Sie Zugriff haben."
-        :schnaqs.not-found/alert-body "Laden Sie zu Ihrem ersten schnaq ein, indem Sie einen erstellen."
+        :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."
+        :schnaqs.not-found/alert-body "Lade zu deinem ersten schnaq ein, indem du einen erstellst."
 
         ;; Admin Center
-        :meeting/educate-on-link-text "Teilen Sie den untenstehenden Link mit Ihren Kolleg:innen."
+        :meeting/educate-on-link-text "Teile den untenstehenden Link mit deinen Kolleg:innen und Freund:innen."
         :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
         :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
         :meeting/educate-on-admin "Später jederzeit zum Admin-Center zurückkehren!"
         :meeting.admin-center/heading "Admin-Center"
         :meeting.admin-center/subheading "schnaq: \"%s\""
         :meeting.admin-center.edit.link/header "Zugang zum Admin-Center"
-        :meeting.admin-center.edit.link/primer "Administration ist Arbeit, lassen Sie sich helfen!"
+        :meeting.admin-center.edit.link/primer "Administration ist Arbeit, lass' dir dabei helfen!"
         :meeting.admin-center.edit.link/admin "Zugang zum Admin-Center per Mail"
         :meeting.admin-center.edit.link/admin-privileges "Editieren und Vorschläge verwalten"
         :meeting.admin-center.edit.link.form/label "E-Mail Adresse der Administrator:innen"
@@ -503,13 +503,13 @@
         :discussion/add-premise-against "Ich habe einen Grund dagegen"
         :discussion.badges/user-overview "Alle Teilnehmer:innen"
         :discussion.badges/delete-statement "Beitrag löschen"
-        :discussion.badges/delete-statement-confirmation "Wollen Sie den Beitrag wirklich löschen?"
+        :discussion.badges/delete-statement-confirmation "Möchtest du den Beitrag wirklich löschen?"
         :discussion.notification/new-content-title "Neuer Beitrag!"
-        :discussion.notification/new-content-body "Ihr Beitrag wurde erfolgreich gespeichert."
+        :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
 
         ;; meetings overview
-        :meetings/header "Übersicht Ihrer schnaqs"
-        :meetings/subheader "Auf diese schnaqs haben Sie Zugriff"
+        :meetings/header "Übersicht deiner schnaqs"
+        :meetings/subheader "Auf diese schnaqs hast du Zugriff"
 
         ;; Feedbacks
         :feedbacks.overview/header "Rückmeldungen"
@@ -520,33 +520,33 @@
         :feedbacks/button "Feedback"
         :feedbacks/screenshot "Screenshot"
         :feedbacks.modal/primer "Feedback ist wichtig! Wir freuen uns sehr über
-     jede Art von Feedback, je ehrlicher desto besser 🥳 Hinterlassen Sie uns
-     gerne einen kleinen Kommentar und helfen Sie uns damit diese Software
+     jede Art von Feedback, je ehrlicher desto besser 🥳 Hinterlasse uns
+     gerne einen kleinen Kommentar und hilf uns damit diese Software
      weiter zu verbessern. Dankeschön!"
-        :feedbacks.modal/contact-name "Ihr Name"
+        :feedbacks.modal/contact-name "Dein Name"
         :feedbacks.modal/contact-mail "E-Mail Adresse"
-        :feedbacks.modal/description "Ihre Rückmeldung"
+        :feedbacks.modal/description "Deine Rückmeldung"
         :feedbacks.modal/optional "Optional"
         :feedbacks.modal/screenshot "Foto der Anwendung mit abschicken?"
-        :feedbacks.modal/disclaimer "Ihre Daten werden nur auf unseren Servern
+        :feedbacks.modal/disclaimer "Deine Daten werden nur auf unseren Servern
      abgespeichert und keinen Dritten zugänglich gemacht."
-        :feedbacks.notification/title "Vielen Dank für Ihre Rückmeldung!"
-        :feedbacks.notification/body "Ihr Feedback wurde erfolgreich an uns
+        :feedbacks.notification/title "Vielen Dank für deine Rückmeldung!"
+        :feedbacks.notification/body "Dein Feedback wurde erfolgreich an uns
      gesendet 🎉"
 
         :feedbacks.survey/primer
-        [:<> "Wir würden uns freuen, wenn Sie bei einer
-     kleinen Umfrage teilnehmen würden. Diese wird bei Google Forms gehostet
+        [:<> "Wir würden uns freuen, wenn du bei einer
+     kleinen Umfrage teilnehmen würdest. Diese wird bei Google Forms gehostet
      und unterliegt den "
          [:a {:href "https://policies.google.com/privacy"} "Datenschutzbestimmungen von Google"]
-         ". Mit der Teilnahme an der Umfrage akzeptieren Sie diese Datenschutzbestimmungen."]
+         ". Mit der Teilnahme an der Umfrage akzeptierst du diesen Datenschutzbestimmungen."]
         :feedbacks.survey/checkbox "Ja, ich möchte an der Umfrage teilnehmen"
         :feedbacks.survey/loading "Formular wird geladen..."
         :feedbacks.survey/tab "Umfrage"
 
         ;; login
         :login/as "Hallo, "
-        :login/set-name "Geben Sie Ihren Namen ein"
+        :login/set-name "Gib deinen Namen ein"
 
         ;; analytics
         :analytics/heading "Analytics"
@@ -570,14 +570,14 @@
 
         ;; User related
         :user.button/set-name "Name speichern"
-        :user.button/set-name-placeholder "Ihr Name"
+        :user.button/set-name-placeholder "Dein Name"
         :user.button/change-name "Namen ändern"
         :user.button/success-body "Name erfolgreich gespeichert"
         :user.set-name/dialog-header "Hallo 👋"
-        :user.set-name/dialog-lead "Schön, dass Sie hier sind!"
-        :user.set-name/dialog-body "Um an Diskussionen teilzunehmen ist es notwendig, dass Sie einen Namen eingeben."
-        :user.set-name/dialog-button "Wie möchten Sie genannt werden?"
-        :user.set-name.modal/header "Geben Sie einen Namen ein"
+        :user.set-name/dialog-lead "Schön, dass du hier bist!"
+        :user.set-name/dialog-body "Um an Diskussionen teilzunehmen ist es notwendig, dass du einen Namen eingibst."
+        :user.set-name/dialog-button "Wie möchtest du genannt werden?"
+        :user.set-name.modal/header "Gib einen Namen ein"
         :user.set-name.modal/primer "Der Name wird den anderen Teilnehmer:innen im schnaq angezeigt."
         :user/login "Login / Registrieren"
         :user/logout "Logout"
@@ -587,14 +587,14 @@
         :errors/navigate-to-startpage "Zurück zur Startseite"
         :errors/generic "Es ist ein Fehler aufgetreten"
 
-        :error.generic/contact-us [:span "Sollten Sie hier landen nachdem Sie etwas auf schnaq.com angeklickt haben, geben Sie uns gerne Bescheid unter " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
+        :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
         :error.404/heading "Diese Seite existiert nicht 🙉"
-        :error.404/body "Die URL der Sie gefolgt sind existiert leider nicht. Möglicherweise hat sich ein Tippfehler
+        :error.404/body "Die URL, der du gefolgt bist, existiert leider nicht. Möglicherweise hat sich ein Tippfehler
      oder ein Zeichen zu viel eingeschlichen."
 
-        :error.403/heading "Sie haben nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
-        :error.403/body "Ihnen fehlt die Berechtigung diese Seite aufzurufen oder es handelt sich um einen Tippfehler in Ihrer URL."
+        :error.403/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+        :error.403/body "Dir fehlt die Berechtigung diese Seite aufzurufen oder es handelt sich um einen Tippfehler in deiner URL."
 
         ;; Graph Texts
         :graph/heading "Diskussionsübersicht"
@@ -618,23 +618,23 @@
         :pricing.trial.temporary/deactivation "Verfügbar ab 01.01.2021"
         :pricing.features/heading "Schnaq-Abonnement Vorteile"
         :pricing.features.user-numbers/heading "Unbegrenzte Teilnehmer:innen"
-        :pricing.features.user-numbers/content "Lassen Sie so viele Mitarbeiter:innen, wie Sie möchten, kooperieren. *"
+        :pricing.features.user-numbers/content "Lass so viele Mitarbeiter:innen, wie du möchtest, kooperieren. *"
         :pricing.features.team-numbers/heading "Unbegrenzte Teams"
-        :pricing.features.team-numbers/content "Die Anzahl der Teams, die Sie erstellen können, ist unlimitiert. *"
+        :pricing.features.team-numbers/content "Die Anzahl der Teams, die du erstellen kannst, ist unlimitiert. *"
         :pricing.features.app-integration/heading "App-Integration"
-        :pricing.features.app-integration/content "Verknüpfen Sie schnaq leicht mit Ihrem Slack, MS Teams, Confluence …"
+        :pricing.features.app-integration/content "Verknüpfe schnaq leicht mit deinem Slack, MS Teams, Confluence …"
         :pricing.features.analysis/heading "Automatische Analysen"
         :pricing.features.analysis/content "Die Beiträge werden automatisch analysiert und für alle Teilnehmer:innen aufbereitet."
         :pricing.features.knowledge-db/heading "Wissensdatenbank"
-        :pricing.features.knowledge-db/content "Sammeln Sie erarbeitetes Wissen und Ideen an einem Ort."
+        :pricing.features.knowledge-db/content "Sammle erarbeitetes Wissen und Ideen an einem Ort."
         :pricing.features.mindmap/heading "Interaktive Mindmap"
         :pricing.features.mindmap/content "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."
         :pricing.features/disclaimer "* Gilt nur für Business-Abonnement"
         :pricing.competitors/per-month-per-user " € pro Monat pro Nutzer:in"
-        :pricing.comparison/heading "Sie wachsen weiter – Sie sparen mehr!"
-        :pricing.comparison/subheading "Egal wie groß Ihr Team wird, der Preis bleibt der Gleiche.
+        :pricing.comparison/heading "Ihr wachst weiter – ihr spart mehr!"
+        :pricing.comparison/subheading "Egal wie groß dein Team wird, der Preis bleibt der Gleiche.
    So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."
-        :pricing.comparison.schnaq/price-point "79 € pro Monat für Ihr Unternehmen"
+        :pricing.comparison.schnaq/price-point "79 € pro Monat für dein Unternehmen"
         :pricing.comparison.schnaq/brainstorm "Brainstorming"
         :pricing.comparison.schnaq/decision-making "Entscheidungsfindung"
         :pricing.comparison.schnaq/knowledge-db "Wissensdatenbank"
@@ -656,32 +656,32 @@
         :pricing.faq/heading "Häufig gestellte Fragen zu schnaq Abos"
         :pricing.faq.terminate/heading "Kann ich jederzeit kündigen?"
         :pricing.faq.terminate/body
-        [:<> [:span.text-primary "Ja! "] "Sie können" [:span.text-primary " jeden Monat"] " kündigen,
-     wenn Sie die monatliche Zahlweise gewählt haben. Wenn Sie die jährliche Zahlweise
-     wählen, können Sie zum Ablauf des Abonnementjahres kündigen."]
+        [:<> [:span.text-primary "Ja! "] " Du kannst" [:span.text-primary " jeden Monat"] " kündigen,
+     wenn du die monatliche Zahlweise gewählt hast. Wenn du die jährliche Zahlweise
+     wählst, kannst du zum Ablauf des Abonnementjahres kündigen."]
         :pricing.faq.extra-price/heading "Muss ich für mehr Leute extra bezahlen?"
         :pricing.faq.extra-price/body
-        [:<> [:span.text-primary "Nein, "] "Sie können" [:span.text-primary " beliebig viele Personen "]
-         " zu Ihrer Organisation hinzufügen. Jedes Unternehmen, Verein,
+        [:<> [:span.text-primary "Nein, "] "du kannst" [:span.text-primary " beliebig viele Personen "]
+         " zu deiner Organisation hinzufügen. Jedes Unternehmen, Verein,
          Bildungseinrichtung, usw. braucht " [:span.text-primary "nur ein Abonnement."]]
         :pricing.faq.trial-time/heading "Verlängert sich der Testzeitraum automatisch?"
         :pricing.faq.trial-time/body
-        [:<> [:span.text-primary "Nein, "] "wenn ihr Testzeitraum endet, können Sie" [:span.text-primary " aktiv entscheiden"]
-         ", ob Sie Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchten.
+        [:<> [:span.text-primary "Nein, "] "wenn dein Testzeitraum endet, kannst du" [:span.text-primary " aktiv entscheiden"]
+         ", ob du Zahlungsdaten hinzufügen und weiter den Business-Tarif nutzen möchtest.
          Der " [:span.text-primary "Starter Plan bleibt unbegrenzt kostenfrei"] ", auch nach dem Testzeitraum."]
         :pricing.faq.longer-trial/heading "Kann ich den Business-Tarif länger testen?"
         :pricing.faq.longer-trial/body
-        [:<> [:span.text-primary "Ja! "] "Schreiben Sie uns einfach eine " [:span.text-primary " E-Mail"] " an "
+        [:<> [:span.text-primary "Ja! "] "Schreibe uns einfach eine " [:span.text-primary " E-Mail"] " an "
          [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
         :pricing.faq.privacy/heading "Wer hat Zugriff auf meine Daten?"
         :pricing.faq.privacy/body-1
-        [:<> "Jede Person, die Sie Ihrem Unternehmen hinzufügen, kann potentiell auf die hinterlegten Daten zugreifen."
-         "Technisch werden Ihre Daten vollständig sicher auf"
+        [:<> "Jede Person, die du deinem Unternehmen hinzufügst, kann potentiell auf die hinterlegten Daten zugreifen."
+         "Technisch werden deine Daten vollständig sicher auf"
          [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
         :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
-        :pricing.faq.privacy/body-3 " finden Sie mehr Informationen"
+        :pricing.faq.privacy/body-3 " findest du mehr Informationen"
         :pricing/headline "Schnaq Abonnement"
-        :pricing.newsletter/lead "Werden Sie sofort informiert, wenn das Abonnement live geht: "
+        :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht: "
         :pricing.newsletter/name "DisqTec Newsletter."
 
         ;; feature list
