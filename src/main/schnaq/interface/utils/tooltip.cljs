@@ -4,6 +4,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn nested-div
+  "Create a div with a tooltip, content is placed inside this div"
   [tooltip-location tooltip content]
   (reagent/create-class
     {:component-did-mount
