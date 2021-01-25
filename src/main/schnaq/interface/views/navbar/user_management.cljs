@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.navbar.user-management
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
@@ -60,8 +61,10 @@
       (when-not toolbelt/production?
         [:<>
          [:div.dropdown-divider]
-         [:button.dropdown-item
-          {:on-click #(rf/dispatch [login-logout-event])}
+         [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
           (if authenticated?
             (labels :user/logout)
-            (labels :user/login))]])]]))
+            (labels :user/login))]
+         (when authenticated?
+           [:a.dropdown-item {:href config/keycloak-profile-page}
+            (labels :user.profile/settings)])])]]))

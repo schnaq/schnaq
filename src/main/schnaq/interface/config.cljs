@@ -12,6 +12,7 @@
 (goog-define keycloak-ssl-required "external")
 (goog-define keycloak-resource "development")
 (goog-define keycloak-public-client true)
+(goog-define keycloak-profile-page "https://keycloak.disqtec.com/auth/realms/schnaq/account/#/personal-info")
 
 (def keycloak
   {:url keycloak-auth-server-url
