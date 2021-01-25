@@ -56,7 +56,7 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; If login / init was successful, ask in keynote for the user's information.
+;; If login / init was successful, ask in keycloak for the user's information.
 
 (rf/reg-event-fx
   :keycloak/load-user-profile
