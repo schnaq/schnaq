@@ -1,8 +1,7 @@
 (ns schnaq.interface.auth
   (:require ["keycloak-js" :as Keycloak]
-            [schnaq.interface.config :as config]
             [re-frame.core :as rf]
-            [taoensso.timbre :as log]))
+            [schnaq.interface.config :as config]))
 
 ;; -----------------------------------------------------------------------------
 ;; Init function of keycloak. Called in the beginning to check if the user was
@@ -85,6 +84,25 @@
 
 
 ;; -----------------------------------------------------------------------------
+;; Logout functions.
+
+(rf/reg-event-fx
+  :keycloak/logout
+  (fn [{:keys [db]} [_ _]]
+    (let [^js keycloak (get-in db [:user :keycloak])]
+      (when keycloak
+        {:fx [[:keycloak/logout-request keycloak]]}))))
+
+(rf/reg-fx
+  :keycloak/logout-request
+  (fn [keycloak]
+    (-> keycloak
+        (.logout)
+        (.then #(rf/dispatch [:user/remove-authentication]))
+        (.catch #(rf/dispatch [:ajax.error/to-console %])))))
+
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-event-db
   :user/authenticated!
@@ -100,15 +118,3 @@
   :user/keycloak
   (fn [db _]
     (get-in db [:user :keycloak])))
-
-(comment
-  (rf/dispatch [:keycloak/login])
-  (rf/dispatch [:keycloak/init])
-  (rf/dispatch [:keycloak/check-state])
-  (let [profile
-        (-> @re-frame.db/app-db
-            :user :keycloak
-            .loadUserProfile)]
-    (.then profile (fn [e] (prn (js->clj e)))))
-  (.log js/console keycloak)
-  (.init keycloak))
