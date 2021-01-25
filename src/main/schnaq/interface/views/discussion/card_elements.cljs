@@ -3,13 +3,11 @@
             [goog.dom :as gdom]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]
-            [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.utils.tool-tip :as tooltip]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
@@ -70,28 +68,13 @@
      [admin-buttons/admin-center share-hash edit-hash])
    [admin-buttons/txt-export share-hash title]])
 
-(defn tooltip-div
-  [tooltip-location tooltip content]
-  (reagent/create-class
-    {:component-did-mount
-     (fn [comp] (js-wrap/tooltip (rdom/dom-node comp)))
-     :component-will-unmount
-     (fn [comp]
-       (js-wrap/tooltip (rdom/dom-node comp) "disable")
-       (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
-     :reagent-render
-     (fn [] [:div.h-100
-             {:data-toggle "tooltip"
-              :data-placement tooltip-location
-              :title tooltip} content])}))
-
 (defn radio-button
   "Radio Button helper function. This function creates a radio button."
   [id radio-name value label hint color-class checked?]
   [:<>
    [:input {:id id :type "radio" :name radio-name :value value :default-checked checked?}]
    [:label.mx-1.my-1 {:class color-class :for id}
-    [tooltip-div "bottom" hint label]]])
+    [tooltip/nested-div "bottom" hint label]]])
 
 (defn radio-buttons [textarea-id]
   [:div.radio-toolbar
