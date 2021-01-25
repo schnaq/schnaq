@@ -97,7 +97,7 @@
   (fn [keycloak]
     (-> keycloak
         (.logout)
-        (.then #(rf/dispatch [:user/remove-authentication]))
+        (.then #(rf/dispatch [:user/authenticated! false]))
         (.catch #(rf/dispatch [:ajax.error/to-console %])))))
 
 
