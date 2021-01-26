@@ -41,8 +41,3 @@
   {:url keycloak-auth-server-url
    :realm keycloak-realm
    :clientId keycloak-client})
-
-(def keycloak-refresh-time
-  "Tokens must be refreshed. Define here how often this should be done."
-  (let [minutes-to-next-refresh 15]
-    (* 60 minutes-to-next-refresh)))
