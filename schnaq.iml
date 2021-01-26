@@ -11,136 +11,299 @@
     <orderEntry type="library" name="Deps: com.cognitect/transit-java:1.0.343" level="project" />
     <orderEntry type="library" name="Deps: com.google.elemental2/elemental2-core:1.0.0-RC1" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-middleware:0.5.11" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-dataexchange:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudsearch:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/amazon-kinesis-client:1.9.3" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-identitystore:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-transcribe:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.json:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/clojure:1.10.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iotanalytics:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-athena:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-clouddirectory:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: thheller/shadow-cljsjs:0.0.21" level="project" />
     <orderEntry type="library" name="Deps: com.wsscode/pathom:2.2.31" level="project" />
+    <orderEntry type="library" name="Deps: joda-time:2.9.6" level="project" />
     <orderEntry type="library" name="Deps: javax.activation/javax.activation-api:1.2.0" level="project" />
     <orderEntry type="library" name="Deps: com.ibm.icu/icu4j:66.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-autoscaling:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mechanicalturkrequester:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-signer:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-licensemanager:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/test:0.1.5" level="project" />
-    <orderEntry type="library" name="Deps: commons-codec:1.11" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-opsworks:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-macie2:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: commons-codec:1.12" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elasticinference:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloud9:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: com.bhauman/cljs-test-display:0.1.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iam:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.3.4" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.7" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.4" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-translate:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.logging:0.5.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/ring-http-response:0.9.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-appflow:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.44" level="project" />
+    <orderEntry type="library" name="Deps: org.tukaani/xz:1.5" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-braket:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-support:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-sns:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/muuntaja:0.6.7" level="project" />
+    <orderEntry type="library" name="Deps: io.netty/netty-common:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.0.732" level="project" />
     <orderEntry type="library" name="Deps: edn-query-language/eql:0.0.9" level="project" />
     <orderEntry type="library" name="Deps: io.undertow/undertow-core:2.1.3.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-docdb:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-glacier:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client-api:0.8.55" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.js/js:20.1.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudformation:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/ring-swagger-ui:3.36.0" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-databind:2.12.0" level="project" />
     <orderEntry type="library" name="Deps: expound:0.8.7" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/spec.alpha:0.2.187" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mediapackage:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-discovery:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.cli:1.0.194" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-savingsplans:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-fms:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-rds:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: mvxcvi/puget:1.1.2" level="project" />
     <orderEntry type="library" name="Deps: compojure:1.6.2" level="project" />
     <orderEntry type="library" name="Deps: commons-fileupload:1.4" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-ssl:0.3.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-computeoptimizer:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-sts:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-autoscalingplans:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-chime:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-apigatewayv2:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-rdsdata:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-storagegateway:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codestar:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-http:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/http-fx:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-util:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/encore:3.4.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-pi:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-appconfig:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-macie:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ecr:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iotjobsdataplane:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/spec-tools:0.10.4" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.regex/regex:20.1.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iotthingsgraph:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-honeycode:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpasyncclient:4.1.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.1.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ssooidc:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/prop-types:15.6.0-0" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: Local com.datomic/dev-local (dev-local.jar)" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.common/wildfly-common:1.5.2.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-datasync:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-greengrass:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-sagemaker:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/hmac-authn:0.1.195" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha-cloverage:1.0.75" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elasticsearch:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-quicksight:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-sqs:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: net.jpountz.lz4/lz4:1.3" level="project" />
+    <orderEntry type="library" name="Deps: io.netty/netty-codec:4.1.48.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-waf:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react-dom:17.0.1-0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-organizations:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-appsync:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.macro:0.1.5" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudhsmv2:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/deep-diff:0.0-47" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/anomalies:0.1.12" level="project" />
     <orderEntry type="library" name="Deps: ring-cors:0.1.13" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.dataformat/jackson-dataformat-cbor:2.10.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudfront:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-lakeformation:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.flatland/useful:0.11.6" level="project" />
     <orderEntry type="library" name="Deps: com.googlecode.json-simple/json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Deps: gnl/ghostwheel:0.3.9" level="project" />
+    <orderEntry type="library" name="Deps: org.iq80.snappy/snappy:0.4" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-datapipeline:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-augmentedairuntime:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-lightsail:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-defaults:0.3.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ivs:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.264" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-neptune:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20191016-6ae1f72f" level="project" />
     <orderEntry type="library" name="Deps: io.aviso/pretty:0.1.37" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-events:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-comprehendmedical:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudhsm:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iot1clickprojects:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-lexmodelbuilding:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.14" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.sdk/graal-sdk:20.1.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-glue:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: rewrite-clj:0.6.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-s3control:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/clojurescript:1.10.773" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-models:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ebs:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-pinpointsmsvoice:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: io.netty/netty-buffer:4.1.48.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iotevents:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react-highlight:1.0.7-2" level="project" />
     <orderEntry type="library" name="Deps: slingshot:0.12.2" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpcore-nio:4.4.10" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-jetty-adapter:1.8.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-emr:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-imagebuilder:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-directory:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: io.netty/netty-handler:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Deps: org.flatland/ordered:1.5.7" level="project" />
     <orderEntry type="library" name="Deps: com.yahoo.platform.yui/yuicompressor:2.4.8" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/highlight:9.12.0-2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codecommit:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: spec-coerce:1.0.0-alpha6" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.6" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-inspector:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-costandusagereport:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-util:7.1" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-resourcegroupstaggingapi:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.google.jsinterop/jsinterop-annotations:1.0.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-groundstation:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-alexaforbusiness:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: fipp:0.6.23" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-applicationinsights:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.logging/jboss-logging:3.4.1.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-directconnect:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elastictranscoder:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-swagger:0.5.11" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-simpleworkflow:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.wsscode/spec-inspec:1.0.0-alpha2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-pinpoint:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-core:2.12.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-synthetics:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-marketplaceentitlement:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kendra:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-fsx:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.yaml/snakeyaml:1.23" level="project" />
     <orderEntry type="library" name="Deps: aero:1.1.6" level="project" />
+    <orderEntry type="library" name="Deps: clj-http:3.10.3" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm:7.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-migrationhubconfig:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-worklink:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cljs-ajax:0.8.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ses:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-migrationhub:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-swf-libraries:1.11.22" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codepipeline:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-efs:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-ring:0.5.11" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-detective:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/tools.namespace:0.0-237" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react:17.0.1-0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-batch:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-config:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-sagemakerruntime:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpcore:4.4.13" level="project" />
     <orderEntry type="library" name="Deps: thheller/shadow-util:0.7.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-medialive:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-workmailmessageflow:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpclient-cache:4.5.10" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: mvxcvi/arrangement:1.2.0" level="project" />
     <orderEntry type="library" name="Deps: instaparse:1.4.8" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-marketplacemeteringservice:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-dms:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mediaconvert:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-costexplorer:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-resourcegroups:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-acmpca:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iotsitewise:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ec2:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-secretsmanager:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client-pro:0.9.66" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kinesisanalyticsv2:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-js:0.8.861" level="project" />
     <orderEntry type="library" name="Deps: clj-tuple:0.2.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/dynamodb-streams-kinesis-adapter:1.2.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-transfer:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-core:0.5.11" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-personalizeevents:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codebuild:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ram:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: zprint:0.5.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-securityhub:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-snowball:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/truss:1.6.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-pinpointemail:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client:0.8.114" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-headers:0.3.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library-third-party:0.0-20191016-6ae1f72f" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-stepfunctions:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: ring-middleware-format:0.7.4" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-gamelift:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: software.amazon.ion/ion-java:1.0.2" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-annotations:2.12.0" level="project" />
     <orderEntry type="library" name="Deps: hiccup:1.0.5" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elasticbeanstalk:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mediaconnect:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-workmail:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mediastoredata:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-opsworkscm:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-outposts:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cloverage:1.2.0" level="project" />
     <orderEntry type="library" name="Deps: binaryage/env-config:0.2.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-eventbridge:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-rekognition:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mediastore:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-frauddetector:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-qldb:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iot:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-lex:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: riddley:0.2.0" level="project" />
     <orderEntry type="library" name="Deps: progrock:0.1.2" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/http-client:0.1.105" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-comprehend:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.google.javascript/closure-compiler-externs:v20200830" level="project" />
     <orderEntry type="library" name="Deps: org.javassist/javassist:3.18.1-GA" level="project" />
     <orderEntry type="library" name="Deps: org.checkerframework/checker-compat-qual:2.5.5" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-dlm:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.xnio/xnio-nio:3.8.0.Final" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/java.classpath:0.3.0" level="project" />
     <orderEntry type="library" name="Deps: gnl/ghostwheel.logging:0.3.9" level="project" />
     <orderEntry type="library" name="Deps: ns-tracker:0.4.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cognitosync:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: clout:2.2.1" level="project" />
     <orderEntry type="library" name="Deps: commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/failureaccess:1.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/guava:28.2-android" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-networkmanager:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-textract:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.xml:0.0.8" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/jmespath-java:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-schema:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.truffle/truffle-api:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: borkdude/dynaload:0.2.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-polly:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-robomaker:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: binaryage/devtools:1.0.2" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/algo.generic:0.1.2" level="project" />
     <orderEntry type="library" name="Deps: net.cgrand/macrovich:0.2.1" level="project" />
     <orderEntry type="library" name="Deps: re-frame:1.1.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kinesisvideosignalingchannels:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: reagent:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: org.msgpack/msgpack:0.6.12" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-backup:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/client-impl-shared:0.8.86" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-core:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: orchestra:2020.07.12-1" level="project" />
     <orderEntry type="library" name="Deps: borkdude/edamame:0.0.11-alpha.15" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.js/js-scriptengine:20.1.0" level="project" />
@@ -149,80 +312,164 @@
     <orderEntry type="library" name="Deps: com.taoensso/timbre:5.1.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/malli:0.2.1" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-clj:1.0.324" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kinesis:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mq:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mediatailor:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codestarconnections:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-globalaccelerator:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: io.netty/netty-transport:4.1.48.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-schemas:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudtrail:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/query-support:0.8.27" level="project" />
     <orderEntry type="library" name="Deps: args4j:2.0.26" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-commons:7.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-simpledb:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.fressian/fressian:0.6.5" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react-dom-server:17.0.1-0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-lambda:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: crypto-random:1.2.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codeguruprofiler:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ioteventsdata:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-xray:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: clj-commons/clj-yaml:0.6.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudwatch:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: io.netty/netty-codec-http:4.1.48.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-dax:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.google.jsinterop/base:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: gnl/ghostwheel.unghost:0.3.9" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-codec:1.1.2" level="project" />
     <orderEntry type="library" name="Deps: thheller/shadow-client:1.3.3" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-connectparticipant:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-malli:0.5.11" level="project" />
-    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpclient:4.5.6" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-serverlessapplicationrepository:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpclient:4.5.10" level="project" />
     <orderEntry type="library" name="Deps: metosin/schema-tools:0.12.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-connect:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.rrb-vector:0.1.1" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-anti-forgery:1.3.0" level="project" />
     <orderEntry type="library" name="Deps: prismatic/schema:1.1.12" level="project" />
     <orderEntry type="library" name="Deps: com.bhauman/spell-spec:0.1.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-machinelearning:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: crypto-equality:1.0.0" level="project" />
+    <orderEntry type="library" name="Deps: robert/hooke:1.3.0" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.client/wildfly-client-config:1.0.1.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ecs:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-health:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-servicecatalog:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: net.java.dev.jna/jna:3.2.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-importexport:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-apigatewaymanagementapi:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-route53:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cheshire:5.10.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-sso:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codeartifact:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: tigris:0.1.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-shield:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mobile:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-workspaces:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codegurureviewer:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-client:9.4.27.v20200227" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-guardduty:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-appstream:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-sieppari:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: com.andrewmcveigh/cljs-time:0.5.2" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-io:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.reader:1.3.3" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-marketplacecatalog:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.tcrawley/dynapath:1.1.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-devicefarm:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codestarnotifications:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-eks:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-wafv2:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-acm:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-budgets:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mediapackagevod:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-servicediscovery:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-personalizeruntime:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.taoensso/nippy:2.12.2" level="project" />
     <orderEntry type="library" name="Deps: javax.servlet/javax.servlet-api:3.1.0" level="project" />
     <orderEntry type="library" name="Deps: potemkin:0.4.5" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-http:0.5.11" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elasticloadbalancing:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: nrepl:0.7.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cognitoidp:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-amplify:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-managedblockchain:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: io.netty/netty-resolver:4.1.48.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-redshift:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: binaryage/oops:0.7.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-servermigration:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-dynamodb:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iotsecuretunneling:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-appmesh:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: clj-stacktrace:0.2.8" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudwatchmetrics:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iot1clickdevices:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.google.re2j/re2j:1.3" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kinesisvideo:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.xnio/xnio-api:3.8.0.Final" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-sesv2:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.google.javascript/closure-compiler-unshaded:v20200830" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/test.check:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-frontend:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-analysis:7.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-servicequotas:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: amazonica:0.3.153" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-codedeploy:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-spec:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: com.sun.activation/jakarta.activation:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/jsonista:0.3.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.protobuf/protobuf-java:3.11.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-pricing:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-swagger-ui:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-servlet:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.memoize:1.0.236" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-accessanalyzer:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-logs:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: hawk:0.2.11" level="project" />
     <orderEntry type="library" name="Deps: tech.droit/clj-diff:1.0.1" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ec2instanceconnect:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-applicationautoscaling:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: ring:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.priority-map:1.0.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-marketplacecommerceanalytics:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cider/piggieback:0.5.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-route53resolver:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cognitoidentity:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-forecast:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.31.v20200723" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-qldbsession:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.10" level="project" />
     <orderEntry type="library" name="Deps: com.google.code.findbugs/jsr305:3.0.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elasticloadbalancingv2:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-dev:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-core:1.8.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.cache:1.0.207" level="project" />
     <orderEntry type="library" name="Deps: meta-merge:1.0.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-api-gateway:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-forecastquery:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-tree:7.1" level="project" />
     <orderEntry type="library" name="Deps: rewrite-cljs:0.4.4" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-all:4.2" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kms:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: medley:1.3.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-workdocs:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/re-frame-10x:0.7.0" level="project" />
     <orderEntry type="library" name="Deps: clojure-msgpack:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.async:1.3.610" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.dataformat/jackson-dataformat-smile:2.10.2" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.datatype/jackson-datatype-jsr310:2.12.0" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ssm:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elasticache:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-personalize:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: javax.xml.bind/jaxb-api:2.3.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/sieppari:0.0.0-alpha13" level="project" />
     <orderEntry type="library" name="Deps: com.google.code.gson/gson:2.7" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-interceptors:0.5.11" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-s3:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kafka:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: http-kit:2.5.1" level="project" />
   </component>
 </module>
