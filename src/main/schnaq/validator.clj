@@ -1,9 +1,11 @@
 (ns schnaq.validator
-  (:require
-    [ghostwheel.core :refer [>defn]]
-    [schnaq.meeting.database :as db]
-    [ring.util.http-response :refer [forbidden]]
-    [schnaq.config :as config]))
+  (:require [clojure.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn]]
+            [schnaq.meeting.database :as db]
+            [ring.util.http-response :refer [forbidden]]
+            [schnaq.config :as config]))
+
+(s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
 
 (>defn valid-password?
   "Check if the password is a valid."
