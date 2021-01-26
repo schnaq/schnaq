@@ -3,6 +3,11 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]))
 
+(defn- error-to-console
+  "Shorthand function to log to console."
+  [message]
+  (rf/dispatch [:ajax.error/to-console message]))
+
 ;; -----------------------------------------------------------------------------
 ;; Init function of keycloak. Called in the beginning to check if the user was
 ;; logged in. Restores the last login state according to the settings in
@@ -27,8 +32,7 @@
                  (rf/dispatch [:keycloak/load-user-profile])))
         (.catch (fn [_]
                   (rf/dispatch [:user/authenticated! false])
-                  (rf/dispatch [:ajax.error/to-console
-                                "Silent check with keycloak failed."]))))))
+                  (error-to-console "Silent check with keycloak failed."))))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -47,10 +51,8 @@
     (-> keycloak
         (.login)
         (.then #(rf/dispatch [:keycloak/load-user-profile]))
-        (.catch
-          #(rf/dispatch
-             [:ajax.error/to-console
-              "Login not successful. Request could not be fulfilled."])))))
+        (.catch #(error-to-console
+                   "Login not successful. Request could not be fulfilled.")))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -71,8 +73,8 @@
         (.loadUserProfile)
         (.then #(rf/dispatch [:keycloak/store-user-profile
                               (js->clj % :keywordize-keys true)]))
-        (.catch #(rf/dispatch [:ajax.error/to-console
-                               "Could not load user profile from keycloak."])))))
+        (.catch #(error-to-console
+                   "Could not load user profile from keycloak.")))))
 
 (rf/reg-event-db
   :keycloak/store-user-profile
@@ -100,9 +102,8 @@
         (.logout)
         (.then #(rf/dispatch [:user/authenticated! false]))
         (.catch
-          #(rf/dispatch
-             [:ajax.error/to-console
-              "Logout not successful. Request could not be fulfilled."])))))
+          #(error-to-console
+             "Logout not successful. Request could not be fulfilled.")))))
 
 
 ;; -----------------------------------------------------------------------------
