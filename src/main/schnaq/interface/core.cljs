@@ -71,7 +71,7 @@
   (log/info (gstring/format "API: %s" config/api-url))
   (log/info (gstring/format "Environment: %s" config/environment))
   (log/info (gstring/format "Keycloak Realm: %s" config/keycloak-realm))
-  (log/info (gstring/format "Keycloak Client: %s" config/keycloak-resource)))
+  (log/info (gstring/format "Keycloak Client: %s" config/keycloak-client)))
 
 (defn init
   "Entrypoint into the application."

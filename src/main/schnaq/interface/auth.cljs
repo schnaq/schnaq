@@ -3,6 +3,11 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]))
 
+(defn- error-to-console
+  "Shorthand function to log to console."
+  [message]
+  (rf/dispatch [:ajax.error/to-console message]))
+
 ;; -----------------------------------------------------------------------------
 ;; Init function of keycloak. Called in the beginning to check if the user was
 ;; logged in. Restores the last login state according to the settings in
@@ -25,7 +30,9 @@
         (.then (fn [result]
                  (rf/dispatch [:user/authenticated! result])
                  (rf/dispatch [:keycloak/load-user-profile])))
-        (.catch #(rf/dispatch [:user/authenticated! false])))))
+        (.catch (fn [_]
+                  (rf/dispatch [:user/authenticated! false])
+                  (error-to-console "Silent check with keycloak failed."))))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -44,15 +51,8 @@
     (-> keycloak
         (.login)
         (.then #(rf/dispatch [:keycloak/load-user-profile]))
-        (.catch
-          (fn [error]
-            (rf/dispatch
-              [:notification/add
-               #:notification{:title "Login fehlgeschlagen"
-                              :body [:pre [:code (str error)]]
-                              :context :danger
-                              :stay-visible? true
-                              :on-close-fn #(rf/dispatch [:clear-error])}]))))))
+        (.catch #(error-to-console
+                   "Login not successful. Request could not be fulfilled.")))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -61,8 +61,9 @@
 (rf/reg-event-fx
   :keycloak/load-user-profile
   (fn [{:keys [db]} [_ _]]
-    (let [^js keycloak (get-in db [:user :keycloak])]
-      (when keycloak
+    (let [^js keycloak (get-in db [:user :keycloak])
+          authenticated? (get-in db [:user :authenticated?])]
+      (when (and keycloak authenticated?)
         {:fx [[:keycloak/load-user-profile-request keycloak]]}))))
 
 (rf/reg-fx
@@ -71,7 +72,9 @@
     (-> keycloak
         (.loadUserProfile)
         (.then #(rf/dispatch [:keycloak/store-user-profile
-                              (js->clj % :keywordize-keys true)])))))
+                              (js->clj % :keywordize-keys true)]))
+        (.catch #(error-to-console
+                   "Could not load user profile from keycloak.")))))
 
 (rf/reg-event-db
   :keycloak/store-user-profile
@@ -98,7 +101,9 @@
     (-> keycloak
         (.logout)
         (.then #(rf/dispatch [:user/authenticated! false]))
-        (.catch #(rf/dispatch [:ajax.error/to-console %])))))
+        (.catch
+          #(error-to-console
+             "Logout not successful. Request could not be fulfilled.")))))
 
 
 ;; -----------------------------------------------------------------------------
