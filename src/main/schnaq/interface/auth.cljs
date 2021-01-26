@@ -25,7 +25,10 @@
         (.then (fn [result]
                  (rf/dispatch [:user/authenticated! result])
                  (rf/dispatch [:keycloak/load-user-profile])))
-        (.catch #(rf/dispatch [:user/authenticated! false])))))
+        (.catch (fn [_]
+                  (rf/dispatch [:user/authenticated! false])
+                  (rf/dispatch [:ajax.error/to-console
+                                "Silent check with keycloak failed."]))))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -71,7 +74,9 @@
     (-> keycloak
         (.loadUserProfile)
         (.then #(rf/dispatch [:keycloak/store-user-profile
-                              (js->clj % :keywordize-keys true)])))))
+                              (js->clj % :keywordize-keys true)]))
+        (.catch #(rf/dispatch [:ajax.error/to-console
+                               "Could not load user profile from keycloak."])))))
 
 (rf/reg-event-db
   :keycloak/store-user-profile
@@ -98,7 +103,10 @@
     (-> keycloak
         (.logout)
         (.then #(rf/dispatch [:user/authenticated! false]))
-        (.catch #(rf/dispatch [:ajax.error/to-console %])))))
+        (.catch
+          #(rf/dispatch
+             [:ajax.error/to-console
+              "Logout not successful. Request could not be fulfilled."])))))
 
 
 ;; -----------------------------------------------------------------------------
