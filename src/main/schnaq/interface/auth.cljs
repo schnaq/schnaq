@@ -48,14 +48,9 @@
         (.login)
         (.then #(rf/dispatch [:keycloak/load-user-profile]))
         (.catch
-          (fn [error]
-            (rf/dispatch
-              [:notification/add
-               #:notification{:title "Login fehlgeschlagen"
-                              :body [:pre [:code (str error)]]
-                              :context :danger
-                              :stay-visible? true
-                              :on-close-fn #(rf/dispatch [:clear-error])}]))))))
+          #(rf/dispatch
+             [:ajax.error/to-console
+              "Login not successful. Request could not be fulfilled."])))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -64,8 +59,9 @@
 (rf/reg-event-fx
   :keycloak/load-user-profile
   (fn [{:keys [db]} [_ _]]
-    (let [^js keycloak (get-in db [:user :keycloak])]
-      (when keycloak
+    (let [^js keycloak (get-in db [:user :keycloak])
+          authenticated? (get-in db [:user :authenticated?])]
+      (when (and keycloak authenticated?)
         {:fx [[:keycloak/load-user-profile-request keycloak]]}))))
 
 (rf/reg-fx
