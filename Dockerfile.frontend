@@ -10,6 +10,8 @@ RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -e "(prn \"Downloading
 
 ARG REST_API_URL
 ARG BUILD_HASH
+ARG KEYCLOAK_CLIENT
+ARG KEYCLOAK_REALM
 
 RUN apk add yarn
 RUN yarn global add sass
