@@ -98,6 +98,9 @@
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Make this discussion public"
 
+        :discussion.privacy/public "Public Discussion"
+        :discussion.privacy/private "Private Discussion"
+
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
         :privacy/subheading "We lead you through it step by step!"
@@ -450,6 +453,9 @@
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
+
+        :discussion.privacy/public "Öffentliche Diskussion"
+        :discussion.privacy/private "Private Diskussion"
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
@@ -805,6 +811,7 @@
      :home "fa-home"
      :language "fa-language"
      :laptop "fa-laptop-code"
+     :lock-open "fa-lock-open"
      :minus "fa-minus"
      :newspaper "fa-newspaper"
      :plane "fa-paper-plane"

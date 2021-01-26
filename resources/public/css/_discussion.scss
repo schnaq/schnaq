@@ -22,6 +22,12 @@
   }
 }
 
+.privacy-indicator {
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 1rem;
+  }
+}
+
 .statement-content {
   padding: 1rem;
 

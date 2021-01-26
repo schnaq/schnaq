@@ -119,7 +119,8 @@
    :meeting/type
    :meeting/description
    :meeting/share-hash
-   {:meeting/author author-pattern}])
+   {:meeting/author author-pattern}
+   {:agenda/_meeting [{:agenda/discussion [:discussion/states]}]}])
 
 (def ^:private statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
