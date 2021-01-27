@@ -17,17 +17,17 @@
                    (rf/dispatch [:schnaq.admin/set-header-image-url
                                  (oget e [:target :elements])]))}
      [:div.form-group
-      [:label {:for input-id} (labels :schnaq.header-image-url/label)]
+      [:label {:for input-id} (labels :schnaq.header-image.url/label)]
       [:input.form-control.m-1.input-rounded
        {:id input-id
         :name image-form-name
         :auto-complete "off"
         :required true
-        :placeholder (labels :schnaq.header-image-url/placeholder)}]
+        :placeholder (labels :schnaq.header-image.url/placeholder)}]
       [:small.form-text.text-muted.float-right
-       (labels :schnaq.header-image-url/note)]]
+       (labels :schnaq.header-image.url/note)]]
      [:button.btn.btn-outline-primary
-      (labels :schnaq.header-image-url/button)]]))
+      (labels :schnaq.header-image.url/button)]]))
 
 ;; events
 
@@ -54,15 +54,15 @@
      (if error
        ;; when error occured display a warning and do not clear form
        [[:dispatch [:notification/add
-                    #:notification{:title (labels :schnaq.header-image-url/failed-setting-title)
+                    #:notification{:title (labels :schnaq.header-image.url/failed-setting-title)
                                    :body [:<>
-                                          (labels :schnaq.header-image-url/failed-setting-body)
+                                          (labels :schnaq.header-image.url/failed-setting-body)
                                           [:span error]]
                                    :context :danger
                                    :stay-visible? true}]]]
        ;; when no error occured clear form
        [[:dispatch [:notification/add
-                    #:notification{:title (labels :schnaq.header-image-url/successful-set)
-                                   :body (labels :schnaq.header-image-url/successful-set-body)
+                    #:notification{:title (labels :schnaq.header-image.url/successful-set)
+                                   :body (labels :schnaq.header-image.url/successful-set-body)
                                    :context :success}]]
         [:form/clear form]])}))
