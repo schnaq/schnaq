@@ -7,7 +7,8 @@
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log]))
 
-(def ^:private trusted-cdn-url-regex (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)"))
+(def ^:private trusted-cdn-url-regex
+  (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.disqtec\\.com/(.+)"))
 
 (def ^:private error-cdn "prohibited cdn")
 (def ^:private error-img "Setting image failed")

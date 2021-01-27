@@ -20,7 +20,7 @@
     (let [share-hash "aaaa1-bbb2-ccc3"
           _schnaq (create-schnaq share-hash)
           bad-url "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png"
-          url "https://cdn.pixabay.com/photo/2020/06/24/23/58/landscape-5338046_960_720.jpg"
+          url "https://s3.disqtec.com/schnaq-header-images/fooo2"
           key "Test-Upload"
           bad-share "foo"
           bad-request-1 (@#'media/check-and-upload-image
