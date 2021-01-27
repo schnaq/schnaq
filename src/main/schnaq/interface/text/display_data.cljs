@@ -373,7 +373,9 @@
         :admin.center.delete.public/label "Public schnaqs"
         :admin.center.delete.public/button "Delete schnaq"
         :admin.center.delete/heading "Deletion"
-        :admin.center.delete.public/heading "Public schnaqs"}
+        :admin.center.delete.public/heading "Public schnaqs"
+        :admin.center.delete.private/label "Share-hash"
+        :admin.center.delete.private/heading "Private schnaqs"}
    :de {;; Common
         :common/language "Sprache"
         :common/history "Verlauf"
@@ -740,7 +742,9 @@
         :admin.center.delete.public/label "Öffentliche schnaqs"
         :admin.center.delete.public/button "Schnaq löschen"
         :admin.center.delete/heading "Löschen"
-        :admin.center.delete.public/heading "Öffentliche schnaqs"}})
+        :admin.center.delete.public/heading "Öffentliche schnaqs"
+        :admin.center.delete.private/label "Share-hash"
+        :admin.center.delete.private/heading "Private schnaqs"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup

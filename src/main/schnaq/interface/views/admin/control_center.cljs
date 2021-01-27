@@ -2,7 +2,7 @@
   (:require [ajax.core :as ajax]
             [oops.core :refer [oget]]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.pages :as pages]
             [re-frame.core :as rf]))
@@ -53,6 +53,26 @@
     [:div.col-auto
      [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
 
+(defn- private-meeting-deletion-form
+  "Easily delete one of the public meetings."
+  []
+  [:form.form
+   {:id "private-meeting-form"
+    :on-submit (fn [e]
+                 (js-wrap/prevent-default e)
+                 (when (js/confirm (labels :admin.center.delete/confirmation))
+                   (rf/dispatch [:admin.schnaq/delete
+                                 (oget e [:target :elements :private-meeting-hash :value])])))}
+   [:div.form-row.align-items-center
+    [:div.col-auto
+     [:label
+      {:for "private-meeting-hash"} (labels :admin.center.delete.private/label)]]
+    [:div.col-auto
+     [:input.form-control
+      {:id "private-meeting-hash"}]]
+    [:div.col-auto
+     [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
+
 (defn- center-overview
   "The startpage of the admin center."
   []
@@ -64,7 +84,9 @@
     [:div
      [:h2 (labels :admin.center.delete/heading)]
      [:h4 (labels :admin.center.delete.public/heading)]
-     [public-meeting-deletion-form]]]])
+     [public-meeting-deletion-form]
+     [:h4 (labels :admin.center.delete.private/heading)]
+     [private-meeting-deletion-form]]]])
 
 (defn center-overview-route
   []
