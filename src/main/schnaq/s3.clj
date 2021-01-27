@@ -3,6 +3,8 @@
 
 (def ^:private bucket-headers "schnaq-header-images")
 
+(def ^:private bucket-url "https://s3.disqtec.com/schnaq-header-images/")
+
 (def ^:private credentials {:access-key "minio"
                             :secret-key "***REMOVED***"
                             :endpoint "https://s3.disqtec.com"
@@ -15,4 +17,5 @@
                      :key key
                      :input-stream (:body file)
                      :metadata {:content-length (:length file)}))
-  {:message "Image upload sucessfull"})
+  {:message "Image upload sucessfull"
+   :bucket-url (str bucket-url key)})
