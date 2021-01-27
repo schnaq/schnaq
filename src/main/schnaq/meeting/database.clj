@@ -39,7 +39,7 @@
   [data]
   (d/transact (new-connection) {:tx-data data}))
 
-(defn- query
+(defn query
   "Shorthand to not type out the same first param every time"
   [query-vector & args]
   (apply d/q query-vector (d/db (new-connection)) args))

@@ -12,6 +12,7 @@
             [ring.util.http-response :refer [ok created not-found bad-request forbidden unauthorized]]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
@@ -39,16 +40,18 @@
   (= config/admin-password password))
 
 (defn- valid-hash?
-  "Check if a schnaq-hash ist valid."
+  "Check if a schnaq-hash ist valid. Returns false, when the discussion is deleted."
   [share-hash]
-  (not (nil? (db/meeting-by-hash share-hash))))
+  (and (not (nil? (db/meeting-by-hash share-hash)))
+       (not (discussion-db/discussion-deleted? share-hash))))
 
 (>defn- valid-credentials?
   "Validate if share-hash and edit-hash match"
   [share-hash edit-hash]
   [string? string? :ret boolean?]
   (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
-    (= edit-hash (:meeting/edit-hash authenticate-meeting))))
+    (and (= edit-hash (:meeting/edit-hash authenticate-meeting))
+         (not (discussion-db/discussion-deleted? share-hash)))))
 
 (defn- deny-access
   "Return a 403 Forbidden to unauthorized access."
