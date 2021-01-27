@@ -91,6 +91,8 @@ build-frontend-image:
       docker build -f Dockerfile.frontend
       --build-arg REST_API_URL=https://api.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
+      --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
       -t $CI_REGISTRY_IMAGE/frontend .
     - docker push $CI_REGISTRY_IMAGE/frontend
   only:
@@ -128,6 +130,8 @@ build-frontend-staging-image:
       docker build -f Dockerfile.frontend
       --build-arg REST_API_URL=https://api.staging.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
+      --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
       -t $CI_REGISTRY_IMAGE/frontend:staging .
     - docker push $CI_REGISTRY_IMAGE/frontend:staging
   only:

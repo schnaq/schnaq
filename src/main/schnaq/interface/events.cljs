@@ -93,7 +93,18 @@
   (fn [db _]
     (get db :locale)))
 
-(rf/reg-event-db
+(rf/reg-fx
+  ;; Changes the HTML lang attribute accordingly.
+  :change-document-lang
+  (fn [lang-short]
+    (let [locale-string (case lang-short
+                          :de "de-DE"
+                          :en "en-US"
+                          "en-US")]
+      (.setAttribute (.-documentElement js/document) "lang" locale-string))))
+
+(rf/reg-event-fx
   :set-locale
-  (fn [db [_ locale]]
-    (assoc db :locale locale)))
+  (fn [{:keys [db]} [_ locale]]
+    {:db (assoc db :locale locale)
+     :fx [[:change-document-lang locale]]}))

@@ -104,7 +104,7 @@
    :author/nickname])
 
 (def ^:private user-pattern
-  "Pull a user based on these atributes"
+  "Pull a user based on these attributes"
   [:db/id
    {:user/core-author [:author/nickname]}
    :user/upvotes
@@ -119,7 +119,8 @@
    :meeting/type
    :meeting/description
    :meeting/share-hash
-   {:meeting/author author-pattern}])
+   {:meeting/author author-pattern}
+   {:agenda/_meeting [{:agenda/discussion [:discussion/states]}]}])
 
 (def ^:private statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."

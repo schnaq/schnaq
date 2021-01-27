@@ -1,3 +1,5 @@
+@import 'variables';
+
 .badge-transparent {
   background-color: transparent;
   color: inherit;
@@ -17,4 +19,14 @@
   &:focus {
     background-color: rgba($black, 0.2);
   }
+}
+
+.badge-primary-outline {
+  background-color: transparent;
+  border: solid 1px $primary;
+}
+
+.badge-secondary-outline {
+  background-color: transparent;
+  border: solid 1px $secondary;
 }
