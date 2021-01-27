@@ -30,3 +30,13 @@
   {:sender-address (or (System/getenv "EMAIL_SENDER_ADDRESS") "noreply@dialogo.io")
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
    :sender-password (System/getenv "EMAIL_PASSWORD")})
+
+(def s3-bucket-headers "schnaq-header-images")
+
+(def s3-bucket-url "https://s3.disqtec.com/schnaq-header-images/")
+
+(def s3-credentials {:access-key "minio"
+                     :secret-key "***REMOVED***"
+                     :endpoint "https://s3.disqtec.com"
+                     :client-config
+                     {:path-style-access-enabled true}})
