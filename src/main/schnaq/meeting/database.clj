@@ -222,6 +222,8 @@
       '[:find (pull ?meetings meeting-pattern-public) ?ts
         :in $ meeting-pattern-public
         :where [?public-discussions :discussion/states :discussion.state/public ?tx]
+        (not-join [?public-discussions]
+                  [?public-discussions :discussion/states :discussion.state/deleted])
         [?public-agendas :agenda/discussion ?public-discussions]
         [?public-agendas :agenda/meeting ?meetings]
         [?tx :db/txInstant ?ts]]
