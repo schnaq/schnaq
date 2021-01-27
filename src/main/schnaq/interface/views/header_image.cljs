@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.brainstorm.cdn
+(ns schnaq.interface.views.header-image
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
@@ -29,7 +29,7 @@
      [:button.btn.btn-outline-primary
       (labels :schnaq.preview-image-url/button)]]))
 
-;; subs
+;; events
 
 (rf/reg-event-fx
   :schnaq.admin/set-preview-image-url
