@@ -1,5 +1,6 @@
 (ns schnaq.interface.auth
   (:require ["keycloak-js" :as Keycloak]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]))
 
@@ -7,6 +8,12 @@
   "Shorthand function to log to console."
   [message]
   (rf/dispatch [:ajax.error/to-console message]))
+
+(defn- user-authenticated?
+  "Quickly lookup authentication status of user."
+  [app-db]
+  (get-in app-db [:user :authenticated?] false))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Init function of keycloak. Called in the beginning to check if the user was
@@ -29,7 +36,8 @@
                    :silentCheckSsoRedirectUri (str (-> js/window .-location .-origin) "/silent-check-sso.html")})
         (.then (fn [result]
                  (rf/dispatch [:user/authenticated! result])
-                 (rf/dispatch [:keycloak/load-user-profile])))
+                 (rf/dispatch [:keycloak/load-user-profile])
+                 (rf/dispatch [:keycloak.roles/extract])))
         (.catch (fn [_]
                   (rf/dispatch [:user/authenticated! false])
                   (error-to-console "Silent check with keycloak failed."))))))
@@ -61,9 +69,8 @@
 (rf/reg-event-fx
   :keycloak/load-user-profile
   (fn [{:keys [db]} [_ _]]
-    (let [^js keycloak (get-in db [:user :keycloak])
-          authenticated? (get-in db [:user :authenticated?])]
-      (when (and keycloak authenticated?)
+    (let [^js keycloak (get-in db [:user :keycloak])]
+      (when (and keycloak (user-authenticated? db))
         {:fx [[:keycloak/load-user-profile-request keycloak]]}))))
 
 (rf/reg-fx
@@ -122,3 +129,12 @@
   :user/keycloak
   (fn [db _]
     (get-in db [:user :keycloak])))
+
+(rf/reg-event-db
+  :keycloak.roles/extract
+  (fn [db [_ _]]
+    (when (user-authenticated? db)
+      (let [^js keycloak (get-in db [:user :keycloak])
+            roles (:roles (js->clj (oget keycloak [:realmAccess])
+                                   :keywordize-keys true))]
+        (assoc-in db [:user :roles] (map keyword roles))))))
