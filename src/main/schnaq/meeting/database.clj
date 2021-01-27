@@ -235,7 +235,7 @@
 (>defn meeting-by-hash-generic
   "Generic meeting by hash method, outputs according to pattern."
   [hash pattern]
-  [string? sequential? :ret map?]
+  [string? sequential? :ret (? map?)]
   (->
     (d/q
       '[:find (pull ?meeting pattern)

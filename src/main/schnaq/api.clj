@@ -39,7 +39,7 @@
   [string? :ret boolean?]
   (= config/admin-password password))
 
-(defn- valid-hash?
+(defn- valid-discussion?
   "Check if a schnaq-hash ist valid. Returns false, when the discussion is deleted."
   [share-hash]
   (and (not (nil? (db/meeting-by-hash share-hash)))
@@ -103,7 +103,9 @@
   "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
-    (ok (db/meeting-by-hash hash))))
+    (if (valid-discussion? hash)
+      (ok (db/meeting-by-hash hash))
+      (deny-access))))
 
 (defn- meetings-by-hashes
   "Bulk loading of meetings. May be used when users asks for all the meetings
@@ -117,9 +119,9 @@
                             \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
   [req]
   (if-let [hashes (get-in req [:params :share-hashes])]
-    (let [meetings (if (string? hashes)
-                     [(db/meeting-by-hash hashes)]
-                     (map db/meeting-by-hash hashes))]
+    (let [hashes-list (if (string? hashes) [(db/meeting-by-hash hashes)] hashes)
+          filtered-hashes (filter valid-discussion? hashes-list)
+          meetings (map db/meeting-by-hash filtered-hashes)]
       (if-not (or (nil? meetings) (= [nil] meetings))
         (ok {:meetings meetings})
         (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
@@ -287,7 +289,7 @@
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [body-params]}]
   (let [{:keys [share-hash]} body-params]
-    (if (valid-hash? share-hash)
+    (if (valid-discussion? share-hash)
       (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
       (deny-access invalid-rights-message))))
 
@@ -295,7 +297,7 @@
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [body-params]}]
   (let [{:keys [share-hash selected-statement]} body-params]
-    (if (valid-hash? share-hash)
+    (if (valid-discussion? share-hash)
       (ok (with-statement-meta
             {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
              :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
@@ -319,7 +321,7 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement nickname]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (valid-hash? share-hash)
+    (if (valid-discussion? share-hash)
       (do (db/add-starting-statement! share-hash author-id statement)
           (log/info "Starting statement added for discussion" share-hash)
           (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
@@ -424,7 +426,7 @@
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)]
-    (if (valid-hash? share-hash)
+    (if (valid-discussion? share-hash)
       (let [statements (db/all-statements-for-graph share-hash)
             starting-statements (db/starting-statements share-hash)
             edges (discussion/links-for-agenda statements starting-statements share-hash)
@@ -438,7 +440,7 @@
   "Exports the discussion data as a string."
   [{:keys [params]}]
   (let [{:keys [share-hash]} params]
-    (if (valid-hash? share-hash)
+    (if (valid-discussion? share-hash)
       (do (log/info "User is generating a txt export for discussion" share-hash)
           (ok {:string-representation (export/generate-text-export share-hash)}))
       (deny-access invalid-rights-message))))
