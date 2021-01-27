@@ -30,7 +30,7 @@
 
 (defn- check-and-upload-image [image-url key share-hash]
   (if (check-url image-url)
-    (do (log/debug (str "Set preview image: [" image-url "] for schnaq [" share-hash "]"))
+    (do (log/debug (format "Set preview image: [%s] for schnaq [%s]" image-url share-hash))
         (upload-img-and-store-url image-url key share-hash))
     (forbidden {:error error-cdn})))
 
