@@ -137,4 +137,4 @@
       (let [^js keycloak (get-in db [:user :keycloak])
             roles (:roles (js->clj (oget keycloak [:realmAccess])
                                    :keywordize-keys true))]
-        (assoc-in db [:user :roles] (map keyword roles))))))
+        (assoc-in db [:user :roles] (mapv keyword roles))))))
