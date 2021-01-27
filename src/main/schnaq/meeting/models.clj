@@ -233,7 +233,8 @@
    {:db/ident :discussion.state/closed}
    {:db/ident :discussion.state/private
     :db/doc "DEPRECATED: Use :discussion.state/public"}
-   {:db/ident :discussion.state/deleted}
+   {:db/ident :discussion.state/deleted
+    :db/doc "Supersedes most other states. When set do absolutely not show under any circumstances"}
    {:db/ident :discussion.state/public}
    ;; Deletion is a marker. We don't really delete anything from datomic
    ;; Discussion
