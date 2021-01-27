@@ -1,6 +1,6 @@
 (ns schnaq.database.discussion
   "Discussion related functions interacting with the database."
-  (:require [ghostwheel.core :refer [>defn]]
+  (:require [ghostwheel.core :refer [>defn ?]]
             [schnaq.meeting.database :refer [transact] :as main-db]
             [taoensso.timbre :as log])
   (:import (clojure.lang ExceptionInfo)))
@@ -8,7 +8,7 @@
 (>defn delete-discussion
   "Adds the deleted state to a discussion"
   [share-hash]
-  [:meeting/share-hash :ret any?]
+  [:meeting/share-hash :ret (? :meeting/share-hash)]
   (let [discussion-id (main-db/discussion-by-share-hash share-hash)]
     (try
       (transact [[:db/add discussion-id :discussion/states :discussion.state/deleted]])

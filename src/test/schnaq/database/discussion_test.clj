@@ -18,11 +18,11 @@
                             :meeting/author (main-db/add-user-if-not-exists "Wegi")}]
     (testing "When deleting wrong discussion, throw error."
       (is (nil? (db/delete-discussion "nonsense-8u89jh89z79h88##")))
-      (is (associative? (db/delete-discussion sample-discussion))))
+      (is (string? (db/delete-discussion sample-discussion))))
     (testing "Deleting a public discussion, should decrease the count."
       (let [new-meeting-id (main-db/add-meeting new-public-meeting)]
         (main-db/add-agenda-point "Some-title" "Some-description" new-meeting-id
-                             0 true))
+                                  0 true))
       (is (= (inc discussion-count) (count (main-db/public-meetings))))
       (db/delete-discussion new-discussion-hash)
       (is (= discussion-count (count (main-db/public-meetings)))))))
