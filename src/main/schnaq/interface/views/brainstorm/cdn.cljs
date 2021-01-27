@@ -50,16 +50,19 @@
 (rf/reg-event-fx
   :schnaq.admin/set-preview-image-url-success
   (fn [_ [_ form {:keys [error]}]]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :schnaq.preview-image-url/successful-set)
-                                     :body (labels :schnaq.preview-image-url/successful-set-body)
-                                     :context :success}]]
-          [:form/clear form]
-          (when error
-            [:dispatch [:notification/add
-                        #:notification{:title (labels :schnaq.preview-image-url/failed-setting-title)
-                                       :body [:<>
-                                              (labels :schnaq.preview-image-url/failed-setting-body)
-                                              [:span error]]
-                                       :context :warning
-                                       :stay-visible? true}]])]}))
+    {:fx
+     (if error
+       ;; when error occured display a warning and do not clear form
+       [[:dispatch [:notification/add
+                    #:notification{:title (labels :schnaq.preview-image-url/failed-setting-title)
+                                   :body [:<>
+                                          (labels :schnaq.preview-image-url/failed-setting-body)
+                                          [:span error]]
+                                   :context :danger
+                                   :stay-visible? true}]]]
+       ;; when no error occured clear form
+       [[:dispatch [:notification/add
+                    #:notification{:title (labels :schnaq.preview-image-url/successful-set)
+                                   :body (labels :schnaq.preview-image-url/successful-set-body)
+                                   :context :success}]]
+        [:form/clear form]])}))

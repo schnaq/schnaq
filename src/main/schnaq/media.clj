@@ -6,7 +6,7 @@
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log]))
 
-(defn upload-header-from-url [url key]
+(defn- upload-header-from-url [url key]
   (try
     (let [img (client/get url {:as :stream})]
       (s3/upload-data-to-s3 img key))
