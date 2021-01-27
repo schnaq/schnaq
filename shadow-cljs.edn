@@ -10,7 +10,9 @@
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}}
                 :release {:closure-defines {schnaq.interface.config/api-url #shadow/env "REST_API_URL"
                                             schnaq.interface.config/environment "production"
-                                            schnaq.interface.config/build-hash #shadow/env "BUILD_HASH"}}
+                                            schnaq.interface.config/build-hash #shadow/env "BUILD_HASH"
+                                            schnaq.interface.config/keycloak-realm #shadow/env "KEYCLOAK_REALM"
+                                            schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"}}
                 :devtools {:http-root "resources/public"
                            :http-port 8700
                            :preloads [devtools.preload day8.re-frame-10x.preload]}}

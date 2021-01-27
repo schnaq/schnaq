@@ -225,6 +225,20 @@
     (assoc db :votes {:up {}
                       :down {}})))
 
+(defn- discussion-privacy-badge
+  "A small badge displaying who can see the discussion!"
+  [meeting]
+  (let [states (set (-> meeting :agenda/_meeting first :agenda/discussion :discussion/states))
+        public? (contains? states :discussion.state/public)]
+    [:div.text-center.mt-2.privacy-indicator
+     (if public?
+       [:span.badge.badge-secondary-outline
+        [:i {:class (str "m-auto fas fa-lg " (fa :lock-open))}] " "
+        (labels :discussion.privacy/public)]
+       [:span.badge.badge-primary-outline
+        [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " "
+        (labels :discussion.privacy/private)])]))
+
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [title input]
@@ -248,7 +262,9 @@
       [title-and-input-element title input]]
      ;; up-down votes and statistics
      [:div.col-2.pr-3
-      [:div.float-right info-content]]]))
+      [:div.float-right
+       info-content
+       [discussion-privacy-badge meeting]]]]))
 
 (defn- topic-bubble-mobile
   [meeting title input info-content]
@@ -260,7 +276,8 @@
        [graph-button share-hash]]
       ;; settings
       [:div.p-0
-       info-content]]
+       info-content
+       [discussion-privacy-badge meeting]]]
      ;; title
      [title-and-input-element title input]]))
 
