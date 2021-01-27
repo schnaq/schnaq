@@ -12,6 +12,8 @@
   (let [discussion-id (main-db/discussion-by-share-hash share-hash)]
     (try
       (transact [[:db/add discussion-id :discussion/states :discussion.state/deleted]])
+      (log/info "Schnaq with share-hash " share-hash " has been set to deleted.")
+      share-hash
       (catch ExceptionInfo e
         (log/error "Deletion of discussion with id " discussion-id " and share-hash "
                    share-hash " failed. Exception:\n" e)))))

@@ -155,6 +155,16 @@
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
       (deny-access "You do not have the rights to access this action."))))
 
+(defn- delete-schnaq!
+  "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash password]} body-params]
+    (if (valid-password? password)
+      (if (discussion-db/delete-discussion share-hash)
+        (ok {:share-hash share-hash})
+        (bad-request {:error "An error occurred, while deleting the schnaq."}))
+      (deny-access))))
+
 ;; -----------------------------------------------------------------------------
 ;; Votes
 
@@ -447,6 +457,7 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
+    (POST "/admin/schnaq/delete" [] delete-schnaq!)
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
