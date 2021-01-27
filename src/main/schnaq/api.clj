@@ -431,7 +431,7 @@
     (POST "/discussion/statements/starting/add" [] add-starting-statement!)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
-    (POST "/preview-image/image" [] media/set-preview-image)
+    (POST "/header-image/image" [] media/set-preview-image)
     (POST "/feedback/add" [] add-feedback)
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)

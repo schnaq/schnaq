@@ -37,4 +37,4 @@
                       share-hash)]
       (is (= (-> bad-request-1 :body :error) @#'media/error-cdn))
       (is (= (-> bad-request-2 :body :error) @#'media/error-img))
-      (is (= (-> request-1 :body :error) nil)))))
+      (is (nil? (-> request-1 :body :error))))))
