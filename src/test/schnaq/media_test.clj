@@ -1,17 +1,24 @@
 (ns schnaq.media-test
-  (:require [clojure.test :refer [is deftest testing]]
+  (:require [clojure.test :refer [is deftest testing use-fixtures]]
             [schnaq.media :as media]
-            [schnaq.meeting.database :as db]))
+            [schnaq.meeting.database :as db]
+            [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
+(use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
+(use-fixtures :once schnaq-toolbelt/clean-database-fixture)
+
+(defn- create-schnaq
+  [share-hash]
+  (db/add-meeting {:meeting/title "Test-Schnaq"
+                   :meeting/start-date (db/now)
+                   :meeting/end-date (db/now)
+                   :meeting/share-hash share-hash
+                   :meeting/author (db/add-user-if-not-exists "Mike")}))
 
 (deftest test-cdn-restriction
   (testing "Test that only urls from pixabay are allowed"
-    (let [share-hash "aaaa-bbb-ccc"
-          _schnaq (db/add-meeting {:meeting/title "Test"
-                                   :meeting/start-date (db/now)
-                                   :meeting/end-date (db/now)
-                                   :meeting/share-hash share-hash
-                                   :meeting/author (db/add-user-if-not-exists "Mike")})
+    (let [share-hash "aaaa1-bbb2-ccc3"
+          _schnaq (create-schnaq share-hash)
           bad-url "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png"
           url "https://cdn.pixabay.com/photo/2020/06/24/23/58/landscape-5338046_960_720.jpg"
           key "Test-Upload"
