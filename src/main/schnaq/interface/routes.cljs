@@ -42,7 +42,10 @@
    ["admin/center"
     {:name :routes/admin-center
      :view admin-center/center-overview-route
-     :link-text (labels :router/admin-center)}]
+     :link-text (labels :router/admin-center)
+     :controllers [{:start (fn []
+                             (rf/dispatch [:admin/set-password (js/prompt "Admin Password")])
+                             (rf/dispatch [:meetings.public/load]))}]}]
    ["schnaqs"
     ["/public"
      {:name :routes/public-discussions

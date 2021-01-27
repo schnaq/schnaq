@@ -368,7 +368,12 @@
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
-        :admin.center.start/subheading "Administrate schnaqs as a superuser"}
+        :admin.center.start/subheading "Administrate schnaqs as a superuser"
+        :admin.center.delete/confirmation "Do you really want to delete this schnaq?"
+        :admin.center.delete.public/label "Public schnaqs"
+        :admin.center.delete.public/button "Delete schnaq"
+        :admin.center.delete/heading "Deletion"
+        :admin.center.delete.public/heading "Public schnaqs"}
    :de {;; Common
         :common/language "Sprache"
         :common/history "Verlauf"
@@ -730,7 +735,12 @@
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
-        :admin.center.start/subheading "Administration von schnaqs als Superuser"}})
+        :admin.center.start/subheading "Administration von schnaqs als Superuser"
+        :admin.center.delete/confirmation "Soll dieses schnaq wirklich gelöscht werden?"
+        :admin.center.delete.public/label "Öffentliche schnaqs"
+        :admin.center.delete.public/button "Schnaq löschen"
+        :admin.center.delete/heading "Löschen"
+        :admin.center.delete.public/heading "Öffentliche schnaqs"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
