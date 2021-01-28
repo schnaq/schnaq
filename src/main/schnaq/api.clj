@@ -125,10 +125,10 @@
                             \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
   [req]
   (if-let [hashes (get-in req [:params :share-hashes])]
-    (let [hashes-list (if (string? hashes) [(db/meeting-by-hash hashes)] hashes)
+    (let [hashes-list (if (string? hashes) [hashes] hashes)
           filtered-hashes (filter valid-discussion? hashes-list)
           meetings (map db/meeting-by-hash filtered-hashes)]
-      (if-not (or (nil? meetings) (= [nil] meetings))
+      (if-not (or (nil? meetings) (= [nil] meetings) (empty? meetings))
         (ok {:meetings meetings})
         (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
     (bad-request {:error "Meetings could not be loaded."})))
