@@ -697,9 +697,9 @@
     :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
     :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))
 
-;; Dialog.core outfactor. Should Probably go into its own namespace on next refactor.
+;;; WARNING: Only Deprecated functions down here. They are gonna vanish with time
 
-(def argument-pattern
+(def legacy-argument-pattern
   "Defines the default pattern for arguments. Oftentimes used in pull-patterns
   in a Datalog query bind the data to this structure."
   [:db/id
@@ -717,21 +717,6 @@
                                :statement/version
                                {:statement/author [:author/nickname]}]}
           {:argument/conclusion statement-pattern})}])
-
-(def discussion-pattern
-  "Representation of a discussion. Oftentimes used in a Datalog pull pattern."
-  [:db/id
-   :discussion/title
-   :discussion/description
-   {:discussion/states [:db/ident]}
-   {:discussion/starting-arguments argument-pattern}
-   {:discussion/starting-statements statement-pattern}])
-
-(>defn get-statement
-  "Returns the statement given an id."
-  [statement-id]
-  [:db/id :ret ::specs/statement]
-  (d/pull (d/db (new-connection)) statement-pattern statement-id))
 
 (>defn starting-conclusions-by-discussion
   {:deprecated "Use `starting-statements` instead"
@@ -761,6 +746,6 @@
           [?agenda :agenda/meeting ?meeting]
           [?agenda :agenda/discussion ?discussion]
           [?discussion :discussion/starting-arguments ?starting-arguments]]
-        argument-pattern share-hash)
+        legacy-argument-pattern share-hash)
       flatten
       (toolbelt/pull-key-up :db/ident)))

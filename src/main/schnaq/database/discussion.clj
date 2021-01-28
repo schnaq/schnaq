@@ -9,6 +9,40 @@
             [taoensso.timbre :as log])
   (:import (clojure.lang ExceptionInfo)))
 
+(def argument-pattern
+  "Defines the default pattern for arguments. Oftentimes used in pull-patterns
+  in a Datalog query bind the data to this structure."
+  [:db/id
+   :argument/version
+   {:argument/author [:author/nickname]}
+   {:argument/type [:db/ident]}
+   {:argument/premises main-db/statement-pattern}
+   {:argument/conclusion
+    (conj main-db/statement-pattern
+          :argument/version
+          {:argument/author [:author/nickname]}
+          {:argument/type [:db/ident]}
+          {:argument/premises [:db/id
+                               :statement/content
+                               :statement/version
+                               {:statement/author [:author/nickname]}]}
+          {:argument/conclusion main-db/statement-pattern})}])
+
+(def discussion-pattern
+  "Representation of a discussion. Oftentimes used in a Datalog pull pattern."
+  [:db/id
+   :discussion/title
+   :discussion/description
+   {:discussion/states [:db/ident]}
+   {:discussion/starting-arguments argument-pattern}
+   {:discussion/starting-statements main-db/statement-pattern}])
+
+(>defn get-statement
+  "Returns the statement given an id."
+  [statement-id]
+  [:db/id :ret ::specs/statement]
+  (d/pull (d/db (new-connection)) main-db/statement-pattern statement-id))
+
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
   [share-hash]
@@ -99,7 +133,7 @@
         '[:find (pull ?arguments argument-pattern)
           :in $ argument-pattern ?conclusion
           :where [?arguments :argument/conclusion ?conclusion]]
-        main-db/argument-pattern conclusion-id)
+        argument-pattern conclusion-id)
       (toolbelt/pull-key-up :db/ident)
       flatten))
 
@@ -126,7 +160,7 @@
       '[:find (pull ?discussions discussion-pattern)
         :in $ discussion-pattern ?title
         :where [?discussions :discussion/title ?title]]
-      main-db/discussion-pattern title)))
+      discussion-pattern title)))
 
 (defn all-arguments-for-discussion
   "Returns all arguments belonging to a discussion, identified by discussion id."
@@ -138,7 +172,7 @@
           [?agenda :agenda/meeting ?meeting]
           [?agenda :agenda/discussion ?discussion]
           [?discussion-arguments :argument/discussions ?discussion]]
-        main-db/argument-pattern share-hash)
+        argument-pattern share-hash)
       flatten
       (toolbelt/pull-key-up :db/ident)))
 
@@ -208,7 +242,7 @@
           (new-premises-for-statement! share-hash author-id statement-id reacting-string reaction)
           [:tempids (str "argument-" reacting-string)])]
     (toolbelt/pull-key-up
-      (d/pull (d/db (main-db/new-connection)) main-db/argument-pattern argument-id)
+      (d/pull (d/db (main-db/new-connection)) argument-pattern argument-id)
       :db/ident)))
 
 (>defn support-statement!

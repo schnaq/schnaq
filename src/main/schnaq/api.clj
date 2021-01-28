@@ -316,7 +316,7 @@
   (let [{:keys [share-hash statement-id]} body-params]
     (if (valid-discussion-and-statement? statement-id share-hash)
       (ok (with-statement-meta
-            {:conclusion (db/get-statement statement-id)
+            {:conclusion (discussion-db/get-statement statement-id)
              :premises (discussion/premises-for-conclusion-id statement-id)
              :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
             share-hash))

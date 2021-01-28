@@ -1,5 +1,5 @@
 (ns schnaq.meeting.database-test
-  (:require [clojure.test :refer [deftest testing use-fixtures is are]]
+  (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
