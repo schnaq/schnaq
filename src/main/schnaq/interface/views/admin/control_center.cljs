@@ -7,6 +7,23 @@
             [schnaq.interface.views.pages :as pages]
             [re-frame.core :as rf]))
 
+(rf/reg-sub
+  :migration.users/status
+  (fn [db _]
+    (get-in db [:migration :status :users] "-")))
+
+(defn- migrate-users-form
+  "Migrates the users to the new format."
+  []
+  [:form.form
+   {:id "migrate-users-form"
+    :on-submit (fn [e]
+                 (js-wrap/prevent-default e)
+                 (when (js/confirm "Nutzer wirklich migrieren? Nicht nochmal klicken, wenn gestartet!")
+                   (rf/dispatch [:migration.users/start])))}
+   [:button.btn.btn-danger {:type "submit"} "Migriere Nutzer JETZT!"]
+   [:p "Status: " @(rf/subscribe [:migration.users/status])]])
+
 (rf/reg-event-db
   :admin.schnaq.delete/success
   (fn [db [_ {:keys [share-hash]}]]
@@ -26,6 +43,7 @@
                           :response-format (ajax/transit-response-format)
                           :on-success [:admin.schnaq.delete/success]
                           :on-failure [:ajax.error/as-notification]}]]})))
+
 
 (defn- public-meeting-deletion-form
   "Easily delete one of the public meetings."
@@ -86,7 +104,11 @@
      [:h4 (labels :admin.center.delete.public/heading)]
      [public-meeting-deletion-form]
      [:h4 (labels :admin.center.delete.private/heading)]
-     [private-meeting-deletion-form]]]])
+     [private-meeting-deletion-form]]
+    [:hr]
+    [:div
+     [:h4 "Migration"]
+     [migrate-users-form]]]])
 
 (defn center-overview-route
   []
