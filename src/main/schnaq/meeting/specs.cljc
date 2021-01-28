@@ -12,6 +12,7 @@
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
 (s/def :discussion/share-hash ::non-blank-string)
+(s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted}
@@ -21,7 +22,7 @@
 (s/def ::discussion (s/keys :req [:discussion/title :discussion/description
                                   :discussion/states]
                             :opt [:discussion/starting-arguments :discussion/starting-statements
-                                  :discussion/share-hash]))
+                                  :discussion/share-hash :discussion/edit-hash]))
 
 ;; Author
 (s/def :author/nickname string?)

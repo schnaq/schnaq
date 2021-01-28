@@ -240,7 +240,7 @@
    {:db/ident :discussion.state/deleted
     :db/doc "Supersedes most other states. When set do absolutely not show under any circumstances"}
    {:db/ident :discussion.state/public}
-   ;; Deletion is a marker. We don't really delete anything from datomic
+
    ;; Discussion
    {:db/ident :discussion/title
     :db/valueType :db.type/string
@@ -251,6 +251,11 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "A unique hash that grants participation access to the discussion"}
+   {:db/ident :discussion/edit-hash
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
+    :db/doc "A hash that grants edit access to the discussion"}
    {:db/ident :discussion/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
