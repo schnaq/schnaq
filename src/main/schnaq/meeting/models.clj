@@ -149,6 +149,11 @@
     :db/doc "DEPRECATED: Do not use agenda-points in new code.
     An id belonging to the (foreign) discussion represented by this agenda"}
    ;; User
+   {:db/ident :user/nickname
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "User is identified by the nickname, when using the site without an account."}
    {:db/ident :user/core-author
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
@@ -162,6 +167,14 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "All downvotes the user gave."}
+   ;; Author
+   {:db/ident :author/nickname
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "DEPRECATED: The nickname of an author. Author will not be used in the future.
+    Use :user/nickname instead."}
+
    ;; Feedback
    {:db/ident :feedback/contact-name
     :db/valueType :db.type/string
@@ -197,12 +210,7 @@
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one
     :db/doc "A marker whether the statement has been marked as deleted."}
-   ;; Author
-   {:db/ident :author/nickname
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/value
-    :db/doc "The nickname of an author"}
+
    ;; Argument Types
    {:db/ident :argument.type/support}
    {:db/ident :argument.type/attack}

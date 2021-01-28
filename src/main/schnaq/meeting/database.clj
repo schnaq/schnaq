@@ -108,7 +108,8 @@
   [:db/id
    {:user/core-author [:author/nickname]}
    :user/upvotes
-   :user/downvotes])
+   :user/downvotes
+   :user/nickname])
 
 (def ^:private meeting-pattern-public
   "Pull a schnaq based on these attributes, omit sensitive information"
@@ -370,6 +371,7 @@
   (when (s/valid? :author/nickname nickname)
     (get-in
       (transact [{:db/id "temp-user"
+                  :user/nickname nickname
                   :user/core-author
                   {:db/id (format "id-%s" nickname)
                    :author/nickname nickname}}])
