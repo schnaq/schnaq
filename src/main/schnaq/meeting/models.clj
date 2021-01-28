@@ -35,7 +35,7 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "Set type of a meeting"}
-   {:db/ident :meeting/header-image-url                     ;; TODO put in discussion
+   {:db/ident :meeting/header-image-url
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "URL pointing to an image to be displayed as header."}
@@ -260,6 +260,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
+   {:db/ident :discussion/header-image-url
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "URL pointing to an image to be displayed as header."}
    {:db/ident :discussion/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
