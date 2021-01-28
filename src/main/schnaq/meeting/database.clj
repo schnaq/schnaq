@@ -117,6 +117,7 @@
    :meeting/start-date
    :meeting/end-date
    :meeting/type
+   :meeting/header-image-url
    :meeting/description
    :meeting/share-hash
    {:meeting/author author-pattern}
