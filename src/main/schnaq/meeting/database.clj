@@ -264,7 +264,7 @@
   A discussion is automatically created for the agenda-point.
   Returns the discussion-id of the newly created discussion."
   ([title description meeting-id share-hash]
-   [:agenda/title (? string?) int? :ret int?]
+   [:agenda/title (? string?) int? :meeting/share-hash :ret int?]
    (add-agenda-point title description meeting-id 1 false share-hash))
   ([title description meeting-id rank public? share-hash]
    [:agenda/title (? string?) int? :agenda/rank boolean? :meeting/share-hash :ret int?]
