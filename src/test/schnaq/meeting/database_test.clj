@@ -54,8 +54,8 @@
                                    :meeting/author (db/add-user-if-not-exists "Wegi")})
           _ (db/add-agenda-point "Hi" "Beschreibung" meeting)
           christian-id (db/author-id-by-nickname "Christian")
-          first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
-          second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
+          first-id (discussion-db/add-starting-statement! share-hash christian-id "this is sparta")
+          second-id (discussion-db/add-starting-statement! share-hash christian-id "this is kreta")]
       (is (db/check-valid-statement-id-and-meeting first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-and-meeting second-id "Wegi-ist-der-schönste")))))
 
@@ -160,7 +160,8 @@
             woggler-id (db/author-id-by-nickname "wooooggler")]
         (is (= 4 (db/number-of-active-discussion-users)))
         (@#'db/transact
-          [(@#'db/prepare-new-argument cat-or-dog-id woggler-id "Alles doof" ["weil alles doof war"])]))
+          [(discussion-db/prepare-new-argument cat-or-dog-id woggler-id "Alles doof"
+                                               ["weil alles doof war"])]))
       (is (= 5 (db/number-of-active-discussion-users))))))
 
 (deftest statement-length-stats-test
@@ -185,46 +186,6 @@
           statements (db/all-statements-for-graph graph-hash)]
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
-
-(deftest pack-premises-test
-  (testing "Test the creation of statement-entities from strings"
-    (let [premises ["What a beautifull day" "Hello test"]
-          author-id (db/author-id-by-nickname "Test-person")
-          premise-entities (@#'db/pack-premises premises author-id)]
-      (is (= [{:db/id "premise-What a beautifull day",
-               :statement/author author-id,
-               :statement/content (first premises),
-               :statement/version 1}
-              {:db/id "premise-Hello test",
-               :statement/author author-id,
-               :statement/content (second premises),
-               :statement/version 1}]
-             premise-entities)))))
-
-(deftest prepare-new-argument-test
-  (testing "Test the creation of a valid argument-entity from strings"
-    (let [premises ["What a beautifull day" "Hello test"]
-          conclusion "Wow look at this"
-          author-id (db/author-id-by-nickname "Test-person")
-          meeting-hash "graph-hash"
-          discussion-id (:db/id (db/discussion-by-share-hash meeting-hash))
-          with-id (@#'db/prepare-new-argument discussion-id author-id conclusion premises "temp-id-here")]
-      (is (contains? with-id :argument/premises))
-      (is (contains? with-id :argument/conclusion))
-      (is (contains? with-id :argument/author))
-      (is (contains? with-id :argument/version))
-      (is (contains? with-id :argument/type))
-      (is (contains? with-id :argument/discussions)))))
-
-(deftest add-starting-statement!-test
-  (testing "Test the creation of a valid argument-entity from strings"
-    (let [statement "Wow look at this"
-          author-id (db/author-id-by-nickname "Test-person")
-          meeting-hash "graph-hash"
-          _ (db/add-starting-statement! meeting-hash author-id statement)
-          starting-statements (db/starting-statements meeting-hash)]
-      (testing "Must have three more statements than the vanilla set and one more starting conclusion"
-        (is (= 3 (count starting-statements)))))))
 
 (deftest all-arguments-for-conclusion-test
   (testing "Get arguments, that have a certain conclusion"

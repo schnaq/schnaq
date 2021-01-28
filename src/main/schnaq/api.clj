@@ -328,7 +328,7 @@
   (let [{:keys [share-hash statement nickname]} body-params
         author-id (db/author-id-by-nickname nickname)]
     (if (valid-discussion? share-hash)
-      (do (db/add-starting-statement! share-hash author-id statement)
+      (do (discussion-db/add-starting-statement! share-hash author-id statement)
           (log/info "Starting statement added for discussion" share-hash)
           (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
       (deny-access invalid-rights-message))))
