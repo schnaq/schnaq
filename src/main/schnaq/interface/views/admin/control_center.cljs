@@ -54,7 +54,7 @@
      [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
 
 (defn- private-meeting-deletion-form
-  "Easily delete one of the public meetings."
+  "Easily delete any meetings."
   []
   [:form.form
    {:id "private-meeting-form"
