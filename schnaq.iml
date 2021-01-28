@@ -195,7 +195,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-fsx:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.yaml/snakeyaml:1.23" level="project" />
     <orderEntry type="library" name="Deps: aero:1.1.6" level="project" />
-    <orderEntry type="library" name="Deps: clj-http:3.10.3" level="project" />
+    <orderEntry type="library" name="Deps: clj-http:3.11.0" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm:7.1" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-migrationhubconfig:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-worklink:1.11.850" level="project" />
@@ -216,7 +216,7 @@
     <orderEntry type="library" name="Deps: thheller/shadow-util:0.7.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-medialive:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-workmailmessageflow:1.11.850" level="project" />
-    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpclient-cache:4.5.10" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpclient-cache:4.5.13" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: mvxcvi/arrangement:1.2.0" level="project" />
     <orderEntry type="library" name="Deps: instaparse:1.4.8" level="project" />
@@ -342,7 +342,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-connectparticipant:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-malli:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-serverlessapplicationrepository:1.11.850" level="project" />
-    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpclient:4.5.10" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpclient:4.5.13" level="project" />
     <orderEntry type="library" name="Deps: metosin/schema-tools:0.12.2" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-connect:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.rrb-vector:0.1.1" level="project" />
@@ -441,7 +441,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-forecast:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.31.v20200723" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-qldbsession:1.11.850" level="project" />
-    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.10" level="project" />
+    <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpmime:4.5.13" level="project" />
     <orderEntry type="library" name="Deps: com.google.code.findbugs/jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elasticloadbalancingv2:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-dev:0.5.11" level="project" />
