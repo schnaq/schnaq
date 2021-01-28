@@ -48,3 +48,17 @@
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/attack (:argument/type new-attack))))))
+
+(deftest statements-by-content-test
+  (testing "Statements are identified by identical content."
+    (is (= 1 (count (db/statements-by-content "dogs can act as watchdogs"))))
+    (is (= 1 (count (db/statements-by-content "we have no use for a watchdog"))))
+    (is (empty? (db/statements-by-content "foo-baar-ajshdjkahsjdkljsadklja")))))
+
+(deftest all-arguments-for-discussion-test
+  (testing "Should return valid arguments for valid discussion."
+    (let [share-hash "cat-dog-hash"]
+      (is (empty? (db/all-arguments-for-discussion "non-existing-hash-1923hwudahsi")))
+      (is (seq (db/all-arguments-for-discussion share-hash)))
+      (is (contains? #{:argument.type/undercut :argument.type/support :argument.type/attack}
+                     (:argument/type (rand-nth (db/all-arguments-for-discussion share-hash))))))))

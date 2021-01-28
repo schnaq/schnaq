@@ -1,5 +1,6 @@
 (ns schnaq.discussion-test
   (:require [clojure.test :refer [use-fixtures is deftest testing are]]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.discussion :as discussion]
             [schnaq.meeting.database :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -11,7 +12,7 @@
   (testing "Test whether all undercut descendants are found in a sub-discussion."
     (let [undercuts-for-root @#'discussion/undercuts-for-root
           share-hash "ameisenbär-hash"
-          all-arguments (db/all-arguments-for-discussion share-hash)
+          all-arguments (discussion-db/all-arguments-for-discussion share-hash)
           matching-argument (first (filter #(= :argument.type/attack (:argument/type %)) all-arguments))
           root-statement (first (:argument/premises matching-argument))
           matching-undercut (first (undercuts-for-root (:db/id root-statement) all-arguments))]
@@ -25,7 +26,7 @@
     (let [direct-children @#'discussion/direct-children
           share-hash "ameisenbär-hash"
           root-id (:db/id (first (db/starting-statements share-hash)))
-          all-arguments (db/all-arguments-for-discussion share-hash)
+          all-arguments (discussion-db/all-arguments-for-discussion share-hash)
           children (direct-children root-id all-arguments)]
       (is (= 2 (count children)))
       (is (empty? (direct-children -1 all-arguments))))))
@@ -33,7 +34,7 @@
 (deftest sub-discussion-information-test
   (testing "Test information regarding sub-discussions."
     (let [share-hash "ameisenbär-hash"
-          arguments (db/all-arguments-for-discussion share-hash)
+          arguments (discussion-db/all-arguments-for-discussion share-hash)
           root-id (:db/id (first (db/starting-statements share-hash)))
           infos (discussion/sub-discussion-information root-id arguments)
           author-names (into #{} (map :author/nickname (:authors infos)))]

@@ -1,6 +1,7 @@
 (ns schnaq.discussion
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.specs :as specs]))
 
@@ -87,7 +88,7 @@
   "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
   [statements share-hash starting-statements]
   [sequential? :meeting/share-hash sequential? :ret sequential?]
-  (let [arguments (db/all-arguments-for-discussion share-hash)
+  (let [arguments (discussion-db/all-arguments-for-discussion share-hash)
         starting-statement-ids (into #{} (map :db/id starting-statements))]
     (map #(create-node % arguments starting-statement-ids) statements)))
 
@@ -128,7 +129,7 @@
   "Creates all links for a discussion with its agenda as root."
   [statements starting-statements share-hash]
   [sequential? sequential? :meeting/share-hash :ret sequential?]
-  (let [arguments (db/all-arguments-for-discussion share-hash)]
+  (let [arguments (discussion-db/all-arguments-for-discussion share-hash)]
     (concat
       (create-links statements arguments)
       (agenda-links share-hash starting-statements))))

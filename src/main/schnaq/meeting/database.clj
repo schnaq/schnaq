@@ -122,7 +122,7 @@
    {:meeting/author author-pattern}
    {:agenda/_meeting [{:agenda/discussion [:discussion/states]}]}])
 
-(def ^:private statement-pattern
+(def statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
    :statement/content
@@ -883,49 +883,5 @@
         :in $ discussion-pattern ?title
         :where [?discussions :discussion/title ?title]]
       discussion-pattern title)))
-
-(defn all-arguments-for-discussion
-  "Returns all arguments belonging to a discussion, identified by discussion id."
-  [share-hash]
-  (-> (query
-        '[:find (pull ?discussion-arguments argument-pattern)
-          :in $ argument-pattern ?share-hash
-          :where [?meeting :meeting/share-hash ?share-hash]
-          [?agenda :agenda/meeting ?meeting]
-          [?agenda :agenda/discussion ?discussion]
-          [?discussion-arguments :argument/discussions ?discussion]]
-        argument-pattern share-hash)
-      flatten
-      (toolbelt/pull-key-up :db/ident)))
-
-(>defn statements-by-content
-  "Returns all statements that have the matching `content`."
-  [content]
-  [:statement/content
-   :ret (s/coll-of ::specs/statement)]
-  (map first
-       (let [db (d/db (new-connection))]
-         (d/q
-           '[:find (pull ?statements statement-pattern)
-             :in $ statement-pattern ?content
-             :where [?statements :statement/content ?content]]
-           db statement-pattern content))))
-
-(>defn new-premises-for-statement!
-  "Creates a new argument based on a statement, which is used as conclusion."
-  [share-hash author-id new-conclusion-id new-statement-string argument-type]
-  [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
-  (let [discussion-id (discussion-by-share-hash share-hash)
-        new-arguments
-        [{:db/id (str "argument-" new-statement-string)
-          :argument/author author-id
-          :argument/premises (pack-premises [new-statement-string] author-id)
-          :argument/conclusion new-conclusion-id
-          :argument/version 1
-          :argument/type argument-type
-          :argument/discussions [discussion-id]}]]
-    (transact new-arguments)))
-
-
 
 

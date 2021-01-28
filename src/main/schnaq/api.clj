@@ -282,7 +282,7 @@
   (-> data
       processors/hide-deleted-statement-content
       processors/with-votes
-      (processors/with-sub-discussion-information (db/all-arguments-for-discussion share-hash))))
+      (processors/with-sub-discussion-information (discussion-db/all-arguments-for-discussion share-hash))))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."

@@ -1,5 +1,6 @@
 (ns schnaq.meeting.database-test
   (:require [clojure.test :refer [deftest testing use-fixtures is are]]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.time Instant)))
@@ -19,7 +20,7 @@
   (testing "Tests whether setting up and downvotes works properly."
     (let [share-hash "cat-dog-hash"
           some-statements (map #(-> % :argument/premises first :db/id)
-                               (db/all-arguments-for-discussion share-hash))
+                               (discussion-db/all-arguments-for-discussion share-hash))
           author-1 "Test-1"
           author-2 "Test-2"]
       (db/add-user-if-not-exists author-1)
@@ -247,20 +248,6 @@
     (is (empty? (db/all-discussions-by-title "")))
     (is (empty? (db/all-discussions-by-title "👾")))
     (is (seq (db/all-discussions-by-title "Cat or Dog?")))))
-
-(deftest all-arguments-for-discussion-test
-  (testing "Should return valid arguments for valid discussion."
-    (let [share-hash "cat-dog-hash"]
-      (is (empty? (db/all-arguments-for-discussion "non-existing-hash-1923hwudahsi")))
-      (is (seq (db/all-arguments-for-discussion share-hash)))
-      (is (contains? #{:argument.type/undercut :argument.type/support :argument.type/attack}
-                     (:argument/type (rand-nth (db/all-arguments-for-discussion share-hash))))))))
-
-(deftest statements-by-content-test
-  (testing "Statements are identified by identical content."
-    (is (= 1 (count (db/statements-by-content "dogs can act as watchdogs"))))
-    (is (= 1 (count (db/statements-by-content "we have no use for a watchdog"))))
-    (is (empty? (db/statements-by-content "foo-baar-ajshdjkahsjdkljsadklja")))))
 
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."
