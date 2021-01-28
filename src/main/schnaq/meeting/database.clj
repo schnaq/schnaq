@@ -911,7 +911,7 @@
              :where [?statements :statement/content ?content]]
            db statement-pattern content))))
 
-(>defn- new-premises-for-statement!
+(>defn new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
   [share-hash author-id new-conclusion-id new-statement-string argument-type]
   [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
