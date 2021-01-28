@@ -190,7 +190,7 @@
 (deftest all-arguments-for-conclusion-test
   (testing "Get arguments, that have a certain conclusion"
     (let [share-hash "simple-hash"
-          starting-conclusion (first (db/starting-statements share-hash))
+          starting-conclusion (first (discussion-db/starting-statements share-hash))
           simple-argument (first (discussion-db/all-arguments-for-conclusion (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (-> simple-argument :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> simple-argument :argument/conclusion :statement/content))))))
@@ -200,13 +200,3 @@
     (is (empty? (discussion-db/all-discussions-by-title "")))
     (is (empty? (discussion-db/all-discussions-by-title "👾")))
     (is (seq (discussion-db/all-discussions-by-title "Cat or Dog?")))))
-
-(deftest starting-statements-test
-  (testing "Should return all starting-statements from a discussion."
-    (let [cat-dog-hash "cat-dog-hash"
-          simple-hash "simple-hash"
-          graph-hash "graph-hash"]
-      (are [result discussion] (= result (count (db/starting-statements discussion)))
-                               3 cat-dog-hash
-                               1 simple-hash
-                               2 graph-hash))))

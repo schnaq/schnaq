@@ -1,7 +1,6 @@
 (ns schnaq.meeting.processors-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
@@ -23,7 +22,7 @@
   (testing "Testing enrichment with sub-discussion-information."
     (let [share-hash "ameisenbär-hash"
           arguments (discussion-db/all-arguments-for-discussion share-hash)
-          root-id (:db/id (first (db/starting-statements share-hash)))
+          root-id (:db/id (first (discussion-db/starting-statements share-hash)))
           processed-structure (processors/with-sub-discussion-information {:statement/content "foo"
                                                                            :db/id root-id} arguments)
           infos (:meta/sub-discussion-info processed-structure)

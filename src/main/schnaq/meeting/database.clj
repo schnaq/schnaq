@@ -764,35 +764,3 @@
         argument-pattern share-hash)
       flatten
       (toolbelt/pull-key-up :db/ident)))
-
-(>defn starting-statements
-  "Returns all starting-statements belonging to a discussion."
-  [share-hash]
-  [:db/id :ret (s/coll-of ::specs/statement)]
-  (flatten
-    (query
-      '[:find (pull ?statements statement-pattern)
-        :in $ ?share-hash statement-pattern
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion ?discussion]
-        [?discussion :discussion/starting-statements ?statements]]
-      share-hash statement-pattern)))
-
-(defn discussion-by-share-hash
-  "Returns one discussion which can be reached by a certain share-hash. (Brainstorm only ever have one)"
-  [share-hash]
-  (ffirst
-    (query
-      '[:find ?discussions
-        :in $ ?share-hash
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion ?discussions]]
-      share-hash)))
-
-(>defn delete-statements!
-  "Deletes all statements, without explicitly checking anything."
-  [statement-ids]
-  [(s/coll-of :db/id) :ret associative?]
-  (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))

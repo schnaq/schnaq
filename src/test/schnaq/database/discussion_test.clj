@@ -1,5 +1,5 @@
 (ns schnaq.database.discussion-test
-  (:require [clojure.test :refer [deftest testing use-fixtures is]]
+  (:require [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
             [schnaq.meeting.database :as main-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -31,7 +31,7 @@
   (testing "Add a new supporting statement to a discussion"
     (let [share-hash "simple-hash"
           author-id (main-db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (main-db/starting-statements share-hash))
+          starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/support-statement! share-hash author-id (:db/id starting-conclusion)
                                             "This is a new support")]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
@@ -42,7 +42,7 @@
   (testing "Add a new attacking statement to a discussion"
     (let [share-hash "simple-hash"
           author-id (main-db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (main-db/starting-statements share-hash))
+          starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/attack-statement! share-hash author-id (:db/id starting-conclusion)
                                            "This is a new attack")]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
@@ -66,7 +66,7 @@
 (deftest statements-undercutting-premise-test
   (testing "Get arguments, that are undercutting an argument with a certain premise"
     (let [share-hash "simple-hash"
-          starting-conclusion (first (main-db/starting-statements share-hash))
+          starting-conclusion (first (db/starting-statements share-hash))
           simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
           desired-statement (first (db/statements-undercutting-premise premise-to-undercut-id))]
@@ -78,7 +78,7 @@
           author-id (main-db/author-id-by-nickname "Test-person")
           meeting-hash "graph-hash"
           _ (db/add-starting-statement! meeting-hash author-id statement)
-          starting-statements (main-db/starting-statements meeting-hash)]
+          starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 3 (count starting-statements)))))))
 
@@ -88,7 +88,7 @@
           conclusion "Wow look at this"
           author-id (main-db/author-id-by-nickname "Test-person")
           meeting-hash "graph-hash"
-          discussion-id (:db/id (main-db/discussion-by-share-hash meeting-hash))
+          discussion-id (:db/id (db/discussion-by-share-hash meeting-hash))
           with-id (db/prepare-new-argument discussion-id author-id conclusion premises "temp-id-here")]
       (is (contains? with-id :argument/premises))
       (is (contains? with-id :argument/conclusion))
@@ -111,3 +111,13 @@
                :statement/content (second premises),
                :statement/version 1}]
              premise-entities)))))
+
+(deftest starting-statements-test
+  (testing "Should return all starting-statements from a discussion."
+    (let [cat-dog-hash "cat-dog-hash"
+          simple-hash "simple-hash"
+          graph-hash "graph-hash"]
+      (are [result discussion] (= result (count (db/starting-statements discussion)))
+                               3 cat-dog-hash
+                               1 simple-hash
+                               2 graph-hash))))

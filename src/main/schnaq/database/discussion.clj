@@ -9,6 +9,38 @@
             [taoensso.timbre :as log])
   (:import (clojure.lang ExceptionInfo)))
 
+(>defn starting-statements
+  "Returns all starting-statements belonging to a discussion."
+  [share-hash]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (flatten
+    (query
+      '[:find (pull ?statements statement-pattern)
+        :in $ ?share-hash statement-pattern
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?agenda :agenda/meeting ?meeting]
+        [?agenda :agenda/discussion ?discussion]
+        [?discussion :discussion/starting-statements ?statements]]
+      share-hash main-db/statement-pattern)))
+
+(defn discussion-by-share-hash
+  "Returns one discussion which can be reached by a certain share-hash. (Brainstorm only ever have one)"
+  [share-hash]
+  (ffirst
+    (query
+      '[:find ?discussions
+        :in $ ?share-hash
+        :where [?meeting :meeting/share-hash ?share-hash]
+        [?agenda :agenda/meeting ?meeting]
+        [?agenda :agenda/discussion ?discussions]]
+      share-hash)))
+
+(>defn delete-statements!
+  "Deletes all statements, without explicitly checking anything."
+  [statement-ids]
+  [(s/coll-of :db/id) :ret associative?]
+  (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))
+
 (>defn- pack-premises
   "Packs premises into a statement-structure."
   [premises author-id]
@@ -55,7 +87,7 @@
   [:meeting/share-hash :db/id :statement/content :ret :db/id]
   (let [new-statement (build-new-statement author-id statement-content "add/starting-argument")
         temporary-id (:db/id new-statement)
-        discussion-id (main-db/discussion-by-share-hash share-hash)]
+        discussion-id (discussion-by-share-hash share-hash)]
     (get-in (transact [new-statement
                        [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
@@ -127,7 +159,7 @@
   "Adds the deleted state to a discussion"
   [share-hash]
   [:meeting/share-hash :ret (? :meeting/share-hash)]
-  (let [discussion-id (main-db/discussion-by-share-hash share-hash)]
+  (let [discussion-id (discussion-by-share-hash share-hash)]
     (try
       (transact [[:db/add discussion-id :discussion/states :discussion.state/deleted]])
       (log/info "Schnaq with share-hash " share-hash " has been set to deleted.")
@@ -156,7 +188,7 @@
   "Creates a new argument based on a statement, which is used as conclusion."
   [share-hash author-id new-conclusion-id new-statement-string argument-type]
   [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
-  (let [discussion-id (main-db/discussion-by-share-hash share-hash)
+  (let [discussion-id (discussion-by-share-hash share-hash)
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author author-id

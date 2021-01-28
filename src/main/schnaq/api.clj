@@ -158,7 +158,7 @@
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
     (if (valid-credentials? share-hash edit-hash)
       (if (every? #(db/check-valid-statement-id-and-meeting % share-hash) statement-ids)
-        (do (db/delete-statements! statement-ids)
+        (do (discussion-db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
       (deny-access "You do not have the rights to access this action."))))
@@ -288,7 +288,7 @@
   "Returns starting conclusions for a discussion, with processors applied."
   [share-hash]
   (let [deprecated-starters (db/starting-conclusions-by-discussion share-hash)
-        starting-statements (db/starting-statements share-hash)]
+        starting-statements (discussion-db/starting-statements share-hash)]
     (with-statement-meta (concat starting-statements deprecated-starters) share-hash)))
 
 (defn- get-starting-conclusions
@@ -434,7 +434,7 @@
   (let [share-hash (:share-hash body-params)]
     (if (valid-discussion? share-hash)
       (let [statements (db/all-statements-for-graph share-hash)
-            starting-statements (db/starting-statements share-hash)
+            starting-statements (discussion-db/starting-statements share-hash)
             edges (discussion/links-for-agenda statements starting-statements share-hash)
             controversy-vals (discussion/calculate-controversy edges)]
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
