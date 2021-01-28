@@ -35,6 +35,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "Set type of a meeting"}
+   {:db/ident :meeting/header-image-url
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "URL pointing to an image to be displayed as header."}
    {:db/ident :meeting.type/meeting}
    {:db/ident :meeting.type/brainstorm}
 
