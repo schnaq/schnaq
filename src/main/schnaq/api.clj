@@ -343,8 +343,8 @@
           (ok (with-statement-meta
                 {:new-argument
                  (if (= :attack reaction)
-                   (db/attack-statement! share-hash author-id conclusion-id premise)
-                   (db/support-statement! share-hash author-id conclusion-id premise))}
+                   (discussion-db/attack-statement! share-hash author-id conclusion-id premise)
+                   (discussion-db/support-statement! share-hash author-id conclusion-id premise))}
                 share-hash)))
       (deny-access invalid-rights-message))))
 

@@ -242,28 +242,6 @@
           desired-statement (first (db/statements-undercutting-premise premise-to-undercut-id))]
       (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (:statement/content desired-statement))))))
 
-(deftest attack-statement!-test
-  (testing "Add a new attacking statement to a discussion"
-    (let [share-hash "simple-hash"
-          author-id (db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/attack-statement! share-hash author-id (:db/id starting-conclusion)
-                                           "This is a new attack")]
-      (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/attack (:argument/type new-attack))))))
-
-(deftest support-statement!-test
-  (testing "Add a new supporting statement to a discussion"
-    (let [share-hash "simple-hash"
-          author-id (db/author-id-by-nickname "Wegi")
-          starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/support-statement! share-hash author-id (:db/id starting-conclusion)
-                                            "This is a new support")]
-      (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/support (:argument/type new-attack))))))
-
 (deftest all-discussions-by-title-test
   (testing "Should return discussions if title matches at least one discussion."
     (is (empty? (db/all-discussions-by-title "")))

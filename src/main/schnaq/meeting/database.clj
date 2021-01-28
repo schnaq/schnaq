@@ -699,7 +699,7 @@
 
 ;; Dialog.core outfactor. Should Probably go into its own namespace on next refactor.
 
-(def ^:private argument-pattern
+(def argument-pattern
   "Defines the default pattern for arguments. Oftentimes used in pull-patterns
   in a Datalog query bind the data to this structure."
   [:db/id
@@ -926,26 +926,6 @@
           :argument/discussions [discussion-id]}]]
     (transact new-arguments)))
 
-(>defn- react-to-statement!
-  "Create a new statement reacting to another statement. Returns the newly created argument."
-  [share-hash author-id statement-id reacting-string reaction]
-  [:meeting/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
-  (let [argument-id
-        (get-in
-          (new-premises-for-statement! share-hash author-id statement-id reacting-string reaction)
-          [:tempids (str "argument-" reacting-string)])]
-    (toolbelt/pull-key-up
-      (d/pull (d/db (new-connection)) argument-pattern argument-id)
-      :db/ident)))
 
-(>defn attack-statement!
-  "Create a new statement attacking another statement. Returns the newly created argument."
-  [share-hash author-id statement-id attacking-string]
-  [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash author-id statement-id attacking-string :argument.type/attack))
 
-(>defn support-statement!
-  "Create a new statement supporting another statement. Returns the newly created argument."
-  [share-hash author-id statement-id supporting-string]
-  [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash author-id statement-id supporting-string :argument.type/support))
+
