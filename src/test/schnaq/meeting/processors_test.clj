@@ -1,6 +1,6 @@
 (ns schnaq.meeting.processors-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
-            [schnaq.meeting.database :as db]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.processors :as processors]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
@@ -10,7 +10,7 @@
 (deftest with-votes-processor-test
   (testing "Result should have all statements enriched with votes-metadata"
     (let [share-hash "cat-dog-hash"
-          enriched-data (processors/with-votes (db/all-arguments-for-discussion share-hash))
+          enriched-data (processors/with-votes (discussion-db/all-arguments-for-discussion share-hash))
           wrongly-asserted-meta (filter :meta/upvotes enriched-data)
           statements-only (flatten (map :argument/premises enriched-data))
           upvotes-only (filter number? (map :meta/upvotes statements-only))
@@ -21,8 +21,8 @@
 (deftest with-sub-discussion-information-test
   (testing "Testing enrichment with sub-discussion-information."
     (let [share-hash "ameisenbär-hash"
-          arguments (db/all-arguments-for-discussion share-hash)
-          root-id (:db/id (first (db/starting-statements share-hash)))
+          arguments (discussion-db/all-arguments-for-discussion share-hash)
+          root-id (:db/id (first (discussion-db/starting-statements share-hash)))
           processed-structure (processors/with-sub-discussion-information {:statement/content "foo"
                                                                            :db/id root-id} arguments)
           infos (:meta/sub-discussion-info processed-structure)

@@ -5,6 +5,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.brainstorm.create :as brainstorm-create]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.errors :as error-views]
@@ -38,6 +39,13 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
+   ["admin/center"
+    {:name :routes/admin-center
+     :view admin-center/center-overview-route
+     :link-text (labels :router/admin-center)
+     :controllers [{:start (fn []
+                             (rf/dispatch [:admin/set-password (js/prompt "Admin Password")])
+                             (rf/dispatch [:meetings.public/load]))}]}]
    ["schnaqs"
     ["/public"
      {:name :routes/public-discussions
