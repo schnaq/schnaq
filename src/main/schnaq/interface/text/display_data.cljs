@@ -58,7 +58,7 @@
         ;; Create schnaqs
         :schnaqs/create "Create schnaq"
 
-        ;; Image preview
+        ;; Header image
         :schnaq.header-image.url/placeholder "Image url"
         :schnaq.header-image.url/button "Add as preview image"
         :schnaq.header-image.url/note "Images are restricted to content from pixabay.com"
@@ -425,7 +425,7 @@
         ;; Create schnaqs
         :schnaqs/create "schnaq anlegen"
 
-        ;; Image preview
+        ;; Header image
         :schnaq.header-image.url/placeholder "Bild URL eingeben"
         :schnaq.header-image.url/button "Vorschaubild hinzufügen"
         :schnaq.header-image.url/note "Erlaubt werden nur Inhalte von pixabay.com"

@@ -33,7 +33,7 @@
 
 (def s3-bucket-headers "schnaq-header-images")
 
-(def s3-bucket-url "https://s3.disqtec.com/schnaq-header-images/")
+(def s3-bucket-header-url "https://s3.disqtec.com/schnaq-header-images/")
 
 (def s3-credentials {:access-key "minio"
                      :secret-key "***REMOVED***"
