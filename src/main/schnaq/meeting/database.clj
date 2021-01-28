@@ -265,9 +265,9 @@
   Returns the discussion-id of the newly created discussion."
   ([title description meeting-id share-hash]
    [:agenda/title (? string?) int? :meeting/share-hash :ret int?]
-   (add-agenda-point title description meeting-id 1 false share-hash "will-be-deleted-soon"))
-  ([title description meeting-id rank public? share-hash edit-hash]
-   [:agenda/title (? string?) int? :agenda/rank boolean? :meeting/share-hash :meeting/edit-hash
+   (add-agenda-point title description meeting-id 1 false share-hash "will-be-deleted-soon" 1))
+  ([title description meeting-id rank public? share-hash edit-hash author-id]
+   [:agenda/title (? string?) int? :agenda/rank boolean? :meeting/share-hash :meeting/edit-hash :db/id
     :ret int?]
    (when (and (s/valid? :agenda/title title)
               (s/valid? int? meeting-id))
@@ -283,7 +283,8 @@
                         :discussion/states discussion-state
                         :discussion/starting-statements []
                         :discussion/share-hash share-hash
-                        :discussion/edit-hash edit-hash}}
+                        :discussion/edit-hash edit-hash
+                        :discussion/author author-id}}
            agenda (if (and description (s/valid? :agenda/description description))
                     (merge-with merge
                                 raw-agenda

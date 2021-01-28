@@ -36,7 +36,12 @@
    {:discussion/states [:db/ident]}
    {:discussion/starting-arguments argument-pattern}
    {:discussion/starting-statements main-db/statement-pattern}
-   :discussion/share-hash])
+   :discussion/share-hash
+   :discussion/author])
+
+(def discussion-pattern-private
+  "Holds sensitive information as well."
+  (conj discussion-pattern :discussion/edit-hash))
 
 (>defn get-statement
   "Returns the statement given an id."

@@ -22,12 +22,12 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "A hash that grants participation access to the discussion"}
-   {:db/ident :meeting/edit-hash                            ;; TODO put in discussion
+   {:db/ident :meeting/edit-hash
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "A hash that grants edit access to the discussion"}
-   {:db/ident :meeting/author                               ;; TODO put in discussion
+   {:db/ident :meeting/author
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
@@ -256,6 +256,10 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "A hash that grants edit access to the discussion"}
+   {:db/ident :discussion/author
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The author of a meeting."}
    {:db/ident :discussion/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
