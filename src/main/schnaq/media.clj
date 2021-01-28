@@ -28,7 +28,9 @@
       :error-img)))
 
 (defn- check-url [url]
-  (re-matches trusted-cdn-url-regex url))
+  (if (re-matches trusted-cdn-url-regex url)
+    true
+    false))
 
 (defn- check-and-upload-image [image-url key share-hash]
   (if (check-url image-url)
