@@ -2,7 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
@@ -44,6 +44,13 @@
       [name-input username button-class]
       [change-name-button])))
 
+(defn- admin-star
+  "Show a star icon if the user is logged in as admin."
+  []
+  (when @(rf/subscribe [:user/administrator?])
+    [:i.pr-1 {:class (str "far " (fa :star))
+              :title (labels :user.profile/star-tooltip)}]))
+
 (defn user-handling-dropdown
   "Dropdown menu to change user name, to log in, ..."
   [button-class]
@@ -55,6 +62,7 @@
       {:href "#" :role "button" :data-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
       [:button.btn.dropdown-toggle {:class button-class}
+       [admin-star]
        username]]
      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
       [username-bar-view]

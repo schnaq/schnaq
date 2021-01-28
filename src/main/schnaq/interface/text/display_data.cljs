@@ -233,6 +233,7 @@
         :user/login "Login / Sign up"
         :user/logout "Logout"
         :user.profile/settings "Settings"
+        :user.profile/star-tooltip "You're an admin!\n\"With great power comes great responsibility.\""
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -588,6 +589,7 @@
         :user/login "Login / Registrieren"
         :user/logout "Logout"
         :user.profile/settings "Einstellungen"
+        :user.profile/star-tooltip "Du bist ein Admin!\n\"Aus großer Kraft folgt große Verantwortung.\""
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
@@ -818,6 +820,7 @@
      :plus "fa-plus"
      :share "fa-share-alt"
      :shield "fa-shield-alt"
+     :star "fa-star"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
      :user/group "fa-users"
