@@ -17,7 +17,7 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "A description of the meetings purpose."}
-   {:db/ident :meeting/share-hash                           ;; TODO put in discussion
+   {:db/ident :meeting/share-hash
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
