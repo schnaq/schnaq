@@ -14,7 +14,7 @@
   [url]
   (if url
     url
-    config/place-holder-img))
+    config/place-holder-header-img))
 
 (defn image-url-input []
   (let [input-id "admin-image-url"]
