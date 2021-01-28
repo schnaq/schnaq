@@ -45,6 +45,12 @@
   (and (not (nil? (db/meeting-by-hash share-hash)))
        (not (discussion-db/discussion-deleted? share-hash))))
 
+(defn- valid-discussion-and-statement?
+  "Checks whether a discussion is valid and also whether the statement belongs to the discussion."
+  [statement-id share-hash]
+  (and (valid-discussion? share-hash)
+       (db/check-valid-statement-id-and-meeting statement-id share-hash)))
+
 (>defn- valid-credentials?
   "Validate if share-hash and edit-hash match"
   [share-hash edit-hash]
@@ -173,7 +179,7 @@
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
   [{:keys [meeting-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
-  (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
+  (if (valid-discussion-and-statement? statement-id meeting-hash)
     (let [nickname (db/canonical-username nickname)
           vote (check-vote-fn statement-id nickname)
           counter-vote (counter-check-vote-fn statement-id nickname)]
@@ -308,7 +314,7 @@
   "Return the sought after conclusion (by id) and the following premises / undercuts."
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement-id]} body-params]
-    (if (db/check-valid-statement-id-and-meeting statement-id share-hash)
+    (if (valid-discussion-and-statement? statement-id share-hash)
       (ok (with-statement-meta
             {:conclusion (db/get-statement statement-id)
              :premises (discussion/premises-for-conclusion-id statement-id)
@@ -332,7 +338,7 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (db/check-valid-statement-id-and-meeting conclusion-id share-hash)
+    (if (valid-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (with-statement-meta
                 {:new-argument
