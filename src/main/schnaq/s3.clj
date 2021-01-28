@@ -2,11 +2,11 @@
   (:require [amazonica.aws.s3 :as s3]
             [schnaq.config :as config]))
 
-(defn upload-data-to-s3 [file key-name]
+(defn upload-data-to-s3 [file file-name]
   (-> config/s3-credentials
       (s3/put-object :bucket-name config/s3-bucket-headers
-                     :key key-name
+                     :key file-name
                      :input-stream (:body file)
                      :metadata {:content-length (:length file)}))
   {:message "Image upload sucessfull"
-   :bucket-url (str config/s3-bucket-header-url key-name)})
+   :bucket-url (str config/s3-bucket-header-url file-name)})
