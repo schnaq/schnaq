@@ -16,7 +16,7 @@
                    :meeting/author (db/add-user-if-not-exists "Mike")}))
 
 (deftest test-cdn-restriction
-  (testing "Test that only urls from pixabay are allowed"
+  (testing "Test image upload to s3"
     (let [share-hash "aaaa1-bbb2-ccc3"
           _schnaq (create-schnaq share-hash)
           bad-url "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png"
@@ -35,9 +35,9 @@
                       url
                       key
                       share-hash)]
-      (is (= (-> bad-request-1 :body :error) @#'media/error-cdn))
-      (is (= (-> bad-request-2 :body :error) @#'media/error-img))
-      (is (nil? (-> request-1 :body :error))))))
+      (is (= bad-request-1 :error-forbidden-cdn))
+      (is (= bad-request-2 :error-img))
+      (is (not (nil? (-> request-1 :db-after)))))))
 
 (deftest test-cdn-regex
   (testing "Test that only pixabay's cdn url is allowed"

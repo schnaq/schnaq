@@ -49,3 +49,19 @@
         :error-forbidden-cdn (forbidden {:error error-cdn})
         (ok {:message success-img}))
       (validator/deny-access))))
+
+(comment
+
+  (check-url "https://cdn.pixabay.com/photo/2020/10/23/17/47/girl-5679419_960_720.jpg")
+  (check-url "aaaaa")
+
+  (try
+    (let [share "ad4cc8b7-cbc6-4317-a566-1859cec09e1f"
+          key (str "header-" share)]
+      (check-and-upload-image
+        "https://s3.disqtec.com/schnaq-header-images/fooo2"
+        key
+        share))
+
+    (catch Exception e
+      {:error (.getMessage e)})))
