@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest testing is are use-fixtures]]
             [schnaq.api :as api]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.specs :as specs]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -42,7 +43,7 @@
   (testing "Check if graph data is correct"
     (let [graph-data-for-agenda @#'api/graph-data-for-agenda
           share-hash "89eh32hoas-2983ud"
-          discussion-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))
+          discussion-id (:db/id (first (discussion-db/all-discussions-by-title "Cat or Dog?")))
           request {:body-params {:share-hash share-hash
                                  :discussion-id discussion-id}}
           bad-request {:body-params {:share-hash "123"

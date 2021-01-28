@@ -154,7 +154,7 @@
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
-    (let [cat-or-dog-id (:db/id (first (db/all-discussions-by-title "Cat or Dog?")))]
+    (let [cat-or-dog-id (:db/id (first (discussion-db/all-discussions-by-title "Cat or Dog?")))]
       (is (= 4 (db/number-of-active-discussion-users)))
       (let [_ (db/add-user-if-not-exists "wooooggler")
             woggler-id (db/author-id-by-nickname "wooooggler")]
@@ -230,24 +230,15 @@
   (testing "Get arguments, that have a certain conclusion"
     (let [share-hash "simple-hash"
           starting-conclusion (first (db/starting-statements share-hash))
-          simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))]
+          simple-argument (first (discussion-db/all-arguments-for-conclusion (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (-> simple-argument :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> simple-argument :argument/conclusion :statement/content))))))
 
-(deftest statements-undercutting-premise-test
-  (testing "Get arguments, that are undercutting an argument with a certain premise"
-    (let [share-hash "simple-hash"
-          starting-conclusion (first (db/starting-statements share-hash))
-          simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
-          premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
-          desired-statement (first (db/statements-undercutting-premise premise-to-undercut-id))]
-      (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (:statement/content desired-statement))))))
-
 (deftest all-discussions-by-title-test
   (testing "Should return discussions if title matches at least one discussion."
-    (is (empty? (db/all-discussions-by-title "")))
-    (is (empty? (db/all-discussions-by-title "👾")))
-    (is (seq (db/all-discussions-by-title "Cat or Dog?")))))
+    (is (empty? (discussion-db/all-discussions-by-title "")))
+    (is (empty? (discussion-db/all-discussions-by-title "👾")))
+    (is (seq (discussion-db/all-discussions-by-title "Cat or Dog?")))))
 
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."

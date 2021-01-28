@@ -9,6 +9,42 @@
             [taoensso.timbre :as log])
   (:import (clojure.lang ExceptionInfo)))
 
+(defn all-arguments-for-conclusion
+  "Get all arguments for a given conclusion."
+  [conclusion-id]
+  (-> (query
+        '[:find (pull ?arguments argument-pattern)
+          :in $ argument-pattern ?conclusion
+          :where [?arguments :argument/conclusion ?conclusion]]
+        main-db/argument-pattern conclusion-id)
+      (toolbelt/pull-key-up :db/ident)
+      flatten))
+
+(defn statements-undercutting-premise
+  "Return all statements that are used to undercut an argument where `statement-id`
+  is used as one of the premises in the undercut argument."
+  [statement-id]
+  (flatten
+    (query
+      '[:find (pull ?undercutting-statements statement-pattern)
+        :in $ statement-pattern ?statement-id
+        :where [?arguments :argument/premises ?statement-id]
+        [?undercutting-arguments :argument/conclusion ?arguments]
+        [?undercutting-arguments :argument/premises ?undercutting-statements]]
+      main-db/statement-pattern statement-id)))
+
+(>defn all-discussions-by-title
+  "Query all discussions based on the title. Could possible be multiple
+  entities."
+  [title]
+  [string? :ret (s/coll-of ::specs/discussion)]
+  (flatten
+    (query
+      '[:find (pull ?discussions discussion-pattern)
+        :in $ discussion-pattern ?title
+        :where [?discussions :discussion/title ?title]]
+      main-db/discussion-pattern title)))
+
 (defn all-arguments-for-discussion
   "Returns all arguments belonging to a discussion, identified by discussion id."
   [share-hash]

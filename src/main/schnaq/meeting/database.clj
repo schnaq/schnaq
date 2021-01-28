@@ -718,7 +718,7 @@
                                {:statement/author [:author/nickname]}]}
           {:argument/conclusion statement-pattern})}])
 
-(def ^:private discussion-pattern
+(def discussion-pattern
   "Representation of a discussion. Oftentimes used in a Datalog pull pattern."
   [:db/id
    :discussion/title
@@ -797,7 +797,7 @@
   [(s/coll-of :db/id) :ret associative?]
   (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))
 
-(>defn- pack-premises
+(>defn pack-premises
   "Packs premises into a statement-structure."
   [premises author-id]
   [(s/coll-of :statement/content) :db/id
@@ -847,41 +847,5 @@
     (get-in (transact [new-statement
                        [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
-
-(defn all-arguments-for-conclusion
-  "Get all arguments for a given conclusion."
-  [conclusion-id]
-  (-> (query
-        '[:find (pull ?arguments argument-pattern)
-          :in $ argument-pattern ?conclusion
-          :where [?arguments :argument/conclusion ?conclusion]]
-        argument-pattern conclusion-id)
-      (toolbelt/pull-key-up :db/ident)
-      flatten))
-
-(defn statements-undercutting-premise
-  "Return all statements that are used to undercut an argument where `statement-id`
-  is used as one of the premises in the undercut argument."
-  [statement-id]
-  (flatten
-    (query
-      '[:find (pull ?undercutting-statements statement-pattern)
-        :in $ statement-pattern ?statement-id
-        :where [?arguments :argument/premises ?statement-id]
-        [?undercutting-arguments :argument/conclusion ?arguments]
-        [?undercutting-arguments :argument/premises ?undercutting-statements]]
-      statement-pattern statement-id)))
-
-(>defn all-discussions-by-title
-  "Query all discussions based on the title. Could possible be multiple
-  entities."
-  [title]
-  [string? :ret (s/coll-of ::specs/discussion)]
-  (flatten
-    (query
-      '[:find (pull ?discussions discussion-pattern)
-        :in $ discussion-pattern ?title
-        :where [?discussions :discussion/title ?title]]
-      discussion-pattern title)))
 
 

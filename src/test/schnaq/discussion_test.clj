@@ -114,7 +114,7 @@
   (testing "Get annotated premises, that are undercutting an argument with a certain premise"
     (let [share-hash "simple-hash"
           starting-conclusion (first (db/starting-statements share-hash))
-          simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
+          simple-argument (first (discussion-db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
           desired-statement (first (discussion/premises-undercutting-argument-with-premise-id premise-to-undercut-id))]
       (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (:statement/content desired-statement)))
