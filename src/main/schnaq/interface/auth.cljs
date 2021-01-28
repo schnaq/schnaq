@@ -1,8 +1,14 @@
 (ns schnaq.interface.auth
   (:require ["keycloak-js" :as Keycloak]
-            [oops.core :refer [oget]]
+            [ajax.core :as ajax]
+            [cljs.core.async :refer [go <! timeout]]
+            [ghostwheel.core :refer [>defn >defn-]]
+            [goog.string :as gstring]
+            [oops.core :refer [oget oset!]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :as config]))
+            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :as config]
+            [taoensso.timbre :as log]))
 
 (defn- error-to-console
   "Shorthand function to log to console."
@@ -11,8 +17,8 @@
 
 (defn- user-authenticated?
   "Quickly lookup authentication status of user."
-  [app-db]
-  (get-in app-db [:user :authenticated?] false))
+  [db]
+  (get-in db [:user :authenticated?] false))
 
 
 ;; -----------------------------------------------------------------------------
@@ -30,6 +36,7 @@
 (rf/reg-fx
   :keycloak/silent-check
   (fn [^js keycloak]
+    (def kc keycloak)
     (-> keycloak
         (.init #js{:onLoad "check-sso"
                    :checkLoginIframe false
@@ -37,7 +44,8 @@
         (.then (fn [result]
                  (rf/dispatch [:user/authenticated! result])
                  (rf/dispatch [:keycloak/load-user-profile])
-                 (rf/dispatch [:keycloak.roles/extract])))
+                 (rf/dispatch [:keycloak.roles/extract])
+                 (rf/dispatch [:keycloak/check-token-validity])))
         (.catch (fn [_]
                   (rf/dispatch [:user/authenticated! false])
                   (error-to-console "Silent check with keycloak failed."))))))
@@ -55,7 +63,7 @@
 
 (rf/reg-fx
   :keycloak/login-request
-  (fn [keycloak]
+  (fn [^js keycloak]
     (-> keycloak
         (.login)
         (.then #(rf/dispatch [:keycloak/load-user-profile]))
@@ -104,13 +112,40 @@
 
 (rf/reg-fx
   :keycloak/logout-request
-  (fn [keycloak]
+  (fn [^js keycloak]
     (-> keycloak
         (.logout)
         (.then #(rf/dispatch [:user/authenticated! false]))
         (.catch
           #(error-to-console
              "Logout not successful. Request could not be fulfilled.")))))
+
+
+;; -----------------------------------------------------------------------------
+;; Refresh access token (the one, which is sent to the backend and stored in
+;; keycloak.token) when it is expired.
+
+(rf/reg-event-fx
+  :keycloak/check-token-validity
+  (fn [{:keys [db]} [_ _]]
+    (let [^js keycloak (get-in db [:user :keycloak])
+          authenticated? (get-in db [:user :authenticated?])]
+      (when (and keycloak authenticated?)
+        {:fx [[:keycloak/loop-token-validity-check keycloak]]}))))
+
+(rf/reg-fx
+  :keycloak/loop-token-validity-check
+  (fn [^js keycloak]
+    (go (while true
+          (<! (timeout 30000))
+          (-> keycloak
+              (.updateToken 30)
+              (.then
+                #(when %
+                   (log/trace "Access Token for user validation refreshed")))
+              (.catch
+                #(log/error
+                   "Error when updating the keycloak access token.")))))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -129,7 +164,7 @@
   :user/administrator?
   (fn [db _]
     (let [roles (get-in db [:user :roles])]
-      (= :admin (some #{:admin} roles)))))
+      (= "admin" (some #{"admin"} roles)))))
 
 (rf/reg-sub
   :user/keycloak
@@ -143,4 +178,5 @@
       (let [^js keycloak (get-in db [:user :keycloak])
             roles (:roles (js->clj (oget keycloak [:realmAccess])
                                    :keywordize-keys true))]
-        (assoc-in db [:user :roles] (mapv keyword roles))))))
+        (assoc-in db [:user :roles] roles)))))
+
