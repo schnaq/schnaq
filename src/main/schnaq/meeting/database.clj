@@ -263,11 +263,11 @@
   "Add an agenda to the database.
   A discussion is automatically created for the agenda-point.
   Returns the discussion-id of the newly created discussion."
-  ([title description meeting-id]
+  ([title description meeting-id share-hash]
    [:agenda/title (? string?) int? :ret int?]
-   (add-agenda-point title description meeting-id 1 false))
-  ([title description meeting-id rank public?]
-   [:agenda/title (? string?) int? :agenda/rank boolean? :ret int?]
+   (add-agenda-point title description meeting-id 1 false share-hash))
+  ([title description meeting-id rank public? share-hash]
+   [:agenda/title (? string?) int? :agenda/rank boolean? :meeting/share-hash :ret int?]
    (when (and (s/valid? :agenda/title title)
               (s/valid? int? meeting-id))
      (let [default-state [:discussion.state/open]
@@ -280,7 +280,8 @@
                        {:db/id "whatever-forget-it"
                         :discussion/title title
                         :discussion/states discussion-state
-                        :discussion/starting-statements []}}
+                        :discussion/starting-statements []
+                        :discussion/share-hash share-hash}}
            agenda (if (and description (s/valid? :agenda/description description))
                     (merge-with merge
                                 raw-agenda

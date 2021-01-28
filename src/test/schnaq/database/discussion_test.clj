@@ -22,7 +22,7 @@
     (testing "Deleting a public discussion, should decrease the count."
       (let [new-meeting-id (main-db/add-meeting new-public-meeting)]
         (main-db/add-agenda-point "Some-title" "Some-description" new-meeting-id
-                                  0 true))
+                                  0 true sample-discussion))
       (is (= (inc discussion-count) (count (main-db/public-meetings))))
       (db/delete-discussion new-discussion-hash)
       (is (= discussion-count (count (main-db/public-meetings)))))))

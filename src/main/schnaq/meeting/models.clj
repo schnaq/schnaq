@@ -17,17 +17,17 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "A description of the meetings purpose."}
-   {:db/ident :meeting/share-hash
+   {:db/ident :meeting/share-hash                           ;; TODO put in discussion
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "A hash that grants participation access to the discussion"}
-   {:db/ident :meeting/edit-hash
+   {:db/ident :meeting/edit-hash                            ;; TODO put in discussion
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/identity
     :db/doc "A hash that grants edit access to the discussion"}
-   {:db/ident :meeting/author
+   {:db/ident :meeting/author                               ;; TODO put in discussion
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
@@ -35,7 +35,7 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "Set type of a meeting"}
-   {:db/ident :meeting/header-image-url
+   {:db/ident :meeting/header-image-url                     ;; TODO put in discussion
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "URL pointing to an image to be displayed as header."}
@@ -246,6 +246,11 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The title / heading of a discussion. This should be system-widely unique."}
+   {:db/ident :discussion/share-hash
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
+    :db/doc "A unique hash that grants participation access to the discussion"}
    {:db/ident :discussion/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one

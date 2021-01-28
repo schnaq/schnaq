@@ -8,12 +8,13 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
+(def ^:private any-meeting-share-hash "aklsuzd98-234da-123d" )
 (defn- any-meeting-id
   []
   (db/add-meeting {:meeting/title "Bla"
                    :meeting/start-date (db/now)
                    :meeting/end-date (db/now)
-                   :meeting/share-hash "aklsuzd98-234da-123d"
+                   :meeting/share-hash any-meeting-share-hash
                    :meeting/author (db/add-user-if-not-exists "Wegi")}))
 
 (deftest up-and-downvotes-test
@@ -52,7 +53,7 @@
                                    :meeting/end-date (db/now)
                                    :meeting/share-hash share-hash
                                    :meeting/author (db/add-user-if-not-exists "Wegi")})
-          _ (db/add-agenda-point "Hi" "Beschreibung" meeting)
+          _ (db/add-agenda-point "Hi" "Beschreibung" meeting share-hash)
           christian-id (db/author-id-by-nickname "Christian")
           first-id (discussion-db/add-starting-statement! share-hash christian-id "this is sparta")
           second-id (discussion-db/add-starting-statement! share-hash christian-id "this is kreta")]
@@ -84,10 +85,10 @@
 (deftest add-agenda-point-test
   (testing "Check whether agendas are added correctly"
     (let [some-meeting (any-meeting-id)]
-      (is (number? (db/add-agenda-point "Alles gut" "hier" some-meeting)))
-      (is (nil? (db/add-agenda-point 123 nil some-meeting)))
-      (is (nil? (db/add-agenda-point "Meeting-kaputt" nil "was ist das?")))
-      (is (number? (db/add-agenda-point "Kaputte description wird ignoriert" 123 some-meeting))))))
+      (is (number? (db/add-agenda-point "Alles gut" "hier" some-meeting any-meeting-share-hash)))
+      (is (nil? (db/add-agenda-point 123 nil some-meeting any-meeting-share-hash)))
+      (is (nil? (db/add-agenda-point "Meeting-kaputt" nil "was ist das?" any-meeting-share-hash)))
+      (is (number? (db/add-agenda-point "Kaputte description wird ignoriert" 123 some-meeting any-meeting-share-hash))))))
 
 (deftest add-user-test
   (testing "Check for correct user-addition"
