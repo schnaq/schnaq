@@ -1,7 +1,7 @@
 (ns schnaq.toolbelt
   "Utility functions supporting the backend."
   (:require [clojure.walk :as walk]
-            [ghostwheel.core :refer [>defn ?]]])
+            [ghostwheel.core :refer [>defn ?]])
 
   (:import (clojure.lang PersistentArrayMap)
            (java.io File)
