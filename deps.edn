@@ -1,7 +1,9 @@
 {:paths ["src/main" "src/test"]
- :deps {binaryage/devtools {:mvn/version "1.0.2"}
+ :deps {amazonica/amazonica {:mvn/version "0.3.153"}
+        binaryage/devtools {:mvn/version "1.0.2"}
         binaryage/oops {:mvn/version "0.7.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
+        clj-http/clj-http {:mvn/version "3.11.0"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/client-pro {:mvn/version "0.9.66"}
         com.draines/postal {:mvn/version "2.0.4"}

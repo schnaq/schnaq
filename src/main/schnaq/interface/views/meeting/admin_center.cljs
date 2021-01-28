@@ -11,6 +11,7 @@
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]))
@@ -266,6 +267,7 @@
   [:ret :re-frame/component]
   (let [input-id "participant-email-addresses"]
     [:<>
+     [header-image/image-url-input]
      [:h4.mt-4 (labels :meeting.admin/delete-statements-heading)]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]

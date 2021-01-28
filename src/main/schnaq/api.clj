@@ -9,17 +9,19 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
-            [ring.util.http-response :refer [ok created not-found bad-request forbidden unauthorized]]
+            [ring.util.http-response :refer [ok created not-found bad-request unauthorized]]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
+            [schnaq.media :as media]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
+            [schnaq.validator :as validator]
             [taoensso.timbre :as log])
   (:import (java.util Base64 UUID))
   (:gen-class))
@@ -32,39 +34,6 @@
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
 
 (def ^:private invalid-rights-message "Sie haben nicht genügend Rechte, um diese Diskussion zu betrachten.")
-
-(>defn- valid-password?
-  "Check if the password is a valid."
-  [password]
-  [string? :ret boolean?]
-  (= config/admin-password password))
-
-(defn- valid-discussion?
-  "Check if a schnaq-hash ist valid. Returns false, when the discussion is deleted."
-  [share-hash]
-  (and (not (nil? (db/meeting-by-hash share-hash)))
-       (not (discussion-db/discussion-deleted? share-hash))))
-
-(defn- valid-discussion-and-statement?
-  "Checks whether a discussion is valid and also whether the statement belongs to the discussion."
-  [statement-id share-hash]
-  (and (valid-discussion? share-hash)
-       (db/check-valid-statement-id-and-meeting statement-id share-hash)))
-
-(>defn- valid-credentials?
-  "Validate if share-hash and edit-hash match"
-  [share-hash edit-hash]
-  [string? string? :ret boolean?]
-  (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
-    (and (= edit-hash (:meeting/edit-hash authenticate-meeting))
-         (not (discussion-db/discussion-deleted? share-hash)))))
-
-(defn- deny-access
-  "Return a 403 Forbidden to unauthorized access."
-  ([]
-   (deny-access "You are not allowed to access this resource."))
-  ([message]
-   (forbidden {:error message})))
 
 (defn- ping
   "Route to ping the API. Used in our monitoring system."
@@ -109,9 +78,9 @@
   "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
-    (if (valid-discussion? hash)
+    (if (validator/valid-discussion? hash)
       (ok (db/meeting-by-hash hash))
-      (deny-access))))
+      (validator/deny-access))))
 
 (defn- meetings-by-hashes
   "Bulk loading of meetings. May be used when users asks for all the meetings
@@ -126,7 +95,7 @@
   [req]
   (if-let [hashes (get-in req [:params :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)
-          filtered-hashes (filter valid-discussion? hashes-list)
+          filtered-hashes (filter validator/valid-discussion? hashes-list)
           meetings (map db/meeting-by-hash filtered-hashes)]
       (if-not (or (nil? meetings) (= [nil] meetings) (empty? meetings))
         (ok {:meetings meetings})
@@ -144,11 +113,11 @@
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)
         edit-hash (:edit-hash body-params)]
-    (if (valid-credentials? share-hash edit-hash)
+    (if (validator/valid-credentials? share-hash edit-hash)
       (ok {:meeting (add-hashes-to-meeting (db/meeting-by-hash share-hash)
                                            share-hash
                                            edit-hash)})
-      (deny-access "You provided the wrong hashes to access this schnaq."))))
+      (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
 
 (defn- delete-statements!
   "Deletes the passed list of statements if the admin-rights are fitting.
@@ -156,22 +125,22 @@
   the passed edit-hash."
   [{:keys [body-params]}]
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
-    (if (valid-credentials? share-hash edit-hash)
+    (if (validator/valid-credentials? share-hash edit-hash)
       (if (every? #(db/check-valid-statement-id-and-meeting % share-hash) statement-ids)
         (do (discussion-db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
-      (deny-access "You do not have the rights to access this action."))))
+      (validator/deny-access "You do not have the rights to access this action."))))
 
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
   [{:keys [body-params]}]
   (let [{:keys [share-hash password]} body-params]
-    (if (valid-password? password)
+    (if (validator/valid-password? password)
       (if (discussion-db/delete-discussion share-hash)
         (ok {:share-hash share-hash})
         (bad-request {:error "An error occurred, while deleting the schnaq."}))
-      (deny-access))))
+      (validator/deny-access))))
 
 ;; -----------------------------------------------------------------------------
 ;; Votes
@@ -179,7 +148,7 @@
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
   [{:keys [meeting-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
-  (if (valid-discussion-and-statement? statement-id meeting-hash)
+  (if (validator/valid-discussion-and-statement? statement-id meeting-hash)
     (let [nickname (db/canonical-username nickname)
           vote (check-vote-fn statement-id nickname)
           counter-vote (counter-check-vote-fn statement-id nickname)]
@@ -237,7 +206,7 @@
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok (db/all-feedbacks))
     (unauthorized)))
 
@@ -247,7 +216,7 @@
   [:ring/request :ret :ring/response]
   (let [{:keys [share-hash edit-hash recipients share-link]} body-params
         meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
-    (if (valid-credentials? share-hash edit-hash)
+    (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Invite Emails for some meeting sent")
           (ok (merge
                 {:message "Emails sent successfully"}
@@ -255,7 +224,7 @@
                   (format (email-templates :invitation/title) meeting-title)
                   (format (email-templates :invitation/body) meeting-title share-link)
                   recipients))))
-      (deny-access))))
+      (validator/deny-access))))
 
 (>defn- send-admin-center-link
   "Send URL to admin-center via mail to recipient."
@@ -263,7 +232,7 @@
   [:ring/request :ret :ring/response]
   (let [{:keys [share-hash edit-hash recipient admin-center]} body-params
         meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
-    (if (valid-credentials? share-hash edit-hash)
+    (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Send admin link for meeting " meeting-title " via E-Mail")
           (ok (merge
                 {:message "Emails sent successfully"}
@@ -271,7 +240,7 @@
                   (format (email-templates :admin-center/title) meeting-title)
                   (format (email-templates :admin-center/body) meeting-title admin-center)
                   [recipient]))))
-      (deny-access))))
+      (validator/deny-access))))
 
 ;; -----------------------------------------------------------------------------
 ;; Discussion
@@ -295,50 +264,50 @@
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [body-params]}]
   (let [{:keys [share-hash]} body-params]
-    (if (valid-discussion? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
-      (deny-access invalid-rights-message))))
+      (validator/deny-access invalid-rights-message))))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [body-params]}]
   (let [{:keys [share-hash selected-statement]} body-params]
-    (if (valid-discussion? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (ok (with-statement-meta
             {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
              :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
             share-hash))
-      (deny-access invalid-rights-message))))
+      (validator/deny-access invalid-rights-message))))
 
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following premises / undercuts."
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement-id]} body-params]
-    (if (valid-discussion-and-statement? statement-id share-hash)
+    (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (with-statement-meta
             {:conclusion (discussion-db/get-statement statement-id)
              :premises (discussion/premises-for-conclusion-id statement-id)
              :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
             share-hash))
-      (deny-access invalid-rights-message))))
+      (validator/deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement nickname]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (do (discussion-db/add-starting-statement! share-hash author-id statement)
           (log/info "Starting statement added for discussion" share-hash)
           (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
-      (deny-access invalid-rights-message))))
+      (validator/deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
   [{:keys [body-params]}]
   (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (valid-discussion-and-statement? conclusion-id share-hash)
+    (if (validator/valid-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (with-statement-meta
                 {:new-argument
@@ -346,7 +315,7 @@
                    (discussion-db/attack-statement! share-hash author-id conclusion-id premise)
                    (discussion-db/support-statement! share-hash author-id conclusion-id premise))}
                 share-hash)))
-      (deny-access invalid-rights-message))))
+      (validator/deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
 ;; Analytics
@@ -354,63 +323,63 @@
 (defn- number-of-meetings
   "Returns the number of all meetings."
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok {:meetings-num (db/number-of-meetings)})
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- last-meeting-date
   "Returns the date of the last meeting created."
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok {:last-created (db/last-meeting)})
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- number-of-usernames
   "Returns the number of all meetings."
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok {:usernames-num (db/number-of-usernames)})
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- agendas-per-meeting
   "Returns the average numbers of meetings"
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok {:average-agendas (float (db/average-number-of-agendas))})
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- number-of-statements
   "Returns the number of statements"
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok {:statements-num (db/number-of-statements)})
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- number-of-active-users
   "Returns the number of statements"
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok {:active-users-num (db/number-of-active-discussion-users)})
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- statement-lengths-stats
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok {:statement-length-stats (db/statement-length-stats)})
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- argument-type-stats
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (ok {:argument-type-stats (db/argument-type-stats)})
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- all-stats
   "Returns all statistics at once."
   [{:keys [body-params]}]
-  (if (valid-password? (:password body-params))
+  (if (validator/valid-password? (:password body-params))
     (let [timestamp-since (toolbelt/now-minus-days (Integer/parseInt (:days-since body-params)))]
       (ok {:stats {:meetings-num (db/number-of-meetings timestamp-since)
                    :usernames-num (db/number-of-usernames timestamp-since)
@@ -419,20 +388,20 @@
                    :active-users-num (db/number-of-active-discussion-users timestamp-since)
                    :statement-length-stats (db/statement-length-stats timestamp-since)
                    :argument-type-stats (db/argument-type-stats timestamp-since)}}))
-    (deny-access)))
+    (validator/deny-access)))
 
 (defn- check-credentials
   "Checks whether share-hash and edit-hash match."
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)
         edit-hash (:edit-hash body-params)]
-    (ok {:valid-credentials? (valid-credentials? share-hash edit-hash)})))
+    (ok {:valid-credentials? (validator/valid-credentials? share-hash edit-hash)})))
 
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)]
-    (if (valid-discussion? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (let [statements (db/all-statements-for-graph share-hash)
             starting-statements (discussion-db/starting-statements share-hash)
             edges (discussion/links-for-agenda statements starting-statements share-hash)
@@ -446,10 +415,10 @@
   "Exports the discussion data as a string."
   [{:keys [params]}]
   (let [{:keys [share-hash]} params]
-    (if (valid-discussion? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (do (log/info "User is generating a txt export for discussion" share-hash)
           (ok {:string-representation (export/generate-text-export share-hash)}))
-      (deny-access invalid-rights-message))))
+      (validator/deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
@@ -476,6 +445,7 @@
     (POST "/discussion/statements/starting/add" [] add-starting-statement!)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
+    (POST "/header-image/image" [] media/set-preview-image)
     (POST "/feedback/add" [] add-feedback)
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
