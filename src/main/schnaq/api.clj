@@ -10,6 +10,7 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.util.http-response :refer [ok created not-found bad-request unauthorized]]
+            [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
             [schnaq.discussion :as discussion]
@@ -421,6 +422,7 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
+    (GET "/admin/test" [] (partial auth/with-admin-access auth/testview))
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
