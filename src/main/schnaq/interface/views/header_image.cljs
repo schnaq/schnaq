@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.header-image
-  (:require [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -39,7 +39,7 @@
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config/config) "/header-image/image")
                           :format (ajax/transit-request-format)
-                          :params {:image-url (oget form [image-form-name :value])
+                          :params {:image-url (oget+ form [image-form-name :value])
                                    :share-hash share-hash
                                    :edit-hash edit-hash
                                    :admin-center (common/get-admin-center-link current-route)}
@@ -52,7 +52,7 @@
   (fn [_ [_ form {:keys [error]}]]
     {:fx
      (if error
-       ;; when error occured display a warning and do not clear form
+       ;; when error occurred display a warning and do not clear form
        [[:dispatch [:notification/add
                     #:notification{:title (labels :schnaq.header-image.url/failed-setting-title)
                                    :body [:<>
@@ -60,7 +60,7 @@
                                           [:span error]]
                                    :context :danger
                                    :stay-visible? true}]]]
-       ;; when no error occured clear form
+       ;; when no error occurred clear form
        [[:dispatch [:notification/add
                     #:notification{:title (labels :schnaq.header-image.url/successful-set)
                                    :body (labels :schnaq.header-image.url/successful-set-body)
