@@ -28,7 +28,7 @@
 (def deleted-statement-text "[deleted]")
 
 (def email
-  {:sender-address (or (System/getenv "EMAIL_SENDER_ADDRESS") "noreply@dialogo.io")
+  {:sender-address (or (System/getenv "EMAIL_SENDER_ADDRESS") "info@schnaq.com")
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
    :sender-password (System/getenv "EMAIL_PASSWORD")})
 
@@ -46,6 +46,8 @@
 ;; Keycloak
 
 (def keycloak-public-key
-  "Public RSA key of keycloak client."
+  "Public RSA key of keycloak client. Default is public key of the
+  development-instance."
   (keys/str->public-key
-    "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtsaglvgpZHk0TJIXMuCIcm6xfvC9MgXCDaK8aCigBWd+qBOLPJsULHlbmlT74f6mchBPjIxxedqGt/MjUI0leJm/1W0l+BBEfpp2FC9VQE40cRL+M4qE7rdj3JEogr+x7tz912hvPmvw90Vo3H57OMklv3R8QFzFirBlRO8TcsXJgaYFBPCezpLhEMwKKy1LkxvzkrF0STbRysXk+yzIPRYsBYhdegYMyL3D36CwFUolysyuepHC+DcNsp8wrSk9DrH4RSIfUsk2Kn7IEfcY+d65DNOzzQ0M4mAvHxrieSk52KT4HD70NwVqkZxsGbvDFQ4dHPdqXiO+hb3Zux3EZwIDAQAB\n-----END PUBLIC KEY-----"))
+    (or (System/getenv "KEYCLOAK_PUBLIC_KEY")
+        "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtsaglvgpZHk0TJIXMuCIcm6xfvC9MgXCDaK8aCigBWd+qBOLPJsULHlbmlT74f6mchBPjIxxedqGt/MjUI0leJm/1W0l+BBEfpp2FC9VQE40cRL+M4qE7rdj3JEogr+x7tz912hvPmvw90Vo3H57OMklv3R8QFzFirBlRO8TcsXJgaYFBPCezpLhEMwKKy1LkxvzkrF0STbRysXk+yzIPRYsBYhdegYMyL3D36CwFUolysyuepHC+DcNsp8wrSk9DrH4RSIfUsk2Kn7IEfcY+d65DNOzzQ0M4mAvHxrieSk52KT4HD70NwVqkZxsGbvDFQ4dHPdqXiO+hb3Zux3EZwIDAQAB\n-----END PUBLIC KEY-----")))
