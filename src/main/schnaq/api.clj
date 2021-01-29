@@ -435,7 +435,8 @@
                     :where [?user :user/core-author ?author]
                     [?author :author/nickname ?nickname]])
         transaction (mapv #(vector :db/add (first %) :user/nickname (second %)) all-users)]
-    (db/transact transaction)))
+    (db/transact transaction)
+    (ok {:message "success"})))
 
 (comment
   ;; Comment left in on Purpose for testing
@@ -471,7 +472,7 @@
                                                   :discussion/header-image-url (:meeting/header-image-url attributes)})))
                                  all-users)))]
     (db/transact transaction)
-    #_transaction))
+    (ok {:message "success"})))
 
 (comment
   ;; Comment left in on Purpose for testing
@@ -489,7 +490,8 @@
 
 (def ^:private temporary-migration-routes
   (routes
-    (POST "/admin/migrations/users-89hjasd-123897dha" [] migrate-users!)))
+    (POST "/admin/migrations/users-89hjasd-123897dha" [] migrate-users!)
+    (POST "/admin/migrations/discussion-129083uehwe78fh87asd3" [] migrate-discussions!)))
 
 (def ^:private common-routes
   "Common routes for all modes."
