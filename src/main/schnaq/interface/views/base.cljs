@@ -51,6 +51,9 @@
      [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0
       [:ul.list-inline
        [:li.list-inline-item
+        [:a.btn.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
+         (labels :coc/heading)]]
+       [:li.list-inline-item
         [:a.btn.btn-outline-white {:href "https://disqtec.com/ueber-uns"}
          (labels :footer.buttons/about-us)]]
        [:li.list-inline-item
