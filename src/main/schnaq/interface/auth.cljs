@@ -180,3 +180,37 @@
                                    :keywordize-keys true))]
         (assoc-in db [:user :roles] roles)))))
 
+(>defn authentication-header
+  "Adds a map containing the token used for authenticating the user in the
+  backend."
+  [db]
+  [map? :ret map?]
+  (let [^js keycloak (get-in db [:user :keycloak])]
+    (if (and keycloak (user-authenticated? db))
+      {:Authorization (gstring/format "Token %s" (.-token keycloak))}
+      {})))
+
+(rf/reg-event-fx
+  :auth/test
+  (fn [{:keys [db]} _]
+    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
+      (prn (authentication-header db))
+      {:fx [[:http-xhrio {:method :get
+                          :uri (str (:rest-backend config) "/admin/test")
+                          :headers (authentication-header db)
+                          :params {:share-hash share-hash}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:notification/add
+                                       #:notification{:title "Auth erfolgreich"
+                                                      :body "Jeah"
+                                                      :context :success}]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(comment
+  (rf/dispatch [:auth/test])
+  (rf/dispatch [:keycloak/logout])
+
+  (oget kc :onTokenExpired)
+  (.isTokenExpired kc))
+

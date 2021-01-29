@@ -422,7 +422,9 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
-    (GET "/admin/test" [] (partial auth/with-admin-access auth/testview))
+    (auth/wrap-jwt-authentication
+      (auth/auth-middleware
+        (GET "/admin/test" [] auth/testview)))
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
