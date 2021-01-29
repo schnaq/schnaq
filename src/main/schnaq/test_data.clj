@@ -1,5 +1,5 @@
 (ns schnaq.test-data)
-
+;; TODO restructure test-data during step 3 switchup
 (def ^:private meetings
   [{:db/id "meeting/expansion"
     :meeting/title "Wir wollen expandieren"

@@ -375,7 +375,7 @@
         :router/start-discussion "Start discussion"
         :router/startpage "Startpage"
         :router/true-404-view "404 error page"
-        :router/public-discussions "Public discussions"
+        :router/public-discussions "Public schnaqs"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -757,7 +757,7 @@
         :router/start-discussion "Starte Besprechung"
         :router/startpage "Startseite"
         :router/true-404-view "404 Fehlerseite"
-        :router/public-discussions "Öffentliche Diskussionen"
+        :router/public-discussions "Öffentliche schnaqs"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"

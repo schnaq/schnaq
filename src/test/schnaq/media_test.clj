@@ -9,11 +9,12 @@
 
 (defn- create-schnaq
   [share-hash]
-  (db/add-meeting {:meeting/title "Test-Schnaq"
-                   :meeting/start-date (db/now)
-                   :meeting/end-date (db/now)
-                   :meeting/share-hash share-hash
-                   :meeting/author (db/add-user-if-not-exists "Mike")}))
+  (let [meeting-id (db/add-meeting {:meeting/title "Test-Schnaq"
+                                    :meeting/start-date (db/now)
+                                    :meeting/end-date (db/now)
+                                    :meeting/share-hash share-hash
+                                    :meeting/author (db/add-user-if-not-exists "Mike")})]
+    (db/add-agenda-point "Title" "desc" meeting-id 1 true share-hash "bla" (db/add-user-if-not-exists "Mike"))))
 
 (deftest test-cdn-restriction
   (testing "Test image upload to s3"

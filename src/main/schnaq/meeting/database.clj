@@ -108,7 +108,8 @@
   [:db/id
    {:user/core-author [:author/nickname]}
    :user/upvotes
-   :user/downvotes])
+   :user/downvotes
+   :user/nickname])
 
 (def ^:private meeting-pattern-public
   "Pull a schnaq based on these attributes, omit sensitive information"
@@ -264,11 +265,12 @@
   "Add an agenda to the database.
   A discussion is automatically created for the agenda-point.
   Returns the discussion-id of the newly created discussion."
-  ([title description meeting-id]
-   [:agenda/title (? string?) int? :ret int?]
-   (add-agenda-point title description meeting-id 1 false))
-  ([title description meeting-id rank public?]
-   [:agenda/title (? string?) int? :agenda/rank boolean? :ret int?]
+  ([title description meeting-id share-hash]
+   [:agenda/title (? string?) int? :meeting/share-hash :ret int?]
+   (add-agenda-point title description meeting-id 1 false share-hash "will-be-deleted-soon" 1))
+  ([title description meeting-id rank public? share-hash edit-hash author-id]
+   [:agenda/title (? string?) int? :agenda/rank boolean? :meeting/share-hash :meeting/edit-hash :db/id
+    :ret int?]
    (when (and (s/valid? :agenda/title title)
               (s/valid? int? meeting-id))
      (let [default-state [:discussion.state/open]
@@ -281,7 +283,10 @@
                        {:db/id "whatever-forget-it"
                         :discussion/title title
                         :discussion/states discussion-state
-                        :discussion/starting-statements []}}
+                        :discussion/starting-statements []
+                        :discussion/share-hash share-hash
+                        :discussion/edit-hash edit-hash
+                        :discussion/author author-id}}
            agenda (if (and description (s/valid? :agenda/description description))
                     (merge-with merge
                                 raw-agenda
@@ -367,6 +372,7 @@
   (when (s/valid? :author/nickname nickname)
     (get-in
       (transact [{:db/id "temp-user"
+                  :user/nickname nickname
                   :user/core-author
                   {:db/id (format "id-%s" nickname)
                    :author/nickname nickname}}])

@@ -7,8 +7,14 @@
 #?(:cljs (s/def :re-frame/component vector?))
 
 ;; Discussion
+(s/def ::non-blank-string (s/and string? (complement string/blank?)))
+
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
+(s/def :discussion/share-hash ::non-blank-string)
+(s/def :discussion/edit-hash ::non-blank-string)
+(s/def :discussion/author (s/or :reference ::entity-reference
+                             :author ::author))
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted}
@@ -17,7 +23,9 @@
 (s/def :discussion/starting-statements (s/coll-of ::statement))
 (s/def ::discussion (s/keys :req [:discussion/title :discussion/description
                                   :discussion/states]
-                            :opt [:discussion/starting-arguments :discussion/starting-statements]))
+                            :opt [:discussion/starting-arguments :discussion/starting-statements
+                                  ;; The following things need to go to req, after live database has been migrated
+                                  :discussion/share-hash :discussion/edit-hash :discussion/author]))
 
 ;; Author
 (s/def :author/nickname string?)
@@ -47,7 +55,7 @@
 ;; Common
 (s/def :db/id (s/or :transacted number? :temporary any?))
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))
-(s/def ::non-blank-string (s/and string? (complement string/blank?)))
+
 
 ;; Meeting
 (s/def :meeting/title ::non-blank-string)

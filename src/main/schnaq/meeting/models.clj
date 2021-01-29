@@ -149,6 +149,11 @@
     :db/doc "DEPRECATED: Do not use agenda-points in new code.
     An id belonging to the (foreign) discussion represented by this agenda"}
    ;; User
+   {:db/ident :user/nickname
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "User is identified by the nickname, when using the site without an account."}
    {:db/ident :user/core-author
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
@@ -162,6 +167,14 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "All downvotes the user gave."}
+   ;; Author
+   {:db/ident :author/nickname
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "DEPRECATED: The nickname of an author. Author will not be used in the future.
+    Use :user/nickname instead."}
+
    ;; Feedback
    {:db/ident :feedback/contact-name
     :db/valueType :db.type/string
@@ -197,12 +210,7 @@
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one
     :db/doc "A marker whether the statement has been marked as deleted."}
-   ;; Author
-   {:db/ident :author/nickname
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/value
-    :db/doc "The nickname of an author"}
+
    ;; Argument Types
    {:db/ident :argument.type/support}
    {:db/ident :argument.type/attack}
@@ -240,12 +248,30 @@
    {:db/ident :discussion.state/deleted
     :db/doc "Supersedes most other states. When set do absolutely not show under any circumstances"}
    {:db/ident :discussion.state/public}
-   ;; Deletion is a marker. We don't really delete anything from datomic
+
    ;; Discussion
    {:db/ident :discussion/title
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The title / heading of a discussion. This should be system-widely unique."}
+   {:db/ident :discussion/share-hash
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
+    :db/doc "A unique hash that grants participation access to the discussion"}
+   {:db/ident :discussion/edit-hash
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
+    :db/doc "A hash that grants edit access to the discussion"}
+   {:db/ident :discussion/author
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The author of a meeting."}
+   {:db/ident :discussion/header-image-url
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "URL pointing to an image to be displayed as header."}
    {:db/ident :discussion/description
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one

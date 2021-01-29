@@ -56,13 +56,15 @@
   Returns the newly-created meeting."
   [request]
   (let [{:keys [meeting nickname agendas public-discussion?]} (:body-params request)
-        final-meeting (add-hashes-to-meeting meeting
-                                             (.toString (UUID/randomUUID))
-                                             (.toString (UUID/randomUUID)))
+        share-hash (.toString (UUID/randomUUID))
+        edit-hash (.toString (UUID/randomUUID))
+        final-meeting (add-hashes-to-meeting meeting share-hash edit-hash)
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         created-meeting (db/meeting-private-data meeting-id)]
-    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %) public-discussion?) agendas)
+    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %)
+                                public-discussion? share-hash edit-hash author-id)
+          agendas)
     (log/info (:db/ident (:meeting/type created-meeting)) " Meeting Created: " meeting-id " - "
               (:meeting/title created-meeting) " – Public? " public-discussion?)
     (created "" {:new-meeting created-meeting})))
@@ -93,6 +95,7 @@
   `{:params {:share-hashes [\"bb328b5e-297d-4725-8c11-f1ed7db39109\"
                             \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
   [req]
+  (println "in meetings-by-hashes")
   (if-let [hashes (get-in req [:params :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)
           filtered-hashes (filter validator/valid-discussion? hashes-list)
@@ -421,10 +424,74 @@
       (validator/deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
+;; Temporary Migration functions
+
+(defn- migrate-users!
+  "Migrates the nickname field from the author to the user."
+  [_req]
+  (let [all-users
+        (db/query '[:find ?user ?nickname
+                    :in $
+                    :where [?user :user/core-author ?author]
+                    [?author :author/nickname ?nickname]])
+        transaction (mapv #(vector :db/add (first %) :user/nickname (second %)) all-users)]
+    (db/transact transaction)
+    (ok {:message "success"})))
+
+(comment
+  ;; Comment left in on Purpose for testing
+  (migrate-users! :a)
+  (db/query '[:find (pull ?user [:db/id
+                                 {:user/core-author [:author/nickname]}
+                                 :user/nickname])
+              :in $
+              :where [?user :user/core-author _]])
+  )
+
+(defn- migrate-discussions!
+  "Migrates the share-hash, edit-hash, author and header-image-url field from the
+  meeting to the discussion."
+  [_req]
+  (let [all-users
+        (db/query '[:find ?discussion (pull ?meeting [:meeting/share-hash
+                                                      :meeting/edit-hash
+                                                      :meeting/author
+                                                      :meeting/header-image-url])
+                    :in $
+                    :where [?meeting :meeting/type :meeting.type/brainstorm]
+                    [?agenda :agenda/discussion ?discussion]
+                    [?agenda :agenda/meeting ?meeting]])
+        transaction (vec (flatten
+                           (mapv (fn [[discussion attributes]]
+                                   (into {}
+                                         (filter second
+                                                 {:db/id discussion
+                                                  :discussion/share-hash (:meeting/share-hash attributes)
+                                                  :discussion/edit-hash (:meeting/edit-hash attributes)
+                                                  :discussion/author (:db/id (:meeting/author attributes))
+                                                  :discussion/header-image-url (:meeting/header-image-url attributes)})))
+                                 all-users)))]
+    (db/transact transaction)
+    (ok {:message "success"})))
+
+(comment
+  ;; Comment left in on Purpose for testing
+  (migrate-discussions! :a)
+  (db/query '[:find (pull ?discussion [*])
+              :in $
+              :where [?discussion :discussion/title _]])
+  )
+
+;; -----------------------------------------------------------------------------
 ;; Routes
 
 (def ^:private not-found-msg
   "Error, page not found!")
+
+(def ^:private temporary-migration-routes
+  (routes
+    (POST "/admin/migrations/users-89hjasd-123897dha" [] migrate-users!)
+    (POST "/admin/migrations/discussion-129083uehwe78fh87asd3" [] migrate-discussions!)))
 
 (def ^:private common-routes
   "Common routes for all modes."
@@ -473,8 +540,10 @@
   "Building routes for app."
   (if schnaq-core/production-mode?
     (routes common-routes
+            temporary-migration-routes
             (route/not-found not-found-msg))
     (routes common-routes
+            temporary-migration-routes
             development-routes
             (route/not-found not-found-msg))))
 

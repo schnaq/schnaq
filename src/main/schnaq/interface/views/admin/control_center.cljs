@@ -7,6 +7,76 @@
             [schnaq.interface.views.pages :as pages]
             [re-frame.core :as rf]))
 
+(rf/reg-sub
+  :migration.discussions/status
+  (fn [db _]
+    (get-in db [:migration :status :discussions] "-")))
+
+(rf/reg-event-db
+  :migration.discussions/success
+  (fn [db _]
+    (assoc-in db [:migration :status :discussions] "Migration erfolgreich fertig gestellt")))
+
+(rf/reg-event-fx
+  :migration.discussions/start
+  (fn [{:keys [db]} _]
+    (let [admin-pass (get-in db [:admin :password])]
+      {:db (assoc-in db [:migration :status :discussions] "Läuft… Bitte Warten")
+       :fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/admin/migrations/discussion-129083uehwe78fh87asd3")
+                          :params {:password admin-pass}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:migration.discussions/success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(defn- migrate-discussions-form
+  "Migrates the discussions to the new format."
+  []
+  [:form.form
+   {:id "migrate-discussions-form"
+    :on-submit (fn [e]
+                 (js-wrap/prevent-default e)
+                 (when (js/confirm "Diskussionen wirklich migrieren? Nicht nochmal klicken, wenn gestartet!")
+                   (rf/dispatch [:migration.discussions/start])))}
+   [:button.btn.btn-danger {:type "submit"} "Migriere Diskussionen JETZT!"]
+   [:p "Status: " @(rf/subscribe [:migration.discussions/status])]])
+
+(rf/reg-sub
+  :migration.users/status
+  (fn [db _]
+    (get-in db [:migration :status :users] "-")))
+
+(rf/reg-event-db
+  :migration.users/success
+  (fn [db _]
+    (assoc-in db [:migration :status :users] "Migration erfolgreich fertig gestellt")))
+
+(rf/reg-event-fx
+  :migration.users/start
+  (fn [{:keys [db]} _]
+    (let [admin-pass (get-in db [:admin :password])]
+      {:db (assoc-in db [:migration :status :users] "Läuft… Bitte Warten")
+       :fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/admin/migrations/users-89hjasd-123897dha")
+                          :params {:password admin-pass}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:migration.users/success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(defn- migrate-users-form
+  "Migrates the users to the new format."
+  []
+  [:form.form
+   {:id "migrate-users-form"
+    :on-submit (fn [e]
+                 (js-wrap/prevent-default e)
+                 (when (js/confirm "Nutzer wirklich migrieren? Nicht nochmal klicken, wenn gestartet!")
+                   (rf/dispatch [:migration.users/start])))}
+   [:button.btn.btn-danger {:type "submit"} "Migriere Nutzer JETZT!"]
+   [:p "Status: " @(rf/subscribe [:migration.users/status])]])
+
 (rf/reg-event-db
   :admin.schnaq.delete/success
   (fn [db [_ {:keys [share-hash]}]]
@@ -26,6 +96,7 @@
                           :response-format (ajax/transit-response-format)
                           :on-success [:admin.schnaq.delete/success]
                           :on-failure [:ajax.error/as-notification]}]]})))
+
 
 (defn- public-meeting-deletion-form
   "Easily delete one of the public meetings."
@@ -86,7 +157,12 @@
      [:h4 (labels :admin.center.delete.public/heading)]
      [public-meeting-deletion-form]
      [:h4 (labels :admin.center.delete.private/heading)]
-     [private-meeting-deletion-form]]]])
+     [private-meeting-deletion-form]]
+    [:hr]
+    [:div
+     [:h4 "Migration"]
+     [migrate-users-form]
+     [migrate-discussions-form]]]])
 
 (defn center-overview-route
   []
