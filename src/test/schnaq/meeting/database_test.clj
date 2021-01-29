@@ -8,7 +8,7 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
-(def ^:private any-meeting-share-hash "aklsuzd98-234da-123d" )
+(def ^:private any-meeting-share-hash "aklsuzd98-234da-123d")
 (defn- any-meeting-id
   []
   (db/add-meeting {:meeting/title "Bla"
@@ -98,7 +98,7 @@
 (deftest add-feedback-test
   (testing "Valid feedbacks should be stored."
     (let [feedback {:feedback/description "Very good stuff 👍 Would use again"
-                    :feedback/contact-mail "christian@dialogo.io"
+                    :feedback/contact-mail "christian@schnaq.com"
                     :feedback/has-image? false}]
       (is (zero? (count (db/all-feedbacks))))
       (is (number? (db/add-feedback! feedback)))
