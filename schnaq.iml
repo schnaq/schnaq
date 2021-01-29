@@ -447,6 +447,7 @@
     <orderEntry type="library" name="Deps: cider/piggieback:0.5.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-route53resolver:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cognitoidentity:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: ring/ring-mock:0.4.0" level="project" />
     <orderEntry type="library" name="Deps: com.sun.mail/jakarta.mail:1.6.5" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-forecast:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-server:9.4.31.v20200723" level="project" />
