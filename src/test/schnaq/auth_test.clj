@@ -44,5 +44,18 @@
     (testing "Wrong tokens shall not pass."
       (is (= 401 (:status (response token-wrong-signature))))
       (is (= 401 (:status (response token-timed-out)))))
-    (testing "Missing token shall also not pass.")
-    (is (= 401 (:status (test-routes (mock/request :get path)))))))
+    (testing "Missing token shall also not pass."
+      (is (= 401 (:status (test-routes (mock/request :get path))))))))
+
+(deftest admin-middleware-test
+  (let [path "/test/admin/authentication"
+        response #(test-routes (-> (mock/request :get path)
+                                   (mock-authorization-header %)))]
+    (testing "JWT token with admin role shall pass."
+      (is (= "n2o" (:body (response token-n2o-admin)))))
+    (testing "Valid JWT, but no admin role, has no access."
+      (is (= 401 (:status (response token-schnaqqifant-user)))))
+    (testing "Wrong, old or missing tokens have no access."
+      (is (= 401 (:status (response token-timed-out))))
+      (is (= 401 (:status (response token-wrong-signature))))
+      (is (= 401 (:status (test-routes (mock/request :get path))))))))
