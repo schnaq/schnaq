@@ -34,7 +34,6 @@
 (rf/reg-fx
   :keycloak/silent-check
   (fn [^js keycloak]
-    (def kc keycloak)
     (-> keycloak
         (.init #js{:onLoad "check-sso"
                    :checkLoginIframe false
