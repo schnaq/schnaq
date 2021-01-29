@@ -424,10 +424,38 @@
       (validator/deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
+;; Temporary Migration functions
+
+(defn- migrate-users!
+  "Migrates the nickname field from the author to the user."
+  []
+  (let [all-users
+        (db/query '[:find ?user ?nickname
+                    :in $
+                    :where [?user :user/core-author ?author]
+                    [?author :author/nickname ?nickname]])
+        transaction (mapv #(vector :db/add (first %) :user/nickname (second %)) all-users)]
+    (db/transact transaction)))
+
+(comment
+  ;; Comment left in on Purpose for testing
+  (migrate-users!)
+  (db/query '[:find (pull ?user [:db/id
+                                 {:user/core-author [:author/nickname]}
+                                 :user/nickname])
+              :in $
+              :where [?user :user/core-author _]])
+  )
+
+;; -----------------------------------------------------------------------------
 ;; Routes
 
 (def ^:private not-found-msg
   "Error, page not found!")
+
+(def ^:private temporary-migration-routes
+  (routes
+    (POST "/admin/migrations/users-89hjasd-123897dha" [] migrate-users!)))
 
 (def ^:private common-routes
   "Common routes for all modes."
@@ -476,8 +504,10 @@
   "Building routes for app."
   (if schnaq-core/production-mode?
     (routes common-routes
+            temporary-migration-routes
             (route/not-found not-found-msg))
     (routes common-routes
+            temporary-migration-routes
             development-routes
             (route/not-found not-found-msg))))
 

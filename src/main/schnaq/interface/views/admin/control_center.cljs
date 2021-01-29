@@ -12,6 +12,24 @@
   (fn [db _]
     (get-in db [:migration :status :users] "-")))
 
+(rf/reg-event-db
+  :migration.users/success
+  (fn [db _]
+    (assoc-in db [:migration :status :users] "Migration erfolgreich fertig gestellt")))
+
+(rf/reg-event-fx
+  :migration.users/start
+  (fn [{:keys [db]} _]
+    (let [admin-pass (get-in db [:admin :password])]
+      {:db (assoc-in db [:migration :status :users] "Läuft… Bitte Warten")
+       :fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config) "/admin/migrations/users-89hjasd-123897dha")
+                          :params {:password admin-pass}
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:migration.users/success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
 (defn- migrate-users-form
   "Migrates the users to the new format."
   []
