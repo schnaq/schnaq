@@ -484,6 +484,10 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
+;; About applying middlewares: We need to chain `wrap-routes` calls, because
+;; compojure can't handle natively more than one custom middleware. reitit has a
+;; vector of middlewares, where these functions can simply put into.
+;; See more on wrap-routes: https://github.com/weavejester/compojure/issues/192
 
 (def ^:private not-found-msg
   "Error, page not found!")
