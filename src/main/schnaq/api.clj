@@ -441,6 +441,7 @@
     (GET "/ping" [] ping)
     (POST "/admin/schnaq/delete" [] delete-schnaq!)
     (-> (GET "/admin/test" [] auth/testview)
+        (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
     (POST "/admin/statements/delete" [] delete-statements!)

@@ -4,29 +4,42 @@
             [buddy.auth.middleware :refer [wrap-authentication]]
             [ghostwheel.core :refer [>defn >defn-]]
             [ring.util.http-response :refer [ok bad-request unauthorized]]
-            [schnaq.config :as config]
-            [clojure.spec.alpha :as s]
-            [buddy.core.keys :as keys]))
-
-(s/def :token/payload map?)
-(s/def :token/header map?)
-(def ^:private wrong-public-key
-  (keys/str->public-key
-    "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl9JrfD8moySWXe0G1lFeK2w376n6HzUXDwcnLR5XapQIOr5XyZVo35QRzoJnp5oN4Im/sO5K2VZh+9lBY6bdBaCjcMtTFFd1SF30hIJGMlZOXLC9qy6odIPjtwhNkzl8LqDfLzAW8eo6IS+ezMmNq2MJtsYcz1hhI8LmE+DHXdQ+gYqipRf7WyUUORicuTHaPdJOPKCk6O3FuvGqWUyO37leToho7MY/rTfllc/Sbxjxg8PX1nxTK/9KGU+svRfhMeYkyD2KJBOPQFHh1pHZFwv8TyDebKxml4l3NRNQWe4GcBrs0o8OPTNDJamknJDKFo5y3oM2YEzoS1YVNNpGJQIDAQAB\n-----END PUBLIC KEY-----"))
+            [schnaq.config :as config]))
 
 (def signed-jwt-backend (backends/jws {:secret config/keycloak-public-key
                                        :options {:alg :rs256}}))
 
+(>defn- has-admin-role?
+  "Check if user has realm-wide admin access."
+  [request]
+  [map? :ret boolean?]
+  (= "admin" (some #{"admin"}
+                   (get-in request [:identity :realm_access :roles]))))
+
 (defn wrap-jwt-authentication
+  "Use buddys jwt backend with our public key for authentication."
   [handler]
   (wrap-authentication handler signed-jwt-backend))
 
 (defn auth-middleware
+  "Validate, that user is logged-in."
   [handler]
   (fn [request]
     (if (authenticated? request)
+      (-> request
+          (assoc-in [:identity :id] (get-in request [:identity :sub]))
+          (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
+          (assoc-in [:identity :admin?] (has-admin-role? request))
+          handler)
+      (unauthorized "Login missing"))))
+
+(defn is-admin-middleware
+  "Check if user has admin-role."
+  [handler]
+  (fn [request]
+    (if (has-admin-role? request)
       (handler request)
-      {:status 401 :body {:error "Unauthorized"}})))
+      (unauthorized "Not an admin"))))
 
 (defn testview
   "testing"
@@ -34,3 +47,5 @@
   (prn request)
   (def foo request)
   (ok {:message "Jeaasdqweh"}))
+
+(comment)
