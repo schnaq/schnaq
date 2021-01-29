@@ -428,7 +428,7 @@
 
 (defn- migrate-users!
   "Migrates the nickname field from the author to the user."
-  []
+  [_req]
   (let [all-users
         (db/query '[:find ?user ?nickname
                     :in $
@@ -440,7 +440,7 @@
 
 (comment
   ;; Comment left in on Purpose for testing
-  (migrate-users!)
+  (migrate-users! :a)
   (db/query '[:find (pull ?user [:db/id
                                  {:user/core-author [:author/nickname]}
                                  :user/nickname])
@@ -451,7 +451,7 @@
 (defn- migrate-discussions!
   "Migrates the share-hash, edit-hash, author and header-image-url field from the
   meeting to the discussion."
-  []
+  [_req]
   (let [all-users
         (db/query '[:find ?discussion (pull ?meeting [:meeting/share-hash
                                                       :meeting/edit-hash
@@ -476,7 +476,7 @@
 
 (comment
   ;; Comment left in on Purpose for testing
-  (migrate-discussions!)
+  (migrate-discussions! :a)
   (db/query '[:find (pull ?discussion [*])
               :in $
               :where [?discussion :discussion/title _]])
