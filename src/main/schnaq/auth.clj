@@ -80,12 +80,14 @@
     (bad-request "Malformed JWT token.")))
 
 (defn with-admin-access
-  "Check if request with JWT token has :is-admin? claim"
+  "Check if request contains a valid token and that user has an admin role."
   [view request]
-  (if (and (has-token? request)
-           (has-admin-role? (extract-token-from-request request)))
-    (view request)
-    (unauthorized "You are not an admin.")))
+  (let [no-valid-token (with-valid-token view request)]
+    (if (:status no-valid-token)
+      no-valid-token
+      (if (has-admin-role? (extract-token-from-request request))
+        (view request)
+        (unauthorized "You are not an admin.")))))
 
 (defn testview
   "testing"

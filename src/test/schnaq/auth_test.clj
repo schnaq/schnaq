@@ -87,6 +87,7 @@
     forbidden response"
       (is (= 401 (:status (with-admin-access' request-with-user-token)))))
     (testing "Invalid token should still result in a bad request response."
-      (is (= 400 (:status (with-admin-access' request-no-authorization-token)))))))
+      (is (= 400 (:status (with-admin-access' request-no-authorization-token))))
+      (is (= 400 (:status (with-admin-access' {})))))))
 
 
