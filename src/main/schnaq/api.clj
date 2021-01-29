@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [compojure.core :refer [GET POST routes wrap-routes]]
+            [compojure.core :refer [GET POST routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
@@ -10,7 +10,6 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.util.http-response :refer [ok created not-found bad-request unauthorized]]
-            [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
@@ -440,10 +439,6 @@
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
     (POST "/admin/schnaq/delete" [] delete-schnaq!)
-    (-> (GET "/admin/test" [] auth/testview)
-        (wrap-routes auth/is-admin-middleware)
-        (wrap-routes auth/auth-middleware)
-        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
