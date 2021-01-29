@@ -31,7 +31,7 @@
           (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
           (assoc-in [:identity :admin?] (has-admin-role? request))
           handler)
-      (unauthorized "Login missing"))))
+      (unauthorized "You are not logged in. Maybe your token is malformed / expired."))))
 
 (defn is-admin-middleware
   "Check if user has admin-role."
@@ -39,13 +39,4 @@
   (fn [request]
     (if (has-admin-role? request)
       (handler request)
-      (unauthorized "Not an admin"))))
-
-(defn testview
-  "testing"
-  [request]
-  (prn request)
-  (def foo request)
-  (ok {:message "Jeaasdqweh"}))
-
-(comment)
+      (unauthorized "You are not an admin."))))
