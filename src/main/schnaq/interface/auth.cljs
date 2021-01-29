@@ -1,12 +1,10 @@
 (ns schnaq.interface.auth
   (:require ["keycloak-js" :as Keycloak]
-            [ajax.core :as ajax]
             [cljs.core.async :refer [go <! timeout]]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [ghostwheel.core :refer [>defn]]
             [goog.string :as gstring]
-            [oops.core :refer [oget oset!]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.config :as config]
             [taoensso.timbre :as log]))
 

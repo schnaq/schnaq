@@ -2,8 +2,8 @@
   (:require [buddy.auth :refer [authenticated?]]
             [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication]]
-            [ghostwheel.core :refer [>defn >defn-]]
-            [ring.util.http-response :refer [ok bad-request unauthorized]]
+            [ghostwheel.core :refer [>defn-]]
+            [ring.util.http-response :refer [unauthorized]]
             [schnaq.config :as config]))
 
 (def signed-jwt-backend (backends/jws {:secret config/keycloak-public-key
@@ -14,7 +14,7 @@
   [request]
   [map? :ret boolean?]
   (= "admin" (some #{"admin"}
-                   (get-in request [:identity :realm_access :roles]))))
+                   (get-in request [:identity :roles]))))
 
 (defn wrap-jwt-authentication
   "Use buddys jwt backend with our public key for authentication."

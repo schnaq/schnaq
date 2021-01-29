@@ -1,5 +1,5 @@
 (ns schnaq.auth-test
-  (:require [clojure.test :refer [deftest testing is are]]
+  (:require [clojure.test :refer [deftest testing is]]
             [compojure.core :refer [routes GET wrap-routes]]
             [ring.mock.request :as mock]
             [ring.util.http-response :refer [ok]]
