@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [compojure.core :refer [GET POST routes]]
+            [compojure.core :refer [GET POST routes wrap-routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
@@ -423,6 +423,10 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
+;; About applying middlewares: We need to chain `wrap-routes` calls, because
+;; compojure can't handle natively more than one custom middleware. reitit has a
+;; vector of middlewares, where these functions can simply put into.
+;; See more on wrap-routes: https://github.com/weavejester/compojure/issues/192
 
 (def ^:private not-found-msg
   "Error, page not found!")
@@ -436,9 +440,9 @@
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
     (POST "/admin/schnaq/delete" [] delete-schnaq!)
-    (auth/wrap-jwt-authentication
-      (auth/auth-middleware
-        (GET "/admin/test" [] auth/testview)))
+    (-> (GET "/admin/test" [] auth/testview)
+        (wrap-routes auth/auth-middleware)
+        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
