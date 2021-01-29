@@ -64,7 +64,7 @@
       share-hash main-db/statement-pattern)))
 
 (defn discussion-by-share-hash
-  "Returns one discussion which can be reached by a certain share-hash. (Brainstorm only ever have one)"
+  "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)"
   [share-hash]
   (ffirst
     (query
