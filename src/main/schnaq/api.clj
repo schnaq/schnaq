@@ -447,6 +447,40 @@
               :where [?user :user/core-author _]])
   )
 
+(defn- migrate-discussions!
+  "Migrates the share-hash, edit-hash, author and header-image-url field from the
+  meeting to the discussion."
+  []
+  (let [all-users
+        (db/query '[:find ?discussion (pull ?meeting [:meeting/share-hash
+                                                      :meeting/edit-hash
+                                                      :meeting/author
+                                                      :meeting/header-image-url])
+                    :in $
+                    :where [?meeting :meeting/type :meeting.type/brainstorm]
+                    [?agenda :agenda/discussion ?discussion]
+                    [?agenda :agenda/meeting ?meeting]])
+        transaction (vec (flatten
+                           (mapv (fn [[discussion attributes]]
+                                   (into {}
+                                         (filter second
+                                                 {:db/id discussion
+                                                  :discussion/share-hash (:meeting/share-hash attributes)
+                                                  :discussion/edit-hash (:meeting/edit-hash attributes)
+                                                  :discussion/author (:db/id (:meeting/author attributes))
+                                                  :discussion/header-image-url (:meeting/header-image-url attributes)})))
+                                 all-users)))]
+    (db/transact transaction)
+    #_transaction))
+
+(comment
+  ;; Comment left in on Purpose for testing
+  (migrate-discussions!)
+  (db/query '[:find (pull ?discussion [*])
+              :in $
+              :where [?discussion :discussion/title _]])
+  )
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 
