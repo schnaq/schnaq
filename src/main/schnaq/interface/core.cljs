@@ -17,6 +17,7 @@
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.updates :as updates]
             [schnaq.interface.views :as views]
+            [schnaq.interface.views.admin.control-center]
             [schnaq.interface.views.brainstorm.create]
             [schnaq.interface.views.common]
             [schnaq.interface.views.discussion.card-elements]

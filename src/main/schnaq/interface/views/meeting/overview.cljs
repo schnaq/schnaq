@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.meeting.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- no-meetings-found
@@ -22,19 +23,17 @@
 (defn- meeting-entry
   "Displays a single meeting element of the meeting list"
   [meeting]
-  ;; clickable div
-  [:div.meeting-entry
-   {:on-click (fn []
-                (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                              {:share-hash (:meeting/share-hash meeting)}])
-                (rf/dispatch [:meeting/select-current meeting]))}
-   ;; title and arrow
-   [:div.meeting-entry-title
-    [:div.row
-     [:div.col-lg-11.px-3
-      [:h3 (:meeting/title meeting)]]
-     [:div.col-lg-1
-      [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-right))}]]]]])
+  (let [share-hash (:meeting/share-hash meeting)
+        title (:meeting/title meeting)
+        url (header-image/check-for-header-img (:meeting/header-image-url meeting))]
+    [:div.meeting-entry
+     {:on-click (fn []
+                  (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                {:share-hash share-hash}])
+                  (rf/dispatch [:meeting/select-current meeting]))}
+     [:div [:img.meeting-entry-title-header-image {:src url}]]
+     [:div.meeting-entry-title
+      [:h5 title]]]))
 
 (defn- meetings-list-view
   "Shows a list of all meetings."

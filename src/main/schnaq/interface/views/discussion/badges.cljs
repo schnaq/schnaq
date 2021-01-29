@@ -89,6 +89,5 @@
 (rf/reg-event-db
   :visited/set-visited-statements
   (fn [db [_ statement]]
-    (println statement)
     (assoc-in db [:visited :statement-nums (str (:db/id statement))]
               (str (-> statement :meta/sub-discussion-info :sub-statements)))))

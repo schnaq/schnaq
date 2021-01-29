@@ -1,6 +1,7 @@
 (ns schnaq.export
   (:require [clojure.string :as string]
             [ghostwheel.core :refer [>defn >defn-]]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as db]
             [schnaq.discussion :as discussion]))
 
@@ -50,7 +51,7 @@
   [share-hash]
   [:meeting/share-hash :ret string?]
   (let [statements (db/all-statements-for-graph share-hash)
-        starting-statements (db/starting-statements share-hash)
+        starting-statements (discussion-db/starting-statements share-hash)
         legacy-starting-arguments (map :argument/conclusion
                                        (db/starting-arguments-by-discussion share-hash))
         starting-set-with-legacy (distinct (concat starting-statements legacy-starting-arguments))

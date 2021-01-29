@@ -1,11 +1,11 @@
 @import 'variables';
 
 .meeting-entry-no-hover {
-  background: $white;
-  border-radius: 1rem;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 4px 0 rgba(0, 0, 0, 0.19);
-  color: $text-dark;
-  padding: 2rem;
+  background-color: $white;
+  border-radius: 2rem;
+  box-shadow: $light-shadow;
+  height: 20rem;
+  overflow: hidden;
 }
 
 
@@ -17,14 +17,25 @@
 
   &:hover {
     background: $white-shade;
+    box-shadow: $hover-shadow;
   }
 }
 
 
 .meeting-entry-title {
   background-color: transparent;
-  border: 0;
-  border-radius: 1.5rem 1.5rem 0 0;
+  color: $text-dark;
+  padding: 1rem 1.5rem 1.75rem;
+  text-decoration: none;
+}
+
+.meeting-entry-title-header-image {
+  max-height: 16rem;
+  min-height: 100%;
+  min-width: 100%;
+  object-fit: cover;
+  object-position: 0 0;
+  overflow: hidden;
 }
 
 .meeting-entry-desc {

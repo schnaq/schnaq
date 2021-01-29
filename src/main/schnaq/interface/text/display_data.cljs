@@ -357,6 +357,7 @@
 
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
+        :router/admin-center "Admin-Center"
         :router/all-feedbacks "All feedbacks"
         :router/all-meetings "All schnaqs"
         :router/analytics "Analytics dashboard"
@@ -374,7 +375,18 @@
         :router/start-discussion "Start discussion"
         :router/startpage "Startpage"
         :router/true-404-view "404 error page"
-        :router/public-discussions "Public discussions"}
+        :router/public-discussions "Public discussions"
+
+        :admin.center.start/title "Admin Center"
+        :admin.center.start/heading "Admin Center"
+        :admin.center.start/subheading "Administrate schnaqs as a superuser"
+        :admin.center.delete/confirmation "Do you really want to delete this schnaq?"
+        :admin.center.delete.public/label "Public schnaqs"
+        :admin.center.delete.public/button "Delete schnaq"
+        :admin.center.delete/heading "Deletion"
+        :admin.center.delete.public/heading "Public schnaqs"
+        :admin.center.delete.private/label "Share-hash"
+        :admin.center.delete.private/heading "Private schnaqs"}
    :de {;; Common
         :common/language "Sprache"
         :common/history "Verlauf"
@@ -727,6 +739,7 @@
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
+        :router/admin-center "Admin-Center"
         :router/all-feedbacks "Alle Feedbacks"
         :router/all-meetings "Alle schnaqs"
         :router/analytics "Analyse-Dashboard"
@@ -744,7 +757,18 @@
         :router/start-discussion "Starte Besprechung"
         :router/startpage "Startseite"
         :router/true-404-view "404 Fehlerseite"
-        :router/public-discussions "Öffentliche Diskussionen"}})
+        :router/public-discussions "Öffentliche Diskussionen"
+
+        :admin.center.start/title "Admin Center"
+        :admin.center.start/heading "Admin Center"
+        :admin.center.start/subheading "Administration von schnaqs als Superuser"
+        :admin.center.delete/confirmation "Soll dieses schnaq wirklich gelöscht werden?"
+        :admin.center.delete.public/label "Öffentliche schnaqs"
+        :admin.center.delete.public/button "Schnaq löschen"
+        :admin.center.delete/heading "Löschen"
+        :admin.center.delete.public/heading "Öffentliche schnaqs"
+        :admin.center.delete.private/label "Share-hash"
+        :admin.center.delete.private/heading "Private schnaqs"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup

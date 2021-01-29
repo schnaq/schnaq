@@ -13,6 +13,7 @@
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
@@ -78,7 +79,9 @@
   "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
-    (ok (db/meeting-by-hash hash))))
+    (if (validator/valid-discussion? hash)
+      (ok (db/meeting-by-hash hash))
+      (validator/deny-access))))
 
 (defn- meetings-by-hashes
   "Bulk loading of meetings. May be used when users asks for all the meetings
@@ -92,10 +95,10 @@
                             \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
   [req]
   (if-let [hashes (get-in req [:params :share-hashes])]
-    (let [meetings (if (string? hashes)
-                     [(db/meeting-by-hash hashes)]
-                     (map db/meeting-by-hash hashes))]
-      (if-not (or (nil? meetings) (= [nil] meetings))
+    (let [hashes-list (if (string? hashes) [hashes] hashes)
+          filtered-hashes (filter validator/valid-discussion? hashes-list)
+          meetings (map db/meeting-by-hash filtered-hashes)]
+      (if-not (or (nil? meetings) (= [nil] meetings) (empty? meetings))
         (ok {:meetings meetings})
         (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
     (bad-request {:error "Meetings could not be loaded."})))
@@ -125,10 +128,20 @@
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
     (if (validator/valid-credentials? share-hash edit-hash)
       (if (every? #(db/check-valid-statement-id-and-meeting % share-hash) statement-ids)
-        (do (db/delete-statements! statement-ids)
+        (do (discussion-db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
       (validator/deny-access "You do not have the rights to access this action."))))
+
+(defn- delete-schnaq!
+  "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash password]} body-params]
+    (if (validator/valid-password? password)
+      (if (discussion-db/delete-discussion share-hash)
+        (ok {:share-hash share-hash})
+        (bad-request {:error "An error occurred, while deleting the schnaq."}))
+      (validator/deny-access))))
 
 ;; -----------------------------------------------------------------------------
 ;; Votes
@@ -136,7 +149,7 @@
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
   [{:keys [meeting-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
-  (if (db/check-valid-statement-id-and-meeting statement-id meeting-hash)
+  (if (validator/valid-discussion-and-statement? statement-id meeting-hash)
     (let [nickname (db/canonical-username nickname)
           vote (check-vote-fn statement-id nickname)
           counter-vote (counter-check-vote-fn statement-id nickname)]
@@ -239,20 +252,20 @@
   (-> data
       processors/hide-deleted-statement-content
       processors/with-votes
-      (processors/with-sub-discussion-information (db/all-arguments-for-discussion share-hash))))
+      (processors/with-sub-discussion-information (discussion-db/all-arguments-for-discussion share-hash))))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [share-hash]
   (let [deprecated-starters (db/starting-conclusions-by-discussion share-hash)
-        starting-statements (db/starting-statements share-hash)]
+        starting-statements (discussion-db/starting-statements share-hash)]
     (with-statement-meta (concat starting-statements deprecated-starters) share-hash)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [body-params]}]
   (let [{:keys [share-hash]} body-params]
-    (if (validator/valid-hash? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
       (validator/deny-access invalid-rights-message))))
 
@@ -260,7 +273,7 @@
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [body-params]}]
   (let [{:keys [share-hash selected-statement]} body-params]
-    (if (validator/valid-hash? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (ok (with-statement-meta
             {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
              :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
@@ -271,9 +284,9 @@
   "Return the sought after conclusion (by id) and the following premises / undercuts."
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement-id]} body-params]
-    (if (db/check-valid-statement-id-and-meeting statement-id share-hash)
+    (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (with-statement-meta
-            {:conclusion (db/get-statement statement-id)
+            {:conclusion (discussion-db/get-statement statement-id)
              :premises (discussion/premises-for-conclusion-id statement-id)
              :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
             share-hash))
@@ -284,8 +297,8 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement nickname]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (validator/valid-hash? share-hash)
-      (do (db/add-starting-statement! share-hash author-id statement)
+    (if (validator/valid-discussion? share-hash)
+      (do (discussion-db/add-starting-statement! share-hash author-id statement)
           (log/info "Starting statement added for discussion" share-hash)
           (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
       (validator/deny-access invalid-rights-message))))
@@ -295,13 +308,13 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
         author-id (db/author-id-by-nickname nickname)]
-    (if (db/check-valid-statement-id-and-meeting conclusion-id share-hash)
+    (if (validator/valid-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (with-statement-meta
                 {:new-argument
                  (if (= :attack reaction)
-                   (db/attack-statement! share-hash author-id conclusion-id premise)
-                   (db/support-statement! share-hash author-id conclusion-id premise))}
+                   (discussion-db/attack-statement! share-hash author-id conclusion-id premise)
+                   (discussion-db/support-statement! share-hash author-id conclusion-id premise))}
                 share-hash)))
       (validator/deny-access invalid-rights-message))))
 
@@ -389,9 +402,9 @@
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)]
-    (if (validator/valid-hash? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (let [statements (db/all-statements-for-graph share-hash)
-            starting-statements (db/starting-statements share-hash)
+            starting-statements (discussion-db/starting-statements share-hash)
             edges (discussion/links-for-agenda statements starting-statements share-hash)
             controversy-vals (discussion/calculate-controversy edges)]
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
@@ -403,7 +416,7 @@
   "Exports the discussion data as a string."
   [{:keys [params]}]
   (let [{:keys [share-hash]} params]
-    (if (validator/valid-hash? share-hash)
+    (if (validator/valid-discussion? share-hash)
       (do (log/info "User is generating a txt export for discussion" share-hash)
           (ok {:string-representation (export/generate-text-export share-hash)}))
       (validator/deny-access invalid-rights-message))))
@@ -422,6 +435,7 @@
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
+    (POST "/admin/schnaq/delete" [] delete-schnaq!)
     (auth/wrap-jwt-authentication
       (auth/auth-middleware
         (GET "/admin/test" [] auth/testview)))
