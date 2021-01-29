@@ -21,6 +21,19 @@
         :nav-meeting-agenda "Create Agenda"
         :nav/blog "Blog"
 
+        ;; code of conduct
+        :coc/heading "Code of Conduct"
+        :coc/subheading "Do onto others as you would have them do unto you"
+
+        :coc.users/lead "Behaviour towards other users"
+        :coc.users/title "Respect and non-discrimination "
+        :coc.users/body "A respectful behaviour is important and is the basis of each factual discussion. This applies not only offline but also online.  \nIt is important to us that all users can express themselves without being discriminated against based on their person, origin or views. \nPosts that do not adhere to these guidelines will be deleted."
+
+        :coc.content/lead "Content"
+        :coc.content/title "We obey the law, please do that too"
+        :coc.content/body "We comply with German law; this applies especially to data protection, equality and non-discrimination.\nContent that violates applicable law will be deleted."
+
+
         ;; Startpage
         :startpage/heading "Your personal discussion hub"
         :startpage/subheading "The group chat is exploding with messages again? Discuss with schnaq in peace – on your own terms!"
@@ -403,6 +416,18 @@
         :nav-meeting-agenda "Agenda erzeugen"
         :nav/blog "Zum Blog"
 
+        ;; code of conduct
+        :coc/heading "Code of Conduct"
+        :coc/subheading "Unsere Benimmregeln"
+
+        :coc.users/lead "Verhalten gegenüber anderen Nutzern:innen"
+        :coc.users/title "Respektvoller Umgang und Nichtdiskriminierung"
+        :coc.users/body "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen. Dies gilt nicht nur offline sondern auch online. \nUns ist es wichtig, dass sich jede:r Nutzer:in ausdrücken kann, ohne aufgrund ihrer Person, Herkunft oder Ansichten diskriminiert zu werden. \nBeiträge, die sich nicht an diese Richtlinien halten, werden entfernt. \n"
+
+        :coc.content/lead "Inhalte"
+        :coc.content/title "Wir halten uns an das Gesetz, bitte tut das auch"
+        :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte die gegen geltendes Recht verstoßen werden gelöscht."
+
         ;; Startpage
         :startpage/heading "Deine Zentrale für Diskussionen"
         :startpage/subheading "Schon wieder 50 Benachrichtigungen in der Gruppe? Diskutiere mit schnaq in Ruhe – wann du willst!"
@@ -783,6 +808,8 @@
   (identifier
     {:animation-discussion "/animations/animation_discussion.webm"
      :animation-discussion-mp4 "/animations/animation_discussion.mp4"
+     :coc/police "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqifant-polizei.png"
+     :coc/hippie "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqifant-hippie.png"
      :elephant-admin "/imgs/elephants/admin.png"
      :elephant-erase "/imgs/elephants/erase.png"
      :elephant-share "/imgs/elephants/share.png"

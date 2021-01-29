@@ -7,6 +7,7 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.brainstorm.create :as brainstorm-create]
+            [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
@@ -46,6 +47,10 @@
      :controllers [{:start (fn []
                              (rf/dispatch [:admin/set-password (js/prompt "Admin Password")])
                              (rf/dispatch [:meetings.public/load]))}]}]
+   ["coc"
+    {:name :routes/code-of-conduct
+     :view coc/view
+     :link-text (labels :router/code-of-conduct)}]
    ["schnaqs"
     ["/public"
      {:name :routes/public-discussions
