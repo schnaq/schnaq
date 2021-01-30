@@ -26,8 +26,8 @@
         :coc/subheading "Do onto others as you would have them do unto you"
 
         :coc.users/lead "Behaviour towards other users"
-        :coc.users/title "Respect and non-discrimination "
-        :coc.users/body "A respectful behaviour is important and is the basis of each factual discussion. This applies not only offline but also online.  \nIt is important to us that all users can express themselves without being discriminated against based on their person, origin or views. \nPosts that do not adhere to these guidelines will be deleted."
+        :coc.users/title "Respect and Non-Discrimination"
+        :coc.users/body "A respectful behaviour is important and is the basis of each factual discussion. This applies not only offline but also online.\nIt is important to us that all users can express themselves without being discriminated against based on their person, origin or views. \nPosts that do not adhere to these guidelines will be deleted."
 
         :coc.content/lead "Content"
         :coc.content/title "We obey the law, please do that too"
@@ -40,7 +40,7 @@
 
         :startpage.usage/lead "What do I use schnaq for?"
 
-        :startpage.call-to-action/discuss-spotlight-topics "Current highlights for you"
+        :startpage.call-to-action/discuss-spotlight-topics "Current schnaqs for you"
 
         :startpage.features/more-information "More information"
 
@@ -64,7 +64,7 @@
         :startpage.early-adopter/or "or"
 
         :footer.buttons/about-us "About us"
-        :footer.buttons/legal-note "Impress"
+        :footer.buttons/legal-note "Legal note"
         :footer.buttons/privacy "Privacy Notice"
         :footer.tagline/developed-with " Developed with "
 
@@ -420,19 +420,19 @@
         :coc/heading "Verhaltensregeln"
         :coc/subheading "Unsere Benimmregeln"
 
-        :coc.users/lead "Verhalten gegenüber anderen Nutzern:innen"
+        :coc.users/lead "Verhalten gegenüber anderen Nutzer:innen"
         :coc.users/title "Respektvoller Umgang und Nichtdiskriminierung"
-        :coc.users/body "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen. Dies gilt nicht nur offline sondern auch online. \nUns ist es wichtig, dass sich jede:r Nutzer:in ausdrücken kann, ohne aufgrund ihrer Person, Herkunft oder Ansichten diskriminiert zu werden. \nBeiträge, die sich nicht an diese Richtlinien halten, werden entfernt. \n"
+        :coc.users/body "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen. Dies gilt nicht nur offline sondern auch online. \nUns ist es wichtig, dass sich jede:r Nutzer:in ausdrücken kann, ohne aufgrund ihrer Person, Herkunft oder Ansichten diskriminiert zu werden. \nBeiträge, die sich nicht an diese Richtlinien halten, werden entfernt."
 
         :coc.content/lead "Inhalte"
         :coc.content/title "Wir halten uns an das Gesetz, bitte tut das auch"
-        :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte die gegen geltendes Recht verstoßen werden gelöscht."
+        :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte, die gegen geltendes Recht verstoßen, werden von uns gelöscht."
 
         ;; Startpage
         :startpage/heading "Deine Zentrale für Diskussionen"
         :startpage/subheading "Schon wieder 50 Benachrichtigungen in der Gruppe? Diskutiere mit schnaq in Ruhe – wann du willst!"
 
-        :startpage.call-to-action/discuss-spotlight-topics "Aktuelle Highlightthemen für dich"
+        :startpage.call-to-action/discuss-spotlight-topics "Aktuelle schnaqs für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
