@@ -3,7 +3,7 @@
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]))
 
-(defn- coc-content []
+(defn- content []
   (let [header
         {:page/heading (labels :coc/heading)
          :page/more-for-heading (labels :coc/subheading)}]
@@ -21,4 +21,4 @@
 (defn view
   "A view containing the code of conduct"
   []
-  [coc-content])
+  [content])
