@@ -62,10 +62,10 @@
 (defn- educate-element []
   [:div.row.mb-3
    [:div.col-12.col-md-6.share-link-icons
-    [img-text (img-path :elephant-share)
+    [img-text (img-path :schnaqqifant/share)
      (labels :meeting/educate-on-link-text)]]
    [:div.col-12.col-md-6.share-link-icons
-    [img-text (img-path :elephant-talk)
+    [img-text (img-path :schnaqqifant/talk)
      (labels :meetings/educate-on-link-text-subtitle)]]])
 
 ;; -----------------------------------------------------------------------------
@@ -235,11 +235,11 @@
     ;; elephant admin
     [:div.col-md-6
      [:div.share-link-icons
-      [img-text (img-path :elephant-admin)
+      [img-text (img-path :schnaqqifant/admin)
        (labels :meeting.admin-center.edit.link/admin)]]]
     ;; elephant edit
     [:div.col-md-6.share-link-icons
-     [img-text (img-path :elephant-erase)
+     [img-text (img-path :schnaqqifant/erase)
       (labels :meeting.admin-center.edit.link/admin-privileges)]]]
    ;; admin mail input
    (let [input-id "admin-link-mail-address"]
@@ -319,7 +319,7 @@
       [invite-participants-tabs]
       [:div.pb-5.mt-3]
       ;; stop image and hint to copy the link
-      [:div.single-image [:img {:src (img-path :elephant-stop)}]]
+      [:div.single-image [:img {:src (img-path :schnaqqifant/stop)}]]
       [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
       ;; go to meeting button
       [:button.btn.button-primary.btn-lg.center-block.mb-5

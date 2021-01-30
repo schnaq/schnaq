@@ -12,10 +12,10 @@
      [:<>
       [:section.container
        [rows/image-left
-        :coc/hippie
+        :schnaqqifant/hippie
         :coc.users]
        [rows/image-right
-        :coc/police
+        :schnaqqifant/police
         :coc.content]]]]))
 
 (defn view
