@@ -417,7 +417,7 @@
         :nav/blog "Zum Blog"
 
         ;; code of conduct
-        :coc/heading "Code of Conduct"
+        :coc/heading "Verhaltensregeln"
         :coc/subheading "Unsere Benimmregeln"
 
         :coc.users/lead "Verhalten gegenüber anderen Nutzern:innen"
