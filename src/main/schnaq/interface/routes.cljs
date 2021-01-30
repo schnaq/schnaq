@@ -47,7 +47,7 @@
      :controllers [{:start (fn []
                              (rf/dispatch [:admin/set-password (js/prompt "Admin Password")])
                              (rf/dispatch [:meetings.public/load]))}]}]
-   ["coc"
+   ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
      :link-text (labels :router/code-of-conduct)}]
