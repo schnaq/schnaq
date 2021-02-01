@@ -43,13 +43,16 @@
   [:footer
    [:div.container
     [:div.row
-     [:div.col-md-6.col-12
+     [:div.col-md-4.col-12
       [:img.footer-schnaqqifant
        {:src (img-path :logo-white)}]
       [:div.lead.font-italic.pb-1
        (labels :startpage/heading)]]
-     [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0
+     [:div.col-md-8.col-12.text-md-right.pt-3.pt-md-0
       [:ul.list-inline
+       [:li.list-inline-item
+        [:a.btn.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
+         (labels :coc/heading)]]
        [:li.list-inline-item
         [:a.btn.btn-outline-white {:href "https://disqtec.com/ueber-uns"}
          (labels :footer.buttons/about-us)]]

@@ -21,13 +21,26 @@
         :nav-meeting-agenda "Create Agenda"
         :nav/blog "Blog"
 
+        ;; code of conduct
+        :coc/heading "Code of Conduct"
+        :coc/subheading "Do onto others as you would have them do unto you"
+
+        :coc.users/lead "Behaviour towards other users"
+        :coc.users/title "Respect and Non-Discrimination"
+        :coc.users/body "A respectful behaviour is important and is the basis of each factual discussion. This applies not only offline but also online.\nIt is important to us that all users can express themselves without being discriminated against based on their person, origin or views. \nPosts that do not adhere to these guidelines will be deleted."
+
+        :coc.content/lead "Content"
+        :coc.content/title "We obey the law, please do that too"
+        :coc.content/body "We comply with German law; this applies especially to data protection, equality and non-discrimination.\nContent that violates applicable law will be deleted."
+
+
         ;; Startpage
         :startpage/heading "Your personal discussion hub"
         :startpage/subheading "The group chat is exploding with messages again? Discuss with schnaq in peace – on your own terms!"
 
         :startpage.usage/lead "What do I use schnaq for?"
 
-        :startpage.call-to-action/discuss-spotlight-topics "Current highlights for you"
+        :startpage.call-to-action/discuss-spotlight-topics "Current schnaqs for you"
 
         :startpage.features/more-information "More information"
 
@@ -51,7 +64,7 @@
         :startpage.early-adopter/or "or"
 
         :footer.buttons/about-us "About us"
-        :footer.buttons/legal-note "Impress"
+        :footer.buttons/legal-note "Legal note"
         :footer.buttons/privacy "Privacy Notice"
         :footer.tagline/developed-with " Developed with "
 
@@ -403,11 +416,23 @@
         :nav-meeting-agenda "Agenda erzeugen"
         :nav/blog "Zum Blog"
 
+        ;; code of conduct
+        :coc/heading "Verhaltensregeln"
+        :coc/subheading "Unsere Benimmregeln"
+
+        :coc.users/lead "Verhalten gegenüber anderen Nutzer:innen"
+        :coc.users/title "Respektvoller Umgang und Nichtdiskriminierung"
+        :coc.users/body "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen. Dies gilt nicht nur offline sondern auch online. \nUns ist es wichtig, dass sich jede:r Nutzer:in ausdrücken kann, ohne aufgrund ihrer Person, Herkunft oder Ansichten diskriminiert zu werden. \nBeiträge, die sich nicht an diese Richtlinien halten, werden entfernt."
+
+        :coc.content/lead "Inhalte"
+        :coc.content/title "Wir halten uns an das Gesetz, bitte tut das auch"
+        :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte, die gegen geltendes Recht verstoßen, werden von uns gelöscht."
+
         ;; Startpage
         :startpage/heading "Deine Zentrale für Diskussionen"
         :startpage/subheading "Schon wieder 50 Benachrichtigungen in der Gruppe? Diskutiere mit schnaq in Ruhe – wann du willst!"
 
-        :startpage.call-to-action/discuss-spotlight-topics "Aktuelle Highlightthemen für dich"
+        :startpage.call-to-action/discuss-spotlight-topics "Aktuelle schnaqs für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
@@ -783,11 +808,8 @@
   (identifier
     {:animation-discussion "/animations/animation_discussion.webm"
      :animation-discussion-mp4 "/animations/animation_discussion.mp4"
-     :elephant-admin "/imgs/elephants/admin.png"
-     :elephant-erase "/imgs/elephants/erase.png"
-     :elephant-share "/imgs/elephants/share.png"
-     :elephant-stop "/imgs/elephants/stop.png"
-     :elephant-talk "/imgs/elephants/talk.png"
+     :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
+     :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
      :how-to/taskbar "/imgs/howto/taskbar.svg"
      :icon-add "/imgs/buttons/add-button.svg"
      :icon-community "/imgs/community.svg"
@@ -797,24 +819,29 @@
      :icon-robot "/imgs/robot.svg"
      :logo "/imgs/Schnaq-Logo.svg"
      :logo-white "/imgs/Schnaq-Logo-White.svg"
-     :logos/doctronic "/imgs/logos/doctronic_logo.png"
      :logos/digihub "/imgs/logos/digihub_logo.png"
+     :logos/doctronic "/imgs/logos/doctronic_logo.png"
      :logos/ignition "/imgs/logos/ignition_logo.png"
-     :privacy/made-in-germany "/imgs/privacy/shield.jpg"
-     :schnaqqifant/original "/imgs/schnaqqifant.svg"
-     :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
-     :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
-     :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"
-     :startpage.features/discussion-graph "/imgs/startpage/sample_graph.png"
-     :pricing.others/miro "imgs/startpage/pricing/miro.png"
-     :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
      :pricing.others/confluence "imgs/startpage/pricing/confluence.jpeg"
-     :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
-     :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
-     :spotlight.merkel "imgs/spotlight/merkel.jpg"
-     :spotlight.eco-brain "imgs/spotlight/brain.jpg"
-     :spotlight.home-office "imgs/spotlight/covid-19.jpg"
-     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
+     :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
+     :pricing.others/miro "imgs/startpage/pricing/miro.png"
+     :privacy/made-in-germany "/imgs/privacy/shield.jpg"
+     :schnaqqifant/admin "/imgs/elephants/admin.png"
+     :schnaqqifant/erase "/imgs/elephants/erase.png"
+     :schnaqqifant/hippie "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqifant-hippie.png"
+     :schnaqqifant/original "/imgs/schnaqqifant.svg"
+     :schnaqqifant/police "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqifant-polizei.png"
+     :schnaqqifant/share "/imgs/elephants/share.png"
+     :schnaqqifant/stop "/imgs/elephants/stop.png"
+     :schnaqqifant/talk "/imgs/elephants/talk.png"
+     :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
+     :spotlight/eco-brain "/imgs/spotlight/brain.jpg"
+     :spotlight/home-office "/imgs/spotlight/covid-19.jpg"
+     :spotlight/merkel "/imgs/spotlight/merkel.jpg"
+     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"
+     :startpage.features/discussion-graph "/imgs/startpage/sample_graph.png"
+     :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
+     :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"}))
 
 (defn video
   "Returns an video path"

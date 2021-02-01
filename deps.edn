@@ -4,7 +4,7 @@
         binaryage/oops {:mvn/version "0.7.0"}
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
-        clj-http/clj-http {:mvn/version "3.11.0"}
+        clj-http/clj-http {:mvn/version "3.12.0"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/client-pro {:mvn/version "0.9.66"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -57,7 +57,7 @@
            {:extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}
 
            :uberjar
-           {:replace-deps {seancorfield/depstar {:mvn/version "2.0.165"}}
+           {:replace-deps {seancorfield/depstar {:mvn/version "2.0.171"}}
             :exec-fn hf.depstar/uberjar
             :exec-args {:main-class schnaq.api
                         :verbose true

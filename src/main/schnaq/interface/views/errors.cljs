@@ -14,7 +14,7 @@
   [pages/with-nav-and-header
    {:page/heading heading}
    [:div.container.py-3.text-center
-    [:img.w-25 {:src (img-path :elephant-stop)}]
+    [:img.w-25 {:src (img-path :schnaqqifant/stop)}]
     [:div.alert.alert-danger.mt-4 {:role "alert"}
      [:h4.alert-heading heading]
      [:hr]
