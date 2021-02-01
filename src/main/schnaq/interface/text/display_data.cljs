@@ -14,11 +14,8 @@
         :nav/schnaqs "Schnaqs"
         :nav.schnaqs/show-all "All schnaqs"
         :nav.schnaqs/show-all-public "All public schnaqs"
-        :nav.schnaqs/create-meeting "Prepare meeting"
-        :nav.schnaqs/create-brainstorm "Create brainstorm"
         :nav.schnaqs/create-schnaq "Create schnaq"
         :nav.schnaqs/last-added "Last created schnaq"
-        :nav-meeting-agenda "Create Agenda"
         :nav/blog "Blog"
 
         ;; code of conduct
@@ -82,12 +79,7 @@
         :schnaq.header-image.url/failed-seting-body "The image will not be used as preview image."
 
         ;; Create meeting
-        :meeting-create-subheader "Give your schnaq a name and description"
-        :meeting-form-title-placeholder "What should the name of your meeting be?"
-        :meeting-form-description "Description"
-        :meeting-form-end-date "Date"
-        :meeting-form-end-time "Time"
-        :meeting/copy-share-link "Copy Link:"
+        :meeting-form-title-placeholder "What should the name of your schnaq be?"
         :meeting/copy-link-tooltip "Click here to copy your link"
         :meeting/link-copied-heading "Link copied"
         :meeting/link-copied-success "The link was copied to your clipboard!"
@@ -375,7 +367,7 @@
         :router/all-meetings "All schnaqs"
         :router/analytics "Analytics dashboard"
         :router/continue-discussion "Continue Discussion"
-        :router/create-brainstorm "Create Brainstorming"
+        :router/create-brainstorm "Create schnaq"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
         :router/invalid-link "Error page"
@@ -410,10 +402,8 @@
         :nav/schnaqs "Schnaqs"
         :nav.schnaqs/show-all "Alle schnaqs"
         :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
-        :nav.schnaqs/create-brainstorm "Brainstorm anlegen"
         :nav.schnaqs/create-schnaq "schnaq anlegen"
         :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
-        :nav-meeting-agenda "Agenda erzeugen"
         :nav/blog "Zum Blog"
 
         ;; code of conduct
@@ -476,12 +466,7 @@
 
 
         ;; Create meeting
-        :meeting-create-subheader "Gib deinem schnaq einen Namen und eine Beschreibung"
         :meeting-form-title-placeholder "Wie soll dein schnaq heißen?"
-        :meeting-form-description "Beschreibung"
-        :meeting-form-end-date "Datum"
-        :meeting-form-end-time "Uhrzeit"
-        :meeting/copy-share-link "Link kopieren:"
         :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
         :meeting/link-copied-heading "Link kopiert"
         :meeting/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
@@ -769,7 +754,7 @@
         :router/all-meetings "Alle schnaqs"
         :router/analytics "Analyse-Dashboard"
         :router/continue-discussion "Führe Besprechung fort"
-        :router/create-brainstorm "Brainstorm anlegen"
+        :router/create-brainstorm "Schnaq anlegen"
         :router/graph-view "Graph View"
         :router/how-to "Wie benutze ich schnaq?"
         :router/invalid-link "Fehlerseite"
