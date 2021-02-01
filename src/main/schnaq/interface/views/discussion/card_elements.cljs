@@ -25,8 +25,9 @@
      #(rf/dispatch [:discussion.history/time-travel history-length])}
     [tooltip/nested-div
      "right"
-     (labels :tooltip/history-home)
-     [:i {:class (str "fas fa-2x " (fa :home))}]]]])
+     (labels :history.home/tooltip)
+     [:<> [:i {:class "fas fa-angle-double-left"}]
+      [:div [:small (labels :history.home/text)]]]]]])
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
