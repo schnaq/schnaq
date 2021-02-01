@@ -273,8 +273,8 @@
 
         ;; Graph Texts
         :graph/heading "Discussion Overview"
-        :graph.button/text "Show discussion graph"
-        :graph/download-png "Download graph as image"
+        :graph.button/text "Show mindmap"
+        :graph/download-png "Download mindmap as image"
 
         ;; Pricing Page
         :pricing.free-tier/description "For small teams and private parties. The starter plan is the perfect entry
@@ -665,8 +665,8 @@
 
         ;; Graph Texts
         :graph/heading "Diskussionsübersicht"
-        :graph.button/text "Zum Diskussionsgraphen"
-        :graph/download-png "Graph als Bild herunterladen"
+        :graph.button/text "Mindmap anzeigen"
+        :graph/download-png "Mindmap als Bild herunterladen"
 
         ;; Pricing Page
         :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der

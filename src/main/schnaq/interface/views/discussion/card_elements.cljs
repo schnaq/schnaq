@@ -53,12 +53,15 @@
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:img.graph-icon-img.clickable-no-hover
-   {:src (img-path :icon-graph) :alt (labels :graph.button/text)
-    :title (labels :graph.button/text)
-    :on-click #(rf/dispatch
+  [:button.btn.btn-sm.btn-outline-primary
+   {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
-                  {:share-hash share-hash}])}])
+                  {:share-hash share-hash}])}
+   [:img
+    {:src (img-path :icon-graph) :alt (labels :graph.button/text)
+     :title (labels :graph.button/text)
+     :width "40rem"}]
+   [:div (labels :graph.button/text)]])
 
 (defn settings-element
   "Element containing settings buttons"
@@ -255,7 +258,7 @@
   (let [share-hash (:meeting/share-hash meeting)]
     [:div.row
      ;; graph
-     [:div.col-2.graph-icon
+     [:div.col-2
       [graph-button share-hash]]
      ;; title
      [:div.col-8
@@ -272,7 +275,7 @@
     [:<>
      [:div.d-flex
       ;; graph
-      [:div.graph-icon.mr-auto.mb-5
+      [:div.mr-auto.mb-5
        [graph-button share-hash]]
       ;; settings
       [:div.p-0
