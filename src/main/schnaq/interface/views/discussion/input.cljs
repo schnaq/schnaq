@@ -47,8 +47,8 @@
         :title (labels :discussion/create-argument-action)}
        [:i {:class (str "m-auto fas " (fa :plane))}]]]]))
 
-(defn- input-form
-  "A basic input form with optional radio buttons"
+(defn input-form
+  "Form to collect the user's statements."
   [textarea-name]
   (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
         when-starting (fn [e] (js-wrap/prevent-default e)
