@@ -65,28 +65,6 @@
   display: flex;
 }
 
-.graph-icon {
-  align-items: start;
-  display: flex;
-  min-width: 4rem;
-}
-
-.graph-icon-img {
-  border: $primary-light 1px solid;
-  border-radius: 1rem;
-  box-shadow: $regular-shadow;
-  max-height: 4rem;
-  padding: 0.5rem;
-
-  @include media-breakpoint-down(md) {
-    max-height: 4rem;
-  }
-
-  &:hover {
-    box-shadow: $hover-shadow;
-  }
-}
-
 .meeting-edit-title {
   background: transparent;
   border: 0;
