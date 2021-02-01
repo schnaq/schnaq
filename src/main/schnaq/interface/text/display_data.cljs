@@ -365,8 +365,11 @@
         :feature/secure "Your data is stored securely on EU servers"
 
         ;; tooltips
-        :tooltip/history-home "Back to start"
         :tooltip/history-statement "Back to statement made by "
+
+        ;; History
+        :history.home/text "Start"
+        :history.home/tooltip "Back to the discussion's beginning"
 
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
@@ -759,8 +762,11 @@
         :feature/secure "Deine Daten sind sicher auf deutschen Servern"
 
         ;; tooltips
-        :tooltip/history-home "Zurück zum Start"
         :tooltip/history-statement "Zurück zum Beitrag von "
+
+        ;; History
+        :history.home/text "Zum Anfang"
+        :history.home/tooltip "Zurück zum Diskussionsanfang"
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
