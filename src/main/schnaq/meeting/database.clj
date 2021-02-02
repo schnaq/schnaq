@@ -98,15 +98,9 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
-(def ^:private author-pattern
-  "Pull an author based on these attributes."
-  [:db/id
-   :author/nickname])
-
 (def ^:private user-pattern
   "Pull a user based on these attributes"
   [:db/id
-   {:user/core-author [:author/nickname]}
    :user/upvotes
    :user/downvotes
    :user/nickname])
@@ -121,7 +115,7 @@
    :meeting/header-image-url
    :meeting/description
    :meeting/share-hash
-   {:meeting/author author-pattern}
+   {:meeting/author user-pattern}
    {:agenda/_meeting [{:agenda/discussion [:discussion/states]}]}])
 
 (def statement-pattern

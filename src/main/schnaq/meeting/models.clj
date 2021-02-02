@@ -154,11 +154,6 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/value
     :db/doc "User is identified by the nickname, when using the site without an account."}
-   {:db/ident :user/core-author
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/identity
-    :db/doc "The author of a discussion that corresponds to this user."}
    {:db/ident :user/upvotes
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
@@ -167,6 +162,12 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "All downvotes the user gave."}
+   {:db/ident :user/core-author
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
+    :db/doc "DEPRECATED: Do not use this ref anymore. Formerly:
+    The author of a discussion that corresponds to this user."}
    ;; Author
    {:db/ident :author/nickname
     :db/valueType :db.type/string
