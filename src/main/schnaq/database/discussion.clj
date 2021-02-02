@@ -66,9 +66,9 @@
   [share-hash]
   (ffirst
     (query
-      '[:find ?discussions
+      '[:find ?discussion
         :in $ ?share-hash
-        :where [?discussion :discussion/share-hash share-hash]]
+        :where [?discussion :discussion/share-hash ?share-hash]]
       share-hash)))
 
 (>defn delete-statements!

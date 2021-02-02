@@ -86,7 +86,7 @@
           conclusion "Wow look at this"
           user-id (main-db/user-by-nickname "Test-person")
           meeting-hash "graph-hash"
-          discussion-id (:db/id (db/discussion-by-share-hash meeting-hash))
+          discussion-id  (db/discussion-by-share-hash meeting-hash)
           with-id (db/prepare-new-argument discussion-id user-id conclusion premises "temp-id-here")]
       (is (contains? with-id :argument/premises))
       (is (contains? with-id :argument/conclusion))

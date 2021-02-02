@@ -345,6 +345,8 @@
 (def ^:private graph-discussion
   [{:db/id "discussion/graph"
     :discussion/title "Wetter Graph"
+    :discussion/share-hash "graph-hash"
+    :discussion/edit-hash "secreeeet"
     :discussion/description "Der Graph muss korrekt sein"
     :discussion/states [:discussion.state/open]
     :discussion/starting-statements ["statement/warm" "statement/foo"]}
@@ -421,6 +423,8 @@
     :agenda/meeting "meeting/simple"}
    {:db/id "discussion/simple"
     :discussion/title "Simple Discussion"
+    :discussion/share-hash "simple-hash"
+    :discussion/edit-hash "simple-hash-secret"
     :discussion/description "A very simple discussion"
     :discussion/states [:discussion.state/open]
     :discussion/starting-statements ["statement/brainstorm"]}
