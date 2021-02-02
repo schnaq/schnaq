@@ -22,7 +22,8 @@
        [:input.form-check-input.big-checkbox {:type :checkbox
                                               :id :public-discussion?
                                               :defaultChecked true}]
-       [:label.form-check-label.display-6 {:for :public-discussion?} (labels :discussion.create.public-checkbox/label)]]
+       [:label.form-check-label.display-6.pl-1 {:for :public-discussion?}
+        (labels :discussion.create.public-checkbox/label)]]
       [:div.pt-3.text-center
        [:button.btn.button-primary (labels :brainstorm.create.button/save)]]]]]])
 
