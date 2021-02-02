@@ -426,7 +426,7 @@
 
         ;; Startpage
         :startpage/heading "Deine Online-Diskussionsplattform"
-        :startpage/subheading "Diskussionen, Online-Partizipationen, Entscheidungsfindung"
+        :startpage/subheading "Diskussionen, Online-Partizipationen, Entscheidungsfindungen"
 
         :startpage.call-to-action/discuss-spotlight-topics "Aktuelle schnaqs für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
