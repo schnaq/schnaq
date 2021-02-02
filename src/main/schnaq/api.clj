@@ -298,9 +298,9 @@
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement nickname]} body-params
-        author-id (db/author-id-by-nickname nickname)]
+        user-id (db/user-by-nickname nickname)]
     (if (validator/valid-discussion? share-hash)
-      (do (discussion-db/add-starting-statement! share-hash author-id statement)
+      (do (discussion-db/add-starting-statement! share-hash user-id statement)
           (log/info "Starting statement added for discussion" share-hash)
           (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
       (validator/deny-access invalid-rights-message))))
@@ -309,14 +309,14 @@
   "Adds a support or attack regarding a certain statement."
   [{:keys [body-params]}]
   (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
-        author-id (db/author-id-by-nickname nickname)]
+        user-id (db/user-by-nickname nickname)]
     (if (validator/valid-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (with-statement-meta
                 {:new-argument
                  (if (= :attack reaction)
-                   (discussion-db/attack-statement! share-hash author-id conclusion-id premise)
-                   (discussion-db/support-statement! share-hash author-id conclusion-id premise))}
+                   (discussion-db/attack-statement! share-hash user-id conclusion-id premise)
+                   (discussion-db/support-statement! share-hash user-id conclusion-id premise))}
                 share-hash)))
       (validator/deny-access invalid-rights-message))))
 

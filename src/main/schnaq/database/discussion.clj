@@ -83,11 +83,11 @@
 
 (>defn- pack-premises
   "Packs premises into a statement-structure."
-  [premises author-id]
+  [premises user-id]
   [(s/coll-of :statement/content) :db/id
    :ret (s/coll-of map?)]
   (mapv (fn [premise] {:db/id (str "premise-" premise)
-                       :statement/author author-id
+                       :statement/author user-id
                        :statement/content premise
                        :statement/version 1})
         premises))
@@ -113,19 +113,19 @@
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
-  ([author-id content]
-   (build-new-statement author-id content (str "conclusion-" content)))
-  ([author-id content temp-id]
+  ([user-id content]
+   (build-new-statement user-id content (str "conclusion-" content)))
+  ([user-id content temp-id]
    {:db/id temp-id
-    :statement/author author-id
+    :statement/author user-id
     :statement/content content
     :statement/version 1}))
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
-  [share-hash author-id statement-content]
+  [share-hash user-id statement-content]
   [:meeting/share-hash :db/id :statement/content :ret :db/id]
-  (let [new-statement (build-new-statement author-id statement-content "add/starting-argument")
+  (let [new-statement (build-new-statement user-id statement-content "add/starting-argument")
         temporary-id (:db/id new-statement)
         discussion-id (discussion-by-share-hash share-hash)]
     (get-in (transact [new-statement
@@ -226,13 +226,13 @@
 
 (>defn- new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
-  [share-hash author-id new-conclusion-id new-statement-string argument-type]
+  [share-hash user-id new-conclusion-id new-statement-string argument-type]
   [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
   (let [discussion-id (discussion-by-share-hash share-hash)
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
-          :argument/author author-id
-          :argument/premises (pack-premises [new-statement-string] author-id)
+          :argument/author user-id
+          :argument/premises (pack-premises [new-statement-string] user-id)
           :argument/conclusion new-conclusion-id
           :argument/version 1
           :argument/type argument-type
@@ -241,11 +241,11 @@
 
 (>defn- react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
-  [share-hash author-id statement-id reacting-string reaction]
+  [share-hash user-id statement-id reacting-string reaction]
   [:meeting/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
   (let [argument-id
         (get-in
-          (new-premises-for-statement! share-hash author-id statement-id reacting-string reaction)
+          (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction)
           [:tempids (str "argument-" reacting-string)])]
     (toolbelt/pull-key-up
       (d/pull (d/db (main-db/new-connection)) argument-pattern argument-id)
@@ -253,12 +253,12 @@
 
 (>defn support-statement!
   "Create a new statement supporting another statement. Returns the newly created argument."
-  [share-hash author-id statement-id supporting-string]
+  [share-hash user-id statement-id supporting-string]
   [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash author-id statement-id supporting-string :argument.type/support))
+  (react-to-statement! share-hash user-id statement-id supporting-string :argument.type/support))
 
 (>defn attack-statement!
   "Create a new statement attacking another statement. Returns the newly created argument."
-  [share-hash author-id statement-id attacking-string]
+  [share-hash user-id statement-id attacking-string]
   [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash author-id statement-id attacking-string :argument.type/attack))
+  (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
