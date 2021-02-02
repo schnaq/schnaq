@@ -46,10 +46,13 @@
 
 (defn video-left
   "Feature row where the video is located on the right side."
-  [video-key-webm vide-key-webm text-namespace & [looping?]]
-  (let [loop? (when looping? looping? true)]
+  [video-key-webm vide-key-webm text-namespace & [looping? video-class]]
+  (let [attributes {:auto-play true :muted true :plays-inline true}]
     (row-builder-text-right
-      [:video.w-100.feature-animations {:auto-play true :loop loop? :muted true :plays-inline true}
+      [:video.w-100.feature-animations
+       (cond-> attributes
+               looping? (assoc :loop looping?)
+               video-class (assoc :class video-class))
        [:source {:src (video video-key-webm) :type "video/webm"}]
        [:source {:src (video vide-key-webm) :type "video/mp4"}]]
       [build-text-box text-namespace])))

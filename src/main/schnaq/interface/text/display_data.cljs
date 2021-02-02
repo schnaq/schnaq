@@ -11,7 +11,7 @@
 
         ;; navbar labels
         :nav/startpage "Home"
-        :nav/schnaqs "Schnaqs"
+        :nav/schnaqs "schnaqs"
         :nav.schnaqs/show-all "All schnaqs"
         :nav.schnaqs/show-all-public "All public schnaqs"
         :nav.schnaqs/create-schnaq "Create schnaq"
@@ -33,7 +33,7 @@
 
         ;; Startpage
         :startpage/heading "Your personal discussion hub"
-        :startpage/subheading "The group chat is exploding with messages again? Discuss with schnaq in peace – on your own terms!"
+        :startpage/subheading "discuss, participate, decide"
 
         :startpage.usage/lead "What do I use schnaq for?"
 
@@ -218,7 +218,7 @@
 
         ;; analytics
         :analytics/heading "Analytics"
-        :analytics/overall-meetings "Schnaqs created"
+        :analytics/overall-meetings "schnaqs created"
         :analytics/user-numbers "Usernames created"
         :analytics/average-agendas-title "Average number of agendas / schnaq"
         :analytics/statements-num-title "# of statements"
@@ -355,6 +355,7 @@
         :feature/what "One step to start a discussion"
         :feature/share "Invite friends – they don't need accounts"
         :feature/participate "Find out what others think"
+        :feature/graph "Automatically generated mindmaps"
         :feature/private-public "Decide who gets to see your discussion"
         :feature/secure "Your data is stored securely on EU servers"
 
@@ -404,7 +405,7 @@
 
         ;; navbar labels
         :nav/startpage "Home"
-        :nav/schnaqs "Schnaqs"
+        :nav/schnaqs "schnaqs"
         :nav.schnaqs/show-all "Alle schnaqs"
         :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
         :nav.schnaqs/create-schnaq "schnaq anlegen"
@@ -424,8 +425,8 @@
         :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte, die gegen geltendes Recht verstoßen, werden von uns gelöscht."
 
         ;; Startpage
-        :startpage/heading "Deine Zentrale für Diskussionen"
-        :startpage/subheading "Schon wieder 50 Benachrichtigungen in der Gruppe? Diskutiere mit schnaq in Ruhe – wann du willst!"
+        :startpage/heading "Deine Online-Diskussionsplattform"
+        :startpage/subheading "Diskussionen, Online-Partizipationen, Entscheidungsfindungen"
 
         :startpage.call-to-action/discuss-spotlight-topics "Aktuelle schnaqs für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
@@ -747,6 +748,7 @@
         :feature/what "Mit einem Schritt zur Diskussion"
         :feature/share "Lade deine Freunde ein – keine Accounts notwendig"
         :feature/participate "Finde heraus, was andere denken"
+        :feature/graph "Automatisch generierte Mindmaps"
         :feature/private-public "Entscheide, wer deine Diskussion sehen darf"
         :feature/secure "Deine Daten sind sicher auf deutschen Servern"
 
@@ -801,9 +803,7 @@
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-    {:animation-discussion "/animations/animation_discussion.webm"
-     :animation-discussion-mp4 "/animations/animation_discussion.mp4"
-     :feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
+    {:feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
      :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
      :how-to/taskbar "/imgs/howto/taskbar.svg"
      :icon-add "/imgs/buttons/add-button.svg"
@@ -842,7 +842,9 @@
   "Returns an video path"
   [identifier]
   (identifier
-    {:start-page.features.sample-discussion/webm "/animations/sample_discussion.webm"
+    {:animation-discussion/webm "/animations/animation_discussion.webm"
+     :animation-discussion/mp4 "/animations/animation_discussion.mp4"
+     :start-page.features.sample-discussion/webm "/animations/sample_discussion.webm"
      :start-page.features.sample-discussion/mp4 "/animations/sample_discussion.mp4"
      :start-page.work-together/webm "/animations/WorkTogether.webm"
      :start-page.work-together/mp4 "/animations/WorkTogether.mp4"}))
@@ -888,6 +890,7 @@
      :plus "fa-plus"
      :share "fa-share-alt"
      :shield "fa-shield-alt"
+     :site-map "fa-sitemap"
      :star "fa-star"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
