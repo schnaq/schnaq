@@ -1,9 +1,8 @@
 (ns schnaq.config
-  (:require [buddy.core.keys :as keys]
-            [schnaq.toolbelt :as toolbelt]))
+  "General configuration of the schnaq API. Find more configuration settings in
+  the schnaq.config.* namespaces."
+  (:require [schnaq.toolbelt :as toolbelt]))
 
-;; Dev config. Need a proper way to handle switch when in production.
-;; ##################################################################
 (def datomic
   "When we are production ready, put here the original production config and use
   dev-locals `divert-system` to use dev-local instead of a datomic cluster."
@@ -41,13 +40,3 @@
                      :endpoint "https://s3.disqtec.com"
                      :client-config
                      {:path-style-access-enabled true}})
-
-;; -----------------------------------------------------------------------------
-;; Keycloak
-
-(def keycloak-public-key
-  "Public RSA key of keycloak client. Default is public key of the
-  development-instance."
-  (keys/str->public-key
-    (or (System/getenv "KEYCLOAK_PUBLIC_KEY")
-        "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtsaglvgpZHk0TJIXMuCIcm6xfvC9MgXCDaK8aCigBWd+qBOLPJsULHlbmlT74f6mchBPjIxxedqGt/MjUI0leJm/1W0l+BBEfpp2FC9VQE40cRL+M4qE7rdj3JEogr+x7tz912hvPmvw90Vo3H57OMklv3R8QFzFirBlRO8TcsXJgaYFBPCezpLhEMwKKy1LkxvzkrF0STbRysXk+yzIPRYsBYhdegYMyL3D36CwFUolysyuepHC+DcNsp8wrSk9DrH4RSIfUsk2Kn7IEfcY+d65DNOzzQ0M4mAvHxrieSk52KT4HD70NwVqkZxsGbvDFQ4dHPdqXiO+hb3Zux3EZwIDAQAB\n-----END PUBLIC KEY-----")))
