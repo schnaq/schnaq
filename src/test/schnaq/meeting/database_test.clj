@@ -47,13 +47,11 @@
 (deftest valid-statement-id-and-meeting?-test
   (testing "Test the function that checks whether a statement belongs to a certain meeting."
     (let [share-hash "Wegi-ist-der-schönste"
-          meeting (db/add-meeting {:meeting/title "test-meet"
-                                   :meeting/description "whatever"
-                                   :meeting/start-date (db/now)
-                                   :meeting/end-date (db/now)
-                                   :meeting/share-hash share-hash
-                                   :meeting/author (db/add-user-if-not-exists "Wegi")})
-          _ (db/add-agenda-point "Hi" "Beschreibung" meeting share-hash)
+          _ (discussion-db/new-discussion {:discussion/title "test-meet"
+                                           :discussion/share-hash share-hash
+                                           :discussion/edit-hash (str "secret-" share-hash)
+                                           :discussion/author (db/add-user-if-not-exists "Wegi")}
+                                          true)
           christian-id (db/user-by-nickname "Christian")
           first-id (discussion-db/add-starting-statement! share-hash christian-id "this is sparta")
           second-id (discussion-db/add-starting-statement! share-hash christian-id "this is kreta")]
@@ -81,14 +79,6 @@
       (is (number? (db/add-meeting minimal-meeting)))
       (is (number? (db/add-meeting (assoc minimal-meeting :meeting/description "some description"))))
       (is (nil? (db/add-meeting (assoc minimal-meeting :meeting/description 123)))))))
-
-(deftest add-agenda-point-test
-  (testing "Check whether agendas are added correctly"
-    (let [some-meeting (any-meeting-id)]
-      (is (number? (db/add-agenda-point "Alles gut" "hier" some-meeting any-meeting-share-hash)))
-      (is (nil? (db/add-agenda-point 123 nil some-meeting any-meeting-share-hash)))
-      (is (nil? (db/add-agenda-point "Meeting-kaputt" nil "was ist das?" any-meeting-share-hash)))
-      (is (number? (db/add-agenda-point "Kaputte description wird ignoriert" 123 some-meeting any-meeting-share-hash))))))
 
 (deftest add-user-test
   (testing "Check for correct user-addition"

@@ -251,54 +251,6 @@
   [hash]
   (meeting-by-hash-generic hash meeting-pattern))
 
-;; ----------------------------------------------------------------------------
-;; agenda
-;; ----------------------------------------------------------------------------
-
-(>defn add-agenda-point
-  "Add an agenda to the database.
-  A discussion is automatically created for the agenda-point.
-  Returns the discussion-id of the newly created discussion."
-  ([title description meeting-id share-hash]
-   [:agenda/title (? string?) int? :meeting/share-hash :ret int?]
-   (add-agenda-point title description meeting-id 1 false share-hash "will-be-deleted-soon" 1))
-  ([title description meeting-id rank public? share-hash edit-hash author-id]
-   [:agenda/title (? string?) int? :agenda/rank boolean? :meeting/share-hash :meeting/edit-hash :db/id
-    :ret int?]
-   (when (and (s/valid? :agenda/title title)
-              (s/valid? int? meeting-id))
-     (let [default-state [:discussion.state/open]
-           discussion-state (if public? (conj default-state :discussion.state/public) default-state)
-           raw-agenda {:db/id "temp-id"
-                       :agenda/title title
-                       :agenda/meeting meeting-id
-                       :agenda/rank rank
-                       :agenda/discussion
-                       {:db/id "whatever-forget-it"
-                        :discussion/title title
-                        :discussion/states discussion-state
-                        :discussion/starting-statements []
-                        :discussion/share-hash share-hash
-                        :discussion/edit-hash edit-hash
-                        :discussion/author author-id}}
-           agenda (if (and description (s/valid? :agenda/description description))
-                    (merge-with merge
-                                raw-agenda
-                                {:agenda/description description
-                                 :agenda/discussion {:discussion/description description}})
-                    raw-agenda)]
-       (get-in
-         (transact [agenda])
-         [:tempids "temp-id"])))))
-
-(def ^:private agenda-pattern
-  [:db/id
-   :agenda/title
-   :agenda/description
-   :agenda/meeting
-   :agenda/rank
-   :agenda/discussion])
-
 (>defn all-statements
   "Returns all statements belonging to a discussion"
   [share-hash]
@@ -327,16 +279,6 @@
             [?agenda :agenda/discussion ?discussion]
             [?discussion :discussion/starting-statements ?statements]]
           (d/db (new-connection)) share-hash statement-pattern)))))
-
-(defn agenda-by-discussion-id
-  "Returns an agenda which has the corresponding `discussion-id`."
-  [discussion-id]
-  (ffirst
-    (d/q
-      '[:find (pull ?agenda agenda-pattern)
-        :in $ ?discussion-id agenda-pattern
-        :where [?agenda :agenda/discussion ?discussion-id]]
-      (d/db (new-connection)) discussion-id agenda-pattern)))
 
 ;; ----------------------------------------------------------------------------
 ;; user
@@ -499,23 +441,19 @@
   (or
     (ffirst
       (d/q
-        '[:find ?meeting
+        '[:find ?discussion
           :in $ ?statement ?hash
           :where (or [?argument :argument/premises ?statement]
                      [?argument :argument/conclusion ?statement])
           [?argument :argument/discussions ?discussion]
-          [?agenda :agenda/discussion ?discussion]
-          [?agenda :agenda/meeting ?meeting]
-          [?meeting :meeting/share-hash ?hash]]
+          [?discussion :discussion/share-hash ?hash]]
         (d/db (new-connection)) statement-id meeting-hash))
     (ffirst
       (d/q
-        '[:find ?meeting
+        '[:find ?discussion
           :in $ ?statement ?hash
           :where [?discussion :discussion/starting-statements ?statement]
-          [?agenda :agenda/discussion ?discussion]
-          [?agenda :agenda/meeting ?meeting]
-          [?meeting :meeting/share-hash ?hash]]
+          [?discussion :discussion/share-hash ?hash]]
         (d/db (new-connection)) statement-id meeting-hash))))
 
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################

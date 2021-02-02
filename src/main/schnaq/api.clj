@@ -108,7 +108,6 @@
   `{:params {:share-hashes [\"bb328b5e-297d-4725-8c11-f1ed7db39109\"
                             \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
   [req]
-  (println "in meetings-by-hashes")
   (if-let [hashes (get-in req [:params :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)
           filtered-hashes (filter validator/valid-discussion? hashes-list)

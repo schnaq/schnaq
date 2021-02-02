@@ -9,24 +9,21 @@
 
 (deftest delete-discussion-test
   (let [sample-discussion "simple-hash"
-        discussion-count (count (main-db/public-meetings))
+        discussion-count (count (db/public-discussions))
         new-discussion-hash "ajskdhajksdh"
         author (main-db/add-user-if-not-exists "Wegi")
-        new-public-meeting {:meeting/title "Bla"
-                            :meeting/start-date (main-db/now)
-                            :meeting/end-date (main-db/now)
-                            :meeting/share-hash new-discussion-hash
-                            :meeting/author author}]
+        new-public-discussion {:discussion/title "Bla"
+                               :discussion/share-hash new-discussion-hash
+                               :discussion/edit-hash "secret-whatever"
+                               :discussion/author author}]
     (testing "When deleting wrong discussion, throw error."
       (is (nil? (db/delete-discussion "nonsense-8u89jh89z79h88##")))
       (is (string? (db/delete-discussion sample-discussion))))
     (testing "Deleting a public discussion, should decrease the count."
-      (let [new-meeting-id (main-db/add-meeting new-public-meeting)]
-        (main-db/add-agenda-point "Some-title" "Some-description" new-meeting-id
-                                  0 true sample-discussion "edit-hash" author))
-      (is (= (inc discussion-count) (count (main-db/public-meetings))))
+      (db/new-discussion new-public-discussion true)
+      (is (= (inc discussion-count) (count (db/public-discussions))))
       (db/delete-discussion new-discussion-hash)
-      (is (= discussion-count (count (main-db/public-meetings)))))))
+      (is (= discussion-count (count (db/public-discussions)))))))
 
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
