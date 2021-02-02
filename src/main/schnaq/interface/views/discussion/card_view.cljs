@@ -5,6 +5,7 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.discussion.card-elements :as elements]
+            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar.user-management :as um]))
 
@@ -48,30 +49,19 @@
        [:div.row.px-3
         [elements/history-view history]]]]]))
 
-(rf/reg-sub
-  :discussion.conclusions/starting
-  (fn [db _]
-    (get-in db [:discussion :conclusions :starting] [])))
-
 (defn- discussion-start-view
   "The first step after starting a discussion."
   [{:meeting/keys [title] :as current-meeting}]
   (let [current-starting @(rf/subscribe [:discussion.conclusions/starting])
-        input-desktop [elements/input-starting-statement-form-desktop "input-statement-id-desktop"]
-        input-mobile [elements/input-starting-statement-form-mobile "input-statement-id-mobile"]]
+        input-form [input/input-form "statement-text"]]
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop
-       current-meeting title input-desktop
+       current-meeting title input-form
        nil current-starting nil]
       [elements/discussion-view-mobile
-       current-meeting title input-mobile
+       current-meeting title input-form
        nil current-starting]]]))
-
-(rf/reg-sub
-  :discussion.premises/current
-  (fn [db _]
-    (get-in db [:discussion :premises :current] [])))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
@@ -82,23 +72,34 @@
         title (:statement/content current-conclusion)
         info-content [elements/info-content-conclusion
                       current-conclusion (:meeting/edit-hash current-meeting)]
-        input-desktop [elements/input-conclusion-form-desktop "input-statement-id-desktop"]
-        input-mobile [elements/input-conclusion-form-mobile "input-statement-id-mobile"]]
+        input-form [input/input-form "premise-text"]]
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop
-       current-meeting title input-desktop
+       current-meeting title input-form
        info-content current-premises history]
       [elements/discussion-view-mobile
-       current-meeting title input-mobile
+       current-meeting title input-form
        info-content current-premises]]]))
+
+(rf/reg-sub
+  :discussion.premises/current
+  (fn [db _]
+    (get-in db [:discussion :premises :current] [])))
+
+(rf/reg-sub
+  :discussion.conclusions/starting
+  (fn [db _]
+    (get-in db [:discussion :conclusions :starting] [])))
+
+;; -----------------------------------------------------------------------------
 
 (defn- derive-view []
   (let [current-meeting @(rf/subscribe [:meeting/selected])
-        history @(rf/subscribe [:discussion-history])]
+        current-route-name @(rf/subscribe [:navigation/current-route-name])]
     [:<>
      [card-meeting-header current-meeting]
-     (if (zero? (count history))
+     (if (= :routes.schnaq/start current-route-name)
        [discussion-start-view current-meeting]
        [selected-conclusion-view current-meeting])]))
 

@@ -25,6 +25,11 @@
   (fn [db]
     (:current-route db)))
 
+(rf/reg-sub
+  :navigation/current-route-name
+  (fn [db]
+    (get-in db [:current-route :data :name])))
+
 (rf/reg-event-fx
   :navigation/navigate
   (fn [_cofx [_ & route]]

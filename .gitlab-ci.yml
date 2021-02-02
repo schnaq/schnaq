@@ -69,7 +69,7 @@ coverage-report:
   image: python:3-alpine
   stage: report
   script:
-    - wget -O - https://s3.cs.hhu.de/dialogo-ci/lcov_cobertura.py | python3 - target/coverage/lcov.info --output target/coverage/coverage.xml
+    - wget -O - https://s3.disqtec.com/schnaq-ci/lcov_cobertura.py | python3 - target/coverage/lcov.info --output target/coverage/coverage.xml
   artifacts:
     reports:
       cobertura: target/coverage/coverage.xml

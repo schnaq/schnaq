@@ -76,8 +76,8 @@
         new-text (oget new-text-element [:value])
         choice (oget form [:premise-choice :value])]
     (case choice
-      "against-radio" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
-      "for-radio" (rf/dispatch [:discussion.reaction.statement/send :support new-text]))
+      "attack" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
+      "support" (rf/dispatch [:discussion.reaction.statement/send :support new-text]))
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (rf/reg-event-fx

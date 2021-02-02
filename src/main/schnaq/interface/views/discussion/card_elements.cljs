@@ -1,19 +1,15 @@
 (ns schnaq.interface.views.discussion.card-elements
   (:require [ajax.core :as ajax]
-            [goog.dom :as gdom]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.brainstorm.tools :as btools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.user :as user]))
 
 (defn- home-button
@@ -63,121 +59,6 @@
      :title (labels :graph.button/text)
      :width "40rem"}]
    [:div (labels :graph.button/text)]])
-
-(defn settings-element
-  "Element containing settings buttons"
-  [{:meeting/keys [share-hash title] :as meeting} edit-hash]
-  [:div.float-right
-   (when (and edit-hash (btools/is-brainstorm? meeting))
-     [admin-buttons/admin-center share-hash edit-hash])
-   [admin-buttons/txt-export share-hash title]])
-
-(defn radio-button
-  "Radio Button helper function. This function creates a radio button."
-  [id radio-name value label hint color-class checked?]
-  [:<>
-   [:input {:id id :type "radio" :name radio-name :value value :default-checked checked?}]
-   [:label.mx-1.my-1 {:class color-class :for id}
-    [tooltip/nested-div "bottom" hint label]]])
-
-(defn radio-buttons [textarea-id]
-  [:div.radio-toolbar
-   [:div.d-flex.flex-row.px-3
-    ;; support
-    [radio-button
-     (str textarea-id "for-radio") "premise-choice" "for-radio"
-     [:i {:class (str "m-auto fas " (fa :plus))}]
-     (labels :discussion/add-premise-supporting) "hover-primary" true]
-    (when-not toolbelt/production?
-      ;; neutral
-      [radio-button
-       (str textarea-id "neutral-radio") "premise-choice" "for-radio"
-       [:i {:class (str "m-auto fas " (fa :comment))}]
-       (labels :discussion/add-premise-supporting) "hover-white" false])
-    ;; attack
-    [radio-button
-     (str textarea-id "against-radio") "premise-choice" "against-radio"
-     [:i {:class (str "m-auto fas " (fa :minus))}]
-     (labels :discussion/add-premise-against) "hover-secondary" false]]])
-
-(defn- textarea-form [textarea-id textarea-name]
-  [:textarea.form-control.discussion-text-input-area.w-100
-   {:id textarea-id
-    :name textarea-name :wrap "soft" :rows 1
-    :auto-complete "off"
-    :onInput (fn [_event]
-               ;; first reset input then set height +1px in order to prevent scrolling
-               (let [input (gdom/getElement textarea-id)]
-                 (toolbelt/height-to-scrollheight! input)))
-    :required true
-    :data-dynamic-height true
-    :placeholder (labels :discussion/add-argument-conclusion-placeholder)}])
-
-(defn- input-form-mobile
-  "A basic input form with optional radio buttons"
-  [textarea-id textarea-name submit-fn radio-buttons]
-  [:form.my-2
-   {:on-submit submit-fn}
-   [:div.discussion-input-container.w-100
-    ;; text input
-    [textarea-form textarea-id textarea-name]
-    ;; statement-type and submit button row
-    [:div.d-flex.flex-row.float-right
-     ;; reaction type
-     radio-buttons
-     ;; submit icon button
-     [:button.primary-icon-button
-      {:type "submit"
-       :title (labels :discussion/create-argument-action)}
-      [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
-
-(defn input-conclusion-form-mobile
-  "A form, which allows the input of a conclusions"
-  [textarea-id]
-  (let [submit-fn (fn [e]
-                    (js-wrap/prevent-default e)
-                    (logic/submit-new-premise (oget e [:target :elements])))]
-    [input-form-mobile textarea-id "premise-text" submit-fn [radio-buttons textarea-id]]))
-
-(defn input-starting-statement-form-mobile
-  "A form, which allows the input of a starting-statement."
-  [textarea-id]
-  (let [submit-fn (fn [e] (js-wrap/prevent-default e)
-                    (rf/dispatch [:discussion.add.statement/starting
-                                  (oget e [:target :elements])]))]
-    [input-form-mobile textarea-id "statement-text" submit-fn nil]))
-
-(defn- input-form-desktop
-  "A basic input form with optional radio buttons"
-  [textarea-id textarea-name submit-fn radio-buttons]
-  [:form.my-2
-   {:on-submit submit-fn}
-   [:div.discussion-input-container.w-100
-    [:div.d-flex.flex-row
-     [textarea-form textarea-id textarea-name]
-     ;; reaction type
-     radio-buttons
-     ;; submit icon button
-     [:button.primary-icon-button
-      {:type "submit"
-       :title (labels :discussion/create-argument-action)}
-      [:i {:class (str "m-auto fas " (fa :plane))}]]]]])
-
-(defn input-conclusion-form-desktop
-  "A form, which allows the input of a conclusions"
-  [textarea-id]
-  (let [submit-fn (fn [e]
-                    (js-wrap/prevent-default e)
-                    (logic/submit-new-premise (oget e [:target :elements])))]
-    [input-form-desktop textarea-id "premise-text" submit-fn [radio-buttons textarea-id]]))
-
-(defn input-starting-statement-form-desktop
-  "A form, which allows the input of a starting-statement."
-  [textarea-id]
-  (let [submit-fn (fn [e] (js-wrap/prevent-default e)
-                    (rf/dispatch [:discussion.add.statement/starting
-                                  (oget e [:target :elements])]))]
-    [input-form-desktop textarea-id "statement-text" submit-fn nil]))
 
 (rf/reg-event-fx
   :discussion.add.statement/starting
@@ -253,7 +134,6 @@
    [:div.line-divider.my-4]
    input])
 
-;; here
 (defn- topic-bubble-desktop
   [meeting title input info-content]
   (let [share-hash (:meeting/share-hash meeting)]
