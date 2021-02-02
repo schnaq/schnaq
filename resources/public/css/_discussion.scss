@@ -1,3 +1,4 @@
+@import 'rounded';
 @import 'variables';
 
 .statement-outer {
@@ -64,8 +65,8 @@
 }
 
 .discussion-view-rounded {
+  @include rounded-4;
   background: $white;
-  border-radius: 2rem;
   overflow: hidden;
   padding: 0;
 

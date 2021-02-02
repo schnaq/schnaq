@@ -10,7 +10,7 @@
   "Get a user's avatar."
   [display-name size]
   [string? number? :ret vector?]
-  [:div.avatar-image.m-auto.schnaq-rounded.p-0
+  [:div.avatar-image.m-auto.p-0
    {:title display-name
     :dangerouslySetInnerHTML {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}])
 
