@@ -122,3 +122,16 @@
                                3 cat-dog-hash
                                1 simple-hash
                                2 graph-hash))))
+
+(deftest new-discussion-test
+  (let [minimal-discussion {:discussion/title "Whatevs"
+                            :discussion/share-hash "oooooh"
+                            :discussion/edit-hash "secret-never-guessed"}]
+    (testing "Whether a correct id is returned when valid discussions are transacted."
+      (is (number? (db/new-discussion minimal-discussion true)))
+      (is (number? (db/new-discussion (assoc minimal-discussion
+                                        :discussion/description nil
+                                        :discussion/header-image-url "")
+                                      false))))
+    (testing "Transacting something non-essential should return nil"
+      (is (nil? (db/new-discussion (dissoc minimal-discussion :discussion/title) false))))))

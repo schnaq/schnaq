@@ -51,23 +51,36 @@
   (assoc meeting :meeting/share-hash share-hash
                  :meeting/edit-hash edit-hash))
 
+(defn- create-discussion-data-with-hashes
+  "Creates a valid discussion object and adds hashes"
+  [title share-hash edit-hash]
+  {:discussion/title title
+   :discussion/share-hash share-hash
+   :discussion/edit-hash edit-hash})
+
 (defn- add-meeting
   "Adds a meeting and (optional) agendas to the database.
   Returns the newly-created meeting."
   [request]
-  (let [{:keys [meeting nickname agendas public-discussion?]} (:body-params request)
+  (let [{:keys [meeting nickname public-discussion?]} (:body-params request)
         share-hash (.toString (UUID/randomUUID))
         edit-hash (.toString (UUID/randomUUID))
         final-meeting (add-hashes-to-meeting meeting share-hash edit-hash)
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
-        created-meeting (db/meeting-private-data meeting-id)]
-    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %)
-                                public-discussion? share-hash edit-hash author-id)
-          agendas)
-    (log/info (:db/ident (:meeting/type created-meeting)) " Meeting Created: " meeting-id " - "
-              (:meeting/title created-meeting) " – Public? " public-discussion?)
-    (created "" {:new-meeting created-meeting})))
+        discussion-data (create-discussion-data-with-hashes
+                          (:meeting/title meeting) share-hash edit-hash)
+        new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
+    (if new-discussion-id
+      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)
+            created-meeting (db/meeting-private-data meeting-id)]
+        (log/info "Discussion created: " new-discussion-id " - "
+                  (:discussion/title created-discussion) " – Public? " public-discussion?)
+        (created "" {:new-discussion created-discussion
+                     :new-meeting created-meeting}))
+      (do
+        (log/info "Did not create discussion from following data:\n" discussion-data)
+        (bad-request "The input you provided could not be used to create a discussion.")))))
 
 (defn- add-author
   "Adds an author to the database."

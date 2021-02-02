@@ -147,7 +147,7 @@
   [id]
   (d/pull (d/db (new-connection)) '[*] id))
 
-(>defn- clean-and-add-to-db!
+(>defn clean-and-add-to-db!
   "Removes empty strings and nil values from map before transacting it to the
   database. Checks if the specification still matches. If true, transact the
   entity."

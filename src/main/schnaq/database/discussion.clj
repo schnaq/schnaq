@@ -259,3 +259,21 @@
   [share-hash user-id statement-id attacking-string]
   [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
+
+(>defn new-discussion
+  "Adds a new discussion to the database."
+  [discussion-data public?]
+  [map? boolean? :ret :db/id]
+  (let [default-states [:discussion.state/open]
+        states (cond-> default-states
+                       public? (conj :discussion.state/public))]
+    (main-db/clean-and-add-to-db! (assoc discussion-data :discussion/states states)
+                                  ::specs/discussion)))
+
+(>defn private-discussion-data
+  "Return non public meeting data by id."
+  [id]
+  [int? :ret ::specs/discussion]
+  (toolbelt/pull-key-up
+    (d/pull (d/db (new-connection)) discussion-pattern-private id)
+    :db/ident))
