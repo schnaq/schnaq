@@ -24,7 +24,7 @@
   (let [argument-type @(rf/subscribe [:form/argument-type])
         switch-key (gstring/format "control-input-%s" (str (random-uuid)))
         [outline next-type button-label tooltip switch-state] (button-styling argument-type)]
-    [:button.btn
+    [:button.btn.border-radius-important
      {:type "button" :class outline :title (labels tooltip)
       :on-click #(rf/dispatch [:form/argument-type! next-type])}
      [:div.custom-control.custom-switch
@@ -36,7 +36,10 @@
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
   [textarea-name]
-  (let [current-route-name @(rf/subscribe [:navigation/current-route-name])]
+  (let [argument-type @(rf/subscribe [:form/argument-type])
+        current-route-name @(rf/subscribe [:navigation/current-route-name])
+        current-color (if (= :argument.type/support argument-type)
+                        "text-primary" "text-secondary")]
     [:div.input-group
      (when-not (= :routes.schnaq/start current-route-name)
        [:div.input-group-prepend
@@ -50,8 +53,8 @@
        :data-dynamic-height true
        :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
      [:div.input-group-append
-      [:button.btn.text-primary
-       {:type "submit"
+      [:button.btn
+       {:type "submit" :class current-color
         :title (labels :discussion/create-argument-action)}
        [:i {:class (str "m-auto fas " (fa :plane))}]]]]))
 
