@@ -168,13 +168,6 @@
     :db/unique :db.unique/identity
     :db/doc "DEPRECATED: Do not use this ref anymore. Formerly:
     The author of a discussion that corresponds to this user."}
-   ;; Author
-   {:db/ident :author/nickname
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/value
-    :db/doc "DEPRECATED: The nickname of an author. Author will not be used in the future.
-    Use :user/nickname instead."}
 
    ;; Feedback
    {:db/ident :feedback/contact-name
@@ -290,3 +283,13 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The statements at the source of the discussion-graph"}])
+
+
+;; Big and lonely deprecation valley. Everything down here is old school:
+;; Author
+{:db/ident :author/nickname
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/unique :db.unique/value
+ :db/doc "DEPRECATED: The nickname of an author. Author will not be used in the future.
+    Use :user/nickname instead."}

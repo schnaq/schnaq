@@ -26,7 +26,7 @@
           processed-structure (processors/with-sub-discussion-information {:statement/content "foo"
                                                                            :db/id root-id} arguments)
           infos (:meta/sub-discussion-info processed-structure)
-          author-names (into #{} (map :author/nickname (:authors infos)))]
+          author-names (into #{} (map :user/nickname (:authors infos)))]
       (is (= 3 (:sub-statements infos)))
       (is (contains? author-names "Der miese Peter"))
       (is (contains? author-names "Wegi"))

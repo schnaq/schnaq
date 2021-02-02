@@ -350,13 +350,10 @@
   "Add a new user / author to the database."
   [nickname]
   [string? :ret int?]
-  (when (s/valid? :author/nickname nickname)
+  (when (s/valid? :user/nickname nickname)
     (get-in
       (transact [{:db/id "temp-user"
-                  :user/nickname nickname
-                  :user/core-author
-                  {:db/id (format "id-%s" nickname)
-                   :author/nickname nickname}}])
+                  :user/nickname nickname}])
       [:tempids "temp-user"])))
 
 (>defn user-by-nickname
@@ -386,7 +383,7 @@
   [:meeting/share-hash :ret sequential?]
   (map
     (fn [statement]
-      {:author (-> statement :statement/author :author/nickname)
+      {:author (-> statement :statement/author :user/nickname)
        :id (:db/id statement)
        :label (if (:statement/deleted? statement)
                 config/deleted-statement-text
@@ -394,23 +391,13 @@
     (all-statements share-hash)))
 
 (>defn add-user-if-not-exists
-  "Adds an author and user if they do not exist yet. Returns the (new) user-id."
+  "Adds a user if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  [:author/nickname :ret int?]
+  [:user/nickname :ret int?]
   (if-let [user-id (user-by-nickname nickname)]
     user-id
     (do (log/info "Added a new user: " nickname)
         (add-user nickname))))
-
-(>defn all-author-names
-  "Returns the names of all authors."
-  []
-  [:ret (s/coll-of :author/nickname)]
-  (map first
-       (d/q
-         '[:find ?names
-           :where [_ :author/nickname ?names]]
-         (d/db (new-connection)))))
 
 ;; ----------------------------------------------------------------------------
 ;; voting
@@ -489,8 +476,7 @@
     (d/q
       '[:find ?user
         :in $ ?statement ?nickname ?field-name
-        :where [?author :author/nickname ?nickname]
-        [?user :user/core-author ?author]
+        :where [?user :user/nickname ?nickname]
         [?user ?field-name ?statement]]
       (d/db (new-connection)) statement-id user-nickname field-name)))
 
@@ -590,8 +576,8 @@
 
 (defn number-of-usernames
   "Returns the number of different usernames in the database."
-  ([] (number-of-entities-since :author/nickname))
-  ([since] (number-of-entities-since :author/nickname since)))
+  ([] (number-of-entities-since :user/nickname))
+  ([since] (number-of-entities-since :user/nickname since)))
 
 (defn number-of-statements
   "Returns the number of different usernames in the database."

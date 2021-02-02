@@ -80,8 +80,6 @@
 (s/def ::agenda (s/keys :req [:agenda/title :agenda/meeting :agenda/discussion]
                         :opt [:agenda/description :agenda/rank]))
 
-(s/def :author/nickname ::non-blank-string)
-
 ;; Feedback
 (s/def :feedback/contact-name string?)
 (s/def :feedback/contact-mail string?)
