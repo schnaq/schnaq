@@ -7,11 +7,11 @@
 
 (>defn- build-author-list
   "Build a nicely formatted string of a html list containing the authors from a sequence."
-  [authors]
+  [users]
   [sequential? :ret string?]
   (str
     "<ul class=\"authors-list\">"
-    (apply str (map #(str "<li>" (:author/nickname %) "</li>") authors))
+    (apply str (map #(str "<li>" (:user/nickname %) "</li>") users))
     "</ul>"))
 
 (defn- delete-clicker

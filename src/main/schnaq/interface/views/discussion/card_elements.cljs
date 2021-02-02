@@ -34,7 +34,7 @@
      [home-button (count indexed-history)]
      ;; history
      (for [[index statement] indexed-history]
-       (let [nickname (-> statement :statement/author :author/nickname)]
+       (let [nickname (-> statement :statement/author :user/nickname)]
          [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
           {:key (str "history-" (:db/id statement))}
           (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
@@ -203,4 +203,4 @@
    [cards/up-down-vote-breaking statement]
    [badges/extra-discussion-info-badges statement edit-hash]
    [:div.pt-3
-    [user/user-info (-> statement :statement/author :author/nickname) 32]]])
+    [user/user-info (-> statement :statement/author :user/nickname) 32]]])

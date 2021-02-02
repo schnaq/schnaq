@@ -98,15 +98,9 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
-(def ^:private author-pattern
-  "Pull an author based on these attributes."
-  [:db/id
-   :author/nickname])
-
 (def ^:private user-pattern
   "Pull a user based on these attributes"
   [:db/id
-   {:user/core-author [:author/nickname]}
    :user/upvotes
    :user/downvotes
    :user/nickname])
@@ -121,7 +115,7 @@
    :meeting/header-image-url
    :meeting/description
    :meeting/share-hash
-   {:meeting/author author-pattern}
+   {:meeting/author user-pattern}
    {:agenda/_meeting [{:agenda/discussion [:discussion/states]}]}])
 
 (def statement-pattern
@@ -130,7 +124,7 @@
    :statement/content
    :statement/version
    :statement/deleted?
-   {:statement/author [:author/nickname]}])
+   {:statement/author [:user/nickname]}])
 
 (def ^:private meeting-pattern
   "Has all meeting information, including sensitive ones."
@@ -352,50 +346,36 @@
   [int? :ret map?]
   (d/pull (d/db (new-connection)) user-pattern id))
 
-(>defn author-id-by-nickname
-  "Returns an author-id by nickname. The nickname is not case sensitive"
-  [nickname]
-  [string? :ret (? number?)]
-  (ffirst
-    (d/q
-      '[:find ?author
-        :in $ ?author-name
-        :where [?author :author/nickname ?original-nickname]
-        [(.toLowerCase ^String ?original-nickname) ?lower-name]
-        [(= ?lower-name ?author-name)]]
-      (d/db (new-connection)) (.toLowerCase ^String nickname))))
-
 (>defn add-user
   "Add a new user / author to the database."
   [nickname]
   [string? :ret int?]
-  (when (s/valid? :author/nickname nickname)
+  (when (s/valid? :user/nickname nickname)
     (get-in
       (transact [{:db/id "temp-user"
-                  :user/nickname nickname
-                  :user/core-author
-                  {:db/id (format "id-%s" nickname)
-                   :author/nickname nickname}}])
+                  :user/nickname nickname}])
       [:tempids "temp-user"])))
 
 (>defn user-by-nickname
-  "Return the **schnaq** user-id by nickname. The nickname is not case sensitive."
+  "Return the **schnaq** user-id by nickname. The nickname is not case sensitive.
+  If there is no user with said nickname returns nil."
   [nickname]
   [string? :ret (? number?)]
-  (when-let [dialog-author (author-id-by-nickname nickname)]
-    (ffirst
-      (d/q
-        '[:find ?user
-          :in $ ?author
-          :where [?user :user/core-author ?author]]
-        (d/db (new-connection)) dialog-author))))
+  (ffirst
+    (d/q
+      '[:find ?user
+        :in $ ?user-name
+        :where [?user :user/nickname ?original-nickname]
+        [(.toLowerCase ^String ?original-nickname) ?lower-name]
+        [(= ?lower-name ?user-name)]]
+      (d/db (new-connection)) (.toLowerCase ^String nickname))))
 
 (>defn canonical-username
   "Return the canonical username (regarding case) that is saved."
   [nickname]
-  [:author/nickname :ret :author/nickname]
-  (:author/nickname
-    (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
+  [:user/nickname :ret :user/nickname]
+  (:user/nickname
+    (d/pull (d/db (new-connection)) [:user/nickname] (user-by-nickname nickname))))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
@@ -403,7 +383,7 @@
   [:meeting/share-hash :ret sequential?]
   (map
     (fn [statement]
-      {:author (-> statement :statement/author :author/nickname)
+      {:author (-> statement :statement/author :user/nickname)
        :id (:db/id statement)
        :label (if (:statement/deleted? statement)
                 config/deleted-statement-text
@@ -411,23 +391,13 @@
     (all-statements share-hash)))
 
 (>defn add-user-if-not-exists
-  "Adds an author and user if they do not exist yet. Returns the (new) user-id."
+  "Adds a user if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  [:author/nickname :ret int?]
+  [:user/nickname :ret int?]
   (if-let [user-id (user-by-nickname nickname)]
     user-id
     (do (log/info "Added a new user: " nickname)
         (add-user nickname))))
-
-(>defn all-author-names
-  "Returns the names of all authors."
-  []
-  [:ret (s/coll-of :author/nickname)]
-  (map first
-       (d/q
-         '[:find ?names
-           :where [_ :author/nickname ?names]]
-         (d/db (new-connection)))))
 
 ;; ----------------------------------------------------------------------------
 ;; voting
@@ -506,8 +476,7 @@
     (d/q
       '[:find ?user
         :in $ ?statement ?nickname ?field-name
-        :where [?author :author/nickname ?nickname]
-        [?user :user/core-author ?author]
+        :where [?user :user/nickname ?nickname]
         [?user ?field-name ?statement]]
       (d/db (new-connection)) statement-id user-nickname field-name)))
 
@@ -607,8 +576,8 @@
 
 (defn number-of-usernames
   "Returns the number of different usernames in the database."
-  ([] (number-of-entities-since :author/nickname))
-  ([since] (number-of-entities-since :author/nickname since)))
+  ([] (number-of-entities-since :user/nickname))
+  ([since] (number-of-entities-since :user/nickname since)))
 
 (defn number-of-statements
   "Returns the number of different usernames in the database."
@@ -711,18 +680,18 @@
   in a Datalog query bind the data to this structure."
   [:db/id
    :argument/version
-   {:argument/author [:author/nickname]}
+   {:argument/author [:user/nickname]}
    {:argument/type [:db/ident]}
    {:argument/premises statement-pattern}
    {:argument/conclusion
     (conj statement-pattern
           :argument/version
-          {:argument/author [:author/nickname]}
+          {:argument/author [:user/nickname]}
           {:argument/type [:db/ident]}
           {:argument/premises [:db/id
                                :statement/content
                                :statement/version
-                               {:statement/author [:author/nickname]}]}
+                               {:statement/author [:user/nickname]}]}
           {:argument/conclusion statement-pattern})}])
 
 (>defn starting-conclusions-by-discussion

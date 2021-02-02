@@ -14,7 +14,7 @@
 (s/def :discussion/share-hash ::non-blank-string)
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/author (s/or :reference ::entity-reference
-                             :author ::author))
+                             :user ::user))
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted}
@@ -28,13 +28,13 @@
                                   :discussion/share-hash :discussion/edit-hash :discussion/author]))
 
 ;; Author
-(s/def :author/nickname string?)
-(s/def ::author (s/keys :req [:author/nickname]))
+(s/def :user/nickname string?)
+(s/def ::user (s/keys :req [:user/nickname]))
 
 ;; Statement
 (s/def :statement/content string?)
 (s/def :statement/version number?)
-(s/def :statement/author ::author)
+(s/def :statement/author ::user)
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]))
 
@@ -42,7 +42,7 @@
 (s/def :argument/type
   #{:argument.type/attack :argument.type/support :argument.type/undercut})
 (s/def :argument/version number?)
-(s/def :argument/author ::author)
+(s/def :argument/author ::user)
 (s/def :argument/conclusion (s/or :statement ::statement
                                   :argument ::argument))
 (s/def :argument/premises (s/coll-of ::statement))
@@ -65,7 +65,7 @@
 (s/def :meeting/start-date inst?)
 (s/def :meeting/end-date inst?)
 (s/def :meeting/author (s/or :reference ::entity-reference
-                             :author ::author))
+                             :user ::user))
 (s/def ::meeting (s/keys :req [:meeting/title :meeting/author
                                :meeting/share-hash
                                :meeting/start-date :meeting/end-date]
@@ -79,8 +79,6 @@
 (s/def :agenda/rank pos-int?)
 (s/def ::agenda (s/keys :req [:agenda/title :agenda/meeting :agenda/discussion]
                         :opt [:agenda/description :agenda/rank]))
-
-(s/def :author/nickname ::non-blank-string)
 
 ;; Feedback
 (s/def :feedback/contact-name string?)

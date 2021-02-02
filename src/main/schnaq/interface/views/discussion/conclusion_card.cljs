@@ -94,7 +94,7 @@
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
         [:div.float-right.pb-1
-         [user/user-info (-> statement :statement/author :author/nickname) 32]]]]]]))
+         [user/user-info (-> statement :statement/author :user/nickname) 32]]]]]]))
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
