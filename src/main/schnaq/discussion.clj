@@ -100,7 +100,7 @@
         author (db/user (-> meeting :meeting/author :db/id))]
     {:id meeting-hash
      :label (:meeting/title meeting)
-     :author (:author/nickname (:user/core-author author))
+     :author (:user/nickname author)
      :type :agenda}))
 
 (>defn- agenda-links
