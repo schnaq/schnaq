@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.input
-  (:require [goog.string :as gstring]
+  (:require [ghostwheel.core :refer [>defn-]]
+            [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [fa labels]]
@@ -7,15 +8,22 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.logic :as logic]))
 
+(>defn- button-styling
+  "Dispatch button styling by argument-type."
+  [argument-type]
+  [keyword? :ret vector?]
+  (if (= :argument.type/support argument-type)
+    ["btn-outline-primary" :argument.type/attack :discussion.add.button/support
+     :discussion/add-premise-supporting true]
+    ["btn-outline-secondary" :argument.type/support :discussion.add.button/attack
+     :discussion/add-premise-against false]))
+
 (defn- argument-type-choose-button
   "Switch to differentiate between the argument types."
   []
   (let [argument-type @(rf/subscribe [:form/argument-type])
         switch-key (gstring/format "control-input-%s" (str (random-uuid)))
-        [outline next-type button-label tooltip switch-state]
-        (if (= :argument.type/support argument-type)
-          ["btn-outline-primary" :argument.type/attack :discussion.add.button/support :discussion/add-premise-supporting true]
-          ["btn-outline-secondary" :argument.type/support :discussion.add.button/attack :discussion/add-premise-against false])]
+        [outline next-type button-label tooltip switch-state] (button-styling argument-type)]
     [:button.btn
      {:type "button" :class outline :title (labels tooltip)
       :on-click #(rf/dispatch [:form/argument-type! next-type])}
