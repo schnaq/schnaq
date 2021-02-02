@@ -30,7 +30,8 @@ services:
       - EMAIL_SENDER_ADDRESS
       - EMAIL_HOST
       - EMAIL_PASSWORD
-      - KEYCLOAK_PUBLIC_KEY
+      - KEYCLOAK_SERVER
+      - KEYCLOAK_REALM
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.schnaq-backend.rule=Host(`api.schnaq.com`)"

@@ -5,7 +5,7 @@
             [buddy.core.keys :as keys]
             [ghostwheel.core :refer [>defn-]]
             [ring.util.http-response :refer [unauthorized]]
-            [schnaq.config :as config]
+            [schnaq.config.keycloak :as keycloak-config]
             [schnaq.core :as schnaq-core]))
 
 (def ^:private public-key-for-test-backend
@@ -20,7 +20,7 @@
 
 (def ^:private signed-jwt-backend
   "Primary backend for JWT validation."
-  (backends/jws {:secret config/keycloak-public-key
+  (backends/jws {:secret keycloak-config/keycloak-public-key
                  :options {:alg :rs256}}))
 
 (defn wrap-jwt-authentication
