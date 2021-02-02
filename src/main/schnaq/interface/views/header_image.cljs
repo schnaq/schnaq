@@ -25,7 +25,7 @@
                                  (oget e [:target :elements])]))}
      [:div.form-group
       [:label {:for input-id} (labels :schnaq.header-image.url/label)]
-      [:input.form-control.m-1.input-rounded
+      [:input.form-control.m-1.rounded-3
        {:id input-id
         :name image-form-name
         :auto-complete "off"

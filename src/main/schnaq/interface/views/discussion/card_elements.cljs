@@ -50,7 +50,7 @@
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary
+  [:button.btn.btn-sm.btn-outline-primary.rounded-2
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
@@ -168,7 +168,7 @@
 (defn- topic-bubble [content]
   (let [title (:meeting/title @(rf/subscribe [:meeting/selected]))]
     (common/set-website-title! title)
-    [:div.topic-view-rounded.shadow-straight-light.mt-md-4
+    [:div.topic-view.shadow-straight-light.mt-md-4
      [:div.discussion-light-background content]]))
 
 (defn- topic-view [current-meeting conclusions topic-content]

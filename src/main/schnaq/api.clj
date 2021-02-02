@@ -445,8 +445,7 @@
                                  {:user/core-author [:author/nickname]}
                                  :user/nickname])
               :in $
-              :where [?user :user/core-author _]])
-  )
+              :where [?user :user/core-author _]]))
 
 (defn- migrate-discussions!
   "Migrates the share-hash, edit-hash, author and header-image-url field from the
@@ -479,8 +478,7 @@
   (migrate-discussions! :a)
   (db/query '[:find (pull ?discussion [*])
               :in $
-              :where [?discussion :discussion/title _]])
-  )
+              :where [?discussion :discussion/title _]]))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
