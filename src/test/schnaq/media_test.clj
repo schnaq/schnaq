@@ -25,15 +25,16 @@
           url (format "%s%s" config/s3-bucket-header-url "for-testing-image-do-not-delete")
           key "Test-Upload"
           bad-share "foo"
-          bad-request-1 (@#'media/check-and-upload-image
+          check-and-upload-image #'media/check-and-upload-image
+          bad-request-1 (check-and-upload-image
                           bad-url
                           key
                           share-hash)
-          bad-request-2 (@#'media/check-and-upload-image
+          bad-request-2 (check-and-upload-image
                           url
                           key
                           bad-share)
-          request-1 (@#'media/check-and-upload-image
+          request-1 (check-and-upload-image
                       url
                       key
                       share-hash)]
@@ -43,13 +44,14 @@
 
 (deftest test-cdn-regex
   (testing "Test that only pixabay's cdn url is allowed"
-    (let [allowed-url (@#'media/check-url
+    (let [valid-url? #'media/valid-url?
+          allowed-url (valid-url?
                         "https://cdn.pixabay.com/photo/2020/10/23/17/47/girl-5679419_960_720.jpg")
-          bad-url-1 (@#'media/check-url
+          bad-url-1 (valid-url?
                       "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
-          bad-url-2 (@#'media/check-url
+          bad-url-2 (valid-url?
                       "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png")
-          bad-url-3 (@#'media/check-url
+          bad-url-3 (valid-url?
                       "https://pixabay.com/foo.jpg")]
       (is (true? allowed-url))
       (is (false? bad-url-1))

@@ -29,13 +29,13 @@
       (log/debug (.getMessage e))
       :error-img)))
 
-(defn- check-url [url]
+(defn- valid-url? [url]
   (if (re-matches trusted-cdn-url-regex url)
     true
     false))
 
 (defn- check-and-upload-image [image-url key share-hash]
-  (if (check-url image-url)
+  (if (valid-url? image-url)
     (do (log/debug (format "Set preview image: [%s] for schnaq [%s]" image-url share-hash))
         (upload-img-and-store-url image-url key share-hash))
     :error-forbidden-cdn))
