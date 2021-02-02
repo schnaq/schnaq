@@ -1,6 +1,8 @@
 @use 'sass:map';
 
 // Create rounded-classes and corresponding mixins.
+// For example: rounded-0 .. rounded-5
+// rounded-0-important .. rounded-5-important
 
 $roundings: (
   'rounded-0': 0,
