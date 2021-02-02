@@ -13,10 +13,10 @@
   "Overview of structured discussions."
   []
   [rows/video-left
-   :start-page.features.sample-discussion/webm
-   :start-page.features.sample-discussion/mp4
+   :animation-discussion/webm
+   :animation-discussion/mp4
    :startpage.features.discussion
-   false])
+   true "video-background-primary"])
 
 (defn- graph-visualization
   "Feature box showcasing the graph."

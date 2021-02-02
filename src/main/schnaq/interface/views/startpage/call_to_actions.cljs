@@ -1,15 +1,15 @@
 (ns schnaq.interface.views.startpage.call-to-actions
   (:require [schnaq.interface.config :as config]
-            [schnaq.interface.text.display-data :refer [fa img-path labels]]
+            [schnaq.interface.text.display-data :refer [fa img-path labels video]]
             [re-frame.core :as rf]))
 
 (defn- header-animation
   "Display header animation video."
   []
   [:section
-   [:video.w-100.video-background-primary.startpage-animation {:auto-play true :loop true :muted true :plays-inline true}
-    [:source {:src (img-path :animation-discussion) :type "video/webm"}]
-    [:source {:src (img-path :animation-discussion-mp4) :type "video/mp4"}]]])
+   [:video.w-100.startpage-animation {:auto-play true :loop false :muted true :plays-inline true}
+    [:source {:src (video :start-page.features.sample-discussion/webm) :type "video/webm"}]
+    [:source {:src (video :start-page.features.sample-discussion/mp4) :type "video/mp4"}]]])
 
 (defn- start-schnaq-button
   "Tell user to create a schnaq now."
@@ -39,15 +39,15 @@
     [start-schnaq-button]]
    [:div.col-lg-6.py-lg-5
     [bullet-point :clipboard :feature/what]
-    [bullet-point :share :feature/share]
-    [bullet-point :user/group :feature/participate]
+    [bullet-point :user/group :feature/share]
+    [bullet-point :graph :feature/graph]
     [bullet-point :user/shield :feature/private-public]
     [bullet-point :shield :feature/secure]]])
 
 (defn- spotlight-element [title image link]
   [:div.spotlight-discussion.clickable-no-hover
    [:a.no-text-decoration {:href link}
-    [:img.spotlight-discussion-image {:src image}]
+    [:div [:img.spotlight-discussion-image {:src image}]]
     [:div.spotlight-discussion-title
      [:h6 title]]]])
 

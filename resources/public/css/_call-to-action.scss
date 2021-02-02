@@ -22,8 +22,12 @@
 }
 
 .spotlight-discussion-image {
-  height: 16rem;
-  max-width: 100%;
+  max-height: 16rem;
+  min-height: 100%;
+  min-width: 100%;
+  object-fit: cover;
+  object-position: 0 0;
+  overflow: hidden;
 }
 
 .spotlight-discussion-title {
