@@ -890,6 +890,7 @@
      :plus "fa-plus"
      :share "fa-share-alt"
      :shield "fa-shield-alt"
+     :site-map "fa-sitemap"
      :star "fa-star"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
