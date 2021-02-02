@@ -40,7 +40,7 @@
    [:div.col-lg-6.py-lg-5
     [bullet-point :clipboard :feature/what]
     [bullet-point :user/group :feature/share]
-    [bullet-point :graph :feature/graph]
+    [bullet-point :site-map :feature/graph]
     [bullet-point :user/shield :feature/private-public]
     [bullet-point :shield :feature/secure]]])
 
