@@ -18,7 +18,7 @@
           matching-undercut (first (undercuts-for-root (:db/id root-statement) all-arguments))]
       (is (= "going for a walk with the dog every day is good for social interaction and physical exercise"
              (-> matching-undercut :argument/premises first :statement/content)))
-      (is (= "Der miese Peter" (-> matching-undercut :argument/author :author/nickname)))
+      (is (= "Der miese Peter" (-> matching-undercut :argument/author :user/nickname)))
       (is (empty? (undercuts-for-root [] all-arguments))))))
 
 (deftest direct-children-test
@@ -37,7 +37,7 @@
           arguments (discussion-db/all-arguments-for-discussion share-hash)
           root-id (:db/id (first (discussion-db/starting-statements share-hash)))
           infos (discussion/sub-discussion-information root-id arguments)
-          author-names (into #{} (map :author/nickname (:authors infos)))]
+          author-names (into #{} (map :user/nickname (:authors infos)))]
       (is (= 3 (:sub-statements infos)))
       (is (contains? author-names "Der miese Peter"))
       (is (contains? author-names "Wegi"))
