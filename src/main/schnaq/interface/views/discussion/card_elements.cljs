@@ -50,7 +50,7 @@
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary
+  [:button.btn.btn-sm.btn-outline-primary.rounded-2
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}

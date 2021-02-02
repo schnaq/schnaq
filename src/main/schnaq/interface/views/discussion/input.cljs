@@ -24,7 +24,7 @@
   (let [argument-type @(rf/subscribe [:form/argument-type])
         switch-key (gstring/format "control-input-%s" (str (random-uuid)))
         [outline next-type button-label tooltip switch-state] (button-styling argument-type)]
-    [:button.btn.border-radius-important
+    [:button.btn.rounded-3-important
      {:type "button" :class outline :title (labels tooltip)
       :on-click #(rf/dispatch [:form/argument-type! next-type])}
      [:div.custom-control.custom-switch
