@@ -346,19 +346,6 @@
   [int? :ret map?]
   (d/pull (d/db (new-connection)) user-pattern id))
 
-(>defn author-id-by-nickname
-  "Returns an author-id by nickname. The nickname is not case sensitive"
-  [nickname]
-  [string? :ret (? number?)]
-  (ffirst
-    (d/q
-      '[:find ?author
-        :in $ ?author-name
-        :where [?author :author/nickname ?original-nickname]
-        [(.toLowerCase ^String ?original-nickname) ?lower-name]
-        [(= ?lower-name ?author-name)]]
-      (d/db (new-connection)) (.toLowerCase ^String nickname))))
-
 (>defn add-user
   "Add a new user / author to the database."
   [nickname]
@@ -373,23 +360,25 @@
       [:tempids "temp-user"])))
 
 (>defn user-by-nickname
-  "Return the **schnaq** user-id by nickname. The nickname is not case sensitive."
+  "Return the **schnaq** user-id by nickname. The nickname is not case sensitive.
+  If there is no user with said nickname returns nil."
   [nickname]
   [string? :ret (? number?)]
-  (when-let [dialog-author (author-id-by-nickname nickname)]
-    (ffirst
-      (d/q
-        '[:find ?user
-          :in $ ?author
-          :where [?user :user/core-author ?author]]
-        (d/db (new-connection)) dialog-author))))
+  (ffirst
+    (d/q
+      '[:find ?user
+        :in $ ?user-name
+        :where [?user :user/nickname ?original-nickname]
+        [(.toLowerCase ^String ?original-nickname) ?lower-name]
+        [(= ?lower-name ?user-name)]]
+      (d/db (new-connection)) (.toLowerCase ^String nickname))))
 
 (>defn canonical-username
   "Return the canonical username (regarding case) that is saved."
   [nickname]
-  [:author/nickname :ret :author/nickname]
-  (:author/nickname
-    (d/pull (d/db (new-connection)) [:author/nickname] (author-id-by-nickname nickname))))
+  [:user/nickname :ret :user/nickname]
+  (:user/nickname
+    (d/pull (d/db (new-connection)) [:user/nickname] (user-by-nickname nickname))))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."

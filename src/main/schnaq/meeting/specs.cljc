@@ -28,7 +28,7 @@
                                   :discussion/share-hash :discussion/edit-hash :discussion/author]))
 
 ;; Author
-(s/def :author/nickname string?)
+(s/def :user/nickname string?)
 (s/def ::user (s/keys :req [:user/nickname]))
 
 ;; Statement

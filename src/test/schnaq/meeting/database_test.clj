@@ -54,7 +54,7 @@
                                    :meeting/share-hash share-hash
                                    :meeting/author (db/add-user-if-not-exists "Wegi")})
           _ (db/add-agenda-point "Hi" "Beschreibung" meeting share-hash)
-          christian-id (db/author-id-by-nickname "Christian")
+          christian-id (db/user-by-nickname "Christian")
           first-id (discussion-db/add-starting-statement! share-hash christian-id "this is sparta")
           second-id (discussion-db/add-starting-statement! share-hash christian-id "this is kreta")]
       (is (db/check-valid-statement-id-and-meeting first-id "Wegi-ist-der-schönste"))
@@ -158,7 +158,7 @@
     (let [cat-or-dog-id (:db/id (first (discussion-db/all-discussions-by-title "Cat or Dog?")))]
       (is (= 4 (db/number-of-active-discussion-users)))
       (let [_ (db/add-user-if-not-exists "wooooggler")
-            woggler-id (db/author-id-by-nickname "wooooggler")]
+            woggler-id (db/user-by-nickname "wooooggler")]
         (is (= 4 (db/number-of-active-discussion-users)))
         (@#'db/transact
           [(discussion-db/prepare-new-argument cat-or-dog-id woggler-id "Alles doof"

@@ -91,17 +91,17 @@
 
 (>defn prepare-new-argument
   "Prepares a new argument for transaction. Optionally sets a temporary id."
-  ([discussion-id author-id conclusion premises temporary-id]
+  ([discussion-id user-id conclusion premises temporary-id]
    [:db/id :db/id :statement/content (s/coll-of :statement/content) :db/id :ret map?]
    (merge
-     (prepare-new-argument discussion-id author-id conclusion premises)
+     (prepare-new-argument discussion-id user-id conclusion premises)
      {:db/id temporary-id}))
-  ([discussion-id author-id conclusion premises]
+  ([discussion-id user-id conclusion premises]
    [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret map?]
-   {:argument/author author-id
-    :argument/premises (pack-premises premises author-id)
+   {:argument/author user-id
+    :argument/premises (pack-premises premises user-id)
     :argument/conclusion {:db/id (str "conclusion-" conclusion)
-                          :statement/author author-id
+                          :statement/author user-id
                           :statement/content conclusion
                           :statement/version 1}
     :argument/version 1

@@ -31,9 +31,9 @@
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
     (let [share-hash "simple-hash"
-          author-id (main-db/author-id-by-nickname "Wegi")
+          user-id (main-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/support-statement! share-hash author-id (:db/id starting-conclusion)
+          new-attack (db/support-statement! share-hash user-id (:db/id starting-conclusion)
                                             "This is a new support")]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
@@ -42,9 +42,9 @@
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
     (let [share-hash "simple-hash"
-          author-id (main-db/author-id-by-nickname "Wegi")
+          user-id (main-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/attack-statement! share-hash author-id (:db/id starting-conclusion)
+          new-attack (db/attack-statement! share-hash user-id (:db/id starting-conclusion)
                                            "This is a new attack")]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
@@ -76,9 +76,9 @@
 (deftest add-starting-statement!-test
   (testing "Test the creation of a valid argument-entity from strings"
     (let [statement "Wow look at this"
-          author-id (main-db/author-id-by-nickname "Test-person")
+          user-id (main-db/user-by-nickname "Test-person")
           meeting-hash "graph-hash"
-          _ (db/add-starting-statement! meeting-hash author-id statement)
+          _ (db/add-starting-statement! meeting-hash user-id statement)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 3 (count starting-statements)))))))
@@ -87,10 +87,10 @@
   (testing "Test the creation of a valid argument-entity from strings"
     (let [premises ["What a beautifull day" "Hello test"]
           conclusion "Wow look at this"
-          author-id (main-db/author-id-by-nickname "Test-person")
+          user-id (main-db/user-by-nickname "Test-person")
           meeting-hash "graph-hash"
           discussion-id (:db/id (db/discussion-by-share-hash meeting-hash))
-          with-id (db/prepare-new-argument discussion-id author-id conclusion premises "temp-id-here")]
+          with-id (db/prepare-new-argument discussion-id user-id conclusion premises "temp-id-here")]
       (is (contains? with-id :argument/premises))
       (is (contains? with-id :argument/conclusion))
       (is (contains? with-id :argument/author))
@@ -101,14 +101,14 @@
 (deftest pack-premises-test
   (testing "Test the creation of statement-entities from strings"
     (let [premises ["What a beautifull day" "Hello test"]
-          author-id (main-db/author-id-by-nickname "Test-person")
-          premise-entities (@#'db/pack-premises premises author-id)]
+          user-id (main-db/user-by-nickname "Test-person")
+          premise-entities (@#'db/pack-premises premises user-id)]
       (is (= [{:db/id "premise-What a beautifull day",
-               :statement/author author-id,
+               :statement/author user-id,
                :statement/content (first premises),
                :statement/version 1}
               {:db/id "premise-Hello test",
-               :statement/author author-id,
+               :statement/author user-id,
                :statement/content (second premises),
                :statement/version 1}]
              premise-entities)))))
