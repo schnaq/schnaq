@@ -47,7 +47,7 @@
        [:hr]
        [:h6.text-left (labels :common/history)]
        [:div.row.px-3
-        [elements/history-view history]]]]]))
+        [elements/history-view-mobile history]]]]]))
 
 (defn- discussion-start-view
   "The first step after starting a discussion."

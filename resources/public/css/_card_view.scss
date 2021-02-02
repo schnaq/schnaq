@@ -46,8 +46,6 @@
   background: $white;
   border: 0;
   border-radius: 1rem;
-  height: 4.5rem;
-  max-width: 4.5rem;
   overflow: hidden;
   padding: 0 0 0 0.5rem;
 
@@ -62,15 +60,29 @@
   }
 }
 
+.history-card-content {
+  background: $white;
+  height: 100%;
+  padding: 1rem;
+  white-space: pre-line;
+
+  @include media-breakpoint-down(sm) {
+    padding: 0.35rem 0 0;
+  }
+
+  &:hover {
+    background: $white-shade;
+  }
+}
+
 .card-history-home {
   background: $white;
   border: 0;
   border-radius: 1rem;
   color: $gray-700;
   height: 4.5rem;
-  max-width: 4.5rem;
   overflow: hidden;
-  padding: 1rem 0;
+  padding: 1rem;
 
   @include media-breakpoint-down(sm) {
     height: 3rem;
@@ -143,21 +155,6 @@
 .mobile-attitude-disagree {
   @include media-breakpoint-down(sm) {
     background: $secondary;
-  }
-}
-
-.history-card-content {
-  background: $white;
-  height: 100%;
-  padding: 0.8rem 0 0;
-  white-space: pre-line;
-
-  @include media-breakpoint-down(sm) {
-    padding: 0.35rem 0 0;
-  }
-
-  &:hover {
-    background: $white-shade;
   }
 }
 
