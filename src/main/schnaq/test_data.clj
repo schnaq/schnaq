@@ -67,37 +67,37 @@
 
 (def ^:private cat-or-dog-authors-and-users
   [{:db/id "user/wegi"
-    :user/core-author {:db/id "author/wegi" :author/nickname "Wegi"}}
+    :user/nickname "Wegi"}
    {:db/id "user/mike"
-    :user/core-author {:db/id "author/mike" :author/nickname "Mike"}}
+    :user/nickname "Mike"}
    {:db/id "user/schredder"
-    :user/core-author {:db/id "author/schredder" :author/nickname "Der Schredder"}}
+    :user/nickname "Der Schredder"}
    {:db/id "user/rambo"
-    :user/core-author {:db/id "author/rambo" :author/nickname "Christian"}}
+    :user/nickname "Christian"}
    {:db/id "user/stinky"
-    :user/core-author {:db/id "author/stinky" :author/nickname "Der miese Peter"}}
+    :user/nickname "Der miese Peter"}
    {:db/id "user/test-person"
-    :user/core-author {:db/id "author/test-person" :author/nickname "Test-person"}}])
+    :user/nickname "Test-person"}])
 
 (def ^:private cat-or-dog-statements
   [{:db/id "statement/get-dog"
-    :statement/author "author/wegi"                         ; Use the tempid above
+    :statement/author "user/wegi"                         ; Use the tempid above
     :statement/content "we should get a dog"
     :statement/version 1}
    {:db/id "statement/get-cat"
-    :statement/author "author/schredder"                    ; Use the tempid above
+    :statement/author "user/schredder"                    ; Use the tempid above
     :statement/content "we should get a cat"
     :statement/version 1}
    {:db/id "statement/get-both"
-    :statement/author "author/rambo"                        ; Use the tempid above
+    :statement/author "user/rambo"                        ; Use the tempid above
     :statement/content "we could get both, a dog and a cat"
     :statement/version 1}])
 
 (def ^:private cat-or-dog-arguments
   [{:db/id "argument/watchdogs"
-    :argument/author "author/wegi"
+    :argument/author "user/wegi"
     :argument/premises [{:db/id "statement/watchdogs"
-                         :statement/author "author/wegi"
+                         :statement/author "user/wegi"
                          :statement/content "dogs can act as watchdogs"
                          :statement/version 1}]
     :argument/conclusion "statement/get-dog"
@@ -105,9 +105,9 @@
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "argument/tedious-dogs"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/walks"
-                         :statement/author "author/schredder" ; Use the tempid above
+                         :statement/author "user/schredder" ; Use the tempid above
                          :statement/content
                          "you have to take the dog for a walk every day, which is tedious"
                          :statement/version 1}]
@@ -115,18 +115,18 @@
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
-   {:argument/author "author/stinky"
+   {:argument/author "user/stinky"
     :argument/premises [{:db/id "statement/no-use"
-                         :statement/author "author/stinky"
+                         :statement/author "user/stinky"
                          :statement/content "we have no use for a watchdog"
                          :statement/version 1}]
     :argument/conclusion "argument/watchdogs"
     :argument/version 1
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/stinky"
+   {:argument/author "user/stinky"
     :argument/premises [{:db/id "statement/exercise"
-                         :statement/author "author/stinky"
+                         :statement/author "user/stinky"
                          :statement/content
                          "going for a walk with the dog every day is good for social interaction and physical exercise"
                          :statement/version 1}]
@@ -135,18 +135,18 @@
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "argument/both-is-fine"
-    :argument/author "author/rambo"
+    :argument/author "user/rambo"
     :argument/premises [{:db/id "statement/no-problem"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "it would be no problem"
                          :statement/version 1}]
     :argument/conclusion "statement/get-both"
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/wegi"
+   {:argument/author "user/wegi"
     :argument/premises [{:db/id "statement/moneeey"
-                         :statement/author "author/wegi"
+                         :statement/author "user/wegi"
                          :statement/content "we do not have enough money for two pets"
                          :statement/version 1}]
     :argument/conclusion "statement/no-problem"
@@ -155,13 +155,13 @@
     :argument/discussions ["discussion/cat-or-dog"]}
    ;; Here be premise groups
    {:db/id "argument/hate"
-    :argument/author "author/stinky"
+    :argument/author "user/stinky"
     :argument/premises [{:db/id "statement/best-friends"
-                         :statement/author "author/stinky"
+                         :statement/author "user/stinky"
                          :statement/content "won't be best friends"
                          :statement/version 1}
                         {:db/id "statement/strong-hate"
-                         :statement/author "author/stinky"
+                         :statement/author "user/stinky"
                          :statement/content
                          "a cat and a dog will generally not get along well"
                          :statement/version 1}]
@@ -170,18 +170,18 @@
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
    {:db/id "argument/independent-cats"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/independent"
-                         :statement/author "author/schredder"
+                         :statement/author "user/schredder"
                          :statement/content "cats are very independent"
                          :statement/version 1}]
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/wegi"
+   {:argument/author "user/wegi"
     :argument/premises [{:db/id "statement/take-care-baby"
-                         :statement/author "author/wegi"
+                         :statement/author "user/wegi"
                          :statement/content
                          "the purpose of a pet is to have something to take care of"
                          :statement/version 1}]
@@ -189,18 +189,18 @@
     :argument/version 1
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/wegi"
+   {:argument/author "user/wegi"
     :argument/premises [{:db/id "statement/overbred"
-                         :statement/author "author/wegi"
+                         :statement/author "user/wegi"
                          :statement/content "this is not true for overbred races"
                          :statement/version 1}]
     :argument/conclusion "statement/independent"
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/schredder"
+   {:argument/author "user/schredder"
     :argument/premises [{:db/id "statement/darwin-likes"
-                         :statement/author "author/schredder"
+                         :statement/author "user/schredder"
                          :statement/content "this lies in their natural conditions"
                          :statement/version 1}]
     :argument/conclusion "statement/independent"
@@ -208,9 +208,9 @@
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
    {:db/id "argument/hunters"
-    :argument/author "author/rambo"
+    :argument/author "user/rambo"
     :argument/premises [{:db/id "statement/ancestry"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content
                          (str "cats ancestors are animals in wildlife, who are"
                               " hunting alone and not in groups")
@@ -219,9 +219,9 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/wegi"
+   {:argument/author "user/wegi"
     :argument/premises [{:db/id "statement/wild-thang"
-                         :statement/author "author/wegi"
+                         :statement/author "user/wegi"
                          :statement/content "house cats are not wild cats anymore"
                          :statement/version 1}]
     :argument/conclusion "argument/hunters"
@@ -229,27 +229,27 @@
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
    {:db/id "argument/no-taxes"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/taxes"
-                         :statement/author "author/schredder"
+                         :statement/author "user/schredder"
                          :statement/content "a cat does not cost taxes like a dog does"
                          :statement/version 1}]
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/stinky"
+   {:argument/author "user/stinky"
     :argument/premises [{:db/id "statement/credibility"
-                         :statement/author "author/stinky"
+                         :statement/author "user/stinky"
                          :statement/content "thats what you just say without a credible source"
                          :statement/version 1}]
     :argument/conclusion "argument/no-taxes"
     :argument/version 1
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/rambo"
+   {:argument/author "user/rambo"
     :argument/premises [{:db/id "statement/germoney"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "in germany a second dog costs even
                          more taxes"
                          :statement/version 1}]
@@ -257,9 +257,9 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/rambo"
+   {:argument/author "user/rambo"
     :argument/premises [{:db/id "statement/doggo-same"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content
                          "other costs of living for cats and dogs are nearly the same"
                          :statement/version 1}]
@@ -268,18 +268,18 @@
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
    {:db/id "argument/moody-cats"
-    :argument/author "author/wegi"
+    :argument/author "user/wegi"
     :argument/premises [{:db/id "statement/moody"
-                         :statement/author "author/wegi"
+                         :statement/author "user/wegi"
                          :statement/content "cats are capricious"
                          :statement/version 1}]
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/schredder"
+   {:argument/author "user/schredder"
     :argument/premises [{:db/id "statement/race-dogs"
-                         :statement/author "author/schredder"
+                         :statement/author "user/schredder"
                          :statement/content
                          (str "this is based on the cats race and on the breeding"
                               ", and is not inherent for cats.")
@@ -288,9 +288,9 @@
     :argument/version 1
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/schredder"
+   {:argument/author "user/schredder"
     :argument/premises [{:db/id "statement/stinky-cats"
-                         :statement/author "author/schredder"
+                         :statement/author "user/schredder"
                          :statement/content
                          "cats are only moody if youre stinky."
                          :statement/version 1}]
@@ -298,9 +298,9 @@
     :argument/version 1
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/schredder"
+   {:argument/author "user/schredder"
     :argument/premises [{:db/id "statement/catcatcatcat"
-                         :statement/author "author/schredder"
+                         :statement/author "user/schredder"
                          :statement/content
                          (str "the fact, that cats are capricious, is based on the"
                               " cats race")
@@ -309,9 +309,9 @@
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog"]}
-   {:argument/author "author/schredder"
+   {:argument/author "user/schredder"
     :argument/premises [{:db/id "statement/not-all-cats"
-                         :statement/author "author/schredder"
+                         :statement/author "user/schredder"
                          :statement/content "not every cat is capricious"
                          :statement/version 1}]
     :argument/conclusion "statement/moody"
@@ -319,9 +319,9 @@
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog"]}
    {:db/id "argument/rambo-hates-cats"
-    :argument/author "author/rambo"
+    :argument/author "user/rambo"
     :argument/premises [{:db/id "statement/fire-cats"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content (str "several cats of my friends are real"
                                                  " assholes")
                          :statement/version 1}]
@@ -349,22 +349,22 @@
     :discussion/states [:discussion.state/open]
     :discussion/starting-statements ["statement/warm" "statement/foo"]}
    {:db/id "argument/warm"
-    :argument/author "author/rambo"
+    :argument/author "user/rambo"
     :argument/premises [{:db/id "statement/GrossFoo"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "Foo"
                          :statement/version 1}]
     :argument/conclusion {:db/id "statement/warm"
-                          :statement/author "author/rambo"
+                          :statement/author "user/rambo"
                           :statement/content "Es ist warm"
                           :statement/version 1}
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
    {:db/id "argument/B"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/B"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "B"
                          :statement/version 1}]
     :argument/conclusion "statement/GrossFoo"
@@ -372,9 +372,9 @@
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
    {:db/id "argument/SonneScheint"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/SonneScheint"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "Die Sonne scheint!"
                          :statement/version 1}]
     :argument/conclusion "statement/warm"
@@ -382,9 +382,9 @@
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
    {:db/id "argument/SonneScheintC"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/C"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "Die Sonne gibt Vitamin C"
                          :statement/version 1}]
     :argument/conclusion "statement/SonneScheint"
@@ -392,13 +392,13 @@
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
    {:db/id "argument/foo"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/Bar"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "Bar"
                          :statement/version 1}]
     :argument/conclusion {:db/id "statement/foo"
-                          :statement/author "author/rambo"
+                          :statement/author "user/rambo"
                           :statement/content "foo"
                           :statement/version 1}
     :argument/version 1
@@ -425,22 +425,22 @@
     :discussion/states [:discussion.state/open]
     :discussion/starting-statements ["statement/brainstorm"]}
    {:db/id "argument/simple-start"
-    :argument/author "author/rambo"
+    :argument/author "user/rambo"
     :argument/premises [{:db/id "statement/denken"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "Man denkt viel nach dabei"
                          :statement/version 1}]
     :argument/conclusion {:db/id "statement/brainstorm"
-                          :statement/author "author/rambo"
+                          :statement/author "user/rambo"
                           :statement/content "Brainstorming ist total wichtig"
                           :statement/version 1}
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/simple"]}
    {:db/id "argument/denken-nix-brainstorm"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/denken-nix-brainstorm"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "Brainstorm hat nichts mit aktiv denken zu tun"
                          :statement/version 1}]
     :argument/conclusion "argument/simple-start"
@@ -448,9 +448,9 @@
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/simple"]}
    {:db/id "argument/denken-tut-weh"
-    :argument/author "author/schredder"
+    :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/denken-tut-weh"
-                         :statement/author "author/rambo"
+                         :statement/author "user/rambo"
                          :statement/content "Denken sorgt nur für Kopfschmerzen. Lieber den Donaldo machen!"
                          :statement/version 1}]
     :argument/conclusion "statement/denken"
