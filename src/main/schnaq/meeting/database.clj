@@ -130,7 +130,7 @@
    :statement/content
    :statement/version
    :statement/deleted?
-   {:statement/author [:author/nickname]}])
+   {:statement/author [:user/nickname]}])
 
 (def ^:private meeting-pattern
   "Has all meeting information, including sensitive ones."
@@ -711,18 +711,18 @@
   in a Datalog query bind the data to this structure."
   [:db/id
    :argument/version
-   {:argument/author [:author/nickname]}
+   {:argument/author [:user/nickname]}
    {:argument/type [:db/ident]}
    {:argument/premises statement-pattern}
    {:argument/conclusion
     (conj statement-pattern
           :argument/version
-          {:argument/author [:author/nickname]}
+          {:argument/author [:user/nickname]}
           {:argument/type [:db/ident]}
           {:argument/premises [:db/id
                                :statement/content
                                :statement/version
-                               {:statement/author [:author/nickname]}]}
+                               {:statement/author [:user/nickname]}]}
           {:argument/conclusion statement-pattern})}])
 
 (>defn starting-conclusions-by-discussion

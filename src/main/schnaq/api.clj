@@ -428,15 +428,28 @@
 
 (defn- migrate-users!
   "Migrates the nickname field from the author to the user."
-  ;; TODO migrate statement and argument refs as well
   [_req]
   (let [all-users
         (db/query '[:find ?user ?nickname
                     :in $
                     :where [?user :user/core-author ?author]
                     [?author :author/nickname ?nickname]])
-        transaction (mapv #(vector :db/add (first %) :user/nickname (second %)) all-users)]
+        transaction (mapv #(vector :db/add (first %) :user/nickname (second %)) all-users)
+        all-statements
+        (db/query '[:find ?statement ?user
+                    :in $
+                    :where [?statement :statement/author ?author]
+                    [?user :user/core-author ?author]])
+        statement-transaction (mapv #(hash-map :db/id (first %) :statement/author (second %)) all-statements)
+        all-arguments
+        (db/query '[:find ?argument ?user
+                    :in $
+                    :where [?argument :argument/author ?author]
+                    [?user :user/core-author ?author]])
+        argument-transaction (mapv #(hash-map :db/id (first %) :argument/author (second %)) all-arguments)]
     (db/transact transaction)
+    (db/transact statement-transaction)
+    (db/transact argument-transaction)
     (ok {:message "success"})))
 
 (comment
@@ -453,7 +466,7 @@
   "Migrates the share-hash, edit-hash, author and header-image-url field from the
   meeting to the discussion."
   [_req]
-  (let [all-users
+  (let [all-discussions
         (db/query '[:find ?discussion (pull ?meeting [:meeting/share-hash
                                                       :meeting/edit-hash
                                                       :meeting/author
@@ -471,7 +484,7 @@
                                                   :discussion/edit-hash (:meeting/edit-hash attributes)
                                                   :discussion/author (:db/id (:meeting/author attributes))
                                                   :discussion/header-image-url (:meeting/header-image-url attributes)})))
-                                 all-users)))]
+                                 all-discussions)))]
     (db/transact transaction)
     (ok {:message "success"})))
 

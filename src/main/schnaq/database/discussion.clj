@@ -14,18 +14,15 @@
   in a Datalog query bind the data to this structure."
   [:db/id
    :argument/version
-   {:argument/author [:author/nickname]}
+   {:argument/author [:user/nickname]}
    {:argument/type [:db/ident]}
    {:argument/premises main-db/statement-pattern}
    {:argument/conclusion
     (conj main-db/statement-pattern
           :argument/version
-          {:argument/author [:author/nickname]}
+          {:argument/author [:user/nickname]}
           {:argument/type [:db/ident]}
-          {:argument/premises [:db/id
-                               :statement/content
-                               :statement/version
-                               {:statement/author [:author/nickname]}]}
+          {:argument/premises main-db/statement-pattern}
           {:argument/conclusion main-db/statement-pattern})}])
 
 (def discussion-pattern
