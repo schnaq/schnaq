@@ -61,7 +61,7 @@
      [:a#profile-dropdown.nav-link
       {:href "#" :role "button" :data-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
-      [:button.btn.dropdown-toggle {:class button-class}
+      [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
        [admin-star]
        username]]
      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
