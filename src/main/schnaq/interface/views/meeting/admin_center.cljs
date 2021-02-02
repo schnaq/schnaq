@@ -84,7 +84,7 @@
                                   (oget e [:target :elements])]))}
       [:div.form-group
        [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
-       [:textarea.form-control.m-1.input-rounded
+       [:textarea.form-control.m-1.border-radius
         {:id input-id
          :name "participant-addresses" :wrap "soft" :rows 3
          :auto-complete "off"
@@ -250,7 +250,7 @@
                                   (oget e [:target :elements])]))}
       [:div.form-group
        [:label {:for input-id} (labels :meeting.admin-center.edit.link.form/label)]
-       [:input.form-control.m-1.input-rounded
+       [:input.form-control.m-1.border-radius
         {:id input-id
          :name "admin-center-recipient"
          :auto-complete "off"
@@ -276,7 +276,7 @@
                                   (oget e [:target :elements])]))}
       [:div.form-group
        [:label.m-1 {:for input-id} (labels :meeting.admin/statements-label)]
-       [:textarea.form-control.m-1.input-rounded
+       [:textarea.form-control.m-1.border-radius
         {:id input-id
          :name "statement-ids" :wrap "soft" :rows 3
          :auto-complete "off"
