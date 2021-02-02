@@ -267,7 +267,7 @@
 
         ;; Graph Texts
         :graph/heading "Discussion Overview"
-        :graph.button/text "Show mindmap"
+        :graph.button/text "Mindmap"
         :graph/download-png "Download mindmap as image"
 
         ;; Pricing Page
@@ -658,7 +658,7 @@
 
         ;; Graph Texts
         :graph/heading "Diskussionsübersicht"
-        :graph.button/text "Mindmap anzeigen"
+        :graph.button/text "Mindmap"
         :graph/download-png "Mindmap als Bild herunterladen"
 
         ;; Pricing Page
