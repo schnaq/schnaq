@@ -756,8 +756,9 @@
         :tooltip/history-statement "Zurück zum Beitrag von "
 
         ;; History
-        :history.home/text "Zum Anfang"
+        :history.home/text "Diskussionsstart"
         :history.home/tooltip "Zurück zum Diskussionsanfang"
+        :history.statement/user "Beitrag von "
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"

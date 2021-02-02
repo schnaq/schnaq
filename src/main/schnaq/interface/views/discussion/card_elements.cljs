@@ -12,7 +12,7 @@
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
 
-(defn- home-button
+(defn- home-button-mobile
   "Home button for history view"
   [history-length]
   [:div.d-inline-block.d-md-block.pr-2.pr-md-0.mt-md-4.pt-2.pt-md-0
@@ -25,13 +25,13 @@
      [:<> [:i {:class "fas fa-angle-double-left"}]
       [:div [:small (labels :history.home/text)]]]]]])
 
-(defn history-view
+(defn history-view-mobile
   "History view displayed in the left column in the desktop view."
   [history]
   (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
     [:<>
      ;; home button
-     [home-button (count indexed-history)]
+     [home-button-mobile (count indexed-history)]
      ;; history
      (for [[index statement] indexed-history]
        (let [nickname (-> statement :statement/author :user/nickname)]
@@ -46,6 +46,47 @@
                "right"
                (str (labels :tooltip/history-statement) nickname)
                [common/avatar nickname 42]]]])]))]))
+
+(defn- home-button
+  "Home button for history view"
+  [history-length]
+  [:div.d-inline-block.text-dark
+   [:div.clickable.card-history-home.text-center
+    {:on-click
+     #(rf/dispatch [:discussion.history/time-travel history-length])}
+    [tooltip/nested-div
+     "right"
+     (labels :history.home/tooltip)
+     [:<>
+      [:div [:h5 (labels :history.home/text)]]
+      [:div.mr-auto [badges/current-schnaq-info-badges]]]]]])
+
+(defn history-view
+  "History view displayed in the left column in the desktop view."
+  [history]
+  (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
+    [:<>
+     ;; home button
+     [home-button (count indexed-history)]
+     ;; history
+     (for [[index statement] indexed-history]
+       (let [nickname (-> statement :statement/author :user/nickname)
+             content (-> statement :statement/content)]
+         [:div.d-inline-block.d-md-block.text-dark
+          {:key (str "history-" (:db/id statement))}
+          (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+            [:div.card-history.clickable.mt-md-4
+             {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
+              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+             [:div.history-card-content
+              [tooltip/nested-div
+               "right"
+               (str (labels :tooltip/history-statement) nickname)
+               [:<>
+                [:div.d-flex.flex-row
+                 [:h6 (str (labels :history.statement/user) nickname)]
+                 [common/avatar nickname 22]]
+                [:span content]]]]])]))]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
@@ -168,7 +209,7 @@
 (defn- topic-bubble [content]
   (let [title (:meeting/title @(rf/subscribe [:meeting/selected]))]
     (common/set-website-title! title)
-    [:div.topic-view.shadow-straight-light.mt-md-4
+    [:div.topic-view.shadow-straight-light.md-4
      [:div.discussion-light-background content]]))
 
 (defn- topic-view [current-meeting conclusions topic-content]
@@ -190,9 +231,9 @@
   [current-meeting title input info-content conclusions history]
   [:div.container-fluid
    [:div.row.px-0.mx-0
-    [:div.col-1.py-4
+    [:div.col-2.py-4
      [history-view history]]
-    [:div.col-10.py-4.px-0
+    [:div.col-9.py-4.px-0
      [topic-view current-meeting conclusions
       [topic-bubble-desktop current-meeting title input info-content]]]]])
 
