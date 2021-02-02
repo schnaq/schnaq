@@ -428,6 +428,7 @@
 
 (defn- migrate-users!
   "Migrates the nickname field from the author to the user."
+  ;; TODO migrate statement and argument refs as well
   [_req]
   (let [all-users
         (db/query '[:find ?user ?nickname
