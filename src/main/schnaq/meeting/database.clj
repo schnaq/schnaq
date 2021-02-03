@@ -263,9 +263,7 @@
         (d/q
           '[:find (pull ?statements statement-pattern)
             :in $ ?share-hash statement-pattern
-            :where [?meeting :meeting/share-hash ?share-hash]
-            [?agenda :agenda/meeting ?meeting]
-            [?agenda :agenda/discussion ?discussion]
+            :where [?discussion :discussion/share-hash ?share-hash]
             [?arguments :argument/discussions ?discussion]
             (or
               [?arguments :argument/conclusion ?statements]
@@ -276,9 +274,7 @@
         (d/q
           '[:find (pull ?statements statement-pattern)
             :in $ ?share-hash statement-pattern
-            :where [?meeting :meeting/share-hash ?share-hash]
-            [?agenda :agenda/meeting ?meeting]
-            [?agenda :agenda/discussion ?discussion]
+            :where [?discussion :discussion/share-hash ?share-hash]
             [?discussion :discussion/starting-statements ?statements]]
           (d/db (new-connection)) share-hash statement-pattern)))))
 
