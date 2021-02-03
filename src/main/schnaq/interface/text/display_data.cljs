@@ -257,7 +257,7 @@
         :errors/generic "An error occurred"
 
         :error.generic/contact-us
-        [:<> "Did you end up here after clicking something on schnaq.com? Give us a hint at " [:a {:href "mailto:info@dialogo.io"} "info@dialogo.io"]]
+        [:<> "Did you end up here after clicking something on schnaq.com? Give us a hint at " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
 
         :error.404/heading "This site does not exist 🙉"
         :error.404/body "The URL that you followed does not exist. Maybe there is a typo."
