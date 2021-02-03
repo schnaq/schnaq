@@ -1,6 +1,7 @@
 (ns schnaq.media-test
   (:require [clojure.test :refer [is deftest testing use-fixtures]]
             [schnaq.config :as config]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.media :as media]
             [schnaq.meeting.database :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -10,12 +11,16 @@
 
 (defn- create-schnaq
   [share-hash]
-  (let [meeting-id (db/add-meeting {:meeting/title "Test-Schnaq"
-                                    :meeting/start-date (db/now)
-                                    :meeting/end-date (db/now)
-                                    :meeting/share-hash share-hash
-                                    :meeting/author (db/add-user-if-not-exists "Mike")})]
-    (db/add-agenda-point "Title" "desc" meeting-id 1 true share-hash "bla" (db/add-user-if-not-exists "Mike"))))
+  (db/add-meeting {:meeting/title "Test-Schnaq"
+                      :meeting/start-date (db/now)
+                      :meeting/end-date (db/now)
+                      :meeting/share-hash share-hash
+                      :meeting/author (db/add-user-if-not-exists "Mike")})
+  (discussion-db/new-discussion {:discussion/title "Test-Schnaq"
+                                 :discussion/share-hash share-hash
+                                 :discussion/edit-hash "secret"
+                                 :discussion/author (db/add-user-if-not-exists "Mike")}
+                                true))
 
 (deftest test-cdn-restriction
   (testing "Test image upload to s3"

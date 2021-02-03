@@ -46,7 +46,7 @@
      :link-text (labels :router/admin-center)
      :controllers [{:start (fn []
                              (rf/dispatch [:admin/set-password (js/prompt "Admin Password")])
-                             (rf/dispatch [:meetings.public/load]))}]}]
+                             (rf/dispatch [:schnaqs.public/load]))}]}]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
@@ -56,7 +56,7 @@
      {:name :routes/public-discussions
       :view meetings-overview/public-discussions-view
       :link-text (labels :router/public-discussions)
-      :controllers [{:start (fn [] (rf/dispatch [:meetings.public/load]))}]}]
+      :controllers [{:start (fn [] (rf/dispatch [:schnaqs.public/load]))}]}]
     ["/my"
      {:name :routes.meetings/my-schnaqs
       :view meetings-overview/meeting-view-visited

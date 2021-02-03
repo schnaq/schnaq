@@ -8,12 +8,14 @@
 
 (rf/reg-event-fx
   :meeting.creation/added-continue-with-agendas
-  (fn [{:keys [db]} [_ {:keys [new-meeting]}]]
+  (fn [{:keys [db]} [_ {:keys [new-meeting new-discussion]}]]
     (let [share-hash (:meeting/share-hash new-meeting)
           edit-hash (:meeting/edit-hash new-meeting)]
       {:db (-> db
                (assoc-in [:meeting :last-added] new-meeting)
-               (update :meetings conj new-meeting))
+               (assoc-in [:discussions :last-added] new-discussion)
+               (update :meetings conj new-meeting)
+               (update-in [:discussions :all] conj new-discussion))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
                         {:share-hash share-hash}]]
             [:dispatch [:meeting/select-current new-meeting]]
@@ -48,18 +50,12 @@
 
 (rf/reg-event-fx
   :meeting.creation/new
-  (fn [{:keys [db]} [_ {:meeting/keys [title description] :as new-meeting} public?]]
-    (let [nickname (get-in db [:user :name] "Anonymous")
-          agendas (get-in db [:agenda :creating :all] [])
-          stub-agendas [{:title title
-                         :description description
-                         :agenda/rank 1}]
-          agendas-to-send (if (zero? (count agendas)) stub-agendas (vals agendas))]
+  (fn [{:keys [db]} [_ new-meeting public?]]
+    (let [nickname (get-in db [:user :name] "Anonymous")]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/meeting/add")
                           :params {:nickname nickname
                                    :meeting new-meeting
-                                   :agendas agendas-to-send
                                    :public-discussion? public?}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)

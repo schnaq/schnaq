@@ -15,17 +15,20 @@
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/author (s/or :reference ::entity-reference
                              :user ::user))
+(s/def :discussion/header-image-url string?)
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
-               :discussion.state/private :discussion.state/deleted}
+               :discussion.state/private :discussion.state/deleted
+               :discussion.state/public}
              :distinct true))
 (s/def :discussion/starting-arguments (s/coll-of ::argument))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
-(s/def ::discussion (s/keys :req [:discussion/title :discussion/description
-                                  :discussion/states]
+(s/def ::discussion (s/keys :req [:discussion/title :discussion/states]
                             :opt [:discussion/starting-arguments :discussion/starting-statements
+                                  :discussion/description
                                   ;; The following things need to go to req, after live database has been migrated
-                                  :discussion/share-hash :discussion/edit-hash :discussion/author]))
+                                  :discussion/share-hash :discussion/edit-hash :discussion/author
+                                  :discussion/header-image-url]))
 
 ;; Author
 (s/def :user/nickname string?)

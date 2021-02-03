@@ -73,22 +73,22 @@
                             :on-failure [:ajax.error/to-console]}]]}))))
 
 (rf/reg-event-fx
-  :meetings.public/load
+  :schnaqs.public/load
   (fn [_ _]
     {:fx [[:http-xhrio {:method :get
                         :uri (str (:rest-backend config) "/schnaqs/public")
                         :params {}
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
-                        :on-success [:meeting.public/store-from-backend]
+                        :on-success [:schnaqs.public/store-from-backend]
                         :on-failure [:ajax.error/to-console]}]]}))
 
 (rf/reg-event-db
-  :meeting.public/store-from-backend
-  (fn [db [_ {:keys [meetings]}]]
-    (assoc-in db [:meetings :public] meetings)))
+  :schnaqs.public/store-from-backend
+  (fn [db [_ {:keys [discussions]}]]
+    (assoc-in db [:schnaqs :public] discussions)))
 
 (rf/reg-sub
-  :meetings/public
+  :schnaqs/public
   (fn [db _]
-    (get-in db [:meetings :public])))
+    (get-in db [:schnaqs :public])))

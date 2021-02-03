@@ -1,32 +1,32 @@
 (ns schnaq.database.discussion-test
   (:require [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
+            [schnaq.database.discussion-test-data :as test-data]
             [schnaq.meeting.database :as main-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
-(use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
+(use-fixtures :each
+              schnaq-toolbelt/init-test-delete-db-fixture
+              #(schnaq-toolbelt/init-test-delete-db-fixture % test-data/public-discussions))
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest delete-discussion-test
   (let [sample-discussion "simple-hash"
-        discussion-count (count (main-db/public-meetings))
+        discussion-count (count (db/public-discussions))
         new-discussion-hash "ajskdhajksdh"
         author (main-db/add-user-if-not-exists "Wegi")
-        new-public-meeting {:meeting/title "Bla"
-                            :meeting/start-date (main-db/now)
-                            :meeting/end-date (main-db/now)
-                            :meeting/share-hash new-discussion-hash
-                            :meeting/author author}]
+        new-public-discussion {:discussion/title "Bla"
+                               :discussion/share-hash new-discussion-hash
+                               :discussion/edit-hash "secret-whatever"
+                               :discussion/author author}]
     (testing "When deleting wrong discussion, throw error."
       (is (nil? (db/delete-discussion "nonsense-8u89jh89z79h88##")))
       (is (string? (db/delete-discussion sample-discussion))))
     (testing "Deleting a public discussion, should decrease the count."
-      (let [new-meeting-id (main-db/add-meeting new-public-meeting)]
-        (main-db/add-agenda-point "Some-title" "Some-description" new-meeting-id
-                                  0 true sample-discussion "edit-hash" author))
-      (is (= (inc discussion-count) (count (main-db/public-meetings))))
+      (db/new-discussion new-public-discussion true)
+      (is (= (inc discussion-count) (count (db/public-discussions))))
       (db/delete-discussion new-discussion-hash)
-      (is (= discussion-count (count (main-db/public-meetings)))))))
+      (is (= discussion-count (count (db/public-discussions)))))))
 
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
@@ -122,3 +122,28 @@
                                3 cat-dog-hash
                                1 simple-hash
                                2 graph-hash))))
+
+(deftest new-discussion-test
+  (let [minimal-discussion {:discussion/title "Whatevs"
+                            :discussion/share-hash "oooooh"
+                            :discussion/edit-hash "secret-never-guessed"}]
+    (testing "Whether a correct id is returned when valid discussions are transacted."
+      (is (number? (db/new-discussion minimal-discussion true)))
+      (is (number? (db/new-discussion (assoc minimal-discussion
+                                        :discussion/description nil
+                                        :discussion/header-image-url "")
+                                      false))))
+    (testing "Transacting something non-essential should return nil"
+      (is (nil? (db/new-discussion (dissoc minimal-discussion :discussion/title) false))))))
+
+(deftest public-discussions-test
+  (testing "Should return all discussions that are marked as public."
+    (is (= 1 (count (db/public-discussions))))
+    (db/new-discussion {:discussion/title "tester" :discussion/share-hash "newwwwasd"
+                        :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                       true)
+    (is (= 2 (count (db/public-discussions))))
+    (db/new-discussion {:discussion/title "tester private" :discussion/share-hash "newaaaasdasdwwwasd"
+                        :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                       false)
+    (is (= 2 (count (db/public-discussions))))))

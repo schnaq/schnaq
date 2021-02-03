@@ -51,23 +51,37 @@
   (assoc meeting :meeting/share-hash share-hash
                  :meeting/edit-hash edit-hash))
 
+(defn- create-discussion-data-with-hashes
+  "Creates a valid discussion object and adds hashes"
+  [title author share-hash edit-hash]
+  {:discussion/title title
+   :discussion/share-hash share-hash
+   :discussion/edit-hash edit-hash
+   :discussion/author author})
+
 (defn- add-meeting
   "Adds a meeting and (optional) agendas to the database.
   Returns the newly-created meeting."
   [request]
-  (let [{:keys [meeting nickname agendas public-discussion?]} (:body-params request)
+  (let [{:keys [meeting nickname public-discussion?]} (:body-params request)
         share-hash (.toString (UUID/randomUUID))
         edit-hash (.toString (UUID/randomUUID))
         final-meeting (add-hashes-to-meeting meeting share-hash edit-hash)
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
-        created-meeting (db/meeting-private-data meeting-id)]
-    (run! #(db/add-agenda-point (:title %) (:description %) meeting-id (:agenda/rank %)
-                                public-discussion? share-hash edit-hash author-id)
-          agendas)
-    (log/info (:db/ident (:meeting/type created-meeting)) " Meeting Created: " meeting-id " - "
-              (:meeting/title created-meeting) " – Public? " public-discussion?)
-    (created "" {:new-meeting created-meeting})))
+        discussion-data (create-discussion-data-with-hashes
+                          (:meeting/title meeting) author-id share-hash edit-hash)
+        new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
+    (if new-discussion-id
+      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)
+            created-meeting (db/meeting-private-data meeting-id)]
+        (log/info "Discussion created: " new-discussion-id " - "
+                  (:discussion/title created-discussion) " – Public? " public-discussion?)
+        (created "" {:new-discussion created-discussion
+                     :new-meeting created-meeting}))
+      (do
+        (log/info "Did not create discussion from following data:\n" discussion-data)
+        (bad-request "The input you provided could not be used to create a discussion.")))))
 
 (defn- add-author
   "Adds an author to the database."
@@ -81,7 +95,8 @@
   [req]
   (let [hash (get-in req [:route-params :hash])]
     (if (validator/valid-discussion? hash)
-      (ok (db/meeting-by-hash hash))
+      (let [states (:discussion/states (discussion-db/discussion-by-share-hash hash))]
+        (ok (assoc (db/meeting-by-hash hash) :meeting/_states states)))
       (validator/deny-access))))
 
 (defn- meetings-by-hashes
@@ -95,7 +110,6 @@
   `{:params {:share-hashes [\"bb328b5e-297d-4725-8c11-f1ed7db39109\"
                             \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
   [req]
-  (println "in meetings-by-hashes")
   (if-let [hashes (get-in req [:params :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)
           filtered-hashes (filter validator/valid-discussion? hashes-list)
@@ -108,7 +122,7 @@
 (defn- public-schnaqs
   "Return all public meetings."
   [_req]
-  (ok {:meetings (db/public-meetings)}))
+  (ok {:discussions (discussion-db/public-discussions)}))
 
 (defn- meeting-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further

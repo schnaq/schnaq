@@ -34,7 +34,8 @@
    {:discussion/starting-arguments argument-pattern}
    {:discussion/starting-statements main-db/statement-pattern}
    :discussion/share-hash
-   :discussion/author])
+   :discussion/header-image-url
+   {:discussion/author [:user/nickname]}])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."
@@ -54,23 +55,20 @@
     (query
       '[:find (pull ?statements statement-pattern)
         :in $ ?share-hash statement-pattern
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion ?discussion]
+        :where [?discussion :discussion/share-hash ?share-hash]
         [?discussion :discussion/starting-statements ?statements]]
       share-hash main-db/statement-pattern)))
 
 (defn discussion-by-share-hash
   "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)"
   [share-hash]
-  (ffirst
-    (query
-      '[:find ?discussions
-        :in $ ?share-hash
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion ?discussions]]
-      share-hash)))
+  (-> (query
+        '[:find (pull ?discussion discussion-pattern)
+          :in $ ?share-hash discussion-pattern
+          :where [?discussion :discussion/share-hash ?share-hash]]
+        share-hash discussion-pattern)
+      (toolbelt/pull-key-up :db/ident)
+      ffirst))
 
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
@@ -124,7 +122,7 @@
   [:meeting/share-hash :db/id :statement/content :ret :db/id]
   (let [new-statement (build-new-statement user-id statement-content "add/starting-argument")
         temporary-id (:db/id new-statement)
-        discussion-id (discussion-by-share-hash share-hash)]
+        discussion-id (:db/id (discussion-by-share-hash share-hash))]
     (get-in (transact [new-statement
                        [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
@@ -158,22 +156,21 @@
   entities."
   [title]
   [string? :ret (s/coll-of ::specs/discussion)]
-  (flatten
-    (query
-      '[:find (pull ?discussions discussion-pattern)
-        :in $ discussion-pattern ?title
-        :where [?discussions :discussion/title ?title]]
-      discussion-pattern title)))
+  (-> (query
+        '[:find (pull ?discussions discussion-pattern)
+          :in $ discussion-pattern ?title
+          :where [?discussions :discussion/title ?title]]
+        discussion-pattern title)
+      (toolbelt/pull-key-up :db/ident)
+      flatten))
 
 (defn all-arguments-for-discussion
-  "Returns all arguments belonging to a discussion, identified by discussion id."
+  "Returns all arguments belonging to a discussion, identified by share-hash."
   [share-hash]
   (-> (query
         '[:find (pull ?discussion-arguments argument-pattern)
           :in $ argument-pattern ?share-hash
-          :where [?meeting :meeting/share-hash ?share-hash]
-          [?agenda :agenda/meeting ?meeting]
-          [?agenda :agenda/discussion ?discussion]
+          :where [?discussion :discussion/share-hash ?share-hash]
           [?discussion-arguments :argument/discussions ?discussion]]
         argument-pattern share-hash)
       flatten
@@ -195,15 +192,16 @@
 (>defn delete-discussion
   "Adds the deleted state to a discussion"
   [share-hash]
-  [:meeting/share-hash :ret (? :meeting/share-hash)]
-  (let [discussion-id (discussion-by-share-hash share-hash)]
-    (try
-      (transact [[:db/add discussion-id :discussion/states :discussion.state/deleted]])
-      (log/info "Schnaq with share-hash " share-hash " has been set to deleted.")
-      share-hash
-      (catch ExceptionInfo e
-        (log/error "Deletion of discussion with id " discussion-id " and share-hash "
-                   share-hash " failed. Exception:\n" e)))))
+  [:discussion/share-hash :ret (? :discussion/share-hash)]
+  (try
+    (transact [[:db/add [:discussion/share-hash share-hash]
+                :discussion/states :discussion.state/deleted]])
+    (log/info "Schnaq with share-hash " share-hash " has been set to deleted.")
+    share-hash
+    (catch ExceptionInfo e
+      (log/error
+        (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
+                share-hash e)))))
 
 (>defn discussion-deleted?
   "Returns whether a discussion has been marked as deleted."
@@ -225,7 +223,7 @@
   "Creates a new argument based on a statement, which is used as conclusion."
   [share-hash user-id new-conclusion-id new-statement-string argument-type]
   [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
-  (let [discussion-id (discussion-by-share-hash share-hash)
+  (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author user-id
@@ -259,3 +257,37 @@
   [share-hash user-id statement-id attacking-string]
   [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
+
+(>defn new-discussion
+  "Adds a new discussion to the database."
+  [discussion-data public?]
+  [map? boolean? :ret :db/id]
+  (let [default-states [:discussion.state/open]
+        states (cond-> default-states
+                       public? (conj :discussion.state/public))]
+    (main-db/clean-and-add-to-db! (assoc discussion-data :discussion/states states)
+                                  ::specs/discussion)))
+
+(>defn private-discussion-data
+  "Return non public meeting data by id."
+  [id]
+  [int? :ret ::specs/discussion]
+  (toolbelt/pull-key-up
+    (d/pull (d/db (new-connection)) discussion-pattern-private id)
+    :db/ident))
+
+(defn public-discussions
+  "Returns all public discussions."
+  []
+  (->>
+    (d/q
+      '[:find (pull ?public-discussions discussion-pattern) ?ts
+        :in $ discussion-pattern
+        :where [?public-discussions :discussion/states :discussion.state/public ?tx]
+        (not-join [?public-discussions]
+                  [?public-discussions :discussion/states :discussion.state/deleted])
+        [?tx :db/txInstant ?ts]]
+      (d/db (new-connection)) discussion-pattern)
+    (#(toolbelt/pull-key-up % :db/ident))
+    (sort-by second toolbelt/comp-compare)
+    (map first)))

@@ -58,6 +58,47 @@
    [:div.container.py-4
     [meetings-list-view subscription-key]]])
 
+(defn- schnaq-entry
+  "Displays a single schnaq of the schnaq list"
+  [schnaq]
+  (let [share-hash (:discussion/share-hash schnaq)
+        title (:discussion/title schnaq)
+        url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
+    [:div.meeting-entry
+     {:on-click (fn []
+                  (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                {:share-hash share-hash}])
+                  (rf/dispatch [:meeting/select-current {:db/id (random-uuid)
+                                                         :meeting/title title
+                                                         :meeting/share-hash share-hash
+                                                         :meeting/header-image-url (:discussion/header-image-url schnaq)}]))}
+     [:div [:img.meeting-entry-title-header-image {:src url}]]
+     [:div.meeting-entry-title
+      [:h5 title]]]))
+
+(defn- schnaq-list-view
+  "Shows a list of schnaqs."
+  [subscription-key]
+  [:div.meetings-list
+   (let [schnaqs @(rf/subscribe [subscription-key])]
+     (if (empty? schnaqs)
+       [no-meetings-found]
+       (for [schnaq schnaqs]
+         [:div.py-3 {:key (:db/id schnaq)}
+          [schnaq-entry schnaq]])))])
+
+(>defn- schnaq-overview
+  "Shows the page for an overview of schnaqs. Takes a subscription-key which
+  must be a keyword referring to a subscription, which returns a collection of
+  schnaqs."
+  [subscription-key]
+  [keyword? :ret vector?]
+  [pages/with-nav-and-header
+   {:page/heading (labels :meetings/header)
+    :page/subheading (labels :meetings/subheader)}
+   [:div.container.py-4
+    [schnaq-list-view subscription-key]]])
+
 (defn meeting-view-entry
   "Render all meetings."
   []
@@ -66,7 +107,7 @@
 (defn public-discussions-view
   "Render all public discussions."
   []
-  [meeting-view :meetings/public])
+  [schnaq-overview :schnaqs/public])
 
 (defn meeting-view-visited
   "Render visited meetings."
