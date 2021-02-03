@@ -80,9 +80,9 @@
 (rf/reg-event-db
   :admin.schnaq.delete/success
   (fn [db [_ {:keys [share-hash]}]]
-    (let [public-schnaqs (get-in db [:meetings :public])
-          new-public-schnaqs (remove #(= share-hash (:meeting/share-hash %)) public-schnaqs)]
-      (assoc-in db [:meetings :public] new-public-schnaqs))))
+    (let [public-schnaqs (get-in db [:schnaqs :public])
+          new-public-schnaqs (remove #(= share-hash (:discussion/share-hash %)) public-schnaqs)]
+      (assoc-in db [:schnaqs :public] new-public-schnaqs))))
 
 (rf/reg-event-fx
   :admin.schnaq/delete
@@ -107,20 +107,20 @@
                  (js-wrap/prevent-default e)
                  (when (js/confirm (labels :admin.center.delete/confirmation))
                    (rf/dispatch [:admin.schnaq/delete
-                                 (oget e [:target :elements :public-meeting-select :value])])))}
+                                 (oget e [:target :elements :public-schnaq-select :value])])))}
    [:div.form-row.align-items-center
     [:div.col-auto
      [:label
-      {:for "public-meeting-select"} (labels :admin.center.delete.public/label)]]
-    (let [public-meetings @(rf/subscribe [:meetings/public])]
+      {:for "public-schnaq-select"} (labels :admin.center.delete.public/label)]]
+    (let [public-schnaqs @(rf/subscribe [:schnaqs/public])]
       [:div.col-auto
        [:select.form-control
-        {:id "public-meeting-select"}
-        (for [meeting public-meetings]
+        {:id "public-schnaq-select"}
+        (for [schnaq public-schnaqs]
           [:option
-           {:key (:meeting/share-hash meeting)
-            :value (:meeting/share-hash meeting)}
-           (:meeting/title meeting)])]])
+           {:key (:discussion/share-hash schnaq)
+            :value (:discussion/share-hash schnaq)}
+           (:discussion/title schnaq)])]])
     [:div.col-auto
      [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
 

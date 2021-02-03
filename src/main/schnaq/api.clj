@@ -123,7 +123,7 @@
 (defn- public-schnaqs
   "Return all public meetings."
   [_req]
-  (ok {:meetings (db/public-meetings)}))
+  (ok {:discussions (discussion-db/public-discussions)}))
 
 (defn- meeting-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
