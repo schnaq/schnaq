@@ -64,12 +64,13 @@
 (defn discussion-by-share-hash
   "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)"
   [share-hash]
-  (ffirst
-    (query
-      '[:find ?discussion
-        :in $ ?share-hash
+  (-> (query
+      '[:find (pull ?discussion discussion-pattern)
+        :in $ ?share-hash discussion-pattern
         :where [?discussion :discussion/share-hash ?share-hash]]
-      share-hash)))
+      share-hash discussion-pattern)
+      (toolbelt/pull-key-up :db/ident)
+      ffirst))
 
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
@@ -123,7 +124,7 @@
   [:meeting/share-hash :db/id :statement/content :ret :db/id]
   (let [new-statement (build-new-statement user-id statement-content "add/starting-argument")
         temporary-id (:db/id new-statement)
-        discussion-id (discussion-by-share-hash share-hash)]
+        discussion-id (:db/id (discussion-by-share-hash share-hash))]
     (get-in (transact [new-statement
                        [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
@@ -225,7 +226,7 @@
   "Creates a new argument based on a statement, which is used as conclusion."
   [share-hash user-id new-conclusion-id new-statement-string argument-type]
   [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
-  (let [discussion-id (discussion-by-share-hash share-hash)
+  (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author user-id

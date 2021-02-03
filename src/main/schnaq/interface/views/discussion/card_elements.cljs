@@ -113,8 +113,9 @@
 (defn- discussion-privacy-badge
   "A small badge displaying who can see the discussion!"
   [meeting]
-  (let [states (set (-> meeting :agenda/_meeting first :agenda/discussion :discussion/states))
+  (let [states (set (-> meeting :meeting/_states))
         public? (contains? states :discussion.state/public)]
+    (println meeting)
     [:div.text-center.mt-2.privacy-indicator
      (if public?
        [:span.badge.badge-secondary-outline

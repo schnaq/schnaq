@@ -97,7 +97,8 @@
   [req]
   (let [hash (get-in req [:route-params :hash])]
     (if (validator/valid-discussion? hash)
-      (ok (db/meeting-by-hash hash))
+      (let [states (:discussion/states (discussion-db/discussion-by-share-hash hash))]
+        (ok (assoc (db/meeting-by-hash hash) :meeting/_states states)))
       (validator/deny-access))))
 
 (defn- meetings-by-hashes
