@@ -199,8 +199,9 @@
     (log/info "Schnaq with share-hash " share-hash " has been set to deleted.")
     share-hash
     (catch ExceptionInfo e
-      (log/error "Deletion of discussion with share-hash "
-                 share-hash " failed. Exception:\n" e))))
+      (log/error
+        (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
+                share-hash e)))))
 
 (>defn discussion-deleted?
   "Returns whether a discussion has been marked as deleted."
