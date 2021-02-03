@@ -91,8 +91,10 @@
    (init-and-seed! {:datomic config/datomic
                     :name config/db-name}))
   ([config]
+   (init-and-seed! config test-data/schnaq-test-data))
+  ([config test-data]
    (init! config)
-   (transact test-data/schnaq-test-data)))
+   (transact test-data)))
 
 
 ;; -----------------------------------------------------------------------------

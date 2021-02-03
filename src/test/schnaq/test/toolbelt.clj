@@ -22,15 +22,21 @@
 
 (defn init-db-test-fixture
   "Fixture to initialize, test, and afterwards delete the database."
-  [f]
-  (database/init-and-seed! test-config)
-  (f))
+  ([f]
+   (database/init-and-seed! test-config)
+   (f))
+  ([f test-data]
+   (database/init-and-seed! test-config test-data)
+   (f)))
 
 (defn init-test-delete-db-fixture
   "Fixture to initialize, test, and afterwards delete the database."
-  [f]
-  (init-db-test-fixture f)
-  (database/delete-database!))
+  ([f]
+   (init-db-test-fixture f)
+   (database/delete-database!))
+  ([f test-data]
+   (init-db-test-fixture f test-data)
+   (database/delete-database!)))
 
 ;; -----------------------------------------------------------------------------
 ;; Generative Test Helpers

@@ -1,10 +1,13 @@
 (ns schnaq.database.discussion-test
   (:require [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
+            [schnaq.database.discussion-test-data :as test-data]
             [schnaq.meeting.database :as main-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
-(use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
+(use-fixtures :each
+              schnaq-toolbelt/init-test-delete-db-fixture
+              #(schnaq-toolbelt/init-test-delete-db-fixture % test-data/public-discussions))
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest delete-discussion-test
@@ -132,3 +135,15 @@
                                       false))))
     (testing "Transacting something non-essential should return nil"
       (is (nil? (db/new-discussion (dissoc minimal-discussion :discussion/title) false))))))
+
+(deftest public-discussions-test
+  (testing "Should return all discussions that are marked as public."
+    (is (= 1 (count (db/public-discussions))))
+    (db/new-discussion {:discussion/title "tester" :discussion/share-hash "newwwwasd"
+                        :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                       true)
+    (is (= 2 (count (db/public-discussions))))
+    (db/new-discussion {:discussion/title "tester private" :discussion/share-hash "newaaaasdasdwwwasd"
+                        :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                       false)
+    (is (= 2 (count (db/public-discussions))))))

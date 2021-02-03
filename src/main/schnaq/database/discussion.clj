@@ -260,7 +260,6 @@
   (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
 
 (>defn new-discussion
-  ;; TODO test what happens with invalid author-id (should fail)
   "Adds a new discussion to the database."
   [discussion-data public?]
   [map? boolean? :ret :db/id]
@@ -280,7 +279,6 @@
 
 (defn public-discussions
   "Returns all public discussions."
-  ;; TODO write tests
   []
   (->>
     (d/q
