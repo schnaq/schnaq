@@ -56,8 +56,38 @@
      (when edit-hash
        [delete-clicker statement edit-hash])]))
 
+(defn current-schnaq-info-badges
+  "Badges that display current schnaq info."
+  []
+  (let [meta-info @(rf/subscribe [:current-schnaq/meta-info])
+        statement-count (:all-statements meta-info)
+        user-count (count (:authors meta-info))]
+    [:p.mb-0
+     [:span.badge.badge-pill.badge-transparent.mr-2
+      [:i {:class (str "m-auto fas " (fa :comment))}]
+      " " statement-count]
+     [:span.badge.badge-pill.badge-transparent.mr-2
+      {:tabIndex 20
+       :title (labels :discussion.badges/user-overview)}
+      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
 
 ;; #### Subs ####
+
+(rf/reg-sub
+  :current-schnaq/meta-info
+  (fn [db [_]]
+    (let [starting-conclusions (get-in db [:discussion :conclusions :starting])
+          n-conclusions (count starting-conclusions)
+          fn-get-meta-info (fn [starting] (-> starting :meta/sub-discussion-info))
+          all-meta-infos (map fn-get-meta-info starting-conclusions)
+          fn-add-values (fn [{statements-v1 :all-statements authors-v1 :authors}
+                             {statements-v2 :sub-statements authors-v2 :authors}]
+                          {:all-statements (+ statements-v1 statements-v2)
+                           :authors (conj authors-v1 authors-v2)})
+          schnaq-info (reduce fn-add-values
+                              {:all-statements n-conclusions :authors #{}}
+                              all-meta-infos)]
+      schnaq-info)))
 
 (rf/reg-sub
   :visited/load-statement-nums
