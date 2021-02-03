@@ -22,8 +22,7 @@
     [tooltip/nested-div
      "right"
      (labels :history.home/tooltip)
-     [:<> [:i {:class "fas fa-angle-double-left"}]
-      [:div [:small (labels :history.home/text)]]]]]])
+     [:<> [:div [:small (labels :history.home/text)]]]]]])
 
 (defn history-view-mobile
   "History view displayed in the left column in the desktop view."
@@ -47,46 +46,63 @@
                (str (labels :tooltip/history-statement) nickname)
                [common/avatar nickname 42]]]])]))]))
 
-(defn- home-button
-  "Home button for history view"
-  [history-length]
-  [:div.d-inline-block.text-dark
-   [:div.clickable.card-history-home.text-center
+(defn- my-schnaqs-button
+  "Return to your schnaqs Button"
+  []
+  [:div.d-inline-block.text-dark.w-100
+   [:div.clickable.card-history-home
     {:on-click
-     #(rf/dispatch [:discussion.history/time-travel history-length])}
+     #(rf/dispatch [:navigation/navigate :routes.meetings/my-schnaqs])}
     [tooltip/nested-div
      "right"
-     (labels :history.home/tooltip)
-     [:<>
-      [:div [:h5 (labels :history.home/text)]]
-      [:div.mr-auto [badges/current-schnaq-info-badges]]]]]])
+     (labels :history.all-schnaqs/tooltip)
+     [:div.d-flex
+      [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
+      [:div [:h5 (labels :history.all-schnaqs/text)]]]]]])
+
+(defn- discussion-start-button
+  "Discussion start button for history view"
+  [history-length]
+  [:div.clickable.card-history-home.mt-4.text-dark
+   {:on-click #(rf/dispatch [:discussion.history/time-travel history-length])}
+   [tooltip/nested-div
+    "right"
+    (labels :history.home/tooltip)
+    [:div.ml-4
+     [:div [:h5 (labels :history.home/text)]]
+     [:div.mr-auto [badges/current-schnaq-info-badges]]]]])
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
   [history]
   (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
     [:<>
-     ;; home button
-     [home-button (count indexed-history)]
+     ;; my schnaqs button
+     [my-schnaqs-button]
+     ;; discussion start button
+     (when (seq indexed-history)
+       [discussion-start-button (count indexed-history)])
      ;; history
-     (for [[index statement] indexed-history]
+     (for [[index statement] (butlast indexed-history)]
        (let [nickname (-> statement :statement/author :user/nickname)
              content (-> statement :statement/content)]
-         [:div.d-inline-block.d-md-block.text-dark
-          {:key (str "history-" (:db/id statement))}
-          (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
-            [:div.card-history.clickable.mt-md-4
-             {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
-              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-             [:div.history-card-content
-              [tooltip/nested-div
-               "right"
-               (str (labels :tooltip/history-statement) nickname)
-               [:<>
-                [:div.d-flex.flex-row
-                 [:h6 (str (labels :history.statement/user) nickname)]
-                 [common/avatar nickname 22]]
-                [:span content]]]]])]))]))
+         [:div {:key (str "history-container-" (:db/id statement))}
+          [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
+          [:div.d-inline-block.d-md-block.text-dark
+           {:key (str "history-" (:db/id statement))}
+           (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+             [:div.card-history.clickable
+              {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
+               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+              [:div.history-card-content
+               [tooltip/nested-div
+                "right"
+                (str (labels :tooltip/history-statement) nickname)
+                [:<>
+                 [:div.d-flex.flex-row
+                  [:h6 (str (labels :history.statement/user) nickname)]
+                  [:div.ml-auto [common/avatar nickname 22]]]
+                 [:span content]]]]])]]))]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"

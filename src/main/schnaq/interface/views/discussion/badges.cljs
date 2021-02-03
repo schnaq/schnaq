@@ -77,17 +77,16 @@
   :current-schnaq/meta-info
   (fn [db [_]]
     (let [starting-conclusions (get-in db [:discussion :conclusions :starting])
+          n-conclusions (count starting-conclusions)
           fn-get-meta-info (fn [starting] (-> starting :meta/sub-discussion-info))
           all-meta-infos (map fn-get-meta-info starting-conclusions)
-          fn-add-values (fn [v1 v2]
-                          (let [statements-v1 (:all-statements v1)
-                                statements-v2 (:sub-statements v2)
-                                authors-v1 (:authors v1)
-                                authors-v2 (:authors v2)]
-                            ;; add 1 for each starting statement
-                            {:all-statements (+ 1 statements-v1 statements-v2)
-                             :authors (conj authors-v1 authors-v2)}))
-          schnaq-info (reduce fn-add-values {:all-statements 0 :authors #{}} all-meta-infos)]
+          fn-add-values (fn [{statements-v1 :all-statements authors-v1 :authors}
+                             {statements-v2 :sub-statements authors-v2 :authors}]
+                          {:all-statements (+ statements-v1 statements-v2)
+                           :authors (conj authors-v1 authors-v2)})
+          schnaq-info (reduce fn-add-values
+                              {:all-statements n-conclusions :authors #{}}
+                              all-meta-infos)]
       schnaq-info)))
 
 (rf/reg-sub
