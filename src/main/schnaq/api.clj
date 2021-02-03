@@ -51,8 +51,6 @@
   (assoc meeting :meeting/share-hash share-hash
                  :meeting/edit-hash edit-hash))
 
-;; TODO die kreierte Diskussion ist per default privat, abgegebene Beiträge verschwinden
-;; und die Diskussion wird in keiner Liste angezeigt
 (defn- create-discussion-data-with-hashes
   "Creates a valid discussion object and adds hashes"
   [title author share-hash edit-hash]

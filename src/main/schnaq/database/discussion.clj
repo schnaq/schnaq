@@ -55,9 +55,7 @@
     (query
       '[:find (pull ?statements statement-pattern)
         :in $ ?share-hash statement-pattern
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion ?discussion]
+        :where [?discussion :discussion/share-hash ?share-hash]
         [?discussion :discussion/starting-statements ?statements]]
       share-hash main-db/statement-pattern)))
 
