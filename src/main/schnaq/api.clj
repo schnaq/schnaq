@@ -51,12 +51,15 @@
   (assoc meeting :meeting/share-hash share-hash
                  :meeting/edit-hash edit-hash))
 
+;; TODO die kreierte Diskussion ist per default privat, abgegebene Beiträge verschwinden
+;; und die Diskussion wird in keiner Liste angezeigt
 (defn- create-discussion-data-with-hashes
   "Creates a valid discussion object and adds hashes"
-  [title share-hash edit-hash]
+  [title author share-hash edit-hash]
   {:discussion/title title
    :discussion/share-hash share-hash
-   :discussion/edit-hash edit-hash})
+   :discussion/edit-hash edit-hash
+   :discussion/author author})
 
 (defn- add-meeting
   "Adds a meeting and (optional) agendas to the database.
@@ -69,7 +72,7 @@
         author-id (db/add-user-if-not-exists nickname)
         meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
         discussion-data (create-discussion-data-with-hashes
-                          (:meeting/title meeting) share-hash edit-hash)
+                          (:meeting/title meeting) author-id share-hash edit-hash)
         new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
     (if new-discussion-id
       (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)

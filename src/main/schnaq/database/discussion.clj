@@ -157,12 +157,13 @@
   entities."
   [title]
   [string? :ret (s/coll-of ::specs/discussion)]
-  (flatten
-    (query
-      '[:find (pull ?discussions discussion-pattern)
-        :in $ discussion-pattern ?title
-        :where [?discussions :discussion/title ?title]]
-      discussion-pattern title)))
+  (-> (query
+        '[:find (pull ?discussions discussion-pattern)
+          :in $ discussion-pattern ?title
+          :where [?discussions :discussion/title ?title]]
+        discussion-pattern title)
+      (toolbelt/pull-key-up :db/ident)
+      flatten))
 
 (defn all-arguments-for-discussion
   "Returns all arguments belonging to a discussion, identified by discussion id."
@@ -260,6 +261,7 @@
   (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
 
 (>defn new-discussion
+  ;; TODO test what happens with invalid author-id (should fail)
   "Adds a new discussion to the database."
   [discussion-data public?]
   [map? boolean? :ret :db/id]
