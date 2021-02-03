@@ -335,9 +335,11 @@
     :discussion/title "Cat or Dog?"
     :discussion/description "Should a person looking for a pet rather buy a dog or a cat?"
     :discussion/states [:discussion.state/open]
+    :discussion/share-hash "cat-dog-hash"
     :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]}
    {:db/id "discussion/tapir-or-ameisenbaer"
     :discussion/title "Tapir oder Ameisenbär?"
+    :discussion/share-hash "ameisenbär-hash"
     :discussion/description "What do what do"
     :discussion/states [:discussion.state/open]
     :discussion/starting-statements ["statement/get-dog"]}])

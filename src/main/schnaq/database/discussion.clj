@@ -165,14 +165,12 @@
       flatten))
 
 (defn all-arguments-for-discussion
-  "Returns all arguments belonging to a discussion, identified by discussion id."
+  "Returns all arguments belonging to a discussion, identified by share-hash."
   [share-hash]
   (-> (query
         '[:find (pull ?discussion-arguments argument-pattern)
           :in $ argument-pattern ?share-hash
-          :where [?meeting :meeting/share-hash ?share-hash]
-          [?agenda :agenda/meeting ?meeting]
-          [?agenda :agenda/discussion ?discussion]
+          :where [?discussion :discussion/share-hash ?share-hash]
           [?discussion-arguments :argument/discussions ?discussion]]
         argument-pattern share-hash)
       flatten
