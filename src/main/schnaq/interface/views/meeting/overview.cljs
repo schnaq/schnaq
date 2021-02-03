@@ -59,7 +59,7 @@
     [meetings-list-view subscription-key]]])
 
 (defn- schnaq-entry
-  "Displays a single meeting element of the meeting list"
+  "Displays a single schnaq of the schnaq list"
   [schnaq]
   (let [share-hash (:discussion/share-hash schnaq)
         title (:discussion/title schnaq)
