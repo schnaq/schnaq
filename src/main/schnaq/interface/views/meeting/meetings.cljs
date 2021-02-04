@@ -42,7 +42,7 @@
   :meeting/load-by-share-hash
   (fn [_ [_ hash]]
     {:fx [[:http-xhrio {:method :get
-                        :uri (str (:rest-backend config) "/meeting/by-hash/" hash)
+                        :uri (str (:rest-backend config) "/schnaq/by-hash/" hash)
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
                         :on-success [:meeting/select-current]

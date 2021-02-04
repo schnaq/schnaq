@@ -90,13 +90,12 @@
     (db/add-user-if-not-exists author-name)
     (ok {:text "POST successful"})))
 
-(defn- meeting-by-hash
+(defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
     (if (validator/valid-discussion? hash)
-      (let [states (:discussion/states (discussion-db/discussion-by-share-hash hash))]
-        (ok (assoc (db/meeting-by-hash hash) :meeting/_states states)))
+      (ok (discussion-db/discussion-by-share-hash hash))
       (validator/deny-access))))
 
 (defn- meetings-by-hashes
@@ -449,7 +448,7 @@
   "Common routes for all modes."
   (routes
     (GET "/export/txt" [] export-txt-data)
-    (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
+    (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
     (GET "/meetings/by-hashes" [] meetings-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
