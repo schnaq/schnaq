@@ -4,7 +4,7 @@
   background-color: $white;
   border-radius: 2rem;
   box-shadow: $light-shadow;
-  height: 20rem;
+  height: 15rem;
   overflow: hidden;
 }
 
@@ -14,6 +14,10 @@
   @extend .meeting-entry-no-hover;
   /* stylelint-enable */
   cursor: pointer;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
 
   &:hover {
     background: $white-shade;
@@ -30,7 +34,7 @@
 }
 
 .meeting-entry-title-header-image {
-  max-height: 16rem;
+  max-height: 10rem;
   min-height: 100%;
   min-width: 100%;
   object-fit: cover;

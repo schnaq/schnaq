@@ -10,6 +10,7 @@
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.errors :as error-views]
+            [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.meeting.admin-center :as meeting-admin]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
@@ -54,12 +55,12 @@
    ["schnaqs"
     ["/public"
      {:name :routes/public-discussions
-      :view meetings-overview/public-discussions-view
+      :view feed/public-discussions-view
       :link-text (labels :router/public-discussions)
       :controllers [{:start (fn [] (rf/dispatch [:schnaqs.public/load]))}]}]
     ["/my"
      {:name :routes.meetings/my-schnaqs
-      :view meetings-overview/meeting-view-visited
+      :view feed/personal-discussions-view
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]]
    ["schnaq"
