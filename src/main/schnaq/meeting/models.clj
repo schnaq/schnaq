@@ -274,11 +274,6 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The states the discussion is in"}
-   {:db/ident :discussion/starting-arguments
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "DEPRECATED: Use starting-conclusions for new data instead.
-    The arguments at the source of the discussion-graph"}
    {:db/ident :discussion/starting-statements
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many

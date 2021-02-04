@@ -7,41 +7,6 @@
             [schnaq.interface.views.pages :as pages]
             [re-frame.core :as rf]))
 
-(rf/reg-sub
-  :migration.starting-arguments/status
-  (fn [db _]
-    (get-in db [:migration :status :starting-arguments] "-")))
-
-(rf/reg-event-db
-  :migration.starting-arguments/success
-  (fn [db _]
-    (assoc-in db [:migration :status :starting-arguments] "Migration erfolgreich fertig gestellt")))
-
-(rf/reg-event-fx
-  :migration.starting-arguments/start
-  (fn [{:keys [db]} _]
-    (let [admin-pass (get-in db [:admin :password])]
-      {:db (assoc-in db [:migration :status :starting-arguments] "Läuft… Bitte Warten")
-       :fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/admin/migrations/starting-statements-a78stdgah23f-a9sd")
-                          :params {:password admin-pass}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:migration.starting-arguments/success]
-                          :on-failure [:ajax.error/as-notification]}]]})))
-
-(defn- migrate-starting-arguments-form
-  "Migrates the starting-arguments to starting-statements."
-  []
-  [:form.form
-   {:id "migrate-discussions-form"
-    :on-submit (fn [e]
-                 (js-wrap/prevent-default e)
-                 (when (js/confirm "Arguments wirklich migrieren? Nicht nochmal klicken, wenn gestartet!")
-                   (rf/dispatch [:migration.starting-arguments/start])))}
-   [:button.btn.btn-danger {:type "submit"} "Migriere Starting Arguments JETZT!"]
-   [:p "Status: " @(rf/subscribe [:migration.starting-arguments/status])]])
-
 (rf/reg-event-db
   :admin.schnaq.delete/success
   (fn [db [_ {:keys [share-hash]}]]
@@ -122,11 +87,7 @@
      [:h4 (labels :admin.center.delete.public/heading)]
      [public-meeting-deletion-form]
      [:h4 (labels :admin.center.delete.private/heading)]
-     [private-meeting-deletion-form]]
-    [:hr]
-    [:div
-     [:h4 "Migration"]
-     [migrate-starting-arguments-form]]]])
+     [private-meeting-deletion-form]]]])
 
 (defn center-overview-route
   []

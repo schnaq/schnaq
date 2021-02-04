@@ -21,13 +21,10 @@
                :discussion.state/private :discussion.state/deleted
                :discussion.state/public}
              :distinct true))
-(s/def :discussion/starting-arguments (s/coll-of ::argument))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
-(s/def ::discussion (s/keys :req [:discussion/title :discussion/states]
-                            :opt [:discussion/starting-arguments :discussion/starting-statements
-                                  :discussion/description
-                                  ;; The following things need to go to req, after live database has been migrated
-                                  :discussion/share-hash :discussion/edit-hash :discussion/author
+(s/def ::discussion (s/keys :req [:discussion/title :discussion/states
+                                  :discussion/share-hash :discussion/edit-hash :discussion/author]
+                            :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url]))
 
 ;; Author

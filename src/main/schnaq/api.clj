@@ -436,31 +436,6 @@
       (validator/deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
-;; Temporary Migration functions
-
-(defn- migrate-starting-arguments!
-  "Migrates the starting-arguments field to the starting-statements field."
-  [_req]
-  (let [all-starting-arguments
-        (->
-          (db/query '[:find ?discussion (pull ?starting-arguments [:argument/conclusion])
-                      :in $
-                      :where [?discussion :discussion/starting-arguments ?starting-arguments]])
-          (toolbelt/pull-key-up :db/id)
-          (toolbelt/pull-key-up :argument/conclusion)
-          set)
-        transaction (mapv #(vector :db/add (first %) :discussion/starting-statements (second %)) all-starting-arguments)]
-    (db/transact transaction)
-    (ok {:message "success"})))
-
-(comment
-  ;; Comment left in on Purpose for testing
-  (migrate-starting-arguments! :a)
-  (db/query '[:find (pull ?discussion [*])
-              :in $
-              :where [?discussion :discussion/starting-statements _]]))
-
-;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
 ;; compojure can't handle natively more than one custom middleware. reitit has a
@@ -469,10 +444,6 @@
 
 (def ^:private not-found-msg
   "Error, page not found!")
-
-(def ^:private temporary-migration-routes
-  (routes
-    (POST "/admin/migrations/starting-statements-a78stdgah23f-a9sd" [] migrate-starting-arguments!)))
 
 (def ^:private common-routes
   "Common routes for all modes."
@@ -521,10 +492,8 @@
   "Building routes for app."
   (if schnaq-core/production-mode?
     (routes common-routes
-            temporary-migration-routes
             (route/not-found not-found-msg))
     (routes common-routes
-            temporary-migration-routes
             development-routes
             (route/not-found not-found-msg))))
 
