@@ -220,7 +220,7 @@
 (>defn- new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
   [share-hash user-id new-conclusion-id new-statement-string argument-type]
-  [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
+  [:discussion/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
@@ -235,7 +235,7 @@
 (>defn- react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
   [share-hash user-id statement-id reacting-string reaction]
-  [:meeting/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
   (let [argument-id
         (get-in
           (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction)
@@ -247,13 +247,13 @@
 (>defn support-statement!
   "Create a new statement supporting another statement. Returns the newly created argument."
   [share-hash user-id statement-id supporting-string]
-  [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
+  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! share-hash user-id statement-id supporting-string :argument.type/support))
 
 (>defn attack-statement!
   "Create a new statement attacking another statement. Returns the newly created argument."
   [share-hash user-id statement-id attacking-string]
-  [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
+  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
 
 (>defn new-discussion

@@ -30,7 +30,7 @@
   "Looks up all direct children of a node. An undercut is considered a child of the premise
   of an argument."
   [root-id all-arguments]
-  [(s/or :id int? :share-hash :meeting/share-hash) sequential? :ret sequential?]
+  [(s/or :id int? :share-hash :discussion/share-hash) sequential? :ret sequential?]
   (let [arguments-with-root (filter
                               #(= root-id (get-in % [:argument/conclusion :db/id]))
                               all-arguments)
@@ -87,7 +87,7 @@
 (>defn- create-nodes
   "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
   [statements share-hash starting-statements]
-  [sequential? :meeting/share-hash sequential? :ret sequential?]
+  [sequential? :discussion/share-hash sequential? :ret sequential?]
   (let [arguments (discussion-db/all-arguments-for-discussion share-hash)
         starting-statement-ids (into #{} (map :db/id starting-statements))]
     (map #(create-node % arguments starting-statement-ids) statements)))
