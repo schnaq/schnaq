@@ -336,6 +336,7 @@
     :discussion/description "Should a person looking for a pet rather buy a dog or a cat?"
     :discussion/states [:discussion.state/open]
     :discussion/share-hash "cat-dog-hash"
+    :discussion/author "user/wegi"
     :discussion/starting-statements ["statement/get-dog" "statement/get-both" "statement/get-cat"]}
    {:db/id "discussion/tapir-or-ameisenbaer"
     :discussion/title "Tapir oder Ameisenbär?"
@@ -349,6 +350,7 @@
     :discussion/title "Wetter Graph"
     :discussion/share-hash "graph-hash"
     :discussion/edit-hash "secreeeet"
+    :discussion/author "user/wegi"
     :discussion/description "Der Graph muss korrekt sein"
     :discussion/states [:discussion.state/open]
     :discussion/starting-statements ["statement/warm" "statement/foo"]}

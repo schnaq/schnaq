@@ -103,14 +103,14 @@
 
 (deftest schnaqs-by-hashes-test
   (let [schnaqs-by-hashes #'api/schnaqs-by-hashes
-        share-hash1 "89eh32hoas-2983ud"
+        share-hash1 "cat-dog-hash"
         share-hash2 "graph-hash"]
-    (testing "No hash provided, no meeting returned."
+    (testing "No hash provided, no discussion returned."
       (is (= 400 (:status (schnaqs-by-hashes {})))))
-    (testing "Invalid hash returns no meeting."
+    (testing "Invalid hash returns no discussion."
       (is (= 404 (:status (schnaqs-by-hashes
                             {:params {:share-hashes "something-non-existent"}})))))
-    (testing "Querying by a single valid hash returns a meeting."
+    (testing "Querying by a single valid hash returns a discussion."
       (let [api-call (schnaqs-by-hashes {:params {:share-hashes share-hash1}})]
         (is (= 200 (:status api-call)))
         (is (= 1 (count (get-in api-call [:body :discussions]))))
@@ -120,7 +120,7 @@
         (is (= 200 (:status api-call)))
         (is (= 1 (count (get-in api-call [:body :discussions]))))
         (is (s/valid? ::specs/discussion (first (get-in api-call [:body :discussions]))))))
-    (testing "Asking for multiple valid hashes, returns a list of valid meetings."
+    (testing "Asking for multiple valid hashes, returns a list of valid discussions."
       (let [api-call (schnaqs-by-hashes {:params {:share-hashes [share-hash1 share-hash2]}})]
         (is (= 200 (:status api-call)))
         (is (= 2 (count (get-in api-call [:body :discussions]))))

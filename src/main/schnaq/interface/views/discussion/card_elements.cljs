@@ -170,7 +170,7 @@
 (defn- discussion-privacy-badge
   "A small badge displaying who can see the discussion!"
   [{:keys [discussion/states]}]
-  (let [public? (contains? states :discussion.state/public)]
+  (let [public? (contains? (set states) :discussion.state/public)]
     [:div.text-center.mt-2.privacy-indicator
      (if public?
        [:span.badge.badge-secondary-outline
