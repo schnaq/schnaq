@@ -100,7 +100,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
-(def ^:private user-pattern
+(def user-pattern
   "Pull a user based on these attributes"
   [:db/id
    :user/upvotes

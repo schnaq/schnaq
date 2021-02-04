@@ -35,7 +35,7 @@
    {:discussion/starting-statements main-db/statement-pattern}
    :discussion/share-hash
    :discussion/header-image-url
-   {:discussion/author [:user/nickname]}])
+   {:discussion/author main-db/user-pattern}])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."
