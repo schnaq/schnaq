@@ -598,22 +598,6 @@
                                {:statement/author [:user/nickname]}]}
           {:argument/conclusion statement-pattern})}])
 
-(>defn starting-conclusions-by-discussion
-  {:deprecated "Use `starting-statements` instead"
-   :doc "Query all conclusions belonging to starting-arguments of a certain discussion."}
-  [share-hash]
-  [:db/id :ret (s/coll-of ::specs/statement)]
-  (flatten
-    (query
-      '[:find (pull ?starting-conclusions statement-pattern)
-        :in $ ?share-hash statement-pattern
-        :where [?meeting :meeting/share-hash ?share-hash]
-        [?agenda :agenda/meeting ?meeting]
-        [?agenda :agenda/discussion ?discussion]
-        [?discussion :discussion/starting-arguments ?starting-arguments]
-        [?starting-arguments :argument/conclusion ?starting-conclusions]]
-      share-hash statement-pattern)))
-
 (defn starting-arguments-by-discussion
   {:deprecated "2020-11-03"
    :doc "Do not use this function anymore in production.
