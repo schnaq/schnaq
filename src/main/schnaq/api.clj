@@ -485,7 +485,8 @@
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."
   (routes
-    (GET "/meetings" [] all-meetings)))
+    ;; todo this function should deliver discussions
+    (GET "/schnaqs" [] all-meetings)))
 
 (def ^:private app-routes
   "Building routes for app."

@@ -18,8 +18,7 @@
                (update-in [:discussions :all] conj new-discussion))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
                         {:share-hash share-hash}]]
-            ;; todo pass a discussion here
-            [:dispatch [:schnaq/select-current new-meeting]]
+            [:dispatch [:schnaq/select-current new-discussion]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :meeting/created-success-heading)
                                        :body (labels :meeting/created-success-subheading)
@@ -29,12 +28,10 @@
             [:dispatch [:meetings.save-admin-access/to-localstorage share-hash edit-hash]]]})))
 
 (rf/reg-event-fx
-  ;; todo this should take a discussion now
-  ;; todo last-1
   :schnaq/select-current
   (fn [{:keys [db]} [_ discussion]]
     {:db (assoc-in db [:schnaq :selected] discussion)
-     :fx [[:dispatch [:meeting.visited/to-localstorage (:meeting/share-hash meeting)]]]}))
+     :fx [[:dispatch [:schnaq.visited/to-localstorage (:discussion/share-hash discussion)]]]}))
 
 (rf/reg-sub
   :schnaq/selected

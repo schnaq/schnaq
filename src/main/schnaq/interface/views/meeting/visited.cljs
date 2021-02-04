@@ -10,39 +10,40 @@
 
 (def ^:private hash-separator ",")
 
-(>defn- parse-visited-meetings-from-localstorage
+(>defn- parse-visited-schnaqs-from-localstorage
   "Read previously visited meetings from localstorage."
   []
   [:ret (s/coll-of (s/or :filled string? :empty nil?))]
   (remove empty?
-          (string/split (ls/get-item :meetings/visited)
+          (string/split (ls/get-item :schnaqs/visited)
                         (re-pattern hash-separator))))
 
-(>defn- build-visited-meetings-from-localstorage
+(>defn- build-visited-schnaqs-from-localstorage
   "Builds collection of visited meetings, based on previously stored hashes from
   the localstorage."
   [share-hash]
   [string? :ret (s/coll-of string?)]
-  (let [meetings-visited (parse-visited-meetings-from-localstorage)
-        meetings-visited-with-new-hash (conj meetings-visited share-hash)
+  (let [schnaqs-visited (parse-visited-schnaqs-from-localstorage)
+        schnaqs-visited-with-new-hash (conj schnaqs-visited share-hash)
         join-hashes (partial string/join hash-separator)]
-    (if-not (some #{share-hash} meetings-visited)
-      (join-hashes meetings-visited-with-new-hash)
-      (join-hashes meetings-visited))))
+    (if-not (some #{share-hash} schnaqs-visited)
+      (join-hashes schnaqs-visited-with-new-hash)
+      (join-hashes schnaqs-visited))))
 
 (rf/reg-event-db
-  :meetings.visited/store-hashes-from-localstorage
+  ;; todo store schnaqs (discussions) not meetings here
+  :schnaqs.visited/store-hashes-from-localstorage
   (fn [db _]
     (assoc-in db [:meetings :visited-hashes]
-              (parse-visited-meetings-from-localstorage))))
+              (parse-visited-schnaqs-from-localstorage))))
 
 (rf/reg-event-fx
-  :meeting.visited/to-localstorage
+  :schnaq.visited/to-localstorage
   (fn [_ [_ share-hash]]
     {:fx [[:localstorage/write
-           [:meetings/visited
-            (build-visited-meetings-from-localstorage share-hash)]]
-          [:dispatch [:meetings.visited/store-hashes-from-localstorage]]]}))
+           [:schnaqs/visited
+            (build-visited-schnaqs-from-localstorage share-hash)]]
+          [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-sub
   :meetings.visited/all-hashes
@@ -50,14 +51,15 @@
     (get-in db [:meetings :visited-hashes])))
 
 (rf/reg-sub
-  :meetings.visited/all
+  :schnaqs.visited/all
   (fn [db _]
-    (get-in db [:meetings :visited])))
+    (get-in db [:schnaqs :visited])))
 
 (rf/reg-event-db
+  ;; todo this should store and save discussions
   :meeting.visited/store-from-backend
   (fn [db [_ {:keys [meetings]}]]
-    (assoc-in db [:meetings :visited] meetings)))
+    (assoc-in db [:schnaqs :visited] meetings)))
 
 (rf/reg-event-fx
   :meetings.visited/load

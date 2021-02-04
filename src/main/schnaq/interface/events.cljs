@@ -43,11 +43,11 @@
                                   :child [modal/enter-name-modal]}]]]}))))
 
 (rf/reg-event-fx
-  :load/meetings
+  :load/schnaqs
   (fn [_ _]
     (when-not toolbelt/production?
       {:fx [[:http-xhrio {:method :get
-                          :uri (str (:rest-backend config) "/meetings")
+                          :uri (str (:rest-backend config) "/schnaqs")
                           :timeout 10000
                           :response-format (ajax/transit-response-format)
                           :on-success [:init-from-backend]
@@ -65,18 +65,18 @@
   :initialise-db
   (fn [_ _]
     {:db schnaq-db/default-db
-     :fx [[:dispatch [:load/meetings]]
+     :fx [[:dispatch [:load/schnaqs]]
           [:dispatch [:username/from-localstorage]]
           [:dispatch [:keycloak/init]]
           [:dispatch [:load/last-added-meeting]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
           [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]
-          [:dispatch [:meetings.visited/store-hashes-from-localstorage]]]}))
+          [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-event-db
   :init-from-backend
-  (fn [db [_ all-meetings]]
-    (assoc-in db [:meetings :all] all-meetings)))
+  (fn [db [_ all-discussions]]
+    (assoc-in db [:schnaqs :all] all-discussions)))
 
 (rf/reg-event-db
   :admin/set-password
