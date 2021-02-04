@@ -13,6 +13,7 @@
   }
 
   &:focus {
+    color: $primary;
     outline: none !important;
   }
 }

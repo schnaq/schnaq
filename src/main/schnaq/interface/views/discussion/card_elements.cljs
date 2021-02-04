@@ -46,19 +46,23 @@
                (str (labels :tooltip/history-statement) nickname)
                [common/avatar nickname 42]]]])]))]))
 
-(defn- my-schnaqs-button
+(defn- back-to-feed-button
   "Return to your schnaqs Button"
   []
-  [:div.d-inline-block.text-dark.w-100
-   [:div.clickable.card-history-home
-    {:on-click
-     #(rf/dispatch [:navigation/navigate :routes.meetings/my-schnaqs])}
-    [tooltip/nested-div
-     "right"
-     (labels :history.all-schnaqs/tooltip)
-     [:div.d-flex
-      [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
-      [:div [:h5 (labels :history.all-schnaqs/text)]]]]]])
+  (let [feed @(rf/subscribe [:feed/get-current])
+        feed-route (case feed
+                     :personal :routes.meetings/my-schnaqs
+                     :routes/public-discussions)]
+    [:div.d-inline-block.text-dark.w-100
+     [:div.clickable.card-history-home
+      {:on-click
+       #(rf/dispatch [:navigation/navigate feed-route])}
+      [tooltip/nested-div
+       "right"
+       (labels :history.all-schnaqs/tooltip)
+       [:div.d-flex
+        [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
+        [:div [:h5 (labels :history.all-schnaqs/text)]]]]]]))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -78,7 +82,7 @@
   (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
     [:<>
      ;; my schnaqs button
-     [my-schnaqs-button]
+     [back-to-feed-button]
      ;; discussion start button
      (when (seq indexed-history)
        [discussion-start-button (count indexed-history)])

@@ -117,3 +117,16 @@
   "Render all discussions in which the user participated."
   []
   [schnaq-overview :schnaqs.visited/all :schnaqs/header])
+
+;; events
+
+(rf/reg-event-db
+  :feed/store-current
+  (fn [db [_ feed-type]]
+    ;; store either :personal or :public feed
+    (assoc-in db [:feed :current] feed-type)))
+
+(rf/reg-sub
+  :feed/get-current
+  (fn [db _]
+    (get-in db [:feed :current])))

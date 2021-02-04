@@ -367,8 +367,8 @@
         :history.home/text "Start"
         :history.home/tooltip "Back to the discussion's beginning"
         :history.statement/user "Post from "
-        :history.all-schnaqs/text "My schnaqs"
-        :history.all-schnaqs/tooltip "Back to all your schnaqs"
+        :history.all-schnaqs/text "Overview"
+        :history.all-schnaqs/tooltip "Back to all schnaqs"
 
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
@@ -764,8 +764,8 @@
         :history.home/text "Diskussionsstart"
         :history.home/tooltip "Zurück zum Diskussionsanfang"
         :history.statement/user "Beitrag von "
-        :history.all-schnaqs/text "Meine schnaqs"
-        :history.all-schnaqs/tooltip "Zurück zu deinen schnaqs"
+        :history.all-schnaqs/text "Übersicht"
+        :history.all-schnaqs/tooltip "Zurück zur Übersicht der schnaqs"
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
