@@ -42,7 +42,7 @@
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: com.bhauman/cljs-test-display:0.1.1" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iam:1.11.850" level="project" />
-    <orderEntry type="library" name="Deps: ring/ring-devel:1.8.2" level="project" />
+    <orderEntry type="library" name="Deps: ring/ring-devel:1.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.zeromq/jzmq:3.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.7" level="project" />
@@ -155,7 +155,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudhsm:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iot1clickprojects:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-lexmodelbuilding:1.11.850" level="project" />
-    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.15" level="project" />
+    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.16" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.sdk/graal-sdk:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-glue:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: rewrite-clj:0.6.1" level="project" />
@@ -169,7 +169,7 @@
     <orderEntry type="library" name="Deps: cljsjs/react-highlight:1.0.7-2" level="project" />
     <orderEntry type="library" name="Deps: slingshot:0.12.2" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpcore-nio:4.4.10" level="project" />
-    <orderEntry type="library" name="Deps: ring/ring-jetty-adapter:1.8.2" level="project" />
+    <orderEntry type="library" name="Deps: ring/ring-jetty-adapter:1.9.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-emr:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-imagebuilder:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-directory:1.11.850" level="project" />
@@ -451,7 +451,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-pricing:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-swagger-ui:0.5.11" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit:0.5.11" level="project" />
-    <orderEntry type="library" name="Deps: ring/ring-servlet:1.8.2" level="project" />
+    <orderEntry type="library" name="Deps: ring/ring-servlet:1.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.memoize:1.0.236" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-accessanalyzer:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-logs:1.11.850" level="project" />
@@ -459,7 +459,7 @@
     <orderEntry type="library" name="Deps: tech.droit/clj-diff:1.0.1" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-ec2instanceconnect:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-applicationautoscaling:1.11.850" level="project" />
-    <orderEntry type="library" name="Deps: ring:1.8.2" level="project" />
+    <orderEntry type="library" name="Deps: ring:1.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/data.priority-map:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-marketplacecommerceanalytics:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cider/piggieback:0.5.0" level="project" />
@@ -476,7 +476,7 @@
     <orderEntry type="library" name="Deps: raven-clj:1.6.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-elasticloadbalancingv2:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-dev:0.5.11" level="project" />
-    <orderEntry type="library" name="Deps: ring/ring-core:1.8.2" level="project" />
+    <orderEntry type="library" name="Deps: ring/ring-core:1.9.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.cache:1.0.207" level="project" />
     <orderEntry type="library" name="Deps: meta-merge:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-api-gateway:1.11.850" level="project" />
