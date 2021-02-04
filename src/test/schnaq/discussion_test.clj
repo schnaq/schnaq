@@ -64,7 +64,7 @@
     (let [share-hash "graph-hash"
           statements (db/all-statements-for-graph share-hash)
           starting-statements (db/starting-statements share-hash)
-          links (discussion/links-for-agenda statements starting-statements share-hash)]
+          links (discussion/links-for-starting statements starting-statements share-hash)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (count links)))))))
 

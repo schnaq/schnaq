@@ -92,8 +92,8 @@
         starting-statement-ids (into #{} (map :db/id starting-statements))]
     (map #(create-node % arguments starting-statement-ids) statements)))
 
-(>defn- agenda-node
-  "Creates node data for an agenda point."
+(>defn- starting-node
+  "Creates node data for a starting point representing the discussion."
   [share-hash]
   [:discussion/share-hash :ret map?]
   (let [discussion (discussion-db/discussion-by-share-hash share-hash)
@@ -103,7 +103,7 @@
      :author (:user/nickname author)
      :type :agenda}))
 
-(>defn- agenda-links
+(>defn- starting-links
   "Creates links from an starting statement to the topic node."
   [share-hash starting-statements]
   [:discussion/share-hash sequential? :ret sequential?]
@@ -117,16 +117,16 @@
   [statements starting-statements share-hash]
   [sequential? sequential? :meeting/share-hash :ret sequential?]
   (conj (create-nodes statements share-hash starting-statements)
-        (agenda-node share-hash)))
+        (starting-node share-hash)))
 
-(>defn links-for-agenda
-  "Creates all links for a discussion with its agenda as root."
+(>defn links-for-starting
+  "Creates all links for a discussion with its discussion topic as root."
   [statements starting-statements share-hash]
   [sequential? sequential? :meeting/share-hash :ret sequential?]
   (let [arguments (discussion-db/all-arguments-for-discussion share-hash)]
     (concat
       (create-links statements arguments)
-      (agenda-links share-hash starting-statements))))
+      (starting-links share-hash starting-statements))))
 
 (>defn- update-controversy-map
   "Updates controversy-map with the contents from a single edge."
