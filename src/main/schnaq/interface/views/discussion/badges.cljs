@@ -58,8 +58,8 @@
 
 (defn satic-info-badges
   "Badges that display schnaq info."
-  [subscribe]
-  (let [meta-info @(rf/subscribe [subscribe])
+  [subscription-handle]
+  (let [meta-info @(rf/subscribe [subscription-handle])
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
