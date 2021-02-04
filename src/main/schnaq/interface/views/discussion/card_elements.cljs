@@ -235,6 +235,7 @@
    [cards/conclusion-cards-list conclusions (:meeting/share-hash current-meeting)]])
 
 (defn discussion-view-mobile
+  ;; todo this now takes a discussion instead of a meeting and also why take the title separately?
   "Discussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
   [current-meeting title input info-content conclusions]
@@ -243,6 +244,7 @@
     [topic-bubble-mobile current-meeting title input info-content]]])
 
 (defn discussion-view-desktop
+  ;; todo this now takes a discussion instead of a meeting and also why take the title separately?
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
   [current-meeting title input info-content conclusions history]
