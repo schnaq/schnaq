@@ -8,74 +8,39 @@
             [re-frame.core :as rf]))
 
 (rf/reg-sub
-  :migration.discussions/status
+  :migration.starting-arguments/status
   (fn [db _]
-    (get-in db [:migration :status :discussions] "-")))
+    (get-in db [:migration :status :starting-arguments] "-")))
 
 (rf/reg-event-db
-  :migration.discussions/success
+  :migration.starting-arguments/success
   (fn [db _]
-    (assoc-in db [:migration :status :discussions] "Migration erfolgreich fertig gestellt")))
+    (assoc-in db [:migration :status :starting-arguments] "Migration erfolgreich fertig gestellt")))
 
 (rf/reg-event-fx
-  :migration.discussions/start
+  :migration.starting-arguments/start
   (fn [{:keys [db]} _]
     (let [admin-pass (get-in db [:admin :password])]
-      {:db (assoc-in db [:migration :status :discussions] "Läuft… Bitte Warten")
+      {:db (assoc-in db [:migration :status :starting-arguments] "Läuft… Bitte Warten")
        :fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/admin/migrations/discussion-129083uehwe78fh87asd3")
+                          :uri (str (:rest-backend config) "/admin/migrations/starting-statements-a78stdgah23f-a9sd")
                           :params {:password admin-pass}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
-                          :on-success [:migration.discussions/success]
+                          :on-success [:migration.starting-arguments/success]
                           :on-failure [:ajax.error/as-notification]}]]})))
 
-(defn- migrate-discussions-form
-  "Migrates the discussions to the new format."
+(defn- migrate-starting-arguments-form
+  "Migrates the starting-arguments to starting-statements."
   []
   [:form.form
    {:id "migrate-discussions-form"
     :on-submit (fn [e]
                  (js-wrap/prevent-default e)
-                 (when (js/confirm "Diskussionen wirklich migrieren? Nicht nochmal klicken, wenn gestartet!")
-                   (rf/dispatch [:migration.discussions/start])))}
-   [:button.btn.btn-danger {:type "submit"} "Migriere Diskussionen JETZT!"]
-   [:p "Status: " @(rf/subscribe [:migration.discussions/status])]])
-
-(rf/reg-sub
-  :migration.users/status
-  (fn [db _]
-    (get-in db [:migration :status :users] "-")))
-
-(rf/reg-event-db
-  :migration.users/success
-  (fn [db _]
-    (assoc-in db [:migration :status :users] "Migration erfolgreich fertig gestellt")))
-
-(rf/reg-event-fx
-  :migration.users/start
-  (fn [{:keys [db]} _]
-    (let [admin-pass (get-in db [:admin :password])]
-      {:db (assoc-in db [:migration :status :users] "Läuft… Bitte Warten")
-       :fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/admin/migrations/users-89hjasd-123897dha")
-                          :params {:password admin-pass}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:migration.users/success]
-                          :on-failure [:ajax.error/as-notification]}]]})))
-
-(defn- migrate-users-form
-  "Migrates the users to the new format."
-  []
-  [:form.form
-   {:id "migrate-users-form"
-    :on-submit (fn [e]
-                 (js-wrap/prevent-default e)
-                 (when (js/confirm "Nutzer wirklich migrieren? Nicht nochmal klicken, wenn gestartet!")
-                   (rf/dispatch [:migration.users/start])))}
-   [:button.btn.btn-danger {:type "submit"} "Migriere Nutzer JETZT!"]
-   [:p "Status: " @(rf/subscribe [:migration.users/status])]])
+                 (when (js/confirm "Arguments wirklich migrieren? Nicht nochmal klicken, wenn gestartet!")
+                   (rf/dispatch [:migration.starting-arguments/start])))}
+   [:button.btn.btn-danger {:type "submit"} "Migriere Starting Arguments JETZT!"]
+   [:p "Status: " @(rf/subscribe [:migration.starting-arguments/status])]])
 
 (rf/reg-event-db
   :admin.schnaq.delete/success
@@ -161,8 +126,7 @@
     [:hr]
     [:div
      [:h4 "Migration"]
-     [migrate-users-form]
-     [migrate-discussions-form]]]])
+     [migrate-starting-arguments-form]]]])
 
 (defn center-overview-route
   []
