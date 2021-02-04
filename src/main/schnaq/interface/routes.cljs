@@ -61,7 +61,7 @@
      {:name :routes.meetings/my-schnaqs
       :view meetings-overview/meeting-view-visited
       :link-text (labels :router/my-schnaqs)
-      :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]]
+      :controllers [{:start (fn [] (rf/dispatch [:schnaqs.visited/load]))}]}]]
    ["schnaq"
     ["/create"
      {:name :routes.brainstorm/create

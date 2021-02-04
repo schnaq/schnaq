@@ -53,7 +53,7 @@
   "Navbar definition for the default pages."
   []
   (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
-        visited-hashes @(rf/subscribe [:meetings.visited/all-hashes])]
+        visited-hashes @(rf/subscribe [:schnaqs.visited/all-hashes])]
     ;; collapsable navbar
     [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
      ;; logo

@@ -449,7 +449,8 @@
   (routes
     (GET "/export/txt" [] export-txt-data)
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
-    (GET "/meetings/by-hashes" [] meetings-by-hashes)
+    ;; todo this function should return a list of discussions
+    (GET "/schnaqs/by-hashes" [] meetings-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
     (POST "/admin/schnaq/delete" [] delete-schnaq!)

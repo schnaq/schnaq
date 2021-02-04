@@ -31,10 +31,9 @@
       (join-hashes schnaqs-visited))))
 
 (rf/reg-event-db
-  ;; todo store schnaqs (discussions) not meetings here
   :schnaqs.visited/store-hashes-from-localstorage
   (fn [db _]
-    (assoc-in db [:meetings :visited-hashes]
+    (assoc-in db [:schnaqs :visited-hashes]
               (parse-visited-schnaqs-from-localstorage))))
 
 (rf/reg-event-fx
@@ -46,9 +45,9 @@
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-sub
-  :meetings.visited/all-hashes
+  :schnaqs.visited/all-hashes
   (fn [db _]
-    (get-in db [:meetings :visited-hashes])))
+    (get-in db [:schnaqs :visited-hashes])))
 
 (rf/reg-sub
   :schnaqs.visited/all
@@ -56,22 +55,21 @@
     (get-in db [:schnaqs :visited])))
 
 (rf/reg-event-db
-  ;; todo this should store and save discussions
-  :meeting.visited/store-from-backend
-  (fn [db [_ {:keys [meetings]}]]
-    (assoc-in db [:schnaqs :visited] meetings)))
+  :schnaqs.visited/store-from-backend
+  (fn [db [_ {:keys [discussions]}]]
+    (assoc-in db [:schnaqs :visited] discussions)))
 
 (rf/reg-event-fx
-  :meetings.visited/load
+  :schnaqs.visited/load
   (fn [{:keys [db]} _]
-    (let [visited-hashes (get-in db [:meetings :visited-hashes])]
+    (let [visited-hashes (get-in db [:schnaqs :visited-hashes])]
       (when-not (empty? visited-hashes)
         {:fx [[:http-xhrio {:method :get
-                            :uri (str (:rest-backend config) "/meetings/by-hashes")
+                            :uri (str (:rest-backend config) "/schnaqs/by-hashes")
                             :params {:share-hashes visited-hashes}
                             :format (ajax/transit-request-format)
                             :response-format (ajax/transit-response-format)
-                            :on-success [:meeting.visited/store-from-backend]
+                            :on-success [:schnaqs.visited/store-from-backend]
                             :on-failure [:ajax.error/to-console]}]]}))))
 
 (rf/reg-event-fx
