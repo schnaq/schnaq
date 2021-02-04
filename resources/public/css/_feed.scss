@@ -1,0 +1,14 @@
+@import 'variables';
+
+.feed-button {
+  @include button-template;
+  background-color: transparent;
+  box-shadow: none;
+  color: $text-dark;
+
+  &:hover {
+    background-color: $white-shade;
+    color: $primary;
+  }
+
+}
