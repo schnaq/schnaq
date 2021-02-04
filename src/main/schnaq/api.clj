@@ -98,9 +98,9 @@
       (ok (discussion-db/discussion-by-share-hash hash))
       (validator/deny-access))))
 
-(defn- meetings-by-hashes
-  "Bulk loading of meetings. May be used when users asks for all the meetings
-  they have access to. If only one meeting shall be loaded, compojure packs it
+(defn- schnaqs-by-hashes
+  "Bulk loading of discussions. May be used when users asks for all the schnaqs
+  they have access to. If only one schnaq shall be loaded, compojure packs it
   into a single string:
   `{:params {:share-hashes \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"}}`
 
@@ -112,11 +112,11 @@
   (if-let [hashes (get-in req [:params :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)
           filtered-hashes (filter validator/valid-discussion? hashes-list)
-          meetings (map db/meeting-by-hash filtered-hashes)]
-      (if-not (or (nil? meetings) (= [nil] meetings) (empty? meetings))
-        (ok {:meetings meetings})
-        (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
-    (bad-request {:error "Meetings could not be loaded."})))
+          discussions (map discussion-db/discussion-by-share-hash filtered-hashes)]
+      (if-not (or (nil? discussions) (= [nil] discussions) (empty? discussions))
+        (ok {:discussions discussions})
+        (not-found {:error "Schnaqs could not be found. Maybe you provided an invalid hash."})))
+    (bad-request {:error "Schnaqs could not be loaded."})))
 
 (defn- public-schnaqs
   "Return all public meetings."
@@ -449,8 +449,7 @@
   (routes
     (GET "/export/txt" [] export-txt-data)
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
-    ;; todo this function should return a list of discussions
-    (GET "/schnaqs/by-hashes" [] meetings-by-hashes)
+    (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
     (POST "/admin/schnaq/delete" [] delete-schnaq!)
