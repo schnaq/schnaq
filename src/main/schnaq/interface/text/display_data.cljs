@@ -181,8 +181,9 @@
         :discussion.notification/new-content-body "Your statement was added successfully!"
 
         ;; meetings overview
-        :meetings/header "Overview of your schnaqs"
-        :meetings/subheader "These are the schnaqs that you are part of"
+        :schnaqs/header "Overview of your schnaqs"
+        :schnaqs/subheader "These are the schnaqs that you are part of"
+        :schnaqs.all/header "Public schnaqs"
 
         ;; Feedbacks
         :feedbacks.overview/header "Feedbacks"
@@ -570,8 +571,9 @@
         :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
 
         ;; meetings overview
-        :meetings/header "Übersicht deiner schnaqs"
-        :meetings/subheader "Auf diese schnaqs hast du Zugriff"
+        :schnaqs/header "Übersicht deiner schnaqs"
+        :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
+        :schnaqs.all/header "Öffentliche schnaqs"
 
         ;; Feedbacks
         :feedbacks.overview/header "Rückmeldungen"

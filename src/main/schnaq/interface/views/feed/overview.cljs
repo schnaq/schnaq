@@ -75,11 +75,11 @@
 
 (defn- feed-extra-information []
   [:div.feed-extra-info
-   [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
    [about-button :footer.buttons/about-us "https://disqtec.com/ueber-uns"]
    [about-button :nav/blog "https://schnaq.com/blog/"]
    [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
-   [about-button :router/privacy :routes/privacy]])
+   [about-button :router/privacy (reitfe/href :routes/privacy)]
+   [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]])
 
 (defn- feed-page-dektop [subscription-key]
   [:div.row.px-0.mx-0.py-3
@@ -98,10 +98,11 @@
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
   schnaqs."
-  [subscription-key]
-  [keyword? :ret vector?]
+  [subscription-key page-header]
+  [keyword? keyword? :ret vector?]
   [pages/with-nav
-   {}
+   {:page/heading (labels page-header)
+    :page/subheading (labels :schnaqs/subheader)}
    [:div.container-fluid.px-0
     [toolbelt/desktop-mobile-switch
      [feed-page-dektop subscription-key]
@@ -110,9 +111,9 @@
 (defn public-discussions-view
   "Render all public discussions."
   []
-  [schnaq-overview :schnaqs/public])
+  [schnaq-overview :schnaqs/public :schnaqs.all/header])
 
 (defn personal-discussions-view
   "Render all discussions in which the user participated."
   []
-  [schnaq-overview :schnaqs.visited/all])
+  [schnaq-overview :schnaqs.visited/all :schnaqs/header])
