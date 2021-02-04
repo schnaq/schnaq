@@ -40,10 +40,10 @@
   [_]
   (ok {:text "🧙‍♂️"}))
 
-(defn- all-meetings
+(defn- all-schnaqs
   "Returns all meetings from the db."
   [_req]
-  (ok (db/all-meetings)))
+  (ok (discussion-db/all-discussions)))
 
 (defn- add-hashes-to-meeting
   "Enrich meeting by its hashes."
@@ -486,8 +486,7 @@
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."
   (routes
-    ;; todo this function should deliver discussions
-    (GET "/schnaqs" [] all-meetings)))
+    (GET "/schnaqs" [] all-schnaqs)))
 
 (def ^:private app-routes
   "Building routes for app."

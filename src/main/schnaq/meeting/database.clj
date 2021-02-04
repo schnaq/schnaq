@@ -164,7 +164,7 @@
         [:tempids identifier]))))
 
 ;; -----------------------------------------------------------------------------
-;; Feedbacks
+;; Feedback functions
 
 (>defn add-feedback!
   "Adds a feedback to the database. Returns the id of the newly added feedback."
@@ -199,18 +199,6 @@
   [id]
   [int? :ret ::specs/meeting]
   (d/pull (d/db (new-connection)) meeting-pattern id))
-
-(defn all-meetings
-  "Shows all meetings currently in the db."
-  []
-  (->
-    (d/q
-      '[:find (pull ?meetings meeting-pattern-public)
-        :in $ meeting-pattern-public
-        :where [?meetings :meeting/title _]]
-      (d/db (new-connection)) meeting-pattern-public)
-    (toolbelt/pull-key-up :db/ident)
-    flatten))
 
 (defn public-meetings
   "Returns all meetings where the discussion is public."
@@ -441,7 +429,7 @@
           [?discussion :discussion/share-hash ?hash]]
         (d/db (new-connection)) statement-id meeting-hash))))
 
-;; ##### From here on  Analytics. This will be refactored into its own app sometime.###################
+;; ##### From here on  Analytics. This will be refactored into its own app sometime. ###################
 
 (def ^:private max-time-back Instant/EPOCH)
 
