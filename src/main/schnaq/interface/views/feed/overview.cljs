@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.feed.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.pages :as pages]))
@@ -49,7 +50,7 @@
      (if (empty? schnaqs)
        [no-schnaqs-found]
        (for [schnaq schnaqs]
-         [:div.py-3 {:key (:db/id schnaq)}
+         [:div.pb-4 {:key (:db/id schnaq)}
           [schnaq-entry schnaq]])))])
 
 (defn- feed-button [label route]
@@ -65,13 +66,27 @@
    [feed-button :router/public-discussions :routes/public-discussions]
    [feed-button :nav.schnaqs/create-schnaq :routes.brainstorm/create]])
 
+(defn about-button [label href-link]
+  [:div.my-3
+   [:a.btn.btn-outline-primary {:href href-link}
+    (labels label)]])
+
+(defn- feed-extra-information []
+  [:div.feed-extra-info
+   [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+   [about-button :footer.buttons/about-us "https://disqtec.com/ueber-uns"]
+   [about-button :nav/blog "https://schnaq.com/blog/"]
+   [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
+   [about-button :router/privacy :routes/privacy]])
+
 (defn- feed-page [subscription-key]
-  [:div.row.px-0.mx-0
+  [:div.row.px-0.mx-0.py-3
    [:div.col-3.py-3
     [feed-navigation]]
    [:div.col-6.py-3.px-5
     [schnaq-list-view subscription-key]]
-   [:div.col-3.py-3]])
+   [:div.col-3.py-3
+    [feed-extra-information]]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which

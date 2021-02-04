@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'rounded';
 
 .feed-button {
   @include button-template;
@@ -14,4 +15,10 @@
   &:focus {
     outline: none !important;
   }
+}
+
+.feed-extra-info {
+  @include rounded-2;
+  background-color: $gray-200;
+  padding: 2rem 3rem;
 }
