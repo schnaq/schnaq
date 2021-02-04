@@ -171,13 +171,6 @@
       (is (= 15 (:supports stats)))
       (is (= 9 (:undercuts stats))))))
 
-(deftest all-statements-for-graph-test
-  (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
-    (let [graph-hash "graph-hash"
-          statements (db/all-statements-for-graph graph-hash)]
-      (is (= 7 (count statements)))
-      (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
-
 (deftest all-arguments-for-conclusion-test
   (testing "Get arguments, that have a certain conclusion"
     (let [share-hash "simple-hash"

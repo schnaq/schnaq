@@ -3,6 +3,7 @@
   (:require [clojure.spec.alpha :as s]
             [datomic.client.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
+            [schnaq.config :as config]
             [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
             [schnaq.meeting.specs :as specs]
             [schnaq.toolbelt :as toolbelt]
@@ -291,3 +292,16 @@
     (#(toolbelt/pull-key-up % :db/ident))
     (sort-by second toolbelt/comp-compare)
     (map first)))
+
+(>defn all-statements-for-graph
+  "Returns all statements for a discussion. Specially prepared for node and edge generation."
+  [share-hash]
+  [:discussion/share-hash :ret sequential?]
+  (map
+    (fn [statement]
+      {:author (-> statement :statement/author :user/nickname)
+       :id (:db/id statement)
+       :label (if (:statement/deleted? statement)
+                config/deleted-statement-text
+                (:statement/content statement))})
+    (main-db/all-statements share-hash)))

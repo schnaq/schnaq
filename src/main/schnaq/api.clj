@@ -419,7 +419,7 @@
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)]
     (if (validator/valid-discussion? share-hash)
-      (let [statements (db/all-statements-for-graph share-hash)
+      (let [statements (discussion-db/all-statements-for-graph share-hash)
             starting-statements (discussion-db/starting-statements share-hash)
             edges (discussion/links-for-agenda statements starting-statements share-hash)
             controversy-vals (discussion/calculate-controversy edges)]

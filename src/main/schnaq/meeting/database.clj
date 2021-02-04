@@ -317,19 +317,6 @@
   (:user/nickname
     (d/pull (d/db (new-connection)) [:user/nickname] (user-by-nickname nickname))))
 
-(>defn all-statements-for-graph
-  "Returns all statements for a discussion. Specially prepared for node and edge generation."
-  [share-hash]
-  [:meeting/share-hash :ret sequential?]
-  (map
-    (fn [statement]
-      {:author (-> statement :statement/author :user/nickname)
-       :id (:db/id statement)
-       :label (if (:statement/deleted? statement)
-                config/deleted-statement-text
-                (:statement/content statement))})
-    (all-statements share-hash)))
-
 (>defn add-user-if-not-exists
   "Adds a user if they do not exist yet. Returns the (new) user-id."
   [nickname]

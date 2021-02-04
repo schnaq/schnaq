@@ -14,7 +14,7 @@
 (>defn- undercuts-for-root
   "Find all undercuts, where root-statement is undercut. (Root is set as a premise)"
   [root-id all-arguments]
-  [(s/or :id int? :share-hash :meeting/share-hash) sequential? :ret sequential?]
+  [(s/or :id int? :share-hash :discussion/share-hash) sequential? :ret sequential?]
   (let [subset-arguments (filter #((set (premise-ids %)) root-id) all-arguments)
         argument-ids (map :db/id subset-arguments)]
     (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
@@ -94,19 +94,19 @@
 
 (>defn- agenda-node
   "Creates node data for an agenda point."
-  [meeting-hash]
-  [:meeting/share-hash :ret map?]
-  (let [meeting (db/meeting-by-hash meeting-hash)
-        author (db/user (-> meeting :meeting/author :db/id))]
-    {:id meeting-hash
-     :label (:meeting/title meeting)
+  [share-hash]
+  [:discussion/share-hash :ret map?]
+  (let [discussion (discussion-db/discussion-by-share-hash share-hash)
+        author (db/user (-> discussion :discussion/author :db/id))]
+    {:id share-hash
+     :label (:discussion/title discussion)
      :author (:user/nickname author)
      :type :agenda}))
 
 (>defn- agenda-links
   "Creates links from an starting statement to an agenda node."
   [share-hash starting-statements]
-  [:meeting/share-hash sequential? :ret sequential?]
+  [:discussion/share-hash sequential? :ret sequential?]
   ;; Legacy support for starting-arguments. Safely delete when those discussions are not in use anymore.
   (let [starting-arguments (db/starting-arguments-by-discussion share-hash)
         starting-argument-links (set (map (fn [argument] {:from (-> argument :argument/conclusion :db/id)
