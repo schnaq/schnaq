@@ -52,7 +52,8 @@
 (defn navbar
   "Navbar definition for the default pages."
   []
-  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
+  ;; todo hier wird jetzt eine discussion rausgeholt
+  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         visited-hashes @(rf/subscribe [:schnaqs.visited/all-hashes])]
     ;; collapsable navbar
     [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light

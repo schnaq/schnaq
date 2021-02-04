@@ -468,7 +468,8 @@
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/meeting/add" [] add-meeting)
-    (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
+    ;; todo use discussions and not meetings
+    (POST "/schnaq/by-hash-as-admin" [] meeting-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     ;; Analytics routes

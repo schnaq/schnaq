@@ -56,7 +56,8 @@
   [feed-button label #(rf/dispatch [:navigation/navigate route])])
 
 (defn- feed-navigation []
-  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])]
+  ;; todo hier kommt jetzt eine discussion raus
+  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
     [:div
      [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs]
      [feed-button-navigate :router/public-discussions :routes/public-discussions]

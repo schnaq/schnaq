@@ -54,12 +54,13 @@
                           :on-failure [:ajax.error/to-console]}]]})))
 
 (rf/reg-event-fx
+  ;; todo rename everything
   :load/last-added-meeting
   (fn [_ _]
-    (let [share-hash (ls/get-item :meeting.last-added/share-hash)
-          edit-hash (ls/get-item :meeting.last-added/edit-hash)]
+    (let [share-hash (ls/get-item :schnaq.last-added/share-hash)
+          edit-hash (ls/get-item :schnaq.last-added/edit-hash)]
       (when-not (and (nil? edit-hash) (nil? share-hash))
-        {:fx [[:dispatch [:meeting/load-by-hash-as-admin share-hash edit-hash]]]}))))
+        {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx
   :initialise-db

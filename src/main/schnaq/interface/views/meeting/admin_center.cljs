@@ -310,7 +310,8 @@
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
   []
-  (let [{:meeting/keys [share-hash title]} @(rf/subscribe [:meeting/last-added])]
+  ;; todo hier kommt eine discussion raus
+  (let [{:meeting/keys [share-hash title]} @(rf/subscribe [:schnaq/last-added])]
     ;; display admin center
     [pages/with-nav-and-header
      {:page/heading (labels :meeting.admin-center/heading)

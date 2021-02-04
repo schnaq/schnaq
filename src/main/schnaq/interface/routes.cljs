@@ -133,7 +133,7 @@
                        :start (fn [{:keys [path]}]
                                 (let [share-hash (:share-hash path)
                                       edit-hash (:edit-hash path)]
-                                  (rf/dispatch [:meeting/load-by-hash-as-admin share-hash edit-hash])
+                                  (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
                                   (rf/dispatch [:meetings.save-admin-access/to-localstorage
                                                 share-hash edit-hash])))}]}]]
      ["/"

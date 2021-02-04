@@ -7,12 +7,13 @@
 ;; #### Events ####
 
 (rf/reg-event-fx
+  ;; todo new-meeting should be new-discussion
   :meeting.creation/added-continue-with-agendas
   (fn [{:keys [db]} [_ {:keys [new-meeting new-discussion]}]]
     (let [share-hash (:meeting/share-hash new-meeting)
           edit-hash (:meeting/edit-hash new-meeting)]
       {:db (-> db
-               (assoc-in [:meeting :last-added] new-meeting)
+               (assoc-in [:schnaq :last-added] new-meeting)
                (assoc-in [:discussions :last-added] new-discussion)
                (update :meetings conj new-meeting)
                (update-in [:discussions :all] conj new-discussion))
@@ -23,8 +24,8 @@
                         #:notification{:title (labels :meeting/created-success-heading)
                                        :body (labels :meeting/created-success-subheading)
                                        :context :success}]]
-            [:localstorage/write [:meeting.last-added/share-hash share-hash]]
-            [:localstorage/write [:meeting.last-added/edit-hash edit-hash]]
+            [:localstorage/write [:schnaq.last-added/share-hash share-hash]]
+            [:localstorage/write [:schnaq.last-added/edit-hash edit-hash]]
             [:dispatch [:meetings.save-admin-access/to-localstorage share-hash edit-hash]]]})))
 
 (rf/reg-event-fx
@@ -83,30 +84,30 @@
       {:fx [[:dispatch [:navigation/navigate :routes/forbidden-page]]]})))
 
 (rf/reg-event-db
-  :meeting/save-as-last-added
-  (fn [db [_ {:keys [meeting]}]]
-    (assoc-in db [:meeting :last-added] meeting)))
+  :schnaq/save-as-last-added
+  (fn [db [_ {:keys [discussion]}]]
+    (assoc-in db [:schnaq :last-added] discussion)))
 
 (rf/reg-sub
-  :meeting/last-added
+  :schnaq/last-added
   (fn [db _]
-    (get-in db [:meeting :last-added])))
+    (get-in db [:schnaq :last-added])))
 
 (rf/reg-event-fx
-  :meeting/error-remove-hashes
+  :schnaq/error-remove-hashes
   (fn [_ [_ response]]
     {:fx [[:dispatch [:ajax.error/as-notification response]]
-          [:localstorage/remove [:meeting.last-added/edit-hash]]
-          [:localstorage/remove [:meeting.last-added/share-hash]]]}))
+          [:localstorage/remove :schnaq.last-added/edit-hash]
+          [:localstorage/remove :schnaq.last-added/share-hash]]}))
 
 (rf/reg-event-fx
-  :meeting/load-by-hash-as-admin
+  :schnaq/load-by-hash-as-admin
   (fn [_ [_ share-hash edit-hash]]
     {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config) "/meeting/by-hash-as-admin")
+                        :uri (str (:rest-backend config) "/schnaq/by-hash-as-admin")
                         :params {:share-hash share-hash
                                  :edit-hash edit-hash}
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
-                        :on-success [:meeting/save-as-last-added]
-                        :on-failure [:meeting/error-remove-hashes]}]]}))
+                        :on-success [:schnaq/save-as-last-added]
+                        :on-failure [:schnaq/error-remove-hashes]}]]}))
