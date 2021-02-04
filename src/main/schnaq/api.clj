@@ -440,73 +440,27 @@
 ;; -----------------------------------------------------------------------------
 ;; Temporary Migration functions
 
-(defn- migrate-users!
-  "Migrates the nickname field from the author to the user."
+(defn- migrate-starting-arguments!
+  "Migrates the starting-arguments field to the starting-statements field."
   [_req]
-  (let [all-users
-        (db/query '[:find ?user ?nickname
-                    :in $
-                    :where [?user :user/core-author ?author]
-                    [?author :author/nickname ?nickname]])
-        transaction (mapv #(vector :db/add (first %) :user/nickname (second %)) all-users)
-        all-statements
-        (db/query '[:find ?statement ?user
-                    :in $
-                    :where [?statement :statement/author ?author]
-                    [?user :user/core-author ?author]])
-        statement-transaction (mapv #(hash-map :db/id (first %) :statement/author (second %)) all-statements)
-        all-arguments
-        (db/query '[:find ?argument ?user
-                    :in $
-                    :where [?argument :argument/author ?author]
-                    [?user :user/core-author ?author]])
-        argument-transaction (mapv #(hash-map :db/id (first %) :argument/author (second %)) all-arguments)]
-    (db/transact transaction)
-    (db/transact statement-transaction)
-    (db/transact argument-transaction)
-    (ok {:message "success"})))
-
-(comment
-  ;; Comment left in on Purpose for testing
-  (migrate-users! :a)
-  (db/query '[:find (pull ?user [:db/id
-                                 {:user/core-author [:author/nickname]}
-                                 :user/nickname])
-              :in $
-              :where [?user :user/core-author _]]))
-
-(defn- migrate-discussions!
-  "Migrates the share-hash, edit-hash, author and header-image-url field from the
-  meeting to the discussion."
-  [_req]
-  (let [all-discussions
-        (db/query '[:find ?discussion (pull ?meeting [:meeting/share-hash
-                                                      :meeting/edit-hash
-                                                      :meeting/author
-                                                      :meeting/header-image-url])
-                    :in $
-                    :where [?meeting :meeting/type :meeting.type/brainstorm]
-                    [?agenda :agenda/discussion ?discussion]
-                    [?agenda :agenda/meeting ?meeting]])
-        transaction (vec (flatten
-                           (mapv (fn [[discussion attributes]]
-                                   (into {}
-                                         (filter second
-                                                 {:db/id discussion
-                                                  :discussion/share-hash (:meeting/share-hash attributes)
-                                                  :discussion/edit-hash (:meeting/edit-hash attributes)
-                                                  :discussion/author (:db/id (:meeting/author attributes))
-                                                  :discussion/header-image-url (:meeting/header-image-url attributes)})))
-                                 all-discussions)))]
+  (let [all-starting-arguments
+        (->
+          (db/query '[:find ?discussion (pull ?starting-arguments [:argument/conclusion])
+                      :in $
+                      :where [?discussion :discussion/starting-arguments ?starting-arguments]])
+          (toolbelt/pull-key-up :db/id)
+          (toolbelt/pull-key-up :argument/conclusion)
+          set)
+        transaction (mapv #(vector :db/add (first %) :discussion/starting-statements (second %)) all-starting-arguments)]
     (db/transact transaction)
     (ok {:message "success"})))
 
 (comment
   ;; Comment left in on Purpose for testing
-  (migrate-discussions! :a)
+  (migrate-starting-arguments! :a)
   (db/query '[:find (pull ?discussion [*])
               :in $
-              :where [?discussion :discussion/title _]]))
+              :where [?discussion :discussion/starting-statements _]]))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
@@ -520,8 +474,7 @@
 
 (def ^:private temporary-migration-routes
   (routes
-    (POST "/admin/migrations/users-89hjasd-123897dha" [] migrate-users!)
-    (POST "/admin/migrations/discussion-129083uehwe78fh87asd3" [] migrate-discussions!)))
+    (POST "/admin/migrations/starting-statements-a78stdgah23f-a9sd" [] migrate-starting-arguments!)))
 
 (def ^:private common-routes
   "Common routes for all modes."
