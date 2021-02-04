@@ -273,9 +273,7 @@
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [share-hash]
-  (let [deprecated-starters (db/starting-conclusions-by-discussion share-hash)
-        starting-statements (discussion-db/starting-statements share-hash)]
-    (with-statement-meta (concat starting-statements deprecated-starters) share-hash)))
+  (with-statement-meta (discussion-db/starting-statements share-hash) share-hash))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -421,7 +419,7 @@
     (if (validator/valid-discussion? share-hash)
       (let [statements (discussion-db/all-statements-for-graph share-hash)
             starting-statements (discussion-db/starting-statements share-hash)
-            edges (discussion/links-for-agenda statements starting-statements share-hash)
+            edges (discussion/links-for-starting statements starting-statements share-hash)
             controversy-vals (discussion/calculate-controversy edges)]
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
                      :edges edges
@@ -438,31 +436,6 @@
       (validator/deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
-;; Temporary Migration functions
-
-(defn- migrate-starting-arguments!
-  "Migrates the starting-arguments field to the starting-statements field."
-  [_req]
-  (let [all-starting-arguments
-        (->
-          (db/query '[:find ?discussion (pull ?starting-arguments [:argument/conclusion])
-                      :in $
-                      :where [?discussion :discussion/starting-arguments ?starting-arguments]])
-          (toolbelt/pull-key-up :db/id)
-          (toolbelt/pull-key-up :argument/conclusion)
-          set)
-        transaction (mapv #(vector :db/add (first %) :discussion/starting-statements (second %)) all-starting-arguments)]
-    (db/transact transaction)
-    (ok {:message "success"})))
-
-(comment
-  ;; Comment left in on Purpose for testing
-  (migrate-starting-arguments! :a)
-  (db/query '[:find (pull ?discussion [*])
-              :in $
-              :where [?discussion :discussion/starting-statements _]]))
-
-;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
 ;; compojure can't handle natively more than one custom middleware. reitit has a
@@ -471,10 +444,6 @@
 
 (def ^:private not-found-msg
   "Error, page not found!")
-
-(def ^:private temporary-migration-routes
-  (routes
-    (POST "/admin/migrations/starting-statements-a78stdgah23f-a9sd" [] migrate-starting-arguments!)))
 
 (def ^:private common-routes
   "Common routes for all modes."
@@ -523,10 +492,8 @@
   "Building routes for app."
   (if schnaq-core/production-mode?
     (routes common-routes
-            temporary-migration-routes
             (route/not-found not-found-msg))
     (routes common-routes
-            temporary-migration-routes
             development-routes
             (route/not-found not-found-msg))))
 

@@ -32,7 +32,6 @@
    :discussion/title
    :discussion/description
    {:discussion/states [:db/ident]}
-   {:discussion/starting-arguments argument-pattern}
    {:discussion/starting-statements main-db/statement-pattern}
    :discussion/share-hash
    :discussion/header-image-url
