@@ -1,5 +1,5 @@
-(ns schnaq.interface.views.meeting.visited
-  "Handling visited meetings."
+(ns schnaq.interface.views.schnaq.visited
+  "Handling visited schnaqs."
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
