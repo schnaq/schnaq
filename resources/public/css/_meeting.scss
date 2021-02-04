@@ -15,6 +15,10 @@
   /* stylelint-enable */
   cursor: pointer;
 
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
+
   &:hover {
     background: $white-shade;
     box-shadow: $hover-shadow;

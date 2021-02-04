@@ -4,7 +4,8 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.header-image :as header-image]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
@@ -53,18 +54,28 @@
          [:div.pb-4 {:key (:db/id schnaq)}
           [schnaq-entry schnaq]])))])
 
-(defn- feed-button [label route]
+(defn- feed-button [label on-click-fn]
   [:div
    [:button.feed-button
     {:type "button"
-     :on-click #(rf/dispatch [:navigation/navigate route])}
+     :on-click on-click-fn}
     [:h5 (labels label)]]])
 
+(defn- feed-button-navigate [label route]
+  [feed-button label #(rf/dispatch [:navigation/navigate route])])
+
 (defn- feed-navigation []
-  [:div
-   [feed-button :router/my-schnaqs :routes.meetings/my-schnaqs]
-   [feed-button :router/public-discussions :routes/public-discussions]
-   [feed-button :nav.schnaqs/create-schnaq :routes.brainstorm/create]])
+  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])]
+    [:div
+     [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs]
+     [feed-button-navigate :router/public-discussions :routes/public-discussions]
+     (when-not (nil? edit-hash)
+       [feed-button :nav.schnaqs/last-added #(rf/dispatch [:navigation/navigate
+                                                           :routes.meeting/admin-center
+                                                           {:share-hash share-hash :edit-hash edit-hash}])])
+     (when-not toolbelt/production?
+       [feed-button-navigate :nav.schnaqs/show-all :routes/meetings])
+     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.brainstorm/create]]))
 
 (defn about-button [label href-link]
   [:div.my-3
@@ -79,7 +90,7 @@
    [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
    [about-button :router/privacy :routes/privacy]])
 
-(defn- feed-page [subscription-key]
+(defn- feed-page-dektop [subscription-key]
   [:div.row.px-0.mx-0.py-3
    [:div.col-3.py-3
     [feed-navigation]]
@@ -87,6 +98,10 @@
     [schnaq-list-view subscription-key]]
    [:div.col-3.py-3
     [feed-extra-information]]])
+
+(defn- feed-page-mobile [subscription-key]
+  [:div.my-3
+   [schnaq-list-view subscription-key]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
@@ -96,8 +111,10 @@
   [keyword? :ret vector?]
   [pages/with-nav
    {}
-   [:div.container-fluid
-    [feed-page subscription-key]]])
+   [:div.container-fluid.px-0
+    [toolbelt/desktop-mobile-switch
+     [feed-page-dektop subscription-key]
+     [feed-page-mobile subscription-key]]]])
 
 (defn public-discussions-view
   "Render all public discussions."
