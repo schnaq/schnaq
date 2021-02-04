@@ -62,7 +62,8 @@
 (defn- feed-navigation []
   [:div
    [feed-button :router/my-schnaqs :routes.meetings/my-schnaqs]
-   [feed-button :router/public-discussions :routes/public-discussions]])
+   [feed-button :router/public-discussions :routes/public-discussions]
+   [feed-button :nav.schnaqs/create-schnaq :routes.brainstorm/create]])
 
 (defn- feed-page [subscription-key]
   [:div.row.px-0.mx-0

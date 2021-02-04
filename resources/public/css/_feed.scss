@@ -11,4 +11,7 @@
     color: $primary;
   }
 
+  &:focus {
+    outline: none !important;
+  }
 }
