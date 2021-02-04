@@ -22,24 +22,15 @@
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq]
-  (let [schnaq-share-hash (:discussion/share-hash schnaq)
-        meeting-share-hash (:meeting/share-hash schnaq)
-        schnaq-title (:discussion/title schnaq)
-        meeting-title (:meeting/title schnaq)
-        title (if schnaq-title schnaq-title meeting-title)
-        share-hash (if schnaq-share-hash schnaq-share-hash meeting-share-hash)
-        schnaq-url (:discussion/header-image-url schnaq)
-        meeting-url (:meeting/header-image-url schnaq)
-        url (if schnaq-url schnaq-url meeting-url)]
+  (let [share-hash (:discussion/share-hash schnaq)
+        title (:discussion/title schnaq)
+        url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
     [:div.meeting-entry
      {:on-click (fn []
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])
-                  (rf/dispatch [:meeting/select-current {:db/id (random-uuid)
-                                                         :meeting/title title
-                                                         :meeting/share-hash share-hash
-                                                         :meeting/header-image-url (:discussion/header-image-url schnaq)}]))}
-     [:div [:img.meeting-entry-title-header-image {:src (header-image/check-for-header-img url)}]]
+                  (rf/dispatch [:schnaq/select-current schnaq]))}
+     [:div [:img.meeting-entry-title-header-image {:src url}]]
      [:div.meeting-entry-title
       [:h5 title]]]))
 
@@ -124,4 +115,4 @@
 (defn personal-discussions-view
   "Render all discussions in which the user participated."
   []
-  [schnaq-overview :meetings.visited/all])
+  [schnaq-overview :schnaqs.visited/all])
