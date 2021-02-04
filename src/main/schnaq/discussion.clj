@@ -104,7 +104,7 @@
      :type :agenda}))
 
 (>defn- agenda-links
-  "Creates links from an starting statement to an agenda node."
+  "Creates links from an starting statement to the topic node."
   [share-hash starting-statements]
   [:discussion/share-hash sequential? :ret sequential?]
   (map (fn [statement] {:from (:db/id statement)
