@@ -56,7 +56,7 @@
      (when edit-hash
        [delete-clicker statement edit-hash])]))
 
-(defn satic-info-badges
+(defn static-info-badges
   "Badges that display schnaq info."
   [subscription-handle]
   (let [meta-info @(rf/subscribe [subscription-handle])
@@ -74,7 +74,7 @@
 (defn current-schnaq-info-badges
   "Badges that display info about the current schnaq."
   []
-  [satic-info-badges :current-schnaq/meta-info])
+  [static-info-badges :current-schnaq/meta-info])
 
 ;; #### Subs ####
 
