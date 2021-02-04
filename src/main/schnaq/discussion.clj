@@ -107,16 +107,10 @@
   "Creates links from an starting statement to an agenda node."
   [share-hash starting-statements]
   [:discussion/share-hash sequential? :ret sequential?]
-  ;; Legacy support for starting-arguments. Safely delete when those discussions are not in use anymore.
-  (let [starting-arguments (db/starting-arguments-by-discussion share-hash)
-        starting-argument-links (set (map (fn [argument] {:from (-> argument :argument/conclusion :db/id)
-                                                          :to share-hash
-                                                          :type :argument.type/starting}) starting-arguments))]
-    (concat
-      (map (fn [statement] {:from (:db/id statement)
-                            :to share-hash
-                            :type :argument.type/starting}) starting-statements)
-      starting-argument-links)))
+  (map (fn [statement] {:from (:db/id statement)
+                        :to share-hash
+                        :type :argument.type/starting})
+       starting-statements))
 
 (>defn nodes-for-agenda
   "Returns all nodes for a discussion including its agenda."
