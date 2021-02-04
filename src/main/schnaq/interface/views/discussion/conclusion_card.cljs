@@ -21,8 +21,7 @@
                         :format (ajax/transit-request-format)
                         :params {:statement-id id
                                  :nickname (get-in db [:user :name] "Anonymous")
-                                 ;; todo change terminology here
-                                 :meeting-hash (-> db :schnaq :selected :discussion/share-hash)}
+                                 :share--hash (-> db :schnaq :selected :discussion/share-hash)}
                         :response-format (ajax/transit-response-format)
                         :on-success [:upvote-success statement]
                         :on-failure [:ajax.error/as-notification]}]]}))
@@ -35,8 +34,7 @@
                         :format (ajax/transit-request-format)
                         :params {:statement-id id
                                  :nickname (get-in db [:user :name] "Anonymous")
-                                 ;; todo change terminology here
-                                 :meeting-hash (-> db :schnaq :selected :discussion/share-hash)}
+                                 :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                         :response-format (ajax/transit-response-format)
                         :on-success [:downvote-success statement]
                         :on-failure [:ajax.error/as-notification]}]]}))

@@ -163,8 +163,8 @@
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
-  [{:keys [meeting-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
-  (if (validator/valid-discussion-and-statement? statement-id meeting-hash)
+  [{:keys [share-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
+  (if (validator/valid-discussion-and-statement? statement-id share-hash)
     (let [nickname (db/canonical-username nickname)
           vote (check-vote-fn statement-id nickname)
           counter-vote (counter-check-vote-fn statement-id nickname)]
