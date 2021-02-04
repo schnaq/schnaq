@@ -1,11 +1,10 @@
 @import 'variables';
 @import 'rounded';
 
-.feed-button {
+@mixin feed-button-base {
   @include button-template;
   background-color: transparent;
   box-shadow: none;
-  color: $text-dark;
 
   &:hover {
     background-color: $white-shade;
@@ -16,6 +15,16 @@
     color: $primary;
     outline: none !important;
   }
+}
+
+.feed-button-focused {
+  @include feed-button-base;
+  color: $primary;
+}
+
+.feed-button {
+  @include feed-button-base;
+  color: $text-dark;
 }
 
 .feed-extra-info {

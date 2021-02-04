@@ -45,25 +45,30 @@
          [:div.pb-4 {:key (:db/id schnaq)}
           [schnaq-entry schnaq]])))])
 
-(defn- feed-button [label on-click-fn]
-  [:div
-   [:button.feed-button
-    {:type "button"
-     :on-click on-click-fn}
-    [:h5 (labels label)]]])
+(defn- feed-button [label on-click-fn focused?]
+  (let [button-class (if focused? "feed-button-focused" "feed-button")]
+    [:div
+     [:button
+      {:class button-class :type "button"
+       :on-click on-click-fn}
+      [:h5 (labels label)]]]))
 
-(defn- feed-button-navigate [label route]
-  [feed-button label #(rf/dispatch [:navigation/navigate route])])
+(defn- feed-button-navigate [label route focused?]
+  [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
 
 (defn- feed-navigation []
-  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])]
+  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
+        current-feed @(rf/subscribe [:feed/get-current])
+        public-feed? (= current-feed :public)
+        personal-feed? (= current-feed :personal)]
     [:div
-     [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs]
-     [feed-button-navigate :router/public-discussions :routes/public-discussions]
+     [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
+     [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
      (when-not (nil? edit-hash)
-       [feed-button :nav.schnaqs/last-added #(rf/dispatch [:navigation/navigate
-                                                           :routes.meeting/admin-center
-                                                           {:share-hash share-hash :edit-hash edit-hash}])])
+       [feed-button :nav.schnaqs/last-added
+        #(rf/dispatch [:navigation/navigate
+                       :routes.meeting/admin-center
+                       {:share-hash share-hash :edit-hash edit-hash}])])
      (when-not toolbelt/production?
        [feed-button-navigate :nav.schnaqs/show-all :routes/meetings])
      [feed-button-navigate :nav.schnaqs/create-schnaq :routes.brainstorm/create]]))
