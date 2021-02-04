@@ -30,7 +30,8 @@
      {:on-click (fn []
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])
-                  (rf/dispatch [:meeting/select-current meeting]))}
+                  ;; todo this should pass a discussion now
+                  (rf/dispatch [:schnaq/select-current meeting]))}
      [:div [:img.meeting-entry-title-header-image {:src url}]]
      [:div.meeting-entry-title
       [:h5 title]]]))
@@ -68,7 +69,8 @@
      {:on-click (fn []
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])
-                  (rf/dispatch [:meeting/select-current {:db/id (random-uuid)
+                  ;; todo this should pass a discussion now
+                  (rf/dispatch [:schnaq/select-current {:db/id (random-uuid)
                                                          :meeting/title title
                                                          :meeting/share-hash share-hash
                                                          :meeting/header-image-url (:discussion/header-image-url schnaq)}]))}

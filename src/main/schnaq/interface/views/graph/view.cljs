@@ -145,7 +145,8 @@
 (defn- graph-view
   "The core Graph visualization wrapper."
   []
-  (let [{:keys [meeting/share-hash meeting/title]} @(rf/subscribe [:meeting/selected])]
+  ;; todo this delivers a discussion now
+  (let [{:keys [meeting/share-hash meeting/title]} @(rf/subscribe [:schnaq/selected])]
     [:<>
      [graph-agenda-header title share-hash]
      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]

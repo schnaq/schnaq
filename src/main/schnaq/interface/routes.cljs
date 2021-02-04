@@ -72,7 +72,7 @@
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
-                              (rf/dispatch [:meeting/load-by-share-hash (:share-hash path)]))}]}
+                              (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
      ["/"
       {:controllers schnaq-start-controllers
        :name :routes.schnaq/start
@@ -117,7 +117,7 @@
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
-                              (rf/dispatch [:meeting/load-by-share-hash (:share-hash path)]))}]}
+                              (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
      ["/:edit-hash"
       {:parameters {:path {:edit-hash string?}}
        :controllers [{:parameters {:path [:share-hash :edit-hash]}

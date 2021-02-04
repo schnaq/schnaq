@@ -224,7 +224,8 @@
      [title-and-input-element title input]]))
 
 (defn- topic-bubble [content]
-  (let [title (:meeting/title @(rf/subscribe [:meeting/selected]))]
+  ;; todo this delivers a discussion now
+  (let [title (:meeting/title @(rf/subscribe [:schnaq/selected]))]
     (common/set-website-title! title)
     [:div.topic-view.shadow-straight-light.md-4
      [:div.discussion-light-background content]]))

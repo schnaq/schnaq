@@ -34,7 +34,8 @@
         (fn []
           (rf/dispatch [:navigation/navigate :routes.schnaq/start
                         {:share-hash share-hash}])
-          (rf/dispatch [:meeting/select-current meeting]))}
+          ;; todo pass a discussion here
+          (rf/dispatch [:schnaq/select-current meeting]))}
        [toolbelt/desktop-mobile-switch
         [:h3.mx-5 title]
         [:h3.mx-5.display-6 title]]]
@@ -95,7 +96,8 @@
 ;; -----------------------------------------------------------------------------
 
 (defn- derive-view []
-  (let [current-meeting @(rf/subscribe [:meeting/selected])
+  ;; todo this delivers a discussion now
+  (let [current-meeting @(rf/subscribe [:schnaq/selected])
         current-route-name @(rf/subscribe [:navigation/current-route-name])]
     [:<>
      [card-meeting-header current-meeting]
