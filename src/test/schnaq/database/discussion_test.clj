@@ -126,7 +126,8 @@
 (deftest new-discussion-test
   (let [minimal-discussion {:discussion/title "Whatevs"
                             :discussion/share-hash "oooooh"
-                            :discussion/edit-hash "secret-never-guessed"}]
+                            :discussion/edit-hash "secret-never-guessed"
+                            :discussion/author (main-db/add-user-if-not-exists "Wegi")}]
     (testing "Whether a correct id is returned when valid discussions are transacted."
       (is (number? (db/new-discussion minimal-discussion true)))
       (is (number? (db/new-discussion (assoc minimal-discussion
@@ -139,11 +140,15 @@
 (deftest public-discussions-test
   (testing "Should return all discussions that are marked as public."
     (is (= 1 (count (db/public-discussions))))
-    (db/new-discussion {:discussion/title "tester" :discussion/share-hash "newwwwasd"
+    (db/new-discussion {:discussion/title "tester"
+                        :discussion/share-hash "newwwwasd"
+                        :discussion/edit-hash "secret-yeah"
                         :discussion/author (main-db/add-user-if-not-exists "Wegi")}
                        true)
     (is (= 2 (count (db/public-discussions))))
-    (db/new-discussion {:discussion/title "tester private" :discussion/share-hash "newaaaasdasdwwwasd"
+    (db/new-discussion {:discussion/title "tester private"
+                        :discussion/share-hash "newaaaasdasdwwwasd"
+                        :discussion/edit-hash "secret-yeah"
                         :discussion/author (main-db/add-user-if-not-exists "Wegi")}
                        false)
     (is (= 2 (count (db/public-discussions))))))
