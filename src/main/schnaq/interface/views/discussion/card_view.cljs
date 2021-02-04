@@ -55,11 +55,9 @@
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop
-       current-discussion title input-form
-       nil current-starting nil]
+       current-discussion title input-form nil current-starting nil]
       [elements/discussion-view-mobile
-       current-discussion title input-form
-       nil current-starting]]]))
+       current-discussion title input-form nil current-starting]]]))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
@@ -74,11 +72,9 @@
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop
-       current-discussion title input-form
-       info-content current-premises history]
+       current-discussion title input-form info-content current-premises history]
       [elements/discussion-view-mobile
-       current-discussion title input-form
-       info-content current-premises]]]))
+       current-discussion title input-form info-content current-premises]]]))
 
 (rf/reg-sub
   :discussion.premises/current
