@@ -56,10 +56,10 @@
      (when edit-hash
        [delete-clicker statement edit-hash])]))
 
-(defn current-schnaq-info-badges
-  "Badges that display current schnaq info."
-  []
-  (let [meta-info @(rf/subscribe [:current-schnaq/meta-info])
+(defn static-info-badges
+  "Badges that display schnaq info."
+  [subscription-handle]
+  (let [meta-info @(rf/subscribe [subscription-handle])
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
@@ -70,6 +70,11 @@
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
+
+(defn current-schnaq-info-badges
+  "Badges that display info about the current schnaq."
+  []
+  [static-info-badges :current-schnaq/meta-info])
 
 ;; #### Subs ####
 

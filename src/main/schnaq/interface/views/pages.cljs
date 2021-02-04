@@ -23,3 +23,12 @@
    [navbar/navbar]
    [base/header heading subheading more-for-heading]
    body])
+
+(>defn with-nav
+  "Default page with header and curly wave."
+  [{:page/keys [title heading]} body]
+  [::page-headings (s/+ vector?) :ret vector?]
+  (common/set-website-title! (or title heading))
+  [:<>
+   [navbar/navbar]
+   body])

@@ -71,18 +71,24 @@
       [:div#schnaq-navbar.collapse.navbar-collapse
        [:ul.navbar-nav.mr-auto
         ;; navigation items
-        [:li.nav-item.dropdown
-         [:a#schnaq-dropdown.nav-link.dropdown-toggle
-          {:href "#" :role "button" :data-toggle "dropdown"
-           :aria-haspopup "true" :aria-expanded "false"}
-          (labels :nav/schnaqs)]
-         [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
-          [create-schnaq-link]
-          [:div.dropdown-divider]
-          [last-added-schnaq-link share-hash edit-hash]
-          [my-schnaqs-link visited-hashes]
-          [all-public-schnaqs-link]
-          [all-schnaqs-link]]]
+        [toolbelt/desktop-mobile-switch
+         ;; dektop view
+         [:li.nav-item
+          [:a.nav-link {:role "button" :href (reitfe/href :routes/public-discussions)}
+           (labels :nav/schnaqs)]]
+         ;; mobile view
+         [:li.nav-item.dropdown
+          [:a#schnaq-dropdown.nav-link.dropdown-toggle
+           {:href "#" :role "button" :data-toggle "dropdown"
+            :aria-haspopup "true" :aria-expanded "false"}
+           (labels :nav/schnaqs)]
+          [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
+           [create-schnaq-link]
+           [:div.dropdown-divider]
+           [last-added-schnaq-link share-hash edit-hash]
+           [my-schnaqs-link visited-hashes]
+           [all-public-schnaqs-link]
+           [all-schnaqs-link]]]]
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
           (labels :router/privacy)]]]
