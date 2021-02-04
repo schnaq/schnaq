@@ -244,7 +244,7 @@
 (>defn all-statements
   "Returns all statements belonging to a discussion"
   [share-hash]
-  [:meeting/share-hash :ret (s/coll-of ::specs/statement)]
+  [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
   (distinct
     (concat
       (flatten

@@ -119,7 +119,7 @@
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
   [share-hash user-id statement-content]
-  [:meeting/share-hash :db/id :statement/content :ret :db/id]
+  [:discussion/share-hash :db/id :statement/content :ret :db/id]
   (let [new-statement (build-new-statement user-id statement-content "add/starting-argument")
         temporary-id (:db/id new-statement)
         discussion-id (:db/id (discussion-by-share-hash share-hash))]
@@ -206,14 +206,12 @@
 (>defn discussion-deleted?
   "Returns whether a discussion has been marked as deleted."
   [share-hash]
-  [:meeting/share-hash :ret boolean?]
+  [:discussion/share-hash :ret boolean?]
   (as-> (main-db/query
           '[:find (pull ?states [*])
             :in $ ?share-hash
-            :where [?meeting :meeting/share-hash ?share-hash]
-            [?agenda :agenda/meeting ?meeting]
-            [?agenda :agenda/discussion ?discussions]
-            [?discussions :discussion/states ?states]]
+            :where [?discussion :discussion/share-hash ?share-hash]
+            [?discussion :discussion/states ?states]]
           share-hash) q
         (map #(:db/ident (first %)) q)
         (into #{} q)
