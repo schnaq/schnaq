@@ -40,10 +40,10 @@
   [_]
   (ok {:text "🧙‍♂️"}))
 
-(defn- all-meetings
+(defn- all-schnaqs
   "Returns all meetings from the db."
   [_req]
-  (ok (db/all-meetings)))
+  (ok (discussion-db/all-discussions)))
 
 (defn- add-hashes-to-meeting
   "Enrich meeting by its hashes."
@@ -90,18 +90,17 @@
     (db/add-user-if-not-exists author-name)
     (ok {:text "POST successful"})))
 
-(defn- meeting-by-hash
+(defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
   [req]
   (let [hash (get-in req [:route-params :hash])]
     (if (validator/valid-discussion? hash)
-      (let [states (:discussion/states (discussion-db/discussion-by-share-hash hash))]
-        (ok (assoc (db/meeting-by-hash hash) :meeting/_states states)))
+      (ok (discussion-db/discussion-by-share-hash hash))
       (validator/deny-access))))
 
-(defn- meetings-by-hashes
-  "Bulk loading of meetings. May be used when users asks for all the meetings
-  they have access to. If only one meeting shall be loaded, compojure packs it
+(defn- schnaqs-by-hashes
+  "Bulk loading of discussions. May be used when users asks for all the schnaqs
+  they have access to. If only one schnaq shall be loaded, compojure packs it
   into a single string:
   `{:params {:share-hashes \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"}}`
 
@@ -113,11 +112,11 @@
   (if-let [hashes (get-in req [:params :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)
           filtered-hashes (filter validator/valid-discussion? hashes-list)
-          meetings (map db/meeting-by-hash filtered-hashes)]
-      (if-not (or (nil? meetings) (= [nil] meetings) (empty? meetings))
-        (ok {:meetings meetings})
-        (not-found {:error "Meetings could not be found. Maybe you provided an invalid hash."})))
-    (bad-request {:error "Meetings could not be loaded."})))
+          discussions (map discussion-db/discussion-by-share-hash filtered-hashes)]
+      (if-not (or (nil? discussions) (= [nil] discussions) (empty? discussions))
+        (ok {:discussions discussions})
+        (not-found {:error "Schnaqs could not be found. Maybe you provided an invalid hash."})))
+    (bad-request {:error "Schnaqs could not be loaded."})))
 
 (defn- public-schnaqs
   "Return all public meetings."
@@ -164,8 +163,8 @@
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
-  [{:keys [meeting-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
-  (if (validator/valid-discussion-and-statement? statement-id meeting-hash)
+  [{:keys [share-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
+  (if (validator/valid-discussion-and-statement? statement-id share-hash)
     (let [nickname (db/canonical-username nickname)
           vote (check-vote-fn statement-id nickname)
           counter-vote (counter-check-vote-fn statement-id nickname)]
@@ -449,8 +448,8 @@
   "Common routes for all modes."
   (routes
     (GET "/export/txt" [] export-txt-data)
-    (GET "/meeting/by-hash/:hash" [] meeting-by-hash)
-    (GET "/meetings/by-hashes" [] meetings-by-hashes)
+    (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
+    (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (GET "/ping" [] ping)
     (POST "/admin/schnaq/delete" [] delete-schnaq!)
@@ -486,7 +485,7 @@
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."
   (routes
-    (GET "/meetings" [] all-meetings)))
+    (GET "/schnaqs" [] all-schnaqs)))
 
 (def ^:private app-routes
   "Building routes for app."

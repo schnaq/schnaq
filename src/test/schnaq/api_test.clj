@@ -101,29 +101,29 @@
       (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-edit-hash))))
       (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-share-hash)))))))
 
-(deftest meetings-by-hashes-test
-  (let [meetings-by-hashes #'api/meetings-by-hashes
-        share-hash1 "89eh32hoas-2983ud"
+(deftest schnaqs-by-hashes-test
+  (let [schnaqs-by-hashes #'api/schnaqs-by-hashes
+        share-hash1 "cat-dog-hash"
         share-hash2 "graph-hash"]
-    (testing "No hash provided, no meeting returned."
-      (is (= 400 (:status (meetings-by-hashes {})))))
-    (testing "Invalid hash returns no meeting."
-      (is (= 404 (:status (meetings-by-hashes
+    (testing "No hash provided, no discussion returned."
+      (is (= 400 (:status (schnaqs-by-hashes {})))))
+    (testing "Invalid hash returns no discussion."
+      (is (= 404 (:status (schnaqs-by-hashes
                             {:params {:share-hashes "something-non-existent"}})))))
-    (testing "Querying by a single valid hash returns a meeting."
-      (let [api-call (meetings-by-hashes {:params {:share-hashes share-hash1}})]
+    (testing "Querying by a single valid hash returns a discussion."
+      (let [api-call (schnaqs-by-hashes {:params {:share-hashes share-hash1}})]
         (is (= 200 (:status api-call)))
-        (is (= 1 (count (get-in api-call [:body :meetings]))))
-        (is (s/valid? ::specs/meeting (first (get-in api-call [:body :meetings]))))))
+        (is (= 1 (count (get-in api-call [:body :discussions]))))
+        (is (s/valid? ::specs/discussion (first (get-in api-call [:body :discussions]))))))
     (testing "A valid hash packed into a collection should also work."
-      (let [api-call (meetings-by-hashes {:params {:share-hashes [share-hash1]}})]
+      (let [api-call (schnaqs-by-hashes {:params {:share-hashes [share-hash1]}})]
         (is (= 200 (:status api-call)))
-        (is (= 1 (count (get-in api-call [:body :meetings]))))
-        (is (s/valid? ::specs/meeting (first (get-in api-call [:body :meetings]))))))
-    (testing "Asking for multiple valid hashes, returns a list of valid meetings."
-      (let [api-call (meetings-by-hashes {:params {:share-hashes [share-hash1 share-hash2]}})]
+        (is (= 1 (count (get-in api-call [:body :discussions]))))
+        (is (s/valid? ::specs/discussion (first (get-in api-call [:body :discussions]))))))
+    (testing "Asking for multiple valid hashes, returns a list of valid discussions."
+      (let [api-call (schnaqs-by-hashes {:params {:share-hashes [share-hash1 share-hash2]}})]
         (is (= 200 (:status api-call)))
-        (is (= 2 (count (get-in api-call [:body :meetings]))))
+        (is (= 2 (count (get-in api-call [:body :discussions]))))
         (is (every? true?
-                    (map (partial s/valid? ::specs/meeting)
-                         (get-in api-call [:body :meetings]))))))))
+                    (map (partial s/valid? ::specs/discussion)
+                         (get-in api-call [:body :discussions]))))))))

@@ -35,7 +35,7 @@
    {:discussion/starting-statements main-db/statement-pattern}
    :discussion/share-hash
    :discussion/header-image-url
-   {:discussion/author [:user/nickname]}])
+   {:discussion/author main-db/user-pattern}])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."
@@ -304,3 +304,16 @@
                 config/deleted-statement-text
                 (:statement/content statement))})
     (main-db/all-statements share-hash)))
+
+(defn all-discussions
+  "Shows all discussions currently in the db. The route is only for development purposes.
+  Shows discussions in all states."
+  []
+  (->
+    (d/q
+      '[:find (pull ?discussions discussion-pattern-private)
+        :in $ discussion-pattern-private
+        :where [?discussions :discussion/title _]]
+      (d/db (new-connection)) discussion-pattern-private)
+    (toolbelt/pull-key-up :db/ident)
+    flatten))

@@ -62,7 +62,7 @@
      {:name :routes.meetings/my-schnaqs
       :view feed/personal-discussions-view
       :link-text (labels :router/my-schnaqs)
-      :controllers [{:start (fn [] (rf/dispatch [:meetings.visited/load]))}]}]]
+      :controllers [{:start (fn [] (rf/dispatch [:schnaqs.visited/load]))}]}]]
    ["schnaq"
     ["/create"
      {:name :routes.brainstorm/create
@@ -73,7 +73,7 @@
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
-                              (rf/dispatch [:meeting/load-by-share-hash (:share-hash path)]))}]}
+                              (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
      ["/"
       {:controllers schnaq-start-controllers
        :name :routes.schnaq/start
@@ -118,7 +118,7 @@
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
-                              (rf/dispatch [:meeting/load-by-share-hash (:share-hash path)]))}]}
+                              (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
      ["/:edit-hash"
       {:parameters {:path {:edit-hash string?}}
        :controllers [{:parameters {:path [:share-hash :edit-hash]}

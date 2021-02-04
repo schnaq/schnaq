@@ -115,14 +115,14 @@
 (>defn nodes-for-agenda
   "Returns all nodes for a discussion including its agenda."
   [statements starting-statements share-hash]
-  [sequential? sequential? :meeting/share-hash :ret sequential?]
+  [sequential? sequential? :discussion/share-hash :ret sequential?]
   (conj (create-nodes statements share-hash starting-statements)
         (starting-node share-hash)))
 
 (>defn links-for-starting
   "Creates all links for a discussion with its discussion topic as root."
   [statements starting-statements share-hash]
-  [sequential? sequential? :meeting/share-hash :ret sequential?]
+  [sequential? sequential? :discussion/share-hash :ret sequential?]
   (let [arguments (discussion-db/all-arguments-for-discussion share-hash)]
     (concat
       (create-links statements arguments)

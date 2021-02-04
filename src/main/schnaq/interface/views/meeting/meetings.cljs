@@ -18,7 +18,7 @@
                (update-in [:discussions :all] conj new-discussion))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
                         {:share-hash share-hash}]]
-            [:dispatch [:meeting/select-current new-meeting]]
+            [:dispatch [:schnaq/select-current new-discussion]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :meeting/created-success-heading)
                                        :body (labels :meeting/created-success-subheading)
@@ -28,24 +28,24 @@
             [:dispatch [:meetings.save-admin-access/to-localstorage share-hash edit-hash]]]})))
 
 (rf/reg-event-fx
-  :meeting/select-current
-  (fn [{:keys [db]} [_ meeting]]
-    {:db (assoc-in db [:meeting :selected] meeting)
-     :fx [[:dispatch [:meeting.visited/to-localstorage (:meeting/share-hash meeting)]]]}))
+  :schnaq/select-current
+  (fn [{:keys [db]} [_ discussion]]
+    {:db (assoc-in db [:schnaq :selected] discussion)
+     :fx [[:dispatch [:schnaq.visited/to-localstorage (:discussion/share-hash discussion)]]]}))
 
 (rf/reg-sub
-  :meeting/selected
+  :schnaq/selected
   (fn [db _]
-    (get-in db [:meeting :selected])))
+    (get-in db [:schnaq :selected])))
 
 (rf/reg-event-fx
-  :meeting/load-by-share-hash
+  :schnaq/load-by-share-hash
   (fn [_ [_ hash]]
     {:fx [[:http-xhrio {:method :get
-                        :uri (str (:rest-backend config) "/meeting/by-hash/" hash)
+                        :uri (str (:rest-backend config) "/schnaq/by-hash/" hash)
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
-                        :on-success [:meeting/select-current]
+                        :on-success [:schnaq/select-current]
                         :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-event-fx

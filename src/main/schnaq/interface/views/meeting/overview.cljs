@@ -20,44 +20,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- meeting-entry
-  "Displays a single meeting element of the meeting list"
-  [meeting]
-  (let [share-hash (:meeting/share-hash meeting)
-        title (:meeting/title meeting)
-        url (header-image/check-for-header-img (:meeting/header-image-url meeting))]
-    [:div.meeting-entry
-     {:on-click (fn []
-                  (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                {:share-hash share-hash}])
-                  (rf/dispatch [:meeting/select-current meeting]))}
-     [:div [:img.meeting-entry-title-header-image {:src url}]]
-     [:div.meeting-entry-title
-      [:h5 title]]]))
-
-(defn- meetings-list-view
-  "Shows a list of all meetings."
-  [subscription-key]
-  [:div.meetings-list
-   (let [meetings @(rf/subscribe [subscription-key])]
-     (if (empty? meetings)
-       [no-meetings-found]
-       (for [meeting meetings]
-         [:div.py-3 {:key (:db/id meeting)}
-          [meeting-entry meeting]])))])
-
-(>defn- meeting-view
-  "Shows the page for an overview of meetings. Takes a subscription-key which
-  must be a keyword referring to a subscription, which returns a collection of
-  meetings."
-  [subscription-key]
-  [keyword? :ret vector?]
-  [pages/with-nav-and-header
-   {:page/heading (labels :meetings/header)
-    :page/subheading (labels :meetings/subheader)}
-   [:div.container.py-4
-    [meetings-list-view subscription-key]]])
-
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq]
@@ -68,10 +30,7 @@
      {:on-click (fn []
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])
-                  (rf/dispatch [:meeting/select-current {:db/id (random-uuid)
-                                                         :meeting/title title
-                                                         :meeting/share-hash share-hash
-                                                         :meeting/header-image-url (:discussion/header-image-url schnaq)}]))}
+                  (rf/dispatch [:schnaq/select-current schnaq]))}
      [:div [:img.meeting-entry-title-header-image {:src url}]]
      [:div.meeting-entry-title
       [:h5 title]]]))
@@ -102,7 +61,7 @@
 (defn meeting-view-entry
   "Render all meetings."
   []
-  [meeting-view :meetings/all])
+  [schnaq-overview :schnaqs/all])
 
 (defn public-discussions-view
   "Render all public discussions."
@@ -112,11 +71,11 @@
 (defn meeting-view-visited
   "Render visited meetings."
   []
-  [meeting-view :meetings.visited/all])
+  [schnaq-overview :schnaqs.visited/all])
 
 ;; #### Subs ####
 
 (rf/reg-sub
-  :meetings/all
+  :schnaqs/all
   (fn [db _]
-    (get-in db [:meetings :all])))
+    (get-in db [:schnaqs :all])))

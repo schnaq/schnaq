@@ -169,10 +169,8 @@
 
 (defn- discussion-privacy-badge
   "A small badge displaying who can see the discussion!"
-  [meeting]
-  (let [states (set (-> meeting :meeting/_states))
-        public? (contains? states :discussion.state/public)]
-    (println meeting)
+  [{:keys [discussion/states]}]
+  (let [public? (contains? (set states) :discussion.state/public)]
     [:div.text-center.mt-2.privacy-indicator
      (if public?
        [:span.badge.badge-secondary-outline
@@ -193,66 +191,64 @@
    input])
 
 (defn- topic-bubble-desktop
-  [meeting title input info-content]
-  (let [share-hash (:meeting/share-hash meeting)]
-    [:div.row
-     ;; graph
-     [:div.col-2
-      [graph-button share-hash]]
-     ;; title
-     [:div.col-8
-      [title-and-input-element title input]]
-     ;; up-down votes and statistics
-     [:div.col-2.pr-3
-      [:div.float-right
-       info-content
-       [discussion-privacy-badge meeting]]]]))
+  [{:discussion/keys [share-hash] :as discussion} title input info-content]
+  [:div.row
+   ;; graph
+   [:div.col-2
+    [graph-button share-hash]]
+   ;; title
+   [:div.col-8
+    [title-and-input-element title input]]
+   ;; up-down votes and statistics
+   [:div.col-2.pr-3
+    [:div.float-right
+     info-content
+     [discussion-privacy-badge discussion]]]])
 
 (defn- topic-bubble-mobile
-  [meeting title input info-content]
-  (let [share-hash (:meeting/share-hash meeting)]
-    [:<>
-     [:div.d-flex
-      ;; graph
-      [:div.mr-auto.mb-5
-       [graph-button share-hash]]
-      ;; settings
-      [:div.p-0
-       info-content
-       [discussion-privacy-badge meeting]]]
-     ;; title
-     [title-and-input-element title input]]))
+  [{:discussion/keys [share-hash] :as discussion} title input info-content]
+  [:<>
+   [:div.d-flex
+    ;; graph
+    [:div.mr-auto.mb-5
+     [graph-button share-hash]]
+    ;; settings
+    [:div.p-0
+     info-content
+     [discussion-privacy-badge discussion]]]
+   ;; title
+   [title-and-input-element title input]])
 
 (defn- topic-bubble [content]
-  (let [title (:meeting/title @(rf/subscribe [:meeting/selected]))]
+  (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
     (common/set-website-title! title)
     [:div.topic-view.shadow-straight-light.md-4
      [:div.discussion-light-background content]]))
 
-(defn- topic-view [current-meeting conclusions topic-content]
+(defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
   [:<>
    [topic-bubble topic-content]
-   [cards/conclusion-cards-list conclusions (:meeting/share-hash current-meeting)]])
+   [cards/conclusion-cards-list conclusions share-hash]])
 
 (defn discussion-view-mobile
   "Discussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
-  [current-meeting title input info-content conclusions]
+  [current-discussion title input info-content conclusions]
   [:<>
-   [topic-view current-meeting conclusions
-    [topic-bubble-mobile current-meeting title input info-content]]])
+   [topic-view current-discussion conclusions
+    [topic-bubble-mobile current-discussion title input info-content]]])
 
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [current-meeting title input info-content conclusions history]
+  [current-discussion title input info-content conclusions history]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-2.py-4
      [history-view history]]
     [:div.col-9.py-4.px-0
-     [topic-view current-meeting conclusions
-      [topic-bubble-desktop current-meeting title input info-content]]]]])
+     [topic-view current-discussion conclusions
+      [topic-bubble-desktop current-discussion title input info-content]]]]])
 
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the right of the topic bubble."

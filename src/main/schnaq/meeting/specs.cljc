@@ -23,9 +23,9 @@
              :distinct true))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
 (s/def ::discussion (s/keys :req [:discussion/title :discussion/states
-                                  :discussion/share-hash :discussion/edit-hash :discussion/author]
+                                  :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
-                                  :discussion/header-image-url]))
+                                  :discussion/header-image-url :discussion/edit-hash]))
 
 ;; Author
 (s/def :user/nickname string?)
