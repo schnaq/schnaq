@@ -45,25 +45,30 @@
          [:div.pb-4 {:key (:db/id schnaq)}
           [schnaq-entry schnaq]])))])
 
-(defn- feed-button [label on-click-fn]
-  [:div
-   [:button.feed-button
-    {:type "button"
-     :on-click on-click-fn}
-    [:h5 (labels label)]]])
+(defn- feed-button [label on-click-fn focused?]
+  (let [button-class (if focused? "feed-button-focused" "feed-button")]
+    [:div
+     [:button
+      {:class button-class :type "button"
+       :on-click on-click-fn}
+      [:h5 (labels label)]]]))
 
-(defn- feed-button-navigate [label route]
-  [feed-button label #(rf/dispatch [:navigation/navigate route])])
+(defn- feed-button-navigate [label route focused?]
+  [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
 
 (defn- feed-navigation []
-  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])]
+  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
+        current-feed @(rf/subscribe [:feed/get-current])
+        public-feed? (= current-feed :public)
+        personal-feed? (= current-feed :personal)]
     [:div
-     [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs]
-     [feed-button-navigate :router/public-discussions :routes/public-discussions]
+     [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
+     [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
      (when-not (nil? edit-hash)
-       [feed-button :nav.schnaqs/last-added #(rf/dispatch [:navigation/navigate
-                                                           :routes.meeting/admin-center
-                                                           {:share-hash share-hash :edit-hash edit-hash}])])
+       [feed-button :nav.schnaqs/last-added
+        #(rf/dispatch [:navigation/navigate
+                       :routes.meeting/admin-center
+                       {:share-hash share-hash :edit-hash edit-hash}])])
      (when-not toolbelt/production?
        [feed-button-navigate :nav.schnaqs/show-all :routes/meetings])
      [feed-button-navigate :nav.schnaqs/create-schnaq :routes.brainstorm/create]]))
@@ -75,11 +80,11 @@
 
 (defn- feed-extra-information []
   [:div.feed-extra-info
-   [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
    [about-button :footer.buttons/about-us "https://disqtec.com/ueber-uns"]
    [about-button :nav/blog "https://schnaq.com/blog/"]
    [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
-   [about-button :router/privacy :routes/privacy]])
+   [about-button :router/privacy (reitfe/href :routes/privacy)]
+   [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]])
 
 (defn- feed-page-dektop [subscription-key]
   [:div.row.px-0.mx-0.py-3
@@ -98,10 +103,11 @@
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
   schnaqs."
-  [subscription-key]
-  [keyword? :ret vector?]
+  [subscription-key page-header]
+  [keyword? keyword? :ret vector?]
   [pages/with-nav
-   {}
+   {:page/heading (labels page-header)
+    :page/subheading (labels :schnaqs/subheader)}
    [:div.container-fluid.px-0
     [toolbelt/desktop-mobile-switch
      [feed-page-dektop subscription-key]
@@ -110,9 +116,22 @@
 (defn public-discussions-view
   "Render all public discussions."
   []
-  [schnaq-overview :schnaqs/public])
+  [schnaq-overview :schnaqs/public :schnaqs.all/header])
 
 (defn personal-discussions-view
   "Render all discussions in which the user participated."
   []
-  [schnaq-overview :schnaqs.visited/all])
+  [schnaq-overview :schnaqs.visited/all :schnaqs/header])
+
+;; events
+
+(rf/reg-event-db
+  :feed/store-current
+  (fn [db [_ feed-type]]
+    ;; store either :personal or :public feed
+    (assoc-in db [:feed :current] feed-type)))
+
+(rf/reg-sub
+  :feed/get-current
+  (fn [db _]
+    (get-in db [:feed :current])))
