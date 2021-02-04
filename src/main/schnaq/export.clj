@@ -50,7 +50,7 @@
   "Generates a textual representation of the discussion-data."
   [share-hash]
   [:meeting/share-hash :ret string?]
-  (let [statements (db/all-statements-for-graph share-hash)
+  (let [statements (discussion-db/all-statements-for-graph share-hash)
         starting-statements (discussion-db/starting-statements share-hash)
         legacy-starting-arguments (map :argument/conclusion
                                        (db/starting-arguments-by-discussion share-hash))

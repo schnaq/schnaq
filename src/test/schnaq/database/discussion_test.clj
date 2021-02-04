@@ -147,3 +147,10 @@
                         :discussion/author (main-db/add-user-if-not-exists "Wegi")}
                        false)
     (is (= 2 (count (db/public-discussions))))))
+
+(deftest all-statements-for-graph-test
+  (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
+    (let [graph-hash "graph-hash"
+          statements (db/all-statements-for-graph graph-hash)]
+      (is (= 7 (count statements)))
+      (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))

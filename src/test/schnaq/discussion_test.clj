@@ -1,8 +1,7 @@
 (ns schnaq.discussion-test
   (:require [clojure.test :refer [use-fixtures is deftest testing are]]
-            [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.discussion :as db]
             [schnaq.discussion :as discussion]
-            [schnaq.meeting.database :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -12,7 +11,7 @@
   (testing "Test whether all undercut descendants are found in a sub-discussion."
     (let [undercuts-for-root @#'discussion/undercuts-for-root
           share-hash "ameisenbär-hash"
-          all-arguments (discussion-db/all-arguments-for-discussion share-hash)
+          all-arguments (db/all-arguments-for-discussion share-hash)
           matching-argument (first (filter #(= :argument.type/attack (:argument/type %)) all-arguments))
           root-statement (first (:argument/premises matching-argument))
           matching-undercut (first (undercuts-for-root (:db/id root-statement) all-arguments))]
@@ -25,8 +24,8 @@
   (testing "Test whether all direct children are found."
     (let [direct-children @#'discussion/direct-children
           share-hash "ameisenbär-hash"
-          root-id (:db/id (first (discussion-db/starting-statements share-hash)))
-          all-arguments (discussion-db/all-arguments-for-discussion share-hash)
+          root-id (:db/id (first (db/starting-statements share-hash)))
+          all-arguments (db/all-arguments-for-discussion share-hash)
           children (direct-children root-id all-arguments)]
       (is (= 2 (count children)))
       (is (empty? (direct-children -1 all-arguments))))))
@@ -34,8 +33,8 @@
 (deftest sub-discussion-information-test
   (testing "Test information regarding sub-discussions."
     (let [share-hash "ameisenbär-hash"
-          arguments (discussion-db/all-arguments-for-discussion share-hash)
-          root-id (:db/id (first (discussion-db/starting-statements share-hash)))
+          arguments (db/all-arguments-for-discussion share-hash)
+          root-id (:db/id (first (db/starting-statements share-hash)))
           infos (discussion/sub-discussion-information root-id arguments)
           author-names (into #{} (map :user/nickname (:authors infos)))]
       (is (= 3 (:sub-statements infos)))
@@ -50,7 +49,7 @@
           share-hash-tapir-only "ameisenbär-hash"
           statements (db/all-statements-for-graph share-hash)
           contents (set (map :content statements))
-          starting-statements (discussion-db/starting-statements share-hash-tapir-only)
+          starting-statements (db/starting-statements share-hash-tapir-only)
           nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
           statement-nodes (filter #(= "statement" (:type %)) nodes)]
       (testing "Nodes contain agenda as data thus containing one more element than the statements."
@@ -64,7 +63,7 @@
   (testing "Validate data for graph links"
     (let [share-hash "graph-hash"
           statements (db/all-statements-for-graph share-hash)
-          starting-statements (discussion-db/starting-statements share-hash)
+          starting-statements (db/starting-statements share-hash)
           links (discussion/links-for-agenda statements starting-statements share-hash)]
       (testing "Links contains agenda as data thus containing one more element than the statements."
         (is (= (count statements) (count links)))))))
@@ -105,7 +104,7 @@
 (deftest premises-for-conclusion-id-test
   (testing "Get arguments (with meta-information), that have a certain conclusion"
     (let [share-hash "simple-hash"
-          starting-conclusion (first (discussion-db/starting-statements share-hash))
+          starting-conclusion (first (db/starting-statements share-hash))
           meta-premise (first (discussion/premises-for-conclusion-id (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
       (is (= :argument.type/support (:meta/argument-type meta-premise))))))
@@ -113,8 +112,8 @@
 (deftest premises-undercutting-argument-with-conclusion-id-test
   (testing "Get annotated premises, that are undercutting an argument with a certain premise"
     (let [share-hash "simple-hash"
-          starting-conclusion (first (discussion-db/starting-statements share-hash))
-          simple-argument (first (discussion-db/all-arguments-for-conclusion (:db/id starting-conclusion)))
+          starting-conclusion (first (db/starting-statements share-hash))
+          simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
           premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
           desired-statement (first (discussion/premises-undercutting-argument-with-premise-id premise-to-undercut-id))]
       (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (:statement/content desired-statement)))
