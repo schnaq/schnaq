@@ -45,13 +45,14 @@
                         :on-failure [:ajax.error/as-notification]}]]}))
 
 (rf/reg-event-fx
-  :meeting.creation/new
-  (fn [{:keys [db]} [_ new-meeting public?]]
+  :schnaq.create/new
+  ;; todo this should create and pass a new discussion
+  (fn [{:keys [db]} [_ new-discussion public?]]
     (let [nickname (get-in db [:user :name] "Anonymous")]
       {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/meeting/add")
+                          :uri (str (:rest-backend config) "/schnaq/add")
                           :params {:nickname nickname
-                                   :meeting new-meeting
+                                   :discussion new-discussion
                                    :public-discussion? public?}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)

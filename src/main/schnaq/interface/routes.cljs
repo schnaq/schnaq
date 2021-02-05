@@ -2,12 +2,11 @@
   (:require [re-frame.core :as rf]
             [reitit.coercion.spec]
             [schnaq.interface.analytics.core :as analytics]
+            [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.admin.control-center :as admin-center]
-            [schnaq.interface.views.brainstorm.create :as brainstorm-create]
-            [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
@@ -15,6 +14,7 @@
             [schnaq.interface.views.meeting.admin-center :as meeting-admin]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.privacy :as privacy]
+            [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.graph.view :as graph-view]))
@@ -70,7 +70,8 @@
    ["schnaq"
     ["/create"
      {:name :routes.schnaq/create
-      :view brainstorm-create/create-brainstorm-view
+      ;; todo change namespace
+      :view create/create-brainstorm-view
       :link-text (labels :router/create-brainstorm)
       :controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}]
     ["/:share-hash"

@@ -1,18 +1,5 @@
 (ns schnaq.interface.views.meeting.create
-  (:require [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]))
-
-(defn new-meeting-helper
-  "Creates a new meeting with the form from `create-meeting-form`."
-  [title public? type]
-  (rf/dispatch
-    [:meeting.creation/new
-     {:meeting/title title
-      :meeting/description nil
-      :meeting/type type
-      :meeting/end-date (js/Date. (str "2016-05-28T13:37"))
-      :meeting/start-date (js/Date.)}
-     public?]))
+  (:require [schnaq.interface.text.display-data :refer [labels]]))
 
 (defn meeting-title-input
   "The input and label for a new meeting-title"

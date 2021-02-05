@@ -11,7 +11,7 @@
 
 (deftest add-meeting-with-empty-description-test
   (testing "Check whether a meeting with an empty description is added or refused."
-    (let [response (@#'api/add-meeting {:body-params {:meeting {:meeting/title "Test"
+    (let [response (@#'api/add-schnaq {:body-params {:meeting {:meeting/title "Test"
                                                                 :meeting/start-date (db/now)
                                                                 :meeting/end-date (db/now)
                                                                 :meeting/description ""}

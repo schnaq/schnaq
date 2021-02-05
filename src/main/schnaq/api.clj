@@ -59,9 +59,9 @@
    :discussion/edit-hash edit-hash
    :discussion/author author})
 
-(defn- add-meeting
-  "Adds a meeting and (optional) agendas to the database.
-  Returns the newly-created meeting."
+(defn- add-schnaq
+  "Adds a discussion to the database. Returns the newly-created discussion."
+  ;; todo create discussion instead of meeting
   [request]
   (let [{:keys [meeting nickname public-discussion?]} (:body-params request)
         share-hash (.toString (UUID/randomUUID))
@@ -461,7 +461,7 @@
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/header-image/image" [] media/set-preview-image)
-    (POST "/meeting/add" [] add-meeting)
+    (POST "/schnaq/add" [] add-schnaq)
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)

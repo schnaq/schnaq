@@ -1,11 +1,13 @@
-(ns schnaq.interface.views.brainstorm.create
+(ns schnaq.interface.views.schnaq.create
   (:require [oops.core :refer [oget]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.meeting.create :as meeting-create]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [re-frame.core :as rf]))
 
 (defn- create-brainstorm []
+  ;; todo relabel
   [pages/with-nav-and-header
    {:page/heading (labels :brainstorm/heading)}
    [:div.container
@@ -15,7 +17,7 @@
                     (let [title (oget e [:target :elements :meeting-title :value])
                           public? (oget e [:target :elements :public-discussion? :checked])]
                       (js-wrap/prevent-default e)
-                      (meeting-create/new-meeting-helper title public? :meeting.type/brainstorm)))}
+                      (rf/dispatch [:schnaq.create/new {:discussion/title title} public?])))}
       [:div.agenda-meeting-container.shadow-straight.p-3
        [meeting-create/meeting-title-input]]
       [:div.form-check.pt-2.text-center
@@ -28,4 +30,5 @@
        [:button.btn.button-primary (labels :brainstorm.create.button/save)]]]]]])
 
 (defn create-brainstorm-view []
+  ;; todo relabel
   [create-brainstorm])
