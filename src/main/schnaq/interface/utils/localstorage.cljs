@@ -95,8 +95,12 @@
   "Build key value pair for inserting into local storage hashmap.
   Does not override the key if it is present"
   [key value local-storage-key]
+  ;; PARTIALLY DEPRECATED: Remove the meeting part after 2020-08-05
   (let [local-hashes (get-item local-storage-key)
-        new-hashes (add-key-value-to-local-hashmap local-hashes key value)
+        combined-hashes (if (= :schnaqs/admin-access)
+                          (distinct (concat local-hashes (get-item :meetings/admin-access)))
+                          local-hashes)
+        new-hashes (add-key-value-to-local-hashmap combined-hashes key value)
         hashes-tuple (map (fn [[val key]] (str "[" val " " key "]")) (seq new-hashes))
         hashes-as-string (string/join "," hashes-tuple)]
     hashes-as-string))
