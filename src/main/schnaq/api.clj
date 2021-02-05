@@ -110,6 +110,7 @@
       (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
 
 (defn- delete-statements!
+  ;; todo rework terminology
   "Deletes the passed list of statements if the admin-rights are fitting.
   Important: Needs to check whether the statement-id really belongs to the meeting with
   the passed edit-hash."

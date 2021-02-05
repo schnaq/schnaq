@@ -326,20 +326,31 @@
     (map first)))
 
 (>defn- all-statements
-  "Returns all statements belonging to a discussion"
+  "Returns all statements belonging to a discussion."
   [share-hash]
   [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
-  (flatten
-    (d/q
-      '[:find (pull ?statements statement-pattern)
-        :in $ ?share-hash statement-pattern
-        :where [?discussion :discussion/share-hash ?share-hash]
-        [?arguments :argument/discussions ?discussion]
-        (or
-          [?arguments :argument/conclusion ?statements]
-          [?arguments :argument/premises ?statements])
-        [?statements :statement/version _]]
-      (d/db (new-connection)) share-hash main-db/statement-pattern)))
+  (distinct
+    (concat
+      (flatten
+        (d/q
+          '[:find (pull ?statements statement-pattern)
+            :in $ ?share-hash statement-pattern
+            :where [?discussion :discussion/share-hash ?share-hash]
+            [?arguments :argument/discussions ?discussion]
+            (or
+              [?arguments :argument/conclusion ?statements]
+              [?arguments :argument/premises ?statements])
+            [?statements :statement/version _]]
+          (d/db (new-connection)) share-hash main-db/statement-pattern))
+      ;; When there are no reactions to the starting statement, the starting statements
+      ;; need to be checked explicitly, because there will be no arguments containing them.
+      (flatten
+        (d/q
+          '[:find (pull ?statements statement-pattern)
+            :in $ ?share-hash statement-pattern
+            :where [?discussion :discussion/share-hash ?share-hash]
+            [?discussion :discussion/starting-statements ?statements]]
+          (d/db (new-connection)) share-hash main-db/statement-pattern)))))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
