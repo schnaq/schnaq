@@ -1,47 +1,7 @@
 (ns schnaq.meeting.models)
 
 (def datomic-schema
-  [{:db/ident :meeting/title
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "The Title for the Meeting - does not have to be unique"}
-   {:db/ident :meeting/start-date
-    :db/valueType :db.type/instant
-    :db/cardinality :db.cardinality/one
-    :db/doc "The time the meetings officially starts at."}
-   {:db/ident :meeting/end-date
-    :db/valueType :db.type/instant
-    :db/cardinality :db.cardinality/one
-    :db/doc "The time after which participation is not possible anymore."}
-   {:db/ident :meeting/description
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "A description of the meetings purpose."}
-   {:db/ident :meeting/share-hash
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/identity
-    :db/doc "A hash that grants participation access to the discussion"}
-   {:db/ident :meeting/edit-hash
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/identity
-    :db/doc "A hash that grants edit access to the discussion"}
-   {:db/ident :meeting/author
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The author of a meeting."}
-   {:db/ident :meeting/type
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "Set type of a meeting"}
-   {:db/ident :meeting/header-image-url
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "URL pointing to an image to be displayed as header."}
-   {:db/ident :meeting.type/meeting}
-   {:db/ident :meeting.type/brainstorm}
-
+  [
    ;; Suggesting changes to a meeting
    {:db/ident :meeting.suggestion/meeting
     :db/valueType :db.type/ref

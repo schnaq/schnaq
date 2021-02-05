@@ -320,7 +320,8 @@
   "Returns the date of the last meeting created."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:last-created (db/last-meeting)})
+    ;; todo disabled until analytics rework
+    (ok {:last-created 12341234})
     (validator/deny-access)))
 
 (defn- number-of-usernames
