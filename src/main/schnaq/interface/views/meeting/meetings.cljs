@@ -7,23 +7,6 @@
 ;; #### Events ####
 
 (rf/reg-event-fx
-  :schnaq/created
-  (fn [{:keys [db]} [_ {:keys [new-discussion]}]]
-    (let [{:discussion/keys [share-hash edit-hash]} new-discussion]
-      {:db (-> db
-               (assoc-in [:schnaq :last-added] new-discussion)
-               (update-in [:schnaqs :all] conj new-discussion))
-       :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
-            [:dispatch [:schnaq/select-current new-discussion]]
-            [:dispatch [:notification/add
-                        #:notification{:title (labels :schnaq/created-success-heading)
-                                       :body (labels :schnaq/created-success-subheading)
-                                       :context :success}]]
-            [:localstorage/write [:schnaq.last-added/share-hash share-hash]]
-            [:localstorage/write [:schnaq.last-added/edit-hash edit-hash]]
-            [:dispatch [:schnaqs.save-admin-access/to-localstorage share-hash edit-hash]]]})))
-
-(rf/reg-event-fx
   :schnaq/select-current
   (fn [{:keys [db]} [_ discussion]]
     {:db (assoc-in db [:schnaq :selected] discussion)
@@ -43,21 +26,6 @@
                         :response-format (ajax/transit-response-format)
                         :on-success [:schnaq/select-current]
                         :on-failure [:ajax.error/as-notification]}]]}))
-
-(rf/reg-event-fx
-  :schnaq.create/new
-  ;; todo this should create and pass a new discussion
-  (fn [{:keys [db]} [_ new-discussion public?]]
-    (let [nickname (get-in db [:user :name] "Anonymous")]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/schnaq/add")
-                          :params {:nickname nickname
-                                   :discussion new-discussion
-                                   :public-discussion? public?}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:schnaq/created]
-                          :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   :meeting/check-admin-credentials
