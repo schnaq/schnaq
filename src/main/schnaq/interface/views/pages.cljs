@@ -30,7 +30,7 @@
   [with-nav-and-header
    {:page/heading (labels :page.login/heading)
     :page/subheading (labels :page.login/subheading)}
-   [:div.container.text-center
+   [:div.container.text-center.pt-5
     [:button.btn.btn-lg.btn-secondary
      {:on-click #(rf/dispatch [:keycloak/login])}
      (labels :user/login)]]])
