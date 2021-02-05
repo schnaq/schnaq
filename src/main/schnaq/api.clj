@@ -110,13 +110,13 @@
       (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
 
 (defn- delete-statements!
-  ;; todo rework terminology
   "Deletes the passed list of statements if the admin-rights are fitting.
-  Important: Needs to check whether the statement-id really belongs to the meeting with
+  Important: Needs to check whether the statement-id really belongs to the discussion with
   the passed edit-hash."
   [{:keys [body-params]}]
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
     (if (validator/valid-credentials? share-hash edit-hash)
+      ;; could optimize with a collection query here
       (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
         (do (discussion-db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
