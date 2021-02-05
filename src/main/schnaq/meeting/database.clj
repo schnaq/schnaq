@@ -272,10 +272,13 @@
 
 
 (def minimal-user-pattern
+  "Minimal user pull pattern."
   [:db/id
    :user/nickname])
 
-(>defn user [id]
+(>defn user
+  "Pull user from database."
+  [id]
   [int? :ret map?]
   (d/pull (d/db (new-connection)) minimal-user-pattern id))
 
