@@ -56,30 +56,6 @@
 (s/def :db/id (s/or :transacted number? :temporary any?))
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))
 
-
-;; Meeting
-(s/def :meeting/title ::non-blank-string)
-(s/def :meeting/description ::non-blank-string)
-(s/def :meeting/share-hash ::non-blank-string)
-(s/def :meeting/edit-hash ::non-blank-string)
-(s/def :meeting/start-date inst?)
-(s/def :meeting/end-date inst?)
-(s/def :meeting/author (s/or :reference ::entity-reference
-                             :user ::user))
-(s/def ::meeting (s/keys :req [:meeting/title :meeting/author
-                               :meeting/share-hash
-                               :meeting/start-date :meeting/end-date]
-                         :opt [:meeting/description :meeting/edit-hash]))
-
-;; Agenda
-(s/def :agenda/title ::non-blank-string)
-(s/def :agenda/description ::non-blank-string)
-(s/def :agenda/meeting ::entity-reference)
-(s/def :agenda/discussion ::entity-reference)
-(s/def :agenda/rank pos-int?)
-(s/def ::agenda (s/keys :req [:agenda/title :agenda/meeting :agenda/discussion]
-                        :opt [:agenda/description :agenda/rank]))
-
 ;; Feedback
 (s/def :feedback/contact-name string?)
 (s/def :feedback/contact-mail string?)
