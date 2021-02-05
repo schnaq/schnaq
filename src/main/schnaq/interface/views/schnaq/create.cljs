@@ -17,10 +17,9 @@
      :required true
      :placeholder (labels :schnaq.create.input/placeholder)}]])
 
-(defn- create-brainstorm []
-  ;; todo relabel
+(defn- create-schnaq-page []
   [pages/with-nav-and-header
-   {:page/heading (labels :brainstorm/heading)}
+   {:page/heading (labels :schnaq.create/heading)}
    [:div.container
     [:div.py-3.mt-3
      [:form
@@ -38,11 +37,10 @@
        [:label.form-check-label.display-6.pl-1 {:for :public-discussion?}
         (labels :discussion.create.public-checkbox/label)]]
       [:div.pt-3.text-center
-       [:button.btn.button-primary (labels :brainstorm.create.button/save)]]]]]])
+       [:button.btn.button-primary (labels :schnaq.create.button/save)]]]]]])
 
-(defn create-brainstorm-view []
-  ;; todo relabel
-  [create-brainstorm])
+(defn create-schnaq-view []
+  [create-schnaq-page])
 
 (rf/reg-event-fx
   :schnaq.create/new

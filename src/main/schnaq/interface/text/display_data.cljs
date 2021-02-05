@@ -106,9 +106,9 @@
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
 
         ;; Brainstorming time
-        :brainstorm/heading "Start schnaq"
+        :schnaq.create/heading "Start schnaq"
         :brainstorm.buttons/start-now "Start your discussion"
-        :brainstorm.create.button/save "Start a new schnaq!"
+        :schnaq.create.button/save "Start a new schnaq!"
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Make this discussion public"
@@ -377,7 +377,7 @@
         :router/all-meetings "All schnaqs"
         :router/analytics "Analytics dashboard"
         :router/continue-discussion "Continue Discussion"
-        :router/create-brainstorm "Create schnaq"
+        :router/create-schnaq "Create schnaq"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
         :router/invalid-link "Error page"
@@ -502,9 +502,9 @@
         :meeting.admin.notifications/statements-deleted-lead "Deine gewählten Nachrichten wurden erfolgreich gelöscht."
 
         ;; Brainstorming time
-        :brainstorm/heading "Schnaq starten"
+        :schnaq.create/heading "Schnaq starten"
         :brainstorm.buttons/start-now "Starte deine Diskussion"
-        :brainstorm.create.button/save "Schnaq starten!"
+        :schnaq.create.button/save "Schnaq starten!"
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
@@ -774,7 +774,7 @@
         :router/all-meetings "Alle schnaqs"
         :router/analytics "Analyse-Dashboard"
         :router/continue-discussion "Führe Besprechung fort"
-        :router/create-brainstorm "Schnaq anlegen"
+        :router/create-schnaq "Schnaq anlegen"
         :router/graph-view "Graph View"
         :router/how-to "Wie benutze ich schnaq?"
         :router/invalid-link "Fehlerseite"

@@ -70,9 +70,8 @@
    ["schnaq"
     ["/create"
      {:name :routes.schnaq/create
-      ;; todo change namespace
-      :view create/create-brainstorm-view
-      :link-text (labels :router/create-brainstorm)
+      :view create/create-schnaq-view
+      :link-text (labels :router/create-schnaq)
       :controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
