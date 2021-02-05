@@ -205,7 +205,7 @@
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
   (let [{:keys [share-hash edit-hash recipients share-link]} body-params
-        meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
+        meeting-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Invite Emails for some meeting sent")
           (ok (merge
@@ -221,7 +221,7 @@
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
   (let [{:keys [share-hash edit-hash recipient admin-center]} body-params
-        meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
+        meeting-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Send admin link for meeting " meeting-title " via E-Mail")
           (ok (merge

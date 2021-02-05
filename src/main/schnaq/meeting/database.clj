@@ -187,29 +187,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Meetings
 
-(>defn meeting-by-hash-generic
-  "Generic meeting by hash method, outputs according to pattern."
-  [hash pattern]
-  [string? sequential? :ret (? map?)]
-  (->
-    (d/q
-      '[:find (pull ?meeting pattern)
-        :in $ ?hash pattern
-        :where [?meeting :meeting/share-hash ?hash]]
-      (d/db (new-connection)) hash pattern)
-    ffirst
-    (toolbelt/pull-key-up :db/ident)))
-
-(defn meeting-by-hash
-  "Returns the meeting corresponding to the share hash."
-  [hash]
-  (meeting-by-hash-generic hash meeting-pattern-public))
-
-(defn meeting-by-hash-private
-  "Returns all meeting data, even the private parts by hash."
-  [hash]
-  (meeting-by-hash-generic hash meeting-pattern))
-
 (>defn all-statements
   "Returns all statements belonging to a discussion"
   [share-hash]
