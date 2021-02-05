@@ -45,40 +45,20 @@
   [_req]
   (ok (discussion-db/all-discussions)))
 
-(defn- add-hashes-to-meeting
-  "Enrich meeting by its hashes."
-  [meeting share-hash edit-hash]
-  (assoc meeting :meeting/share-hash share-hash
-                 :meeting/edit-hash edit-hash))
-
-(defn- create-discussion-data-with-hashes
-  "Creates a valid discussion object and adds hashes"
-  [title author share-hash edit-hash]
-  {:discussion/title title
-   :discussion/share-hash share-hash
-   :discussion/edit-hash edit-hash
-   :discussion/author author})
-
-(defn- add-meeting
-  "Adds a meeting and (optional) agendas to the database.
-  Returns the newly-created meeting."
+(defn- add-schnaq
+  "Adds a discussion to the database. Returns the newly-created discussion."
   [request]
-  (let [{:keys [meeting nickname public-discussion?]} (:body-params request)
-        share-hash (.toString (UUID/randomUUID))
-        edit-hash (.toString (UUID/randomUUID))
-        final-meeting (add-hashes-to-meeting meeting share-hash edit-hash)
-        author-id (db/add-user-if-not-exists nickname)
-        meeting-id (db/add-meeting (assoc final-meeting :meeting/author author-id))
-        discussion-data (create-discussion-data-with-hashes
-                          (:meeting/title meeting) author-id share-hash edit-hash)
+  (let [{:keys [discussion nickname public-discussion?]} (:body-params request)
+        discussion-data {:discussion/title (:discussion/title discussion)
+                         :discussion/share-hash (.toString (UUID/randomUUID))
+                         :discussion/edit-hash (.toString (UUID/randomUUID))
+                         :discussion/author (db/add-user-if-not-exists nickname)}
         new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
     (if new-discussion-id
-      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)
-            created-meeting (db/meeting-private-data meeting-id)]
+      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
         (log/info "Discussion created: " new-discussion-id " - "
                   (:discussion/title created-discussion) " – Public? " public-discussion?)
-        (created "" {:new-discussion created-discussion
-                     :new-meeting created-meeting}))
+        (created "" {:new-discussion created-discussion}))
       (do
         (log/info "Did not create discussion from following data:\n" discussion-data)
         (bad-request "The input you provided could not be used to create a discussion.")))))
@@ -461,7 +441,7 @@
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/header-image/image" [] media/set-preview-image)
-    (POST "/meeting/add" [] add-meeting)
+    (POST "/schnaq/add" [] add-schnaq)
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)

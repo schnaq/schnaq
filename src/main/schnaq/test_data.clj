@@ -349,7 +349,7 @@
   [{:db/id "discussion/graph"
     :discussion/title "Wetter Graph"
     :discussion/share-hash "graph-hash"
-    :discussion/edit-hash "secreeeet"
+    :discussion/edit-hash "graph-edit-hash"
     :discussion/author "user/wegi"
     :discussion/description "Der Graph muss korrekt sein"
     :discussion/states [:discussion.state/open]

@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest testing is are use-fixtures]]
             [schnaq.api :as api]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.specs :as specs]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -9,28 +10,16 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
-(deftest add-meeting-with-empty-description-test
-  (testing "Check whether a meeting with an empty description is added or refused."
-    (let [response (@#'api/add-meeting {:body-params {:meeting {:meeting/title "Test"
-                                                                :meeting/start-date (db/now)
-                                                                :meeting/end-date (db/now)
-                                                                :meeting/description ""}
-                                                      :nickname "Wegi"
-                                                      :public-discussion? true}})]
-      (is (= 201 (:status response)))
-      (is (s/valid? ::specs/meeting (-> response :body :new-meeting))))))
-
 (deftest check-credentials-test
   (testing "Check if credentials are verified correctly."
     (let [check-credentials @#'api/check-credentials
           share-hash "abbada"
           edit-hash "Scooby Doo"
-          _ (db/add-meeting {:meeting/title "foo"
-                             :meeting/share-hash share-hash
-                             :meeting/edit-hash edit-hash
-                             :meeting/start-date (db/now)
-                             :meeting/end-date (db/now)
-                             :meeting/author (db/add-user-if-not-exists "Wegi")})
+          _ (discussion-db/new-discussion {:discussion/title "foo"
+                                           :discussion/share-hash share-hash
+                                           :discussion/edit-hash edit-hash
+                                           :discussion/author (db/add-user-if-not-exists "Wegi")}
+                                          true)
           succeeding-response (check-credentials {:body-params {:share-hash share-hash :edit-hash edit-hash}})
           failing-response (check-credentials {:body-params {:share-hash share-hash :edit-hash "INVALID"}})]
       (is (= 200 (:status succeeding-response)))
@@ -81,8 +70,8 @@
                     "schnaqi.com"
                     "fakeschnaq.com"))))
 
-(deftest meeting-by-hash-as-admin-test
-  (let [meeting-by-hash-as-admin #'api/schnaq-by-hash-as-admin
+(deftest schnaq-by-hash-as-admin-test
+  (let [schnaq-by-hash-as-admin #'api/schnaq-by-hash-as-admin
         share-hash "graph-hash"
         edit-hash "graph-edit-hash"
         request {:body-params {:share-hash share-hash
@@ -92,10 +81,10 @@
         req-wrong-share-hash {:body-params {:share-hash "razupaltuff"
                                             :edit-hash edit-hash}}]
     (testing "Valid hashes are ok."
-      (is (= 200 (:status (meeting-by-hash-as-admin request)))))
+      (is (= 200 (:status (schnaq-by-hash-as-admin request)))))
     (testing "Wrong hashes are forbidden."
-      (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-edit-hash))))
-      (is (= 403 (:status (meeting-by-hash-as-admin req-wrong-share-hash)))))))
+      (is (= 403 (:status (schnaq-by-hash-as-admin req-wrong-edit-hash))))
+      (is (= 403 (:status (schnaq-by-hash-as-admin req-wrong-share-hash)))))))
 
 (deftest schnaqs-by-hashes-test
   (let [schnaqs-by-hashes #'api/schnaqs-by-hashes
