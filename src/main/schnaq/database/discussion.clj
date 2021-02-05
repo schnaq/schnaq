@@ -72,10 +72,12 @@
       ffirst))
 
 (defn discussion-by-share-hash
+  "Query discussion and apply public discussion pattern to it."
   [share-hash]
   (discussion-by-share-hash-template share-hash discussion-pattern))
 
 (defn discussion-by-share-hash-private
+  "Query discussion and apply the private discussion pattern."
   [share-hash]
   (discussion-by-share-hash-template share-hash discussion-pattern-private))
 
