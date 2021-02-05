@@ -332,7 +332,7 @@
   (distinct
     (concat
       (flatten
-        (d/q
+        (query
           '[:find (pull ?statements statement-pattern)
             :in $ ?share-hash statement-pattern
             :where [?discussion :discussion/share-hash ?share-hash]
@@ -341,16 +341,16 @@
               [?arguments :argument/conclusion ?statements]
               [?arguments :argument/premises ?statements])
             [?statements :statement/version _]]
-          (d/db (new-connection)) share-hash main-db/statement-pattern))
+          share-hash main-db/statement-pattern))
       ;; When there are no reactions to the starting statement, the starting statements
       ;; need to be checked explicitly, because there will be no arguments containing them.
       (flatten
-        (d/q
+        (query
           '[:find (pull ?statements statement-pattern)
             :in $ ?share-hash statement-pattern
             :where [?discussion :discussion/share-hash ?share-hash]
             [?discussion :discussion/starting-statements ?statements]]
-          (d/db (new-connection)) share-hash main-db/statement-pattern)))))
+          share-hash main-db/statement-pattern)))))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
@@ -377,3 +377,25 @@
       (d/db (new-connection)) discussion-pattern-private)
     (toolbelt/pull-key-up :db/ident)
     flatten))
+
+(>defn check-valid-statement-id-for-discussion
+  "Checks whether the statement-id matches the share-hash."
+  [statement-id share-hash]
+  [:db/id :discussion/share-hash :ret (? :db/id)]
+  (or
+    (ffirst
+      (query
+        '[:find ?discussion
+          :in $ ?statement ?hash
+          :where (or [?argument :argument/premises ?statement]
+                     [?argument :argument/conclusion ?statement])
+          [?argument :argument/discussions ?discussion]
+          [?discussion :discussion/share-hash ?hash]]
+        statement-id share-hash))
+    (ffirst
+      (query
+        '[:find ?discussion
+          :in $ ?statement ?hash
+          :where [?discussion :discussion/starting-statements ?statement]
+          [?discussion :discussion/share-hash ?hash]]
+        statement-id share-hash))))

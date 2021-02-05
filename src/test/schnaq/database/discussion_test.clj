@@ -164,3 +164,17 @@
   (testing "Test whether deleted discussions are correctly recognized."
     (is (db/discussion-deleted? "public-share-hash-deleted"))
     (is (not (db/discussion-deleted? "public-share-hash")))))
+
+(deftest valid-statement-id-and-meeting?-test
+  (testing "Test the function that checks whether a statement belongs to a certain meeting."
+    (let [share-hash "Wegi-ist-der-schönste"
+          _ (db/new-discussion {:discussion/title "test-meet"
+                                           :discussion/share-hash share-hash
+                                           :discussion/edit-hash (str "secret-" share-hash)
+                                           :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                                          true)
+          christian-id (main-db/user-by-nickname "Christian")
+          first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
+          second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
+      (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
+      (is (db/check-valid-statement-id-for-discussion second-id "Wegi-ist-der-schönste")))))

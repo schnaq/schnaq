@@ -9,7 +9,8 @@
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (def ^:private any-meeting-share-hash "aklsuzd98-234da-123d")
-(defn- any-discussion
+;; temporarily disable during refactor
+#_(defn- any-discussion
   []
   (discussion-db/new-discussion {:discussion/title "Bla"
                                  :discussion/share-hash any-meeting-share-hash
@@ -43,20 +44,6 @@
       (db/remove-upvote! (first some-statements) author-2)
       (is (zero? (db/upvotes-for-statement (first some-statements))))
       (is (zero? (db/downvotes-for-statement (first some-statements)))))))
-
-(deftest valid-statement-id-and-meeting?-test
-  (testing "Test the function that checks whether a statement belongs to a certain meeting."
-    (let [share-hash "Wegi-ist-der-schönste"
-          _ (discussion-db/new-discussion {:discussion/title "test-meet"
-                                           :discussion/share-hash share-hash
-                                           :discussion/edit-hash (str "secret-" share-hash)
-                                           :discussion/author (db/add-user-if-not-exists "Wegi")}
-                                          true)
-          christian-id (db/user-by-nickname "Christian")
-          first-id (discussion-db/add-starting-statement! share-hash christian-id "this is sparta")
-          second-id (discussion-db/add-starting-statement! share-hash christian-id "this is kreta")]
-      (is (db/check-valid-statement-id-and-meeting first-id "Wegi-ist-der-schönste"))
-      (is (db/check-valid-statement-id-and-meeting second-id "Wegi-ist-der-schönste")))))
 
 (deftest clean-db-vals-test
   (testing "Test whether nil values are properly cleaned from a map."

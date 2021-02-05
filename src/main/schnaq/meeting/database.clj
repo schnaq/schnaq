@@ -316,29 +316,6 @@
   [number? string? :ret (? number?)]
   (generic-reaction-check statement-id user-nickname :user/downvotes))
 
-(>defn check-valid-statement-id-and-meeting
-  ;; todo continue
-  "Checks whether the statement-id matches the share-hash."
-  [statement-id share-hash]
-  [number? string? :ret (? number?)]
-  (or
-    (ffirst
-      (d/q
-        '[:find ?discussion
-          :in $ ?statement ?hash
-          :where (or [?argument :argument/premises ?statement]
-                     [?argument :argument/conclusion ?statement])
-          [?argument :argument/discussions ?discussion]
-          [?discussion :discussion/share-hash ?hash]]
-        (d/db (new-connection)) statement-id share-hash))
-    (ffirst
-      (d/q
-        '[:find ?discussion
-          :in $ ?statement ?hash
-          :where [?discussion :discussion/starting-statements ?statement]
-          [?discussion :discussion/share-hash ?hash]]
-        (d/db (new-connection)) statement-id share-hash))))
-
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime. ###################
 
 (def ^:private max-time-back Instant/EPOCH)
