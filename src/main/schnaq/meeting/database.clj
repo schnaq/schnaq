@@ -358,8 +358,8 @@
 
 (defn number-of-meetings
   "Returns the number of meetings. Optionally takes a date since when this counts."
-  ([] (number-of-entities-since :meeting/title))
-  ([since] (number-of-entities-since :meeting/title since)))
+  ([] (number-of-entities-since :discussion/title))
+  ([since] (number-of-entities-since :discussion/title since)))
 
 (defn number-of-usernames
   "Returns the number of different usernames in the database."

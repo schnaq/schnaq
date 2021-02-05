@@ -347,20 +347,7 @@
     :argument/discussions ["discussion/graph"]}])
 
 (def ^:private simple-discussion
-  [{:db/id "meeting/simple"
-    :meeting/title "Wir wollen simple Meetings"
-    :meeting/description "Das ist ein simples meeting"
-    :meeting/start-date #inst "2019-10-01T01:01:01.000-00:00"
-    :meeting/end-date #inst "2019-12-01T01:01:01.000-00:00"
-    :meeting/share-hash "simple-hash"
-    :meeting/author "user/wegi"}
-   {:db/id "agenda/simple-agenda"
-    :agenda/title "Simple top"
-    :agenda/description "Simple top top"
-    :agenda/discussion "discussion/simple"
-    :agenda/rank 1
-    :agenda/meeting "meeting/simple"}
-   {:db/id "discussion/simple"
+  [{:db/id "discussion/simple"
     :discussion/title "Simple Discussion"
     :discussion/share-hash "simple-hash"
     :discussion/edit-hash "simple-hash-secret"
