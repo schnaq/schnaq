@@ -9,7 +9,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
-            [ring.util.http-response :refer [ok created not-found bad-request unauthorized]]
+            [ring.util.http-response :refer [ok created bad-request unauthorized]]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
