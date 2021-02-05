@@ -29,9 +29,9 @@
 (>defn valid-credentials?
   "Validate if share-hash and edit-hash match"
   [share-hash edit-hash]
-  [string? string? :ret boolean?]
-  (let [authenticate-meeting (db/meeting-by-hash-private share-hash)]
-    (and (= edit-hash (:meeting/edit-hash authenticate-meeting))
+  [:discussion/share-hash :discussion/edit-hash :ret boolean?]
+  (let [complete-discussion (discussion-db/discussion-by-share-hash-private share-hash)]
+    (and (= edit-hash (:discussion/edit-hash complete-discussion))
          (not (discussion-db/discussion-deleted? share-hash)))))
 
 (defn deny-access
