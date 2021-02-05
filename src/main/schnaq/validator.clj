@@ -17,8 +17,7 @@
 (defn valid-discussion?
   "Check if a schnaq-hash ist valid. Returns false, when the discussion is deleted."
   [share-hash]
-  (and (not (nil? (db/meeting-by-hash share-hash)))
-       (not (discussion-db/discussion-deleted? share-hash))))
+  (not (discussion-db/discussion-deleted? share-hash)))
 
 (defn valid-discussion-and-statement?
   "Checks whether a discussion is valid and also whether the statement belongs to the discussion."

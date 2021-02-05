@@ -81,6 +81,22 @@
   [share-hash]
   (discussion-by-share-hash-template share-hash discussion-pattern-private))
 
+(>defn valid-discussions-by-hashes
+  "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
+  [share-hashes]
+  [(s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]
+  (as-> (d/q
+          '[:find (pull ?discussions discussion-pattern)
+            :in $ [?share-hashes ...] discussion-pattern
+            :where [?discussions :discussion/share-hash ?share-hashes]
+            (not-join [?discussions]
+                      [?discussions :discussion/states :discussion.state/deleted])]
+          (d/db (main-db/new-connection)) share-hashes discussion-pattern)
+        result
+        (toolbelt/pull-key-up result :db/ident)
+        (map first result)
+        (filter #(s/valid? ::specs/discussion %) result)))
+
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
   [statement-ids]

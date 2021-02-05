@@ -110,12 +110,8 @@
                             \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
   [req]
   (if-let [hashes (get-in req [:params :share-hashes])]
-    (let [hashes-list (if (string? hashes) [hashes] hashes)
-          filtered-hashes (filter validator/valid-discussion? hashes-list)
-          discussions (map discussion-db/discussion-by-share-hash filtered-hashes)]
-      (if-not (or (nil? discussions) (= [nil] discussions) (empty? discussions))
-        (ok {:discussions discussions})
-        (not-found {:error "Schnaqs could not be found. Maybe you provided an invalid hash."})))
+    (let [hashes-list (if (string? hashes) [hashes] hashes)]
+      (ok {:discussions (discussion-db/valid-discussions-by-hashes hashes-list)}))
     (bad-request {:error "Schnaqs could not be loaded."})))
 
 (defn- public-schnaqs
@@ -446,10 +442,10 @@
   "Common routes for all modes."
   (routes
     (GET "/export/txt" [] export-txt-data)
+    (GET "/ping" [] ping)
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
     (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
-    (GET "/ping" [] ping)
     (POST "/admin/schnaq/delete" [] delete-schnaq!)
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
@@ -461,10 +457,10 @@
     (POST "/discussion/statements/starting/add" [] add-starting-statement!)
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
-    (POST "/header-image/image" [] media/set-preview-image)
     (POST "/feedback/add" [] add-feedback)
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
+    (POST "/header-image/image" [] media/set-preview-image)
     (POST "/meeting/add" [] add-meeting)
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
