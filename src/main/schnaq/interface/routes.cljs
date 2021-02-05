@@ -124,7 +124,6 @@
        :controllers [{:parameters {:path [:share-hash :edit-hash]}
                       :start (fn [{:keys [path]}]
                                (let [{:keys [share-hash edit-hash]} path]
-                                 (println share-hash edit-hash )
                                  (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
       ["/manage"
        {:name :routes.schnaq/admin-center

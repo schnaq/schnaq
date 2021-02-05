@@ -100,6 +100,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
+;; todo user pattern in other things should not show up and downvotes
 (def user-pattern
   "Pull a user based on these attributes"
   [:db/id

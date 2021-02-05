@@ -13,8 +13,7 @@
       {:db (-> db
                (assoc-in [:schnaq :last-added] new-discussion)
                (update-in [:schnaqs :all] conj new-discussion))
-       :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
-                        {:share-hash share-hash}]]
+       :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-discussion]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :schnaq/created-success-heading)
