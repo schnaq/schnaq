@@ -128,10 +128,6 @@
    :statement/deleted?
    {:statement/author [:user/nickname]}])
 
-(def ^:private meeting-pattern
-  "Has all meeting information, including sensitive ones."
-  (conj meeting-pattern-public :meeting/edit-hash))
-
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
@@ -187,30 +183,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Meetings
 
-(>defn all-statements
-  "Returns all statements belonging to a discussion"
-  [share-hash]
-  [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
-  (distinct
-    (concat
-      (flatten
-        (d/q
-          '[:find (pull ?statements statement-pattern)
-            :in $ ?share-hash statement-pattern
-            :where [?discussion :discussion/share-hash ?share-hash]
-            [?arguments :argument/discussions ?discussion]
-            (or
-              [?arguments :argument/conclusion ?statements]
-              [?arguments :argument/premises ?statements])
-            [?statements :statement/version _]]
-          (d/db (new-connection)) share-hash statement-pattern))
-      (flatten
-        (d/q
-          '[:find (pull ?statements statement-pattern)
-            :in $ ?share-hash statement-pattern
-            :where [?discussion :discussion/share-hash ?share-hash]
-            [?discussion :discussion/starting-statements ?statements]]
-          (d/db (new-connection)) share-hash statement-pattern)))))
+
 
 ;; ----------------------------------------------------------------------------
 ;; user

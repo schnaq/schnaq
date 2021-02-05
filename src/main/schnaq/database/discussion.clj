@@ -325,6 +325,22 @@
     (sort-by second toolbelt/comp-compare)
     (map first)))
 
+(>defn- all-statements
+  "Returns all statements belonging to a discussion"
+  [share-hash]
+  [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
+  (flatten
+    (d/q
+      '[:find (pull ?statements statement-pattern)
+        :in $ ?share-hash statement-pattern
+        :where [?discussion :discussion/share-hash ?share-hash]
+        [?arguments :argument/discussions ?discussion]
+        (or
+          [?arguments :argument/conclusion ?statements]
+          [?arguments :argument/premises ?statements])
+        [?statements :statement/version _]]
+      (d/db (new-connection)) share-hash main-db/statement-pattern)))
+
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
   [share-hash]
@@ -336,7 +352,7 @@
        :label (if (:statement/deleted? statement)
                 config/deleted-statement-text
                 (:statement/content statement))})
-    (main-db/all-statements share-hash)))
+    (all-statements share-hash)))
 
 (defn all-discussions
   "Shows all discussions currently in the db. The route is only for development purposes.
