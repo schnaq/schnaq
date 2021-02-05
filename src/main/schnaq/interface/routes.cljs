@@ -46,7 +46,7 @@
      :view admin-center/center-overview-route
      :link-text (labels :router/admin-center)
      :controllers [{:start (fn []
-                             (rf/dispatch [:admin/set-password (js/prompt "Admin Password")])
+                             ;; TODO: this should be prevented!!
                              (rf/dispatch [:schnaqs.public/load]))}]}]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
