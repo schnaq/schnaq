@@ -7,26 +7,22 @@
 ;; #### Events ####
 
 (rf/reg-event-fx
-  ;; todo new-meeting should be new-discussion
   :meeting.creation/added-continue-with-agendas
-  (fn [{:keys [db]} [_ {:keys [new-meeting new-discussion]}]]
-    (let [share-hash (:meeting/share-hash new-meeting)
-          edit-hash (:meeting/edit-hash new-meeting)]
+  (fn [{:keys [db]} [_ {:keys [new-discussion]}]]
+    (let [{:keys [share-hash edit-hash]} new-discussion]
       {:db (-> db
-               (assoc-in [:schnaq :last-added] new-meeting)
-               (assoc-in [:discussions :last-added] new-discussion)
-               (update :meetings conj new-meeting)
-               (update-in [:discussions :all] conj new-discussion))
+               (assoc-in [:schnaq :last-added] new-discussion)
+               (update-in [:schnaqs :all] conj new-discussion))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start
                         {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-discussion]]
             [:dispatch [:notification/add
-                        #:notification{:title (labels :meeting/created-success-heading)
-                                       :body (labels :meeting/created-success-subheading)
+                        #:notification{:title (labels :schnaq/created-success-heading)
+                                       :body (labels :schnaq/created-success-subheading)
                                        :context :success}]]
             [:localstorage/write [:schnaq.last-added/share-hash share-hash]]
             [:localstorage/write [:schnaq.last-added/edit-hash edit-hash]]
-            [:dispatch [:meetings.save-admin-access/to-localstorage share-hash edit-hash]]]})))
+            [:dispatch [:schnaqs.save-admin-access/to-localstorage share-hash edit-hash]]]})))
 
 (rf/reg-event-fx
   :schnaq/select-current

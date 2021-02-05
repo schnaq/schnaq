@@ -78,13 +78,13 @@
         :schnaq.header-image.url/failed-setting-title "Error when adding image"
         :schnaq.header-image.url/failed-seting-body "The image will not be used as preview image."
 
-        ;; Create meeting
+        ;; Create schnaq
         :meeting-form-title-placeholder "What should the name of your schnaq be?"
         :meeting/copy-link-tooltip "Click here to copy your link"
         :meeting/link-copied-heading "Link copied"
         :meeting/link-copied-success "The link was copied to your clipboard!"
-        :meeting/created-success-heading "Your schnaq was created!"
-        :meeting/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
+        :schnaq/created-success-heading "Your schnaq was created!"
+        :schnaq/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
         :meetings/continue-with-schnaq-after-creation "Invited Everybody? Lets go!"
         :meetings/continue-to-schnaq-button "To the schnaq"
 
@@ -474,13 +474,13 @@
 
 
 
-        ;; Create meeting
+        ;; Create schnaq
         :meeting-form-title-placeholder "Wie soll dein schnaq heißen?"
         :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
         :meeting/link-copied-heading "Link kopiert"
         :meeting/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
-        :meeting/created-success-heading "Dein schnaq wurde erstellt!"
-        :meeting/created-success-subheading "Nun kannst du den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
+        :schnaq/created-success-heading "Dein schnaq wurde erstellt!"
+        :schnaq/created-success-subheading "Nun kannst du den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
         :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Los geht's!"
         :meetings/continue-to-schnaq-button "Zum schnaq"
 

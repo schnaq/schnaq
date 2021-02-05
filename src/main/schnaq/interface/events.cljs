@@ -54,8 +54,7 @@
                           :on-failure [:ajax.error/to-console]}]]})))
 
 (rf/reg-event-fx
-  ;; todo rename everything
-  :load/last-added-meeting
+  :load/last-added-schnaq
   (fn [_ _]
     (let [share-hash (ls/get-item :schnaq.last-added/share-hash)
           edit-hash (ls/get-item :schnaq.last-added/edit-hash)]
@@ -69,7 +68,7 @@
      :fx [[:dispatch [:load/schnaqs]]
           [:dispatch [:username/from-localstorage]]
           [:dispatch [:keycloak/init]]
-          [:dispatch [:load/last-added-meeting]]
+          [:dispatch [:load/last-added-schnaq]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
           [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))

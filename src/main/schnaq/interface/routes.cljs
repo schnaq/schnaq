@@ -134,7 +134,7 @@
                                 (let [share-hash (:share-hash path)
                                       edit-hash (:edit-hash path)]
                                   (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
-                                  (rf/dispatch [:meetings.save-admin-access/to-localstorage
+                                  (rf/dispatch [:schnaqs.save-admin-access/to-localstorage
                                                 share-hash edit-hash])))}]}]]
      ["/"
       ;; DEPRECATED: Do not use at all. This has the same effect as `:routes.schnaq/start`

@@ -346,7 +346,8 @@
               (ls/parse-hash-map-string (ls/get-item :meetings/admin-access)))))
 
 (rf/reg-event-fx
-  :meetings.save-admin-access/to-localstorage
+  :schnaqs.save-admin-access/to-localstorage
+  ;;todo rebrand to discussions
   (fn [_ [_ share-hash edit-hash]]
     {:fx [[:localstorage/write
            [:meetings/admin-access
