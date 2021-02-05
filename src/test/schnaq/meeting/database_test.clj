@@ -9,13 +9,13 @@
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (def ^:private any-meeting-share-hash "aklsuzd98-234da-123d")
-(defn- any-meeting-id
+(defn- any-discussion
   []
-  (db/add-meeting {:meeting/title "Bla"
-                   :meeting/start-date (db/now)
-                   :meeting/end-date (db/now)
-                   :meeting/share-hash any-meeting-share-hash
-                   :meeting/author (db/add-user-if-not-exists "Wegi")}))
+  (discussion-db/new-discussion {:discussion/title "Bla"
+                                 :discussion/share-hash any-meeting-share-hash
+                                 :discussion/edit-hash (str any-meeting-share-hash "-secret")
+                                 :discussion/author (db/add-user-if-not-exists "Wegi")}
+                                true))
 
 (deftest up-and-downvotes-test
   (testing "Tests whether setting up and downvotes works properly."
@@ -69,17 +69,6 @@
       (is (= {} (@#'db/clean-db-vals {:foo ""})))
       (is (= time-map (@#'db/clean-db-vals time-map))))))
 
-(deftest add-meeting-test
-  (testing "Test whether meetings are properly added"
-    (let [minimal-meeting {:meeting/title "Bla"
-                           :meeting/start-date (db/now)
-                           :meeting/end-date (db/now)
-                           :meeting/share-hash "aklsuzd98-234da-123d"
-                           :meeting/author (db/add-user-if-not-exists "Wegi")}]
-      (is (number? (db/add-meeting minimal-meeting)))
-      (is (number? (db/add-meeting (assoc minimal-meeting :meeting/description "some description"))))
-      (is (nil? (db/add-meeting (assoc minimal-meeting :meeting/description 123)))))))
-
 (deftest add-user-test
   (testing "Check for correct user-addition"
     (is (number? (db/add-user "Gib ihm!")))
@@ -120,7 +109,8 @@
 (deftest number-of-meetings-test
   (testing "Return the correct number of meetings"
     (is (= 5 (db/number-of-meetings)))
-    (any-meeting-id)                                        ;; Adds any new meeting
+    ;; Adds any new discussion
+    (any-discussion)
     (is (= 6 (db/number-of-meetings)))
     (is (zero? (db/number-of-meetings (Instant/now))))))
 
@@ -140,7 +130,7 @@
 (deftest average-number-of-agendas-test
   (testing "Test whether the average number of agendas fits."
     (is (= 6/5 (db/average-number-of-agendas)))
-    (any-meeting-id)
+    (any-discussion)
     (is (= 1 (db/average-number-of-agendas)))))
 
 (deftest number-of-active-users-test

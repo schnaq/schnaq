@@ -187,19 +187,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Meetings
 
-(>defn add-meeting
-  "Adds a meeting to the database. Returns the id of the newly added meeting.
-  Automatically cleans input."
-  [meeting]
-  [map? :ret int?]
-  (clean-and-add-to-db! meeting ::specs/meeting))
-
-(>defn meeting-private-data
-  "Return non public meeting data by id."
-  [id]
-  [int? :ret ::specs/meeting]
-  (d/pull (d/db (new-connection)) meeting-pattern id))
-
 (defn public-meetings
   "Returns all meetings where the discussion is public."
   []
