@@ -11,7 +11,7 @@
 (defn- card-meeting-header
   "Overview header for a meeting with a name input"
   [{:discussion/keys [title share-hash] :as discussion}]
-  (let [admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+  (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
         history @(rf/subscribe [:discussion-history])]
     [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header.shadow-straight-light

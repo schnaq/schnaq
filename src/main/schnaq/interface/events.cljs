@@ -70,7 +70,7 @@
           [:dispatch [:keycloak/init]]
           [:dispatch [:load/last-added-schnaq]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
-          [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]
+          [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-event-db

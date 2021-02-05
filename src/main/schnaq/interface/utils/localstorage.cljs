@@ -63,7 +63,7 @@
 (def ^:private hash-separator " ")
 
 (defn parse-hash-map-string
-  "Read previously visited meetings from localstorage. E.g (ls/get-item :meetings/admin-access)
+  "Read previously visited meetings from localstorage. E.g (ls/get-item :schnaqs/admin-access)
   The string must obey the following convention '[share-1 edit-1],[share-2 edit-2]'"
   [hash-map-string]
   (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
@@ -92,7 +92,7 @@
     hashes-as-string))
 
 (defn add-key-value-and-build-map-from-localstorage
-  "build and insert key value pair into an existing local storage hashmap.
+  "Build key value pair for inserting into local storage hashmap.
   Does not override the key if it is present"
   [key value local-storage-key]
   (let [local-hashes (get-item local-storage-key)
