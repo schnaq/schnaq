@@ -153,20 +153,15 @@
     (assoc-in db [:user :authenticated?] toggle)))
 
 (rf/reg-sub
-  :user/authenticated?
+  :user/is-authenticated?
   (fn [db _]
     (get-in db [:user :authenticated?] false)))
 
 (rf/reg-sub
-  :user/administrator?
+  :user/has-administrator-role?
   (fn [db _]
     (let [roles (get-in db [:user :roles])]
       (= "admin" (some #{"admin"} roles)))))
-
-(rf/reg-sub
-  :user/keycloak
-  (fn [db _]
-    (get-in db [:user :keycloak])))
 
 (rf/reg-event-db
   :keycloak.roles/extract
