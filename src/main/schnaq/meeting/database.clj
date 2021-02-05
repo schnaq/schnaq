@@ -107,19 +107,6 @@
    :user/downvotes
    :user/nickname])
 
-(def ^:private meeting-pattern-public
-  "Pull a schnaq based on these attributes, omit sensitive information"
-  [:db/id
-   :meeting/title
-   :meeting/start-date
-   :meeting/end-date
-   :meeting/type
-   :meeting/header-image-url
-   :meeting/description
-   :meeting/share-hash
-   {:meeting/author user-pattern}
-   {:agenda/_meeting [{:agenda/discussion [:discussion/states]}]}])
-
 (def statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
@@ -179,11 +166,6 @@
              :where [?feedback :feedback/description _ ?tx]
              [?tx :db/txInstant ?ts]]
            (d/db (new-connection))))))
-
-;; -----------------------------------------------------------------------------
-;; Meetings
-
-
 
 ;; ----------------------------------------------------------------------------
 ;; user
