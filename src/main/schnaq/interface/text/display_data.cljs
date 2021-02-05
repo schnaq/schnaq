@@ -79,7 +79,7 @@
         :schnaq.header-image.url/failed-seting-body "The image will not be used as preview image."
 
         ;; Create schnaq
-        :meeting-form-title-placeholder "What should the name of your schnaq be?"
+        :schnaq.create.input/placeholder "What should the name of your schnaq be?"
         :meeting/copy-link-tooltip "Click here to copy your link"
         :meeting/link-copied-heading "Link copied"
         :meeting/link-copied-success "The link was copied to your clipboard!"
@@ -476,7 +476,7 @@
 
 
         ;; Create schnaq
-        :meeting-form-title-placeholder "Wie soll dein schnaq heißen?"
+        :schnaq.create.input/placeholder "Wie soll dein schnaq heißen?"
         :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
         :meeting/link-copied-heading "Link kopiert"
         :meeting/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
