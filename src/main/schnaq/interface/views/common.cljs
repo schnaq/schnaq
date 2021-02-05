@@ -98,7 +98,7 @@
   [current-route]
   [map? :ret string?]
   (let [{:keys [share-hash edit-hash]} (:path-params current-route)
-        path (reitfe/href :routes.meeting/admin-center {:share-hash share-hash
+        path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
                                                         :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))

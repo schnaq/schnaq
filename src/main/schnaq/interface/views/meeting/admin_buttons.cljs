@@ -33,7 +33,7 @@
    (labels :meeting/admin-center-tooltip)
    [:i {:class (str "m-auto fas " (fa :cog))}]
    #(rf/dispatch [:navigation/navigate
-                  :routes.meeting/admin-center
+                  :routes.schnaq/admin-center
                   {:share-hash share-hash :edit-hash edit-hash}])])
 
 (defn- create-txt-download-handler

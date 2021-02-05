@@ -65,7 +65,7 @@
       :controllers [{:start (fn [] (rf/dispatch [:schnaqs.visited/load]))}]}]]
    ["schnaq"
     ["/create"
-     {:name :routes.brainstorm/create
+     {:name :routes.schnaq/create
       :view brainstorm-create/create-brainstorm-view
       :link-text (labels :router/create-brainstorm)
       :controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}]
@@ -111,7 +111,7 @@
     {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     (when-not toolbelt/production?
       [""
-       {:name :routes/meetings
+       {:name :routes/schnaqs
         :view meetings-overview/meeting-view-entry
         :link-text (labels :router/all-meetings)}])
     ["/:share-hash"
@@ -126,7 +126,7 @@
                                (let [{:keys [share-hash edit-hash]} path]
                                  (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
       ["/manage"
-       {:name :routes.meeting/admin-center
+       {:name :routes.schnaq/admin-center
         :view meeting-admin/admin-center-view
         :link-text (labels :router/meeting-created)
         :controllers [{:parameters {:path [:share-hash :edit-hash]}

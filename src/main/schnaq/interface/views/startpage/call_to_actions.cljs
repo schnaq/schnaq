@@ -17,7 +17,7 @@
   [:section
    [:button.button-call-to-action.w-100
     {:type "button"
-     :on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
+     :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
     (labels :brainstorm.buttons/start-now)]])
 
 (defn- bullet-point
