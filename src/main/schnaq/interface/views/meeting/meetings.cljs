@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.meeting.meetings
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels]]))
+            [schnaq.interface.config :refer [config]]))
 
 ;; #### Events ####
 
