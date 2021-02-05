@@ -86,7 +86,7 @@
                     "fakeschnaq.com"))))
 
 (deftest meeting-by-hash-as-admin-test
-  (let [meeting-by-hash-as-admin #'api/meeting-by-hash-as-admin
+  (let [meeting-by-hash-as-admin #'api/schnaq-by-hash-as-admin
         share-hash "graph-hash"
         edit-hash "graph-edit-hash"
         request {:body-params {:share-hash share-hash

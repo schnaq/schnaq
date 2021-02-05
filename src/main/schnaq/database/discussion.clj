@@ -59,16 +59,25 @@
         [?discussion :discussion/starting-statements ?statements]]
       share-hash main-db/statement-pattern)))
 
-(defn discussion-by-share-hash
-  "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)"
-  [share-hash]
+(defn discussion-by-share-hash-template
+  "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)
+  Apply the pull-patern you like."
+  [share-hash template-pattern]
   (-> (query
         '[:find (pull ?discussion discussion-pattern)
           :in $ ?share-hash discussion-pattern
           :where [?discussion :discussion/share-hash ?share-hash]]
-        share-hash discussion-pattern)
+        share-hash template-pattern)
       (toolbelt/pull-key-up :db/ident)
       ffirst))
+
+(defn discussion-by-share-hash
+  [share-hash]
+  (discussion-by-share-hash-template share-hash discussion-pattern))
+
+(defn discussion-by-share-hash-private
+  [share-hash]
+  (discussion-by-share-hash-template share-hash discussion-pattern-private))
 
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
