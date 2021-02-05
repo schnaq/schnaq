@@ -23,7 +23,7 @@
         meeting-string (set (remove empty?
                                     (string/split (ls/get-item :meetings/visited)
                                                   (re-pattern hash-separator))))]
-    (list (cset/union schnaq-string meeting-string))))
+    (into '() (cset/union schnaq-string meeting-string))))
 
 (>defn- build-visited-schnaqs-from-localstorage
   "Builds collection of visited meetings, based on previously stored hashes from
