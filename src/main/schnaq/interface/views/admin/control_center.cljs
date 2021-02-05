@@ -78,7 +78,8 @@
   "The startpage of the admin center."
   []
   [pages/with-nav-and-header
-   {:page/title (labels :admin.center.start/title)
+   {:condition/needs-administrator? true
+    :page/title (labels :admin.center.start/title)
     :page/heading (labels :admin.center.start/heading)
     :page/subheading (labels :admin.center.start/subheading)}
    [:div.container
