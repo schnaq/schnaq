@@ -74,17 +74,18 @@
      [feed-button-navigate :nav.schnaqs/create-schnaq :routes.brainstorm/create]]))
 
 (defn about-button [label href-link]
-  [:div.my-3
-   [:a.btn.btn-outline-primary {:href href-link}
+  [:div.btn-block
+   [:a.btn.btn-outline-primary.rounded-2.w-100 {:href href-link}
     (labels label)]])
 
 (defn- feed-extra-information []
-  [:div.feed-extra-info
-   [about-button :footer.buttons/about-us "https://disqtec.com/ueber-uns"]
-   [about-button :nav/blog "https://schnaq.com/blog/"]
-   [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
-   [about-button :router/privacy (reitfe/href :routes/privacy)]
-   [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]])
+  [:div.feed-extra-info.text-right
+   [:div.btn-group-vertical
+    [about-button :footer.buttons/about-us "https://disqtec.com/ueber-uns"]
+    [about-button :nav/blog "https://schnaq.com/blog/"]
+    [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
+    [about-button :router/privacy (reitfe/href :routes/privacy)]
+    [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]]])
 
 (defn- feed-page-dektop [subscription-key]
   [:div.row.px-0.mx-0.py-3
