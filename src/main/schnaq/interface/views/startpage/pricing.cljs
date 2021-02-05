@@ -14,7 +14,7 @@
     [:p.text-muted.text-center (labels :pricing.free-tier/beta-notice)]
     [:div.text-center.mt-auto
      [:button.btn.button-primary
-      {:on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
+      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
       [:p.card-text (labels :pricing.free-tier/call-to-action)]]]]])
 
 (defn- business-tier-card

@@ -16,7 +16,7 @@
     (labels :schnaqs.not-found/alert-lead)]
    [:p (labels :schnaqs.not-found/alert-body)]
    [:div.btn.btn-outline-primary
-    {:on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
+    {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
     (labels :nav.schnaqs/create-schnaq)]])
 
 (defn- schnaq-entry
@@ -57,7 +57,7 @@
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
 
 (defn- feed-navigation []
-  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
+  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         current-feed @(rf/subscribe [:feed/get-current])
         public-feed? (= current-feed :public)
         personal-feed? (= current-feed :personal)]
@@ -66,12 +66,11 @@
      [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
      (when-not (nil? edit-hash)
        [feed-button :nav.schnaqs/last-added
-        #(rf/dispatch [:navigation/navigate
-                       :routes.meeting/admin-center
+        #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center
                        {:share-hash share-hash :edit-hash edit-hash}])])
      (when-not toolbelt/production?
-       [feed-button-navigate :nav.schnaqs/show-all :routes/meetings])
-     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.brainstorm/create]]))
+       [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
+     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]]))
 
 (defn about-button [label href-link]
   [:div.btn-block

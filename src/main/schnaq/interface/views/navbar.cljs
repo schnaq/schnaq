@@ -14,14 +14,14 @@
    (labels label-key)])
 
 (defn- create-schnaq-link []
-  (create-dropdown-item (reitfe/href :routes.brainstorm/create)
+  (create-dropdown-item (reitfe/href :routes.schnaq/create)
                         :nav.schnaqs/create-schnaq))
 
 (defn- last-added-schnaq-link [share-hash edit-hash]
   (when-not (nil? edit-hash)
     [:div.dropdown-item.clickable
      {:on-click #(rf/dispatch [:navigation/navigate
-                               :routes.meeting/admin-center
+                               :routes.schnaq/admin-center
                                {:share-hash share-hash :edit-hash edit-hash}])}
      (labels :nav.schnaqs/last-added)]))
 
@@ -32,7 +32,7 @@
 
 (defn- all-schnaqs-link []
   (when-not toolbelt/production?
-    (create-dropdown-item (reitfe/href :routes/meetings)
+    (create-dropdown-item (reitfe/href :routes/schnaqs)
                           :nav.schnaqs/show-all)))
 
 (defn- all-public-schnaqs-link []
@@ -52,7 +52,7 @@
 (defn navbar
   "Navbar definition for the default pages."
   []
-  (let [{:meeting/keys [share-hash edit-hash]} @(rf/subscribe [:meeting/last-added])
+  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         visited-hashes @(rf/subscribe [:schnaqs.visited/all-hashes])]
     ;; collapsable navbar
     [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light

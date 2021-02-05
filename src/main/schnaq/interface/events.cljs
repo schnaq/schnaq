@@ -54,12 +54,12 @@
                           :on-failure [:ajax.error/to-console]}]]})))
 
 (rf/reg-event-fx
-  :load/last-added-meeting
+  :load/last-added-schnaq
   (fn [_ _]
-    (let [share-hash (ls/get-item :meeting.last-added/share-hash)
-          edit-hash (ls/get-item :meeting.last-added/edit-hash)]
+    (let [share-hash (ls/get-item :schnaq.last-added/share-hash)
+          edit-hash (ls/get-item :schnaq.last-added/edit-hash)]
       (when-not (and (nil? edit-hash) (nil? share-hash))
-        {:fx [[:dispatch [:meeting/load-by-hash-as-admin share-hash edit-hash]]]}))))
+        {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx
   :initialise-db
@@ -68,9 +68,9 @@
      :fx [[:dispatch [:load/schnaqs]]
           [:dispatch [:username/from-localstorage]]
           [:dispatch [:keycloak/init]]
-          [:dispatch [:load/last-added-meeting]]
+          [:dispatch [:load/last-added-schnaq]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
-          [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]
+          [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-event-db

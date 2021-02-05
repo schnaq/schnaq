@@ -123,16 +123,14 @@
   [_req]
   (ok {:discussions (discussion-db/public-discussions)}))
 
-(defn- meeting-by-hash-as-admin
+(defn- schnaq-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
   processing in the frontend."
   [{:keys [body-params]}]
   (let [share-hash (:share-hash body-params)
         edit-hash (:edit-hash body-params)]
     (if (validator/valid-credentials? share-hash edit-hash)
-      (ok {:meeting (add-hashes-to-meeting (db/meeting-by-hash share-hash)
-                                           share-hash
-                                           edit-hash)})
+      (ok {:discussion (discussion-db/discussion-by-share-hash-private share-hash)})
       (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
 
 (defn- delete-statements!
@@ -468,7 +466,7 @@
     (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/meeting/add" [] add-meeting)
-    (POST "/meeting/by-hash-as-admin" [] meeting-by-hash-as-admin)
+    (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     ;; Analytics routes

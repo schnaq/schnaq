@@ -59,16 +59,27 @@
         [?discussion :discussion/starting-statements ?statements]]
       share-hash main-db/statement-pattern)))
 
-(defn discussion-by-share-hash
-  "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)"
-  [share-hash]
+(defn discussion-by-share-hash-template
+  "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)
+  Apply the pull-patern you like."
+  [share-hash template-pattern]
   (-> (query
         '[:find (pull ?discussion discussion-pattern)
           :in $ ?share-hash discussion-pattern
           :where [?discussion :discussion/share-hash ?share-hash]]
-        share-hash discussion-pattern)
+        share-hash template-pattern)
       (toolbelt/pull-key-up :db/ident)
       ffirst))
+
+(defn discussion-by-share-hash
+  "Query discussion and apply public discussion pattern to it."
+  [share-hash]
+  (discussion-by-share-hash-template share-hash discussion-pattern))
+
+(defn discussion-by-share-hash-private
+  "Query discussion and apply the private discussion pattern."
+  [share-hash]
+  (discussion-by-share-hash-template share-hash discussion-pattern-private))
 
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
@@ -119,7 +130,7 @@
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
   [share-hash user-id statement-content]
-  [:meeting/share-hash :db/id :statement/content :ret :db/id]
+  [:discussion/share-hash :db/id :statement/content :ret :db/id]
   (let [new-statement (build-new-statement user-id statement-content "add/starting-argument")
         temporary-id (:db/id new-statement)
         discussion-id (:db/id (discussion-by-share-hash share-hash))]
@@ -206,14 +217,12 @@
 (>defn discussion-deleted?
   "Returns whether a discussion has been marked as deleted."
   [share-hash]
-  [:meeting/share-hash :ret boolean?]
+  [:discussion/share-hash :ret boolean?]
   (as-> (main-db/query
           '[:find (pull ?states [*])
             :in $ ?share-hash
-            :where [?meeting :meeting/share-hash ?share-hash]
-            [?agenda :agenda/meeting ?meeting]
-            [?agenda :agenda/discussion ?discussions]
-            [?discussions :discussion/states ?states]]
+            :where [?discussion :discussion/share-hash ?share-hash]
+            [?discussion :discussion/states ?states]]
           share-hash) q
         (map #(:db/ident (first %)) q)
         (into #{} q)
@@ -222,7 +231,7 @@
 (>defn- new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
   [share-hash user-id new-conclusion-id new-statement-string argument-type]
-  [:meeting/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
+  [:discussion/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
@@ -237,7 +246,7 @@
 (>defn- react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
   [share-hash user-id statement-id reacting-string reaction]
-  [:meeting/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
   (let [argument-id
         (get-in
           (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction)
@@ -249,13 +258,13 @@
 (>defn support-statement!
   "Create a new statement supporting another statement. Returns the newly created argument."
   [share-hash user-id statement-id supporting-string]
-  [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
+  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! share-hash user-id statement-id supporting-string :argument.type/support))
 
 (>defn attack-statement!
   "Create a new statement attacking another statement. Returns the newly created argument."
   [share-hash user-id statement-id attacking-string]
-  [:meeting/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
+  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
 
 (>defn new-discussion

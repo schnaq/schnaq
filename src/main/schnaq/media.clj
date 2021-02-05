@@ -15,9 +15,7 @@
 (def ^:private success-img "Setting image succeeded")
 
 (defn- add-bucket-url-to-database [{:keys [bucket-url]} share-hash]
-  (d/transact [{:db/id [:meeting/share-hash share-hash]
-                :meeting/header-image-url bucket-url}
-               {:db/id [:discussion/share-hash share-hash]
+  (d/transact [{:db/id [:discussion/share-hash share-hash]
                 :discussion/header-image-url bucket-url}]))
 
 (defn- upload-img-and-store-url [url key share-hash]

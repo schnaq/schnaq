@@ -63,13 +63,13 @@
 (def ^:private hash-separator " ")
 
 (defn parse-hash-map-string
-  "Read previously visited meetings from localstorage. E.g (ls/get-item :meetings/admin-access)
+  "Read previously visited meetings from localstorage. E.g (ls/get-item :schnaqs/admin-access)
   The string must obey the following convention '[share-1 edit-1],[share-2 edit-2]'"
   [hash-map-string]
   (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
         hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
         hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
-        hashes-map (into {} hashes-vector)]
+        hashes-map (if (empty? hashes-vector) {} (into {} hashes-vector))]
     hashes-map))
 
 (defn- add-key-value-to-local-hashmap
@@ -92,11 +92,19 @@
     hashes-as-string))
 
 (defn add-key-value-and-build-map-from-localstorage
-  "build and insert key value pair into an existing local storage hashmap.
+  "Build key value pair for inserting into local storage hashmap.
   Does not override the key if it is present"
   [key value local-storage-key]
+  ;; PARTIALLY DEPRECATED: Remove the meeting part after 2020-08-05
   (let [local-hashes (get-item local-storage-key)
-        new-hashes (add-key-value-to-local-hashmap local-hashes key value)
+        combined-hashes (if (= :schnaqs/admin-access local-storage-key)
+                          (if-let [old-admin-access (get-item :meetings/admin-access)]
+                            (str local-hashes "," old-admin-access)
+                            local-hashes)
+                          local-hashes)
+        new-hashes (add-key-value-to-local-hashmap combined-hashes key value)
         hashes-tuple (map (fn [[val key]] (str "[" val " " key "]")) (seq new-hashes))
         hashes-as-string (string/join "," hashes-tuple)]
+    (when (= :schnaqs/admin-access local-storage-key)
+      (remove-item! :meetings/admin-access))
     hashes-as-string))

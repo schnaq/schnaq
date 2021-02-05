@@ -100,7 +100,7 @@
   "Displays a list of conclusions."
   [conclusions share-hash]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-        admin-access-map @(rf/subscribe [:meetings/load-admin-access])
+        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
     [:div.card-columns.card-columns-discussion.py-3
      (for [conclusion conclusions]

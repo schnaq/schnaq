@@ -100,6 +100,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
+;; todo user pattern in other things should not show up and downvotes
 (def user-pattern
   "Pull a user based on these attributes"
   [:db/id
@@ -244,7 +245,7 @@
 (>defn all-statements
   "Returns all statements belonging to a discussion"
   [share-hash]
-  [:meeting/share-hash :ret (s/coll-of ::specs/statement)]
+  [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
   (distinct
     (concat
       (flatten

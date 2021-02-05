@@ -159,3 +159,8 @@
           statements (db/all-statements-for-graph graph-hash)]
       (is (= 7 (count statements)))
       (is (= 1 (count (filter #(= "foo" (:label %)) statements)))))))
+
+(deftest discussion-deleted?-test
+  (testing "Test whether deleted discussions are correctly recognized."
+    (is (db/discussion-deleted? "public-share-hash-deleted"))
+    (is (not (db/discussion-deleted? "public-share-hash")))))

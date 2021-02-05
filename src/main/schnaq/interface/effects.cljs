@@ -10,7 +10,7 @@
 
 (rf/reg-fx
   :localstorage/remove
-  (fn [[key]]
+  (fn [key]
     (ls/remove-item! key)))
 
 (rf/reg-fx

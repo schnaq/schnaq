@@ -78,15 +78,15 @@
         :schnaq.header-image.url/failed-setting-title "Error when adding image"
         :schnaq.header-image.url/failed-seting-body "The image will not be used as preview image."
 
-        ;; Create meeting
+        ;; Create schnaq
         :meeting-form-title-placeholder "What should the name of your schnaq be?"
         :meeting/copy-link-tooltip "Click here to copy your link"
         :meeting/link-copied-heading "Link copied"
         :meeting/link-copied-success "The link was copied to your clipboard!"
-        :meeting/created-success-heading "Your schnaq was created!"
-        :meeting/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
-        :meetings/continue-with-schnaq-after-creation "Invited Everybody? Lets go!"
-        :meetings/continue-to-schnaq-button "To the schnaq"
+        :schnaq/created-success-heading "Your schnaq was created!"
+        :schnaq/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
+        :schnaqs/continue-with-schnaq-after-creation "Invited Everybody? Lets go!"
+        :schnaqs/continue-to-schnaq-button "To the schnaq"
 
         :meeting.admin/addresses-label "Email addresses of the participants"
         :meeting.admin/addresses-placeholder "Email addresses separated by a newline or space."
@@ -152,8 +152,8 @@
         :meetings/educate-on-link-text-subtitle "Everybody with possession of the link can participate."
         :meeting/educate-on-edit "Want to change the name or description?"
         :meeting/educate-on-admin "Go back to the admin center at any time!"
-        :meeting.admin-center/heading "Admin-Center"
-        :meeting.admin-center/subheading "schnaq: \"%s\""
+        :schnaq.admin-center/heading "Admin-Center"
+        :schnaq.admin-center/subheading "schnaq: \"%s\""
         :meeting.admin-center.edit.link/header "Entry to the admin-center"
         :meeting.admin-center.edit.link/primer "Administration takes work, let others help!"
         :meeting.admin-center.edit.link/admin "Entry to Admin-Center via Email"
@@ -475,15 +475,15 @@
 
 
 
-        ;; Create meeting
+        ;; Create schnaq
         :meeting-form-title-placeholder "Wie soll dein schnaq heißen?"
         :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
         :meeting/link-copied-heading "Link kopiert"
         :meeting/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
-        :meeting/created-success-heading "Dein schnaq wurde erstellt!"
-        :meeting/created-success-subheading "Nun kannst du den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
-        :meetings/continue-with-schnaq-after-creation "Alle eingeladen? Los geht's!"
-        :meetings/continue-to-schnaq-button "Zum schnaq"
+        :schnaq/created-success-heading "Dein schnaq wurde erstellt!"
+        :schnaq/created-success-subheading "Nun kannst du den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
+        :schnaqs/continue-with-schnaq-after-creation "Alle eingeladen? Los geht's!"
+        :schnaqs/continue-to-schnaq-button "Zum schnaq"
 
         :meeting.admin/addresses-label "E-Mail Adressen der Teilnehmer:innen"
         :meeting.admin/addresses-placeholder "E-Mail Adressen getrennt mit Leerzeichen oder Zeilenumbruch eingeben."
@@ -542,8 +542,8 @@
         :meetings/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
         :meeting/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
         :meeting/educate-on-admin "Später jederzeit zum Admin-Center zurückkehren!"
-        :meeting.admin-center/heading "Admin-Center"
-        :meeting.admin-center/subheading "schnaq: \"%s\""
+        :schnaq.admin-center/heading "Admin-Center"
+        :schnaq.admin-center/subheading "schnaq: \"%s\""
         :meeting.admin-center.edit.link/header "Zugang zum Admin-Center"
         :meeting.admin-center.edit.link/primer "Administration ist Arbeit, lass' dir dabei helfen!"
         :meeting.admin-center.edit.link/admin "Zugang zum Admin-Center per Mail"

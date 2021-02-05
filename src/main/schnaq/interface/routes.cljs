@@ -69,7 +69,7 @@
                               (rf/dispatch [:feed/store-current :personal]))}]}]]
    ["schnaq"
     ["/create"
-     {:name :routes.brainstorm/create
+     {:name :routes.schnaq/create
       :view brainstorm-create/create-brainstorm-view
       :link-text (labels :router/create-brainstorm)
       :controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}]
@@ -115,7 +115,7 @@
     {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     (when-not toolbelt/production?
       [""
-       {:name :routes/meetings
+       {:name :routes/schnaqs
         :view meetings-overview/meeting-view-entry
         :link-text (labels :router/all-meetings)}])
     ["/:share-hash"
@@ -130,15 +130,15 @@
                                (let [{:keys [share-hash edit-hash]} path]
                                  (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
       ["/manage"
-       {:name :routes.meeting/admin-center
+       {:name :routes.schnaq/admin-center
         :view meeting-admin/admin-center-view
         :link-text (labels :router/meeting-created)
         :controllers [{:parameters {:path [:share-hash :edit-hash]}
                        :start (fn [{:keys [path]}]
                                 (let [share-hash (:share-hash path)
                                       edit-hash (:edit-hash path)]
-                                  (rf/dispatch [:meeting/load-by-hash-as-admin share-hash edit-hash])
-                                  (rf/dispatch [:meetings.save-admin-access/to-localstorage
+                                  (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
+                                  (rf/dispatch [:schnaqs.save-admin-access/to-localstorage
                                                 share-hash edit-hash])))}]}]]
      ["/"
       ;; DEPRECATED: Do not use at all. This has the same effect as `:routes.schnaq/start`

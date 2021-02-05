@@ -310,22 +310,21 @@
 (defn- admin-center
   "This view is presented to the user after they have created a new meeting."
   []
-  (let [{:meeting/keys [share-hash title]} @(rf/subscribe [:meeting/last-added])]
+  (let [{:discussion/keys [share-hash title]} @(rf/subscribe [:schnaq/last-added])]
     ;; display admin center
     [pages/with-nav-and-header
-     {:page/heading (labels :meeting.admin-center/heading)
-      :page/subheading (gstring/format (labels :meeting.admin-center/subheading) title)}
+     {:page/heading (labels :schnaq.admin-center/heading)
+      :page/subheading (gstring/format (labels :schnaq.admin-center/subheading) title)}
      [:div.container.px-3.px-md-5.py-3.text-center
       [invite-participants-tabs]
       [:div.pb-5.mt-3]
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :schnaqqifant/stop)}]]
-      [:h4.mb-4 (labels :meetings/continue-with-schnaq-after-creation)]
-      ;; go to meeting button
+      [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
       [:button.btn.button-primary.btn-lg.center-block.mb-5
        {:role "button"
         :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}
-       (labels :meetings/continue-to-schnaq-button)]]]))
+       (labels :schnaqs/continue-to-schnaq-button)]]]))
 
 (defn admin-center-view []
   [admin-center])
@@ -334,20 +333,20 @@
 ;; #### Events ####
 
 (rf/reg-sub
-  :meetings/load-admin-access
+  :schnaqs/load-admin-access
   (fn [db [_]]
-    (get-in db [:meetings :admin-access])))
+    (get-in db [:schnaqs :admin-access])))
 
 (rf/reg-event-db
-  :meetings.save-admin-access/store-hashes-from-localstorage
+  :schnaqs.save-admin-access/store-hashes-from-localstorage
   (fn [db _]
-    (assoc-in db [:meetings :admin-access]
-              (ls/parse-hash-map-string (ls/get-item :meetings/admin-access)))))
+    (assoc-in db [:schnaqs :admin-access]
+              (ls/parse-hash-map-string (ls/get-item :schnaqs/admin-access)))))
 
 (rf/reg-event-fx
-  :meetings.save-admin-access/to-localstorage
+  :schnaqs.save-admin-access/to-localstorage
   (fn [_ [_ share-hash edit-hash]]
     {:fx [[:localstorage/write
-           [:meetings/admin-access
-            (ls/add-key-value-and-build-map-from-localstorage share-hash edit-hash :meetings/admin-access)]]
-          [:dispatch [:meetings.save-admin-access/store-hashes-from-localstorage]]]}))
+           [:schnaqs/admin-access
+            (ls/add-key-value-and-build-map-from-localstorage share-hash edit-hash :schnaqs/admin-access)]]
+          [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]]}))

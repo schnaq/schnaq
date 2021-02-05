@@ -48,7 +48,7 @@
 (>defn generate-text-export
   "Generates a textual representation of the discussion-data."
   [share-hash]
-  [:meeting/share-hash :ret string?]
+  [:discussion/share-hash :ret string?]
   (let [statements (db/all-statements-for-graph share-hash)
         starting-statements (db/starting-statements share-hash)
         all-nodes (discussion/nodes-for-agenda statements starting-statements share-hash)

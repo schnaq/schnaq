@@ -14,7 +14,7 @@
     (labels :schnaqs.not-found/alert-lead)]
    [:p (labels :schnaqs.not-found/alert-body)]
    [:div.btn.btn-outline-primary
-    {:on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
+    {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
     (labels :nav.schnaqs/create-schnaq)]])
 
 
