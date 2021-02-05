@@ -181,8 +181,9 @@
         :discussion.notification/new-content-body "Your statement was added successfully!"
 
         ;; meetings overview
-        :meetings/header "Overview of your schnaqs"
-        :meetings/subheader "These are the schnaqs that you are part of"
+        :schnaqs/header "Overview of your schnaqs"
+        :schnaqs/subheader "These are the schnaqs that you are part of"
+        :schnaqs.all/header "Public schnaqs"
 
         ;; Feedbacks
         :feedbacks.overview/header "Feedbacks"
@@ -366,8 +367,8 @@
         :history.home/text "Start"
         :history.home/tooltip "Back to the discussion's beginning"
         :history.statement/user "Post from "
-        :history.all-schnaqs/text "My schnaqs"
-        :history.all-schnaqs/tooltip "Back to all your schnaqs"
+        :history.all-schnaqs/text "Overview"
+        :history.all-schnaqs/tooltip "Back to all schnaqs"
 
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
@@ -570,8 +571,9 @@
         :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
 
         ;; meetings overview
-        :meetings/header "Übersicht deiner schnaqs"
-        :meetings/subheader "Auf diese schnaqs hast du Zugriff"
+        :schnaqs/header "Übersicht deiner schnaqs"
+        :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
+        :schnaqs.all/header "Öffentliche schnaqs"
 
         ;; Feedbacks
         :feedbacks.overview/header "Rückmeldungen"
@@ -762,8 +764,8 @@
         :history.home/text "Diskussionsstart"
         :history.home/tooltip "Zurück zum Diskussionsanfang"
         :history.statement/user "Beitrag von "
-        :history.all-schnaqs/text "Meine schnaqs"
-        :history.all-schnaqs/tooltip "Zurück zu deinen schnaqs"
+        :history.all-schnaqs/text "Übersicht"
+        :history.all-schnaqs/tooltip "Zurück zur Übersicht der schnaqs"
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"

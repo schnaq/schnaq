@@ -53,8 +53,8 @@
   [subscription-key]
   [keyword? :ret vector?]
   [pages/with-nav-and-header
-   {:page/heading (labels :meetings/header)
-    :page/subheading (labels :meetings/subheader)}
+   {:page/heading (labels :schnaqs/header)
+    :page/subheading (labels :schnaqs/subheader)}
    [:div.container.py-4
     [schnaq-list-view subscription-key]]])
 

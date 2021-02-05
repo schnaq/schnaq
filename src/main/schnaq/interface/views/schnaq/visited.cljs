@@ -2,6 +2,7 @@
   "Handling visited schnaqs."
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
+            [clojure.set :as cset]
             [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
@@ -14,9 +15,15 @@
   "Read previously visited meetings from localstorage."
   []
   [:ret (s/coll-of (s/or :filled string? :empty nil?))]
-  (remove empty?
-          (string/split (ls/get-item :schnaqs/visited)
-                        (re-pattern hash-separator))))
+  ;; PARTIALLY DEPRECATED: Remove the meeting part after 2021-08-05
+  ;; Every important user should have the new format then
+  (let [schnaq-string (set (remove empty?
+                                   (string/split (ls/get-item :schnaqs/visited)
+                                                 (re-pattern hash-separator))))
+        meeting-string (set (remove empty?
+                                    (string/split (ls/get-item :meetings/visited)
+                                                  (re-pattern hash-separator))))]
+    (into '() (cset/union schnaq-string meeting-string))))
 
 (>defn- build-visited-schnaqs-from-localstorage
   "Builds collection of visited meetings, based on previously stored hashes from

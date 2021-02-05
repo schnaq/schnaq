@@ -46,19 +46,23 @@
                (str (labels :tooltip/history-statement) nickname)
                [common/avatar nickname 42]]]])]))]))
 
-(defn- my-schnaqs-button
+(defn- back-to-feed-button
   "Return to your schnaqs Button"
   []
-  [:div.d-inline-block.text-dark.w-100
-   [:div.clickable.card-history-home
-    {:on-click
-     #(rf/dispatch [:navigation/navigate :routes.meetings/my-schnaqs])}
-    [tooltip/nested-div
-     "right"
-     (labels :history.all-schnaqs/tooltip)
-     [:div.d-flex
-      [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
-      [:div [:h5 (labels :history.all-schnaqs/text)]]]]]])
+  (let [feed @(rf/subscribe [:feed/get-current])
+        feed-route (case feed
+                     :personal :routes.meetings/my-schnaqs
+                     :routes/public-discussions)]
+    [:div.d-inline-block.text-dark.w-100
+     [:div.clickable.card-history-home
+      {:on-click
+       #(rf/dispatch [:navigation/navigate feed-route])}
+      [tooltip/nested-div
+       "right"
+       (labels :history.all-schnaqs/tooltip)
+       [:div.d-flex
+        [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
+        [:div [:h5 (labels :history.all-schnaqs/text)]]]]]]))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -78,7 +82,7 @@
   (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
     [:<>
      ;; my schnaqs button
-     [my-schnaqs-button]
+     [back-to-feed-button]
      ;; discussion start button
      (when (seq indexed-history)
        [discussion-start-button (count indexed-history)])
@@ -182,23 +186,25 @@
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
-  [title input]
+  [title input is-topic?]
   [:<>
    [toolbelt/desktop-mobile-switch
-    [:h2.align-self-center title]
+    (if is-topic?
+      [:h2.align-self-center title]
+      [:h6 title])
     [:h2.align-self-center.display-6 title]]
    [:div.line-divider.my-4]
    input])
 
 (defn- topic-bubble-desktop
-  [{:discussion/keys [share-hash] :as discussion} title input info-content]
+  [{:discussion/keys [share-hash] :as discussion} title input info-content is-topic?]
   [:div.row
    ;; graph
    [:div.col-2
     [graph-button share-hash]]
    ;; title
    [:div.col-8
-    [title-and-input-element title input]]
+    [title-and-input-element title input is-topic?]]
    ;; up-down votes and statistics
    [:div.col-2.pr-3
     [:div.float-right
@@ -242,13 +248,14 @@
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
   [current-discussion title input info-content conclusions history]
-  [:div.container-fluid
-   [:div.row.px-0.mx-0
-    [:div.col-2.py-4
-     [history-view history]]
-    [:div.col-9.py-4.px-0
-     [topic-view current-discussion conclusions
-      [topic-bubble-desktop current-discussion title input info-content]]]]])
+  (let [is-topic? (nil? history)]
+    [:div.container-fluid
+     [:div.row.px-0.mx-0
+      [:div.col-2.py-4
+       [history-view history]]
+      [:div.col-9.py-4.px-0
+       [topic-view current-discussion conclusions
+        [topic-bubble-desktop current-discussion title input info-content is-topic?]]]]]))
 
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the right of the topic bubble."
