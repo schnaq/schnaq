@@ -100,7 +100,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
-;; todo user pattern in other things should not show up and downvotes
 (def user-pattern
   "Pull a user based on these attributes"
   [:db/id
@@ -271,9 +270,14 @@
 ;; user
 ;; ----------------------------------------------------------------------------
 
+
+(def minimal-user-pattern
+  [:db/id
+   :user/nickname])
+
 (>defn user [id]
   [int? :ret map?]
-  (d/pull (d/db (new-connection)) user-pattern id))
+  (d/pull (d/db (new-connection)) minimal-user-pattern id))
 
 (>defn add-user
   "Add a new user / author to the database."
