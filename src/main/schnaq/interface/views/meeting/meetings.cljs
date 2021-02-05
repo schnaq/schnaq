@@ -7,9 +7,9 @@
 ;; #### Events ####
 
 (rf/reg-event-fx
-  :meeting.creation/added-continue-with-agendas
+  :schnaq/created
   (fn [{:keys [db]} [_ {:keys [new-discussion]}]]
-    (let [{:keys [share-hash edit-hash]} new-discussion]
+    (let [{:discussion/keys [share-hash edit-hash]} new-discussion]
       {:db (-> db
                (assoc-in [:schnaq :last-added] new-discussion)
                (update-in [:schnaqs :all] conj new-discussion))
@@ -56,7 +56,7 @@
                                    :public-discussion? public?}
                           :format (ajax/transit-request-format)
                           :response-format (ajax/transit-response-format)
-                          :on-success [:meeting.creation/added-continue-with-agendas]
+                          :on-success [:schnaq/created]
                           :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
