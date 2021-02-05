@@ -66,11 +66,13 @@
   "Read previously visited meetings from localstorage. E.g (ls/get-item :schnaqs/admin-access)
   The string must obey the following convention '[share-1 edit-1],[share-2 edit-2]'"
   [hash-map-string]
-  (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
-        hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
-        hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
-        hashes-map (into {} hashes-vector)]
-    hashes-map))
+  (if (= hash-map-string "[]")
+    {}
+    (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
+          hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
+          hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
+          hashes-map (into {} hashes-vector)]
+      hashes-map)))
 
 (defn- add-key-value-to-local-hashmap
   [hash-map-string key value]
