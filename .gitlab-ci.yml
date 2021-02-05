@@ -1,3 +1,6 @@
+default:
+  tags: [ 'bi-lab' ]
+
 stages:
   - build
   - test
@@ -9,7 +12,6 @@ cache:
   key: one-key-to-rule-them-all
   paths:
     - ./.m2/repository
-
 
 # ------------------------------------------------------------------------------
 # Stage "test"
@@ -80,8 +82,6 @@ coverage-report:
 
 build-frontend-image:
   image: docker
-  tags:
-    - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
@@ -100,8 +100,6 @@ build-frontend-image:
 
 build-backend-image:
   image: docker
-  tags:
-    - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
@@ -119,8 +117,6 @@ build-backend-image:
 
 build-frontend-staging-image:
   image: docker
-  tags:
-    - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
@@ -139,8 +135,6 @@ build-frontend-staging-image:
 
 build-backend-staging-image:
   image: docker
-  tags:
-    - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
