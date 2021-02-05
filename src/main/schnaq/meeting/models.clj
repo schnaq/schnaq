@@ -1,33 +1,7 @@
 (ns schnaq.meeting.models)
 
 (def datomic-schema
-  [;; Agenda-Point
-   {:db/ident :agenda/title
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "DEPRECATED: Do not use agenda-points in new code.
-    The short title of the Agenda-Point"}
-   {:db/ident :agenda/description
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/doc "DEPRECATED: Do not use agenda-points in new code.
-    A description of the point"}
-   {:db/ident :agenda/meeting
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "DEPRECATED: Do not use agenda-points in new code.
-    The meeting the agenda belongs to"}
-   {:db/ident :agenda/rank
-    :db/valueType :db.type/long
-    :db/cardinality :db.cardinality/one
-    :db/doc "DEPRECATED: Do not use agenda-points in new code.
-    The rank of the agenda. e.g. a rank of 1 means its the first Agenda-Point"}
-   {:db/ident :agenda/discussion
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "DEPRECATED: Do not use agenda-points in new code.
-    An id belonging to the (foreign) discussion represented by this agenda"}
-   ;; User
+  [;; User
    {:db/ident :user/nickname
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
@@ -41,12 +15,6 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "All downvotes the user gave."}
-   {:db/ident :user/core-author
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/unique :db.unique/identity
-    :db/doc "DEPRECATED: Do not use this ref anymore. Formerly:
-    The author of a discussion that corresponds to this user."}
 
    ;; Feedback
    {:db/ident :feedback/contact-name

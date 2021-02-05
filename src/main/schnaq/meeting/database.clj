@@ -376,13 +376,15 @@
   ([]
    [:ret number?]
    (average-number-of-agendas max-time-back))
-  ([since]
+  ([_since]
    [inst? :ret number?]
-   (let [meetings (number-of-meetings since)
+   ;; todo rework with analytics refactor
+   #_(let [meetings (number-of-meetings since)
          agendas (number-of-entities-since :agenda/title since)]
      (if (zero? meetings)
        0
-       (/ agendas meetings)))))
+       (/ agendas meetings)))
+   0))
 
 (>defn active-discussion-authors
   "Returns all authors active in a discussion during a period since the provided
