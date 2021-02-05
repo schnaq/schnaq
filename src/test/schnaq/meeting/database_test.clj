@@ -8,7 +8,7 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
-(def ^:private any-meeting-share-hash "aklsuzd98-234da-123d")
+#_(def ^:private any-meeting-share-hash "aklsuzd98-234da-123d")
 ;; temporarily disable during refactor
 #_(defn- any-discussion
   []
