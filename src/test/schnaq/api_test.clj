@@ -2,7 +2,6 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest testing is are use-fixtures]]
             [schnaq.api :as api]
-            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as db]
             [schnaq.meeting.specs :as specs]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -42,12 +41,9 @@
 (deftest graph-data-for-agenda-test
   (testing "Check if graph data is correct"
     (let [graph-data-for-agenda @#'api/graph-data-for-agenda
-          share-hash "89eh32hoas-2983ud"
-          discussion-id (:db/id (first (discussion-db/all-discussions-by-title "Cat or Dog?")))
-          request {:body-params {:share-hash share-hash
-                                 :discussion-id discussion-id}}
-          bad-request {:body-params {:share-hash "123"
-                                     :discussion-id 456}}
+          share-hash "cat-dog-hash"
+          request {:body-params {:share-hash share-hash}}
+          bad-request {:body-params {:share-hash "123"}}
           response (graph-data-for-agenda request)
           bad-response (graph-data-for-agenda bad-request)
           error-text "Invalid meeting hash. You are not allowed to view this data."]
@@ -108,8 +104,10 @@
     (testing "No hash provided, no discussion returned."
       (is (= 400 (:status (schnaqs-by-hashes {})))))
     (testing "Invalid hash returns no discussion."
-      (is (= 404 (:status (schnaqs-by-hashes
-                            {:params {:share-hashes "something-non-existent"}})))))
+      (is (= 200 (:status (schnaqs-by-hashes
+                            {:params {:share-hashes "something-non-existent"}}))))
+      (is (empty? (get-in (schnaqs-by-hashes {:params {:share-hashes "something-non-existent"}})
+                          [:body :discussions]))))
     (testing "Querying by a single valid hash returns a discussion."
       (let [api-call (schnaqs-by-hashes {:params {:share-hashes share-hash1}})]
         (is (= 200 (:status api-call)))
