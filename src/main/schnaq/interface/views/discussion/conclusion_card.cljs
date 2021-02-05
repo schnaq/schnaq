@@ -21,7 +21,7 @@
                         :format (ajax/transit-request-format)
                         :params {:statement-id id
                                  :nickname (get-in db [:user :name] "Anonymous")
-                                 :share--hash (-> db :schnaq :selected :discussion/share-hash)}
+                                 :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                         :response-format (ajax/transit-response-format)
                         :on-success [:upvote-success statement]
                         :on-failure [:ajax.error/as-notification]}]]}))
