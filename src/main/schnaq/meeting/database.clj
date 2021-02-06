@@ -107,19 +107,6 @@
    :user/downvotes
    :user/nickname])
 
-(def ^:private meeting-pattern-public
-  "Pull a schnaq based on these attributes, omit sensitive information"
-  [:db/id
-   :meeting/title
-   :meeting/start-date
-   :meeting/end-date
-   :meeting/type
-   :meeting/header-image-url
-   :meeting/description
-   :meeting/share-hash
-   {:meeting/author user-pattern}
-   {:agenda/_meeting [{:agenda/discussion [:discussion/states]}]}])
-
 (def statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
@@ -127,10 +114,6 @@
    :statement/version
    :statement/deleted?
    {:statement/author [:user/nickname]}])
-
-(def ^:private meeting-pattern
-  "Has all meeting information, including sensitive ones."
-  (conj meeting-pattern-public :meeting/edit-hash))
 
 ;; ##### Input functions #####
 (defn now [] (Date.))
@@ -183,88 +166,6 @@
              :where [?feedback :feedback/description _ ?tx]
              [?tx :db/txInstant ?ts]]
            (d/db (new-connection))))))
-
-;; -----------------------------------------------------------------------------
-;; Meetings
-
-(>defn add-meeting
-  "Adds a meeting to the database. Returns the id of the newly added meeting.
-  Automatically cleans input."
-  [meeting]
-  [map? :ret int?]
-  (clean-and-add-to-db! meeting ::specs/meeting))
-
-(>defn meeting-private-data
-  "Return non public meeting data by id."
-  [id]
-  [int? :ret ::specs/meeting]
-  (d/pull (d/db (new-connection)) meeting-pattern id))
-
-(defn public-meetings
-  "Returns all meetings where the discussion is public."
-  []
-  (->>
-    (d/q
-      '[:find (pull ?meetings meeting-pattern-public) ?ts
-        :in $ meeting-pattern-public
-        :where [?public-discussions :discussion/states :discussion.state/public ?tx]
-        (not-join [?public-discussions]
-                  [?public-discussions :discussion/states :discussion.state/deleted])
-        [?public-agendas :agenda/discussion ?public-discussions]
-        [?public-agendas :agenda/meeting ?meetings]
-        [?tx :db/txInstant ?ts]]
-      (d/db (new-connection)) meeting-pattern-public)
-    (#(toolbelt/pull-key-up % :db/ident))
-    (sort-by second toolbelt/comp-compare)
-    (map first)))
-
-(>defn meeting-by-hash-generic
-  "Generic meeting by hash method, outputs according to pattern."
-  [hash pattern]
-  [string? sequential? :ret (? map?)]
-  (->
-    (d/q
-      '[:find (pull ?meeting pattern)
-        :in $ ?hash pattern
-        :where [?meeting :meeting/share-hash ?hash]]
-      (d/db (new-connection)) hash pattern)
-    ffirst
-    (toolbelt/pull-key-up :db/ident)))
-
-(defn meeting-by-hash
-  "Returns the meeting corresponding to the share hash."
-  [hash]
-  (meeting-by-hash-generic hash meeting-pattern-public))
-
-(defn meeting-by-hash-private
-  "Returns all meeting data, even the private parts by hash."
-  [hash]
-  (meeting-by-hash-generic hash meeting-pattern))
-
-(>defn all-statements
-  "Returns all statements belonging to a discussion"
-  [share-hash]
-  [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
-  (distinct
-    (concat
-      (flatten
-        (d/q
-          '[:find (pull ?statements statement-pattern)
-            :in $ ?share-hash statement-pattern
-            :where [?discussion :discussion/share-hash ?share-hash]
-            [?arguments :argument/discussions ?discussion]
-            (or
-              [?arguments :argument/conclusion ?statements]
-              [?arguments :argument/premises ?statements])
-            [?statements :statement/version _]]
-          (d/db (new-connection)) share-hash statement-pattern))
-      (flatten
-        (d/q
-          '[:find (pull ?statements statement-pattern)
-            :in $ ?share-hash statement-pattern
-            :where [?discussion :discussion/share-hash ?share-hash]
-            [?discussion :discussion/starting-statements ?statements]]
-          (d/db (new-connection)) share-hash statement-pattern)))))
 
 ;; ----------------------------------------------------------------------------
 ;; user
@@ -415,28 +316,6 @@
   [number? string? :ret (? number?)]
   (generic-reaction-check statement-id user-nickname :user/downvotes))
 
-(>defn check-valid-statement-id-and-meeting
-  "Checks whether the statement-id matches the meeting-hash."
-  [statement-id meeting-hash]
-  [number? string? :ret (? number?)]
-  (or
-    (ffirst
-      (d/q
-        '[:find ?discussion
-          :in $ ?statement ?hash
-          :where (or [?argument :argument/premises ?statement]
-                     [?argument :argument/conclusion ?statement])
-          [?argument :argument/discussions ?discussion]
-          [?discussion :discussion/share-hash ?hash]]
-        (d/db (new-connection)) statement-id meeting-hash))
-    (ffirst
-      (d/q
-        '[:find ?discussion
-          :in $ ?statement ?hash
-          :where [?discussion :discussion/starting-statements ?statement]
-          [?discussion :discussion/share-hash ?hash]]
-        (d/db (new-connection)) statement-id meeting-hash))))
-
 ;; ##### From here on  Analytics. This will be refactored into its own app sometime. ###################
 
 (def ^:private max-time-back Instant/EPOCH)
@@ -459,17 +338,6 @@
          (d/db (new-connection)) (Date/from since) attribute))
      0)))
 
-(>defn last-meeting
-  "Returns the timestamp of the last meeting created."
-  []
-  [:ret inst?]
-  (ffirst
-    (d/q
-      '[:find (max ?created-time)
-        :where [?meetings :meeting/type :meeting.type/meeting ?tx]
-        [?tx :db/txInstant ?created-time]]
-      (d/db (new-connection)))))
-
 (>defn- number-of-entities-with-value-since
   "Returns the number of entities in the db since some timestamp. Default is all."
   ([attribute value]
@@ -490,8 +358,8 @@
 
 (defn number-of-meetings
   "Returns the number of meetings. Optionally takes a date since when this counts."
-  ([] (number-of-entities-since :meeting/title))
-  ([since] (number-of-entities-since :meeting/title since)))
+  ([] (number-of-entities-since :discussion/title))
+  ([since] (number-of-entities-since :discussion/title since)))
 
 (defn number-of-usernames
   "Returns the number of different usernames in the database."
@@ -508,13 +376,15 @@
   ([]
    [:ret number?]
    (average-number-of-agendas max-time-back))
-  ([since]
+  ([_since]
    [inst? :ret number?]
-   (let [meetings (number-of-meetings since)
+   ;; todo rework with analytics refactor
+   #_(let [meetings (number-of-meetings since)
          agendas (number-of-entities-since :agenda/title since)]
      (if (zero? meetings)
        0
-       (/ agendas meetings)))))
+       (/ agendas meetings)))
+   0))
 
 (>defn active-discussion-authors
   "Returns all authors active in a discussion during a period since the provided

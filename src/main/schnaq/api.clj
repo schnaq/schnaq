@@ -111,12 +111,13 @@
 
 (defn- delete-statements!
   "Deletes the passed list of statements if the admin-rights are fitting.
-  Important: Needs to check whether the statement-id really belongs to the meeting with
+  Important: Needs to check whether the statement-id really belongs to the discussion with
   the passed edit-hash."
   [{:keys [body-params]}]
   (let [{:keys [share-hash edit-hash statement-ids]} body-params]
     (if (validator/valid-credentials? share-hash edit-hash)
-      (if (every? #(db/check-valid-statement-id-and-meeting % share-hash) statement-ids)
+      ;; could optimize with a collection query here
+      (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
         (do (discussion-db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
         (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
@@ -205,7 +206,7 @@
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
   (let [{:keys [share-hash edit-hash recipients share-link]} body-params
-        meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
+        meeting-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Invite Emails for some meeting sent")
           (ok (merge
@@ -221,7 +222,7 @@
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
   (let [{:keys [share-hash edit-hash recipient admin-center]} body-params
-        meeting-title (:meeting/title (db/meeting-by-hash share-hash))]
+        meeting-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Send admin link for meeting " meeting-title " via E-Mail")
           (ok (merge
@@ -319,7 +320,8 @@
   "Returns the date of the last meeting created."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:last-created (db/last-meeting)})
+    ;; todo disabled until analytics rework
+    (ok {:last-created 12341234})
     (validator/deny-access)))
 
 (defn- number-of-usernames

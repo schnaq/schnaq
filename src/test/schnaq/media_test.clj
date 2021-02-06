@@ -11,11 +11,6 @@
 
 (defn- create-schnaq
   [share-hash]
-  (db/add-meeting {:meeting/title "Test-Schnaq"
-                      :meeting/start-date (db/now)
-                      :meeting/end-date (db/now)
-                      :meeting/share-hash share-hash
-                      :meeting/author (db/add-user-if-not-exists "Mike")})
   (discussion-db/new-discussion {:discussion/title "Test-Schnaq"
                                  :discussion/share-hash share-hash
                                  :discussion/edit-hash "secret"
