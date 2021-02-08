@@ -60,6 +60,10 @@
         :startpage.early-adopter.buttons/join-schnaq "Public schnaqs"
         :startpage.early-adopter/or "or"
 
+        ;; Login page
+        :page.login/heading "Please Login"
+        :page.login/subheading "You need to login to access this resource"
+
         :footer.buttons/about-us "About us"
         :footer.buttons/legal-note "Legal note"
         :footer.buttons/privacy "Privacy Notice"
@@ -456,6 +460,10 @@
         :startpage.early-adopter/body "Stöbere durch öffentliche Diskussionen:"
         :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
         :startpage.early-adopter/or "oder"
+
+        ;; Login Page
+        :page.login/heading "Bitte logg dich ein"
+        :page.login/subheading "Um auf die folgende Ressource zugreifen zu können, musst du eingeloggt sein"
 
         :footer.buttons/about-us "Über uns"
         :footer.buttons/legal-note "Impressum"

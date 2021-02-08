@@ -163,11 +163,6 @@
     (let [roles (get-in db [:user :roles])]
       (= "admin" (some #{"admin"} roles)))))
 
-(rf/reg-sub
-  :user/keycloak
-  (fn [db _]
-    (get-in db [:user :keycloak])))
-
 (rf/reg-event-db
   :keycloak.roles/extract
   (fn [db [_ _]]
