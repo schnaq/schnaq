@@ -317,14 +317,6 @@
     (ok {:discussions-num (analytics-db/number-of-discussions)})
     (validator/deny-access)))
 
-(defn- last-meeting-date
-  "Returns the date of the last meeting created."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    ;; todo disabled until analytics rework
-    (ok {:last-created 12341234})
-    (validator/deny-access)))
-
 (defn- number-of-usernames
   "Returns the number of all meetings."
   [{:keys [body-params]}]
@@ -454,7 +446,6 @@
     (POST "/analytics/statements-per-discussion" [] statements-per-discussion)
     (POST "/analytics/argument-types" [] argument-type-stats)
     (POST "/analytics/discussions" [] number-of-discussions)
-    (POST "/analytics/last-meetings" [] last-meeting-date)
     (POST "/analytics/statement-lengths" [] statement-lengths-stats)
     (POST "/analytics/statements" [] number-of-statements)
     (POST "/analytics/usernames" [] number-of-usernames)))
