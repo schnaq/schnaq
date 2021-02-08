@@ -18,7 +18,7 @@
 (rf/reg-event-fx
   :admin.schnaq/delete
   (fn [{:keys [db]} [_ share-hash]]
-    {:fx [[:http-xhrio {:method :post
+    {:fx [[:http-xhrio {:method :delete
                         :uri (str (:rest-backend config) "/admin/schnaq/delete")
                         :params {:share-hash share-hash}
                         :headers (auth/authentication-header db)

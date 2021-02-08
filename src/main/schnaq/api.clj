@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [compojure.core :refer [GET POST routes wrap-routes]]
+            [compojure.core :refer [GET POST DELETE routes wrap-routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
@@ -429,7 +429,7 @@
         (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
-    (-> (POST "/admin/schnaq/delete" [] delete-schnaq!)
+    (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
         (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
