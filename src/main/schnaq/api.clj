@@ -195,10 +195,8 @@
 
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok (db/all-feedbacks))
-    (unauthorized)))
+  [_]
+  (ok (db/all-feedbacks)))
 
 (>defn- send-invite-emails
   "Expects a list of recipients and the meeting which shall be send."
@@ -427,6 +425,10 @@
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
     (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
+    (-> (GET "/admin/feedbacks" [] all-feedbacks)
+        (wrap-routes auth/is-admin-middleware)
+        (wrap-routes auth/auth-middleware)
+        (wrap-routes auth/wrap-jwt-authentication))
     (-> (POST "/admin/schnaq/delete" [] delete-schnaq!)
         (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
@@ -442,7 +444,6 @@
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/feedback/add" [] add-feedback)
-    (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/header-image/image" [] media/set-preview-image)
     (POST "/schnaq/add" [] add-schnaq)
