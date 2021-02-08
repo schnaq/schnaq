@@ -369,6 +369,8 @@
         :history.statement/user "Post from "
         :history.all-schnaqs/text "Overview"
         :history.all-schnaqs/tooltip "Back to all schnaqs"
+        :history.back/text "Back"
+        :history.back/tooltip "Back to previous post"
 
         ;; Route Link Texts
         :router.features/discussion "Discussion features"
@@ -766,6 +768,8 @@
         :history.statement/user "Beitrag von "
         :history.all-schnaqs/text "Übersicht"
         :history.all-schnaqs/tooltip "Zurück zur Übersicht der schnaqs"
+        :history.back/text "Zurück"
+        :history.back/tooltip "Zurück zum vorherigen Beitrag"
 
         ;; Route Link Texts
         :router.features/discussion "Diskussionsfeatures"
