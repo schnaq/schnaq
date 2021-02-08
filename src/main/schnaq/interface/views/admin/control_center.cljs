@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.admin.control-center
   (:require [ajax.core :as ajax]
             [oops.core :refer [oget]]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -17,15 +18,14 @@
 (rf/reg-event-fx
   :admin.schnaq/delete
   (fn [{:keys [db]} [_ share-hash]]
-    (let [admin-pass (get-in db [:admin :password])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/admin/schnaq/delete")
-                          :params {:share-hash share-hash
-                                   :password admin-pass}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:admin.schnaq.delete/success]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/admin/schnaq/delete")
+                        :params {:share-hash share-hash}
+                        :headers (auth/authentication-header db)
+                        :format (ajax/transit-request-format)
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:admin.schnaq.delete/success]
+                        :on-failure [:ajax.error/as-notification]}]]}))
 
 
 (defn- public-meeting-deletion-form

@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [compojure.core :refer [GET POST routes]]
+            [compojure.core :refer [GET POST routes wrap-routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
@@ -10,6 +10,7 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.util.http-response :refer [ok created bad-request unauthorized]]
+            [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
@@ -145,12 +146,10 @@
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash password]} body-params]
-    (if (validator/valid-password? password)
-      (if (discussion-db/delete-discussion share-hash)
-        (ok {:share-hash share-hash})
-        (bad-request {:error "An error occurred, while deleting the schnaq."}))
-      (validator/deny-access))))
+  (let [{:keys [share-hash]} body-params]
+    (if (discussion-db/delete-discussion share-hash)
+      (ok {:share-hash share-hash})
+      (bad-request {:error "An error occurred, while deleting the schnaq."}))))
 
 ;; -----------------------------------------------------------------------------
 ;; Votes
@@ -446,7 +445,10 @@
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
     (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
-    (POST "/admin/schnaq/delete" [] delete-schnaq!)
+    (-> (POST "/admin/schnaq/delete" [] delete-schnaq!)
+        (wrap-routes auth/is-admin-middleware)
+        (wrap-routes auth/auth-middleware)
+        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
