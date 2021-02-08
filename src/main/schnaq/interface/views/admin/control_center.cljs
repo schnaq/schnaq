@@ -83,12 +83,11 @@
     :page/heading (labels :admin.center.start/heading)
     :page/subheading (labels :admin.center.start/subheading)}
    [:div.container
-    [:div
-     [:h2 (labels :admin.center.delete/heading)]
-     [:h4 (labels :admin.center.delete.public/heading)]
-     [public-meeting-deletion-form]
-     [:h4 (labels :admin.center.delete.private/heading)]
-     [private-meeting-deletion-form]]]])
+    [:h2 (labels :admin.center.delete/heading)]
+    [:h4 (labels :admin.center.delete.public/heading)]
+    [public-meeting-deletion-form]
+    [:h4 (labels :admin.center.delete.private/heading)]
+    [private-meeting-deletion-form]]])
 
 (defn center-overview-route
   []
