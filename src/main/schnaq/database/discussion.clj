@@ -231,7 +231,7 @@
   (try
     (transact [[:db/add [:discussion/share-hash share-hash]
                 :discussion/states :discussion.state/deleted]])
-    (log/info "Schnaq with share-hash " share-hash " has been set to deleted.")
+    (log/info (format "Schnaq with share-hash %s has been set to deleted." share-hash))
     share-hash
     (catch ExceptionInfo e
       (log/error
