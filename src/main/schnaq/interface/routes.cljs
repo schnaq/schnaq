@@ -194,9 +194,7 @@
     {:name :routes/analytics
      :view analytics/analytics-dashboard-entrypoint
      :link-text (labels :router/analytics)
-     :controllers [{:start (fn []
-                             (rf/dispatch [:admin/set-password (js/prompt "Enter the Admin Password to see analytics")])
-                             (rf/dispatch [:analytics/load-dashboard]))}]}]
+     :controllers [{:start (fn [] (rf/dispatch [:analytics/load-dashboard]))}]}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
