@@ -187,12 +187,12 @@
 (rf/reg-event-db
   :analytics/all-stats-loaded
   (fn [db [_ {:keys [stats]}]]
-    (assoc db :analytics {:meetings-num {:overall (:meetings-num stats)}
+    (assoc db :analytics {:discussions-num {:overall (:discussions-num stats)}
                           :usernames-num {:overall (:usernames-num stats)}
                           :statements {:number {:overall (:statements-num stats)}
-                                       :lengths (:statement-length-stats stats)}
+                                       :lengths (:statement-length-stats stats)
+                                       :average-per-discussion (:average-statements stats)}
                           :active-users-num {:overall (:active-users-num stats)}
-                          :agendas {:average-per-meeting (:average-agendas stats)}
                           :arguments {:types (:argument-type-stats stats)}})))
 
 ;; #### Subs ####
