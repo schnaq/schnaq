@@ -60,7 +60,7 @@
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"
-    (let [stats (main-db/statement-length-stats)]
+    (let [stats (db/statement-length-stats)]
       (is (< (:min stats) (:max stats)))
       (is (< (:min stats) (:median stats)))
       (is (> (:max stats) (:median stats)))

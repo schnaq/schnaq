@@ -99,15 +99,16 @@
   ([] [:ret map?]
    (statement-length-stats max-time-back))
   ([since] [inst? :ret map?]
-   (let [sorted-contents (sort-by count
-                                  (flatten
-                                    (main-db/query
-                                      '[:find ?contents
-                                        :in $ ?since
-                                        :where [_ :statement/content ?contents ?tx]
-                                        [?tx :db/txInstant ?add-date]
-                                        [(< ?since ?add-date)]]
-                                      (Date/from since))))
+   (let [sorted-contents (->>
+                           (main-db/query
+                             '[:find ?contents
+                               :in $ ?since
+                               :where [_ :statement/content ?contents ?tx]
+                               [?tx :db/txInstant ?add-date]
+                               [(< ?since ?add-date)]]
+                             (Date/from since))
+                           flatten
+                           (sort-by count))
          content-count (count sorted-contents)
          max-length (count (last sorted-contents))
          min-length (count (first sorted-contents))
