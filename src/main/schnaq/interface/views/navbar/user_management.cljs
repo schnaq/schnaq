@@ -66,7 +66,7 @@
        username]]
      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
       [username-bar-view]
-      (when-not toolbelt/production?
+      (when (or authenticated? (not toolbelt/production?))
         [:<>
          [:div.dropdown-divider]
          (when authenticated?
