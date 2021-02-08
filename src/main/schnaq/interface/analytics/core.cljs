@@ -102,7 +102,7 @@
   ([db path on-success-event days-since]
    [map? string? keyword? int? :ret map?]
    (when (get-in db [:user :authenticated?])
-     {:fx [[:http-xhrio {:method :post
+     {:fx [[:http-xhrio {:method :get
                          :uri (str (:rest-backend config) path)
                          :format (ajax/transit-request-format)
                          :params {:days-since days-since}

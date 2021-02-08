@@ -3,7 +3,7 @@
             [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication]]
             [buddy.core.keys :as keys]
-            [ghostwheel.core :refer [>defn-]]
+            [ghostwheel.core :refer [>defn]]
             [ring.util.http-response :refer [unauthorized]]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.core :as schnaq-core]))
@@ -33,7 +33,7 @@
 
 ;; -----------------------------------------------------------------------------
 
-(>defn- has-admin-role?
+(>defn has-admin-role?
   "Check if user has realm-wide admin access."
   [request]
   [map? :ret boolean?]

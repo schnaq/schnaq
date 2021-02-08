@@ -10,10 +10,10 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.util.http-response :refer [ok created bad-request]]
+            [schnaq.api.analytics :as analytics]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
-            [schnaq.database.analytics :as analytics-db]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
@@ -304,72 +304,6 @@
                 share-hash)))
       (validator/deny-access invalid-rights-message))))
 
-;; -----------------------------------------------------------------------------
-;; Analytics
-
-(defn- number-of-discussions
-  "Returns the number of all meetings."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok {:discussions-num (analytics-db/number-of-discussions)})
-    (validator/deny-access)))
-
-(defn- number-of-usernames
-  "Returns the number of all meetings."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok {:usernames-num (analytics-db/number-of-usernames)})
-    (validator/deny-access)))
-
-(defn- statements-per-discussion
-  "Returns the average numbers of meetings"
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok {:average-statements (float (analytics-db/average-number-of-statements))})
-    (validator/deny-access)))
-
-(defn- number-of-statements
-  "Returns the number of statements"
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok {:statements-num (analytics-db/number-of-statements)})
-    (validator/deny-access)))
-
-(defn- number-of-active-users
-  "Returns the number of statements"
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok {:active-users-num (analytics-db/number-of-active-discussion-users)})
-    (validator/deny-access)))
-
-(defn- statement-lengths-stats
-  "Returns statistics about the statement length."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok {:statement-length-stats (analytics-db/statement-length-stats)})
-    (validator/deny-access)))
-
-(defn- argument-type-stats
-  "Returns statistics about the statement length."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok {:argument-type-stats (analytics-db/argument-type-stats)})
-    (validator/deny-access)))
-
-(defn- all-stats
-  "Returns all statistics at once."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (let [timestamp-since (toolbelt/now-minus-days (Integer/parseInt (:days-since body-params)))]
-      (ok {:stats {:discussions-num (analytics-db/number-of-discussions timestamp-since)
-                   :usernames-num (analytics-db/number-of-usernames timestamp-since)
-                   :average-statements (float (analytics-db/average-number-of-statements timestamp-since))
-                   :statements-num (analytics-db/number-of-statements timestamp-since)
-                   :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
-                   :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
-                   :argument-type-stats (analytics-db/argument-type-stats timestamp-since)}}))
-    (validator/deny-access)))
-
 (defn- check-credentials
   "Checks whether share-hash and edit-hash match."
   [{:keys [body-params]}]
@@ -443,15 +377,7 @@
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
-    ;; Analytics routes
-    (POST "/analytics" [] all-stats)
-    (POST "/analytics/active-users" [] number-of-active-users)
-    (POST "/analytics/statements-per-discussion" [] statements-per-discussion)
-    (POST "/analytics/argument-types" [] argument-type-stats)
-    (POST "/analytics/discussions" [] number-of-discussions)
-    (POST "/analytics/statement-lengths" [] statement-lengths-stats)
-    (POST "/analytics/statements" [] number-of-statements)
-    (POST "/analytics/usernames" [] number-of-usernames)))
+    analytics/analytics-routes))
 
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."
