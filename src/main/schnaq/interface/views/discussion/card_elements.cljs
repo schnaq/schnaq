@@ -46,23 +46,28 @@
                (str (labels :tooltip/history-statement) nickname)
                [common/avatar nickname 42]]]])]))]))
 
-(defn- back-to-feed-button
+(defn- back-button
   "Return to your schnaqs Button"
-  []
+  [has-history?]
   (let [feed @(rf/subscribe [:feed/get-current])
         feed-route (case feed
                      :personal :routes.meetings/my-schnaqs
-                     :routes/public-discussions)]
+                     :routes/public-discussions)
+        back-feed [:navigation/navigate feed-route]
+        back-history [:discussion.history/time-travel 1]
+        navigation (if has-history? back-history back-feed)
+        label (if has-history? :history.back/text :history.all-schnaqs/text)
+        tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     [:div.d-inline-block.text-dark.w-100
      [:div.clickable.card-history-home
       {:on-click
-       #(rf/dispatch [:navigation/navigate feed-route])}
+       #(rf/dispatch navigation)}
       [tooltip/nested-div
        "right"
-       (labels :history.all-schnaqs/tooltip)
+       (labels tooltip)
        [:div.d-flex
         [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
-        [:div [:h5 (labels :history.all-schnaqs/text)]]]]]]))
+        [:div [:h5 (labels label)]]]]]]))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -79,12 +84,13 @@
 (defn history-view
   "History view displayed in the left column in the desktop view."
   [history]
-  (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
+  (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)
+        has-history? (seq indexed-history)]
     [:<>
      ;; my schnaqs button
-     [back-to-feed-button]
+     [back-button has-history?]
      ;; discussion start button
-     (when (seq indexed-history)
+     (when has-history?
        [discussion-start-button (count indexed-history)])
      ;; history
      (for [[index statement] (butlast indexed-history)]
