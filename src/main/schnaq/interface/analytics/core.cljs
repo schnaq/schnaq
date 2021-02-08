@@ -90,7 +90,7 @@
 (rf/reg-event-fx
   :analytics/load-dashboard
   (fn [_ _]
-    {:fx [[:dispatch [:analytics/load-meeting-num]]
+    {:fx [[:dispatch [:analytics/load-discussions-num]]
           [:dispatch [:analytics/load-usernames-num]]
           [:dispatch [:analytics/load-average-number-of-agendas]]
           [:dispatch [:analytics/load-statements-num]]
@@ -121,9 +121,9 @@
     (fetch-with-password db "/analytics" :analytics/all-stats-loaded days)))
 
 (rf/reg-event-fx
-  :analytics/load-meeting-num
+  :analytics/load-discussions-num
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/meetings" :analytics/meeting-num-loaded)))
+    (fetch-with-password db "/analytics/discussions" :analytics/discussions-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-last-meeting-date
@@ -161,9 +161,9 @@
     (fetch-with-password db "/analytics/argument-types" :analytics/argument-type-stats-loaded)))
 
 (rf/reg-event-db
-  :analytics/meeting-num-loaded
-  (fn [db [_ {:keys [meetings-num]}]]
-    (assoc-in db [:analytics :meetings-num :overall] meetings-num)))
+  :analytics/discussions-num-loaded
+  (fn [db [_ {:keys [discussions-num]}]]
+    (assoc-in db [:analytics :discussions-num :overall] discussions-num)))
 
 (rf/reg-event-db
   :analytics/usernames-num-loaded

@@ -12,6 +12,7 @@
             [ring.util.http-response :refer [ok created bad-request unauthorized]]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
+            [schnaq.database.analytics :as analytics-db]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
@@ -309,11 +310,11 @@
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
-(defn- number-of-meetings
+(defn- number-of-discussions
   "Returns the number of all meetings."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:meetings-num (db/number-of-meetings)})
+    (ok {:discussions-num (analytics-db/number-of-discussions)})
     (validator/deny-access)))
 
 (defn- last-meeting-date
@@ -371,7 +372,7 @@
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
     (let [timestamp-since (toolbelt/now-minus-days (Integer/parseInt (:days-since body-params)))]
-      (ok {:stats {:meetings-num (db/number-of-meetings timestamp-since)
+      (ok {:stats {:discussinos-num (analytics-db/number-of-discussions timestamp-since)
                    :usernames-num (db/number-of-usernames timestamp-since)
                    :average-agendas (float (db/average-number-of-agendas timestamp-since))
                    :statements-num (db/number-of-statements timestamp-since)
@@ -452,7 +453,7 @@
     (POST "/analytics/active-users" [] number-of-active-users)
     (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
     (POST "/analytics/argument-types" [] argument-type-stats)
-    (POST "/analytics/meetings" [] number-of-meetings)
+    (POST "/analytics/discussions" [] number-of-discussions)
     (POST "/analytics/last-meetings" [] last-meeting-date)
     (POST "/analytics/statement-lengths" [] statement-lengths-stats)
     (POST "/analytics/statements" [] number-of-statements)
