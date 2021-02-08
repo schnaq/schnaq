@@ -41,11 +41,16 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
-   ["admin/center"
-    {:name :routes/admin-center
-     :view admin-center/center-overview-route
-     :link-text (labels :router/admin-center)
-     :controllers [{:start (fn [] (rf/dispatch [:schnaqs.public/load]))}]}]
+   ["admin"
+    ["/center"
+     {:name :routes/admin-center
+      :view admin-center/center-overview-route
+      :link-text (labels :router/admin-center)
+      :controllers [{:start (fn [] (rf/dispatch [:schnaqs.public/load]))}]}]
+    ["/feedbacks"
+     {:name :routes/feedbacks
+      :view feedback-admin/feedbacks-view
+      :link-text (labels :router/all-feedbacks)}]]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
@@ -179,10 +184,6 @@
                                  (rf/dispatch [:graph/load-data-for-discussion]))
                         :stop (fn []
                                 (rf/dispatch [:updates.periodic/graph false]))}]}]]]]]
-   ["feedbacks"
-    {:name :routes/feedbacks
-     :view feedback-admin/feedbacks-view
-     :link-text (labels :router/all-feedbacks)}]
    ["analytics"
     {:name :routes/analytics
      :view analytics/analytics-dashboard-entrypoint
