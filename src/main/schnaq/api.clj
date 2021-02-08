@@ -18,6 +18,7 @@
             [schnaq.export :as export]
             [schnaq.media :as media]
             [schnaq.meeting.database :as db]
+            [schnaq.meeting.meta-info :as meta-info]
             [schnaq.meeting.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
@@ -426,6 +427,7 @@
     (GET "/export/txt" [] export-txt-data)
     (GET "/ping" [] ping)
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
+    (GET "/schnaq/meta-info/by-hash/:hash" [] meta-info/get-discussion-meta-info)
     (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (POST "/admin/schnaq/delete" [] delete-schnaq!)
