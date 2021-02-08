@@ -329,7 +329,7 @@
   "Returns the number of all meetings."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:usernames-num (db/number-of-usernames)})
+    (ok {:usernames-num (analytics-db/number-of-usernames)})
     (validator/deny-access)))
 
 (defn- agendas-per-meeting
@@ -372,8 +372,8 @@
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
     (let [timestamp-since (toolbelt/now-minus-days (Integer/parseInt (:days-since body-params)))]
-      (ok {:stats {:discussinos-num (analytics-db/number-of-discussions timestamp-since)
-                   :usernames-num (db/number-of-usernames timestamp-since)
+      (ok {:stats {:discussions-num (analytics-db/number-of-discussions timestamp-since)
+                   :usernames-num (analytics-db/number-of-usernames timestamp-since)
                    :average-agendas (float (db/average-number-of-agendas timestamp-since))
                    :statements-num (db/number-of-statements timestamp-since)
                    :active-users-num (db/number-of-active-discussion-users timestamp-since)

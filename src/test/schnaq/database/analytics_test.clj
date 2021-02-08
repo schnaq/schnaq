@@ -10,7 +10,7 @@
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (def ^:private any-meeting-share-hash "aklsuzd98-234da-123d")
-;; temporarily disable during refactor
+
 (defn- any-discussion
   []
   (discussion-db/new-discussion {:discussion/title "Bla"
@@ -30,10 +30,10 @@
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (= 6 (main-db/number-of-usernames)))
+    (is (= 6 (db/number-of-usernames)))
     (main-db/add-user-if-not-exists "Some-Testdude")
-    (is (= 7 (main-db/number-of-usernames)))
-    (is (zero? (main-db/number-of-meetings (Instant/now))))))
+    (is (= 7 (db/number-of-usernames)))
+    (is (zero? (db/number-of-usernames (Instant/now))))))
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
