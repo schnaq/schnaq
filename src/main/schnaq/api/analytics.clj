@@ -1,5 +1,5 @@
 (ns schnaq.api.analytics
-  (:require [compojure.core :refer [GET POST DELETE routes wrap-routes context]]
+  (:require [compojure.core :refer [GET routes wrap-routes context]]
             [ring.util.http-response :refer [ok]]
             [schnaq.database.analytics :as analytics-db]
             [schnaq.toolbelt :as toolbelt]

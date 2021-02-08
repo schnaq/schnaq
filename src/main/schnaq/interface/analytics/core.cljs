@@ -1,7 +1,7 @@
 (ns schnaq.interface.analytics.core
   (:require [ajax.core :as ajax]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn- >defn]]
+            [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
