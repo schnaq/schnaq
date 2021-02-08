@@ -54,7 +54,7 @@
     (testing "JWT token with admin role shall pass."
       (is (= "n2o" (:body (response token-n2o-admin)))))
     (testing "Valid JWT, but no admin role, has no access."
-      (is (= 401 (:status (response token-schnaqqifant-user)))))
+      (is (= 403 (:status (response token-schnaqqifant-user)))))
     (testing "Wrong, old or missing tokens have no access."
       (is (= 401 (:status (response token-timed-out))))
       (is (= 401 (:status (response token-wrong-signature))))

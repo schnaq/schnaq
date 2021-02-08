@@ -4,7 +4,7 @@
             [buddy.auth.middleware :refer [wrap-authentication]]
             [buddy.core.keys :as keys]
             [ghostwheel.core :refer [>defn]]
-            [ring.util.http-response :refer [unauthorized]]
+            [ring.util.http-response :refer [unauthorized forbidden]]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.core :as schnaq-core]))
 
@@ -58,4 +58,4 @@
   (fn [request]
     (if (has-admin-role? request)
       (handler request)
-      (unauthorized "You are not an admin."))))
+      (forbidden "You are not an admin."))))
