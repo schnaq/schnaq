@@ -17,7 +17,8 @@
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
-            [schnaq.interface.views.graph.view :as graph-view]))
+            [schnaq.interface.views.graph.view :as graph-view]
+            [schnaq.interface.views.pages :as pages]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -41,6 +42,10 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)}]
+   ["login"
+    {:name :routes/login
+     :view pages/login-page
+     :link-text (labels :user/login)}]
    ["admin"
     ["/center"
      {:name :routes/admin-center

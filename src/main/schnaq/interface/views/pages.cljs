@@ -24,6 +24,16 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn login-page
+  "Show a login page."
+  []
+  [with-nav-and-header
+   {:condition/needs-authentication? true
+    :page/heading (labels :page.login/heading)
+    :page/subheading (labels :page.login/subheading)}
+   (when @(rf/subscribe [:user/authenticated?])
+     (rf/dispatch [:navigation/navigate :routes/startpage]))])
+
 (defn- please-login
   "Default page indicating, that it is necessary to login."
   []
