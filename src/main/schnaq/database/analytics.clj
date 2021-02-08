@@ -1,5 +1,5 @@
 (ns schnaq.database.analytics
-  (:require [ghostwheel.core :refer [>defn >defn- ?]]
+  (:require [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.meeting.database :as main-db])
   (:import (java.util Date)
            (java.time Instant)))
