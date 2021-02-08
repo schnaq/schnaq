@@ -153,12 +153,12 @@
     (assoc-in db [:user :authenticated?] toggle)))
 
 (rf/reg-sub
-  :user/is-authenticated?
+  :user/authenticated?
   (fn [db _]
     (get-in db [:user :authenticated?] false)))
 
 (rf/reg-sub
-  :user/has-administrator-role?
+  :user/administrator?
   (fn [db _]
     (let [roles (get-in db [:user :roles])]
       (= "admin" (some #{"admin"} roles)))))

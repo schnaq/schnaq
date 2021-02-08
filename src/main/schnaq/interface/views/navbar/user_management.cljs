@@ -47,7 +47,7 @@
 (defn- admin-star
   "Show a star icon if the user is logged in as admin."
   []
-  (when @(rf/subscribe [:user/has-administrator-role?])
+  (when @(rf/subscribe [:user/administrator?])
     [:i.pr-1 {:class (str "far " (fa :star))
               :title (labels :user.profile/star-tooltip)}]))
 
@@ -55,7 +55,7 @@
   "Dropdown menu to change user name, to log in, ..."
   [button-class]
   (let [username @(rf/subscribe [:user/display-name])
-        authenticated? @(rf/subscribe [:user/is-authenticated?])
+        authenticated? @(rf/subscribe [:user/authenticated?])
         login-logout-event (if authenticated? :keycloak/logout :keycloak/login)]
     [:ul.navbar-nav.dropdown
      [:a#profile-dropdown.nav-link
