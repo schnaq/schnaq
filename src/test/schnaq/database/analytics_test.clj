@@ -37,8 +37,8 @@
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
-    (is (= 38 (main-db/number-of-statements)))
-    (is (zero? (main-db/number-of-statements (Instant/now))))))
+    (is (= 38 (db/number-of-statements)))
+    (is (zero? (db/number-of-statements (Instant/now))))))
 
 ;; todo temporarily disable during refactor
 #_(deftest average-number-of-agendas-test
