@@ -364,7 +364,7 @@
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:argument-type-stats (db/argument-type-stats)})
+    (ok {:argument-type-stats (analytics-db/argument-type-stats)})
     (validator/deny-access)))
 
 (defn- all-stats
@@ -378,7 +378,7 @@
                    :statements-num (analytics-db/number-of-statements timestamp-since)
                    :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
                    :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
-                   :argument-type-stats (db/argument-type-stats timestamp-since)}}))
+                   :argument-type-stats (analytics-db/argument-type-stats timestamp-since)}}))
     (validator/deny-access)))
 
 (defn- check-credentials
