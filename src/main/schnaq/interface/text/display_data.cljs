@@ -17,6 +17,7 @@
         :nav.schnaqs/create-schnaq "Create schnaq"
         :nav.schnaqs/last-added "Last created schnaq"
         :nav/blog "Blog"
+        :nav/admin "Admin"
 
         ;; code of conduct
         :coc/heading "Code of Conduct"
@@ -423,6 +424,7 @@
         :nav.schnaqs/create-schnaq "schnaq anlegen"
         :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
         :nav/blog "Zum Blog"
+        :nav/admin "Admin"
 
         ;; code of conduct
         :coc/heading "Verhaltensregeln"

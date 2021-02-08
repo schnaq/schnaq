@@ -63,7 +63,7 @@
         {:href "#" :role "button" :data-toggle "dropdown" :id ul-id
          :aria-haspopup "true" :aria-expanded "false"}
         [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
-         "Admin"]]
+         (labels :nav/admin)]]
        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/admin-center)}
