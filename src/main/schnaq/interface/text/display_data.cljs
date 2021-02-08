@@ -217,6 +217,9 @@
         :feedbacks.survey/loading "The form is being loaded…"
         :feedbacks.survey/tab "Survey"
 
+        :feedbacks.missing/heading "Feedbacks were not yet loaded from our backend."
+        :feedbacks.missing/button-text "Load feedbacks"
+
         ;; login
         :login/as "Hello, "
         :login/set-name "Enter your name"
@@ -617,6 +620,9 @@
         :feedbacks.survey/checkbox "Ja, ich möchte an der Umfrage teilnehmen"
         :feedbacks.survey/loading "Formular wird geladen..."
         :feedbacks.survey/tab "Umfrage"
+
+        :feedbacks.missing/heading "Feedbacks wurden noch nicht geladen 😱"
+        :feedbacks.missing/button-text "Nachladen"
 
         ;; login
         :login/as "Hallo, "

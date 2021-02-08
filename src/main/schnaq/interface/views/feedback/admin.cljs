@@ -11,11 +11,10 @@
 (defn- list-feedbacks
   "Shows a list of all feedback."
   []
-  [:div#feedback-list.container.py-4
-   (let [feedbacks @(rf/subscribe [:feedbacks])
-         _ (rf/dispatch [:feedbacks/fetch])]
+  [:div.container.py-4
+   (if-let [feedbacks @(rf/subscribe [:feedbacks])]
      [:<>
-      [:h4 (gstring/format "Es gibt %s Rückmeldungen 🥳 !" (count feedbacks))]
+      [:h4 (gstring/format "Es gibt %s Rückmeldungen 🥳!" (count feedbacks))]
       [:table.table.table-striped
        [:thead
         [:tr
@@ -34,7 +33,12 @@
             (when (:feedback/has-image? feedback)
               (let [img-src (gstring/format "/media/feedbacks/screenshots/%s.png" (:db/id feedback))]
                 [:a {:href img-src}
-                 [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]])])
+                 [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]]
+     [:div.text-center
+      [:h4.pb-3 (labels :feedbacks.missing/heading)]
+      [:button.btn.btn-outline-primary
+       {:on-click #(rf/dispatch [:feedbacks/fetch])}
+       (labels :feedbacks.missing/button-text)]])])
 
 (defn- overview
   "Shows the page for an overview of all feedbacks."
@@ -57,12 +61,12 @@
 
 (rf/reg-event-fx
   :feedbacks/fetch
-  (fn [{:keys [db]} [_ password]]
-    {:fx [[:http-xhrio {:method :get
-                        :uri (gstring/format "%s/admin/feedbacks" (:rest-backend config))
-                        :params {:password password}
-                        :headers (auth/authentication-header db)
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:feedbacks/store]
-                        :on-failure [:ajax.error/as-notification]}]]}))
+  (fn [{:keys [db]} _]
+    (when (get-in db [:user :authenticated?])
+      {:fx [[:http-xhrio {:method :get
+                          :uri (gstring/format "%s/admin/feedbacks" (:rest-backend config))
+                          :headers (auth/authentication-header db)
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:feedbacks/store]
+                          :on-failure [:ajax.error/to-console]}]]})))

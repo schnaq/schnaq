@@ -50,7 +50,8 @@
     ["/feedbacks"
      {:name :routes/feedbacks
       :view feedback-admin/feedbacks-view
-      :link-text (labels :router/all-feedbacks)}]]
+      :link-text (labels :router/all-feedbacks)
+      :controllers [{:start (fn [] (rf/dispatch [:feedbacks/fetch]))}]}]]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
