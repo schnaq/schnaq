@@ -15,9 +15,6 @@
 (def api
   {:port (Integer/parseInt (or (System/getenv "API_PORT") "3000"))})
 
-(def admin-password
-  (or (System/getenv "ADMIN_PASSWORD") "Schnapspralinen"))
-
 (def env-mode
   (or (System/getenv "ENVIRONMENT") "development"))
 

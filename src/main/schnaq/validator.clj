@@ -2,16 +2,9 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [schnaq.database.discussion :as db]
-            [ring.util.http-response :refer [forbidden]]
-            [schnaq.config :as config]))
+            [ring.util.http-response :refer [forbidden]]))
 
 (s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
-
-(>defn valid-password?
-  "Check if the password is a valid."
-  [password]
-  [string? :ret boolean?]
-  (= config/admin-password password))
 
 (defn valid-discussion?
   "Check if a schnaq-hash ist valid. Returns false, when the discussion is deleted."
