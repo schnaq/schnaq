@@ -59,26 +59,21 @@
   [pages/with-nav-and-header
    {:page/heading (labels :analytics/heading)}
    [:<>
-    (let [meetings-num @(rf/subscribe [:analytics/number-of-meetings-overall])
+    (let [discussions-num @(rf/subscribe [:analytics/number-of-discussions-overall])
           usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
-          average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])
+          average-statements @(rf/subscribe [:analytics/number-of-average-statements])
           statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
           active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
-          argument-types @(rf/subscribe [:analytics/argument-type-stats])
-          last-meeting @(rf/subscribe [:analytics/last-meeting-created])
-          last-meeting-date (if last-meeting (str (.getDate last-meeting) "." (inc (.getMonth last-meeting)) "."
-                                                  (.getFullYear last-meeting))
-                                             "None")]
+          argument-types @(rf/subscribe [:analytics/argument-type-stats])]
       [:div.container.px-5.py-3
        [analytics-controls]
        [:div.card-columns
-        [analytics-card (labels :analytics/overall-meetings) meetings-num]
+        [analytics-card (labels :analytics/overall-discussions) discussions-num]
         [analytics-card (labels :analytics/user-numbers) usernames-num]
-        [analytics-card (labels :analytics/average-agendas-title) average-agendas]
+        [analytics-card (labels :analytics/average-statements-title) average-statements]
         [analytics-card (labels :analytics/statements-num-title) statements-num]
         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
-        [analytics-card (labels :analytics/last-meeting-created-title) last-meeting-date]
         [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
         [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])]])
 
@@ -90,14 +85,13 @@
 (rf/reg-event-fx
   :analytics/load-dashboard
   (fn [_ _]
-    {:fx [[:dispatch [:analytics/load-meeting-num]]
+    {:fx [[:dispatch [:analytics/load-discussions-num]]
           [:dispatch [:analytics/load-usernames-num]]
-          [:dispatch [:analytics/load-average-number-of-agendas]]
+          [:dispatch [:analytics/load-average-number-of-statements]]
           [:dispatch [:analytics/load-statements-num]]
           [:dispatch [:analytics/load-active-users]]
           [:dispatch [:analytics/load-statement-length-stats]]
-          [:dispatch [:analytics/load-argument-type-stats]]
-          [:dispatch [:analytics/load-last-meeting-date]]]}))
+          [:dispatch [:analytics/load-argument-type-stats]]]}))
 
 (>defn fetch-with-password
   "Fetches something from an endpoint with the password."
@@ -121,14 +115,9 @@
     (fetch-with-password db "/analytics" :analytics/all-stats-loaded days)))
 
 (rf/reg-event-fx
-  :analytics/load-meeting-num
+  :analytics/load-discussions-num
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/meetings" :analytics/meeting-num-loaded)))
-
-(rf/reg-event-fx
-  :analytics/load-last-meeting-date
-  (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/last-meetings" :analytics/last-meeting-created-success)))
+    (fetch-with-password db "/analytics/discussions" :analytics/discussions-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-usernames-num
@@ -136,9 +125,9 @@
     (fetch-with-password db "/analytics/usernames" :analytics/usernames-num-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-average-number-of-agendas
+  :analytics/load-average-number-of-statements
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/agendas-per-meeting" :analytics/agendas-per-meeting-loaded)))
+    (fetch-with-password db "/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-statements-num
@@ -161,9 +150,9 @@
     (fetch-with-password db "/analytics/argument-types" :analytics/argument-type-stats-loaded)))
 
 (rf/reg-event-db
-  :analytics/meeting-num-loaded
-  (fn [db [_ {:keys [meetings-num]}]]
-    (assoc-in db [:analytics :meetings-num :overall] meetings-num)))
+  :analytics/discussions-num-loaded
+  (fn [db [_ {:keys [discussions-num]}]]
+    (assoc-in db [:analytics :discussions-num :overall] discussions-num)))
 
 (rf/reg-event-db
   :analytics/usernames-num-loaded
@@ -181,9 +170,9 @@
     (assoc-in db [:analytics :active-users-num :overall] active-users-num)))
 
 (rf/reg-event-db
-  :analytics/agendas-per-meeting-loaded
-  (fn [db [_ {:keys [average-agendas]}]]
-    (assoc-in db [:analytics :agendas :average-per-meeting] (gstring/format "%.2f" average-agendas))))
+  :analytics/statements-per-discussion-loaded
+  (fn [db [_ {:keys [average-statements]}]]
+    (assoc-in db [:analytics :statements :average-per-discussion] (gstring/format "%.2f" average-statements))))
 
 (rf/reg-event-db
   :analytics/statement-length-stats-loaded
@@ -196,27 +185,22 @@
     (assoc-in db [:analytics :arguments :types] argument-type-stats)))
 
 (rf/reg-event-db
-  :analytics/last-meeting-created-success
-  (fn [db [_ {:keys [last-created]}]]
-    (assoc-in db [:analytics :meetings :last-created] last-created)))
-
-(rf/reg-event-db
   :analytics/all-stats-loaded
   (fn [db [_ {:keys [stats]}]]
-    (assoc db :analytics {:meetings-num {:overall (:meetings-num stats)}
+    (assoc db :analytics {:discussions-num {:overall (:discussions-num stats)}
                           :usernames-num {:overall (:usernames-num stats)}
                           :statements {:number {:overall (:statements-num stats)}
-                                       :lengths (:statement-length-stats stats)}
+                                       :lengths (:statement-length-stats stats)
+                                       :average-per-discussion (:average-statements stats)}
                           :active-users-num {:overall (:active-users-num stats)}
-                          :agendas {:average-per-meeting (:average-agendas stats)}
                           :arguments {:types (:argument-type-stats stats)}})))
 
 ;; #### Subs ####
 
 (rf/reg-sub
-  :analytics/number-of-meetings-overall
+  :analytics/number-of-discussions-overall
   (fn [db _]
-    (get-in db [:analytics :meetings-num :overall])))
+    (get-in db [:analytics :discussions-num :overall])))
 
 (rf/reg-sub
   :analytics/number-of-usernames-overall
@@ -224,9 +208,9 @@
     (get-in db [:analytics :usernames-num :overall])))
 
 (rf/reg-sub
-  :analytics/number-of-average-agendas
+  :analytics/number-of-average-statements
   (fn [db _]
-    (get-in db [:analytics :agendas :average-per-meeting])))
+    (get-in db [:analytics :statements :average-per-discussion])))
 
 (rf/reg-sub
   :analytics/number-of-statements-overall
@@ -247,8 +231,3 @@
   :analytics/argument-type-stats
   (fn [db _]
     (get-in db [:analytics :arguments :types])))
-
-(rf/reg-sub
-  :analytics/last-meeting-created
-  (fn [db _]
-    (get-in db [:analytics :meetings :last-created])))

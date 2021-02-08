@@ -2,21 +2,10 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as db]
-            [schnaq.test.toolbelt :as schnaq-toolbelt])
-  (:import (java.time Instant)))
+            [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
-
-#_(def ^:private any-meeting-share-hash "aklsuzd98-234da-123d")
-;; temporarily disable during refactor
-#_(defn- any-discussion
-  []
-  (discussion-db/new-discussion {:discussion/title "Bla"
-                                 :discussion/share-hash any-meeting-share-hash
-                                 :discussion/edit-hash (str any-meeting-share-hash "-secret")
-                                 :discussion/author (db/add-user-if-not-exists "Wegi")}
-                                true))
 
 (deftest up-and-downvotes-test
   (testing "Tests whether setting up and downvotes works properly."
@@ -89,65 +78,6 @@
     (is (= "Wegi" (db/canonical-username "WEGI")
            (db/canonical-username "WeGi")))
     (is (= "Der Schredder" (db/canonical-username "DER schredder")))))
-
-
-;; Tests for the analytics part
-;; todo temporarily disable during refactor
-#_(deftest number-of-meetings-test
-  (testing "Return the correct number of meetings"
-    (is (= 5 (db/number-of-meetings)))
-    ;; Adds any new discussion
-    (any-discussion)
-    (is (= 6 (db/number-of-meetings)))
-    (is (zero? (db/number-of-meetings (Instant/now))))))
-
-(deftest number-of-usernames-test
-  (testing "Return the correct number of usernames"
-    ;; There are at least the 4 users from the test-set
-    (is (= 6 (db/number-of-usernames)))
-    (db/add-user-if-not-exists "Some-Testdude")
-    (is (= 7 (db/number-of-usernames)))
-    (is (zero? (db/number-of-meetings (Instant/now))))))
-
-(deftest number-of-statements-test
-  (testing "Return the correct number of statements."
-    (is (= 38 (db/number-of-statements)))
-    (is (zero? (db/number-of-statements (Instant/now))))))
-
-;; todo temporarily disable during refactor
-#_(deftest average-number-of-agendas-test
-  (testing "Test whether the average number of agendas fits."
-    (is (= 6/5 (db/average-number-of-agendas)))
-    (any-discussion)
-    (is (= 1 (db/average-number-of-agendas)))))
-
-(deftest number-of-active-users-test
-  (testing "Test whether the active users are returned correctly."
-    (let [cat-or-dog-id (:db/id (first (discussion-db/all-discussions-by-title "Cat or Dog?")))]
-      (is (= 4 (db/number-of-active-discussion-users)))
-      (let [_ (db/add-user-if-not-exists "wooooggler")
-            woggler-id (db/user-by-nickname "wooooggler")]
-        (is (= 4 (db/number-of-active-discussion-users)))
-        (@#'db/transact
-          [(discussion-db/prepare-new-argument cat-or-dog-id woggler-id "Alles doof"
-                                               ["weil alles doof war"])]))
-      (is (= 5 (db/number-of-active-discussion-users))))))
-
-(deftest statement-length-stats-test
-  (testing "Testing the function that returns lengths of statements statistics"
-    (let [stats (db/statement-length-stats)]
-      (is (< (:min stats) (:max stats)))
-      (is (< (:min stats) (:median stats)))
-      (is (> (:max stats) (:median stats)))
-      (is (> (:max stats) (:average stats)))
-      (is float? (:average stats)))))
-
-(deftest argument-type-stats-test
-  (testing "Statistics about argument types should be working."
-    (let [stats (db/argument-type-stats)]
-      (is (= 7 (:attacks stats)))
-      (is (= 15 (:supports stats)))
-      (is (= 9 (:undercuts stats))))))
 
 (deftest all-arguments-for-conclusion-test
   (testing "Get arguments, that have a certain conclusion"

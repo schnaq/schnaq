@@ -226,14 +226,13 @@
 
         ;; analytics
         :analytics/heading "Analytics"
-        :analytics/overall-meetings "schnaqs created"
+        :analytics/overall-discussions "schnaqs created"
         :analytics/user-numbers "Usernames created"
-        :analytics/average-agendas-title "Average number of agendas / schnaq"
+        :analytics/average-statements-title "Average number of statements / schnaq"
         :analytics/statements-num-title "# of statements"
         :analytics/active-users-num-title "Active users"
         :analytics/statement-lengths-title "Length of statements"
         :analytics/argument-types-title "Argument types"
-        :analytics/last-meeting-created-title "Last meeting created at"
         :analytics/fetch-data-button "Retrieving data…"
 
         ;; Supporters
@@ -630,14 +629,13 @@
 
         ;; analytics
         :analytics/heading "Analytics"
-        :analytics/overall-meetings "Schnaqs erstellt"
+        :analytics/overall-discussions "Schnaqs erstellt"
         :analytics/user-numbers "Usernamen angelegt"
-        :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Schnaq"
+        :analytics/average-statements-title "Durchschnittliche Zahl an Beiträgen pro Schnaq"
         :analytics/statements-num-title "Anzahl Statements"
         :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
         :analytics/statement-lengths-title "Beitragslängen"
         :analytics/argument-types-title "Argumenttypen"
-        :analytics/last-meeting-created-title "Letztes Meeting erstellt am"
         :analytics/fetch-data-button "Hole Daten"
 
         ;; Supporters
