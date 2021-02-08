@@ -45,9 +45,7 @@
     {:name :routes/admin-center
      :view admin-center/center-overview-route
      :link-text (labels :router/admin-center)
-     :controllers [{:start (fn []
-                             ;; TODO: this should be prevented!!
-                             (rf/dispatch [:schnaqs.public/load]))}]}]
+     :controllers [{:start (fn [] (rf/dispatch [:schnaqs.public/load]))}]}]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
