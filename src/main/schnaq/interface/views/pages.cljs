@@ -39,14 +39,13 @@
   "Takes the conditions and returns either the page or redirects to other views."
   [{:condition/keys [needs-authentication? needs-administrator?]} page]
   [::page-options (s/+ vector?) :ret vector?]
-  (if (or needs-administrator? needs-authentication?)
-    (if @(rf/subscribe [:user/is-authenticated?])
-      (if needs-administrator?
-        (if @(rf/subscribe [:user/has-administrator-role?])
-          page (rf/dispatch [:navigation/navigate :routes/forbidden-page]))
-        page)
-      [please-login])
-    page))
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        admin? @(rf/subscribe [:user/administrator?])]
+    (cond
+      (and (or needs-authentication? needs-administrator?)
+           (not authenticated?)) [please-login]
+      (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
+      :else page)))
 
 
 ;; -----------------------------------------------------------------------------
