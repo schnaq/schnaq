@@ -1,19 +1,20 @@
 (ns schnaq.interface.views.feedback.admin
-  (:require [clojure.string :as string]
+  (:require [ajax.core :as ajax]
+            [clojure.string :as string]
             [goog.string :as gstring]
             [re-frame.core :as rf]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.pages :as pages]
-            [ajax.core :as ajax]))
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- list-feedbacks
   "Shows a list of all feedback."
   []
-  [:div#feedback-list
-   (let [feedbacks @(rf/subscribe [:feedbacks])]
+  [:div.container.py-4
+   (if-let [feedbacks @(rf/subscribe [:feedbacks])]
      [:<>
-      [:h4 (gstring/format "Es gibt %s Rückmeldungen 🥳 !" (count feedbacks))]
+      [:h4 (gstring/format "Es gibt %s Rückmeldungen 🥳!" (count feedbacks))]
       [:table.table.table-striped
        [:thead
         [:tr
@@ -32,18 +33,21 @@
             (when (:feedback/has-image? feedback)
               (let [img-src (gstring/format "/media/feedbacks/screenshots/%s.png" (:db/id feedback))]
                 [:a {:href img-src}
-                 [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]])])
+                 [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]]
+     [:div.text-center
+      [:h4.pb-3 (labels :feedbacks.missing/heading)]
+      [:button.btn.btn-outline-primary
+       {:on-click #(rf/dispatch [:feedbacks/fetch])}
+       (labels :feedbacks.missing/button-text)]])])
 
 (defn- overview
   "Shows the page for an overview of all feedbacks."
   []
-  (let [feedbacks @(rf/subscribe [:feedbacks])]
-    (if (nil? feedbacks)
-      (let [password (js/prompt "Enter password to see all Feedbacks")]
-        (rf/dispatch [:feedbacks/fetch password]))
-      [pages/with-nav-and-header {:page/heading (labels :feedbacks.overview/header)
-                                  :page/subheading (labels :feedbacks.overview/subheader)}
-       [:div.container.py-4 [list-feedbacks]]])))
+  [pages/with-nav-and-header
+   {:condition/needs-administrator? true
+    :page/heading (labels :feedbacks.overview/header)
+    :page/subheading (labels :feedbacks.overview/subheader)}
+   [list-feedbacks]])
 
 (defn feedbacks-view []
   [overview])
@@ -57,11 +61,12 @@
 
 (rf/reg-event-fx
   :feedbacks/fetch
-  (fn [_ [_ password]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (gstring/format "%s/feedbacks" (:rest-backend config))
-                        :params {:password password}
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:feedbacks/store]
-                        :on-failure [:ajax.error/as-notification]}]]}))
+  (fn [{:keys [db]} _]
+    (when (get-in db [:user :authenticated?])
+      {:fx [[:http-xhrio {:method :get
+                          :uri (gstring/format "%s/admin/feedbacks" (:rest-backend config))
+                          :headers (auth/authentication-header db)
+                          :format (ajax/transit-request-format)
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:feedbacks/store]
+                          :on-failure [:ajax.error/to-console]}]]})))

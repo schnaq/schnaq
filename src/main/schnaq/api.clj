@@ -2,14 +2,14 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [compojure.core :refer [GET POST routes wrap-routes]]
+            [compojure.core :refer [GET POST DELETE routes wrap-routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
-            [ring.util.http-response :refer [ok created bad-request unauthorized]]
+            [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
@@ -195,10 +195,8 @@
 
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok (db/all-feedbacks))
-    (unauthorized)))
+  [_]
+  (ok (db/all-feedbacks)))
 
 (>defn- send-invite-emails
   "Expects a list of recipients and the meeting which shall be send."
@@ -427,7 +425,11 @@
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
     (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
-    (-> (POST "/admin/schnaq/delete" [] delete-schnaq!)
+    (-> (GET "/admin/feedbacks" [] all-feedbacks)
+        (wrap-routes auth/is-admin-middleware)
+        (wrap-routes auth/auth-middleware)
+        (wrap-routes auth/wrap-jwt-authentication))
+    (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
         (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
@@ -442,7 +444,6 @@
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/feedback/add" [] add-feedback)
-    (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/header-image/image" [] media/set-preview-image)
     (POST "/schnaq/add" [] add-schnaq)
