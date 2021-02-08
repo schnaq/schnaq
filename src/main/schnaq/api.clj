@@ -332,11 +332,11 @@
     (ok {:usernames-num (analytics-db/number-of-usernames)})
     (validator/deny-access)))
 
-(defn- agendas-per-meeting
+(defn- statements-per-discussion
   "Returns the average numbers of meetings"
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:average-agendas (float (db/average-number-of-agendas))})
+    (ok {:average-statements (float (analytics-db/average-number-of-statements))})
     (validator/deny-access)))
 
 (defn- number-of-statements
@@ -374,7 +374,7 @@
     (let [timestamp-since (toolbelt/now-minus-days (Integer/parseInt (:days-since body-params)))]
       (ok {:stats {:discussions-num (analytics-db/number-of-discussions timestamp-since)
                    :usernames-num (analytics-db/number-of-usernames timestamp-since)
-                   :average-agendas (float (db/average-number-of-agendas timestamp-since))
+                   :average-statements (float (analytics-db/average-number-of-statements timestamp-since))
                    :statements-num (analytics-db/number-of-statements timestamp-since)
                    :active-users-num (db/number-of-active-discussion-users timestamp-since)
                    :statement-length-stats (db/statement-length-stats timestamp-since)
@@ -451,7 +451,7 @@
     ;; Analytics routes
     (POST "/analytics" [] all-stats)
     (POST "/analytics/active-users" [] number-of-active-users)
-    (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
+    (POST "/analytics/statements-per-discussion" [] statements-per-discussion)
     (POST "/analytics/argument-types" [] argument-type-stats)
     (POST "/analytics/discussions" [] number-of-discussions)
     (POST "/analytics/last-meetings" [] last-meeting-date)

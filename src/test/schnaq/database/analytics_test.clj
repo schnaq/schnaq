@@ -40,12 +40,11 @@
     (is (= 38 (db/number-of-statements)))
     (is (zero? (db/number-of-statements (Instant/now))))))
 
-;; todo temporarily disable during refactor
-#_(deftest average-number-of-agendas-test
-    (testing "Test whether the average number of agendas fits."
-      (is (= 6/5 (main-db/average-number-of-agendas)))
-      (any-discussion)
-      (is (= 1 (main-db/average-number-of-agendas)))))
+(deftest average-number-of-statements-test
+  (testing "Test whether the average number of statements fits."
+    (is (= 38/4 (db/average-number-of-statements)))
+    (any-discussion)
+    (is (= 38/5 (db/average-number-of-statements)))))
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."

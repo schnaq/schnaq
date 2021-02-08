@@ -59,9 +59,9 @@
   [pages/with-nav-and-header
    {:page/heading (labels :analytics/heading)}
    [:<>
-    (let [meetings-num @(rf/subscribe [:analytics/number-of-meetings-overall])
+    (let [discussions-num @(rf/subscribe [:analytics/number-of-discussions-overall])
           usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
-          average-agendas @(rf/subscribe [:analytics/number-of-average-agendas])
+          average-statements @(rf/subscribe [:analytics/number-of-average-statements])
           statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
           active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
@@ -73,9 +73,9 @@
       [:div.container.px-5.py-3
        [analytics-controls]
        [:div.card-columns
-        [analytics-card (labels :analytics/overall-meetings) meetings-num]
+        [analytics-card (labels :analytics/overall-discussions) discussions-num]
         [analytics-card (labels :analytics/user-numbers) usernames-num]
-        [analytics-card (labels :analytics/average-agendas-title) average-agendas]
+        [analytics-card (labels :analytics/average-statements-title) average-statements]
         [analytics-card (labels :analytics/statements-num-title) statements-num]
         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
         [analytics-card (labels :analytics/last-meeting-created-title) last-meeting-date]
@@ -92,7 +92,7 @@
   (fn [_ _]
     {:fx [[:dispatch [:analytics/load-discussions-num]]
           [:dispatch [:analytics/load-usernames-num]]
-          [:dispatch [:analytics/load-average-number-of-agendas]]
+          [:dispatch [:analytics/load-average-number-of-statements]]
           [:dispatch [:analytics/load-statements-num]]
           [:dispatch [:analytics/load-active-users]]
           [:dispatch [:analytics/load-statement-length-stats]]
@@ -136,9 +136,9 @@
     (fetch-with-password db "/analytics/usernames" :analytics/usernames-num-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-average-number-of-agendas
+  :analytics/load-average-number-of-statements
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/agendas-per-meeting" :analytics/agendas-per-meeting-loaded)))
+    (fetch-with-password db "/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-statements-num
@@ -181,9 +181,9 @@
     (assoc-in db [:analytics :active-users-num :overall] active-users-num)))
 
 (rf/reg-event-db
-  :analytics/agendas-per-meeting-loaded
-  (fn [db [_ {:keys [average-agendas]}]]
-    (assoc-in db [:analytics :agendas :average-per-meeting] (gstring/format "%.2f" average-agendas))))
+  :analytics/statements-per-discussion-loaded
+  (fn [db [_ {:keys [average-statements]}]]
+    (assoc-in db [:analytics :statements :average-per-discussion] (gstring/format "%.2f" average-statements))))
 
 (rf/reg-event-db
   :analytics/statement-length-stats-loaded
@@ -214,9 +214,9 @@
 ;; #### Subs ####
 
 (rf/reg-sub
-  :analytics/number-of-meetings-overall
+  :analytics/number-of-discussions-overall
   (fn [db _]
-    (get-in db [:analytics :meetings-num :overall])))
+    (get-in db [:analytics :discussions-num :overall])))
 
 (rf/reg-sub
   :analytics/number-of-usernames-overall
@@ -224,9 +224,9 @@
     (get-in db [:analytics :usernames-num :overall])))
 
 (rf/reg-sub
-  :analytics/number-of-average-agendas
+  :analytics/number-of-average-statements
   (fn [db _]
-    (get-in db [:analytics :agendas :average-per-meeting])))
+    (get-in db [:analytics :statements :average-per-discussion])))
 
 (rf/reg-sub
   :analytics/number-of-statements-overall
