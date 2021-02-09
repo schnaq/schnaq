@@ -1,8 +1,11 @@
 (ns schnaq.api.analytics-test
-  (:require [clojure.test :refer [deftest are testing]]
+  (:require [clojure.test :refer [use-fixtures deftest are testing]]
             [ring.mock.request :as mock]
             [schnaq.api.analytics :as sut]
-            [schnaq.test.toolbelt :refer [token-schnaqqifant-user token-n2o-admin mock-authorization-header]]))
+            [schnaq.test.toolbelt :refer [clean-database-fixture init-test-delete-db-fixture token-schnaqqifant-user token-n2o-admin mock-authorization-header]]))
+
+(use-fixtures :each init-test-delete-db-fixture)
+(use-fixtures :once clean-database-fixture)
 
 (defn- response-status [path token]
   (:status (sut/analytics-routes
