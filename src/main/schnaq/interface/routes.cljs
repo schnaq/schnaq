@@ -63,16 +63,14 @@
       :link-text (labels :router/public-discussions)
       :controllers [{:start (fn []
                               (rf/dispatch [:schnaqs.public/load])
-                              (rf/dispatch [:feed/store-current :public])
-                              (rf/dispatch [:schnaqs/get-all-meta-infos]))}]}]
+                              (rf/dispatch [:feed/store-current :public]))}]}]
     ["/my"
      {:name :routes.meetings/my-schnaqs
       :view feed/personal-discussions-view
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn []
                               (rf/dispatch [:schnaqs.visited/load])
-                              (rf/dispatch [:feed/store-current :personal])
-                              (rf/dispatch [:schnaqs/get-all-meta-infos]))}]}]]
+                              (rf/dispatch [:feed/store-current :personal]))}]}]]
    ["schnaq"
     ["/create"
      {:name :routes.schnaq/create
