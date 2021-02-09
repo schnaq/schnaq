@@ -36,7 +36,7 @@
 (goog-define keycloak-client "development")
 (goog-define keycloak-public-client true)
 (def keycloak-profile-page
-  (gstring/format "https://keycloak.disqtec.com/auth/realms/%s/account/#/personal-info" keycloak-client))
+  (gstring/format "https://keycloak.disqtec.com/auth/realms/%s/account/#/personal-info" keycloak-realm))
 
 (def keycloak
   "Keycloak configuration, which is sent to the server via keycloak-js."
