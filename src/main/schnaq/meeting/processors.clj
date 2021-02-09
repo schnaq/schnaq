@@ -3,7 +3,9 @@
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.discussion :as discussion]
-            [schnaq.meeting.database :as db])
+            [schnaq.meeting.database :as db]
+            [schnaq.meta-info :as meta-info]
+            [schnaq.meeting.specs :as specs])
   (:import (clojure.lang PersistentArrayMap)))
 
 (>defn with-votes
@@ -36,3 +38,11 @@
        (assoc % :meta/sub-discussion-info (discussion/sub-discussion-information (:db/id %) all-arguments))
        %)
     data))
+
+(>defn add-meta-info-to-schnaq
+  "Enrich a schnaq with its meta-infos."
+  [schnaq]
+  [::specs/discussion :ret ::specs/discussion]
+  (let [share-hash (:discussion/share-hash schnaq)
+        meta-info (meta-info/discussion-meta-info share-hash)]
+    (assoc schnaq :meta-info meta-info)))

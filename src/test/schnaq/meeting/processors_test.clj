@@ -2,7 +2,8 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.processors :as processors]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt]
+            [schnaq.meta-info :as meta-info]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
@@ -32,3 +33,12 @@
       (is (contains? author-names "Wegi"))
       (is (contains? author-names "Der Schredder"))
       (is (= "foo" (:statement/content processed-structure))))))
+
+(deftest add-meta-info-test
+  (testing "Test if meta info was correctly added to schnaq"
+    (let [share-hash "ameisenbär-hash"
+          discussion (discussion-db/discussion-by-share-hash share-hash)
+          discussion-with-meta-info (processors/add-meta-info-to-schnaq discussion)
+          meta-info (meta-info/discussion-meta-info share-hash)
+          processed-meta-info (get discussion-with-meta-info :meta-info)]
+      (is (= meta-info processed-meta-info)))))

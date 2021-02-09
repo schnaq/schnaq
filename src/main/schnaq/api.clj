@@ -93,13 +93,15 @@
   [req]
   (if-let [hashes (get-in req [:params :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)]
-      (ok {:discussions (discussion-db/valid-discussions-by-hashes hashes-list)}))
+      (ok {:discussions
+           (map processors/add-meta-info-to-schnaq
+                (discussion-db/valid-discussions-by-hashes hashes-list))}))
     (bad-request {:error "Schnaqs could not be loaded."})))
 
 (defn- public-schnaqs
   "Return all public meetings."
   [_req]
-  (ok {:discussions (discussion-db/public-discussions)}))
+  (ok {:discussions (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
 
 (defn- schnaq-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further

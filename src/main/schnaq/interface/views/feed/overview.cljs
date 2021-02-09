@@ -5,7 +5,8 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.discussion.badges :as badges]))
 
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
@@ -31,8 +32,10 @@
                                 {:share-hash share-hash}])
                   (rf/dispatch [:schnaq/select-current schnaq]))}
      [:div [:img.meeting-entry-title-header-image {:src url}]]
-     [:div.meeting-entry-title
-      [:h5 title]]]))
+     [:div.px-4
+      [:div.meeting-entry-title
+       [:h5 title]]
+      [badges/schnaq-info-badges schnaq]]]))
 
 (defn- schnaq-list-view
   "Shows a list of schnaqs."

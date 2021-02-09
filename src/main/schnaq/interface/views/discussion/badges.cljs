@@ -56,11 +56,10 @@
      (when edit-hash
        [delete-clicker statement edit-hash])]))
 
-(defn static-info-badges
+(defn- static-info-badges
   "Badges that display schnaq info."
-  [subscription-handle]
-  (let [meta-info @(rf/subscribe [subscription-handle])
-        statement-count (:all-statements meta-info)
+  [meta-info]
+  (let [statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
@@ -72,11 +71,27 @@
       [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
 
 (defn current-schnaq-info-badges
-  "Badges that display info about the current schnaq."
+  "Badges that display info of the current schnaq."
   []
-  [static-info-badges :current-schnaq/meta-info])
+  (let [meta-info @(rf/subscribe [:current-schnaq/meta-info])]
+    [static-info-badges meta-info]))
+
+(defn schnaq-info-badges
+  "Badges that display info of a schnaq."
+  [schnaq]
+  [static-info-badges (get schnaq :meta-info)])
 
 ;; #### Subs ####
+
+(rf/reg-event-db
+  :schnaqs/store-meta-info-by-hash
+  (fn [db [_ share-hash meta-info]]
+    (assoc-in db [:schnaqs :meta-info share-hash] meta-info)))
+
+(rf/reg-sub
+  :schnaqs/get-meta-info-by-hash
+  (fn [db [_ share-hash]]
+    (get-in db [:schnaqs :meta-info (str share-hash)])))
 
 (rf/reg-sub
   :current-schnaq/meta-info
