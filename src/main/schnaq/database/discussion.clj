@@ -325,7 +325,7 @@
     (sort-by second toolbelt/comp-compare)
     (map first)))
 
-(>defn- all-statements
+(>defn all-statements
   "Returns all statements belonging to a discussion."
   [share-hash]
   [:discussion/share-hash :ret (s/coll-of ::specs/statement)]

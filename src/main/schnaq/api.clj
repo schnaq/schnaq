@@ -20,7 +20,6 @@
             [schnaq.export :as export]
             [schnaq.media :as media]
             [schnaq.meeting.database :as db]
-            [schnaq.meeting.meta-info :as meta-info]
             [schnaq.meeting.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
@@ -94,13 +93,15 @@
   [req]
   (if-let [hashes (get-in req [:params :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)]
-      (ok {:discussions (discussion-db/valid-discussions-by-hashes hashes-list)}))
+      (ok {:discussions
+           (map processors/add-meta-info-to-schnaq
+                (discussion-db/valid-discussions-by-hashes hashes-list))}))
     (bad-request {:error "Schnaqs could not be loaded."})))
 
 (defn- public-schnaqs
   "Return all public meetings."
   [_req]
-  (ok {:discussions (discussion-db/public-discussions)}))
+  (ok {:discussions (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
 
 (defn- schnaq-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
@@ -417,8 +418,6 @@
     (GET "/export/txt" [] export-txt-data)
     (GET "/ping" [] ping)
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
-    (GET "/schnaq/meta-info/by-hash/:hash" [] meta-info/get-discussion-meta-info)
-    (GET "/schnaqs/meta-info/by-hashes" [] meta-info/get-multiple-discussion-meta-infos)
     (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (-> (GET "/admin/feedbacks" [] all-feedbacks)

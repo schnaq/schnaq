@@ -1,8 +1,6 @@
 (ns schnaq.interface.views.discussion.badges
-  (:require [ajax.core :as ajax]
-            [ghostwheel.core :refer [>defn-]]
+  (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]))
@@ -60,9 +58,8 @@
 
 (defn- static-info-badges
   "Badges that display schnaq info."
-  [subscription-handle optional-arg]
-  (let [meta-info @(rf/subscribe [subscription-handle optional-arg])
-        statement-count (:all-statements meta-info)
+  [meta-info]
+  (let [statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
@@ -74,44 +71,17 @@
       [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
 
 (defn current-schnaq-info-badges
-  "Badges that display info about the current schnaq."
+  "Badges that display info of the current schnaq."
   []
-  [static-info-badges :current-schnaq/meta-info])
+  (let [meta-info @(rf/subscribe [:current-schnaq/meta-info])]
+    [static-info-badges meta-info]))
 
 (defn schnaq-info-badges
-  "Badges that display info about the current schnaq."
-  [share-hash]
-  [static-info-badges :schnaqs/get-meta-info-by-hash share-hash])
+  "Badges that display info of a schnaq."
+  [schnaq]
+  [static-info-badges (get-in schnaq [:meta-info])])
 
 ;; #### Subs ####
-
-(rf/reg-event-fx
-  :schnaqs/get-all-meta-infos
-  (fn [{:keys [db]} [_]]
-    (let [all-schnaqs (get-in db [:schnaqs :all])
-          share-hashes (map #(:discussion/share-hash %) all-schnaqs)]
-      {:fx [[:http-xhrio {:method :get
-                          :uri (str (:rest-backend config) "/schnaqs/meta-info/by-hashes")
-                          :params {:share-hashes share-hashes}
-                          :timeout 10000
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:schnaqs/store-multiple-meta-info-by-hash]
-                          :on-failure [:ajax.error/to-console]}]]})))
-
-(rf/reg-event-db
-  :schnaqs/store-multiple-meta-info-by-hash
-  (fn [db [_ meta-infos]]
-    (update-in db [:schnaqs :meta-info] merge meta-infos)))
-
-(rf/reg-event-fx
-  :schnaq/meta-info-by-hash
-  (fn [_ [_ share-hash]]
-    {:fx [[:http-xhrio {:method :get
-                        :uri (str (:rest-backend config) "/schnaq/meta-info/by-hash/" share-hash)
-                        :timeout 10000
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:schnaqs/store-meta-info-by-hash share-hash]
-                        :on-failure [:ajax.error/to-console]}]]}))
 
 (rf/reg-event-db
   :schnaqs/store-meta-info-by-hash

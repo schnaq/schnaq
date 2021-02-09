@@ -35,7 +35,7 @@
      [:div.px-4
       [:div.meeting-entry-title
        [:h5 title]]
-      [badges/schnaq-info-badges share-hash]]]))
+      [badges/schnaq-info-badges schnaq]]]))
 
 (defn- schnaq-list-view
   "Shows a list of schnaqs."
