@@ -147,7 +147,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudhsm:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-iot1clickprojects:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-lexmodelbuilding:1.11.850" level="project" />
-    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.17" level="project" />
+    <orderEntry type="library" name="Deps: thheller/shadow-cljs:2.11.18" level="project" />
     <orderEntry type="library" name="Deps: org.graalvm.sdk/graal-sdk:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-glue:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: rewrite-clj:0.6.1" level="project" />
@@ -463,7 +463,6 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-forecastquery:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-tree:7.1" level="project" />
     <orderEntry type="library" name="Deps: rewrite-cljs:0.4.4" level="project" />
-    <orderEntry type="library" name="Deps: org.ow2.asm/asm-all:4.2" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kms:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: medley:1.3.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-workdocs:1.11.850" level="project" />

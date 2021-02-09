@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.navbar.user-management
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -51,6 +52,29 @@
     [:i.pr-1 {:class (str "far " (fa :star))
               :title (labels :user.profile/star-tooltip)}]))
 
+(defn admin-dropdown
+  "Show Admin pages when user is authenticated and has admin role."
+  [button-class]
+  (let [admin? @(rf/subscribe [:user/administrator?])
+        ul-id "admin-dropdown"]
+    (when admin?
+      [:ul.navbar-nav.dropdown
+       [:a#admin-dropdown.nav-link
+        {:href "#" :role "button" :data-toggle "dropdown" :id ul-id
+         :aria-haspopup "true" :aria-expanded "false"}
+        [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
+         (labels :nav/admin)]]
+       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby (str ul-id)}
+        [:li.nav-item
+         [:a.nav-link {:role "button" :href (reitfe/href :routes/admin-center)}
+          (labels :router/admin-center)]]
+        [:li.nav-item
+         [:a.nav-link {:role "button" :href (reitfe/href :routes/feedbacks)}
+          (labels :router/all-feedbacks)]]
+        [:li.nav-item
+         [:a.nav-link {:role "button" :href (reitfe/href :routes/analytics)}
+          (labels :router/analytics)]]]])))
+
 (defn user-handling-dropdown
   "Dropdown menu to change user name, to log in, ..."
   [button-class]
@@ -65,10 +89,10 @@
        [admin-star]
        username]]
      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
-      [username-bar-view]
+      (when-not authenticated?
+        [username-bar-view])
       (when (or authenticated? (not toolbelt/production?))
         [:<>
-         [:div.dropdown-divider]
          (when authenticated?
            [:a.dropdown-item {:href config/keycloak-profile-page}
             (labels :user.profile/settings)])

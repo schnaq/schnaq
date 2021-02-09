@@ -1,14 +1,15 @@
 (ns schnaq.interface.analytics.core
   (:require [ajax.core :as ajax]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn- >defn]]
+            [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
+            [oops.core :refer [oget]]
+            [re-frame.core :as rf]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.pages :as pages]
-            [oops.core :refer [oget]]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- analytics-card
   "A single card containing a metric and a title."
@@ -37,27 +38,27 @@
 (defn- analytics-controls
   "The controls for the analytics view."
   []
-  [:div
-   [:form.form-inline
-    {:on-submit (fn [e]
-                  (js-wrap/prevent-default e)
-                  (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
-    [:input#days-input.form-control.form-round-05.py-1.mr-sm-2
-     {:type "number"
-      :name "days-input"
-      :placeholder "Stats for last X days"
-      :autoFocus true
-      :required true
-      :defaultValue 7}]
-    [:input.btn.btn-outline-primary.mt-1.mt-sm-0
-     {:type "submit"
-      :value (labels :analytics/fetch-data-button)}]]])
+  [:form.form-inline
+   {:on-submit (fn [e]
+                 (js-wrap/prevent-default e)
+                 (rf/dispatch [:analytics/load-all-with-time (oget e [:target :elements :days-input :value])]))}
+   [:input#days-input.form-control.form-round-05.py-1.mr-sm-2
+    {:type "number"
+     :name "days-input"
+     :placeholder "Stats for last X days"
+     :autoFocus true
+     :required true
+     :defaultValue 7}]
+   [:input.btn.btn-outline-primary.mt-1.mt-sm-0
+    {:type "submit"
+     :value (labels :analytics/fetch-data-button)}]])
 
 (defn- analytics-dashboard-view
   "The dashboard displaying all analytics."
   []
   [pages/with-nav-and-header
-   {:page/heading (labels :analytics/heading)}
+   {:condition/needs-administrator? true
+    :page/heading (labels :analytics/heading)}
    [:<>
     (let [discussions-num @(rf/subscribe [:analytics/number-of-discussions-overall])
           usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
@@ -93,61 +94,62 @@
           [:dispatch [:analytics/load-statement-length-stats]]
           [:dispatch [:analytics/load-argument-type-stats]]]}))
 
-(>defn fetch-with-password
-  "Fetches something from an endpoint with the password."
+(>defn- fetch-statistics
+  "Fetches something from an endpoint with an authentication header."
   ([db path on-success-event]
    [map? string? keyword? :ret map?]
-   (fetch-with-password db path on-success-event 9999))
+   (fetch-statistics db path on-success-event 9999))
   ([db path on-success-event days-since]
    [map? string? keyword? int? :ret map?]
-   {:fx [[:http-xhrio {:method :post
-                       :uri (str (:rest-backend config) path)
-                       :format (ajax/transit-request-format)
-                       :params {:password (-> db :admin :password)
-                                :days-since days-since}
-                       :response-format (ajax/transit-response-format)
-                       :on-success [on-success-event]
-                       :on-failure [:ajax.error/as-notification]}]]}))
+   (when (get-in db [:user :authenticated?])
+     {:fx [[:http-xhrio {:method :get
+                         :uri (str (:rest-backend config) path)
+                         :format (ajax/transit-request-format)
+                         :params {:days-since days-since}
+                         :headers (auth/authentication-header db)
+                         :response-format (ajax/transit-response-format)
+                         :on-success [on-success-event]
+                         :on-failure [:ajax.error/to-console]}]]})))
 
 (rf/reg-event-fx
   :analytics/load-all-with-time
   (fn [{:keys [db]} [_ days]]
-    (fetch-with-password db "/analytics" :analytics/all-stats-loaded days)))
+    (fetch-statistics db "/analytics" :analytics/all-stats-loaded days)))
 
 (rf/reg-event-fx
   :analytics/load-discussions-num
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/discussions" :analytics/discussions-num-loaded)))
+    (fetch-statistics db "/analytics/discussions" :analytics/discussions-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-usernames-num
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/usernames" :analytics/usernames-num-loaded)))
+    (fetch-statistics db "/analytics/usernames" :analytics/usernames-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-average-number-of-statements
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
+    (fetch-statistics db "/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-statements-num
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/statements" :analytics/statements-num-loaded)))
+    (fetch-statistics db "/analytics/statements" :analytics/statements-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-active-users
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/active-users" :analytics/active-users-num-loaded)))
+    (fetch-statistics db "/analytics/active-users" :analytics/active-users-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-statement-length-stats
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
+    (fetch-statistics db "/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-argument-type-stats
   (fn [{:keys [db]} _]
-    (fetch-with-password db "/analytics/argument-types" :analytics/argument-type-stats-loaded)))
+    (fetch-statistics db "/analytics/argument-types" :analytics/argument-type-stats-loaded)))
 
 (rf/reg-event-db
   :analytics/discussions-num-loaded

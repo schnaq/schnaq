@@ -3,8 +3,8 @@
             [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication]]
             [buddy.core.keys :as keys]
-            [ghostwheel.core :refer [>defn-]]
-            [ring.util.http-response :refer [unauthorized]]
+            [ghostwheel.core :refer [>defn]]
+            [ring.util.http-response :refer [unauthorized forbidden]]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.core :as schnaq-core]))
 
@@ -33,7 +33,7 @@
 
 ;; -----------------------------------------------------------------------------
 
-(>defn- has-admin-role?
+(>defn has-admin-role?
   "Check if user has realm-wide admin access."
   [request]
   [map? :ret boolean?]
@@ -58,4 +58,4 @@
   (fn [request]
     (if (has-admin-role? request)
       (handler request)
-      (unauthorized "You are not an admin."))))
+      (forbidden "You are not an admin."))))
