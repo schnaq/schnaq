@@ -4,7 +4,7 @@
             [schnaq.config :as config]
             [schnaq.discussion :as discussion]
             [schnaq.meeting.database :as db]
-            [schnaq.meeting.meta-info :as meta-info]
+            [schnaq.meta-info :as meta-info]
             [schnaq.meeting.specs :as specs])
   (:import (clojure.lang PersistentArrayMap)))
 

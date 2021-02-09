@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as main-db]
-            [schnaq.meeting.meta-info :as meta-info]
+            [schnaq.meta-info :as meta-info]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -11,10 +11,8 @@
 (deftest meta-infos-test
   (testing "Tests if number of posts are correct and authors increase after adding a new one to the discussion\n"
     (let [share-hash "simple-hash"
-          discussion (discussion-db/discussion-by-share-hash share-hash)
-          starting (:discussion/starting-statements discussion)
-          arguments (discussion-db/all-arguments-for-discussion share-hash)
-          total-count (+ (count starting) (count arguments))
+          all-statements (discussion-db/all-statements share-hash)
+          total-count (count all-statements)
           meta-infos (#'meta-info/discussion-meta-info share-hash)
           ;; add starting argument
           statement "Clojure can melt steelbeams"

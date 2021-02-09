@@ -1,4 +1,4 @@
-(ns schnaq.meeting.meta-info
+(ns schnaq.meta-info
   (:require [schnaq.database.discussion :as discussion-db]))
 
 

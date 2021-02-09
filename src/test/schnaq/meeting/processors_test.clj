@@ -3,7 +3,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.processors :as processors]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
-            [schnaq.meeting.meta-info :as meta-info]))
+            [schnaq.meta-info :as meta-info]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
