@@ -4,7 +4,7 @@
   background-color: $white;
   border-radius: 2rem;
   box-shadow: $light-shadow;
-  height: 15rem;
+  min-height: 15rem;
   overflow: hidden;
 }
 
@@ -29,7 +29,7 @@
 .meeting-entry-title {
   background-color: transparent;
   color: $text-dark;
-  padding: 1rem 1.5rem 1.75rem;
+  padding: 1rem 0 0;
   text-decoration: none;
 }
 

@@ -418,6 +418,7 @@
     (GET "/ping" [] ping)
     (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
     (GET "/schnaq/meta-info/by-hash/:hash" [] meta-info/get-discussion-meta-info)
+    (GET "/schnaqs/meta-info/by-hashes" [] meta-info/get-multiple-discussion-meta-infos)
     (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
     (-> (GET "/admin/feedbacks" [] all-feedbacks)
