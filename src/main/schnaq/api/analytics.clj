@@ -1,9 +1,9 @@
 (ns schnaq.api.analytics
   (:require [compojure.core :refer [GET routes wrap-routes context]]
             [ring.util.http-response :refer [ok]]
+            [schnaq.auth :as auth]
             [schnaq.database.analytics :as analytics-db]
-            [schnaq.toolbelt :as toolbelt]
-            [schnaq.auth :as auth]))
+            [schnaq.toolbelt :as toolbelt]))
 
 (defn- number-of-discussions
   "Returns the number of all meetings."
