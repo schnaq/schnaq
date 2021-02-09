@@ -2,9 +2,11 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.test.alpha :as stest]
             [expound.alpha :as expound]
+            [ghostwheel.core :refer [>defn]]
+            [ring.mock.request :as mock]
             [schnaq.meeting.database :as database]
-            [schnaq.toolbelt :as schnaq-toolbelt]
-            [ring.mock.request :as mock]))
+            [schnaq.toolbelt :as schnaq-toolbelt]))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Fixtures
@@ -76,5 +78,14 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn mock-authorization-header [request token]
+(>defn mock-authorization-header
+  "Add authorization token header to a request."
+  [request token]
+  [map? string? :ret map?]
   (mock/header request "Authorization" (format "Token %s" token)))
+
+(>defn mock-query-params
+  "Add query parameters to a mock request."
+  [request parameter value]
+  [map? vector? string? :ret map?]
+  (assoc-in request [:params parameter] value))
