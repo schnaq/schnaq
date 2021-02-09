@@ -217,20 +217,22 @@
         :feedbacks.survey/loading "The form is being loaded…"
         :feedbacks.survey/tab "Survey"
 
+        :feedbacks.missing/heading "Feedbacks were not yet loaded from our backend."
+        :feedbacks.missing/button-text "Load feedbacks"
+
         ;; login
         :login/as "Hello, "
         :login/set-name "Enter your name"
 
         ;; analytics
         :analytics/heading "Analytics"
-        :analytics/overall-meetings "schnaqs created"
+        :analytics/overall-discussions "schnaqs created"
         :analytics/user-numbers "Usernames created"
-        :analytics/average-agendas-title "Average number of agendas / schnaq"
+        :analytics/average-statements-title "Average number of statements / schnaq"
         :analytics/statements-num-title "# of statements"
         :analytics/active-users-num-title "Active users"
         :analytics/statement-lengths-title "Length of statements"
         :analytics/argument-types-title "Argument types"
-        :analytics/last-meeting-created-title "Last meeting created at"
         :analytics/fetch-data-button "Retrieving data…"
 
         ;; Supporters
@@ -618,20 +620,22 @@
         :feedbacks.survey/loading "Formular wird geladen..."
         :feedbacks.survey/tab "Umfrage"
 
+        :feedbacks.missing/heading "Feedbacks wurden noch nicht geladen 😱"
+        :feedbacks.missing/button-text "Nachladen"
+
         ;; login
         :login/as "Hallo, "
         :login/set-name "Gib deinen Namen ein"
 
         ;; analytics
         :analytics/heading "Analytics"
-        :analytics/overall-meetings "Schnaqs erstellt"
+        :analytics/overall-discussions "Schnaqs erstellt"
         :analytics/user-numbers "Usernamen angelegt"
-        :analytics/average-agendas-title "Durchschnittliche Zahl an Agendas pro Schnaq"
+        :analytics/average-statements-title "Durchschnittliche Zahl an Beiträgen pro Schnaq"
         :analytics/statements-num-title "Anzahl Statements"
         :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
         :analytics/statement-lengths-title "Beitragslängen"
         :analytics/argument-types-title "Argumenttypen"
-        :analytics/last-meeting-created-title "Letztes Meeting erstellt am"
         :analytics/fetch-data-button "Hole Daten"
 
         ;; Supporters

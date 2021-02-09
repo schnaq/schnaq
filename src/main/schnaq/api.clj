@@ -2,17 +2,18 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [compojure.core :refer [GET POST routes wrap-routes]]
+            [compojure.core :refer [GET POST DELETE routes wrap-routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
-            [ring.util.http-response :refer [ok created bad-request unauthorized]]
+            [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.core :as schnaq-core]
+            [schnaq.database.analytics :as analytics-db]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
@@ -196,10 +197,8 @@
 
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    (ok (db/all-feedbacks))
-    (unauthorized)))
+  [_]
+  (ok (db/all-feedbacks)))
 
 (>defn- send-invite-emails
   "Expects a list of recipients and the meeting which shall be send."
@@ -309,61 +308,53 @@
 ;; -----------------------------------------------------------------------------
 ;; Analytics
 
-(defn- number-of-meetings
+(defn- number-of-discussions
   "Returns the number of all meetings."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:meetings-num (db/number-of-meetings)})
-    (validator/deny-access)))
-
-(defn- last-meeting-date
-  "Returns the date of the last meeting created."
-  [{:keys [body-params]}]
-  (if (validator/valid-password? (:password body-params))
-    ;; todo disabled until analytics rework
-    (ok {:last-created 12341234})
+    (ok {:discussions-num (analytics-db/number-of-discussions)})
     (validator/deny-access)))
 
 (defn- number-of-usernames
   "Returns the number of all meetings."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:usernames-num (db/number-of-usernames)})
+    (ok {:usernames-num (analytics-db/number-of-usernames)})
     (validator/deny-access)))
 
-(defn- agendas-per-meeting
+(defn- statements-per-discussion
   "Returns the average numbers of meetings"
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:average-agendas (float (db/average-number-of-agendas))})
+    (ok {:average-statements (float (analytics-db/average-number-of-statements))})
     (validator/deny-access)))
 
 (defn- number-of-statements
   "Returns the number of statements"
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:statements-num (db/number-of-statements)})
+    (ok {:statements-num (analytics-db/number-of-statements)})
     (validator/deny-access)))
 
 (defn- number-of-active-users
   "Returns the number of statements"
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:active-users-num (db/number-of-active-discussion-users)})
+    (ok {:active-users-num (analytics-db/number-of-active-discussion-users)})
     (validator/deny-access)))
 
 (defn- statement-lengths-stats
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:statement-length-stats (db/statement-length-stats)})
+    (ok {:statement-length-stats (analytics-db/statement-length-stats)})
     (validator/deny-access)))
 
 (defn- argument-type-stats
   "Returns statistics about the statement length."
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
-    (ok {:argument-type-stats (db/argument-type-stats)})
+    (ok {:argument-type-stats (analytics-db/argument-type-stats)})
     (validator/deny-access)))
 
 (defn- all-stats
@@ -371,13 +362,13 @@
   [{:keys [body-params]}]
   (if (validator/valid-password? (:password body-params))
     (let [timestamp-since (toolbelt/now-minus-days (Integer/parseInt (:days-since body-params)))]
-      (ok {:stats {:meetings-num (db/number-of-meetings timestamp-since)
-                   :usernames-num (db/number-of-usernames timestamp-since)
-                   :average-agendas (float (db/average-number-of-agendas timestamp-since))
-                   :statements-num (db/number-of-statements timestamp-since)
-                   :active-users-num (db/number-of-active-discussion-users timestamp-since)
-                   :statement-length-stats (db/statement-length-stats timestamp-since)
-                   :argument-type-stats (db/argument-type-stats timestamp-since)}}))
+      (ok {:stats {:discussions-num (analytics-db/number-of-discussions timestamp-since)
+                   :usernames-num (analytics-db/number-of-usernames timestamp-since)
+                   :average-statements (float (analytics-db/average-number-of-statements timestamp-since))
+                   :statements-num (analytics-db/number-of-statements timestamp-since)
+                   :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
+                   :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
+                   :argument-type-stats (analytics-db/argument-type-stats timestamp-since)}}))
     (validator/deny-access)))
 
 (defn- check-credentials
@@ -429,7 +420,11 @@
     (GET "/schnaq/meta-info/by-hash/:hash" [] meta-info/get-discussion-meta-info)
     (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
     (GET "/schnaqs/public" [] public-schnaqs)
-    (-> (POST "/admin/schnaq/delete" [] delete-schnaq!)
+    (-> (GET "/admin/feedbacks" [] all-feedbacks)
+        (wrap-routes auth/is-admin-middleware)
+        (wrap-routes auth/auth-middleware)
+        (wrap-routes auth/wrap-jwt-authentication))
+    (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
         (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
@@ -444,7 +439,6 @@
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/feedback/add" [] add-feedback)
-    (POST "/feedbacks" [] all-feedbacks)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/header-image/image" [] media/set-preview-image)
     (POST "/schnaq/add" [] add-schnaq)
@@ -454,10 +448,9 @@
     ;; Analytics routes
     (POST "/analytics" [] all-stats)
     (POST "/analytics/active-users" [] number-of-active-users)
-    (POST "/analytics/agendas-per-meeting" [] agendas-per-meeting)
+    (POST "/analytics/statements-per-discussion" [] statements-per-discussion)
     (POST "/analytics/argument-types" [] argument-type-stats)
-    (POST "/analytics/meetings" [] number-of-meetings)
-    (POST "/analytics/last-meetings" [] last-meeting-date)
+    (POST "/analytics/discussions" [] number-of-discussions)
     (POST "/analytics/statement-lengths" [] statement-lengths-stats)
     (POST "/analytics/statements" [] number-of-statements)
     (POST "/analytics/usernames" [] number-of-usernames)))

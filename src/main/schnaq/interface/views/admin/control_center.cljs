@@ -18,7 +18,7 @@
 (rf/reg-event-fx
   :admin.schnaq/delete
   (fn [{:keys [db]} [_ share-hash]]
-    {:fx [[:http-xhrio {:method :post
+    {:fx [[:http-xhrio {:method :delete
                         :uri (str (:rest-backend config) "/admin/schnaq/delete")
                         :params {:share-hash share-hash}
                         :headers (auth/authentication-header db)
@@ -83,12 +83,11 @@
     :page/heading (labels :admin.center.start/heading)
     :page/subheading (labels :admin.center.start/subheading)}
    [:div.container
-    [:div
-     [:h2 (labels :admin.center.delete/heading)]
-     [:h4 (labels :admin.center.delete.public/heading)]
-     [public-meeting-deletion-form]
-     [:h4 (labels :admin.center.delete.private/heading)]
-     [private-meeting-deletion-form]]]])
+    [:h2 (labels :admin.center.delete/heading)]
+    [:h4 (labels :admin.center.delete.public/heading)]
+    [public-meeting-deletion-form]
+    [:h4 (labels :admin.center.delete.private/heading)]
+    [private-meeting-deletion-form]]])
 
 (defn center-overview-route
   []
