@@ -1,16 +1,23 @@
 (ns schnaq.api.analytics-test
-  (:require [clojure.test :refer [use-fixtures deftest are testing]]
+  (:require [clojure.test :refer [use-fixtures deftest is are testing]]
             [ring.mock.request :as mock]
             [schnaq.api.analytics :as sut]
-            [schnaq.test.toolbelt :refer [clean-database-fixture init-test-delete-db-fixture token-schnaqqifant-user token-n2o-admin mock-authorization-header]]))
+            [schnaq.test.toolbelt :as toolbelt :refer [token-schnaqqifant-user token-n2o-admin]]))
 
-(use-fixtures :each init-test-delete-db-fixture)
-(use-fixtures :once clean-database-fixture)
+(use-fixtures :each toolbelt/init-test-delete-db-fixture)
+(use-fixtures :once toolbelt/clean-database-fixture)
 
 (defn- response-status [path token]
   (:status (sut/analytics-routes
              (-> (mock/request :get (format "/analytics%s" path))
-                 (mock-authorization-header token)))))
+                 (toolbelt/mock-authorization-header token)))))
+
+(defn- response-status-main-route [token]
+  (:status
+    (sut/analytics-routes
+      (-> (mock/request :get "/analytics")
+          (toolbelt/mock-query-params :days-since "7")
+          (toolbelt/mock-authorization-header token)))))
 
 (deftest permission-test
   (testing "Analytics should only be accessible from logged in super users."
@@ -42,7 +49,11 @@
       "/discussions"
       "/statement-lengths"
       "/statements"
-      "/usernames")))
+      "/usernames"))
+  (testing "Default route requires query parameter."
+    (is (= 200 (response-status-main-route token-n2o-admin)))
+    (is (= 403 (response-status-main-route token-schnaqqifant-user)))
+    (is (= 401 (response-status-main-route nil)))))
 
 
 
