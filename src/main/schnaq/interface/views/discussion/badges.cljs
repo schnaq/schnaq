@@ -79,7 +79,7 @@
 (defn schnaq-info-badges
   "Badges that display info of a schnaq."
   [schnaq]
-  [static-info-badges (get-in schnaq [:meta-info])])
+  [static-info-badges (get schnaq :meta-info)])
 
 ;; #### Subs ####
 

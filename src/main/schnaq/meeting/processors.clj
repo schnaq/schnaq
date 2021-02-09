@@ -40,9 +40,9 @@
     data))
 
 (>defn add-meta-info-to-schnaq
-  "Enrich a schnaq its meta-infos."
+  "Enrich a schnaq with its meta-infos."
   [schnaq]
   [::specs/discussion :ret ::specs/discussion]
   (let [share-hash (:discussion/share-hash schnaq)
         meta-info (meta-info/discussion-meta-info share-hash)]
-    (assoc-in schnaq [:meta-info] meta-info)))
+    (assoc schnaq :meta-info meta-info)))
