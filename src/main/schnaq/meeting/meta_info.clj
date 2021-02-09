@@ -1,7 +1,5 @@
 (ns schnaq.meeting.meta-info
-  (:require [ghostwheel.core :refer [>defn]]
-            [ring.util.http-response :refer [ok]]
-            [schnaq.database.discussion :as discussion-db]))
+  (:require [schnaq.database.discussion :as discussion-db]))
 
 
 (defn discussion-meta-info
