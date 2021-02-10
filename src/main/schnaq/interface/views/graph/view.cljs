@@ -11,6 +11,7 @@
             [schnaq.interface.config :refer [config] :as conf]
             [schnaq.interface.text.display-data :refer [colors fa]]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.spinner.spinner :as spinner]))
 
@@ -150,6 +151,7 @@
         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]]
       [:div.col-9 [:h2 title]]
       [:div.col-2.pull-right
+       [graph-settings/open-settings]
        [admin-buttons/graph-download-as-png (gstring/format "#%s" graph-id)]
        [admin-buttons/txt-export share-hash title]]]]))
 

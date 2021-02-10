@@ -29,6 +29,7 @@
             [schnaq.interface.views.feedback.collect]
             [schnaq.interface.views.feedback.survey]
             [schnaq.interface.views.graph.view]
+            [schnaq.interface.views.graph.settings]
             [schnaq.interface.views.meeting.admin-center]
             [schnaq.interface.views.meeting.meetings]
             [schnaq.interface.views.meeting.overview]
