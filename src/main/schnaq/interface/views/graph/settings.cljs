@@ -2,7 +2,7 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [colors fa labels]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn- gravity-slider
