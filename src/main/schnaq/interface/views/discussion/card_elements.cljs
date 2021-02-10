@@ -272,10 +272,6 @@
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]]]]))
 
 (defn info-content-conclusion
-  "Badges and up/down-votes to be displayed in the right of the topic bubble."
+  "Badges and up/down-votes to be displayed in the topic bubble."
   [statement]
-  [:<>
-   [cards/up-down-vote-breaking statement]
-   ;[badges/extra-discussion-info-badges statement edit-hash]
-   #_[:div.pt-3
-      [user/user-info (-> statement :statement/author :user/nickname) 32]]])
+  [cards/up-down-vote-breaking statement])

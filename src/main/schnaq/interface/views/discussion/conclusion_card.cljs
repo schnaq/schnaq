@@ -81,7 +81,7 @@
         [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]
       [:h6.m-0 (logic/calculate-votes statement :downvotes votes)]]]))
 
-(defn up-down-vote
+(defn- up-down-vote
   "Add inline panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
