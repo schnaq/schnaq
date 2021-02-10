@@ -65,19 +65,39 @@
   (let [votes @(rf/subscribe [:local-votes])]
     [:div.float-right
      [:div.d-flex
-      [:div.vote-box.up-vote
+      [:div.px-2
        {:on-click (fn [e]
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-upvote statement]))}
-       [:h6 [:i {:class (str "m-auto fas fa-lg " (fa :arrow-up))}]]]
-      [:h6.ml-1.pt-1 (logic/calculate-votes statement :upvotes votes)]]
-     [:div.d-flex
-      [:div.vote-box.down-vote.align-bottom
+       [:div.vote-box.up-vote
+        [:i {:class (str "m-auto fas " (fa :arrow-up))}]]]
+      [:h6.m-0 (logic/calculate-votes statement :upvotes votes)]]
+     [:div.d-flex.mt-3
+      [:div.px-2
        {:on-click (fn [e]
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-downvote statement]))}
-       [:h6 [:i {:class (str "m-auto fas fa-lg " (fa :arrow-down))}]]]
-      [:h6.ml-1.pt-1 (logic/calculate-votes statement :downvotes votes)]]]))
+       [:div.vote-box.down-vote.align-bottom
+        [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]
+      [:h6.m-0 (logic/calculate-votes statement :downvotes votes)]]]))
+
+(defn up-down-vote
+  "Add inline panel for up and down votes."
+  [statement]
+  (let [votes @(rf/subscribe [:local-votes])]
+    [:div.d-flex {:on-click (fn [e] (js-wrap/stop-propagation e))}
+     [:div.px-2
+      {:on-click (fn [e]
+                   (js-wrap/stop-propagation e)
+                   (rf/dispatch [:discussion/toggle-upvote statement]))}
+      [:div.vote-box.up-vote [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]]
+     [:h6.m-0 (logic/calculate-votes statement :upvotes votes)]
+     [:div.px-2
+      {:on-click (fn [e]
+                   (js-wrap/stop-propagation e)
+                   (rf/dispatch [:discussion/toggle-downvote statement]))}
+      [:div.vote-box.down-vote [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]
+     [:h6.align-middle.m-0 (logic/calculate-votes statement :downvotes votes)]]))
 
 (defn- statement-card
   [edit-hash {:keys [statement/content] :as statement} attitude]
@@ -88,13 +108,13 @@
       [:div.m-auto
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
-       [:div.d-flex.pt-3
-        [:div.mr-auto [:p content]]
-        [:div.pb-2 [up-down-vote-breaking statement]]]
+       [:div.d-flex.mt-1
+        [:div.ml-auto
+         [user/user-info (-> statement :statement/author :user/nickname) 32]]]
+       [:div.my-3 [:p content]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
-        [:div.float-right.pb-1
-         [user/user-info (-> statement :statement/author :user/nickname) 32]]]]]]))
+        [up-down-vote statement]]]]]))
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."

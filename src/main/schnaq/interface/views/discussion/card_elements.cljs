@@ -181,7 +181,7 @@
   "A small badge displaying who can see the discussion!"
   [{:keys [discussion/states]}]
   (let [public? (contains? (set states) :discussion.state/public)]
-    [:div.text-center.mt-2.privacy-indicator
+    [:div.text-center.privacy-indicator
      (if public?
        [:span.badge.badge-secondary-outline
         [:i {:class (str "m-auto fas fa-lg " (fa :lock-open))}] " "
@@ -192,44 +192,53 @@
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
-  [title input is-topic?]
-  [:<>
-   [toolbelt/desktop-mobile-switch
-    (if is-topic?
-      [:h2.align-self-center title]
-      [:h6 title])
-    [:h2.align-self-center.display-6 title]]
-   [:div.line-divider.my-4]
-   input])
+  [content input is-topic?]
+  (let [title (:content content)]
+    [:<>
+     [toolbelt/desktop-mobile-switch
+      (if is-topic?
+        [:h2.align-self-center title]
+        [:h6 title])
+      [:h2.align-self-center.display-6 title]]
+     [:div.line-divider.my-4]
+     input]))
 
 (defn- topic-bubble-desktop
-  [{:discussion/keys [share-hash] :as discussion} title input info-content is-topic?]
+  [{:discussion/keys [share-hash] :as discussion} content input badges info-content is-topic?]
   [:div.row
    ;; graph
    [:div.col-2
-    [graph-button share-hash]]
+    [:div.d-flex
+     [:div.mb-auto [graph-button share-hash]]
+     [:div.mt-auto badges]]]
    ;; title
    [:div.col-8
-    [title-and-input-element title input is-topic?]]
+    [:div.d-flex.mb-4
+     [discussion-privacy-badge discussion]
+     [:div.ml-auto
+      [user/user-info (-> content :author :user/nickname) 32]]]
+    [title-and-input-element content input is-topic?]]
    ;; up-down votes and statistics
    [:div.col-2.pr-3
     [:div.float-right
-     info-content
-     [discussion-privacy-badge discussion]]]])
+     info-content]]])
 
 (defn- topic-bubble-mobile
-  [{:discussion/keys [share-hash] :as discussion} title input info-content]
+  [{:discussion/keys [share-hash] :as discussion} content input badges info-content]
   [:<>
-   [:div.d-flex
-    ;; graph
-    [:div.mr-auto.mb-5
-     [graph-button share-hash]]
+   [:div.d-flex.mb-4
+    ;; graph and badges
+    [:div.mr-auto
+     [graph-button share-hash]
+     [:div.mt-2 badges]]
     ;; settings
     [:div.p-0
-     info-content
-     [discussion-privacy-badge discussion]]]
+     [discussion-privacy-badge discussion]
+     [:div.d-flex
+      [:div.ml-auto.mr-2 [user/user-info (-> content :author :user/nickname) 32]]
+      info-content]]]
    ;; title
-   [title-and-input-element title input]])
+   [title-and-input-element content input]])
 
 (defn- topic-bubble [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
@@ -245,15 +254,15 @@
 (defn discussion-view-mobile
   "Discussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
-  [current-discussion title input info-content conclusions]
+  [current-discussion content input badges info-content conclusions]
   [:<>
    [topic-view current-discussion conclusions
-    [topic-bubble-mobile current-discussion title input info-content]]])
+    [topic-bubble-mobile current-discussion content input badges info-content]]])
 
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [current-discussion title input info-content conclusions history]
+  [current-discussion statement input badges info-content conclusions history]
   (let [is-topic? (nil? history)]
     [:div.container-fluid
      [:div.row.px-0.mx-0
@@ -261,13 +270,13 @@
        [history-view history]]
       [:div.col-9.py-4.px-0
        [topic-view current-discussion conclusions
-        [topic-bubble-desktop current-discussion title input info-content is-topic?]]]]]))
+        [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]]]]))
 
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the right of the topic bubble."
-  [statement edit-hash]
+  [statement]
   [:<>
    [cards/up-down-vote-breaking statement]
-   [badges/extra-discussion-info-badges statement edit-hash]
-   [:div.pt-3
-    [user/user-info (-> statement :statement/author :user/nickname) 32]]])
+   ;[badges/extra-discussion-info-badges statement edit-hash]
+   #_[:div.pt-3
+      [user/user-info (-> statement :statement/author :user/nickname) 32]]])

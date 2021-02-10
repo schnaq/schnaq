@@ -9,11 +9,10 @@
 (defn user-info
   "User info box containing relevant information for discussions."
   [username avatar-size]
-  [:div.user-info
-   [:div.d-flex.flex-row.align-items-center
-    [:div [common/avatar username avatar-size]]
-    [:div.pl-2.pb-1.user-name
-     [:small username]]]])
+  [:div.d-flex.flex-row.align-items-center
+   [:div.pr-2.pb-1.text-right.user-name
+    [:small username]]
+   [:div [common/avatar username avatar-size]]])
 
 (rf/reg-event-fx
   :user/set-display-name
