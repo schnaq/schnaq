@@ -111,7 +111,7 @@
        [:div.d-flex.mt-1
         [:div.ml-auto
          [user/user-info (-> statement :statement/author :user/nickname) 32]]]
-       [:div.my-3 [:p content]]
+       [:div.my-1 [:p content]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
         [up-down-vote statement]]]]]))
