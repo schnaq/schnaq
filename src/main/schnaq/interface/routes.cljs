@@ -111,7 +111,8 @@
                                (rf/dispatch [:updates.periodic/graph true])
                                (rf/dispatch [:graph/load-data-for-discussion]))
                       :stop (fn []
-                              (rf/dispatch [:updates.periodic/graph false]))}]}]]]
+                              (rf/dispatch [:updates.periodic/graph false])
+                              (rf/dispatch [:notifications/reset]))}]}]]]
    ["pricing"
     {:name :routes/pricing
      :view pricing-view/pricing-view
