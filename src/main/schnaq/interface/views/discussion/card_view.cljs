@@ -3,6 +3,7 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [img-path labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
@@ -53,15 +54,17 @@
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
-  [{:discussion/keys [title] :as current-discussion}]
+  [{:discussion/keys [title author] :as current-discussion}]
   (let [current-starting @(rf/subscribe [:discussion.conclusions/starting])
-        input-form [input/input-form "statement-text"]]
+        input-form [input/input-form "statement-text"]
+        content {:content title :author author}
+        badges [badges/current-schnaq-info-badges]]
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop
-       current-discussion title input-form nil current-starting nil]
+       current-discussion content input-form badges nil current-starting nil]
       [elements/discussion-view-mobile
-       current-discussion title input-form nil current-starting]]]))
+       current-discussion content input-form badges nil current-starting]]]))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
@@ -69,16 +72,20 @@
   (let [current-premises @(rf/subscribe [:discussion.premises/current])
         history @(rf/subscribe [:discussion-history])
         current-conclusion (last history)
-        title (:statement/content current-conclusion)
         info-content [elements/info-content-conclusion
                       current-conclusion (:discussion/edit-hash current-discussion)]
-        input-form [input/input-form "premise-text"]]
+        badges [badges/extra-discussion-info-badges
+                current-conclusion (:discussion/edit-hash current-discussion)]
+        input-form [input/input-form "premise-text"]
+        title (:statement/content current-conclusion)
+        author (:statement/author current-conclusion)
+        content {:content title :author author}]
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop
-       current-discussion title input-form info-content current-premises history]
+       current-discussion content input-form badges info-content current-premises history]
       [elements/discussion-view-mobile
-       current-discussion title input-form info-content current-premises]]]))
+       current-discussion content input-form badges info-content current-premises]]]))
 
 (rf/reg-sub
   :discussion.premises/current
