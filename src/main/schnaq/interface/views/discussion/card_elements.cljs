@@ -208,9 +208,8 @@
   [:div.row
    ;; graph
    [:div.col-2
-    [:div.d-flex
-     [:div.mb-auto [graph-button share-hash]]
-     [:div.mt-auto badges]]]
+    [graph-button share-hash]
+    [:div.mt-3 badges]]
    ;; title
    [:div.col-8
     [:div.d-flex.mb-4
