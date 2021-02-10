@@ -95,10 +95,22 @@
         edges-store (reagent/atom edges)
         width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
-        route-params (get-in @(rf/subscribe [:navigation/current-route]) [:parameters :path])]
+        route-params (get-in @(rf/subscribe [:navigation/current-route]) [:parameters :path])
+        options {:width (str width)
+                 :height (str height)
+                 :physics {:barnesHut {:avoidOverlap
+                                       @(rf/subscribe [:graph.settings/gravity])}}}]
     (reagent/create-class
       {:display-name "Visualization of Discussion Graph"
-       :reagent-render (fn [_graph] [:div {:id graph-id}])
+       :reagent-render
+       (fn [_graph]
+         (let [graph-object @(rf/subscribe [:graph/get-object])
+               gravity @(rf/subscribe [:graph.settings/gravity])]
+           (when graph-object
+             (.setOptions graph-object
+                          (clj->js (assoc-in options [:physics :barnesHut :avoidOverlap]
+                                             gravity))))
+           [:div {:id graph-id}]))
        :component-did-mount
        (fn [this]
          (.add @nodes-vis (clj->js (convert-nodes-for-vis nodes controversy-values)))
@@ -106,10 +118,9 @@
          (let [root-node (rdom/dom-node this)
                data #js {:nodes @nodes-vis
                          :edges @edges-vis}
-               options (clj->js {:width (str width)
-                                 :height (str height)
-                                 :physics {:barnesHut {:avoidOverlap 0.02}}})]
-           (.on (Network. root-node data options) "doubleClick"
+               graph (Network. root-node data (clj->js options))
+               _ (rf/dispatch [:graph/store-object graph])]
+           (.on graph "doubleClick"
                 (fn [properties]
                   (let [node-id (first (get (js->clj properties) "nodes"))]
                     (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
@@ -155,6 +166,9 @@
 (defn graph-view-entrypoint []
   [graph-view])
 
+
+;; -----------------------------------------------------------------------------
+
 (rf/reg-event-fx
   :graph/load-data-for-discussion
   (fn [{:keys [db]} _]
@@ -177,3 +191,24 @@
   :graph/current
   (fn [db _]
     (get-in db [:graph :current])))
+
+(rf/reg-event-db
+  :graph/store-object
+  (fn [db [_ graph-js]]
+    (assoc-in db [:graph :object] graph-js)))
+
+(rf/reg-sub
+  :graph/get-object
+  (fn [db _]
+    (get-in db [:graph :object])))
+
+(rf/reg-event-db
+  :graph.settings/gravity!
+  (fn [db [_ value]]
+    (assoc-in db [:graph :settings :gravity] value)))
+
+(rf/reg-sub
+  :graph.settings/gravity
+  (fn [db _]
+    (let [default-gravity 0.1]
+      (get-in db [:graph :settings :gravity] default-gravity)))) ;
