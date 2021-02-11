@@ -247,7 +247,14 @@
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [share-hash]
-  (with-statement-meta (discussion-db/starting-statements share-hash) share-hash))
+  (let [starting-statements (discussion-db/starting-statements share-hash)
+        statement-ids (map :db/id starting-statements)
+        info-map (discussion-db/child-node-info statement-ids)]
+    (map
+      #(assoc % :meta/sub-discussion-info (get info-map (:db/id %)))
+      (-> starting-statements
+          processors/hide-deleted-statement-content
+          processors/with-votes))))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."

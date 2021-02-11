@@ -37,6 +37,7 @@
         potential-undercuts (undercuts-for-root root-id all-arguments)
         children (concat arguments-with-root potential-undercuts)
         premises-list (map assoc-type-to-premises children)]
+    ;; This works because we do not have premise-groups implemented
     (flatten premises-list)))
 
 (>defn- create-link
@@ -63,9 +64,9 @@
          sub-statements-count 0
          authors #{}]
     (if (seq descendants)
-      (let [next-child (first descendants)]
+      (let [[next-child & rest-children] descendants]
         (recur (:db/id next-child)
-               (concat (rest descendants) (direct-children (:db/id next-child) arguments))
+               (concat rest-children (direct-children (:db/id next-child) arguments))
                (inc sub-statements-count)
                (conj authors (or (:statement/author next-child) (:argument/author next-child)))))
       {:sub-statements sub-statements-count

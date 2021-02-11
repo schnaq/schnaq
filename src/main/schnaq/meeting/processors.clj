@@ -30,7 +30,7 @@
     data))
 
 (>defn with-sub-discussion-information
-  "Enrich every statement map with its vote-counts."
+  "Enrich every statement map with its author and post-count meta-information."
   [data all-arguments]
   [any? sequential? :ret any?]
   (walk/postwalk

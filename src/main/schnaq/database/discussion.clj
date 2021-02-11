@@ -67,6 +67,42 @@
         [?discussion :discussion/starting-statements ?statements]]
       share-hash main-db/statement-pattern)))
 
+(defn transitive-child-rules
+  "Returns a set of rules for finding transitive children entities of a given
+  node up to depth of `depth`.
+  For example, calling this function with a depth of 10 would return a
+  rule set against which you could query descendants anywhere from
+  direct children to 10 levels of \"children-of-children\".
+  This is an example of generating graph-walking rulesets."
+  [depth]
+  (let [sib-sym (fn [i]
+                  (symbol (str "transitive-child-" i)))]
+    (apply concat
+           '[[(transitive-child-1 ?parent ?child)
+              [?args :argument/conclusion ?parent]
+              [?args :argument/premises ?child]]]
+           (for [i (range 2 (inc depth))]
+             [[(list (sib-sym i) '?parent '?child)
+               (list 'transitive-child-1 '?parent '?child)]
+              [(list (sib-sym i) '?parent '?child)
+               (list (sib-sym (dec i)) '?parent '?middlelink)
+               (list (sib-sym (dec i)) '?middlelink '?child)]]))))
+
+(defn child-node-info
+  "Takes a list of statement-ids and returns a map {id meta-info-map} for the statements."
+  [statement-ids]
+  (apply merge
+         (map #(hash-map (first %) {:sub-statements (second %)
+                                    :authors (last %)})
+              (query
+                '[:find ?statement-ids (count ?chi) (distinct ?nickname)
+                  :in $ % [?statement-ids ...]
+                  :where
+                  (transitive-child-7 ?statement-ids ?chi)
+                  [?chi :statement/author ?authors]
+                  [?authors :user/nickname ?nickname]]
+                (transitive-child-rules 7) statement-ids))))
+
 (defn discussion-by-share-hash-template
   "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)
   Apply the pull-patern you like."
