@@ -387,15 +387,15 @@
       (query
         '[:find ?discussion
           :in $ ?statement ?hash
-          :where (or [?argument :argument/premises ?statement]
-                     [?argument :argument/conclusion ?statement])
+          :where [?discussion :discussion/share-hash ?hash]
           [?argument :argument/discussions ?discussion]
-          [?discussion :discussion/share-hash ?hash]]
+          (or [?argument :argument/premises ?statement]
+              [?argument :argument/conclusion ?statement])]
         statement-id share-hash))
     (ffirst
       (query
         '[:find ?discussion
           :in $ ?statement ?hash
-          :where [?discussion :discussion/starting-statements ?statement]
-          [?discussion :discussion/share-hash ?hash]]
+          :where [?discussion :discussion/share-hash ?hash]
+          [?discussion :discussion/starting-statements ?statement]]
         statement-id share-hash))))
