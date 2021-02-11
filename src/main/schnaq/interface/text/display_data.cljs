@@ -276,7 +276,10 @@
         ;; Graph Texts
         :graph/heading "Discussion Overview"
         :graph.button/text "Mindmap"
-        :graph/download-png "Download mindmap as image"
+        :graph.download/as-png "Download mindmap as image"
+        :graph.settings/title "Settings for your MindMap"
+        :graph.settings/description "Here are some settings for your mindmap! Play around with the sliders and let the magic happen."
+        :graph.settings.gravity/label "Adjust the gravity between your nodes."
 
         ;; Pricing Page
         :pricing.free-tier/description "For small teams and private parties. The starter plan is the perfect entry
@@ -680,7 +683,10 @@
         ;; Graph Texts
         :graph/heading "Diskussionsübersicht"
         :graph.button/text "Mindmap"
-        :graph/download-png "Mindmap als Bild herunterladen"
+        :graph.download/as-png "Mindmap als Bild herunterladen"
+        :graph.settings/title "Einstellungen für die Mindmap"
+        :graph.settings/description "Finde hier Einstellungen für deine Mindmap! Spiele mit den Slidern herum und schau was passiert."
+        :graph.settings.gravity/label "Stelle hier die Gravitation zwischen den Knoten ein."
 
         ;; Pricing Page
         :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der
