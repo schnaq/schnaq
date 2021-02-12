@@ -94,11 +94,15 @@
          (map #(hash-map (first %) {:sub-statements (second %)
                                     :authors (last %)})
               (query
-                '[:find ?statement-ids (count ?chi) (distinct ?nickname)
+                '[:find ?statement-ids (count ?children) (distinct ?nickname)
                   :in $ % [?statement-ids ...]
                   :where
-                  (transitive-child-7 ?statement-ids ?chi)
-                  [?chi :statement/author ?authors]
+                  ;; We pick a transitive depth of 7 as a sweetspot. The deeper the rule
+                  ;; goes, the more complicated and slower the query gets. 10 is too slow
+                  ;; for our purposes, but 5 is maybe not deep enough for the typical discussion
+                  ;; 7 offers a good speed while being deep enough for most discussions.
+                  (transitive-child-7 ?statement-ids ?children)
+                  [?children :statement/author ?authors]
                   [?authors :user/nickname ?nickname]]
                 (transitive-child-rules 7) statement-ids))))
 
