@@ -13,6 +13,7 @@
             [schnaq.api.analytics :as analytics]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
+            [schnaq.config.keycloak :as keycloak-config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.discussion :as discussion]
@@ -420,11 +421,11 @@
 (defn- say-hello
   "Print some debug information to the console when the system is loaded."
   []
-  (log/info "Welcome to Schnaq's Backend 🧙")
+  (log/info "Welcome to schnaq's Backend 🧙")
   (log/info (format "Build Hash: %s" config/build-hash))
   (log/info (format "Environment: %s" config/env-mode))
-  (log/info (format "Port: %s" (:port config/api)))
-  (log/info (format "Database Name: %s" config/db-name)))
+  (log/info (format "Database Name: %s" config/db-name))
+  (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def allowed-origin
   "Regular expression, which defines the allowed origins for API requests."
