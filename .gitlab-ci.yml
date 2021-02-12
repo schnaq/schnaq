@@ -132,6 +132,7 @@ build-frontend-staging-image:
     - docker push $CI_REGISTRY_IMAGE/frontend:staging
   only:
     - develop
+    - add/logs
 
 build-backend-staging-image:
   image: docker
@@ -149,3 +150,4 @@ build-backend-staging-image:
     - docker push $CI_REGISTRY_IMAGE/backend:staging
   only:
     - develop
+    - add/logs
