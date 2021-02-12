@@ -1,5 +1,7 @@
 FROM clojure:openjdk-16-tools-deps-alpine
 
+RUN apk add --no-cache tzdata
+
 WORKDIR /code
 
 # Cache and install Clojure dependencies
