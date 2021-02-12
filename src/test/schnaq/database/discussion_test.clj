@@ -178,3 +178,11 @@
           second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-for-discussion second-id "Wegi-ist-der-schönste")))))
+
+(deftest all-premises-for-conclusion
+  (testing "Get arguments (with meta-information), that have a certain conclusion"
+    (let [share-hash "simple-hash"
+          starting-conclusion (first (db/starting-statements share-hash))
+          meta-premise (first (db/all-premises-for-conclusion (:db/id starting-conclusion)))]
+      (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
+      (is (= :argument.type/support (:meta/argument-type meta-premise))))))

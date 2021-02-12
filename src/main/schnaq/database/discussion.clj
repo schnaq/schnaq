@@ -67,6 +67,45 @@
         [?discussion :discussion/starting-statements ?statements]]
       share-hash main-db/statement-pattern)))
 
+(defn transitive-child-rules
+  "Returns a set of rules for finding transitive children entities of a given
+  node up to depth of `depth`.
+  For example, calling this function with a depth of 10 would return a
+  rule set against which you could query descendants anywhere from
+  direct children to 10 levels of \"children-of-children\" by using the `transitive-child-10` rule."
+  [depth]
+  (let [sib-sym (fn [i]
+                  (symbol (str "transitive-child-" i)))]
+    (apply concat
+           '[[(transitive-child-1 ?parent ?child)
+              [?args :argument/conclusion ?parent]
+              [?args :argument/premises ?child]]]
+           (for [i (range 2 (inc depth))]
+             [[(list (sib-sym i) '?parent '?child)
+               (list 'transitive-child-1 '?parent '?child)]
+              [(list (sib-sym i) '?parent '?child)
+               (list (sib-sym (dec i)) '?parent '?middlelink)
+               (list (sib-sym (dec i)) '?middlelink '?child)]]))))
+
+(defn child-node-info
+  "Takes a list of statement-ids and returns a map {id meta-info-map} for the statements."
+  [statement-ids]
+  (apply merge
+         (map #(hash-map (first %) {:sub-statements (second %)
+                                    :authors (last %)})
+              (query
+                '[:find ?statement-ids (count ?children) (distinct ?nickname)
+                  :in $ % [?statement-ids ...]
+                  :where
+                  ;; We pick a transitive depth of 7 as a sweetspot. The deeper the rule
+                  ;; goes, the more complicated and slower the query gets. 10 is too slow
+                  ;; for our purposes, but 5 is maybe not deep enough for the typical discussion
+                  ;; 7 offers a good speed while being deep enough for most discussions.
+                  (transitive-child-7 ?statement-ids ?children)
+                  [?children :statement/author ?authors]
+                  [?authors :user/nickname ?nickname]]
+                (transitive-child-rules 7) statement-ids))))
+
 (defn discussion-by-share-hash-template
   "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)
   Apply the pull-patern you like."
@@ -172,6 +211,20 @@
         argument-pattern conclusion-id)
       (toolbelt/pull-key-up :db/ident)
       flatten))
+
+(defn all-premises-for-conclusion
+  "Get all premises for a given conclusion."
+  [conclusion-id]
+  (map
+    #(assoc (first %) :meta/argument-type (second %))
+    (-> (query
+          '[:find (pull ?statements statement-pattern) (pull ?type [:db/ident])
+            :in $ statement-pattern ?conclusion
+            :where [?arguments :argument/conclusion ?conclusion]
+            [?arguments :argument/premises ?statements]
+            [?arguments :argument/type ?type]]
+          main-db/statement-pattern conclusion-id)
+        (toolbelt/pull-key-up :db/ident))))
 
 (defn statements-undercutting-premise
   "Return all statements that are used to undercut an argument where `statement-id`
@@ -387,15 +440,15 @@
       (query
         '[:find ?discussion
           :in $ ?statement ?hash
-          :where (or [?argument :argument/premises ?statement]
-                     [?argument :argument/conclusion ?statement])
+          :where [?discussion :discussion/share-hash ?hash]
           [?argument :argument/discussions ?discussion]
-          [?discussion :discussion/share-hash ?hash]]
+          (or [?argument :argument/premises ?statement]
+              [?argument :argument/conclusion ?statement])]
         statement-id share-hash))
     (ffirst
       (query
         '[:find ?discussion
           :in $ ?statement ?hash
-          :where [?discussion :discussion/starting-statements ?statement]
-          [?discussion :discussion/share-hash ?hash]]
+          :where [?discussion :discussion/share-hash ?hash]
+          [?discussion :discussion/starting-statements ?statement]]
         statement-id share-hash))))

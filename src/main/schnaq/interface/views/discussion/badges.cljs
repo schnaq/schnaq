@@ -11,7 +11,7 @@
   [sequential? :ret string?]
   (str
     "<ul class=\"authors-list\">"
-    (apply str (map #(str "<li>" (:user/nickname %) "</li>") users))
+    (apply str (map #(str "<li>" % "</li>") users))
     "</ul>"))
 
 (defn- delete-clicker
@@ -32,7 +32,7 @@
   (let [popover-id (str "debater-popover-" (:db/id statement))
         old-statements-nums-map @(rf/subscribe [:visited/load-statement-nums])
         old-statement-num (get old-statements-nums-map (str (:db/id statement)) 0)
-        statement-num (-> statement :meta/sub-discussion-info :sub-statements)
+        statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
         new? (not (= old-statement-num statement-num))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
     [:p.mb-0
@@ -40,7 +40,7 @@
       (if new?
         [:i.secondary-color pill-class]
         [:i pill-class])
-      " " (-> statement :meta/sub-discussion-info :sub-statements)]
+      " " statement-num]
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       {:id popover-id
        :data-toggle "popover"

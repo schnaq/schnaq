@@ -67,7 +67,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudformation:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: metosin/ring-swagger-ui:3.36.0" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-databind:2.12.1" level="project" />
-    <orderEntry type="library" name="Deps: expound:0.8.7" level="project" />
+    <orderEntry type="library" name="Deps: expound:0.8.9" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/spec.alpha:0.2.194" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-mediapackage:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-discovery:1.11.850" level="project" />
@@ -120,6 +120,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-waf:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react-dom:17.0.1-0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-organizations:1.11.850" level="project" />
+    <orderEntry type="library" name="Deps: com.taoensso/tufte:2.2.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-appsync:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.macro:0.1.5" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-cloudhsmv2:1.11.850" level="project" />
@@ -463,6 +464,7 @@
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-forecastquery:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm-tree:7.1" level="project" />
     <orderEntry type="library" name="Deps: rewrite-cljs:0.4.4" level="project" />
+    <orderEntry type="library" name="Deps: org.ow2.asm/asm-all:4.2" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-kms:1.11.850" level="project" />
     <orderEntry type="library" name="Deps: medley:1.3.0" level="project" />
     <orderEntry type="library" name="Deps: com.amazonaws/aws-java-sdk-workdocs:1.11.850" level="project" />

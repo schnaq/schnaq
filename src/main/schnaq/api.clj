@@ -236,18 +236,30 @@
 ;; -----------------------------------------------------------------------------
 ;; Discussion
 
-(defn- with-statement-meta
-  "Returns a data structure, where all statements have been enhanced with meta-information."
-  [data share-hash]
+(defn- valid-statements-with-votes
+  "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
+  [data]
   (-> data
       processors/hide-deleted-statement-content
-      processors/with-votes
-      (processors/with-sub-discussion-information (discussion-db/all-arguments-for-discussion share-hash))))
+      processors/with-votes))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [share-hash]
-  (with-statement-meta (discussion-db/starting-statements share-hash) share-hash))
+  (let [starting-statements (discussion-db/starting-statements share-hash)
+        statement-ids (map :db/id starting-statements)
+        info-map (discussion-db/child-node-info statement-ids)]
+    (map
+      #(assoc % :meta/sub-discussion-info (get info-map (:db/id %)))
+      (-> starting-statements
+          processors/hide-deleted-statement-content
+          processors/with-votes))))
+
+(defn- with-sub-discussion-info
+  [statements]
+  (let [statement-ids (map :db/id statements)
+        info-map (discussion-db/child-node-info statement-ids)]
+    (map #(assoc % :meta/sub-discussion-info (get info-map (:db/id %))) statements)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -262,10 +274,9 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash selected-statement]} body-params]
     (if (validator/valid-discussion? share-hash)
-      (ok (with-statement-meta
-            {:premises (discussion/premises-for-conclusion-id (:db/id selected-statement))
-             :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
-            share-hash))
+      (ok (valid-statements-with-votes
+            {:premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion (:db/id selected-statement)))
+             :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement)))}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- get-statement-info
@@ -273,11 +284,10 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement-id]} body-params]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
-      (ok (with-statement-meta
-            {:conclusion (discussion-db/get-statement statement-id)
-             :premises (discussion/premises-for-conclusion-id statement-id)
-             :undercuts (discussion/premises-undercutting-argument-with-premise-id statement-id)}
-            share-hash))
+      (ok (valid-statements-with-votes
+            {:conclusion (first (with-sub-discussion-info [(discussion-db/get-statement statement-id)]))
+             :premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion statement-id))
+             :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id statement-id))}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
@@ -298,12 +308,11 @@
         user-id (db/user-by-nickname nickname)]
     (if (validator/valid-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
-          (ok (with-statement-meta
+          (ok (valid-statements-with-votes
                 {:new-argument
                  (if (= :attack reaction)
                    (discussion-db/attack-statement! share-hash user-id conclusion-id premise)
-                   (discussion-db/support-statement! share-hash user-id conclusion-id premise))}
-                share-hash)))
+                   (discussion-db/support-statement! share-hash user-id conclusion-id premise))})))
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials

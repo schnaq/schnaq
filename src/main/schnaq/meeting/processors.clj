@@ -2,7 +2,6 @@
   (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
-            [schnaq.discussion :as discussion]
             [schnaq.meeting.database :as db]
             [schnaq.meta-info :as meta-info]
             [schnaq.meeting.specs :as specs])
@@ -26,16 +25,6 @@
   (walk/postwalk
     #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content) (:statement/deleted? %))
        (assoc % :statement/content config/deleted-statement-text)
-       %)
-    data))
-
-(>defn with-sub-discussion-information
-  "Enrich every statement map with its vote-counts."
-  [data all-arguments]
-  [any? sequential? :ret any?]
-  (walk/postwalk
-    #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content))
-       (assoc % :meta/sub-discussion-info (discussion/sub-discussion-information (:db/id %) all-arguments))
        %)
     data))
 
