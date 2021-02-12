@@ -246,6 +246,14 @@
          processors/with-votes
          (processors/with-sub-discussion-information (discussion-db/all-arguments-for-discussion share-hash)))))
 
+(defn- valid-statements-with-votes
+  "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
+  [data]
+  (p :-with-small-meta
+     (-> data
+         processors/hide-deleted-statement-content
+         processors/with-votes)))
+
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
   [share-hash]
@@ -257,6 +265,13 @@
       (-> starting-statements
           processors/hide-deleted-statement-content
           processors/with-votes))))
+
+(defn- with-sub-discussion-info
+  [statements]
+  (p :-with-statement-meta-new-info-map
+     (let [statement-ids (map :db/id statements)
+           info-map (discussion-db/child-node-info statement-ids)]
+       (map #(assoc % :meta/sub-discussion-info (get info-map (:db/id %))) statements))))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -271,10 +286,9 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash selected-statement]} body-params]
     (if (validator/valid-discussion? share-hash)
-      (ok (with-statement-meta
-            {:premises (discussion-db/all-premises-for-conclusion (:db/id selected-statement))
-             :undercuts (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement))}
-            share-hash))
+      (ok (valid-statements-with-votes
+            {:premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion (:db/id selected-statement)))
+             :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement)))}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- get-statement-info
@@ -283,11 +297,10 @@
   (let [{:keys [share-hash statement-id]} body-params]
     (p :get-statement-info
        (if (validator/valid-discussion-and-statement? statement-id share-hash)
-         (ok (with-statement-meta
-               {:conclusion (p :-db/get-statement (discussion-db/get-statement statement-id))
-                :premises (p :-discussion/premises-for-conclusion-id (discussion-db/all-premises-for-conclusion statement-id))
-                :undercuts (p :-undercuts-for-premise (discussion/premises-undercutting-argument-with-premise-id statement-id))}
-               share-hash))
+         (ok (valid-statements-with-votes
+               {:conclusion (p :-db/get-statement (first (with-sub-discussion-info [(discussion-db/get-statement statement-id)])))
+                :premises (p :-discussion/premises-for-conclusion-id (with-sub-discussion-info (discussion-db/all-premises-for-conclusion statement-id)))
+                :undercuts (p :-undercuts-for-premise (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id statement-id)))}))
          (validator/deny-access invalid-rights-message)))))
 
 (defn- add-starting-statement!
