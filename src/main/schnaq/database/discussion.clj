@@ -209,6 +209,20 @@
       (toolbelt/pull-key-up :db/ident)
       flatten))
 
+(defn all-premises-for-conclusion
+  "Get all premises for a given conclusion."
+  [conclusion-id]
+  (map
+    #(assoc (first %) :meta/argument-type (second %))
+    (-> (query
+          '[:find (pull ?statements statement-pattern) (pull ?type [:db/ident])
+            :in $ statement-pattern ?conclusion
+            :where [?arguments :argument/conclusion ?conclusion]
+            [?arguments :argument/premises ?statements]
+            [?arguments :argument/type ?type]]
+          main-db/statement-pattern conclusion-id)
+        (toolbelt/pull-key-up :db/ident))))
+
 (defn statements-undercutting-premise
   "Return all statements that are used to undercut an argument where `statement-id`
   is used as one of the premises in the undercut argument."

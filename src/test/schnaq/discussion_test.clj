@@ -101,14 +101,6 @@
               1234 50.0}
              (discussion/calculate-controversy edges))))))
 
-(deftest premises-for-conclusion-id-test
-  (testing "Get arguments (with meta-information), that have a certain conclusion"
-    (let [share-hash "simple-hash"
-          starting-conclusion (first (db/starting-statements share-hash))
-          meta-premise (first (discussion/premises-for-conclusion-id (:db/id starting-conclusion)))]
-      (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
-      (is (= :argument.type/support (:meta/argument-type meta-premise))))))
-
 (deftest premises-undercutting-argument-with-conclusion-id-test
   (testing "Get annotated premises, that are undercutting an argument with a certain premise"
     (let [share-hash "simple-hash"

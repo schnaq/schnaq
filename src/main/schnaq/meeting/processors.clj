@@ -5,7 +5,8 @@
             [schnaq.discussion :as discussion]
             [schnaq.meeting.database :as db]
             [schnaq.meta-info :as meta-info]
-            [schnaq.meeting.specs :as specs])
+            [schnaq.meeting.specs :as specs]
+            [taoensso.tufte :refer [p]])
   (:import (clojure.lang PersistentArrayMap)))
 
 (>defn with-votes
@@ -33,11 +34,12 @@
   "Enrich every statement map with its author and post-count meta-information."
   [data all-arguments]
   [any? sequential? :ret any?]
-  (walk/postwalk
-    #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content))
-       (assoc % :meta/sub-discussion-info (discussion/sub-discussion-information (:db/id %) all-arguments))
-       %)
-    data))
+  (p :--with-sub-discussion-information
+     (walk/postwalk
+       #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content))
+          (assoc % :meta/sub-discussion-info (discussion/sub-discussion-information (:db/id %) all-arguments))
+          %)
+       data)))
 
 (>defn add-meta-info-to-schnaq
   "Enrich a schnaq with its meta-infos."
