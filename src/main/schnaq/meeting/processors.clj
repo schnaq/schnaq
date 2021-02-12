@@ -2,11 +2,9 @@
   (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
-            [schnaq.discussion :as discussion]
             [schnaq.meeting.database :as db]
             [schnaq.meta-info :as meta-info]
-            [schnaq.meeting.specs :as specs]
-            [taoensso.tufte :refer [p]])
+            [schnaq.meeting.specs :as specs])
   (:import (clojure.lang PersistentArrayMap)))
 
 (>defn with-votes
@@ -29,17 +27,6 @@
        (assoc % :statement/content config/deleted-statement-text)
        %)
     data))
-
-(>defn with-sub-discussion-information
-  "Enrich every statement map with its author and post-count meta-information."
-  [data all-arguments]
-  [any? sequential? :ret any?]
-  (p :--with-sub-discussion-information
-     (walk/postwalk
-       #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content))
-          (assoc % :meta/sub-discussion-info (discussion/sub-discussion-information (:db/id %) all-arguments))
-          %)
-       data)))
 
 (>defn add-meta-info-to-schnaq
   "Enrich a schnaq with its meta-infos."

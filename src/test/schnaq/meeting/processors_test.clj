@@ -19,21 +19,6 @@
       (is (= (count statements-only) (count upvotes-only) (count downvotes-only)))
       (is (zero? (count wrongly-asserted-meta))))))
 
-(deftest with-sub-discussion-information-test
-  (testing "Testing enrichment with sub-discussion-information."
-    (let [share-hash "ameisenbär-hash"
-          arguments (discussion-db/all-arguments-for-discussion share-hash)
-          root-id (:db/id (first (discussion-db/starting-statements share-hash)))
-          processed-structure (processors/with-sub-discussion-information {:statement/content "foo"
-                                                                           :db/id root-id} arguments)
-          infos (:meta/sub-discussion-info processed-structure)
-          author-names (into #{} (map :user/nickname (:authors infos)))]
-      (is (= 3 (:sub-statements infos)))
-      (is (contains? author-names "Der miese Peter"))
-      (is (contains? author-names "Wegi"))
-      (is (contains? author-names "Der Schredder"))
-      (is (= "foo" (:statement/content processed-structure))))))
-
 (deftest add-meta-info-test
   (testing "Test if meta info was correctly added to schnaq"
     (let [share-hash "ameisenbär-hash"

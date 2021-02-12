@@ -24,8 +24,7 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log]
-            [taoensso.tufte :refer [profile p]])
+            [taoensso.timbre :as log])
   (:import (java.util Base64 UUID))
   (:gen-class))
 
@@ -237,22 +236,12 @@
 ;; -----------------------------------------------------------------------------
 ;; Discussion
 
-(defn- with-statement-meta
-  "Returns a data structure, where all statements have been enhanced with meta-information."
-  [data share-hash]
-  (p :-with-statement-meta
-     (-> data
-         processors/hide-deleted-statement-content
-         processors/with-votes
-         (processors/with-sub-discussion-information (discussion-db/all-arguments-for-discussion share-hash)))))
-
 (defn- valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [data]
-  (p :-with-small-meta
-     (-> data
-         processors/hide-deleted-statement-content
-         processors/with-votes)))
+  (-> data
+      processors/hide-deleted-statement-content
+      processors/with-votes))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied."
@@ -268,10 +257,9 @@
 
 (defn- with-sub-discussion-info
   [statements]
-  (p :-with-statement-meta-new-info-map
-     (let [statement-ids (map :db/id statements)
-           info-map (discussion-db/child-node-info statement-ids)]
-       (map #(assoc % :meta/sub-discussion-info (get info-map (:db/id %))) statements))))
+  (let [statement-ids (map :db/id statements)
+        info-map (discussion-db/child-node-info statement-ids)]
+    (map #(assoc % :meta/sub-discussion-info (get info-map (:db/id %))) statements)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -295,13 +283,12 @@
   "Return the sought after conclusion (by id) and the following premises / undercuts."
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement-id]} body-params]
-    (p :get-statement-info
-       (if (validator/valid-discussion-and-statement? statement-id share-hash)
-         (ok (valid-statements-with-votes
-               {:conclusion (p :-db/get-statement (first (with-sub-discussion-info [(discussion-db/get-statement statement-id)])))
-                :premises (p :-discussion/premises-for-conclusion-id (with-sub-discussion-info (discussion-db/all-premises-for-conclusion statement-id)))
-                :undercuts (p :-undercuts-for-premise (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id statement-id)))}))
-         (validator/deny-access invalid-rights-message)))))
+    (if (validator/valid-discussion-and-statement? statement-id share-hash)
+      (ok (valid-statements-with-votes
+            {:conclusion (first (with-sub-discussion-info [(discussion-db/get-statement statement-id)]))
+             :premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion statement-id))
+             :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id statement-id))}))
+      (validator/deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
@@ -321,12 +308,11 @@
         user-id (db/user-by-nickname nickname)]
     (if (validator/valid-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
-          (ok (with-statement-meta
+          (ok (valid-statements-with-votes
                 {:new-argument
                  (if (= :attack reaction)
                    (discussion-db/attack-statement! share-hash user-id conclusion-id premise)
-                   (discussion-db/support-statement! share-hash user-id conclusion-id premise))}
-                share-hash)))
+                   (discussion-db/support-statement! share-hash user-id conclusion-id premise))})))
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials
@@ -468,12 +454,4 @@
   "Start the server from here"
   (-main)
   (stop-server)
-  :end)
-
-(comment
-  (profile
-    {}
-    (dotimes [_ 10]
-      (get-statement-info {:body-params {:share-hash "f7df43eb-8c08-4d98-8793-f51becbf0bcc"
-                                         :statement-id 79164837203530}})))
   :end)
