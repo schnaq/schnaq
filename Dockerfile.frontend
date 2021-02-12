@@ -30,7 +30,8 @@ RUN yarn shadow-cljs release app
 
 # ------------------------------------------------------------------------------
 
-FROM nginx
+FROM nginx:alpine
+RUN apk add --no-cache tzdata
 WORKDIR /usr/share/nginx/html
 COPY --from=shadow-build /code/resources/public .
 COPY nginx/schnaq.conf /etc/nginx/conf.d/default.conf
