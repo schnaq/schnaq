@@ -31,7 +31,7 @@
   "Build public key from server's response."
   (try
     (let [public-key (get-public-key)]
-      (log/info "[Keycloak] Successfully loaded public key: %s" public-key)
+      (log/info "[Keycloak] Successfully loaded public key:" public-key)
       (keys/str->public-key
         (format "-----BEGIN PUBLIC KEY-----\n%s\n-----END PUBLIC KEY-----"
                 public-key)))
