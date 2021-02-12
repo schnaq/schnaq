@@ -58,8 +58,8 @@
 (def analytics-routes
   (->
     (routes
-      (GET "/analytics" [] all-stats)
       (context "/analytics" []
+        (GET "/" [] all-stats)                              ;; matches /analytics and /analytics/
         (GET "/active-users" [] number-of-active-users)
         (GET "/statements-per-discussion" [] statements-per-discussion)
         (GET "/argument-types" [] argument-type-stats)
