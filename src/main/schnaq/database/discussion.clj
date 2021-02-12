@@ -72,8 +72,7 @@
   node up to depth of `depth`.
   For example, calling this function with a depth of 10 would return a
   rule set against which you could query descendants anywhere from
-  direct children to 10 levels of \"children-of-children\".
-  This is an example of generating graph-walking rulesets."
+  direct children to 10 levels of \"children-of-children\" by using the `transitive-child-10` rule."
   [depth]
   (let [sib-sym (fn [i]
                   (symbol (str "transitive-child-" i)))]
