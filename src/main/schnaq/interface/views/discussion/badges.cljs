@@ -140,4 +140,4 @@
   :visited/set-visited-statements
   (fn [db [_ statement]]
     (assoc-in db [:visited :statement-nums (str (:db/id statement))]
-              (str (-> statement :meta/sub-discussion-info :sub-statements)))))
+              (str (get-in statement [:meta/sub-discussion-info :sub-statements] 0)))))
