@@ -69,7 +69,8 @@
   (let [hashes (remove empty? (string/split hash-map-string (re-pattern tuple-separator)))
         hashes-unbox (map (fn [tuple] (second (re-find tuple-data tuple))) hashes)
         hashes-vector (map (fn [tuple] (string/split tuple (re-pattern hash-separator))) hashes-unbox)
-        hashes-map (if (empty? hashes-vector) {} (into {} hashes-vector))]
+        cleaned-vector (remove #(nil? (second %)) hashes-vector)
+        hashes-map (if (empty? cleaned-vector) {} (into {} cleaned-vector))]
     hashes-map))
 
 (defn- add-key-value-to-local-hashmap
