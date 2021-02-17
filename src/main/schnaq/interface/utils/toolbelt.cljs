@@ -1,5 +1,6 @@
 (ns schnaq.interface.utils.toolbelt
   (:require [cljs.spec.alpha :as s]
+            [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
             [goog.dom :as gdom]
             [goog.dom.classes :as gclasses]
@@ -59,3 +60,10 @@
    [:div.d-none.d-md-block desktop-view]
    [:div.d-md-none mobile-view]])
 
+(defn truncate-to-n-words
+  "Truncate string to n words."
+  [text n-words]
+  (let [s (string/split text #" ")]
+    (if (< n-words (count s))
+      (string/join " " (conj (vec (take n-words s)) "..."))
+      text)))
