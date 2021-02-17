@@ -7,8 +7,8 @@
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
         clj-http/clj-http {:mvn/version "3.12.1"}
-        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.953"}
-        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.953"}
+        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.956"}
+        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.956"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/client-pro {:mvn/version "0.9.66"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -33,7 +33,7 @@
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring-middleware-format/ring-middleware-format {:mvn/version "0.7.4"}
         ring/ring-mock {:mvn/version "0.4.0"}
-        ring/ring {:mvn/version "1.9.0"}
+        ring/ring {:mvn/version "1.9.1"}
         ring/ring-defaults {:mvn/version "0.3.2"}
         thheller/shadow-cljs {:mvn/version "2.11.18"}}
 

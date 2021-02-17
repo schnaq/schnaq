@@ -48,7 +48,7 @@
       [um/user-handling-dropdown "btn-outline-light"]
       [:div.d-md-none
        [:hr]
-       [:h6.text-left (labels :common/history)]
+       [:h6.text-left (labels :history/title)]
        [:div.row.px-3
         [elements/history-view-mobile history]]]]]))
 

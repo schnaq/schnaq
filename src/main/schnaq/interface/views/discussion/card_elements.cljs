@@ -72,14 +72,16 @@
 (defn- discussion-start-button
   "Discussion start button for history view"
   [history-length]
-  [:div.clickable.card-history-home.mt-4.text-dark
-   {:on-click #(rf/dispatch [:discussion.history/time-travel history-length])}
-   [tooltip/nested-div
-    "right"
-    (labels :history.home/tooltip)
-    [:div.ml-4
-     [:div [:h5 (labels :history.home/text)]]
-     [:div.mr-auto [badges/current-schnaq-info-badges]]]]])
+  (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
+    [:div.clickable.card-history-home.text-dark
+     {:on-click #(rf/dispatch [:discussion.history/time-travel history-length])}
+     [tooltip/nested-div
+      "right"
+      (labels :history.home/tooltip)
+      [:div.text-center
+       [:h6 title]
+       [:p.text-muted.mb-0 (labels :history.home/text)]
+       [badges/current-schnaq-info-badges]]]]))
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
@@ -91,28 +93,31 @@
      [back-button has-history?]
      ;; discussion start button
      (when has-history?
-       [discussion-start-button (count indexed-history)])
-     ;; history
-     (for [[index statement] (butlast indexed-history)]
-       (let [nickname (-> statement :statement/author :user/nickname)
-             content (-> statement :statement/content)]
-         [:div {:key (str "history-container-" (:db/id statement))}
-          [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
-          [:div.d-inline-block.d-md-block.text-dark
-           {:key (str "history-" (:db/id statement))}
-           (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
-             [:div.card-history.clickable
-              {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
-               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-              [:div.history-card-content
-               [tooltip/nested-div
-                "right"
-                (str (labels :tooltip/history-statement) nickname)
-                [:<>
-                 [:div.d-flex.flex-row
-                  [:h6 (str (labels :history.statement/user) nickname)]
-                  [:div.ml-auto [common/avatar nickname 22]]]
-                 [:span content]]]]])]]))]))
+       [:section.history-wrapper
+        [:h5.p-2.text-center (labels :history/title)]
+        [discussion-start-button (count indexed-history)]
+        ;; history
+        (for [[index statement] indexed-history]
+          (let [show-n-words 20
+                nickname (-> statement :statement/author :user/nickname)
+                content (-> statement :statement/content)]
+            [:article {:key (str "history-container-" (:db/id statement))}
+             [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
+             [:div.d-inline-block.d-md-block.text-dark
+              {:key (str "history-" (:db/id statement))}
+              (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+                [:div.card-history.clickable
+                 {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
+                  :on-click #(rf/dispatch [:discussion.history/time-travel index])}
+                 [:div.history-card-content
+                  [tooltip/nested-div
+                   "right"
+                   (str (labels :tooltip/history-statement) nickname)
+                   [:<>
+                    [:div.d-flex.flex-row
+                     [:h6 (str (labels :history.statement/user) nickname)]
+                     [:div.ml-auto [common/avatar nickname 22]]]
+                    (toolbelt/truncate-to-n-words content show-n-words)]]]])]]))])]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"

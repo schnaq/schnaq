@@ -6,7 +6,6 @@
 (def ^:private translations
   {:en {;; Common
         :common/language "Language"
-        :common/history "History"
         :error/export-failed "Export failed. Please try again later."
 
         ;; navbar labels
@@ -374,6 +373,7 @@
         :tooltip/history-statement "Back to statement made by "
 
         ;; History
+        :history/title "History"
         :history.home/text "Start"
         :history.home/tooltip "Back to the discussion's beginning"
         :history.statement/user "Post from "
@@ -416,7 +416,6 @@
         :admin.center.delete.private/heading "Private schnaqs"}
    :de {;; Common
         :common/language "Sprache"
-        :common/history "Verlauf"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
 
         ;; navbar labels
@@ -783,7 +782,8 @@
         :tooltip/history-statement "Zurück zum Beitrag von "
 
         ;; History
-        :history.home/text "Diskussionsstart"
+        :history/title "Verlauf"
+        :history.home/text "Start"
         :history.home/tooltip "Zurück zum Diskussionsanfang"
         :history.statement/user "Beitrag von "
         :history.all-schnaqs/text "Übersicht"
