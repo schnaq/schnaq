@@ -60,9 +60,10 @@
    [:div.d-none.d-md-block desktop-view]
    [:div.d-md-none mobile-view]])
 
-(defn truncate-to-n-words
+(>defn truncate-to-n-words
   "Truncate string to n words."
   [text n-words]
+  [string? nat-int? :ret string?]
   (let [s (string/split text #" ")]
     (if (< n-words (count s))
       (string/join " " (conj (vec (take n-words s)) "..."))
