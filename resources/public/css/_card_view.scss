@@ -60,21 +60,6 @@
   }
 }
 
-.history-card-content {
-  background: $white;
-  height: 100%;
-  padding: 1rem;
-  white-space: pre-line;
-
-  @include media-breakpoint-down(sm) {
-    padding: 0.35rem 0 0;
-  }
-
-  &:hover {
-    background: $white-shade;
-  }
-}
-
 .card-history-home {
   background: $white;
   border: 0;
@@ -93,13 +78,6 @@
   &:hover {
     background: $white-shade;
   }
-}
-
-.history-thread-line {
-  background-color: $gray-600;
-  height: 2rem;
-  margin: 0 auto;
-  width: 0.2rem;
 }
 
 .line-divider {
