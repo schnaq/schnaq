@@ -50,8 +50,7 @@
 
            :outdated {:extra-deps {antq/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
-                                  "--exclude=com.datomic/dev-local"
-                                  "--exclude=github-hhucn/dialog.core"]}
+                                  "--exclude=com.datomic/dev-local"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
