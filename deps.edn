@@ -61,6 +61,10 @@
            :dev-local
            {:extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}
 
+           :frontend
+           {:main-opts ["-m" "shadow.cljs.devtools.cli"
+                        "watch" ":app"]}
+
            :uberjar
            {:replace-deps {seancorfield/depstar {:mvn/version "2.0.171"}}
             :exec-fn hf.depstar/uberjar
