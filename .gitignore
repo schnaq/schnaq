@@ -6,6 +6,11 @@ pom.xml
 out/
 .m2/
 
+# Calva-related
+.lsp/
+.workspaces/
+.calva/
+
 .datomic/
 datomic/
 datomic-*.zip

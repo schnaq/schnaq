@@ -50,8 +50,7 @@
 
            :outdated {:extra-deps {antq/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
-                                  "--exclude=com.datomic/dev-local"
-                                  "--exclude=github-hhucn/dialog.core"]}
+                                  "--exclude=com.datomic/dev-local"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
@@ -60,6 +59,10 @@
 
            :dev-local
            {:extra-deps {com.datomic/dev-local {:local/root "local_jars/dev-local/dev-local.jar"}}}
+
+           :frontend
+           {:main-opts ["-m" "shadow.cljs.devtools.cli"
+                        "watch" ":app"]}
 
            :uberjar
            {:replace-deps {seancorfield/depstar {:mvn/version "2.0.171"}}
