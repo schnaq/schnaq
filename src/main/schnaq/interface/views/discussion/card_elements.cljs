@@ -93,7 +93,7 @@
      [back-button has-history?]
      ;; discussion start button
      (when has-history?
-       [:div.history-wrapper
+       [:section.history-wrapper
         [:h5.p-2.text-center (labels :history/title)]
         [discussion-start-button (count indexed-history)]
         ;; history
@@ -101,7 +101,7 @@
           (let [show-n-words 20
                 nickname (-> statement :statement/author :user/nickname)
                 content (-> statement :statement/content)]
-            [:div {:key (str "history-container-" (:db/id statement))}
+            [:article {:key (str "history-container-" (:db/id statement))}
              [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
              [:div.d-inline-block.d-md-block.text-dark
               {:key (str "history-" (:db/id statement))}
