@@ -97,6 +97,7 @@
         width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
         route-params (get-in @(rf/subscribe [:navigation/current-route]) [:parameters :path])
+        share-hash (:discussion/share-hash @(rf/subscribe [:schnaq/selected]))
         options {:width (str width)
                  :height (str height)
                  :physics {:barnesHut {:avoidOverlap
@@ -124,8 +125,11 @@
            (.on graph "doubleClick"
                 (fn [properties]
                   (let [node-id (first (get (js->clj properties) "nodes"))]
-                    (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
-                                  (assoc route-params :statement-id node-id)]))))))
+                    (if (= node-id share-hash)              ;; if true, the user clicked on the discussion title
+                      (rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])
+                      (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
+                                    (assoc route-params :statement-id node-id)])))))))
+
        :component-did-update
        (fn [this _argv]
          (let [[_ {:keys [nodes edges controversy-values]}] (reagent/argv this)
