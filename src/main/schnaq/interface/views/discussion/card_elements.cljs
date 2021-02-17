@@ -97,7 +97,7 @@
         [:h5.p-2.text-center (labels :history/title)]
         [discussion-start-button (count indexed-history)]
         ;; history
-        (for [[index statement] (butlast indexed-history)]
+        (for [[index statement] indexed-history]
           (let [show-n-words 20
                 nickname (-> statement :statement/author :user/nickname)
                 content (-> statement :statement/content)]
