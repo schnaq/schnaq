@@ -23,7 +23,8 @@
   (testing "Test if meta info was correctly added to schnaq"
     (let [share-hash "ameisenbär-hash"
           discussion (discussion-db/discussion-by-share-hash share-hash)
+          author (:discussion/author discussion)
           discussion-with-meta-info (processors/add-meta-info-to-schnaq discussion)
-          meta-info (meta-info/discussion-meta-info share-hash)
+          meta-info (meta-info/discussion-meta-info share-hash author)
           processed-meta-info (get discussion-with-meta-info :meta-info)]
       (is (= meta-info processed-meta-info)))))

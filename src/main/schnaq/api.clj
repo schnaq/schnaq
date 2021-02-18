@@ -78,7 +78,7 @@
   [req]
   (let [hash (get-in req [:route-params :hash])]
     (if (validator/valid-discussion? hash)
-      (ok (discussion-db/discussion-by-share-hash hash))
+      (ok (processors/add-meta-info-to-schnaq (discussion-db/discussion-by-share-hash hash)))
       (validator/deny-access))))
 
 (defn- schnaqs-by-hashes

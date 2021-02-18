@@ -11,15 +11,16 @@
 (deftest meta-infos-test
   (testing "Tests if number of posts are correct and authors increase after adding a new one to the discussion\n"
     (let [share-hash "simple-hash"
+          author {:user/nickname "Wegi"}
           all-statements (discussion-db/all-statements share-hash)
           total-count (count all-statements)
-          meta-infos (#'meta-info/discussion-meta-info share-hash)
+          meta-infos (#'meta-info/discussion-meta-info share-hash author)
           ;; add starting argument
           statement "Clojure can melt steelbeams"
           user-id (main-db/add-user "New Person")
           _ (discussion-db/add-starting-statement! share-hash user-id statement)
           ;; new meta infos
-          new-meta-infos (#'meta-info/discussion-meta-info share-hash)]
+          new-meta-infos (#'meta-info/discussion-meta-info share-hash author)]
       (testing "Test if total count is correct"
         (is (= total-count (:all-statements meta-infos))))
       (testing "Test if total count is increased after adding a new statement"

@@ -32,8 +32,10 @@
   (let [popover-id (str "debater-popover-" (:db/id statement))
         old-statements-nums-map @(rf/subscribe [:visited/load-statement-nums])
         old-statement-num (get old-statements-nums-map (str (:db/id statement)) 0)
-        statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
+        statement-num (inc (get-in statement [:meta/sub-discussion-info :sub-statements] 0))
         new? (not (= old-statement-num statement-num))
+        authors (conj (-> statement :meta/sub-discussion-info :authors)
+                      (-> statement :statement/author :user/nickname))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
@@ -50,9 +52,9 @@
                    (js-wrap/popover (str "#" popover-id) "show"))
        :title (labels :discussion.badges/user-overview)
        :data-html true
-       :data-content (build-author-list (get-in statement [:meta/sub-discussion-info :authors]))}
+       :data-content (build-author-list authors)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
-      (-> statement :meta/sub-discussion-info :authors count)]
+      (count authors)]
      (when edit-hash
        [delete-clicker statement edit-hash])]))
 
@@ -73,8 +75,8 @@
 (defn current-schnaq-info-badges
   "Badges that display info of the current schnaq."
   []
-  (let [meta-info @(rf/subscribe [:current-schnaq/meta-info])]
-    [static-info-badges meta-info]))
+  (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
+    [static-info-badges (:meta-info current-schnaq)]))
 
 (defn schnaq-info-badges
   "Badges that display info of a schnaq."
@@ -82,32 +84,6 @@
   [static-info-badges (get schnaq :meta-info)])
 
 ;; #### Subs ####
-
-(rf/reg-event-db
-  :schnaqs/store-meta-info-by-hash
-  (fn [db [_ share-hash meta-info]]
-    (assoc-in db [:schnaqs :meta-info share-hash] meta-info)))
-
-(rf/reg-sub
-  :schnaqs/get-meta-info-by-hash
-  (fn [db [_ share-hash]]
-    (get-in db [:schnaqs :meta-info (str share-hash)])))
-
-(rf/reg-sub
-  :current-schnaq/meta-info
-  (fn [db [_]]
-    (let [starting-conclusions (get-in db [:discussion :conclusions :starting])
-          n-conclusions (count starting-conclusions)
-          fn-get-meta-info (fn [starting] (-> starting :meta/sub-discussion-info))
-          all-meta-infos (map fn-get-meta-info starting-conclusions)
-          fn-add-values (fn [{statements-v1 :all-statements authors-v1 :authors}
-                             {statements-v2 :sub-statements authors-v2 :authors}]
-                          {:all-statements (+ statements-v1 statements-v2)
-                           :authors (conj authors-v1 authors-v2)})
-          schnaq-info (reduce fn-add-values
-                              {:all-statements n-conclusions :authors #{}}
-                              all-meta-infos)]
-      schnaq-info)))
 
 (rf/reg-sub
   :visited/load-statement-nums
