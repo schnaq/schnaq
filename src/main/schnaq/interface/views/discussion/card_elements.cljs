@@ -98,7 +98,7 @@
         [discussion-start-button (count indexed-history)]
         ;; history
         (for [[index statement] indexed-history]
-          (let [show-number-of-words 20
+          (let [max-word-count 20
                 nickname (-> statement :statement/author :user/nickname)
                 content (-> statement :statement/content)
                 tooltip (if (zero? index) (str (labels :tooltip/history-statement-current))
@@ -119,7 +119,7 @@
                     [:div.d-flex.flex-row
                      [:h6 (str (labels :history.statement/user) nickname)]
                      [:div.ml-auto [common/avatar nickname 22]]]
-                    (toolbelt/truncate-to-n-words content show-number-of-words)]]]])]]))])]))
+                    (toolbelt/truncate-to-n-words content max-word-count)]]]])]]))])]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
