@@ -98,9 +98,11 @@
         [discussion-start-button (count indexed-history)]
         ;; history
         (for [[index statement] indexed-history]
-          (let [show-n-words 20
+          (let [show-number-of-words 20
                 nickname (-> statement :statement/author :user/nickname)
-                content (-> statement :statement/content)]
+                content (-> statement :statement/content)
+                tooltip (if (zero? index) (str (labels :tooltip/history-statement-current))
+                                          (str (labels :tooltip/history-statement) nickname))]
             [:article {:key (str "history-container-" (:db/id statement))}
              [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
              [:div.d-inline-block.d-md-block.text-dark
@@ -112,12 +114,12 @@
                  [:div.history-card-content
                   [tooltip/nested-div
                    "right"
-                   (str (labels :tooltip/history-statement) nickname)
+                   tooltip
                    [:<>
                     [:div.d-flex.flex-row
                      [:h6 (str (labels :history.statement/user) nickname)]
                      [:div.ml-auto [common/avatar nickname 22]]]
-                    (toolbelt/truncate-to-n-words content show-n-words)]]]])]]))])]))
+                    (toolbelt/truncate-to-n-words content show-number-of-words)]]]])]]))])]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"

@@ -371,6 +371,7 @@
 
         ;; tooltips
         :tooltip/history-statement "Back to statement made by "
+        :tooltip/history-statement-current "Current statement"
 
         ;; History
         :history/title "History"
@@ -780,6 +781,7 @@
 
         ;; tooltips
         :tooltip/history-statement "Zurück zum Beitrag von "
+        :tooltip/history-statement-current "Aktueller Beitrag"
 
         ;; History
         :history/title "Verlauf"
