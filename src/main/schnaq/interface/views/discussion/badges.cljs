@@ -32,8 +32,10 @@
   (let [popover-id (str "debater-popover-" (:db/id statement))
         old-statements-nums-map @(rf/subscribe [:visited/load-statement-nums])
         old-statement-num (get old-statements-nums-map (str (:db/id statement)) 0)
-        statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
+        statement-num (inc (get-in statement [:meta/sub-discussion-info :sub-statements] 0))
         new? (not (= old-statement-num statement-num))
+        authors (conj (-> statement :meta/sub-discussion-info :authors)
+                      (-> statement :statement/author :user/nickname))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
@@ -50,9 +52,9 @@
                    (js-wrap/popover (str "#" popover-id) "show"))
        :title (labels :discussion.badges/user-overview)
        :data-html true
-       :data-content (build-author-list (get-in statement [:meta/sub-discussion-info :authors]))}
+       :data-content (build-author-list authors)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
-      (-> statement :meta/sub-discussion-info :authors count)]
+      (count authors)]
      (when edit-hash
        [delete-clicker statement edit-hash])]))
 
