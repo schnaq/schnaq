@@ -73,8 +73,8 @@
 (defn current-schnaq-info-badges
   "Badges that display info of the current schnaq."
   []
-  (let [meta-info @(rf/subscribe [:current-schnaq/meta-info])]
-    [static-info-badges meta-info]))
+  (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
+    [static-info-badges (:meta-info current-schnaq)]))
 
 (defn schnaq-info-badges
   "Badges that display info of a schnaq."
