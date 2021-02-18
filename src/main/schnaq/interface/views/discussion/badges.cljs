@@ -83,32 +83,6 @@
 
 ;; #### Subs ####
 
-(rf/reg-event-db
-  :schnaqs/store-meta-info-by-hash
-  (fn [db [_ share-hash meta-info]]
-    (assoc-in db [:schnaqs :meta-info share-hash] meta-info)))
-
-(rf/reg-sub
-  :schnaqs/get-meta-info-by-hash
-  (fn [db [_ share-hash]]
-    (get-in db [:schnaqs :meta-info (str share-hash)])))
-
-(rf/reg-sub
-  :current-schnaq/meta-info
-  (fn [db [_]]
-    (let [starting-conclusions (get-in db [:discussion :conclusions :starting])
-          n-conclusions (count starting-conclusions)
-          fn-get-meta-info (fn [starting] (-> starting :meta/sub-discussion-info))
-          all-meta-infos (map fn-get-meta-info starting-conclusions)
-          fn-add-values (fn [{statements-v1 :all-statements authors-v1 :authors}
-                             {statements-v2 :sub-statements authors-v2 :authors}]
-                          {:all-statements (+ statements-v1 statements-v2)
-                           :authors (conj authors-v1 authors-v2)})
-          schnaq-info (reduce fn-add-values
-                              {:all-statements n-conclusions :authors #{}}
-                              all-meta-infos)]
-      schnaq-info)))
-
 (rf/reg-sub
   :visited/load-statement-nums
   (fn [db [_]]
