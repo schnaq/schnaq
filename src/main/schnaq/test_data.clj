@@ -16,15 +16,15 @@
 
 (def ^:private cat-or-dog-statements
   [{:db/id "statement/get-dog"
-    :statement/author "user/wegi"                         ; Use the tempid above
+    :statement/author "user/wegi"                           ; Use the tempid above
     :statement/content "we should get a dog"
     :statement/version 1}
    {:db/id "statement/get-cat"
-    :statement/author "user/schredder"                    ; Use the tempid above
+    :statement/author "user/schredder"                      ; Use the tempid above
     :statement/content "we should get a cat"
     :statement/version 1}
    {:db/id "statement/get-both"
-    :statement/author "user/rambo"                        ; Use the tempid above
+    :statement/author "user/rambo"                          ; Use the tempid above
     :statement/content "we could get both, a dog and a cat"
     :statement/version 1}])
 
@@ -277,6 +277,7 @@
     :discussion/title "Tapir oder Ameisenbär?"
     :discussion/share-hash "ameisenbär-hash"
     :discussion/description "What do what do"
+    :discussion/author "user/wegi"
     :discussion/states [:discussion.state/open]
     :discussion/starting-statements ["statement/get-dog"]}])
 
@@ -350,6 +351,7 @@
   [{:db/id "discussion/simple"
     :discussion/title "Simple Discussion"
     :discussion/share-hash "simple-hash"
+    :discussion/author "user/wegi"
     :discussion/edit-hash "simple-hash-secret"
     :discussion/description "A very simple discussion"
     :discussion/states [:discussion.state/open]

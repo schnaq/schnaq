@@ -33,5 +33,6 @@
   [schnaq]
   [::specs/discussion :ret ::specs/discussion]
   (let [share-hash (:discussion/share-hash schnaq)
-        meta-info (meta-info/discussion-meta-info share-hash)]
+        author (:discussion/author schnaq)
+        meta-info (meta-info/discussion-meta-info share-hash author)]
     (assoc schnaq :meta-info meta-info)))
