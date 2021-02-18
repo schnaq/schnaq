@@ -100,9 +100,13 @@
         (for [[index statement] indexed-history]
           (let [max-word-count 20
                 nickname (-> statement :statement/author :user/nickname)
-                content (-> statement :statement/content)
-                tooltip (if (zero? index) (str (labels :tooltip/history-statement-current))
-                                          (str (labels :tooltip/history-statement) nickname))]
+                statement-content (-> statement :statement/content)
+                tooltip (str (labels :tooltip/history-statement) nickname)
+                history-content [:<>
+                                 [:div.d-flex.flex-row
+                                  [:h6 (str (labels :history.statement/user) nickname)]
+                                  [:div.ml-auto [common/avatar nickname 22]]]
+                                 (toolbelt/truncate-to-n-words statement-content max-word-count)]]
             [:article {:key (str "history-container-" (:db/id statement))}
              [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
              [:div.d-inline-block.d-md-block.text-dark
@@ -112,14 +116,9 @@
                  {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
                   :on-click #(rf/dispatch [:discussion.history/time-travel index])}
                  [:div.history-card-content
-                  [tooltip/nested-div
-                   "right"
-                   tooltip
-                   [:<>
-                    [:div.d-flex.flex-row
-                     [:h6 (str (labels :history.statement/user) nickname)]
-                     [:div.ml-auto [common/avatar nickname 22]]]
-                    (toolbelt/truncate-to-n-words content max-word-count)]]]])]]))])]))
+                  (if (zero? index)
+                    history-content
+                    [tooltip/nested-div "right" tooltip history-content])]])]]))])]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
