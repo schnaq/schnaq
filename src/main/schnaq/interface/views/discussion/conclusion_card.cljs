@@ -2,7 +2,7 @@
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [fa]]
+            [schnaq.interface.text.display-data :refer [fa labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
@@ -58,6 +58,20 @@
       :switched (update-in
                   (update-in db [:votes :down id] inc)
                   [:votes :up id] dec))))
+
+(defn- call-to-contribute
+  "If no contributions are available, add a call to action to engage the users."
+  []
+  [:article.w-75.mx-auto.pt-5
+   [:div.alert.alert-primary.text-center.row
+    [:div.col-sm-8.col-12
+     [:p.lead.pt-3 (labels :call-to-contribute/lead)]
+     [:p (labels :call-to-contribute/body)]]
+    [:div.col-sm-4.col-12.p-3.p-md-0
+     [:img.w-75 {:src (img-path :schnaqqifant.300w/talk)}]]]])
+
+
+;; -----------------------------------------------------------------------------
 
 (defn up-down-vote-breaking
   "Add panel for up and down votes."
@@ -122,17 +136,19 @@
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
-    [:div.card-columns.card-columns-discussion.py-3
-     (for [conclusion conclusions]
-       [:div {:key (:db/id conclusion)
-              :on-click (fn [_e]
-                          (let [selection (.toString (.getSelection js/window))]
-                            (when (zero? (count selection))
-                              (rf/dispatch [:discussion.select/conclusion conclusion])
-                              (rf/dispatch [:discussion.history/push conclusion])
-                              (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
-                                            (assoc path-params :statement-id (:db/id conclusion))]))))}
-        [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]])]))
+    (if (seq conclusions)
+      [:div.card-columns.card-columns-discussion.py-3
+       (for [conclusion conclusions]
+         [:div {:key (:db/id conclusion)
+                :on-click (fn [_e]
+                            (let [selection (.toString (.getSelection js/window))]
+                              (when (zero? (count selection))
+                                (rf/dispatch [:discussion.select/conclusion conclusion])
+                                (rf/dispatch [:discussion.history/push conclusion])
+                                (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
+                                              (assoc path-params :statement-id (:db/id conclusion))]))))}
+          [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]])]
+      [call-to-contribute])))
 
 (rf/reg-event-fx
   :discussion.select/conclusion
