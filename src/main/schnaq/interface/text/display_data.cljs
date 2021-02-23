@@ -18,6 +18,10 @@
         :nav/blog "Blog"
         :nav/admin "Admin"
 
+        ;; Call to contribute
+        :call-to-contribute/lead "There are currently no contributions"
+        :call-to-contribute/body "You might be the first person to write something about this!"
+
         ;; code of conduct
         :coc/heading "Code of Conduct"
         :coc/subheading "Do onto others as you would have them do unto you"
@@ -428,6 +432,10 @@
         :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
         :nav/blog "Zum Blog"
         :nav/admin "Admin"
+
+        ;; Call to contribute
+        :call-to-contribute/lead "Bisher gibt es hier noch keine Beiträge"
+        :call-to-contribute/body "Du könntest die erste Person sein, die hierzu etwas schreibt!"
 
         ;; code of conduct
         :coc/heading "Verhaltensregeln"
@@ -863,6 +871,7 @@
      :schnaqqifant/share "/imgs/elephants/share.png"
      :schnaqqifant/stop "/imgs/elephants/stop.png"
      :schnaqqifant/talk "/imgs/elephants/talk.png"
+     :schnaqqifant.300w/talk "/imgs/elephants/talk300w.png"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :spotlight/eco-brain "/imgs/spotlight/brain.jpg"
      :spotlight/home-office "/imgs/spotlight/covid-19.jpg"
