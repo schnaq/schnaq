@@ -1,6 +1,5 @@
 (ns schnaq.interface.views
   (:require [re-frame.core :as rf]
-            [reagent.dom]
             [schnaq.interface.views.feedback.collect :as feedback]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.modals.modal :as modal]
@@ -13,9 +12,9 @@
      (when current-route
        [:<>
         [modal/modal]
-         (if-let [current-view (-> current-route :data :view)]
-           [current-view]
-           [:div ""])])]))
+        (if-let [current-view (-> current-route :data :view)]
+          [current-view]
+          [:div ""])])]))
 
 (defn- footer []
   [base/footer])
