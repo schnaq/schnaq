@@ -4,6 +4,7 @@
     "server": "shadow-cljs server;"
   },
   "dependencies": {
+    "@fontsource/open-sans": "^4.2.1",
     "@fortawesome/fontawesome-free": "^5.14.0",
     "bootstrap": "^4.5.2",
     "create-react-class": "^15.6.3",
