@@ -13,7 +13,9 @@
      (when current-route
        [:<>
         [modal/modal]
-        [(-> current-route :data :view)]])]))
+         (if-let [current-view (-> current-route :data :view)]
+           [current-view]
+           [:div ""])])]))
 
 (defn- footer []
   [base/footer])

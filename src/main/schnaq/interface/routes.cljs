@@ -38,6 +38,11 @@
 (def routes
   ["/"
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
+   ["en/{*rest-url}"
+    {:name :routes/force-english
+     :controllers [{:parameters {:path [:rest-url]}
+                    :start (fn [{:keys [path]}]
+                             (rf/dispatch [:language/set-and-redirect :en (:rest-url path)]))}]}]
    [""
     {:name :routes/startpage
      :view startpage-views/startpage-view

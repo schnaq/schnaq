@@ -1,11 +1,14 @@
 (ns schnaq.interface.events
   (:require [ajax.core :as ajax]
+            [oops.core :refer [oset!]]
             [re-frame.core :as rf]
+            [reitit.frontend :as reitit-frontend]
             [schnaq.interface.db :as schnaq-db]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.views.modals.modal :as modal]))
 
 (rf/reg-event-fx
@@ -108,3 +111,17 @@
   (fn [{:keys [db]} [_ locale]]
     {:db (assoc db :locale locale)
      :fx [[:change-document-lang locale]]}))
+
+(rf/reg-fx
+  ;; Changes location via js, lets reitit re-match the url after changing
+  :change-location
+  (fn [url]
+    (rf/dispatch
+      [:navigation/navigated
+       (reitit-frontend/match-by-path navigation/router (str (-> js/window .-location .-origin) "/" url))])))
+
+(rf/reg-event-fx
+  :language/set-and-redirect
+  (fn [_ [_ locale redirect-url]]
+    {:fx [[:dispatch [:set-locale locale]]
+          [:change-location redirect-url]]}))
