@@ -3,6 +3,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -11,14 +12,15 @@
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
   []
-  [:div.alert.alert-primary.text-center
-   [:p.lead
-    "🙈 "
-    (labels :schnaqs.not-found/alert-lead)]
-   [:p (labels :schnaqs.not-found/alert-body)]
-   [:div.btn.btn-outline-primary
-    {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
-    (labels :nav.schnaqs/create-schnaq)]])
+  [common/delayed-fade-in
+   [:div.alert.alert-primary.text-center
+    [:p.lead
+     "🙈 "
+     (labels :schnaqs.not-found/alert-lead)]
+    [:p (labels :schnaqs.not-found/alert-body)]
+    [:div.btn.btn-outline-primary
+     {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+     (labels :nav.schnaqs/create-schnaq)]]])
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
@@ -26,7 +28,7 @@
   (let [share-hash (:discussion/share-hash schnaq)
         title (:discussion/title schnaq)
         url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
-    [:div.meeting-entry
+    [:article.meeting-entry
      {:on-click (fn []
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])

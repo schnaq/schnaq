@@ -20,9 +20,10 @@
             [ghostwheel.core :refer [>defn- >defn]]
             [goog.string :as gstring]
             [schnaq.interface.text.display-data :refer [fa]]
+            [schnaq.interface.views.common :as common]
             [reagent.dom]
             [re-frame.core :as rf]
-            ["framer-motion" :refer [motion AnimatePresence]]))
+            ["framer-motion" :refer [AnimatePresence]]))
 
 (def ^:private display-time
   "Milliseconds, that a notification stays visible."
@@ -42,11 +43,8 @@
    secondary, ...)."
   [{:notification/keys [title body id context on-close-fn]}]
   [::notification :ret associative?]
-  [:> (.-div motion)
-   {:initial {:opacity 0}
-    :animate {:opacity 1}
-    :exit {:opacity 0}}
-   [:div
+  [common/fade-in-and-out
+   [:article
     {:class-name (toast-classes context)
      :aria-atomic "true", :aria-live "assertive", :role "alert"}
     [:div.toast-header
