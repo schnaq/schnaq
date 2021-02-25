@@ -1,9 +1,12 @@
 (ns schnaq.interface.views.common
-  (:require ["jdenticon" :as jdenticon]
+  (:require ["framer-motion" :refer [motion AnimatePresence]]
+            ["jdenticon" :as jdenticon]
+            [cljs.core.async :refer [go <! timeout]]
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [goog.string :as gstring]
             [oops.core :refer [oget oset!]]
+            [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]))
 
 (>defn avatar
@@ -99,7 +102,7 @@
   [map? :ret string?]
   (let [{:keys [share-hash edit-hash]} (:path-params current-route)
         path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
-                                                        :edit-hash edit-hash})
+                                                       :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
@@ -109,3 +112,38 @@
   [string? :ret nil?]
   (let [new-title (gstring/format "schnaq - %s" title)]
     (oset! js/document [:title] new-title)))
+
+
+;; -----------------------------------------------------------------------------
+;; Higher Order Components
+
+(defn delay-render
+  "Wrap a component in this component to wait for a certain amount of
+  milliseconds, until the provided component is rendered."
+  [_component]
+  (let [ready? (reagent/atom false)]
+    (reagent/create-class
+      {:component-did-mount
+       (fn []
+         (let [delay-in-milliseconds 500]
+           (go (<! (timeout delay-in-milliseconds))
+               (reset! ready? true))))
+       :display-name "Delay Rendering of wrapped component"
+       :reagent-render
+       (fn [component]
+         (when @ready? [:> AnimatePresence component]))})))
+
+(defn fade-in-and-out
+  "Add animation to component, which fades the component in and out."
+  [component]
+  [:> (.-div motion)
+   {:initial {:opacity 0}
+    :animate {:opacity 1}
+    :exit {:opacity 0}}
+   component])
+
+(defn delayed-fade-in
+  "Takes a component and applies a delay and a fade-in-and-out animation."
+  [component]
+  [delay-render [fade-in-and-out component]])
+
