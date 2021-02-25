@@ -9,57 +9,6 @@
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
 
-(rf/reg-sub
-  :local-votes
-  (fn [db _]
-    (get db :votes)))
-
-(rf/reg-event-fx
-  :discussion/toggle-upvote
-  (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config) "/votes/up/toggle")
-                        :format (ajax/transit-request-format)
-                        :params {:statement-id id
-                                 :nickname (get-in db [:user :name] "Anonymous")
-                                 :share-hash (-> db :schnaq :selected :discussion/share-hash)}
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:upvote-success statement]
-                        :on-failure [:ajax.error/as-notification]}]]}))
-
-(rf/reg-event-fx
-  :discussion/toggle-downvote
-  (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config) "/votes/down/toggle")
-                        :format (ajax/transit-request-format)
-                        :params {:statement-id id
-                                 :nickname (get-in db [:user :name] "Anonymous")
-                                 :share-hash (-> db :schnaq :selected :discussion/share-hash)}
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:downvote-success statement]
-                        :on-failure [:ajax.error/as-notification]}]]}))
-
-(rf/reg-event-db
-  :upvote-success
-  (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (case operation
-      :added (update-in db [:votes :up id] inc)
-      :removed (update-in db [:votes :up id] dec)
-      :switched (update-in
-                  (update-in db [:votes :up id] inc)
-                  [:votes :down id] dec))))
-
-(rf/reg-event-db
-  :downvote-success
-  (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (case operation
-      :added (update-in db [:votes :down id] inc)
-      :removed (update-in db [:votes :down id] dec)
-      :switched (update-in
-                  (update-in db [:votes :down id] inc)
-                  [:votes :up id] dec))))
-
 (defn- call-to-contribute
   "If no contributions are available, add a call to action to engage the users."
   []
@@ -170,3 +119,54 @@
   :discussion.premises/set-current
   (fn [db [_ {:keys [premises undercuts]}]]
     (assoc-in db [:discussion :premises :current] (concat premises undercuts))))
+
+(rf/reg-sub
+  :local-votes
+  (fn [db _]
+    (get db :votes)))
+
+(rf/reg-event-fx
+  :discussion/toggle-upvote
+  (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/votes/up/toggle")
+                        :format (ajax/transit-request-format)
+                        :params {:statement-id id
+                                 :nickname (get-in db [:user :name] "Anonymous")
+                                 :share-hash (-> db :schnaq :selected :discussion/share-hash)}
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:upvote-success statement]
+                        :on-failure [:ajax.error/as-notification]}]]}))
+
+(rf/reg-event-fx
+  :discussion/toggle-downvote
+  (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
+    {:fx [[:http-xhrio {:method :post
+                        :uri (str (:rest-backend config) "/votes/down/toggle")
+                        :format (ajax/transit-request-format)
+                        :params {:statement-id id
+                                 :nickname (get-in db [:user :name] "Anonymous")
+                                 :share-hash (-> db :schnaq :selected :discussion/share-hash)}
+                        :response-format (ajax/transit-response-format)
+                        :on-success [:downvote-success statement]
+                        :on-failure [:ajax.error/as-notification]}]]}))
+
+(rf/reg-event-db
+  :upvote-success
+  (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
+    (case operation
+      :added (update-in db [:votes :up id] inc)
+      :removed (update-in db [:votes :up id] dec)
+      :switched (update-in
+                  (update-in db [:votes :up id] inc)
+                  [:votes :down id] dec))))
+
+(rf/reg-event-db
+  :downvote-success
+  (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
+    (case operation
+      :added (update-in db [:votes :down id] inc)
+      :removed (update-in db [:votes :down id] dec)
+      :switched (update-in
+                  (update-in db [:votes :down id] inc)
+                  [:votes :up id] dec))))
