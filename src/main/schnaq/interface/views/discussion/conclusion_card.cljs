@@ -4,6 +4,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [fa labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
@@ -62,13 +63,14 @@
 (defn- call-to-contribute
   "If no contributions are available, add a call to action to engage the users."
   []
-  [:article.w-75.mx-auto.pt-5
-   [:div.alert.alert-primary.text-center.row
-    [:div.col-sm-8.col-12
-     [:p.lead.pt-3 (labels :call-to-contribute/lead)]
-     [:p (labels :call-to-contribute/body)]]
-    [:div.col-sm-4.col-12.p-3.p-md-0
-     [:img.w-75 {:src (img-path :schnaqqifant.300w/talk)}]]]])
+  [common/delayed-fade-in
+   [:article.w-75.mx-auto.pt-5
+    [:div.alert.alert-primary.text-center.row
+     [:div.col-sm-8.col-12
+      [:p.lead.pt-3 (labels :call-to-contribute/lead)]
+      [:p (labels :call-to-contribute/body)]]
+     [:div.col-sm-4.col-12.p-3.p-md-0
+      [:img.w-75 {:src (img-path :schnaqqifant.300w/talk)}]]]]])
 
 
 ;; -----------------------------------------------------------------------------
