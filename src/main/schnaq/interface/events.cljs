@@ -5,10 +5,11 @@
             [reitit.frontend :as reitit-frontend]
             [schnaq.interface.db :as schnaq-db]
             [schnaq.interface.config :refer [config]]
+            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.language :as lang]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.navigation :as navigation]
             [schnaq.interface.views.modals.modal :as modal]))
 
 (rf/reg-event-fx
@@ -120,8 +121,15 @@
       [:navigation/navigated
        (reitit-frontend/match-by-path navigation/router (str (-> js/window .-location .-origin) "/" url))])))
 
+(rf/reg-fx
+  ;; Changes more than just the document locale, like changing the key in config and writing it to localstorage.
+  ;; (But includes execution of set-locale)
+  :switch-language
+  (fn [locale]
+    (lang/set-language locale)))
+
 (rf/reg-event-fx
   :language/set-and-redirect
   (fn [_ [_ locale redirect-url]]
-    {:fx [[:dispatch [:set-locale locale]]
+    {:fx [[:switch-language locale]
           [:change-location redirect-url]]}))
