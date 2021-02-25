@@ -32,6 +32,13 @@
     :stop (fn []
             (rf/dispatch [:updates.periodic/starting-conclusions false]))}])
 
+(defn language-controllers
+  "Returns controllers for the desired locale switch and redirect."
+  [locale]
+  [{:parameters {:path [:rest-url]}
+    :start (fn [{:keys [path]}]
+             (rf/dispatch [:language/set-and-redirect locale (:rest-url path)]))}])
+
 ;; IMPORTANT: Routes called here as views do not hot-reload for some reason. Only
 ;; components inside do regularly. So just use components here that wrap the view you
 ;; want to function regularly.
@@ -40,9 +47,10 @@
    {:coercion reitit.coercion.spec/coercion}                ;; Enable Spec coercion for all routes
    ["en/{*rest-url}"
     {:name :routes/force-english
-     :controllers [{:parameters {:path [:rest-url]}
-                    :start (fn [{:keys [path]}]
-                             (rf/dispatch [:language/set-and-redirect :en (:rest-url path)]))}]}]
+     :controllers (language-controllers :en)}]
+   ["de/{*rest-url}"
+    {:name :routes/force-german
+     :controllers (language-controllers :de)}]
    [""
     {:name :routes/startpage
      :view startpage-views/startpage-view
