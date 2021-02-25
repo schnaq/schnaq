@@ -1,6 +1,5 @@
 (ns schnaq.interface.events
   (:require [ajax.core :as ajax]
-            [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
             [schnaq.interface.db :as schnaq-db]

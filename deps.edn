@@ -7,8 +7,8 @@
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.1"}
         clj-http/clj-http {:mvn/version "3.12.1"}
-        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.960"}
-        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.960"}
+        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.962"}
+        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.962"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/client-pro {:mvn/version "0.9.66"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -17,7 +17,7 @@
         com.taoensso/tufte {:mvn/version "2.2.0"}
         compojure/compojure {:mvn/version "1.6.2"}
         day8.re-frame/http-fx {:mvn/version "0.2.2"}
-        day8.re-frame/re-frame-10x {:mvn/version "0.7.0"}
+        day8.re-frame/re-frame-10x {:mvn/version "1.0.0"}
         expound/expound {:mvn/version "0.8.9"}
         gnl/ghostwheel {:mvn/version "0.3.9"}
         http-kit/http-kit {:mvn/version "2.5.3"}
@@ -28,7 +28,7 @@
         org.clojure/core.async {:mvn/version "1.3.610"}
         org.clojure/data.json {:mvn/version "1.0.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}
-        re-frame/re-frame {:mvn/version "1.1.2"}
+        re-frame/re-frame {:mvn/version "1.2.0"}
         reagent/reagent {:mvn/version "1.0.0"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring-middleware-format/ring-middleware-format {:mvn/version "0.7.4"}
@@ -65,7 +65,7 @@
                         "watch" ":app"]}
 
            :uberjar
-           {:replace-deps {seancorfield/depstar {:mvn/version "2.0.187"}}
+           {:replace-deps {seancorfield/depstar {:mvn/version "2.0.188"}}
             :exec-fn hf.depstar/uberjar
             :exec-args {:main-class schnaq.api
                         :verbose true
