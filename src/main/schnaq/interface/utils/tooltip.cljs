@@ -5,7 +5,7 @@
 
 (defn nested-div
   "Create a div with a tooltip, content is placed inside this div"
-  [tooltip-location tooltip content]
+  [_tooltip-location _tooltip _content]
   (reagent/create-class
     {:component-did-mount
      (fn [comp] (js-wrap/tooltip (rdom/dom-node comp)))
@@ -14,13 +14,13 @@
        (js-wrap/tooltip (rdom/dom-node comp) "disable")
        (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
      :reagent-render
-     (fn [] [:div.h-100
-             {:data-toggle "tooltip"
-              :data-placement tooltip-location
-              :title tooltip} content])}))
+     (fn [tooltip-location tooltip content]
+       [:div.h-100 {:data-toggle "tooltip"
+                    :data-placement tooltip-location
+                    :title tooltip} content])}))
 
 (defn tooltip-button
-  [tooltip-location tooltip content on-click-fn]
+  [_tooltip-location _tooltip _content _on-click-fn]
   (reagent/create-class
     {:component-did-mount
      (fn [comp] (js-wrap/tooltip (rdom/dom-node comp)))
@@ -29,8 +29,9 @@
        (js-wrap/tooltip (rdom/dom-node comp) "disable")
        (js-wrap/tooltip (rdom/dom-node comp) "dispose"))
      :reagent-render
-     (fn [] [:button.button-secondary-b-1.button-md.my-2.mx-3
-             {:on-click on-click-fn
-              :data-toggle "tooltip"
-              :data-placement tooltip-location
-              :title tooltip} content])}))
+     (fn [tooltip-location tooltip content on-click-fn]
+       [:button.button-secondary-b-1.button-md.my-2.mx-3
+        {:on-click on-click-fn
+         :data-toggle "tooltip"
+         :data-placement tooltip-location
+         :title tooltip} content])}))
