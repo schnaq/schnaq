@@ -64,6 +64,16 @@
         :startpage.early-adopter.buttons/join-schnaq "Public schnaqs"
         :startpage.early-adopter/or "or"
 
+        :startpage.newsletter/heading "Subscribe to our Newsletter"
+        :startpage.newsletter/address-placeholder "E-Mail Address"
+        :startpage.newsletter/consent "I want to subscribe to the schnaq newsletter, and regularly receive information about schnaq.com."
+        :startpage.newsletter/more-info-clicker "More information"
+        :startpage.newsletter/policy-disclaimer "Schnaq saves, processes and saves the personal information you enter above to
+        subscribe you to the newsletter. You can unsubscribe at any time, by clicking the appropriate link in the emails you will receive.
+        Alternatively you can write us an email, and we will unsubscribe you personally."
+        :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our "
+        :startpage.newsletter/privacy-policy "privacy policy"
+
         ;; Login page
         :page.login/heading "Please Login"
         :page.login/subheading "You need to login to access this resource"
@@ -475,6 +485,17 @@
         :startpage.early-adopter/body "Stöbere durch öffentliche Diskussionen:"
         :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
         :startpage.early-adopter/or "oder"
+
+        :startpage.newsletter/heading "Newsletter abonnieren"
+        :startpage.newsletter/address-placeholder "E-Mail Adresse"
+        :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."
+        :startpage.newsletter/more-info-clicker "Mehr Informationen"
+        :startpage.newsletter/policy-disclaimer "schnaq erhebt, verarbeitet und nutzt Ihre oben angegebenen personenbezogenen Daten zur
+        Bearbeitung Ihres Anliegens. Jederzeit können Sie sich von dem Newsletter abmelden, indem Sie auf
+        den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ können Sie uns auch eine E-Mail
+        schreiben und wir kümmern uns dann um Ihr Anliegen."
+        :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer "
+        :startpage.newsletter/privacy-policy "Datenschutzerklärung"
 
         ;; Login Page
         :page.login/heading "Bitte logg dich ein"

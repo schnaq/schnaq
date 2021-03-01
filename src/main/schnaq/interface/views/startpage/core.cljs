@@ -11,11 +11,11 @@
 
 (defn- mailchimp-form
   []
-  [:div.row
+  [:div.row.pt-3.pb-5
    [:div.col-4
     [:img.img-fluid {:src (img-path :startpage/newsletter)}]]
    [:div.col-8
-    [:h3.text-center "Newsletter abonnieren"]
+    [:h3.text-center (labels :startpage.newsletter/heading)]
     [:form
      {:target "_blank" :name "mc-embedded-subscribe-form" :method "post" :action
       "https://dialogo.us8.list-manage.com/subscribe/post?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
@@ -23,7 +23,7 @@
      [:div.form-group
       [:input
        {:required true
-        :placeholder "E-Mail Adresse"
+        :placeholder (labels :startpage.newsletter/address-placeholder)
         :name "EMAIL" :defaultValue "" :type "email"
         :class "form-control"}]]
 
@@ -37,21 +37,18 @@
       [:div.form-check
        [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
        [:label.form-check-label {:for "nochmal-nachfragen"}
-        "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."]
+        (labels :startpage.newsletter/consent)]
        [:a {:href "#" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
             :aria-expanded "false" :aria-controls "#collapse-more-newsletter"}
-        "Mehr Informationen"]
+        (labels :startpage.newsletter/more-info-clicker)]
        [:div.collapse {:id "collapse-more-newsletter"}
-        [:p.small "schnaq erhebt, verarbeitet und nutzt Ihre oben angegebenen personenbezogenen Daten zur
-   Bearbeitung Ihres Anliegens. Jederzeit können Sie sich von dem Newsletter abmelden, indem Sie auf
-   den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ können Sie uns auch eine E-Mail
-   schreiben und wir kümmern uns dann um Ihr Anliegen."
-         [:br] "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer "
-         [:a {:href "https://disqtec.com/datenschutz"} "Datenschutzerklärung"] "."]]]]
+        [:p.small (labels :startpage.newsletter/policy-disclaimer)
+         [:br] (labels :startpage.newsletter/privacy-policy-lead)
+         [:a {:href "https://disqtec.com/datenschutz"} (labels :startpage.newsletter/privacy-policy)] "."]]]]
 
      [:div.form-group
       [:input
-       {:name "subscribe" :value "Newsletter abonnieren" :type "submit" :readOnly true
+       {:name "subscribe" :value (labels :startpage.newsletter/heading) :type "submit" :readOnly true
         :class "btn btn-primary d-block mx-auto"}]]]]])
 
 
