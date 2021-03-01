@@ -105,10 +105,10 @@
        [cta/spotlight-discussions]
        [startpage-features/feature-rows]
        [mailchimp-form]
-       [supporters]]
+       [testimonials/view]]
       [early-adopters]
       [:section.container
-       [testimonials/view]]]]))
+       [supporters]]]]))
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
