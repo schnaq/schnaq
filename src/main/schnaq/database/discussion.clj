@@ -142,15 +142,15 @@
   [share-hashes]
   [(s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]
   (as-> (query
-          '[:find (pull ?discussions discussion-pattern)
-            :in $ [?share-hashes ...] discussion-pattern
-            :where [?discussions :discussion/share-hash ?share-hashes]
+          '[:find (pull ?discussions discussion-pattern) (pull ?tx transaction-pattern)
+            :in $ [?share-hashes ...] discussion-pattern transaction-pattern
+            :where [?discussions :discussion/share-hash ?share-hashes ?tx]
             (not-join [?discussions]
                       [?discussions :discussion/states :discussion.state/deleted])]
-          share-hashes discussion-pattern-minimal)
+          share-hashes discussion-pattern-minimal main-db/transaction-pattern)
         result
+        (map merge-entity-and-transaction result)
         (toolbelt/pull-key-up result :db/ident)
-        (map first result)
         (filter #(s/valid? ::specs/discussion %) result)))
 
 (>defn delete-statements!
