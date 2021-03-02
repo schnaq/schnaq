@@ -7,7 +7,6 @@
             [schnaq.meeting.models :as models]
             [schnaq.meeting.specs :as specs]
             [schnaq.test-data :as test-data]
-            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
 

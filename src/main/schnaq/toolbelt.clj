@@ -43,12 +43,3 @@
        (key-name %)
        %)
     coll))
-
-
-(defn comp-compare
-  "A compare that exhibits the exact opposite behaviour."
-  [val1 val2]
-  (case (compare val1 val2)
-    0 0
-    -1 1
-    1 -1))
