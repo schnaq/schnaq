@@ -18,7 +18,7 @@
     [:h3.text-center (labels :startpage.newsletter/heading)]
     [:form
      {:target "_blank" :name "mc-embedded-subscribe-form" :method "post" :action
-      "https://dialogo.us8.list-manage.com/subscribe/post?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
+      "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
 
      [:div.form-group
       [:input
