@@ -55,12 +55,6 @@
   [:db/id :ret ::specs/statement]
   (d/pull (d/db (new-connection)) main-db/statement-pattern statement-id))
 
-(>defn- merge-entity-and-transaction
-  "When pulling entity and transaction, merge the results into a single map."
-  [[entity transaction]]
-  [(s/coll-of map?) :ret map?]
-  (merge entity transaction))
-
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
   [share-hash]
@@ -71,7 +65,7 @@
            :where [?discussion :discussion/share-hash ?share-hash]
            [?discussion :discussion/starting-statements ?statements ?tx]]
          share-hash main-db/statement-pattern main-db/transaction-pattern)
-       (map merge-entity-and-transaction)
+       (map main-db/merge-entity-and-transaction)
        flatten))
 
 (defn transitive-child-rules
@@ -125,7 +119,7 @@
         share-hash template-pattern main-db/transaction-pattern)
       first
       (toolbelt/pull-key-up :db/ident)
-      merge-entity-and-transaction))
+      main-db/merge-entity-and-transaction))
 
 (defn discussion-by-share-hash
   "Query discussion and apply public discussion pattern to it."
@@ -149,7 +143,7 @@
                       [?discussions :discussion/states :discussion.state/deleted])]
           share-hashes discussion-pattern-minimal main-db/transaction-pattern)
         result
-        (map merge-entity-and-transaction result)
+        (map main-db/merge-entity-and-transaction result)
         (toolbelt/pull-key-up result :db/ident)
         (filter #(s/valid? ::specs/discussion %) result)))
 
@@ -383,7 +377,7 @@
                   [?public-discussions :discussion/states :discussion.state/deleted])]
       discussion-pattern main-db/transaction-pattern)
     result
-    (map merge-entity-and-transaction result)
+    (map main-db/merge-entity-and-transaction result)
     (toolbelt/pull-key-up result :db/ident)
     (sort-by :db/txInstant result)
     (reverse result)))
