@@ -3,7 +3,8 @@
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.localstorage :as ls]))
+            [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.utils.time :as time]))
 
 (>defn- build-author-list
   "Build a nicely formatted string of a html list containing the authors from a sequence."
@@ -30,6 +31,7 @@
   "Badges that display additional discussion info."
   [statement edit-hash]
   (let [popover-id (str "debater-popover-" (:db/id statement))
+        locale @(rf/subscribe [:current-locale])
         old-statements-nums-map @(rf/subscribe [:visited/load-statement-nums])
         old-statement-num (get old-statements-nums-map (str (:db/id statement)) 0)
         statement-num (inc (get-in statement [:meta/sub-discussion-info :sub-statements] 0))
@@ -56,7 +58,8 @@
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (count authors)]
      (when edit-hash
-       [delete-clicker statement edit-hash])]))
+       [delete-clicker statement edit-hash])
+     [:small [time/timestamp-with-tooltip (:db/txInstant statement) locale]]]))
 
 (defn- static-info-badges
   "Badges that display schnaq info."

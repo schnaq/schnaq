@@ -3,7 +3,8 @@
             ["date-fns/locale" :as df-locale]
             ["date-fns-tz" :as df-tz]
             [ghostwheel.core :refer [>defn]]
-            [schnaq.interface.config :as config]))
+            [schnaq.interface.config :as config]
+            [schnaq.interface.utils.tooltip :as tooltip]))
 
 (def ^:private select-locale
   {:de df-locale/de
@@ -31,4 +32,9 @@
                   #js {:timeZone (:timezone config/time-settings)})
     ""))
 
-
+(>defn timestamp-with-tooltip
+  "Print prettified string containing the timestamp with a tooltip."
+  [timestamp locale]
+  [inst? keyword? :ret vector?]
+  [tooltip/inline-element :bottom (formatted-with-timezone timestamp)
+   (format-distance timestamp locale)])
