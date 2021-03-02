@@ -1,7 +1,9 @@
 (ns schnaq.interface.utils.time
   (:require ["date-fns" :as df]
             ["date-fns/locale" :as df-locale]
-            [ghostwheel.core :refer [>defn]]))
+            ["date-fns-tz" :as df-tz]
+            [ghostwheel.core :refer [>defn]]
+            [schnaq.interface.config :as config]))
 
 (def ^:private select-locale
   {:de df-locale/de
@@ -12,6 +14,21 @@
   to the current time, e.g. '1 day ago'."
   [timestamp locale]
   [inst? keyword? :ret string?]
-  (df/formatDistance timestamp (js/Date.)
-                     #js {:addSuffix true
-                          :locale (get select-locale locale df-locale/en)}))
+  (if timestamp
+    (df/formatDistance timestamp (js/Date.)
+                       #js {:addSuffix true
+                            :locale (get select-locale locale df-locale/en)})
+    ""))
+
+(>defn formatted-with-timezone
+  "Return formatted and timezoned string containing the time and date according
+  to the pattern, e.g. '16:47 02.03.2021'."
+  [timestamp]
+  [inst? :ret string?]
+  (if timestamp
+    (df-tz/format (df-tz/utcToZonedTime timestamp (:timezone config/time-settings))
+                  (:pattern config/time-settings)
+                  #js {:timeZone (:timezone config/time-settings)})
+    ""))
+
+
