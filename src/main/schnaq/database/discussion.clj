@@ -113,17 +113,19 @@
                   [?authors :user/nickname ?nickname]]
                 (transitive-child-rules 7) statement-ids))))
 
-(defn discussion-by-share-hash-template
+(>defn discussion-by-share-hash-template
   "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)
   Apply the pull-patern you like."
   [share-hash template-pattern]
+  [string? vector? :ret map?]
   (-> (query
-        '[:find (pull ?discussion discussion-pattern)
-          :in $ ?share-hash discussion-pattern
-          :where [?discussion :discussion/share-hash ?share-hash]]
-        share-hash template-pattern)
+        '[:find (pull ?discussion discussion-pattern) (pull ?tx transaction-pattern)
+          :in $ ?share-hash discussion-pattern transaction-pattern
+          :where [?discussion :discussion/share-hash ?share-hash ?tx]]
+        share-hash template-pattern main-db/transaction-pattern)
+      first
       (toolbelt/pull-key-up :db/ident)
-      ffirst))
+      merge-entity-and-transaction))
 
 (defn discussion-by-share-hash
   "Query discussion and apply public discussion pattern to it."
