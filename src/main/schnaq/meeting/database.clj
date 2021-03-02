@@ -114,6 +114,10 @@
    :statement/deleted?
    {:statement/author [:user/nickname]}])
 
+(def transaction-pattern
+  "Pull transaction information."
+  [:db/txInstant])
+
 ;; ##### Input functions #####
 (defn now [] (Date.))
 

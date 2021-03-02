@@ -55,17 +55,24 @@
   [:db/id :ret ::specs/statement]
   (d/pull (d/db (new-connection)) main-db/statement-pattern statement-id))
 
+(>defn- merge-entity-and-transaction
+  "When pulling entity and transaction, merge the results into a single map."
+  [[entity transaction]]
+  [(s/coll-of map?) :ret map?]
+  (merge entity transaction))
+
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
   [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
-  (flatten
-    (query
-      '[:find (pull ?statements statement-pattern)
-        :in $ ?share-hash statement-pattern
-        :where [?discussion :discussion/share-hash ?share-hash]
-        [?discussion :discussion/starting-statements ?statements]]
-      share-hash main-db/statement-pattern)))
+  (->> (query
+         '[:find (pull ?statements statement-pattern) (pull ?tx transaction-pattern)
+           :in $ ?share-hash statement-pattern transaction-pattern
+           :where [?discussion :discussion/share-hash ?share-hash]
+           [?discussion :discussion/starting-statements ?statements ?tx]]
+         share-hash main-db/statement-pattern main-db/transaction-pattern)
+       (map merge-entity-and-transaction)
+       flatten))
 
 (defn transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
