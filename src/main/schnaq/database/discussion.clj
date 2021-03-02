@@ -374,18 +374,19 @@
 (defn public-discussions
   "Returns all public discussions."
   []
-  (->>
-    (d/q
-      '[:find (pull ?public-discussions discussion-pattern) ?ts
-        :in $ discussion-pattern
+  (as->
+    (query
+      '[:find (pull ?public-discussions discussion-pattern) (pull ?tx transaction-pattern)
+        :in $ discussion-pattern transaction-pattern
         :where [?public-discussions :discussion/states :discussion.state/public ?tx]
         (not-join [?public-discussions]
-                  [?public-discussions :discussion/states :discussion.state/deleted])
-        [?tx :db/txInstant ?ts]]
-      (d/db (new-connection)) discussion-pattern)
-    (#(toolbelt/pull-key-up % :db/ident))
-    (sort-by second toolbelt/comp-compare)
-    (map first)))
+                  [?public-discussions :discussion/states :discussion.state/deleted])]
+      discussion-pattern main-db/transaction-pattern)
+    result
+    (map merge-entity-and-transaction result)
+    (toolbelt/pull-key-up result :db/ident)
+    (sort-by :db/txInstant result)
+    (reverse result)))
 
 (>defn all-statements
   "Returns all statements belonging to a discussion."
