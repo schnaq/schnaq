@@ -901,7 +901,7 @@
      :startpage.features/discussion-graph "/imgs/startpage/sample_graph.png"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
      :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"
-     :startpage/newsletter "imgs/startpage/newsletter.jpeg"}))
+     :startpage/newsletter "/imgs/startpage/newsletter.jpeg"}))
 
 (defn video
   "Returns an video path"
