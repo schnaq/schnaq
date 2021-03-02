@@ -59,12 +59,13 @@
       (count authors)]
      (when edit-hash
        [delete-clicker statement edit-hash])
-     [:small [time/timestamp-with-tooltip (:db/txInstant statement) locale]]]))
+     [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant statement) locale]]]))
 
-(defn- static-info-badges
+(defn static-info-badges
   "Badges that display schnaq info."
-  [meta-info]
-  (let [statement-count (:all-statements meta-info)
+  [schnaq]
+  (let [meta-info (:meta-info schnaq)
+        statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
@@ -73,18 +74,9 @@
      [:span.badge.badge-pill.badge-transparent.mr-2
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
-      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
+      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]
+     [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant schnaq) :de]]]))
 
-(defn current-schnaq-info-badges
-  "Badges that display info of the current schnaq."
-  []
-  (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
-    [static-info-badges (:meta-info current-schnaq)]))
-
-(defn schnaq-info-badges
-  "Badges that display info of a schnaq."
-  [schnaq]
-  [static-info-badges (get schnaq :meta-info)])
 
 ;; #### Subs ####
 

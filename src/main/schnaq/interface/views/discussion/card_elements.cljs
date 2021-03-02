@@ -72,7 +72,8 @@
 (defn- discussion-start-button
   "Discussion start button for history view"
   [history-length]
-  (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
+  (let [schnaq @(rf/subscribe [:schnaq/selected])
+        title (:discussion/title schnaq)]
     [:div.clickable.card-history-home.text-dark
      {:on-click #(rf/dispatch [:discussion.history/time-travel history-length])}
      [tooltip/block-element
@@ -81,7 +82,7 @@
       [:div.text-center
        [:h6 title]
        [:p.text-muted.mb-0 (labels :history.home/text)]
-       [badges/current-schnaq-info-badges]]]]))
+       [badges/static-info-badges schnaq]]]]))
 
 (defn history-view
   "History view displayed in the left column in the desktop view."

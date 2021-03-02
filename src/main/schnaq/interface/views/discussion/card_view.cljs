@@ -54,17 +54,17 @@
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
-  [{:discussion/keys [title author] :as current-discussion}]
+  [{:discussion/keys [title author] :as schnaq}]
   (let [current-starting @(rf/subscribe [:discussion.conclusions/starting])
         input-form [input/input-form "statement-text"]
         content {:content title :author author}
-        badges [badges/current-schnaq-info-badges]]
+        badges [badges/static-info-badges schnaq]]
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop
-       current-discussion content input-form badges nil current-starting nil]
+       schnaq content input-form badges nil current-starting nil]
       [elements/discussion-view-mobile
-       current-discussion content input-form badges nil current-starting]]]))
+       schnaq content input-form badges nil current-starting]]]))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
