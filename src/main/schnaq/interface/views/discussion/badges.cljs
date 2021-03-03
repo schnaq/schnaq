@@ -66,7 +66,8 @@
   [schnaq]
   (let [meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))]
+        user-count (count (:authors meta-info))
+        locale @(rf/subscribe [:current-locale])]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
       [:i {:class (str "m-auto fas " (fa :comment))}]
@@ -75,7 +76,7 @@
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]
-     [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant schnaq) :de]]]))
+     [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant schnaq) locale]]]))
 
 
 ;; #### Subs ####
