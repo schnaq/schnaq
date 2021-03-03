@@ -43,3 +43,9 @@
        (key-name %)
        %)
     coll))
+
+(>defn ascending
+  "Comparator, can be used to sort collections in an ascending way."
+  [a b]
+  [any? any? :ret number?]
+  (compare a b))

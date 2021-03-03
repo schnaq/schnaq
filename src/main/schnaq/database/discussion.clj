@@ -218,18 +218,20 @@
 (defn all-premises-for-conclusion
   "Get all premises for a given conclusion."
   [conclusion-id]
-  (->> (query
-         '[:find (pull ?statements statement-pattern) (pull ?type [:db/ident]) (pull ?tx transaction-pattern)
-           :keys :statement :argument-type :transaction
-           :in $ statement-pattern ?conclusion transaction-pattern
-           :where [?arguments :argument/conclusion ?conclusion ?tx]
-           [?arguments :argument/premises ?statements]
-           [?arguments :argument/type ?type]]
-         main-db/statement-pattern conclusion-id main-db/transaction-pattern)
-       (map (fn [{:keys [statement argument-type transaction]}]
-              (-> (merge statement transaction)
-                  (assoc :meta/argument-type argument-type)
-                  (toolbelt/pull-key-up :db/ident))))))
+  (let [statements
+        (query
+          '[:find (pull ?statements statement-pattern) (pull ?type [:db/ident]) (pull ?tx transaction-pattern)
+            :keys :statement :argument-type :transaction
+            :in $ statement-pattern ?conclusion transaction-pattern
+            :where [?arguments :argument/conclusion ?conclusion ?tx]
+            [?arguments :argument/premises ?statements]
+            [?arguments :argument/type ?type]]
+          main-db/statement-pattern conclusion-id main-db/transaction-pattern)]
+    (map (fn [{:keys [statement argument-type transaction]}]
+           (-> (merge statement transaction)
+               (assoc :meta/argument-type argument-type)
+               (toolbelt/pull-key-up :db/ident)))
+         statements)))
 
 (defn statements-undercutting-premise
   "Return all statements that are used to undercut an argument where `statement-id`
@@ -381,8 +383,7 @@
     result
     (map main-db/merge-entity-and-transaction result)
     (toolbelt/pull-key-up result :db/ident)
-    (sort-by :db/txInstant result)
-    (reverse result)))
+    (sort-by :db/txInstant toolbelt/ascending result)))
 
 (>defn all-statements
   "Returns all statements belonging to a discussion."
