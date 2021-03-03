@@ -7,6 +7,7 @@
             [schnaq.meeting.models :as models]
             [schnaq.meeting.specs :as specs]
             [schnaq.test-data :as test-data]
+            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
 
@@ -171,8 +172,7 @@
            :where [?feedback :feedback/description _ ?tx]]
          transaction-pattern)
        (map merge-entity-and-transaction)
-       (sort-by :db/txInstant)
-       reverse))
+       (sort-by :db/txInstant toolbelt/ascending)))
 
 ;; ----------------------------------------------------------------------------
 ;; user
