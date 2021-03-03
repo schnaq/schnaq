@@ -3,7 +3,8 @@
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.localstorage :as ls]))
+            [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.utils.time :as time]))
 
 (>defn- build-author-list
   "Build a nicely formatted string of a html list containing the authors from a sequence."
@@ -30,6 +31,7 @@
   "Badges that display additional discussion info."
   [statement edit-hash]
   (let [popover-id (str "debater-popover-" (:db/id statement))
+        locale @(rf/subscribe [:current-locale])
         old-statements-nums-map @(rf/subscribe [:visited/load-statement-nums])
         old-statement-num (get old-statements-nums-map (str (:db/id statement)) 0)
         statement-num (inc (get-in statement [:meta/sub-discussion-info :sub-statements] 0))
@@ -56,13 +58,16 @@
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (count authors)]
      (when edit-hash
-       [delete-clicker statement edit-hash])]))
+       [delete-clicker statement edit-hash])
+     [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant statement) locale]]]))
 
-(defn- static-info-badges
+(defn static-info-badges
   "Badges that display schnaq info."
-  [meta-info]
-  (let [statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))]
+  [schnaq]
+  (let [meta-info (:meta-info schnaq)
+        statement-count (:all-statements meta-info)
+        user-count (count (:authors meta-info))
+        locale @(rf/subscribe [:current-locale])]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
       [:i {:class (str "m-auto fas " (fa :comment))}]
@@ -70,18 +75,9 @@
      [:span.badge.badge-pill.badge-transparent.mr-2
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
-      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
+      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]
+     [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant schnaq) locale]]]))
 
-(defn current-schnaq-info-badges
-  "Badges that display info of the current schnaq."
-  []
-  (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
-    [static-info-badges (:meta-info current-schnaq)]))
-
-(defn schnaq-info-badges
-  "Badges that display info of a schnaq."
-  [schnaq]
-  [static-info-badges (get schnaq :meta-info)])
 
 ;; #### Subs ####
 

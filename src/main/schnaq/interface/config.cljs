@@ -27,6 +27,7 @@
 ;; header image
 (def place-holder-header-img "https://s3.disqtec.com/schnaq-header-images/header-placeholder.jpg")
 
+
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
 
@@ -43,3 +44,11 @@
   {:url keycloak-auth-server-url
    :realm keycloak-realm
    :clientId keycloak-client})
+
+
+;; -----------------------------------------------------------------------------
+;; Time settings
+
+(def time-settings
+  {:pattern "HH:mm dd.MM.yyy"
+   :timezone "Europe/Berlin"})

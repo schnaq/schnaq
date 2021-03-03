@@ -169,10 +169,10 @@
   (testing "Test the function that checks whether a statement belongs to a certain meeting."
     (let [share-hash "Wegi-ist-der-schönste"
           _ (db/new-discussion {:discussion/title "test-meet"
-                                           :discussion/share-hash share-hash
-                                           :discussion/edit-hash (str "secret-" share-hash)
-                                           :discussion/author (main-db/add-user-if-not-exists "Wegi")}
-                                          true)
+                                :discussion/share-hash share-hash
+                                :discussion/edit-hash (str "secret-" share-hash)
+                                :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                               true)
           christian-id (main-db/user-by-nickname "Christian")
           first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
           second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
@@ -186,3 +186,23 @@
           meta-premise (first (db/all-premises-for-conclusion (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
       (is (= :argument.type/support (:meta/argument-type meta-premise))))))
+
+(deftest valid-discussions-by-hashes-test
+  (let [new-discussion-hash "hello-i-am-new-here"
+        author (main-db/add-user-if-not-exists "Christian")
+        new-public-discussion {:discussion/title "Bla"
+                               :discussion/share-hash new-discussion-hash
+                               :discussion/edit-hash ":shrug:"
+                               :discussion/author author}
+        _ (db/new-discussion new-public-discussion true)]
+    (testing "Valid discussions should be returned."
+      (are [valid share-hashes]
+        (= valid (count (db/valid-discussions-by-hashes share-hashes)))
+        0 []
+        0 ["razupaltuff"]
+        1 ["public-share-hash"]
+        1 ["public-share-hash" "razupaltuff"]
+        1 ["public-share-hash" "public-share-hash-deleted"]
+        2 ["public-share-hash" new-discussion-hash]
+        2 ["public-share-hash" new-discussion-hash "public-share-hash-deleted"]
+        2 ["public-share-hash" new-discussion-hash "public-share-hash-deleted" "razupaltuff"]))))
