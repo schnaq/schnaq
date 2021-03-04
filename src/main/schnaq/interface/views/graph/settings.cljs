@@ -5,6 +5,14 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
+(defn- stabilize-graph
+  "Stabilize the graph."
+  []
+  (let [^js graph @(rf/subscribe [:graph/get-object])]
+    [:button.btn.btn-outline-primary
+     {:on-click #(.stabilize graph)}
+     (labels :graph.settings/stabilize)]))
+
 (defn- gravity-slider
   "Show gravity slider."
   []
@@ -31,8 +39,8 @@
      #:notification{:title (labels :graph.settings/title)
                     :body [:<>
                            [:p (labels :graph.settings/description)]
-                           [:hr]
-                           [gravity-slider]]
+                           [:hr] [gravity-slider]
+                           [:hr] [stabilize-graph]]
                     :context :info
                     :stay-visible? true}]))
 
