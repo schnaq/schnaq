@@ -30,10 +30,10 @@
                       (rf/dispatch [:schnaq.create/new {:discussion/title title} public?])))}
       [:div.agenda-meeting-container.shadow-straight.p-3
        [title-input]]
-      [:div.form-check.pt-2.text-center
+      [:div.form-check.pt-3.text-center
        [:input.form-check-input.big-checkbox {:type :checkbox
                                               :id :public-discussion?
-                                              :defaultChecked true}]
+                                              :defaultChecked false}]
        [:label.form-check-label.display-6.pl-1 {:for :public-discussion?}
         (labels :discussion.create.public-checkbox/label)]]
       [:div.pt-3.text-center

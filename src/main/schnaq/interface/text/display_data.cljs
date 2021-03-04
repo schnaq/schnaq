@@ -36,7 +36,7 @@
 
 
         ;; Startpage
-        :startpage/heading "Your personal discussion hub"
+        :startpage/heading "Your Personal Discussion Hub"
         :startpage/subheading "discuss, participate, decide"
 
         :startpage.usage/lead "What do I use schnaq for?"
@@ -383,7 +383,7 @@
         :feature/participate "Find out what others think"
         :feature/graph "Automatically generated mindmaps"
         :feature/private-public "Decide who gets to see your discussion"
-        :feature/secure "Your data is stored securely on EU servers"
+        :feature/secure "Your data is stored securely on servers in Germany"
 
         ;; tooltips
         :tooltip/history-statement "Back to statement made by "
