@@ -149,13 +149,13 @@
   (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                         {:share-hash share-hash}]))]
     (common/set-website-title! title)
-    [:div.container-fluid.bg-white.p-4.shadow-sm
+    [:section.container-fluid.bg-white.p-4.shadow-sm
      [:div.row
       [:div.col-1.back-arrow
        [:span {:on-click go-back-fn}                        ;; the icon itself is not clickable
         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]]
-      [:div.col-9 [:h2 title]]
-      [:div.col-2.pull-right
+      [:div.col-7 [:h2 title]]
+      [:div.col-4.pull-right
        [graph-settings/open-settings]
        [admin-buttons/graph-download-as-png (gstring/format "#%s" graph-id)]
        [admin-buttons/txt-export share-hash title]]]]))
