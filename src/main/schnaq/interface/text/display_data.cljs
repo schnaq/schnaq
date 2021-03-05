@@ -34,6 +34,20 @@
         :coc.content/title "We obey the law, please do that too"
         :coc.content/body "We comply with German law; this applies especially to data protection, equality and non-discrimination.\nContent that violates applicable law will be deleted."
 
+        ;; how-to
+        :how-to.create/title "Which topic do you want to schnaq about and with whom?"
+        :how-to.create/body "Put in a descriptive title and choose whether you want to schnaq with the whole world or rather schnaq in private"
+        :how-to.why/title "Why should I schnaq?"
+        :how-to.why/body "Fluffed your lines? Didn't get a chance to speak? Did everyone get everything? No clue why the discussion took so long?\nSave your time and store your knowlegde in schnaq. Participate whenever you like. The mindmap of the discussion is on the house."
+        :how-to.admin/title "Administer your schnaq or invite someone to help you"
+        :how-to.admin/body "Invite participants via link or mail. If you need any help as admin just invite someone to lend you a hand."
+        :how-to.schnaq/title "How do I schnaq?"
+        :how-to.schnaq/body "Share your opinion! Others can react to your post or add a comment. The mind-map is automatically generated and updated whenever there is a new statement. Fancy a post? Just click on it and jump right at it."
+        :how-to.pro-con/title "To Agree or Disagree ..."
+        :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro arguments are highlighted blue and contra arguments are highlighted orange. You can add multiple pro arguments as well as contra arguments to the same statement."
+        :how-to.call-to-action/title "Now you know!"
+        :how-to.call-to-action/body "That's actually all there is to know about schnaq. Now use it!"
+
 
         ;; Startpage
         :startpage/heading "Your personal discussion hub"
@@ -408,6 +422,7 @@
         :router/startpage "Startpage"
         :router/true-404-view "404 error page"
         :router/public-discussions "Public schnaqs"
+        :router/code-of-conduct "Code of Conduct"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -448,6 +463,20 @@
         :coc.content/lead "Inhalte"
         :coc.content/title "Wir halten uns an das Gesetz, bitte tut das auch"
         :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte, die gegen geltendes Recht verstoßen, werden von uns gelöscht."
+
+        ;; how-to
+        :how-to.create/title "Worüber möchtest du schnaqqen und mit wem?"
+        :how-to.create/body "Gebe deinem schnaq einen aussagekräftigen Titel und wähle aus, ob du mit der ganzen Welt schnaqqen willst, oder lieber selbst entscheidest wer mitschnaqqt."
+        :how-to.why/title "Wieso soll ich schnaqqen?"
+        :how-to.why/body "Faden verloren? Nicht zu Wort gekommen? Haben alle alles verstanden? Mal wieder keine Ahnung warum so viel diskutiert wurde?\nSpar dir Zeit und halte Wissen mit schnaq fest. Nimm Teil, wann du Zeit hast. Die Mindmap der Diskussion gibt's geschenkt."
+        :how-to.admin/title "Administriere dein schnaq oder lass dir helfen"
+        :how-to.admin/body "Lade Teilnehmer:innen per Link oder Mail ein. Wenn du Hilfe beim Administrieren brauchst, klicke einfach auf 'Admin Zugang' und verschicke einen Administrationszugang per Mail.\n\nAls Admin kannst du Beiträge löschen und Personen per Mail einladen."
+        :how-to.schnaq/title "Wie schnaqqe ich?"
+        :how-to.schnaq/body "Teile deine Meinung! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Teilnehmer:innen können drauf reagieren und antworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag. Wenn du zu einem Beitrag springen möchtest klicke ihn einfach an."
+        :how-to.pro-con/title "Bist dafür oder dagegen?"
+        :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf links im Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
+        :how-to.call-to-action/title "Jetzt weißt du Bescheid!"
+        :how-to.call-to-action/body "Hiermit ist alles erklärt was über schnaq zu erklären gibt, also lege direkt los!"
 
         ;; Startpage
         :startpage/heading "Deine Online-Diskussionsplattform"
@@ -822,6 +851,7 @@
         :router/startpage "Startseite"
         :router/true-404-view "404 Fehlerseite"
         :router/public-discussions "Öffentliche schnaqs"
+        :router/code-of-conduct "Verhaltensregeln"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -887,6 +917,16 @@
   (identifier
     {:animation-discussion/webm "/animations/animation_discussion.webm"
      :animation-discussion/mp4 "/animations/animation_discussion.mp4"
+     :how-to.admin/webm "https://s3.disqtec.com/schnaq-how-to/admin.webm"
+     :how-to.admin/mp4 "https://s3.disqtec.com/schnaq-how-to/admin.mp4"
+     :how-to.create/webm "https://s3.disqtec.com/schnaq-how-to/create.webm"
+     :how-to.create/mp4 "https://s3.disqtec.com/schnaq-how-to/create.mp4"
+     :how-to.discussion/webm "https://s3.disqtec.com/schnaq-how-to/discussion.webm"
+     :how-to.discussion/mp4 "https://s3.disqtec.com/schnaq-how-to/discussion.mp4"
+     :how-to.pro-con/webm "https://s3.disqtec.com/schnaq-how-to/discussion-2.webm"
+     :how-to.pro-con/mp4 "https://s3.disqtec.com/schnaq-how-to/discussion-2.mp4"
+     :how-to.why/webm "https://s3.disqtec.com/schnaq-how-to/why.webm"
+     :how-to.why/mp4 "https://s3.disqtec.com/schnaq-how-to/why.mp4"
      :start-page.features.sample-discussion/webm "/animations/sample_discussion.webm"
      :start-page.features.sample-discussion/mp4 "/animations/sample_discussion.mp4"
      :start-page.work-together/webm "/animations/WorkTogether.webm"
