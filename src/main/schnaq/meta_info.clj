@@ -7,5 +7,6 @@
   [share-hash author]
   (let [all-statements (discussion-db/all-statements share-hash)
         total-count (count all-statements)
-        authors (distinct (conj (map #(:statement/author %) all-statements) author))]
+        authors (distinct (conj (map #(-> % :statement/author :user/nickname) all-statements)
+                                (:user/nickname author)))]
     {:all-statements total-count :authors authors}))
