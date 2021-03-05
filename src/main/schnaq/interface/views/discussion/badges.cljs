@@ -34,8 +34,8 @@
         locale @(rf/subscribe [:current-locale])
         old-statements-nums-map @(rf/subscribe [:visited/load-statement-nums])
         old-statement-num (get old-statements-nums-map (str (:db/id statement)) 0)
-        statement-num (inc (get-in statement [:meta/sub-discussion-info :sub-statements] 0))
-        new? (not (= (inc old-statement-num) statement-num))
+        statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
+        new? (not (= old-statement-num statement-num))
         authors (conj (-> statement :meta/sub-discussion-info :authors)
                       (-> statement :statement/author :user/nickname))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
