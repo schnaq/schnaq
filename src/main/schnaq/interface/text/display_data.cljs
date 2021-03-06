@@ -50,7 +50,7 @@
 
 
         ;; Startpage
-        :startpage/heading "Your personal discussion hub"
+        :startpage/heading "Your Personal Discussion Hub"
         :startpage/subheading "discuss, participate, decide"
 
         :startpage.usage/lead "What do I use schnaq for?"
@@ -77,6 +77,16 @@
         :startpage.early-adopter/body "Browse through public discussions"
         :startpage.early-adopter.buttons/join-schnaq "Public schnaqs"
         :startpage.early-adopter/or "or"
+
+        :startpage.newsletter/heading "Subscribe to our Newsletter"
+        :startpage.newsletter/address-placeholder "E-Mail Address"
+        :startpage.newsletter/consent "I want to subscribe to the schnaq newsletter, and regularly receive information about schnaq.com."
+        :startpage.newsletter/more-info-clicker "More information"
+        :startpage.newsletter/policy-disclaimer "Schnaq saves, processes and saves the personal information you enter above to
+        subscribe you to the newsletter. You can unsubscribe at any time, by clicking the appropriate link in the emails you will receive.
+        Alternatively you can write us an email, and we will unsubscribe you personally."
+        :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our "
+        :startpage.newsletter/privacy-policy "privacy policy"
 
         ;; Login page
         :page.login/heading "Please Login"
@@ -211,6 +221,8 @@
         :feedbacks.overview/header "Feedbacks"
         :feedbacks.overview/subheader "All feedbacks"
         :feedbacks.overview/description "Description"
+        :feedbacks.overview/table-header "We have %s feedbacks 🥳!"
+        :feedbacks.overview/when? "When?"
         :feedbacks.overview/contact-name "From"
         :feedbacks.overview/contact-mail "E-Mail"
         :feedbacks/button "Feedback"
@@ -294,9 +306,10 @@
         :graph/heading "Discussion Overview"
         :graph.button/text "Mindmap"
         :graph.download/as-png "Download mindmap as image"
-        :graph.settings/title "Settings for your MindMap"
-        :graph.settings/description "Here are some settings for your mindmap! Play around with the sliders and let the magic happen."
+        :graph.settings/title "Settings for your Mindmap"
+        :graph.settings/description "Here are some settings for your Mindmap! Play around with the sliders and let the magic happen."
         :graph.settings.gravity/label "Adjust the gravity between your nodes."
+        :graph.settings/stabilize "Stabilize Mindmap"
 
         ;; Pricing Page
         :pricing.free-tier/description "For small teams and private parties. The starter plan is the perfect entry
@@ -385,7 +398,7 @@
         :feature/participate "Find out what others think"
         :feature/graph "Automatically generated mindmaps"
         :feature/private-public "Decide who gets to see your discussion"
-        :feature/secure "Your data is stored securely on EU servers"
+        :feature/secure "Your data is stored securely on servers in Germany"
 
         ;; tooltips
         :tooltip/history-statement "Back to statement made by "
@@ -504,6 +517,17 @@
         :startpage.early-adopter/body "Stöbere durch öffentliche Diskussionen:"
         :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
         :startpage.early-adopter/or "oder"
+
+        :startpage.newsletter/heading "Newsletter abonnieren"
+        :startpage.newsletter/address-placeholder "E-Mail Adresse"
+        :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."
+        :startpage.newsletter/more-info-clicker "Mehr Informationen"
+        :startpage.newsletter/policy-disclaimer "schnaq erhebt, verarbeitet und nutzt Ihre oben angegebenen personenbezogenen Daten zur
+        Bearbeitung Ihres Anliegens. Jederzeit können Sie sich von dem Newsletter abmelden, indem Sie auf
+        den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ können Sie uns auch eine E-Mail
+        schreiben und wir kümmern uns dann um Ihr Anliegen."
+        :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer "
+        :startpage.newsletter/privacy-policy "Datenschutzerklärung"
 
         ;; Login Page
         :page.login/heading "Bitte logg dich ein"
@@ -633,6 +657,8 @@
         :feedbacks.overview/header "Rückmeldungen"
         :feedbacks.overview/subheader "Alle abgegebenen Rückmeldungen"
         :feedbacks.overview/description "Beschreibung"
+        :feedbacks.overview/table-header "Es gibt %s Rückmeldungen 🥳!"
+        :feedbacks.overview/when? "Wann?"
         :feedbacks.overview/contact-name "Von"
         :feedbacks.overview/contact-mail "E-Mail"
         :feedbacks/button "Feedback"
@@ -724,6 +750,7 @@
         :graph.settings/title "Einstellungen für die Mindmap"
         :graph.settings/description "Finde hier Einstellungen für deine Mindmap! Spiele mit den Slidern herum und schau was passiert."
         :graph.settings.gravity/label "Stelle hier die Gravitation zwischen den Knoten ein."
+        :graph.settings/stabilize "Stabilisiere Mindmap"
 
         ;; Pricing Page
         :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der
@@ -909,7 +936,8 @@
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"
      :startpage.features/discussion-graph "/imgs/startpage/sample_graph.png"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
-     :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"}))
+     :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"
+     :startpage/newsletter "https://s3.disqtec.com/startpage/newsletter.jpeg"}))
 
 (defn video
   "Returns an video path"

@@ -19,8 +19,8 @@
    [:div.clickable.card-history-home.text-center
     {:on-click
      #(rf/dispatch [:discussion.history/time-travel history-length])}
-    [tooltip/nested-div
-     "right"
+    [tooltip/block-element
+     :right
      (labels :history.home/tooltip)
      [:<> [:div [:small (labels :history.home/text)]]]]]])
 
@@ -41,8 +41,8 @@
              {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
              [:div.history-card-content.text-center
-              [tooltip/nested-div
-               "right"
+              [tooltip/block-element
+               :right
                (str (labels :tooltip/history-statement) nickname)
                [common/avatar nickname 42]]]])]))]))
 
@@ -62,8 +62,8 @@
      [:div.clickable.card-history-home
       {:on-click
        #(rf/dispatch navigation)}
-      [tooltip/nested-div
-       "right"
+      [tooltip/block-element
+       :right
        (labels tooltip)
        [:div.d-flex
         [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
@@ -72,16 +72,17 @@
 (defn- discussion-start-button
   "Discussion start button for history view"
   [history-length]
-  (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
+  (let [schnaq @(rf/subscribe [:schnaq/selected])
+        title (:discussion/title schnaq)]
     [:div.clickable.card-history-home.text-dark
      {:on-click #(rf/dispatch [:discussion.history/time-travel history-length])}
-     [tooltip/nested-div
-      "right"
+     [tooltip/block-element
+      :right
       (labels :history.home/tooltip)
       [:div.text-center
        [:h6 title]
        [:p.text-muted.mb-0 (labels :history.home/text)]
-       [badges/current-schnaq-info-badges]]]]))
+       [badges/static-info-badges schnaq]]]]))
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
@@ -118,7 +119,7 @@
                  [:div.history-card-content
                   (if (zero? index)
                     history-content
-                    [tooltip/nested-div "right" tooltip history-content])]])]]))])]))
+                    [tooltip/block-element :right tooltip history-content])]])]]))])]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"

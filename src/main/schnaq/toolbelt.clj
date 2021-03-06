@@ -44,11 +44,8 @@
        %)
     coll))
 
-
-(defn comp-compare
-  "A compare that exhibits the exact opposite behaviour."
-  [val1 val2]
-  (case (compare val1 val2)
-    0 0
-    -1 1
-    1 -1))
+(>defn ascending
+  "Comparator, can be used to sort collections in an ascending way."
+  [a b]
+  [any? any? :ret number?]
+  (compare b a))

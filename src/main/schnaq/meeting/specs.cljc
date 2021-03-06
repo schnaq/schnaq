@@ -6,6 +6,9 @@
 ;; Frontend only
 #?(:cljs (s/def :re-frame/component vector?))
 
+;; Transaction
+(s/def :db/txInstant inst?)
+
 ;; Discussion
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
 
@@ -14,7 +17,7 @@
 (s/def :discussion/share-hash ::non-blank-string)
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/author (s/or :reference ::entity-reference
-                             :user ::user))
+                                :user ::user))
 (s/def :discussion/header-image-url string?)
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
@@ -25,7 +28,8 @@
 (s/def ::discussion (s/keys :req [:discussion/title :discussion/states
                                   :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
-                                  :discussion/header-image-url :discussion/edit-hash]))
+                                  :discussion/header-image-url :discussion/edit-hash
+                                  :db/txInstant]))
 
 ;; Author
 (s/def :user/nickname string?)
@@ -50,7 +54,8 @@
 (s/def ::argument
   (s/keys :req [:argument/author :argument/premises :argument/conclusion
                 :argument/type :argument/version]
-          :opt [:argument/discussions]))
+          :opt [:argument/discussions
+                :db/txInstant]))
 
 ;; Common
 (s/def :db/id (s/or :transacted number? :temporary any?))
@@ -62,4 +67,5 @@
 (s/def :feedback/description ::non-blank-string)
 (s/def :feedback/has-image? boolean?)
 (s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
-                          :opt [:feedback/contact-name :feedback/contact-mail]))
+                          :opt [:feedback/contact-name :feedback/contact-mail
+                                :db/txInstant]))

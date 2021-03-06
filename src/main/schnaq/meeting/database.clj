@@ -95,6 +95,11 @@
    (init! config)
    (transact test-data)))
 
+(>defn merge-entity-and-transaction
+  "When pulling entity and transaction, merge the results into a single map."
+  [[entity transaction]]
+  [(s/coll-of map?) :ret map?]
+  (merge entity transaction))
 
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
@@ -113,6 +118,10 @@
    :statement/version
    :statement/deleted?
    {:statement/author [:user/nickname]}])
+
+(def transaction-pattern
+  "Pull transaction information."
+  [:db/txInstant])
 
 ;; ##### Input functions #####
 (defn now [] (Date.))
@@ -157,14 +166,13 @@
 (defn all-feedbacks
   "Return complete feedbacks from database, sorted by descending timestamp."
   []
-  (map first
-       (sort-by
-         second toolbelt/comp-compare
-         (d/q
-           '[:find (pull ?feedback [*]) ?ts
-             :where [?feedback :feedback/description _ ?tx]
-             [?tx :db/txInstant ?ts]]
-           (d/db (new-connection))))))
+  (->> (query
+         '[:find (pull ?feedback [*]) (pull ?tx transaction-pattern)
+           :in $ transaction-pattern
+           :where [?feedback :feedback/description _ ?tx]]
+         transaction-pattern)
+       (map merge-entity-and-transaction)
+       (sort-by :db/txInstant toolbelt/ascending)))
 
 ;; ----------------------------------------------------------------------------
 ;; user
