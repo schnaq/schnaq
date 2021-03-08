@@ -42,7 +42,7 @@
         :how-to.admin/title "Administer your schnaq or invite someone to help you"
         :how-to.admin/body "Invite participants via link or mail. If you need any help as admin just invite someone to lend you a hand."
         :how-to.schnaq/title "How do I schnaq?"
-        :how-to.schnaq/body "Share your opinion! Others can react to your post or add a comment. The mind-map is automatically generated and updated whenever there is a new statement. Fancy a post? Just click on it and jump right at it."
+        :how-to.schnaq/body "Share your opinion! Others can react to your post or add a comment. The mindmap is automatically generated and updated whenever there is a new statement. Fancy a post? Just click on it and jump right at it."
         :how-to.pro-con/title "To Agree or Disagree ..."
         :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro arguments are highlighted blue and contra arguments are highlighted orange. You can add multiple pro arguments as well as contra arguments to the same statement."
         :how-to.call-to-action/title "Now you know!"
@@ -137,10 +137,9 @@
         :meeting.admin.notifications/statements-deleted-title "Statements deleted!"
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
 
-        ;; Brainstorming time
+        ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
-        :brainstorm.buttons/start-now "Start your discussion"
-        :schnaq.create.button/save "Start a new schnaq!"
+        :schnaq.create.button/save "Start a new schnaq"
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Make this discussion public"
@@ -481,13 +480,13 @@
         :how-to.create/title "Worüber möchtest du schnaqqen und mit wem?"
         :how-to.create/body "Gebe deinem schnaq einen aussagekräftigen Titel und wähle aus, ob du mit der ganzen Welt schnaqqen willst, oder lieber selbst entscheidest wer mitschnaqqt."
         :how-to.why/title "Wieso soll ich schnaqqen?"
-        :how-to.why/body "Faden verloren? Nicht zu Wort gekommen? Haben alle alles verstanden? Mal wieder keine Ahnung warum so viel diskutiert wurde?\nSpar dir Zeit und halte Wissen mit schnaq fest. Nimm Teil, wann du Zeit hast. Die Mindmap der Diskussion gibt's geschenkt."
+        :how-to.why/body "Faden verloren? Nicht zu Wort gekommen? Haben alle alles verstanden? Mal wieder keine Ahnung warum so viel diskutiert wurde?\nSpar dir Zeit und halte Wissen mit schnaq fest. Nimm teil, wann du Zeit hast. Die Mindmap der Diskussion gibt's geschenkt."
         :how-to.admin/title "Administriere dein schnaq oder lass dir helfen"
-        :how-to.admin/body "Lade Teilnehmer:innen per Link oder Mail ein. Wenn du Hilfe beim Administrieren brauchst, klicke einfach auf 'Admin Zugang' und verschicke einen Administrationszugang per Mail.\n\nAls Admin kannst du Beiträge löschen und Personen per Mail einladen."
+        :how-to.admin/body "Lade Teilnehmer:innen per Link oder Mail ein. Wenn du Hilfe beim Administrieren brauchst, klicke einfach auf \"Admin Zugang\" und verschicke einen Administrationszugang per Mail.\n\nAls Admin kannst du Beiträge löschen und Personen per Mail einladen."
         :how-to.schnaq/title "Wie schnaqqe ich?"
-        :how-to.schnaq/body "Teile deine Meinung! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Teilnehmer:innen können drauf reagieren und antworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag. Wenn du zu einem Beitrag springen möchtest klicke ihn einfach an."
-        :how-to.pro-con/title "Bist dafür oder dagegen?"
-        :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf links im Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
+        :how-to.schnaq/body "Teile deine Meinung! Trage sie in das Eingabefeld ein und sie erscheint in der Liste an Beiträgen. Teilnehmer:innen können drauf reagieren und antworten. Die Mindmap wird automatisch generiert und aktualisiert sich mit jedem neuen Beitrag. Wenn du zu einem Beitrag springen möchtest, klicke ihn einfach an."
+        :how-to.pro-con/title "Bist du dafür oder dagegen?"
+        :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
         :how-to.call-to-action/title "Jetzt weißt du Bescheid!"
         :how-to.call-to-action/body "Hiermit ist alles erklärt was über schnaq zu erklären gibt, also lege direkt los!"
 
@@ -579,10 +578,9 @@
         :meeting.admin.notifications/statements-deleted-title "Nachrichten gelöscht!"
         :meeting.admin.notifications/statements-deleted-lead "Deine gewählten Nachrichten wurden erfolgreich gelöscht."
 
-        ;; Brainstorming time
+        ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
-        :brainstorm.buttons/start-now "Starte deine Diskussion"
-        :schnaq.create.button/save "Schnaq starten!"
+        :schnaq.create.button/save "Schnaq starten"
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
