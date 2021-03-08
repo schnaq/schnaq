@@ -42,8 +42,8 @@
    [:div.col-12.col-lg-6.text-center
     [:button.button-secondary.font-200
      {:type "button"
-      :on-click #(rf/dispatch [:navigation/navigate :routes.brainstorm/create])}
-     (labels :brainstorm.buttons/start-now)]]
+      :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+     (labels :schnaq.create.button/save)]]
    [:div.col-12.col-lg-6
     [text-box
      :how-to.call-to-action/title
