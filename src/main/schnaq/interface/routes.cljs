@@ -11,6 +11,7 @@
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
+            [schnaq.interface.views.how-to :as how-to]
             [schnaq.interface.views.meeting.admin-center :as meeting-admin]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.privacy :as privacy]
@@ -74,6 +75,10 @@
     {:name :routes/code-of-conduct
      :view coc/view
      :link-text (labels :router/code-of-conduct)}]
+   ["how-to"
+    {:name :routes/how-to
+     :view how-to/view
+     :link-text (labels :router/how-to)}]
    ["schnaqs"
     ["/public"
      {:name :routes/public-discussions

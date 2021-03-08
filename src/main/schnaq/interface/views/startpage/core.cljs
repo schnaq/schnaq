@@ -72,7 +72,7 @@
      [:button.button-secondary
       {:type "button"
        :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
-      (labels :brainstorm.buttons/start-now)]]]
+      (labels :schnaq.create.button/save)]]]
    [base/wavy-curve "scale(1.5,1)"]])
 
 (defn- supporters []

@@ -18,7 +18,7 @@
    [:button.button-call-to-action.w-100
     {:type "button"
      :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
-    (labels :brainstorm.buttons/start-now)]])
+    (labels :schnaq.create.button/save)]])
 
 (defn- bullet-point
   "Display a bullet-point with a leading icon.
