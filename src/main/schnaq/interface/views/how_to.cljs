@@ -1,8 +1,7 @@
-(ns schnaq.interface.views.how-to.view
+(ns schnaq.interface.views.how-to
   (:require [schnaq.interface.text.display-data :refer [labels img-path video]]
             [re-frame.core :as rf]
             [schnaq.interface.views.pages :as pages]))
-
 
 (defn- text-box
   "Text box with title and a body."
