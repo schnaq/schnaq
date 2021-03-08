@@ -35,6 +35,7 @@
         :coc.content/body "We comply with German law; this applies especially to data protection, equality and non-discrimination.\nContent that violates applicable law will be deleted."
 
         ;; how-to
+        :how-to/title "How to schnaq?"
         :how-to.create/title "Which topic do you want to schnaq about and with whom?"
         :how-to.create/body "Put in a descriptive title and choose whether you want to schnaq with the whole world or rather schnaq in private"
         :how-to.why/title "Why should I schnaq?"
@@ -477,6 +478,7 @@
         :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte, die gegen geltendes Recht verstoßen, werden von uns gelöscht."
 
         ;; how-to
+        :how-to/title "Wie verwende ich schnaq?"
         :how-to.create/title "Worüber möchtest du schnaqqen und mit wem?"
         :how-to.create/body "Gebe deinem schnaq einen aussagekräftigen Titel und wähle aus, ob du mit der ganzen Welt schnaqqen willst, oder lieber selbst entscheidest wer mitschnaqqt."
         :how-to.why/title "Wieso soll ich schnaqqen?"
