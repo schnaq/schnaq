@@ -734,7 +734,7 @@
         :user.profile/settings "Einstellungen"
         :user.profile/star-tooltip "Du bist ein Admin!\n\"Aus großer Kraft folgt große Verantwortung.\""
         :user.action/link-copied "Link kopiert!"
-        :user.action/link-copied-body "Teile den Link mit anderen um ihnen Zugriff zu geben."
+        :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
