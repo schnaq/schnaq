@@ -29,7 +29,8 @@
        (js-wrap/tooltip (str "#meeting-link-form-" id-extra) "dispose"))
      :reagent-render
      (fn []
-       (let [display-content (create-link-fn @(rf/subscribe [:navigation/current-route]))
+       (let [display-content (create-link-fn (-> @(rf/subscribe [:navigation/current-route])
+                                                 :path-params :share-hash))
              meeting-link-id (str "meeting-link" id-extra)]
          [:div.pb-4
           [:form.form.create-meeting-form.d-flex
@@ -202,7 +203,7 @@
                           :params {:recipients recipients
                                    :share-hash share-hash
                                    :edit-hash edit-hash
-                                   :share-link (common/get-share-link current-route)}
+                                   :share-link (common/get-share-link share-hash)}
                           :response-format (ajax/transit-response-format)
                           :on-success [:meeting-admin/send-email-success form]
                           :on-failure [:ajax.error/as-notification]}]]})))
