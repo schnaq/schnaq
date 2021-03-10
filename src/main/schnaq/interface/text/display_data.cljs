@@ -198,6 +198,7 @@
         :meeting.admin-center.edit/administrate "Administrate Discussion"
         :meeting/admin-center-export "Download discussion as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
+        :meeting/share-link-tooltip "Copy share-link"
 
         ;; Discussion Language
         :discussion/create-argument-action "Add Statement"
@@ -288,6 +289,8 @@
         :user/logout "Logout"
         :user.profile/settings "Settings"
         :user.profile/star-tooltip "You're an admin!\n\"With great power comes great responsibility.\""
+        :user.action/link-copied "Link copied!"
+        :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -634,6 +637,7 @@
         :meeting.admin-center.edit/administrate "Diskussion administrieren"
         :meeting/admin-center-export "Diskussion als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
+        :meeting/share-link-tooltip "Zugangslink kopieren"
 
         ;; Discussion Language
         :discussion/create-argument-action "Beitrag hinzufügen"
@@ -729,6 +733,8 @@
         :user/logout "Logout"
         :user.profile/settings "Einstellungen"
         :user.profile/star-tooltip "Du bist ein Admin!\n\"Aus großer Kraft folgt große Verantwortung.\""
+        :user.action/link-copied "Link kopiert!"
+        :user.action/link-copied-body "Teile den Link mit anderen um ihnen Zugriff zu geben."
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
