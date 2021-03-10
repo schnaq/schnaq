@@ -89,7 +89,8 @@
     [about-button :nav/blog "https://schnaq.com/blog/"]
     [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
     [about-button :router/privacy (reitfe/href :routes/privacy)]
-    [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]]])
+    [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+    [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
 (defn- feed-page-dektop [subscription-key]
   [:div.row.px-0.mx-0.py-3
