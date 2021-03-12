@@ -109,7 +109,7 @@
         :schnaq.header-image.url/successful-set "Preview image successfully set"
         :schnaq.header-image.url/successful-set-body "The image will be featured in this schnaq's header."
         :schnaq.header-image.url/failed-setting-title "Error when adding image"
-        :schnaq.header-image.url/failed-seting-body "The image will not be used as preview image."
+        :schnaq.header-image.url/failed-setting-body "The image will not be used as preview image."
 
         ;; Create schnaq
         :schnaq.create.input/placeholder "What should the name of your schnaq be?"
@@ -552,7 +552,7 @@
         :schnaq.header-image.url/successful-set "Vorschaubild erfolgreich gesetzt"
         :schnaq.header-image.url/successful-set-body "Das Bild wird nun in der Übersicht dargestellt."
         :schnaq.header-image.url/failed-setting-title "Fehler beim Hinzufügen des Bildes"
-        :schnaq.header-image.url/failed-seting-body "Das Bild wird nicht in der Vorschau genutzt."
+        :schnaq.header-image.url/failed-setting-body "Das Bild wird nicht in der Vorschau genutzt."
 
 
 
