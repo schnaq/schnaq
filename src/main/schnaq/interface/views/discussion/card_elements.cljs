@@ -265,14 +265,17 @@
 (defn- sort-options
   "Displays the different sort options for card elements."
   []
-  [:div
-   [:p "Sort by "
-    [:button.btn.btn-outline-primary.btn-tiny
-     {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-     "Newest"]
-    [:button.btn.btn-outline-primary.btn-tiny
-     {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-     "Popular"]]])
+  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
+    [:div.py-2
+     [:p.small.mb-0 "Sort"
+      [:button.btn.btn-outline-primary.btn-sm.mx-1
+       {:class (when (= sort-method :newest) "active")
+        :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
+       "Newest"]
+      [:button.btn.btn-outline-primary.btn-sm
+       {:class (when (= sort-method :popular) "active")
+        :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+       "Popular"]]]))
 
 (defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
   [:<>

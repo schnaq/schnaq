@@ -91,7 +91,7 @@
                     :newest :db/txInstant
                     :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
             sorted-conclusions (sort-by keyfn > conclusions)]
-        [:div.card-columns.card-columns-discussion.py-3
+        [:div.card-columns.card-columns-discussion.pb-3
          (for [conclusion sorted-conclusions]
            [:div {:key (:db/id conclusion)
                   :on-click (fn [_e]
