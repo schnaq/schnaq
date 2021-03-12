@@ -252,9 +252,32 @@
     [:div.topic-view.shadow-straight-light.md-4
      [:div.discussion-light-background content]]))
 
+(rf/reg-event-db
+  :discussion.statements.sort/set
+  (fn [db [_ method]]
+    (assoc-in db [:discussion :statements :sort-method] method)))
+
+(rf/reg-sub
+  :discussion.statements/sort-method
+  (fn [db _]
+    (get-in db [:discussion :statements :sort-method] :newest)))
+
+(defn- sort-options
+  "Displays the different sort options for card elements."
+  []
+  [:div
+   [:p "Sort by "
+    [:button.btn.btn-outline-primary.btn-tiny
+     {:on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
+     "Newest"]
+    [:button.btn.btn-outline-primary.btn-tiny
+     {:on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+     "Popular"]]])
+
 (defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
   [:<>
    [topic-bubble topic-content]
+   [sort-options]
    [cards/conclusion-cards-list conclusions share-hash]])
 
 (defn discussion-view-mobile
