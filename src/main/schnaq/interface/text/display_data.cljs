@@ -51,8 +51,8 @@
 
 
         ;; Startpage
-        :startpage/heading "Your Personal Discussion Hub"
-        :startpage/subheading "discuss, participate, decide"
+        :startpage/heading "Structure your Business Knowledge"
+        :startpage/subheading "Comprehensible processes, sustainable knowledge preparation, finally structure"
 
         :startpage.usage/lead "What do I use schnaq for?"
 
@@ -75,7 +75,7 @@
         Did something interesting catch your attention? Just double click to jump right in through the mindmap."
 
         :startpage.early-adopter/title "Gotten curious?"
-        :startpage.early-adopter/body "Browse through public discussions"
+        :startpage.early-adopter/body "Browse through public schnaqs"
         :startpage.early-adopter.buttons/join-schnaq "Public schnaqs"
         :startpage.early-adopter/or "or"
 
@@ -396,11 +396,10 @@
         :pricing.newsletter/name "DisqTec newsletter."
 
         ;; feature list
-        :feature/what "One step to start a discussion"
-        :feature/share "Invite friends – they don't need accounts"
-        :feature/participate "Find out what others think"
+        :feature/what "One step to start a structured discussion with your team"
+        :feature/share "Invite colleagues – they don't need accounts"
         :feature/graph "Automatically generated mindmaps"
-        :feature/private-public "Decide who gets to see your discussion"
+        :feature/processing "Prepare your business knowledge sustainably"
         :feature/secure "Your data is stored securely on servers in Germany"
 
         ;; tooltips
@@ -496,8 +495,8 @@
         :how-to.call-to-action/body "Hiermit ist alles erklärt was über schnaq zu erklären gibt, also lege direkt los!"
 
         ;; Startpage
-        :startpage/heading "Deine Online-Diskussionsplattform"
-        :startpage/subheading "Diskussionen, Online-Partizipationen, Entscheidungsfindungen"
+        :startpage/heading "Strukturiere Dein Unternehmenswissen"
+        :startpage/subheading "Nachvollziehbare Prozesse, nachhaltige Wissensaufbereitung, endlich Struktur"
 
         :startpage.call-to-action/discuss-spotlight-topics "Aktuelle schnaqs für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
@@ -518,7 +517,7 @@
         :startpage.features.graph/body [:span "Zu jeder Diskussion wird automatisch eine Mindmap erstellt. So hast du jederzeit den Überblick. Dir ist etwas interessantes aufgefallen?" [:br] " Spring über die Mindmap per Doppelklick direkt in die Diskussion."]
 
         :startpage.early-adopter/title "Neugierig geworden?"
-        :startpage.early-adopter/body "Stöbere durch öffentliche Diskussionen:"
+        :startpage.early-adopter/body "Stöbere durch öffentliche schnaqs"
         :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
         :startpage.early-adopter/or "oder"
 
@@ -842,11 +841,10 @@
         :pricing.newsletter/name "DisqTec Newsletter."
 
         ;; feature list
-        :feature/what "Mit einem Schritt zur Diskussion"
-        :feature/share "Lade deine Freunde ein – keine Accounts notwendig"
-        :feature/participate "Finde heraus, was andere denken"
+        :feature/what "Mit einem Schritt im Team strukturiert diskutieren"
+        :feature/share "Lade deine Kolleg:innen ein – keine Accounts notwendig"
         :feature/graph "Automatisch generierte Mindmaps"
-        :feature/private-public "Entscheide, wer deine Diskussion sehen darf"
+        :feature/processing "Bereite dein Unternehmenswissen nachhaltig auf"
         :feature/secure "Deine Daten sind sicher auf deutschen Servern"
 
         ;; tooltips
@@ -1005,6 +1003,7 @@
      :newspaper "fa-newspaper"
      :plane "fa-paper-plane"
      :plus "fa-plus"
+     :project/diagram "fa-project-diagram"
      :share "fa-share-alt"
      :shield "fa-shield-alt"
      :site-map "fa-sitemap"
