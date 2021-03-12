@@ -8,13 +8,13 @@
 
 (>defn calculate-votes
   "Calculates the votes without needing to reload."
-  [statement vote-type vote-store]
-  [map? keyword? map? :ret number?]
-  (let [[internal-key db-key] (if (= vote-type :upvotes)
-                                [:meta/upvotes :up]
-                                [:meta/downvotes :down])
-        vote-change (get-in vote-store [db-key (:db/id statement)] 0)]
-    (+ (internal-key statement) vote-change)))
+  [statement local-votes]
+  [map? map? :ret number?]
+  (let [up-vote-change (get-in local-votes [:up (:db/id statement)] 0)
+        down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
+    (-
+      (+ (:meta/upvotes statement) up-vote-change)
+      (+ (:meta/downvotes statement) down-vote-change))))
 
 (defn arg-type->attitude
   "Returns an attitude deduced from an argument-type."
