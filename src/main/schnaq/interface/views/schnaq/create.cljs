@@ -4,6 +4,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]
             [re-frame.core :as rf]))
 
@@ -37,7 +38,8 @@
        [:label.form-check-label.display-6.pl-1 {:for :public-discussion?}
         (labels :discussion.create.public-checkbox/label)]]
       [:div.pt-3.text-center
-       [:button.btn.button-primary (labels :schnaq.create.button/save)]]]]]])
+       [:button.btn.button-primary (labels :schnaq.create.button/save)]]
+      [how-to-elements/quick-how-to-create]]]]])
 
 (defn create-schnaq-view []
   [create-schnaq-page])

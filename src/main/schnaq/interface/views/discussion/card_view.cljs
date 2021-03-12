@@ -64,7 +64,7 @@
       [elements/discussion-view-desktop
        schnaq content input-form badges nil current-starting nil]
       [elements/discussion-view-mobile
-       schnaq content input-form badges nil current-starting]]]))
+       schnaq content input-form badges nil current-starting nil]]]))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
@@ -85,7 +85,7 @@
       [elements/discussion-view-desktop
        current-discussion content input-form badges info-content current-premises history]
       [elements/discussion-view-mobile
-       current-discussion content input-form badges info-content current-premises]]]))
+       current-discussion content input-form badges info-content current-premises history]]]))
 
 (rf/reg-sub
   :discussion.premises/current

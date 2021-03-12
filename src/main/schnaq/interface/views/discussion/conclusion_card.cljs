@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [fa labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -17,7 +18,10 @@
     [:div.alert.alert-primary.text-center.row
      [:div.col-sm-8.col-12
       [:p.lead.pt-3 (labels :call-to-contribute/lead)]
-      [:p (labels :call-to-contribute/body)]]
+      [:p (labels :call-to-contribute/body)]
+      [:p (labels :how-to/ask-question)
+       [:a {:href (reitfe/href :routes/how-to)}
+        (labels :how-to/answer-question)]]]
      [:div.col-sm-4.col-12.p-3.p-md-0
       [:img.w-75 {:src (img-path :schnaqqifant.300w/talk)}]]]]])
 
