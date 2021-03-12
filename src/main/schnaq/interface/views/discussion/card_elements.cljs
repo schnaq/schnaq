@@ -267,15 +267,15 @@
   []
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
     [:div.py-2
-     [:p.small.mb-0 "Sort"
+     [:p.small.mb-0 (labels :badges.sort/sort)
       [:button.btn.btn-outline-primary.btn-sm.mx-1
        {:class (when (= sort-method :newest) "active")
         :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-       "Newest"]
+       (labels :badges.sort/newest)]
       [:button.btn.btn-outline-primary.btn-sm
        {:class (when (= sort-method :popular) "active")
         :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-       "Popular"]]]))
+       (labels :badges.sort/popular)]]]))
 
 (defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
   [:<>
