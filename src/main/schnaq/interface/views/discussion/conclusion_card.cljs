@@ -93,17 +93,15 @@
             sorted-conclusions (sort-by keyfn > conclusions)]
         [:div.card-columns.card-columns-discussion.py-3
          (for [conclusion sorted-conclusions]
-           (do
-             (println conclusion)
-             [:div {:key (:db/id conclusion)
-                    :on-click (fn [_e]
-                                (let [selection (.toString (.getSelection js/window))]
-                                  (when (zero? (count selection))
-                                    (rf/dispatch [:discussion.select/conclusion conclusion])
-                                    (rf/dispatch [:discussion.history/push conclusion])
-                                    (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
-                                                  (assoc path-params :statement-id (:db/id conclusion))]))))}
-              [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]]))])
+           [:div {:key (:db/id conclusion)
+                  :on-click (fn [_e]
+                              (let [selection (.toString (.getSelection js/window))]
+                                (when (zero? (count selection))
+                                  (rf/dispatch [:discussion.select/conclusion conclusion])
+                                  (rf/dispatch [:discussion.history/push conclusion])
+                                  (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
+                                                (assoc path-params :statement-id (:db/id conclusion))]))))}
+            [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]])])
       [call-to-contribute])))
 
 (rf/reg-event-fx
