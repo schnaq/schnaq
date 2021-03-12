@@ -100,7 +100,7 @@
         share-hash (:discussion/share-hash @(rf/subscribe [:schnaq/selected]))
         options {:width (str width)
                  :height (str height)
-                 :layout {:randomSeed :contant}
+                 :layout {:randomSeed :constant}
                  :physics {:barnesHut {:avoidOverlap
                                        @(rf/subscribe [:graph.settings/gravity])}}}]
     (reagent/create-class
