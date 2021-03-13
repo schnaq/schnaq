@@ -69,11 +69,11 @@
         :startpage.features.discussion/body "A lot of times knowledge only exists in the head of a specific person. Nobody got time to add everything into the company knowledge base.
         schnaq grabs the information where it is created and communicated. Whether it's through video, phone, meeting, chat or email.
         At the end all employees can access the information relevant to them. Collaboration bordering on magic."
-        :startpage.features.graph/lead "Clear Visualization"
-        :startpage.features.graph/title "Never lose track"
-        :startpage.features.graph/body "A mindmap is automatically created for every discussion.
-        This way it's easy for you to keep track of things.
-        Did something interesting catch your attention? Just double click to jump right in through the mindmap."
+        :startpage.features.graph/lead "The brain of your company"
+        :startpage.features.graph/title "Data is the lifeblood of an organization"
+        :startpage.features.graph/body "You need impeccable data to have an advantage in the digital age.
+        schnaq transforms the knowledge of your employees into pure data. All corresponding knowledge and information is automatically linked.
+        Easy access and analysis guaranteed!"
 
         :startpage.early-adopter/title "Gotten curious?"
         :startpage.early-adopter/body "Browse through public schnaqs"
@@ -514,9 +514,11 @@
         :startpage.features.discussion/body "Allzu oft hängt wichtiges Wissen an einzelnen Personen. Niemand hat die Zeit alles immer in das Firmenwiki zu übertragen.
         schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Egal ob in einem Videogespräch, Telefonat, Meeting, Chat oder Email.
         Anschließend können alle Mitarbeiter:innen einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."
-        :startpage.features.graph/lead "Übersichtliche Darstellung"
-        :startpage.features.graph/title "Verliere nie wieder den Überblick"
-        :startpage.features.graph/body [:span "Zu jeder Diskussion wird automatisch eine Mindmap erstellt. So hast du jederzeit den Überblick. Dir ist etwas interessantes aufgefallen?" [:br] " Spring über die Mindmap per Doppelklick direkt in die Diskussion."]
+        :startpage.features.graph/lead "Das Gehirn für Unternehmen"
+        :startpage.features.graph/title "Daten sind das Herz jedes Unternehmens"
+        :startpage.features.graph/body "Jedes Unternehmen braucht eine solide Datengrundlage um im digitalen Zeitalter konkurrenzfähig zu bleiben.
+        schnaq sorgt dafür dass das Wissen der Mitarbeiter:innen in Form von Daten verfügbar ist. Wissen was zusammengehört wird auch in Datenform miteinander verbunden.
+        Einfacher Zugriff und einfache Auswertung garantiert!"
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Stöbere durch öffentliche schnaqs"
