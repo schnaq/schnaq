@@ -64,10 +64,11 @@
         :startpage.features.meeting-organisation/title "What do others think about that?"
         :startpage.features.meeting-organisation/body "Your team is not on the same page? Does your club need to make a hard decision?
         Or do you need to know the opinion of the stakeholders? Create a schnaq discussion and provide an easy overview for everybody."
-        :startpage.features.discussion/lead "Structured Discussions"
-        :startpage.features.discussion/title "The loudest voice isn't always right"
-        :startpage.features.discussion/body "You know the drill. There is always someone stealing all the attention. With schnaq
-        you can easily see the contributions of everyone. Easily address the things that you want to talk about and ignore the rest."
+        :startpage.features.discussion/lead "Kollaborative knowledge"
+        :startpage.features.discussion/title "Know whats relevant for your work"
+        :startpage.features.discussion/body "A lot of times knowledge only exists in the head of a specific person. Nobody got time to add everything into the company knowledge base.
+        schnaq grabs the information where it is created and communicated. Whether it's through video, phone, meeting, chat or email.
+        At the end all employees can access the information relevant to them. Collaboration bordering on magic."
         :startpage.features.graph/lead "Clear Visualization"
         :startpage.features.graph/title "Never lose track"
         :startpage.features.graph/body "A mindmap is automatically created for every discussion.
@@ -508,11 +509,11 @@
         :startpage.features.meeting-organisation/body "Es gibt Uneinigkeiten im Team? Dein Verein muss eine Entscheidung treffen?
         Oder ist es gerade wichtig alle Entscheidungsträger:innen einzubeziehen?
         Mit schnaq Diskussionen können alle schnell und verteilt teilnehmen und sich einen Überblick verschaffen."
-        :startpage.features.discussion/lead "Strukturierte Diskussionen"
-        :startpage.features.discussion/title "Wer am lautesten schreit, hat nicht immer Recht"
-        :startpage.features.discussion/body "Der Gruppenchat bimmelt seit 30 Minuten. Die Nachrichten werden immer mehr. Die Lust zu lesen immer weniger. Nur drei Nachrichten waren interessant.
-        Mit schnaq siehst du einfach strukturiert die Beiträge aller Teilnehmer:innen.
-        Gehe schnell auf die Beiträge ein, die dich interessieren."
+        :startpage.features.discussion/lead "Gemeinsame Wissensgrundlage"
+        :startpage.features.discussion/title "Wissen was relevant ist"
+        :startpage.features.discussion/body "Allzu oft hängt wichtiges Wissen an einzelnen Personen. Niemand hat die Zeit alles immer in das Firmenwiki zu übertragen.
+        schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Egal ob in einem Videogespräch, Telefonat, Meeting, Chat oder Email.
+        Anschließend können alle Mitarbeiter:innen einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."
         :startpage.features.graph/lead "Übersichtliche Darstellung"
         :startpage.features.graph/title "Verliere nie wieder den Überblick"
         :startpage.features.graph/body [:span "Zu jeder Diskussion wird automatisch eine Mindmap erstellt. So hast du jederzeit den Überblick. Dir ist etwas interessantes aufgefallen?" [:br] " Spring über die Mindmap per Doppelklick direkt in die Diskussion."]
