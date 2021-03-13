@@ -80,7 +80,8 @@
         :startpage.early-adopter.buttons/join-schnaq "Public schnaqs"
         :startpage.early-adopter/or "or"
 
-        :startpage.newsletter/heading "Subscribe to our Newsletter"
+        :startpage.newsletter/heading "Be the first to know when you can profit from new features!"
+        :startpage.newsletter/button "Give me exclusive previews!"
         :startpage.newsletter/address-placeholder "E-Mail Address"
         :startpage.newsletter/consent "I want to subscribe to the schnaq newsletter, and regularly receive information about schnaq.com."
         :startpage.newsletter/more-info-clicker "More information"
@@ -525,7 +526,8 @@
         :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
         :startpage.early-adopter/or "oder"
 
-        :startpage.newsletter/heading "Newsletter abonnieren"
+        :startpage.newsletter/heading "Seien Sie die ersten, die von neuen Funktionen profitieren!"
+        :startpage.newsletter/button "Exklusive Informationen anfordern!"
         :startpage.newsletter/address-placeholder "E-Mail Adresse"
         :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."
         :startpage.newsletter/more-info-clicker "Mehr Informationen"

@@ -48,7 +48,7 @@
 
      [:div.form-group
       [:input
-       {:name "subscribe" :value (labels :startpage.newsletter/heading) :type "submit" :readOnly true
+       {:name "subscribe" :value (labels :startpage.newsletter/button) :type "submit" :readOnly true
         :class "btn btn-primary d-block mx-auto"}]]]]])
 
 
