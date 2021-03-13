@@ -396,11 +396,12 @@
         :pricing.newsletter/name "DisqTec newsletter."
 
         ;; feature list
-        :feature/what "One step to start a structured discussion with your team"
-        :feature/share "Invite colleagues – they don't need accounts"
-        :feature/graph "Automatically generated mindmaps"
-        :feature/processing "Prepare your business knowledge sustainably"
-        :feature/secure "Your data is stored securely on servers in Germany"
+        :feature/what "No costly maintenance of protocols and wiki pages"
+        :feature/share "Isolated knowledge silos are prevented"
+        :feature/graph "All company knowledge is structured automatically"
+        :feature/processing "Easy retrieval of relevant information"
+        :feature/secure "Data is kept safe with german engineering"
+        :schnaq.startpage.cta/button "Discuss with your coworkers"
 
         ;; tooltips
         :tooltip/history-statement "Back to statement made by "
@@ -841,11 +842,12 @@
         :pricing.newsletter/name "DisqTec Newsletter."
 
         ;; feature list
-        :feature/what "Mit einem Schritt im Team strukturiert diskutieren"
-        :feature/share "Lade deine Kolleg:innen ein – keine Accounts notwendig"
-        :feature/graph "Automatisch generierte Mindmaps"
-        :feature/processing "Bereite dein Unternehmenswissen nachhaltig auf"
-        :feature/secure "Deine Daten sind sicher auf deutschen Servern"
+        :feature/what "Keine aufwendige Pflege von Protokollen und Wiki-Seiten mehr"
+        :feature/share "Wissenssilos werden verhindert"
+        :feature/graph "Relevante Wissen wird automatisch strukturiert"
+        :feature/processing "Einfaches Finden von relevanten Informationen"
+        :feature/secure "Daten werden nach Deutschen Standards geschützt"
+        :schnaq.startpage.cta/button "Mit Kollegen diskutieren"
 
         ;; tooltips
         :tooltip/history-statement "Zurück zum Beitrag von "
@@ -1004,6 +1006,7 @@
      :plane "fa-paper-plane"
      :plus "fa-plus"
      :project/diagram "fa-project-diagram"
+     :search "fa-search"
      :share "fa-share-alt"
      :shield "fa-shield-alt"
      :site-map "fa-sitemap"

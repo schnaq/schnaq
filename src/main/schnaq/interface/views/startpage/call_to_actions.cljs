@@ -18,7 +18,7 @@
    [:button.button-call-to-action.w-100
     {:type "button"
      :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
-    (labels :schnaq.create.button/save)]])
+    (labels :schnaq.startpage.cta/button)]])
 
 (defn- bullet-point
   "Display a bullet-point with a leading icon.
@@ -41,7 +41,7 @@
     [bullet-point :clipboard :feature/what]
     [bullet-point :user/group :feature/share]
     [bullet-point :site-map :feature/graph]
-    [bullet-point :project/diagram :feature/processing]
+    [bullet-point :search :feature/processing]
     [bullet-point :shield :feature/secure]]])
 
 (defn- spotlight-element [title image link]
