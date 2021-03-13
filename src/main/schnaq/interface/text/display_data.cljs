@@ -60,10 +60,10 @@
 
         :startpage.features/more-information "More information"
 
-        :startpage.features.meeting-organisation/lead "Collaborate"
-        :startpage.features.meeting-organisation/title "What do others think about?"
+        :startpage.features.meeting-organisation/lead "schnaq discussions"
+        :startpage.features.meeting-organisation/title "What do others think about that?"
         :startpage.features.meeting-organisation/body "Your team is not on the same page? Does your club need to make a hard decision?
-        Or do you just want to know what others think on a topic important to you? Create your discussion with schnaq and get on it."
+        Or do you need to know the opinion of the stakeholders? Create a schnaq discussion and provide an easy overview for everybody."
         :startpage.features.discussion/lead "Structured Discussions"
         :startpage.features.discussion/title "The loudest voice isn't always right"
         :startpage.features.discussion/body "You know the drill. There is always someone stealing all the attention. With schnaq
@@ -503,11 +503,11 @@
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
-        :startpage.features.meeting-organisation/lead "Kollaborativer Meinungsaustausch"
+        :startpage.features.meeting-organisation/lead "schnaq Diskussionen"
         :startpage.features.meeting-organisation/title "Was denken andere?"
         :startpage.features.meeting-organisation/body "Es gibt Uneinigkeiten im Team? Dein Verein muss eine Entscheidung treffen?
-        Oder möchtest du einfach wissen was andere Menschen zu Themen denken, die dir wichtig sind? Erstelle eine Diskussion mit schnaq
-        und lege direkt los."
+        Oder ist es gerade wichtig alle Entscheidungsträger:innen einzubeziehen?
+        Mit schnaq Diskussionen können alle schnell und verteilt teilnehmen und sich einen Überblick verschaffen."
         :startpage.features.discussion/lead "Strukturierte Diskussionen"
         :startpage.features.discussion/title "Wer am lautesten schreit, hat nicht immer Recht"
         :startpage.features.discussion/body "Der Gruppenchat bimmelt seit 30 Minuten. Die Nachrichten werden immer mehr. Die Lust zu lesen immer weniger. Nur drei Nachrichten waren interessant.
