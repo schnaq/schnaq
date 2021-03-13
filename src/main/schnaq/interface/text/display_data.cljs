@@ -51,8 +51,8 @@
 
 
         ;; Startpage
-        :startpage/heading "Structure your Business Knowledge"
-        :startpage/subheading "Comprehensible processes, sustainable knowledge preparation, finally structure"
+        :startpage/heading "Structured Company Knowledge. Completely Automated."
+        :startpage/subheading "Software that organizes knowledge and makes it usable – from the morning email until the evening meeting."
 
         :startpage.usage/lead "What do I use schnaq for?"
 
@@ -495,8 +495,8 @@
         :how-to.call-to-action/body "Hiermit ist alles erklärt was über schnaq zu erklären gibt, also lege direkt los!"
 
         ;; Startpage
-        :startpage/heading "Strukturiere Dein Unternehmenswissen"
-        :startpage/subheading "Nachvollziehbare Prozesse, nachhaltige Wissensaufbereitung, endlich Struktur"
+        :startpage/heading "Strukturiertes Unternehmenswissen. Vollautomatisch."
+        :startpage/subheading "Software, die Wissen organisiert und nutzbar macht – von der Email am Morgen bis zum letzten Meeting am Tag."
 
         :startpage.call-to-action/discuss-spotlight-topics "Aktuelle schnaqs für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
