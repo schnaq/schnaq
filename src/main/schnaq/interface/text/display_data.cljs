@@ -449,7 +449,11 @@
         :admin.center.delete/heading "Deletion"
         :admin.center.delete.public/heading "Public schnaqs"
         :admin.center.delete.private/label "Share-hash"
-        :admin.center.delete.private/heading "Private schnaqs"}
+        :admin.center.delete.private/heading "Private schnaqs"
+
+        :badges.sort/sort "Sort"
+        :badges.sort/newest "Newest"
+        :badges.sort/popular "Popular"}
    :de {;; Common
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -903,7 +907,11 @@
         :admin.center.delete/heading "Löschen"
         :admin.center.delete.public/heading "Öffentliche schnaqs"
         :admin.center.delete.private/label "Share-hash"
-        :admin.center.delete.private/heading "Private schnaqs"}})
+        :admin.center.delete.private/heading "Private schnaqs"
+
+        :badges.sort/sort "Sortierung"
+        :badges.sort/newest "Neueste"
+        :badges.sort/popular "Beliebt"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
