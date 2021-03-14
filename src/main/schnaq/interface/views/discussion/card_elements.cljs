@@ -266,8 +266,9 @@
   "Displays the different sort options for card elements."
   []
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-    [:div.py-2
-     [:p.small.mb-0 (labels :badges.sort/sort)
+    [:section.py-2.text-right
+     [:p.small.mb-0
+      (labels :badges.sort/sort)
       [:button.btn.btn-outline-primary.btn-sm.mx-1
        {:class (when (= sort-method :newest) "active")
         :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
