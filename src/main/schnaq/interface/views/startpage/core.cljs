@@ -11,7 +11,7 @@
 
 (defn- mailchimp-form
   []
-  [:div.row.pt-3.pb-5
+  [:section.row.pt-5.pb-5
    [:div.col-12.col-md-4
     [:img.img-fluid {:src (img-path :startpage/newsletter)}]]
    [:div.col-12.col-md-8

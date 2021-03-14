@@ -82,7 +82,7 @@
         :startpage.newsletter/button "Give me exclusive previews!"
         :startpage.newsletter/address-placeholder "E-Mail Address"
         :startpage.newsletter/consent "I want to subscribe to the schnaq newsletter, and regularly receive information about schnaq.com."
-        :startpage.newsletter/more-info-clicker "More information"
+        :startpage.newsletter/more-info-clicker "Data Processing"
         :startpage.newsletter/policy-disclaimer "Schnaq saves, processes and saves the personal information you enter above to
         subscribe you to the newsletter. You can unsubscribe at any time, by clicking the appropriate link in the emails you will receive.
         Alternatively you can write us an email, and we will unsubscribe you personally."
@@ -502,32 +502,38 @@
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
-        :startpage.features.meeting-organisation/lead "schnaq Diskussionen"
+        :startpage.features.meeting-organisation/lead "Wissen durch Diskussionen"
         :startpage.features.meeting-organisation/title "Was denken andere?"
-        :startpage.features.meeting-organisation/body "Es gibt Uneinigkeiten im Team? Dein Verein muss eine Entscheidung treffen?
-        Oder ist es gerade wichtig alle Entscheidungsträger:innen einzubeziehen?
-        Mit schnaq Diskussionen können alle schnell und verteilt teilnehmen und sich einen Überblick verschaffen."
+        :startpage.features.meeting-organisation/body
+        [:<>
+         [:p "Es gibt Uneinigkeiten im Team oder ihr müsst eine Entscheidung treffen? Oder ist es gerade wichtig alle Entscheidungsträger:innen einzubeziehen?"]
+         [:p "Mit schnaq Diskussionen können alle schnell und verteilt teilnehmen und sich einen Überblick verschaffen."]]
+
         :startpage.features.discussion/lead "Gemeinsame Wissensgrundlage"
         :startpage.features.discussion/title "Wissen was relevant ist"
-        :startpage.features.discussion/body "Allzu oft hängt wichtiges Wissen an einzelnen Personen. Niemand hat die Zeit alles immer in das Firmenwiki zu übertragen.
-        schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Egal ob in einem Videogespräch, Telefonat, Meeting, Chat oder Email.
-        Anschließend können alle Mitarbeiter:innen einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."
+        :startpage.features.discussion/body
+        [:<>
+         [:p "Allzu oft hängt wichtiges Wissen an einzelnen Personen. Niemand hat die Zeit alles immer in das Firmenwiki zu übertragen."]
+         [:p "schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Egal ob in einem Videogespräch, Telefonat, Meeting, Chat oder Email."]
+         [:p "Anschließend können alle Mitarbeiter:innen einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."]]
         :startpage.features.graph/lead "Das Gehirn für Unternehmen"
         :startpage.features.graph/title "Daten sind das Herz jedes Unternehmens"
-        :startpage.features.graph/body "Jedes Unternehmen braucht eine solide Datengrundlage um im digitalen Zeitalter konkurrenzfähig zu bleiben.
-        schnaq sorgt dafür dass das Wissen der Mitarbeiter:innen in Form von Daten verfügbar ist. Wissen was zusammengehört wird auch in Datenform miteinander verbunden.
-        Einfacher Zugriff und einfache Auswertung garantiert!"
+        :startpage.features.graph/body
+        [:<>
+         [:p "Jedes Unternehmen braucht eine solide Datengrundlage, um im digitalen Zeitalter konkurrenzfähig zu bleiben."]
+         [:p "schnaq sorgt dafür dass das Wissen der Mitarbeiter:innen in Form von Daten verfügbar ist. Wissen was zusammengehört wird auch in Datenform miteinander verbunden."]
+         [:p "Einfacher Zugriff und einfache Auswertung garantiert!"]]
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Stöbere durch öffentliche schnaqs"
         :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
         :startpage.early-adopter/or "oder"
 
-        :startpage.newsletter/heading "Seien Sie die ersten, die von neuen Funktionen profitieren!"
+        :startpage.newsletter/heading "Gehöre zu den Ersten, die von neuen Funktionen profitieren!"
         :startpage.newsletter/button "Exklusive Informationen anfordern!"
         :startpage.newsletter/address-placeholder "E-Mail Adresse"
         :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."
-        :startpage.newsletter/more-info-clicker "Mehr Informationen"
+        :startpage.newsletter/more-info-clicker "Datenverarbeitung"
         :startpage.newsletter/policy-disclaimer "schnaq erhebt, verarbeitet und nutzt Ihre oben angegebenen personenbezogenen Daten zur
         Bearbeitung Ihres Anliegens. Jederzeit können Sie sich von dem Newsletter abmelden, indem Sie auf
         den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ können Sie uns auch eine E-Mail
