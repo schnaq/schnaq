@@ -96,7 +96,7 @@
 (defn- startpage-content []
   (let [header
         {:page/heading (labels :startpage/heading)
-         :page/more-for-heading [:h2.h4 (labels :startpage/subheading)]}]
+         :page/subheading (labels :startpage/subheading)}]
     [pages/with-nav-and-header
      header
      [:<>

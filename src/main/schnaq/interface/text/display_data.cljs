@@ -497,7 +497,7 @@
 
         ;; Startpage
         :startpage/heading "Strukturiertes Unternehmenswissen. Vollautomatisch."
-        :startpage/subheading "Software, die Wissen organisiert und nutzbar macht – von der Email am Morgen bis zum letzten Meeting am Tag."
+        :startpage/subheading "Software, die Wissen organisiert und nutzbar macht – von der E-Mail am Morgen bis zum letzten Meeting am Tag."
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
