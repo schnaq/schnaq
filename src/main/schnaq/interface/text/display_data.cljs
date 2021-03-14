@@ -856,10 +856,10 @@
         ;; feature list
         :feature/what "Keine aufwendige Pflege von Protokollen und Wiki-Seiten mehr"
         :feature/share "Wissenssilos werden verhindert"
-        :feature/graph "Relevante Wissen wird automatisch strukturiert"
+        :feature/graph "Relevantes Wissen wird automatisch strukturiert"
         :feature/processing "Einfaches Finden von relevanten Informationen"
         :feature/secure "Daten werden nach Deutschen Standards geschützt"
-        :schnaq.startpage.cta/button "Mit Kollegen diskutieren"
+        :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
 
         ;; tooltips
         :tooltip/history-statement "Zurück zum Beitrag von "
