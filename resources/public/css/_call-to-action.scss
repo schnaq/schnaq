@@ -8,34 +8,6 @@
   color: $gray-800;
 }
 
-.spotlight-discussion {
-  background-color: $white;
-  border-radius: 2rem;
-  box-shadow: $light-shadow;
-  height: 20rem;
-  overflow: hidden;
-
-  &:hover {
-    background-color: $white-shade;
-    box-shadow: $hover-shadow;
-  }
-}
-
-.spotlight-discussion-image {
-  max-height: 16rem;
-  min-height: 100%;
-  min-width: 100%;
-  object-fit: cover;
-  object-position: 0 0;
-  overflow: hidden;
-}
-
-.spotlight-discussion-title {
-  color: $gray-800;
-  padding: 1rem 1.5rem 1.75rem;
-  text-decoration: none;
-}
-
 .no-text-decoration {
   text-decoration: none;
 

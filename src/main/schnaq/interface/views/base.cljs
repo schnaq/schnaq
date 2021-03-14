@@ -25,7 +25,7 @@
    [:header.masthead.text-white
     [:div.container
      [:h1 heading]
-     [:h4 subheading]
+     [:h4.display-6 subheading]
      more]]
    [wavy-curve]])
 

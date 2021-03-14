@@ -11,7 +11,7 @@
 
 (defn- mailchimp-form
   []
-  [:div.row.pt-3.pb-5
+  [:section.row.pt-5.pb-5
    [:div.col-12.col-md-4
     [:img.img-fluid {:src (img-path :startpage/newsletter)}]]
    [:div.col-12.col-md-8
@@ -48,7 +48,7 @@
 
      [:div.form-group
       [:input
-       {:name "subscribe" :value (labels :startpage.newsletter/heading) :type "submit" :readOnly true
+       {:name "subscribe" :value (labels :startpage.newsletter/button) :type "submit" :readOnly true
         :class "btn btn-primary d-block mx-auto"}]]]]])
 
 
@@ -96,13 +96,12 @@
 (defn- startpage-content []
   (let [header
         {:page/heading (labels :startpage/heading)
-         :page/more-for-heading (labels :startpage/subheading)}]
+         :page/subheading (labels :startpage/subheading)}]
     [pages/with-nav-and-header
      header
      [:<>
       [:section.container
        [cta/features-call-to-action]
-       [cta/spotlight-discussions]
        [startpage-features/feature-rows]
        [mailchimp-form]
        [testimonials/view]]
