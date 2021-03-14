@@ -56,8 +56,6 @@
 
         :startpage.usage/lead "What do I use schnaq for?"
 
-        :startpage.call-to-action/discuss-spotlight-topics "Current schnaqs for you"
-
         :startpage.features/more-information "More information"
 
         :startpage.features.meeting-organisation/lead "schnaq discussions"
@@ -501,7 +499,6 @@
         :startpage/heading "Strukturiertes Unternehmenswissen. Vollautomatisch."
         :startpage/subheading "Software, die Wissen organisiert und nutzbar macht – von der Email am Morgen bis zum letzten Meeting am Tag."
 
-        :startpage.call-to-action/discuss-spotlight-topics "Aktuelle schnaqs für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
@@ -941,9 +938,6 @@
      :schnaqqifant/talk "/imgs/elephants/talk.png"
      :schnaqqifant.300w/talk "/imgs/elephants/talk300w.png"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
-     :spotlight/eco-brain "/imgs/spotlight/brain.jpg"
-     :spotlight/home-office "/imgs/spotlight/covid-19.jpg"
-     :spotlight/merkel "/imgs/spotlight/merkel.jpg"
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"
      :startpage.features/discussion-graph "/imgs/startpage/sample_graph.png"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"

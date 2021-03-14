@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.startpage.call-to-actions
-  (:require [schnaq.interface.config :as config]
-            [schnaq.interface.text.display-data :refer [fa img-path labels video]]
+  (:require [schnaq.interface.text.display-data :refer [fa labels video]]
             [re-frame.core :as rf]))
 
 (defn- header-animation
@@ -33,7 +32,7 @@
 (defn features-call-to-action
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
-  [:div.row {:key "HeaderExtras-Bullet-Points-and-Animation"}
+  [:section.row {:key "HeaderExtras-Bullet-Points-and-Animation"}
    [:div.col-lg-6.py-lg-4.pr-lg-5
     [header-animation]
     [start-schnaq-button]]
@@ -43,32 +42,3 @@
     [bullet-point :site-map :feature/graph]
     [bullet-point :search :feature/processing]
     [bullet-point :shield :feature/secure]]])
-
-(defn- spotlight-element [title image link]
-  [:div.spotlight-discussion.clickable-no-hover
-   [:a.no-text-decoration {:href link}
-    [:div [:img.spotlight-discussion-image {:src image}]]
-    [:div.spotlight-discussion-title
-     [:h6 title]]]])
-
-(defn spotlight-discussions
-  "Display a row of clickable spotline discussions. Links are currently hardcoded"
-  []
-  [:div.my-4.my-lg-5
-   [:h4 (labels :startpage.call-to-action/discuss-spotlight-topics)]
-   [:div.row
-    ; credit https://pixabay.com/illustrations/brain-leaves-sustainability-organ-5591471/
-    [:div.col-lg-4
-     [spotlight-element "Mein Beitrag für eine nachhaltigere Welt"
-      (img-path :spotlight/eco-brain)
-      config/spotlight-1]]
-    ; credit https://pixabay.com/illustrations/covid-19-work-from-home-quarantine-4938932/
-    [:div.col-lg-4
-     [spotlight-element "Remote-Arbeiten in Zeiten von Corona"
-      (img-path :spotlight/home-office)
-      config/spotlight-2]]
-    ; credit https://www.freeimg.net/photo/1188165/merkel-chancellor-angelamerkel-cdu
-    [:div.col-lg-4
-     [spotlight-element "Nächste:r Bundeskanzler:in"
-      (img-path :spotlight/merkel)
-      config/spotlight-3]]]])

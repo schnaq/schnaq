@@ -102,7 +102,6 @@
      [:<>
       [:section.container
        [cta/features-call-to-action]
-       [cta/spotlight-discussions]
        [startpage-features/feature-rows]
        [mailchimp-form]
        [testimonials/view]]
