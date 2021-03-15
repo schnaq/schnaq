@@ -5,9 +5,6 @@
 (goog-define api-url "http://localhost:3000")
 (goog-define environment "development")
 (goog-define build-hash "dev")
-(goog-define spotlight-1 "https://schnaq.com/schnaq/7d6f68cb-ac6c-4407-ba86-ada29b2abb3b/")
-(goog-define spotlight-2 "https://schnaq.com/schnaq/0950ab05-0edb-441e-b8ca-f8907e85c5c6/")
-(goog-define spotlight-3 "https://schnaq.com/schnaq/ed5788b6-11da-4016-bb24-a93646705739/")
 
 (def deleted-statement-text "[deleted]")
 

@@ -55,38 +55,38 @@
         :how-to/answer-dont-show-again "Got it! Don't show this tip anymore!"
 
         ;; Startpage
-        :startpage/heading "Your Personal Discussion Hub"
-        :startpage/subheading "discuss, participate, decide"
+        :startpage/heading "Structured Company Knowledge. Completely Automated."
+        :startpage/subheading "Software that organizes knowledge and makes it usable – from the morning email until the evening meeting."
 
         :startpage.usage/lead "What do I use schnaq for?"
 
-        :startpage.call-to-action/discuss-spotlight-topics "Current schnaqs for you"
-
         :startpage.features/more-information "More information"
 
-        :startpage.features.meeting-organisation/lead "Collaborate"
-        :startpage.features.meeting-organisation/title "What do others think about?"
+        :startpage.features.meeting-organisation/lead "schnaq discussions"
+        :startpage.features.meeting-organisation/title "What do others think about that?"
         :startpage.features.meeting-organisation/body "Your team is not on the same page? Does your club need to make a hard decision?
-        Or do you just want to know what others think on a topic important to you? Create your discussion with schnaq and get on it."
-        :startpage.features.discussion/lead "Structured Discussions"
-        :startpage.features.discussion/title "The loudest voice isn't always right"
-        :startpage.features.discussion/body "You know the drill. There is always someone stealing all the attention. With schnaq
-        you can easily see the contributions of everyone. Easily address the things that you want to talk about and ignore the rest."
-        :startpage.features.graph/lead "Clear Visualization"
-        :startpage.features.graph/title "Never lose track"
-        :startpage.features.graph/body "A mindmap is automatically created for every discussion.
-        This way it's easy for you to keep track of things.
-        Did something interesting catch your attention? Just double click to jump right in through the mindmap."
+        Or do you need to know the opinion of the stakeholders? Create a schnaq discussion and provide an easy overview for everybody."
+        :startpage.features.discussion/lead "Kollaborative knowledge"
+        :startpage.features.discussion/title "Know whats relevant for your work"
+        :startpage.features.discussion/body "A lot of times knowledge only exists in the head of a specific person. Nobody got time to add everything into the company knowledge base.
+        schnaq grabs the information where it is created and communicated. Whether it's through video, phone, meeting, chat or email.
+        At the end all employees can access the information relevant to them. Collaboration bordering on magic."
+        :startpage.features.graph/lead "The brain of your company"
+        :startpage.features.graph/title "Data is the lifeblood of an organization"
+        :startpage.features.graph/body "You need impeccable data to have an advantage in the digital age.
+        schnaq transforms the knowledge of your employees into pure data. All corresponding knowledge and information is automatically linked.
+        Easy access and analysis guaranteed!"
 
         :startpage.early-adopter/title "Gotten curious?"
-        :startpage.early-adopter/body "Browse through public discussions"
+        :startpage.early-adopter/body "Browse through public schnaqs"
         :startpage.early-adopter.buttons/join-schnaq "Public schnaqs"
         :startpage.early-adopter/or "or"
 
-        :startpage.newsletter/heading "Subscribe to our Newsletter"
+        :startpage.newsletter/heading "Be the first to know when you can profit from new features!"
+        :startpage.newsletter/button "Give me exclusive previews!"
         :startpage.newsletter/address-placeholder "E-Mail Address"
         :startpage.newsletter/consent "I want to subscribe to the schnaq newsletter, and regularly receive information about schnaq.com."
-        :startpage.newsletter/more-info-clicker "More information"
+        :startpage.newsletter/more-info-clicker "Data Processing"
         :startpage.newsletter/policy-disclaimer "Schnaq saves, processes and saves the personal information you enter above to
         subscribe you to the newsletter. You can unsubscribe at any time, by clicking the appropriate link in the emails you will receive.
         Alternatively you can write us an email, and we will unsubscribe you personally."
@@ -113,7 +113,7 @@
         :schnaq.header-image.url/successful-set "Preview image successfully set"
         :schnaq.header-image.url/successful-set-body "The image will be featured in this schnaq's header."
         :schnaq.header-image.url/failed-setting-title "Error when adding image"
-        :schnaq.header-image.url/failed-seting-body "The image will not be used as preview image."
+        :schnaq.header-image.url/failed-setting-body "The image will not be used as preview image."
 
         ;; Create schnaq
         :schnaq.create.input/placeholder "What should the name of your schnaq be?"
@@ -202,6 +202,7 @@
         :meeting.admin-center.edit/administrate "Administrate Discussion"
         :meeting/admin-center-export "Download discussion as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
+        :meeting/share-link-tooltip "Copy share-link"
 
         ;; Discussion Language
         :discussion/create-argument-action "Add Statement"
@@ -292,6 +293,8 @@
         :user/logout "Logout"
         :user.profile/settings "Settings"
         :user.profile/star-tooltip "You're an admin!\n\"With great power comes great responsibility.\""
+        :user.action/link-copied "Link copied!"
+        :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -397,12 +400,12 @@
         :pricing.newsletter/name "DisqTec newsletter."
 
         ;; feature list
-        :feature/what "One step to start a discussion"
-        :feature/share "Invite friends – they don't need accounts"
-        :feature/participate "Find out what others think"
-        :feature/graph "Automatically generated mindmaps"
-        :feature/private-public "Decide who gets to see your discussion"
-        :feature/secure "Your data is stored securely on servers in Germany"
+        :feature/what "No costly maintenance of protocols and wiki pages"
+        :feature/share "Isolated knowledge silos are prevented"
+        :feature/graph "All company knowledge is structured automatically"
+        :feature/processing "Easy retrieval of relevant information"
+        :feature/secure "Data is kept safe with german engineering"
+        :schnaq.startpage.cta/button "Discuss with your coworkers"
 
         ;; tooltips
         :tooltip/history-statement "Back to statement made by "
@@ -450,7 +453,11 @@
         :admin.center.delete/heading "Deletion"
         :admin.center.delete.public/heading "Public schnaqs"
         :admin.center.delete.private/label "Share-hash"
-        :admin.center.delete.private/heading "Private schnaqs"}
+        :admin.center.delete.private/heading "Private schnaqs"
+
+        :badges.sort/sort "Sort"
+        :badges.sort/newest "Newest"
+        :badges.sort/popular "Popular"}
    :de {;; Common
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -503,36 +510,44 @@
 
 
         ;; Startpage
-        :startpage/heading "Deine Online-Diskussionsplattform"
-        :startpage/subheading "Diskussionen, Online-Partizipationen, Entscheidungsfindungen"
+        :startpage/heading "Strukturiertes Unternehmenswissen. Vollautomatisch."
+        :startpage/subheading "Software, die Wissen organisiert und nutzbar macht – von der E-Mail am Morgen bis zum letzten Meeting am Tag."
 
-        :startpage.call-to-action/discuss-spotlight-topics "Aktuelle schnaqs für dich"
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
-        :startpage.features.meeting-organisation/lead "Kollaborativer Meinungsaustausch"
+        :startpage.features.meeting-organisation/lead "Wissen durch Diskussionen"
         :startpage.features.meeting-organisation/title "Was denken andere?"
-        :startpage.features.meeting-organisation/body "Es gibt Uneinigkeiten im Team? Dein Verein muss eine Entscheidung treffen?
-        Oder möchtest du einfach wissen was andere Menschen zu Themen denken, die dir wichtig sind? Erstelle eine Diskussion mit schnaq
-        und lege direkt los."
-        :startpage.features.discussion/lead "Strukturierte Diskussionen"
-        :startpage.features.discussion/title "Wer am lautesten schreit, hat nicht immer Recht"
-        :startpage.features.discussion/body "Der Gruppenchat bimmelt seit 30 Minuten. Die Nachrichten werden immer mehr. Die Lust zu lesen immer weniger. Nur drei Nachrichten waren interessant.
-        Mit schnaq siehst du einfach strukturiert die Beiträge aller Teilnehmer:innen.
-        Gehe schnell auf die Beiträge ein, die dich interessieren."
-        :startpage.features.graph/lead "Übersichtliche Darstellung"
-        :startpage.features.graph/title "Verliere nie wieder den Überblick"
-        :startpage.features.graph/body [:span "Zu jeder Diskussion wird automatisch eine Mindmap erstellt. So hast du jederzeit den Überblick. Dir ist etwas interessantes aufgefallen?" [:br] " Spring über die Mindmap per Doppelklick direkt in die Diskussion."]
+        :startpage.features.meeting-organisation/body
+        [:<>
+         [:p "Es gibt Uneinigkeiten im Team oder ihr müsst eine Entscheidung treffen? Oder ist es gerade wichtig alle Entscheidungsträger:innen einzubeziehen?"]
+         [:p "Mit schnaq Diskussionen können alle schnell und verteilt teilnehmen und sich einen Überblick verschaffen."]]
+
+        :startpage.features.discussion/lead "Gemeinsame Wissensgrundlage"
+        :startpage.features.discussion/title "Wissen was relevant ist"
+        :startpage.features.discussion/body
+        [:<>
+         [:p "Allzu oft hängt wichtiges Wissen an einzelnen Personen. Niemand hat die Zeit alles immer in das Firmenwiki zu übertragen."]
+         [:p "schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Egal ob in einem Videogespräch, Telefonat, Meeting, Chat oder Email."]
+         [:p "Anschließend können alle Mitarbeiter:innen einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."]]
+        :startpage.features.graph/lead "Das Gehirn für Unternehmen"
+        :startpage.features.graph/title "Daten sind das Herz jedes Unternehmens"
+        :startpage.features.graph/body
+        [:<>
+         [:p "Jedes Unternehmen braucht eine solide Datengrundlage, um im digitalen Zeitalter konkurrenzfähig zu bleiben."]
+         [:p "schnaq sorgt dafür dass das Wissen der Mitarbeiter:innen in Form von Daten verfügbar ist. Wissen was zusammengehört wird auch in Datenform miteinander verbunden."]
+         [:p "Einfacher Zugriff und einfache Auswertung garantiert!"]]
 
         :startpage.early-adopter/title "Neugierig geworden?"
-        :startpage.early-adopter/body "Stöbere durch öffentliche Diskussionen:"
+        :startpage.early-adopter/body "Stöbere durch öffentliche schnaqs"
         :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
         :startpage.early-adopter/or "oder"
 
-        :startpage.newsletter/heading "Newsletter abonnieren"
+        :startpage.newsletter/heading "Gehöre zu den Ersten, die von neuen Funktionen profitieren!"
+        :startpage.newsletter/button "Exklusive Informationen anfordern!"
         :startpage.newsletter/address-placeholder "E-Mail Adresse"
         :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."
-        :startpage.newsletter/more-info-clicker "Mehr Informationen"
+        :startpage.newsletter/more-info-clicker "Datenverarbeitung"
         :startpage.newsletter/policy-disclaimer "schnaq erhebt, verarbeitet und nutzt Ihre oben angegebenen personenbezogenen Daten zur
         Bearbeitung Ihres Anliegens. Jederzeit können Sie sich von dem Newsletter abmelden, indem Sie auf
         den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ können Sie uns auch eine E-Mail
@@ -560,7 +575,7 @@
         :schnaq.header-image.url/successful-set "Vorschaubild erfolgreich gesetzt"
         :schnaq.header-image.url/successful-set-body "Das Bild wird nun in der Übersicht dargestellt."
         :schnaq.header-image.url/failed-setting-title "Fehler beim Hinzufügen des Bildes"
-        :schnaq.header-image.url/failed-seting-body "Das Bild wird nicht in der Vorschau genutzt."
+        :schnaq.header-image.url/failed-setting-body "Das Bild wird nicht in der Vorschau genutzt."
 
 
 
@@ -644,6 +659,7 @@
         :meeting.admin-center.edit/administrate "Diskussion administrieren"
         :meeting/admin-center-export "Diskussion als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
+        :meeting/share-link-tooltip "Zugangslink kopieren"
 
         ;; Discussion Language
         :discussion/create-argument-action "Beitrag hinzufügen"
@@ -739,6 +755,8 @@
         :user/logout "Logout"
         :user.profile/settings "Einstellungen"
         :user.profile/star-tooltip "Du bist ein Admin!\n\"Aus großer Kraft folgt große Verantwortung.\""
+        :user.action/link-copied "Link kopiert!"
+        :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
@@ -846,12 +864,12 @@
         :pricing.newsletter/name "DisqTec Newsletter."
 
         ;; feature list
-        :feature/what "Mit einem Schritt zur Diskussion"
-        :feature/share "Lade deine Freunde ein – keine Accounts notwendig"
-        :feature/participate "Finde heraus, was andere denken"
-        :feature/graph "Automatisch generierte Mindmaps"
-        :feature/private-public "Entscheide, wer deine Diskussion sehen darf"
-        :feature/secure "Deine Daten sind sicher auf deutschen Servern"
+        :feature/what "Keine aufwendige Pflege von Protokollen und Wiki-Seiten mehr"
+        :feature/share "Wissenssilos werden verhindert"
+        :feature/graph "Relevantes Wissen wird automatisch strukturiert"
+        :feature/processing "Einfaches Finden von relevanten Informationen"
+        :feature/secure "Daten werden nach Deutschen Standards geschützt"
+        :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
 
         ;; tooltips
         :tooltip/history-statement "Zurück zum Beitrag von "
@@ -899,7 +917,11 @@
         :admin.center.delete/heading "Löschen"
         :admin.center.delete.public/heading "Öffentliche schnaqs"
         :admin.center.delete.private/label "Share-hash"
-        :admin.center.delete.private/heading "Private schnaqs"}})
+        :admin.center.delete.private/heading "Private schnaqs"
+
+        :badges.sort/sort "Sortierung"
+        :badges.sort/newest "Neueste"
+        :badges.sort/popular "Beliebt"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
@@ -940,9 +962,6 @@
      :schnaqqifant/talk "/imgs/elephants/talk.png"
      :schnaqqifant.300w/talk "/imgs/elephants/talk300w.png"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
-     :spotlight/eco-brain "/imgs/spotlight/brain.jpg"
-     :spotlight/home-office "/imgs/spotlight/covid-19.jpg"
-     :spotlight/merkel "/imgs/spotlight/merkel.jpg"
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"
      :startpage.features/discussion-graph "/imgs/startpage/sample_graph.png"
      :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
@@ -1010,6 +1029,8 @@
      :newspaper "fa-newspaper"
      :plane "fa-paper-plane"
      :plus "fa-plus"
+     :project/diagram "fa-project-diagram"
+     :search "fa-search"
      :share "fa-share-alt"
      :shield "fa-shield-alt"
      :site-map "fa-sitemap"

@@ -6,17 +6,12 @@
 (defn- content []
   (let [header
         {:page/heading (labels :coc/heading)
-         :page/more-for-heading (labels :coc/subheading)}]
+         :page/subheading (labels :coc/subheading)}]
     [pages/with-nav-and-header
      header
-     [:<>
-      [:section.container
-       [rows/image-left
-        :schnaqqifant/hippie
-        :coc.users]
-       [rows/image-right
-        :schnaqqifant/police
-        :coc.content]]]]))
+     [:section.container
+      [rows/image-left :schnaqqifant/hippie :coc.users]
+      [rows/image-right :schnaqqifant/police :coc.content]]]))
 
 (defn view
   "A view containing the code of conduct"

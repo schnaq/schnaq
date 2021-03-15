@@ -5,8 +5,10 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.utils.file-download :as file-download]))
+            [schnaq.interface.utils.file-download :as file-download]
+            [schnaq.interface.views.common :as common]))
 
 (defn admin-center
   "Button to access admin menu."
@@ -17,6 +19,22 @@
    #(rf/dispatch [:navigation/navigate
                   :routes.schnaq/admin-center
                   {:share-hash share-hash :edit-hash edit-hash}])])
+
+(defn share-link
+  "Button to access admin menu."
+  [share-hash]
+  [tooltip/tooltip-button "bottom"
+   (labels :meeting/share-link-tooltip)
+   [:i {:class (str "m-auto fas " (fa :share))}]
+   (fn []
+     (clipboard/copy-to-clipboard! (common/get-share-link share-hash))
+     (rf/dispatch [:notification/add
+                   #:notification{:id (str "content-added" (random-uuid))
+                                  :title (labels :user.action/link-copied)
+                                  :body [:<>
+                                         [:p (labels :user.action/link-copied-body)]]
+                                  :context :info
+                                  :stay-visible? false}]))])
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."

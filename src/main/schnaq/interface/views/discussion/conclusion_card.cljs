@@ -39,16 +39,15 @@
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-upvote statement]))}
        [:div.vote-box.up-vote
-        [:i {:class (str "m-auto fas " (fa :arrow-up))}]]]
-      [:h6.m-0 (logic/calculate-votes statement :upvotes votes)]]
-     [:div.d-flex.mt-3
+        [:i {:class (str "m-auto fas " (fa :arrow-up))}]]]]
+     [:h6.d-flex.p-2.m-0 (logic/calculate-votes statement votes)]
+     [:div.d-flex
       [:div.px-2
        {:on-click (fn [e]
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-downvote statement]))}
        [:div.vote-box.down-vote.align-bottom
-        [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]
-      [:h6.m-0 (logic/calculate-votes statement :downvotes votes)]]]))
+        [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]]]))
 
 (defn- up-down-vote
   "Add inline panel for up and down votes."
@@ -60,13 +59,12 @@
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
       [:div.vote-box.up-vote [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]]
-     [:h6.m-0 (logic/calculate-votes statement :upvotes votes)]
-     [:div.px-2
+     [:h6.m-0 (logic/calculate-votes statement votes)]
+     [:div.pl-2
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:div.vote-box.down-vote [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]
-     [:h6.align-middle.m-0 (logic/calculate-votes statement :downvotes votes)]]))
+      [:div.vote-box.down-vote [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
 (defn- statement-card
   [edit-hash {:keys [statement/content] :as statement} attitude]
@@ -92,17 +90,22 @@
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
     (if (seq conclusions)
-      [:div.card-columns.card-columns-discussion.py-3
-       (for [conclusion conclusions]
-         [:div {:key (:db/id conclusion)
-                :on-click (fn [_e]
-                            (let [selection (.toString (.getSelection js/window))]
-                              (when (zero? (count selection))
-                                (rf/dispatch [:discussion.select/conclusion conclusion])
-                                (rf/dispatch [:discussion.history/push conclusion])
-                                (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
-                                              (assoc path-params :statement-id (:db/id conclusion))]))))}
-          [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]])]
+      (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
+            keyfn (case sort-method
+                    :newest :db/txInstant
+                    :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
+            sorted-conclusions (sort-by keyfn > conclusions)]
+        [:div.card-columns.card-columns-discussion.pb-3
+         (for [conclusion sorted-conclusions]
+           [:div {:key (:db/id conclusion)
+                  :on-click (fn [_e]
+                              (let [selection (.toString (.getSelection js/window))]
+                                (when (zero? (count selection))
+                                  (rf/dispatch [:discussion.select/conclusion conclusion])
+                                  (rf/dispatch [:discussion.history/push conclusion])
+                                  (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
+                                                (assoc path-params :statement-id (:db/id conclusion))]))))}
+            [statement-card edit-hash conclusion (logic/arg-type->attitude (:meta/argument-type conclusion))]])])
       [call-to-contribute])))
 
 (rf/reg-event-fx

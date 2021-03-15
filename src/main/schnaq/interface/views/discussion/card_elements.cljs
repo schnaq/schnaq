@@ -253,9 +253,36 @@
     [:div.topic-view.shadow-straight-light.md-4
      [:div.discussion-light-background content]]))
 
+(rf/reg-event-db
+  :discussion.statements.sort/set
+  (fn [db [_ method]]
+    (assoc-in db [:discussion :statements :sort-method] method)))
+
+(rf/reg-sub
+  :discussion.statements/sort-method
+  (fn [db _]
+    (get-in db [:discussion :statements :sort-method] :newest)))
+
+(defn- sort-options
+  "Displays the different sort options for card elements."
+  []
+  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
+    [:section.py-2.text-right
+     [:p.small.mb-0
+      (labels :badges.sort/sort)
+      [:button.btn.btn-outline-primary.btn-sm.mx-1
+       {:class (when (= sort-method :newest) "active")
+        :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
+       (labels :badges.sort/newest)]
+      [:button.btn.btn-outline-primary.btn-sm
+       {:class (when (= sort-method :popular) "active")
+        :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+       (labels :badges.sort/popular)]]]))
+
 (defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
   [:<>
    [topic-bubble topic-content]
+   [sort-options]
    [cards/conclusion-cards-list conclusions share-hash]])
 
 (defn- show-how-to [is-topic?]
