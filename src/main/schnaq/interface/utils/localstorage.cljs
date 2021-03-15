@@ -109,3 +109,30 @@
     (when (= :schnaqs/admin-access local-storage-key)
       (remove-item! :meetings/admin-access))
     hashes-as-string))
+
+;; ### Set Storage Helper ###
+
+(defn parse-string-as-set
+  "Parse a string of a set to clojure set. Must obey convention 'item1 item2'"
+  [set-string]
+  (let [items (remove empty? (string/split set-string (re-pattern hash-separator)))]
+    (set items)))
+
+(defn- parse-set-as-string
+  "Parse a set to a string. Will obey convention 'item1 item2'"
+  [set-data]
+  (let [items (map str set-data)
+        set-items (set items)
+        set-as-string (string/join hash-separator set-items)]
+    set-as-string))
+
+(defn add-to-and-build-set-from-local-storage
+  "Add a value to a set ready for use as local storage data.
+  Get localstorage value of 'key-entry', parse it as set, add 'item' and parse it as string.
+  The resulting string will obey the convention 'item1 item2 item3'"
+  [key-entry item]
+  (let [value-entry (get-item key-entry)
+        string-as-set (parse-string-as-set value-entry)
+        new-set (conj string-as-set item)
+        new-set-as-string (parse-set-as-string new-set)]
+    new-set-as-string))

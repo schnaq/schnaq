@@ -1,3 +1,5 @@
+@import 'variables';
+
 .how-to-video-row {
   padding-bottom: 10rem;
   padding-top: 10rem;
@@ -15,4 +17,14 @@
 .taskbar-background {
   background-color: #fff;
   border-radius: 20px 20px 0 0;
+}
+
+.quick-how-to {
+  @include rounded-3;
+  background-color: $gray-200;
+  box-shadow: $regular-shadow;
+  color: $text-dark;
+  margin: 2rem 0;
+  overflow: hidden;
+  padding: 1rem 2rem;
 }

@@ -10,6 +10,7 @@
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
+            [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]))
 
 (defn- home-button-mobile
@@ -284,13 +285,20 @@
    [sort-options]
    [cards/conclusion-cards-list conclusions share-hash]])
 
+(defn- show-how-to [is-topic?]
+  (if is-topic?
+    [how-to-elements/quick-how-to-schnaq]
+    [how-to-elements/quick-how-to-pro-con]))
+
 (defn discussion-view-mobile
   "Discussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
-  [current-discussion content input badges info-content conclusions]
-  [:<>
-   [topic-view current-discussion conclusions
-    [topic-bubble-mobile current-discussion content input badges info-content]]])
+  [current-discussion content input badges info-content conclusions history]
+  (let [is-topic? (nil? history)]
+    [:<>
+     [topic-view current-discussion conclusions
+      [topic-bubble-mobile current-discussion content input badges info-content]]
+     [show-how-to is-topic?]]))
 
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
@@ -303,7 +311,8 @@
        [history-view history]]
       [:div.col-9.py-4.px-0
        [topic-view current-discussion conclusions
-        [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]]]]))
+        [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
+       [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
 
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the topic bubble."

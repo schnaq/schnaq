@@ -28,6 +28,14 @@
   border-radius: 1rem;
 }
 
+.button-secondary-small {
+  /* stylelint-disable */
+  @extend .button-secondary;
+  /* stylelint-enable */
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+}
+
 .button-primary {
   @include button-template;
   background-color: $primary;

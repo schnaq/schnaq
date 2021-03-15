@@ -35,6 +35,7 @@
         :coc.content/body "We comply with German law; this applies especially to data protection, equality and non-discrimination.\nContent that violates applicable law will be deleted."
 
         ;; how-to
+        :how-to/button "How to schnaq?"
         :how-to/title "How to schnaq?"
         :how-to.create/title "Which topic do you want to schnaq about and with whom?"
         :how-to.create/body "Put in a descriptive title and choose whether you want to schnaq with the whole world or rather schnaq in private"
@@ -48,7 +49,10 @@
         :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro arguments are highlighted blue and contra arguments are highlighted orange. You can add multiple pro arguments as well as contra arguments to the same statement."
         :how-to.call-to-action/title "Now you know!"
         :how-to.call-to-action/body "That's actually all there is to know about schnaq. Now use it!"
-
+        :how-to/ask-question "Not sure how to schnaq? "     ;; whitespace intended
+        :how-to/ask-question-2 "Still not sure how to use schnaq? " ;; whitespace intended
+        :how-to/answer-question "Let us show you how!"
+        :how-to/answer-dont-show-again "Got it! Don't show this tip anymore!"
 
         ;; Startpage
         :startpage/heading "Structured Company Knowledge. Completely Automated."
@@ -485,9 +489,10 @@
         :coc.content/body "Wir halten das Deutsche Grundgesetz ein; dies gilt auch und insbesondere für Datenschutz, Gleichberechtigung und Nichtdiskriminierung.\nInhalte, die gegen geltendes Recht verstoßen, werden von uns gelöscht."
 
         ;; how-to
+        :how-to/button "Wie schnaqqe ich?"
         :how-to/title "Wie verwende ich schnaq?"
         :how-to.create/title "Worüber möchtest du schnaqqen und mit wem?"
-        :how-to.create/body "Gebe deinem schnaq einen aussagekräftigen Titel und wähle aus, ob du mit der ganzen Welt schnaqqen willst, oder lieber selbst entscheidest wer mitschnaqqt."
+        :how-to.create/body "Gib deinem schnaq einen aussagekräftigen Titel und wähle aus, ob du mit der ganzen Welt schnaqqen willst, oder lieber selbst entscheidest wer mitschnaqqt."
         :how-to.why/title "Wieso soll ich schnaqqen?"
         :how-to.why/body "Faden verloren? Nicht zu Wort gekommen? Haben alle alles verstanden? Mal wieder keine Ahnung warum so viel diskutiert wurde?\nSpar dir Zeit und halte Wissen mit schnaq fest. Nimm teil, wann du Zeit hast. Die Mindmap der Diskussion gibt's geschenkt."
         :how-to.admin/title "Administriere dein schnaq oder lass dir helfen"
@@ -498,6 +503,11 @@
         :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
         :how-to.call-to-action/title "Jetzt weißt du Bescheid!"
         :how-to.call-to-action/body "Hiermit ist alles erklärt was über schnaq zu erklären gibt, also lege direkt los!"
+        :how-to/ask-question "Nicht sicher wie du schnaq benutzen sollst? " ;; whitespace intended
+        :how-to/ask-question-2 "Noch Fragen? "              ;; whitespace intended
+        :how-to/answer-question "Schau hier nach!"
+        :how-to/answer-dont-show-again "Verstanden! In Zukunft nicht mehr anzeigen!"
+
 
         ;; Startpage
         :startpage/heading "Strukturiertes Unternehmenswissen. Vollautomatisch."
@@ -1011,6 +1021,7 @@
      :graph "fa-project-diagram"
      :heart "fa-heart"
      :home "fa-home"
+     :info "fa-question-circle"
      :language "fa-language"
      :laptop "fa-laptop-code"
      :lock-open "fa-lock-open"
