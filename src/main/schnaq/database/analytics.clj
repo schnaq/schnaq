@@ -67,8 +67,23 @@
 
 (defn number-of-statements
   "Returns the number of different usernames in the database."
-  ([] (number-of-entities-since :statement/content))
-  ([since] (number-of-entities-since :statement/content since)))
+  ([]
+   (number-of-statements max-time-back))
+  ([since]
+   (or
+     (ffirst
+       (main-db/query
+         '[:find (count ?statements)
+           :in $ ?since
+           :where
+           ;; Make sure statements are not deleted
+           [?statements :statement/content _ ?tx]
+           (not-join [?statements]
+                     [?statements :statement/deleted? true])
+           [?tx :db/txInstant ?start-date]
+           [(< ?since ?start-date)]]
+         (Date/from since)))
+     0)))
 
 (>defn average-number-of-statements
   "Returns the average number of statements per discussion."
