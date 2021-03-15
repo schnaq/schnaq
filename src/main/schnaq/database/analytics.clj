@@ -76,10 +76,16 @@
          '[:find (count ?statements)
            :in $ ?since
            :where
+           ;; Make sure the discussion is not deleted where the statements are from
+           (not [?discussions :discussion/states :discussion.state/deleted])
+           [?arguments :argument/discussions ?discussions]
+           (or-join [?discussions ?arguments ?statements]
+                    [?arguments :argument/premises ?statements]
+                    [?arguments :argument/conclusion ?statements]
+                    [?discussions :discussion/starting-statements ?statements])
            ;; Make sure statements are not deleted
+           (not [?statements :statement/deleted? true])
            [?statements :statement/content _ ?tx]
-           (not-join [?statements]
-                     [?statements :statement/deleted? true])
            [?tx :db/txInstant ?start-date]
            [(< ?since ?start-date)]]
          (Date/from since)))
