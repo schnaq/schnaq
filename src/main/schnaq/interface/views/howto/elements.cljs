@@ -40,7 +40,7 @@
   "Feature row where the video is located on the right side."
   [video-key-webm vide-key-webm title body hide-tag]
   (let [hidden-tags @(rf/subscribe [:how-to-visibility/hidden-tags])
-        hide?   (contains? hidden-tags (str hide-tag))]
+        hide? (contains? hidden-tags (str hide-tag))]
     (when-not hide?
       [common/delayed-fade-in
        [:div.quick-how-to
@@ -74,12 +74,12 @@
 (rf/reg-event-db
   :how-to-visibility/from-localstorage-to-app-db
   (fn [db _]
-    (assoc-in db [:how-to/disabled]
-              (ls/parse-string-as-set (ls/get-item :how-to/disabled)))))
+    (assoc db :how-to/disabled (ls/parse-string-as-set (ls/get-item :how-to/disabled)))))
 
 (rf/reg-sub
   :how-to-visibility/hidden-tags
-  (fn [db _] (get-in db [:how-to/disabled])))
+  (fn [db _]
+    (get db :how-to/disabled)))
 
 (defn quick-how-to-create []
   [quick-how-to

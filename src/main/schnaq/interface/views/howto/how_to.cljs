@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.howto.how-to
-  (:require [schnaq.interface.text.display-data :refer [labels img-path video]]
+  (:require [schnaq.interface.text.display-data :refer [labels]]
             [re-frame.core :as rf]
             [schnaq.interface.views.howto.elements :as elements]
             [schnaq.interface.views.pages :as pages]))
