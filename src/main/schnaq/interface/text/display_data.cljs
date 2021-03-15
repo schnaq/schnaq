@@ -52,6 +52,7 @@
         :how-to/ask-question "Not sure how to schnaq? "     ;; whitespace intended
         :how-to/ask-question-2 "Still not sure how to use schnaq? " ;; whitespace intended
         :how-to/answer-question "Let us show you how!"
+        :how-to/answer-dont-show-again "Got it! Don't show this tip anymore!"
 
         ;; Startpage
         :startpage/heading "Your Personal Discussion Hub"
@@ -498,6 +499,8 @@
         :how-to/ask-question "Nicht sicher wie du schnaq benutzen sollst? " ;; whitespace intended
         :how-to/ask-question-2 "Noch Fragen? "              ;; whitespace intended
         :how-to/answer-question "Schau hier nach!"
+        :how-to/answer-dont-show-again "Verstanden! In Zukunft nicht mehr anzeigen!"
+
 
         ;; Startpage
         :startpage/heading "Deine Online-Diskussionsplattform"

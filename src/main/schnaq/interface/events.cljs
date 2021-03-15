@@ -70,6 +70,7 @@
     {:db schnaq-db/default-db
      :fx [[:dispatch [:load/schnaqs]]
           [:dispatch [:username/from-localstorage]]
+          [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
           [:dispatch [:keycloak/init]]
           [:dispatch [:load/last-added-schnaq]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
