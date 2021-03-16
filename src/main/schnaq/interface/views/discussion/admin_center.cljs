@@ -292,14 +292,14 @@
 (defn- make-discussion-writable-button
   "A button that makes the current discussion writeable when its read-only."
   []
-  [:button.btn.btn-secondary
+  [:button.btn.btn-outline-dark
    {:on-click #(rf/dispatch [:discussion.admin/make-writeable])}
    (labels :discussion.admin.configurations.read-only/button-writeable)])
 
 (defn- make-discussion-read-only-button
   "A button that makes the current discussion read-only when its writeable."
   []
-  [:button.btn.btn-secondary
+  [:button.btn.btn-outline-dark
    {:on-click #(rf/dispatch [:discussion.admin/make-read-only])}
    (labels :discussion.admin.configurations.read-only/button-read-only)])
 
