@@ -290,20 +290,18 @@
        (labels :meeting.admin-center.edit.link.form/submit-button)]])])
 
 (defn- make-discussion-writable-button
-  ;; TODO
   "A button that makes the current discussion writeable when its read-only."
   []
-  [:button
+  [:button.btn.btn-secondary
    {:on-click #(rf/dispatch [:discussion.admin/make-writeable])}
-   "hi make writeable pls"])
+   (labels :discussion.admin.configurations.read-only/button-writeable)])
 
 (defn- make-discussion-read-only-button
-  ;; TODO
   "A button that makes the current discussion read-only when its writeable."
   []
-  [:button
+  [:button.btn.btn-secondary
    {:on-click #(rf/dispatch [:discussion.admin/make-read-only])}
-   "hi read-only pls"])
+   (labels :discussion.admin.configurations.read-only/button-read-only)])
 
 (>defn- administrate-discussion
   "A form which allows removing single statements from the discussion."
@@ -313,11 +311,11 @@
         schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
      [header-image/image-url-input]
-     ;; TODO
-     [:h4.mt-4 "Einstellungen"]
-     (if schnaq-read-only?
-       [make-discussion-writable-button]
-       [make-discussion-read-only-button])
+     [:div.text-left.my-5
+      [:h4.mt-4.text-center (labels :discussion.admin.configurations/heading)]
+      (if schnaq-read-only?
+        [make-discussion-writable-button]
+        [make-discussion-read-only-button])]
      [:h4.mt-4 (labels :meeting.admin/delete-statements-heading)]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]

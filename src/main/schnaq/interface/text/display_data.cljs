@@ -141,6 +141,9 @@
         :meeting.admin.notifications/sending-failed-lead "The following invitations could not be delivered: "
         :meeting.admin.notifications/statements-deleted-title "Statements deleted!"
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
+        :discussion.admin.configurations/heading "Configuration"
+        :discussion.admin.configurations.read-only/button-read-only [:span [:b "Set discussion to"] " read-only"]
+        :discussion.admin.configurations.read-only/button-writeable [:span [:b "Remove"] " read-only"]
 
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
@@ -606,6 +609,9 @@
         :meeting.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
         :meeting.admin.notifications/statements-deleted-title "Nachrichten gelöscht!"
         :meeting.admin.notifications/statements-deleted-lead "Deine gewählten Nachrichten wurden erfolgreich gelöscht."
+        :discussion.admin.configurations/heading "Einstellungen"
+        :discussion.admin.configurations.read-only/button-read-only [:span [:b "Setze Diskussion auf"] " schreibgeschützt"]
+        :discussion.admin.configurations.read-only/button-writeable [:span "Schreibschutz " [:b "entfernen"]]
 
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
