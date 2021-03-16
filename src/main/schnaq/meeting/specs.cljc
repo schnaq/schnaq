@@ -22,7 +22,7 @@
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted
-               :discussion.state/public}
+               :discussion.state/public :discussion.state/read-only}
              :distinct true))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
 (s/def ::discussion (s/keys :req [:discussion/title :discussion/states
