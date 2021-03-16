@@ -36,13 +36,13 @@
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
   [textarea-name]
-  (let [pro-con-is-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+  (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         argument-type @(rf/subscribe [:form/argument-type])
         current-route-name @(rf/subscribe [:navigation/current-route-name])
         current-color (if (= :argument.type/support argument-type)
                         "text-primary" "text-secondary")]
     [:div.input-group
-     (when-not (or (= :routes.schnaq/start current-route-name) pro-con-is-disabled?)
+     (when-not (or (= :routes.schnaq/start current-route-name) pro-con-disabled?)
        [:div.input-group-prepend
         [argument-type-choose-button]])
      [:textarea.form-control.discussion-text-input-area
