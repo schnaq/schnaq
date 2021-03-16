@@ -137,7 +137,7 @@
 (defn- disable-pro-con! [{:keys [body-params]}]
   (let [{:keys [disable-pro-con? share-hash edit-hash]} body-params]
     (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? " for schnaq:" share-hash)
+      (do (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
           (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
           (ok {:share-hash share-hash}))
       (validator/deny-access "You do not have the rights to access this action."))))
