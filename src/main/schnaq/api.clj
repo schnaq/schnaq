@@ -296,7 +296,7 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement nickname]} body-params
         user-id (db/user-by-nickname nickname)]
-    (if (validator/valid-discussion? share-hash)
+    (if (validator/valid-writeable-discussion? share-hash)
       (do (discussion-db/add-starting-statement! share-hash user-id statement)
           (log/info "Starting statement added for discussion" share-hash)
           (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
@@ -307,7 +307,7 @@
   [{:keys [body-params]}]
   (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
         user-id (db/user-by-nickname nickname)]
-    (if (validator/valid-discussion-and-statement? conclusion-id share-hash)
+    (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
                 {:new-argument
