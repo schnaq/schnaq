@@ -130,6 +130,27 @@
                           :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
+  :discussion.admin/make-read-only
+  (fn [{:keys [db]} _]
+    (let [current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config/config) "/admin/discussions/make-read-only")
+                          :format (ajax/transit-request-format)
+                          :params {:share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :response-format (ajax/transit-response-format)
+                          ;; TODO
+                          :on-success [:discussion.admin/make-read-only-success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(rf/reg-event-db
+  :discussion.admin/make-read-only-success
+  (fn [db _]
+    (update-in db [:schnaq :selected :discussion/states]
+               #(distinct (conj % :discussion.states/read-only)))))
+
+(rf/reg-event-fx
   ;; Deletion success from admin center
   :discussion.admin/delete-statements-success
   (fn [_ [_ form _return]]
@@ -249,13 +270,33 @@
       [:button.btn.btn-outline-primary
        (labels :meeting.admin-center.edit.link.form/submit-button)]])])
 
+(defn- make-discussion-writable-button
+  ;; TODO
+  "A button that makes the current discussion writeable when its read-only."
+  []
+  [:button "hi make writeable pls"])
+
+(defn- make-discussion-read-only-button
+  ;; TODO
+  "A button that makes the current discussion read-only when its writeable."
+  []
+  [:button
+   {:on-click #(rf/dispatch [:discussion.admin/make-read-only])}
+   "hi read-only pls"])
+
 (>defn- administrate-discussion
   "A form which allows removing single statements from the discussion."
   []
   [:ret :re-frame/component]
-  (let [input-id "participant-email-addresses"]
+  (let [input-id "participant-email-addresses"
+        schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
      [header-image/image-url-input]
+     ;; TODO
+     [:h4.mt-4 "Einstellungen"]
+     (if schnaq-read-only?
+       [make-discussion-writable-button]
+       [make-discussion-read-only-button])
      [:h4.mt-4 (labels :meeting.admin/delete-statements-heading)]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]
