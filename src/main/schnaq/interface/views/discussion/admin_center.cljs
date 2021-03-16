@@ -140,7 +140,6 @@
                           :params {:share-hash share-hash
                                    :edit-hash edit-hash}
                           :response-format (ajax/transit-response-format)
-                          ;; TODO
                           :on-success [:discussion.admin/make-read-only-success]
                           :on-failure [:ajax.error/as-notification]}]]})))
 
@@ -148,7 +147,27 @@
   :discussion.admin/make-read-only-success
   (fn [db _]
     (update-in db [:schnaq :selected :discussion/states]
-               #(distinct (conj % :discussion.states/read-only)))))
+               #(distinct (conj % :discussion.state/read-only)))))
+
+(rf/reg-event-fx
+  :discussion.admin/make-writeable
+  (fn [{:keys [db]} _]
+    (let [current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config/config) "/admin/discussions/make-writeable")
+                          :format (ajax/transit-request-format)
+                          :params {:share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.admin/make-writeable-success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(rf/reg-event-db
+  :discussion.admin/make-writeable-success
+  (fn [db _]
+    (update-in db [:schnaq :selected :discussion/states]
+               #(-> % set (disj :discussion.state/read-only) vec))))
 
 (rf/reg-event-fx
   ;; Deletion success from admin center
@@ -274,7 +293,9 @@
   ;; TODO
   "A button that makes the current discussion writeable when its read-only."
   []
-  [:button "hi make writeable pls"])
+  [:button
+   {:on-click #(rf/dispatch [:discussion.admin/make-writeable])}
+   "hi make writeable pls"])
 
 (defn- make-discussion-read-only-button
   ;; TODO

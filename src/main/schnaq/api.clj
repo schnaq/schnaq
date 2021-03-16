@@ -124,6 +124,16 @@
           (ok {:share-hash share-hash}))
       (validator/deny-access "You do not have the rights to access this action."))))
 
+(defn- make-discussion-writeable!
+  "Makes a discussion writeable if discussion-admin credentials are there."
+  [{:keys [body-params]}]
+  (let [{:keys [share-hash edit-hash]} body-params]
+    (if (validator/valid-credentials? share-hash edit-hash)
+      (do (log/info "Removing read-only from discussion: " share-hash)
+          (discussion-db/remove-read-only share-hash)
+          (ok {:share-hash share-hash}))
+      (validator/deny-access "You do not have the rights to access this action."))))
+
 (defn- delete-statements!
   "Deletes the passed list of statements if the admin-rights are fitting.
   Important: Needs to check whether the statement-id really belongs to the discussion with
@@ -383,6 +393,7 @@
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
     (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
+    (POST "/admin/discussions/make-writeable" [] make-discussion-writeable!)
     (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
