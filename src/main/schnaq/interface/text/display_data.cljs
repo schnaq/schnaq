@@ -623,7 +623,7 @@
         :discussion.privacy/public "Öffentliche Diskussion"
         :discussion.privacy/private "Private Diskussion"
         :discussion.state/read-only-label "schreibgeschützt"
-        :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, sie können hier nur lesen aber nicht schreiben."
+        :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Sie können hier nur lesen aber nicht schreiben."
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
