@@ -369,6 +369,16 @@
     (d/pull (d/db (new-connection)) discussion-pattern-private id)
     :db/ident))
 
+(defn set-discussion-read-only
+  "Sets a discussion as read-only."
+  [share-hash]
+  (main-db/transact [[:db/add [:discussion/share-hash share-hash] :discussion/states :discussion.state/read-only]]))
+
+(defn remove-read-only
+  "Removes the read-only restriction from a discussion"
+  [share-hash]
+  (main-db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/states :discussion.state/read-only]]))
+
 (defn public-discussions
   "Returns all public discussions."
   []

@@ -78,6 +78,12 @@
       [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]
      [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant schnaq) locale]]]))
 
+(defn read-only-badge
+  "Badge that appears only if the passed schnaq is set to read-only"
+  [schnaq]
+  (let [read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
+    (when read-only?
+      [:p [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)]])))
 
 ;; #### Subs ####
 

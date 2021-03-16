@@ -141,6 +141,9 @@
         :meeting.admin.notifications/sending-failed-lead "The following invitations could not be delivered: "
         :meeting.admin.notifications/statements-deleted-title "Statements deleted!"
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
+        :discussion.admin.configurations/heading "Configuration"
+        :discussion.admin.configurations.read-only/button-read-only [:span [:b "Set schnaq to"] " read-only"]
+        :discussion.admin.configurations.read-only/button-writeable [:span [:b "Remove"] " read-only"]
 
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
@@ -151,6 +154,8 @@
 
         :discussion.privacy/public "Public Discussion"
         :discussion.privacy/private "Private Discussion"
+        :discussion.state/read-only-label "read-only"
+        :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
@@ -199,8 +204,8 @@
         :meeting.admin-center.edit.link.form/submit-button "Send link"
         :meeting.admin-center.invite/via-link "Distribute Link"
         :meeting.admin-center.invite/via-mail "Invite via Email"
-        :meeting.admin-center.edit/administrate "Administrate Discussion"
-        :meeting/admin-center-export "Download discussion as a text-file"
+        :meeting.admin-center.edit/administrate "Administrate schnaq"
+        :meeting/admin-center-export "Download schnaq as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
         :meeting/share-link-tooltip "Copy share-link"
 
@@ -604,6 +609,9 @@
         :meeting.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
         :meeting.admin.notifications/statements-deleted-title "Nachrichten gelöscht!"
         :meeting.admin.notifications/statements-deleted-lead "Deine gewählten Nachrichten wurden erfolgreich gelöscht."
+        :discussion.admin.configurations/heading "Einstellungen"
+        :discussion.admin.configurations.read-only/button-read-only [:span [:b "Setze schnaq auf"] " schreibgeschützt"]
+        :discussion.admin.configurations.read-only/button-writeable [:span "Schreibschutz " [:b "entfernen"]]
 
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
@@ -614,6 +622,8 @@
 
         :discussion.privacy/public "Öffentliche Diskussion"
         :discussion.privacy/private "Private Diskussion"
+        :discussion.state/read-only-label "schreibgeschützt"
+        :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Sie können hier nur lesen aber nicht schreiben."
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
@@ -656,8 +666,8 @@
         :meeting.admin-center.edit.link.form/submit-button "Link verschicken"
         :meeting.admin-center.invite/via-link "Link verteilen"
         :meeting.admin-center.invite/via-mail "Per E-Mail einladen"
-        :meeting.admin-center.edit/administrate "Diskussion administrieren"
-        :meeting/admin-center-export "Diskussion als Textdatei runterladen"
+        :meeting.admin-center.edit/administrate "schnaq administrieren"
+        :meeting/admin-center-export "schnaq als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
         :meeting/share-link-tooltip "Zugangslink kopieren"
 

@@ -1,4 +1,4 @@
-(ns schnaq.meeting.models)
+(ns schnaq.database.models)
 
 (def datomic-schema
   [;; User
@@ -88,7 +88,10 @@
     :db/doc "DEPRECATED: Use :discussion.state/public"}
    {:db/ident :discussion.state/deleted
     :db/doc "Supersedes most other states. When set do absolutely not show under any circumstances"}
-   {:db/ident :discussion.state/public}
+   {:db/ident :discussion.state/public
+    :db/doc "Marks a discussion as publicly visible to everybody."}
+   {:db/ident :discussion.state/read-only
+    :db/doc "Marks a discussion as read-only. Only admins or nobody should be able to add something to the discussion."}
 
    ;; Discussion
    {:db/ident :discussion/title

@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.meeting.admin-center-test
+(ns schnaq.interface.views.discussion.admin-center-test
   (:require [cljs.test :refer [deftest is testing]]
             [schnaq.interface.utils.localstorage :as ls]))
 

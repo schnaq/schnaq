@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.meeting.admin-center
+(ns schnaq.interface.views.discussion.admin-center
   (:require [ajax.core :as ajax]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
@@ -53,7 +53,7 @@
            [:label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
             [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]]))}))
 
-(defn img-text
+(defn- img-text
   "Create one icon in a grid"
   [path-to-img heading]
   [:<>
@@ -81,7 +81,7 @@
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]
                     (js-wrap/prevent-default e)
-                    (rf/dispatch [:meeting.admin/send-email-invites
+                    (rf/dispatch [:discussion.admin/send-email-invites
                                   (oget e [:target :elements])]))}
       [:div.form-group
        [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
@@ -97,7 +97,7 @@
        (labels :meeting.admin/send-invites-button-text)]]]))
 
 (rf/reg-event-fx
-  :meeting.admin/send-admin-center-link
+  :discussion.admin/send-admin-center-link
   (fn [{:keys [db]} [_ form]]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
@@ -109,11 +109,11 @@
                                    :edit-hash edit-hash
                                    :admin-center (common/get-admin-center-link current-route)}
                           :response-format (ajax/transit-response-format)
-                          :on-success [:meeting-admin/send-email-success form]
+                          :on-success [:discussion.admin/send-email-success form]
                           :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
-  :meeting.admin/delete-statements
+  :discussion.admin/delete-statements
   (fn [{:keys [db]} [_ form]]
     (let [raw-statements (oget form ["statement-ids" :value])
           statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
@@ -126,12 +126,52 @@
                                    :share-hash share-hash
                                    :edit-hash edit-hash}
                           :response-format (ajax/transit-response-format)
-                          :on-success [:meeting-admin/delete-statements-success form]
+                          :on-success [:discussion.admin/delete-statements-success form]
                           :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
+  :discussion.admin/make-read-only
+  (fn [{:keys [db]} _]
+    (let [current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config/config) "/admin/discussions/make-read-only")
+                          :format (ajax/transit-request-format)
+                          :params {:share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.admin/make-read-only-success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(rf/reg-event-db
+  :discussion.admin/make-read-only-success
+  (fn [db _]
+    (update-in db [:schnaq :selected :discussion/states]
+               #(distinct (conj % :discussion.state/read-only)))))
+
+(rf/reg-event-fx
+  :discussion.admin/make-writeable
+  (fn [{:keys [db]} _]
+    (let [current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config/config) "/admin/discussions/make-writeable")
+                          :format (ajax/transit-request-format)
+                          :params {:share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:discussion.admin/make-writeable-success]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(rf/reg-event-db
+  :discussion.admin/make-writeable-success
+  (fn [db _]
+    (update-in db [:schnaq :selected :discussion/states]
+               #(-> % set (disj :discussion.state/read-only) vec))))
+
+(rf/reg-event-fx
   ;; Deletion success from admin center
-  :meeting-admin/delete-statements-success
+  :discussion.admin/delete-statements-success
   (fn [_ [_ form _return]]
     {:fx [[:dispatch [:notification/add
                       #:notification{:title (labels :meeting.admin.notifications/statements-deleted-title)
@@ -150,12 +190,12 @@
                                    :share-hash share-hash
                                    :edit-hash edit-hash}
                           :response-format (ajax/transit-response-format)
-                          :on-success [:meeting-admin/delete-statement-success statement-id]
+                          :on-success [:discussion.admin/delete-statement-success statement-id]
                           :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
   ;; Success event of deletion live in discussion - not from admin panel
-  :meeting-admin/delete-statement-success
+  :discussion.admin/delete-statement-success
   (fn [_ [_ statement-id _return]]
     {:fx [[:dispatch [:notification/add
                       #:notification{:title (labels :meeting.admin.notifications/statements-deleted-title)
@@ -178,20 +218,7 @@
           (update-in [:history :full-context] delete-fn)))))
 
 (rf/reg-event-fx
-  :meeting.admin/delete-statements-template
-  (fn [_ [_ statement-ids share-hash edit-hash maybe-form]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config/config) "/admin/statements/delete")
-                        :format (ajax/transit-request-format)
-                        :params {:statement-ids statement-ids
-                                 :share-hash share-hash
-                                 :edit-hash edit-hash}
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:meeting-admin/delete-statements-success maybe-form]
-                        :on-failure [:ajax.error/as-notification]}]]}))
-
-(rf/reg-event-fx
-  :meeting.admin/send-email-invites
+  :discussion.admin/send-email-invites
   (fn [{:keys [db]} [_ form]]
     (let [raw-emails (oget form ["participant-addresses" :value])
           recipients (string/split raw-emails #"\s+")
@@ -205,11 +232,11 @@
                                    :edit-hash edit-hash
                                    :share-link (common/get-share-link share-hash)}
                           :response-format (ajax/transit-response-format)
-                          :on-success [:meeting-admin/send-email-success form]
+                          :on-success [:discussion.admin/send-email-success form]
                           :on-failure [:ajax.error/as-notification]}]]})))
 
 (rf/reg-event-fx
-  :meeting-admin/send-email-success
+  :discussion.admin/send-email-success
   (fn [_ [_ form {:keys [failed-sendings]}]]
     {:fx [[:dispatch [:notification/add
                       #:notification{:title (labels :meeting.admin.notifications/emails-successfully-sent-title)
@@ -247,7 +274,7 @@
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]
                     (js-wrap/prevent-default e)
-                    (rf/dispatch [:meeting.admin/send-admin-center-link
+                    (rf/dispatch [:discussion.admin/send-admin-center-link
                                   (oget e [:target :elements])]))}
       [:div.form-group
        [:label {:for input-id} (labels :meeting.admin-center.edit.link.form/label)]
@@ -262,18 +289,38 @@
       [:button.btn.btn-outline-primary
        (labels :meeting.admin-center.edit.link.form/submit-button)]])])
 
+(defn- make-discussion-writable-button
+  "A button that makes the current discussion writeable when its read-only."
+  []
+  [:button.btn.btn-outline-dark
+   {:on-click #(rf/dispatch [:discussion.admin/make-writeable])}
+   (labels :discussion.admin.configurations.read-only/button-writeable)])
+
+(defn- make-discussion-read-only-button
+  "A button that makes the current discussion read-only when its writeable."
+  []
+  [:button.btn.btn-outline-dark
+   {:on-click #(rf/dispatch [:discussion.admin/make-read-only])}
+   (labels :discussion.admin.configurations.read-only/button-read-only)])
+
 (>defn- administrate-discussion
   "A form which allows removing single statements from the discussion."
   []
   [:ret :re-frame/component]
-  (let [input-id "participant-email-addresses"]
+  (let [input-id "participant-email-addresses"
+        schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
      [header-image/image-url-input]
+     [:div.text-left.my-5
+      [:h4.mt-4.text-center (labels :discussion.admin.configurations/heading)]
+      (if schnaq-read-only?
+        [make-discussion-writable-button]
+        [make-discussion-read-only-button])]
      [:h4.mt-4 (labels :meeting.admin/delete-statements-heading)]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]
                     (js-wrap/prevent-default e)
-                    (rf/dispatch [:meeting.admin/delete-statements
+                    (rf/dispatch [:discussion.admin/delete-statements
                                   (oget e [:target :elements])]))}
       [:div.form-group
        [:label.m-1 {:for input-id} (labels :meeting.admin/statements-label)]

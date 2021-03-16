@@ -34,9 +34,12 @@
                                 {:share-hash share-hash}])
                   (rf/dispatch [:schnaq/select-current schnaq]))}
      [:div [:img.meeting-entry-title-header-image {:src url}]]
-     [:div.px-4
+     [:div.px-4.d-flex
       [:div.meeting-entry-title
        [:h5 title]]
+      [:div.ml-auto.mt-3
+       [badges/read-only-badge schnaq]]]
+     [:div.px-4
       [badges/static-info-badges schnaq]]]))
 
 (defn- schnaq-list-view

@@ -4,7 +4,7 @@
             [datomic.client.api :as d]
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.config :as config]
-            [schnaq.meeting.models :as models]
+            [schnaq.database.models :as models]
             [schnaq.meeting.specs :as specs]
             [schnaq.test-data :as test-data]
             [schnaq.toolbelt :as toolbelt]
