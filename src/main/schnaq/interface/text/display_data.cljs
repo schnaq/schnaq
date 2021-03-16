@@ -151,6 +151,7 @@
 
         :discussion.privacy/public "Public Discussion"
         :discussion.privacy/private "Private Discussion"
+        :discussion.state/read-only-label "read-only"
 
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
@@ -614,6 +615,7 @@
 
         :discussion.privacy/public "Öffentliche Diskussion"
         :discussion.privacy/private "Private Diskussion"
+        :discussion.state/read-only-label "schreibgeschützt"
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
