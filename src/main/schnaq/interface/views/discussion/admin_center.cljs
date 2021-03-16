@@ -343,7 +343,6 @@
 (rf/reg-event-db
   :schnaq.admin/disable-pro-con-success
   (fn [db [_ disable-pro-con?]]
-    (println (str "disable? " disable-pro-con?))
     (if disable-pro-con?
       (update-in db [:schnaq :selected :discussion/states]
                  #(distinct (conj % :discussion.state/disable-pro-con)))
