@@ -152,6 +152,7 @@
         :discussion.privacy/public "Public Discussion"
         :discussion.privacy/private "Private Discussion"
         :discussion.state/read-only-label "read-only"
+        :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
@@ -616,6 +617,7 @@
         :discussion.privacy/public "Öffentliche Diskussion"
         :discussion.privacy/private "Private Diskussion"
         :discussion.state/read-only-label "schreibgeschützt"
+        :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, sie können hier nur lesen aber nicht schreiben."
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"

@@ -201,7 +201,8 @@
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [content input is-topic?]
-  (let [title (:content content)]
+  (let [title (:content content)
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
      [toolbelt/desktop-mobile-switch
       (if is-topic?
@@ -209,7 +210,9 @@
         [:h6 title])
       [:h2.align-self-center.display-6 title]]
      [:div.line-divider.my-4]
-     input]))
+     (if read-only?
+       [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
+       input)]))
 
 (defn- topic-bubble-desktop
   [{:discussion/keys [share-hash] :as discussion} content input badges info-content is-topic?]

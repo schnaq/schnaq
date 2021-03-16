@@ -16,6 +16,13 @@
   (fn [db _]
     (get-in db [:schnaq :selected])))
 
+(rf/reg-sub
+  :schnaq.selected/read-only?
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
+
 (rf/reg-event-fx
   :schnaq/load-by-share-hash
   (fn [_ [_ hash]]
