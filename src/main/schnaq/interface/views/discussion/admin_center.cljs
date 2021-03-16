@@ -304,24 +304,19 @@
    (labels :discussion.admin.configurations.read-only/button-read-only)])
 
 (defn- disable-pro-con []
-  (reagent/create-class
-    {:display-name "Disable pro-con button"
-     :reagent-render
-     (fn [_this]
-       (let [pro-con-is-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-             checked? (if pro-con-is-disabled? "checked" "")]
-         [:div.text-left.mb-5
-          [:input.big-checkbox
-           {:type :checkbox
-            :id :disable-pro-con-checkbox?
-            :checked checked?
-            :on-change (fn [e]
-                         (js-wrap/prevent-default e)
-                         (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-is-disabled?)]))}]
-          [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
-           (labels :schnaq.disable-pro-con/label)]]))}))
-
-;; disable pro con subs
+  (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+        checked? (if pro-con-disabled? "checked" "")]
+    [:div.text-left.mb-5
+     [:input.big-checkbox
+      {:type :checkbox
+       :id :disable-pro-con-checkbox?
+       :checked checked?
+       :on-change
+       (fn [e]
+         (js-wrap/prevent-default e)
+         (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
+     [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
+      (labels :schnaq.disable-pro-con/label)]]))
 
 (rf/reg-sub
   :schnaq.selected/pro-con?
