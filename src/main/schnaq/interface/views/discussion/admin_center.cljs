@@ -303,6 +303,58 @@
    {:on-click #(rf/dispatch [:discussion.admin/make-read-only])}
    (labels :discussion.admin.configurations.read-only/button-read-only)])
 
+(defn- disable-pro-con []
+  (reagent/create-class
+    {:display-name "Disable pro-con button"
+     :reagent-render
+     (fn [_this]
+       (let [pro-con-is-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+             checked? (if pro-con-is-disabled? "checked" "")]
+         [:div.text-left.mb-5
+          [:input.big-checkbox
+           {:type :checkbox
+            :id :disable-pro-con-checkbox?
+            :checked checked?
+            :on-change (fn [e]
+                         (js-wrap/prevent-default e)
+                         (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-is-disabled?)]))}]
+          [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
+           (labels :schnaq.disable-pro-con/label)]]))}))
+
+;; disable pro con subs
+
+(rf/reg-sub
+  :schnaq.selected/pro-con?
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (not (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states selected-schnaq))))))
+
+(rf/reg-event-fx
+  :schnaq.admin/disable-pro-con
+  (fn [{:keys [db]} [_ disable-pro-con?]]
+    (let [current-route (:current-route db)
+          {:keys [share-hash edit-hash]} (:path-params current-route)]
+      {:fx [[:http-xhrio {:method :post
+                          :uri (str (:rest-backend config/config) "/admin/schnaq/disable-pro-con")
+                          :format (ajax/transit-request-format)
+                          :params {:disable-pro-con? disable-pro-con?
+                                   :share-hash share-hash
+                                   :edit-hash edit-hash}
+                          :response-format (ajax/transit-response-format)
+                          :on-success [:schnaq.admin/disable-pro-con-success disable-pro-con?]
+                          :on-failure [:ajax.error/as-notification]}]]})))
+
+(rf/reg-event-db
+  :schnaq.admin/disable-pro-con-success
+  (fn [db [_ disable-pro-con?]]
+    (println (str "disable? " disable-pro-con?))
+    (if disable-pro-con?
+      (update-in db [:schnaq :selected :discussion/states]
+                 #(distinct (conj % :discussion.state/disable-pro-con)))
+      (update-in db [:schnaq :selected :discussion/states]
+                 #(-> % set (disj :discussion.state/disable-pro-con) vec)))))
+
 (>defn- administrate-discussion
   "A form which allows removing single statements from the discussion."
   []
@@ -316,6 +368,7 @@
       (if schnaq-read-only?
         [make-discussion-writable-button]
         [make-discussion-read-only-button])]
+     [disable-pro-con]
      [:h4.mt-4 (labels :meeting.admin/delete-statements-heading)]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]

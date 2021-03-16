@@ -379,6 +379,17 @@
   [share-hash]
   (main-db/transact [[:db/retract [:discussion/share-hash share-hash] :discussion/states :discussion.state/read-only]]))
 
+(defn set-disable-pro-con
+  "Sets or removes the pro/con button tag"
+  [share-hash disable?]
+  (let [enable-transaction [[:db/retract [:discussion/share-hash share-hash]
+                             :discussion/states :discussion.state/disable-pro-con]]
+        disable-transaction [[:db/add [:discussion/share-hash share-hash]
+                              :discussion/states :discussion.state/disable-pro-con]]
+        db-transaction (if disable? disable-transaction
+                                    enable-transaction)]
+    (main-db/transact db-transaction)))
+
 (defn public-discussions
   "Returns all public discussions."
   []
