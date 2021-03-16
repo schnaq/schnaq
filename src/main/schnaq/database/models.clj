@@ -1,4 +1,4 @@
-(ns schnaq.meeting.models)
+(ns schnaq.database.models)
 
 (def datomic-schema
   [;; User
