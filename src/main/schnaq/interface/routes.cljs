@@ -7,12 +7,12 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.admin.control-center :as admin-center]
+            [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.howto.how-to :as how-to]
-            [schnaq.interface.views.meeting.admin-center :as meeting-admin]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.privacy :as privacy]
             [schnaq.interface.views.schnaq.create :as create]
@@ -159,7 +159,7 @@
                                  (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
       ["/manage"
        {:name :routes.schnaq/admin-center
-        :view meeting-admin/admin-center-view
+        :view discussion-admin/admin-center-view
         :link-text (labels :router/meeting-created)
         :controllers [{:parameters {:path [:share-hash :edit-hash]}
                        :start (fn [{:keys [path]}]
