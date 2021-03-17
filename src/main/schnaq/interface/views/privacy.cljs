@@ -36,14 +36,13 @@
 (defn- localstorage-row
   "Explaining localstorage."
   []
-  [:<>
-   [rows/icon-right
-    [:<>
-     [:i#cookie-icon {:class (str "m-auto fas fa-lg " (fa :cookie/complete))}]
-     [:div [:button.btn.btn-outline-primary
-            {:on-click localstorage-explanation}
-            (labels :privacy.localstorage/show-data)]]]
-    :privacy.localstorage]])
+  [rows/icon-right
+   [:<>
+    [:i#cookie-icon {:class (str "m-auto fas fa-lg " (fa :cookie/complete))}]
+    [:div [:button.btn.btn-outline-primary
+           {:on-click localstorage-explanation}
+           (labels :privacy.localstorage/show-data)]]]
+   :privacy.localstorage])
 
 (defn- data-processing []
   [rows/icon-left
