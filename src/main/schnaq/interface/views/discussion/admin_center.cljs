@@ -353,8 +353,7 @@
   "A form which allows removing single statements from the discussion."
   []
   [:ret :re-frame/component]
-  (let [input-id "participant-email-addresses"
-        schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+  (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
      [header-image/image-url-input]
      [:div.text-left.my-5
@@ -362,23 +361,7 @@
       (if schnaq-read-only?
         [make-discussion-writable-button]
         [make-discussion-read-only-button])]
-     [disable-pro-con]
-     [:h4.mt-4 (labels :meeting.admin/delete-statements-heading)]
-     [:form.form.text-left.mb-5
-      {:on-submit (fn [e]
-                    (js-wrap/prevent-default e)
-                    (rf/dispatch [:discussion.admin/delete-statements
-                                  (oget e [:target :elements])]))}
-      [:div.form-group
-       [:label.m-1 {:for input-id} (labels :meeting.admin/statements-label)]
-       [:textarea.form-control.m-1.rounded-3
-        {:id input-id
-         :name "statement-ids" :wrap "soft" :rows 3
-         :auto-complete "off"
-         :required true
-         :placeholder (labels :meeting.admin/statement-id-placeholder)}]]
-      [:button.btn.btn-outline-primary
-       (labels :meeting.admin/delete-statements-button-text)]]]))
+     [disable-pro-con]]))
 
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
