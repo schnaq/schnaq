@@ -23,7 +23,7 @@
     :info
     true))
 
-(defn- dsgvo-row []
+(defn- gdpr-row []
   [rows/icon-right
    [:i {:class (str "m-auto fas fa-lg " (fa :shield))}]
    :privacy.made-in-germany])
@@ -46,8 +46,7 @@
 
 (defn- data-processing []
   [rows/icon-left
-   [:<>
-    [:i#data-proc {:class (str "m-auto fas fa-lg " (fa :server))}]]
+   [:i#data-proc {:class (str "m-auto fas fa-lg " (fa :server))}]
    :privacy.data-processing])
 
 (defn- link-to-privacy []
@@ -63,7 +62,7 @@
    {:page/heading (labels :privacy/heading)
     :page/subheading (labels :privacy/subheading)}
    [:section.container
-    [dsgvo-row]
+    [gdpr-row]
     [personal-data-row]
     [localstorage-row]
     [data-processing]
