@@ -184,7 +184,7 @@
 
         :privacy.data-processing/lead "What happens to your posts?"
         :privacy.data-processing/title "Data Processing"
-        :privacy.data-processing/body [:<> [:p "Your posts and chosen username will be stored on our server. If you do not provide any username the author of your posts will be displayed as ‘anonymous’."]
+        :privacy.data-processing/body [:<> [:p "Your posts and chosen username will be stored on our own servers and are not passed on to other companies. If you do not provide any username, the author of your posts will be displayed as \"Anonymous\". We do not store any other personal data, e.g. user-agent or ip address, to your posts."]
                                        [:p "Posts in public schnaqs can be viewed by anyone. Posts in private schnaqs will only be visible to those with access to the link. Administrators of a schnaq are able to delete a schnaq’s posts."]]
 
 
@@ -653,8 +653,8 @@
         :privacy.localstorage.notification/delete-button "Daten löschen"
         :privacy.data-processing/lead "Was passiert mit deinen Beiträgen?"
         :privacy.data-processing/title "Datenverarbeitung"
-        :privacy.data-processing/body [:<> [:p "Wir speichern die von dir verfassten Beiträge in Kombination mit dem von dir gewählten Nutzernamen auf unserem Server. Wenn du keinen Nutzernamen eingibst, wird als Author ‘Anonym’ eingetragen. Die von dir verfassten Beiträge stehen in keiner Beziehung zueinander."]
-                                       [:p "Beiträge in öffentlichen schnaqs sind von allen Nutzern einsehbar. Beiträge in privaten schnaqs sind nur von Personen einsehbar, die einen Link zur Diskussion haben. Administratoren eines schnaqs haben die Möglichkeit Beiträge zu löschen."]]
+        :privacy.data-processing/body [:<> [:p "Wir speichern die von dir verfassten Beiträge in Kombination mit dem von dir gewählten Nutzernamen auf unserem Server und geben sie nicht an Dritte weiter. Wenn du keinen Nutzernamen eingibst, wird als Author \"Anonymous\" eingetragen. Die von dir verfassten Beiträge stehen in keiner Beziehung zueinander. Es werden keine persönlichen Daten, wie dein Browser oder deine IP-Adresse, mit deinen Beiträgen zusammengeführt."]
+                                       [:p "Beiträge in öffentlichen schnaqs sind von allen Nutzer:innen einsehbar. Beiträge in privaten schnaqs sind nur von Personen einsehbar, die einen Link zur Diskussion haben. Administrator:innen eines schnaqs haben die Möglichkeit Beiträge zu löschen."]]
         :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen "
         :privacy.link-to-privacy/privacy "Datenschutzerklärung"
 
