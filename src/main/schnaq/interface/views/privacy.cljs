@@ -46,11 +46,10 @@
     :privacy.localstorage]])
 
 (defn- data-processing []
-  [:<>
-   [rows/icon-left
-    [:<>
-     [:i#data-proc {:class (str "m-auto fas fa-lg " (fa :server))}]]
-    :privacy.data-processing]])
+  [rows/icon-left
+   [:<>
+    [:i#data-proc {:class (str "m-auto fas fa-lg " (fa :server))}]]
+   :privacy.data-processing])
 
 (defn- link-to-privacy []
   [:section.text-center.pb-5
