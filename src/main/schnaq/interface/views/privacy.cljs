@@ -23,7 +23,7 @@
     :info
     true))
 
-(defn- dsgvo-row []
+(defn- gdpr-row []
   [rows/icon-right
    [:i {:class (str "m-auto fas fa-lg " (fa :shield))}]
    :privacy.made-in-germany])
@@ -36,14 +36,18 @@
 (defn- localstorage-row
   "Explaining localstorage."
   []
-  [:<>
-   [rows/icon-right
-    [:<>
-     [:i#cookie-icon {:class (str "m-auto fas fa-lg " (fa :cookie/complete))}]
-     [:div [:button.btn.btn-outline-primary
-            {:on-click localstorage-explanation}
-            (labels :privacy.localstorage/show-data)]]]
-    :privacy.localstorage]])
+  [rows/icon-right
+   [:<>
+    [:i#cookie-icon {:class (str "m-auto fas fa-lg " (fa :cookie/complete))}]
+    [:div [:button.btn.btn-outline-primary
+           {:on-click localstorage-explanation}
+           (labels :privacy.localstorage/show-data)]]]
+   :privacy.localstorage])
+
+(defn- data-processing []
+  [rows/icon-left
+   [:i#data-proc {:class (str "m-auto fas fa-lg " (fa :server))}]
+   :privacy.data-processing])
 
 (defn- link-to-privacy []
   [:section.text-center.pb-5
@@ -58,9 +62,10 @@
    {:page/heading (labels :privacy/heading)
     :page/subheading (labels :privacy/subheading)}
    [:section.container
-    [dsgvo-row]
+    [gdpr-row]
     [personal-data-row]
     [localstorage-row]
+    [data-processing]
     [link-to-privacy]]])
 
 
