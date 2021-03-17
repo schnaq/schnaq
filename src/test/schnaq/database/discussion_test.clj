@@ -219,11 +219,12 @@
         _ (db/set-disable-pro-con share-hash true)
         schnaq-after (db/discussion-by-share-hash share-hash)
         _ (db/set-disable-pro-con share-hash false)
-        schnaq-after-2 (db/discussion-by-share-hash share-hash)]
+        schnaq-after-2 (db/discussion-by-share-hash share-hash)
+        disabled-pro-con? #(nil? (some #{:discussion.state/disable-pro-con} (:discussion/states %)))]
     (testing "Testing change pro-con-button tag"
-      (is (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states schnaq-before)))
+      (is (disabled-pro-con? schnaq-before)
           "schnaq should not contain disable button tag per default")
-      (is (not (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states schnaq-after))))
+      (is (not (disabled-pro-con? schnaq-after))
           "schnaq should include disable button tag after setting it")
-      (is (nil? (some #{:discussion.state/disable-pro-con} (:discussion/states schnaq-after-2)))
+      (is (disabled-pro-con? schnaq-after-2)
           "schnaq should no longer include disable button tag after removing it"))))
