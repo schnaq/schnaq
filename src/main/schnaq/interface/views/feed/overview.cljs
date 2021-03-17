@@ -95,7 +95,7 @@
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
-(defn- feed-page-dektop [subscription-key]
+(defn- feed-page-desktop [subscription-key]
   [:div.row.px-0.mx-0.py-3
    [:div.col-3.py-3
     [feed-navigation]]
@@ -119,7 +119,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [:div.container-fluid.px-0
     [toolbelt/desktop-mobile-switch
-     [feed-page-dektop subscription-key]
+     [feed-page-desktop subscription-key]
      [feed-page-mobile subscription-key]]]])
 
 (defn public-discussions-view
