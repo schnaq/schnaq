@@ -75,7 +75,10 @@
   [form]
   (let [new-text-element (oget form [:premise-text])
         new-text (oget new-text-element [:value])
-        choice (oget form [:premise-choice :value])]
+        pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
+        choice (if pro-con-disabled?
+                 "support"
+                 (oget form [:premise-choice :value]))]
     (case choice
       "attack" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
       "support" (rf/dispatch [:discussion.reaction.statement/send :support new-text]))

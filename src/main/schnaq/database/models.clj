@@ -92,6 +92,8 @@
     :db/doc "Marks a discussion as publicly visible to everybody."}
    {:db/ident :discussion.state/read-only
     :db/doc "Marks a discussion as read-only. Only admins or nobody should be able to add something to the discussion."}
+   {:db/ident :discussion.state/disable-pro-con
+    :db/doc "Flag to disable the pro/con button."}
 
    ;; Discussion
    {:db/ident :discussion/title

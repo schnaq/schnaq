@@ -208,6 +208,7 @@
         :meeting/admin-center-export "Download schnaq as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
         :meeting/share-link-tooltip "Copy share-link"
+        :schnaq.disable-pro-con/label "Disable agree/disagree button"
 
         ;; Discussion Language
         :discussion/create-argument-action "Add Statement"
@@ -670,6 +671,7 @@
         :meeting/admin-center-export "schnaq als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
         :meeting/share-link-tooltip "Zugangslink kopieren"
+        :schnaq.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
 
         ;; Discussion Language
         :discussion/create-argument-action "Beitrag hinzufügen"

@@ -206,3 +206,25 @@
         2 ["public-share-hash" new-discussion-hash]
         2 ["public-share-hash" new-discussion-hash "public-share-hash-deleted"]
         2 ["public-share-hash" new-discussion-hash "public-share-hash-deleted" "razupaltuff"]))))
+
+(deftest change-pro-con-button-test
+  (let [share-hash "the-hash"
+        author (main-db/add-user-if-not-exists "Mike")
+        new-public-discussion {:discussion/title "Lord"
+                               :discussion/share-hash share-hash
+                               :discussion/edit-hash "secret-whatever"
+                               :discussion/author author}
+        _ (db/new-discussion new-public-discussion true)
+        schnaq-before (db/discussion-by-share-hash share-hash)
+        _ (db/set-disable-pro-con share-hash true)
+        schnaq-after (db/discussion-by-share-hash share-hash)
+        _ (db/set-disable-pro-con share-hash false)
+        schnaq-after-2 (db/discussion-by-share-hash share-hash)
+        disabled-pro-con? #(nil? (some #{:discussion.state/disable-pro-con} (:discussion/states %)))]
+    (testing "Testing change pro-con-button tag"
+      (is (disabled-pro-con? schnaq-before)
+          "schnaq should not contain disable button tag per default")
+      (is (not (disabled-pro-con? schnaq-after))
+          "schnaq should include disable button tag after setting it")
+      (is (disabled-pro-con? schnaq-after-2)
+          "schnaq should no longer include disable button tag after removing it"))))
