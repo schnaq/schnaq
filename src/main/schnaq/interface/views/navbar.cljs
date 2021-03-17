@@ -72,7 +72,7 @@
        [:ul.navbar-nav.mr-auto
         ;; navigation items
         [toolbelt/desktop-mobile-switch
-         ;; dektop view
+         ;; desktop view
          [:li.nav-item
           [:a.nav-link {:role "button" :href (reitfe/href :routes/public-discussions)}
            (labels :nav/schnaqs)]]
