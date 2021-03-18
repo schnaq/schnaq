@@ -122,7 +122,7 @@
         :meeting/link-copied-success "The link was copied to your clipboard!"
         :schnaq/created-success-heading "Your schnaq was created!"
         :schnaq/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
-        :schnaqs/continue-with-schnaq-after-creation "Invited Everybody? Lets go!"
+        :schnaqs/continue-with-schnaq-after-creation "Did you invite everybody? Lets go!"
         :schnaqs/continue-to-schnaq-button "To the schnaq"
 
         :meeting.admin/addresses-label "Email addresses of the participants"

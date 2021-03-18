@@ -295,13 +295,13 @@
   (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         dispatch (if schnaq-read-only? :discussion.admin/make-writeable
                                        :discussion.admin/make-read-only)
-        checked? (if schnaq-read-only? "checked" "")]
+        checked (if schnaq-read-only? "checked" "")]
     [:div.text-left
      [:div.mb-2
       [:input.big-checkbox
        {:type :checkbox
         :id :enable-read-only?
-        :checked checked?
+        :checked checked
         :on-change (fn [e] (js-wrap/prevent-default e)
                      (rf/dispatch [dispatch]))}]
       [:label.form-check-label.display-6.pl-1 {:for :enable-read-only?}
@@ -310,13 +310,13 @@
 
 (defn- disable-pro-con []
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        checked? (if pro-con-disabled? "checked" "")]
+        checked (if pro-con-disabled? "checked" "")]
     [:div.text-left
      [:div.mb-2
       [:input.big-checkbox
        {:type :checkbox
         :id :disable-pro-con-checkbox?
-        :checked checked?
+        :checked checked
         :on-change
         (fn [e]
           (js-wrap/prevent-default e)
