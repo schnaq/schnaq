@@ -139,9 +139,9 @@
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
         :discussion.admin.configurations/heading "Configuration"
         :discussion.admin.configurations.read-only/checkbox "Set to read-only"
-        :discussion.admin.configurations.read-only/explanation "When checked users can no longer add new posts to the discussion. Existing posts are still readable and can be analysed. You can change this option anytime."
+        :discussion.admin.configurations.read-only/explanation "When checked, users can no longer add new posts to the discussion. Existing posts are still readable and can be analysed. You can change this option anytime."
         :discussion.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
-        :discussion.admin.configurations.disable-pro-con/explanation "When checked users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
+        :discussion.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
 
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
