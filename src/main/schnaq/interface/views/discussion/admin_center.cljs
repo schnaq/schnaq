@@ -289,34 +289,41 @@
       [:button.btn.btn-outline-primary
        (labels :meeting.admin-center.edit.link.form/submit-button)]])])
 
-(defn- make-discussion-writable-button
-  "A button that makes the current discussion writeable when its read-only."
+(defn- enable-discussion-read-only
+  "A Checkbox that makes the current discussion read-only or writeable."
   []
-  [:button.btn.btn-outline-dark
-   {:on-click #(rf/dispatch [:discussion.admin/make-writeable])}
-   (labels :discussion.admin.configurations.read-only/button-writeable)])
-
-(defn- make-discussion-read-only-button
-  "A button that makes the current discussion read-only when its writeable."
-  []
-  [:button.btn.btn-outline-dark
-   {:on-click #(rf/dispatch [:discussion.admin/make-read-only])}
-   (labels :discussion.admin.configurations.read-only/button-read-only)])
+  (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        dispatch (if schnaq-read-only? :discussion.admin/make-writeable
+                                       :discussion.admin/make-read-only)
+        checked? (if schnaq-read-only? "checked" "")]
+    [:div.text-left
+     [:div.mb-2
+      [:input.big-checkbox
+       {:type :checkbox
+        :id :enable-read-only?
+        :checked checked?
+        :on-change (fn [e] (js-wrap/prevent-default e)
+                     (rf/dispatch [dispatch]))}]
+      [:label.form-check-label.display-6.pl-1 {:for :enable-read-only?}
+       (labels :discussion.admin.configurations.read-only/checkbox)]]
+     [:span (labels :discussion.admin.configurations.read-only/explanation)]]))
 
 (defn- disable-pro-con []
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         checked? (if pro-con-disabled? "checked" "")]
-    [:div.text-left.mb-5
-     [:input.big-checkbox
-      {:type :checkbox
-       :id :disable-pro-con-checkbox?
-       :checked checked?
-       :on-change
-       (fn [e]
-         (js-wrap/prevent-default e)
-         (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
-     [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
-      (labels :schnaq.disable-pro-con/label)]]))
+    [:div.text-left
+     [:div.mb-2
+      [:input.big-checkbox
+       {:type :checkbox
+        :id :disable-pro-con-checkbox?
+        :checked checked?
+        :on-change
+        (fn [e]
+          (js-wrap/prevent-default e)
+          (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
+      [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
+       (labels :discussion.admin.configurations.disable-pro-con/label)]]
+     [:span (labels :discussion.admin.configurations.disable-pro-con/explanation)]]))
 
 (rf/reg-sub
   :schnaq.selected/pro-con?
@@ -353,15 +360,13 @@
   "A form which allows removing single statements from the discussion."
   []
   [:ret :re-frame/component]
-  (let [schnaq-read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
-    [:<>
-     [header-image/image-url-input]
-     [:div.text-left.my-5
-      [:h4.mt-4.text-center (labels :discussion.admin.configurations/heading)]
-      (if schnaq-read-only?
-        [make-discussion-writable-button]
-        [make-discussion-read-only-button])]
-     [disable-pro-con]]))
+  [:<>
+   [header-image/image-url-input]
+   [:div.text-left.my-5
+    [:h4.mt-4 (labels :discussion.admin.configurations/heading)]]
+   [:div.row
+    [:div.col [enable-discussion-read-only]]
+    [:div.col [disable-pro-con]]]])
 
 (defn- invite-participants-tabs
   "Share link and invite via mail in a tabbed view."
