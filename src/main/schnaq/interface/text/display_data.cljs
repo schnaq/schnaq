@@ -615,7 +615,7 @@
         :discussion.admin.configurations.read-only/checkbox "Schreibschutz aktivieren"
         :discussion.admin.configurations.read-only/explanation "Aktivieren, um keine neuen Beiträge zu erlauben. Bestehende Beiträge sind weiterhin sichtbar und können weiterhin analysiert werden. Diese Option kann jederzeit geändert werden."
         :discussion.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
-        :discussion.admin.configurations.disable-pro-con/explanation "Aktivieren, um den den Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
+        :discussion.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
 
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
