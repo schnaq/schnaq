@@ -122,7 +122,7 @@
         :meeting/link-copied-success "The link was copied to your clipboard!"
         :schnaq/created-success-heading "Your schnaq was created!"
         :schnaq/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
-        :schnaqs/continue-with-schnaq-after-creation "Invited Everybody? Lets go!"
+        :schnaqs/continue-with-schnaq-after-creation "Did you invite everybody? Lets go!"
         :schnaqs/continue-to-schnaq-button "To the schnaq"
 
         :meeting.admin/addresses-label "Email addresses of the participants"
@@ -138,8 +138,10 @@
         :meeting.admin.notifications/statements-deleted-title "Statements deleted!"
         :meeting.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
         :discussion.admin.configurations/heading "Configuration"
-        :discussion.admin.configurations.read-only/button-read-only [:span [:b "Set schnaq to"] " read-only"]
-        :discussion.admin.configurations.read-only/button-writeable [:span [:b "Remove"] " read-only"]
+        :discussion.admin.configurations.read-only/checkbox "Set to read-only"
+        :discussion.admin.configurations.read-only/explanation "When checked, users can no longer add new posts to the discussion. Existing posts are still readable and can be analysed. You can change this option anytime."
+        :discussion.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
+        :discussion.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
 
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
@@ -211,7 +213,7 @@
         :meeting/admin-center-export "Download schnaq as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
         :meeting/share-link-tooltip "Copy share-link"
-        :schnaq.disable-pro-con/label "Disable agree/disagree button"
+
 
         ;; Discussion Language
         :discussion/create-argument-action "Add Statement"
@@ -610,8 +612,10 @@
         :meeting.admin.notifications/statements-deleted-title "Nachrichten gelöscht!"
         :meeting.admin.notifications/statements-deleted-lead "Deine gewählten Nachrichten wurden erfolgreich gelöscht."
         :discussion.admin.configurations/heading "Einstellungen"
-        :discussion.admin.configurations.read-only/button-read-only [:span [:b "Setze schnaq auf"] " schreibgeschützt"]
-        :discussion.admin.configurations.read-only/button-writeable [:span "Schreibschutz " [:b "entfernen"]]
+        :discussion.admin.configurations.read-only/checkbox "Schreibschutz aktivieren"
+        :discussion.admin.configurations.read-only/explanation "Aktivieren, um keine neuen Beiträge zu erlauben. Bestehende Beiträge sind weiterhin sichtbar und können weiterhin analysiert werden. Diese Option kann jederzeit geändert werden."
+        :discussion.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
+        :discussion.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
 
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
@@ -674,7 +678,6 @@
         :meeting/admin-center-export "schnaq als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
         :meeting/share-link-tooltip "Zugangslink kopieren"
-        :schnaq.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
 
         ;; Discussion Language
         :discussion/create-argument-action "Beitrag hinzufügen"
@@ -1021,7 +1024,8 @@
      :clipboard "fa-clipboard-list"
      :clock "fa-clock"
      :circle "fa-circle"
-     :cog "fa-cogs"
+     :cog "fa-cog"
+     :cogs "fa-cogs"
      :comment "fa-comments"
      :comment-alt "fa-comment-alt"
      :cookie/bite "fa-cookie-bite"
