@@ -26,15 +26,3 @@
   (transact (mapv #(vector :db/add hub-id :hub/schnaqs %) discussion-ids))
   (log/info "Added schnaqs with ids " discussion-ids " to hub " hub-id)
   (main-db/fast-pull hub-id hub-pattern))
-
-(comment
-  (create-hub "pinhub")
-  (add-discussions-to-hub 83562883715369 [101155069759783
-                                          101155069759742
-                                          101155069759677])
-  (query
-    '[:find (pull ?hubs hub-pattern)
-      :in $ hub-pattern
-      :where [?hubs :hub/name _]]
-    hub-pattern)
-  )
