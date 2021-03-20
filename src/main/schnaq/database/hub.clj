@@ -1,7 +1,7 @@
 (ns schnaq.database.hub
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn ? >defn-]]
-            [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
+            [ghostwheel.core :refer [>defn]]
+            [schnaq.meeting.database :refer [transact] :as main-db]
             [schnaq.meeting.specs :as specs]
             [taoensso.timbre :as log]))
 
