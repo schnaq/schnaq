@@ -49,13 +49,15 @@
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."
   []
-  [hub-index :keycloak-name])
+  (let [keycloak-name (get-in @(rf/subscribe [:navigation/current-route])
+                              [:path-params :keycloak-name])]
+    [hub-index keycloak-name]))
 
 (rf/reg-event-fx
   :hub/load
   (fn [{:keys [db]} [_ keycloak-name]]
     {:fx [[:http-xhrio {:method :get
-                        :uri (str (:rest-backend config/config) "/hubs/" keycloak-name)
+                        :uri (str (:rest-backend config/config) "/hub/" keycloak-name)
                         :format (ajax/transit-request-format)
                         :response-format (ajax/transit-response-format)
                         :headers (auth/authentication-header db)
@@ -70,4 +72,4 @@
 (rf/reg-sub
   :hubs/schnaqs
   (fn [db [_ keycloak-name]]
-    (get-in db [:hubs keycloak-name] [])))
+    (get-in db [:hubs keycloak-name :hub/schnaqs] [])))
