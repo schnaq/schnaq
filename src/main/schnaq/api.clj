@@ -11,6 +11,7 @@
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.api.analytics :as analytics]
+            [schnaq.api.hubs :as hubs]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
@@ -420,7 +421,8 @@
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
-    analytics/analytics-routes))
+    analytics/analytics-routes
+    hubs/hub-routes))
 
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."

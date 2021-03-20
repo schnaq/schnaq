@@ -11,7 +11,7 @@
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest add-discussions-to-hub-test
-  (let [hub (hub/create-hub "test-hub")
+  (let [hub (hub/create-hub "test-hub" "keycloak-name")
         discussion (first (discussion-db/all-discussions-by-title "Public Test"))
         cat-dog-discussion (first (discussion-db/all-discussions-by-title "Cat or Dog?"))]
     (is (empty? (:hub/schnaqs hub)))
@@ -25,6 +25,6 @@
 
 (deftest create-hub-test
   (let [name "porky"
-        new-hub (hub/create-hub name)]
+        new-hub (hub/create-hub name "keycloak-name")]
     (is (= name (:hub/name new-hub)))
     (is (empty? (:hub/schnaqs new-hub)))))
