@@ -7,7 +7,7 @@
 (defn- hub-by-keycloak-name
   "Query hub by its referenced name in keycloak."
   [request]
-  (let [keycloak-name (get-in request [:route-params :keycloak-name])]
+  (let [keycloak-name (get-in request [:params :keycloak-name])]
     (if (auth/group-membership? request keycloak-name)
       (ok {:hub (hub-db/hub-by-keycloak-name keycloak-name)})
       (forbidden "You are not allowed to access this ressource."))))
