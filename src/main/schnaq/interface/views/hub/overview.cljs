@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.hub.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [ajax.core :as ajax]
+            [goog.string :as gstring]
             [schnaq.interface.config :as config]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.pages :as pages]
@@ -39,8 +40,7 @@
   [keycloak-name]
   [string? :ret vector?]
   [pages/with-nav
-   {:page/heading "Platzhalter"
-    :page/subheading "Platzhalter"}
+   {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
    [:div.container-fluid.px-0
     [toolbelt/desktop-mobile-switch
      [feed-page-desktop keycloak-name]
