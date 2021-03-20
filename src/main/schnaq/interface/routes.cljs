@@ -13,6 +13,7 @@
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
             [schnaq.interface.views.howto.how-to :as how-to]
+            [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.privacy :as privacy]
             [schnaq.interface.views.schnaq.create :as create]
@@ -60,6 +61,13 @@
     {:name :routes/login
      :view pages/login-page
      :link-text (labels :user/login)}]
+   ["hub/:keycloak-name"
+    {:name :routes/hub
+     :view hubs/hub-overview
+     :parameters {:path {:keycloak-name string?}}
+     :controllers [{:parameters {:path [:keycloak-name]}
+                    :start (fn [{:keys [path]}]
+                             (rf/dispatch [:hub/load (:keycloak-name path)]))}]}]
    ["admin"
     ["/center"
      {:name :routes/admin-center
