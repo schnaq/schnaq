@@ -8,14 +8,17 @@
 (def ^:private hub-pattern
   [:db/id
    :hub/name
+   :hub/keycloak-name
    {:hub/schnaqs [:discussion/title]}])
 
 (>defn create-hub
-  [hub-name]
-  [:hub/name :ret ::specs/hub]
+  "Create a hub and reference it to the keycloak-name."
+  [hub-name keycloak-name]
+  [:hub/name :hub/keycloak-name :ret ::specs/hub]
   (let [new-hub (get-in
                   (transact [{:db/id "temp"
-                              :hub/name hub-name}])
+                              :hub/name hub-name
+                              :hub/keycloak-name keycloak-name}])
                   [:tempids "temp"])]
     (log/info "Created hub" new-hub)
     (main-db/fast-pull new-hub hub-pattern)))

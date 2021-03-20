@@ -138,4 +138,9 @@
    {:db/ident :hub/schnaqs
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc "The schnaqs that are visible in the hub."}])
+    :db/doc "The schnaqs that are visible in the hub."}
+   {:db/ident :hub/keycloak-name
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "Map this entity to the group in our keycloak instance."}])

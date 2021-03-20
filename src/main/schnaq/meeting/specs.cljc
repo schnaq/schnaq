@@ -33,8 +33,9 @@
                                   :db/txInstant]))
 
 (s/def :hub/name string?)
+(s/def :hub/keycloak-name string?)
 (s/def :hub/schnaqs (s/coll-of ::discussion))
-(s/def ::hub (s/keys :req [:hub/name]
+(s/def ::hub (s/keys :req [:hub/name :hub/keycloak-name]
                      :opt [:hub/schnaqs]))
 
 ;; Author
