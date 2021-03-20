@@ -137,8 +137,10 @@
 
 (defn fast-pull
   "Pulls any entity with star-syntax and current db."
-  [id]
-  (d/pull (d/db (new-connection)) '[*] id))
+  ([id]
+   (fast-pull id '[*]))
+  ([id pattern]
+   (d/pull (d/db (new-connection)) pattern id)))
 
 (>defn clean-and-add-to-db!
   "Removes empty strings and nil values from map before transacting it to the
