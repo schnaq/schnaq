@@ -468,7 +468,9 @@
 
         :badges.sort/sort "Sort"
         :badges.sort/newest "Newest"
-        :badges.sort/popular "Popular"}
+        :badges.sort/popular "Popular"
+
+        :hub/heading "Personal %s Hub"}
    :de {;; Common
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -939,7 +941,9 @@
 
         :badges.sort/sort "Sortierung"
         :badges.sort/newest "Neueste"
-        :badges.sort/popular "Beliebt"}})
+        :badges.sort/popular "Beliebt"
+
+        :hub/heading "Persönlicher %s Hub"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
