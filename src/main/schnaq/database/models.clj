@@ -129,4 +129,13 @@
    {:db/ident :discussion/starting-statements
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc "The statements at the source of the discussion-graph"}])
+    :db/doc "The statements at the source of the discussion-graph"}
+
+   {:db/ident :hub/name
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The name of the hub."}
+   {:db/ident :hub/schnaqs
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The schnaqs that are visible in the hub."}])
