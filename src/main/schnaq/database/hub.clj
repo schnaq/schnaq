@@ -1,6 +1,7 @@
 (ns schnaq.database.hub
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :refer [transact] :as main-db]
             [schnaq.meeting.specs :as specs]
             [taoensso.timbre :as log]))
@@ -9,7 +10,7 @@
   [:db/id
    :hub/name
    :hub/keycloak-name
-   {:hub/schnaqs [:discussion/title]}])
+   {:hub/schnaqs discussion-db/discussion-pattern}])
 
 (>defn create-hub
   "Create a hub and reference it to the keycloak-name."
@@ -29,3 +30,9 @@
   (transact (mapv #(vector :db/add hub-id :hub/schnaqs %) discussion-ids))
   (log/info "Added schnaqs with ids" discussion-ids "to hub" hub-id)
   (main-db/fast-pull hub-id hub-pattern))
+
+(>defn hub-by-keycloak-name
+  "Return a hub by the reference in keycloak."
+  [keycloak-name]
+  [string? :ret ::specs/hub]
+  (main-db/fast-pull [:hub/keycloak-name keycloak-name] hub-pattern))
