@@ -91,10 +91,14 @@
 (rf/reg-event-db
   :keycloak/store-user-profile
   (fn [db [_ {:keys [username email]}]]
-    (-> db
-        (assoc-in [:user :name] username)
-        (cond-> email
-                (assoc-in [:user :email] email)))))
+    (let [keycloak (get-in db [:user :keycloak])
+          groups (js->clj (oget keycloak [:tokenParsed :groups]))]
+      (-> db
+          (assoc-in [:user :name] username)
+          (cond-> (seq groups)
+                  (assoc-in [:user :groups] groups))
+          (cond-> email
+                  (assoc-in [:user :email] email))))))
 
 
 ;; -----------------------------------------------------------------------------
