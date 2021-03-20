@@ -24,7 +24,7 @@
                                                  set))))))
 
 (deftest create-hub-test
-  (let [name "porni"
+  (let [name "porky"
         new-hub (hub/create-hub name)]
     (is (= name (:hub/name new-hub)))
     (is (empty? (:hub/schnaqs new-hub)))))
