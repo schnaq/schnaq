@@ -5,7 +5,7 @@
             [schnaq.meeting.specs :as specs]
             [taoensso.timbre :as log]))
 
-(def hub-pattern
+(def ^:private hub-pattern
   [:db/id
    :hub/name
    {:hub/schnaqs [:discussion/title]}])
