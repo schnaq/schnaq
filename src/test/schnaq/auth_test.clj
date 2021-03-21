@@ -45,3 +45,11 @@
       (is (= 401 (:status (response token-timed-out))))
       (is (= 401 (:status (response token-wrong-signature))))
       (is (= 401 (:status (test-routes (mock/request :get path))))))))
+
+(deftest group-membership?-test
+  (testing "Verify that user is member of called group."
+    (let [request (assoc-in (mock/request :get "/testing/stuff")
+                            [:identity :groups] ["these-are-my-groups" "schnaqqifantenparty"])]
+      (is (auth/group-membership? request "schnaqqifantenparty"))
+      (is (not (auth/group-membership? request "")))
+      (is (not (auth/group-membership? request "not-member-of"))))))

@@ -59,3 +59,9 @@
     (if (has-admin-role? request)
       (handler request)
       (forbidden "You are not an admin."))))
+
+(defn group-membership?
+  "Check if group is available in the JWT token."
+  [request group]
+  (let [groups (get-in request [:identity :groups])]
+    (some #(= group %) groups)))
