@@ -1,4 +1,4 @@
-(ns schnaq.api.hubs
+(ns schnaq.api.hub
   (:require [compojure.core :refer [GET routes wrap-routes context]]
             [ring.util.http-response :refer [ok forbidden]]
             [schnaq.auth :as auth]

@@ -11,7 +11,7 @@
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.api.analytics :as analytics]
-            [schnaq.api.hubs :as hubs]
+            [schnaq.api.hub :as hubs]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
