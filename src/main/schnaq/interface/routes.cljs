@@ -73,12 +73,12 @@
      {:name :routes/admin-center
       :view admin-center/center-overview-route
       :link-text (labels :router/admin-center)
-      :controllers [{:start (fn [] (rf/dispatch [:schnaqs.public/load]))}]}]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:schnaqs.public/load]]))}]}]
     ["/feedbacks"
      {:name :routes/feedbacks
       :view feedback-admin/feedbacks-view
       :link-text (labels :router/all-feedbacks)
-      :controllers [{:start (fn [] (rf/dispatch [:feedbacks/fetch]))}]}]]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:feedbacks/fetch]]))}]}]]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
@@ -221,7 +221,7 @@
     {:name :routes/analytics
      :view analytics/analytics-dashboard-entrypoint
      :link-text (labels :router/analytics)
-     :controllers [{:start (fn [] (rf/dispatch [:analytics/load-dashboard]))}]}]
+     :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:analytics/load-dashboard]]))}]}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub

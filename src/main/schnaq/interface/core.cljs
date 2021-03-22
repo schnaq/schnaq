@@ -14,6 +14,7 @@
             [schnaq.interface.events]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.routes]
+            [schnaq.interface.scheduler]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.time]
             [schnaq.interface.utils.updates :as updates]
