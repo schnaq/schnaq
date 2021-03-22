@@ -55,7 +55,7 @@
       (and (or needs-authentication? needs-administrator?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
-      :else page)))
+      :else (do (rf/dispatch [:scheduler.execute/after-login]) page))))
 
 
 ;; -----------------------------------------------------------------------------
