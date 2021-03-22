@@ -24,7 +24,7 @@
   (fn [db _]
     (seq (get-in db [:scheduler :after/login]))))
 
-(>defn scheduler-middleware
+(>defn middleware
   "Use scheduler as middleware when a page is refreshed."
   [view]
   [vector? :ret vector?]

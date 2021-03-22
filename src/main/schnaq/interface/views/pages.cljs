@@ -46,7 +46,7 @@
      {:on-click #(rf/dispatch [:keycloak/login])}
      (labels :user/login)]]])
 
-(>defn- with-validated-conditions
+(>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."
   [{:condition/keys [needs-authentication? needs-administrator?]} page]
   [::page-options (s/+ vector?) :ret vector?]
@@ -66,8 +66,8 @@
   [{:page/keys [title heading subheading more-for-heading] :as options} body]
   [::page-options (s/+ vector?) :ret vector?]
   (common/set-website-title! (or title heading))
-  [scheduler/scheduler-middleware
-   [with-validated-conditions
+  [scheduler/middleware
+   [validate-conditions-middleware
     options
     [:<>
      [navbar/navbar]
@@ -79,8 +79,8 @@
   [{:page/keys [title heading] :as options} body]
   [::page-options (s/+ vector?) :ret vector?]
   (common/set-website-title! (or title heading))
-  [scheduler/scheduler-middleware
-   [with-validated-conditions
+  [scheduler/middleware
+   [validate-conditions-middleware
     options
     [:<>
      [navbar/navbar]
