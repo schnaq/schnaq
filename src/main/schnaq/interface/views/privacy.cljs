@@ -2,6 +2,7 @@
   "Page explaining our privacy and how we are storing data."
   (:require [cljs.pprint :refer [pprint]]
             [goog.string :as gstring]
+            [hodgepodge.core :refer [local-storage clear!]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.rows :as rows]
@@ -17,7 +18,7 @@
             (with-out-str (pprint (ls/localstorage->map)))]]
      [:button.btn.btn-sm.btn-outline-danger
       {:on-click #(when (js/confirm (labels :privacy.localstorage.notification/confirmation))
-                    (ls/clear!)
+                    (clear! local-storage)
                     (.reload js/location))}
       (labels :privacy.localstorage.notification/delete-button)]]
     :info

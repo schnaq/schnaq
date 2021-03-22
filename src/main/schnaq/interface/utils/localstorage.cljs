@@ -27,13 +27,6 @@
   [key val]
   (assoc! local-storage key val))
 
-(>defn set-item!
-  "Set `key` in browser's localStorage to `val`. Key and value are both serialized."
-  [key val]
-  [keyword? any? :ret nil?]
-  (assoc! local-storage key val)
-  (.setItem (.-localStorage js/window) (stringify key) val))
-
 (>defn get-item
   "Returns value of `key' from browser's localStorage."
   [key]
@@ -58,12 +51,6 @@
               :when (not (string/starts-with? k "day8.re-frame-10x"))]
           [k v])))
 
-(>defn clear!
-  "Delete all information stored in the LocalStorage."
-  []
-  [:ret nil?]
-  (.clear (.-localStorage js/window)))
-
 ;; #### Hashmap Storage Helper ####
 
 (def ^:private tuple-separator ",")
@@ -81,32 +68,20 @@
         hashes-map (if (empty? cleaned-vector) {} (into {} cleaned-vector))]
     hashes-map))
 
-(defn- add-key-value-to-local-hashmap
-  [hash-map-string key value]
-  (let [parsed-hash-map (parse-hash-map-string hash-map-string)
-        new-hash-map (conj parsed-hash-map {(str key) (str value)})]
-    ;; check if key is already in hash map
-    (if-not (some #{key} parsed-hash-map)
-      new-hash-map
-      parsed-hash-map)))
-
 (defn add-key-value-and-build-map-from-localstorage
   "Build key value pair for inserting into local storage hashmap.
   Does not override the key if it is present"
-  [key value local-storage-key]
+  [local-storage-key]
   ;; PARTIALLY DEPRECATED: Remove the meeting part after 2021-08-05
   (let [local-hashes (get-item local-storage-key)
         combined-hashes (if (= :schnaqs/admin-access local-storage-key)
                           (if-let [old-admin-access (get-item :meetings/admin-access)]
                             (str local-hashes "," old-admin-access)
                             local-hashes)
-                          local-hashes)
-        new-hashes (add-key-value-to-local-hashmap combined-hashes key value)
-        hashes-tuple (map (fn [[val key]] (str "[" val " " key "]")) (seq new-hashes))
-        hashes-as-string (string/join "," hashes-tuple)]
+                          local-hashes)]
     (when (= :schnaqs/admin-access local-storage-key)
       (remove-item! :meetings/admin-access))
-    hashes-as-string))
+    (parse-hash-map-string combined-hashes)))
 
 ;; ### Set Storage Helper ###
 (defn parse-string-as-set
@@ -114,31 +89,6 @@
   [set-string]
   (let [items (remove empty? (string/split set-string (re-pattern hash-separator)))]
     (set items)))
-
-(defn- parse-set-as-string
-  "Parse a set to a string. Will obey convention 'item1 item2'"
-  [set-data]
-  (let [items (map str set-data)
-        set-items (set items)
-        set-as-string (string/join hash-separator set-items)]
-    set-as-string))
-
-(defn add-to-and-build-set-from-local-storage
-  "Add a value to a set ready for use as local storage data.
-  Get localstorage value of 'key-entry', parse it as set, add 'item' and parse it as string.
-  The resulting string will obey the convention 'item1 item2 item3'"
-  [key-entry item]
-  (let [value-entry (get-item key-entry)
-        string-as-set (parse-string-as-set value-entry)
-        new-set (conj string-as-set item)
-        new-set-as-string (parse-set-as-string new-set)]
-    new-set-as-string))
-
-(rf/reg-fx
-  ;; TODO check all occurences and migrate to :localstorage/assoc
-  :localstorage/write
-  (fn [[key value]]
-    (set-item! key value)))
 
 (rf/reg-fx
   ;; Associates a value into local-storage. Can be retrieved as EDN via get or get-in.

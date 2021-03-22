@@ -1,9 +1,11 @@
 (ns schnaq.interface.views.howto.elements
-  (:require [schnaq.interface.text.display-data :refer [fa labels img-path video]]
+  (:require [clojure.set :as cset]
+            [hodgepodge.core :refer [local-storage]]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.views.common :as common]
+            [schnaq.interface.text.display-data :refer [fa labels img-path video]]
             [schnaq.interface.utils.localstorage :as ls]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.common :as common]))
 
 (defn text-box
   "Text box with title and a body."
@@ -40,7 +42,7 @@
   "Feature row where the video is located on the right side."
   [video-key-webm vide-key-webm title body hide-tag]
   (let [hidden-tags @(rf/subscribe [:how-to-visibility/hidden-tags])
-        hide? (contains? hidden-tags (str hide-tag))]
+        hide? (contains? hidden-tags hide-tag)]
     (when-not hide?
       [common/delayed-fade-in
        [:div.quick-how-to
@@ -65,21 +67,28 @@
 
 (rf/reg-event-fx
   :how-to-visibility/to-localstorage
-  (fn [_ [_ how-to-id]]
-    {:fx [[:localstorage/write
-           [:how-to/disabled
-            (ls/add-to-and-build-set-from-local-storage :how-to/disabled how-to-id)]]
-          [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]]}))
+  (fn [{:keys [db]} [_ how-to-id]]
+    ;; PARTIALLY DEPRECATED FROM 2021-09-22: Remove old add-to-and-build-… stuff and use normal set
+    (let [deprecated-set (->> (ls/get-item :how-to/disabled)
+                              ls/parse-string-as-set
+                              (map #(keyword (if (= ":" (first %))
+                                               (subs % 1) %)))
+                              (into #{}))
+          disabled-opts (conj (:how-to/disabled local-storage) how-to-id)
+          merged-opts (cset/union deprecated-set disabled-opts)]
+      {:db (assoc-in db [:how-to :disabled] merged-opts)
+       :fx [[:localstorage/assoc [:how-to/disabled merged-opts]]]})))
 
 (rf/reg-event-db
   :how-to-visibility/from-localstorage-to-app-db
   (fn [db _]
-    (assoc db :how-to/disabled (ls/parse-string-as-set (ls/get-item :how-to/disabled)))))
+    (assoc-in db [:how-to :disabled] (or (:how-to/disabled local-storage)
+                                         (ls/parse-string-as-set (ls/get-item :how-to/disabled))))))
 
 (rf/reg-sub
   :how-to-visibility/hidden-tags
   (fn [db _]
-    (get db :how-to/disabled)))
+    (get-in db [:how-to :disabled])))
 
 (defn quick-how-to-create []
   [quick-how-to
