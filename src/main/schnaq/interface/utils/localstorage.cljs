@@ -22,6 +22,12 @@
     (keyword->string val)
     (str val)))
 
+(defn assoc-item!
+  "Sets `val` in a serialized form into local-storage under the serialized key `key`"
+  [key val]
+  (println "Writing to local-storage " val)
+  (assoc! local-storage key val))
+
 (>defn set-item!
   "Set `key` in browser's localStorage to `val`. Key and value are both serialized."
   [key val]
@@ -148,6 +154,12 @@
   :localstorage/write
   (fn [[key value]]
     (set-item! key value)))
+
+(rf/reg-fx
+  ;; Associates a value into local-storage. Can be retrieved as EDN via get or get-in.
+  :localstorage/assoc
+  (fn [[key value]]
+    (assoc-item! key value)))
 
 (rf/reg-fx
   :localstorage/remove

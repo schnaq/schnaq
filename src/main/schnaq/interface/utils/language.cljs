@@ -22,6 +22,6 @@
   e.g. `:en` for english or `:de` for german.
   Saves the keyword in the localstorage and sets the key to the config."
   [language]
-  (localstorage/set-item! :schnaq/language language)
+  (localstorage/assoc-item! :schnaq/language language)
   (reset! config/user-language language)
   (rf/dispatch [:set-locale language]))
