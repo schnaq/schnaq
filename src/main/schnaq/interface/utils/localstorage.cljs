@@ -157,6 +157,6 @@
     (assoc-item! key value)))
 
 (rf/reg-fx
-  :localstorage/remove
+  :localstorage/dissoc
   (fn [key]
-    (remove-item! key)))
+    (dissoc! local-storage key)))

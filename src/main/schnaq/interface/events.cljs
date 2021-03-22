@@ -63,8 +63,11 @@
 (rf/reg-event-fx
   :load/last-added-schnaq
   (fn [_ _]
-    (let [share-hash (ls/get-item :schnaq.last-added/share-hash)
-          edit-hash (ls/get-item :schnaq.last-added/edit-hash)]
+    ;; PARTIALLY DEPRECATED SINCE 2021-09-22: Remove old ls/get-item and only use new.
+    (let [share-hash (or (:schnaq.last-added/share-hash local-storage)
+                         (ls/get-item :schnaq.last-added/share-hash))
+          edit-hash (or (:schnaq.last-added/edit-hash local-storage)
+                        (ls/get-item :schnaq.last-added/edit-hash))]
       (when-not (and (nil? edit-hash) (nil? share-hash))
         {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 

@@ -71,6 +71,6 @@
                         #:notification{:title (labels :schnaq/created-success-heading)
                                        :body (labels :schnaq/created-success-subheading)
                                        :context :success}]]
-            [:localstorage/write [:schnaq.last-added/share-hash share-hash]]
-            [:localstorage/write [:schnaq.last-added/edit-hash edit-hash]]
+            [:localstorage/assoc [:schnaq.last-added/share-hash share-hash]]
+            [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
             [:dispatch [:schnaqs.save-admin-access/to-localstorage share-hash edit-hash]]]})))
