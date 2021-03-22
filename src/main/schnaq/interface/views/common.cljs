@@ -116,20 +116,20 @@
 ;; -----------------------------------------------------------------------------
 ;; Higher Order Components
 
-(defn delay-render
+(defn- delay-render
   "Wrap a component in this component to wait for a certain amount of
   milliseconds, until the provided component is rendered."
-  [_component]
+  [_component _delay]
   (let [ready? (reagent/atom false)]
     (reagent/create-class
       {:component-did-mount
-       (fn []
-         (let [delay-in-milliseconds 500]
+       (fn [comp]
+         (let [[_ _component delay-in-milliseconds] (reagent/argv comp)]
            (go (<! (timeout delay-in-milliseconds))
                (reset! ready? true))))
        :display-name "Delay Rendering of wrapped component"
        :reagent-render
-       (fn [component]
+       (fn [component _delay]
          (when @ready? [:> AnimatePresence component]))})))
 
 (defn fade-in-and-out
@@ -142,7 +142,9 @@
    component])
 
 (defn delayed-fade-in
-  "Takes a component and applies a delay and a fade-in-and-out animation."
-  [component]
-  [delay-render [fade-in-and-out component]])
-
+  "Takes a component and applies a delay and a fade-in-and-out animation.
+  Optionally takes a `delay` in milliseconds."
+  ([component]
+   [delayed-fade-in component 500])
+  ([component delay]
+   [delay-render [fade-in-and-out component] delay]))

@@ -67,18 +67,23 @@
      :parameters {:path {:keycloak-name string?}}
      :controllers [{:parameters {:path [:keycloak-name]}
                     :start (fn [{:keys [path]}]
-                             (rf/dispatch [:hub/load (:keycloak-name path)]))}]}]
+                             (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}]
    ["admin"
     ["/center"
      {:name :routes/admin-center
       :view admin-center/center-overview-route
       :link-text (labels :router/admin-center)
-      :controllers [{:start (fn [] (rf/dispatch [:schnaqs.public/load]))}]}]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:schnaqs.public/load]]))}]}]
     ["/feedbacks"
      {:name :routes/feedbacks
       :view feedback-admin/feedbacks-view
       :link-text (labels :router/all-feedbacks)
-      :controllers [{:start (fn [] (rf/dispatch [:feedbacks/fetch]))}]}]]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:feedbacks/fetch]]))}]}]
+    ["/analytics"
+     {:name :routes/analytics
+      :view analytics/analytics-dashboard-entrypoint
+      :link-text (labels :router/analytics)
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:analytics/load-dashboard]]))}]}]]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
@@ -217,11 +222,6 @@
                                  (rf/dispatch [:graph/load-data-for-discussion]))
                         :stop (fn []
                                 (rf/dispatch [:updates.periodic/graph false]))}]}]]]]]
-   ["analytics"
-    {:name :routes/analytics
-     :view analytics/analytics-dashboard-entrypoint
-     :link-text (labels :router/analytics)
-     :controllers [{:start (fn [] (rf/dispatch [:analytics/load-dashboard]))}]}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
