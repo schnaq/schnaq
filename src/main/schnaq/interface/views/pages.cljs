@@ -50,12 +50,15 @@
   [{:condition/keys [needs-authentication? needs-administrator?]} page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        admin? @(rf/subscribe [:user/administrator?])]
+        admin? @(rf/subscribe [:user/administrator?])
+        has-events-after-login? @(rf/subscribe [:scheduler.login/has-events?])]
+    (when (and has-events-after-login? authenticated?)
+      (rf/dispatch [:scheduler.execute/after-login]))
     (cond
       (and (or needs-authentication? needs-administrator?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
-      :else (do (rf/dispatch [:scheduler.execute/after-login]) page))))
+      :else page)))
 
 
 ;; -----------------------------------------------------------------------------

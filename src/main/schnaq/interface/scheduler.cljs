@@ -15,4 +15,10 @@
   (fn [{:keys [db]} [_ _]]
     (let [after-login (get-in db [:scheduler :after/login])
           prepend-dispatch-to-events (vec (for [event after-login] [:dispatch event]))]
-      {:fx prepend-dispatch-to-events})))
+      {:fx prepend-dispatch-to-events
+       :db (assoc-in db [:scheduler :after/login] [])})))
+
+(rf/reg-sub
+  :scheduler.login/has-events?
+  (fn [db _]
+    (seq (get-in db [:scheduler :after/login]))))

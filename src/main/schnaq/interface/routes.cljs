@@ -67,7 +67,7 @@
      :parameters {:path {:keycloak-name string?}}
      :controllers [{:parameters {:path [:keycloak-name]}
                     :start (fn [{:keys [path]}]
-                             (rf/dispatch [:hub/load (:keycloak-name path)]))}]}]
+                             (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}]
    ["admin"
     ["/center"
      {:name :routes/admin-center
