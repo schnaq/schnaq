@@ -134,10 +134,6 @@
         set-as-string (string/join hash-separator set-items)]
     set-as-string))
 
-(comment
-  (get local-storage :yo/whaddup :test)
-  )
-
 (defn add-to-and-build-set-from-local-storage
   "Add a value to a set ready for use as local storage data.
   Get localstorage value of 'key-entry', parse it as set, add 'item' and parse it as string.
@@ -150,7 +146,7 @@
     new-set-as-string))
 
 (rf/reg-fx
-  ;; TODO check all occurences and write the data-structure instead of a string
+  ;; TODO check all occurences and migrate to :localstorage/assoc
   :localstorage/write
   (fn [[key value]]
     (set-item! key value)))
