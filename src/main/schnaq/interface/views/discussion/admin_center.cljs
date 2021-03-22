@@ -424,10 +424,15 @@
   :schnaqs.save-admin-access/to-localstorage
   (fn [{:keys [db]} [_ share-hash edit-hash]]
     ;; PARTIALLY DEPRECATED FROM 2021-09-22: Remove the old ls/add-key-value-… stuff and only load native structure
-    (let [deprecated-map (ls/parse-hash-map-string
-                           (ls/add-key-value-and-build-map-from-localstorage
-                             share-hash edit-hash :schnaqs/admin-access))
-          admin-access-map (:schnaqs/admin-access local-storage)]
-      {:db (assoc-in db [:schnaqs :admin-access] admin-access-map)
-       :fx [[:localstorage/assoc [:schnaqs/admin-access (merge deprecated-map admin-access-map)]]
-            [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]]})))
+    (let [deprecated-map (ls/add-key-value-and-build-map-from-localstorage :schnaqs/admin-access)
+          admin-access-map (assoc (:schnaqs/admin-access local-storage) share-hash edit-hash)
+          merged-access (merge deprecated-map admin-access-map)]
+      {:db (assoc-in db [:schnaqs :admin-access] merged-access)
+       :fx [[:localstorage/assoc [:schnaqs/admin-access merged-access]]]})))
+
+(rf/reg-event-db
+  ;; PARTIALLY DEPRECATED FROM 2021-09-22: Remove the second or clause
+  :schnaqs.save-admin-access/store-hashes-from-localstorage
+  (fn [db _]
+    (assoc-in db [:schnaqs :admin-access] (or (:schnaqs/admin-access local-storage)
+                                              (ls/parse-hash-map-string (ls/get-item :schnaqs/admin-access))))))
