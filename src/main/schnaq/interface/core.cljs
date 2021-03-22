@@ -44,6 +44,7 @@
             [schnaq.interface.views.privacy]
             [schnaq.interface.views.schnaq.create]
             [schnaq.interface.views.schnaq.visited]
+            [schnaq.interface.views.loading]
             [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]
             [schnaq.meeting.specs]

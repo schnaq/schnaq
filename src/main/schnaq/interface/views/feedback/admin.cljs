@@ -7,6 +7,7 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.time :as time]
+            [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- list-feedbacks
@@ -39,11 +40,7 @@
                 (let [img-src (gstring/format "/media/feedbacks/screenshots/%s.png" (:db/id feedback))]
                   [:a {:href img-src}
                    [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]]
-       [:div.text-center
-        [:h4.pb-3 (labels :feedbacks.missing/heading)]
-        [:button.btn.btn-outline-primary
-         {:on-click #(rf/dispatch [:feedbacks/fetch])}
-         (labels :feedbacks.missing/button-text)]]))])
+       [loading/loading-placeholder]))])
 
 (defn- overview
   "Shows the page for an overview of all feedbacks."

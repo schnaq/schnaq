@@ -12,8 +12,8 @@
             [schnaq.interface.text.display-data :refer [colors fa]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.graph.settings :as graph-settings]
-            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
-            [schnaq.interface.views.spinner.spinner :as spinner]))
+            [schnaq.interface.views.loading :as loading]
+            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
 
 (def ^:private graph-id "graph")
 
@@ -168,7 +168,7 @@
      [graph-agenda-header title share-hash]
      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
        [graph-canvas graph])
-     [spinner/view]]))
+     [loading/spinner]]))
 
 (defn graph-view-entrypoint []
   [graph-view])
