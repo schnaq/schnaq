@@ -1,6 +1,7 @@
 (ns schnaq.interface.scheduler
   "Scheduler, which can be called to trigger events after another event occurred."
-  (:require [re-frame.core :as rf]))
+  (:require [ghostwheel.core :refer [>defn >defn-]]
+            [re-frame.core :as rf]))
 
 (rf/reg-event-db
   ;; Add events which shall be loaded after the user logged in.
@@ -22,3 +23,13 @@
   :scheduler.login/has-events?
   (fn [db _]
     (seq (get-in db [:scheduler :after/login]))))
+
+(>defn scheduler-middleware
+  "Use scheduler as middleware when a page is refreshed."
+  [view]
+  [vector? :ret vector?]
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])
+        has-events-after-login? @(rf/subscribe [:scheduler.login/has-events?])]
+    (when (and has-events-after-login? authenticated?)
+      (rf/dispatch [:scheduler.execute/after-login]))
+    view))

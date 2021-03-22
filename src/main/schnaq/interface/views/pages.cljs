@@ -3,6 +3,7 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
+            [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
@@ -50,10 +51,7 @@
   [{:condition/keys [needs-authentication? needs-administrator?]} page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        admin? @(rf/subscribe [:user/administrator?])
-        has-events-after-login? @(rf/subscribe [:scheduler.login/has-events?])]
-    (when (and has-events-after-login? authenticated?)
-      (rf/dispatch [:scheduler.execute/after-login]))
+        admin? @(rf/subscribe [:user/administrator?])]
     (cond
       (and (or needs-authentication? needs-administrator?)
            (not authenticated?)) [please-login]
@@ -68,20 +66,22 @@
   [{:page/keys [title heading subheading more-for-heading] :as options} body]
   [::page-options (s/+ vector?) :ret vector?]
   (common/set-website-title! (or title heading))
-  (with-validated-conditions
+  [scheduler/scheduler-middleware
+   [with-validated-conditions
     options
     [:<>
      [navbar/navbar]
      [base/header heading subheading more-for-heading]
-     body]))
+     body]]])
 
 (>defn with-nav
   "Default page with header and curly wave."
   [{:page/keys [title heading] :as options} body]
   [::page-options (s/+ vector?) :ret vector?]
   (common/set-website-title! (or title heading))
-  (with-validated-conditions
+  [scheduler/scheduler-middleware
+   [with-validated-conditions
     options
     [:<>
      [navbar/navbar]
-     body]))
+     body]]])
