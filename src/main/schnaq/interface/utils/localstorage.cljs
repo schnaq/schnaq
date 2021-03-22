@@ -25,7 +25,6 @@
 (defn assoc-item!
   "Sets `val` in a serialized form into local-storage under the serialized key `key`"
   [key val]
-  (println "Writing to local-storage " val)
   (assoc! local-storage key val))
 
 (>defn set-item!
