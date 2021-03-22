@@ -1,5 +1,5 @@
 (ns schnaq.interface.utils.localstorage-test
-  (:require [cljs.test :refer [deftest is are testing]]
+  (:require [cljs.test :refer [deftest are testing]]
             [schnaq.interface.utils.localstorage :as ls]))
 
 (deftest stringify-test
