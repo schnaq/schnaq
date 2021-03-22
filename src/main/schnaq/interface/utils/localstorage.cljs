@@ -1,7 +1,8 @@
 (ns schnaq.interface.utils.localstorage
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn >defn- ?]]))
+            [ghostwheel.core :refer [>defn >defn- ?]]
+            [hodgepodge.core :refer [local-storage]]))
 
 (>defn- keyword->string
   "Takes (namespaced) keywords and creates a string. Optionally is prefixed with
@@ -21,9 +22,10 @@
     (str val)))
 
 (>defn set-item!
-  "Set `key` in browser's localStorage to `val`."
+  "Set `key` in browser's localStorage to `val`. Key and value are both serialized."
   [key val]
   [keyword? any? :ret nil?]
+  (assoc! local-storage key val)
   (.setItem (.-localStorage js/window) (stringify key) val))
 
 (>defn get-item
@@ -96,7 +98,7 @@
   "Build key value pair for inserting into local storage hashmap.
   Does not override the key if it is present"
   [key value local-storage-key]
-  ;; PARTIALLY DEPRECATED: Remove the meeting part after 2020-08-05
+  ;; PARTIALLY DEPRECATED: Remove the meeting part after 2021-08-05
   (let [local-hashes (get-item local-storage-key)
         combined-hashes (if (= :schnaqs/admin-access local-storage-key)
                           (if-let [old-admin-access (get-item :meetings/admin-access)]
@@ -111,7 +113,6 @@
     hashes-as-string))
 
 ;; ### Set Storage Helper ###
-
 (defn parse-string-as-set
   "Parse a string of a set to clojure set. Must obey convention 'item1 item2'"
   [set-string]
@@ -125,6 +126,10 @@
         set-items (set items)
         set-as-string (string/join hash-separator set-items)]
     set-as-string))
+
+(comment
+  (get local-storage :yo/whaddup :test)
+  )
 
 (defn add-to-and-build-set-from-local-storage
   "Add a value to a set ready for use as local storage data.
