@@ -90,16 +90,6 @@
       new-hash-map
       parsed-hash-map)))
 
-(defn add-hash-map-and-build-map-from-localstorage
-  "Build and insert hashmap into an existing local storage hashmap."
-  [hash-map local-storage-key]
-  (let [local-hashes-as-string (get-item local-storage-key)
-        local-hash-map (parse-hash-map-string local-hashes-as-string)
-        new-hash-map (merge local-hash-map hash-map)
-        hashes-tuple (map (fn [[val key]] (str "[" val " " key "]")) (seq new-hash-map))
-        hashes-as-string (string/join "," hashes-tuple)]
-    hashes-as-string))
-
 (defn add-key-value-and-build-map-from-localstorage
   "Build key value pair for inserting into local storage hashmap.
   Does not override the key if it is present"
