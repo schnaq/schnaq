@@ -2,7 +2,8 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn >defn- ?]]
-            [hodgepodge.core :refer [local-storage]]))
+            [hodgepodge.core :refer [local-storage]]
+            [re-frame.core :as rf]))
 
 (>defn- keyword->string
   "Takes (namespaced) keywords and creates a string. Optionally is prefixed with
@@ -141,3 +142,14 @@
         new-set (conj string-as-set item)
         new-set-as-string (parse-set-as-string new-set)]
     new-set-as-string))
+
+(rf/reg-fx
+  ;; TODO check all occurences and write the data-structure instead of a string
+  :localstorage/write
+  (fn [[key value]]
+    (set-item! key value)))
+
+(rf/reg-fx
+  :localstorage/remove
+  (fn [key]
+    (remove-item! key)))
