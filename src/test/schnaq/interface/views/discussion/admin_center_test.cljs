@@ -21,13 +21,3 @@
                             "[" share-2 " " edit-2 "]")]
       (is (= edit-1 (get (ls/parse-hash-map-string local-string) share-1)))
       (is (= edit-2 (get (ls/parse-hash-map-string local-string) share-2))))))
-
-(deftest add-hash-test
-  (testing "Add new share edit hash tuple"
-    (let [share-1 "share-1"
-          edit-1 "edit-1"
-          share-new "share-new"
-          edit-new "edit-new"
-          local-string (str "[" share-1 " " edit-1 "]")
-          hashmap (@#'ls/add-key-value-to-local-hashmap local-string share-new edit-new)]
-      (is (= edit-new (get hashmap share-new))))))
