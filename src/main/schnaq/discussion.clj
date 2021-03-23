@@ -2,8 +2,8 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.meeting.database :as db]
-            [schnaq.meeting.specs :as specs]))
+            [schnaq.database.specs :as specs]
+            [schnaq.meeting.database :as db]))
 
 (>defn- premise-ids
   "Return all premise-ids of a single argument."

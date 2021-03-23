@@ -3,8 +3,8 @@
             [clojure.test :refer [deftest testing is are use-fixtures]]
             [schnaq.api :as api]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.specs :as specs]
             [schnaq.meeting.database :as db]
-            [schnaq.meeting.specs :as specs]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)

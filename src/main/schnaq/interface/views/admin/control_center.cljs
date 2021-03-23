@@ -1,12 +1,10 @@
 (ns schnaq.interface.views.admin.control-center
-  (:require [ajax.core :as ajax]
-            [oops.core :refer [oget]]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config]]
+  (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.pages :as pages]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-db
   :admin.schnaq.delete/success
@@ -18,15 +16,8 @@
 (rf/reg-event-fx
   :admin.schnaq/delete
   (fn [{:keys [db]} [_ share-hash]]
-    {:fx [[:http-xhrio {:method :delete
-                        :uri (str (:rest-backend config) "/admin/schnaq/delete")
-                        :params {:share-hash share-hash}
-                        :headers (auth/authentication-header db)
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:admin.schnaq.delete/success]
-                        :on-failure [:ajax.error/as-notification]}]]}))
-
+    {:fx [(http/xhrio-request db :delete "/admin/schnaq/delete" [:admin.schnaq.delete/success]
+                              {:share-hash share-hash} [:ajax.error/as-notification])]}))
 
 (defn- public-meeting-deletion-form
   "Easily delete one of the public meetings."

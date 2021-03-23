@@ -16,10 +16,12 @@
 
 (def graph-controversy-upper-bound 65)
 
+(def default-anonymous-display-name "Anonymous")
+
 (def periodic-update-time
   "Define how many times should the client query the server for live updates.
   Time must be in milliseconds."
-  10000)
+  3000)
 
 ;; header image
 (def place-holder-header-img "https://s3.disqtec.com/schnaq-header-images/header-placeholder.jpg")

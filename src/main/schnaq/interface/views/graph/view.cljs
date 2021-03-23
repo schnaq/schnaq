@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.graph.view
   (:require ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
-            [ajax.core :as ajax]
             [clojure.set :as set]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
@@ -8,8 +7,9 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [schnaq.interface.config :refer [config] :as conf]
+            [schnaq.interface.config :as conf]
             [schnaq.interface.text.display-data :refer [colors fa]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.loading :as loading]
@@ -180,13 +180,7 @@
   :graph/load-data-for-discussion
   (fn [{:keys [db]} _]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/graph/discussion")
-                          :params {:share-hash share-hash}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:graph/set-current]
-                          :on-failure [:ajax.error/to-console]}]]})))
+      {:fx [(http/xhrio-request db :post "/graph/discussion" [:graph/set-current] {:share-hash share-hash})]})))
 
 (rf/reg-event-db
   :graph/set-current

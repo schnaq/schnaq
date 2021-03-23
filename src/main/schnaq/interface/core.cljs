@@ -7,6 +7,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.dom]
+            [schnaq.database.specs]
             [schnaq.interface.analytics.core]
             [schnaq.interface.auth]
             [schnaq.interface.config :as config]
@@ -15,6 +16,7 @@
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.routes]
             [schnaq.interface.scheduler]
+            [schnaq.interface.user]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.localstorage]
             [schnaq.interface.utils.time]
@@ -48,7 +50,6 @@
             [schnaq.interface.views.loading]
             [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]
-            [schnaq.meeting.specs]
             [taoensso.timbre :as log]))
 ;; NOTE: If you use subs and events in another module, you need to require it
 ;; Requiring other views is needed to have dynamic updates from shadow and re-frame

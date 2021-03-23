@@ -42,7 +42,8 @@
                  (rf/dispatch [:user/authenticated! result])
                  (rf/dispatch [:keycloak/load-user-profile])
                  (rf/dispatch [:keycloak.roles/extract])
-                 (rf/dispatch [:keycloak/check-token-validity])))
+                 (rf/dispatch [:keycloak/check-token-validity])
+                 (rf/dispatch [:user/register result])))
         (.catch (fn [_]
                   (rf/dispatch [:user/authenticated! false])
                   (error-to-console "Silent check with keycloak failed."))))))
@@ -83,22 +84,18 @@
   (fn [^js keycloak]
     (-> keycloak
         (.loadUserProfile)
-        (.then #(rf/dispatch [:keycloak/store-user-profile
+        (.then #(rf/dispatch [:keycloak/store-groups
                               (js->clj % :keywordize-keys true)]))
         (.catch #(error-to-console
                    "Could not load user profile from keycloak.")))))
 
 (rf/reg-event-db
-  :keycloak/store-user-profile
-  (fn [db [_ {:keys [username email]}]]
+  :keycloak/store-groups
+  (fn [db _]
     (let [keycloak (get-in db [:user :keycloak])
           groups (js->clj (oget keycloak [:tokenParsed :groups]))]
-      (-> db
-          (assoc-in [:user :name] username)
-          (cond-> (seq groups)
-                  (assoc-in [:user :groups] groups))
-          (cond-> email
-                  (assoc-in [:user :email] email))))))
+      (when (seq groups)
+        (assoc-in db [:user :groups] groups)))))
 
 
 ;; -----------------------------------------------------------------------------

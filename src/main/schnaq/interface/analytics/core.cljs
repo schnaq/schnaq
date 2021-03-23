@@ -1,13 +1,11 @@
 (ns schnaq.interface.analytics.core
-  (:require [ajax.core :as ajax]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.pages :as pages]))
 
@@ -102,14 +100,7 @@
   ([db path on-success-event days-since]
    [map? string? keyword? int? :ret map?]
    (when (get-in db [:user :authenticated?])
-     {:fx [[:http-xhrio {:method :get
-                         :uri (str (:rest-backend config) path)
-                         :format (ajax/transit-request-format)
-                         :params {:days-since days-since}
-                         :headers (auth/authentication-header db)
-                         :response-format (ajax/transit-response-format)
-                         :on-success [on-success-event]
-                         :on-failure [:ajax.error/to-console]}]]})))
+     {:fx [(http/xhrio-request db :get path [on-success-event] {:days-since days-since})]})))
 
 (rf/reg-event-fx
   :analytics/load-all-with-time

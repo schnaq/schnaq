@@ -5,7 +5,7 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.config :as config]
             [schnaq.database.models :as models]
-            [schnaq.meeting.specs :as specs]
+            [schnaq.database.specs :as specs]
             [schnaq.test-data :as test-data]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
@@ -126,7 +126,7 @@
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
-(>defn- clean-db-vals
+(>defn clean-db-vals
   "Removes all entries from a map that have a value of nil or empty string."
   [data]
   [associative? :ret associative?]

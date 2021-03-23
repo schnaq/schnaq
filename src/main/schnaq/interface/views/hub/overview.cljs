@@ -1,14 +1,12 @@
 (ns schnaq.interface.views.hub.overview
   (:require [ghostwheel.core :refer [>defn-]]
-            [ajax.core :as ajax]
             [goog.string :as gstring]
-            [schnaq.interface.config :as config]
-            [schnaq.interface.views.feed.overview :as feed]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [re-frame.core :as rf]
-            [schnaq.interface.auth :as auth]))
+            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.feed.overview :as feed]
+            [schnaq.interface.views.pages :as pages]))
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
@@ -32,13 +30,7 @@
 (rf/reg-event-fx
   :hub/load
   (fn [{:keys [db]} [_ keycloak-name]]
-    {:fx [[:http-xhrio {:method :get
-                        :uri (str (:rest-backend config/config) "/hub/" keycloak-name)
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :headers (auth/authentication-header db)
-                        :on-success [:hubs.load/success keycloak-name]
-                        :on-failure [:ajax.error/as-notification]}]]}))
+    {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hubs.load/success keycloak-name])]}))
 
 (rf/reg-event-db
   :hubs.load/success

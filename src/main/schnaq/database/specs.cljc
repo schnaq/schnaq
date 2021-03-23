@@ -1,4 +1,4 @@
-(ns schnaq.meeting.specs
+(ns schnaq.database.specs
   (:require #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]))
@@ -38,9 +38,19 @@
 (s/def ::hub (s/keys :req [:hub/name :hub/keycloak-name]
                      :opt [:hub/schnaqs]))
 
-;; Author
+;; User
 (s/def :user/nickname string?)
 (s/def ::user (s/keys :req [:user/nickname]))
+
+;; Registered user
+(s/def :user.registered/keycloak-id ::non-blank-string)
+(s/def :user.registered/email ::non-blank-string)
+(s/def :user.registered/display-name ::non-blank-string)
+(s/def :user.registered/first-name ::non-blank-string)
+(s/def :user.registered/last-name ::non-blank-string)
+(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/email
+                                       :user.registered/display-name]
+                                 :opt [:user.registered/last-name :user.registered/first-name]))
 
 ;; Statement
 (s/def :statement/content string?)

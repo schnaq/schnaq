@@ -1,11 +1,9 @@
 (ns schnaq.interface.views.feedback.admin
-  (:require [ajax.core :as ajax]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
@@ -65,10 +63,4 @@
   :feedbacks/fetch
   (fn [{:keys [db]} _]
     (when (get-in db [:user :authenticated?])
-      {:fx [[:http-xhrio {:method :get
-                          :uri (gstring/format "%s/admin/feedbacks" (:rest-backend config))
-                          :headers (auth/authentication-header db)
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:feedbacks/store]
-                          :on-failure [:ajax.error/to-console]}]]})))
+      {:fx [(http/xhrio-request db :get "/admin/feedbacks" [:feedbacks/store])]})))

@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.discussion.card-elements
-  (:require [ajax.core :as ajax]
-            [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -11,7 +10,8 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.howto.elements :as how-to-elements]
-            [schnaq.interface.views.user :as user]))
+            [schnaq.interface.views.user :as user]
+            [schnaq.interface.utils.http :as http]))
 
 (defn- home-button-mobile
   "Home button for history view"
@@ -139,17 +139,14 @@
   :discussion.add.statement/starting
   (fn [{:keys [db]} [_ form]]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
-          nickname (get-in db [:user :name] "Anonymous")
+          nickname (get-in db [:user :names :display] default-anonymous-display-name)
           statement-text (oget form [:statement-text :value])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/statements/starting/add")
-                          :format (ajax/transit-request-format)
-                          :params {:statement statement-text
-                                   :nickname nickname
-                                   :share-hash share-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.add.statement/starting-success form]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
+                                [:discussion.add.statement/starting-success form]
+                                {:statement statement-text
+                                 :nickname nickname
+                                 :share-hash share-hash}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :discussion.add.statement/starting-success
@@ -165,13 +162,9 @@
   :discussion.query.conclusions/starting
   (fn [{:keys [db]} _]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/conclusions/starting")
-                          :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.query.conclusions/set-starting]
-                          :on-failure [:ajax.error/to-console]}]]})))
+      {:fx [(http/xhrio-request db :post "/discussion/conclusions/starting"
+                                [:discussion.query.conclusions/set-starting]
+                                {:share-hash share-hash})]})))
 
 (rf/reg-event-fx
   :discussion.query.conclusions/set-starting
