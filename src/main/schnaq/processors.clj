@@ -1,4 +1,4 @@
-(ns schnaq.meeting.processors
+(ns schnaq.processors
   (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]

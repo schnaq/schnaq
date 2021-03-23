@@ -1,7 +1,7 @@
-(ns schnaq.meeting.processors-test
+(ns schnaq.processors-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.meeting.processors :as processors]
+            [schnaq.processors :as processors]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
             [schnaq.meta-info :as meta-info]))
 
