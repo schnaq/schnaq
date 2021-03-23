@@ -6,48 +6,9 @@
             [schnaq.interface.db :as schnaq-db]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.language :as lang]
             [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.modals.modal :as modal]))
-
-(rf/reg-event-fx
-  :username/from-localstorage
-  (fn [{:keys [db]} _]
-    ;; DEPRECATED, deleted after 2021-09-22: Remove old-name and only use name from first or clause
-    (let [old-name (ls/get-item :username)
-          username (or (:username local-storage) old-name)]
-      (if username
-        {:db (assoc-in db [:user :name] username)}
-        {:fx [[:dispatch [:username/notification-set-name]]]}))))
-
-(rf/reg-event-fx
-  :username/notification-set-name
-  (fn [_ _]
-    (let [notification-id "username/notification-set-name"]
-      {:fx [[:dispatch
-             [:notification/add
-              #:notification{:id notification-id
-                             :title (labels :user.set-name/dialog-header)
-                             :body [:<>
-                                    [:p (labels :user.set-name/dialog-lead)]
-                                    [:p (labels :user.set-name/dialog-body)]
-                                    [:div.mt-2.btn.btn-sm.btn-outline-primary
-                                     {:on-click #(rf/dispatch [:username/open-dialog])}
-                                     (labels :user.set-name/dialog-button)]]
-                             :context :info
-                             :stay-visible? true}]]]})))
-
-(rf/reg-event-fx
-  :username/open-dialog
-  (fn [{:keys [db]} _]
-    (let [username (get-in db [:user :name])]
-      (when (or (= "Anonymous" username)
-                (nil? username))
-        {:fx [[:dispatch [:user/set-display-name "Anonymous"]]
-              [:dispatch [:modal {:show? true
-                                  :child [modal/enter-name-modal]}]]]}))))
+            [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (rf/reg-event-fx
   :load/schnaqs
@@ -88,11 +49,6 @@
   :init-from-backend
   (fn [db [_ all-discussions]]
     (assoc-in db [:schnaqs :all] all-discussions)))
-
-(rf/reg-event-db
-  :admin/set-password
-  (fn [db [_ password]]
-    (assoc-in db [:admin :password] password)))
 
 (rf/reg-event-fx
   :form/should-clear

@@ -5,6 +5,7 @@
 
 (def ^:private registered-user-pattern
   [:db/id
+   :user.registered/keycloak-id
    :user.registered/display-name
    :user.registered/email
    :user.registered/last-name
