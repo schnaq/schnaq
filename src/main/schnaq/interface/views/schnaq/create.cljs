@@ -38,8 +38,8 @@
        [:label.form-check-label.display-6.pl-1 {:for :public-discussion?}
         (labels :discussion.create.public-checkbox/label)]]
       [:div.pt-3.text-center
-       [:button.btn.button-primary (labels :schnaq.create.button/save)]]
-      [how-to-elements/quick-how-to-create]]]]])
+       [:button.btn.button-primary (labels :schnaq.create.button/save)]]]
+     [how-to-elements/quick-how-to-create]]]])
 
 (defn create-schnaq-view []
   [create-schnaq-page])
