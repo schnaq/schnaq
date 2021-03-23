@@ -7,7 +7,7 @@
 
 (s/def ::http-methods #{:get :post :put :delete :patch})
 
-(defn xhrio-request
+(>defn xhrio-request
   "Returns an xhrio-request-fx for usage in re-frame."
   ([db method path on-success]
    [map? ::http-methods string? vector? :ret vector?]

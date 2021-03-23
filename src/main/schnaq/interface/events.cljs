@@ -1,10 +1,8 @@
 (ns schnaq.interface.events
-  (:require [ajax.core :as ajax]
-            [hodgepodge.core :refer [local-storage]]
+  (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
             [schnaq.interface.db :as schnaq-db]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]

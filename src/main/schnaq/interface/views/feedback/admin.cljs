@@ -1,10 +1,7 @@
 (ns schnaq.interface.views.feedback.admin
-  (:require [ajax.core :as ajax]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as time]

@@ -1,9 +1,6 @@
 (ns schnaq.interface.views.admin.control-center
-  (:require [ajax.core :as ajax]
-            [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]

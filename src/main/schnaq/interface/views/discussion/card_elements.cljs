@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.discussion.card-elements
-  (:require [ajax.core :as ajax]
-            [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config default-anonymous-display-name]]
+            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]

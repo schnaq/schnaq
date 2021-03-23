@@ -1,7 +1,5 @@
 (ns schnaq.interface.views.meeting.meetings
-  (:require [ajax.core :as ajax]
-            [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
+  (:require [re-frame.core :as rf]
             [schnaq.interface.utils.http :as http]))
 
 ;; #### Events ####

@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.header-image
-  (:require [ajax.core :as ajax]
-            [oops.core :refer [oget oget+]]
+  (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels]]

@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.admin-center
-  (:require [ajax.core :as ajax]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]

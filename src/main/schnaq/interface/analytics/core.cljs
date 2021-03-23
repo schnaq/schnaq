@@ -1,12 +1,9 @@
 (ns schnaq.interface.analytics.core
-  (:require [ajax.core :as ajax]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]

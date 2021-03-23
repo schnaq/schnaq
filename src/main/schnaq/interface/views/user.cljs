@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.user
-  (:require [ajax.core :as ajax]
-            [clojure.string :as clj-string]
+  (:require [clojure.string :as clj-string]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config default-anonymous-display-name]]
+            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]))

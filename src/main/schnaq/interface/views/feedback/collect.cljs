@@ -1,20 +1,18 @@
 (ns schnaq.interface.views.feedback.collect
   "Add feedback options to the site."
-  (:require [ajax.core :as ajax]
+  (:require ["html2canvas" :as html2canvas]
             [clojure.string :as string]
             [goog.dom :as gdom]
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feedback.survey :as survey]
-            [schnaq.interface.views.modals.modal :as modal]
-            ["html2canvas" :as html2canvas]))
+            [schnaq.interface.views.modals.modal :as modal]))
 
 (defonce screenshot-url (reagent/atom nil))
 

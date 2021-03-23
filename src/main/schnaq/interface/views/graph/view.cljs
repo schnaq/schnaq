@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.graph.view
   (:require ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
-            [ajax.core :as ajax]
             [clojure.set :as set]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
@@ -8,7 +7,7 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [schnaq.interface.config :refer [config] :as conf]
+            [schnaq.interface.config :as conf]
             [schnaq.interface.text.display-data :refer [colors fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]

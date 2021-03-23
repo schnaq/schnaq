@@ -1,10 +1,7 @@
 (ns schnaq.interface.views.hub.overview
-  (:require [ajax.core :as ajax]
-            [ghostwheel.core :refer [>defn-]]
+  (:require [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]

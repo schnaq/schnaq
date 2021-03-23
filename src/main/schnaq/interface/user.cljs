@@ -1,9 +1,7 @@
 (ns schnaq.interface.user
-  (:require [ajax.core :as ajax]
-            [hodgepodge.core :refer [local-storage]]
+  (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config default-anonymous-display-name]]
+            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.text.display-data :refer [labels]]

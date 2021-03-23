@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [ajax.core :as ajax]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.config :refer [config default-anonymous-display-name]]
+            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [fa labels img-path]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
