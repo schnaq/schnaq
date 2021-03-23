@@ -101,6 +101,7 @@
         :footer.buttons/legal-note "Legal note"
         :footer.buttons/privacy "Privacy Notice"
         :footer.tagline/developed-with " Developed with "
+        :footer.sponsors/heading "Supported by"
 
         ;; Create schnaqs
         :schnaqs/create "Create schnaq"
@@ -161,7 +162,7 @@
         :privacy.made-in-germany/lead "EU-regulation conformity"
         :privacy.made-in-germany/title "Data privacy is important to us!"
         :privacy.made-in-germany/body "The development team of schnaq consists of developers that are tired of misuse of private
-        data. This is why we take special care to be GDPR compliant and to save all data securely on german servers.
+        data. This is why we take special care to be GDPR compliant and to save all data securely on german servers provided by Hetzner.
         We do not exchange any data with other companies without absolute need and making it completely clear."
         :privacy.personal-data/lead "Which data is saved?"
         :privacy.personal-data/title "Personal Data"
@@ -579,6 +580,7 @@
         :footer.buttons/legal-note "Impressum"
         :footer.buttons/privacy "Datenschutz"
         :footer.tagline/developed-with " Entwickelt mit "
+        :footer.sponsors/heading "Wir werden unterstützt von"
 
         ;; Create schnaqs
         :schnaqs/create "schnaq anlegen"
@@ -639,7 +641,7 @@
         :privacy/subheading "Wir erklären es dir gerne!"
         :privacy.made-in-germany/lead "EU-Konformes Vorgehen"
         :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
-        :privacy.made-in-germany/body "Das Entwicklerteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf deutschen Servern zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+        :privacy.made-in-germany/body "Das Entwickler:innenteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf Servern in Deutschland bei Hetzner zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
         :privacy.personal-data/lead "Welche Daten werden erhoben?"
         :privacy.personal-data/title "Persönliche Daten"
         :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Einstellungen prüfen"]]]
@@ -976,6 +978,7 @@
      :logos/digihub "/imgs/logos/digihub_logo.png"
      :logos/doctronic "/imgs/logos/doctronic_logo.png"
      :logos/ignition "/imgs/logos/ignition_logo.png"
+     :logos/hetzner "https://s3.disqtec.com/schnaq-common/logos/logo-hetzner.svg"
      :pricing.others/confluence "imgs/startpage/pricing/confluence.jpeg"
      :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
      :pricing.others/miro "imgs/startpage/pricing/miro.png"

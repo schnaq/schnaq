@@ -25,3 +25,19 @@ footer {
     color: $gray-100;
   }
 }
+
+.social-media-icon {
+  padding-left: 1rem;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.sponsors img {
+  width: 10rem;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

@@ -37,6 +37,65 @@
    [:p.h4 heading]
    [:p subheading]])
 
+
+;; -----------------------------------------------------------------------------
+;; Footer
+
+(defn- logo-and-slogan []
+  [:<>
+   [:img.footer-schnaqqifant
+    {:src (img-path :logo-white)}]
+   [:div.lead.font-italic.pb-1
+    (labels :startpage/heading)]])
+
+(defn- footer-nav []
+  [:ul.list-inline
+   [:li.list-inline-item
+    [:a.btn.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
+     (labels :coc/heading)]]
+   [:li.list-inline-item
+    [:a.btn.btn-outline-white {:href "https://disqtec.com/ueber-uns"}
+     (labels :footer.buttons/about-us)]]
+   [:li.list-inline-item
+    [:a.btn.btn-outline-white
+     {:role "button" :href (reitfe/href :routes/privacy)}
+     (labels :router/privacy)]]
+   [:li.list-inline-item
+    [:a.btn.btn-outline-white
+     {:href "https://disqtec.com/impressum"}
+     (labels :footer.buttons/legal-note)]]])
+
+(defn- developed-in-nrw []
+  [:p.pt-3
+   [:i {:class (str "fas " (fa :terminal))}]
+   (labels :footer.tagline/developed-with)
+   [:i {:class (str "m-auto fas " (fa :flask))}]
+   " in NRW, Germany. "
+   "© " [:a {:href "https://disqtec.com"
+             :target :_blank} "DisqTec"]
+   " "
+   (.getFullYear (js/Date.))])
+
+(defn- social-media []
+  [:section
+   [:a.social-media-icon {:href "https://facebook.com/schnaq" :target :_blank}
+    [:i.fa-2x.fab.fa-facebook]]
+   [:a.social-media-icon {:href "https://instagram.com/schnaqqi" :target :_blank}
+    [:i.fa-2x.fab.fa-instagram]]
+   [:a.social-media-icon {:href "https://www.linkedin.com/company/schnaq" :target :_blank}
+    [:i.fa-2x.fab.fa-linkedin]]
+   [:a.social-media-icon {:href "https://twitter.com/getschnaq" :target :_blank}
+    [:i.fa-2x.fab.fa-twitter]]
+   [:a.social-media-icon {:href "https://github.com/schnaq" :target :_blank}
+    [:i.fa-2x.fab.fa-github]]])
+
+(defn- sponsors []
+  [:section.sponsors
+   [:small (labels :footer.sponsors/heading)]
+   [:article
+    [:a {:href "https://www.hetzner.com/" :target :_blank}
+     [:img {:src (img-path :logos/hetzner)}]]]])
+
 (defn footer
   "Footer to display at the bottom the page."
   []
@@ -44,36 +103,12 @@
    [:div.container
     [:div.row
      [:div.col-md-4.col-12
-      [:img.footer-schnaqqifant
-       {:src (img-path :logo-white)}]
-      [:div.lead.font-italic.pb-1
-       (labels :startpage/heading)]]
+      [logo-and-slogan]]
      [:div.col-md-8.col-12.text-md-right.pt-3.pt-md-0
-      [:ul.list-inline
-       [:li.list-inline-item
-        [:a.btn.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
-         (labels :coc/heading)]]
-       [:li.list-inline-item
-        [:a.btn.btn-outline-white {:href "https://disqtec.com/ueber-uns"}
-         (labels :footer.buttons/about-us)]]
-       [:li.list-inline-item
-        [:a.btn.btn-outline-white
-         {:href "https://schnaq.com/blog/"}
-         (labels :nav/blog)]]
-       [:li.list-inline-item
-        [:a.btn.btn-outline-white
-         {:href "https://disqtec.com/impressum"}
-         (labels :footer.buttons/legal-note)]]
-       [:li.list-inline-item
-        [:a.btn.btn-outline-white
-         {:role "button" :href (reitfe/href :routes/privacy)}
-         (labels :router/privacy)]]]]]
-    [:p.pt-3
-     [:i {:class (str "fas " (fa :terminal))}]
-     (labels :footer.tagline/developed-with)
-     [:i {:class (str "m-auto fas " (fa :flask))}]
-     " in Düsseldorf, Germany. "
-     "© " [:a {:href "https://disqtec.com"
-               :target :_blank} "DisqTec"]
-     " "
-     (.getFullYear (js/Date.))]]])
+      [footer-nav]
+      [social-media]]]
+    [:div.row
+     [:div.col-md-6.col-12
+      [developed-in-nrw]]
+     [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0
+      [sponsors]]]]])
