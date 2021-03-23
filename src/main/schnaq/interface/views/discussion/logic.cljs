@@ -1,10 +1,10 @@
 (ns schnaq.interface.views.discussion.logic
-  (:require [ajax.core :as ajax]
-            [ghostwheel.core :refer [>defn]]
+  (:require [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [labels]]))
+            [schnaq.interface.config :refer [default-anonymous-display-name]]
+            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]))
 
 (>defn calculate-votes
   "Calculates the votes without needing to reload."
@@ -37,17 +37,15 @@
   (fn [{:keys [db]} [_ reaction new-premise]]
     (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])
           nickname (get-in db [:user :names :display] default-anonymous-display-name)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/react-to/statement")
-                          :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash
-                                   :conclusion-id statement-id
-                                   :nickname nickname
-                                   :premise new-premise
-                                   :reaction reaction}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.reaction.statement/added]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request
+              db :post "/discussion/react-to/statement"
+              [:discussion.reaction.statement/added]
+              {:share-hash share-hash
+               :conclusion-id statement-id
+               :nickname nickname
+               :premise new-premise
+               :reaction reaction}
+              [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :discussion.reaction.statement/added
@@ -88,14 +86,12 @@
   :discussion.query.statement/by-id
   (fn [{:keys [db]} _]
     (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/statement/info")
-                          :format (ajax/transit-request-format)
-                          :params {:statement-id statement-id
-                                   :share-hash share-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.query.statement/by-id-success]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request
+              db :post "/discussion/statement/info"
+              [:discussion.query.statement/by-id-success]
+              {:statement-id statement-id
+               :share-hash share-hash}
+              [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :discussion.query.statement/by-id-success
