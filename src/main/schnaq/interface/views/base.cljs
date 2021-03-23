@@ -89,6 +89,13 @@
    [:a.social-media-icon {:href "https://github.com/schnaq" :target :_blank}
     [:i.fa-2x.fab.fa-github]]])
 
+(defn- sponsors []
+  [:section.sponsors
+   [:small (labels :footer.sponsors/heading)]
+   [:article
+    [:a {:href "https://www.hetzner.com/" :target :_blank}
+     [:img {:src (img-path :logos/hetzner)}]]]])
+
 (defn footer
   "Footer to display at the bottom the page."
   []
@@ -103,4 +110,5 @@
     [:div.row
      [:div.col-md-6.col-12
       [developed-in-nrw]]
-     [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0]]]])
+     [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0
+      [sponsors]]]]])

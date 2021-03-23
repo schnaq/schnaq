@@ -30,6 +30,14 @@ footer {
   padding-left: 1rem;
 
   &:hover {
-    color: $gray-400;
+    opacity: 0.8;
+  }
+}
+
+.sponsors img {
+  width: 10rem;
+
+  &:hover {
+    opacity: 0.8;
   }
 }

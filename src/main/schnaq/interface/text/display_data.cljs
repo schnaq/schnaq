@@ -101,6 +101,7 @@
         :footer.buttons/legal-note "Legal note"
         :footer.buttons/privacy "Privacy Notice"
         :footer.tagline/developed-with " Developed with "
+        :footer.sponsors/heading "Supported by"
 
         ;; Create schnaqs
         :schnaqs/create "Create schnaq"
@@ -579,6 +580,7 @@
         :footer.buttons/legal-note "Impressum"
         :footer.buttons/privacy "Datenschutz"
         :footer.tagline/developed-with " Entwickelt mit "
+        :footer.sponsors/heading "Wir werden unterstützt von"
 
         ;; Create schnaqs
         :schnaqs/create "schnaq anlegen"
@@ -976,6 +978,7 @@
      :logos/digihub "/imgs/logos/digihub_logo.png"
      :logos/doctronic "/imgs/logos/doctronic_logo.png"
      :logos/ignition "/imgs/logos/ignition_logo.png"
+     :logos/hetzner "https://s3.disqtec.com/schnaq-common/logos/logo-hetzner.svg"
      :pricing.others/confluence "imgs/startpage/pricing/confluence.jpeg"
      :pricing.others/loomio "imgs/startpage/pricing/loomio.png"
      :pricing.others/miro "imgs/startpage/pricing/miro.png"
