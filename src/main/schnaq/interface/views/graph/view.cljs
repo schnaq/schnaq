@@ -10,6 +10,7 @@
             [reagent.dom :as rdom]
             [schnaq.interface.config :refer [config] :as conf]
             [schnaq.interface.text.display-data :refer [colors fa]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.loading :as loading]
@@ -180,13 +181,7 @@
   :graph/load-data-for-discussion
   (fn [{:keys [db]} _]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/graph/discussion")
-                          :params {:share-hash share-hash}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:graph/set-current]
-                          :on-failure [:ajax.error/to-console]}]]})))
+      {:fx [(http/xhrio-request db :post "/graph/discussion" [:graph/set-current] {:share-hash share-hash})]})))
 
 (rf/reg-event-db
   :graph/set-current

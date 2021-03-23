@@ -4,6 +4,7 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.config :refer [config default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [fa labels img-path]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
@@ -113,14 +114,11 @@
   (fn [{:keys [db]} [_ conclusion]]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
       {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
-       :fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/discussion/statements/for-conclusion")
-                          :format (ajax/transit-request-format)
-                          :params {:selected-statement conclusion
-                                   :share-hash share-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.premises/set-current]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+       :fx [(http/xhrio-request db :post "/discussion/statements/for-conclusion"
+                                [:discussion.premises/set-current]
+                                {:selected-statement conclusion
+                                 :share-hash share-hash}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
   :discussion.premises/set-current
@@ -135,28 +133,20 @@
 (rf/reg-event-fx
   :discussion/toggle-upvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config) "/votes/up/toggle")
-                        :format (ajax/transit-request-format)
-                        :params {:statement-id id
-                                 :nickname (get-in db [:user :names :display] default-anonymous-display-name)
-                                 :share-hash (-> db :schnaq :selected :discussion/share-hash)}
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:upvote-success statement]
-                        :on-failure [:ajax.error/as-notification]}]]}))
+    {:fx [(http/xhrio-request db :post "/votes/up/toggle" [:upvote-success statement]
+                              {:statement-id id
+                               :nickname (get-in db [:user :names :display] default-anonymous-display-name)
+                               :share-hash (-> db :schnaq :selected :discussion/share-hash)}
+                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx
   :discussion/toggle-downvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config) "/votes/down/toggle")
-                        :format (ajax/transit-request-format)
-                        :params {:statement-id id
-                                 :nickname (get-in db [:user :names :display] default-anonymous-display-name)
-                                 :share-hash (-> db :schnaq :selected :discussion/share-hash)}
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:downvote-success statement]
-                        :on-failure [:ajax.error/as-notification]}]]}))
+    {:fx [(http/xhrio-request db :post "/votes/down/toggle" [:downvote-success statement]
+                              {:statement-id id
+                               :nickname (get-in db [:user :names :display] default-anonymous-display-name)
+                               :share-hash (-> db :schnaq :selected :discussion/share-hash)}
+                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-db
   :upvote-success

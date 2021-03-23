@@ -9,6 +9,7 @@
             [reagent.core :as reagent]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feedback.survey :as survey]
@@ -128,14 +129,10 @@
 
 (rf/reg-event-fx
   :feedback/new
-  (fn [_ [_ feedback screenshot form-elements]]
+  (fn [{:keys [db]} [_ feedback screenshot form-elements]]
     (when-not (string/blank? (:feedback/description feedback))
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/feedback/add")
-                          :params (cond-> {:feedback feedback}
-                                          screenshot (assoc :screenshot screenshot))
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:feedbacks/success]
-                          :on-failure [:ajax.error/as-notification]}]
+      {:fx [(http/xhrio-request db :post "/feedback/add" [:feedbacks/success]
+                                (cond-> {:feedback feedback}
+                                        screenshot (assoc :screenshot screenshot))
+                                [:ajax.error/as-notification])
             [:form/clear form-elements]]})))
