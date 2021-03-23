@@ -2,9 +2,9 @@
   (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
+            [schnaq.database.specs :as specs]
             [schnaq.meeting.database :as db]
-            [schnaq.meta-info :as meta-info]
-            [schnaq.meeting.specs :as specs])
+            [schnaq.meta-info :as meta-info])
   (:import (clojure.lang PersistentArrayMap)))
 
 (>defn with-votes

@@ -4,8 +4,8 @@
             [datomic.client.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
+            [schnaq.database.specs :as specs]
             [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
-            [schnaq.meeting.specs :as specs]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:import (clojure.lang ExceptionInfo)))

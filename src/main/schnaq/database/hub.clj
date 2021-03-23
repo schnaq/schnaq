@@ -2,8 +2,8 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.specs :as specs]
             [schnaq.meeting.database :refer [transact] :as main-db]
-            [schnaq.meeting.specs :as specs]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 

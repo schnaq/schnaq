@@ -1,4 +1,4 @@
-(ns schnaq.meeting.specs
+(ns schnaq.database.specs
   (:require #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]))
