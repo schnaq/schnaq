@@ -1,11 +1,12 @@
 (ns schnaq.interface.views.header-image
-  (:require [oops.core :refer [oget oget+]]
+  (:require [ajax.core :as ajax]
+            [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [ajax.core :as ajax]
-            [schnaq.interface.views.common :as common]
-            [schnaq.interface.config :as config]))
+            [schnaq.interface.views.common :as common]))
 
 (def ^:private image-form-name "image-url")
 
@@ -43,16 +44,13 @@
   (fn [{:keys [db]} [_ form]]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config/config) "/header-image/image")
-                          :format (ajax/transit-request-format)
-                          :params {:image-url (oget+ form [image-form-name :value])
-                                   :share-hash share-hash
-                                   :edit-hash edit-hash
-                                   :admin-center (common/get-admin-center-link current-route)}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:schnaq.admin/set-header-image-url-success form]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/header-image/image"
+                                [:schnaq.admin/set-header-image-url-success form]
+                                {:image-url (oget+ form [image-form-name :value])
+                                 :share-hash share-hash
+                                 :edit-hash edit-hash
+                                 :admin-center (common/get-admin-center-link current-route)}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :schnaq.admin/set-header-image-url-success

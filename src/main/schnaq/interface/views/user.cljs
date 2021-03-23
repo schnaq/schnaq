@@ -4,6 +4,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]))
 
 (defn user-info
@@ -20,13 +21,9 @@
     ;; only update when string contains
     (when-not (clj-string/blank? username)
       (cond-> {:db (assoc-in db [:user :names :display] username)
-               :fx [[:http-xhrio {:method :post
-                                  :uri (str (:rest-backend config) "/author/add")
-                                  :params {:nickname username}
-                                  :format (ajax/transit-request-format)
-                                  :response-format (ajax/transit-response-format)
-                                  :on-success [:user/hide-display-name-input username]
-                                  :on-failure [:ajax.error/as-notification]}]]}
+               :fx [(http/xhrio-request db :post "/author/add" [:user/hide-display-name-input username]
+                                        {:nickname username}
+                                        [:ajax.error/as-notification])]}
               (not= default-anonymous-display-name username)
               (update :fx conj [:localstorage/assoc [:username username]])))))
 

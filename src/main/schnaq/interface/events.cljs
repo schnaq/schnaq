@@ -6,20 +6,16 @@
             [schnaq.interface.db :as schnaq-db]
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (rf/reg-event-fx
   :load/schnaqs
-  (fn [_ _]
+  (fn [{:keys [db]} _]
     (when-not toolbelt/production?
-      {:fx [[:http-xhrio {:method :get
-                          :uri (str (:rest-backend config) "/schnaqs")
-                          :timeout 10000
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:init-from-backend]
-                          :on-failure [:ajax.error/to-console]}]]})))
+      {:fx [(http/xhrio-request db :get "/schnaqs" [:init-from-backend])]})))
 
 (rf/reg-event-fx
   :load/last-added-schnaq

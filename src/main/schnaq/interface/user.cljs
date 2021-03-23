@@ -4,6 +4,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.auth :as auth]
             [schnaq.interface.config :refer [config default-anonymous-display-name]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.modals.modal :as modal]))
@@ -50,13 +51,7 @@
   :user/register
   (fn [{:keys [db]} [_ result]]
     (when result
-      {:fx [[:http-xhrio {:method :put
-                          :uri (str (:rest-backend config) "/user/register")
-                          :format (ajax/transit-request-format)
-                          :headers (auth/authentication-header db)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:user.register/success]
-                          :on-failure [:ajax.error/to-console]}]]})))
+      {:fx [(http/xhrio-request db :put "/user/register" :user.register/success)]})))
 
 (rf/reg-event-db
   :user.register/success

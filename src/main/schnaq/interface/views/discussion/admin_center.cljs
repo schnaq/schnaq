@@ -10,6 +10,7 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.views.header-image :as header-image]
@@ -102,16 +103,12 @@
   (fn [{:keys [db]} [_ form]]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config/config) "/emails/send-admin-center-link")
-                          :format (ajax/transit-request-format)
-                          :params {:recipient (oget form ["admin-center-recipient" :value])
-                                   :share-hash share-hash
-                                   :edit-hash edit-hash
-                                   :admin-center (common/get-admin-center-link current-route)}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.admin/send-email-success form]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/emails/send-admin-center-link" [:discussion.admin/send-email-success form]
+                                {:recipient (oget form ["admin-center-recipient" :value])
+                                 :share-hash share-hash
+                                 :edit-hash edit-hash
+                                 :admin-center (common/get-admin-center-link current-route)}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :discussion.admin/delete-statements
@@ -120,29 +117,22 @@
           statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
           current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config/config) "/admin/statements/delete")
-                          :format (ajax/transit-request-format)
-                          :params {:statement-ids statement-ids
-                                   :share-hash share-hash
-                                   :edit-hash edit-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.admin/delete-statements-success form]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/admin/statements/delete"
+                                [:discussion.admin/delete-statements-success form]
+                                {:statement-ids statement-ids
+                                 :share-hash share-hash
+                                 :edit-hash edit-hash}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :discussion.admin/make-read-only
   (fn [{:keys [db]} _]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config/config) "/admin/discussions/make-read-only")
-                          :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash
-                                   :edit-hash edit-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.admin/make-read-only-success]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/admin/discussions/make-read-only" [:discussion.admin/make-read-only-success]
+                                {:share-hash share-hash
+                                 :edit-hash edit-hash}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
   :discussion.admin/make-read-only-success
@@ -155,14 +145,10 @@
   (fn [{:keys [db]} _]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config/config) "/admin/discussions/make-writeable")
-                          :format (ajax/transit-request-format)
-                          :params {:share-hash share-hash
-                                   :edit-hash edit-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.admin/make-writeable-success]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/admin/discussions/make-writeable" [:discussion.admin/make-writeable-success]
+                                {:share-hash share-hash
+                                 :edit-hash edit-hash}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
   :discussion.admin/make-writeable-success
@@ -184,15 +170,12 @@
   :discussion.delete/statement
   (fn [{:keys [db]} [_ statement-id edit-hash]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config/config) "/admin/statements/delete")
-                          :format (ajax/transit-request-format)
-                          :params {:statement-ids [statement-id]
-                                   :share-hash share-hash
-                                   :edit-hash edit-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.admin/delete-statement-success statement-id]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/admin/statements/delete"
+                                [:discussion.admin/delete-statement-success statement-id]
+                                {:statement-ids [statement-id]
+                                 :share-hash share-hash
+                                 :edit-hash edit-hash}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   ;; Success event of deletion live in discussion - not from admin panel
@@ -225,16 +208,12 @@
           recipients (string/split raw-emails #"\s+")
           current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config/config) "/emails/send-invites")
-                          :format (ajax/transit-request-format)
-                          :params {:recipients recipients
-                                   :share-hash share-hash
-                                   :edit-hash edit-hash
-                                   :share-link (common/get-share-link share-hash)}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:discussion.admin/send-email-success form]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/emails/send-invites" [:discussion.admin/send-email-success form]
+                                {:recipients recipients
+                                 :share-hash share-hash
+                                 :edit-hash edit-hash
+                                 :share-link (common/get-share-link share-hash)}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :discussion.admin/send-email-success
@@ -338,15 +317,12 @@
   (fn [{:keys [db]} [_ disable-pro-con?]]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config/config) "/admin/schnaq/disable-pro-con")
-                          :format (ajax/transit-request-format)
-                          :params {:disable-pro-con? disable-pro-con?
-                                   :share-hash share-hash
-                                   :edit-hash edit-hash}
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:schnaq.admin/disable-pro-con-success disable-pro-con?]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/admin/schnaq/disable-pro-con"
+                                [:schnaq.admin/disable-pro-con-success disable-pro-con?]
+                                {:disable-pro-con? disable-pro-con?
+                                 :share-hash share-hash
+                                 :edit-hash edit-hash}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db
   :schnaq.admin/disable-pro-con-success
