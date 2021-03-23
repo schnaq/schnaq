@@ -25,3 +25,11 @@ footer {
     color: $gray-100;
   }
 }
+
+.social-media-icon {
+  padding-left: 1rem;
+
+  &:hover {
+    color: $gray-400;
+  }
+}
