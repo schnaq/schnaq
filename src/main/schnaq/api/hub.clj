@@ -3,7 +3,7 @@
             [ring.util.http-response :refer [ok forbidden]]
             [schnaq.auth :as auth]
             [schnaq.database.hub :as hub-db]
-            [schnaq.meeting.processors :as processors]))
+            [schnaq.processors :as processors]))
 
 (defn- hub-by-keycloak-name
   "Query hub by its referenced name in keycloak."

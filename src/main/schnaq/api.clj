@@ -22,7 +22,7 @@
             [schnaq.export :as export]
             [schnaq.media :as media]
             [schnaq.meeting.database :as db]
-            [schnaq.meeting.processors :as processors]
+            [schnaq.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
