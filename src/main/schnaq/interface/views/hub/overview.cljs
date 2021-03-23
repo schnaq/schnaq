@@ -43,7 +43,7 @@
 (rf/reg-event-db
   :hubs.load/success
   (fn [db [_ keycloak-name response]]
-    (assoc-in db [:hubs keycloak-name] (:hubs response))))
+    (assoc-in db [:hubs keycloak-name] (:hub response))))
 
 (rf/reg-sub
   :hubs/schnaqs
