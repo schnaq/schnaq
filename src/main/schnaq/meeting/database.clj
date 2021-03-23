@@ -126,7 +126,7 @@
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
-(>defn- clean-db-vals
+(>defn clean-db-vals
   "Removes all entries from a map that have a value of nil or empty string."
   [data]
   [associative? :ret associative?]
