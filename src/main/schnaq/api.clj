@@ -12,6 +12,7 @@
             [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.api.analytics :as analytics]
             [schnaq.api.hub :as hub]
+            [schnaq.api.user :as user-api]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
@@ -422,7 +423,8 @@
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
     analytics/analytics-routes
-    hub/hub-routes))
+    hub/hub-routes
+    user-api/user-routes))
 
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."

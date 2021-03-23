@@ -1,7 +1,7 @@
 (ns schnaq.database.user
   (:require [ghostwheel.core :refer [>defn]]
             [schnaq.database.specs :as specs]
-            [schnaq.meeting.database :refer [transact new-connection query fast-pull clean-db-vals]]))
+            [schnaq.meeting.database :refer [transact fast-pull clean-db-vals]]))
 
 (def ^:private registered-user-pattern
   [:db/id
