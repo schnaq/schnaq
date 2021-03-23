@@ -423,7 +423,7 @@
 (rf/reg-event-fx
   :schnaqs.save-admin-access/to-localstorage
   (fn [{:keys [db]} [_ share-hash edit-hash]]
-    ;; PARTIALLY DEPRECATED FROM 2021-09-22: Remove the old ls/add-key-value-… stuff and only load native structure
+    ;; PARTIALLY DEPRECATED, deleted after 2021-09-22: Remove the old ls/add-key-value-… stuff and only load native structure
     (let [deprecated-map (ls/add-key-value-and-build-map-from-localstorage :schnaqs/admin-access)
           admin-access-map (assoc (:schnaqs/admin-access local-storage) share-hash edit-hash)
           merged-access (merge deprecated-map admin-access-map)]

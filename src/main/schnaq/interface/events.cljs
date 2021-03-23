@@ -15,7 +15,7 @@
 (rf/reg-event-fx
   :username/from-localstorage
   (fn [{:keys [db]} _]
-    ;; DEPRECATED FROM 2021-09-22: Remove old-name and only use name from first or clause
+    ;; DEPRECATED, deleted after 2021-09-22: Remove old-name and only use name from first or clause
     (let [old-name (ls/get-item :username)
           username (or (:username local-storage) old-name)]
       (if username
@@ -63,7 +63,7 @@
 (rf/reg-event-fx
   :load/last-added-schnaq
   (fn [_ _]
-    ;; PARTIALLY DEPRECATED SINCE 2021-09-22: Remove old ls/get-item and only use new.
+    ;; PARTIALLY DEPRECATED, deleted after 2021-09-22: Remove old ls/get-item and only use new.
     (let [share-hash (or (:schnaq.last-added/share-hash local-storage)
                          (ls/get-item :schnaq.last-added/share-hash))
           edit-hash (or (:schnaq.last-added/edit-hash local-storage)

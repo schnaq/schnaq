@@ -102,7 +102,7 @@
   :visited.statement-nums/to-localstorage
   (fn [{:keys [db]} [_]]
     (let [statements-nums-map (get-in db [:visited :statement-nums])
-          ;; DEPRECATED SIND 2021-09-22: Remove deprecated-map and use the map directly after merging
+          ;; DEPRECATED, deleted after 2021-09-22: Remove deprecated-map and use the map directly after merging
           deprecated-map (->> (ls/get-item :discussion/statement-nums)
                               ls/parse-hash-map-string
                               (map #(vector (js/parseInt (first %)) (js/parseInt (second %))))
