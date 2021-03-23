@@ -1,13 +1,12 @@
 (ns schnaq.interface.views.schnaq.visited
   "Handling visited schnaqs."
-  (:require [ajax.core :as ajax]
-            [cljs.spec.alpha :as s]
+  (:require [cljs.spec.alpha :as s]
             [clojure.set :as cset]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as ls]))
 
 (def ^:private hash-separator ",")
@@ -60,24 +59,16 @@
   (fn [{:keys [db]} _]
     (let [visited-hashes (get-in db [:schnaqs :visited-hashes])]
       (when-not (empty? visited-hashes)
-        {:fx [[:http-xhrio {:method :get
-                            :uri (str (:rest-backend config) "/schnaqs/by-hashes")
-                            :params {:share-hashes visited-hashes}
-                            :format (ajax/transit-request-format)
-                            :response-format (ajax/transit-response-format)
-                            :on-success [:schnaqs.visited/store-from-backend]
-                            :on-failure [:ajax.error/to-console]}]]}))))
+        {:fx [(http/xhrio-request
+                db :get "/schnaqs/by-hashes"
+                [:schnaqs.visited/store-from-backend]
+                {:share-hashes visited-hashes})]}))))
 
 (rf/reg-event-fx
   :schnaqs.public/load
-  (fn [_ _]
-    {:fx [[:http-xhrio {:method :get
-                        :uri (str (:rest-backend config) "/schnaqs/public")
-                        :params {}
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:schnaqs.public/store-from-backend]
-                        :on-failure [:ajax.error/to-console]}]]}))
+  (fn [{:keys [db]} _]
+    {:fx [(http/xhrio-request db :get "/schnaqs/public"
+                              [:schnaqs.public/store-from-backend])]}))
 
 (rf/reg-event-db
   :schnaqs.public/store-from-backend
