@@ -1,8 +1,8 @@
 (ns schnaq.interface.views.schnaq.create
-  (:require [ajax.core :as ajax]
-            [oops.core :refer [oget]]
-            [schnaq.interface.config :refer [config default-anonymous-display-name]]
+  (:require [oops.core :refer [oget]]
+            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]
@@ -48,15 +48,12 @@
   :schnaq.create/new
   (fn [{:keys [db]} [_ new-discussion public?]]
     (let [nickname (get-in db [:user :names :display] default-anonymous-display-name)]
-      {:fx [[:http-xhrio {:method :post
-                          :uri (str (:rest-backend config) "/schnaq/add")
-                          :params {:nickname nickname
-                                   :discussion new-discussion
-                                   :public-discussion? public?}
-                          :format (ajax/transit-request-format)
-                          :response-format (ajax/transit-response-format)
-                          :on-success [:schnaq/created]
-                          :on-failure [:ajax.error/as-notification]}]]})))
+      {:fx [(http/xhrio-request db :post "/schnaq/add"
+                                [:schnaq/created]
+                                {:nickname nickname
+                                 :discussion new-discussion
+                                 :public-discussion? public?}
+                                [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :schnaq/created
