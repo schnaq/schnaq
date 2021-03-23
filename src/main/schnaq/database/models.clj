@@ -1,7 +1,7 @@
 (ns schnaq.database.models)
 
 (def datomic-schema
-  [;; User
+  [;; Anonymous User
    {:db/ident :user/nickname
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
@@ -15,6 +15,30 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "All downvotes the user gave."}
+
+   ;; Registered Users. Their names are not unique, the keycloak-id is.
+   {:db/ident :user.registered/keycloak-id
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "The unique id that is given by keycloak to the user."}
+   {:db/ident :user.registered/email
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/doc "The email of the user-account."}
+   {:db/ident :user.registered/display-name
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The name that will be displayed in the frontend for the user."}
+   {:db/ident :user.registered/first-name
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The first name."}
+   {:db/ident :user.registered/last-name
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "The first name."}
 
    ;; Feedback
    {:db/ident :feedback/contact-name
