@@ -1,13 +1,14 @@
 (ns schnaq.interface.views.schnaq.visited
   "Handling visited schnaqs."
-  (:require [cljs.spec.alpha :as s]
-            [clojure.string :as string]
+  (:require [ajax.core :as ajax]
+            [cljs.spec.alpha :as s]
             [clojure.set :as cset]
+            [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
+            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.utils.localstorage :as ls]
-            [ajax.core :as ajax]))
+            [schnaq.interface.utils.localstorage :as ls]))
 
 (def ^:private hash-separator ",")
 
@@ -17,38 +18,26 @@
   [:ret (s/coll-of (s/or :filled string? :empty nil?))]
   ;; PARTIALLY DEPRECATED: Remove the meeting part after 2021-08-05
   ;; Every important user should have the new format then
-  (let [schnaq-string (set (remove empty?
-                                   (string/split (ls/get-item :schnaqs/visited)
-                                                 (re-pattern hash-separator))))
+  ;; PARTIALLY DEPRECATED, deleted after 2021-09-22: Remove old ls/get-item part and only use native local-storage
+  (let [old-schnaq-string (set (remove empty?
+                                       (string/split (ls/get-item :schnaqs/visited)
+                                                     (re-pattern hash-separator))))
+        schnaqs-visited (:schnaqs/visited local-storage)
         meeting-string (set (remove empty?
                                     (string/split (ls/get-item :meetings/visited)
                                                   (re-pattern hash-separator))))]
-    (into '() (cset/union schnaq-string meeting-string))))
-
-(>defn- build-visited-schnaqs-from-localstorage
-  "Builds collection of visited meetings, based on previously stored hashes from
-  the localstorage."
-  [share-hash]
-  [string? :ret (s/coll-of string?)]
-  (let [schnaqs-visited (parse-visited-schnaqs-from-localstorage)
-        schnaqs-visited-with-new-hash (conj schnaqs-visited share-hash)
-        join-hashes (partial string/join hash-separator)]
-    (if-not (some #{share-hash} schnaqs-visited)
-      (join-hashes schnaqs-visited-with-new-hash)
-      (join-hashes schnaqs-visited))))
+    (cset/union old-schnaq-string schnaqs-visited meeting-string)))
 
 (rf/reg-event-db
   :schnaqs.visited/store-hashes-from-localstorage
   (fn [db _]
-    (assoc-in db [:schnaqs :visited-hashes]
-              (parse-visited-schnaqs-from-localstorage))))
+    (assoc-in db [:schnaqs :visited-hashes] (parse-visited-schnaqs-from-localstorage))))
 
 (rf/reg-event-fx
   :schnaq.visited/to-localstorage
   (fn [_ [_ share-hash]]
-    {:fx [[:localstorage/write
-           [:schnaqs/visited
-            (build-visited-schnaqs-from-localstorage share-hash)]]
+    {:fx [[:localstorage/assoc
+           [:schnaqs/visited (conj (parse-visited-schnaqs-from-localstorage) share-hash)]]
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-sub

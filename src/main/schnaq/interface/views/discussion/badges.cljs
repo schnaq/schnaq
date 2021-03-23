@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.badges
   (:require [ghostwheel.core :refer [>defn-]]
+            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -32,8 +33,8 @@
   [statement edit-hash]
   (let [popover-id (str "debater-popover-" (:db/id statement))
         locale @(rf/subscribe [:current-locale])
-        old-statements-nums-map @(rf/subscribe [:visited/load-statement-nums])
-        old-statement-num (get old-statements-nums-map (str (:db/id statement)) 0)
+        old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
+        old-statement-num (get old-statements-nums-map (:db/id statement) 0)
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
         new? (not (= old-statement-num statement-num))
         authors (conj (-> statement :meta/sub-discussion-info :authors)
@@ -88,34 +89,31 @@
 ;; #### Subs ####
 
 (rf/reg-sub
-  :visited/load-statement-nums
+  :visited/statement-nums
   (fn [db [_]]
-    (let [string-value-hash-map (get-in db [:visited :statement-nums])
-          int-values (map (fn [[key value]] {key (js/parseInt value)}) string-value-hash-map)]
-      (into {} int-values))))
+    (get-in db [:visited :statement-nums])))
 
 (rf/reg-event-db
   :visited.save-statement-nums/store-hashes-from-localstorage
   (fn [db _]
-    (assoc-in db [:visited :statement-nums]
-              (ls/parse-hash-map-string (ls/get-item :discussion/statement-nums)))))
+    (assoc-in db [:visited :statement-nums] (:discussion/statement-nums local-storage))))
 
 (rf/reg-event-fx
   :visited.statement-nums/to-localstorage
-  (fn [_ [_]]
-    (let [statements-nums-map @(rf/subscribe [:visited/statement-nums])]
-      {:fx [[:localstorage/write
-             [:discussion/statement-nums
-              (ls/add-hash-map-and-build-map-from-localstorage statements-nums-map :visited/statement-nums)]]
+  (fn [{:keys [db]} [_]]
+    (let [statements-nums-map (get-in db [:visited :statement-nums])
+          ;; DEPRECATED, deleted after 2021-09-22: Remove deprecated-map and use the map directly after merging
+          deprecated-map (->> (ls/get-item :discussion/statement-nums)
+                              ls/parse-hash-map-string
+                              (map #(vector (js/parseInt (first %)) (js/parseInt (second %))))
+                              (into {}))
+          current-visited-nums (:discussion/statement-nums local-storage)
+          merged-visited-nums (merge deprecated-map current-visited-nums statements-nums-map)]
+      {:fx [[:localstorage/assoc [:discussion/statement-nums merged-visited-nums]]
             [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]]})))
-
-(rf/reg-sub
-  :visited/statement-nums
-  (fn [db _]
-    (get-in db [:visited :statement-nums])))
 
 (rf/reg-event-db
   :visited/set-visited-statements
   (fn [db [_ statement]]
-    (assoc-in db [:visited :statement-nums (str (:db/id statement))]
-              (str (get-in statement [:meta/sub-discussion-info :sub-statements] 0)))))
+    (assoc-in db [:visited :statement-nums (:db/id statement)]
+              (get-in statement [:meta/sub-discussion-info :sub-statements] 0))))

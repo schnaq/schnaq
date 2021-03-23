@@ -105,6 +105,7 @@
     <orderEntry type="library" name="Deps: clj-http:3.12.1" level="project" />
     <orderEntry type="library" name="Deps: org.ow2.asm/asm:7.1" level="project" />
     <orderEntry type="library" name="Deps: cljs-ajax:0.8.1" level="project" />
+    <orderEntry type="library" name="Deps: funcool/hodgepodge:0.1.4" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-ring:0.5.12" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/tools.namespace:0.0-237" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react:17.0.1-0" level="project" />

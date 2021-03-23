@@ -67,8 +67,8 @@
   :schnaq/error-remove-hashes
   (fn [_ [_ response]]
     {:fx [[:dispatch [:ajax.error/as-notification response]]
-          [:localstorage/remove :schnaq.last-added/edit-hash]
-          [:localstorage/remove :schnaq.last-added/share-hash]]}))
+          [:localstorage/dissoc :schnaq.last-added/edit-hash]
+          [:localstorage/dissoc :schnaq.last-added/share-hash]]}))
 
 (rf/reg-event-fx
   :schnaq/load-by-hash-as-admin

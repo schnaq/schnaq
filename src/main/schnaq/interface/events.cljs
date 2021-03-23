@@ -1,5 +1,6 @@
 (ns schnaq.interface.events
   (:require [ajax.core :as ajax]
+            [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
             [schnaq.interface.db :as schnaq-db]
@@ -14,9 +15,12 @@
 (rf/reg-event-fx
   :username/from-localstorage
   (fn [{:keys [db]} _]
-    (if-let [name (ls/get-item :username)]
-      {:db (assoc-in db [:user :name] name)}
-      {:fx [[:dispatch [:username/notification-set-name]]]})))
+    ;; DEPRECATED, deleted after 2021-09-22: Remove old-name and only use name from first or clause
+    (let [old-name (ls/get-item :username)
+          username (or (:username local-storage) old-name)]
+      (if username
+        {:db (assoc-in db [:user :name] username)}
+        {:fx [[:dispatch [:username/notification-set-name]]]}))))
 
 (rf/reg-event-fx
   :username/notification-set-name
@@ -59,8 +63,11 @@
 (rf/reg-event-fx
   :load/last-added-schnaq
   (fn [_ _]
-    (let [share-hash (ls/get-item :schnaq.last-added/share-hash)
-          edit-hash (ls/get-item :schnaq.last-added/edit-hash)]
+    ;; PARTIALLY DEPRECATED, deleted after 2021-09-22: Remove old ls/get-item and only use new.
+    (let [share-hash (or (:schnaq.last-added/share-hash local-storage)
+                         (ls/get-item :schnaq.last-added/share-hash))
+          edit-hash (or (:schnaq.last-added/edit-hash local-storage)
+                        (ls/get-item :schnaq.last-added/edit-hash))]
       (when-not (and (nil? edit-hash) (nil? share-hash))
         {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
