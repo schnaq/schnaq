@@ -74,7 +74,7 @@
                               (map #(keyword (if (= ":" (first %))
                                                (subs % 1) %)))
                               (into #{}))
-          disabled-opts (conj (:how-to/disabled local-storage) how-to-id)
+          disabled-opts (conj (set (:how-to/disabled local-storage)) how-to-id)
           merged-opts (cset/union deprecated-set disabled-opts)]
       {:db (assoc-in db [:how-to :disabled] merged-opts)
        :fx [[:localstorage/assoc [:how-to/disabled merged-opts]]]})))
