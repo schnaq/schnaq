@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.meeting.meetings
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]))
+            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.utils.http :as http]))
 
 ;; #### Events ####
 
@@ -25,25 +26,16 @@
 
 (rf/reg-event-fx
   :schnaq/load-by-share-hash
-  (fn [_ [_ hash]]
-    {:fx [[:http-xhrio {:method :get
-                        :uri (str (:rest-backend config) "/schnaq/by-hash/" hash)
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:schnaq/select-current]
-                        :on-failure [:ajax.error/as-notification]}]]}))
+  (fn [{:keys [db]} [_ hash]]
+    {:fx [(http/xhrio-request db :get (str "/schnaq/by-hash/" hash) [:schnaq/select-current])]}))
 
 (rf/reg-event-fx
   :meeting/check-admin-credentials
-  (fn [_ [_ share-hash edit-hash]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config) "/credentials/validate")
-                        :params {:share-hash share-hash
-                                 :edit-hash edit-hash}
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:meeting/check-admin-credentials-success]
-                        :on-failure [:ajax.error/as-notification]}]]}))
+  (fn [{:keys [db]} [_ share-hash edit-hash]]
+    {:fx [(http/xhrio-request db :post "/credentials/validate" [:meeting/check-admin-credentials-success]
+                              {:share-hash share-hash
+                               :edit-hash edit-hash}
+                              [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx
   ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
@@ -72,12 +64,8 @@
 
 (rf/reg-event-fx
   :schnaq/load-by-hash-as-admin
-  (fn [_ [_ share-hash edit-hash]]
-    {:fx [[:http-xhrio {:method :post
-                        :uri (str (:rest-backend config) "/schnaq/by-hash-as-admin")
-                        :params {:share-hash share-hash
-                                 :edit-hash edit-hash}
-                        :format (ajax/transit-request-format)
-                        :response-format (ajax/transit-response-format)
-                        :on-success [:schnaq/save-as-last-added]
-                        :on-failure [:schnaq/error-remove-hashes]}]]}))
+  (fn [{:keys [db]} [_ share-hash edit-hash]]
+    {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
+                              {:share-hash share-hash
+                               :edit-hash edit-hash}
+                              [:schnaq/error-remove-hashes])]}))
