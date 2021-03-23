@@ -3,7 +3,7 @@
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :refer [config default-anonymous-display-name]]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.modals.modal :as modal]))
@@ -15,7 +15,7 @@
     (let [old-name (ls/get-item :username)
           username (or (:username local-storage) old-name)]
       (if username
-        {:db (assoc-in db [:user :name] username)}
+        {:db (assoc-in db [:user :names :display] username)}
         {:fx [[:dispatch [:username/notification-set-name]]]}))))
 
 (rf/reg-event-fx
@@ -38,10 +38,10 @@
 (rf/reg-event-fx
   :username/open-dialog
   (fn [{:keys [db]} _]
-    (let [username (get-in db [:user :name])]
-      (when (or (= "Anonymous" username)
+    (let [username (get-in db [:user :names :display])]
+      (when (or (= default-anonymous-display-name username)
                 (nil? username))
-        {:fx [[:dispatch [:user/set-display-name "Anonymous"]]
+        {:fx [[:dispatch [:user/set-display-name default-anonymous-display-name]]
               [:dispatch [:modal {:show? true
                                   :child [modal/enter-name-modal]}]]]}))))
 

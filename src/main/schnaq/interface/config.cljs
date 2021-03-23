@@ -16,6 +16,8 @@
 
 (def graph-controversy-upper-bound 65)
 
+(def default-anonymous-display-name "Anonymous")
+
 (def periodic-update-time
   "Define how many times should the client query the server for live updates.
   Time must be in milliseconds."

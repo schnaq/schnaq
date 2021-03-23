@@ -2,7 +2,7 @@
   (:require [ajax.core :as ajax]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :refer [config default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -139,7 +139,7 @@
   :discussion.add.statement/starting
   (fn [{:keys [db]} [_ form]]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
-          nickname (get-in db [:user :name] "Anonymous")
+          nickname (get-in db [:user :names :display] default-anonymous-display-name)
           statement-text (oget form [:statement-text :value])]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/discussion/statements/starting/add")

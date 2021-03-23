@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.schnaq.create
   (:require [ajax.core :as ajax]
             [oops.core :refer [oget]]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :refer [config default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.howto.elements :as how-to-elements]
@@ -47,7 +47,7 @@
 (rf/reg-event-fx
   :schnaq.create/new
   (fn [{:keys [db]} [_ new-discussion public?]]
-    (let [nickname (get-in db [:user :name] "Anonymous")]
+    (let [nickname (get-in db [:user :names :display] default-anonymous-display-name)]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/schnaq/add")
                           :params {:nickname nickname

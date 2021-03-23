@@ -2,7 +2,7 @@
   (:require [ajax.core :as ajax]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :refer [config default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [fa labels img-path]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
@@ -139,7 +139,7 @@
                         :uri (str (:rest-backend config) "/votes/up/toggle")
                         :format (ajax/transit-request-format)
                         :params {:statement-id id
-                                 :nickname (get-in db [:user :name] "Anonymous")
+                                 :nickname (get-in db [:user :names :display] default-anonymous-display-name)
                                  :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                         :response-format (ajax/transit-response-format)
                         :on-success [:upvote-success statement]
@@ -152,7 +152,7 @@
                         :uri (str (:rest-backend config) "/votes/down/toggle")
                         :format (ajax/transit-request-format)
                         :params {:statement-id id
-                                 :nickname (get-in db [:user :name] "Anonymous")
+                                 :nickname (get-in db [:user :names :display] default-anonymous-display-name)
                                  :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                         :response-format (ajax/transit-response-format)
                         :on-success [:downvote-success statement]

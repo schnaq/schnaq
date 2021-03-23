@@ -2,7 +2,7 @@
   (:require [ajax.core :as ajax]
             [clojure.string :as clj-string]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :refer [config default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
@@ -19,7 +19,7 @@
   (fn [{:keys [db]} [_ username]]
     ;; only update when string contains
     (when-not (clj-string/blank? username)
-      (cond-> {:db (assoc-in db [:user :name] username)
+      (cond-> {:db (assoc-in db [:user :names :display] username)
                :fx [[:http-xhrio {:method :post
                                   :uri (str (:rest-backend config) "/author/add")
                                   :params {:nickname username}
@@ -27,12 +27,13 @@
                                   :response-format (ajax/transit-response-format)
                                   :on-success [:user/hide-display-name-input username]
                                   :on-failure [:ajax.error/as-notification]}]]}
-              (not= "Anonymous" username) (update :fx conj [:localstorage/assoc [:username username]])))))
+              (not= default-anonymous-display-name username)
+              (update :fx conj [:localstorage/assoc [:username username]])))))
 
 (rf/reg-sub
   :user/display-name
   (fn [db]
-    (get-in db [:user :name] "Anonymous")))
+    (get-in db [:user :names :display] default-anonymous-display-name)))
 
 (rf/reg-sub
   :user/show-display-name-input?
@@ -48,9 +49,9 @@
                                       :body (labels :user.button/success-body)
                                       :context :success}]]
            [:dispatch [:notification/remove "username/notification-set-name"]]]]
-      ;; Show notification if user is not named "Anonymous"
+      ;; Show notification if user is not default anonymous display name
       (cond-> {:db (assoc-in db [:controls :username-input :show?] false)}
-              (not= "Anonymous" username) (assoc :fx notification)))))
+              (not= default-anonymous-display-name username) (assoc :fx notification)))))
 
 (rf/reg-event-db
   :user/show-display-name-input

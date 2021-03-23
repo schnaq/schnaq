@@ -3,7 +3,7 @@
             [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.interface.config :refer [config default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]))
 
 (>defn calculate-votes
@@ -36,7 +36,7 @@
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ reaction new-premise]]
     (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])
-          nickname (get-in db [:user :name] "Anonymous")]
+          nickname (get-in db [:user :names :display] default-anonymous-display-name)]
       {:fx [[:http-xhrio {:method :post
                           :uri (str (:rest-backend config) "/discussion/react-to/statement")
                           :format (ajax/transit-request-format)
