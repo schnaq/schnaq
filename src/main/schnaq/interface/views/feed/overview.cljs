@@ -44,9 +44,9 @@
 
 (defn- schnaq-list-view
   "Shows a list of schnaqs."
-  [subscription-key]
+  [subscription-vector]
   [:div.meetings-list
-   (let [schnaqs @(rf/subscribe [subscription-key])]
+   (let [schnaqs @(rf/subscribe subscription-vector)]
      (if (empty? schnaqs)
        [no-schnaqs-found]
        (for [schnaq schnaqs]
@@ -95,42 +95,42 @@
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
-(defn- feed-page-desktop [subscription-key]
+(defn feed-page-desktop [subscription-vector]
   [:div.row.px-0.mx-0.py-3
    [:div.col-3.py-3
     [feed-navigation]]
    [:div.col-6.py-3.px-5
-    [schnaq-list-view subscription-key]]
+    [schnaq-list-view subscription-vector]]
    [:div.col-3.py-3
     [feed-extra-information]]])
 
-(defn- feed-page-mobile [subscription-key]
+(defn feed-page-mobile [subscription-vector]
   [:div.my-3
-   [schnaq-list-view subscription-key]])
+   [schnaq-list-view subscription-vector]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
   schnaqs."
-  [subscription-key page-header]
+  [subscription-vector page-header]
   [keyword? keyword? :ret vector?]
   [pages/with-nav
    {:page/heading (labels page-header)
     :page/subheading (labels :schnaqs/subheader)}
    [:div.container-fluid.px-0
     [toolbelt/desktop-mobile-switch
-     [feed-page-desktop subscription-key]
-     [feed-page-mobile subscription-key]]]])
+     [feed-page-desktop subscription-vector]
+     [feed-page-mobile subscription-vector]]]])
 
 (defn public-discussions-view
   "Render all public discussions."
   []
-  [schnaq-overview :schnaqs/public :schnaqs.all/header])
+  [schnaq-overview [:schnaqs/public] :schnaqs.all/header])
 
 (defn personal-discussions-view
   "Render all discussions in which the user participated."
   []
-  [schnaq-overview :schnaqs.visited/all :schnaqs/header])
+  [schnaq-overview [:schnaqs.visited/all] :schnaqs/header])
 
 ;; events
 
