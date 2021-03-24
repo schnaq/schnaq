@@ -93,7 +93,7 @@
   [:section.sponsors
    [:small (labels :footer.sponsors/heading)]
    [:article
-    [:a {:href "https://www.hetzner.com/" :target :_blank}
+    [:a {:href "https://www.hetzner.com/cloud" :target :_blank}
      [:img {:src (img-path :logos/hetzner)}]]]])
 
 (defn footer
