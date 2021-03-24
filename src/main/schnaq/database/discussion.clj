@@ -56,7 +56,7 @@
    {:discussion/states [:db/ident]}
    :discussion/share-hash
    :discussion/header-image-url
-   {:discussion/author [:db/id :user/nickname]}])
+   {:discussion/author user-db/combined-user-pattern}])
 
 (>defn get-statement
   "Returns the statement given an id."

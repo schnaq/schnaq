@@ -339,9 +339,12 @@
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
-  [{:keys [body-params]}]
+  [{:keys [body-params identity]}]
   (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
-        user-id (user-db/user-by-nickname nickname)]
+        keycloak-id (:sub identity)
+        user-id (if keycloak-id
+                  [:user.registered/keycloak-id keycloak-id]
+                  (user-db/user-by-nickname nickname))]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
@@ -410,11 +413,12 @@
     (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
     (POST "/admin/discussions/make-writeable" [] make-discussion-writeable!)
     (POST "/admin/schnaq/disable-pro-con" [] disable-pro-con!)
-    (POST "/admin/statements/delete" [] delete-statements!) ;; todo see registered user
+    (POST "/admin/statements/delete" [] delete-statements!)
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
-    (POST "/discussion/react-to/statement" [] react-to-any-statement!) ;; todo see registered user
+    (-> (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (-> (POST "/discussion/statements/starting/add" [] add-starting-statement!)
