@@ -49,7 +49,7 @@
   :user/register
   (fn [{:keys [db]} [_ result]]
     (when result
-      {:fx [(http/xhrio-request db :put "/user/register" :user.register/success)]})))
+      {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success])]})))
 
 (rf/reg-event-db
   :user.register/success

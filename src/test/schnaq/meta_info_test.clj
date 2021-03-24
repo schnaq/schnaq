@@ -1,7 +1,7 @@
 (ns schnaq.meta-info-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.meeting.database :as main-db]
+            [schnaq.database.user :as user-db]
             [schnaq.meta-info :as meta-info]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
@@ -17,7 +17,7 @@
           meta-infos (#'meta-info/discussion-meta-info share-hash author)
           ;; add starting argument
           statement "Clojure can melt steelbeams"
-          user-id (main-db/add-user "New Person")
+          user-id (user-db/add-user "New Person")
           _ (discussion-db/add-starting-statement! share-hash user-id statement)
           ;; new meta infos
           new-meta-infos (#'meta-info/discussion-meta-info share-hash author)]

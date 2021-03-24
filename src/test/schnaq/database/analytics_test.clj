@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.analytics :as db]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.user :as user-db]
             [schnaq.meeting.database :as main-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.time Instant)))
@@ -16,7 +17,7 @@
   (discussion-db/new-discussion {:discussion/title "Bla"
                                  :discussion/share-hash any-meeting-share-hash
                                  :discussion/edit-hash (str any-meeting-share-hash "-secret")
-                                 :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                                 :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                                 true))
 
 (deftest number-of-discussions-test
@@ -31,7 +32,7 @@
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
     (is (= 6 (db/number-of-usernames)))
-    (main-db/add-user-if-not-exists "Some-Testdude")
+    (user-db/add-user-if-not-exists "Some-Testdude")
     (is (= 7 (db/number-of-usernames)))
     (is (zero? (db/number-of-usernames (Instant/now))))))
 
@@ -50,8 +51,8 @@
   (testing "Test whether the active users are returned correctly."
     (let [cat-or-dog-id (:db/id (first (discussion-db/all-discussions-by-title "Cat or Dog?")))]
       (is (= 4 (db/number-of-active-discussion-users)))
-      (let [_ (main-db/add-user-if-not-exists "wooooggler")
-            woggler-id (main-db/user-by-nickname "wooooggler")]
+      (let [_ (user-db/add-user-if-not-exists "wooooggler")
+            woggler-id (user-db/user-by-nickname "wooooggler")]
         (is (= 4 (db/number-of-active-discussion-users)))
         (main-db/transact
           [(discussion-db/prepare-new-argument cat-or-dog-id woggler-id "Alles doof"

@@ -18,6 +18,8 @@
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.reaction :as reaction-db]
+            [schnaq.database.user :as user-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
@@ -52,12 +54,16 @@
 
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
-  [request]
-  (let [{:keys [discussion nickname public-discussion?]} (:body-params request)
+  [{:keys [body-params identity]}]
+  (let [{:keys [discussion nickname public-discussion?]} body-params
+        keycloak-id (:sub identity)
+        author (if keycloak-id
+                 [:user.registered/keycloak-id keycloak-id]
+                 (user-db/add-user-if-not-exists nickname))
         discussion-data {:discussion/title (:discussion/title discussion)
                          :discussion/share-hash (.toString (UUID/randomUUID))
                          :discussion/edit-hash (.toString (UUID/randomUUID))
-                         :discussion/author (db/add-user-if-not-exists nickname)}
+                         :discussion/author author}
         new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
     (if new-discussion-id
       (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
@@ -72,7 +78,7 @@
   "Adds an author to the database."
   [req]
   (let [author-name (:nickname (:body-params req))]
-    (db/add-user-if-not-exists author-name)
+    (user-db/add-user-if-not-exists author-name)
     (ok {:text "POST successful"})))
 
 (defn- discussion-by-hash
@@ -173,7 +179,7 @@
   "Toggle up- or downvote of statement."
   [{:keys [share-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
   (if (validator/valid-discussion-and-statement? statement-id share-hash)
-    (let [nickname (db/canonical-username nickname)
+    (let [nickname (user-db/canonical-username nickname)
           vote (check-vote-fn statement-id nickname)
           counter-vote (counter-check-vote-fn statement-id nickname)]
       (log/debug "Triggered Vote on Statement by " nickname)
@@ -190,15 +196,15 @@
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
   [{:keys [body-params]}]
   (toggle-vote-statement
-    body-params db/upvote-statement! db/remove-upvote!
-    db/did-user-upvote-statement db/did-user-downvote-statement))
+    body-params reaction-db/upvote-statement! reaction-db/remove-upvote!
+    reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
   [{:keys [body-params]}]
   (toggle-vote-statement
-    body-params db/downvote-statement! db/remove-downvote!
-    db/did-user-downvote-statement db/did-user-upvote-statement))
+    body-params reaction-db/downvote-statement! reaction-db/remove-downvote!
+    reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
 
 
 ;; -----------------------------------------------------------------------------
@@ -323,9 +329,12 @@
 
 (defn- add-starting-statement!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
-  [{:keys [body-params]}]
+  [{:keys [body-params identity]}]
   (let [{:keys [share-hash statement nickname]} body-params
-        user-id (db/user-by-nickname nickname)]
+        keycloak-id (:sub identity)
+        user-id (if keycloak-id
+                  [:user.registered/keycloak-id keycloak-id]
+                  (user-db/user-by-nickname nickname))]
     (if (validator/valid-writeable-discussion? share-hash)
       (do (discussion-db/add-starting-statement! share-hash user-id statement)
           (log/info "Starting statement added for discussion" share-hash)
@@ -334,9 +343,12 @@
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
-  [{:keys [body-params]}]
+  [{:keys [body-params identity]}]
   (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
-        user-id (db/user-by-nickname nickname)]
+        keycloak-id (:sub identity)
+        user-id (if keycloak-id
+                  [:user.registered/keycloak-id keycloak-id]
+                  (user-db/user-by-nickname nickname))]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
@@ -409,16 +421,19 @@
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
-    (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+    (-> (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
-    (POST "/discussion/statements/starting/add" [] add-starting-statement!)
+    (-> (POST "/discussion/statements/starting/add" [] add-starting-statement!)
+        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/feedback/add" [] add-feedback)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/header-image/image" [] media/set-preview-image)
-    (POST "/schnaq/add" [] add-schnaq)
+    (-> (POST "/schnaq/add" [] add-schnaq)
+        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)

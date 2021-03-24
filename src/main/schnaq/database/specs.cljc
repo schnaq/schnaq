@@ -17,7 +17,8 @@
 (s/def :discussion/share-hash ::non-blank-string)
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/author (s/or :reference ::entity-reference
-                                :user ::user))
+                                :user ::user
+                                :registered-user ::registered-user))
 (s/def :discussion/header-image-url string?)
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
@@ -55,7 +56,7 @@
 ;; Statement
 (s/def :statement/content string?)
 (s/def :statement/version number?)
-(s/def :statement/author ::user)
+(s/def :statement/author (s/or :user ::user :registered-user ::registered-user))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]))
 
@@ -63,7 +64,7 @@
 (s/def :argument/type
   #{:argument.type/attack :argument.type/support :argument.type/undercut})
 (s/def :argument/version number?)
-(s/def :argument/author ::user)
+(s/def :argument/author (s/or :user ::user :registered-user ::registered-user))
 (s/def :argument/conclusion (s/or :statement ::statement
                                   :argument ::argument))
 (s/def :argument/premises (s/coll-of ::statement))
