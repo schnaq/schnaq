@@ -11,6 +11,9 @@
    :user.registered/last-name
    :user.registered/first-name])
 
+(def combined-user-pattern
+  (conj registered-user-pattern ))
+
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, when they exist."

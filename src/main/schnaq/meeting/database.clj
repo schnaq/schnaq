@@ -111,14 +111,6 @@
    :user/downvotes
    :user/nickname])
 
-(def statement-pattern
-  "Representation of a statement. Oftentimes used in a Datalog pull pattern."
-  [:db/id
-   :statement/content
-   :statement/version
-   :statement/deleted?
-   {:statement/author [:user/nickname]}])
-
 (def transaction-pattern
   "Pull transaction information."
   [:db/txInstant])

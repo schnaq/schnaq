@@ -10,6 +10,15 @@
             [taoensso.timbre :as log])
   (:import (clojure.lang ExceptionInfo)))
 
+(def statement-pattern
+  ;; todo the user should be able to be both
+  "Representation of a statement. Oftentimes used in a Datalog pull pattern."
+  [:db/id
+   :statement/content
+   :statement/version
+   :statement/deleted?
+   {:statement/author [:user/nickname]}])
+
 (def argument-pattern
   "Defines the default pattern for arguments. Oftentimes used in pull-patterns
   in a Datalog query bind the data to this structure."
@@ -17,14 +26,14 @@
    :argument/version
    {:argument/author [:user/nickname]}
    {:argument/type [:db/ident]}
-   {:argument/premises main-db/statement-pattern}
+   {:argument/premises statement-pattern}
    {:argument/conclusion
-    (conj main-db/statement-pattern
+    (conj statement-pattern
           :argument/version
           {:argument/author [:user/nickname]}
           {:argument/type [:db/ident]}
-          {:argument/premises main-db/statement-pattern}
-          {:argument/conclusion main-db/statement-pattern})}])
+          {:argument/premises statement-pattern}
+          {:argument/conclusion statement-pattern})}])
 
 (def discussion-pattern
   "Representation of a discussion. Oftentimes used in a Datalog pull pattern."
@@ -32,7 +41,7 @@
    :discussion/title
    :discussion/description
    {:discussion/states [:db/ident]}
-   {:discussion/starting-statements main-db/statement-pattern}
+   {:discussion/starting-statements statement-pattern}
    :discussion/share-hash
    :discussion/header-image-url
    {:discussion/author main-db/minimal-user-pattern}])
@@ -53,7 +62,7 @@
   "Returns the statement given an id."
   [statement-id]
   [:db/id :ret ::specs/statement]
-  (d/pull (d/db (new-connection)) main-db/statement-pattern statement-id))
+  (d/pull (d/db (new-connection)) statement-pattern statement-id))
 
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
@@ -64,7 +73,7 @@
            :in $ ?share-hash statement-pattern transaction-pattern
            :where [?discussion :discussion/share-hash ?share-hash]
            [?discussion :discussion/starting-statements ?statements ?tx]]
-         share-hash main-db/statement-pattern main-db/transaction-pattern)
+         share-hash statement-pattern main-db/transaction-pattern)
        (map main-db/merge-entity-and-transaction)
        flatten))
 
@@ -226,7 +235,7 @@
             :where [?arguments :argument/conclusion ?conclusion ?tx]
             [?arguments :argument/premises ?statements]
             [?arguments :argument/type ?type]]
-          main-db/statement-pattern conclusion-id main-db/transaction-pattern)]
+          statement-pattern conclusion-id main-db/transaction-pattern)]
     (map (fn [{:keys [statement argument-type transaction]}]
            (-> (merge statement transaction)
                (assoc :meta/argument-type argument-type)
@@ -244,7 +253,7 @@
         :where [?arguments :argument/premises ?statement-id]
         [?undercutting-arguments :argument/conclusion ?arguments]
         [?undercutting-arguments :argument/premises ?undercutting-statements]]
-      main-db/statement-pattern statement-id)))
+      statement-pattern statement-id)))
 
 (>defn all-discussions-by-title
   "Query all discussions based on the title. Could possible be multiple
@@ -282,7 +291,7 @@
            '[:find (pull ?statements statement-pattern)
              :in $ statement-pattern ?content
              :where [?statements :statement/content ?content]]
-           db main-db/statement-pattern content))))
+           db statement-pattern content))))
 
 (>defn delete-discussion
   "Adds the deleted state to a discussion"
@@ -422,7 +431,7 @@
               [?arguments :argument/conclusion ?statements]
               [?arguments :argument/premises ?statements])
             [?statements :statement/version _]]
-          share-hash main-db/statement-pattern))
+          share-hash statement-pattern))
       ;; When there are no reactions to the starting statement, the starting statements
       ;; need to be checked explicitly, because there will be no arguments containing them.
       (flatten
@@ -431,7 +440,7 @@
             :in $ ?share-hash statement-pattern
             :where [?discussion :discussion/share-hash ?share-hash]
             [?discussion :discussion/starting-statements ?statements]]
-          share-hash main-db/statement-pattern)))))
+          share-hash statement-pattern)))))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
