@@ -40,7 +40,7 @@
         :how-to.create/title "Which topic do you want to schnaq about and with whom?"
         :how-to.create/body "Put in a descriptive title and choose whether you want to schnaq with the whole world or rather schnaq in private"
         :how-to.why/title "Why should I schnaq?"
-        :how-to.why/body "Fluffed your lines? Didn't get a chance to speak? Did everyone get everything? No clue why the discussion took so long?\nSave your time and store your knowlegde in schnaq. Participate whenever you like. The mindmap of the discussion is on the house."
+        :how-to.why/body "Fluffed your lines? Didn't get a chance to speak? Did everyone get everything? No clue why the discussion took so long?\nSave your time and store your knowledge in schnaq. Participate whenever you like. The mindmap of the discussion is on the house."
         :how-to.admin/title "Administer your schnaq or invite someone to help you"
         :how-to.admin/body "Invite participants via link or mail. If you need any help as admin just invite someone to lend you a hand."
         :how-to.schnaq/title "How do I schnaq?"
@@ -101,7 +101,7 @@
         :footer.buttons/legal-note "Legal note"
         :footer.buttons/privacy "Privacy Notice"
         :footer.tagline/developed-with " Developed with "
-        :footer.sponsors/heading "Supported by"
+        :footer.sponsors/heading "Our servers are hosted by"
 
         ;; Create schnaqs
         :schnaqs/create "Create schnaq"
@@ -580,7 +580,7 @@
         :footer.buttons/legal-note "Impressum"
         :footer.buttons/privacy "Datenschutz"
         :footer.tagline/developed-with " Entwickelt mit "
-        :footer.sponsors/heading "Wir werden unterstützt von"
+        :footer.sponsors/heading "Unsere Server werden gehostet bei"
 
         ;; Create schnaqs
         :schnaqs/create "schnaq anlegen"
