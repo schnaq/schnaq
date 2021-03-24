@@ -104,13 +104,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
 
-(def user-pattern
-  "Pull a user based on these attributes"
-  [:db/id
-   :user/upvotes
-   :user/downvotes
-   :user/nickname])
-
 (def transaction-pattern
   "Pull transaction information."
   [:db/txInstant])
@@ -177,12 +170,6 @@
   "Minimal user pull pattern."
   [:db/id
    :user/nickname])
-
-(>defn user
-  "Pull user from database."
-  [id]
-  [int? :ret map?]
-  (d/pull (d/db (new-connection)) minimal-user-pattern id))
 
 (>defn add-user
   "Add a new user / author to the database."
