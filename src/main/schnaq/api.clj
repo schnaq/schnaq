@@ -54,12 +54,16 @@
 
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
-  [request]
-  (let [{:keys [discussion nickname public-discussion?]} (:body-params request)
+  [{:keys [body-params identity]}]
+  (let [{:keys [discussion nickname public-discussion?]} body-params
+        keycloak-id (:sub identity)
+        author (if keycloak-id
+                 [:user.registered/keycloak-id keycloak-id]
+                 (user-db/add-user-if-not-exists nickname))
         discussion-data {:discussion/title (:discussion/title discussion)
                          :discussion/share-hash (.toString (UUID/randomUUID))
                          :discussion/edit-hash (.toString (UUID/randomUUID))
-                         :discussion/author (user-db/add-user-if-not-exists nickname)}
+                         :discussion/author author}
         new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
     (if new-discussion-id
       (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
@@ -428,7 +432,8 @@
     (POST "/feedback/add" [] add-feedback)
     (POST "/graph/discussion" [] graph-data-for-agenda)
     (POST "/header-image/image" [] media/set-preview-image)
-    (POST "/schnaq/add" [] add-schnaq)
+    (-> (POST "/schnaq/add" [] add-schnaq)
+        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
     (POST "/votes/down/toggle" [] toggle-downvote-statement)
     (POST "/votes/up/toggle" [] toggle-upvote-statement)
