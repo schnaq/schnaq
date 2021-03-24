@@ -55,7 +55,7 @@
 ;; Statement
 (s/def :statement/content string?)
 (s/def :statement/version number?)
-(s/def :statement/author ::user)
+(s/def :statement/author (s/or :user ::user :registered-user ::registered-user))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]))
 
