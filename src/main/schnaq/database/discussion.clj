@@ -12,26 +12,25 @@
   (:import (clojure.lang ExceptionInfo)))
 
 (def statement-pattern
-  ;; todo the user should be able to be both
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
    :statement/content
    :statement/version
    :statement/deleted?
-   {:statement/author [:user/nickname]}])
+   {:statement/author user-db/combined-user-pattern}])
 
 (def argument-pattern
   "Defines the default pattern for arguments. Oftentimes used in pull-patterns
   in a Datalog query bind the data to this structure."
   [:db/id
    :argument/version
-   {:argument/author [:user/nickname]}
+   {:argument/author user-db/combined-user-pattern}
    {:argument/type [:db/ident]}
    {:argument/premises statement-pattern}
    {:argument/conclusion
     (conj statement-pattern
           :argument/version
-          {:argument/author [:user/nickname]}
+          {:argument/author user-db/combined-user-pattern}
           {:argument/type [:db/ident]}
           {:argument/premises statement-pattern}
           {:argument/conclusion statement-pattern})}])
@@ -45,7 +44,7 @@
    {:discussion/starting-statements statement-pattern}
    :discussion/share-hash
    :discussion/header-image-url
-   {:discussion/author user-db/minimal-user-pattern}])
+   {:discussion/author user-db/combined-user-pattern}])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."

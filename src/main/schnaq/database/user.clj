@@ -19,7 +19,7 @@
    :user/nickname])
 
 (def combined-user-pattern
-  (conj registered-user-pattern))
+  (concat registered-user-pattern minimal-user-pattern))
 
 (>defn add-user
   "Add a new anonymous user / author to the database."
