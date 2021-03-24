@@ -68,7 +68,9 @@
 
 (defn- statement-card
   [edit-hash {:keys [statement/content] :as statement} attitude]
-  (let [fa-label (logic/attitude->symbol attitude)]
+  (let [fa-label (logic/attitude->symbol attitude)
+        display-name (or (-> statement :statement/author :user.registered/display-name)
+                         (-> statement :statement/author :user/nickname))]
     [:div.card.card-rounded.clickable.shadow-straight-light
      {:class (str "statement-card-" (name attitude))}
      [:div.d-flex.flex-row
@@ -77,7 +79,7 @@
       [:div.card-view.card-body.py-0.pb-1
        [:div.d-flex.mt-1
         [:div.ml-auto
-         [user/user-info (-> statement :statement/author :user/nickname) 32]]]
+         [user/user-info display-name 32]]]
        [:div.my-1 [:p content]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]

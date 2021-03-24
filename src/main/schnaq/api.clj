@@ -407,7 +407,6 @@
         (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
-    ;; todo maybe the retrieval functions need to use another pattern for user / registered user as well
     (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
     (POST "/admin/discussions/make-writeable" [] make-discussion-writeable!)
     (POST "/admin/schnaq/disable-pro-con" [] disable-pro-con!)
@@ -419,7 +418,7 @@
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
     (-> (POST "/discussion/statements/starting/add" [] add-starting-statement!)
-        (wrap-routes auth/wrap-jwt-authentication))         ;; todo see registered user
+        (wrap-routes auth/wrap-jwt-authentication))
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/feedback/add" [] add-feedback)
