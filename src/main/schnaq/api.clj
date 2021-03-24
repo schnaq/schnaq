@@ -323,9 +323,12 @@
 
 (defn- add-starting-statement!
   "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
-  [{:keys [body-params]}]
+  [{:keys [body-params identity]}]
   (let [{:keys [share-hash statement nickname]} body-params
-        user-id (db/user-by-nickname nickname)]
+        keycloak-id (:sub identity)
+        user-id (if keycloak-id
+                  [:user.registered/keycloak-id keycloak-id]
+                  (db/user-by-nickname nickname))]
     (if (validator/valid-writeable-discussion? share-hash)
       (do (discussion-db/add-starting-statement! share-hash user-id statement)
           (log/info "Starting statement added for discussion" share-hash)
@@ -402,17 +405,19 @@
         (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
+    ;; todo maybe the retrieval functions need to use another pattern for user / registered user as well
     (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
     (POST "/admin/discussions/make-writeable" [] make-discussion-writeable!)
     (POST "/admin/schnaq/disable-pro-con" [] disable-pro-con!)
-    (POST "/admin/statements/delete" [] delete-statements!)
+    (POST "/admin/statements/delete" [] delete-statements!) ;; todo see registered user
     (POST "/author/add" [] add-author)
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
-    (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+    (POST "/discussion/react-to/statement" [] react-to-any-statement!) ;; todo see registered user
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
-    (POST "/discussion/statements/starting/add" [] add-starting-statement!)
+    (-> (POST "/discussion/statements/starting/add" [] add-starting-statement!)
+        (wrap-routes auth/wrap-jwt-authentication))         ;; todo see registered user
     (POST "/emails/send-admin-center-link" [] send-admin-center-link)
     (POST "/emails/send-invites" [] send-invite-emails)
     (POST "/feedback/add" [] add-feedback)
