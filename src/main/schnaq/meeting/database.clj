@@ -2,13 +2,12 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [datomic.client.api :as d]
-            [ghostwheel.core :refer [>defn >defn- ?]]
+            [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.config :as config]
             [schnaq.database.models :as models]
             [schnaq.database.specs :as specs]
             [schnaq.test-data :as test-data]
-            [schnaq.toolbelt :as toolbelt]
-            [taoensso.timbre :as log])
+            [schnaq.toolbelt :as toolbelt])
   (:import (java.util UUID Date)))
 
 (def ^:private datomic-info
@@ -160,146 +159,3 @@
          transaction-pattern)
        (map merge-entity-and-transaction)
        (sort-by :db/txInstant toolbelt/ascending)))
-
-;; ----------------------------------------------------------------------------
-;; user
-;; ----------------------------------------------------------------------------
-
-
-(def minimal-user-pattern
-  "Minimal user pull pattern."
-  [:db/id
-   :user/nickname])
-
-(>defn add-user
-  "Add a new user / author to the database."
-  [nickname]
-  [string? :ret int?]
-  (when (s/valid? :user/nickname nickname)
-    (get-in
-      (transact [{:db/id "temp-user"
-                  :user/nickname nickname}])
-      [:tempids "temp-user"])))
-
-(>defn user-by-nickname
-  "Return the **schnaq** user-id by nickname. The nickname is not case sensitive.
-  If there is no user with said nickname returns nil."
-  [nickname]
-  [string? :ret (? number?)]
-  (ffirst
-    (d/q
-      '[:find ?user
-        :in $ ?user-name
-        :where [?user :user/nickname ?original-nickname]
-        [(.toLowerCase ^String ?original-nickname) ?lower-name]
-        [(= ?lower-name ?user-name)]]
-      (d/db (new-connection)) (.toLowerCase ^String nickname))))
-
-(>defn canonical-username
-  "Return the canonical username (regarding case) that is saved."
-  [nickname]
-  [:user/nickname :ret :user/nickname]
-  (:user/nickname
-    (d/pull (d/db (new-connection)) [:user/nickname] (user-by-nickname nickname))))
-
-(>defn add-user-if-not-exists
-  "Adds a user if they do not exist yet. Returns the (new) user-id."
-  [nickname]
-  [:user/nickname :ret int?]
-  (if-let [user-id (user-by-nickname nickname)]
-    user-id
-    (do (log/info "Added a new user: " nickname)
-        (add-user nickname))))
-
-;; ----------------------------------------------------------------------------
-;; voting
-;; ----------------------------------------------------------------------------
-
-(>defn- vote-on-statement!
-  "Up or Downvote a statement"
-  [statement-id user-nickname vote-type]
-  [number? string? keyword?
-   :ret associative?]
-  (let [user (user-by-nickname user-nickname)
-        [add-field remove-field] (if (= vote-type :upvote)
-                                   [:user/upvotes :user/downvotes]
-                                   [:user/downvotes :user/upvotes])]
-    (when user
-      (transact [[:db/retract user remove-field statement-id]
-                 [:db/add user add-field statement-id]]))))
-
-(>defn upvote-statement!
-  "Upvotes a statement. Takes a user-nickname and a statement-id. The user has to exist, otherwise
-  nothing happens."
-  [statement-id user-nickname]
-  [number? string?
-   :ret associative?]
-  (vote-on-statement! statement-id user-nickname :upvote))
-
-(>defn downvote-statement!
-  "Downvotes a statement. Takes a user-nickname and a statement-id. The user has to exist, otherwise
-  nothing happens."
-  [statement-id user-nickname]
-  [number? string?
-   :ret associative?]
-  (vote-on-statement! statement-id user-nickname :downvote))
-
-(>defn upvotes-for-statement
-  "Returns the number of upvotes for a statement."
-  [statement-id]
-  [number? :ret number?]
-  (count
-    (d/q
-      '[:find ?user
-        :in $ ?statement
-        :where [?user :user/upvotes ?statement]]
-      (d/db (new-connection)) statement-id)))
-
-(>defn downvotes-for-statement
-  "Returns the number of downvotes for a statement."
-  [statement-id]
-  [number? :ret number?]
-  (count
-    (d/q
-      '[:find ?user
-        :in $ ?statement
-        :where [?user :user/downvotes ?statement]]
-      (d/db (new-connection)) statement-id)))
-
-(>defn remove-upvote!
-  "Removes an upvote of a user."
-  [statement-id user-nickname]
-  [number? string? :ret associative?]
-  (when-let [user (user-by-nickname user-nickname)]
-    (transact [[:db/retract user :user/upvotes statement-id]])))
-
-(>defn remove-downvote!
-  "Removes a downvote of a user."
-  [statement-id user-nickname]
-  [number? string? :ret associative?]
-  (when-let [user (user-by-nickname user-nickname)]
-    (transact [[:db/retract user :user/downvotes statement-id]])))
-
-(>defn- generic-reaction-check
-  "Checks whether a user already made some reaction."
-  [statement-id user-nickname field-name]
-  [number? string? keyword? :ret (? number?)]
-  (ffirst
-    (d/q
-      '[:find ?user
-        :in $ ?statement ?nickname ?field-name
-        :where [?user :user/nickname ?nickname]
-        [?user ?field-name ?statement]]
-      (d/db (new-connection)) statement-id user-nickname field-name)))
-
-(>defn did-user-upvote-statement
-  "Check whether a user already upvoted a statement."
-  [statement-id user-nickname]
-  [number? string? :ret (? number?)]
-  (generic-reaction-check statement-id user-nickname :user/upvotes))
-
-(>defn did-user-downvote-statement
-  "Check whether a user already downvoted a statement."
-  [statement-id user-nickname]
-  [number? string? :ret (? number?)]
-  (generic-reaction-check statement-id user-nickname :user/downvotes))

@@ -2,8 +2,8 @@
   (:require [clojure.test :refer [is deftest testing use-fixtures]]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.user :as user-db]
             [schnaq.media :as media]
-            [schnaq.meeting.database :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -14,7 +14,7 @@
   (discussion-db/new-discussion {:discussion/title "Test-Schnaq"
                                  :discussion/share-hash share-hash
                                  :discussion/edit-hash "secret"
-                                 :discussion/author (db/add-user-if-not-exists "Mike")}
+                                 :discussion/author (user-db/add-user-if-not-exists "Mike")}
                                 true))
 
 (deftest test-cdn-restriction

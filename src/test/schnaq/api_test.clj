@@ -4,7 +4,7 @@
             [schnaq.api :as api]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
-            [schnaq.meeting.database :as db]
+            [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -18,7 +18,7 @@
           _ (discussion-db/new-discussion {:discussion/title "foo"
                                            :discussion/share-hash share-hash
                                            :discussion/edit-hash edit-hash
-                                           :discussion/author (db/add-user-if-not-exists "Wegi")}
+                                           :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                                           true)
           succeeding-response (check-credentials {:body-params {:share-hash share-hash :edit-hash edit-hash}})
           failing-response (check-credentials {:body-params {:share-hash share-hash :edit-hash "INVALID"}})]

@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
             [schnaq.database.discussion-test-data :as test-data]
-            [schnaq.meeting.database :as main-db]
+            [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each
@@ -14,7 +14,7 @@
   (let [sample-discussion "simple-hash"
         discussion-count (count (db/public-discussions))
         new-discussion-hash "ajskdhajksdh"
-        author (main-db/add-user-if-not-exists "Wegi")
+        author (user-db/add-user-if-not-exists "Wegi")
         new-public-discussion {:discussion/title "Bla"
                                :discussion/share-hash new-discussion-hash
                                :discussion/edit-hash "secret-whatever"
@@ -31,7 +31,7 @@
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
     (let [share-hash "simple-hash"
-          user-id (main-db/user-by-nickname "Wegi")
+          user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/support-statement! share-hash user-id (:db/id starting-conclusion)
                                             "This is a new support")]
@@ -42,7 +42,7 @@
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
     (let [share-hash "simple-hash"
-          user-id (main-db/user-by-nickname "Wegi")
+          user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/attack-statement! share-hash user-id (:db/id starting-conclusion)
                                            "This is a new attack")]
@@ -76,7 +76,7 @@
 (deftest add-starting-statement!-test
   (testing "Test the creation of a valid argument-entity from strings"
     (let [statement "Wow look at this"
-          user-id (main-db/user-by-nickname "Test-person")
+          user-id (user-db/user-by-nickname "Test-person")
           meeting-hash "graph-hash"
           _ (db/add-starting-statement! meeting-hash user-id statement)
           starting-statements (db/starting-statements meeting-hash)]
@@ -87,7 +87,7 @@
   (testing "Test the creation of a valid argument-entity from strings"
     (let [premises ["What a beautifull day" "Hello test"]
           conclusion "Wow look at this"
-          user-id (main-db/user-by-nickname "Test-person")
+          user-id (user-db/user-by-nickname "Test-person")
           meeting-hash "graph-hash"
           discussion-id (:db/id (db/discussion-by-share-hash meeting-hash))
           with-id (db/prepare-new-argument discussion-id user-id conclusion premises "temp-id-here")]
@@ -101,7 +101,7 @@
 (deftest pack-premises-test
   (testing "Test the creation of statement-entities from strings"
     (let [premises ["What a beautifull day" "Hello test"]
-          user-id (main-db/user-by-nickname "Test-person")
+          user-id (user-db/user-by-nickname "Test-person")
           premise-entities (@#'db/pack-premises premises user-id)]
       (is (= [{:db/id "premise-What a beautifull day",
                :statement/author user-id,
@@ -127,7 +127,7 @@
   (let [minimal-discussion {:discussion/title "Whatevs"
                             :discussion/share-hash "oooooh"
                             :discussion/edit-hash "secret-never-guessed"
-                            :discussion/author (main-db/add-user-if-not-exists "Wegi")}]
+                            :discussion/author (user-db/add-user-if-not-exists "Wegi")}]
     (testing "Whether a correct id is returned when valid discussions are transacted."
       (is (number? (db/new-discussion minimal-discussion true)))
       (is (number? (db/new-discussion (assoc minimal-discussion
@@ -143,13 +143,13 @@
     (db/new-discussion {:discussion/title "tester"
                         :discussion/share-hash "newwwwasd"
                         :discussion/edit-hash "secret-yeah"
-                        :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                        :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                        true)
     (is (= 2 (count (db/public-discussions))))
     (db/new-discussion {:discussion/title "tester private"
                         :discussion/share-hash "newaaaasdasdwwwasd"
                         :discussion/edit-hash "secret-yeah"
-                        :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                        :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                        false)
     (is (= 2 (count (db/public-discussions))))))
 
@@ -171,9 +171,9 @@
           _ (db/new-discussion {:discussion/title "test-meet"
                                 :discussion/share-hash share-hash
                                 :discussion/edit-hash (str "secret-" share-hash)
-                                :discussion/author (main-db/add-user-if-not-exists "Wegi")}
+                                :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                                true)
-          christian-id (main-db/user-by-nickname "Christian")
+          christian-id (user-db/user-by-nickname "Christian")
           first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
           second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
@@ -189,7 +189,7 @@
 
 (deftest valid-discussions-by-hashes-test
   (let [new-discussion-hash "hello-i-am-new-here"
-        author (main-db/add-user-if-not-exists "Christian")
+        author (user-db/add-user-if-not-exists "Christian")
         new-public-discussion {:discussion/title "Bla"
                                :discussion/share-hash new-discussion-hash
                                :discussion/edit-hash ":shrug:"
@@ -209,7 +209,7 @@
 
 (deftest change-pro-con-button-test
   (let [share-hash "the-hash"
-        author (main-db/add-user-if-not-exists "Mike")
+        author (user-db/add-user-if-not-exists "Mike")
         new-public-discussion {:discussion/title "Lord"
                                :discussion/share-hash share-hash
                                :discussion/edit-hash "secret-whatever"

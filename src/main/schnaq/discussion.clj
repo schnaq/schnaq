@@ -3,7 +3,8 @@
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
-            [schnaq.meeting.database :refer [fast-pull] :as db]))
+            [schnaq.database.user :as user-db]
+            [schnaq.meeting.database :refer [fast-pull]]))
 
 (>defn- premise-ids
   "Return all premise-ids of a single argument."
@@ -98,7 +99,7 @@
   [share-hash]
   [:discussion/share-hash :ret map?]
   (let [discussion (discussion-db/discussion-by-share-hash share-hash)
-        author (fast-pull (-> discussion :discussion/author :db/id) db/minimal-user-pattern)]
+        author (fast-pull (-> discussion :discussion/author :db/id) user-db/minimal-user-pattern)]
     {:id share-hash
      :label (:discussion/title discussion)
      :author (:user/nickname author)

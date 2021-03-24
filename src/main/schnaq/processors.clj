@@ -2,8 +2,8 @@
   (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
+            [schnaq.database.reaction :as reaction-db]
             [schnaq.database.specs :as specs]
-            [schnaq.meeting.database :as db]
             [schnaq.meta-info :as meta-info])
   (:import (clojure.lang PersistentArrayMap)))
 
@@ -13,8 +13,8 @@
   [any? :ret any?]
   (walk/postwalk
     #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content))
-       (assoc % :meta/upvotes (db/upvotes-for-statement (:db/id %))
-                :meta/downvotes (db/downvotes-for-statement (:db/id %)))
+       (assoc % :meta/upvotes (reaction-db/upvotes-for-statement (:db/id %))
+                :meta/downvotes (reaction-db/downvotes-for-statement (:db/id %)))
        %)
     data))
 

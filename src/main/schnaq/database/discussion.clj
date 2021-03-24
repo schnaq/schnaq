@@ -5,6 +5,7 @@
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.database.specs :as specs]
+            [schnaq.database.user :as user-db]
             [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
@@ -44,7 +45,7 @@
    {:discussion/starting-statements statement-pattern}
    :discussion/share-hash
    :discussion/header-image-url
-   {:discussion/author main-db/minimal-user-pattern}])
+   {:discussion/author user-db/minimal-user-pattern}])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."
