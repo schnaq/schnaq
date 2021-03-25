@@ -8,17 +8,24 @@
 ;; ----------------------------------------------------------------------------
 
 (>defn- vote-on-statement!
-  "Up or Downvote a statement"
+  "Up or Downvote a statement
+  NOTE: We write to two fields, until the votes are migrated in production. At this point the :user/upvote
+  and :user/downvote variant can be removed. From that point on pass a user-id or a lookup ref."
   [statement-id user-nickname vote-type]
   [number? string? keyword?
    :ret associative?]
   (let [user (user-db/user-by-nickname user-nickname)
         [add-field remove-field] (if (= vote-type :upvote)
                                    [:user/upvotes :user/downvotes]
-                                   [:user/downvotes :user/upvotes])]
+                                   [:user/downvotes :user/upvotes])
+        [add-field-new remove-field-new] (if (= vote-type :upvote)
+                                           [:statement/upvotes :statement/downvotes]
+                                           [:statement/downvotes :statement/upvotes])]
     (when user
       (transact [[:db/retract user remove-field statement-id]
-                 [:db/add user add-field statement-id]]))))
+                 [:db/add user add-field statement-id]
+                 [:db/retract statement-id remove-field-new user]
+                 [:db/add statement-id add-field-new user]]))))
 
 (>defn upvote-statement!
   "Upvotes a statement. Takes a user-nickname and a statement-id. The user has to exist, otherwise
