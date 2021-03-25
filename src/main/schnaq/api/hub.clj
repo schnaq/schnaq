@@ -15,9 +15,17 @@
         (ok {:hub processed-hub}))
       (forbidden "You are not allowed to access this ressource."))))
 
+(defn- all-hubs-for-user
+  "Return all valid hubs for a user."
+  [request]
+  (let [keycloak-names (get-in request [:identity :groups])]
+    (ok {:hubs (hub-db/hubs-by-keycloak-names keycloak-names)})))
+
 (def hub-routes
   (->
     (routes
+      (context "/hubs" []
+        (GET "/personal" [] all-hubs-for-user))
       (context "/hub" []
         (GET "/:keycloak-name" [] hub-by-keycloak-name)))
     (wrap-routes auth/auth-middleware)

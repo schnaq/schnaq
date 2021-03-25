@@ -49,10 +49,12 @@
   "Takes a list of keycloak-names and returns the hub entities."
   [keycloak-names]
   [(s/coll-of string?) :ret (s/coll-of ::specs/hub)]
-  (->> (main-db/query
-         '[:find (pull ?hub hub-pattern) (pull ?tx transaction-pattern)
-           :in $ [?hub-names ...] hub-pattern transaction-pattern
-           :where [?hub :hub/keycloak-name ?hub-names ?tx]]
-         keycloak-names hub-pattern main-db/transaction-pattern)
-       (map main-db/merge-entity-and-transaction)
-       flatten))
+  (toolbelt/pull-key-up
+    (->> (main-db/query
+           '[:find (pull ?hub hub-pattern) (pull ?tx transaction-pattern)
+             :in $ [?hub-names ...] hub-pattern transaction-pattern
+             :where [?hub :hub/keycloak-name ?hub-names ?tx]]
+           keycloak-names hub-pattern main-db/transaction-pattern)
+         (map main-db/merge-entity-and-transaction)
+         flatten)
+    :db/ident))
