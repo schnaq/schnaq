@@ -14,7 +14,7 @@
           some-statements (map #(-> % :argument/premises first :db/id)
                                (discussion-db/all-arguments-for-discussion share-hash))
           author-1 "Test-1"
-          author-1-id(user-db/user-by-nickname "Test-1")
+          author-1-id (user-db/add-user-if-not-exists "Test-1")
           author-2 "Test-2"]
       (user-db/add-user-if-not-exists author-1)
       (user-db/add-user-if-not-exists author-2)
