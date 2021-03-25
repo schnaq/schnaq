@@ -65,6 +65,33 @@
     [:div.col-auto
      [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
 
+(defn- migration-area
+  "Where the migration magic happens"
+  []
+  [:<>
+   [:h2 "Migrationen"]
+   [:h4 "Migration von User-Votes auf das Statement (idempotent)."]
+   [:button.btn.btn-secondary
+    {:on-click #(rf/dispatch [:migrations.votes/migrate])}
+    "Votes Migrieren"]
+   [:p "Status: " @(rf/subscribe [:migrations.votes/status])]])
+
+(rf/reg-event-fx
+  :migrations.votes/migrate
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:migrations :votes :status] "Started Migration.")
+     :fx [(http/xhrio-request db :post "/admin/schnaq/migrate/votes" [:migrations.votes/migrate-success])]}))
+
+(rf/reg-event-db
+  :migrations.votes/migrate-success
+  (fn [db _]
+    (assoc-in db [:migrations :votes :status] "Migration Erfolgreich!")))
+
+(rf/reg-sub
+  :migrations.votes/status
+  (fn [db _]
+    (get-in db [:migrations :votes :status] "-")))
+
 (defn- center-overview
   "The startpage of the admin center."
   []
@@ -78,7 +105,8 @@
     [:h4 (labels :admin.center.delete.public/heading)]
     [public-meeting-deletion-form]
     [:h4 (labels :admin.center.delete.private/heading)]
-    [private-meeting-deletion-form]]])
+    [private-meeting-deletion-form]
+    [migration-area]]])
 
 (defn center-overview-route
   []
