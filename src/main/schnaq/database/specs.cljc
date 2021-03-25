@@ -16,9 +16,7 @@
 (s/def :discussion/description string?)
 (s/def :discussion/share-hash ::non-blank-string)
 (s/def :discussion/edit-hash ::non-blank-string)
-(s/def :discussion/author (s/or :reference ::entity-reference
-                                :user ::user
-                                :registered-user ::registered-user))
+(s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
@@ -53,10 +51,19 @@
                                        :user.registered/display-name]
                                  :opt [:user.registered/last-name :user.registered/first-name]))
 
+;; Could be anonymous or registered
+(s/def ::any-user (s/or :user ::user :registered-user ::registered-user))
+;; Any user or reference
+(s/def ::user-or-reference (s/or :reference ::entity-reference
+                                 :user ::user
+                                 :registered-user ::registered-user))
+
 ;; Statement
 (s/def :statement/content string?)
 (s/def :statement/version number?)
-(s/def :statement/author (s/or :user ::user :registered-user ::registered-user))
+(s/def :statement/author ::any-user)
+(s/def :statement/upvotes (s/coll-of ::user-or-reference))
+(s/def :statement/downvotes (s/coll-of ::user-or-reference))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]))
 
