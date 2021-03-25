@@ -60,7 +60,7 @@
       (handler request)
       (forbidden "You are not an admin."))))
 
-(defn group-membership?
+(defn member-of-group?
   "Check if group is available in the JWT token."
   [request group]
   (let [groups (get-in request [:identity :groups])]

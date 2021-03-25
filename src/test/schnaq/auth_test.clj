@@ -50,6 +50,6 @@
   (testing "Verify that user is member of called group."
     (let [request (assoc-in (mock/request :get "/testing/stuff")
                             [:identity :groups] ["these-are-my-groups" "schnaqqifantenparty"])]
-      (is (auth/group-membership? request "schnaqqifantenparty"))
-      (is (not (auth/group-membership? request "")))
-      (is (not (auth/group-membership? request "not-member-of"))))))
+      (is (auth/member-of-group? request "schnaqqifantenparty"))
+      (is (not (auth/member-of-group? request "")))
+      (is (not (auth/member-of-group? request "not-member-of"))))))
