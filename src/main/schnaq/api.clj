@@ -196,13 +196,12 @@
   (if (validator/valid-discussion-and-statement? statement-id share-hash)
     (let [user-id (extract-user nickname identity)
           vote (check-vote-fn statement-id user-id)
-          ;; todo user user-id instead of nickname elsewhere
           counter-vote (counter-check-vote-fn statement-id user-id)]
-      (log/debug "Triggered Vote on Statement by " nickname)
+      (log/debug "Triggered Vote on Statement by " user-id)
       (if vote
-        (do (remove-vote-fn statement-id nickname)
+        (do (remove-vote-fn statement-id user-id)
             (ok {:operation :removed}))
-        (do (add-vote-fn statement-id nickname)
+        (do (add-vote-fn statement-id user-id)
             (if counter-vote
               (ok {:operation :switched})
               (ok {:operation :added})))))
