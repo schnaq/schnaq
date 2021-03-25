@@ -6,24 +6,16 @@
 ;; voting
 ;; ----------------------------------------------------------------------------
 
-;; TODO delete when reading is done from the new store already
 (>defn- vote-on-statement!
-  "Up or Downvote a statement
-  NOTE: We write to two fields, until the votes are migrated in production. At this point the :user/upvote
-  and :user/downvote variant can be removed. From that point on pass a user-id or a lookup ref."
+  "Up or Downvote a statement."
   [statement-id user-id vote-type]
   [number? :db/id keyword?
    :ret associative?]
-  (let [[add-field remove-field] (if (= vote-type :upvote)
-                                   [:user/upvotes :user/downvotes]
-                                   [:user/downvotes :user/upvotes])
-        [add-field-new remove-field-new] (if (= vote-type :upvote)
+  (let [[add-attribute remove-attribute] (if (= vote-type :upvote)
                                            [:statement/upvotes :statement/downvotes]
                                            [:statement/downvotes :statement/upvotes])]
-    (transact [[:db/retract user-id remove-field statement-id]
-               [:db/add user-id add-field statement-id]
-               [:db/retract statement-id remove-field-new user-id]
-               [:db/add statement-id add-field-new user-id]])))
+    (transact [[:db/retract statement-id remove-attribute user-id]
+               [:db/add statement-id add-attribute user-id]])))
 
 (>defn upvote-statement!
   "Upvotes a statement. Takes a user and a statement-id. The user has to exist, otherwise
@@ -61,21 +53,17 @@
         :where [?statement :statement/downvotes ?user]]
       statement-id)))
 
-;; TODO delete when reading is done from the new store already
 (>defn remove-upvote!
   "Removes an upvote of a user."
   [statement-id user-id]
   [number? :db/id :ret associative?]
-  (transact [[:db/retract user-id :user/upvotes statement-id]
-             [:db/retract statement-id :statement/upvotes user-id]]))
+  (transact [[:db/retract statement-id :statement/upvotes user-id]]))
 
-;; TODO delete when reading is done from the new store already
 (>defn remove-downvote!
   "Removes a downvote of a user."
   [statement-id user-id]
   [number? :db/id :ret associative?]
-  (transact [[:db/retract user-id :user/downvotes statement-id]
-             [:db/retract statement-id :statement/downvotes user-id]]))
+  (transact [[:db/retract statement-id :statement/downvotes user-id]]))
 
 (>defn- generic-reaction-check
   "Checks whether a user already made some reaction."
