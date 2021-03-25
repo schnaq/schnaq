@@ -40,9 +40,10 @@
 (rf/reg-event-db
   :hubs.load/success
   (fn [db [_ {:keys [hubs]}]]
-    (let [formatted-hubs
-          (into {} (map #(vector (:hub/keycloak-name %) %) hubs))]
-      (assoc db :hubs formatted-hubs))))
+    (when-not (empty? hubs)
+      (let [formatted-hubs
+            (into {} (map #(vector (:hub/keycloak-name %) %) hubs))]
+        (assoc db :hubs formatted-hubs)))))
 
 (rf/reg-event-db
   :hub.load/success
