@@ -12,15 +12,16 @@
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
+            [schnaq.interface.views.graph.view :as graph-view]
             [schnaq.interface.views.howto.how-to :as how-to]
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
+            [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.privacy :as privacy]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
-            [schnaq.interface.views.graph.view :as graph-view]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.user.edit-account :as edit-account]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -68,6 +69,11 @@
      :controllers [{:parameters {:path [:keycloak-name]}
                     :start (fn [{:keys [path]}]
                              (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}]
+   ["user"
+    ["/account"
+     {:name :routes/user-edit-account
+      :view edit-account/view
+      :link-text (labels :user/edit-account)}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center

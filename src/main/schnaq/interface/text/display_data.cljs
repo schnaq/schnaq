@@ -307,6 +307,8 @@
         :user.profile/star-tooltip "You're an admin!\n\"With great power comes great responsibility.\""
         :user.action/link-copied "Link copied!"
         :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
+        :user/edit-account "edit account information"
+        :user.settings "Settings"
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -782,6 +784,8 @@
         :user.profile/star-tooltip "Du bist ein Admin!\n\"Aus großer Kraft folgt große Verantwortung.\""
         :user.action/link-copied "Link kopiert!"
         :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
+        :user/edit-account "Kontoinformation bearbeiten"
+        :user.settings "Einstellungen"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
