@@ -68,11 +68,3 @@
     (if (< n-words (count s))
       (string/join " " (conj (vec (take n-words s)) "..."))
       text)))
-
-(>defn remove-from-vector
-  "Removes all elements matching `element` from a vector."
-  [element coll]
-  [any? vector? :ret vector?]
-  (filterv
-    (complement #{element})
-    coll))
