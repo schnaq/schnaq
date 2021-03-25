@@ -87,10 +87,6 @@
 (defn feed-extra-information []
   [:div.feed-extra-info.text-right
    [:div.btn-group-vertical
-    [about-button :footer.buttons/about-us "https://disqtec.com/ueber-uns"]
-    [about-button :nav/blog "https://schnaq.com/blog/"]
-    [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
-    [about-button :router/privacy (reitfe/href :routes/privacy)]
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
