@@ -87,19 +87,17 @@
   (let [all-upvotes
         (->>
           (query
-            '[:find (pull ?statements [:db/id :user/_upvotes])
-              :where [?statements :statement/content _]])
-          (filter #(:user/_upvotes (first %)))
-          flatten)
+            '[:find ?statement ?user
+              :where [?user :user/upvotes ?statement]])
+          (mapv #(vector :db/add (first %) :statement/upvotes (second %))))
         all-downvotes
         (->>
           (query
-            '[:find (pull ?statements [:db/id :user/_downvotes])
-              :where [?statements :statement/content _]])
-          (filter #(:user/_downvotes (first %)))
-          flatten)]
-    all-upvotes
-    all-downvotes))
+            '[:find ?statement ?user
+              :where [?user :user/downvotes ?statement]])
+          (mapv #(vector :db/add (first %) :statement/downvotes (second %))))]
+    (vec (concat
+           all-downvotes all-upvotes))))
 
 (comment
   (migrate-users-to-statement)
