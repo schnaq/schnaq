@@ -9,7 +9,7 @@
   "Query hub by its referenced name in keycloak."
   [request]
   (let [keycloak-name (get-in request [:params :keycloak-name])]
-    (if (auth/group-membership? request keycloak-name)
+    (if (auth/member-of-group? request keycloak-name)
       (let [hub (hub-db/hub-by-keycloak-name keycloak-name)
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
         (ok {:hub processed-hub}))
