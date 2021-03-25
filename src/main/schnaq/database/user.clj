@@ -95,9 +95,10 @@
           (query
             '[:find ?statement ?user
               :where [?user :user/downvotes ?statement]])
-          (mapv #(vector :db/add (first %) :statement/downvotes (second %))))]
-    (vec (concat
-           all-downvotes all-upvotes))))
+          (mapv #(vector :db/add (first %) :statement/downvotes (second %))))
+        transaction (vec (concat all-downvotes all-upvotes))]
+    (transact transaction)
+    true))
 
 (comment
   (migrate-users-to-statement)

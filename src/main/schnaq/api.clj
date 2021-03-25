@@ -174,8 +174,10 @@
 
 (defn- migrate-user-votes!
   "Migrates votes from the user to the statements. Works idempotently."
-  [{:keys [params]}]
-  '())
+  []
+  (if (user-db/migrate-users-to-statement)
+    (ok {:success :success})
+    (bad-request {:error "Something went wrong, oh noooo"})))
 
 ;; -----------------------------------------------------------------------------
 ;; Votes
