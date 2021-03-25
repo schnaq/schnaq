@@ -99,7 +99,8 @@
       :link-text (labels :router/public-discussions)
       :controllers [{:start (fn []
                               (rf/dispatch [:schnaqs.public/load])
-                              (rf/dispatch [:feed/store-current :public]))}]}]
+                              (rf/dispatch [:feed/store-current :public])
+                              (rf/dispatch [:scheduler.after/login [:hubs.personal/load]]))}]}]
     ["/my"
      {:name :routes.meetings/my-schnaqs
       :view feed/personal-discussions-view
