@@ -63,6 +63,15 @@
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
 
+(defn- show-hubs []
+  (let [hubs @(rf/subscribe [:hubs/all])]
+    [:<>
+     [:hr]
+     [:p.h5.text-muted "Deine Hubs"]
+     (for [hub hubs]
+       [:article {:key (:hub/keycloak-name hub)}
+        [common/avatar (:hub/name hub)]])]))
+
 (defn feed-navigation []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         current-feed @(rf/subscribe [:feed/get-current])
@@ -77,7 +86,8 @@
                        {:share-hash share-hash :edit-hash edit-hash}])])
      (when-not toolbelt/production?
        [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
-     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]]))
+     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]
+     [show-hubs]]))
 
 (defn about-button [label href-link]
   [:div.btn-block
