@@ -2,7 +2,6 @@
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
-            [schnaq.interface.db :as schnaq-db]
             [schnaq.interface.navigation :as navigation]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
@@ -27,10 +26,9 @@
         {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx
-  :initialise-db
+  :initialize/schnaq
   (fn [_ _]
-    {:db schnaq-db/default-db
-     :fx [[:dispatch [:load/schnaqs]]
+    {:fx [[:dispatch [:load/schnaqs]]
           [:dispatch [:username/from-localstorage]]
           [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
           [:dispatch [:keycloak/init]]

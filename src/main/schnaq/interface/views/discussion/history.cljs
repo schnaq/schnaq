@@ -46,4 +46,4 @@
 (rf/reg-sub
   :discussion-history
   (fn [db _]
-    (get-in db [:history :full-context])))
+    (get-in db [:history :full-context] [])))

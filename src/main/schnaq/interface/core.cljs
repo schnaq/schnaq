@@ -84,7 +84,7 @@
   "Entrypoint into the application."
   []
   (navigation/init-routes!)
-  (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
+  (rf/dispatch-sync [:initialize/schnaq])                   ;; put a value into application state
   (language/init-language)
   (render)                                                  ;; mount the application's ui into '<div id="app" />'
   (say-hello)
