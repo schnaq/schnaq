@@ -15,9 +15,10 @@
   :scheduler.execute/after-login
   (fn [{:keys [db]} [_ _]]
     (let [after-login (get-in db [:scheduler :after/login])
-          prepend-dispatch-to-events (vec (for [event after-login] [:dispatch event]))]
+          prepend-dispatch-to-events (vec (for [event after-login] [:dispatch event]))
+          events-without-after-login (filterv (complement (into #{} after-login)) after-login)]
       {:fx prepend-dispatch-to-events
-       :db (assoc-in db [:scheduler :after/login] [])})))
+       :db (assoc-in db [:scheduler :after/login] events-without-after-login)})))
 
 (rf/reg-sub
   :scheduler.login/has-events?
