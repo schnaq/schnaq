@@ -7,14 +7,6 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/value
     :db/doc "User is identified by the nickname, when using the site without an account."}
-   {:db/ident :user/upvotes
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "DEPRECATED: Upvotes are held by the statement now. All upvotes the user gave."}
-   {:db/ident :user/downvotes
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "DEPRECATED: Downvotes are held by the statement now. All downvotes the user gave."}
 
    ;; Registered Users. Their names are not unique, the keycloak-id is.
    {:db/ident :user.registered/keycloak-id
