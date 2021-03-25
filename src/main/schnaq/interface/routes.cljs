@@ -21,7 +21,8 @@
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
-            [schnaq.interface.views.user.edit-account :as edit-account]))
+            [schnaq.interface.views.user.edit-account :as edit-account]
+            [schnaq.interface.views.user.edit-hubs :as edit-hubs]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -71,9 +72,15 @@
                              (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}]
    ["user"
     ["/account"
-     {:name :routes/user-edit-account
+     {:name :routes/user-manage-account
       :view edit-account/view
-      :link-text (labels :user/edit-account)}]]
+      :link-text (labels :user/edit-account)
+      :controllers [{:start (fn [] (rf/dispatch [:account-manage/store-current-page :manage-account]))}]}]
+    ["/hubs"
+     {:name :routes/user-manage-hubs
+      :view edit-hubs/view
+      :link-text (labels :user/edit-hubs)
+      :controllers [{:start (fn [] (rf/dispatch [:account-manage/store-current-page :manage-hubs]))}]}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center

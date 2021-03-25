@@ -25,6 +25,14 @@
    [avatar display-name size]
    [:p.small.mt-1 display-name]])
 
+(>defn avatar-with-nickname-right
+  "Create an image based on the nickname and also print the nickname."
+  [display-name size]
+  [string? number? :ret vector?]
+  [:div.row
+   [:div.mr-4 [avatar display-name size]]
+   [:h4.my-auto display-name]])
+
 (>defn add-namespace-to-keyword
   "Prepend a namespace to a keyword. Replaces existing namespace with new
   namespace."

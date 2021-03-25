@@ -59,7 +59,7 @@
      [:button
       {:class button-class :type "button"
        :on-click on-click-fn}
-      [:h5 (labels label)]]]))
+      [:span (labels label)]]]))
 
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])

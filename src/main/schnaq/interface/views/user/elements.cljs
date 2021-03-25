@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.user.elements
-  (:require [schnaq.interface.text.display-data :refer [labels]]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.views.user :as user]))
+            [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.views.common :as common]))
 
 (defn about-button [label href-link]
   [:div.btn-block
@@ -15,27 +16,57 @@
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
-(defn- current-user [user-name]
-  [:<>
-   [:h6 (labels :user.settings)]
-   [user/user-info user-name 32]])
+(defn- current-user [user]
+  (let [user-name (get-in user [:names :display])]
+    [:<>
+     [:h6.text-gray-600.mb-4 (labels :user.settings)]
+     [:div.pl-4
+      [common/avatar-with-nickname-right user-name 40]]]))
+
+(defn- edit-user-navigation-button [label icon route focused?]
+  (let [button-class (if focused? "feed-button-focused" "feed-button")]
+    [:div
+     [:button
+      {:class button-class :type "button"
+       :on-click #(rf/dispatch [:navigation/navigate route])}
+      [:div
+       [:i.mr-4 {:class (str "fas " (fa icon))}]
+       [:span (labels label)]]]]))
+
 
 (defn- user-navigation []
-  [:<>
-   [:h6 (labels :user.settings)]])
+  (let [current-page @(rf/subscribe [:account-manage/get-current-page])
+        manage-account? (= current-page :manage-account)
+        manage-hubs? (= current-page :manage-hubs)]
+    [:<>
+     [edit-user-navigation-button :user.settings/info :user/edit :routes/user-manage-account manage-account?]
+     [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes/user-manage-hubs manage-hubs?]]))
 
-(defn- user-panel []
+(defn- user-panel [user]
   [:div
-   [current-user]
-   [:hr]
+   [current-user user]
+   [:hr.my-4]
    [user-navigation]])
 
-(defn user-view-desktop [_user content]
+(defn user-view-desktop [user content]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-3.py-4.px-5
-     [user-panel]]
+     [user-panel user]]
     [:div.col-6.py-4
      content]
     [:div.col-3.py-4
      [extra-information]]]])
+
+;; events
+
+(rf/reg-event-db
+  :account-manage/store-current-page
+  (fn [db [_ manage-page]]
+    ;; store either :manage-account or :manage-hubs feed
+    (assoc-in db [:account-manage :current] manage-page)))
+
+(rf/reg-sub
+  :account-manage/get-current-page
+  (fn [db _]
+    (get-in db [:account-manage :current])))
