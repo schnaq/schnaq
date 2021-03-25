@@ -32,10 +32,10 @@
        [:div.mr-4 [common/avatar display-name 50]]
        [name-input display-name]]
       [:div.row.pt-5
-       [:div.col.text-left
+       [:div.col.text-left.my-3
         [:a.btn.button-secondary {:href config/keycloak-profile-page}
          (labels :user.keycloak-settings)]]
-       [:div.col.text-right
+       [:div.col.text-right.my-3
         [:button.btn.button-primary
          (labels :user.settings.button/change-account-information)]]]]]))
 
@@ -43,7 +43,7 @@
   (let [user @(rf/subscribe [:user/data])]
     [pages/with-nav
      {:page/heading (labels :user/edit-account)}
-     [elements/user-view-desktop user
+     [elements/user-view user
       [change-user-info user]]]))
 
 (defn view []

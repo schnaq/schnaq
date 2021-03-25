@@ -3,7 +3,6 @@
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.auth :as auth]
             [schnaq.database.user :as user-db]
-            [schnaq.meeting.database :refer [fast-pull]]
             [taoensso.timbre :as log]))
 
 (defn- register-user-if-they-not-exist

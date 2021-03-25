@@ -18,7 +18,7 @@
         user-groups (get-in user [:groups])]
     [pages/with-nav
      {:page/heading (labels :user/edit-hubs)}
-     [elements/user-view-desktop user
+     [elements/user-view user
       [show-hubs user-groups]]]))
 
 (defn view []

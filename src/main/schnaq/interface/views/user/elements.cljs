@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]))
 
 (defn about-button [label href-link]
@@ -48,7 +49,7 @@
    [:hr.my-4]
    [user-navigation]])
 
-(defn user-view-desktop [user content]
+(defn- user-view-desktop [user content]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-3.py-4.px-5
@@ -57,6 +58,11 @@
      content]
     [:div.col-3.py-4
      [extra-information]]]])
+
+(defn user-view [user content]
+  [toolbelt/desktop-mobile-switch
+   [user-view-desktop user content]
+   content])
 
 ;; events
 
