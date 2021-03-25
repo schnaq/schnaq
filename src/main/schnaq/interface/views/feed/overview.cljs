@@ -18,7 +18,7 @@
      "🙈 "
      (labels :schnaqs.not-found/alert-lead)]
     [:p (labels :schnaqs.not-found/alert-body)]
-    [:div.btn.btn-outline-primary
+    [:button.btn.btn-outline-primary
      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
      (labels :nav.schnaqs/create-schnaq)]]])
 
@@ -55,11 +55,10 @@
 
 (defn- feed-button [label on-click-fn focused?]
   (let [button-class (if focused? "feed-button-focused" "feed-button")]
-    [:div
-     [:button
-      {:class button-class :type "button"
-       :on-click on-click-fn}
-      [:h5 (labels label)]]]))
+    [:button
+     {:class button-class :type "button"
+      :on-click on-click-fn}
+     [:h5 (labels label)]]))
 
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
@@ -69,7 +68,7 @@
         current-feed @(rf/subscribe [:feed/get-current])
         public-feed? (= current-feed :public)
         personal-feed? (= current-feed :personal)]
-    [:div
+    [:section
      [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
      [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
      (when-not (nil? edit-hash)
