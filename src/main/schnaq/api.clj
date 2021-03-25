@@ -172,6 +172,11 @@
       (ok {:share-hash share-hash})
       (bad-request {:error "An error occurred, while deleting the schnaq."}))))
 
+(defn- migrate-user-votes!
+  "Migrates votes from the user to the statements. Works idempotently."
+  [{:keys [params]}]
+  '())
+
 ;; -----------------------------------------------------------------------------
 ;; Votes
 
@@ -411,6 +416,10 @@
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
     (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
+        (wrap-routes auth/is-admin-middleware)
+        (wrap-routes auth/auth-middleware)
+        (wrap-routes auth/wrap-jwt-authentication))
+    (-> (POST "/admin/schnaq/migrate" [] migrate-user-votes!)
         (wrap-routes auth/is-admin-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))

@@ -80,3 +80,27 @@
       (-> (transact [(clean-db-vals new-user)])
           (get-in [:tempids temp-id])
           (fast-pull registered-user-pattern)))))
+
+(defn migrate-users-to-statement
+  "Move all votes from user to the statement itself."
+  []
+  (let [all-upvotes
+        (->>
+          (query
+            '[:find (pull ?statements [:db/id :user/_upvotes])
+              :where [?statements :statement/content _]])
+          (filter #(:user/_upvotes (first %)))
+          flatten)
+        all-downvotes
+        (->>
+          (query
+            '[:find (pull ?statements [:db/id :user/_downvotes])
+              :where [?statements :statement/content _]])
+          (filter #(:user/_downvotes (first %)))
+          flatten)]
+    all-upvotes
+    all-downvotes))
+
+(comment
+  (migrate-users-to-statement)
+  )
