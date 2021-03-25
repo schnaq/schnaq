@@ -3,6 +3,8 @@
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]))
 
+(s/def ::non-blank-string (s/and string? (complement string/blank?)))
+
 ;; Frontend only
 #?(:cljs (s/def :re-frame/component vector?))
 
@@ -31,8 +33,6 @@
                                  :registered-user ::registered-user))
 
 ;; Discussion
-(s/def ::non-blank-string (s/and string? (complement string/blank?)))
-
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
 (s/def :discussion/share-hash ::non-blank-string)
