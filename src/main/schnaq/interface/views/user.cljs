@@ -34,7 +34,7 @@
 (rf/reg-sub
   :user/show-display-name-input?
   (fn [db]
-    (get-in db [:controls :username-input :show?] true)))
+    (get-in db [:controls :username-input :show?] false)))
 
 (rf/reg-event-fx
   :user/hide-display-name-input
