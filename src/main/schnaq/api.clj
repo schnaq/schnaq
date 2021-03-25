@@ -42,6 +42,13 @@
 
 (def ^:private invalid-rights-message "Sie haben nicht genügend Rechte, um diese Diskussion zu betrachten.")
 
+(defn- extract-user
+  "Returns a user-id, either from nickname if anonymous user or from identity, if jwt token is present."
+  [nickname identity]
+  (let [nickname (user-db/user-by-nickname nickname)
+        registered-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)]))]
+    (or registered-user nickname)))
+
 (defn- ping
   "Route to ping the API. Used in our monitoring system."
   [_]
@@ -177,16 +184,17 @@
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
-  [{:keys [share-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
+  [{:keys [share-hash statement-id nickname]} identity
+   add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
   (if (validator/valid-discussion-and-statement? statement-id share-hash)
-    (let [nickname (user-db/canonical-username nickname)
-          vote (check-vote-fn statement-id nickname)
-          counter-vote (counter-check-vote-fn statement-id nickname)]
-      (log/debug "Triggered Vote on Statement by " nickname)
+    (let [user-id (extract-user nickname identity)
+          vote (check-vote-fn statement-id user-id)
+          counter-vote (counter-check-vote-fn statement-id user-id)]
+      (log/debug "Triggered Vote on Statement by " user-id)
       (if vote
-        (do (remove-vote-fn statement-id nickname)
+        (do (remove-vote-fn statement-id user-id)
             (ok {:operation :removed}))
-        (do (add-vote-fn statement-id nickname)
+        (do (add-vote-fn statement-id user-id)
             (if counter-vote
               (ok {:operation :switched})
               (ok {:operation :added})))))
@@ -194,16 +202,16 @@
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
-  [{:keys [body-params]}]
+  [{:keys [body-params identity]}]
   (toggle-vote-statement
-    body-params reaction-db/upvote-statement! reaction-db/remove-upvote!
+    body-params identity reaction-db/upvote-statement! reaction-db/remove-upvote!
     reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
-  [{:keys [body-params]}]
+  [{:keys [body-params identity]}]
   (toggle-vote-statement
-    body-params reaction-db/downvote-statement! reaction-db/remove-downvote!
+    body-params identity reaction-db/downvote-statement! reaction-db/remove-downvote!
     reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
 
 
@@ -435,8 +443,10 @@
     (-> (POST "/schnaq/add" [] add-schnaq)
         (wrap-routes auth/wrap-jwt-authentication))
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
-    (POST "/votes/down/toggle" [] toggle-downvote-statement)
-    (POST "/votes/up/toggle" [] toggle-upvote-statement)
+    (-> (POST "/votes/down/toggle" [] toggle-downvote-statement)
+        (wrap-routes auth/wrap-jwt-authentication))
+    (-> (POST "/votes/up/toggle" [] toggle-upvote-statement)
+        (wrap-routes auth/wrap-jwt-authentication))
     analytics/analytics-routes
     hub/hub-routes
     user-api/user-routes))

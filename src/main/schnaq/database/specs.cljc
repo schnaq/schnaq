@@ -3,22 +3,41 @@
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]))
 
+(s/def ::non-blank-string (s/and string? (complement string/blank?)))
+
 ;; Frontend only
 #?(:cljs (s/def :re-frame/component vector?))
 
 ;; Transaction
 (s/def :db/txInstant inst?)
 
-;; Discussion
-(s/def ::non-blank-string (s/and string? (complement string/blank?)))
+;; User
+(s/def :user/nickname string?)
+(s/def ::user (s/keys :req [:user/nickname]))
 
+;; Registered user
+(s/def :user.registered/keycloak-id ::non-blank-string)
+(s/def :user.registered/email ::non-blank-string)
+(s/def :user.registered/display-name ::non-blank-string)
+(s/def :user.registered/first-name ::non-blank-string)
+(s/def :user.registered/last-name ::non-blank-string)
+(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/email
+                                       :user.registered/display-name]
+                                 :opt [:user.registered/last-name :user.registered/first-name]))
+
+;; Could be anonymous or registered
+(s/def ::any-user (s/or :user ::user :registered-user ::registered-user))
+;; Any user or reference
+(s/def ::user-or-reference (s/or :reference ::entity-reference
+                                 :user ::user
+                                 :registered-user ::registered-user))
+
+;; Discussion
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
 (s/def :discussion/share-hash ::non-blank-string)
 (s/def :discussion/edit-hash ::non-blank-string)
-(s/def :discussion/author (s/or :reference ::entity-reference
-                                :user ::user
-                                :registered-user ::registered-user))
+(s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
@@ -39,24 +58,12 @@
 (s/def ::hub (s/keys :req [:hub/name :hub/keycloak-name]
                      :opt [:hub/schnaqs :db/txInstant]))
 
-;; User
-(s/def :user/nickname string?)
-(s/def ::user (s/keys :req [:user/nickname]))
-
-;; Registered user
-(s/def :user.registered/keycloak-id ::non-blank-string)
-(s/def :user.registered/email ::non-blank-string)
-(s/def :user.registered/display-name ::non-blank-string)
-(s/def :user.registered/first-name ::non-blank-string)
-(s/def :user.registered/last-name ::non-blank-string)
-(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/email
-                                       :user.registered/display-name]
-                                 :opt [:user.registered/last-name :user.registered/first-name]))
-
 ;; Statement
 (s/def :statement/content string?)
 (s/def :statement/version number?)
-(s/def :statement/author (s/or :user ::user :registered-user ::registered-user))
+(s/def :statement/author ::any-user)
+(s/def :statement/upvotes (s/coll-of ::user-or-reference))
+(s/def :statement/downvotes (s/coll-of ::user-or-reference))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]))
 
