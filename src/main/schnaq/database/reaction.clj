@@ -43,6 +43,7 @@
    :ret associative?]
   (vote-on-statement! statement-id user-nickname :downvote))
 
+;; TODO we need to read from the new field AFTER the migration is done.
 (>defn upvotes-for-statement
   "Returns the number of upvotes for a statement."
   [statement-id]
@@ -54,6 +55,7 @@
         :where [?user :user/upvotes ?statement]]
       statement-id)))
 
+;; TODO we need to read from the new field AFTER the migration is done.
 (>defn downvotes-for-statement
   "Returns the number of downvotes for a statement."
   [statement-id]
@@ -70,15 +72,18 @@
   [statement-id user-nickname]
   [number? string? :ret associative?]
   (when-let [user (user-db/user-by-nickname user-nickname)]
-    (transact [[:db/retract user :user/upvotes statement-id]])))
+    (transact [[:db/retract user :user/upvotes statement-id]
+               [:db/retract statement-id :statement/upvotes user]])))
 
 (>defn remove-downvote!
   "Removes a downvote of a user."
   [statement-id user-nickname]
   [number? string? :ret associative?]
   (when-let [user (user-db/user-by-nickname user-nickname)]
-    (transact [[:db/retract user :user/downvotes statement-id]])))
+    (transact [[:db/retract user :user/downvotes statement-id]
+               [:db/retract statement-id :statement/downvotes user]])))
 
+;; TODO we need to read from the new field AFTER the migration is done.
 (>defn- generic-reaction-check
   "Checks whether a user already made some reaction."
   [statement-id user-nickname field-name]
