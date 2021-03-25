@@ -454,8 +454,10 @@
     (-> (POST "/schnaq/add" [] add-schnaq)
         (wrap-routes auth/wrap-jwt-authentication))
     (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
-    (POST "/votes/down/toggle" [] toggle-downvote-statement)
-    (POST "/votes/up/toggle" [] toggle-upvote-statement)
+    (-> (POST "/votes/down/toggle" [] toggle-downvote-statement)
+        (wrap-routes auth/wrap-jwt-authentication))
+    (-> (POST "/votes/up/toggle" [] toggle-upvote-statement)
+        (wrap-routes auth/wrap-jwt-authentication))
     analytics/analytics-routes
     hub/hub-routes
     user-api/user-routes))
