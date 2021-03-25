@@ -42,6 +42,13 @@
 
 (def ^:private invalid-rights-message "Sie haben nicht genügend Rechte, um diese Diskussion zu betrachten.")
 
+(defn- extract-user
+  "Returns a user-id, either from nickname if anonymous user or from identity, if jwt token is present."
+  [nickname identity]
+  (let [nickname (user-db/user-by-nickname nickname)
+        registered-user (:db/id (db/fast-pull [:user.registered/keycloak-id (:sub identity)]))]
+    (or registered-user nickname)))
+
 (defn- ping
   "Route to ping the API. Used in our monitoring system."
   [_]
@@ -184,11 +191,13 @@
 
 (defn- toggle-vote-statement
   "Toggle up- or downvote of statement."
-  [{:keys [share-hash statement-id nickname]} add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
+  [{:keys [share-hash statement-id nickname]} identity
+   add-vote-fn remove-vote-fn check-vote-fn counter-check-vote-fn]
   (if (validator/valid-discussion-and-statement? statement-id share-hash)
-    (let [nickname (user-db/canonical-username nickname)
-          vote (check-vote-fn statement-id nickname)
-          counter-vote (counter-check-vote-fn statement-id nickname)]
+    (let [user-id (extract-user nickname identity)
+          vote (check-vote-fn statement-id user-id)
+          ;; todo user user-id instead of nickname elsewhere
+          counter-vote (counter-check-vote-fn statement-id user-id)]
       (log/debug "Triggered Vote on Statement by " nickname)
       (if vote
         (do (remove-vote-fn statement-id nickname)
@@ -201,16 +210,16 @@
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
-  [{:keys [body-params]}]
+  [{:keys [body-params identity]}]
   (toggle-vote-statement
-    body-params reaction-db/upvote-statement! reaction-db/remove-upvote!
+    body-params identity reaction-db/upvote-statement! reaction-db/remove-upvote!
     reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
-  [{:keys [body-params]}]
+  [{:keys [body-params identity]}]
   (toggle-vote-statement
-    body-params reaction-db/downvote-statement! reaction-db/remove-downvote!
+    body-params identity reaction-db/downvote-statement! reaction-db/remove-downvote!
     reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
 
 

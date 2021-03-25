@@ -81,6 +81,7 @@
           (get-in [:tempids temp-id])
           (fast-pull registered-user-pattern)))))
 
+;; TODO delete again
 (defn migrate-users-to-statement
   "Move all votes from user to the statement itself."
   []

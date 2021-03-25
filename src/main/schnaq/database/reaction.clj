@@ -7,6 +7,7 @@
 ;; voting
 ;; ----------------------------------------------------------------------------
 
+;; TODO delete when reading is done from the new store already
 (>defn- vote-on-statement!
   "Up or Downvote a statement
   NOTE: We write to two fields, until the votes are migrated in production. At this point the :user/upvote
@@ -43,7 +44,6 @@
    :ret associative?]
   (vote-on-statement! statement-id user-nickname :downvote))
 
-;; TODO we need to read from the new field AFTER the migration is done.
 (>defn upvotes-for-statement
   "Returns the number of upvotes for a statement."
   [statement-id]
@@ -52,10 +52,9 @@
     (query
       '[:find ?user
         :in $ ?statement
-        :where [?user :user/upvotes ?statement]]
+        :where [?statement :statement/upvotes ?user]]
       statement-id)))
 
-;; TODO we need to read from the new field AFTER the migration is done.
 (>defn downvotes-for-statement
   "Returns the number of downvotes for a statement."
   [statement-id]
@@ -64,9 +63,10 @@
     (query
       '[:find ?user
         :in $ ?statement
-        :where [?user :user/downvotes ?statement]]
+        :where [?statement :statement/downvotes ?user]]
       statement-id)))
 
+;; TODO delete when reading is done from the new store already
 (>defn remove-upvote!
   "Removes an upvote of a user."
   [statement-id user-nickname]
@@ -75,6 +75,7 @@
     (transact [[:db/retract user :user/upvotes statement-id]
                [:db/retract statement-id :statement/upvotes user]])))
 
+;; TODO delete when reading is done from the new store already
 (>defn remove-downvote!
   "Removes a downvote of a user."
   [statement-id user-nickname]
@@ -83,27 +84,25 @@
     (transact [[:db/retract user :user/downvotes statement-id]
                [:db/retract statement-id :statement/downvotes user]])))
 
-;; TODO we need to read from the new field AFTER the migration is done.
 (>defn- generic-reaction-check
   "Checks whether a user already made some reaction."
-  [statement-id user-nickname field-name]
-  [number? string? keyword? :ret (? number?)]
+  [statement-id user-id field-name]
+  [number? :db/id keyword? :ret (? number?)]
   (ffirst
     (query
-      '[:find ?user
-        :in $ ?statement ?nickname ?field-name
-        :where [?user :user/nickname ?nickname]
-        [?user ?field-name ?statement]]
-      statement-id user-nickname field-name)))
+      '[:find ?statement
+        :in $ ?statement ?user ?field-name
+        :where [?statement ?field-name ?user]]
+      statement-id user-id field-name)))
 
 (>defn did-user-upvote-statement
   "Check whether a user already upvoted a statement."
-  [statement-id user-nickname]
-  [number? string? :ret (? number?)]
-  (generic-reaction-check statement-id user-nickname :user/upvotes))
+  [statement-id user-id]
+  [number? :db/id :ret (? number?)]
+  (generic-reaction-check statement-id user-id :statement/upvotes))
 
 (>defn did-user-downvote-statement
   "Check whether a user already downvoted a statement."
-  [statement-id user-nickname]
-  [number? string? :ret (? number?)]
-  (generic-reaction-check statement-id user-nickname :user/downvotes))
+  [statement-id user-id]
+  [number? :db/id :ret (? number?)]
+  (generic-reaction-check statement-id user-id :statement/downvotes))
