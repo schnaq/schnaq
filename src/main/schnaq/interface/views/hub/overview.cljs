@@ -54,3 +54,7 @@
   :hubs/schnaqs
   (fn [db [_ keycloak-name]]
     (get-in db [:hubs keycloak-name :hub/schnaqs] [])))
+
+(rf/reg-sub
+  :hubs/all
+  (fn [db] (:hubs db)))
