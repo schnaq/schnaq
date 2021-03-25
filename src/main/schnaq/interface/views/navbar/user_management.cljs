@@ -2,7 +2,6 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
@@ -94,7 +93,7 @@
       (when (or authenticated? (not toolbelt/production?))
         [:<>
          (when authenticated?
-           [:a.dropdown-item {:href config/keycloak-profile-page}
+           [:a.dropdown-item {:href (reitfe/href :routes/user-manage-account)}
             (labels :user.profile/settings)])
          [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
           (if authenticated?

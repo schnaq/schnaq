@@ -310,8 +310,14 @@
         :user/edit-account "manage account information"
         :user/edit-hubs "manage hubs"
         :user.settings "Settings"
+        :user.keycloak-settings "advanced settings"
         :user.settings/info "User infos"
         :user.settings/hubs "Hubs"
+        :user.settings/change-name "change name"
+        :user.settings.button/change-account-information "save changes"
+        :user.hubs/show "Your hubs"
+        :user.hubs/empty "No hubs assigned"
+
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -790,8 +796,13 @@
         :user/edit-account "Benutzerkonto verwalten"
         :user/edit-hubs "Hubs verwalten"
         :user.settings "Einstellungen"
-        :user.settings/info "Nutzer Infos"
+        :user.keycloak-settings "Erweiterte Einstellungen"
+        :user.settings/info "Persönliche Informationen"
         :user.settings/hubs "Hubs"
+        :user.settings/change-name "Namen ändern"
+        :user.settings.button/change-account-information "Änderungen speichern"
+        :user.hubs/show "Deine Hubs"
+        :user.hubs/empty "Keinen Hubs zugewiesen"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
