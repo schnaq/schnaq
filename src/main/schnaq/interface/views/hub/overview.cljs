@@ -30,10 +30,22 @@
 (rf/reg-event-fx
   :hub/load
   (fn [{:keys [db]} [_ keycloak-name]]
-    {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hubs.load/success keycloak-name])]}))
+    {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hub.load/success keycloak-name])]}))
+
+(rf/reg-event-fx
+  :hubs.personal/load
+  (fn [{:keys [db]}]
+    {:fx [(http/xhrio-request db :get "/hubs/personal" [:hubs.load/success])]}))
 
 (rf/reg-event-db
   :hubs.load/success
+  (fn [db [_ {:keys [hubs]}]]
+    (let [formatted-hubs
+          (into {} (map #(vector (:hub/keycloak-name %) %) hubs))]
+      (assoc db :hubs formatted-hubs))))
+
+(rf/reg-event-db
+  :hub.load/success
   (fn [db [_ keycloak-name response]]
     (assoc-in db [:hubs keycloak-name] (:hub response))))
 
