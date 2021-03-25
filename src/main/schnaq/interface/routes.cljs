@@ -107,7 +107,8 @@
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn []
                               (rf/dispatch [:schnaqs.visited/load])
-                              (rf/dispatch [:feed/store-current :personal]))}]}]]
+                              (rf/dispatch [:feed/store-current :personal])
+                              (rf/dispatch [:scheduler.after/login [:hubs.personal/load]]))}]}]]
    ["schnaq"
     ["/create"
      {:name :routes.schnaq/create
