@@ -11,11 +11,14 @@
 
 (>defn identicon
   "Generate unique identicon."
-  [display-name size]
-  [string? number? :ret vector?]
-  [:span {:title display-name
-          :dangerouslySetInnerHTML
-          {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}])
+  ([display-name]
+   [string? :ret vector?]
+   (identicon display-name))
+  ([display-name size]
+   [string? number? :ret vector?]
+   [:span {:title display-name
+           :dangerouslySetInnerHTML
+           {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}]))
 
 (>defn avatar
   "Get a user's avatar."
