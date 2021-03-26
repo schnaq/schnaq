@@ -64,10 +64,9 @@
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, when they exist."
-  [identity-map]
+  [{:keys [id email preferred_username given_name family_name]}]
   [associative? :ret ::specs/registered-user]
-  (let [{:keys [id email preferred_username given_name family_name]} identity-map
-        existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-pattern)
+  (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-pattern)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
