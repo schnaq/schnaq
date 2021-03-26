@@ -61,16 +61,3 @@
   [toolbelt/desktop-mobile-switch
    [user-view-desktop content]
    content])
-
-;; events
-
-(rf/reg-event-db
-  :account-manage/store-current-page
-  (fn [db [_ manage-page]]
-    ;; store either :manage-account or :manage-hubs feed
-    (assoc-in db [:account-manage :current] manage-page)))
-
-(rf/reg-sub
-  :account-manage/get-current-page
-  (fn [db _]
-    (get-in db [:account-manage :current])))
