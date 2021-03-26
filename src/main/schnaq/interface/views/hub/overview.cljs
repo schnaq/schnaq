@@ -30,6 +30,33 @@
                                      :body (labels :hub.add.schnaq.error/body)
                                      :context :danger}]]]}))
 
+(rf/reg-event-fx
+  :hub.remove/schnaq
+  (fn [{:keys [db]} [_ share-hash]]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      {:fx [(http/xhrio-request db :delete (gstring/format "/hub/%s/remove" keycloak-name)
+                                [:hub.remove.schnaq/success]
+                                {:share-hash share-hash}
+                                [:hub.remove.schnaq/failure])]})))
+
+(rf/reg-event-fx
+  :hub.remove.schnaq/success
+  (fn [{:keys [db]} [_ response]]
+    (let [hub (:hub response)]
+      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :hub.remove.schnaq.success/title)
+                                       :body (labels :hub.remove.schnaq.success/body)
+                                       :context :success}]]]})))
+
+(rf/reg-event-fx
+  :hub.remove.schnaq/failure
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :hub.remove.schnaq.error/title)
+                                     :body (labels :hub.remove.schnaq.error/body)
+                                     :context :danger}]]]}))
+
 (defn hub-settings
   "Additional hub settings that are displayed in the feed."
   []
@@ -70,7 +97,9 @@
         [badges/static-info-badges schnaq]]]]
      [:div.col-1
       [:button.btn.btn-secondary.w-100
-       {:title "Remove schnaq from hub"}
+       ;; TODO remove only after asking a second time
+       {:title "Remove schnaq from hub"
+        :on-click #(rf/dispatch [:hub.remove/schnaq share-hash])}
        [:i.fas.fa-minus-square]]]]))
 
 (>defn- hub-index
