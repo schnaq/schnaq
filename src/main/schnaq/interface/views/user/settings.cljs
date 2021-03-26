@@ -38,8 +38,8 @@
 
 (defn- user-navigation []
   [:<>
-   [edit-user-navigation-button :user.settings/info :user/edit :routes/user-manage-account]
-   [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes/user-manage-hubs]])
+   [edit-user-navigation-button :user.settings/info :user/edit :routes.user.manage/account]
+   [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes.user.manage/hubs]])
 
 (defn- user-panel []
   [:div

@@ -72,11 +72,11 @@
                              (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}]
    ["user"
     ["/account"
-     {:name :routes/user-manage-account
+     {:name :routes.user.manage/account
       :view edit-account/view
       :link-text (labels :user/edit-account)}]
     ["/hubs"
-     {:name :routes/user-manage-hubs
+     {:name :routes.user.manage/hubs
       :view edit-hubs/view
       :link-text (labels :user/edit-hubs)}]]
    ["admin"

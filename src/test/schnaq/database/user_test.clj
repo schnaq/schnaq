@@ -34,12 +34,12 @@
 (deftest change-user-name
   (testing "Test update user name"
     (let [id "test-id-abcdefg"
-          name "Tester"
+          user-name "Tester"
           name-new "New Tester"
-          user (db/register-new-user {:id id :preferred_username name})
+          user (db/register-new-user {:id id :preferred_username user-name})
           updated-user (db/update-display-name id name-new)
           current-name (:user.registered/display-name user)
           updated-name (:user.registered/display-name updated-user)]
       (is (not (= current-name updated-name)))
-      (is (= name current-name))
+      (is (= user-name current-name))
       (is (= name-new updated-name)))))

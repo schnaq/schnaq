@@ -93,7 +93,7 @@
       (when (or authenticated? (not toolbelt/production?))
         [:<>
          (when authenticated?
-           [:a.dropdown-item {:href (reitfe/href :routes/user-manage-account)}
+           [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
             (labels :user.profile/settings)])
          [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
           (if authenticated?
