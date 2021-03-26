@@ -1,6 +1,8 @@
 (ns schnaq.interface.routes
   (:require [re-frame.core :as rf]
             [reitit.coercion.spec]
+            [reitit.frontend :as reitit-front]
+            [reitit.frontend.easy :as reitit-front-easy]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.text.display-data :refer [labels]]
@@ -237,3 +239,24 @@
     {:name :routes/true-404-view
      :view error-views/true-404-entrypoint
      :link-text (labels :router/true-404-view)}]])
+
+
+(def router
+  (reitit-front/router
+    routes))
+
+(defn- on-navigate [new-match]
+  (if new-match
+    (rf/dispatch [:navigation/navigated new-match])
+    (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
+
+(defn init-routes! []
+  (reitit-front-easy/start!
+    router
+    on-navigate
+    {:use-fragment false}))
+
+(defn parse-route
+  "Parses a URL with the schnaq routes and returns the full match object."
+  [url]
+  (reitit-front/match-by-path router url))

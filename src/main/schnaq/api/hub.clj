@@ -32,11 +32,12 @@
       (if (validators/valid-discussion? share-hash)
         ;; NOTE: When hub-exclusive schnaqs are in, check it in the if above.
         (let [discussion-id (:db/id (fast-pull [:discussion/share-hash share-hash] [:db/id]))
-              hub (hub-db/add-discussions-to-hub keycloak-name [discussion-id])
+              hub-id (:db/id (fast-pull [:hub/keycloak-name keycloak-name] [:db/id]))
+              hub (hub-db/add-discussions-to-hub hub-id [discussion-id])
               processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
-          {:hub processed-hub})
-        (bad-request "The discussion could not be found."))
-      (forbidden "You are not a member of the group."))))
+          (ok {:hub processed-hub}))
+        (bad-request {:message "The discussion could not be found."}))
+      (forbidden {:message "You are not a member of the group."}))))
 
 (def hub-routes
   (->

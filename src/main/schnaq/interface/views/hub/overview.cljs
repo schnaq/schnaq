@@ -15,20 +15,7 @@
   :hub.schnaqs/add-success
   (fn [{:keys [db]} [_ response]]
     (let [hub (:hub response)]
-      {:db (assoc-in db [:hub (:hub/keycloak-name hub)] hub)
-       :fx []})))
-
-(rf/reg-event-fx
-  ;; TODO parse url for share-hash
-  ;; TODO on error show what went wrong
-  :hub.schnaqs/add
-  (fn [{:keys [db]} [_ form]]
-    (let [url-input (oget form :schnaq-add-input :value)
-          share-hash :TODO-parse-URL
-          keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      {:fx [(http/xhrio-request db :post (gstring/format "/hub/%s/add" keycloak-name)
-                                [:hub.schnaqs/add-success]
-                                {:share-hash share-hash})]})))
+      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)})))
 
 (defn hub-settings
   "Additional hub settings that are displayed in the feed."
@@ -36,6 +23,10 @@
   [:<>
    [:label "schnaq hinzufügen"]
    [:form.pb-3
+    {:on-submit (fn [e]
+                  (js-wrap/prevent-default e)
+                  (println e)
+                  (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
     [:div.form-row
      [:div.col
       [:input.form-control {:id "schnaq-add-input"
@@ -44,10 +35,7 @@
                             :placeholder "Schnaq-URL z.B. https://schnaq.com/schnaq/…"}]]
      [:div.col
       [:button.btn.btn-secondary
-       {:type "submit"
-        :on-click (fn [e]
-                    (js-wrap/prevent-default e)
-                    (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
+       {:type "submit"}
        "Add schnaq to hub"]]]]])
 
 (defn hub-page-desktop [subscription-vector]

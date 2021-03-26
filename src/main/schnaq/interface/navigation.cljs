@@ -1,24 +1,7 @@
 (ns schnaq.interface.navigation
-  (:require [schnaq.interface.routes :as routes]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.controllers :as reitit-front-controllers]
-            [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]))
-
-(def router
-  (reitit-front/router
-    routes/routes))
-
-(defn on-navigate [new-match]
-  (if new-match
-    (rf/dispatch [:navigation/navigated new-match])
-    (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
-
-(defn init-routes! []
-  (reitit-front-easy/start!
-    router
-    on-navigate
-    {:use-fragment false}))
 
 (rf/reg-sub
   :navigation/current-route

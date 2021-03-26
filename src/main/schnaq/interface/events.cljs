@@ -1,12 +1,27 @@
 (ns schnaq.interface.events
-  (:require [hodgepodge.core :refer [local-storage]]
+  (:require [goog.string :as gstring]
+            [hodgepodge.core :refer [local-storage]]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
-            [schnaq.interface.navigation :as navigation]
+            [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
+
+;; Note: this lives in the common namespace to prevent circles through the routes import
+(rf/reg-event-fx
+  ;; TODO on error show what went wrong
+  :hub.schnaqs/add
+  (fn [{:keys [db]} [_ form]]
+    (let [url-input (oget form :schnaq-add-input :value)
+          share-hash (-> (routes/parse-route url-input) :path-params :share-hash)
+          keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      (println keycloak-name share-hash)
+      {:fx [(http/xhrio-request db :post (gstring/format "/hub/%s/add" keycloak-name)
+                                [:hub.schnaqs/add-success]
+                                {:share-hash share-hash})]})))
 
 (rf/reg-event-fx
   :load/schnaqs
@@ -74,7 +89,7 @@
   (fn [url]
     (rf/dispatch
       [:navigation/navigated
-       (reitit-frontend/match-by-path navigation/router (str (-> js/window .-location .-origin) "/" url))])))
+       (reitit-frontend/match-by-path routes/router (str (-> js/window .-location .-origin) "/" url))])))
 
 (rf/reg-fx
   ;; Changes more than just the document locale, like changing the key in config and writing it to localstorage.

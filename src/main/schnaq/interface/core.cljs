@@ -13,8 +13,8 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.effects]
             [schnaq.interface.events]
-            [schnaq.interface.navigation :as navigation]
-            [schnaq.interface.routes]
+            [schnaq.interface.navigation]
+            [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]
             [schnaq.interface.user]
             [schnaq.interface.utils.language :as language]
@@ -69,7 +69,7 @@
   ;; after shadow-cljs hot-reloads code. We force a UI update by clearing
   ;; the Reframe subscription cache.
   (rf/clear-subscription-cache!)
-  (navigation/init-routes!)
+  (routes/init-routes!)
   (render))
 
 (defn- say-hello
@@ -84,7 +84,7 @@
 (defn init
   "Entrypoint into the application."
   []
-  (navigation/init-routes!)
+  (routes/init-routes!)
   (rf/dispatch-sync [:initialize/schnaq])                   ;; put a value into application state
   (language/init-language)
   (render)                                                  ;; mount the application's ui into '<div id="app" />'
