@@ -24,8 +24,10 @@
      [:div.pl-4
       [common/avatar-with-nickname-right user-name 40]]]))
 
-(defn- edit-user-navigation-button [label icon route focused?]
-  (let [button-class (if focused? "feed-button-focused" "feed-button")]
+(defn- edit-user-navigation-button [label icon route]
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        button-class (if (= route current-route) "feed-button-focused"
+                                                 "feed-button")]
     [:div
      [:button
       {:class button-class :type "button"
@@ -34,14 +36,10 @@
        [:i.mr-4 {:class (str "fas " (fa icon))}]
        [:span (labels label)]]]]))
 
-
 (defn- user-navigation []
-  (let [current-page @(rf/subscribe [:account-manage/get-current-page])
-        manage-account? (= current-page :manage-account)
-        manage-hubs? (= current-page :manage-hubs)]
-    [:<>
-     [edit-user-navigation-button :user.settings/info :user/edit :routes/user-manage-account manage-account?]
-     [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes/user-manage-hubs manage-hubs?]]))
+  [:<>
+   [edit-user-navigation-button :user.settings/info :user/edit :routes/user-manage-account]
+   [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes/user-manage-hubs]])
 
 (defn- user-panel []
   [:div

@@ -74,13 +74,11 @@
     ["/account"
      {:name :routes/user-manage-account
       :view edit-account/view
-      :link-text (labels :user/edit-account)
-      :controllers [{:start (fn [] (rf/dispatch [:account-manage/store-current-page :manage-account]))}]}]
+      :link-text (labels :user/edit-account)}]
     ["/hubs"
      {:name :routes/user-manage-hubs
       :view edit-hubs/view
-      :link-text (labels :user/edit-hubs)
-      :controllers [{:start (fn [] (rf/dispatch [:account-manage/store-current-page :manage-hubs]))}]}]]
+      :link-text (labels :user/edit-hubs)}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center
