@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.hub.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -9,20 +10,44 @@
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.pages :as pages]))
 
+(rf/reg-event-fx
+  ;; TODO show success notification
+  :hub.schnaqs/add-success
+  (fn [{:keys [db]} [_ response]]
+    (let [hub (:hub response)]
+      {:db (assoc-in db [:hub (:hub/keycloak-name hub)] hub)
+       :fx []})))
+
+(rf/reg-event-fx
+  ;; TODO parse url for share-hash
+  ;; TODO on error show what went wrong
+  :hub.schnaqs/add
+  (fn [{:keys [db]} [_ form]]
+    (let [url-input (oget form :schnaq-add-input :value)
+          share-hash :TODO-parse-URL
+          keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      {:fx [(http/xhrio-request db :post (gstring/format "/hub/%s/add" keycloak-name)
+                                [:hub.schnaqs/add-success]
+                                {:share-hash share-hash})]})))
+
 (defn hub-settings
   "Additional hub settings that are displayed in the feed."
   []
-  [:div.pb-3
-   [:form
+  [:<>
+   [:label "schnaq hinzufügen"]
+   [:form.pb-3
     [:div.form-row
      [:div.col
-      [:input.form-control {:name "hub-schnaq-input"
+      [:input.form-control {:id "schnaq-add-input"
+                            :name "hub-schnaq-input"
                             :required true
                             :placeholder "Schnaq-URL z.B. https://schnaq.com/schnaq/…"}]]
      [:div.col
       [:button.btn.btn-secondary
-       {:on-click (fn [e]
-                    (js-wrap/prevent-default e))}
+       {:type "submit"
+        :on-click (fn [e]
+                    (js-wrap/prevent-default e)
+                    (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
        "Add schnaq to hub"]]]]])
 
 (defn hub-page-desktop [subscription-vector]
