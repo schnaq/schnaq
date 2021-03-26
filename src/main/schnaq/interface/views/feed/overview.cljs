@@ -9,6 +9,32 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]))
 
+;; -----------------------------------------------------------------------------
+;; Hubs
+
+(defn- single-hub
+  "Display a single hub."
+  [{:hub/keys [keycloak-name name]}]
+  [:article
+   [:a.btn.btn-link {:href (reitfe/href :routes/hub {:keycloak-name keycloak-name})}
+    [common/identicon name 32]
+    [:span.pl-2 name]]])
+
+(defn- show-hubs
+  "Show all hubs for a user."
+  []
+  (when-let [hubs @(rf/subscribe [:hubs/all])]
+    [:section.feed-hublist
+     [:hr]
+     [:p.h5.text-muted.pb-2 "Deine Hubs"]
+     (for [[keycloak-name hub] hubs]
+       (with-meta
+         [single-hub hub]
+         {:key keycloak-name}))]))
+
+;; -----------------------------------------------------------------------------
+;; schnaqs
+
 (defn no-schnaqs-found
   "Show error message when no meetings were loaded."
   []
@@ -62,15 +88,6 @@
 
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
-
-(defn- show-hubs []
-  (let [hubs @(rf/subscribe [:hubs/all])]
-    [:<>
-     [:hr]
-     [:p.h5.text-muted "Deine Hubs"]
-     (for [hub hubs]
-       [:article {:key (:hub/keycloak-name hub)}
-        [common/avatar (:hub/name hub)]])]))
 
 (defn feed-navigation []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
