@@ -1,8 +1,7 @@
 (ns schnaq.interface.views.user.edit-hubs
   (:require [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.settings :as elements]
+            [schnaq.interface.views.user.settings :as settings]
             [schnaq.interface.views.hub.common :as hub]))
 
 (defn- show-hubs []
@@ -13,13 +12,7 @@
        [:h4.text-gray-600 (labels :user.settings.hubs/empty)]
        [hub/hub-list hubs])]))
 
-(defn- content []
-  [pages/with-nav
-   {:page/heading (labels :user/edit-hubs)}
-   [elements/user-view
-    [show-hubs]]])
-
 (defn view []
-  [content])
+  [settings/user-view :user/edit-hubs [show-hubs]])
 
 

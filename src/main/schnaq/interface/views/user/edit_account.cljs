@@ -6,7 +6,6 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.settings :as settings]))
 
 (defn name-input
@@ -39,13 +38,8 @@
         [:button.btn.button-primary
          (labels :user.settings.button/change-account-information)]]]]]))
 
-(defn- content []
-  [pages/with-nav
-   {:page/heading (labels :user/edit-account)}
-   [settings/user-view [change-user-info]]])
-
 (defn view []
-  [content])
+  [settings/user-view :user/edit-account [change-user-info]])
 
 
 ;; ----------------------------------------------------------------------------
