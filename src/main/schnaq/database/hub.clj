@@ -3,7 +3,7 @@
             [ghostwheel.core :refer [>defn]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
-            [schnaq.meeting.database :refer [transact] :as main-db]
+            [schnaq.meeting.database :refer [transact fast-pull] :as main-db]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 
@@ -58,3 +58,11 @@
          (map main-db/merge-entity-and-transaction)
          flatten)
     :db/ident))
+
+(>defn change-hub-name
+  "Change a hub's name."
+  [keycloak-name new-name]
+  [string? string? :ret ::specs/hub]
+  (transact [[:db/add [:hub/keycloak-name keycloak-name]
+              :hub/name new-name]])
+  (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern))
