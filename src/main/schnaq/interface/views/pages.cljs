@@ -92,7 +92,8 @@
   [::page-options vector? vector? vector? :ret vector?]
   (with-nav
     options
-    [:div.row
-     [:div.col-md-3 left]
-     [:div.col-md-6 middle]
-     [:div.col-md-3 right]]))
+    [:section.container-fluid.px-3.py-3
+     [:div.row
+      [:div.col-12.col-md-3 left]
+      [:div.col-12.col-md-6 middle]
+      [:div.col-12.col-md-3 right]]]))
