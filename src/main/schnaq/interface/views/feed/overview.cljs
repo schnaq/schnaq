@@ -81,10 +81,11 @@
 
 (defn- feed-button [label on-click-fn focused?]
   (let [button-class (if focused? "feed-button-focused" "feed-button")]
-    [:button
-     {:class button-class :type "button"
-      :on-click on-click-fn}
-     [:h5 (labels label)]]))
+    [:article
+     [:button
+      {:class button-class :type "button"
+       :on-click on-click-fn}
+      [:span (labels label)]]]))
 
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
