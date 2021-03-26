@@ -34,20 +34,21 @@
             [schnaq.interface.views.feedback.admin]
             [schnaq.interface.views.feedback.collect]
             [schnaq.interface.views.feedback.survey]
-            [schnaq.interface.views.graph.view]
             [schnaq.interface.views.graph.settings]
+            [schnaq.interface.views.graph.view]
             [schnaq.interface.views.howto.how-to]
+            [schnaq.interface.views.hub.overview]
+            [schnaq.interface.views.loading]
             [schnaq.interface.views.meeting.meetings]
             [schnaq.interface.views.meeting.overview]
             [schnaq.interface.views.modals.modal]
-            [schnaq.interface.views.navbar]
             [schnaq.interface.views.navbar.user-management]
+            [schnaq.interface.views.navbar]
             [schnaq.interface.views.notifications]
             [schnaq.interface.views.pages]
             [schnaq.interface.views.privacy]
             [schnaq.interface.views.schnaq.create]
             [schnaq.interface.views.schnaq.visited]
-            [schnaq.interface.views.loading]
             [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]
             [taoensso.timbre :as log]))
@@ -84,7 +85,7 @@
   "Entrypoint into the application."
   []
   (navigation/init-routes!)
-  (rf/dispatch-sync [:initialise-db])                       ;; put a value into application state
+  (rf/dispatch-sync [:initialize/schnaq])                   ;; put a value into application state
   (language/init-language)
   (render)                                                  ;; mount the application's ui into '<div id="app" />'
   (say-hello)

@@ -7,14 +7,6 @@
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/value
     :db/doc "User is identified by the nickname, when using the site without an account."}
-   {:db/ident :user/upvotes
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "All upvotes the user gave."}
-   {:db/ident :user/downvotes
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "All downvotes the user gave."}
 
    ;; Registered Users. Their names are not unique, the keycloak-id is.
    {:db/ident :user.registered/keycloak-id
@@ -75,6 +67,14 @@
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one
     :db/doc "A marker whether the statement has been marked as deleted."}
+   {:db/ident :statement/upvotes
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "A list of users that upvoted the statement."}
+   {:db/ident :statement/downvotes
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "A list of users that downvoted the statement."}
 
    ;; Argument Types
    {:db/ident :argument.type/support}

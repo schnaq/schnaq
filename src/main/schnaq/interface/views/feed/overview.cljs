@@ -9,6 +9,32 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]))
 
+;; -----------------------------------------------------------------------------
+;; Hubs
+
+(defn- single-hub
+  "Display a single hub."
+  [{:hub/keys [keycloak-name name]}]
+  [:article
+   [:a.btn.btn-link {:href (reitfe/href :routes/hub {:keycloak-name keycloak-name})}
+    [common/identicon name 32]
+    [:span.pl-2 name]]])
+
+(defn- show-hubs
+  "Show all hubs for a user."
+  []
+  (when-let [hubs @(rf/subscribe [:hubs/all])]
+    [:section.feed-hublist
+     [:hr]
+     [:p.h5.text-muted.pb-2 "Deine Hubs"]
+     (for [[keycloak-name hub] hubs]
+       (with-meta
+         [single-hub hub]
+         {:key keycloak-name}))]))
+
+;; -----------------------------------------------------------------------------
+;; schnaqs
+
 (defn no-schnaqs-found
   "Show error message when no meetings were loaded."
   []
@@ -18,7 +44,7 @@
      "🙈 "
      (labels :schnaqs.not-found/alert-lead)]
     [:p (labels :schnaqs.not-found/alert-body)]
-    [:div.btn.btn-outline-primary
+    [:button.btn.btn-outline-primary
      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
      (labels :nav.schnaqs/create-schnaq)]]])
 
@@ -55,11 +81,10 @@
 
 (defn- feed-button [label on-click-fn focused?]
   (let [button-class (if focused? "feed-button-focused" "feed-button")]
-    [:div
-     [:button
-      {:class button-class :type "button"
-       :on-click on-click-fn}
-      [:span (labels label)]]]))
+    [:button
+     {:class button-class :type "button"
+      :on-click on-click-fn}
+     [:h5 (labels label)]]))
 
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
@@ -69,7 +94,7 @@
         current-feed @(rf/subscribe [:feed/get-current])
         public-feed? (= current-feed :public)
         personal-feed? (= current-feed :personal)]
-    [:div
+    [:section
      [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
      [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
      (when-not (nil? edit-hash)
@@ -78,7 +103,8 @@
                        {:share-hash share-hash :edit-hash edit-hash}])])
      (when-not toolbelt/production?
        [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
-     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]]))
+     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]
+     [show-hubs]]))
 
 (defn about-button [label href-link]
   [:div.btn-block
@@ -88,10 +114,6 @@
 (defn feed-extra-information []
   [:div.feed-extra-info.text-right
    [:div.btn-group-vertical
-    [about-button :footer.buttons/about-us "https://disqtec.com/ueber-uns"]
-    [about-button :nav/blog "https://schnaq.com/blog/"]
-    [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
-    [about-button :router/privacy (reitfe/href :routes/privacy)]
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
