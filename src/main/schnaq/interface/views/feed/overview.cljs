@@ -43,7 +43,7 @@
      [:div.px-4
       [badges/static-info-badges schnaq]]]))
 
-(defn- schnaq-list-view
+(defn schnaq-list-view
   "Shows a list of schnaqs."
   [subscription-vector]
   [:div.meetings-list
