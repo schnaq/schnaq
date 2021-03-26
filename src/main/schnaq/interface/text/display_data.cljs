@@ -474,6 +474,7 @@
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
+        :hubs/heading "Your Hubs"
         :hub/heading "Personal %s Hub"
         :hub.add.schnaq.success/title "Schnaq added!"
         :hub.add.schnaq.success/body "The schnaq has been added to your hub successfully."
@@ -957,6 +958,7 @@
         :loading.placeholder/lead "Daten werden geladen..."
         :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
+        :hubs/heading "Deine Hubs"
         :hub/heading "Persönlicher %s Hub"
         :hub.add.schnaq.success/title "Schnaq hinzugefügt!"
         :hub.add.schnaq.success/body "Der schnaq wurde deinem Hub erfolgreich hinzugefügt."
