@@ -65,7 +65,7 @@
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
 
-(defn- feed-navigation []
+(defn feed-navigation []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         current-feed @(rf/subscribe [:feed/get-current])
         public-feed? (= current-feed :public)
@@ -94,32 +94,18 @@
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
-(defn feed-page-desktop [subscription-vector]
-  [:div.row.px-0.mx-0.py-3
-   [:div.col-3.py-3
-    [feed-navigation]]
-   [:div.col-6.py-3.px-5
-    [schnaq-list-view subscription-vector]]
-   [:div.col-3.py-3
-    [feed-extra-information]]])
-
-(defn feed-page-mobile [subscription-vector]
-  [:div.my-3
-   [schnaq-list-view subscription-vector]])
-
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
   schnaqs."
   [subscription-vector page-header]
   [keyword? keyword? :ret vector?]
-  [pages/with-nav
+  [pages/three-column-layout
    {:page/heading (labels page-header)
     :page/subheading (labels :schnaqs/subheader)}
-   [:div.container-fluid.px-0
-    [toolbelt/desktop-mobile-switch
-     [feed-page-desktop subscription-vector]
-     [feed-page-mobile subscription-vector]]]])
+   [feed-navigation]
+   [schnaq-list-view subscription-vector]
+   [feed-extra-information]])
 
 (defn public-discussions-view
   "Render all public discussions."
