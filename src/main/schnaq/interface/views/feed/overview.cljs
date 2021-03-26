@@ -93,7 +93,7 @@
     (labels label)]])
 
 (defn feed-extra-information []
-  [:div.feed-extra-info.text-right
+  [:div.feed-extra-info
    [:div.btn-group-vertical
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])

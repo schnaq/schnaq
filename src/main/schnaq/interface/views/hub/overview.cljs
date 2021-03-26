@@ -32,21 +32,18 @@
   "Additional hub settings that are displayed in the feed."
   []
   [:div.mx-2
-   [:label (labels :hub.add.schnaq.input/label)]
-   [:form.pb-3
+   [:form.pb-3.w-75
     {:on-submit (fn [e]
                   (js-wrap/prevent-default e)
                   (println e)
                   (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
-    [:div.form-row
-     [:div.col
-      [:input.form-control {:name "schnaq-add-input"
-                            :required true
-                            :placeholder (labels :hub.add.schnaq.input/placeholder)}]]
-     [:div.col
-      [:button.btn.btn-secondary
-       {:type "submit"}
-       (labels :hub.add.schnaq.input/button)]]]]])
+    [:label (labels :hub.add.schnaq.input/label)]
+    [:input.form-control {:name "schnaq-add-input"
+                          :required true
+                          :placeholder (labels :hub.add.schnaq.input/placeholder)}]
+    [:button.btn.btn-secondary.mt-1
+     {:type "submit"}
+     (labels :hub.add.schnaq.input/button)]]])
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
@@ -56,10 +53,11 @@
   [pages/three-column-layout
    {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
    [feed/feed-navigation]
+   [feed/schnaq-list-view [:hubs/schnaqs keycloak-name]]
    [:<>
     [hub-settings]
-    [feed/schnaq-list-view [:hubs/schnaqs keycloak-name]]]
-   [feed/feed-extra-information]])
+    [:hr]
+    [feed/feed-extra-information]]])
 
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."
