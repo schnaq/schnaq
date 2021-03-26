@@ -310,12 +310,12 @@
         :user/edit-account "manage account information"
         :user/edit-hubs "manage hubs"
         :user.settings "Settings"
-        :user.keycloak-settings "advanced settings"
+        :user.keycloak-settings "Advanced Settings"
         :user.settings/info "User infos"
         :user.settings/hubs "Hubs"
-        :user.settings/change-name "change name"
-        :user.settings.button/change-account-information "save changes"
-        :user.hubs/show "Your hubs"
+        :user.settings/change-name "Change Name"
+        :user.settings.button/change-account-information "Save Changes"
+        :user.hubs/show "Your Hubs"
         :user.hubs/empty "No hubs assigned"
 
 

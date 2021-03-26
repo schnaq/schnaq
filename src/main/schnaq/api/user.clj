@@ -1,6 +1,6 @@
 (ns schnaq.api.user
   (:require [compojure.core :refer [PUT routes wrap-routes context]]
-            [ring.util.http-response :refer [ok bad-request]]
+            [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
             [schnaq.database.user :as user-db]
             [taoensso.timbre :as log]))
@@ -17,9 +17,7 @@
   [{:keys [body-params identity]}]
   (let [{:keys [display-name]} body-params
         {:keys [id]} identity]
-    (if id
-      (ok {:updated-user (user-db/update-user-name id display-name)})
-      (bad-request {:error "User does not exist!"}))))
+    (ok {:updated-user (user-db/update-user-name id display-name)})))
 
 (def user-routes
   (->

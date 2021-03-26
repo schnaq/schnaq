@@ -1,6 +1,7 @@
 (ns schnaq.database.user-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.user :as db]
+            [schnaq.meeting.database :refer [fast-pull]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -30,3 +31,16 @@
     (let [new-user (db/add-user-if-not-exists "For Sure a new User that does Not exist")]
       (is (int? new-user))
       (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
+
+(deftest change-user-name
+  (testing "Test update user name"
+    (let [id "test-id-abcdefg"
+          name "Tester"
+          name-new "New Tester"
+          user (db/register-new-user {:id id :preferred_username name})
+          updated-user (db/update-user-name id name-new)
+          current-name (:user.registered/display-name user)
+          updated-name (:user.registered/display-name updated-user)]
+      (is (not (= current-name updated-name)))
+      (is (= name current-name))
+      (is (= name-new updated-name)))))

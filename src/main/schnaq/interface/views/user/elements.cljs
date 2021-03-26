@@ -17,8 +17,8 @@
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
-(defn- current-user [user]
-  (let [user-name (get-in user [:names :display])]
+(defn- current-user []
+  (let [user-name @(rf/subscribe [:user/display-name])]
     [:<>
      [:h6.text-gray-600.mb-4 (labels :user.settings)]
      [:div.pl-4
@@ -43,25 +43,25 @@
      [edit-user-navigation-button :user.settings/info :user/edit :routes/user-manage-account manage-account?]
      [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes/user-manage-hubs manage-hubs?]]))
 
-(defn- user-panel [user]
+(defn- user-panel []
   [:div
-   [current-user user]
+   [current-user]
    [:hr.my-4]
    [user-navigation]])
 
-(defn- user-view-desktop [user content]
+(defn- user-view-desktop [content]
   [:div.container-fluid
    [:div.row.px-0.mx-0
     [:div.col-3.py-4.px-5
-     [user-panel user]]
+     [user-panel]]
     [:div.col-6.py-4
      content]
     [:div.col-3.py-4
      [extra-information]]]])
 
-(defn user-view [user content]
+(defn user-view [content]
   [toolbelt/desktop-mobile-switch
-   [user-view-desktop user content]
+   [user-view-desktop content]
    content])
 
 ;; events

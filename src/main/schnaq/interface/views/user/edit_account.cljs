@@ -11,16 +11,16 @@
 
 (defn name-input
   "The input form for the display name."
-  [display-name]
-  [:<>
-   [:input#user-display-name.form-control.form-title.form-border-bottom.mb-2
-    {:type "text"
-     :autoComplete "off"
-     :defaultValue display-name
-     :required true}]])
+  []
+  (let [display-name @(rf/subscribe [:user/display-name])]
+    [:input#user-display-name.form-control.form-title.form-border-bottom.mb-2
+     {:type "text"
+      :autoComplete "off"
+      :defaultValue display-name
+      :required true}]))
 
-(defn- change-user-info [user]
-  (let [display-name (get-in user [:names :display])]
+(defn- change-user-info []
+  (let [display-name (rf/subscribe [:user/display-name])]
     [:div.manage-account-content.shadow-straight-light
      [:h4.text-gray-600.mb-5 (labels :user.settings/change-name)]
      [:form
@@ -30,7 +30,7 @@
                       (rf/dispatch [:user.name/update display-name])))}
       [:div.d-flex.flex-row
        [:div.mr-4 [common/avatar display-name 50]]
-       [name-input display-name]]
+       [name-input]]
       [:div.row.pt-5
        [:div.col.text-left.my-3
         [:a.btn.button-secondary {:href config/keycloak-profile-page}
@@ -40,11 +40,9 @@
          (labels :user.settings.button/change-account-information)]]]]]))
 
 (defn- content []
-  (let [user @(rf/subscribe [:user/data])]
-    [pages/with-nav
-     {:page/heading (labels :user/edit-account)}
-     [elements/user-view user
-      [change-user-info user]]]))
+  [pages/with-nav
+   {:page/heading (labels :user/edit-account)}
+   [elements/user-view [change-user-info]]])
 
 (defn view []
   [content])
@@ -55,6 +53,11 @@
   :user/data
   (fn [db]
     (get-in db [:user])))
+
+(rf/reg-sub
+  :user/groups
+  (fn [db]
+    (get-in db [:user :groups])))
 
 (rf/reg-event-fx
   :user.name/update
