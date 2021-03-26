@@ -70,18 +70,22 @@
         current-feed @(rf/subscribe [:feed/get-current])
         public-feed? (= current-feed :public)
         personal-feed? (= current-feed :personal)]
-    [:section
-     [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
-     [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
-     (when-not (nil? edit-hash)
-       [feed-button :nav.schnaqs/last-added
-        #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center
-                       {:share-hash share-hash :edit-hash edit-hash}])])
-     (when-not toolbelt/production?
-       [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
-     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]
-     [:hr]
-     [hub/list-hubs-with-heading]]))
+    [:<>
+     [:section.row
+      [:div.col-6.col-md-12
+       [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
+       [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
+       (when-not (nil? edit-hash)
+         [feed-button :nav.schnaqs/last-added
+          #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center
+                         {:share-hash share-hash :edit-hash edit-hash}])])
+       (when-not toolbelt/production?
+         [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
+       [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]]
+      [:div.col-md-12.col-6
+       [:hr.d-none.d-md-block]
+       [hub/list-hubs-with-heading]]]
+     [:hr.d-block.d-md-none]]))
 
 (defn- about-button [label href-link]
   [:div.btn-block
