@@ -53,11 +53,12 @@
           [:div.feature-text-box
            [:p (labels :how-to/ask-question-2)
             [:a {:href (reitfe/href :routes/how-to)}
-             (labels :how-to/answer-question)]]
-           [:button.btn.button-secondary-small
-            {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
-            [:p.card-text (labels :how-to/answer-dont-show-again)]]]]
+             (labels :how-to/answer-question)]]]]
          [:div.col-12.col-lg-4.offset-lg-1
+          [:div.text-right
+           [:button.btn.button-secondary-small.mb-3
+            {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
+            [:i {:class (str "m-auto fas " (fa :cross))}]]]
           [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
           [:video.video-scalable {:auto-play true :loop true :muted true :plays-inline true}
            [:source {:src (video video-key-webm) :type "video/webm"}]
