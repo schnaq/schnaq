@@ -32,7 +32,7 @@
 (defn hub-settings
   "Additional hub settings that are displayed in the feed."
   []
-  [:<>
+  [:div.mx-2
    [:label (labels :hub.add.schnaq.input/label)]
    [:form.pb-3
     {:on-submit (fn [e]
@@ -41,8 +41,7 @@
                   (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
     [:div.form-row
      [:div.col
-      [:input.form-control {:id "schnaq-add-input"
-                            :name "hub-schnaq-input"
+      [:input.form-control {:name "schnaq-add-input"
                             :required true
                             :placeholder (labels :hub.add.schnaq.input/placeholder)}]]
      [:div.col
@@ -60,7 +59,11 @@
    [:div.col-3.py-3
     [feed/feed-extra-information]]])
 
-;; TODO mobile umstellen
+(defn hub-page-mobile [subscription-vector]
+  [:div.my-3
+   [hub-settings]
+   [feed/schnaq-list-view subscription-vector]])
+
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
   uniquely refers to a hub."
@@ -71,7 +74,7 @@
    [:div.container-fluid.px-0
     [toolbelt/desktop-mobile-switch
      [hub-page-desktop [:hubs/schnaqs keycloak-name]]
-     [feed/feed-page-mobile [:hubs/schnaqs keycloak-name]]]]])
+     [hub-page-mobile [:hubs/schnaqs keycloak-name]]]]])
 
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."
