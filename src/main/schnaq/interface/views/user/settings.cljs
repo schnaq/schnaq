@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.user.elements
+(ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [fa labels]]

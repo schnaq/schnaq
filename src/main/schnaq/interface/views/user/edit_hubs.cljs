@@ -2,7 +2,7 @@
   (:require [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.elements :as elements]
+            [schnaq.interface.views.user.settings :as elements]
             [schnaq.interface.views.hub.common :as hub]))
 
 (defn- show-hubs []

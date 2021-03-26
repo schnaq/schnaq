@@ -7,7 +7,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.elements :as elements]))
+            [schnaq.interface.views.user.settings :as elements]))
 
 (defn name-input
   "The input form for the display name."
