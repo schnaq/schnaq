@@ -1,5 +1,5 @@
 (ns schnaq.api.hub
-  (:require [compojure.core :refer [GET POST routes wrap-routes context]]
+  (:require [compojure.core :refer [GET POST DELETE routes wrap-routes context]]
             [ring.util.http-response :refer [ok forbidden bad-request]]
             [schnaq.auth :as auth]
             [schnaq.meeting.database :refer [fast-pull]]
@@ -39,6 +39,15 @@
         (bad-request {:message "The discussion could not be found."}))
       (forbidden {:message "You are not a member of the group."}))))
 
+(defn- remove-schnaq-from-hub
+  "Removes a schnaq from the specified hub. Only happens when the caller is member of the hub."
+  [{:keys [params identity]}]
+  (let [{:keys [keycloak-name share-hash]} params]
+    (if (some #{keycloak-name} (:groups identity))
+      (ok {:hub (hub-db/remove-discussion-from-hub [:hub/keycloak-name keycloak-name]
+                                                   [:discussion/share-hash share-hash])})
+      (forbidden {:message "You are not a member of the group."}))))
+
 (def hub-routes
   (->
     (routes
@@ -46,6 +55,7 @@
         (GET "/personal" [] all-hubs-for-user))
       (context "/hub" []
         (GET "/:keycloak-name" [] hub-by-keycloak-name)
-        (POST "/:keycloak-name/add" [] add-schnaq-to-hub)))
+        (POST "/:keycloak-name/add" [] add-schnaq-to-hub)
+        (DELETE "/:keycloak-name/remove" [] remove-schnaq-from-hub)))
     (wrap-routes auth/auth-middleware)
     (wrap-routes auth/wrap-jwt-authentication)))
