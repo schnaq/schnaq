@@ -47,7 +47,7 @@
      [:div.col
       [:button.btn.btn-secondary
        {:type "submit"}
-       "Add schnaq to hub"]]]]])
+       (labels :hub.add.schnaq.input/button)]]]]])
 
 (defn hub-page-desktop [subscription-vector]
   [:div.row.px-0.mx-0.py-3

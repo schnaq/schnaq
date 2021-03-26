@@ -480,7 +480,8 @@
         :hub.add.schnaq.error/title "Schnaq was not added!"
         :hub.add.schnaq.error/body "The schnaq could not be added or found. Please check your input and try again."
         :hub.add.schnaq.input/label "Add schnaq to Hub"
-        :hub.add.schnaq.input/placeholder "Schnaq-URL e.g. https://schnaq.com/schnaq/… or share-code"}
+        :hub.add.schnaq.input/placeholder "Schnaq-URL e.g. https://schnaq.com/schnaq/… or share-code"
+        :hub.add.schnaq.input/button "Add schnaq"}
    :de {;; Common
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -963,7 +964,8 @@
         :hub.add.schnaq.error/title "Fehler beim hinzufügen!"
         :hub.add.schnaq.error/body "Der schnaq konnte nicht gefunden oder hinzugefügt werden. Bitte versuchen Sie es noch einmal."
         :hub.add.schnaq.input/label "schnaq hinzufügen"
-        :hub.add.schnaq.input/placeholder "Schnaq-URL z.B. https://schnaq.com/schnaq/… oder Teil-Code"}})
+        :hub.add.schnaq.input/placeholder "Schnaq-URL z.B. https://schnaq.com/schnaq/… oder Teil-Code"
+        :hub.add.schnaq.input/button "schnaq hinzufügen"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
