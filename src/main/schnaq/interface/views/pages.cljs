@@ -85,3 +85,14 @@
     [:<>
      [navbar/navbar]
      body]]])
+
+(>defn three-column-layout
+  "Use three column layout to display page."
+  [options left middle right]
+  [::page-options vector? vector? vector? :ret vector?]
+  (with-nav
+    options
+    [:div.row
+     [:div.col-md-3 left]
+     [:div.col-md-6 middle]
+     [:div.col-md-3 right]]))
