@@ -50,11 +50,6 @@
 
 ;; ----------------------------------------------------------------------------
 
-(rf/reg-sub
-  :user/groups
-  (fn [db]
-    (get-in db [:user :groups])))
-
 (rf/reg-event-fx
   :user.name/update
   (fn [{:keys [db]} [_ new-display-name]]
