@@ -97,9 +97,9 @@
         [badges/static-info-badges schnaq]]]]
      [:div.col-1
       [:button.btn.btn-secondary.w-100
-       ;; TODO remove only after asking a second time
-       {:title "Remove schnaq from hub"
-        :on-click #(rf/dispatch [:hub.remove/schnaq share-hash])}
+       {:title (labels :hub.remove.schnaq/tooltip)
+        :on-click #(when (js/confirm (labels :hub.remove.schnaq/prompt))
+                     (rf/dispatch [:hub.remove/schnaq share-hash]))}
        [:i.fas.fa-minus-square]]]]))
 
 (>defn- hub-index
