@@ -307,6 +307,17 @@
         :user.profile/star-tooltip "You're an admin!\n\"With great power comes great responsibility.\""
         :user.action/link-copied "Link copied!"
         :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
+        :user/edit-account "Manage Account Information"
+        :user/edit-hubs "Manage Hubs"
+        :user.settings "Settings"
+        :user.keycloak-settings "Advanced Settings"
+        :user.settings/info "User infos"
+        :user.settings/hubs "Hubs"
+        :user.settings/change-name "Change Name"
+        :user.settings.button/change-account-information "Save Changes"
+        :user.settings.hubs/show "Your Hubs"
+        :user.settings.hubs/empty "No hubs assigned"
+
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -474,14 +485,14 @@
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
+        :hubs/heading "Your Hubs"
         :hub/heading "Personal %s Hub"
         :hub.add.schnaq.success/title "Schnaq added!"
         :hub.add.schnaq.success/body "The schnaq has been added to your hub successfully."
-        :hub.add.schnaq.error/title "Schnaq was not added!"
+        :hub.add.schnaq.error/title "schnaq was not added!"
         :hub.add.schnaq.error/body "The schnaq could not be added or found. Please check your input and try again."
-        :hub.add.schnaq.input/label "Add schnaq to Hub"
-        :hub.add.schnaq.input/placeholder "Schnaq-URL e.g. https://schnaq.com/schnaq/… or share-code"
-        :hub.add.schnaq.input/button "Add schnaq"}
+        :hub.add.schnaq.input/button "Add schnaq"
+        :hub.add.schnaq.input/placeholder "schnaq-URL e.g. https://schnaq.com/schnaq/… or share-code"}
    :de {;; Common
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -789,6 +800,16 @@
         :user.profile/star-tooltip "Du bist ein Admin!\n\"Aus großer Kraft folgt große Verantwortung.\""
         :user.action/link-copied "Link kopiert!"
         :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
+        :user/edit-account "Benutzerkonto verwalten"
+        :user/edit-hubs "Hubs verwalten"
+        :user.settings "Einstellungen"
+        :user.keycloak-settings "Erweiterte Einstellungen"
+        :user.settings/info "Persönliche Informationen"
+        :user.settings/hubs "Hubs"
+        :user.settings/change-name "Namen ändern"
+        :user.settings.button/change-account-information "Änderungen speichern"
+        :user.settings.hubs/show "Deine Hubs"
+        :user.settings.hubs/empty "Keinen Hubs zugewiesen"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
@@ -958,11 +979,12 @@
         :loading.placeholder/lead "Daten werden geladen..."
         :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
+        :hubs/heading "Deine Hubs"
         :hub/heading "Persönlicher %s Hub"
         :hub.add.schnaq.success/title "Schnaq hinzugefügt!"
-        :hub.add.schnaq.success/body "Der schnaq wurde Ihrem Hub erfolgreich hinzugefügt."
-        :hub.add.schnaq.error/title "Fehler beim hinzufügen!"
-        :hub.add.schnaq.error/body "Der schnaq konnte nicht gefunden oder hinzugefügt werden. Bitte versuchen Sie es noch einmal."
+        :hub.add.schnaq.success/body "Der schnaq wurde deinem Hub erfolgreich hinzugefügt."
+        :hub.add.schnaq.error/title "Fehler beim Hinzufügen!"
+        :hub.add.schnaq.error/body "Der schnaq konnte nicht gefunden oder hinzugefügt werden. Bitte versuche es noch einmal."
         :hub.add.schnaq.input/label "schnaq hinzufügen"
         :hub.add.schnaq.input/placeholder "Schnaq-URL z.B. https://schnaq.com/schnaq/… oder Teil-Code"
         :hub.add.schnaq.input/button "schnaq hinzufügen"}})
@@ -1085,7 +1107,9 @@
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
      :user/group "fa-users"
+     :user/group-edit "fa-users-cog"
      :user/lock "fa-user-lock"
+     :user/edit "fa-user-edit"
      :user/shield "fa-user-shield"}))
 
 (defn colors

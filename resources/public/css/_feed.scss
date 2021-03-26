@@ -5,6 +5,8 @@
   @include button-template;
   background-color: transparent;
   box-shadow: none;
+  font-size: 1.25rem;
+  font-weight: bolder;
 
   &:hover {
     background-color: $white-shade;

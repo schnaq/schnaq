@@ -2,19 +2,8 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
-            [goog.dom :as gdom]
-            [goog.dom.classes :as gclasses]
             [schnaq.interface.config :refer [config]]
             [oops.core :refer [oset! oget]]))
-
-(>defn add-or-remove-class
-  "Add or delete a certain class, depending on the evaluation of the predicate."
-  [element-id predicate? class]
-  [string? boolean? string? :ret boolean?]
-  (let [element (gdom/getElement element-id)]
-    (if predicate?
-      (gclasses/add element class)
-      (gclasses/remove element class))))
 
 (def production?
   "Checks the configuration for the current environment."

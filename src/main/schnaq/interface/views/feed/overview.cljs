@@ -5,11 +5,12 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
+            [schnaq.interface.views.hub.common :as hub]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]))
 
-(defn no-schnaqs-found
+(defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
   []
   [common/delayed-fade-in
@@ -18,11 +19,11 @@
      "🙈 "
      (labels :schnaqs.not-found/alert-lead)]
     [:p (labels :schnaqs.not-found/alert-body)]
-    [:div.btn.btn-outline-primary
+    [:button.btn.btn-outline-primary
      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
      (labels :nav.schnaqs/create-schnaq)]]])
 
-(defn schnaq-entry
+(defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq]
   (let [share-hash (:discussion/share-hash schnaq)
@@ -55,11 +56,11 @@
 
 (defn- feed-button [label on-click-fn focused?]
   (let [button-class (if focused? "feed-button-focused" "feed-button")]
-    [:div
+    [:article
      [:button
       {:class button-class :type "button"
        :on-click on-click-fn}
-      [:h5 (labels label)]]]))
+      [:span (labels label)]]]))
 
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
@@ -69,18 +70,24 @@
         current-feed @(rf/subscribe [:feed/get-current])
         public-feed? (= current-feed :public)
         personal-feed? (= current-feed :personal)]
-    [:div
-     [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
-     [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
-     (when-not (nil? edit-hash)
-       [feed-button :nav.schnaqs/last-added
-        #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center
-                       {:share-hash share-hash :edit-hash edit-hash}])])
-     (when-not toolbelt/production?
-       [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
-     [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]]))
+    [:<>
+     [:section.row
+      [:div.col-6.col-md-12
+       [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
+       [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
+       (when-not (nil? edit-hash)
+         [feed-button :nav.schnaqs/last-added
+          #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center
+                         {:share-hash share-hash :edit-hash edit-hash}])])
+       (when-not toolbelt/production?
+         [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
+       [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]]
+      [:div.col-md-12.col-6
+       [:hr.d-none.d-md-block]
+       [hub/list-hubs-with-heading]]]
+     [:hr.d-block.d-md-none]]))
 
-(defn about-button [label href-link]
+(defn- about-button [label href-link]
   [:div.btn-block
    [:a.btn.btn-outline-primary.rounded-2.w-100 {:href href-link}
     (labels label)]])
@@ -88,25 +95,8 @@
 (defn feed-extra-information []
   [:div.feed-extra-info.text-right
    [:div.btn-group-vertical
-    [about-button :footer.buttons/about-us "https://disqtec.com/ueber-uns"]
-    [about-button :nav/blog "https://schnaq.com/blog/"]
-    [about-button :footer.buttons/legal-note "https://disqtec.com/impressum"]
-    [about-button :router/privacy (reitfe/href :routes/privacy)]
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
-
-(defn feed-page-desktop [subscription-vector]
-  [:div.row.px-0.mx-0.py-3
-   [:div.col-3.py-3
-    [feed-navigation]]
-   [:div.col-6.py-3.px-5
-    [schnaq-list-view subscription-vector]]
-   [:div.col-3.py-3
-    [feed-extra-information]]])
-
-(defn feed-page-mobile [subscription-vector]
-  [:div.my-3
-   [schnaq-list-view subscription-vector]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
@@ -114,13 +104,12 @@
   schnaqs."
   [subscription-vector page-header]
   [keyword? keyword? :ret vector?]
-  [pages/with-nav
+  [pages/three-column-layout
    {:page/heading (labels page-header)
     :page/subheading (labels :schnaqs/subheader)}
-   [:div.container-fluid.px-0
-    [toolbelt/desktop-mobile-switch
-     [feed-page-desktop subscription-vector]
-     [feed-page-mobile subscription-vector]]]])
+   [feed-navigation]
+   [schnaq-list-view subscription-vector]
+   [feed-extra-information]])
 
 (defn public-discussions-view
   "Render all public discussions."

@@ -6,7 +6,6 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.pages :as pages]))
 
@@ -49,32 +48,18 @@
        {:type "submit"}
        (labels :hub.add.schnaq.input/button)]]]]])
 
-(defn hub-page-desktop [subscription-vector]
-  [:div.row.px-0.mx-0.py-3
-   [:div.col-3.py-3
-    [feed/feed-navigation]]
-   [:div.col-6.py-3.px-5
-    [hub-settings]
-    [feed/schnaq-list-view subscription-vector]]
-   [:div.col-3.py-3
-    [feed/feed-extra-information]]])
-
-(defn hub-page-mobile [subscription-vector]
-  [:div.my-3
-   [hub-settings]
-   [feed/schnaq-list-view subscription-vector]])
-
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
   uniquely refers to a hub."
   [keycloak-name]
   [string? :ret vector?]
-  [pages/with-nav
+  [pages/three-column-layout
    {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
-   [:div.container-fluid.px-0
-    [toolbelt/desktop-mobile-switch
-     [hub-page-desktop [:hubs/schnaqs keycloak-name]]
-     [hub-page-mobile [:hubs/schnaqs keycloak-name]]]]])
+   [feed/feed-navigation]
+   [:<>
+    [hub-settings]
+    [feed/schnaq-list-view [:hubs/schnaqs keycloak-name]]]
+   [feed/feed-extra-information]])
 
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."
@@ -110,3 +95,7 @@
   :hubs/schnaqs
   (fn [db [_ keycloak-name]]
     (get-in db [:hubs keycloak-name :hub/schnaqs] [])))
+
+(rf/reg-sub
+  :hubs/all
+  (fn [db] (:hubs db)))
