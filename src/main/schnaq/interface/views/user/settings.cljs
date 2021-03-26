@@ -1,21 +1,14 @@
 (ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.feed.overview :as feed-overview]))
 
 (defn about-button [label href-link]
   [:div.btn-block
    [:a.btn.btn-outline-primary.rounded-2.w-100 {:href href-link}
     (labels label)]])
-
-(defn extra-information []
-  [:div.feed-extra-info.text-right
-   [:div.btn-group-vertical
-    [about-button :router/privacy (reitfe/href :routes/privacy)]
-    [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-    [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
 (defn- current-user []
   (let [user-name @(rf/subscribe [:user/display-name])]
@@ -55,7 +48,7 @@
     [:div.col-6.py-4
      content]
     [:div.col-3.py-4
-     [extra-information]]]])
+     [feed-overview/feed-extra-information]]]])
 
 (defn user-view [content]
   [toolbelt/desktop-mobile-switch

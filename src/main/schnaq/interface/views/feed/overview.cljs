@@ -88,7 +88,7 @@
    [:a.btn.btn-outline-primary.rounded-2.w-100 {:href href-link}
     (labels label)]])
 
-(defn- feed-extra-information []
+(defn feed-extra-information []
   [:div.feed-extra-info.text-right
    [:div.btn-group-vertical
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
