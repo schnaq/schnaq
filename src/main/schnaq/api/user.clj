@@ -12,10 +12,17 @@
             ", username:" (:preferred_username identity))
   (ok {:registered-user (user-db/register-new-user identity)}))
 
+(defn- change-display-name
+  "change the display name of a registered user"
+  [{:keys [body-params identity]}]
+  (let [{:keys [display-name]} body-params]
+    (ok {:updated-user (user-db/update-display-name (:id identity) display-name)})))
+
 (def user-routes
   (->
     (routes
       (context "/user" []
-        (PUT "/register" [] register-user-if-they-not-exist)))
+        (PUT "/register" [] register-user-if-they-not-exist)
+        (PUT "/name" [] change-display-name)))
     (wrap-routes auth/auth-middleware)
     (wrap-routes auth/wrap-jwt-authentication)))
