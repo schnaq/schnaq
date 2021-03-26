@@ -10,10 +10,7 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]))
 
-;; -----------------------------------------------------------------------------
-;; schnaqs
-
-(defn no-schnaqs-found
+(defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
   []
   [common/delayed-fade-in
@@ -26,7 +23,7 @@
      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
      (labels :nav.schnaqs/create-schnaq)]]])
 
-(defn schnaq-entry
+(defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq]
   (let [share-hash (:discussion/share-hash schnaq)
@@ -68,7 +65,7 @@
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
 
-(defn feed-navigation []
+(defn- feed-navigation []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         current-feed @(rf/subscribe [:feed/get-current])
         public-feed? (= current-feed :public)
@@ -86,18 +83,18 @@
      [:hr]
      [hub/list-hubs-with-heading]]))
 
-(defn about-button [label href-link]
+(defn- about-button [label href-link]
   [:div.btn-block
    [:a.btn.btn-outline-primary.rounded-2.w-100 {:href href-link}
     (labels label)]])
 
-(defn feed-extra-information []
+(defn- feed-extra-information []
   [:div.feed-extra-info.text-right
    [:div.btn-group-vertical
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
-(defn feed-page-desktop [subscription-vector]
+(defn- feed-page-desktop [subscription-vector]
   [:div.row.px-0.mx-0.py-3
    [:div.col-3.py-3
     [feed-navigation]]
@@ -106,7 +103,7 @@
    [:div.col-3.py-3
     [feed-extra-information]]])
 
-(defn feed-page-mobile [subscription-vector]
+(defn- feed-page-mobile [subscription-vector]
   [:div.my-3
    [schnaq-list-view subscription-vector]])
 
