@@ -6,6 +6,8 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.discussion.badges :as badges]
+            [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.pages :as pages]))
 
@@ -41,9 +43,35 @@
     [:input.form-control {:name "schnaq-add-input"
                           :required true
                           :placeholder (labels :hub.add.schnaq.input/placeholder)}]
-    [:button.btn.btn-secondary.mt-1
+    [:button.btn.btn-primary.mt-1
      {:type "submit"}
      (labels :hub.add.schnaq.input/button)]]])
+
+(defn- schnaq-entry-with-deletion
+  "Displays a single schnaq of the schnaq list for the hub, with the option to delete it from the hub."
+  [schnaq]
+  (let [share-hash (:discussion/share-hash schnaq)
+        title (:discussion/title schnaq)
+        url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
+    [:div.row
+     [:div.col-11
+      [:article.meeting-entry
+       {:on-click (fn []
+                    (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                  {:share-hash share-hash}])
+                    (rf/dispatch [:schnaq/select-current schnaq]))}
+       [:div [:img.meeting-entry-title-header-image {:src url}]]
+       [:div.px-4.d-flex
+        [:div.meeting-entry-title
+         [:h5 title]]
+        [:div.ml-auto.mt-3
+         [badges/read-only-badge schnaq]]]
+       [:div.px-4
+        [badges/static-info-badges schnaq]]]]
+     [:div.col-1
+      [:button.btn.btn-secondary.w-100
+       {:title "Remove schnaq from hub"}
+       [:i.fas.fa-minus-square]]]]))
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
@@ -53,7 +81,7 @@
   [pages/three-column-layout
    {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
    [feed/feed-navigation]
-   [feed/schnaq-list-view [:hubs/schnaqs keycloak-name]]
+   [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
    [:<>
     [hub-settings]
     [:hr]
