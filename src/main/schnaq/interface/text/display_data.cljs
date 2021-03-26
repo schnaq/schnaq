@@ -474,7 +474,13 @@
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
-        :hub/heading "Personal %s Hub"}
+        :hub/heading "Personal %s Hub"
+        :hub.add.schnaq.success/title "Schnaq added!"
+        :hub.add.schnaq.success/body "The schnaq has been added to your hub successfully."
+        :hub.add.schnaq.error/title "Schnaq was not added!"
+        :hub.add.schnaq.error/body "The schnaq could not be added or found. Please check your input and try again."
+        :hub.add.schnaq.input/label "Add schnaq to Hub"
+        :hub.add.schnaq.input/placeholder "Schnaq-URL e.g. https://schnaq.com/schnaq/… or share-code"}
    :de {;; Common
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -951,7 +957,13 @@
         :loading.placeholder/lead "Daten werden geladen..."
         :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
-        :hub/heading "Persönlicher %s Hub"}})
+        :hub/heading "Persönlicher %s Hub"
+        :hub.add.schnaq.success/title "Schnaq hinzugefügt!"
+        :hub.add.schnaq.success/body "Der schnaq wurde Ihrem Hub erfolgreich hinzugefügt."
+        :hub.add.schnaq.error/title "Fehler beim hinzufügen!"
+        :hub.add.schnaq.error/body "Der schnaq konnte nicht gefunden oder hinzugefügt werden. Bitte versuchen Sie es noch einmal."
+        :hub.add.schnaq.input/label "schnaq hinzufügen"
+        :hub.add.schnaq.input/placeholder "Schnaq-URL z.B. https://schnaq.com/schnaq/… oder Teil-Code"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup

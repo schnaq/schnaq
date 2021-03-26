@@ -12,16 +12,16 @@
 
 ;; Note: this lives in the common namespace to prevent circles through the routes import
 (rf/reg-event-fx
-  ;; TODO on error show what went wrong
   :hub.schnaqs/add
   (fn [{:keys [db]} [_ form]]
-    (let [url-input (oget form :schnaq-add-input :value)
-          share-hash (-> (routes/parse-route url-input) :path-params :share-hash)
+    (let [schnaq-input (oget form :schnaq-add-input :value)
+          share-hash (or (-> (routes/parse-route schnaq-input) :path-params :share-hash)
+                         schnaq-input)
           keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      (println keycloak-name share-hash)
       {:fx [(http/xhrio-request db :post (gstring/format "/hub/%s/add" keycloak-name)
-                                [:hub.schnaqs/add-success]
-                                {:share-hash share-hash})]})))
+                                [:hub.schnaqs/add-success form]
+                                {:share-hash share-hash}
+                                [:hub.schnaqs/add-failure])]})))
 
 (rf/reg-event-fx
   :load/schnaqs

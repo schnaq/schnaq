@@ -11,17 +11,29 @@
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
-  ;; TODO show success notification
   :hub.schnaqs/add-success
-  (fn [{:keys [db]} [_ response]]
+  (fn [{:keys [db]} [_ form response]]
     (let [hub (:hub response)]
-      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)})))
+      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :hub.add.schnaq.success/title)
+                                       :body (labels :hub.add.schnaq.success/body)
+                                       :context :success}]]
+            [:form/clear form]]})))
+
+(rf/reg-event-fx
+  :hub.schnaqs/add-failure
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :hub.add.schnaq.error/title)
+                                     :body (labels :hub.add.schnaq.error/body)
+                                     :context :danger}]]]}))
 
 (defn hub-settings
   "Additional hub settings that are displayed in the feed."
   []
   [:<>
-   [:label "schnaq hinzufügen"]
+   [:label (labels :hub.add.schnaq.input/label)]
    [:form.pb-3
     {:on-submit (fn [e]
                   (js-wrap/prevent-default e)
@@ -32,7 +44,7 @@
       [:input.form-control {:id "schnaq-add-input"
                             :name "hub-schnaq-input"
                             :required true
-                            :placeholder "Schnaq-URL z.B. https://schnaq.com/schnaq/…"}]]
+                            :placeholder (labels :hub.add.schnaq.input/placeholder)}]]
      [:div.col
       [:button.btn.btn-secondary
        {:type "submit"}
@@ -47,7 +59,6 @@
     [feed/schnaq-list-view subscription-vector]]
    [:div.col-3.py-3
     [feed/feed-extra-information]]])
-
 
 ;; TODO mobile umstellen
 (>defn- hub-index
