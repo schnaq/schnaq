@@ -43,7 +43,8 @@
                  (rf/dispatch [:keycloak/load-user-profile])
                  (rf/dispatch [:keycloak.roles/extract])
                  (rf/dispatch [:keycloak/check-token-validity])
-                 (rf/dispatch [:user/register result])))
+                 (rf/dispatch [:user/register result])
+                 (rf/dispatch [:hubs.personal/load])))
         (.catch (fn [_]
                   (rf/dispatch [:user/authenticated! false])
                   (error-to-console "Silent check with keycloak failed."))))))

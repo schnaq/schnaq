@@ -5,32 +5,10 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
+            [schnaq.interface.views.hub.common :as hub]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]))
-
-;; -----------------------------------------------------------------------------
-;; Hubs
-
-(defn- single-hub
-  "Display a single hub."
-  [{:hub/keys [keycloak-name name]}]
-  [:article
-   [:a.btn.btn-link {:href (reitfe/href :routes/hub {:keycloak-name keycloak-name})}
-    [common/identicon name 32]
-    [:span.pl-2 name]]])
-
-(defn- show-hubs
-  "Show all hubs for a user."
-  []
-  (when-let [hubs @(rf/subscribe [:hubs/all])]
-    [:section.feed-hublist
-     [:hr]
-     [:p.h5.text-muted.pb-2 "Deine Hubs"]
-     (for [[keycloak-name hub] hubs]
-       (with-meta
-         [single-hub hub]
-         {:key keycloak-name}))]))
 
 ;; -----------------------------------------------------------------------------
 ;; schnaqs
@@ -105,7 +83,8 @@
      (when-not toolbelt/production?
        [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
      [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]
-     [show-hubs]]))
+     [:hr]
+     [hub/list-hubs-with-heading]]))
 
 (defn about-button [label href-link]
   [:div.btn-block

@@ -485,7 +485,8 @@
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
-        :hub/heading "Personal %s Hub"}
+        :hub/heading "Personal %s Hub"
+        :hubs/heading "Your Hubs"}
    :de {;; Common
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -972,7 +973,8 @@
         :loading.placeholder/lead "Daten werden geladen..."
         :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
-        :hub/heading "Persönlicher %s Hub"}})
+        :hub/heading "Persönlicher %s Hub"
+        :hubs/heading "Deine Hubs"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
