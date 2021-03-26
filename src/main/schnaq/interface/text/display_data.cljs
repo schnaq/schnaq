@@ -307,6 +307,17 @@
         :user.profile/star-tooltip "You're an admin!\n\"With great power comes great responsibility.\""
         :user.action/link-copied "Link copied!"
         :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
+        :user/edit-account "Manage Account Information"
+        :user/edit-hubs "Manage Hubs"
+        :user.settings "Settings"
+        :user.keycloak-settings "Advanced Settings"
+        :user.settings/info "User infos"
+        :user.settings/hubs "Hubs"
+        :user.settings/change-name "Change Name"
+        :user.settings.button/change-account-information "Save Changes"
+        :user.settings.hubs/show "Your Hubs"
+        :user.settings.hubs/empty "No hubs assigned"
+
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -788,6 +799,16 @@
         :user.profile/star-tooltip "Du bist ein Admin!\n\"Aus großer Kraft folgt große Verantwortung.\""
         :user.action/link-copied "Link kopiert!"
         :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
+        :user/edit-account "Benutzerkonto verwalten"
+        :user/edit-hubs "Hubs verwalten"
+        :user.settings "Einstellungen"
+        :user.keycloak-settings "Erweiterte Einstellungen"
+        :user.settings/info "Persönliche Informationen"
+        :user.settings/hubs "Hubs"
+        :user.settings/change-name "Namen ändern"
+        :user.settings.button/change-account-information "Änderungen speichern"
+        :user.settings.hubs/show "Deine Hubs"
+        :user.settings.hubs/empty "Keinen Hubs zugewiesen"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
@@ -1083,7 +1104,9 @@
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
      :user/group "fa-users"
+     :user/group-edit "fa-users-cog"
      :user/lock "fa-user-lock"
+     :user/edit "fa-user-edit"
      :user/shield "fa-user-shield"}))
 
 (defn colors
