@@ -7,7 +7,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.settings :as elements]))
+            [schnaq.interface.views.user.settings :as settings]))
 
 (defn name-input
   "The input form for the display name."
@@ -42,7 +42,7 @@
 (defn- content []
   [pages/with-nav
    {:page/heading (labels :user/edit-account)}
-   [elements/user-view [change-user-info]]])
+   [settings/user-view [change-user-info]]])
 
 (defn view []
   [content])
