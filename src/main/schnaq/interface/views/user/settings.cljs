@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [fa labels]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.feed.overview :as feed-overview]))
+            [schnaq.interface.views.feed.overview :as feed-overview]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn about-button [label href-link]
   [:div.btn-block
@@ -40,17 +40,9 @@
    [:hr.my-4]
    [user-navigation]])
 
-(defn- user-view-desktop [content]
-  [:div.container-fluid
-   [:div.row.px-0.mx-0
-    [:div.col-3.py-4.px-5
-     [user-panel]]
-    [:div.col-6.py-4
-     content]
-    [:div.col-3.py-4
-     [feed-overview/feed-extra-information]]]])
-
-(defn user-view [content]
-  [toolbelt/desktop-mobile-switch
-   [user-view-desktop content]
-   content])
+(defn user-view [page-heading-label content]
+  [pages/three-column-layout
+   {:page/heading (labels page-heading-label)}
+   [user-panel]
+   content
+   [feed-overview/feed-extra-information]])
