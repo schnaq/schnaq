@@ -94,7 +94,7 @@
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
 
-(defn- feed-page-desktop [subscription-vector]
+(defn feed-page-desktop [subscription-vector]
   [:div.row.px-0.mx-0.py-3
    [:div.col-3.py-3
     [feed-navigation]]
@@ -103,7 +103,7 @@
    [:div.col-3.py-3
     [feed-extra-information]]])
 
-(defn- feed-page-mobile [subscription-vector]
+(defn feed-page-mobile [subscription-vector]
   [:div.my-3
    [schnaq-list-view subscription-vector]])
 
