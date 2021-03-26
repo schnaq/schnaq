@@ -12,15 +12,17 @@
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.feedback.admin :as feedback-admin]
+            [schnaq.interface.views.graph.view :as graph-view]
             [schnaq.interface.views.howto.how-to :as how-to]
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
+            [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.privacy :as privacy]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
-            [schnaq.interface.views.graph.view :as graph-view]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.user.edit-account :as edit-account]
+            [schnaq.interface.views.user.edit-hubs :as edit-hubs]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -68,6 +70,15 @@
      :controllers [{:parameters {:path [:keycloak-name]}
                     :start (fn [{:keys [path]}]
                              (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}]
+   ["user"
+    ["/account"
+     {:name :routes.user.manage/account
+      :view edit-account/view
+      :link-text (labels :user/edit-account)}]
+    ["/hubs"
+     {:name :routes.user.manage/hubs
+      :view edit-hubs/view
+      :link-text (labels :user/edit-hubs)}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center
@@ -99,16 +110,14 @@
       :link-text (labels :router/public-discussions)
       :controllers [{:start (fn []
                               (rf/dispatch [:schnaqs.public/load])
-                              (rf/dispatch [:feed/store-current :public])
-                              (rf/dispatch [:scheduler.after/login [:hubs.personal/load]]))}]}]
+                              (rf/dispatch [:feed/store-current :public]))}]}]
     ["/my"
      {:name :routes.meetings/my-schnaqs
       :view feed/personal-discussions-view
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn []
                               (rf/dispatch [:schnaqs.visited/load])
-                              (rf/dispatch [:feed/store-current :personal])
-                              (rf/dispatch [:scheduler.after/login [:hubs.personal/load]]))}]}]]
+                              (rf/dispatch [:feed/store-current :personal]))}]}]]
    ["schnaq"
     ["/create"
      {:name :routes.schnaq/create

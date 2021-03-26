@@ -30,3 +30,16 @@
     (let [new-user (db/add-user-if-not-exists "For Sure a new User that does Not exist")]
       (is (int? new-user))
       (is (= new-user (db/add-user-if-not-exists "FOR SURE a new User that does Not exist"))))))
+
+(deftest change-user-name
+  (testing "Test update user name"
+    (let [id "test-id-abcdefg"
+          user-name "Tester"
+          name-new "New Tester"
+          user (db/register-new-user {:id id :preferred_username user-name})
+          updated-user (db/update-display-name id name-new)
+          current-name (:user.registered/display-name user)
+          updated-name (:user.registered/display-name updated-user)]
+      (is (not (= current-name updated-name)))
+      (is (= user-name current-name))
+      (is (= name-new updated-name)))))
