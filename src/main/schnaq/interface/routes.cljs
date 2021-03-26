@@ -240,7 +240,6 @@
      :view error-views/true-404-entrypoint
      :link-text (labels :router/true-404-view)}]])
 
-
 (def router
   (reitit-front/router
     routes))
