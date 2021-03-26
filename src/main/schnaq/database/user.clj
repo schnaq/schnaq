@@ -80,7 +80,7 @@
           (get-in [:tempids temp-id])
           (fast-pull registered-user-pattern)))))
 
-(defn update-user-name
+(defn update-display-name
   "Update the name of an existing user"
   [keycloak-id display-name]
   (transact [[:db/add [:user.registered/keycloak-id keycloak-id]

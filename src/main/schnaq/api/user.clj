@@ -15,9 +15,8 @@
 (defn- change-display-name
   "change the display name of a registered user"
   [{:keys [body-params identity]}]
-  (let [{:keys [display-name]} body-params
-        {:keys [id]} identity]
-    (ok {:updated-user (user-db/update-user-name id display-name)})))
+  (let [{:keys [display-name]} body-params]
+    (ok {:updated-user (user-db/update-display-name (:id identity) display-name)})))
 
 (def user-routes
   (->

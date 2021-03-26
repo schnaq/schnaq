@@ -1,7 +1,6 @@
 (ns schnaq.database.user-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.user :as db]
-            [schnaq.meeting.database :refer [fast-pull]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -38,7 +37,7 @@
           name "Tester"
           name-new "New Tester"
           user (db/register-new-user {:id id :preferred_username name})
-          updated-user (db/update-user-name id name-new)
+          updated-user (db/update-display-name id name-new)
           current-name (:user.registered/display-name user)
           updated-name (:user.registered/display-name updated-user)]
       (is (not (= current-name updated-name)))

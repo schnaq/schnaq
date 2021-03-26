@@ -307,16 +307,16 @@
         :user.profile/star-tooltip "You're an admin!\n\"With great power comes great responsibility.\""
         :user.action/link-copied "Link copied!"
         :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
-        :user/edit-account "manage account information"
-        :user/edit-hubs "manage hubs"
+        :user/edit-account "Manage Account Information"
+        :user/edit-hubs "Manage Hubs"
         :user.settings "Settings"
         :user.keycloak-settings "Advanced Settings"
         :user.settings/info "User infos"
         :user.settings/hubs "Hubs"
         :user.settings/change-name "Change Name"
         :user.settings.button/change-account-information "Save Changes"
-        :user.hubs/show "Your Hubs"
-        :user.hubs/empty "No hubs assigned"
+        :user.settings.hubs/show "Your Hubs"
+        :user.settings.hubs/empty "No hubs assigned"
 
 
         ;; Errors
@@ -801,8 +801,8 @@
         :user.settings/hubs "Hubs"
         :user.settings/change-name "Namen ändern"
         :user.settings.button/change-account-information "Änderungen speichern"
-        :user.hubs/show "Deine Hubs"
-        :user.hubs/empty "Keinen Hubs zugewiesen"
+        :user.settings.hubs/show "Deine Hubs"
+        :user.settings.hubs/empty "Keinen Hubs zugewiesen"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"

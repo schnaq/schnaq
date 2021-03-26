@@ -20,14 +20,14 @@
       :required true}]))
 
 (defn- change-user-info []
-  (let [display-name (rf/subscribe [:user/display-name])]
+  (let [display-name @(rf/subscribe [:user/display-name])]
     [:div.manage-account-content.shadow-straight-light
      [:h4.text-gray-600.mb-5 (labels :user.settings/change-name)]
      [:form
       {:on-submit (fn [e]
-                    (let [display-name (oget e [:target :elements :user-display-name :value])]
+                    (let [new-display-name (oget e [:target :elements :user-display-name :value])]
                       (js-wrap/prevent-default e)
-                      (rf/dispatch [:user.name/update display-name])))}
+                      (rf/dispatch [:user.name/update new-display-name])))}
       [:div.d-flex.flex-row
        [:div.mr-4 [common/avatar display-name 50]]
        [name-input]]
@@ -47,12 +47,8 @@
 (defn view []
   [content])
 
-;; subs ;;
 
-(rf/reg-sub
-  :user/data
-  (fn [db]
-    (get-in db [:user])))
+;; ----------------------------------------------------------------------------
 
 (rf/reg-sub
   :user/groups
@@ -70,4 +66,5 @@
 (rf/reg-event-db
   :user.name/update-success
   (fn [db [_ {:keys [updated-user]}]]
-    (assoc-in db [:user :names :display] (get updated-user :user.registered/display-name))))
+    (assoc-in db [:user :names :display]
+              (:user.registered/display-name updated-user))))
