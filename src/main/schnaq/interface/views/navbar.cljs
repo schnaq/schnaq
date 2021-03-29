@@ -27,7 +27,7 @@
 
 (defn- my-schnaqs-link [visited-hashes]
   (when-not (empty? visited-hashes)
-    (create-dropdown-item (reitfe/href :routes.meetings/my-schnaqs)
+    (create-dropdown-item (reitfe/href :routes.schnaqs/personal)
                           :router/my-schnaqs)))
 
 (defn- all-schnaqs-link []
@@ -36,7 +36,7 @@
                           :nav.schnaqs/show-all)))
 
 (defn- all-public-schnaqs-link []
-  (create-dropdown-item (reitfe/href :routes/public-discussions)
+  (create-dropdown-item (reitfe/href :routes.schnaqs/public)
                         :nav.schnaqs/show-all-public))
 
 (defn- blog-link []
@@ -74,7 +74,7 @@
         [toolbelt/desktop-mobile-switch
          ;; desktop view
          [:li.nav-item
-          [:a.nav-link {:role "button" :href (reitfe/href :routes/public-discussions)}
+          [:a.nav-link {:role "button" :href (reitfe/href :routes.schnaqs/public)}
            (labels :nav/schnaqs)]]
          ;; mobile view
          [:li.nav-item.dropdown

@@ -107,19 +107,17 @@
      :link-text (labels :router/how-to)}]
    ["schnaqs"
     ["/public"
-     {:name :routes/public-discussions
+     {:name :routes.schnaqs/public
       :view feed/public-discussions-view
       :link-text (labels :router/public-discussions)
       :controllers [{:start (fn []
-                              (rf/dispatch [:schnaqs.public/load])
-                              (rf/dispatch [:feed/store-current :public]))}]}]
+                              (rf/dispatch [:schnaqs.public/load]))}]}]
     ["/my"
-     {:name :routes.meetings/my-schnaqs
+     {:name :routes.schnaqs/personal
       :view feed/personal-discussions-view
       :link-text (labels :router/my-schnaqs)
       :controllers [{:start (fn []
-                              (rf/dispatch [:schnaqs.visited/load])
-                              (rf/dispatch [:feed/store-current :personal]))}]}]]
+                              (rf/dispatch [:schnaqs.visited/load]))}]}]]
    ["schnaq"
     ["/create"
      {:name :routes.schnaq/create

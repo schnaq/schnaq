@@ -55,7 +55,7 @@
             [:a {:href (reitfe/href :routes/how-to)}
              (labels :how-to/answer-question)]]
            [:p (labels :how-to/question-dont-show-again)
-            [:btn.btn-link.clickable-no-hover
+            [:button.btn.btn-link.clickable-no-hover
              {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
              (labels :how-to/answer-dont-show-again)]]]]
          [:div.col-12.col-lg-4.offset-lg-1

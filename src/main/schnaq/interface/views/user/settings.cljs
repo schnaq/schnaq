@@ -45,4 +45,4 @@
    {:page/heading (labels page-heading-label)}
    [user-panel]
    content
-   [feed-overview/feed-extra-information]])
+   [feed-overview/sidebar-common]])
