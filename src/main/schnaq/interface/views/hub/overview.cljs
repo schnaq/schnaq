@@ -114,7 +114,7 @@
    [:<>
     [hub-settings]
     [:hr]
-    [feed/feed-extra-information]]])
+    [feed/sidebar-common]]])
 
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."

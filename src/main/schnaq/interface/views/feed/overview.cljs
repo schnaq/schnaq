@@ -64,9 +64,6 @@
           :href (reitfe/href route)}
       (labels label)]]))
 
-(defn- feed-button-navigate [label route focused?]
-  [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
-
 (defn feed-navigation
   "Navigate between the feeds."
   []
@@ -88,16 +85,18 @@
        [hub/list-hubs-with-heading]]]
      [:hr.d-block.d-md-none]]))
 
-(defn- about-button [label href-link]
+(defn- generic-button
+  ""
+  [label href-link]
   [:a.btn.btn-outline-primary.rounded-2 {:href href-link}
    (labels label)])
 
-(defn feed-extra-information []
+(defn sidebar-common []
   [:section.text-right.pr-3
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
-     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-     [about-button :how-to/button (reitfe/href :routes/how-to)]]]])
+     [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+     [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
@@ -110,7 +109,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view subscription-vector]
-   [feed-extra-information]])
+   [sidebar-common]])
 
 (defn public-discussions-view
   "Render all public discussions."
