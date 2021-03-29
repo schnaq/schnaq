@@ -29,8 +29,3 @@
   @include feed-button-base;
   color: $text-dark;
 }
-
-.feed-extra-info {
-  @include rounded-2;
-  background-color: transparent;
-}

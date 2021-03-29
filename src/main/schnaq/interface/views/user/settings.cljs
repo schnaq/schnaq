@@ -21,13 +21,12 @@
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
         button-class (if (= route current-route) "feed-button-focused"
                                                  "feed-button")]
-    [:div
+    [:article
      [:button
       {:class button-class :type "button"
        :on-click #(rf/dispatch [:navigation/navigate route])}
-      [:div
-       [:i.mr-4 {:class (str "fas " (fa icon))}]
-       [:span (labels label)]]]]))
+      [:i.mr-4 {:class (str "fas " (fa icon))}]
+      [:span (labels label)]]]))
 
 (defn- user-navigation []
   [:<>
@@ -35,7 +34,7 @@
    [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes.user.manage/hubs]])
 
 (defn- user-panel []
-  [:div
+  [:section
    [current-user]
    [:hr.my-4]
    [user-navigation]])

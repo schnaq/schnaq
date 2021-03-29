@@ -111,14 +111,14 @@
        (labels :badges.sort/alphabetical)]]]))
 
 (defn sidebar-common []
-  [:section.pl-2
+  [:section.pl-2.text-center
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
      [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (defn feed-controls []
-  [:div.feed-extra-info
+  [:section
    [sort-options]
    [:hr]
    [sidebar-common]])
