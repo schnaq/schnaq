@@ -11,7 +11,7 @@
   "Query hub by its referenced name in keycloak."
   [request]
   (let [keycloak-name (get-in request [:params :keycloak-name])]
-    (if (auth/member-of-group? request keycloak-name)
+    (if (auth/member-of-group? (:identity request) keycloak-name)
       (let [hub (hub-db/hub-by-keycloak-name keycloak-name)
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
         (ok {:hub processed-hub}))
@@ -28,7 +28,7 @@
   the schnaq is not exclusively tied to another hub. Also check for appropriate group membership."
   [{:keys [params identity]}]
   (let [{:keys [keycloak-name share-hash]} params]
-    (if (some #{keycloak-name} (:groups identity))
+    (if (auth/member-of-group? identity keycloak-name)
       (if (validators/valid-discussion? share-hash)
         ;; NOTE: When hub-exclusive schnaqs are in, check it in the if above.
         (let [discussion-id (:db/id (fast-pull [:discussion/share-hash share-hash] [:db/id]))
@@ -43,7 +43,7 @@
   "Removes a schnaq from the specified hub. Only happens when the caller is member of the hub."
   [{:keys [params identity]}]
   (let [{:keys [keycloak-name share-hash]} params]
-    (if (some #{keycloak-name} (:groups identity))
+    (if (auth/member-of-group? identity keycloak-name)
       (let [hub (hub-db/remove-discussion-from-hub [:hub/keycloak-name keycloak-name]
                                                    [:discussion/share-hash share-hash])
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]

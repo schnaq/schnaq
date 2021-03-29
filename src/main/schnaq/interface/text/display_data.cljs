@@ -997,7 +997,7 @@
         :hub.remove.schnaq.success/title "schnaq entfernt!"
         :hub.remove.schnaq.success/body "Der schnaq wurde erfolgreich aus deinem Hub entfernt."
         :hub.remove.schnaq.error/title "Entfernen fehlgeschlagen!"
-        :hub.remove.schnaq.error/body "Etwas ist beim entfernen schiefgelaufen. Bitte versuche es erneut."
+        :hub.remove.schnaq.error/body "Etwas ist beim Entfernen schiefgelaufen. Bitte versuche es erneut."
         :hub.remove.schnaq/prompt "Soll der schnaq wirklich aus dem Hub entfernt werden?"
         :hub.remove.schnaq/tooltip "Schnaq aus Hub entfernen"}})
 

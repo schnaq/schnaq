@@ -99,7 +99,7 @@
      [:button.btn.btn-secondary.schnaq-delete-button
       {:title (labels :hub.remove.schnaq/tooltip)
        :on-click #(when (js/confirm (labels :hub.remove.schnaq/prompt))
-                   (rf/dispatch [:hub.remove/schnaq share-hash]))}
+                    (rf/dispatch [:hub.remove/schnaq share-hash]))}
       [:i.fas.fa-minus-square]]]))
 
 (>defn- hub-index
