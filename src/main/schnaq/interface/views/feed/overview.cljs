@@ -123,13 +123,6 @@
    [:hr]
    [sidebar-common]])
 
-(defn sidebar-common []
-  [:section.text-right.pr-3
-   [:div.btn-group {:role "group"}
-    [:div.btn-group-vertical
-     [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-     [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
-
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
