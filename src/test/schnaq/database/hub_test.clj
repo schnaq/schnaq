@@ -1,6 +1,5 @@
 (ns schnaq.database.hub-test
   (:require [clojure.test :refer [is are use-fixtures deftest testing]]
-            [schnaq.database.discussion-test-data :as test-data]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :refer [add-discussions-to-hub] :as hub]
             [schnaq.database.hub-test-data :as hub-test-data]
@@ -9,22 +8,21 @@
 
 (use-fixtures :each
               schnaq-toolbelt/init-test-delete-db-fixture
-              #(schnaq-toolbelt/init-test-delete-db-fixture % test-data/public-discussions)
               #(schnaq-toolbelt/init-test-delete-db-fixture % hub-test-data/hub-test-data))
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest add-discussions-to-hub-test
   (let [hub (hub/create-hub "test-hub" "keycloak-name")
-        discussion (first (discussion-db/all-discussions-by-title "Public Test"))
+        discussion (first (discussion-db/all-discussions-by-title "Tapir oder Ameisenbär?"))
         cat-dog-discussion (first (discussion-db/all-discussions-by-title "Cat or Dog?"))]
     (is (empty? (:hub/schnaqs hub)))
     (let [modified-hub (add-discussions-to-hub (:db/id hub) [(:db/id discussion)
                                                              (:db/id cat-dog-discussion)])]
       (is (= 2 (count (:hub/schnaqs modified-hub))))
-      (is (= #{"Public Test" "Cat or Dog?"} (->> modified-hub
-                                                 :hub/schnaqs
-                                                 (map :discussion/title)
-                                                 set))))))
+      (is (= #{"Tapir oder Ameisenbär?" "Cat or Dog?"} (->> modified-hub
+                                                            :hub/schnaqs
+                                                            (map :discussion/title)
+                                                            set))))))
 
 (deftest create-hub-test
   (let [name "porky"
@@ -49,4 +47,4 @@
       (is (contains? (first test-schnaqs) :db/txInstant))
       (is (contains? (second test-schnaqs) :db/txInstant))
       (is (some #{(-> test-schnaqs first :discussion/title)} ["Another Hub Discussion" "Hub Discussion"]))
-      (is (nil? (#'hub/all-schnaqs-for-hub [:hub/keycloak-name "non-existing-hub-12890378hd"]))))))
+      (is (empty? (#'hub/all-schnaqs-for-hub [:hub/keycloak-name "some-empty-hub"]))))))

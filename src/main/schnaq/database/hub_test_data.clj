@@ -16,6 +16,8 @@
   [{:hub/keycloak-name "test-keycloak"
     :hub/name "YouHub"
     :hub/schnaqs hub-schnaqs}
+   {:hub/keycloak-name "some-empty-hub"
+    :hub/name "Phub"}
 
    {:db/id "user/hub-tester"
     :user/nickname "Hub Tester"}])
