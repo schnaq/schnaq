@@ -64,4 +64,4 @@
   "Check if group is available in the JWT token."
   [identity group]
   [map? string? :ret boolean?]
-  (some #(= group %) (:groups identity)))
+  (some #{group} (:groups identity)))
