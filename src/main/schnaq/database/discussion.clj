@@ -50,7 +50,7 @@
   "Holds sensitive information as well."
   (conj discussion-pattern :discussion/edit-hash))
 
-(def ^:private discussion-pattern-minimal
+(def discussion-pattern-minimal
   [:db/id
    :discussion/title
    {:discussion/states [:db/ident]}
@@ -107,7 +107,7 @@
                 '[:find ?statement-ids (count ?children) (distinct ?nickname)
                   :in $ % [?statement-ids ...]
                   :where
-                  ;; We pick a transitive depth of 7 as a sweetspot. The deeper the rule
+                  ;; We pick a transitive depth of 7 as a sweet-spot. The deeper the rule
                   ;; goes, the more complicated and slower the query gets. 10 is too slow
                   ;; for our purposes, but 5 is maybe not deep enough for the typical discussion
                   ;; 7 offers a good speed while being deep enough for most discussions.
@@ -412,8 +412,7 @@
       discussion-pattern main-db/transaction-pattern)
     result
     (map main-db/merge-entity-and-transaction result)
-    (toolbelt/pull-key-up result :db/ident)
-    (sort-by :db/txInstant toolbelt/ascending result)))
+    (toolbelt/pull-key-up result :db/ident)))
 
 (>defn all-statements
   "Returns all statements belonging to a discussion."

@@ -49,10 +49,14 @@
    [schnaq-list-view subscription-vector schnaq-entry])
   ([subscription-vector single-schnaq-component]
    [:div.meetings-list
-    (let [schnaqs @(rf/subscribe subscription-vector)]
+    (let [schnaqs @(rf/subscribe subscription-vector)
+          sort-method @(rf/subscribe [:feed/sort])
+          sorted-schnaqs (if (= :alphabetical sort-method)
+                           (sort-by #(first (:discussion/title %)) schnaqs)
+                           (sort-by :db/txInstant > schnaqs))]
       (if (empty? schnaqs)
         [no-schnaqs-found]
-        (for [schnaq schnaqs]
+        (for [schnaq sorted-schnaqs]
           [:div.pb-4 {:key (:db/id schnaq)}
            [single-schnaq-component schnaq]])))]))
 
@@ -90,12 +94,34 @@
   [:a.btn.btn-outline-primary.rounded-2 {:href href-link}
    (labels label)])
 
+(defn sort-options
+  "Displays the different sort options for feed elements."
+  []
+  (let [sort-method @(rf/subscribe [:feed/sort])]
+    [:section.py-2.pl-2
+     [:span.small.mb-0
+      (labels :badges.sort/sort) [:br]
+      [:button.btn.btn-outline-primary.btn-sm.mx-1
+       {:class (when (= sort-method :time) "active")
+        :on-click #(rf/dispatch [:feed.sort/set :time])}
+       (labels :badges.sort/newest)]
+      [:button.btn.btn-outline-primary.btn-sm
+       {:class (when (= sort-method :alphabetical) "active")
+        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
+       (labels :badges.sort/alphabetical)]]]))
+
 (defn sidebar-common []
-  [:section.text-right.pr-3
+  [:section.pl-2
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
      [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
+
+(defn feed-controls []
+  [:div.feed-extra-info
+   [sort-options]
+   [:hr]
+   [sidebar-common]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
@@ -108,7 +134,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view subscription-vector]
-   [sidebar-common]])
+   [feed-controls]])
 
 (defn public-discussions-view
   "Render all public discussions."
@@ -119,3 +145,13 @@
   "Render all discussions in which the user participated."
   []
   [schnaq-overview [:schnaqs.visited/all] :schnaqs/header])
+
+(rf/reg-event-db
+  :feed.sort/set
+  (fn [db [_ method]]
+    (assoc-in db [:feed :sort] method)))
+
+(rf/reg-sub
+  :feed/sort
+  (fn [db _]
+    (get-in db [:feed :sort] :time)))

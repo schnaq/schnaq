@@ -1,11 +1,18 @@
 (ns schnaq.database.hub
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn]]
+            [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
-            [schnaq.meeting.database :refer [transact fast-pull] :as main-db]
+            [schnaq.meeting.database
+             :refer [transact fast-pull query merge-entity-and-transaction]
+             :as main-db]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
+
+(def ^:private hub-essential-info-pattern
+  [:db/id
+   :hub/name
+   :hub/keycloak-name])
 
 (def ^:private hub-pattern
   [:db/id
@@ -13,12 +20,27 @@
    :hub/keycloak-name
    {:hub/schnaqs discussion-db/discussion-pattern}])
 
+(>defn- all-schnaqs-for-hub
+  "Return all schnaqs belonging to a hub. Includes the tx."
+  [hub-id]
+  [:db/id :ret any?]
+  (as->
+    (query
+      '[:find (pull ?discussions discussion-pattern) (pull ?tx transaction-pattern)
+        :in $ ?hub discussion-pattern transaction-pattern
+        :where [?hub :hub/schnaqs ?discussions]
+        [?discussions :discussion/title _ ?tx]]
+      hub-id discussion-db/discussion-pattern-minimal main-db/transaction-pattern)
+    result
+    (toolbelt/pull-key-up result :db/ident)
+    (map merge-entity-and-transaction result)))
+
 (defn- pull-hub
-  "Pull a hub from the database and pull db/ident up."
+  "Pull a hub from the database and include all txs pull db/ident up."
   [hub-query]
-  (toolbelt/pull-key-up
-    (main-db/fast-pull hub-query hub-pattern)
-    :db/ident))
+  (let [hub (main-db/fast-pull hub-query hub-essential-info-pattern)]
+    (when (:db/id hub)
+      (assoc hub :hub/schnaqs (all-schnaqs-for-hub (:db/id hub))))))
 
 (>defn create-hub
   "Create a hub and reference it to the keycloak-name."

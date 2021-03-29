@@ -112,6 +112,8 @@
    [feed/feed-navigation]
    [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
    [:<>
+    [feed/sort-options]
+    [:hr]
     [hub-settings]
     [:hr]
     [feed/sidebar-common]]])
