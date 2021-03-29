@@ -44,8 +44,10 @@
   [{:keys [params identity]}]
   (let [{:keys [keycloak-name share-hash]} params]
     (if (some #{keycloak-name} (:groups identity))
-      (ok {:hub (hub-db/remove-discussion-from-hub [:hub/keycloak-name keycloak-name]
-                                                   [:discussion/share-hash share-hash])})
+      (let [hub (hub-db/remove-discussion-from-hub [:hub/keycloak-name keycloak-name]
+                                                   [:discussion/share-hash share-hash])
+            processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
+        (ok {:hub processed-hub}))
       (forbidden {:message "You are not a member of the group."}))))
 
 (def hub-routes
