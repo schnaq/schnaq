@@ -1,4 +1,6 @@
+@use 'rounded' as rounded;
 @import 'variables';
+
 
 @mixin button-template {
   border: 0;
@@ -21,11 +23,13 @@
   }
 }
 
-.btn-b-1 {
-  /* stylelint-disable */
-  @extend .btn;
-  /* stylelint-enable */
-  border-radius: 1rem;
+@each $rounded, $value in rounded.$roundings {
+  .btn-#{$rounded} {
+    /* stylelint-disable */
+    @extend .btn;
+    /* stylelint-enable */
+    border-radius: #{$value};
+  }
 }
 
 .button-secondary-b-1 {

@@ -60,7 +60,7 @@
              (labels :how-to/answer-dont-show-again)]]]]
          [:div.col-12.col-lg-4.offset-lg-1
           [:div.text-right
-           [:button.btn-b-1.btn-outline-secondary.mb-3
+           [:button.btn-rounded-2.btn-outline-secondary.mb-3
             {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
             [:i {:class (str "m-auto fas " (fa :cross))}]]]
           [:img.taskbar-background {:src (img-path :how-to/taskbar)}]

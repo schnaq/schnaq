@@ -96,7 +96,7 @@
         [badges/read-only-badge schnaq]]]
       [:div.px-4
        [badges/static-info-badges schnaq]]]
-     [:button.btn.btn-b-1.btn-secondary.schnaq-delete-button
+     [:button.btn.btn-rounded-2.btn-secondary.schnaq-delete-button
       {:title (labels :hub.remove.schnaq/tooltip)
        :on-click #(when (js/confirm (labels :hub.remove.schnaq/prompt))
                     (rf/dispatch [:hub.remove/schnaq share-hash]))}
