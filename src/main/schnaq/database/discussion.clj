@@ -412,8 +412,7 @@
       discussion-pattern main-db/transaction-pattern)
     result
     (map main-db/merge-entity-and-transaction result)
-    (toolbelt/pull-key-up result :db/ident)
-    (sort-by :db/txInstant toolbelt/ascending result)))
+    (toolbelt/pull-key-up result :db/ident)))
 
 (>defn all-statements
   "Returns all statements belonging to a discussion."
