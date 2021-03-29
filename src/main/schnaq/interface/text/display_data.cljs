@@ -1,6 +1,7 @@
 (ns schnaq.interface.text.display-data
   "Texts used as labels in the whole application."
   (:require [schnaq.interface.config :refer [user-language]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [taoensso.tempura :refer [tr]]))
 
 (def ^:private translations
@@ -52,7 +53,8 @@
         :how-to/ask-question "Not sure how to schnaq? "     ;; whitespace intended
         :how-to/ask-question-2 "Still not sure how to use schnaq? " ;; whitespace intended
         :how-to/answer-question "Let us show you how!"
-        :how-to/answer-dont-show-again "Got it! Don't show this tip anymore!"
+        :how-to/question-dont-show-again "Got it? "         ;; whitespace intended
+        :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
         ;; Startpage
         :startpage/heading "Structured Company Knowledge. Completely Automated."
@@ -168,7 +170,7 @@
         :privacy.personal-data/title "Personal Data"
         :privacy.personal-data/body
         [:<> [:p "Per default we only save data that is needed to operate the service. There is no analysis of personal data, and anonymous data of your behavior on our website is only collected, when you explicitly allow us to do so. "]
-         [:p "If you want to support us and allow the analysis, we collect the data with Matomo and save it on our german servers. Matomo is a free and self-hosted alternative to commercial options for website analytics . We do not exchange this data with third parties."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Check your settings"]]]
+         [:p "If you want to support us and allow the analysis, we collect the data with Matomo and save it on our german servers. Matomo is a free and self-hosted alternative to commercial options for website analytics . We do not exchange this data with third parties."] [:p [:button.btn.btn-outline-primary {:on-click (js-wrap/show-js-klaro)} "Check your settings"]]]
         :privacy.localstorage/lead "What data do I send to the server?"
         :privacy.localstorage/title "Data Exchange"
         :privacy.localstorage/body
@@ -547,7 +549,8 @@
         :how-to/ask-question "Nicht sicher wie du schnaq benutzen sollst? " ;; whitespace intended
         :how-to/ask-question-2 "Noch Fragen? "              ;; whitespace intended
         :how-to/answer-question "Schau hier nach!"
-        :how-to/answer-dont-show-again "Verstanden! In Zukunft nicht mehr anzeigen!"
+        :how-to/question-dont-show-again "Verstanden? "     ;; whitespace intended
+        :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
 
 
         ;; Startpage
@@ -668,7 +671,7 @@
         :privacy.made-in-germany/body "Das Entwickler:innenteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf Servern in Deutschland bei Hetzner zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
         :privacy.personal-data/lead "Welche Daten werden erhoben?"
         :privacy.personal-data/title "Persönliche Daten"
-        :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click #(.show js/klaro)} "Einstellungen prüfen"]]]
+        :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click (js-wrap/show-js-klaro)} "Einstellungen prüfen"]]]
         :privacy.localstorage/lead "Welche Daten schicke ich an die Server?"
         :privacy.localstorage/title "Datenaustausch"
         :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten von dir auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicke auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in deinem Browser (im LocalStorage) abgespeichert. Besuchst du dann schnaq erneut, schickt dein Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ kannst du dir die Zugangslinks per E-Mail schicken lassen und hältst so alle für den Betrieb notwendigen Daten selbst in der Hand."]
@@ -1092,6 +1095,7 @@
      :cookie/bite "fa-cookie-bite"
      :cookie/complete "fa-cookie"
      :copy "fa-copy"
+     :cross "fa-times"
      :delete-icon "fa-times-circle"
      :edit "fa-edit"
      :eraser "fa-eraser"

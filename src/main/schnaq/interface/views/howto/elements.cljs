@@ -54,10 +54,15 @@
            [:p (labels :how-to/ask-question-2)
             [:a {:href (reitfe/href :routes/how-to)}
              (labels :how-to/answer-question)]]
-           [:button.btn.button-secondary-small
-            {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
-            [:p.card-text (labels :how-to/answer-dont-show-again)]]]]
+           [:p (labels :how-to/question-dont-show-again)
+            [:btn.btn-link.clickable-no-hover
+             {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
+             (labels :how-to/answer-dont-show-again)]]]]
          [:div.col-12.col-lg-4.offset-lg-1
+          [:div.text-right
+           [:button.btn-rounded-2.btn-outline-secondary.mb-3
+            {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
+            [:i {:class (str "m-auto fas " (fa :cross))}]]]
           [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
           [:video.video-scalable {:auto-play true :loop true :muted true :plays-inline true}
            [:source {:src (video video-key-webm) :type "video/webm"}]
