@@ -54,16 +54,9 @@
     (get-in db [:schnaq :last-added])))
 
 (rf/reg-event-fx
-  :schnaq/error-remove-hashes
-  (fn [_ [_ response]]
-    {:fx [[:dispatch [:ajax.error/as-notification response]]
-          [:localstorage/dissoc :schnaq.last-added/edit-hash]
-          [:localstorage/dissoc :schnaq.last-added/share-hash]]}))
-
-(rf/reg-event-fx
   :schnaq/load-by-hash-as-admin
   (fn [{:keys [db]} [_ share-hash edit-hash]]
     {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
                               {:share-hash share-hash
                                :edit-hash edit-hash}
-                              [:schnaq/error-remove-hashes])]}))
+                              [:ajax.error/as-notification])]}))
