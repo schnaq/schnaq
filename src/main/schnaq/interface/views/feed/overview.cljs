@@ -52,8 +52,8 @@
     (let [schnaqs @(rf/subscribe subscription-vector)
           sort-method @(rf/subscribe [:feed/sort])
           sorted-schnaqs (if (= :alphabetical sort-method)
-                           (sort-by #(first (:discussion/title %)) < schnaqs)
-                           (sort-by :db/txInstant schnaqs))]
+                           (sort-by #(first (:discussion/title %)) schnaqs)
+                           (sort-by :db/txInstant > schnaqs))]
       (if (empty? schnaqs)
         [no-schnaqs-found]
         (for [schnaq sorted-schnaqs]
@@ -98,11 +98,34 @@
    [:a.btn.btn-outline-primary.rounded-2.w-100 {:href href-link}
     (labels label)]])
 
-(defn feed-extra-information []
-  [:div.feed-extra-info
-   [:div.btn-group-vertical
-    [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-    [about-button :how-to/button (reitfe/href :routes/how-to)]]])
+(defn sort-options
+  "Displays the different sort options for feed elements."
+  []
+  (let [sort-method @(rf/subscribe [:feed/sort])]
+    [:section.py-2
+     [:span.small.mb-0
+      (labels :badges.sort/sort) [:br]
+      [:button.btn.btn-outline-primary.btn-sm.mx-1
+       {:class (when (= sort-method :time) "active")
+        :on-click #(rf/dispatch [:feed.sort/set :time])}
+       (labels :badges.sort/newest)]
+      [:button.btn.btn-outline-primary.btn-sm
+       {:class (when (= sort-method :alphabetical) "active")
+        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
+       (labels :badges.sort/alphabetical)]]]))
+
+(defn further-information
+  "Buttons to more information about the service, like CoC and terms of service."
+  []
+  [:<>
+   [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+   [about-button :how-to/button (reitfe/href :routes/how-to)]])
+
+(defn feed-controls []
+  [:div.feed-extra-info.btn-group-vertical
+   [sort-options]
+   [:hr]
+   [further-information]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
@@ -115,7 +138,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view subscription-vector]
-   [feed-extra-information]])
+   [feed-controls]])
 
 (defn public-discussions-view
   "Render all public discussions."
