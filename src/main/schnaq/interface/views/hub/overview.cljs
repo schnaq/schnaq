@@ -80,27 +80,27 @@
   (let [share-hash (:discussion/share-hash schnaq)
         title (:discussion/title schnaq)
         url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
-    [:div.row
-     [:div.col-11
-      [:article.meeting-entry
-       {:on-click (fn []
-                    (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                  {:share-hash share-hash}])
-                    (rf/dispatch [:schnaq/select-current schnaq]))}
-       [:div [:img.meeting-entry-title-header-image {:src url}]]
-       [:div.px-4.d-flex
-        [:div.meeting-entry-title
-         [:h5 title]]
-        [:div.ml-auto.mt-3
-         [badges/read-only-badge schnaq]]]
-       [:div.px-4
-        [badges/static-info-badges schnaq]]]]
-     [:div.col-1
-      [:button.btn.btn-secondary.w-100
-       {:title (labels :hub.remove.schnaq/tooltip)
-        :on-click #(when (js/confirm (labels :hub.remove.schnaq/prompt))
-                     (rf/dispatch [:hub.remove/schnaq share-hash]))}
-       [:i.fas.fa-minus-square]]]]))
+    [:article
+     {;; The position is needed for the delete button's absolute positioning to work
+      :style {:position :relative}}
+     [:article.meeting-entry
+      {:on-click (fn []
+                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                 {:share-hash share-hash}])
+                   (rf/dispatch [:schnaq/select-current schnaq]))}
+      [:div [:img.meeting-entry-title-header-image {:src url}]]
+      [:div.px-4.d-flex
+       [:div.meeting-entry-title
+        [:h5 title]]
+       [:div.ml-auto.mt-3
+        [badges/read-only-badge schnaq]]]
+      [:div.px-4
+       [badges/static-info-badges schnaq]]]
+     [:button.btn.btn-secondary.schnaq-delete-button
+      {:title (labels :hub.remove.schnaq/tooltip)
+       :on-click #(when (js/confirm (labels :hub.remove.schnaq/prompt))
+                   (rf/dispatch [:hub.remove/schnaq share-hash]))}
+      [:i.fas.fa-minus-square]]]))
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which

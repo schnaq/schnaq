@@ -85,3 +85,10 @@
 .secondary-color {
   color: $secondary-selected;
 }
+
+.schnaq-delete-button {
+  display: inline-block;
+  position: absolute;
+  right: 30px;
+  top: 30px;
+}
