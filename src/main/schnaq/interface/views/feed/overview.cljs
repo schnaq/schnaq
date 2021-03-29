@@ -90,15 +90,15 @@
      [:hr.d-block.d-md-none]]))
 
 (defn- about-button [label href-link]
-  [:div.btn-block
-   [:a.btn.btn-outline-primary.rounded-2.w-100 {:href href-link}
-    (labels label)]])
+  [:a.btn.btn-outline-primary.rounded-2 {:href href-link}
+   (labels label)])
 
 (defn feed-extra-information []
-  [:div.feed-extra-info
-   [:div.btn-group-vertical
-    [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-    [about-button :how-to/button (reitfe/href :routes/how-to)]]])
+  [:section.text-right.pr-3
+   [:div.btn-group {:role "group"}
+    [:div.btn-group-vertical
+     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+     [about-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
