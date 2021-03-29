@@ -21,6 +21,13 @@
   }
 }
 
+.btn-b-1 {
+  /* stylelint-disable */
+  @extend .btn;
+  /* stylelint-enable */
+  border-radius: 1rem;
+}
+
 .button-secondary-b-1 {
   /* stylelint-disable */
   @extend .button-secondary;
@@ -84,4 +91,8 @@
 
 .secondary-color {
   color: $secondary-selected;
+}
+
+.btn-outline-secondary:hover {
+  color: $white;
 }
