@@ -20,8 +20,13 @@
 (defn- all-hubs-for-user
   "Return all valid hubs for a user."
   [request]
-  (let [keycloak-names (get-in request [:identity :groups])]
-    (ok {:hubs (hub-db/hubs-by-keycloak-names keycloak-names)})))
+  (let [keycloak-names (get-in request [:identity :groups])
+        hubs (hub-db/hubs-by-keycloak-names keycloak-names)
+        processed-hubs (map
+                         #(update % :hub/schnaqs
+                                  (fn [hub] (map processors/add-meta-info-to-schnaq hub)))
+                         hubs)]
+    (ok {:hubs processed-hubs})))
 
 (defn- add-schnaq-to-hub
   "Adds a schnaq to a hub identified by the group-name. Only allow the adding when
