@@ -49,10 +49,14 @@
    [schnaq-list-view subscription-vector schnaq-entry])
   ([subscription-vector single-schnaq-component]
    [:div.meetings-list
-    (let [schnaqs @(rf/subscribe subscription-vector)]
+    (let [schnaqs @(rf/subscribe subscription-vector)
+          sort-method @(rf/subscribe [:feed/sort])
+          sorted-schnaqs (if (= :alphabetical sort-method)
+                           (sort-by #(first (:discussion/title %)) < schnaqs)
+                           (sort-by :db/txInstant schnaqs))]
       (if (empty? schnaqs)
         [no-schnaqs-found]
-        (for [schnaq schnaqs]
+        (for [schnaq sorted-schnaqs]
           [:div.pb-4 {:key (:db/id schnaq)}
            [single-schnaq-component schnaq]])))]))
 
@@ -123,7 +127,15 @@
   []
   [schnaq-overview [:schnaqs.visited/all] :schnaqs/header])
 
-;; events
+(rf/reg-event-db
+  :feed.sort/set
+  (fn [db [_ method]]
+    (assoc-in db [:feed :sort] method)))
+
+(rf/reg-sub
+  :feed/sort
+  (fn [db _]
+    (get-in db [:feed :sort] :time)))
 
 (rf/reg-event-db
   :feed/store-current
