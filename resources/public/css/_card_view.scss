@@ -1,7 +1,9 @@
+@use 'shadows' as shadows;
 @import 'rounded';
 @import 'variables';
 
-.topic-view {
+.panel-white {
+  @include shadows.shadow-straight-light;
   @include rounded-2;
   background: $white;
   overflow: hidden;
@@ -13,6 +15,7 @@
 }
 
 .card-rounded {
+  @include shadows.shadow-straight-light;
   @include rounded-2;
   border: 0;
   overflow: hidden;

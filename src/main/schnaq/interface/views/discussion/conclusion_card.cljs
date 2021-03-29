@@ -71,7 +71,7 @@
   (let [fa-label (logic/attitude->symbol attitude)
         display-name (or (-> statement :statement/author :user.registered/display-name)
                          (-> statement :statement/author :user/nickname))]
-    [:div.card.card-rounded.clickable.shadow-straight-light
+    [:article.card.card-rounded.clickable
      {:class (str "statement-card-" (name attitude))}
      [:div.d-flex.flex-row
       [:div.m-auto

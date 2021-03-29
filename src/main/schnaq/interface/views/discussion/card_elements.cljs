@@ -246,7 +246,7 @@
 (defn- topic-bubble [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
     (common/set-website-title! title)
-    [:div.topic-view.shadow-straight-light.md-4
+    [:div.panel-white.md-4
      [:div.discussion-light-background content]]))
 
 (rf/reg-event-db

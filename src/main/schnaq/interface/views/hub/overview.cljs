@@ -102,6 +102,15 @@
                     (rf/dispatch [:hub.remove/schnaq share-hash]))}
       [:i {:class (str "m-auto fas " (fa :cross))}]]]))
 
+(defn- sidebar-right []
+  [:section.panel-white
+   [feed/sort-options]
+   [:hr]
+   [hub-settings]
+   [:hr]
+   [feed/sidebar-common]])
+
+
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
   uniquely refers to a hub."
@@ -111,12 +120,7 @@
    {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
    [feed/feed-navigation]
    [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
-   [:<>
-    [feed/sort-options]
-    [:hr]
-    [hub-settings]
-    [:hr]
-    [feed/sidebar-common]]])
+   [sidebar-right]])
 
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."
@@ -124,6 +128,9 @@
   (let [keycloak-name (get-in @(rf/subscribe [:navigation/current-route])
                               [:path-params :keycloak-name])]
     [hub-index keycloak-name]))
+
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
   :hub/load

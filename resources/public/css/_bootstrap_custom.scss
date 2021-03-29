@@ -32,4 +32,9 @@ $theme-colors: (
   }
 }
 
+.navbar-primary {
+  background: $primary-light;
+  color: $text-light;
+}
+
 @import '../../../node_modules/bootstrap/scss/bootstrap';

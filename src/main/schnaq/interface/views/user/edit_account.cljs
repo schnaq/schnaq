@@ -20,7 +20,7 @@
 
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])]
-    [:div.manage-account-content.shadow-straight-light
+    [:div.panel-white.p-5
      [:h4.text-gray-600.mb-5 (labels :user.settings/change-name)]
      [:form
       {:on-submit (fn [e]
