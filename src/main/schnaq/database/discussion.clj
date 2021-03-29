@@ -8,7 +8,8 @@
             [schnaq.database.user :as user-db]
             [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
             [schnaq.toolbelt :as toolbelt]
-            [taoensso.timbre :as log])
+            [taoensso.timbre :as log]
+            [schnaq.user :as user])
   (:import (clojure.lang ExceptionInfo)))
 
 (def statement-pattern
@@ -449,7 +450,7 @@
   [:discussion/share-hash :ret sequential?]
   (map
     (fn [statement]
-      {:author (-> statement :statement/author :user/nickname)
+      {:author (user/statement-author statement)
        :id (:db/id statement)
        :label (if (:statement/deleted? statement)
                 config/deleted-statement-text

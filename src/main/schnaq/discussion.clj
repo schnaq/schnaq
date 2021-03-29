@@ -4,7 +4,8 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.meeting.database :refer [fast-pull]]))
+            [schnaq.meeting.database :refer [fast-pull]]
+            [schnaq.user :as user]))
 
 (>defn- premise-ids
   "Return all premise-ids of a single argument."
@@ -99,10 +100,10 @@
   [share-hash]
   [:discussion/share-hash :ret map?]
   (let [discussion (discussion-db/discussion-by-share-hash share-hash)
-        author (fast-pull (-> discussion :discussion/author :db/id) user-db/minimal-user-pattern)]
+        author (fast-pull (-> discussion :discussion/author :db/id) user-db/combined-user-pattern)]
     {:id share-hash
      :label (:discussion/title discussion)
-     :author (:user/nickname author)
+     :author (user/display-name author)
      :type :agenda}))
 
 (>defn- starting-links

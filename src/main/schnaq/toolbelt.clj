@@ -2,7 +2,6 @@
   "Utility functions supporting the backend."
   (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn ?]])
-
   (:import (clojure.lang PersistentArrayMap)
            (java.io File)
            (java.time Instant)
