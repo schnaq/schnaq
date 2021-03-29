@@ -51,3 +51,6 @@
   [new-url]
   [string? :ret nil?]
   (.replace (.-location js/window) new-url))
+
+(defn show-js-klaro []
+  #(.show js/klaro))
