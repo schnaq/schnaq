@@ -3,7 +3,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.discussion.badges :as badges]
@@ -96,11 +96,11 @@
         [badges/read-only-badge schnaq]]]
       [:div.px-4
        [badges/static-info-badges schnaq]]]
-     [:button.btn.btn-secondary.schnaq-delete-button
+     [:button.btn.btn-b-1.btn-secondary.schnaq-delete-button
       {:title (labels :hub.remove.schnaq/tooltip)
        :on-click #(when (js/confirm (labels :hub.remove.schnaq/prompt))
                     (rf/dispatch [:hub.remove/schnaq share-hash]))}
-      [:i.fas.fa-minus-square]]]))
+      [:i {:class (str "m-auto fas " (fa :cross))}]]]))
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
