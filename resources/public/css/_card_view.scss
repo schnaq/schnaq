@@ -1,11 +1,10 @@
-@use 'shadows' as shadows;
-@import 'rounded';
-@import 'variables';
+@use 'rounded' as rounded;
+@use 'variables' as vars;
 
 .panel-white {
-  @include shadows.shadow-straight-light;
-  @include rounded-2;
-  background: $white;
+  @extend .shadow-sm;
+  @include rounded.rounded-2;
+  background: vars.$white;
   overflow: hidden;
   padding: 0.5rem 1rem;
 
@@ -15,26 +14,26 @@
 }
 
 .card-rounded {
-  @include shadows.shadow-straight-light;
-  @include rounded-2;
+  @extend .shadow-sm;
+  @include rounded.rounded-2;
   border: 0;
   overflow: hidden;
 
   @include media-breakpoint-down(sm) {
-    @include rounded-0;
+    @include rounded.rounded-0;
   }
 }
 
 .card-view {
-  background: $white;
+  background: vars.$white;
 
   &:hover {
-    background: $white-shade;
+    background: vars.$white-shade;
   }
 }
 
 .card-view-type {
-  color: $gray-100;
+  color: vars.$gray-100;
   margin-left: 0.1rem;
   margin-right: 0.1rem;
   padding-left: 0.1rem;
@@ -46,7 +45,7 @@
 }
 
 .card-history {
-  background: $white;
+  background: vars.$white;
   border: 0;
   border-radius: 1rem;
   overflow: hidden;
@@ -59,15 +58,15 @@
   }
 
   &:hover {
-    background: $white-shade;
+    background: vars.$white-shade;
   }
 }
 
 .card-history-home {
-  background: $white;
+  background: vars.$white;
   border: 0;
   border-radius: 1rem;
-  color: $gray-700;
+  color: vars.$gray-700;
   min-height: 4.5rem;
   overflow: hidden;
   padding: 1.5rem 1rem;
@@ -79,12 +78,12 @@
   }
 
   &:hover {
-    background: $white-shade;
+    background: vars.$white-shade;
   }
 }
 
 .line-divider {
-  background: $gray-200;
+  background: vars.$gray-200;
   margin-left: auto;
   margin-right: auto;
   min-height: 0.01rem;
@@ -92,15 +91,15 @@
 }
 
 .discussion-light-background {
-  background: $white;
-  color: $gray-900;
+  background: vars.$white;
+  color: vars.$gray-900;
   white-space: pre-line;
 }
 
 .discussion-input-container {
-  background: $gray-200;
+  background: vars.$gray-200;
   border: 0;
-  border-bottom: 2px solid $white;
+  border-bottom: 2px solid vars.$white;
   border-radius: 2rem;
   overflow: hidden;
   padding: 0.5rem 1rem;
@@ -109,11 +108,11 @@
 .primary-icon-button {
   background: transparent;
   border: 0;
-  color: $primary;
+  color: vars.$primary;
   outline: none;
 
   &:hover {
-    color: $primary-selected;
+    color: vars.$primary-selected;
   }
 
   &:focus {
@@ -130,24 +129,24 @@
   &:focus {
     background: transparent;
     box-shadow: none;
-    color: $gray-900;
+    color: vars.$gray-900;
   }
 
   &::placeholder {
     background: transparent;
-    color: $gray-600;
+    color: vars.$gray-600;
   }
 }
 
 .mobile-attitude-agree {
   @include media-breakpoint-down(sm) {
-    background: $primary;
+    background: vars.$primary;
   }
 }
 
 .mobile-attitude-disagree {
   @include media-breakpoint-down(sm) {
-    background: $secondary;
+    background: vars.$secondary;
   }
 }
 
@@ -158,27 +157,27 @@
 
 .statement-card-agree {
   @include statement-card;
-  background: $primary;
+  background: vars.$primary;
 
   &:hover {
-    background: $primary-selected;
+    background: vars.$primary-selected;
   }
 }
 
 .statement-card-disagree {
   @include statement-card;
-  background: $secondary;
+  background: vars.$secondary;
 
   &:hover {
-    background: $secondary-selected;
+    background: vars.$secondary-selected;
   }
 }
 
 .statement-card-neutral {
   @include statement-card;
-  background: $gray-300;
+  background: vars.$gray-300;
 
   &:hover {
-    background: $gray-200;
+    background: vars.$gray-200;
   }
 }
