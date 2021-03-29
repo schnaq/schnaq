@@ -15,10 +15,10 @@
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
         history @(rf/subscribe [:discussion-history])
-        feed @(rf/subscribe [:feed/get-current])
+        feed @(rf/subscribe [:feed/get-current])            ;; TODO
         feed-route (case feed
-                     :personal :routes.meetings/my-schnaqs
-                     :routes/public-discussions)]
+                     :personal :routes.schnaqs/personal
+                     :routes.schnaqs/public)]
     [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header.shadow-straight-light
      ;; schnaq logo
      [:a.navbar-brand.mr-auto {:href (reitfe/href feed-route)}
