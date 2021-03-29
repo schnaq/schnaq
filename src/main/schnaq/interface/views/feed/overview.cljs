@@ -121,9 +121,3 @@
   "Render all discussions in which the user participated."
   []
   [schnaq-overview [:schnaqs.visited/all] :schnaqs/header])
-
-
-(rf/reg-sub
-  :feed/get-current
-  (fn [db _]
-    (get-in db [:feed :current])))

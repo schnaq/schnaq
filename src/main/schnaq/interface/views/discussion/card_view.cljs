@@ -14,14 +14,10 @@
   [{:discussion/keys [title share-hash] :as discussion}]
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
-        history @(rf/subscribe [:discussion-history])
-        feed @(rf/subscribe [:feed/get-current])            ;; TODO
-        feed-route (case feed
-                     :personal :routes.schnaqs/personal
-                     :routes.schnaqs/public)]
+        history @(rf/subscribe [:discussion-history])]
     [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.context-header.shadow-straight-light
      ;; schnaq logo
-     [:a.navbar-brand.mr-auto {:href (reitfe/href feed-route)}
+     [:a.navbar-brand.mr-auto {:href (reitfe/href :routes.schnaqs/personal)}
       [:img.d-inline-block.align-middle.mr-2
        {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
      ;; hamburger

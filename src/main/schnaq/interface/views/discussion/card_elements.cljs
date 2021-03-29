@@ -50,11 +50,7 @@
 (defn- back-button
   "Return to your schnaqs Button"
   [has-history?]
-  (let [feed @(rf/subscribe [:feed/get-current])
-        feed-route (case feed
-                     :personal :routes.meetings/my-schnaqs
-                     :routes/public-discussions)
-        back-feed [:navigation/navigate feed-route]
+  (let [back-feed [:navigation/navigate :routes.schnaqs/personal]
         back-history [:discussion.history/time-travel 1]
         navigation (if has-history? back-history back-feed)
         label (if has-history? :history.back/text :history.all-schnaqs/text)
