@@ -7,72 +7,26 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.discussion.badges :as badges]
-            [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.feed.overview :as feed]
+            [schnaq.interface.views.header-image :as header-image]
+            [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]))
 
-(rf/reg-event-fx
-  :hub.schnaqs/add-success
-  (fn [{:keys [db]} [_ form response]]
-    (let [hub (:hub response)]
-      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
-       :fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :hub.add.schnaq.success/title)
-                                       :body (labels :hub.add.schnaq.success/body)
-                                       :context :success}]]
-            [:form/clear form]]})))
-
-(rf/reg-event-fx
-  :hub.schnaqs/add-failure
-  (fn [_ _]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :hub.add.schnaq.error/title)
-                                     :body (labels :hub.add.schnaq.error/body)
-                                     :context :danger}]]]}))
-
-(rf/reg-event-fx
-  :hub.remove/schnaq
-  (fn [{:keys [db]} [_ share-hash]]
-    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      {:fx [(http/xhrio-request db :delete (gstring/format "/hub/%s/remove" keycloak-name)
-                                [:hub.remove.schnaq/success]
-                                {:share-hash share-hash}
-                                [:hub.remove.schnaq/failure])]})))
-
-(rf/reg-event-fx
-  :hub.remove.schnaq/success
-  (fn [{:keys [db]} [_ response]]
-    (let [hub (:hub response)]
-      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
-       :fx [[:dispatch [:notification/add
-                        #:notification{:title (labels :hub.remove.schnaq.success/title)
-                                       :body (labels :hub.remove.schnaq.success/body)
-                                       :context :success}]]]})))
-
-(rf/reg-event-fx
-  :hub.remove.schnaq/failure
-  (fn [_ _]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :hub.remove.schnaq.error/title)
-                                     :body (labels :hub.remove.schnaq.error/body)
-                                     :context :danger}]]]}))
-
-(defn hub-settings
-  "Additional hub settings that are displayed in the feed."
+(defn- add-schnaq-to-hub-form
+  "Add a new schnaq to hub."
   []
-  [:div.mx-2
-   [:form.pb-3.w-75
-    {:on-submit (fn [e]
-                  (js-wrap/prevent-default e)
-                  (println e)
-                  (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
-    [:label (labels :hub.add.schnaq.input/label)]
+  [:form.pb-3
+   {:on-submit (fn [e]
+                 (js-wrap/prevent-default e)
+                 (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
+   [:label.small (labels :hub.add.schnaq.input/label)]
+   [:div.input-group
     [:input.form-control {:name "schnaq-add-input"
                           :required true
                           :placeholder (labels :hub.add.schnaq.input/placeholder)}]
-    [:button.btn.btn-primary.mt-1
-     {:type "submit"}
-     (labels :hub.add.schnaq.input/button)]]])
+    [:div.input-group-append
+     [:button.btn.btn-primary {:type "submit"}
+      [:i {:class (str "m-auto fas " (fa :plus))}]]]]])
 
 (defn- schnaq-entry-with-deletion
   "Displays a single schnaq of the schnaq list for the hub, with the option to delete it from the hub."
@@ -102,14 +56,24 @@
                     (rf/dispatch [:hub.remove/schnaq share-hash]))}
       [:i {:class (str "m-auto fas " (fa :cross))}]]]))
 
-(defn- sidebar-right []
+(defn- hub-panel
+  "Small overview for the hub."
+  []
   [:section.panel-white
-   [feed/sort-options]
-   [:hr]
-   [hub-settings]
+   [hub-common/single-hub @(rf/subscribe [:hub/current])]
+   [:div.mx-2
+    [add-schnaq-to-hub-form]]
+   [:div.text-center
+    [:button.btn.btn-outline-dark
+     [:i.fas.mr-1 {:class (fa :cog)}]
+     (labels :hub/settings)]]
    [:hr]
    [feed/sidebar-common]])
 
+(defn- sidebar-right []
+  [:<>
+   [hub-panel]
+   [feed/sort-options]])
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
@@ -163,3 +127,55 @@
 (rf/reg-sub
   :hubs/all
   (fn [db] (:hubs db)))
+
+(rf/reg-sub
+  :hub/current
+  (fn [db]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      (get-in db [:hubs keycloak-name]))))
+
+(rf/reg-event-fx
+  :hub.schnaqs/add-success
+  (fn [{:keys [db]} [_ form response]]
+    (let [hub (:hub response)]
+      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :hub.add.schnaq.success/title)
+                                       :body (labels :hub.add.schnaq.success/body)
+                                       :context :success}]]
+            [:form/clear form]]})))
+
+(rf/reg-event-fx
+  :hub.schnaqs/add-failure
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :hub.add.schnaq.error/title)
+                                     :body (labels :hub.add.schnaq.error/body)
+                                     :context :danger}]]]}))
+
+(rf/reg-event-fx
+  :hub.remove/schnaq
+  (fn [{:keys [db]} [_ share-hash]]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      {:fx [(http/xhrio-request db :delete (gstring/format "/hub/%s/remove" keycloak-name)
+                                [:hub.remove.schnaq/success]
+                                {:share-hash share-hash}
+                                [:hub.remove.schnaq/failure])]})))
+
+(rf/reg-event-fx
+  :hub.remove.schnaq/success
+  (fn [{:keys [db]} [_ response]]
+    (let [hub (:hub response)]
+      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :hub.remove.schnaq.success/title)
+                                       :body (labels :hub.remove.schnaq.success/body)
+                                       :context :success}]]]})))
+
+(rf/reg-event-fx
+  :hub.remove.schnaq/failure
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :hub.remove.schnaq.error/title)
+                                     :body (labels :hub.remove.schnaq.error/body)
+                                     :context :danger}]]]}))
