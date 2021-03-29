@@ -98,7 +98,7 @@
   "Displays the different sort options for feed elements."
   []
   (let [sort-method @(rf/subscribe [:feed/sort])]
-    [:section.py-2
+    [:section.py-2.pl-2
      [:span.small.mb-0
       (labels :badges.sort/sort) [:br]
       [:button.btn.btn-outline-primary.btn-sm.mx-1
@@ -111,7 +111,7 @@
        (labels :badges.sort/alphabetical)]]]))
 
 (defn sidebar-common []
-  [:section.text-right.pr-3
+  [:section.pl-2
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
@@ -134,7 +134,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view subscription-vector]
-   [sidebar-common]])
+   [feed-controls]])
 
 (defn public-discussions-view
   "Render all public discussions."
