@@ -24,7 +24,7 @@
     [tooltip/block-element
      :right
      (labels :history.home/tooltip)
-     [:<> [:div [:small (labels :history.home/text)]]]]]])
+     [:div [:small (labels :history.home/text)]]]]])
 
 (defn history-view-mobile
   "History view displayed in the left column in the desktop view."

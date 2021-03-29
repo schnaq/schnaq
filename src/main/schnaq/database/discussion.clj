@@ -8,8 +8,8 @@
             [schnaq.database.user :as user-db]
             [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
             [schnaq.toolbelt :as toolbelt]
-            [taoensso.timbre :as log]
-            [schnaq.user :as user])
+            [schnaq.user :as user]
+            [taoensso.timbre :as log])
   (:import (clojure.lang ExceptionInfo)))
 
 (def statement-pattern
