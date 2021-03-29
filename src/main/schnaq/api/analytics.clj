@@ -11,9 +11,14 @@
   (ok {:discussions-num (analytics-db/number-of-discussions)}))
 
 (defn- number-of-usernames
-  "Returns the number of all meetings."
+  "Returns the number of all anonymous usernames created."
   [_]
   (ok {:usernames-num (analytics-db/number-of-usernames)}))
+
+(defn- number-of-registered-users
+  "Returns the number of registered users on the plattform."
+  [_]
+  (ok {:registered-users-num (analytics-db/number-or-registered-users)}))
 
 (defn- statements-per-discussion
   "Returns the average numbers of meetings"
@@ -50,7 +55,8 @@
                  :statements-num (analytics-db/number-of-statements timestamp-since)
                  :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
                  :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
-                 :argument-type-stats (analytics-db/argument-type-stats timestamp-since)}})))
+                 :argument-type-stats (analytics-db/argument-type-stats timestamp-since)
+                 :registered-users-num (analytics-db/number-or-registered-users)}})))
 
 
 ;; -----------------------------------------------------------------------------
@@ -66,7 +72,8 @@
         (GET "/discussions" [] number-of-discussions)
         (GET "/statement-lengths" [] statement-lengths-stats)
         (GET "/statements" [] number-of-statements)
-        (GET "/usernames" [] number-of-usernames)))
+        (GET "/usernames" [] number-of-usernames)
+        (GET "/registered-users" [] number-of-registered-users)))
     (wrap-routes auth/is-admin-middleware)
     (wrap-routes auth/auth-middleware)
     (wrap-routes auth/wrap-jwt-authentication)))

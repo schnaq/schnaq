@@ -59,7 +59,8 @@
     :page/heading (labels :analytics/heading)}
    [:<>
     (let [discussions-num @(rf/subscribe [:analytics/number-of-discussions-overall])
-          usernames-num @(rf/subscribe [:analytics/number-of-usernames-overall])
+          usernames-num @(rf/subscribe [:analytics/number-of-usernames-anonymous])
+          registered-users @(rf/subscribe [:analytics/number-of-users-registered])
           average-statements @(rf/subscribe [:analytics/number-of-average-statements])
           statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
           active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
@@ -70,6 +71,7 @@
        [:div.card-columns
         [analytics-card (labels :analytics/overall-discussions) discussions-num]
         [analytics-card (labels :analytics/user-numbers) usernames-num]
+        [analytics-card (labels :analytics/registered-users-numbers) registered-users]
         [analytics-card (labels :analytics/average-statements-title) average-statements]
         [analytics-card (labels :analytics/statements-num-title) statements-num]
         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
@@ -86,6 +88,7 @@
   (fn [_ _]
     {:fx [[:dispatch [:analytics/load-discussions-num]]
           [:dispatch [:analytics/load-usernames-num]]
+          [:dispatch [:analytics/load-registered-users-num]]
           [:dispatch [:analytics/load-average-number-of-statements]]
           [:dispatch [:analytics/load-statements-num]]
           [:dispatch [:analytics/load-active-users]]
@@ -116,6 +119,11 @@
   :analytics/load-usernames-num
   (fn [{:keys [db]} _]
     (fetch-statistics db "/analytics/usernames" :analytics/usernames-num-loaded)))
+
+(rf/reg-event-fx
+  :analytics/load-registered-users-num
+  (fn [{:keys [db]} _]
+    (fetch-statistics db "/analytics/registered-users" :analytics/registered-users-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-average-number-of-statements
@@ -150,7 +158,12 @@
 (rf/reg-event-db
   :analytics/usernames-num-loaded
   (fn [db [_ {:keys [usernames-num]}]]
-    (assoc-in db [:analytics :usernames-num :overall] usernames-num)))
+    (assoc-in db [:analytics :users-num :anonymous] usernames-num)))
+
+(rf/reg-event-db
+  :analytics/registered-users-num-loaded
+  (fn [db [_ {:keys [registered-users-num]}]]
+    (assoc-in db [:analytics :users-num :registered] registered-users-num)))
 
 (rf/reg-event-db
   :analytics/statements-num-loaded
@@ -181,7 +194,8 @@
   :analytics/all-stats-loaded
   (fn [db [_ {:keys [stats]}]]
     (assoc db :analytics {:discussions-num {:overall (:discussions-num stats)}
-                          :usernames-num {:overall (:usernames-num stats)}
+                          :users-num {:anonymous (:usernames-num stats)
+                                      :registered (:registered-users-num stats)}
                           :statements {:number {:overall (:statements-num stats)}
                                        :lengths (:statement-length-stats stats)
                                        :average-per-discussion (:average-statements stats)}
@@ -196,9 +210,14 @@
     (get-in db [:analytics :discussions-num :overall])))
 
 (rf/reg-sub
-  :analytics/number-of-usernames-overall
+  :analytics/number-of-usernames-anonymous
   (fn [db _]
-    (get-in db [:analytics :usernames-num :overall])))
+    (get-in db [:analytics :users-num :anonymous])))
+
+(rf/reg-sub
+  :analytics/number-of-users-registered
+  (fn [db _]
+    (get-in db [:analytics :users-num :registered])))
 
 (rf/reg-sub
   :analytics/number-of-average-statements

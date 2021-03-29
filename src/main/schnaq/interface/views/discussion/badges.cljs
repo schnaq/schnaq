@@ -5,7 +5,8 @@
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.utils.time :as time]))
+            [schnaq.interface.utils.time :as time]
+            [schnaq.user :as user]))
 
 (>defn- build-author-list
   "Build a nicely formatted string of a html list containing the authors from a sequence."
@@ -38,7 +39,7 @@
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
         new? (not (= old-statement-num statement-num))
         authors (conj (-> statement :meta/sub-discussion-info :authors)
-                      (-> statement :statement/author :user/nickname))
+                      (user/statement-author statement))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
