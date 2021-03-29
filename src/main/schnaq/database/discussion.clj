@@ -113,7 +113,9 @@
                   ;; 7 offers a good speed while being deep enough for most discussions.
                   (transitive-child-7 ?statement-ids ?children)
                   [?children :statement/author ?authors]
-                  [?authors :user/nickname ?nickname]]
+                  (or
+                    [?authors :user/nickname ?nickname]
+                    [?authors :user.registered/display-name ?nickname])]
                 (transitive-child-rules 7) statement-ids))))
 
 (>defn discussion-by-share-hash-template
