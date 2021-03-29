@@ -45,14 +45,16 @@
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."
-  [subscription-vector]
-  [:div.meetings-list
-   (let [schnaqs @(rf/subscribe subscription-vector)]
-     (if (empty? schnaqs)
-       [no-schnaqs-found]
-       (for [schnaq schnaqs]
-         [:div.pb-4 {:key (:db/id schnaq)}
-          [schnaq-entry schnaq]])))])
+  ([subscription-vector]
+   [schnaq-list-view subscription-vector schnaq-entry])
+  ([subscription-vector single-schnaq-component]
+   [:div.meetings-list
+    (let [schnaqs @(rf/subscribe subscription-vector)]
+      (if (empty? schnaqs)
+        [no-schnaqs-found]
+        (for [schnaq schnaqs]
+          [:div.pb-4 {:key (:db/id schnaq)}
+           [single-schnaq-component schnaq]])))]))
 
 (defn- feed-button [label on-click-fn focused?]
   (let [button-class (if focused? "feed-button-focused" "feed-button")]
@@ -93,7 +95,7 @@
     (labels label)]])
 
 (defn feed-extra-information []
-  [:div.feed-extra-info.text-right
+  [:div.feed-extra-info
    [:div.btn-group-vertical
     [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
     [about-button :how-to/button (reitfe/href :routes/how-to)]]])
