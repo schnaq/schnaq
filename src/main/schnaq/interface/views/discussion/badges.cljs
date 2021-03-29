@@ -38,7 +38,8 @@
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
         new? (not (= old-statement-num statement-num))
         authors (conj (-> statement :meta/sub-discussion-info :authors)
-                      (-> statement :statement/author :user/nickname))
+                      (or (-> statement :statement/author :user.registered/display-name)
+                          (-> statement :statement/author :user/nickname)))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
