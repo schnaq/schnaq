@@ -50,7 +50,7 @@
   "Holds sensitive information as well."
   (conj discussion-pattern :discussion/edit-hash))
 
-(def ^:private discussion-pattern-minimal
+(def discussion-pattern-minimal
   [:db/id
    :discussion/title
    {:discussion/states [:db/ident]}
