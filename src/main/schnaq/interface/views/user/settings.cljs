@@ -45,4 +45,5 @@
    {:page/heading (labels page-heading-label)}
    [user-panel]
    content
-   [feed-overview/feed-extra-information]])
+   [:div.feed-extra-info.btn-group-vertical
+    [feed-overview/further-information]]])

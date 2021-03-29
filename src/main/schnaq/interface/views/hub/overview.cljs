@@ -112,9 +112,12 @@
    [feed/feed-navigation]
    [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
    [:<>
+    [feed/sort-options]
+    [:hr]
     [hub-settings]
     [:hr]
-    [feed/feed-extra-information]]])
+    [:div.feed-extra-info.btn-group-vertical
+     [feed/further-information]]]])
 
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."
