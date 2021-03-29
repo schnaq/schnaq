@@ -51,3 +51,8 @@
   [new-url]
   [string? :ret nil?]
   (.replace (.-location js/window) new-url))
+
+(defn show-js-klaro
+  "Trigger klaro popup menu."
+  []
+  #(.show js/klaro))

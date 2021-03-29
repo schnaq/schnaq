@@ -66,7 +66,7 @@
       {:src (img-path :schnaqqifant/white)}]
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-     [:a.button-secondary {:href (rfe/href :routes/public-discussions)}
+     [:a.button-secondary {:href (rfe/href :routes.schnaqs/public)}
       (labels :startpage.early-adopter.buttons/join-schnaq)]
      [:p.pt-4 (labels :startpage.early-adopter/or)]
      [:button.button-secondary

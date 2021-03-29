@@ -60,43 +60,39 @@
           [:div.pb-4 {:key (:db/id schnaq)}
            [single-schnaq-component schnaq]])))]))
 
-(defn- feed-button [label on-click-fn focused?]
-  (let [button-class (if focused? "feed-button-focused" "feed-button")]
+(defn- feed-button [label route]
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        button-class (if (= current-route route) "feed-button-focused" "feed-button")]
     [:article
-     [:button
-      {:class button-class :type "button"
-       :on-click on-click-fn}
-      [:span (labels label)]]]))
+     [:a {:class button-class :type "button"
+          :href (reitfe/href route)}
+      (labels label)]]))
 
-(defn- feed-button-navigate [label route focused?]
-  [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
-
-(defn feed-navigation []
-  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
-        current-feed @(rf/subscribe [:feed/get-current])
-        public-feed? (= current-feed :public)
-        personal-feed? (= current-feed :personal)]
+(defn feed-navigation
+  "Navigate between the feeds."
+  []
+  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
     [:<>
      [:section.row
       [:div.col-6.col-md-12
-       [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
-       [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
+       [feed-button :router/my-schnaqs :routes.schnaqs/personal]
+       [feed-button :router/public-discussions :routes.schnaqs/public]
        (when-not (nil? edit-hash)
          [feed-button :nav.schnaqs/last-added
           #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center
                          {:share-hash share-hash :edit-hash edit-hash}])])
        (when-not toolbelt/production?
-         [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
-       [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]]
+         [feed-button :nav.schnaqs/show-all :routes/schnaqs])
+       [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]
       [:div.col-md-12.col-6
        [:hr.d-none.d-md-block]
        [hub/list-hubs-with-heading]]]
      [:hr.d-block.d-md-none]]))
 
-(defn- about-button [label href-link]
-  [:div.btn-block
-   [:a.btn.btn-outline-primary.rounded-2.w-100 {:href href-link}
-    (labels label)]])
+(defn- generic-button
+  [label href-link]
+  [:a.btn.btn-outline-primary.rounded-2 {:href href-link}
+   (labels label)])
 
 (defn sort-options
   "Displays the different sort options for feed elements."
@@ -114,18 +110,25 @@
         :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
        (labels :badges.sort/alphabetical)]]]))
 
-(defn further-information
-  "Buttons to more information about the service, like CoC and terms of service."
-  []
-  [:<>
-   [about-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-   [about-button :how-to/button (reitfe/href :routes/how-to)]])
+(defn sidebar-common []
+  [:section.text-right.pr-3
+   [:div.btn-group {:role "group"}
+    [:div.btn-group-vertical
+     [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+     [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (defn feed-controls []
-  [:div.feed-extra-info.btn-group-vertical
+  [:div.feed-extra-info
    [sort-options]
    [:hr]
-   [further-information]])
+   [sidebar-common]])
+
+(defn sidebar-common []
+  [:section.text-right.pr-3
+   [:div.btn-group {:role "group"}
+    [:div.btn-group-vertical
+     [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+     [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
@@ -138,7 +141,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view subscription-vector]
-   [feed-controls]])
+   [sidebar-common]])
 
 (defn public-discussions-view
   "Render all public discussions."
@@ -159,14 +162,3 @@
   :feed/sort
   (fn [db _]
     (get-in db [:feed :sort] :time)))
-
-(rf/reg-event-db
-  :feed/store-current
-  (fn [db [_ feed-type]]
-    ;; store either :personal or :public feed
-    (assoc-in db [:feed :current] feed-type)))
-
-(rf/reg-sub
-  :feed/get-current
-  (fn [db _]
-    (get-in db [:feed :current])))

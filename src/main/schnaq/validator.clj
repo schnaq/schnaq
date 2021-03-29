@@ -9,9 +9,12 @@
 (defn valid-discussion?
   "Check if a schnaq-hash ist valid. Returns false, when the discussion is deleted."
   [share-hash]
-  (let [discussion (db/discussion-by-share-hash share-hash)]
-    (and discussion
-         (not (some #{:discussion.state/deleted} (:discussion/states discussion))))))
+  (try
+    (let [discussion (db/discussion-by-share-hash share-hash)]
+      (and discussion
+           (not (some #{:discussion.state/deleted} (:discussion/states discussion)))))
+    (catch Exception _
+      false)))
 
 (defn valid-writeable-discussion?
   "Check if a schnaq-hash ist valid and writeable. Returns false, when the discussion is deleted or
