@@ -2,25 +2,24 @@
 @import 'variables';
 
 
-@mixin button-template {
+@mixin button-template($padding-top-bottom, $padding-left-right) {
   border: 0;
   border-radius: 1.5rem;
   box-shadow: $regular-shadow;
   color: $white;
   font-weight: bold;
-  padding: 1rem 2rem;
+  padding: $padding-top-bottom $padding-left-right;
 }
 
-.button-secondary {
-  @include button-template;
-  background-color: $secondary;
-  font-size: 125%;
+// btns
 
-  &:hover {
-    background-color: $secondary-selected;
-    box-shadow: $hover-shadow;
-    color: $white;
-  }
+.btn-secondary {
+  @include button-template(0.5rem, 1rem);
+  color: $white;
+}
+
+.btn-outline-secondary:hover {
+  color: $white;
 }
 
 @each $rounded, $value in rounded.$roundings {
@@ -32,11 +31,18 @@
   }
 }
 
-.button-secondary-b-1 {
-  /* stylelint-disable */
-  @extend .button-secondary;
-  /* stylelint-enable */
-  border-radius: 1rem;
+// Buttons
+
+.button-secondary {
+  @include button-template(1rem, 2rem);
+  background-color: $secondary;
+  font-size: 125%;
+
+  &:hover {
+    background-color: $secondary-selected;
+    box-shadow: $hover-shadow;
+    color: $white;
+  }
 }
 
 .button-secondary-small {
@@ -48,7 +54,7 @@
 }
 
 .button-primary {
-  @include button-template;
+  @include button-template(1rem, 2rem);
   background-color: $primary;
   font-size: 150%;
 
@@ -57,11 +63,6 @@
     box-shadow: $hover-shadow;
     color: $white;
   }
-}
-
-.button-md {
-  font-size: 100%;
-  padding: 0.75rem 1rem;
 }
 
 .button-call-to-action {
@@ -95,10 +96,6 @@
 
 .secondary-color {
   color: $secondary-selected;
-}
-
-.btn-outline-secondary:hover {
-  color: $white;
 }
 
 .schnaq-delete-button {

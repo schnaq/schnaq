@@ -2,7 +2,7 @@
 @import 'rounded';
 
 @mixin feed-button-base {
-  @include button-template;
+  @include button-template(1rem, 2rem);
   background-color: transparent;
   box-shadow: none;
   font-size: 1.25rem;
