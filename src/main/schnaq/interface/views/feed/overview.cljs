@@ -86,7 +86,6 @@
      [:hr.d-block.d-md-none]]))
 
 (defn- generic-button
-  ""
   [label href-link]
   [:a.btn.btn-outline-primary.rounded-2 {:href href-link}
    (labels label)])
