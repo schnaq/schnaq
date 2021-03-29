@@ -3,12 +3,14 @@
             [schnaq.database.discussion-test-data :as test-data]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :refer [add-discussions-to-hub] :as hub]
+            [schnaq.database.hub-test-data :as hub-test-data]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.util UUID)))
 
 (use-fixtures :each
               schnaq-toolbelt/init-test-delete-db-fixture
-              #(schnaq-toolbelt/init-test-delete-db-fixture % test-data/public-discussions))
+              #(schnaq-toolbelt/init-test-delete-db-fixture % test-data/public-discussions)
+              #(schnaq-toolbelt/init-test-delete-db-fixture % hub-test-data/hub-test-data))
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (deftest add-discussions-to-hub-test
@@ -39,3 +41,12 @@
         0 []
         0 ["razupaltuff"]
         2 keycloak-names))))
+
+(deftest all-schnaqs-for-hub-test
+  (testing "Test whether the schnaqs for a hub are correctly pulled."
+    (let [test-schnaqs (#'hub/all-schnaqs-for-hub [:hub/keycloak-name "test-keycloak"])]
+      (is (= 2 (count test-schnaqs)))
+      (is (contains? (first test-schnaqs) :db/txInstant))
+      (is (contains? (second test-schnaqs) :db/txInstant))
+      (is (some #{(-> test-schnaqs first :discussion/title)} ["Another Hub Discussion" "Hub Discussion"]))
+      (is (nil? (#'hub/all-schnaqs-for-hub [:hub/keycloak-name "non-existing-hub-12890378hd"]))))))
