@@ -56,34 +56,33 @@
           [:div.pb-4 {:key (:db/id schnaq)}
            [single-schnaq-component schnaq]])))]))
 
-(defn- feed-button [label on-click-fn focused?]
-  (let [button-class (if focused? "feed-button-focused" "feed-button")]
+(defn- feed-button [label route]
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        button-class (if (= current-route route) "feed-button-focused" "feed-button")]
     [:article
-     [:button
-      {:class button-class :type "button"
-       :on-click on-click-fn}
-      [:span (labels label)]]]))
+     [:a {:class button-class :type "button"
+          :href (reitfe/href route)}
+      (labels label)]]))
 
 (defn- feed-button-navigate [label route focused?]
   [feed-button label #(rf/dispatch [:navigation/navigate route]) focused?])
 
-(defn feed-navigation []
-  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
-        current-feed @(rf/subscribe [:feed/get-current])
-        public-feed? (= current-feed :public)
-        personal-feed? (= current-feed :personal)]
+(defn feed-navigation
+  "Navigate between the feeds."
+  []
+  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
     [:<>
      [:section.row
       [:div.col-6.col-md-12
-       [feed-button-navigate :router/my-schnaqs :routes.meetings/my-schnaqs personal-feed?]
-       [feed-button-navigate :router/public-discussions :routes/public-discussions public-feed?]
+       [feed-button :router/my-schnaqs :routes.schnaqs/personal]
+       [feed-button :router/public-discussions :routes.schnaqs/public]
        (when-not (nil? edit-hash)
          [feed-button :nav.schnaqs/last-added
           #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center
                          {:share-hash share-hash :edit-hash edit-hash}])])
        (when-not toolbelt/production?
-         [feed-button-navigate :nav.schnaqs/show-all :routes/schnaqs])
-       [feed-button-navigate :nav.schnaqs/create-schnaq :routes.schnaq/create]]
+         [feed-button :nav.schnaqs/show-all :routes/schnaqs])
+       [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]
       [:div.col-md-12.col-6
        [:hr.d-none.d-md-block]
        [hub/list-hubs-with-heading]]]
@@ -123,13 +122,6 @@
   []
   [schnaq-overview [:schnaqs.visited/all] :schnaqs/header])
 
-;; events
-
-(rf/reg-event-db
-  :feed/store-current
-  (fn [db [_ feed-type]]
-    ;; store either :personal or :public feed
-    (assoc-in db [:feed :current] feed-type)))
 
 (rf/reg-sub
   :feed/get-current
