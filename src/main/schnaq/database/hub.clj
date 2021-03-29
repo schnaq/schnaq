@@ -39,6 +39,13 @@
   (log/info "Added schnaqs with ids" discussion-ids "to hub" hub-id)
   (pull-hub hub-id))
 
+(>defn remove-discussion-from-hub
+  [hub-id discussion-id]
+  [:db/id :db/id :ret ::specs/hub]
+  (transact [[:db/retract hub-id :hub/schnaqs discussion-id]])
+  (log/info "Removed schnaq" discussion-id "from hub" hub-id)
+  (pull-hub hub-id))
+
 (>defn hub-by-keycloak-name
   "Return a hub by the reference in keycloak."
   [keycloak-name]

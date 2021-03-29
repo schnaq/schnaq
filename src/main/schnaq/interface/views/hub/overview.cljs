@@ -6,6 +6,8 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.discussion.badges :as badges]
+            [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.pages :as pages]))
 
@@ -28,25 +30,77 @@
                                      :body (labels :hub.add.schnaq.error/body)
                                      :context :danger}]]]}))
 
+(rf/reg-event-fx
+  :hub.remove/schnaq
+  (fn [{:keys [db]} [_ share-hash]]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      {:fx [(http/xhrio-request db :delete (gstring/format "/hub/%s/remove" keycloak-name)
+                                [:hub.remove.schnaq/success]
+                                {:share-hash share-hash}
+                                [:hub.remove.schnaq/failure])]})))
+
+(rf/reg-event-fx
+  :hub.remove.schnaq/success
+  (fn [{:keys [db]} [_ response]]
+    (let [hub (:hub response)]
+      {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :hub.remove.schnaq.success/title)
+                                       :body (labels :hub.remove.schnaq.success/body)
+                                       :context :success}]]]})))
+
+(rf/reg-event-fx
+  :hub.remove.schnaq/failure
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :hub.remove.schnaq.error/title)
+                                     :body (labels :hub.remove.schnaq.error/body)
+                                     :context :danger}]]]}))
+
 (defn hub-settings
   "Additional hub settings that are displayed in the feed."
   []
   [:div.mx-2
-   [:label (labels :hub.add.schnaq.input/label)]
-   [:form.pb-3
+   [:form.pb-3.w-75
     {:on-submit (fn [e]
                   (js-wrap/prevent-default e)
                   (println e)
                   (rf/dispatch [:hub.schnaqs/add (oget e [:target :elements])]))}
-    [:div.form-row
-     [:div.col
-      [:input.form-control {:name "schnaq-add-input"
-                            :required true
-                            :placeholder (labels :hub.add.schnaq.input/placeholder)}]]
-     [:div.col
-      [:button.btn.btn-secondary
-       {:type "submit"}
-       "Add schnaq to hub"]]]]])
+    [:label (labels :hub.add.schnaq.input/label)]
+    [:input.form-control {:name "schnaq-add-input"
+                          :required true
+                          :placeholder (labels :hub.add.schnaq.input/placeholder)}]
+    [:button.btn.btn-primary.mt-1
+     {:type "submit"}
+     (labels :hub.add.schnaq.input/button)]]])
+
+(defn- schnaq-entry-with-deletion
+  "Displays a single schnaq of the schnaq list for the hub, with the option to delete it from the hub."
+  [schnaq]
+  (let [share-hash (:discussion/share-hash schnaq)
+        title (:discussion/title schnaq)
+        url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
+    [:article
+     {;; The position is needed for the delete button's absolute positioning to work
+      :style {:position :relative}}
+     [:article.meeting-entry
+      {:on-click (fn []
+                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                 {:share-hash share-hash}])
+                   (rf/dispatch [:schnaq/select-current schnaq]))}
+      [:div [:img.meeting-entry-title-header-image {:src url}]]
+      [:div.px-4.d-flex
+       [:div.meeting-entry-title
+        [:h5 title]]
+       [:div.ml-auto.mt-3
+        [badges/read-only-badge schnaq]]]
+      [:div.px-4
+       [badges/static-info-badges schnaq]]]
+     [:button.btn.btn-secondary.schnaq-delete-button
+      {:title (labels :hub.remove.schnaq/tooltip)
+       :on-click #(when (js/confirm (labels :hub.remove.schnaq/prompt))
+                    (rf/dispatch [:hub.remove/schnaq share-hash]))}
+      [:i.fas.fa-minus-square]]]))
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
@@ -56,10 +110,11 @@
   [pages/three-column-layout
    {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
    [feed/feed-navigation]
+   [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
    [:<>
     [hub-settings]
-    [feed/schnaq-list-view [:hubs/schnaqs keycloak-name]]]
-   [feed/feed-extra-information]])
+    [:hr]
+    [feed/feed-extra-information]]])
 
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."

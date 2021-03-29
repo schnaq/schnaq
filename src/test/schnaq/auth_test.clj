@@ -48,8 +48,8 @@
 
 (deftest member-of-group?-test
   (testing "Verify that user is member of called group."
-    (let [request (assoc-in (mock/request :get "/testing/stuff")
-                            [:identity :groups] ["these-are-my-groups" "schnaqqifantenparty"])]
-      (is (auth/member-of-group? request "schnaqqifantenparty"))
-      (is (not (auth/member-of-group? request "")))
-      (is (not (auth/member-of-group? request "not-member-of"))))))
+    (let [identity (:identity (assoc-in (mock/request :get "/testing/stuff")
+                                        [:identity :groups] ["these-are-my-groups" "schnaqqifantenparty"]))]
+      (is (auth/member-of-group? identity "schnaqqifantenparty"))
+      (is (not (auth/member-of-group? identity "")))
+      (is (not (auth/member-of-group? identity "not-member-of"))))))

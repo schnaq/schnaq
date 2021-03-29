@@ -93,6 +93,14 @@
   color: $secondary-selected;
 }
 
-.btn-outline-secondary:hover {
-  color: $white;
+.schnaq-delete-button {
+  display: inline-block;
+  opacity: 0.9;
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+
+  &:hover {
+    opacity: 1;
+  }
 }
