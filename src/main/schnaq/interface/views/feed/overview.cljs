@@ -101,7 +101,7 @@
   "Displays the different sort options for feed elements."
   []
   (let [sort-method @(rf/subscribe [:feed/sort])]
-    [:section.py-2.pl-2.text-right
+    [:section.pl-2.text-right
      [:span.small.mb-0
       (labels :badges.sort/sort) [:br]
       [:button.btn.btn-outline-primary.btn-sm.mx-1

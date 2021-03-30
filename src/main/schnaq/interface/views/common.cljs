@@ -132,6 +132,22 @@
 
 
 ;; -----------------------------------------------------------------------------
+;; Form-related
+
+(defn form-input
+  "The input form for the display name."
+  [{:keys [id placeholder default-value css]}]
+  [:input.form-control.form-border-bottom.mb-2
+   {:id id
+    :class css
+    :type "text"
+    :autoComplete "off"
+    :defaultValue default-value
+    :placeholder placeholder
+    :required true}])
+
+
+;; -----------------------------------------------------------------------------
 ;; Higher Order Components
 
 (defn- delay-render

@@ -6,17 +6,8 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]
-            [re-frame.core :as rf]))
-
-(defn title-input
-  "The input and label for a new schnaq."
-  []
-  [:<>
-   [:input#schnaq-title.form-control.form-title.form-border-bottom.mb-2
-    {:type "text"
-     :autoComplete "off"
-     :required true
-     :placeholder (labels :schnaq.create.input/placeholder)}]])
+            [re-frame.core :as rf]
+            [schnaq.interface.views.common :as common]))
 
 (defn- create-schnaq-page []
   [pages/with-nav-and-header
@@ -30,7 +21,9 @@
                       (js-wrap/prevent-default e)
                       (rf/dispatch [:schnaq.create/new {:discussion/title title} public?])))}
       [:div.panel-white.p-4
-       [title-input]]
+       [common/form-input {:id :schnaq-title
+                           :placeholder (labels :schnaq.create.input/placeholder)
+                           :css "font-150"}]]
       [:div.form-check.pt-3.text-center
        [:input.form-check-input.big-checkbox {:type :checkbox
                                               :id :public-discussion?

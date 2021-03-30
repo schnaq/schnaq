@@ -13,7 +13,7 @@
 (defn- current-user []
   (let [user-name @(rf/subscribe [:user/display-name])]
     [:<>
-     [:h6.text-gray-600.mb-4 (labels :user.settings)]
+     [:h6.text-muted.mb-4 (labels :user.settings)]
      [:div.pl-4
       [common/avatar-with-nickname-right user-name 40]]]))
 

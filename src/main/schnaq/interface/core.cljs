@@ -39,6 +39,7 @@
             [schnaq.interface.views.howto.how-to]
             [schnaq.interface.views.hub.common]
             [schnaq.interface.views.hub.overview]
+            [schnaq.interface.views.hub.settings]
             [schnaq.interface.views.loading]
             [schnaq.interface.views.meeting.meetings]
             [schnaq.interface.views.meeting.overview]
