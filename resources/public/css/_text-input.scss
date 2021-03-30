@@ -15,23 +15,10 @@
   border: 0;
   border-bottom: 2px solid $gray-300;
   border-radius: 0;
-  font-size: 150%;
 
   &:focus {
     background: transparent;
     border-bottom: 2px solid $primary-selected;
     box-shadow: none;
-  }
-}
-
-.form-border-bottom-light {
-  /* stylelint-disable */
-  @extend .form-border-bottom;
-  /* stylelint-enable */
-
-  border-bottom: 2px solid $white;
-
-  &:focus {
-    border-bottom: 3px solid $white;
   }
 }

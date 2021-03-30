@@ -73,7 +73,7 @@
      [:hr]
      [feed/sidebar-common]]))
 
-(defn- sidebar-right []
+(defn sidebar-right []
   [:<>
    [hub-panel]
    [feed/sort-options]])
