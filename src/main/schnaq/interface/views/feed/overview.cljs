@@ -118,7 +118,7 @@
      [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (defn feed-controls []
-  [:section
+  [:section.panel-white
    [sort-options]
    [:hr]
    [sidebar-common]])

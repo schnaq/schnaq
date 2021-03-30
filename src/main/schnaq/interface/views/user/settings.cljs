@@ -44,4 +44,5 @@
    {:page/heading (labels page-heading-label)}
    [user-panel]
    content
-   [feed-overview/sidebar-common]])
+   [:section.panel-white
+    [feed-overview/sidebar-common]]])
