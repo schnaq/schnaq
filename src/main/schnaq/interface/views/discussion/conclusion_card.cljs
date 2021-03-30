@@ -7,6 +7,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
+            [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
@@ -68,22 +69,25 @@
       [:div.vote-box.down-vote [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
 (defn- statement-card
-  [edit-hash {:keys [statement/content] :as statement} attitude]
+  [edit-hash statement attitude]
   (let [fa-label (logic/attitude->symbol attitude)
-        display-name (user-utils/statement-author statement)]
-    [:article.card.card-rounded.clickable
-     {:class (str "statement-card-" (name attitude))}
-     [:div.d-flex.flex-row
-      [:div.m-auto
-       [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
-      [:div.card-view.card-body.py-0.pb-1
-       [:div.d-flex.mt-1
-        [:div.ml-auto
-         [user/user-info display-name 32]]]
-       [:div.my-1 [:p content]]
-       [:div.d-flex
-        [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
-        [up-down-vote statement]]]]]))
+        display-name (user-utils/statement-author statement)
+        currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+    (if currently-edited?
+      [edit/edit-card statement]
+      [:article.card.card-rounded.clickable
+       {:class (str "statement-card-" (name attitude))}
+       [:div.d-flex.flex-row
+        [:div.m-auto
+         [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
+        [:div.card-view.card-body.py-0.pb-1
+         [:div.d-flex.mt-1
+          [:div.ml-auto
+           [user/user-info display-name 32]]]
+         [:div.my-1 [:p (:statement/content statement)]]
+         [:div.d-flex
+          [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
+          [up-down-vote statement]]]]])))
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."

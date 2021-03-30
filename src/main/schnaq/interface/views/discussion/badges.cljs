@@ -38,7 +38,7 @@
       [:span.badge.badge-pill.badge-transparent.badge-clickable
        {:tabIndex 40
         :on-click (fn [e] (js-wrap/stop-propagation e)
-                    (js/alert "Editierzeit!"))
+                    (rf/dispatch [:statement.edit/activate-edit (:db/id statement)]))
         :title (labels :discussion.badges/edit-statement)}
        [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])))
 
