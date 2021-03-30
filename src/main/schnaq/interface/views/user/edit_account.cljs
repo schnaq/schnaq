@@ -21,7 +21,7 @@
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])]
     [:div.panel-white.p-5
-     [:h4.text-gray-600.mb-5 (labels :user.settings/change-name)]
+     [:h4.text-muted.mb-5 (labels :user.settings/change-name)]
      [:form
       {:on-submit (fn [e]
                     (let [new-display-name (oget e [:target :elements :user-display-name :value])]
@@ -32,10 +32,10 @@
        [name-input]]
       [:div.row.pt-5
        [:div.col.text-left.my-3
-        [:a.btn.button-secondary {:href config/keycloak-profile-page}
+        [:a.btn.btn-outline-secondary.rounded-2 {:href config/keycloak-profile-page}
          (labels :user.keycloak-settings)]]
        [:div.col.text-right.my-3
-        [:button.btn.button-primary
+        [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
          (labels :user.settings.button/change-account-information)]]]]]))
 
 (defn view []
