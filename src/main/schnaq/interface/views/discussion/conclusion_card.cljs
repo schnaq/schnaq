@@ -93,8 +93,7 @@
         currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card statement]
-      [:div {:key (:db/id statement)
-             :on-click (fn [_e]
+      [:div {:on-click (fn [_e]
                          (let [selection (js-wrap/to-string (.getSelection js/window))]
                            (when (zero? (count selection))
                              (rf/dispatch [:discussion.select/conclusion statement])
@@ -117,7 +116,9 @@
             sorted-conclusions (sort-by keyfn > conclusions)]
         [:div.card-columns.card-columns-discussion.pb-3
          (for [statement sorted-conclusions]
-           [statement-or-edit-wrapper statement edit-hash])])
+           (with-meta
+             [statement-or-edit-wrapper statement edit-hash]
+             {:key (:db/id statement)}))])
       [call-to-contribute])))
 
 (rf/reg-event-fx

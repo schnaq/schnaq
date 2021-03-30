@@ -16,7 +16,7 @@
                                  (oget e [:target :elements])]))}
      [:div.form-group
       [:label {:for statement-html-id} (labels :statement.edit/label)]
-      [:textarea.form-control {:id statement-html-id
+      [:textarea.form-control {:name statement-html-id
                                :rows 3
                                :placeholder (:statement/content statement)
                                :defaultValue (:statement/content statement)}]]
@@ -45,7 +45,6 @@
   ;; Merge instead of overwriting, to preserve meta information
   (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))
 
-;; TODO jede menge warnings auf der Konsole
 (rf/reg-event-fx
   :statement.edit.send/success
   (fn [{:keys [db]} [_ form response]]
