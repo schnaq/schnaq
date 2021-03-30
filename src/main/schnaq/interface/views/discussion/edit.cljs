@@ -4,9 +4,10 @@
 (defn edit-card
   "The same as a statement-card, but currently being an editable input."
   [statement]
-  [:form.card.card-rounded
+  [:form.card.statement-card
    [:label "Currently being edited"]
    [:input {:type "text"
+            :placeholder (:statement/content statement)
             :defaultValue (:statement/content statement)}]
    [:button.btn.btn-outline-primary "Submit"]
    [:button.btn.btn-outline-secondary "Cancel"]])
