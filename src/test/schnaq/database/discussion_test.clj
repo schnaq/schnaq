@@ -1,7 +1,9 @@
 (ns schnaq.database.discussion-test
-  (:require [clojure.test :refer [deftest testing use-fixtures is are]]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
             [schnaq.database.discussion-test-data :as test-data]
+            [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
@@ -228,3 +230,16 @@
           "schnaq should include disable button tag after setting it")
       (is (disabled-pro-con? schnaq-after-2)
           "schnaq should no longer include disable button tag after removing it"))))
+
+(deftest change-statement-text-test
+  (testing "Test whether editing statement-content works correctly."
+    (let [cat-dog-discussion (first (db/all-discussions-by-title "Cat or Dog?"))
+          initial-content "Unmodified-statement"
+          modified-content "Whats up in dis here house?"
+          new-user (user-db/add-user-if-not-exists "Wugiperson")
+          new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
+                                                       new-user initial-content)]
+      (is (= initial-content (:statement/content (db/get-statement new-statement-id))))
+      (let [modified-statement (db/change-statement-text new-statement-id modified-content)]
+        (is (= modified-content (:statement/content modified-statement)))
+        (is (s/valid? ::specs/statement modified-statement))))))

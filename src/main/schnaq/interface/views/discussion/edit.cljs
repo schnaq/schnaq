@@ -2,20 +2,22 @@
   (:require [re-frame.core :as rf]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
+;; TODO replace strings with labels
+
 (defn edit-card
   "The same as a statement-card, but currently being an editable input."
   [statement]
   (let [statement-html-id (str "statement-edit-" (:db/id statement))]
     [:form.card.statement-card.py-2.px-3
      [:div.form-group
-      [:label {:for statement-html-id}
-       "New statement text:"]
+      [:label {:for statement-html-id} "New statement text:"]
       [:textarea.form-control {:id statement-html-id
                                :rows 3
                                :placeholder (:statement/content statement)
                                :defaultValue (:statement/content statement)}]]
      [:div.text-right
       [:button.btn.btn-outline-primary.mr-1 "Submit"]
+      ;; TODO wire in functionality to submit.
       [:button.btn.btn-outline-secondary
        {:on-click (fn [e]
                     (js-wrap/prevent-default e)

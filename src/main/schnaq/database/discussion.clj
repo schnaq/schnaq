@@ -6,7 +6,7 @@
             [schnaq.config :as config]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
+            [schnaq.meeting.database :refer [transact new-connection query fast-pull] :as main-db]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
@@ -491,3 +491,11 @@
           :where [?discussion :discussion/share-hash ?hash]
           [?discussion :discussion/starting-statements ?statement]]
         statement-id share-hash))))
+
+(>defn change-statement-text
+  "Changes the content of a statement to `new-content`."
+  [statement-id new-content]
+  [:db/id :statement/content :ret ::specs/statement]
+  (transact [[:db/add statement-id :statement/content new-content]])
+  (log/info "Statement" statement-id "edited with new content.")
+  (fast-pull statement-id statement-pattern))
