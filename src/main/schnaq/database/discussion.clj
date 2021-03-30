@@ -6,7 +6,7 @@
             [schnaq.config :as config]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.meeting.database :refer [transact new-connection query fast-pull] :as main-db]
+            [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
