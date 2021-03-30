@@ -146,6 +146,9 @@
         :discussion.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
         :discussion.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
 
+        :statement.edit.send.failure/title "Edit could not be made"
+        :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
+
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
         :schnaq.create.button/save "Start a new schnaq"
@@ -654,6 +657,9 @@
         :discussion.admin.configurations.read-only/explanation "Aktivieren, um keine neuen Beiträge zu erlauben. Bestehende Beiträge sind weiterhin sichtbar und können weiterhin analysiert werden. Diese Option kann jederzeit geändert werden."
         :discussion.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
         :discussion.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
+
+        :statement.edit.send.failure/title "Änderung nicht gespeichert"
+        :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
 
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"

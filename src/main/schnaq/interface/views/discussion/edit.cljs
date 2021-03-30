@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.edit
   (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
@@ -38,7 +39,6 @@
                                 {:statement-id statement-id
                                  :share-hash share-hash
                                  :new-content (oget+ form [html-selector :value])}
-                                ;; TODO failure case
                                 [:statement.edit.send/failure])]})))
 
 (defn- update-statement-in-list
@@ -57,6 +57,14 @@
                (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement)))
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
+
+(rf/reg-event-fx
+  :statement.edit.send/failure
+  (fn [_ _]
+    {:fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :statement.edit.send.failure/title)
+                                     :body (labels :statement.edit.send.failure/body)
+                                     :context :danger}]]]}))
 
 (rf/reg-event-db
   :statement.edit/activate-edit
