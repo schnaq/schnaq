@@ -1,13 +1,12 @@
 @import 'variables';
 
 .meeting-entry-no-hover {
+  @extend .shadow-sm;
   background-color: $white;
   border-radius: 2rem;
-  box-shadow: $light-shadow;
   min-height: 15rem;
   overflow: hidden;
 }
-
 
 .meeting-entry {
   /* stylelint-disable */

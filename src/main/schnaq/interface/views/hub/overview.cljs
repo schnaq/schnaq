@@ -64,7 +64,7 @@
    [:div.mx-2
     [add-schnaq-to-hub-form]]
    [:div.text-center
-    [:button.btn.btn-outline-dark
+    [:button.btn.btn-outline-dark.btn-rounded-2 {:disabled true}
      [:i.fas.mr-1 {:class (fa :cog)}]
      (labels :hub/settings)]]
    [:hr]
