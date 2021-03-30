@@ -101,7 +101,7 @@
   "Displays the different sort options for feed elements."
   []
   (let [sort-method @(rf/subscribe [:feed/sort])]
-    [:section.py-2.pl-2.text-right
+    [:section.pl-2.text-right
      [:span.small.mb-0
       (labels :badges.sort/sort) [:br]
       [:button.btn.btn-outline-primary.btn-sm.mx-1
@@ -121,10 +121,11 @@
      [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (defn feed-controls []
-  [:section.panel-white
-   [sort-options]
-   [:hr]
-   [sidebar-common]])
+  [:<>
+   [:section.panel-white
+    [sidebar-common]]
+   [sort-options]])
+
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
