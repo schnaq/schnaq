@@ -101,7 +101,7 @@
          (for [conclusion sorted-conclusions]
            [:div {:key (:db/id conclusion)
                   :on-click (fn [_e]
-                              (let [selection (.toString (.getSelection js/window))]
+                              (let [selection (js-wrap/to-string (.getSelection js/window))]
                                 (when (zero? (count selection))
                                   (rf/dispatch [:discussion.select/conclusion conclusion])
                                   (rf/dispatch [:discussion.history/push conclusion])
