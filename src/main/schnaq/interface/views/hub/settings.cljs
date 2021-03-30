@@ -47,11 +47,22 @@
   []
   [settings-view])
 
-
 (rf/reg-event-fx
   :hub.name/update
   (fn [{:keys [db]} [_ new-hub-name]]
-    {:fx [(http/xhrio-request db :put "/hub/name"
-                              [:hub/load]
-                              {:hub-name new-hub-name}
-                              [:ajax.error/as-notification])]}))
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      {:fx [(http/xhrio-request
+              db :put (gstring/format "/hub/%s/name" keycloak-name)
+              [:hub.name/update-success]
+              {:new-hub-name new-hub-name}
+              [:ajax.error/as-notification])]})))
+
+(rf/reg-event-fx
+  :hub.name/update-success
+  (fn [{:keys [db]} [_ {:keys [hub]}]]
+    {:db (assoc-in db [:hubs (:hub/keycloak-name hub)] hub)
+     :fx [[:dispatch
+           [:notification/add
+            #:notification{:title (labels :hub.settings.name/updated-title)
+                           :body (labels :hub.settings.name/updated-body)
+                           :context :success}]]]}))
