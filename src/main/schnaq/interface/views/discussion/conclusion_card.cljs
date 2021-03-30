@@ -105,8 +105,7 @@
 (defn conclusion-cards-list
   "Displays a list of conclusions."
   [conclusions share-hash]
-  (let [
-        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
+  (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
     (if (seq conclusions)
       (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])

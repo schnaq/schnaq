@@ -21,12 +21,12 @@
                                :placeholder (:statement/content statement)
                                :defaultValue (:statement/content statement)}]]
      [:div.text-right
-      [:button.btn.btn-outline-primary.mr-1 {:type "submit"} (labels :statement.edit.button/submit)]
       [:button.btn.btn-outline-secondary
        {:on-click (fn [e]
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:statement.edit/deactivate-edit (:db/id statement)]))}
-       (labels :statement.edit.button/cancel)]]]))
+       (labels :statement.edit.button/cancel)]
+      [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]))
 
 (rf/reg-event-fx
   :statement.edit/send
