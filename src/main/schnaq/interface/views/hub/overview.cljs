@@ -3,6 +3,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -59,16 +60,18 @@
 (defn- hub-panel
   "Small overview for the hub."
   []
-  [:section.panel-white
-   [hub-common/single-hub @(rf/subscribe [:hub/current])]
-   [:div.mx-2
-    [add-schnaq-to-hub-form]]
-   [:div.text-center
-    [:button.btn.btn-outline-dark.btn-rounded-2
-     [:i.fas.mr-1 {:class (fa :cog)}]
-     (labels :hub/settings)]]
-   [:hr]
-   [feed/sidebar-common]])
+  (let [hub @(rf/subscribe [:hub/current])]
+    [:section.panel-white
+     [hub-common/single-hub hub]
+     [:div.mx-2
+      [add-schnaq-to-hub-form]]
+     [:div.text-center
+      [:a.btn.btn-outline-dark.btn-rounded-2
+       {:href (reitfe/href :routes.hub/edit {:keycloak-name (:hub/keycloak-name hub)})}
+       [:i.fas.mr-1 {:class (fa :cog)}]
+       (labels :hub/settings)]]
+     [:hr]
+     [feed/sidebar-common]]))
 
 (defn- sidebar-right []
   [:<>
@@ -78,20 +81,20 @@
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
   uniquely refers to a hub."
-  [keycloak-name]
-  [string? :ret vector?]
-  [pages/three-column-layout
-   {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
-   [feed/feed-navigation]
-   [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
-   [sidebar-right]])
+  []
+  [:ret vector?]
+  (let [keycloak-name (get-in @(rf/subscribe [:navigation/current-route])
+                              [:path-params :keycloak-name])]
+    [pages/three-column-layout
+     {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
+     [feed/feed-navigation]
+     [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
+     [sidebar-right]]))
 
 (defn hub-overview
   "Renders all schnaqs belonging to the hub."
   []
-  (let [keycloak-name (get-in @(rf/subscribe [:navigation/current-route])
-                              [:path-params :keycloak-name])]
-    [hub-index keycloak-name]))
+  [hub-index])
 
 
 ;; -----------------------------------------------------------------------------
