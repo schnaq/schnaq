@@ -78,6 +78,11 @@
   (fn [db [_ statement-id]]
     (update-in db [:statements :currently-edited] disj statement-id)))
 
+(rf/reg-event-db
+  :statement.edit/reset-edits
+  (fn [db _]
+    (assoc-in db [:statements :currently-edited] #{})))
+
 (rf/reg-sub
   :statement.edit/ongoing?
   (fn [db [_ statement-id]]
