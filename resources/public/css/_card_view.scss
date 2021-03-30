@@ -6,21 +6,10 @@
   @include rounded.rounded-2;
   background: vars.$white;
   overflow: hidden;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
-  }
-}
-
-.card-rounded {
-  @extend .shadow-sm;
-  @include rounded.rounded-2;
-  border: 0;
-  overflow: hidden;
-
-  @include media-breakpoint-down(sm) {
-    @include rounded.rounded-0;
   }
 }
 
@@ -150,13 +139,15 @@
   }
 }
 
-@mixin statement-card {
+.statement-card {
+  @include rounded.rounded-1;
+  border: 0;
   overflow: hidden;
   white-space: pre-line;
 }
 
 .statement-card-agree {
-  @include statement-card;
+  @extend .statement-card;
   background: vars.$primary;
 
   &:hover {
@@ -165,7 +156,7 @@
 }
 
 .statement-card-disagree {
-  @include statement-card;
+  @extend .statement-card;
   background: vars.$secondary;
 
   &:hover {
@@ -174,7 +165,7 @@
 }
 
 .statement-card-neutral {
-  @include statement-card;
+  @extend .statement-card;
   background: vars.$gray-300;
 
   &:hover {
