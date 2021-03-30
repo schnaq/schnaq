@@ -28,7 +28,7 @@
                            :css "font-150"}]]
       [:div.text-right.my-3
        [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
-        (labels :user.settings.button/change-account-information)]]]]))
+        (labels :hub.settings/save)]]]]))
 
 (>defn- settings-view
   "Show the CRUD view for a hub."
