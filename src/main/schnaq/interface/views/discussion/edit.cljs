@@ -5,8 +5,6 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
-;; TODO replace strings with labels
-
 (defn edit-card
   "The same as a statement-card, but currently being an editable input."
   [statement]
@@ -17,18 +15,18 @@
                    (rf/dispatch [:statement.edit/send (:db/id statement) statement-html-id
                                  (oget e [:target :elements])]))}
      [:div.form-group
-      [:label {:for statement-html-id} "New statement text:"]
+      [:label {:for statement-html-id} (labels :statement.edit/label)]
       [:textarea.form-control {:id statement-html-id
                                :rows 3
                                :placeholder (:statement/content statement)
                                :defaultValue (:statement/content statement)}]]
      [:div.text-right
-      [:button.btn.btn-outline-primary.mr-1 {:type "submit"} "Submit"]
+      [:button.btn.btn-outline-primary.mr-1 {:type "submit"} (labels :statement.edit.button/submit)]
       [:button.btn.btn-outline-secondary
        {:on-click (fn [e]
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:statement.edit/deactivate-edit (:db/id statement)]))}
-       "Cancel"]]]))
+       (labels :statement.edit.button/cancel)]]]))
 
 (rf/reg-event-fx
   :statement.edit/send

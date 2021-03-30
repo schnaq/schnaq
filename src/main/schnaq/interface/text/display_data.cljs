@@ -148,6 +148,9 @@
 
         :statement.edit.send.failure/title "Edit could not be made"
         :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
+        :statement.edit/label "Edit statement"
+        :statement.edit.button/submit "Submit"
+        :statement.edit.button/cancel "Cancel"
 
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
@@ -660,6 +663,9 @@
 
         :statement.edit.send.failure/title "Änderung nicht gespeichert"
         :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
+        :statement.edit/label "Beitrag bearbeiten"
+        :statement.edit.button/submit "Absenden"
+        :statement.edit.button/cancel "Abbrechen"
 
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
