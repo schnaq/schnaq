@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [compojure.core :refer [GET POST DELETE routes wrap-routes]]
+            [compojure.core :refer [GET POST PUT DELETE routes wrap-routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn- ?]]
             [org.httpkit.server :as server]
@@ -396,6 +396,20 @@
           (ok {:string-representation (export/generate-text-export share-hash)}))
       (validator/deny-access invalid-rights-message))))
 
+(defn- edit-statement!
+  "Edits the content of a statement, when the user is the registered author."
+  [{:keys [params identity]}]
+  (let [{:keys [statement-id new-content share-hash]} params
+        user-identity (:sub identity)
+        statement (db/fast-pull statement-id [{:statement/author [:user.registered/keycloak-id]}
+                                              :statement/deleted?])]
+    (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
+      (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
+               (not (:statement/deleted? statement)))
+        (ok {:updated-statement (discussion-db/change-statement-text statement-id new-content)})
+        (bad-request {:error "You can not edit a closed / deleted discussion or statement."}))
+      (validator/deny-access invalid-rights-message))))
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -430,6 +444,9 @@
     (POST "/credentials/validate" [] check-credentials)
     (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
     (-> (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+        (wrap-routes auth/wrap-jwt-authentication))
+    (-> (PUT "/discussion/statement/edit" [] edit-statement!)
+        (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
     (POST "/discussion/statement/info" [] get-statement-info)
     (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
