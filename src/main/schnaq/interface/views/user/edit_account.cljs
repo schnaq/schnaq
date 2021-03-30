@@ -6,13 +6,14 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.settings :as settings]))
 
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])
         input-id :user-display-name]
-    [:div.panel-white.p-5
-     [:h4.text-muted.mb-5 (labels :user.settings/change-name)]
+    [pages/settings-panel
+     (labels :user.settings/change-name)
      [:form
       {:on-submit (fn [e]
                     (let [new-display-name (oget+ e [:target :elements input-id :value])]
