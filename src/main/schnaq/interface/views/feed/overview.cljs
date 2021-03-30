@@ -60,13 +60,17 @@
           [:div.pb-4 {:key (:db/id schnaq)}
            [single-schnaq-component schnaq]])))]))
 
-(defn- feed-button [label route]
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        button-class (if (= current-route route) "feed-button-focused" "feed-button")]
-    [:article
-     [:a {:class button-class :type "button"
-          :href (reitfe/href route)}
-      (labels label)]]))
+(defn- feed-button
+  "Create a button for the feed list."
+  ([label route]
+   [feed-button label route nil])
+  ([label route route-params]
+   (let [current-route @(rf/subscribe [:navigation/current-route-name])
+         button-class (if (= current-route route) "feed-button-focused" "feed-button")]
+     [:article
+      [:a {:class button-class :type "button"
+           :href (reitfe/href route route-params)}
+       (labels label)]])))
 
 (defn feed-navigation
   "Navigate between the feeds."
@@ -79,8 +83,7 @@
        [feed-button :router/public-discussions :routes.schnaqs/public]
        (when-not (nil? edit-hash)
          [feed-button :nav.schnaqs/last-added
-          #(rf/dispatch [:navigation/navigate :routes.schnaq/admin-center
-                         {:share-hash share-hash :edit-hash edit-hash}])])
+          :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
        (when-not toolbelt/production?
          [feed-button :nav.schnaqs/show-all :routes/schnaqs])
        [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]
@@ -111,7 +114,7 @@
        (labels :badges.sort/alphabetical)]]]))
 
 (defn sidebar-common []
-  [:section.text-center.mt-3
+  [:section.text-center
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
