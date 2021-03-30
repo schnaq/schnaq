@@ -1,5 +1,5 @@
 (ns schnaq.api.hub
-  (:require [compojure.core :refer [GET POST DELETE routes wrap-routes context]]
+  (:require [compojure.core :refer [GET POST DELETE PUT routes wrap-routes context]]
             [ring.util.http-response :refer [ok forbidden bad-request]]
             [schnaq.auth :as auth]
             [schnaq.meeting.database :refer [fast-pull]]
@@ -55,6 +55,19 @@
         (ok {:hub processed-hub}))
       (forbidden {:message "You are not a member of the group."}))))
 
+(defn- change-hub-name
+  "Change hub name."
+  [{:keys [params identity]}]
+  (let [{:keys [keycloak-name new-hub-name]} params]
+    (if (auth/member-of-group? identity keycloak-name)
+      (let [hub (hub-db/change-hub-name keycloak-name new-hub-name)
+            processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
+        (ok {:hub processed-hub}))
+      (forbidden {:message "You are not a member of the group."}))))
+
+
+;; -----------------------------------------------------------------------------
+
 (def hub-routes
   (->
     (routes
@@ -63,6 +76,7 @@
       (context "/hub" []
         (GET "/:keycloak-name" [] hub-by-keycloak-name)
         (POST "/:keycloak-name/add" [] add-schnaq-to-hub)
+        (PUT "/:keycloak-name/name" [] change-hub-name)
         (DELETE "/:keycloak-name/remove" [] remove-schnaq-from-hub)))
     (wrap-routes auth/auth-middleware)
     (wrap-routes auth/wrap-jwt-authentication)))

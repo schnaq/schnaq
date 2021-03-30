@@ -48,3 +48,9 @@
       (is (contains? (second test-schnaqs) :db/txInstant))
       (is (some #{(-> test-schnaqs first :discussion/title)} ["Another Hub Discussion" "Hub Discussion"]))
       (is (empty? (#'hub/all-schnaqs-for-hub [:hub/keycloak-name "some-empty-hub"]))))))
+
+(deftest change-hub-name-test
+  (testing "When a hub exists, a group member can change it's name."
+    (let [keycloak-name "schnaqqifantenparty"
+          _ (hub/create-hub "hubby" keycloak-name)]
+      (is (= "thisisfine" (:hub/name (hub/change-hub-name keycloak-name "thisisfine")))))))

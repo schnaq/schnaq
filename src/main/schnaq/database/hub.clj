@@ -94,4 +94,6 @@
   [string? string? :ret ::specs/hub]
   (transact [[:db/add [:hub/keycloak-name keycloak-name]
               :hub/name new-name]])
-  (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern))
+  (toolbelt/pull-key-up
+    (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern)
+    :db/ident))

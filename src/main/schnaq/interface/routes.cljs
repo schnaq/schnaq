@@ -17,6 +17,7 @@
             [schnaq.interface.views.graph.view :as graph-view]
             [schnaq.interface.views.howto.how-to :as how-to]
             [schnaq.interface.views.hub.overview :as hubs]
+            [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.privacy :as privacy]
@@ -66,12 +67,16 @@
      :view pages/login-page
      :link-text (labels :user/login)}]
    ["hub/:keycloak-name"
-    {:name :routes/hub
-     :view hubs/hub-overview
-     :parameters {:path {:keycloak-name string?}}
+    {:parameters {:path {:keycloak-name string?}}
      :controllers [{:parameters {:path [:keycloak-name]}
                     :start (fn [{:keys [path]}]
-                             (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}]
+                             (rf/dispatch [:scheduler.after/login [:hub/load (:keycloak-name path)]]))}]}
+    ["/"
+     {:name :routes/hub
+      :view hubs/hub-overview}]
+    ["/edit"
+     {:name :routes.hub/edit
+      :view hub-settings/settings}]]
    ["user"
     ["/account"
      {:name :routes.user.manage/account
