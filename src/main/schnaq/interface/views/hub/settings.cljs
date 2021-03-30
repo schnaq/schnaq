@@ -40,7 +40,7 @@
      {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
      [feed/feed-navigation]
      [settings-body]
-     [hubs/sidebar-right]]))
+     [hubs/hub-panel]]))
 
 (defn settings
   "Renders all schnaqs belonging to the hub."

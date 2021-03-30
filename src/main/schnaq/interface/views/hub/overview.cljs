@@ -57,7 +57,7 @@
                     (rf/dispatch [:hub.remove/schnaq share-hash]))}
       [:i {:class (str "m-auto fas " (fa :cross))}]]]))
 
-(defn- hub-panel
+(defn hub-panel
   "Small overview for the hub."
   []
   (let [hub @(rf/subscribe [:hub/current])]
