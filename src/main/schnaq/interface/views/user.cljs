@@ -10,7 +10,7 @@
   "User info box containing relevant information for discussions."
   [username avatar-size]
   [:div.d-flex.flex-row.align-items-center
-   [:div.pr-2.pb-1.text-right.user-name
+   [:div.pr-2.pb-1.text-right
     [:small username]]
    [common/avatar username avatar-size]])
 

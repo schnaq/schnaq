@@ -491,6 +491,7 @@
 
         :hubs/heading "Your Hubs"
         :hub/heading "Personal %s Hub"
+        :hub/settings "Administration"
         :hub.add.schnaq.success/title "Schnaq added!"
         :hub.add.schnaq.success/body "The schnaq has been added to your hub successfully."
         :hub.add.schnaq.error/title "schnaq was not added!"
@@ -994,6 +995,7 @@
 
         :hubs/heading "Deine Hubs"
         :hub/heading "Persönlicher %s Hub"
+        :hub/settings "Verwaltung"
         :hub.add.schnaq.success/title "Schnaq hinzugefügt!"
         :hub.add.schnaq.success/body "Der schnaq wurde deinem Hub erfolgreich hinzugefügt."
         :hub.add.schnaq.error/title "Fehler beim Hinzufügen!"

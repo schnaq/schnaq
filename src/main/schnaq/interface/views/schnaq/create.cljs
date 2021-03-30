@@ -29,7 +29,7 @@
                           public? (oget e [:target :elements :public-discussion? :checked])]
                       (js-wrap/prevent-default e)
                       (rf/dispatch [:schnaq.create/new {:discussion/title title} public?])))}
-      [:div.agenda-meeting-container.shadow-straight.p-3
+      [:div.panel-white.p-4
        [title-input]]
       [:div.form-check.pt-3.text-center
        [:input.form-check-input.big-checkbox {:type :checkbox

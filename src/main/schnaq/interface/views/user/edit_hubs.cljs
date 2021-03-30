@@ -6,7 +6,7 @@
 
 (defn- show-hubs []
   (let [hubs @(rf/subscribe [:hubs/all])]
-    [:div.manage-account-content.shadow-straight-light
+    [:div.panel-white.p-5
      [:h4.text-gray-600.mb-5 (labels :user.settings.hubs/show)]
      (if (empty? hubs)
        [:h4.text-gray-600 (labels :user.settings.hubs/empty)]

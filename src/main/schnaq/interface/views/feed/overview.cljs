@@ -98,7 +98,7 @@
   "Displays the different sort options for feed elements."
   []
   (let [sort-method @(rf/subscribe [:feed/sort])]
-    [:section.py-2.pl-2
+    [:section.py-2.pl-2.text-right
      [:span.small.mb-0
       (labels :badges.sort/sort) [:br]
       [:button.btn.btn-outline-primary.btn-sm.mx-1
@@ -111,14 +111,14 @@
        (labels :badges.sort/alphabetical)]]]))
 
 (defn sidebar-common []
-  [:section.pl-2
+  [:section.text-center.mt-3
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
      [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (defn feed-controls []
-  [:div.feed-extra-info
+  [:section.panel-white
    [sort-options]
    [:hr]
    [sidebar-common]])

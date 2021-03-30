@@ -71,7 +71,7 @@
   [edit-hash {:keys [statement/content] :as statement} attitude]
   (let [fa-label (logic/attitude->symbol attitude)
         display-name (user-utils/statement-author statement)]
-    [:div.card.card-rounded.clickable.shadow-straight-light
+    [:article.card.card-rounded.clickable
      {:class (str "statement-card-" (name attitude))}
      [:div.d-flex.flex-row
       [:div.m-auto
