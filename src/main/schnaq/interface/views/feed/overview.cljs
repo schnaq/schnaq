@@ -114,7 +114,7 @@
        (labels :badges.sort/alphabetical)]]]))
 
 (defn sidebar-common []
-  [:section.text-center
+  [:section.text-center.my-3.text-center
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
@@ -125,7 +125,6 @@
    [:section.panel-white
     [sidebar-common]]
    [sort-options]])
-
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which

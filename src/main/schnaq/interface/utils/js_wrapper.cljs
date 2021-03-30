@@ -56,3 +56,8 @@
   "Trigger klaro popup menu."
   []
   #(.show js/klaro))
+
+(defn to-string
+  "Converts something to string via js."
+  [input]
+  (.toString input))

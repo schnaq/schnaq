@@ -390,7 +390,16 @@
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/simple"]}])
 
+(def ^:private registered-users
+  [{:db/id "user.registered/alex"
+    :user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276",
+    :user.registered/display-name "A. Schneider",
+    :user.registered/email "alexander@schneider.gg",
+    :user.registered/last-name "Schneider",
+    :user.registered/first-name "Alexander"}])
+
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-arguments
           cat-or-dog-discussion
-          graph-discussion simple-discussion))
+          graph-discussion simple-discussion
+          registered-users))

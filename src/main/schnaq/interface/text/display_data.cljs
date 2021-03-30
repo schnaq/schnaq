@@ -146,6 +146,12 @@
         :discussion.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
         :discussion.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
 
+        :statement.edit.send.failure/title "Edit could not be made"
+        :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
+        :statement.edit/label "Edit statement"
+        :statement.edit.button/submit "Submit"
+        :statement.edit.button/cancel "Cancel"
+
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
         :schnaq.create.button/save "Start a new schnaq"
@@ -230,6 +236,7 @@
         :discussion.badges/delete-statement-confirmation "Do you really want to delete the statement?"
         :discussion.notification/new-content-title "New statement!"
         :discussion.notification/new-content-body "Your statement was added successfully!"
+        :discussion.badges/edit-statement "edit"
 
         ;; meetings overview
         :schnaqs/header "Overview of your schnaqs"
@@ -658,6 +665,12 @@
         :discussion.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
         :discussion.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
 
+        :statement.edit.send.failure/title "Änderung nicht gespeichert"
+        :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
+        :statement.edit/label "Beitrag bearbeiten"
+        :statement.edit.button/submit "Absenden"
+        :statement.edit.button/cancel "Abbrechen"
+
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
         :schnaq.create.button/save "Schnaq starten"
@@ -732,6 +745,7 @@
         :discussion.badges/delete-statement-confirmation "Möchtest du den Beitrag wirklich löschen?"
         :discussion.notification/new-content-title "Neuer Beitrag!"
         :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
+        :discussion.badges/edit-statement "editieren"
 
         ;; meetings overview
         :schnaqs/header "Übersicht deiner schnaqs"

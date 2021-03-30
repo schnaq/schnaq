@@ -58,5 +58,11 @@
       (-> db
           (assoc-in [:user :names :display] display-name)
           (assoc-in [:user :email] email)
+          (assoc-in [:user :id] (:db/id registered-user))
           (cond-> first-name (assoc-in [:user :names :first] first-name))
           (cond-> last-name (assoc-in [:user :names :last] last-name))))))
+
+(rf/reg-sub
+  :user/id
+  (fn [db _]
+    (get-in db [:user :id])))

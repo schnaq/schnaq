@@ -37,7 +37,8 @@
              (rf/dispatch [:updates.periodic/starting-conclusions true])
              (rf/dispatch [:discussion.query.conclusions/starting]))
     :stop (fn []
-            (rf/dispatch [:updates.periodic/starting-conclusions false]))}])
+            (rf/dispatch [:updates.periodic/starting-conclusions false])
+            (rf/dispatch [:statement.edit/reset-edits]))}])
 
 (defn language-controllers
   "Returns controllers for the desired locale switch and redirect."
@@ -147,7 +148,8 @@
                       :start (fn []
                                (rf/dispatch [:discussion.query.statement/by-id]))
                       :stop (fn []
-                              (rf/dispatch [:visited.statement-nums/to-localstorage]))}]}]
+                              (rf/dispatch [:visited.statement-nums/to-localstorage])
+                              (rf/dispatch [:statement.edit/reset-edits]))}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint
