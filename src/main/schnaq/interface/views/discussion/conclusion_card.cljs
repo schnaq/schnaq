@@ -75,7 +75,7 @@
         currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card statement]
-      [:article.card.card-rounded.clickable
+      [:article.card.card-statement.clickable
        {:class (str "statement-card-" (name attitude))}
        [:div.d-flex.flex-row
         [:div.m-auto
