@@ -29,6 +29,19 @@
       :title (labels :discussion.badges/delete-statement)}
      [:i {:class (str "m-auto fas " (fa :trash))}]]))
 
+(defn- edit-button
+  "Give the registered user the ability to edit their statement."
+  [statement]
+  (let [user-id @(rf/subscribe [:user/id])]
+    (when (and (= user-id (:db/id (:statement/author statement)))
+               (not (:statement/deleted? statement)))
+      [:span.badge.badge-pill.badge-transparent.badge-clickable
+       {:tabIndex 40
+        :on-click (fn [e] (js-wrap/stop-propagation e)
+                    (js/alert "Editierzeit!"))
+        :title (labels :discussion.badges/edit-statement)}
+       [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])))
+
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
   [statement edit-hash]
@@ -59,6 +72,7 @@
        :data-content (build-author-list authors)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (count authors)]
+     [edit-button statement]
      (when edit-hash
        [delete-clicker statement edit-hash])
      [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant statement) locale]]]))
