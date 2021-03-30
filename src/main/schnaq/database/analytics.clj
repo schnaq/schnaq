@@ -65,6 +65,11 @@
   ([] (number-of-entities-since :user/nickname))
   ([since] (number-of-entities-since :user/nickname since)))
 
+(defn number-or-registered-users
+  "Returns the number of registered users in the database."
+  ([] (number-of-entities-since :user.registered/display-name))
+  ([since] (number-of-entities-since :user.registered/display-name since)))
+
 (defn number-of-statements
   "Returns the number of different usernames in the database."
   ([]

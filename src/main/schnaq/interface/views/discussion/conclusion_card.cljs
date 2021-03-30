@@ -8,7 +8,8 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.user :as user]))
+            [schnaq.interface.views.user :as user]
+            [schnaq.user :as user-utils]))
 
 (defn- call-to-contribute
   "If no contributions are available, add a call to action to engage the users."
@@ -69,8 +70,7 @@
 (defn- statement-card
   [edit-hash {:keys [statement/content] :as statement} attitude]
   (let [fa-label (logic/attitude->symbol attitude)
-        display-name (or (-> statement :statement/author :user.registered/display-name)
-                         (-> statement :statement/author :user/nickname))]
+        display-name (user-utils/statement-author statement)]
     [:article.card.card-rounded.clickable
      {:class (str "statement-card-" (name attitude))}
      [:div.d-flex.flex-row

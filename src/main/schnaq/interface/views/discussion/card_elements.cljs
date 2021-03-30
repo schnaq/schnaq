@@ -11,7 +11,8 @@
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.user :as user-utils]))
 
 (defn- home-button-mobile
   "Home button for history view"
@@ -23,7 +24,7 @@
     [tooltip/block-element
      :right
      (labels :history.home/tooltip)
-     [:<> [:div [:small (labels :history.home/text)]]]]]])
+     [:div [:small (labels :history.home/text)]]]]])
 
 (defn history-view-mobile
   "History view displayed in the left column in the desktop view."
@@ -34,7 +35,7 @@
      [home-button-mobile (count indexed-history)]
      ;; history
      (for [[index statement] indexed-history]
-       (let [nickname (-> statement :statement/author :user/nickname)]
+       (let [nickname (user-utils/statement-author statement)]
          [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
           {:key (str "history-" (:db/id statement))}
           (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
@@ -97,7 +98,7 @@
         ;; history
         (for [[index statement] indexed-history]
           (let [max-word-count 20
-                nickname (-> statement :statement/author :user/nickname)
+                nickname (user-utils/statement-author statement)
                 statement-content (-> statement :statement/content)
                 tooltip (str (labels :tooltip/history-statement) nickname)
                 history-content [:<>
@@ -205,8 +206,7 @@
 
 (defn- topic-bubble-desktop
   [{:discussion/keys [share-hash] :as discussion} content input badges info-content is-topic?]
-  (let [display-name (or (-> content :author :user.registered/display-name)
-                         (-> content :author :user/nickname))]
+  (let [display-name (user-utils/display-name (:author content))]
     [:div.row
      ;; graph
      [:div.col-2
@@ -226,8 +226,7 @@
 
 (defn- topic-bubble-mobile
   [{:discussion/keys [share-hash] :as discussion} content input badges info-content]
-  (let [display-name (or (-> content :author :user.registered/display-name)
-                         (-> content :author :user/nickname))]
+  (let [display-name (user-utils/display-name (:author content))]
     [:<>
      [:div.d-flex.mb-4
       ;; graph and badges
