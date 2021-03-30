@@ -63,7 +63,14 @@
   "Returns the statement given an id."
   [statement-id]
   [:db/id :ret ::specs/statement]
-  (d/pull (d/db (new-connection)) statement-pattern statement-id))
+  (main-db/merge-entity-and-transaction
+    (first
+      (query
+        '[:find (pull ?statement statement-pattern) (pull ?tx transaction-pattern)
+          :in $ ?statement statement-pattern transaction-pattern
+          ;; Get the earliest creation tx
+          :where [?statement :statement/version 1 ?tx]]
+        statement-id statement-pattern main-db/transaction-pattern))))
 
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
@@ -498,4 +505,4 @@
   [:db/id :statement/content :ret ::specs/statement]
   (transact [[:db/add statement-id :statement/content new-content]])
   (log/info "Statement" statement-id "edited with new content.")
-  (fast-pull statement-id statement-pattern))
+  (get-statement statement-id))

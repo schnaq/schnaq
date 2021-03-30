@@ -44,7 +44,8 @@
 (defn- update-statement-in-list
   "Updates the content of a statement in a collection."
   [coll new-statement]
-  (map #(if (= (:db/id new-statement) (:db/id %)) new-statement %) coll))
+  ;; Merge instead of overwriting, to preserve meta information
+  (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))
 
 ;; TODO jede menge warnings auf der Konsole
 (rf/reg-event-fx
