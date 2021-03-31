@@ -93,8 +93,9 @@
      [:hr.d-block.d-md-none]]))
 
 (defn- generic-button
+  "Generic outline button with my-2."
   [label href-link]
-  [:a.btn.btn-outline-primary.rounded-2 {:href href-link}
+  [:a.btn.btn-outline-primary.rounded-2.my-2.w-100 {:href href-link}
    (labels label)])
 
 (defn sort-options
@@ -115,10 +116,8 @@
 
 (defn sidebar-common []
   [:section.text-center.my-3.text-center
-   [:div.btn-group {:role "group"}
-    [:div.btn-group-vertical
-     [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-     [generic-button :how-to/button (reitfe/href :routes/how-to)]]]])
+   [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+   [generic-button :how-to/button (reitfe/href :routes/how-to)]])
 
 (defn feed-controls []
   [:<>
