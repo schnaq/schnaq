@@ -25,8 +25,9 @@
      [:button
       {:class button-class :type "button"
        :on-click #(rf/dispatch [:navigation/navigate route])}
-      [:i.mr-4 {:class (str "fas " (fa icon))}]
-      [:span (labels label)]]]))
+      [:div.d-flex.flex-row.text-left
+       [:i.mr-4.my-auto {:class (str "fas " (fa icon))}]
+       [:span (labels label)]]]]))
 
 (defn- user-navigation []
   [:<>
