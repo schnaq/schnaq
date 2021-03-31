@@ -95,7 +95,7 @@
 (defn- generic-feed-button
   "Generic outline button."
   [label href-link]
-  [:article
+  [:article.w-100
    [:a.feed-button-outlined.w-100 {:href href-link}
     (labels label)]])
 
@@ -118,7 +118,7 @@
 (defn sidebar-common []
   [:section.text-center.my-3.text-center
    [:div.btn-group {:role "group"}
-    [:div.btn-group-verticals
+    [:div.btn-group-vertical
      [generic-feed-button :coc/heading (reitfe/href :routes/code-of-conduct)]
      [generic-feed-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
