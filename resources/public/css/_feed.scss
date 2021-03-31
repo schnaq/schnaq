@@ -1,5 +1,5 @@
+@use 'rounded' as rounded;
 @import 'variables';
-@import 'rounded';
 
 @mixin feed-button-base {
   @include button-template(1rem, 2rem);
@@ -28,4 +28,13 @@
 .feed-button {
   @include feed-button-base;
   color: $text-dark;
+}
+
+.feed-button-outlined {
+  @extend .btn;
+  @extend .btn-outline-primary;
+  @extend .my-2;
+  @include rounded.rounded-2;
+
+  width: 200px;
 }

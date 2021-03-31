@@ -92,11 +92,12 @@
        [hub/list-hubs-with-heading]]]
      [:hr.d-block.d-md-none]]))
 
-(defn- generic-button
-  "Generic outline button with my-2."
+(defn- generic-feed-button
+  "Generic outline button."
   [label href-link]
-  [:a.btn.btn-outline-primary.rounded-2.my-2.w-100 {:href href-link}
-   (labels label)])
+  [:article
+   [:a.feed-button-outlined {:href href-link}
+    (labels label)]])
 
 (defn sort-options
   "Displays the different sort options for feed elements."
@@ -116,8 +117,8 @@
 
 (defn sidebar-common []
   [:section.text-center.my-3.text-center
-   [generic-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-   [generic-button :how-to/button (reitfe/href :routes/how-to)]])
+   [generic-feed-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+   [generic-feed-button :how-to/button (reitfe/href :routes/how-to)]])
 
 (defn feed-controls []
   [:<>
