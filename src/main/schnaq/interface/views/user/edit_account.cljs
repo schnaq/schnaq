@@ -7,14 +7,15 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.settings :as settings]))
+            [schnaq.interface.views.user.settings :as settings]
+            [schnaq.interface.views.hub.common :as hub]))
 
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])
         input-id :user-display-name]
-    [pages/settings-panel
+    [:<>
      (labels :user.settings/change-name)
-     [:form
+     [:form.my-4
       {:on-submit (fn [e]
                     (let [new-display-name (oget+ e [:target :elements input-id :value])]
                       (js-wrap/prevent-default e)
@@ -26,14 +27,30 @@
                            :css "font-150"}]]
       [:div.row.pt-5
        [:div.col.text-left.my-3
-        [:a.btn.btn-outline-secondary.rounded-2 {:href config/keycloak-profile-page}
+        [:a.btn.btn-lg.btn-outline-secondary.rounded-2 {:href config/keycloak-profile-page}
          (labels :user.keycloak-settings)]]
        [:div.col.text-right.my-3
         [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
          (labels :user.settings.button/change-account-information)]]]]]))
 
+(defn- show-hubs []
+  (let [hubs @(rf/subscribe [:hubs/all])]
+    [:<>
+     (labels :user.settings.hubs/show)
+     (if (empty? hubs)
+       [:h6.text-muted.mt-4 (labels :user.settings.hubs/empty)]
+       [hub/hub-list hubs])]))
+
+(defn- content []
+  [pages/settings-panel
+   [:<>
+    [:h1.mb-5 (labels :user.settings/header)]
+    [change-user-info]
+    [:hr.my-5]
+    [show-hubs]]])
+
 (defn view []
-  [settings/user-view :user/edit-account [change-user-info]])
+  [settings/user-view :user/edit-account [content]])
 
 
 ;; ----------------------------------------------------------------------------

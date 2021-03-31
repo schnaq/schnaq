@@ -24,8 +24,7 @@
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
-            [schnaq.interface.views.user.edit-account :as edit-account]
-            [schnaq.interface.views.user.edit-hubs :as edit-hubs]))
+            [schnaq.interface.views.user.edit-account :as edit-account]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -82,11 +81,7 @@
     ["/account"
      {:name :routes.user.manage/account
       :view edit-account/view
-      :link-text (labels :user/edit-account)}]
-    ["/hubs"
-     {:name :routes.user.manage/hubs
-      :view edit-hubs/view
-      :link-text (labels :user/edit-hubs)}]]
+      :link-text (labels :user/edit-account)}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center

@@ -54,7 +54,6 @@
             [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]
             [schnaq.interface.views.user.edit-account]
-            [schnaq.interface.views.user.edit-hubs]
             [schnaq.interface.views.user.settings]
             [taoensso.timbre :as log]))
 ;; NOTE: If you use subs and events in another module, you need to require it

@@ -13,7 +13,6 @@
 (defn- current-user []
   (let [user-name @(rf/subscribe [:user/display-name])]
     [:<>
-     [:h6.text-muted.mb-4 (labels :user.settings)]
      [:div.pl-4
       [common/avatar-with-nickname-right user-name 40]]]))
 
@@ -31,19 +30,20 @@
 
 (defn- user-navigation []
   [:<>
-   [edit-user-navigation-button :user.settings/info :user/edit :routes.user.manage/account]
-   [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes.user.manage/hubs]])
+   [edit-user-navigation-button :user.settings/info :user/edit :routes.user.manage/account]])
 
-(defn- user-panel []
+(defn- edit-user-panel []
   [:section
-   [current-user]
+   [:h6.text-muted.mb-4 (labels :user.settings)]
    [:hr.my-4]
    [user-navigation]])
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout
    {:page/heading (labels page-heading-label)}
-   [user-panel]
+   [edit-user-panel]
    content
    [:section.panel-white
+    [current-user]
+    [:hr.my-4]
     [feed-overview/sidebar-common]]])
