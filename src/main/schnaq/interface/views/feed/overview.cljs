@@ -96,7 +96,7 @@
   "Generic outline button."
   [label href-link]
   [:article.w-100
-   [:a.feed-button-outlined.w-100 {:href href-link}
+   [:a.feed-button-outlined {:href href-link}
     (labels label)]])
 
 (defn sort-options
