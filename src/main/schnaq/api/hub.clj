@@ -78,4 +78,5 @@
         (POST "/:keycloak-name/add" [] add-schnaq-to-hub)
         (PUT "/:keycloak-name/name" [] change-hub-name)
         (DELETE "/:keycloak-name/remove" [] remove-schnaq-from-hub)))
-    (wrap-routes auth/auth-middleware)))
+    (wrap-routes auth/auth-middleware)
+    (wrap-routes auth/wrap-jwt-authentication)))

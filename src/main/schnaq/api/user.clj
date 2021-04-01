@@ -24,4 +24,5 @@
       (context "/user" []
         (PUT "/register" [] register-user-if-they-not-exist)
         (PUT "/name" [] change-display-name)))
-    (wrap-routes auth/auth-middleware)))
+    (wrap-routes auth/auth-middleware)
+    (wrap-routes auth/wrap-jwt-authentication)))
