@@ -87,7 +87,7 @@
   (let [author-name (:nickname (:body-params req))]
     (user-db/add-user-if-not-exists author-name)
     (ok {:text "POST successful"})))
-;; TODO wie legt man jemanden als admin an?
+
 (defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
   [{:keys [params identity]}]
