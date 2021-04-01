@@ -6,9 +6,14 @@
 
 (rf/reg-event-fx
   :schnaq/select-current
-  (fn [{:keys [db]} [_ discussion]]
-    {:db (assoc-in db [:schnaq :selected] discussion)
-     :fx [[:dispatch [:schnaq.visited/to-localstorage (:discussion/share-hash discussion)]]]}))
+  (fn [{:keys [db]} [_ {:discussion/keys [share-hash edit-hash] :as discussion}]]
+    (println share-hash edit-hash)
+    {:db (cond->
+           db
+           true (assoc-in [:schnaq :selected] discussion)
+           edit-hash (update-in [:schnaqs :admin-access]
+                                assoc share-hash edit-hash))
+     :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]]}))
 
 (rf/reg-sub
   :schnaq/selected
