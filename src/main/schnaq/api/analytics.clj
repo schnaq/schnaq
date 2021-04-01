@@ -75,5 +75,4 @@
         (GET "/usernames" [] number-of-usernames)
         (GET "/registered-users" [] number-of-registered-users)))
     (wrap-routes auth/is-admin-middleware)
-    (wrap-routes auth/auth-middleware)
-    (wrap-routes auth/wrap-jwt-authentication)))
+    (wrap-routes auth/auth-middleware)))
