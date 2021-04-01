@@ -87,13 +87,17 @@
   (let [author-name (:nickname (:body-params req))]
     (user-db/add-user-if-not-exists author-name)
     (ok {:text "POST successful"})))
-
+;; TODO wie legt man jemanden als admin an?
 (defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
-  [req]
-  (let [hash (get-in req [:route-params :hash])]
+  [{:keys [params identity]}]
+  (let [hash (:hash params)
+        keycloak-id (:sub identity)]
     (if (validator/valid-discussion? hash)
-      (ok (processors/add-meta-info-to-schnaq (discussion-db/discussion-by-share-hash hash)))
+      (ok (processors/add-meta-info-to-schnaq
+            (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
+              (discussion-db/discussion-by-share-hash-private hash)
+              (discussion-db/discussion-by-share-hash hash))))
       (validator/deny-access))))
 
 (defn- schnaqs-by-hashes
