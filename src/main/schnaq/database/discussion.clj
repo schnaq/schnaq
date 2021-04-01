@@ -506,3 +506,10 @@
   (transact [[:db/add statement-id :statement/content new-content]])
   (log/info "Statement" statement-id "edited with new content.")
   (get-statement statement-id))
+
+(>defn add-admin-to-discussion
+  "Adds an admin user to a discussion."
+  [share-hash keycloak-id]
+  [:discussion/share-hash :user.registered/keycloak-id :ret associative?]
+  (transact [[:db/add [:discussion/share-hash share-hash] :discussion/admins
+              [:user.registered/keycloak-id keycloak-id]]]))

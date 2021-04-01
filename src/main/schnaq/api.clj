@@ -371,11 +371,15 @@
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials
-  "Checks whether share-hash and edit-hash match."
-  [{:keys [body-params]}]
-  (let [share-hash (:share-hash body-params)
-        edit-hash (:edit-hash body-params)]
-    (ok {:valid-credentials? (validator/valid-credentials? share-hash edit-hash)})))
+  "Checks whether share-hash and edit-hash match.
+  If the user is logged in and the credentials are valid, they are added as an admin."
+  [{:keys [params identity]}]
+  (let [{:keys [share-hash edit-hash]} params
+        valid-credentials? (validator/valid-credentials? share-hash edit-hash)
+        keycloak-id (:sub identity)]
+    (when (and valid-credentials? keycloak-id)
+      (discussion-db/add-admin-to-discussion share-hash keycloak-id))
+    (ok {:valid-credentials? valid-credentials?})))
 
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
