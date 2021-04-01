@@ -7,7 +7,6 @@
 (rf/reg-event-fx
   :schnaq/select-current
   (fn [{:keys [db]} [_ {:discussion/keys [share-hash edit-hash] :as discussion}]]
-    (println share-hash edit-hash)
     {:db (cond->
            db
            true (assoc-in [:schnaq :selected] discussion)
