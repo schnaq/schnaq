@@ -21,16 +21,14 @@
 (defn- upload-img-and-store-url [url key share-hash]
   (try
     (let [img (client/get url {:as :stream})]
-      (-> (s3/upload-data-to-s3 img key)
+      (-> (s3/upload-stream-to-s3 :schnaq/header img key)
           (add-bucket-url-to-database share-hash)))
     (catch Exception e
       (log/debug (.getMessage e))
       :error-img)))
 
 (defn- valid-url? [url]
-  (if (re-matches trusted-cdn-url-regex url)
-    true
-    false))
+  (re-matches trusted-cdn-url-regex url))
 
 (defn- check-and-upload-image [image-url key share-hash]
   (if (valid-url? image-url)
