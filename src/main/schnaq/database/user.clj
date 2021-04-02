@@ -104,13 +104,9 @@
   "Returns all members of a certain group."
   [group-name]
   [::specs/non-blank-string :ret (s/coll-of ::specs/user-or-reference)]
-  (query
-    '[:find (pull ?users [:user.registered/display-name])
-      :in $ ?group
-      :where [?users :user.registered/groups ?group]]
-    group-name))
-
-(comment
-
-  (members-of-group "parteyy")
-  )
+  (flatten
+    (query
+      '[:find (pull ?users [:user.registered/display-name])
+        :in $ ?group
+        :where [?users :user.registered/groups ?group]]
+      group-name)))

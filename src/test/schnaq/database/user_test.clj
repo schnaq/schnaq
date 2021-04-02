@@ -64,3 +64,8 @@
         (is (some #(= "test-group" %) updated-groups))
         (is (some #(= "schnaqqifantenparty" %) updated-groups))
         (is (some #(= "new-test-group" %) updated-groups))))))
+
+(deftest members-of-group-test
+  (testing "Are the members pulled correctly?"
+    (is (empty? (db/members-of-group "some-group-thats-not-there")))
+    (is (some #(= "A. Schneider" (:user.registered/display-name %)) (db/members-of-group "test-groups")))))
