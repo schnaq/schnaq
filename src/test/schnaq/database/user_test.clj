@@ -56,11 +56,11 @@
       (is (some #(= "test-group" %) unmodified-test-user-groups))
       (is (not (some #(= "schnaqqifantenparty" %) unmodified-test-user-groups)))
       (is (not (some #(= "new-test-group" %) unmodified-test-user-groups)))
-      (let [new-groups ["schnaqqifantenparty" "new-test-group"]
+      (let [new-groups ["schnaqqifantenparty" "new-test-group" "test-group"]
             _ (db/update-groups test-user-id new-groups)
             updated-groups
             (:user.registered/groups (fast-pull [:user.registered/keycloak-id test-user-id] group-pattern))]
         (is (seq updated-groups))
-        (is (not (some #(= "test-group" %) updated-groups)))
+        (is (some #(= "test-group" %) updated-groups))
         (is (some #(= "schnaqqifantenparty" %) updated-groups))
         (is (some #(= "new-test-group" %) updated-groups))))))
