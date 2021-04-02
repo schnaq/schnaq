@@ -86,3 +86,12 @@
   (transact [[:db/add [:user.registered/keycloak-id keycloak-id]
               :user.registered/display-name display-name]])
   (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern))
+
+(>defn update-groups
+  "Updates the user groups to be equal to the new input."
+  [keycloak-id groups]
+  [:user.registered/keycloak-id :user.registered/groups :ret :user.registered/groups]
+  (let [empty-groups [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/groups]
+        add-new-groups (map #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/groups %)
+                            groups)]
+    (into [empty-groups] add-new-groups)))

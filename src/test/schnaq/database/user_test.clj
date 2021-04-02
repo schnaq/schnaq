@@ -1,6 +1,7 @@
 (ns schnaq.database.user-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.user :as db]
+            [schnaq.meeting.database :refer [fast-pull]]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -43,3 +44,23 @@
       (is (not (= current-name updated-name)))
       (is (= user-name current-name))
       (is (= name-new updated-name)))))
+
+(deftest update-groups-test
+  (testing "Test, whether the user has correct groups"
+    (let [test-user-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
+          group-pattern [:user.registered/keycloak-id
+                         :user.registered/groups]
+          unmodified-test-user-groups
+          (:user.registered/groups (fast-pull [:user.registered/keycloak-id test-user-id] group-pattern))]
+      (is (seq unmodified-test-user-groups))
+      (is (some #(= "test-group" %) unmodified-test-user-groups))
+      (is (not (some #(= "schnaqqifantenparty" %) unmodified-test-user-groups)))
+      (is (not (some #(= "new-test-group" %) unmodified-test-user-groups)))
+      (let [new-groups ["schnaqqifantenparty" "new-test-group"]
+            _ (db/update-groups test-user-id new-groups)
+            updated-groups
+            (:user.registered/groups (fast-pull [:user.registered/keycloak-id test-user-id] group-pattern))]
+        (is (seq updated-groups))
+        (is (not (some #(= "test-group" %) updated-groups)))
+        (is (some #(= "schnaqqifantenparty" %) updated-groups))
+        (is (some #(= "new-test-group" %) updated-groups))))))

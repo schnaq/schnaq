@@ -396,7 +396,8 @@
     :user.registered/display-name "A. Schneider",
     :user.registered/email "alexander@schneider.gg",
     :user.registered/last-name "Schneider",
-    :user.registered/first-name "Alexander"}])
+    :user.registered/first-name "Alexander"
+    :user.registered/groups ["test-group"]}])
 
 (def schnaq-test-data
   (concat cat-or-dog-authors-and-users cat-or-dog-statements cat-or-dog-arguments
