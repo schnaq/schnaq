@@ -1,9 +1,9 @@
 (ns schnaq.media-test
   (:require [clojure.test :refer [is deftest testing use-fixtures]]
-            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
             [schnaq.media :as media]
+            [schnaq.s3 :as s3]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -22,7 +22,7 @@
     (let [share-hash "aaaa1-bbb2-ccc3"
           _schnaq (create-schnaq share-hash)
           bad-url "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png"
-          url (format "%s%s" (:header config/s3-buckets) "for-testing-image-do-not-delete")
+          url (format "%s%s" (#'s3/create-s3-bucket-url :schnaq/header-images) "for-testing-image-do-not-delete")
           key "Test-Upload"
           bad-share "foo"
           check-and-upload-image #'media/check-and-upload-image
@@ -53,7 +53,7 @@
                       "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png")
           bad-url-3 (valid-url?
                       "https://pixabay.com/foo.jpg")]
-      (is (true? allowed-url))
-      (is (false? bad-url-1))
-      (is (false? bad-url-2))
-      (is (false? bad-url-3)))))
+      (is allowed-url)
+      (is (not bad-url-1))
+      (is (not bad-url-2))
+      (is (not bad-url-3)))))
