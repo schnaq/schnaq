@@ -55,7 +55,7 @@
     (pull-hub new-hub)))
 
 (>defn create-hubs-if-not-existing
-  "Create all hubs that are not yet existent."
+  "Create all hubs that are not yet existent. Returns the input, when no exception was caused."
   [keycloak-names]
   [(s/coll-of :hub/keycloak-name) :ret any?]
   (let [non-existent-keycloak-names
@@ -63,7 +63,8 @@
         transaction (mapv #(hash-map :hub/keycloak-name %
                                      :hub/name %)
                           non-existent-keycloak-names)]
-    (transact transaction)))
+    (transact transaction)
+    keycloak-names))
 
 (>defn add-discussions-to-hub
   [hub-id discussion-ids]
