@@ -65,9 +65,9 @@
 (>defn settings-panel
   "Construct a common panel for the middle in a feed."
   [heading body]
-  [vector? string? :ret vector?]
+  [string? vector? :ret vector?]
   [:div.panel-white.p-5
-   [:h4.text-muted.mb-5 heading]
+   [:h1.text-muted.mb-5 heading]
    body])
 
 

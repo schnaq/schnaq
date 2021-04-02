@@ -1111,6 +1111,7 @@
      :arrow-right "fa-arrow-right"
      :arrow-up "fa-arrow-up"
      :calendar "fa-calendar-plus"
+     :camera "fa-camera"
      :carry "fa-people-carry"
      :check/double "fa-check-double"
      :check/normal "fa-check"

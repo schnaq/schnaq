@@ -12,6 +12,12 @@
             ", username:" (:preferred_username identity))
   (ok {:registered-user (user-db/register-new-user identity)}))
 
+(defn- change-profile-picture [{:keys [params]}]
+  (println (:image params))
+  (println params)
+  ;(def foo params)
+  (ok "Neues Profil Bild angelegt"))
+
 (defn- change-display-name
   "change the display name of a registered user"
   [{:keys [body-params identity]}]
@@ -23,6 +29,7 @@
     (routes
       (context "/user" []
         (PUT "/register" [] register-user-if-they-not-exist)
+        (PUT "/picture" [] change-profile-picture)
         (PUT "/name" [] change-display-name)))
     (wrap-routes auth/auth-middleware)
     (wrap-routes auth/wrap-jwt-authentication)))
