@@ -22,8 +22,8 @@
                                            :discussion/edit-hash edit-hash
                                            :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                                           true)
-          succeeding-response (check-credentials {:body-params {:share-hash share-hash :edit-hash edit-hash}})
-          failing-response (check-credentials {:body-params {:share-hash share-hash :edit-hash "INVALID"}})]
+          succeeding-response (check-credentials {:params {:share-hash share-hash :edit-hash edit-hash}})
+          failing-response (check-credentials {:params {:share-hash share-hash :edit-hash "INVALID"}})]
       (is (= 200 (:status succeeding-response)))
       (is (-> succeeding-response :body :valid-credentials?))
       (is (not (-> failing-response :body :valid-credentials?)))
