@@ -37,10 +37,12 @@
 
 (defn- pull-hub
   "Pull a hub from the database and include all txs pull db/ident up."
-  [hub-query]
-  (let [hub (main-db/fast-pull hub-query hub-essential-info-pattern)]
-    (when (:db/id hub)
-      (assoc hub :hub/schnaqs (all-schnaqs-for-hub (:db/id hub))))))
+  ([hub-query]
+   (pull-hub hub-query hub-essential-info-pattern))
+  ([hub-query pattern]
+   (let [hub (main-db/fast-pull hub-query pattern)]
+     (when (:db/id hub)
+       (assoc hub :hub/schnaqs (all-schnaqs-for-hub (:db/id hub)))))))
 
 (>defn create-hub
   "Create a hub and reference it to the keycloak-name."
