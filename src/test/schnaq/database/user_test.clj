@@ -68,4 +68,4 @@
 (deftest members-of-group-test
   (testing "Are the members pulled correctly?"
     (is (empty? (db/members-of-group "some-group-thats-not-there")))
-    (is (some #(= "A. Schneider" (:user.registered/display-name %)) (db/members-of-group "test-groups")))))
+    (is (some #(= "A. Schneider" (:user.registered/display-name %)) (db/members-of-group "test-group")))))
