@@ -51,3 +51,10 @@
 (def time-settings
   {:pattern "HH:mm dd.MM.yyy"
    :timezone "Europe/Berlin"})
+
+;; -----------------------------------------------------------------------------
+;; Time settings
+
+(def max-allowed-profile-picture-size
+  "Maximal allowed image size of profile picture in bytes."
+  5000000)

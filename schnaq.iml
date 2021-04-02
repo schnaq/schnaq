@@ -57,6 +57,7 @@
     <orderEntry type="library" name="Deps: org.graalvm.regex/regex:20.1.0" level="project" />
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpasyncclient:4.1.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.1.0" level="project" />
+    <orderEntry type="library" name="Deps: jtk-dvlp/re-frame-readfile-fx:2.0.0" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: Local com.datomic/dev-local (dev-local.jar)" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.common/wildfly-common:1.5.2.Final" level="project" />
