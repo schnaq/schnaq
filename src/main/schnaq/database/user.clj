@@ -68,7 +68,7 @@
   (let [empty-groups [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/groups]
         add-new-groups (map #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/groups %)
                             groups)]
-    (into [empty-groups] add-new-groups)))
+    (transact (into [empty-groups] add-new-groups))))
 
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
