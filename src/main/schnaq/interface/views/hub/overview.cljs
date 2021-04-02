@@ -80,6 +80,7 @@
   []
   (let [members @(rf/subscribe [:hub.current/members])]
     [:article.panel-white.mt-3
+     [:h5.text-center (labels :hub.members/heading)]
      (for [member members]
        [:div.d-inline-block.py-1.px-2 {:key (:db/id member)}
         [common/avatar-with-nickname (:user.registered/display-name member) 50]])]))
