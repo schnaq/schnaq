@@ -100,7 +100,8 @@
   (let [keycloak-name (get-in @(rf/subscribe [:navigation/current-route])
                               [:path-params :keycloak-name])]
     [pages/three-column-layout
-     {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
+     {:page/heading (gstring/format (labels :hub/heading) keycloak-name)
+      :condition/needs-authentication? true}
      [feed/feed-navigation]
      [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
      [sidebar-right]]))
