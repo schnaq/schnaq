@@ -137,7 +137,8 @@
   (fn [db [_ keycloak-name response]]
     (-> db
         (assoc-in [:hubs keycloak-name] (:hub response))
-        (assoc-in [:hubs keycloak-name :members] (:hub-members response)))))
+        ;; We do not reuse the :hubs namespace, because the query of all hubs overwrites it when a race condition hits.
+        (assoc-in [:hub-members keycloak-name] (:hub-members response)))))
 
 (rf/reg-sub
   :hubs/schnaqs
@@ -156,9 +157,9 @@
 
 (rf/reg-sub
   :hub.current/members
-  :<- [:hub/current]
-  (fn [current-hub _]
-    (:members current-hub)))
+  (fn [db _]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      (get-in db [:hub-members keycloak-name] []))))
 
 (rf/reg-event-fx
   :hub.schnaqs/add-success
