@@ -8,6 +8,7 @@
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.header-image :as header-image]
@@ -74,10 +75,20 @@
      [:hr]
      [feed/sidebar-common]]))
 
+(defn- member-list
+  "Lists all members of a hub."
+  []
+  (let [members @(rf/subscribe [:hub.current/members])]
+    [:article.panel-white.mt-3
+     (for [member members]
+       [:div.d-inline-block.py-1.px-2 {:key (:db/id member)}
+        [common/avatar-with-nickname (:user.registered/display-name member) 50]])]))
+
 (defn sidebar-right []
   [:<>
    [hub-panel]
-   [feed/sort-options]])
+   [feed/sort-options]
+   [member-list]])
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
@@ -141,6 +152,12 @@
   (fn [db]
     (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
       (get-in db [:hubs keycloak-name]))))
+
+(rf/reg-sub
+  :hub.current/members
+  :<- [:hub/current]
+  (fn [current-hub _]
+    (:members current-hub)))
 
 (rf/reg-event-fx
   :hub.schnaqs/add-success
