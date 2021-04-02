@@ -31,6 +31,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The first name."}
+   {:db/ident :user.registered/groups
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/many
+    :db/doc "The groups the user is currently part of."}
 
    ;; Feedback
    {:db/ident :feedback/contact-name
