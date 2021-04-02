@@ -1032,7 +1032,7 @@
         :hub.remove.schnaq.error/body "Etwas ist beim Entfernen schiefgelaufen. Bitte versuche es erneut."
         :hub.remove.schnaq/prompt "Soll der schnaq wirklich aus dem Hub entfernt werden?"
         :hub.remove.schnaq/tooltip "Schnaq aus Hub entfernen"
-        :hub.members/heading "Mitglieder"}})
+        :hub.members/heading "Mitglieder:innen"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
