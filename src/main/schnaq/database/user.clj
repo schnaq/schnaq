@@ -69,7 +69,8 @@
         add-new-groups (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/groups %)
                              groups)]
     (transact [empty-groups])
-    (transact add-new-groups)))
+    (transact add-new-groups)
+    groups))
 
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
