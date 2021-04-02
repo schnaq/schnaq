@@ -3,6 +3,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :refer [add-discussions-to-hub] :as hub]
             [schnaq.database.hub-test-data :as hub-test-data]
+            [schnaq.meeting.database :refer [fast-pull]]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.util UUID)))
 
@@ -54,3 +55,12 @@
     (let [keycloak-name "schnaqqifantenparty"
           _ (hub/create-hub "hubby" keycloak-name)]
       (is (= "thisisfine" (:hub/name (hub/change-hub-name keycloak-name "thisisfine")))))))
+
+(deftest create-hubs-if-not-existing-test
+  (testing "Test whether new hubs are created in bulk, when not already there."
+    (let [non-existent-hub-id "schnaqqifantenparty"
+          existent-hub-id "test-keycloak"]
+      (is (= {:db/id nil} (fast-pull [:hub/keycloak-name non-existent-hub-id])))
+      (is (not (nil? (:db/id (fast-pull [:hub/keycloak-name existent-hub-id])))))
+      (hub/create-hubs-if-not-existing [non-existent-hub-id existent-hub-id])
+      (is (not (nil? (:db/id (fast-pull [:hub/keycloak-name non-existent-hub-id]))))))))

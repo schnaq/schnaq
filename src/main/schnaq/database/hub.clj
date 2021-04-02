@@ -54,6 +54,17 @@
     (log/info "Created hub" new-hub)
     (pull-hub new-hub)))
 
+(>defn create-hubs-if-not-existing
+  "Create all hubs that are not yet existent."
+  [keycloak-names]
+  [(s/coll-of :hub/keycloak-name) :ret any?]
+  (let [non-existent-keycloak-names
+        (remove #(fast-pull [:hub/keycloak-name %] [:hub/keycloak-name]) keycloak-names)
+        transaction (mapv #(hash-map :hub/keycloak-name %
+                                     :hub/name %)
+                          non-existent-keycloak-names)]
+    (transact transaction)))
+
 (>defn add-discussions-to-hub
   [hub-id discussion-ids]
   [:db/id (s/coll-of :db/id) :ret ::specs/hub]
