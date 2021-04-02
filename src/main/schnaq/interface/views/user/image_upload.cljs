@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.user.image-upload
   (:require [goog.string :as gstring]
-            [jtk-dvlp.re-frame.readfile-fx]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]

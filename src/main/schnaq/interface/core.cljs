@@ -17,6 +17,7 @@
             [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]
             [schnaq.interface.user]
+            [schnaq.interface.utils.file-reader]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.localstorage]
             [schnaq.interface.utils.time]
