@@ -28,9 +28,15 @@
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
    :sender-password (System/getenv "EMAIL_PASSWORD")})
 
-(def s3-bucket-headers "schnaq-header-images")
+(def s3-base "https://s3.disqtec.com")
 
-(def s3-bucket-header-url "https://s3.disqtec.com/schnaq-header-images/")
+(defn s3-buckets
+  "Returns bucket names"
+  [bucket-name]
+  (get
+    {:schnaq/header-images "schnaq-header-images"
+     :user/profile-pictures "schnaq-profile-pictures"}
+    bucket-name))
 
 (def s3-credentials {:access-key "minio"
                      :secret-key "***REMOVED***"
