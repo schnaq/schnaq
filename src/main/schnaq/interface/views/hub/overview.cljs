@@ -4,6 +4,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -102,12 +103,14 @@
 (rf/reg-event-fx
   :hub/load
   (fn [{:keys [db]} [_ keycloak-name]]
-    {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hub.load/success keycloak-name])]}))
+    (when (auth/user-authenticated? db)
+      {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hub.load/success keycloak-name])]})))
 
 (rf/reg-event-fx
   :hubs.personal/load
   (fn [{:keys [db]}]
-    {:fx [(http/xhrio-request db :get "/hubs/personal" [:hubs.load/success])]}))
+    (when (auth/user-authenticated? db)
+      {:fx [(http/xhrio-request db :get "/hubs/personal" [:hubs.load/success])]})))
 
 (rf/reg-event-db
   :hubs.load/success

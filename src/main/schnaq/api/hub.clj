@@ -21,6 +21,7 @@
   "Return all valid hubs for a user."
   [request]
   (let [keycloak-names (get-in request [:identity :groups])
+        keycloak-names (hub-db/create-hubs-if-not-existing keycloak-names)
         hubs (hub-db/hubs-by-keycloak-names keycloak-names)
         processed-hubs (map
                          #(update % :hub/schnaqs
