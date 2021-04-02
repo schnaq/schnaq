@@ -42,7 +42,8 @@
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout
-   {:page/heading (labels page-heading-label)}
+   {:page/heading (labels page-heading-label)
+    :condition/needs-authentication? true}
    [user-panel]
    content
    [:section.panel-white
