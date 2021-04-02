@@ -4,6 +4,7 @@
             [schnaq.auth :as auth]
             [schnaq.meeting.database :refer [fast-pull]]
             [schnaq.database.hub :as hub-db]
+            [schnaq.database.user :as user-db]
             [schnaq.processors :as processors]
             [schnaq.validator :as validators]))
 
@@ -14,7 +15,8 @@
     (if (auth/member-of-group? (:identity request) keycloak-name)
       (let [hub (hub-db/hub-by-keycloak-name keycloak-name)
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
-        (ok {:hub processed-hub}))
+        (ok {:hub processed-hub
+             :hub-members (user-db/members-of-group keycloak-name)}))
       (forbidden "You are not allowed to access this ressource."))))
 
 (defn- all-hubs-for-user
