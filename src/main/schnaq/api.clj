@@ -508,7 +508,7 @@
 
 (def allowed-origin
   "Regular expression, which defines the allowed origins for API requests."
-  #"^((https?:\/\/)?(.*\.)?(schnaq\.com))($|\/.*$)")
+  #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
 (defn -main
   "This is our main entry point for the REST API Server."
