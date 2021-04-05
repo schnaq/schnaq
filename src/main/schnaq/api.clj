@@ -223,7 +223,7 @@
 ;; Feedback
 
 (>defn- save-screenshot-if-provided!
-  "Stores a base64 encoded file to disk."
+  "Stores a screenshot from a feedback in s3."
   [screenshot file-name]
   [(? string?) (s/or :number number? :string string?) :ret (? string?)]
   (when screenshot
