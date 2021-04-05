@@ -23,4 +23,4 @@
                      :key file-name
                      :input-stream stream
                      :metadata {:content-length content-length}))
-  (relative-file-path bucket file-name))
+  (absolute-file-url bucket file-name))
