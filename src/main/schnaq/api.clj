@@ -225,7 +225,7 @@
 (>defn- upload-screenshot!
   "Stores a screenshot from a feedback in s3."
   [screenshot file-name]
-  [(? string?) (s/or :number number? :string string?) :ret string?]
+  [string? (s/or :number number? :string string?) :ret string?]
   (let [[_header image] (string/split screenshot #",")
         #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
     (s3/upload-stream
