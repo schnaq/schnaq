@@ -225,7 +225,7 @@
 (>defn- save-screenshot-if-provided!
   "Stores a base64 encoded file to disk."
   [screenshot file-name]
-  [(? string?) (s/or :number number? :string string?) :ret nil?]
+  [(? string?) (s/or :number number? :string string?) :ret (? string?)]
   (when screenshot
     (let [[_header image] (string/split screenshot #",")
           #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
