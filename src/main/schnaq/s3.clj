@@ -11,7 +11,7 @@
   (-> config/s3-credentials
       (s3/put-object :bucket-name (config/s3-buckets bucket)
                      :key file-name
-                     :input-stream (:body stream)
+                     :input-stream stream
                      :metadata {:content-length (:length stream)}))
   {:message "File upload successful"
    :bucket-url (str (create-s3-bucket-url bucket) file-name)})

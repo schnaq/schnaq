@@ -37,11 +37,11 @@
   (get
     {:schnaq/header-images "schnaq-header-images"
      :user/profile-pictures "schnaq-profile-pictures"
-     :feedback/screenshots "schnaq-feedback-screenshots"}
+     :feedbacks/screenshots "schnaq-feedback-screenshots"}
     bucket-name))
 
 (def s3-credentials {:access-key "minio"
                      :secret-key "***REMOVED***"
-                     :endpoint "https://s3.disqtec.com"
+                     :endpoint s3-base
                      :client-config
                      {:path-style-access-enabled true}})
