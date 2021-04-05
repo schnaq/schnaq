@@ -4,7 +4,7 @@
             [clojure.string :as string]
             [compojure.core :refer [GET POST PUT DELETE routes wrap-routes]]
             [compojure.route :as route]
-            [ghostwheel.core :refer [>defn- ?]]
+            [ghostwheel.core :refer [>defn-]]
             [org.httpkit.server :as server]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
