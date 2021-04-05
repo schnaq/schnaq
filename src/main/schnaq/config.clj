@@ -1,7 +1,8 @@
 (ns schnaq.config
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
-  (:require [schnaq.toolbelt :as toolbelt]))
+  (:require [schnaq.toolbelt :as toolbelt]
+            [schnaq.shared-config :as shared-config]))
 
 (def datomic
   "When we are production ready, put here the original production config and use
@@ -28,12 +29,8 @@
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
    :sender-password (System/getenv "EMAIL_PASSWORD")})
 
-(def s3-bucket-headers "schnaq-header-images")
-
-(def s3-bucket-header-url "https://s3.disqtec.com/schnaq-header-images/")
-
 (def s3-credentials {:access-key "minio"
                      :secret-key "***REMOVED***"
-                     :endpoint "https://s3.disqtec.com"
+                     :endpoint shared-config/s3-host
                      :client-config
                      {:path-style-access-enabled true}})

@@ -4,7 +4,7 @@
             [clojure.string :as string]
             [compojure.core :refer [GET POST PUT DELETE routes wrap-routes]]
             [compojure.route :as route]
-            [ghostwheel.core :refer [>defn- ?]]
+            [ghostwheel.core :refer [>defn-]]
             [org.httpkit.server :as server]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
@@ -26,7 +26,7 @@
             [schnaq.media :as media]
             [schnaq.meeting.database :as db]
             [schnaq.processors :as processors]
-            [schnaq.toolbelt :as toolbelt]
+            [schnaq.s3 :as s3]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log])
@@ -222,18 +222,17 @@
 ;; -----------------------------------------------------------------------------
 ;; Feedback
 
-(>defn- save-screenshot-if-provided!
-  "Stores a base64 encoded file to disk."
-  [screenshot directory file-name]
-  [(? string?) string? (s/or :number number? :string string?)
-   :ret nil?]
-  (when screenshot
-    (let [[_header image] (string/split screenshot #",")
-          #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)
-          path (toolbelt/create-directory! directory)
-          location (format "%s/%s.png" path file-name)]
-      (with-open [w (io/output-stream location)]
-        (.write w decodedBytes)))))
+(>defn- upload-screenshot!
+  "Stores a screenshot from a feedback in s3."
+  [screenshot file-name]
+  [string? (s/or :number number? :string string?) :ret string?]
+  (let [[_header image] (string/split screenshot #",")
+        #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
+    (s3/upload-stream
+      :feedbacks/screenshots
+      (io/input-stream decodedBytes)
+      (format "%s.png" file-name)
+      (count decodedBytes))))
 
 (defn- add-feedback
   "Add new feedback from schnaqs frontend."
@@ -241,8 +240,9 @@
   (let [feedback (:feedback body-params)
         feedback-id (db/add-feedback! feedback)
         screenshot (:screenshot body-params)]
-    (save-screenshot-if-provided! screenshot "resources/public/media/feedbacks/screenshots" feedback-id)
-    (log/info "Schnaq Feedback created")
+    (when screenshot
+      (upload-screenshot! screenshot feedback-id))
+    (log/info "Feedback created")
     (created "" {:feedback feedback})))
 
 (defn- all-feedbacks

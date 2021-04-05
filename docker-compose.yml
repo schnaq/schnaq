@@ -6,8 +6,6 @@ services:
     networks:
       - web
     restart: unless-stopped
-    volumes:
-      - ./persist/media:/usr/share/nginx/html/media
     environment:
       - "TZ=Europe/Berlin"
     labels:
@@ -25,7 +23,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./persist/datomic:/code/.datomic
-      - ./persist/media:/code/resources/public/media
     environment:
       - "TZ=Europe/Berlin"
       - API_PORT=80

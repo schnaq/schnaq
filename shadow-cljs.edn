@@ -12,7 +12,8 @@
                                             schnaq.interface.config/environment "production"
                                             schnaq.interface.config/build-hash #shadow/env "BUILD_HASH"
                                             schnaq.interface.config/keycloak-realm #shadow/env "KEYCLOAK_REALM"
-                                            schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"}}
+                                            schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"
+                                            schnaq.shared-config/s3-host #shadow/env "S3_HOST"}}
                 :devtools {:http-root "resources/public"
                            :http-port 8700
                            :preloads [devtools.preload day8.re-frame-10x.preload]}}

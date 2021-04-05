@@ -22,7 +22,7 @@
   []
   (.then
     (html2canvas (gdom/getElement "app")
-                 (clj->js {:letterRendering 1 :allowTaint true}))
+                 (clj->js {:letterRendering 1}))
     (fn [e]
       (reset! screenshot-url (.toDataURL e)))))
 

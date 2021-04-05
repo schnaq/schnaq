@@ -23,7 +23,6 @@
   Time must be in milliseconds."
   3000)
 
-;; header image
 (def place-holder-header-img "https://s3.disqtec.com/schnaq-header-images/header-placeholder.jpg")
 
 
