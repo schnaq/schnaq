@@ -2,6 +2,7 @@
   (:require [clojure.string :as string]
             [goog.string :as gstring]
             [re-frame.core :as rf]
+            [schnaq.shared-config :as shared-config]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as time]
@@ -35,7 +36,10 @@
              [:td (:feedback/description feedback)]
              [:td.image
               (when (:feedback/has-image? feedback)
-                (let [img-src (gstring/format "/media/feedbacks/screenshots/%s.png" (:db/id feedback))]
+                (let [img-src (gstring/format "%s/%s/%s.png"
+                                              shared-config/s3-host
+                                              (shared-config/s3-buckets :feedbacks/screenshots)
+                                              (:db/id feedback))]
                   [:a {:href img-src}
                    [:img.img-fluid.img-thumbnail {:src img-src}]]))]])]]]
        [loading/loading-placeholder]))])
