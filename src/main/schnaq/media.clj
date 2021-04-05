@@ -21,7 +21,7 @@
 (defn- upload-img-and-store-url [url key share-hash]
   (try
     (let [img-stream (client/get url {:as :stream})]
-      (-> (s3/upload-stream-to-s3 :schnaq/header-images (:body img-stream) key (:length img-stream))
+      (-> (s3/upload-stream :schnaq/header-images (:body img-stream) key (:length img-stream))
           (add-bucket-url-to-database share-hash)))
     (catch Exception e
       (log/debug (.getMessage e))

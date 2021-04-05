@@ -229,7 +229,7 @@
   (when screenshot
     (let [[_header image] (string/split screenshot #",")
           #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
-      (s3/upload-stream-to-s3
+      (s3/upload-stream
         :feedbacks/screenshots
         (io/input-stream decodedBytes)
         (format "%s.png" file-name)
