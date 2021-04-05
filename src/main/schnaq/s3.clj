@@ -1,8 +1,12 @@
 (ns schnaq.s3
   (:require [amazonica.aws.s3 :as s3]
+            [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]))
 
-(defn- create-s3-bucket-url [bucket-name]
+(>defn create-s3-bucket-url
+  "Return complete URL to bucket."
+  [bucket-name]
+  [keyword? :ret string?]
   (format "%s/%s/" config/s3-base (config/s3-buckets bucket-name)))
 
 (defn upload-stream-to-s3
