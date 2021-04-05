@@ -21,9 +21,11 @@
 (s/def :user.registered/display-name ::non-blank-string)
 (s/def :user.registered/first-name ::non-blank-string)
 (s/def :user.registered/last-name ::non-blank-string)
+(s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/email
                                        :user.registered/display-name]
-                                 :opt [:user.registered/last-name :user.registered/first-name]))
+                                 :opt [:user.registered/last-name :user.registered/first-name
+                                       :user.registered/groups]))
 
 ;; Could be anonymous or registered
 (s/def ::any-user (s/or :user ::user :registered-user ::registered-user))
@@ -39,6 +41,8 @@
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
+(s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
+                                           :reference ::entity-reference)))
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted
@@ -50,7 +54,7 @@
                                   :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
-                                  :db/txInstant]))
+                                  :db/txInstant :discussion/admins]))
 
 (s/def :hub/name string?)
 (s/def :hub/keycloak-name string?)

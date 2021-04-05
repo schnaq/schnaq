@@ -13,7 +13,7 @@
   [message]
   (rf/dispatch [:ajax.error/to-console message]))
 
-(defn- user-authenticated?
+(defn user-authenticated?
   "Quickly lookup authentication status of user."
   [db]
   (get-in db [:user :authenticated?] false))

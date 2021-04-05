@@ -31,6 +31,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "The first name."}
+   {:db/ident :user.registered/groups
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/many
+    :db/doc "The groups the user is currently part of."}
 
    ;; Feedback
    {:db/ident :feedback/contact-name
@@ -138,6 +142,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The author of a meeting."}
+   {:db/ident :discussion/admins
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The registered users, that are allowed to administrate the discussion."}
    {:db/ident :discussion/header-image-url
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one

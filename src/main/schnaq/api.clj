@@ -90,10 +90,14 @@
 
 (defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
-  [req]
-  (let [hash (get-in req [:route-params :hash])]
+  [{:keys [params identity]}]
+  (let [hash (:hash params)
+        keycloak-id (:sub identity)]
     (if (validator/valid-discussion? hash)
-      (ok (processors/add-meta-info-to-schnaq (discussion-db/discussion-by-share-hash hash)))
+      (ok (processors/add-meta-info-to-schnaq
+            (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
+              (discussion-db/discussion-by-share-hash-private hash)
+              (discussion-db/discussion-by-share-hash hash))))
       (validator/deny-access))))
 
 (defn- schnaqs-by-hashes
@@ -367,11 +371,15 @@
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials
-  "Checks whether share-hash and edit-hash match."
-  [{:keys [body-params]}]
-  (let [share-hash (:share-hash body-params)
-        edit-hash (:edit-hash body-params)]
-    (ok {:valid-credentials? (validator/valid-credentials? share-hash edit-hash)})))
+  "Checks whether share-hash and edit-hash match.
+  If the user is logged in and the credentials are valid, they are added as an admin."
+  [{:keys [params identity]}]
+  (let [{:keys [share-hash edit-hash]} params
+        valid-credentials? (validator/valid-credentials? share-hash edit-hash)
+        keycloak-id (:sub identity)]
+    (when (and valid-credentials? keycloak-id)
+      (discussion-db/add-admin-to-discussion share-hash keycloak-id))
+    (ok {:valid-credentials? valid-credentials?})))
 
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
@@ -421,52 +429,46 @@
   "Error, page not found!")
 
 (def ^:private common-routes
-  "Common routes for all modes."
-  (routes
-    (GET "/export/txt" [] export-txt-data)
-    (GET "/ping" [] ping)
-    (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
-    (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
-    (GET "/schnaqs/public" [] public-schnaqs)
-    (-> (GET "/admin/feedbacks" [] all-feedbacks)
-        (wrap-routes auth/is-admin-middleware)
-        (wrap-routes auth/auth-middleware)
-        (wrap-routes auth/wrap-jwt-authentication))
-    (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
-        (wrap-routes auth/is-admin-middleware)
-        (wrap-routes auth/auth-middleware)
-        (wrap-routes auth/wrap-jwt-authentication))
-    (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
-    (POST "/admin/discussions/make-writeable" [] make-discussion-writeable!)
-    (POST "/admin/schnaq/disable-pro-con" [] disable-pro-con!)
-    (POST "/admin/statements/delete" [] delete-statements!)
-    (POST "/author/add" [] add-author)
-    (POST "/credentials/validate" [] check-credentials)
-    (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
-    (-> (POST "/discussion/react-to/statement" [] react-to-any-statement!)
-        (wrap-routes auth/wrap-jwt-authentication))
-    (-> (PUT "/discussion/statement/edit" [] edit-statement!)
-        (wrap-routes auth/auth-middleware)
-        (wrap-routes auth/wrap-jwt-authentication))
-    (POST "/discussion/statement/info" [] get-statement-info)
-    (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
-    (-> (POST "/discussion/statements/starting/add" [] add-starting-statement!)
-        (wrap-routes auth/wrap-jwt-authentication))
-    (POST "/emails/send-admin-center-link" [] send-admin-center-link)
-    (POST "/emails/send-invites" [] send-invite-emails)
-    (POST "/feedback/add" [] add-feedback)
-    (POST "/graph/discussion" [] graph-data-for-agenda)
-    (POST "/header-image/image" [] media/set-preview-image)
-    (-> (POST "/schnaq/add" [] add-schnaq)
-        (wrap-routes auth/wrap-jwt-authentication))
-    (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
-    (-> (POST "/votes/down/toggle" [] toggle-downvote-statement)
-        (wrap-routes auth/wrap-jwt-authentication))
-    (-> (POST "/votes/up/toggle" [] toggle-upvote-statement)
-        (wrap-routes auth/wrap-jwt-authentication))
-    analytics/analytics-routes
-    hub/hub-routes
-    user-api/user-routes))
+  "Common routes for all modes, already wrapped with jwt-parsing."
+  (->
+    (routes
+      (GET "/export/txt" [] export-txt-data)
+      (GET "/ping" [] ping)
+      (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
+      (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
+      (GET "/schnaqs/public" [] public-schnaqs)
+      (-> (GET "/admin/feedbacks" [] all-feedbacks)
+          (wrap-routes auth/is-admin-middleware)
+          (wrap-routes auth/auth-middleware))
+      (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
+          (wrap-routes auth/is-admin-middleware)
+          (wrap-routes auth/auth-middleware))
+      (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
+      (POST "/admin/discussions/make-writeable" [] make-discussion-writeable!)
+      (POST "/admin/schnaq/disable-pro-con" [] disable-pro-con!)
+      (POST "/admin/statements/delete" [] delete-statements!)
+      (POST "/author/add" [] add-author)
+      (POST "/credentials/validate" [] check-credentials)
+      (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
+      (POST "/discussion/react-to/statement" [] react-to-any-statement!)
+      (-> (PUT "/discussion/statement/edit" [] edit-statement!)
+          (wrap-routes auth/auth-middleware))
+      (POST "/discussion/statement/info" [] get-statement-info)
+      (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
+      (POST "/discussion/statements/starting/add" [] add-starting-statement!)
+      (POST "/emails/send-admin-center-link" [] send-admin-center-link)
+      (POST "/emails/send-invites" [] send-invite-emails)
+      (POST "/feedback/add" [] add-feedback)
+      (POST "/graph/discussion" [] graph-data-for-agenda)
+      (POST "/header-image/image" [] media/set-preview-image)
+      (POST "/schnaq/add" [] add-schnaq)
+      (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
+      (POST "/votes/down/toggle" [] toggle-downvote-statement)
+      (POST "/votes/up/toggle" [] toggle-upvote-statement)
+      analytics/analytics-routes
+      hub/hub-routes
+      user-api/user-routes)
+    (wrap-routes auth/wrap-jwt-authentication)))
 
 (def ^:private development-routes
   "Exclusive Routes only available outside of production."
@@ -506,7 +508,7 @@
 
 (def allowed-origin
   "Regular expression, which defines the allowed origins for API requests."
-  #"^((https?:\/\/)?(.*\.)?(schnaq\.com))($|\/.*$)")
+  #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
 (defn -main
   "This is our main entry point for the REST API Server."

@@ -4,9 +4,11 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.header-image :as header-image]
@@ -73,10 +75,22 @@
      [:hr]
      [feed/sidebar-common]]))
 
+(defn- member-list
+  "Lists all members of a hub."
+  []
+  (let [members @(rf/subscribe [:hub.current/members])]
+    (when (seq members)
+      [:section.panel-white.mt-3
+       [:h5.text-center (labels :hub.members/heading)]
+       (for [member members]
+         [:article.d-inline-block.py-1.px-2 {:key (:db/id member)}
+          [common/avatar-with-nickname (:user.registered/display-name member) 50]])])))
+
 (defn sidebar-right []
   [:<>
    [hub-panel]
-   [feed/sort-options]])
+   [feed/sort-options]
+   [member-list]])
 
 (>defn- hub-index
   "Shows the page for an overview of schnaqs for a hub. Takes a keycloak-name which
@@ -86,7 +100,8 @@
   (let [keycloak-name (get-in @(rf/subscribe [:navigation/current-route])
                               [:path-params :keycloak-name])]
     [pages/three-column-layout
-     {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
+     {:page/heading (gstring/format (labels :hub/heading) keycloak-name)
+      :condition/needs-authentication? true}
      [feed/feed-navigation]
      [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
      [sidebar-right]]))
@@ -102,12 +117,14 @@
 (rf/reg-event-fx
   :hub/load
   (fn [{:keys [db]} [_ keycloak-name]]
-    {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hub.load/success keycloak-name])]}))
+    (when (auth/user-authenticated? db)
+      {:fx [(http/xhrio-request db :get (str "/hub/" keycloak-name) [:hub.load/success keycloak-name])]})))
 
 (rf/reg-event-fx
   :hubs.personal/load
   (fn [{:keys [db]}]
-    {:fx [(http/xhrio-request db :get "/hubs/personal" [:hubs.load/success])]}))
+    (when (auth/user-authenticated? db)
+      {:fx [(http/xhrio-request db :get "/hubs/personal" [:hubs.load/success])]})))
 
 (rf/reg-event-db
   :hubs.load/success
@@ -120,7 +137,10 @@
 (rf/reg-event-db
   :hub.load/success
   (fn [db [_ keycloak-name response]]
-    (assoc-in db [:hubs keycloak-name] (:hub response))))
+    (-> db
+        (assoc-in [:hubs keycloak-name] (:hub response))
+        ;; We do not reuse the :hubs namespace, because the query of all hubs overwrites it when a race condition hits.
+        (assoc-in [:hub-members keycloak-name] (:hub-members response)))))
 
 (rf/reg-sub
   :hubs/schnaqs
@@ -136,6 +156,12 @@
   (fn [db]
     (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
       (get-in db [:hubs keycloak-name]))))
+
+(rf/reg-sub
+  :hub.current/members
+  (fn [db _]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      (get-in db [:hub-members keycloak-name] []))))
 
 (rf/reg-event-fx
   :hub.schnaqs/add-success

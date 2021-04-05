@@ -22,8 +22,8 @@
                                            :discussion/edit-hash edit-hash
                                            :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                                           true)
-          succeeding-response (check-credentials {:body-params {:share-hash share-hash :edit-hash edit-hash}})
-          failing-response (check-credentials {:body-params {:share-hash share-hash :edit-hash "INVALID"}})]
+          succeeding-response (check-credentials {:params {:share-hash share-hash :edit-hash edit-hash}})
+          failing-response (check-credentials {:params {:share-hash share-hash :edit-hash "INVALID"}})]
       (is (= 200 (:status succeeding-response)))
       (is (-> succeeding-response :body :valid-credentials?))
       (is (not (-> failing-response :body :valid-credentials?)))
@@ -55,6 +55,8 @@
       (are [origin] (not (nil? (test-regex origin)))
                     "api.schnaq.com"
                     "schnaq.com"
+                    "schnaq.de"
+                    "www.schnaq.de"
                     "www.schnaq.com"
                     "https://api.schnaq.com"
                     "https://schnaq.com"
@@ -69,7 +71,8 @@
                     "localhost"
                     "penguin.books"
                     "christian.rocks"
-                    "schnaqi.com"
+                    "schnaqqi.com"
+                    "schnaq.dev"
                     "fakeschnaq.com"))))
 
 (deftest schnaq-by-hash-as-admin-test

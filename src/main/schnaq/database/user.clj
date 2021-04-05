@@ -61,10 +61,21 @@
     (do (log/info "Added a new user: " nickname)
         (add-user nickname))))
 
+(>defn update-groups
+  "Updates the user groups to be equal to the new input."
+  [keycloak-id groups]
+  [:user.registered/keycloak-id :user.registered/groups :ret :user.registered/groups]
+  (let [empty-groups [:db/retract [:user.registered/keycloak-id keycloak-id] :user.registered/groups]
+        add-new-groups (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/groups %)
+                             groups)]
+    (transact [empty-groups])
+    (transact add-new-groups)
+    groups))
+
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
-  Returns the user, when they exist."
-  [{:keys [id email preferred_username given_name family_name]}]
+  Returns the user, after updating their groups, when they exist."
+  [{:keys [id email preferred_username given_name family_name groups]}]
   [associative? :ret ::specs/registered-user]
   (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-pattern)
         temp-id (str "new-registered-user-" id)
@@ -73,9 +84,12 @@
                   :user.registered/email email
                   :user.registered/display-name preferred_username
                   :user.registered/first-name given_name
-                  :user.registered/last-name family_name}]
+                  :user.registered/last-name family_name
+                  :user.registered/groups groups}]
     (if (:db/id existing-user)
-      existing-user
+      (do
+        (update-groups id groups)
+        existing-user)
       (-> (transact [(clean-db-vals new-user)])
           (get-in [:tempids temp-id])
           (fast-pull registered-user-pattern)))))
@@ -86,3 +100,15 @@
   (transact [[:db/add [:user.registered/keycloak-id keycloak-id]
               :user.registered/display-name display-name]])
   (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern))
+
+(>defn members-of-group
+  "Returns all members of a certain group."
+  [group-name]
+  [::specs/non-blank-string :ret (s/coll-of ::specs/user-or-reference)]
+  (flatten
+    (query
+      '[:find (pull ?users [:db/id
+                            :user.registered/display-name])
+        :in $ ?group
+        :where [?users :user.registered/groups ?group]]
+      group-name)))
