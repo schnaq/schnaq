@@ -26,7 +26,7 @@
             [schnaq.media :as media]
             [schnaq.meeting.database :as db]
             [schnaq.processors :as processors]
-            [schnaq.toolbelt :as toolbelt]
+            [schnaq.s3 :as s3]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log])
@@ -224,16 +224,16 @@
 
 (>defn- save-screenshot-if-provided!
   "Stores a base64 encoded file to disk."
-  [screenshot directory file-name]
-  [(? string?) string? (s/or :number number? :string string?)
-   :ret nil?]
+  [screenshot file-name]
+  [(? string?) (s/or :number number? :string string?) :ret nil?]
   (when screenshot
     (let [[_header image] (string/split screenshot #",")
-          #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)
-          path (toolbelt/create-directory! directory)
-          location (format "%s/%s.png" path file-name)]
-      (with-open [w (io/output-stream location)]
-        (.write w decodedBytes)))))
+          #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
+      (s3/upload-stream-to-s3
+        :feedbacks/screenshots
+        (io/input-stream decodedBytes)
+        (format "%s.png" file-name)
+        (count decodedBytes)))))
 
 (defn- add-feedback
   "Add new feedback from schnaqs frontend."
@@ -241,7 +241,7 @@
   (let [feedback (:feedback body-params)
         feedback-id (db/add-feedback! feedback)
         screenshot (:screenshot body-params)]
-    (save-screenshot-if-provided! screenshot "resources/public/media/feedbacks/screenshots" feedback-id)
+    (save-screenshot-if-provided! screenshot feedback-id)
     (log/info "Schnaq Feedback created")
     (created "" {:feedback feedback})))
 
