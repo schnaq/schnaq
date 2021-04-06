@@ -72,10 +72,28 @@
     (transact add-new-groups)
     groups))
 
+(defn- update-user-info
+  "Updates given-name, last-name, email-address when they are not nil."
+  [{:keys [id given_name family_name email]} existing-user]
+  (let [user-ref [:user.registered/keycloak-id id]
+        transaction (cond->
+                      []
+                      (and given_name
+                           (not= given_name (:user.registered/first-name existing-user)))
+                      (conj [:db/add user-ref :user.registered/first-name given_name])
+                      (and family_name
+                           (not= family_name (:user.registered/last-name existing-user)))
+                      (conj [:db/add user-ref :user.registered/last-name family_name])
+                      (and email
+                           (not= email (:user.registered/email existing-user)))
+                      (conj [:db/add user-ref :user.registered/email email]))]
+    (when (seq transaction)
+      (transact transaction))))
+
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist."
-  [{:keys [id email preferred_username given_name family_name groups]}]
+  [{:keys [id email preferred_username given_name family_name groups] :as identity}]
   [associative? :ret ::specs/registered-user]
   (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-pattern)
         temp-id (str "new-registered-user-" id)
@@ -88,6 +106,7 @@
                   :user.registered/groups groups}]
     (if (:db/id existing-user)
       (do
+        (update-user-info identity existing-user)
         (update-groups id groups)
         existing-user)
       (-> (transact [(clean-db-vals new-user)])
