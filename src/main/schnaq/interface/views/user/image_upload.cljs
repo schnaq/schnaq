@@ -34,3 +34,7 @@
                                :body (gstring/format (labels :user.settings.error/profile-picture-too-large)
                                                      actual-size config/max-allowed-profile-picture-size)
                                :context :danger}]]]}))))
+
+(rf/reg-sub
+  :user.profile.picture/load-from-db
+  (fn [db _] (get-in db [:user :profile-picture :temporary])))

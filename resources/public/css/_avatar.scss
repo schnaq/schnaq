@@ -17,13 +17,20 @@
   }
 }
 
-.profile-pic {
+.profile-pic-container {
   @include rounded.rounded-2;
   background-color: vars.$white-shade;
   box-shadow: vars.$light-shadow;
   height: 5rem;
-  object-fit: cover;
+  overflow: hidden;
   width: 5rem;
+}
+
+.profile-pic-image {
+  background-position: center center;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
 }
 
 .change-profile-pic-button {

@@ -12,12 +12,12 @@
             [schnaq.interface.views.user.image-upload :as image]))
 
 (defn- avatar-input [input-id]
-  (let [profile-pic? false
+  (let [profile-pic @(rf/subscribe [:user.profile.picture/load-from-db])
         display-name @(rf/subscribe [:user/display-name])]
     [:div.d-flex.mr-4
-     [:div.d-flex.profile-pic
-      (if profile-pic?
-        [:div]
+     [:div.d-flex.profile-pic-container
+      (if profile-pic
+        [:img.profile-pic-image {:src (:content profile-pic)}]
         [common/avatar display-name 60])]
      [:div.mt-auto
       [:label.btn.btn-light.change-profile-pic-button
@@ -73,7 +73,9 @@
     [show-hubs]]])
 
 (defn view []
-  [settings/user-view :user/edit-account [content]])
+  [settings/user-view
+   :user/edit-account
+   [content]])
 
 
 ;; ----------------------------------------------------------------------------

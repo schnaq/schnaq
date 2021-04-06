@@ -1,11 +1,16 @@
 (ns schnaq.media
   (:require [clj-http.client :as client]
-            [schnaq.meeting.database :as d]
+            [clojure.java.io :as io]
+            [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
+            [image-resizer.core :as resizer-core]
+            [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [ok bad-request forbidden]]
-            [schnaq.validator :as validator]
+            [schnaq.meeting.database :as d]
             [schnaq.s3 :as s3]
-            [taoensso.timbre :as log]))
+            [schnaq.validator :as validator]
+            [taoensso.timbre :as log])
+  (:import (java.util Base64)))
 
 (def ^:private trusted-cdn-url-regex
   (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.disqtec\\.com/(.+)"))
@@ -49,3 +54,15 @@
         :error-forbidden-cdn (forbidden {:error error-cdn})
         (ok {:message success-img}))
       (validator/deny-access))))
+
+(>defn scale-image-to-height
+  "Scale image data url to a specified height and return it as input stream"
+  [image-data-url height]
+  [string? number? :ret any?]
+  (let [[header image-without-header] (string/split image-data-url #",")
+        #^bytes image-bytes (.decode (Base64/getDecoder) ^String image-without-header)
+        image-type (second (re-find #"/([A-z]*);" header))]
+    (when image-type
+      (resizer-format/as-stream
+        (resizer-core/resize-to-height (io/input-stream image-bytes) height)
+        image-type))))

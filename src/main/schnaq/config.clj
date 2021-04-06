@@ -28,6 +28,10 @@
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
    :sender-password (System/getenv "EMAIL_PASSWORD")})
 
+(def profile-picture-height
+  "Profile Picture height in pixels."
+  200)
+
 (def s3-base "https://s3.disqtec.com")
 
 (defn s3-buckets

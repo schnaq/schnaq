@@ -2,7 +2,9 @@
   (:require [compojure.core :refer [PUT routes wrap-routes context]]
             [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
+            [schnaq.config :as config]
             [schnaq.database.user :as user-db]
+            [schnaq.media :as media]
             [taoensso.timbre :as log]))
 
 (defn- register-user-if-they-not-exist
@@ -13,10 +15,10 @@
   (ok {:registered-user (user-db/register-new-user identity)}))
 
 (defn- change-profile-picture [{:keys [params]}]
-  (println (:image params))
-  (println params)
-  ;(def foo params)
-  (ok "Neues Profil Bild angelegt"))
+  (let [image (:image params)
+        scaled-image-stream (media/scale-image-to-height (:content image) config/profile-picture-height)]
+    (if scaled-image-stream
+      (ok "Neues Profil Bild angelegt"))))
 
 (defn- change-display-name
   "change the display name of a registered user"

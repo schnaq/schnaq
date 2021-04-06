@@ -42,7 +42,7 @@
   [pages/three-column-layout
    {:page/heading (labels page-heading-label)
     :condition/needs-authentication? true}
-   [user-panel]
+   [edit-user-panel]
    content
    [:section.panel-white
     [current-user]
