@@ -40,10 +40,10 @@
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
-  [display-name size]
+  [{:user.registered/keys [display-name] :as user} size]
   [string? number? :ret vector?]
   [:div.row
-   [:div.mr-4 [avatar display-name size]]
+   [:div.mr-4 [avatar user size]]
    [:h4.my-auto display-name]])
 
 (>defn add-namespace-to-keyword

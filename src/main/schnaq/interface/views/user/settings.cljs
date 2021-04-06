@@ -11,10 +11,10 @@
     (labels label)]])
 
 (defn- current-user []
-  (let [user-name @(rf/subscribe [:user/display-name])]
-    [:<>
-     [:div.pl-4
-      [common/avatar-with-nickname-right user-name 40]]]))
+  (let [user @(rf/subscribe [:user/current])]
+    [:div.pl-4
+     [common/avatar-with-nickname-right #:user.registered{:profile-picture (get-in user [:profile-picture :display])
+                                                          :display-name (get-in user [:names :display])} 40]]))
 
 (defn- edit-user-navigation-button [label icon route]
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
