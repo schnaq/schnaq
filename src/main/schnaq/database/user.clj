@@ -11,7 +11,8 @@
    :user.registered/display-name
    :user.registered/email
    :user.registered/last-name
-   :user.registered/first-name])
+   :user.registered/first-name
+   :user.registered/profile-picture])
 
 (def minimal-user-pattern
   "Minimal user pull pattern."

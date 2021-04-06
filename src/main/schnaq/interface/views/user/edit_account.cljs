@@ -99,6 +99,13 @@
   (fn [{:keys [db]} _]
     (when-let [new-profile-picture-url (get-in db [:user :profile-picture :temporary])]
       {:fx [(http/xhrio-request db :put "/user/picture"
-                                [:user.name/update-success]
+                                [:user.profile-picture/update-success]
                                 {:image new-profile-picture-url}
                                 [:ajax.error/as-notification])]})))
+
+(rf/reg-event-db
+  :user.profile-picture/update-success
+  (fn [db [_ {:keys [updated-user]}]]
+    (assoc-in db [:user :profile-picture :display]
+              (:user.registered/profile-picture updated-user))))
+
