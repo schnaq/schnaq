@@ -16,17 +16,19 @@
             ", username:" (:preferred_username identity))
   (ok {:registered-user (user-db/register-new-user identity)}))
 
-(defn- change-profile-picture [{:keys [params]}]
+(defn- change-profile-picture
+  "Change the profile picture of a user.
+  This includes uploading an image to s3 and updating the associated url in the database."
+  [{:keys [identity params]}]
   (let [{:keys [input-stream image-type content-type]} (media/scale-image-to-height (get-in params [:image :content])
                                                                                     config/profile-picture-height)
         image-name (str (UUID/randomUUID) "." image-type)]
     (if input-stream
-      (do
-        (s3/upload-stream :user/profile-pictures
-                          input-stream
-                          image-name
-                          {:content-type content-type})
-        (ok "New profile picture uploaded"))
+      (let [absolute-url (s3/upload-stream :user/profile-pictures
+                                           input-stream
+                                           image-name
+                                           {:content-type content-type})]
+        (ok {:updated-user (user-db/update-profile-picture-url (:id identity) absolute-url)}))
       (bad-request "Error while uploading profile picture: Could not scale image"))))
 
 (defn- change-display-name

@@ -95,10 +95,17 @@
           (fast-pull registered-user-pattern)))))
 
 (defn update-display-name
-  "Update the name of an existing user"
+  "Update the name of an existing user."
   [keycloak-id display-name]
   (transact [[:db/add [:user.registered/keycloak-id keycloak-id]
               :user.registered/display-name display-name]])
+  (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern))
+
+(defn update-profile-picture-url
+  "Update the profile picture url."
+  [keycloak-id profile-picture-url]
+  (transact [[:db/add [:user.registered/keycloak-id keycloak-id]
+              :user.registered/profile-picture profile-picture-url]])
   (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern))
 
 (>defn members-of-group
