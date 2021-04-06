@@ -22,7 +22,7 @@
     (let [share-hash "aaaa1-bbb2-ccc3"
           _schnaq (create-schnaq share-hash)
           bad-url "https://www.hhu.de/typo3conf/ext/wiminno/Resources/Public/img/hhu_logo.png"
-          url (format "%s%s" (#'s3/create-s3-bucket-url :schnaq/header-images) "for-testing-image-do-not-delete")
+          url (#'s3/absolute-file-url :schnaq/header-images "for-testing-image-do-not-delete")
           key "Test-Upload"
           bad-share "foo"
           check-and-upload-image #'media/check-and-upload-image

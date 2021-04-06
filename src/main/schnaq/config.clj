@@ -1,7 +1,8 @@
 (ns schnaq.config
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
-  (:require [schnaq.toolbelt :as toolbelt]))
+  (:require [schnaq.toolbelt :as toolbelt]
+            [schnaq.shared-config :as shared-config]))
 
 (def datomic
   "When we are production ready, put here the original production config and use
@@ -32,18 +33,8 @@
   "Profile Picture height in pixels."
   200)
 
-(def s3-base "https://s3.disqtec.com")
-
-(defn s3-buckets
-  "Returns bucket names"
-  [bucket-name]
-  (get
-    {:schnaq/header-images "schnaq-header-images"
-     :user/profile-pictures "schnaq-profile-pictures"}
-    bucket-name))
-
 (def s3-credentials {:access-key "minio"
                      :secret-key "***REMOVED***"
-                     :endpoint "https://s3.disqtec.com"
+                     :endpoint shared-config/s3-host
                      :client-config
                      {:path-style-access-enabled true}})

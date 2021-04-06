@@ -62,5 +62,4 @@
   (fn [{:keys [db]} [_ share-hash edit-hash]]
     {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
                               {:share-hash share-hash
-                               :edit-hash edit-hash}
-                              [:ajax.error/as-notification])]}))
+                               :edit-hash edit-hash})]}))

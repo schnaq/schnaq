@@ -19,15 +19,15 @@
 (def ^:private error-img "Setting image failed")
 (def ^:private success-img "Setting image succeeded")
 
-(defn- add-bucket-url-to-database [{:keys [bucket-url]} share-hash]
+(defn- add-bucket-url-to-database [relative-file-path share-hash]
   (d/transact [{:db/id [:discussion/share-hash share-hash]
-                :discussion/header-image-url bucket-url}]))
+                :discussion/header-image-url relative-file-path}]))
 
 (defn- upload-img-and-store-url [url key share-hash]
   (try
-    (let [img (client/get url {:as :stream})]
-      (-> (s3/upload-stream-to-s3 :schnaq/header-images img key)
-          (add-bucket-url-to-database share-hash)))
+    (let [img-stream (client/get url {:as :stream})
+          relative-file-path (s3/upload-stream :schnaq/header-images (:body img-stream) key (:length img-stream))]
+      (add-bucket-url-to-database relative-file-path share-hash))
     (catch Exception e
       (log/debug (.getMessage e))
       :error-img)))
