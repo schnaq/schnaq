@@ -14,9 +14,9 @@
 (defn- avatar-input [input-id]
   (let [user @(rf/subscribe [:user/current])]
     [:div.d-flex.mr-4
-     [:div.d-flex.profile-pic-container
+     [:div.d-flex.avatar-image
       [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                       :display-name (get-in user [:names :display])} 60]]
+                                       :display-name (get-in user [:names :display])} 80]]
      [:div.mt-auto
       [:label.btn.btn-light.change-profile-pic-button
        [:i.fas.mr-1 {:class (fa :camera)}]

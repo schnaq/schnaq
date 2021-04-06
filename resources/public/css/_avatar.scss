@@ -4,6 +4,7 @@
 .avatar-image {
   @include media-breakpoint-down(sm) {
     height: 35px;
+    overflow: hidden;
     width: 35px;
 
     svg {
@@ -15,15 +16,6 @@
   svg {
     border-radius: 1em;
   }
-}
-
-.profile-pic-container {
-  @include rounded.rounded-2;
-  background-color: vars.$white-shade;
-  box-shadow: vars.$light-shadow;
-  height: 5rem;
-  overflow: hidden;
-  width: 5rem;
 }
 
 .profile-pic-image {

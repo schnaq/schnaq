@@ -219,7 +219,7 @@
       [:div.d-flex.mb-4
        [discussion-privacy-badge discussion]
        [:div.ml-auto
-        [user/user-info display-name 32]]]
+        [user/user-info display-name 32 (:author content)]]]
       [title-and-input-element content input is-topic?]]
      ;; up-down votes and statistics
      [:div.col-2.pr-3
@@ -239,7 +239,7 @@
       [:div.p-0
        [discussion-privacy-badge discussion]
        [:div.d-flex
-        [:div.ml-auto.mr-2 [user/user-info display-name 32]]
+        [:div.ml-auto.mr-2 [user/user-info display-name 32 (:author content)]]
         info-content]]]
      ;; title
      [title-and-input-element content input]]))
