@@ -24,16 +24,17 @@
 (>defn avatar
   "Get a user's avatar."
   [{:user.registered/keys [display-name profile-picture]} size]
-  [string? number? :ret vector?]
+  [map? number? :ret vector?]
   [:div.avatar-image.m-auto.p-0
    (if profile-picture
-         [:img.profile-pic-image {:src profile-picture}]
-         [identicon display-name size])])
+     [:div {:style {:max-height (str size "px") :max-width (str size "px")}}
+      [:img.profile-pic-image {:src profile-picture}]]
+     [identicon display-name size])])
 
 (>defn avatar-with-nickname
   "Create an image based on the nickname and also print the nickname."
   [{:user.registered/keys [display-name] :as user} size]
-  [string? number? :ret vector?]
+  [map? number? :ret vector?]
   [:div.text-center
    [avatar user size]
    [:p.small.mt-1 display-name]])
@@ -41,7 +42,7 @@
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
   [{:user.registered/keys [display-name] :as user} size]
-  [string? number? :ret vector?]
+  [map? number? :ret vector?]
   [:div.row
    [:div.mr-4 [avatar user size]]
    [:h4.my-auto display-name]])

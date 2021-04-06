@@ -12,13 +12,11 @@
             [schnaq.interface.views.user.image-upload :as image]))
 
 (defn- avatar-input [input-id]
-  (let [profile-pic @(rf/subscribe [:user.profile.picture/temporary])
-        display-name @(rf/subscribe [:user/display-name])]
+  (let [user @(rf/subscribe [:user/current])]
     [:div.d-flex.mr-4
      [:div.d-flex.profile-pic-container
-      (if profile-pic
-        [:img.profile-pic-image {:src (:content profile-pic)}]
-        [common/avatar display-name 60])]
+      [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
+                                       :display-name (get-in user [:names :display])} 60]]
      [:div.mt-auto
       [:label.btn.btn-light.change-profile-pic-button
        [:i.fas.mr-1 {:class (fa :camera)}]
