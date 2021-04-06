@@ -53,3 +53,7 @@
   :user/show-display-name-input
   (fn [db _]
     (assoc-in db [:controls :username-input :show?] true)))
+
+(rf/reg-sub
+  :user/current
+  (fn [db] (:user db)))

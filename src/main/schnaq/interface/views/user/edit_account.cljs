@@ -12,7 +12,7 @@
             [schnaq.interface.views.user.image-upload :as image]))
 
 (defn- avatar-input [input-id]
-  (let [profile-pic @(rf/subscribe [:user.profile.picture/load-from-db])
+  (let [profile-pic @(rf/subscribe [:user.profile.picture/temporary])
         display-name @(rf/subscribe [:user/display-name])]
     [:div.d-flex.mr-4
      [:div.d-flex.profile-pic-container

@@ -36,5 +36,5 @@
                                :context :danger}]]]}))))
 
 (rf/reg-sub
-  :user.profile.picture/load-from-db
+  :user.profile.picture/temporary
   (fn [db _] (get-in db [:user :profile-picture :temporary])))

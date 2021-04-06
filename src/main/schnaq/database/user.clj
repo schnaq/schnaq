@@ -115,8 +115,7 @@
   [::specs/non-blank-string :ret (s/coll-of ::specs/user-or-reference)]
   (flatten
     (query
-      '[:find (pull ?users [:db/id
-                            :user.registered/display-name])
-        :in $ ?group
+      '[:find (pull ?users combined-user-pattern)
+        :in $ ?group combined-user-pattern
         :where [?users :user.registered/groups ?group]]
-      group-name)))
+      group-name combined-user-pattern)))

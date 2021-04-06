@@ -7,7 +7,8 @@
             [goog.string :as gstring]
             [oops.core :refer [oget oset!]]
             [reagent.core :as reagent]
-            [reitit.frontend.easy :as reitfe]))
+            [reitit.frontend.easy :as reitfe]
+            [re-frame.core :as rf]))
 
 (>defn identicon
   "Generate unique identicon."
@@ -22,17 +23,19 @@
 
 (>defn avatar
   "Get a user's avatar."
-  [display-name size]
+  [{:user.registered/keys [display-name profile-picture]} size]
   [string? number? :ret vector?]
   [:div.avatar-image.m-auto.p-0
-   [identicon display-name size]])
+   (if profile-picture
+         [:img.profile-pic-image {:src profile-picture}]
+         [identicon display-name size])])
 
 (>defn avatar-with-nickname
   "Create an image based on the nickname and also print the nickname."
-  [display-name size]
+  [{:user.registered/keys [display-name] :as user} size]
   [string? number? :ret vector?]
   [:div.text-center
-   [avatar display-name size]
+   [avatar user size]
    [:p.small.mt-1 display-name]])
 
 (>defn avatar-with-nickname-right
