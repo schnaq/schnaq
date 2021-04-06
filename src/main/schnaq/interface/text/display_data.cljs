@@ -517,7 +517,8 @@
         :hub.remove.schnaq.error/title "Removal failed!"
         :hub.remove.schnaq.error/body "Something went wrong. We were unable to remove the schnaq. Please try again."
         :hub.remove.schnaq/prompt "Do you really want to remove the schnaq from the hub?"
-        :hub.remove.schnaq/tooltip "Remove the schnaq from hub"}
+        :hub.remove.schnaq/tooltip "Remove the schnaq from hub"
+        :hub.members/heading "Members"}
    :de {;; Common
         :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -1037,7 +1038,8 @@
         :hub.remove.schnaq.error/title "Entfernen fehlgeschlagen!"
         :hub.remove.schnaq.error/body "Etwas ist beim Entfernen schiefgelaufen. Bitte versuche es erneut."
         :hub.remove.schnaq/prompt "Soll der schnaq wirklich aus dem Hub entfernt werden?"
-        :hub.remove.schnaq/tooltip "Schnaq aus Hub entfernen"}})
+        :hub.remove.schnaq/tooltip "Schnaq aus Hub entfernen"
+        :hub.members/heading "Mitglieder:innen"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup

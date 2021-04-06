@@ -40,8 +40,9 @@
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout
-   {:page/heading (labels page-heading-label)}
-   [edit-user-panel]
+   {:page/heading (labels page-heading-label)
+    :condition/needs-authentication? true}
+   [user-panel]
    content
    [:section.panel-white
     [current-user]

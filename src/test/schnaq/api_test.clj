@@ -55,6 +55,8 @@
       (are [origin] (not (nil? (test-regex origin)))
                     "api.schnaq.com"
                     "schnaq.com"
+                    "schnaq.de"
+                    "www.schnaq.de"
                     "www.schnaq.com"
                     "https://api.schnaq.com"
                     "https://schnaq.com"
@@ -69,7 +71,8 @@
                     "localhost"
                     "penguin.books"
                     "christian.rocks"
-                    "schnaqi.com"
+                    "schnaqqi.com"
+                    "schnaq.dev"
                     "fakeschnaq.com"))))
 
 (deftest schnaq-by-hash-as-admin-test
