@@ -23,10 +23,13 @@
   (d/transact [{:db/id [:discussion/share-hash share-hash]
                 :discussion/header-image-url relative-file-path}]))
 
-(defn- upload-img-and-store-url [url key share-hash]
+(defn- upload-img-and-store-url [url file-name share-hash]
   (try
     (let [img-stream (client/get url {:as :stream})
-          relative-file-path (s3/upload-stream :schnaq/header-images (:body img-stream) key (:length img-stream))]
+          relative-file-path (s3/upload-stream :schnaq/header-images
+                                               (:body img-stream)
+                                               file-name
+                                               {:content-length (:length img-stream)})]
       (add-bucket-url-to-database relative-file-path share-hash))
     (catch Exception e
       (log/debug (.getMessage e))
@@ -35,10 +38,10 @@
 (defn- valid-url? [url]
   (re-matches trusted-cdn-url-regex url))
 
-(defn- check-and-upload-image [image-url key share-hash]
+(defn- check-and-upload-image [image-url file-name share-hash]
   (if (valid-url? image-url)
     (do (log/debug (format "Set preview image: [%s] for schnaq [%s]" image-url share-hash))
-        (upload-img-and-store-url image-url key share-hash))
+        (upload-img-and-store-url image-url file-name share-hash))
     :error-forbidden-cdn))
 
 (>defn set-preview-image
@@ -47,22 +50,24 @@
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
   (let [{:keys [share-hash edit-hash image-url]} body-params
-        key (str "header-" share-hash)]
+        file-name (str "header-" share-hash)]
     (if (validator/valid-credentials? share-hash edit-hash)
-      (case (check-and-upload-image image-url key share-hash)
+      (case (check-and-upload-image image-url file-name share-hash)
         :error-img (bad-request {:error error-img})
         :error-forbidden-cdn (forbidden {:error error-cdn})
         (ok {:message success-img}))
       (validator/deny-access))))
 
 (>defn scale-image-to-height
-  "Scale image data url to a specified height and return it as input stream"
+  "Scale image data url to a specified height and return a map containing input-stream, image-type and content-type"
   [image-data-url height]
-  [string? number? :ret any?]
+  [string? number? :ret map?]
   (let [[header image-without-header] (string/split image-data-url #",")
         #^bytes image-bytes (.decode (Base64/getDecoder) ^String image-without-header)
-        image-type (second (re-find #"/([A-z]*);" header))]
-    (when image-type
-      (resizer-format/as-stream
-        (resizer-core/resize-to-height (io/input-stream image-bytes) height)
-        image-type))))
+        image-type (second (re-find #"/([A-z]*);" header))
+        content-type (second (re-find #":(([A-z]*)/[A-z]*);" header))
+        resized-image (resizer-core/resize-to-height (io/input-stream image-bytes) height)
+        input-stream (when image-type (resizer-format/as-stream resized-image image-type))]
+    {:input-stream input-stream
+     :image-type image-type
+     :content-type content-type}))
