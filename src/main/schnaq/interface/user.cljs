@@ -59,7 +59,7 @@
           (assoc-in [:user :names :display] display-name)
           (assoc-in [:user :email] email)
           (assoc-in [:user :id] (:db/id registered-user))
-          (assoc-in [:profile-picture :display] profile-picture)
+          (assoc-in [:user :profile-picture :display] profile-picture)
           (cond-> first-name (assoc-in [:user :names :first] first-name))
           (cond-> last-name (assoc-in [:user :names :last] last-name))))))
 
