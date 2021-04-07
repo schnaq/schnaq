@@ -839,7 +839,7 @@
         :user/edit-hubs "Hubs verwalten"
         :user.settings "Einstellungen"
         :user.keycloak-settings "Erweiterte Einstellungen"
-        :user.settings/header "Nutzerdaten verwalten"
+        :user.settings/header "Nutzer:innendaten verwalten"
         :user.settings/info "Persönliche Informationen"
         :user.settings/hubs "Hubs"
         :user.settings/change-name "Namen ändern"
