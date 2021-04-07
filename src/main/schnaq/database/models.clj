@@ -35,6 +35,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/many
     :db/doc "The groups the user is currently part of."}
+   {:db/ident :user.registered/profile-picture
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "URL to where the profile picture was uploaded to."}
 
    ;; Feedback
    {:db/ident :feedback/contact-name

@@ -22,25 +22,30 @@
 
 (>defn avatar
   "Get a user's avatar."
-  [display-name size]
-  [string? number? :ret vector?]
-  [:div.avatar-image.m-auto.p-0
-   [identicon display-name size]])
+  [{:user.registered/keys [profile-picture display-name] :as user} size]
+  [map? number? :ret vector?]
+  (let [display-name (or display-name (:user/nickname user))]
+    [:div.avatar-image.m-auto.p-0
+     (if profile-picture
+       [:div.profile-pic-fill
+        {:style {:max-height (str size "px") :max-width (str size "px")}}
+        [:img.profile-pic-image {:src profile-picture}]]
+       [identicon display-name size])]))
 
 (>defn avatar-with-nickname
   "Create an image based on the nickname and also print the nickname."
-  [display-name size]
-  [string? number? :ret vector?]
+  [{:user.registered/keys [display-name] :as user} size]
+  [map? number? :ret vector?]
   [:div.text-center
-   [avatar display-name size]
+   [avatar user size]
    [:p.small.mt-1 display-name]])
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
-  [display-name size]
-  [string? number? :ret vector?]
+  [{:user.registered/keys [display-name] :as user} size]
+  [map? number? :ret vector?]
   [:div.row
-   [:div.mr-4 [avatar display-name size]]
+   [:div.mr-4 [avatar user size]]
    [:h4.my-auto display-name]])
 
 (>defn add-namespace-to-keyword

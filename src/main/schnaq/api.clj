@@ -232,7 +232,7 @@
       :feedbacks/screenshots
       (io/input-stream decodedBytes)
       (format "%s.png" file-name)
-      (count decodedBytes))))
+      {:content-length (count decodedBytes)})))
 
 (defn- add-feedback
   "Add new feedback from schnaqs frontend."

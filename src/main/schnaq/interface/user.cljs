@@ -54,11 +54,12 @@
 (rf/reg-event-db
   :user.register/success
   (fn [db [_ {:keys [registered-user]}]]
-    (let [{:user.registered/keys [display-name first-name last-name email]} registered-user]
+    (let [{:user.registered/keys [display-name first-name last-name email profile-picture]} registered-user]
       (-> db
           (assoc-in [:user :names :display] display-name)
           (assoc-in [:user :email] email)
           (assoc-in [:user :id] (:db/id registered-user))
+          (assoc-in [:user :profile-picture :display] profile-picture)
           (cond-> first-name (assoc-in [:user :names :first] first-name))
           (cond-> last-name (assoc-in [:user :names :last] last-name))))))
 

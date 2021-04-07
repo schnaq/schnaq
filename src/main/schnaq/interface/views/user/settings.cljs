@@ -11,11 +11,10 @@
     (labels label)]])
 
 (defn- current-user []
-  (let [user-name @(rf/subscribe [:user/display-name])]
-    [:<>
-     [:h6.text-muted.mb-4 (labels :user.settings)]
-     [:div.pl-4
-      [common/avatar-with-nickname-right user-name 40]]]))
+  (let [user @(rf/subscribe [:user/current])]
+    [:div.pl-4
+     [common/avatar-with-nickname-right #:user.registered{:profile-picture (get-in user [:profile-picture :display])
+                                                          :display-name (get-in user [:names :display])} 40]]))
 
 (defn- edit-user-navigation-button [label icon route]
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
@@ -31,12 +30,11 @@
 
 (defn- user-navigation []
   [:<>
-   [edit-user-navigation-button :user.settings/info :user/edit :routes.user.manage/account]
-   [edit-user-navigation-button :user.settings/hubs :user/group-edit :routes.user.manage/hubs]])
+   [edit-user-navigation-button :user.settings/info :user/edit :routes.user.manage/account]])
 
-(defn- user-panel []
+(defn- edit-user-panel []
   [:section
-   [current-user]
+   [:h6.text-muted.mb-4 (labels :user.settings)]
    [:hr.my-4]
    [user-navigation]])
 
@@ -44,7 +42,9 @@
   [pages/three-column-layout
    {:page/heading (labels page-heading-label)
     :condition/needs-authentication? true}
-   [user-panel]
+   [edit-user-panel]
    content
    [:section.panel-white
+    [current-user]
+    [:hr.my-4]
     [feed-overview/sidebar-common]]])

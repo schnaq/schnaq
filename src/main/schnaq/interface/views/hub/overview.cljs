@@ -84,7 +84,7 @@
        [:h5.text-center (labels :hub.members/heading)]
        (for [member members]
          [:article.d-inline-block.py-1.px-2 {:key (:db/id member)}
-          [common/avatar-with-nickname (:user.registered/display-name member) 50]])])))
+          [common/avatar-with-nickname member 50]])])))
 
 (defn sidebar-right []
   [:<>

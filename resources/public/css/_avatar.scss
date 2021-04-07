@@ -1,6 +1,10 @@
+@use 'variables' as vars;
+@use 'rounded' as rounded;
+
 .avatar-image {
   @include media-breakpoint-down(sm) {
     height: 35px;
+    overflow: hidden;
     width: 35px;
 
     svg {
@@ -12,4 +16,25 @@
   svg {
     border-radius: 1em;
   }
+}
+
+.profile-pic-fill {
+  @include rounded.rounded-1;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.profile-pic-image {
+  background-position: center center;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.change-profile-pic-button {
+  box-shadow: vars.$regular-shadow;
+  margin-bottom: -1rem !important;
+  margin-left: -2rem !important;
 }

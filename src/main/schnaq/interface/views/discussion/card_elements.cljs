@@ -35,7 +35,8 @@
      [home-button-mobile (count indexed-history)]
      ;; history
      (for [[index statement] indexed-history]
-       (let [nickname (user-utils/statement-author statement)]
+       (let [user (:statement/author statement)
+             nickname (user-utils/statement-author statement)]
          [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
           {:key (str "history-" (:db/id statement))}
           (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
@@ -46,7 +47,7 @@
               [tooltip/block-element
                :right
                (str (labels :tooltip/history-statement) nickname)
-               [common/avatar nickname 42]]]])]))]))
+               [common/avatar user 42]]]])]))]))
 
 (defn- back-button
   "Return to your schnaqs Button"
@@ -99,12 +100,13 @@
         (for [[index statement] indexed-history]
           (let [max-word-count 20
                 nickname (user-utils/statement-author statement)
+                user (:statement/author statement)
                 statement-content (-> statement :statement/content)
                 tooltip (str (labels :tooltip/history-statement) nickname)
                 history-content [:<>
                                  [:div.d-flex.flex-row
                                   [:h6 (str (labels :history.statement/user) nickname)]
-                                  [:div.ml-auto [common/avatar nickname 22]]]
+                                  [:div.ml-auto [common/avatar user 22]]]
                                  (toolbelt/truncate-to-n-words statement-content max-word-count)]]
             [:article {:key (str "history-container-" (:db/id statement))}
              [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
@@ -217,7 +219,7 @@
       [:div.d-flex.mb-4
        [discussion-privacy-badge discussion]
        [:div.ml-auto
-        [user/user-info display-name 32]]]
+        [user/user-info display-name 32 (:author content)]]]
       [title-and-input-element content input is-topic?]]
      ;; up-down votes and statistics
      [:div.col-2.pr-3
@@ -237,7 +239,7 @@
       [:div.p-0
        [discussion-privacy-badge discussion]
        [:div.d-flex
-        [:div.ml-auto.mr-2 [user/user-info display-name 32]]
+        [:div.ml-auto.mr-2 [user/user-info display-name 32 (:author content)]]
         info-content]]]
      ;; title
      [title-and-input-element content input]]))

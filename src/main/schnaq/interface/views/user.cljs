@@ -8,11 +8,11 @@
 
 (defn user-info
   "User info box containing relevant information for discussions."
-  [username avatar-size]
+  [username avatar-size user]
   [:div.d-flex.flex-row.align-items-center
    [:div.pr-2.pb-1.text-right
     [:small username]]
-   [common/avatar username avatar-size]])
+   [common/avatar user avatar-size]])
 
 (rf/reg-event-fx
   :user/set-display-name
@@ -53,3 +53,7 @@
   :user/show-display-name-input
   (fn [db _]
     (assoc-in db [:controls :username-input :show?] true)))
+
+(rf/reg-sub
+  :user/current
+  (fn [db] (:user db)))

@@ -18,10 +18,10 @@
 
 (defn upload-stream
   "Upload a data stream to a specified s3 bucket. Returns relative path to file in bucket."
-  [bucket stream file-name content-length]
+  [bucket stream file-name metadata]
   (-> config/s3-credentials
       (s3/put-object :bucket-name (shared-config/s3-buckets bucket)
                      :key file-name
                      :input-stream stream
-                     :metadata {:content-length content-length}))
+                     :metadata metadata))
   (absolute-file-url bucket file-name))

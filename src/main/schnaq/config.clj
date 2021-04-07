@@ -29,6 +29,10 @@
    :sender-host (or (System/getenv "EMAIL_HOST") "smtp.ionos.de")
    :sender-password (System/getenv "EMAIL_PASSWORD")})
 
+(def profile-picture-height
+  "Profile Picture height in pixels."
+  200)
+
 (def s3-credentials {:access-key "minio"
                      :secret-key "***REMOVED***"
                      :endpoint shared-config/s3-host
