@@ -20,16 +20,22 @@
            :dangerouslySetInnerHTML
            {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}]))
 
+(defn get-user-name [user]
+  (let [registered-name (:user.registered/display-name user)
+        display-name (or registered-name (:user/nickname user))]
+    display-name))
+
 (>defn avatar
   "Get a user's avatar."
-  [{:user.registered/keys [display-name profile-picture]} size]
+  [{:user.registered/keys [profile-picture] :as user} size]
   [map? number? :ret vector?]
-  [:div.avatar-image.m-auto.p-0
-   (if profile-picture
-     [:div.profile-pic-fill
-      {:style {:max-height (str size "px") :max-width (str size "px")}}
-      [:img.profile-pic-image {:src profile-picture}]]
-     [identicon display-name size])])
+  (let [display-name (get-user-name user)]
+    [:div.avatar-image.m-auto.p-0
+     (if profile-picture
+       [:div.profile-pic-fill
+        {:style {:max-height (str size "px") :max-width (str size "px")}}
+        [:img.profile-pic-image {:src profile-picture}]]
+       [identicon display-name size])]))
 
 (>defn avatar-with-nickname
   "Create an image based on the nickname and also print the nickname."
