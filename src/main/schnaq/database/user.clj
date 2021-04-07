@@ -1,6 +1,6 @@
 (ns schnaq.database.user
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn ?]]
+            [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.database.specs :as specs]
             [schnaq.meeting.database :refer [transact fast-pull clean-db-vals query]]
             [taoensso.timbre :as log]))
@@ -95,19 +95,25 @@
           (get-in [:tempids temp-id])
           (fast-pull registered-user-pattern)))))
 
-(defn update-display-name
-  "Update the name of an existing user."
-  [keycloak-id display-name]
+(>defn- update-user-field
+  "Updates a user's field in the database and return updated user."
+  [keycloak-id field value]
+  [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
   (transact [[:db/add [:user.registered/keycloak-id keycloak-id]
-              :user.registered/display-name display-name]])
+              field value]])
   (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern))
 
-(defn update-profile-picture-url
+(>defn update-display-name
+  "Update the name of an existing user."
+  [keycloak-id display-name]
+  [:user.registered/keycloak-id string? :ret ::specs/registered-user]
+  (update-user-field keycloak-id :user.registered/display-name display-name))
+
+(>defn update-profile-picture-url
   "Update the profile picture url."
   [keycloak-id profile-picture-url]
-  (transact [[:db/add [:user.registered/keycloak-id keycloak-id]
-              :user.registered/profile-picture profile-picture-url]])
-  (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern))
+  [:user.registered/keycloak-id :user.registered/profile-picture :ret ::specs/registered-user]
+  (update-user-field keycloak-id :user.registered/profile-picture profile-picture-url))
 
 (>defn members-of-group
   "Returns all members of a certain group."
