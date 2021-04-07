@@ -2,8 +2,8 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.config :as config]))
+            [schnaq.interface.config :as config]
+            [schnaq.interface.text.display-data :refer [labels]]))
 
 (defn store-temporary-profile-picture
   "Store image file from event to database."
@@ -16,7 +16,6 @@
   :user.profile.picture/store
   (fn [_ [_ picture-file]]
     {:fx [[:readfile {:files [picture-file]
-                      :charsets ["utf-8" nil]
                       :on-success [:picture-read-file-success]
                       :on-error [:ajax.error/to-console]}]]}))
 

@@ -6,10 +6,10 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.user.settings :as settings]
             [schnaq.interface.views.hub.common :as hub]
-            [schnaq.interface.views.user.image-upload :as image]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.user.image-upload :as image]
+            [schnaq.interface.views.user.settings :as settings]))
 
 (defn- avatar-input [input-id]
   (let [user @(rf/subscribe [:user/current])]
