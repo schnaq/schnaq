@@ -20,16 +20,11 @@
            :dangerouslySetInnerHTML
            {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fff"}))}}]))
 
-(defn get-user-name [user]
-  (let [registered-name (:user.registered/display-name user)
-        display-name (or registered-name (:user/nickname user))]
-    display-name))
-
 (>defn avatar
   "Get a user's avatar."
-  [{:user.registered/keys [profile-picture] :as user} size]
+  [{:user.registered/keys [profile-picture display-name] :as user} size]
   [map? number? :ret vector?]
-  (let [display-name (get-user-name user)]
+  (let [display-name (or display-name (:user/nickname user))]
     [:div.avatar-image.m-auto.p-0
      (if profile-picture
        [:div.profile-pic-fill
