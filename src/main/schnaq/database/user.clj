@@ -5,7 +5,7 @@
             [schnaq.meeting.database :refer [transact fast-pull clean-db-vals query]]
             [taoensso.timbre :as log]))
 
-(def ^:private registered-user-pattern
+(def registered-user-pattern
   [:db/id
    :user.registered/keycloak-id
    :user.registered/display-name

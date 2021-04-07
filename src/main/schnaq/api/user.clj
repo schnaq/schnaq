@@ -16,13 +16,18 @@
             ", username:" (:preferred_username identity))
   (ok {:registered-user (user-db/register-new-user identity)}))
 
+(defn- create-UUID-file-name
+  "Generates a UUID based on a unique id with a file type suffix."
+  [id file-type]
+  (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type))
+
 (defn- change-profile-picture
   "Change the profile picture of a user.
   This includes uploading an image to s3 and updating the associated url in the database."
   [{:keys [identity params]}]
   (let [{:keys [input-stream image-type content-type]} (media/scale-image-to-height (get-in params [:image :content])
                                                                                     config/profile-picture-height)
-        image-name (str (UUID/randomUUID) "." image-type)]
+        image-name (create-UUID-file-name (:id identity) image-type)]
     (if input-stream
       (let [absolute-url (s3/upload-stream :user/profile-pictures
                                            input-stream

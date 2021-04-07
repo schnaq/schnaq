@@ -7,8 +7,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oget oset!]]
             [reagent.core :as reagent]
-            [reitit.frontend.easy :as reitfe]
-            [re-frame.core :as rf]))
+            [reitit.frontend.easy :as reitfe]))
 
 (>defn identicon
   "Generate unique identicon."
@@ -27,7 +26,8 @@
   [map? number? :ret vector?]
   [:div.avatar-image.m-auto.p-0
    (if profile-picture
-     [:div {:style {:max-height (str size "px") :max-width (str size "px")}}
+     [:div.profile-pic-fill.rounded-1
+      {:style {:max-height (str size "px") :max-width (str size "px")}}
       [:img.profile-pic-image {:src profile-picture}]]
      [identicon display-name size])])
 
