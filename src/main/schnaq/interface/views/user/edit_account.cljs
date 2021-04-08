@@ -13,18 +13,20 @@
 
 (defn- avatar-input [input-id]
   (let [user @(rf/subscribe [:user/current])]
-    [:div.d-flex.mr-4
-     [:div.d-flex.avatar-image
-      [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                       :display-name (get-in user [:names :display])} 80]]
-     [:div.mt-auto
-      [:label.btn.btn-light.change-profile-pic-button
-       [:i.fas.mr-1 {:class (fa :camera)}]
-       [:input {:id input-id
-                :accept "image/x-png,image/jpeg,image/*"
-                :type "file"
-                :on-change (fn [event] (image/store-temporary-profile-picture event))
-                :hidden true}]]]]))
+    (let [profile-picture (get-in user [:profile-picture :display])
+          preview-image (or (get-in user [:profile-picture :temporary :content]) profile-picture)]
+      [:div.d-flex.mr-4
+       [:div.d-flex.avatar-image
+        [common/avatar #:user.registered{:profile-picture preview-image
+                                         :display-name (get-in user [:names :display])} 80]]
+       [:div.mt-auto
+        [:label.btn.btn-light.change-profile-pic-button
+         [:i.fas.mr-1 {:class (fa :camera)}]
+         [:input {:id input-id
+                  :accept "image/x-png,image/jpeg,image/*"
+                  :type "file"
+                  :on-change (fn [event] (image/store-temporary-profile-picture event))
+                  :hidden true}]]]])))
 
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])
