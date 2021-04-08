@@ -23,13 +23,13 @@
        [:div.mt-auto
         (if temporary-picture
           ;; delete temporary button
-          [:button.btn.btn-dark.change-profile-pic-button
+          [:button.btn.btn-primary.change-profile-pic-button
            {:on-click (fn [e] (js-wrap/prevent-default e)
                         (rf/dispatch [:user.picture/reset]))}
-           [:i.fas.mr-1 {:class (fa :cross)}]]
+           [:i.fas {:class (fa :cross)}]]
           ;; upload temporary button
           [:label.btn.btn-light.change-profile-pic-button
-           [:i.fas.mr-1 {:class (fa :camera)}]
+           [:i.fas {:class (fa :camera)}]
            [:input {:id input-id
                     :accept "image/x-png,image/jpeg,image/*"
                     :type "file"
