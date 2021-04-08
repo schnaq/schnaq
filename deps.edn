@@ -52,7 +52,8 @@
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
-                                  "--exclude=com.datomic/dev-local"]}
+                                  "--exclude=com.datomic/dev-local"
+                                  "--exclude=thheller/shadow-cljs"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
