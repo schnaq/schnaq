@@ -68,8 +68,8 @@
    (let [current-route @(rf/subscribe [:navigation/current-route-name])
          button-class (if (= current-route route) "feed-button-focused" "feed-button")]
      [:article
-      [:a {:class button-class :type "button"
-           :href (reitfe/href route route-params)}
+      [:button.btn.btn-link {:class button-class :type "button"
+                             :href (reitfe/href route route-params)}
        (labels label)]])))
 
 (defn feed-navigation
