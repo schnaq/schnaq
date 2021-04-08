@@ -81,7 +81,8 @@
     ["/account"
      {:name :routes.user.manage/account
       :view edit-account/view
-      :link-text (labels :user/edit-account)}]]
+      :link-text (labels :user/edit-account)
+      :controllers [{:stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center
