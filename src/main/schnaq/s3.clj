@@ -2,7 +2,7 @@
   (:require [amazonica.aws.s3 :as s3]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
-            [schnaq.shared-config :as shared-config]))
+            [schnaq.config.shared :as shared-config]))
 
 (>defn absolute-file-url
   "Return absolute URL to bucket."
