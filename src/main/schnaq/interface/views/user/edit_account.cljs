@@ -12,19 +12,29 @@
             [schnaq.interface.views.user.settings :as settings]))
 
 (defn- avatar-input [input-id]
-  (let [user @(rf/subscribe [:user/current])]
+  (let [user @(rf/subscribe [:user/current])
+        profile-picture (get-in user [:profile-picture :display])
+        temporary-picture (get-in user [:profile-picture :temporary :content])
+        preview-image (or temporary-picture profile-picture)]
     [:div.d-flex.mr-4
      [:div.d-flex.avatar-image
-      [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
+      [common/avatar #:user.registered{:profile-picture preview-image
                                        :display-name (get-in user [:names :display])} 80]]
      [:div.mt-auto
-      [:label.btn.btn-light.change-profile-pic-button
-       [:i.fas.mr-1 {:class (fa :camera)}]
-       [:input {:id input-id
-                :accept "image/x-png,image/jpeg,image/*"
-                :type "file"
-                :on-change (fn [event] (image/store-temporary-profile-picture event))
-                :hidden true}]]]]))
+      (if temporary-picture
+        ;; delete temporary button
+        [:button.btn.btn-primary.change-profile-pic-button
+         {:on-click (fn [e] (js-wrap/prevent-default e)
+                      (rf/dispatch [:user.picture/reset]))}
+         [:i.fas {:class (fa :cross)}]]
+        ;; upload temporary button
+        [:label.btn.btn-light.change-profile-pic-button
+         [:i.fas {:class (fa :camera)}]
+         [:input {:id input-id
+                  :accept "image/x-png,image/jpeg,image/*"
+                  :type "file"
+                  :on-change (fn [event] (image/store-temporary-profile-picture event))
+                  :hidden true}]])]]))
 
 (defn- change-user-info []
   (let [display-name @(rf/subscribe [:user/display-name])
@@ -100,6 +110,11 @@
                                 [:user.profile-picture/update-success]
                                 {:image new-profile-picture-url}
                                 [:ajax.error/as-notification])]})))
+
+(rf/reg-event-db
+  :user.picture/reset
+  (fn [db _]
+    (update-in db [:user :profile-picture] dissoc :temporary)))
 
 (rf/reg-event-db
   :user.profile-picture/update-success
