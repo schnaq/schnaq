@@ -44,12 +44,9 @@
      (labels :user.settings/change-name)
      [:form.my-4
       {:on-submit (fn [e]
-                    (let [new-display-name (oget+ e [:target :elements input-id :value])
-                          new-profile-picture (oget+ e [:target :elements pic-input-id :value])]
+                    (let [new-display-name (oget+ e [:target :elements input-id :value])]
                       (js-wrap/prevent-default e)
-                      (when new-profile-picture
-
-                        (rf/dispatch [:user.picture/update new-profile-picture]))
+                      (rf/dispatch [:user.picture/update])
                       (rf/dispatch [:user.name/update new-display-name])))}
       [:div.d-flex.flex-row
        [avatar-input pic-input-id]
