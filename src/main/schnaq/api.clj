@@ -18,6 +18,7 @@
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.hub :as hub-db]
             [schnaq.database.reaction :as reaction-db]
             [schnaq.database.user :as user-db]
             [schnaq.discussion :as discussion]
@@ -62,20 +63,26 @@
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
   [{:keys [body-params identity]}]
-  (let [{:keys [discussion nickname public-discussion?]} body-params
+  (let [{:keys [discussion nickname public-discussion? hub-exclusive? origin]} body-params
         keycloak-id (:sub identity)
+        authorized-for-hub (some #(= % origin) (:groups identity))
         author (if keycloak-id
                  [:user.registered/keycloak-id keycloak-id]
                  (user-db/add-user-if-not-exists nickname))
-        discussion-data {:discussion/title (:discussion/title discussion)
-                         :discussion/share-hash (.toString (UUID/randomUUID))
-                         :discussion/edit-hash (.toString (UUID/randomUUID))
-                         :discussion/author author}
+        discussion-data (cond-> {:discussion/title (:discussion/title discussion)
+                                 :discussion/share-hash (.toString (UUID/randomUUID))
+                                 :discussion/edit-hash (.toString (UUID/randomUUID))
+                                 :discussion/author author}
+                                (and hub-exclusive? authorized-for-hub)
+                                (assoc :discussion/hub-origin [:hub/keycloak-name origin]))
         new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
     (if new-discussion-id
       (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
+        (when (and hub-exclusive? origin authorized-for-hub)
+          (hub-db/add-discussions-to-hub [:hub/keycloak-name origin] [new-discussion-id]))
         (log/info "Discussion created: " new-discussion-id " - "
-                  (:discussion/title created-discussion) " – Public? " public-discussion?)
+                  (:discussion/title created-discussion) " – Public? " public-discussion?
+                  "Exclusive?" hub-exclusive? "for" origin)
         (created "" {:new-discussion created-discussion}))
       (do
         (log/info "Did not create discussion from following data:\n" discussion-data)
