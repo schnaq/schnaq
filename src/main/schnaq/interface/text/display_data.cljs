@@ -324,14 +324,14 @@
         :user.settings/header "Manage User Data"
         :user.settings/info "User infos"
         :user.settings/hubs "Hubs"
-        :user.settings/change-name "Change Name and Profile Picture"
-        :user.settings.button/change-account-information "Save Changes"
-        :user.settings.hubs/show "Your Hubs"
+        :user.settings/change-name "Change name and profile picture"
+        :user.settings.button/change-account-information "Save changes"
+        :user.settings.hubs/show "Your hubs"
         :user.settings.hubs/empty "No hubs assigned"
-        :user.settings.profile-picture-title/success "Profile Picture successfully uploaded"
-        :user.settings.profile-picture-body/success "Your new Profile Picture was successfully set. You may have to reload the page to see it."
-        :user.settings.profile-picture-title/error "Error while uploading Profile Picture"
-        :user.settings.profile-picture-too-large/error "Your Profile Picture size is %d bytes, it exceeds the maximum allowed size of %d bytes. Please upload a smaller picture."
+        :user.settings.profile-picture-title/success "Profile picture successfully uploaded"
+        :user.settings.profile-picture-body/success "Your new profile picture was successfully set. You may have to reload the page to see it."
+        :user.settings.profile-picture-title/error "Error while uploading profile picture"
+        :user.settings.profile-picture-too-large/error "Your profile picture size is %d bytes, it exceeds the maximum allowed size of %d bytes. Please upload a smaller picture."
 
 
         ;; Errors
