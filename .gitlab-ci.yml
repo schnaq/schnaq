@@ -149,3 +149,19 @@ build-backend-staging-image:
     - docker push $CI_REGISTRY_IMAGE/backend:staging
   only:
     - develop
+
+deploy-staging:
+  stage: deploy
+  variables:
+    DEPLOYMENT: staging
+  trigger: dialogo/deployments/schnaq
+  only:
+    - develop
+
+deploy-production:
+  stage: deploy
+  variables:
+    DEPLOYMENT: production
+  trigger: dialogo/deployments/schnaq
+  only:
+    - deploy
