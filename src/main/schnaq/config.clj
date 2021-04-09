@@ -1,8 +1,8 @@
 (ns schnaq.config
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
-  (:require [schnaq.toolbelt :as toolbelt]
-            [schnaq.shared-config :as shared-config]))
+  (:require [schnaq.config.shared :as shared-config]
+            [schnaq.toolbelt :as toolbelt]))
 
 (def datomic
   "When we are production ready, put here the original production config and use

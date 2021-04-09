@@ -1,7 +1,8 @@
 (ns schnaq.interface.config
-  (:require [goog.string :as gstring]))
+  (:require [goog.string :as gstring]
+            [schnaq.config.shared :as shared-config]))
 
-;; Third parameter is a default value
+;; Second parameter is a default value
 (goog-define api-url "http://localhost:3000")
 (goog-define environment "development")
 (goog-define build-hash "dev")
@@ -29,17 +30,16 @@
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
 
-(goog-define keycloak-auth-server-url "https://keycloak.disqtec.com/auth/")
 (goog-define keycloak-ssl-required "external")
 (goog-define keycloak-realm "development")
 (goog-define keycloak-client "development")
 (goog-define keycloak-public-client true)
 (def keycloak-profile-page
-  (gstring/format "https://keycloak.disqtec.com/auth/realms/%s/account/#/personal-info" keycloak-realm))
+  (gstring/format "%s/auth/realms/%s/account/#/personal-info" shared-config/keycloak-host keycloak-realm))
 
 (def keycloak
   "Keycloak configuration, which is sent to the server via keycloak-js."
-  {:url keycloak-auth-server-url
+  {:url (gstring/format "%s/auth/" shared-config/keycloak-host)
    :realm keycloak-realm
    :clientId keycloak-client})
 

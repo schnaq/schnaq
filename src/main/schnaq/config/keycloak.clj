@@ -3,11 +3,12 @@
             [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.string :as string]
+            [schnaq.config.shared :as shared-config]
             [taoensso.timbre :as log]))
 
 (def server
   "Define your keycloak server's base url."
-  (let [server (or (System/getenv "KEYCLOAK_SERVER") "https://keycloak.disqtec.com")]
+  (let [server shared-config/keycloak-host]
     (if (string/ends-with? server "/")
       server
       (format "%s/" server))))

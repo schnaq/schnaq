@@ -130,15 +130,17 @@
   "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)
   Apply the pull-patern you like."
   [share-hash template-pattern]
-  [string? vector? :ret map?]
-  (-> (query
-        '[:find (pull ?discussion discussion-pattern) (pull ?tx transaction-pattern)
-          :in $ ?share-hash discussion-pattern transaction-pattern
-          :where [?discussion :discussion/share-hash ?share-hash ?tx]]
-        share-hash template-pattern main-db/transaction-pattern)
-      first
-      (toolbelt/pull-key-up :db/ident)
-      main-db/merge-entity-and-transaction))
+  [string? vector? :ret (? map?)]
+  (let [entities (query
+                   '[:find (pull ?discussion discussion-pattern) (pull ?tx transaction-pattern)
+                     :in $ ?share-hash discussion-pattern transaction-pattern
+                     :where [?discussion :discussion/share-hash ?share-hash ?tx]]
+                   share-hash template-pattern main-db/transaction-pattern)]
+    (when (seq entities)
+      (-> entities
+          first
+          (toolbelt/pull-key-up :db/ident)
+          main-db/merge-entity-and-transaction))))
 
 (defn discussion-by-share-hash
   "Query discussion and apply public discussion pattern to it."
