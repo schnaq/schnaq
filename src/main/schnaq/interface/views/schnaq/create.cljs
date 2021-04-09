@@ -12,7 +12,8 @@
 (defn- create-schnaq-options
   "Options that can be chosen when creating a schnaq."
   []
-  (let [user-groups @(rf/subscribe [:user/groups])]
+  (let [user-groups @(rf/subscribe [:user/groups])
+        hubs @(rf/subscribe [:hubs/all])]
     [:div.pt-3.text-center.row
      [:div.form-check
       (if (empty? user-groups)
@@ -27,7 +28,6 @@
            (jq/prop (jq/$ "#hub-exclusive") "checked" false))}]
       [:label.form-check-label.display-6.pl-1 {:for :public-discussion}
        (labels :discussion.create.public-checkbox/label)]]
-     ;; TODO: pop up menu with hub selector down below
      (when (seq user-groups)
        [:div.form-check.col-6
         [:input.form-check-input.big-checkbox
@@ -38,7 +38,11 @@
           #(when (oget % [:target :checked])
              (jq/prop (jq/$ "#public-discussion") "checked" false))}]
         [:label.form-check-label.display-6.pl-1 {:for :hub-exclusive}
-         (labels :discussion.create.hub-exclusive-checkbox/label)]])]))
+         (labels :discussion.create.hub-exclusive-checkbox/label)]
+        [:select.form-control
+         {:id :exclusive-hub-select}
+         (for [group-id user-groups]
+           [:option {:value group-id} (get-in hubs [group-id :hub/name])])]])]))
 
 (defn- create-schnaq-page []
   [pages/with-nav-and-header
