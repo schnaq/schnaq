@@ -78,7 +78,7 @@
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
     [:<>
      [:section.row
-      [:div.list-group.col-6.col-md-12 {:role "group"}
+      [:div.list-group.col-6.col-md-12
        [feed-button :router/my-schnaqs :routes.schnaqs/personal]
        [feed-button :router/public-discussions :routes.schnaqs/public]
        (when-not (nil? edit-hash)
