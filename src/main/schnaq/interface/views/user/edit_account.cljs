@@ -113,9 +113,12 @@
   (fn [db _]
     (update-in db [:user :profile-picture] dissoc :temporary)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :user.profile-picture/update-success
-  (fn [db [_ {:keys [updated-user]}]]
-    (assoc-in db [:user :profile-picture :display]
-              (:user.registered/profile-picture updated-user))))
-
+  (fn [{:keys [db]} [_ {:keys [updated-user]}]]
+    {:db (assoc-in db [:user :profile-picture :display]
+                   (:user.registered/profile-picture updated-user))
+     :fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :user.settings.profile-picture-title/success)
+                                     :body (labels :user.settings.profile-picture-body/success)
+                                     :context :success}]]]}))

@@ -29,8 +29,8 @@
         {:db (assoc-in db [:user :profile-picture :temporary] profile-picture)}
         {:fx [[:dispatch
                [:notification/add
-                #:notification{:title (labels :user.settings.error/profile-picture-title)
-                               :body (gstring/format (labels :user.settings.error/profile-picture-too-large)
+                #:notification{:title (labels :user.settings.profile-picture-title/error)
+                               :body (gstring/format (labels :user.settings.profile-picture-too-large/error)
                                                      actual-size config/max-allowed-profile-picture-size)
                                :context :danger}]]]}))))
 
