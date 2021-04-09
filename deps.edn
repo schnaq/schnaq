@@ -37,7 +37,7 @@
         ring/ring-mock {:mvn/version "0.4.0"}
         ring/ring {:mvn/version "1.9.2"}
         ring/ring-defaults {:mvn/version "0.3.2"}
-        thheller/shadow-cljs {:mvn/version "2.12.1"}}
+        thheller/shadow-cljs {:mvn/version "2.12.3"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
@@ -52,8 +52,7 @@
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
-                                  "--exclude=com.datomic/dev-local"
-                                  "--exclude=thheller/shadow-cljs"]}
+                                  "--exclude=com.datomic/dev-local"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
