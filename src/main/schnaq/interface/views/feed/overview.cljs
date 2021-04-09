@@ -67,10 +67,10 @@
   ([label route route-params]
    (let [current-route @(rf/subscribe [:navigation/current-route-name])
          button-class (if (= current-route route) "feed-button-focused" "feed-button")]
-     [:article
-      [:button.btn.btn-link {:class button-class :type "button"
-                             :href (reitfe/href route route-params)}
-       (labels label)]])))
+     [:a.btn.btn-link.text-left {:class button-class
+                                 :role "button"
+                                 :href (reitfe/href route route-params)}
+      (labels label)])))
 
 (defn feed-navigation
   "Navigate between the feeds."
@@ -78,7 +78,7 @@
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
     [:<>
      [:section.row
-      [:div.col-6.col-md-12
+      [:div.list-group.col-6.col-md-12 {:role "group"}
        [feed-button :router/my-schnaqs :routes.schnaqs/personal]
        [feed-button :router/public-discussions :routes.schnaqs/public]
        (when-not (nil? edit-hash)
