@@ -14,7 +14,7 @@
   []
   (let [user-groups @(rf/subscribe [:user/groups])
         hubs @(rf/subscribe [:hubs/all])]
-    [:div.pt-3.text-center.row
+    [:div.row.mt-4..p-4.text-center.panel-white
      [:div.form-check
       (if (empty? user-groups)
         {:class "col-12"}
@@ -39,10 +39,13 @@
              (jq/prop (jq/$ "#public-discussion") "checked" false))}]
         [:label.form-check-label.display-6.pl-1 {:for :hub-exclusive}
          (labels :discussion.create.hub-exclusive-checkbox/label)]
-        [:select.form-control
-         {:id :exclusive-hub-select}
+        [:select.form-control.custom-select.mt-1
+         {:id :exclusive-hub-select
+          :style {:max-width "90%"}}
          (for [group-id user-groups]
-           [:option {:value group-id} (get-in hubs [group-id :hub/name])])]])]))
+           [:option {:value group-id
+                     :key group-id}
+            (get-in hubs [group-id :hub/name])])]])]))
 
 (defn- create-schnaq-page []
   [pages/with-nav-and-header
@@ -55,10 +58,11 @@
                           public? (oget e [:target :elements :public-discussion :checked])]
                       (jq/prevent-default e)
                       (rf/dispatch [:schnaq.create/new {:discussion/title title} public?])))}
-      [:div.panel-white.p-4
-       [common/form-input {:id :schnaq-title
-                           :placeholder (labels :schnaq.create.input/placeholder)
-                           :css "font-150"}]]
+      [:div.panel-white.row.p-4
+       [:div.col-12
+        [common/form-input {:id :schnaq-title
+                            :placeholder (labels :schnaq.create.input/placeholder)
+                            :css "font-150"}]]]
       [create-schnaq-options]
       [:div.pt-3.text-center
        [:button.btn.button-primary (labels :schnaq.create.button/save)]]]

@@ -157,7 +157,7 @@
         :schnaq.create.button/save "Start a new schnaq"
 
         ;; Discussion Creation
-        :discussion.create.public-checkbox/label "Make this discussion public"
+        :discussion.create.public-checkbox/label "Make this schnaq public"
         :discussion.create.hub-exclusive-checkbox/label "Add schnaq to a Hub"
 
         :discussion.privacy/public "Public Discussion"
@@ -681,7 +681,7 @@
         :schnaq.create.button/save "Schnaq starten"
 
         ;; Discussion Creation
-        :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
+        :discussion.create.public-checkbox/label "Diesen schnaq öffentlich machen"
         :discussion.create.hub-exclusive-checkbox/label "Schnaq zu einem Hub hinzufügen"
 
         :discussion.privacy/public "Öffentliche Diskussion"
