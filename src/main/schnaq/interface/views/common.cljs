@@ -144,6 +144,7 @@
   [{:keys [id placeholder default-value css]}]
   [:input.form-control.form-border-bottom.mb-2
    {:id id
+    :key (str id placeholder default-value)
     :class css
     :type "text"
     :autoComplete "off"
