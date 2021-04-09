@@ -166,6 +166,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The statements at the source of the discussion-graph"}
+   {:db/ident :discussion/hub-origin
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The hub in which the schnaq is originated in. The quasi owner of the schnaq."}
 
    {:db/ident :hub/name
     :db/valueType :db.type/string
