@@ -54,10 +54,8 @@
     [:div.py-3.mt-3
      [:form
       {:on-submit (fn [e]
-                    (let [title (oget e [:target :elements :schnaq-title :value])
-                          public? (oget e [:target :elements :public-discussion :checked])]
-                      (jq/prevent-default e)
-                      (rf/dispatch [:schnaq.create/new {:discussion/title title} public?])))}
+                    (jq/prevent-default e)
+                    (rf/dispatch [:schnaq.create/new (oget e [:target :elements])]))}
       [:div.panel-white.row.p-4
        [:div.col-12
         [common/form-input {:id :schnaq-title
@@ -73,13 +71,20 @@
 
 (rf/reg-event-fx
   :schnaq.create/new
-  (fn [{:keys [db]} [_ new-discussion public?]]
-    (let [nickname (get-in db [:user :names :display] default-anonymous-display-name)]
+  (fn [{:keys [db]} [_ form-elements]]
+    (let [authenticated? (get-in db [:user :authenticated?] false)
+          nickname (get-in db [:user :names :display] default-anonymous-display-name)
+          discussion-title (oget form-elements [:schnaq-title :value])
+          public? (oget form-elements [:public-discussion :checked])
+          exclusive? (when authenticated? (oget form-elements [:hub-exclusive :checked]))
+          origin-hub (when authenticated? (oget form-elements [:exclusive-hub-select :value]))]
       {:fx [(http/xhrio-request db :post "/schnaq/add"
                                 [:schnaq/created]
                                 {:nickname nickname
-                                 :discussion new-discussion
-                                 :public-discussion? public?}
+                                 :discussion {:discussion/title discussion-title}
+                                 :public-discussion? public?
+                                 :hub-exclusive? exclusive?
+                                 :origin origin-hub}
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
