@@ -3,7 +3,7 @@
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]
             [re-frame.core :as rf]
@@ -17,19 +17,36 @@
      [:form
       {:on-submit (fn [e]
                     (let [title (oget e [:target :elements :schnaq-title :value])
-                          public? (oget e [:target :elements :public-discussion? :checked])]
-                      (js-wrap/prevent-default e)
+                          public? (oget e [:target :elements :public-discussion :checked])]
+                      (jq/prevent-default e)
                       (rf/dispatch [:schnaq.create/new {:discussion/title title} public?])))}
       [:div.panel-white.p-4
        [common/form-input {:id :schnaq-title
                            :placeholder (labels :schnaq.create.input/placeholder)
                            :css "font-150"}]]
-      [:div.form-check.pt-3.text-center
-       [:input.form-check-input.big-checkbox {:type :checkbox
-                                              :id :public-discussion?
-                                              :defaultChecked false}]
-       [:label.form-check-label.display-6.pl-1 {:for :public-discussion?}
-        (labels :discussion.create.public-checkbox/label)]]
+      [:div.pt-3.text-center.row
+       [:div.form-check.col-6
+        [:input.form-check-input.big-checkbox
+         {:type :checkbox
+          :id :public-discussion
+          :defaultChecked false
+          :on-change
+          #(when (oget % [:target :checked])
+             (jq/prop (jq/$ "#hub-exclusive") "checked" false))}]
+        [:label.form-check-label.display-6.pl-1 {:for :public-discussion}
+         (labels :discussion.create.public-checkbox/label)]]
+       ;; TODO: only show when user has a hub
+       ;; TODO: pop up menu with hub selector down below
+       [:div.form-check.col-6
+        [:input.form-check-input.big-checkbox
+         {:type :checkbox
+          :id :hub-exclusive
+          :defaultChecked false
+          :on-change
+          #(when (oget % [:target :checked])
+             (jq/prop (jq/$ "#public-discussion") "checked" false))}]
+        [:label.form-check-label.display-6.pl-1 {:for :hub-exclusive}
+         (labels :discussion.create.hub-exclusive-checkbox/label)]]]
       [:div.pt-3.text-center
        [:button.btn.button-primary (labels :schnaq.create.button/save)]]]
      [how-to-elements/quick-how-to-create]]]])
