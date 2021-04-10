@@ -44,12 +44,9 @@
      (labels :user.settings/change-name)
      [:form.my-4
       {:on-submit (fn [e]
-                    (let [new-display-name (oget+ e [:target :elements input-id :value])
-                          new-profile-picture (oget+ e [:target :elements pic-input-id :value])]
+                    (let [new-display-name (oget+ e [:target :elements input-id :value])]
                       (js-wrap/prevent-default e)
-                      (when new-profile-picture
-
-                        (rf/dispatch [:user.picture/update new-profile-picture]))
+                      (rf/dispatch [:user.picture/update])
                       (rf/dispatch [:user.name/update new-display-name])))}
       [:div.d-flex.flex-row
        [avatar-input pic-input-id]
@@ -116,9 +113,12 @@
   (fn [db _]
     (update-in db [:user :profile-picture] dissoc :temporary)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :user.profile-picture/update-success
-  (fn [db [_ {:keys [updated-user]}]]
-    (assoc-in db [:user :profile-picture :display]
-              (:user.registered/profile-picture updated-user))))
-
+  (fn [{:keys [db]} [_ {:keys [updated-user]}]]
+    {:db (assoc-in db [:user :profile-picture :display]
+                   (:user.registered/profile-picture updated-user))
+     :fx [[:dispatch [:notification/add
+                      #:notification{:title (labels :user.settings.profile-picture-title/success)
+                                     :body (labels :user.settings.profile-picture-body/success)
+                                     :context :success}]]]}))

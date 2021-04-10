@@ -325,12 +325,14 @@
         :user.settings/header "Manage User Data"
         :user.settings/info "User infos"
         :user.settings/hubs "Hubs"
-        :user.settings/change-name "Change Name and Profile Picture"
-        :user.settings.button/change-account-information "Save Changes"
-        :user.settings.hubs/show "Your Hubs"
+        :user.settings/change-name "Change name and profile picture"
+        :user.settings.button/change-account-information "Save changes"
+        :user.settings.hubs/show "Your hubs"
         :user.settings.hubs/empty "No hubs assigned"
-        :user.settings.error/profile-picture-title "Error Uploading Profile Picture"
-        :user.settings.error/profile-picture-too-large "Your profile picture size is %d bytes, it exceeds the maximum allowed size of %d bytes. Please upload a smaller picture."
+        :user.settings.profile-picture-title/success "Profile picture successfully uploaded"
+        :user.settings.profile-picture-body/success "Your new profile picture was successfully set. You may have to reload the page to see it."
+        :user.settings.profile-picture-title/error "Error while uploading profile picture"
+        :user.settings.profile-picture-too-large/error "Your profile picture size is %d bytes, it exceeds the maximum allowed size of %d bytes. Please upload a smaller picture."
 
 
         ;; Errors
@@ -848,8 +850,10 @@
         :user.settings.button/change-account-information "Änderungen speichern"
         :user.settings.hubs/show "Deine Hubs"
         :user.settings.hubs/empty "Keinen Hubs zugewiesen"
-        :user.settings.error/profile-picture-title "Hochladen des Profilbildes fehlgeschlagen"
-        :user.settings.error/profile-picture-too-large "Dein Profilbild ist %d Bytes groß, die maximal erlaubte Größe ist %d Bytes. Bitte lade ein kleineres Bild hoch."
+        :user.settings.profile-picture-title/success "Profilbild erfolgreich gesetzt"
+        :user.settings.profile-picture-body/success "Profilbild wurde hochgeladen und gespeichert. Ggf. Seite neuladen um aktualisiertes Bild zu sehen."
+        :user.settings.profile-picture-title/error "Hochladen des Profilbildes fehlgeschlagen"
+        :user.settings.profile-picture-too-large/error "Dein Profilbild ist %d Bytes groß, die maximal erlaubte Größe ist %d Bytes. Bitte lade ein kleineres Bild hoch."
 
 
         ;; Errors
