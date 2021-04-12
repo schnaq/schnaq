@@ -18,9 +18,6 @@
        [:small.font-weight-light.d-inline.mr-1
         [time/timestamp-with-tooltip time locale]
         (labels :discussion.badges/statement-by)])
-     (when (toolbelt/is-user-registered? user)
-       [:img {:style {:height (str (/ avatar-size 2) "px") :width (str (/ avatar-size 2) "px")}
-              :src (img-path :schnaqqifant/original)}])
      [:small.font-weight-bold.mr-2 {:class name-class} username]
      [common/avatar user avatar-size]]))
 
