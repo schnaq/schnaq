@@ -2,7 +2,7 @@
   (:require [clojure.string :as clj-string]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.utils.time :as time]
@@ -13,15 +13,14 @@
   [user avatar-size time]
   (let [locale @(rf/subscribe [:current-locale])
         authenticated? (:user.registered/keycloak-id user)
-        display-name (user-utils/display-name user)]
+        display-name (user-utils/display-name user)
+        name-class (if authenticated? "text-primary" "text-muted")]
     [:div.d-flex.flex-row.text-muted
      (when time
-       [:small.font-weight-light.d-inline.mr-2
+       [:small.font-weight-light.d-inline.mr-1
         [time/timestamp-with-tooltip time locale]
         (labels :discussion.badges/statement-by)])
-     (when authenticated?
-       [:i.text-primary.pr-1 {:class (str "fas " (fa :check/circle))}])
-     [:small.font-weight-bold.mr-2 display-name]
+     [:small.mr-2 {:class name-class} display-name]
      [common/avatar user avatar-size]]))
 
 (rf/reg-event-fx
