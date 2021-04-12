@@ -57,8 +57,3 @@
     (if (< n-words (count s))
       (string/join " " (conj (vec (take n-words s)) "..."))
       text)))
-
-(defn is-user-registered?
-  "Check if user has a keycloak id and if so, return true."
-  [{:user.registered/keys [keycloak-id]}]
-  (string? keycloak-id))

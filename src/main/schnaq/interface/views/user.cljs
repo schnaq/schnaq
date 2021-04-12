@@ -6,19 +6,21 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.utils.time :as time]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.user :as user-utils]))
 
 (defn user-info
   "User info box containing relevant information for discussions."
-  [username avatar-size user time]
+  [user avatar-size time]
   (let [locale @(rf/subscribe [:current-locale])
-        name-class (if (toolbelt/is-user-registered? user) "text-primary" "text-muted")]
+        authenticated? (:user.registered/keycloak-id user)
+        display-name (user-utils/display-name user)
+        name-class (if authenticated? "text-primary" "text-muted")]
     [:div.d-flex.flex-row.text-muted
      (when time
        [:small.font-weight-light.d-inline.mr-1
         [time/timestamp-with-tooltip time locale]
         (labels :discussion.badges/statement-by)])
-     [:small.font-weight-bold.mr-2 {:class name-class} username]
+     [:small.font-weight-bold.mr-2 {:class name-class} display-name]
      [common/avatar user avatar-size]]))
 
 (rf/reg-event-fx

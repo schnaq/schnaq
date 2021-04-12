@@ -70,8 +70,7 @@
 
 (defn- statement-card
   [edit-hash statement attitude]
-  (let [fa-label (logic/attitude->symbol attitude)
-        display-name (user-utils/statement-author statement)]
+  (let [fa-label (logic/attitude->symbol attitude)]
     [:article.card.statement-card.clickable
      {:class (str "statement-card-" (name attitude))}
      [:div.d-flex.flex-row
@@ -79,7 +78,7 @@
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
        [:div.d-flex.justify-content-end.mt-2
-        [user/user-info display-name 32 (:statement/author statement) (:db/txInstant statement)]]
+        [user/user-info (:statement/author statement) 32 (:db/txInstant statement)]]
        [:div.my-1 [:p (:statement/content statement)]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
