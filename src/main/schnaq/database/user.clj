@@ -3,8 +3,7 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.database.specs :as specs]
             [schnaq.meeting.database :refer [transact fast-pull clean-db-vals query]]
-            [taoensso.timbre :as log])
-  (:import (java.util UUID)))
+            [taoensso.timbre :as log]))
 
 (def registered-user-pattern
   [:db/id
@@ -145,27 +144,3 @@
         :in $ ?group combined-user-pattern
         :where [?users :user.registered/groups ?group]]
       group-name combined-user-pattern)))
-
-(defn temp-remove-mass-entries
-  "Delete after migration."
-  [property]
-  (let [retracts
-        (vec (for [id (flatten (query
-                                 '[:find ?user
-                                   :in $ ?property
-                                   :where [?user ?property]]
-                                 property))]
-               [:db/add id property (.toString (UUID/randomUUID))]))]
-    (log/info "[Migrations] Overwriting mails" retracts)
-    (transact retracts)))
-
-(comment
-  (temp-remove-mass-entries :user.registered/email)
-
-  (query
-    '[:find (pull ?user pattern)
-      :in $ pattern
-      :where [?user :user.registered/keycloak-id]]
-    combined-user-pattern)
-
-  :nil)
