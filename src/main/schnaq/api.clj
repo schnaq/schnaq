@@ -426,12 +426,6 @@
       (validator/deny-access invalid-rights-message))))
 
 
-(defn- temp-delete-user-mails
-  "Delete this after migration."
-  [_]
-  (user-db/temp-remove-mass-entries :user.registered/email)
-  (ok "Migration successful."))
-
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -455,9 +449,6 @@
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
       (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
-          (wrap-routes auth/is-admin-middleware)
-          (wrap-routes auth/auth-middleware))
-      (-> (POST "/admin/migrations/user-mails" [] temp-delete-user-mails)
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
       (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
