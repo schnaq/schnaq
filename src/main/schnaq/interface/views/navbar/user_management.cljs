@@ -3,8 +3,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels fa]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn- name-input
   "An input, where the user can set their name. Happens automatically by typing."
