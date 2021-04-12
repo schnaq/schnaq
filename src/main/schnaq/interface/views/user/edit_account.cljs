@@ -6,7 +6,7 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.hub.common :as hub]
+            [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.image-upload :as image]
             [schnaq.interface.views.user.settings :as settings]))
@@ -61,21 +61,13 @@
         [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
          (labels :user.settings.button/change-account-information)]]]]]))
 
-(defn- show-hubs []
-  (let [hubs @(rf/subscribe [:hubs/all])]
-    [:<>
-     (labels :user.settings.hubs/show)
-     (if (empty? hubs)
-       (labels :user.settings.hubs/empty)
-       [hub/hub-list hubs])]))
-
 (defn- content []
   [pages/settings-panel
    (labels :user.settings/header)
    [:<>
     [change-user-info]
     [:hr.my-5]
-    [show-hubs]]])
+    [hub-common/list-hubs-with-heading]]])
 
 (defn view []
   [settings/user-view
