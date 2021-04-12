@@ -74,3 +74,8 @@
   "Converts something to string via js."
   [input]
   (.toString input))
+
+(defn ctrl-press
+  "Check for a ctrl + `keyCode` kombination in `event`."
+  [event keyCode]
+  (and (.-ctrlKey event) (= keyCode (.-keyCode event))))
