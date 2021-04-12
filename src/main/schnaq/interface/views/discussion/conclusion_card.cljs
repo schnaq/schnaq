@@ -9,8 +9,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.user :as user]
-            [schnaq.user :as user-utils]))
+            [schnaq.interface.views.user :as user]))
 
 (defn- call-to-contribute
   "If no contributions are available, add a call to action to engage the users."
