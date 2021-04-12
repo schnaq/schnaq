@@ -206,43 +206,39 @@
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        input)]))
 
-(defn- topic-bubble-desktop
-  [{:discussion/keys [share-hash] :as discussion} content input badges info-content is-topic?]
-  (let [display-name (user-utils/display-name (:author content))]
-    [:div.row
-     ;; graph
-     [:div.col-2
-      [graph-button share-hash]
-      [:div.mt-3 badges]]
-     ;; title
-     [:div.col-8
-      [:div.d-flex.mb-4
-       [discussion-privacy-badge discussion]
-       [:div.ml-auto
-        [user/user-info display-name 32 (:author content)]]]
-      [title-and-input-element content input is-topic?]]
-     ;; up-down votes and statistics
-     [:div.col-2.pr-3
-      [:div.float-right
-       info-content]]]))
+(defn- topic-bubble-desktop [{:discussion/keys [share-hash] :as discussion} content input badges info-content is-topic?]
+  [:div.row
+   ;; graph
+   [:div.col-2
+    [graph-button share-hash]
+    [:div.mt-3 badges]]
+   ;; title
+   [:div.col-8
+    [:div.d-flex.mb-4
+     [discussion-privacy-badge discussion]
+     [:div.ml-auto
+      [user/user-info (:author content) 42 (:db/txInstant content)]]]
+    [title-and-input-element content input is-topic?]]
+   ;; up-down votes and statistics
+   [:div.col-2.pr-3
+    [:div.float-right
+     info-content]]])
 
-(defn- topic-bubble-mobile
-  [{:discussion/keys [share-hash] :as discussion} content input badges info-content]
-  (let [display-name (user-utils/display-name (:author content))]
-    [:<>
-     [:div.d-flex.mb-4
-      ;; graph and badges
-      [:div.mr-auto
-       [graph-button share-hash]
-       [:div.mt-2 badges]]
-      ;; settings
-      [:div.p-0
-       [discussion-privacy-badge discussion]
-       [:div.d-flex
-        [:div.ml-auto.mr-2 [user/user-info display-name 32 (:author content)]]
-        info-content]]]
-     ;; title
-     [title-and-input-element content input]]))
+(defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} content input badges info-content]
+  [:<>
+   [:div.d-flex.mb-4
+    ;; graph and badges
+    [:div.mr-auto
+     [graph-button share-hash]
+     [:div.mt-2 badges]]
+    ;; settings
+    [:div.p-0
+     [discussion-privacy-badge discussion]
+     [:div.d-flex
+      [:div.ml-auto.mr-2 [user/user-info (:author content) 32 (:db/txInstant content)]]
+      info-content]]]
+   ;; title
+   [title-and-input-element content input]])
 
 (defn- topic-bubble [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]

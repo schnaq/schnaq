@@ -46,7 +46,6 @@
   "Badges that display additional discussion info."
   [statement edit-hash]
   (let [popover-id (str "debater-popover-" (:db/id statement))
-        locale @(rf/subscribe [:current-locale])
         old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
@@ -74,8 +73,7 @@
       (count authors)]
      [edit-button statement]
      (when edit-hash
-       [delete-clicker statement edit-hash])
-     [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant statement) locale]]]))
+       [delete-clicker statement edit-hash])]))
 
 (defn static-info-badges
   "Badges that display schnaq info."

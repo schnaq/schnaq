@@ -9,8 +9,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.user :as user]
-            [schnaq.user :as user-utils]))
+            [schnaq.interface.views.user :as user]))
 
 (defn- call-to-contribute
   "If no contributions are available, add a call to action to engage the users."
@@ -70,17 +69,15 @@
 
 (defn- statement-card
   [edit-hash statement attitude]
-  (let [fa-label (logic/attitude->symbol attitude)
-        display-name (user-utils/statement-author statement)]
+  (let [fa-label (logic/attitude->symbol attitude)]
     [:article.card.statement-card.clickable
      {:class (str "statement-card-" (name attitude))}
      [:div.d-flex.flex-row
       [:div.m-auto
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
-       [:div.d-flex.mt-1
-        [:div.ml-auto
-         [user/user-info display-name 32 (:statement/author statement)]]]
+       [:div.d-flex.justify-content-end.mt-2
+        [user/user-info (:statement/author statement) 32 (:db/txInstant statement)]]
        [:div.my-1 [:p (:statement/content statement)]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
