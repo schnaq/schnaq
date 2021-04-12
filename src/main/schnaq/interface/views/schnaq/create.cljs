@@ -14,7 +14,7 @@
   []
   (let [user-groups @(rf/subscribe [:user/groups])
         hubs @(rf/subscribe [:hubs/all])]
-    [:div.row.mt-4..p-4.text-center.panel-white
+    [:div.row.mt-4.p-4.text-center.panel-white
      [:div.form-check
       (if (empty? user-groups)
         {:class "col-12"}
@@ -27,7 +27,8 @@
         #(when (and (seq user-groups) (oget % [:target :checked]))
            (jq/prop (jq/$ "#hub-exclusive") "checked" false))}]
       [:label.form-check-label.display-6.pl-1 {:for :public-discussion}
-       (labels :discussion.create.public-checkbox/label)]]
+       (labels :discussion.create.public-checkbox/label)]
+      [:small.form-text.text-muted (labels :schnaq.create.public/help-text)]]
      (when (seq user-groups)
        [:div.form-check.col-6
         [:input.form-check-input.big-checkbox
@@ -39,9 +40,10 @@
              (jq/prop (jq/$ "#public-discussion") "checked" false))}]
         [:label.form-check-label.display-6.pl-1 {:for :hub-exclusive}
          (labels :discussion.create.hub-exclusive-checkbox/label)]
-        [:select.form-control.custom-select.mt-1
+        [:small.form-text.text-muted (labels :schnaq.create.hub/help-text)]
+        [:select.form-control.custom-select.mt-3
          {:id :exclusive-hub-select
-          :style {:max-width "90%"}}
+          :style {:max-width "80%"}}
          (for [group-id user-groups]
            [:option {:value group-id
                      :key group-id}
