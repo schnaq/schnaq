@@ -22,7 +22,7 @@
                       (js-wrap/prevent-default e)
                       (rf/dispatch [:hub.name/update new-hub-name])))}
       [:div.d-flex.flex-row
-       [:div.mr-4 [common/avatar name 50]]
+       [:div.mr-4 [common/identicon name 50]]
        [common/form-input {:id input-id
                            :default-value name
                            :css "font-150"}]]
