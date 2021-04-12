@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.user.edit-account
   (:require [clojure.string :as string]
+            [goog.string :as gstring]
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]
@@ -100,7 +101,7 @@
       {:fx [(http/xhrio-request db :put "/user/picture"
                                 [:user.profile-picture/update-success]
                                 {:image new-profile-picture-url}
-                                [:ajax.error/as-notification])]})))
+                                [:user.profile-picture/update-error])]})))
 
 (rf/reg-event-db
   :user.picture/reset
@@ -116,3 +117,16 @@
                       #:notification{:title (labels :user.settings.profile-picture-title/success)
                                      :body (labels :user.settings.profile-picture-body/success)
                                      :context :success}]]]}))
+
+(rf/reg-event-fx
+  :user.profile-picture/update-error
+  (fn [{:keys [db]} [_ {:keys [response]}]]
+    (let [mime-types (string/join ", " shared-config/allowed-mime-types)
+          error-message (case (:error response)
+                          :scaling (labels :user.settings.profile-picture.errors/scaling)
+                          :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types))]
+      {:db (assoc-in db [:user :profile-picture :temporary] nil)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :user.settings.profile-picture-title/error)
+                                       :body error-message
+                                       :context :danger}]]]})))
