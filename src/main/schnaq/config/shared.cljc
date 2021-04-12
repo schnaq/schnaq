@@ -17,3 +17,10 @@
      :feedbacks/screenshots "schnaq-feedback-screenshots"}
     bucket-name))
 
+
+;; -----------------------------------------------------------------------------
+;; Profile Image Upload
+
+(def allowed-mime-types
+  "Define a list of allowed mime-types."
+  #{"image/jpeg" "image/png"})
