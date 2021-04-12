@@ -3,6 +3,19 @@
             [ghostwheel.core :refer [>defn]]))
 
 
+(>defn $
+  "The jquery-lookup syntax."
+  [lookup]
+  [string? :ret any?]
+  (jquery lookup))
+
+(defn prop
+  "Wrap the .prop function of jQuery."
+  ([element prop]
+   (.prop element prop))
+  ([element prop value]
+   (.prop element prop value)))
+
 (>defn prevent-default
   "Wraps the js `<Event>.preventDefault` method to prevent Cursive warnings."
   [event]

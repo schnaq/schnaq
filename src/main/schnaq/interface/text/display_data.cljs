@@ -120,6 +120,8 @@
 
         ;; Create schnaq
         :schnaq.create.input/placeholder "What should the name of your schnaq be?"
+        :schnaq.create.public/help-text "Publicly lists your schnaq."
+        :schnaq.create.hub/help-text "Directly assign your schnaq to a hub."
         :meeting/copy-link-tooltip "Click here to copy your link"
         :meeting/link-copied-heading "Link copied"
         :meeting/link-copied-success "The link was copied to your clipboard!"
@@ -157,7 +159,8 @@
         :schnaq.create.button/save "Start a new schnaq"
 
         ;; Discussion Creation
-        :discussion.create.public-checkbox/label "Make this discussion public"
+        :discussion.create.public-checkbox/label "Make this schnaq public"
+        :discussion.create.hub-exclusive-checkbox/label "Add schnaq to a Hub"
 
         :discussion.privacy/public "Public Discussion"
         :discussion.privacy/private "Private Discussion"
@@ -646,6 +649,8 @@
 
         ;; Create schnaq
         :schnaq.create.input/placeholder "Wie soll dein schnaq heißen?"
+        :schnaq.create.public/help-text "Damit wird dein schnaq öffentlich gelistet und zugänglich sein."
+        :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
         :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
         :meeting/link-copied-heading "Link kopiert"
         :meeting/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
@@ -682,7 +687,8 @@
         :schnaq.create.button/save "Schnaq starten"
 
         ;; Discussion Creation
-        :discussion.create.public-checkbox/label "Diese Diskussion öffentlich machen"
+        :discussion.create.public-checkbox/label "Diesen schnaq öffentlich machen"
+        :discussion.create.hub-exclusive-checkbox/label "Schnaq zu einem Hub hinzufügen"
 
         :discussion.privacy/public "Öffentliche Diskussion"
         :discussion.privacy/private "Private Diskussion"

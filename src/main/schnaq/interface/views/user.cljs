@@ -28,8 +28,13 @@
 
 (rf/reg-sub
   :user/display-name
-  (fn [db]
+  (fn [db _]
     (get-in db [:user :names :display] default-anonymous-display-name)))
+
+(rf/reg-sub
+  :user/groups
+  (fn [db _]
+    (get-in db [:user :groups] [])))
 
 (rf/reg-sub
   :user/show-display-name-input?

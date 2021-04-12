@@ -3,11 +3,51 @@
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]
             [re-frame.core :as rf]
             [schnaq.interface.views.common :as common]))
+
+(defn- create-schnaq-options
+  "Options that can be chosen when creating a schnaq."
+  []
+  (let [user-groups @(rf/subscribe [:user/groups])
+        hubs @(rf/subscribe [:hubs/all])]
+    [:div.row.mt-4.p-4.text-center.panel-white
+     [:div.form-check
+      (if (empty? user-groups)
+        {:class "col-12"}
+        {:class "col-6"})
+      [:input.form-check-input.big-checkbox
+       {:type :checkbox
+        :id :public-discussion
+        :defaultChecked false
+        :on-change
+        #(when (and (seq user-groups) (oget % [:target :checked]))
+           (jq/prop (jq/$ "#hub-exclusive") "checked" false))}]
+      [:label.form-check-label.display-6.pl-1 {:for :public-discussion}
+       (labels :discussion.create.public-checkbox/label)]
+      [:small.form-text.text-muted (labels :schnaq.create.public/help-text)]]
+     (when (seq user-groups)
+       [:div.form-check.col-6
+        [:input.form-check-input.big-checkbox
+         {:type :checkbox
+          :id :hub-exclusive
+          :defaultChecked false
+          :on-change
+          #(when (oget % [:target :checked])
+             (jq/prop (jq/$ "#public-discussion") "checked" false))}]
+        [:label.form-check-label.display-6.pl-1 {:for :hub-exclusive}
+         (labels :discussion.create.hub-exclusive-checkbox/label)]
+        [:small.form-text.text-muted (labels :schnaq.create.hub/help-text)]
+        [:select.form-control.custom-select.mt-3
+         {:id :exclusive-hub-select
+          :style {:max-width "80%"}}
+         (for [group-id user-groups]
+           [:option {:value group-id
+                     :key group-id}
+            (get-in hubs [group-id :hub/name])])]])]))
 
 (defn- create-schnaq-page []
   [pages/with-nav-and-header
@@ -16,20 +56,14 @@
     [:div.py-3.mt-3
      [:form
       {:on-submit (fn [e]
-                    (let [title (oget e [:target :elements :schnaq-title :value])
-                          public? (oget e [:target :elements :public-discussion? :checked])]
-                      (js-wrap/prevent-default e)
-                      (rf/dispatch [:schnaq.create/new {:discussion/title title} public?])))}
-      [:div.panel-white.p-4
-       [common/form-input {:id :schnaq-title
-                           :placeholder (labels :schnaq.create.input/placeholder)
-                           :css "font-150"}]]
-      [:div.form-check.pt-3.text-center
-       [:input.form-check-input.big-checkbox {:type :checkbox
-                                              :id :public-discussion?
-                                              :defaultChecked false}]
-       [:label.form-check-label.display-6.pl-1 {:for :public-discussion?}
-        (labels :discussion.create.public-checkbox/label)]]
+                    (jq/prevent-default e)
+                    (rf/dispatch [:schnaq.create/new (oget e [:target :elements])]))}
+      [:div.panel-white.row.p-4
+       [:div.col-12
+        [common/form-input {:id :schnaq-title
+                            :placeholder (labels :schnaq.create.input/placeholder)
+                            :css "font-150"}]]]
+      [create-schnaq-options]
       [:div.pt-3.text-center
        [:button.btn.button-primary (labels :schnaq.create.button/save)]]]
      [how-to-elements/quick-how-to-create]]]])
@@ -39,13 +73,20 @@
 
 (rf/reg-event-fx
   :schnaq.create/new
-  (fn [{:keys [db]} [_ new-discussion public?]]
-    (let [nickname (get-in db [:user :names :display] default-anonymous-display-name)]
+  (fn [{:keys [db]} [_ form-elements]]
+    (let [authenticated? (get-in db [:user :authenticated?] false)
+          nickname (get-in db [:user :names :display] default-anonymous-display-name)
+          discussion-title (oget form-elements [:schnaq-title :value])
+          public? (oget form-elements [:public-discussion :checked])
+          exclusive? (when authenticated? (oget form-elements [:hub-exclusive :checked]))
+          origin-hub (when authenticated? (oget form-elements [:exclusive-hub-select :value]))]
       {:fx [(http/xhrio-request db :post "/schnaq/add"
                                 [:schnaq/created]
                                 {:nickname nickname
-                                 :discussion new-discussion
-                                 :public-discussion? public?}
+                                 :discussion {:discussion/title discussion-title}
+                                 :public-discussion? public?
+                                 :hub-exclusive? exclusive?
+                                 :origin origin-hub}
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx

@@ -42,6 +42,8 @@
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
+(s/def :discussion/hub-origin (s/or :reference :db/id
+                                    :hub ::hub))
 (s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
                                            :reference ::entity-reference)))
 (s/def :discussion/states
@@ -55,7 +57,7 @@
                                   :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
-                                  :db/txInstant :discussion/admins]))
+                                  :db/txInstant :discussion/admins :discussion/hub-origin]))
 
 (s/def :hub/name string?)
 (s/def :hub/keycloak-name string?)

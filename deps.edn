@@ -7,8 +7,8 @@
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.3"}
         clj-http/clj-http {:mvn/version "3.12.1"}
-        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.995"}
-        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.995"}
+        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.996"}
+        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.996"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/client-pro {:mvn/version "0.9.66"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -37,7 +37,7 @@
         ring/ring-mock {:mvn/version "0.4.0"}
         ring/ring {:mvn/version "1.9.2"}
         ring/ring-defaults {:mvn/version "0.3.2"}
-        thheller/shadow-cljs {:mvn/version "2.12.1"}}
+        thheller/shadow-cljs {:mvn/version "2.12.4"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
@@ -52,8 +52,7 @@
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
                       :main-opts ["-m" "antq.core"
-                                  "--exclude=com.datomic/dev-local"
-                                  "--exclude=thheller/shadow-cljs"]}
+                                  "--exclude=com.datomic/dev-local"]}
 
            :clj-kondo
            {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
