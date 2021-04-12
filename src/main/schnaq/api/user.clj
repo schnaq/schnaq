@@ -1,8 +1,10 @@
 (ns schnaq.api.user
-  (:require [compojure.core :refer [PUT routes wrap-routes context]]
+  (:require [clojure.string :as string]
+            [compojure.core :refer [PUT routes wrap-routes context]]
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.user :as user-db]
             [schnaq.media :as media]
             [schnaq.s3 :as s3]
@@ -25,16 +27,20 @@
   "Change the profile picture of a user.
   This includes uploading an image to s3 and updating the associated url in the database."
   [{:keys [identity params]}]
-  (let [{:keys [input-stream image-type content-type]} (media/scale-image-to-height (get-in params [:image :content])
-                                                                                    config/profile-picture-height)
-        image-name (create-UUID-file-name (:id identity) image-type)]
-    (if input-stream
-      (let [absolute-url (s3/upload-stream :user/profile-pictures
-                                           input-stream
-                                           image-name
-                                           {:content-type content-type})]
-        (ok {:updated-user (user-db/update-profile-picture-url (:id identity) absolute-url)}))
-      (bad-request "Error while uploading profile picture: Could not scale image"))))
+  (let [image-type (get-in params [:image :type])]
+    (if (shared-config/allowed-mime-types image-type)
+      (if-let [{:keys [input-stream image-type content-type]}
+               (media/scale-image-to-height (get-in params [:image :content]) config/profile-picture-height)]
+        (let [image-name (create-UUID-file-name (:id identity) image-type)
+              absolute-url (s3/upload-stream :user/profile-pictures
+                                             input-stream
+                                             image-name
+                                             {:content-type content-type})]
+          (ok {:updated-user (user-db/update-profile-picture-url (:id identity) absolute-url)}))
+        (bad-request {:error :scaling
+                      :message "Could not scale image"}))
+      (bad-request {:error :invalid-file-type
+                    :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types))}))))
 
 (defn- change-display-name
   "change the display name of a registered user"
