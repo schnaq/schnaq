@@ -1134,6 +1134,7 @@
      :check/double "fa-check-double"
      :check/normal "fa-check"
      :check/square "fa-check-square"
+     :check/circle "fa-check-circle"
      :clipboard "fa-clipboard-list"
      :clock "fa-clock"
      :circle "fa-circle"
