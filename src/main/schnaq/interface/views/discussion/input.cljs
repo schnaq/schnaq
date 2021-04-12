@@ -4,7 +4,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [fa labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.logic :as logic]))
 
@@ -63,15 +63,18 @@
   "Form to collect the user's statements."
   [textarea-name]
   (let [current-route-name @(rf/subscribe [:navigation/current-route-name])
-        when-starting (fn [e] (js-wrap/prevent-default e)
+        when-starting (fn [e] (jq/prevent-default e)
                         (rf/dispatch [:discussion.add.statement/starting
-                                      (oget e [:target :elements])]))
+                                      (oget e [:currentTarget :elements])]))
         when-deeper-in-discussion (fn [e]
-                                    (js-wrap/prevent-default e)
-                                    (logic/submit-new-premise (oget e [:target :elements])))]
+                                    (jq/prevent-default e)
+                                    (logic/submit-new-premise (oget e [:currentTarget :elements])))
+        event-to-send (if (= :routes.schnaq/start current-route-name)
+                        when-starting when-deeper-in-discussion)]
     [:form.my-2
-     {:on-submit (if (= :routes.schnaq/start current-route-name)
-                   when-starting when-deeper-in-discussion)}
+     {:on-submit #(event-to-send %)
+      :on-key-down #(when (jq/ctrl-press % 13)
+                      (event-to-send %))}
      [:div.discussion-input-container
       [textarea-for-statements textarea-name]]]))
 
