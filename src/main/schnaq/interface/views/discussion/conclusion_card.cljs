@@ -78,9 +78,8 @@
       [:div.m-auto
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
-       [:div.d-flex.mt-1
-        [:div.ml-auto
-         [user/user-info display-name 32 (:statement/author statement) (:db/txInstant statement)]]]
+       [:div.d-flex.justify-content-end.mt-2
+        [user/user-info display-name 32 (:statement/author statement) (:db/txInstant statement)]]
        [:div.my-1 [:p (:statement/content statement)]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]

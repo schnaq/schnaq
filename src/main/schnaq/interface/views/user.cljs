@@ -2,21 +2,26 @@
   (:require [clojure.string :as clj-string]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [img-path labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.utils.time :as time]))
+            [schnaq.interface.utils.time :as time]
+            [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (defn user-info
   "User info box containing relevant information for discussions."
   [username avatar-size user time]
-  (let [locale @(rf/subscribe [:current-locale])]
-    [:div.d-flex.flex-row.align-items-center.text-muted
-     [:div.pr-2.text-right.mb-auto
-      (when time
-        [:small.font-weight-light [time/timestamp-with-tooltip time locale]
-         (labels :discussion.badges/statement-by)])
-      [:small.font-weight-bold username]]
+  (let [locale @(rf/subscribe [:current-locale])
+        name-class (if (toolbelt/is-user-registered? user) "text-primary" "text-muted")]
+    [:div.d-flex.flex-row.text-muted
+     (when time
+       [:small.font-weight-light.d-inline.mr-1
+        [time/timestamp-with-tooltip time locale]
+        (labels :discussion.badges/statement-by)])
+     (when (toolbelt/is-user-registered? user)
+       [:img {:style {:height (str (/ avatar-size 2) "px") :width (str (/ avatar-size 2) "px")}
+              :src (img-path :schnaqqifant/original)}])
+     [:small.font-weight-bold.mr-2 {:class name-class} username]
      [common/avatar user avatar-size]]))
 
 (rf/reg-event-fx

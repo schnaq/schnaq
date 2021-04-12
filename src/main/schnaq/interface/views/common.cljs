@@ -25,10 +25,10 @@
   [{:user.registered/keys [profile-picture display-name] :as user} size]
   [map? number? :ret vector?]
   (let [display-name (or display-name (:user/nickname user))]
-    [:div.avatar-image.m-auto.p-0
+    [:div.avatar-image.p-0
      (if profile-picture
        [:div.profile-pic-fill
-        {:style {:max-height (str size "px") :max-width (str size "px")}}
+        {:style {:height (str size "px") :width (str size "px")}}
         [:img.profile-pic-image {:src profile-picture}]]
        [identicon display-name size])]))
 
