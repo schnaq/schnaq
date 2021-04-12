@@ -9,7 +9,7 @@
             [schnaq.user :as user-utils]))
 
 (defn user-info
-  "User info box containing relevant information for discussions."
+  "User info box displaying user's nickname, timestamp and the avatar."
   [user avatar-size time]
   (let [locale @(rf/subscribe [:current-locale])
         authenticated? (:user.registered/keycloak-id user)
