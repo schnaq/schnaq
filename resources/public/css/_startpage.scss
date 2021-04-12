@@ -41,6 +41,7 @@ $header-opacity: 1;
   background-color: transparent;
   fill: $header-color;
   margin: -1rem 0;
+  max-height: 11rem;
   opacity: $header-opacity;
   width: 100%;
 }
