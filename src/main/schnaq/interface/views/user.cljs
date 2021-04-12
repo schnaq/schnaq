@@ -4,15 +4,20 @@
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.utils.time :as time]))
 
 (defn user-info
   "User info box containing relevant information for discussions."
-  [username avatar-size user]
-  [:div.d-flex.flex-row.align-items-center
-   [:div.pr-2.pb-1.text-right
-    [:small username]]
-   [common/avatar user avatar-size]])
+  [username avatar-size user time]
+  (let [locale @(rf/subscribe [:current-locale])]
+    [:div.d-flex.flex-row.align-items-center.text-muted
+     [:div.pr-2.text-right.mb-auto
+      (when time
+        [:small.font-weight-light [time/timestamp-with-tooltip time locale]
+         (labels :discussion.badges/statement-by)])
+      [:small.font-weight-bold username]]
+     [common/avatar user avatar-size]]))
 
 (rf/reg-event-fx
   :user/set-display-name

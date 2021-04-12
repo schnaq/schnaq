@@ -240,6 +240,7 @@
         :discussion.notification/new-content-title "New statement!"
         :discussion.notification/new-content-body "Your statement was added successfully!"
         :discussion.badges/edit-statement "edit"
+        :discussion.badges/statement-by " by "             ; spaces intended
 
         ;; meetings overview
         :schnaqs/header "Overview of your schnaqs"
@@ -758,6 +759,7 @@
         :discussion.notification/new-content-title "Neuer Beitrag!"
         :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
         :discussion.badges/edit-statement "editieren"
+        :discussion.badges/statement-by " von "             ; spaces intended
 
         ;; meetings overview
         :schnaqs/header "Übersicht deiner schnaqs"
