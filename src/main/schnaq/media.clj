@@ -62,12 +62,14 @@
   "Scale image data url to a specified height and return a map containing input-stream, image-type and content-type"
   [image-data-url height]
   [string? number? :ret map?]
-  (let [[header image-without-header] (string/split image-data-url #",")
-        #^bytes image-bytes (.decode (Base64/getDecoder) ^String image-without-header)
-        image-type (second (re-find #"/([A-z]*);" header))
-        content-type (second (re-find #":(([A-z]*)/[A-z]*);" header))
-        resized-image (resizer-core/resize-to-height (io/input-stream image-bytes) height)
-        input-stream (when image-type (resizer-format/as-stream resized-image image-type))]
-    {:input-stream input-stream
-     :image-type image-type
-     :content-type content-type}))
+  (try
+    (let [[header image-without-header] (string/split image-data-url #",")
+          #^bytes image-bytes (.decode (Base64/getDecoder) ^String image-without-header)
+          image-type (second (re-find #"/([A-z]*);" header))
+          content-type (second (re-find #":(([A-z]*)/[A-z]*);" header))
+          resized-image (resizer-core/resize-to-height (io/input-stream image-bytes) height)
+          input-stream (when image-type (resizer-format/as-stream resized-image image-type))]
+      {:input-stream input-stream
+       :image-type image-type
+       :content-type content-type})
+    (catch Exception _)))

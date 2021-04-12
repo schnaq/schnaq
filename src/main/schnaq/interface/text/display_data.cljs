@@ -333,7 +333,8 @@
         :user.settings.profile-picture-body/success "Your new profile picture was successfully set. You may have to reload the page to see it."
         :user.settings.profile-picture-title/error "Error while uploading profile picture"
         :user.settings.profile-picture-too-large/error "Your profile picture size is %d bytes, it exceeds the maximum allowed size of %d bytes. Please upload a smaller picture."
-
+        :user.settings.profile-picture.errors/scaling "Your profile picture could not be converted. Maybe the image is corrupt. Please try a different image or contact us."
+        :user.settings.profile-picture.errors/invalid-file-type "The image you provided has the wrong file type. Allowed file types: %s"
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -854,6 +855,8 @@
         :user.settings.profile-picture-body/success "Profilbild wurde hochgeladen und gespeichert. Ggf. Seite neuladen um aktualisiertes Bild zu sehen."
         :user.settings.profile-picture-title/error "Hochladen des Profilbildes fehlgeschlagen"
         :user.settings.profile-picture-too-large/error "Dein Profilbild ist %d Bytes groß, die maximal erlaubte Größe ist %d Bytes. Bitte lade ein kleineres Bild hoch."
+        :user.settings.profile-picture.errors/scaling "Dein Profilbild konnte nicht konvertiert werden. Vielleicht ist das Bild kaputt. Bitte probiere ein anderes Bild oder kontaktiere uns."
+        :user.settings.profile-picture.errors/invalid-file-type "Dein Profilbild hat den falschen Dateitypen. Erlaubt sind: %s"
 
 
         ;; Errors
