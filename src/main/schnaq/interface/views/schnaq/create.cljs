@@ -57,7 +57,10 @@
      [:form
       {:on-submit (fn [e]
                     (jq/prevent-default e)
-                    (rf/dispatch [:schnaq.create/new (oget e [:target :elements])]))}
+                    (rf/dispatch [:schnaq.create/new (oget e [:target :elements])]))
+       :on-key-down (fn [e]
+                      (when (jq/ctrl-press e 13)
+                        (rf/dispatch [:schnaq.create/new (oget e [:currentTarget :elements])])))}
       [:div.panel-white.row.p-4
        [:div.col-12
         [common/form-input {:id :schnaq-title
