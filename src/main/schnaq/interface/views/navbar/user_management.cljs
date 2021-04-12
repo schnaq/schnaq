@@ -3,8 +3,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels fa]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn- name-input
   "An input, where the user can set their name. Happens automatically by typing."
@@ -90,12 +89,10 @@
      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
       (when-not authenticated?
         [username-bar-view])
-      (when (or authenticated? (not toolbelt/production?))
-        [:<>
-         (when authenticated?
-           [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
-            (labels :user.profile/settings)])
-         [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
-          (if authenticated?
-            (labels :user/logout)
-            (labels :user/login))]])]]))
+      (when authenticated?
+        [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
+         (labels :user.profile/settings)])
+      [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
+       (if authenticated?
+         (labels :user/logout)
+         (labels :user/login))]]]))
