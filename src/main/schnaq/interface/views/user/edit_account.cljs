@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.user.edit-account
-  (:require [oops.core :refer [oget+]]
+  (:require [clojure.string :as string]
+            [oops.core :refer [oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [fa labels]]
@@ -9,7 +10,8 @@
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.image-upload :as image]
-            [schnaq.interface.views.user.settings :as settings]))
+            [schnaq.interface.views.user.settings :as settings]
+            [schnaq.config.shared :as shared-config]))
 
 (defn- avatar-input [input-id]
   (let [user @(rf/subscribe [:user/current])
@@ -31,7 +33,7 @@
         [:label.btn.btn-light.change-profile-pic-button
          [:i.fas {:class (fa :camera)}]
          [:input {:id input-id
-                  :accept "image/x-png,image/jpeg,image/*"
+                  :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
                   :on-change (fn [event] (image/store-temporary-profile-picture event))
                   :hidden true}]])]]))
