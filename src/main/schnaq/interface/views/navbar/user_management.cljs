@@ -90,12 +90,10 @@
      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
       (when-not authenticated?
         [username-bar-view])
-      (when (or authenticated? (not toolbelt/production?))
-        [:<>
-         (when authenticated?
-           [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
-            (labels :user.profile/settings)])
-         [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
-          (if authenticated?
-            (labels :user/logout)
-            (labels :user/login))]])]]))
+      (when authenticated?
+        [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
+         (labels :user.profile/settings)])
+      [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
+       (if authenticated?
+         (labels :user/logout)
+         (labels :user/login))]]]))
