@@ -72,4 +72,5 @@
       {:input-stream input-stream
        :image-type image-type
        :content-type content-type})
-    (catch Exception _)))
+    (catch Exception e
+      (log/warn "Converting image failed with exception:" e))))
