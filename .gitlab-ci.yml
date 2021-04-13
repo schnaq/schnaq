@@ -1,5 +1,6 @@
-default:
-  tags: [ 'bi-lab' ]
+# Fallback: Use this tag when the cs servers are down.
+#default:
+#  tags: [ 'bi-lab' ]
 
 stages:
   - build
@@ -12,6 +13,10 @@ cache:
   key: one-key-to-rule-them-all
   paths:
     - ./.m2/repository
+
+variables:
+  BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
+  FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
 
 # ------------------------------------------------------------------------------
 # Stage "test"
@@ -93,8 +98,10 @@ build-frontend-image:
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
-      -t $CI_REGISTRY_IMAGE/frontend .
-    - docker push $CI_REGISTRY_IMAGE/frontend
+      -t $FRONTEND_IMAGE:$CI_PIPELINE_IID .
+    - docker tag $FRONTEND_IMAGE:$CI_PIPELINE_IID $FRONTEND_IMAGE:latest
+    - docker push $FRONTEND_IMAGE:$CI_PIPELINE_IID
+    - docker push $FRONTEND_IMAGE:latest
   only:
     - deploy
 
@@ -110,8 +117,10 @@ build-backend-image:
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      -t $CI_REGISTRY_IMAGE/backend .
-    - docker push $CI_REGISTRY_IMAGE/backend
+      -t $BACKEND_IMAGE:$CI_PIPELINE_IID .
+    - docker tag $BACKEND_IMAGE:$CI_PIPELINE_IID $BACKEND_IMAGE:latest
+    - docker push $BACKEND_IMAGE:$CI_PIPELINE_IID
+    - docker push $BACKEND_IMAGE:latest
   only:
     - deploy
 
@@ -128,8 +137,10 @@ build-frontend-staging-image:
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
-      -t $CI_REGISTRY_IMAGE/frontend:staging .
-    - docker push $CI_REGISTRY_IMAGE/frontend:staging
+      -t $FRONTEND_IMAGE:$CI_PIPELINE_IID .
+    - docker tag $FRONTEND_IMAGE:$CI_PIPELINE_IID $FRONTEND_IMAGE:staging
+    - docker push $FRONTEND_IMAGE:$CI_PIPELINE_IID
+    - docker push $FRONTEND_IMAGE:staging
   only:
     - develop
 
@@ -145,8 +156,10 @@ build-backend-staging-image:
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      -t $CI_REGISTRY_IMAGE/backend:staging .
-    - docker push $CI_REGISTRY_IMAGE/backend:staging
+      -t $BACKEND_IMAGE:$CI_PIPELINE_IID .
+    - docker tag $BACKEND_IMAGE:$CI_PIPELINE_IID $BACKEND_IMAGE:staging
+    - docker push $BACKEND_IMAGE:$CI_PIPELINE_IID
+    - docker push $BACKEND_IMAGE:staging
   only:
     - develop
 
