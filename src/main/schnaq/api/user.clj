@@ -36,6 +36,7 @@
                                              input-stream
                                              image-name
                                              {:content-type content-type})]
+          (log/info "User" (:id identity) "updated their profile picture")
           (ok {:updated-user (user-db/update-profile-picture-url (:id identity) absolute-url)}))
         (bad-request {:error :scaling
                       :message "Could not scale image"}))
