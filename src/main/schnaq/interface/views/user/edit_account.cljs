@@ -124,7 +124,8 @@
     (let [mime-types (string/join ", " shared-config/allowed-mime-types)
           error-message (case (:error response)
                           :scaling (labels :user.settings.profile-picture.errors/scaling)
-                          :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types))]
+                          :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
+                          (labels :user.settings.profile-picture.errors/default))]
       {:db (assoc-in db [:user :profile-picture :temporary] nil)
        :fx [[:dispatch [:notification/add
                         #:notification{:title (labels :user.settings.profile-picture-title/error)
