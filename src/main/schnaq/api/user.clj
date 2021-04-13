@@ -37,7 +37,7 @@
                                              input-stream
                                              image-name
                                              {:content-type content-type})]
-          (log/info "User" (:id identity) "updated their profile picture")
+          (log/info "User" (:id identity) "updated their profile picture to" absolute-url)
           (ok {:updated-user (user-db/update-profile-picture-url (:id identity) absolute-url)}))
         (do
           (log/warn "Conversion of image failed for user" (:id identity))
