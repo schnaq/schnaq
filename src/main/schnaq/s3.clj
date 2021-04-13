@@ -2,7 +2,8 @@
   (:require [amazonica.aws.s3 :as s3]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.config.shared :as shared-config]
+            [taoensso.timbre :as log]))
 
 (>defn absolute-file-url
   "Return absolute URL to bucket."
@@ -24,4 +25,5 @@
                      :key file-name
                      :input-stream stream
                      :metadata metadata))
+  (log/info "Uploaded file under the key" file-name "to bucket" (shared-config/s3-buckets bucket))
   (absolute-file-url bucket file-name))

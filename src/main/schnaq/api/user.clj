@@ -28,6 +28,7 @@
   This includes uploading an image to s3 and updating the associated url in the database."
   [{:keys [identity params]}]
   (let [image-type (get-in params [:image :type])]
+    (log/info "User" (:id identity) "trying to set profile picture to:" (get-in params [:image :name]))
     (if (shared-config/allowed-mime-types image-type)
       (if-let [{:keys [input-stream image-type content-type]}
                (media/scale-image-to-height (get-in params [:image :content]) config/profile-picture-height)]
@@ -38,8 +39,10 @@
                                              {:content-type content-type})]
           (log/info "User" (:id identity) "updated their profile picture")
           (ok {:updated-user (user-db/update-profile-picture-url (:id identity) absolute-url)}))
-        (bad-request {:error :scaling
-                      :message "Could not scale image"}))
+        (do
+          (log/warn "Conversion of image failed for user" (:id identity))
+          (bad-request {:error :scaling
+                        :message "Could not scale image"})))
       (bad-request {:error :invalid-file-type
                     :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types))}))))
 
