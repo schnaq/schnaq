@@ -11,7 +11,7 @@
   [id button-type tooltip]
   (let [argument-type @(rf/subscribe [:form/argument-type])
         checked? (= button-type argument-type)]
-    [:input {:id id :type "radio" :name "options" :autoComplete "off"
+    [:input {:id (str "argument-type-button-" id) :type "radio" :name "options" :autoComplete "off"
              :defaultChecked checked?
              :title (labels tooltip)
              :on-click (fn [e] (jq/prevent-default e)
