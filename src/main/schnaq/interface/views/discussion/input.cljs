@@ -8,7 +8,7 @@
 
 (defn- argument-button [id button-type tooltip]
   (let [argument-type @(rf/subscribe [:form/argument-type])
-        checked? (or (= button-type argument-type))]
+        checked? (= button-type argument-type)]
     [:input {:id id :type "radio" :name "options" :autoComplete "off"
              :defaultChecked checked?
              :title (labels tooltip)
