@@ -19,13 +19,13 @@
   "Switch to differentiate between the argument types."
   []
   [:div.btn-group.btn-group-toggle {:data-toggle "buttons"}
-   [:label.btn.btn-outline-primary
+   [:label.btn.btn-outline-primary.rounded-4
     [argument-button "attack" :argument.type/support :discussion/add-premise-against]
     (labels :discussion.add.button/support)]
    [:label.btn.btn-outline-dark.active
     [argument-button "neutral" :argument.type/neutral :discussion/add-premise-neutral]
     (labels :discussion.add.button/neutral)]
-   [:label.btn.btn-outline-secondary
+   [:label.btn.btn-outline-secondary.rounded-4
     [argument-button "support" :argument.type/attack :discussion/add-premise-supporting]
     (labels :discussion.add.button/attack)]])
 
