@@ -1,21 +1,10 @@
 (ns schnaq.interface.views.discussion.input
-  (:require [ghostwheel.core :refer [>defn-]]
-            [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.logic :as logic]))
-
-(>defn- button-styling
-  "Dispatch button styling by argument-type."
-  [argument-type]
-  [keyword? :ret vector?]
-  (if (= :argument.type/support argument-type)
-    ["btn-outline-primary" :argument.type/attack :discussion.add.button/support
-     :discussion/add-premise-supporting true]
-    ["btn-outline-secondary" :argument.type/support :discussion.add.button/attack
-     :discussion/add-premise-against false]))
 
 (defn- argument-button [id button-type tooltip]
   (let [argument-type @(rf/subscribe [:form/argument-type])
