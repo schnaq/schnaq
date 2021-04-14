@@ -78,7 +78,7 @@
                  "support"
                  (oget form [:premise-choice :value]))]
     (case choice
-      "attack" (rf/dispatch [:discussion.reaction.statement/send :attack new-text])
+      "attack" (rf/dispatch [:discussion.reaction.statement/send :neutral new-text])
       "support" (rf/dispatch [:discussion.reaction.statement/send :support new-text]))
     (rf/dispatch [:form/should-clear [new-text-element]])))
 

@@ -366,6 +366,12 @@
   [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
   (react-to-statement! share-hash user-id statement-id supporting-string :argument.type/support))
 
+(>defn neutral-statement!
+  "Create a new neutral statement. Returns the newly created argument."
+  [share-hash user-id statement-id attacking-string]
+  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
+  (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/neutral))
+
 (>defn attack-statement!
   "Create a new statement attacking another statement. Returns the newly created argument."
   [share-hash user-id statement-id attacking-string]

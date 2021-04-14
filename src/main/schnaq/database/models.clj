@@ -88,6 +88,8 @@
    {:db/ident :argument.type/support}
    {:db/ident :argument.type/attack}
    {:db/ident :argument.type/undercut}
+   {:db/ident :argument.type/neutral}
+
    ;; Argument
    {:db/ident :argument/author
     :db/valueType :db.type/ref

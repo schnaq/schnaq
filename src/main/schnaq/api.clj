@@ -372,8 +372,9 @@
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
                 {:new-argument
-                 (if (= :attack reaction)
-                   (discussion-db/attack-statement! share-hash user-id conclusion-id premise)
+                 (case reaction
+                   :attack (discussion-db/attack-statement! share-hash user-id conclusion-id premise)
+                   :neutral (discussion-db/neutral-statement! share-hash user-id conclusion-id premise)
                    (discussion-db/support-statement! share-hash user-id conclusion-id premise))})))
       (validator/deny-access invalid-rights-message))))
 
