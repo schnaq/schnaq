@@ -35,8 +35,10 @@
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         argument-type @(rf/subscribe [:form/argument-type])
         current-route-name @(rf/subscribe [:navigation/current-route-name])
-        current-color (if (= :argument.type/support argument-type)
-                        "text-primary" "text-secondary")]
+        current-color (case argument-type
+                        :argument.type/support "text-primary"
+                        :argument.type/attack "text-secondary"
+                        :argument.type/neutral "text-dark")]
     [:div.input-group
      (when-not (or (= :routes.schnaq/start current-route-name) pro-con-disabled?)
        [:div.input-group-prepend
