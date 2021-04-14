@@ -17,6 +17,9 @@ cache:
 variables:
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
+  BACKEND_IMAGE_TAGGED: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID
+  FRONTEND_IMAGE_TAGGED: $CI_REGISTRY_IMAGE/frontend:$CI_PIPELINE_IID
+
 
 # ------------------------------------------------------------------------------
 # Stage "test"
@@ -87,6 +90,8 @@ coverage-report:
 
 build-frontend-image:
   image: docker
+  tags:
+    - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
@@ -98,15 +103,17 @@ build-frontend-image:
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
-      -t $FRONTEND_IMAGE:$CI_PIPELINE_IID .
-    - docker tag $FRONTEND_IMAGE:$CI_PIPELINE_IID $FRONTEND_IMAGE:latest
-    - docker push $FRONTEND_IMAGE:$CI_PIPELINE_IID
+      -t $FRONTEND_IMAGE_TAGGED .
+    - docker tag $FRONTEND_IMAGE_TAGGED $FRONTEND_IMAGE:latest
+    - docker push $FRONTEND_IMAGE_TAGGED
     - docker push $FRONTEND_IMAGE:latest
   only:
     - deploy
 
 build-backend-image:
   image: docker
+  tags:
+    - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
@@ -117,15 +124,17 @@ build-backend-image:
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      -t $BACKEND_IMAGE:$CI_PIPELINE_IID .
-    - docker tag $BACKEND_IMAGE:$CI_PIPELINE_IID $BACKEND_IMAGE:latest
-    - docker push $BACKEND_IMAGE:$CI_PIPELINE_IID
+      -t $BACKEND_IMAGE_TAGGED .
+    - docker tag $BACKEND_IMAGE_TAGGED $BACKEND_IMAGE:latest
+    - docker push $BACKEND_IMAGE_TAGGED
     - docker push $BACKEND_IMAGE:latest
   only:
     - deploy
 
 build-frontend-staging-image:
   image: docker
+  tags:
+    - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
@@ -137,15 +146,17 @@ build-frontend-staging-image:
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
-      -t $FRONTEND_IMAGE:$CI_PIPELINE_IID .
-    - docker tag $FRONTEND_IMAGE:$CI_PIPELINE_IID $FRONTEND_IMAGE:staging
-    - docker push $FRONTEND_IMAGE:$CI_PIPELINE_IID
+      -t ${FRONTEND_IMAGE_TAGGED}-staging .
+    - docker tag ${FRONTEND_IMAGE_TAGGED}-staging $FRONTEND_IMAGE:staging
+    - docker push ${FRONTEND_IMAGE_TAGGED}-staging
     - docker push $FRONTEND_IMAGE:staging
   only:
     - develop
 
 build-backend-staging-image:
   image: docker
+  tags:
+    - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
@@ -156,17 +167,23 @@ build-backend-staging-image:
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      -t $BACKEND_IMAGE:$CI_PIPELINE_IID .
-    - docker tag $BACKEND_IMAGE:$CI_PIPELINE_IID $BACKEND_IMAGE:staging
-    - docker push $BACKEND_IMAGE:$CI_PIPELINE_IID
+      -t ${BACKEND_IMAGE_TAGGED}-staging .
+    - docker tag ${BACKEND_IMAGE_TAGGED}-staging $BACKEND_IMAGE:staging
+    - docker push ${BACKEND_IMAGE_TAGGED}-staging
     - docker push $BACKEND_IMAGE:staging
   only:
     - develop
+
+
+# ------------------------------------------------------------------------------
+# Deploy
 
 deploy-staging:
   stage: deploy
   variables:
     DEPLOYMENT: staging
+    DEPLOY_BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID-staging  # here, we cannot use the constructed vars from above, because than var expansion fails.
+    DEPLOY_FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_PIPELINE_IID-staging
   trigger: dialogo/deployments/schnaq
   only:
     - develop
@@ -175,6 +192,8 @@ deploy-production:
   stage: deploy
   variables:
     DEPLOYMENT: production
+    DEPLOY_BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID
+    DEPLOY_FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_PIPELINE_IID
   trigger: dialogo/deployments/schnaq
   only:
     - deploy
