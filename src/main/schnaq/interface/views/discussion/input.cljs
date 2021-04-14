@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.input
   (:require [ghostwheel.core :refer [>defn-]]
-            [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [fa labels]]
@@ -18,20 +17,28 @@
     ["btn-outline-secondary" :argument.type/support :discussion.add.button/attack
      :discussion/add-premise-against false]))
 
+(defn- argument-button [id button-type tooltip]
+  (let [argument-type @(rf/subscribe [:form/argument-type])
+        checked? (or (= button-type argument-type))]
+    [:input {:id id :type "radio" :name "options" :autoComplete "off"
+             :defaultChecked checked?
+             :title (labels tooltip)
+             :on-click (fn [e] (jq/prevent-default e)
+                         (rf/dispatch [:form/argument-type! button-type]))}]))
+
 (defn- argument-type-choose-button
   "Switch to differentiate between the argument types."
   []
-  (let [argument-type @(rf/subscribe [:form/argument-type])
-        switch-key (gstring/format "control-input-%s" (str (random-uuid)))
-        [outline next-type button-label tooltip switch-state] (button-styling argument-type)]
-    [:button.btn.rounded-3-important
-     {:type "button" :class outline :title (labels tooltip)
-      :on-click #(rf/dispatch [:form/argument-type! next-type])}
-     [:div.custom-control.custom-switch
-      [:input.custom-control-input {:id switch-key :type "checkbox"
-                                    :name "premise-choice" :value argument-type
-                                    :default-checked switch-state}]
-      [:label.custom-control-label {:for switch-key} (labels button-label)]]]))
+  [:div.btn-group.btn-group-toggle {:data-toggle "buttons"}
+   [:label.btn.btn-outline-primary
+    [argument-button "attack" :argument.type/support :discussion/add-premise-against]
+    (labels :discussion.add.button/support)]
+   [:label.btn.btn-outline-dark.active
+    [argument-button "neutral" :argument.type/neutral :discussion/add-premise-neutral]
+    (labels :discussion.add.button/neutral)]
+   [:label.btn.btn-outline-secondary
+    [argument-button "support" :argument.type/attack :discussion/add-premise-supporting]
+    (labels :discussion.add.button/attack)]])
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
@@ -86,4 +93,4 @@
 (rf/reg-sub
   :form/argument-type
   (fn [db]
-    (get-in db [:form :argument/type] :argument.type/support)))
+    (get-in db [:form :argument/type] :argument.type/neutral)))
