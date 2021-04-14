@@ -40,6 +40,7 @@
                    :argument.type/support (colors :blue/default)
                    :argument.type/attack (colors :orange/default)
                    :argument.type/undercut (colors :orange/default)
+                   :argument.type/neutral (colors :gray/medium)
                    :agenda (colors :white)
                    (colors :blue/default))]
        (assoc % :color {:background color

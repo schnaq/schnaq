@@ -1193,5 +1193,6 @@
      :blue/selected "#0181dd"
      :orange/default "#ff772d"
      :orange/selected "#fe661e"
-     :gray/dark "#343a40"
+     :gray/dark "#adb5bd"
+     :gray/medium "#adb5bd"
      :white "#ffffff"}))
