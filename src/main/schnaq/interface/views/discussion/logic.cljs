@@ -78,7 +78,6 @@
         choice (if pro-con-disabled?
                  :neutral
                  (keyword (name argument-type)))]
-    (println "Choice: " choice)
     (rf/dispatch [:discussion.reaction.statement/send choice new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
