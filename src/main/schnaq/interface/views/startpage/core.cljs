@@ -96,7 +96,7 @@
   (let [header
         {:page/heading (labels :startpage/heading)
          :page/subheading (labels :startpage/subheading)
-         :page/more-for-heading [cta/features-call-to-action]}]
+         :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}]
     [pages/with-nav-and-header
      header
      [:<>
