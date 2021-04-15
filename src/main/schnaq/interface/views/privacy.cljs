@@ -39,16 +39,21 @@
   []
   [rows/icon-right
    [:<>
-    [:i#cookie-icon {:class (str "m-auto fas fa-lg " (fa :cookie/complete))}]
+    [:i {:class (str "m-auto fas fa-lg " (fa :cookie/complete))}]
     [:div [:button.btn.btn-outline-primary
            {:on-click localstorage-explanation}
            (labels :privacy.localstorage/show-data)]]]
    :privacy.localstorage])
 
-(defn- data-processing []
+(defn- data-processing-anonymous []
   [rows/icon-left
-   [:i#data-proc {:class (str "m-auto fas fa-lg " (fa :server))}]
-   :privacy.data-processing])
+   [:i {:class (str "m-auto fas fa-lg " (fa :user/ninja))}]
+   :privacy.data-processing.anonymous])
+
+(defn- data-processing-registered []
+  [rows/icon-right
+   [:i {:class (str "m-auto fas fa-lg " (fa :user/plus))}]
+   :privacy.data-processing.registered])
 
 (defn- link-to-privacy []
   [:section.text-center.pb-5
@@ -66,7 +71,8 @@
     [gdpr-row]
     [personal-data-row]
     [localstorage-row]
-    [data-processing]
+    [data-processing-anonymous]
+    [data-processing-registered]
     [link-to-privacy]]])
 
 

@@ -172,9 +172,10 @@
         :privacy/subheading "We lead you through it step by step!"
         :privacy.made-in-germany/lead "EU-regulation conformity"
         :privacy.made-in-germany/title "Data privacy is important to us!"
-        :privacy.made-in-germany/body "The development team of schnaq consists of developers that are tired of misuse of private
-        data. This is why we take special care to be GDPR compliant and to save all data securely on german servers provided by Hetzner.
-        We do not exchange any data with other companies without absolute need and making it completely clear."
+        :privacy.made-in-germany/body
+        [:<>
+         [:p "The development team of schnaq consists of developers that are tired of misuse of private data. This is why we take special care to be GDPR compliant and to save all data securely on german servers provided by Hetzner. We do not exchange any data with other companies without absolute need and making it completely clear."]
+         [:p "If you are still unclear about how we handle your data, please feel free to contact us! We really care about transparency and clarity with personal data and we explain to you to the last bit what happens with the data."]]
         :privacy.personal-data/lead "Which data is saved?"
         :privacy.personal-data/title "Personal Data"
         :privacy.personal-data/body
@@ -192,11 +193,18 @@
         :privacy.localstorage.notification/confirmation "Do you really want to delete the data?"
         :privacy.localstorage.notification/delete-button "Delete data"
 
-        :privacy.data-processing/lead "What happens to your posts?"
-        :privacy.data-processing/title "Data Processing"
-        :privacy.data-processing/body [:<> [:p "Your posts and chosen username will be stored on our own servers and are not passed on to other companies. If you do not provide any username, the author of your posts will be displayed as \"Anonymous\". We do not store any other personal data, e.g. user-agent or ip address, to your posts."]
-                                       [:p "Posts in public schnaqs can be viewed by anyone. Posts in private schnaqs will only be visible to those with access to the link. Administrators of a schnaq are able to delete a schnaq’s posts."]]
-
+        :privacy.data-processing.anonymous/lead "What happens to your posts?"
+        :privacy.data-processing.anonymous/title "Data Processing for Anonymous Users"
+        :privacy.data-processing.anonymous/body [:<> [:p "Your posts and chosen username will be stored on our own servers and are not passed on to other companies. If you do not provide any username, the author of your posts will be displayed as \"Anonymous\". Since even we do not remember who the contributions come from, it is not possible to edit the contribution. We do not store any other personal data, e.g. user-agent or ip address, to your posts."]
+                                                 [:p "Posts in public schnaqs can be viewed by anyone. Posts in private schnaqs will only be visible to those with access to the link. Administrators of a schnaq are able to delete a schnaq’s posts."]]
+        :privacy.data-processing.registered/lead "And if I am logged in now?"
+        :privacy.data-processing.registered/title "Data Processing for Registered Users"
+        :privacy.data-processing.registered/body
+        [:<> [:p "If you decide to register, your email address and name will be saved. This allows us to personalize your schnaq experience and display your name when you save a post. The email address is among other things necessary for notifications so that you are informed when there are new posts for you."]
+         [:p "When you log in via an external provider, such as LinkedIn, LinkedIn receives a request from you to transmit the displayed information to us, which we then store. If you log in again, LinkedIn will also receive another request. If you want to avoid this, simply create an account with us directly."]
+         [:p "In addition, we store in your account the hubs and schnaqs to which you have access. So you can also log in on your smartphone or other device and have access to all your schnaqs."]
+         [:p "Now it is also possible to use advanced features, like edit posts, since you now have an identity on our platform 👍"]
+         [:p "At any time you can contact us and request to view or delete your data."]]
 
         :privacy.link-to-privacy/lead "More information can be found in the comprehensive "
         :privacy.link-to-privacy/privacy "Privacy notice"
@@ -703,7 +711,10 @@
         :privacy/subheading "Wir erklären es dir gerne!"
         :privacy.made-in-germany/lead "EU-Konformes Vorgehen"
         :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
-        :privacy.made-in-germany/body "Das Entwickler:innenteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf Servern in Deutschland bei Hetzner zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"
+        :privacy.made-in-germany/body
+        [:<>
+         [:p "Das Entwickler:innenteam von schnaq besteht aus Informatiker:innen, die es Leid sind, dass mit Daten nicht sorgfältig umgegangen wird. Deshalb legen wir besonderen Wert darauf, DSGVO konform zu agieren und sämtliche Daten sicher auf Servern in Deutschland bei Hetzner zu speichern. Kein Datenaustausch mit anderen Unternehmen, keine faulen Kompromisse!"]
+         [:p "Sollten noch Unklarheiten bei unserem Vorgehen mit deinen Daten bestehen, so kontaktiere uns gerne! Uns liegt Transparenz und Klarheit mit persönlichen Daten wirklich am Herzen und wir erklären dir bis zum letzten Bit was mit den Daten geschieht."]]
         :privacy.personal-data/lead "Welche Daten werden erhoben?"
         :privacy.personal-data/title "Persönliche Daten"
         :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click (js-wrap/show-js-klaro)} "Einstellungen prüfen"]]]
@@ -716,10 +727,20 @@
         :privacy.localstorage.notification/body "Hinweis: \"Kryptische\" Zeichenketten sind die Zugangscodes zu den schnaqs."
         :privacy.localstorage.notification/confirmation "Möchtest du deine Daten wirklich löschen?"
         :privacy.localstorage.notification/delete-button "Daten löschen"
-        :privacy.data-processing/lead "Was passiert mit deinen Beiträgen?"
-        :privacy.data-processing/title "Datenverarbeitung"
-        :privacy.data-processing/body [:<> [:p "Wir speichern die von dir verfassten Beiträge in Kombination mit dem von dir gewählten Nutzernamen auf unserem Server und geben sie nicht an Dritte weiter. Wenn du keinen Nutzernamen eingibst, wird als Author \"Anonymous\" eingetragen. Die von dir verfassten Beiträge stehen in keiner Beziehung zueinander. Es werden keine persönlichen Daten, wie dein Browser oder deine IP-Adresse, mit deinen Beiträgen zusammengeführt."]
-                                       [:p "Beiträge in öffentlichen schnaqs sind von allen Nutzer:innen einsehbar. Beiträge in privaten schnaqs sind nur von Personen einsehbar, die einen Link zur Diskussion haben. Administrator:innen eines schnaqs haben die Möglichkeit Beiträge zu löschen."]]
+
+        :privacy.data-processing.anonymous/lead "Was passiert mit deinen Beiträgen?"
+        :privacy.data-processing.anonymous/title "Datenverarbeitung bei anonymen Zugängen"
+        :privacy.data-processing.anonymous/body [:<> [:p "Wir speichern die von dir verfassten Beiträge in Kombination mit dem von dir gewählten Nutzernamen auf unserem Server und geben sie nicht an Dritte weiter. Wenn du keinen Nutzer:innennamen eingibst, wird als Autor:in \"Anonymous\" eingetragen. Die von dir verfassten Beiträge stehen in keiner Beziehung zueinander. Da auch wir uns nicht merken, von wem die Beiträge stammen, ist eine Bearbeitung des Beitrags nicht möglich. Es werden keine persönlichen Daten, wie dein Browser oder deine IP-Adresse, mit deinen Beiträgen zusammengeführt."]
+                                                 [:p "Beiträge in öffentlichen schnaqs sind von allen Nutzer:innen einsehbar. Beiträge in privaten schnaqs sind nur von Personen einsehbar, die einen Link zur Diskussion haben. Administrator:innen eines schnaqs haben die Möglichkeit Beiträge zu löschen."]]
+        :privacy.data-processing.registered/lead "Und wenn ich nun eingeloggt bin?"
+        :privacy.data-processing.registered/title "Datenverarbeitung bei registrierten Nutzer:innen"
+        :privacy.data-processing.registered/body
+        [:<> [:p "Solltest du dich entscheiden dich zu registrieren, so werden E-Mail Adresse und dein Name gespeichert. Damit personalisieren wir dein schnaq-Erlebnis und zeigen deinen Namen an, wenn du einen Beitrag speicherst. Die Mailadresse ist unter anderem für Benachrichtigungen notwendig damit du informiert wirst wenn es neue Beiträge für dich gibt."]
+         [:p "Bei einem Login über einen externen Anbieter, wie LinkedIn, erhält LinkedIn von dir eine Anfrage die angezeigten Informationen an uns zu übermitteln, die wir dann bei uns speichern. Loggst du dich erneut ein, so erhält LinkedIn auch wieder eine Anfrage. Möchtest du das vermeiden, so erstelle einfach direkt einen Account bei uns."]
+         [:p "Zusätzlich speichern wir in deinem Account die Hubs und schnaqs, zu denen du Zugang hast. Damit kannst dich auch auf deinem Smartphone oder anderem Endgerät einloggen und hast Zugriff auf alle deine schnaqs."]
+         [:p "Nun ist es auch möglich erweiterte Funktionen, wie Beiträge editieren, zu verwenden, da du nun eine Identität auf unserer Plattform hast 👍"]
+         [:p "Jederzeit kannst du uns kontaktieren und die Einsicht oder Löschung deiner Daten beantragen."]]
+
         :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen "
         :privacy.link-to-privacy/privacy "Datenschutzerklärung"
 
@@ -1181,6 +1202,8 @@
      :user/group-edit "fa-users-cog"
      :user/lock "fa-user-lock"
      :user/edit "fa-user-edit"
+     :user/ninja "fa-user-ninja"
+     :user/plus "fa-user-plus"
      :user/shield "fa-user-shield"}))
 
 (defn colors
