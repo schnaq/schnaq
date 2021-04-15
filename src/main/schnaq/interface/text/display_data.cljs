@@ -81,7 +81,6 @@
 
         :startpage.early-adopter/title "Gotten curious?"
         :startpage.early-adopter/body "Browse through public schnaqs"
-        :startpage.early-adopter.buttons/join-schnaq "Public schnaqs"
         :startpage.early-adopter/or "or"
 
         :startpage.newsletter/heading "Be the first to know when you can profit from new features!"
@@ -615,9 +614,9 @@
          [:p.text-muted.text-center [:small "Kein Hinterlegen von Zahlungsmitteln notwendig."]]]
 
         :startpage.early-adopter/title "Neugierig geworden?"
-        :startpage.early-adopter/body "Stöbere durch öffentliche schnaqs"
-        :startpage.early-adopter.buttons/join-schnaq "Öffentliche schnaqs"
+        :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
         :startpage.early-adopter/or "oder"
+        :startpage.early-adopter/test "Teste Hubs drei Monate kostenfrei"
 
         :startpage.newsletter/heading "Gehöre zu den Ersten, die von neuen Funktionen profitieren!"
         :startpage.newsletter/button "Exklusive Informationen anfordern!"

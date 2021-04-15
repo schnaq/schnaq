@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.startpage.core
   "Defining the startpage of schnaq."
-  (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
+  (:require [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.pages :as pages]
@@ -66,12 +65,13 @@
       {:src (img-path :schnaqqifant/white)}]
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-     [:a.button-secondary {:href (rfe/href :routes.schnaqs/public)}
-      (labels :startpage.early-adopter.buttons/join-schnaq)]
+     [:a.btn.button-secondary {:role "button"
+                               :href "mailto:info@schnaq.com"}
+      (labels :startpage.early-adopter/test)]
      [:p.pt-4 (labels :startpage.early-adopter/or)]
-     [:button.button-secondary
-      {:type "button"
-       :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+     [:a.btn.button-secondary
+      {:role "button"
+       :href (reitfe/href :routes.schnaq/create)}
       (labels :schnaq.create.button/save)]]]
    [base/wavy-curve "scale(1.5,1)"]])
 
