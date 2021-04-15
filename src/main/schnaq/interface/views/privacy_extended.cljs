@@ -144,7 +144,8 @@
      "vertreten durch Christian Meter" [:br]
      "Am Hagen 6" [:br]
      "42855 Remscheid" [:br]
-     (toolbelt/obfuscate-mail "info@schnaq.com")]]])
+     (toolbelt/obfuscate-mail "info@schnaq.com")]
+    [:p "Rechtlich bindend ist die deutsche Fassung dieser Datenschutzerklärung."]]])
 
 ;; -----------------------------------------------------------------------------
 
