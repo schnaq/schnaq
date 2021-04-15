@@ -5,29 +5,35 @@
 (defn wavy-curve
   "Define a wavy curve."
   ([]
-   [wavy-curve ""])
+   [wavy-curve "" false])
   ([transformation]
-   [:svg.wavy-curve
-    {:xmlSpace "preserve"
-     :overflow :auto
-     :viewBox "0 0 19 4"
-     :preserveAspectRatio :none
-     :style {:transform transformation
-             :-webkit-transform transformation}
-     :y "0px"
-     :x "0px"}
-    [:path {:d "M0 0 L 0 3 Q 3 3, 6 2 T 12 2 T 19 2 L 19 0"}]]))
+   [wavy-curve transformation false])
+  ([transformation gradient?]
+   (let [svg-class (if gradient? "wavy-curve-gradient" "wavy-curve")]
+     [:svg
+      {:class svg-class
+       :xmlSpace "preserve"
+       :overflow :auto
+       :viewBox "0 0 19 4"
+       :preserveAspectRatio :none
+       :style {:transform transformation
+               :-webkit-transform transformation}
+       :y "0px"
+       :x "0px"}
+      [:path {:d "M0 0 L 0 3 Q 3 3, 6 2 T 12 2 T 19 2 L 19 0"}]])))
 
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
-  [heading subheading & more]
-  [:div.pb-5
-   [:header.masthead.text-white
-    [:div.container
-     [:h1 heading]
-     [:h2.display-6 subheading]
-     more]]
-   [wavy-curve]])
+  [heading subheading gradient? & more]
+  (let [header-class (if gradient? "masthead-gradient" "masthead")]
+    [:div.pb-5
+     [:header.text-white
+      {:class header-class}
+      [:div.container
+       [:h1 heading]
+       [:h2.display-6 subheading]
+       more]]
+     [wavy-curve "" gradient?]]))
 
 (defn img-bullet-subtext
   "Create one icon in a grid"

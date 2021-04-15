@@ -7,7 +7,7 @@
   looks up the corresponding text entries, which are then rendered."
   [text-namespace]
   (let [prepend-namespace (partial common/add-namespace-to-keyword text-namespace)]
-    [:article.feature-text-box.pb-5
+    [:article.feature-text-box
      [:p.lead.mb-1 (labels (prepend-namespace :lead))]
      [:h5 (labels (prepend-namespace :title))]
      [:section (labels (prepend-namespace :body))]]))
@@ -16,16 +16,16 @@
   "Generic builder to align text and asset. Here, text is on the right
   and the remainder is on the left."
   [left right]
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-5 left]
-   [:div.col-12.col-lg-6.offset-lg-1 right]])
+  [:div.row.feature-row
+   [:div.col-12.col-lg-5.my-auto left]
+   [:div.col-12.col-lg-6.offset-lg-1.my-auto right]])
 
 (defn- row-builder-text-left
   "Build a row, like the feature rows. Here, the text is on the left side."
   [left right]
-  [:div.row.align-items-center.feature-row
-   [:div.col-12.col-lg-6 left]
-   [:div.col-12.col-lg-5.offset-lg-1 right]])
+  [:div.row.feature-row
+   [:div.col-12.col-lg-6.my-auto left]
+   [:div.col-12.col-lg-5.offset-lg-1.my-auto right]])
 
 
 ;; -----------------------------------------------------------------------------

@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.startpage.core
   "Defining the startpage of schnaq."
-  (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
+  (:require [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.pages :as pages]
@@ -12,9 +11,9 @@
 (defn- mailchimp-form
   []
   [:section.row.pt-5.pb-5
-   [:div.col-12.col-md-4
-    [:img.img-fluid {:src (img-path :startpage/newsletter)}]]
-   [:div.col-12.col-md-8
+   [:div.col-12.col-md-4.my-auto
+    [:img.img-fluid {:src (img-path :schnaqqifant/share)}]]
+   [:div.col-12.col-md-8.my-auto
     [:h3.text-center (labels :startpage.newsletter/heading)]
     [:form
      {:target "_blank" :name "mc-embedded-subscribe-form" :method "post" :action
@@ -66,12 +65,13 @@
       {:src (img-path :schnaqqifant/white)}]
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
-     [:a.button-secondary {:href (rfe/href :routes.schnaqs/public)}
-      (labels :startpage.early-adopter.buttons/join-schnaq)]
+     [:a.btn.button-secondary {:role "button"
+                               :href "mailto:info@schnaq.com"}
+      (labels :startpage.early-adopter/test)]
      [:p.pt-4 (labels :startpage.early-adopter/or)]
-     [:button.button-secondary
-      {:type "button"
-       :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+     [:a.btn.button-secondary
+      {:role "button"
+       :href (reitfe/href :routes.schnaq/create)}
       (labels :schnaq.create.button/save)]]]
    [base/wavy-curve "scale(1.5,1)"]])
 
@@ -92,22 +92,20 @@
         :alt "digihub logo"}]]]]])
 
 ;; -----------------------------------------------------------------------------
-
 (defn- startpage-content []
-  (let [header
-        {:page/heading (labels :startpage/heading)
-         :page/subheading (labels :startpage/subheading)}]
-    [pages/with-nav-and-header
-     header
-     [:<>
-      [:section.container
-       [cta/features-call-to-action]
-       [startpage-features/feature-rows]
-       [mailchimp-form]
-       [testimonials/view]]
-      [early-adopters]
-      [:section.container
-       [supporters]]]]))
+  [pages/with-nav-and-header
+   {:page/heading (labels :startpage/heading)
+    :page/subheading (labels :startpage/subheading)
+    :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})
+    :page/gradient? true}
+   [:<>
+    [:section.container
+     [startpage-features/feature-rows]
+     [mailchimp-form]
+     [testimonials/view]]
+    [early-adopters]
+    [:section.container
+     [supporters]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

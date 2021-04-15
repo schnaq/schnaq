@@ -13,6 +13,18 @@
   }
 }
 
+.panel-light-background {
+  @extend .shadow-sm;
+  @include rounded.rounded-2;
+  background: vars.$light-background;
+  overflow: hidden;
+  padding: 1rem;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
+}
+
 .card-view {
   background: vars.$white;
 
