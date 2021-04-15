@@ -57,3 +57,9 @@
     (if (< n-words (count s))
       (string/join " " (conj (vec (take n-words s)) "..."))
       text)))
+
+(defn obfuscate-mail
+  "Hide real mail address."
+  [mail]
+  [:span.obfuscate
+   (apply str (reverse mail))])
