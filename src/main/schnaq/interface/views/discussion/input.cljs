@@ -1,37 +1,41 @@
 (ns schnaq.interface.views.discussion.input
-  (:require [ghostwheel.core :refer [>defn-]]
-            [goog.string :as gstring]
-            [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.logic :as logic]))
 
-(>defn- button-styling
-  "Dispatch button styling by argument-type."
-  [argument-type]
-  [keyword? :ret vector?]
-  (if (= :argument.type/support argument-type)
-    ["btn-outline-primary" :argument.type/attack :discussion.add.button/support
-     :discussion/add-premise-supporting true]
-    ["btn-outline-secondary" :argument.type/support :discussion.add.button/attack
-     :discussion/add-premise-against false]))
+(defn- argument-type-button
+  "Button to select current attitude."
+  [id button-type tooltip]
+  (let [argument-type @(rf/subscribe [:form/argument-type])
+        checked? (= button-type argument-type)]
+    [:input {:id (str "argument-type-button-" id) :type "radio" :name "options" :autoComplete "off"
+             :defaultChecked checked?
+             :title (labels tooltip)
+             :on-click (fn [e] (jq/prevent-default e)
+                         (rf/dispatch [:form/argument-type! button-type]))}]))
 
 (defn- argument-type-choose-button
   "Switch to differentiate between the argument types."
   []
   (let [argument-type @(rf/subscribe [:form/argument-type])
-        switch-key (gstring/format "control-input-%s" (str (random-uuid)))
-        [outline next-type button-label tooltip switch-state] (button-styling argument-type)]
-    [:button.btn.rounded-3-important
-     {:type "button" :class outline :title (labels tooltip)
-      :on-click #(rf/dispatch [:form/argument-type! next-type])}
-     [:div.custom-control.custom-switch
-      [:input.custom-control-input {:id switch-key :type "checkbox"
-                                    :name "premise-choice" :value argument-type
-                                    :default-checked switch-state}]
-      [:label.custom-control-label {:for switch-key} (labels button-label)]]]))
+        active-class (fn [argument-type current-button] {:class (when (= argument-type current-button) "active")})
+        set-active (partial active-class argument-type)]
+    [:div.btn-group.btn-group-toggle {:data-toggle "buttons"}
+     [:label.btn.btn-outline-primary.rounded-4
+      (set-active :argument.type/support)
+      [argument-type-button "support" :argument.type/support :discussion/add-premise-against]
+      (labels :discussion.add.button/support)]
+     [:label.btn.btn-outline-dark
+      (set-active :argument.type/neutral)
+      [argument-type-button "neutral" :argument.type/neutral :discussion/add-premise-neutral]
+      (labels :discussion.add.button/neutral)]
+     [:label.btn.btn-outline-secondary.rounded-4
+      (set-active :argument.type/attack)
+      [argument-type-button "attack" :argument.type/attack :discussion/add-premise-supporting]
+      (labels :discussion.add.button/attack)]]))
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
@@ -39,8 +43,10 @@
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
         argument-type @(rf/subscribe [:form/argument-type])
         current-route-name @(rf/subscribe [:navigation/current-route-name])
-        current-color (if (= :argument.type/support argument-type)
-                        "text-primary" "text-secondary")]
+        current-color (case argument-type
+                        :argument.type/support "text-primary"
+                        :argument.type/attack "text-secondary"
+                        :argument.type/neutral "text-dark")]
     [:div.input-group
      (when-not (or (= :routes.schnaq/start current-route-name) pro-con-disabled?)
        [:div.input-group-prepend
@@ -86,4 +92,4 @@
 (rf/reg-sub
   :form/argument-type
   (fn [db]
-    (get-in db [:form :argument/type] :argument.type/support)))
+    (get-in db [:form :argument/type] :argument.type/neutral)))

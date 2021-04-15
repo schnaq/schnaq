@@ -22,6 +22,10 @@
   color: $white;
 }
 
+.btn-outline-secondary.active {
+  color: $white !important;
+}
+
 @each $rounded, $value in rounded.$roundings {
   .btn-#{$rounded} {
     /* stylelint-disable */

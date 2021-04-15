@@ -76,7 +76,7 @@
 
 ;; Argument
 (s/def :argument/type
-  #{:argument.type/attack :argument.type/support :argument.type/undercut})
+  #{:argument.type/attack :argument.type/support :argument.type/undercut :argument.type/neutral})
 (s/def :argument/version number?)
 (s/def :argument/author (s/or :user ::user :registered-user ::registered-user))
 (s/def :argument/conclusion (s/or :statement ::statement
