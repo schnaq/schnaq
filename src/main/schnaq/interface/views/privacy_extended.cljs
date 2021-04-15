@@ -8,7 +8,8 @@
 (defn- privacy-entry
   "Define a privacy entry."
   [title body]
-  [:section
+  [:section {:style {:text-align :justify
+                     :hyphens :auto}}
    [:h3.pt-4 title]
    body])
 
@@ -48,6 +49,20 @@
 
     [:p "Alle von uns eingesetzten Cookies generieren zufällige Zeichenketten, die zum Abgleich mit korrespondierenden Zeichenketten auf unserem Server verwendet werden."]
     [privacy/open-privacy-settings]]])
+
+(defn- personal-data []
+  [privacy-entry
+   "Persönliche Daten"
+   [:<>
+    [:h4 "Verwendung von schnaq ohne Nutzer:innen Accounts"]
+    [:p "Wenn Sie schnaq verwenden ohne sich zu registrieren, sind so sogenannte \"Anonyme Nutzer:in\". Dabei werden zusätzlich zu den für den Serverbetrieb notwendigen Daten nur Ihr Beitrag und ein optionaler selbstgewählter Name abgespeichert werden. Beim Speichern des Beitrags wird dann diese Zeichenkette lose mit dem Beitrag abgesichert. Eine Zuordnung zu einer Identität erfolgt dabei nicht. Nimmt jemand mit demselben Namen an irgendeinem schnaq teil, so erscheinen die Beiträge nach außen hin so als kämen sie von der selben Person."]
+    [:p "Mit dem Abschicken Ihres Beitrages stimmen Sie der Speicherung zu. Da wir später nicht mehr nachvollziehen können, von wem der Beitrag stand, haben Sie kein Recht darauf diesen Beitrag zu löschen, denn es fehlt der Nachweis der Autor:innenschaft."]
+    [:h4 "Verwendung von schnaq als registrierte:r Nutzer:in"]
+    [:p "Bei der Registrierung werden von Ihnen Ihre Mailadresse und Ihr Vor- und Nachname gespeichert. Diese sind für den Betrieb von schnaq erforderlich, die Erfassung erfolgt somit nach Art. 6 Abs. 1 lit. f DSGVO. Die Registrierung ist für den normalen Betrieb von schnaq optional. Mit der Mailadresse werden automatische Benachrichtigungen auf neue Beiträge ermöglicht. Mit den Namen werden Ihre Beiträge auf der Oberfläche von schnaq zusammen dargestellt. Auch weitere Zugehörigkeiten, beispielsweise zu den Hubs oder weiteren schnaqs, werden damit visuell dargestellt."]
+    [:p "Diese Daten werden auf unseren eigenen Servern gespeichert und nicht an Dritte weitergegeben."]
+    [:p "Es gibt Möglichkeiten das eigene Nutzer:innenprofil zu erweitern. Dazu gehört beispielsweise ein eigenes optionales Profilbild hochzuladen. Dieses Profilbild wird dann als Ihr Avatar dargestellt und immer dann präsentiert, wenn Ihr Nutzer:innenaccount in Erscheinung tritt, beispielsweise wenn man sich Ihre Beiträge anschaut."]
+    [:h4 "Textbeiträge"]
+    [:p "Die Textbeiträge müssen von Ihnen selbst stammen und dürfen keine Urheberrechte verletzen. Die Textbeiträge werden nicht an Dritte weitergegeben. Intern können Ihre Beiträge für weitere wissenschaftliche Auswertungen und dem Training von eigenen neuronalen Netzen verwendet werden. Sie verlieren dabei niemals Ihre Autor:innenschaft an diesen Beiträgen. Damit werden beispielsweise automatisiert maschinell erstellte Zusammenfassungen oder Statistiken berechnet. Diese Zusammenfassungen und Statistiken sind für die Auswertung Ihres schnaqs vorgesehen und werden an keine Dritten weitergegeben."]]])
 
 (defn- matomo []
   [privacy-entry
@@ -126,7 +141,7 @@
    [:<>
     [:p "Verantwortlicher im Sinne der DSGVO ist:"]
     [:p
-     "schnaq (noch nicht gegründet)" [:br]
+     "schnaq (nicht gegründet)" [:br]
      "vertreten durch Christian Meter" [:br]
      "Am Hagen 6" [:br]
      "42855 Remscheid" [:br]
@@ -143,6 +158,7 @@
     [allgemeines]
     [logfiles]
     [cookies]
+    [personal-data]
     [matomo]
     [rechte-der-betroffenen]
     [recht-auf-beschwerde]

@@ -164,12 +164,13 @@
      :view pricing-view/pricing-view
      :link-text (labels :router/pricing)}]
    ["privacy"
-    {:name :routes/privacy
-     :view privacy/view
-     :link-text (labels :router/privacy)}]
-   ["privacy/extended"
-    {:name :routes/privacy-extended
-     :view privacy-extended/view}]
+    [""
+     {:name :routes/privacy
+      :view privacy/view
+      :link-text (labels :router/privacy)}]
+    ["/extended"
+     {:name :routes/privacy-extended
+      :view privacy-extended/view}]]
    ["meetings"
     {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     (when-not toolbelt/production?

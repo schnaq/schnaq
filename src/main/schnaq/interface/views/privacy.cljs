@@ -8,7 +8,8 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [reitit.frontend.easy :as reitfe]))
 
 (defn open-privacy-settings
   "Open privacy settings."
@@ -68,7 +69,7 @@
   [:section.text-center.pb-5
    [:p.lead
     (gstring/format "%s " (labels :privacy.link-to-privacy/lead))
-    [:a {:href "https://disqtec.com/datenschutz"}
+    [:a {:href (reitfe/href :routes/privacy-extended)}
      (labels :privacy.link-to-privacy/privacy)]
     "."]])
 
