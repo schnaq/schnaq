@@ -10,10 +10,9 @@
   "Button to select current attitude."
   [id button-type label tooltip]
   (let [argument-type @(rf/subscribe [:form/argument-type])
-        checked? (= button-type argument-type)
-        active (= argument-type button-type)]
+        checked? (= button-type argument-type)]
     [:label.btn.btn-outline-primary.rounded-4
-     (when active
+     (when checked?
        {:class "active"})
      [:input {:id (str "argument-type-button-" id) :type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
