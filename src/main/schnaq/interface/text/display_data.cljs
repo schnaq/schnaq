@@ -57,8 +57,8 @@
         :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
         ;; Startpage
-        :startpage/heading "Better decisions together"
-        :startpage/subheading "Software, that helps remote-teams structure their shared knowledge. Democratizing discussions – Because everybody has valuable insights."
+        :startpage/heading "Better Decisions Together"
+        :startpage/subheading "Software, that helps remote-teams structure their shared knowledge. Democratizing discussions – because everybody has valuable insights."
         :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
                                          " discussions which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
 
@@ -67,14 +67,14 @@
         :startpage.features/more-information "More information"
 
         :startpage.features.meeting-organisation/lead "Well informed at any time"
-        :startpage.features.meeting-organisation/title "Make the optimal decisions"
+        :startpage.features.meeting-organisation/title "Make the Optimal Decisions"
         :startpage.features.meeting-organisation/body
         [:<>
-         [:p "Its hard to make a decision where anybody can contribute their knowledge by using chat-tools and E-Mail. Clarity suffers in turn."]
+         [:p "It's hard to make a decision where anybody can contribute their knowledge by using chat-tools and E-Mail. Clarity suffers in turn."]
          [:p "With schnaq discussions, anybody can participate and be heard equally, no matter the time and place they're in. This way all relevant insights and viewpoints can be incorporated in the decisions you take."]]
 
         :startpage.features.discussion/lead "Onboarding was never easier"
-        :startpage.features.discussion/title "Easy team Q&A function"
+        :startpage.features.discussion/title "Easy Team Q&A Function"
         :startpage.features.discussion/body
         [:<>
          [:p "Any person on your team has some special knowledge only they posses. And nobody got time to create all those long wiki pages."]
@@ -82,18 +82,18 @@
          [:p "Once a question is answered, it is available to be viewed and improved upon by others in the team. Collaboration that feels effortless."]]
 
         :startpage.features.graph/lead "Easy integration"
-        :startpage.features.graph/title "Personal spaces for your teams"
+        :startpage.features.graph/title "Personal Spaces for Your Teams"
         :startpage.features.graph/body
         [:<>
          [:p "Any team can work in their own private hub. Only the people you add to your hub, can collaborate with you."]
-         [:p "Schnaq also lets you use logins, that you may already have in your company. This way you do not need to create any extra accounts. Do you need any logins, we do not support yet?" [:a {:href "mailto:info@schnaq.com"} "Contact us!"]]
+         [:p "Schnaq also lets you use logins, that you may already have in your company. This way you do not need to create any extra accounts. Do you need any logins, we do not support yet? " [:a {:href "mailto:info@schnaq.com"} "Contact us!"]]
          [:p.text-center.mb-0
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:info@schnaq.com"}
            "Try out hubs for three months free of charge"]]
          [:p.text-muted.text-center [:small "You do not need to make any payment options upfront"]]]
 
-        :startpage.early-adopter/title "Gotten curious?"
+        :startpage.early-adopter/title "Gotten Curious?"
         :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
         :startpage.early-adopter/or "or"
         :startpage.early-adopter/test "Test hubs for three months free of charge"
@@ -114,7 +114,7 @@
         :page.login/subheading "You need to login to access this resource"
 
         :footer.buttons/about-us "About us"
-        :footer.buttons/legal-note "Legal note"
+        :footer.buttons/legal-note "Legal Note"
         :footer.buttons/privacy "Privacy Notice"
         :footer.tagline/developed-with " Developed with "
         :footer.sponsors/heading "Our servers are hosted by"
@@ -494,7 +494,7 @@
         :router/my-schnaqs "My schnaqs"
         :router/not-found-label "Not found route redirect"
         :router/pricing "Prices"
-        :router/privacy "Privacy policy"
+        :router/privacy "Privacy Policy"
         :router/show-single-meeting "Show schnaq"
         :router/start-discussion "Start discussion"
         :router/startpage "Startpage"
@@ -606,8 +606,8 @@
         :startpage.features.meeting-organisation/title "Optimale Entscheidungen treffen"
         :startpage.features.meeting-organisation/body
         [:<>
-         [:p "Mit Chat-Tools oder E-Mails ist es schwierig Entscheidungen so zu treffen, dass jede:r Wissen einbringen kann. Die Nachvollziehbarkeit leidet auch."]
-         [:p "Mit schnaq Diskussionen können alle gleichberechtigt und verteilt an verschiedenen Zeitpunkten an einer Diskussion teilnehmen. So können alle im Team dazu Beitragen eine gut informierte Entscheidung zu treffen. Dabei ist es unwichtig, wo die einzelnen Teammitglieder:innen sitzen."]]
+         [:p "Mit Chat-Tools oder E-Mails ist es schwierig Entscheidungen so zu treffen, dass jede:r Wissen einbringen kann. Die Nachvollziehbarkeit leidet sehr."]
+         [:p "Mit schnaq Diskussionen können alle gleichberechtigt und verteilt an verschiedenen Zeitpunkten an einer Diskussion teilnehmen. So können alle im Team dazu beitragen eine gut informierte Entscheidung zu treffen. Dabei ist es unwichtig, wo die einzelnen Teammitglieder:innen sitzen."]]
 
         :startpage.features.discussion/lead "Onboarding war nie einfacher"
         :startpage.features.discussion/title "Einfache Team Q&A Funktion"
@@ -621,12 +621,12 @@
         :startpage.features.graph/title "Persönliche Bereiche für jedes Team"
         :startpage.features.graph/body
         [:<>
-         [:p "Jedes Team kann einen eigenen Hub bekommen. Auf diesen Bereich haben nur die Teammitglieder:innen die ihr hinzugefügt Zugriff."]
-         [:p "Schnaq bietet auch die Möglichkeit bereits bestehende Logins, die ihr im Unternehmen nutzt einzubinden. So braucht ihr keinen extra Account. Braucht ihr weitere Anbindungen?" [:a {:href "mailto:info@schnaq.com"} "Kontaktiert uns!"]]
+         [:p "Jedes Team kann einen eigenen Hub bekommen. Auf diesen Bereich haben nur die Teammitglieder:innen, die ihr hinzufügt, Zugriff."]
+         [:p "Schnaq bietet auch die Möglichkeit bereits bestehende Logins, die ihr im Unternehmen nutzt, einzubinden. So braucht ihr keinen extra Account. Braucht ihr weitere Anbindungen? " [:a {:href "mailto:info@schnaq.com"} "Kontaktiert uns!"]]
          [:p.text-center.mb-0
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:info@schnaq.com"}
-           "Testet Hubs drei Monate kostenfrei."]]
+           "Testet Hubs drei Monate kostenfrei"]]
          [:p.text-muted.text-center [:small "Kein Hinterlegen von Zahlungsmitteln notwendig."]]]
 
         :startpage.early-adopter/title "Neugierig geworden?"
@@ -997,7 +997,7 @@
         :feature/share "Alle können gleichberechtigt ihr Wissen einbringen"
         :feature/graph "Relevantes Wissen wird automatisch in eine Mindmap überführt"
         :feature/processing "Informationen sind einfach wiederzufinden"
-        :feature/secure "Daten werden nach Deutschen Standards geschützt"
+        :feature/secure "Daten werden nach deutschen Standards geschützt"
         :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
 
         ;; Tooltips
