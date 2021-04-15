@@ -5,7 +5,7 @@
 (defn- header-animation
   "Display header animation video."
   []
-  [:section
+  [:section.panel-light-background.mb-3
    [:video.w-100.startpage-animation {:auto-play true :loop false :muted true :plays-inline true}
     [:source {:src (video :start-page.features.sample-discussion/webm) :type "video/webm"}]
     [:source {:src (video :start-page.features.sample-discussion/mp4) :type "video/mp4"}]]])
@@ -32,7 +32,7 @@
 (defn features-call-to-action
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
-  [:section.row {:key "HeaderExtras-Bullet-Points-and-Animation"}
+  [:section.row.mt-3 {:key "HeaderExtras-Bullet-Points-and-Animation"}
    [:div.col-lg-6.py-lg-4.pr-lg-5
     [header-animation]
     [start-schnaq-button]]

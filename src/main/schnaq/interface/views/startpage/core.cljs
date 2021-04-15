@@ -92,16 +92,16 @@
         :alt "digihub logo"}]]]]])
 
 ;; -----------------------------------------------------------------------------
-
+;; TODO social proof counter
 (defn- startpage-content []
   (let [header
         {:page/heading (labels :startpage/heading)
-         :page/subheading (labels :startpage/subheading)}]
+         :page/subheading (labels :startpage/subheading)
+         :page/more-for-heading [cta/features-call-to-action]}]
     [pages/with-nav-and-header
      header
      [:<>
       [:section.container
-       [cta/features-call-to-action]
        [startpage-features/feature-rows]
        [mailchimp-form]
        [testimonials/view]]

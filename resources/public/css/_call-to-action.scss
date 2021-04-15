@@ -1,11 +1,13 @@
-@import 'variables';
+@use 'variables' as vars;
 
 .icon-points-text {
   font-size: 1.17em;
 }
 
 .icon-points-icon {
-  color: $gray-800;
+  color: vars.$gray-100;
+  display: inline-block;
+  width: 1em !important;
 }
 
 .no-text-decoration {
