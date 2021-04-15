@@ -92,7 +92,6 @@
         :alt "digihub logo"}]]]]])
 
 ;; -----------------------------------------------------------------------------
-;; TODO social proof counter
 (defn- startpage-content []
   (let [header
         {:page/heading (labels :startpage/heading)

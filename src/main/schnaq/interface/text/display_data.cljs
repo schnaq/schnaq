@@ -581,34 +581,38 @@
 
         ;; Startpage
         :startpage/heading "Gemeinsam bessere Entscheidungen treffen"
-        :startpage/subheading "Kommunikationssoftware, die Remote-Teams hilft strukturiert Wissen auszutauschen. Demokratisiere Diskussionen – Weil jede:r im Team was beitragen kann."
+        :startpage/subheading "Kommunikationssoftware, die Remote-Teams hilft strukturiert Wissen auszutauschen. Demokratisiere Diskussionen – Weil jede:r im Team etwas beitragen kann."
         :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
                                          " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
-        :startpage.features.meeting-organisation/lead "Wissen durch Diskussionen"
-        :startpage.features.meeting-organisation/title "Was denken andere?"
+        :startpage.features.meeting-organisation/lead "Gut informiert an jedem Punkt"
+        :startpage.features.meeting-organisation/title "Optimale Entscheidungen treffen"
         :startpage.features.meeting-organisation/body
         [:<>
-         [:p "Es gibt Uneinigkeiten im Team oder ihr müsst eine Entscheidung treffen? Oder ist es gerade wichtig alle Entscheidungsträger:innen einzubeziehen?"]
-         [:p "Mit schnaq Diskussionen können alle schnell und verteilt teilnehmen und sich einen Überblick verschaffen."]]
+         [:p "Mit Chat-Tools oder E-Mails ist es schwierig Entscheidungen so zu treffen, dass jede:r Wissen einbringen kann. Die Nachvollziehbarkeit leidet auch."]
+         [:p "Mit schnaq Diskussionen können alle gleichberechtigt und verteilt an verschiedenen Zeitpunkten an einer Diskussion teilnehmen. So können alle im Team dazu Beitragen eine gut informierte Entscheidung zu treffen. Dabei ist es unwichtig, wo die einzelnen Teammitglieder:innen sitzen."]]
 
-        :startpage.features.discussion/lead "Gemeinsame Wissensgrundlage"
-        :startpage.features.discussion/title "Wissen was relevant ist"
+        :startpage.features.discussion/lead "Onboarding war nie einfacher"
+        :startpage.features.discussion/title "Einfache Team Q&A Funktion"
         :startpage.features.discussion/body
         [:<>
          [:p "Allzu oft hängt wichtiges Wissen an einzelnen Personen. Niemand hat die Zeit alles immer in das Firmenwiki zu übertragen."]
-         [:p "schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Egal ob in einem Videogespräch, Telefonat, Meeting, Chat oder Email."]
-         [:p "Anschließend können alle Mitarbeiter:innen einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."]]
-        :startpage.features.graph/lead "Das Gehirn für Unternehmen"
-        :startpage.features.graph/title "Daten sind das Herz jedes Unternehmens"
+         [:p "schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Wenn jemand eine Frage hat, können die Kolleg:innen diese einfach beantworten."]
+         [:p "Anschließend können alle aus dem Team einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."]]
+        :startpage.features.graph/lead "Einfache Integration"
+        :startpage.features.graph/title "Persönliche Bereiche für jedes Team"
         :startpage.features.graph/body
         [:<>
-         [:p "Jedes Unternehmen braucht eine solide Datengrundlage, um im digitalen Zeitalter konkurrenzfähig zu bleiben."]
-         [:p "schnaq sorgt dafür dass das Wissen der Mitarbeiter:innen in Form von Daten verfügbar ist. Wissen was zusammengehört wird auch in Datenform miteinander verbunden."]
-         [:p "Einfacher Zugriff und einfache Auswertung garantiert!"]]
+         [:p "Jedes Team kann einen eigenen Hub bekommen. Auf diesen Bereich haben nur die Teammitglieder:innen die ihr hinzugefügt Zugriff."]
+         [:p "Schnaq bietet auch die Möglichkeit bereits bestehende Logins, die ihr im Unternehmen nutzt einzubinden. So braucht ihr keinen extra Account. Braucht ihr weitere Anbindungen?" [:a {:href "mailto:info@schnaq.com"} "Kontaktiert uns!"]]
+         [:p.text-center.mb-0
+          [:a.btn.btn-primary {:role "button"
+                               :href "mailto:info@schnaq.com"}
+           "Testet Hubs drei Monate kostenfrei."]]
+         [:p.text-muted.text-center [:small "Kein Hinterlegen von Zahlungsmitteln notwendig."]]]
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Stöbere durch öffentliche schnaqs"
@@ -974,10 +978,10 @@
         :pricing.newsletter/name "DisqTec Newsletter."
 
         ;; feature list
-        :feature/what "Keine aufwendige Pflege von Protokollen und Wiki-Seiten mehr"
-        :feature/share "Wissenssilos werden verhindert"
-        :feature/graph "Relevantes Wissen wird automatisch strukturiert"
-        :feature/processing "Einfaches Finden von relevanten Informationen"
+        :feature/what "Entscheidungen werden nachvollziehbarer und informierter"
+        :feature/share "Alle können gleichberechtigt ihr Wissen einbringen"
+        :feature/graph "Relevantes Wissen wird automatisch in eine Mindmap überführt"
+        :feature/processing "Informationen sind einfach wiederzufinden"
         :feature/secure "Daten werden nach Deutschen Standards geschützt"
         :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
 
