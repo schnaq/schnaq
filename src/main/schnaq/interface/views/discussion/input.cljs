@@ -28,11 +28,11 @@
       (set-active :argument.type/support)
       [argument-type-button "support" :argument.type/support :discussion/add-premise-against]
       (labels :discussion.add.button/support)]
-     [:label.btn.btn-outline-dark
+     [:label.btn.btn-outline-primary
       (set-active :argument.type/neutral)
       [argument-type-button "neutral" :argument.type/neutral :discussion/add-premise-neutral]
       (labels :discussion.add.button/neutral)]
-     [:label.btn.btn-outline-secondary.rounded-4
+     [:label.btn.btn-outline-primary.rounded-4
       (set-active :argument.type/attack)
       [argument-type-button "attack" :argument.type/attack :discussion/add-premise-supporting]
       (labels :discussion.add.button/attack)]]))
@@ -48,9 +48,6 @@
                         :argument.type/attack "text-secondary"
                         :argument.type/neutral "text-dark")]
     [:div.input-group
-     (when-not (or (= :routes.schnaq/start current-route-name) pro-con-disabled?)
-       [:div.input-group-prepend
-        [argument-type-choose-button]])
      [:textarea.form-control.discussion-text-input-area
       {:name textarea-name :wrap "soft" :rows 1
        :auto-complete "off"
@@ -59,11 +56,15 @@
        :required true
        :data-dynamic-height true
        :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-     [:div.input-group-append
-      [:button.btn
-       {:type "submit" :class current-color
-        :title (labels :discussion/create-argument-action)}
-       [:i {:class (str "m-auto fas " (fa :plane))}]]]]))
+     [:div.d-flex.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
+      (when-not (or (= :routes.schnaq/start current-route-name) pro-con-disabled?)
+        [:div.input-group-prepend
+         [argument-type-choose-button]])
+      [:div.input-group-append
+       [:button.btn
+        {:type "submit" :class current-color
+         :title (labels :discussion/create-argument-action)}
+        [:i {:class (str "m-auto fas " (fa :plane))}]]]]]))
 
 (defn input-form
   "Form to collect the user's statements."
