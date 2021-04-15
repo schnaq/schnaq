@@ -57,31 +57,46 @@
         :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
         ;; Startpage
-        :startpage/heading "Structured Company Knowledge. Completely Automated."
-        :startpage/subheading "Software that organizes knowledge and makes it usable – from the morning email until the evening meeting."
+        :startpage/heading "Better decisions together"
+        :startpage/subheading "Software, that helps remote-teams structure their shared knowledge. Democratizing discussions – Because everybody has valuable insights."
+        :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
+                                         " discussions which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
 
         :startpage.usage/lead "What do I use schnaq for?"
 
         :startpage.features/more-information "More information"
 
-        :startpage.features.meeting-organisation/lead "schnaq discussions"
-        :startpage.features.meeting-organisation/title "What do others think about that?"
-        :startpage.features.meeting-organisation/body "Your team is not on the same page? Does your club need to make a hard decision?
-        Or do you need to know the opinion of the stakeholders? Create a schnaq discussion and provide an easy overview for everybody."
-        :startpage.features.discussion/lead "Kollaborative knowledge"
-        :startpage.features.discussion/title "Know whats relevant for your work"
-        :startpage.features.discussion/body "A lot of times knowledge only exists in the head of a specific person. Nobody got time to add everything into the company knowledge base.
-        schnaq grabs the information where it is created and communicated. Whether it's through video, phone, meeting, chat or email.
-        At the end all employees can access the information relevant to them. Collaboration bordering on magic."
-        :startpage.features.graph/lead "The brain of your company"
-        :startpage.features.graph/title "Data is the lifeblood of an organization"
-        :startpage.features.graph/body "You need impeccable data to have an advantage in the digital age.
-        schnaq transforms the knowledge of your employees into pure data. All corresponding knowledge and information is automatically linked.
-        Easy access and analysis guaranteed!"
+        :startpage.features.meeting-organisation/lead "Well informed at any time"
+        :startpage.features.meeting-organisation/title "Make the optimal decisions"
+        :startpage.features.meeting-organisation/body
+        [:<>
+         [:p "Its hard to make a decision where anybody can contribute their knowledge by using chat-tools and E-Mail. Clarity suffers in turn."]
+         [:p "With schnaq discussions, anybody can participate and be heard equally, no matter the time and place they're in. This way all relevant insights and viewpoints can be incorporated in the decisions you take."]]
+
+        :startpage.features.discussion/lead "Onboarding was never easier"
+        :startpage.features.discussion/title "Easy team Q&A function"
+        :startpage.features.discussion/body
+        [:<>
+         [:p "Any person on your team has some special knowledge only they posses. And nobody got time to create all those long wiki pages."]
+         [:p "schnaq collects the knowledge where it is shared naturally. When somebody asks a question through schnaq, any colleague can pitch in and answer."]
+         [:p "Once a question is answered, it is available to be viewed and improved upon by others in the team. Collaboration that feels effortless."]]
+
+        :startpage.features.graph/lead "Easy integration"
+        :startpage.features.graph/title "Personal spaces for your teams"
+        :startpage.features.graph/body
+        [:<>
+         [:p "Any team can work in their own private hub. Only the people you add to your hub, can collaborate with you."]
+         [:p "Schnaq also lets you use logins, that you may already have in your company. This way you do not need to create any extra accounts. Do you need any logins, we do not support yet?" [:a {:href "mailto:info@schnaq.com"} "Contact us!"]]
+         [:p.text-center.mb-0
+          [:a.btn.btn-primary {:role "button"
+                               :href "mailto:info@schnaq.com"}
+           "Try out hubs for three months free of charge"]]
+         [:p.text-muted.text-center [:small "You do not need to make any payment options upfront"]]]
 
         :startpage.early-adopter/title "Gotten curious?"
-        :startpage.early-adopter/body "Browse through public schnaqs"
+        :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
         :startpage.early-adopter/or "or"
+        :startpage.early-adopter/test "Test hubs for three months free of charge"
 
         :startpage.newsletter/heading "Be the first to know when you can profit from new features!"
         :startpage.newsletter/button "Give me exclusive previews!"
@@ -443,10 +458,10 @@
         :pricing.newsletter/name "DisqTec newsletter."
 
         ;; feature list
-        :feature/what "No costly maintenance of protocols and wiki pages"
-        :feature/share "Isolated knowledge silos are prevented"
-        :feature/graph "All company knowledge is structured automatically"
-        :feature/processing "Easy retrieval of relevant information"
+        :feature/what "Decisions become more transparent and well-informed"
+        :feature/share "Everybody can contribute their knowledge equally"
+        :feature/graph "Relevant knowledge is automatically transformed into a mindmap"
+        :feature/processing "Information is easy to find"
         :feature/secure "Data is kept safe with german engineering"
         :schnaq.startpage.cta/button "Discuss with your coworkers"
 
@@ -601,6 +616,7 @@
          [:p "Allzu oft hängt wichtiges Wissen an einzelnen Personen. Niemand hat die Zeit alles immer in das Firmenwiki zu übertragen."]
          [:p "schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Wenn jemand eine Frage hat, können die Kolleg:innen diese einfach beantworten."]
          [:p "Anschließend können alle aus dem Team einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."]]
+
         :startpage.features.graph/lead "Einfache Integration"
         :startpage.features.graph/title "Persönliche Bereiche für jedes Team"
         :startpage.features.graph/body
