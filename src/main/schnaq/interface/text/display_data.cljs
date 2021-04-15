@@ -997,7 +997,7 @@
         :feature/share "Wissenssilos werden verhindert"
         :feature/graph "Relevantes Wissen wird automatisch strukturiert"
         :feature/processing "Einfaches Finden von relevanten Informationen"
-        :feature/secure "Daten werden nach Deutschen Standards geschützt"
+        :feature/secure "Daten werden nach deutschen Standards geschützt"
         :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
 
         ;; tooltips
