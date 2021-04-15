@@ -249,7 +249,7 @@
         :schnaqs/subheader "These are the schnaqs that you are part of"
         :schnaqs.all/header "Public schnaqs"
 
-        ;; Feedbacks
+        ;; Feedback
         :feedbacks.overview/header "Feedbacks"
         :feedbacks.overview/subheader "All feedbacks"
         :feedbacks.overview/description "Description"
@@ -282,7 +282,7 @@
         :feedbacks.missing/heading "Feedbacks were not yet loaded from our backend."
         :feedbacks.missing/button-text "Load feedbacks"
 
-        ;; login
+        ;; Log-in
         :login/as "Hello, "
         :login/set-name "Enter your name"
 
@@ -580,8 +580,8 @@
 
 
         ;; Startpage
-        :startpage/heading "Strukturiertes Unternehmenswissen. Vollautomatisch."
-        :startpage/subheading "Software, die Wissen organisiert und nutzbar macht – von der E-Mail am Morgen bis zum letzten Meeting am Tag."
+        :startpage/heading "Gemeinsam bessere Entscheidungen treffen"
+        :startpage/subheading "Kommunikationssoftware, die Remote-Teams hilft strukturiert Wissen auszutauschen. Demokratisiere Diskussionen – Weil jede:r im Team was beitragen kann."
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
@@ -770,7 +770,7 @@
         :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
         :schnaqs.all/header "Öffentliche schnaqs"
 
-        ;; Feedbacks
+        ;; Feedback
         :feedbacks.overview/header "Rückmeldungen"
         :feedbacks.overview/subheader "Alle abgegebenen Rückmeldungen"
         :feedbacks.overview/description "Beschreibung"
@@ -808,7 +808,7 @@
         :feedbacks.missing/heading "Feedbacks wurden noch nicht geladen 😱"
         :feedbacks.missing/button-text "Nachladen"
 
-        ;; login
+        ;; Log-in
         :login/as "Hallo, "
         :login/set-name "Gib deinen Namen ein"
 
@@ -979,7 +979,7 @@
         :feature/secure "Daten werden nach Deutschen Standards geschützt"
         :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
 
-        ;; tooltips
+        ;; Tooltips
         :tooltip/history-statement "Zurück zum Beitrag von "
         :tooltip/history-statement-current "Aktueller Beitrag"
 
