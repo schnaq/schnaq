@@ -12,9 +12,9 @@
 (defn- mailchimp-form
   []
   [:section.row.pt-5.pb-5
-   [:div.col-12.col-md-4
-    [:img.img-fluid {:src (img-path :startpage/newsletter)}]]
-   [:div.col-12.col-md-8
+   [:div.col-12.col-md-4.my-auto
+    [:img.img-fluid {:src (img-path :schnaqqifant/share)}]]
+   [:div.col-12.col-md-8.my-auto
     [:h3.text-center (labels :startpage.newsletter/heading)]
     [:form
      {:target "_blank" :name "mc-embedded-subscribe-form" :method "post" :action

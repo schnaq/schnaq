@@ -1103,11 +1103,7 @@
      :schnaqqifant/talk "/imgs/elephants/talk.png"
      :schnaqqifant.300w/talk "/imgs/elephants/talk300w.png"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
-     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"
-     :startpage.features/discussion-graph "/imgs/startpage/sample_graph.png"
-     :startpage.features/meeting-organisation "/imgs/startpage/meeting_organisation_500px.png"
-     :startpage.features/sample-discussion "/imgs/startpage/discussion_vegan.jpg"
-     :startpage/newsletter "https://s3.disqtec.com/startpage/newsletter.jpeg"}))
+     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
 
 (defn video
   "Returns an video path"
