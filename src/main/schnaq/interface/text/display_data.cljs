@@ -170,6 +170,7 @@
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
         :privacy/subheading "We lead you through it step by step!"
+        :privacy/open-settings "Open Settings"
         :privacy.made-in-germany/lead "EU-regulation conformity"
         :privacy.made-in-germany/title "Data privacy is important to us!"
         :privacy.made-in-germany/body
@@ -709,6 +710,7 @@
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
         :privacy/subheading "Wir erklären es dir gerne!"
+        :privacy/open-settings "Einstellungen prüfen"
         :privacy.made-in-germany/lead "EU-Konformes Vorgehen"
         :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
         :privacy.made-in-germany/body
@@ -717,7 +719,7 @@
          [:p "Sollten noch Unklarheiten bei unserem Vorgehen mit deinen Daten bestehen, so kontaktiere uns gerne! Uns liegt Transparenz und Klarheit mit persönlichen Daten wirklich am Herzen und wir erklären dir bis zum letzten Bit was mit den Daten geschieht."]]
         :privacy.personal-data/lead "Welche Daten werden erhoben?"
         :privacy.personal-data/title "Persönliche Daten"
-        :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."] [:p [:button.btn.btn-outline-primary {:on-click (js-wrap/show-js-klaro)} "Einstellungen prüfen"]]]
+        :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."]]
         :privacy.localstorage/lead "Welche Daten schicke ich an die Server?"
         :privacy.localstorage/title "Datenaustausch"
         :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten von dir auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicke auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in deinem Browser (im LocalStorage) abgespeichert. Besuchst du dann schnaq erneut, schickt dein Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ kannst du dir die Zugangslinks per E-Mail schicken lassen und hältst so alle für den Betrieb notwendigen Daten selbst in der Hand."]

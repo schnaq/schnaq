@@ -5,9 +5,16 @@
             [hodgepodge.core :refer [local-storage clear!]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]))
+
+(defn open-privacy-settings
+  "Open privacy settings."
+  []
+  [:button.btn.btn-outline-primary {:on-click (js-wrap/show-js-klaro)}
+   (labels :privacy/open-settings)])
 
 (defn- localstorage-explanation []
   (notify!
@@ -31,7 +38,9 @@
 
 (defn- personal-data-row []
   [rows/icon-left
-   [:i {:class (str "m-auto fas fa-lg " (fa :user/lock))}]
+   [:<>
+    [:i {:class (str "m-auto fas fa-lg " (fa :user/lock))}]
+    [:div [open-privacy-settings]]]
    :privacy.personal-data])
 
 (defn- localstorage-row

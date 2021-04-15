@@ -21,6 +21,7 @@
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.privacy :as privacy]
+            [schnaq.interface.views.privacy-extended :as privacy-extended]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
@@ -166,6 +167,9 @@
     {:name :routes/privacy
      :view privacy/view
      :link-text (labels :router/privacy)}]
+   ["privacy/extended"
+    {:name :routes/privacy-extended
+     :view privacy-extended/view}]
    ["meetings"
     {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     (when-not toolbelt/production?
