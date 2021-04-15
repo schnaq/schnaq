@@ -35,7 +35,7 @@
   [:p.text-social-proof.text-center.pt-2
    [:img.social-proof-icon
     {:src (img-path :schnaqqifant/white)}]
-   "schnaq hat schon in " [:b 350] " Diskussionen geholfen " [:b 2200] " mal Wissen auszutauschen."])
+   (labels :startpage.social-proof/numbers)])
 
 (defn features-call-to-action
   "Displays a list of features with a call-to-action button to start a schnaq"

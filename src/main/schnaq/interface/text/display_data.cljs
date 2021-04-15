@@ -1,6 +1,6 @@
 (ns schnaq.interface.text.display-data
   "Texts used as labels in the whole application."
-  (:require [schnaq.interface.config :refer [user-language]]
+  (:require [schnaq.interface.config :refer [user-language marketing-num-schnaqs marketing-num-statements]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [taoensso.tempura :refer [tr]]))
 
@@ -582,6 +582,8 @@
         ;; Startpage
         :startpage/heading "Gemeinsam bessere Entscheidungen treffen"
         :startpage/subheading "Kommunikationssoftware, die Remote-Teams hilft strukturiert Wissen auszutauschen. Demokratisiere Diskussionen – Weil jede:r im Team was beitragen kann."
+        :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
+                                         " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
