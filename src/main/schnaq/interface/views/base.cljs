@@ -21,7 +21,7 @@
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
   [heading subheading & more]
-  [:div.pb-5
+  [:div
    [:header.masthead.text-white
     [:div.container
      [:h1 heading]
