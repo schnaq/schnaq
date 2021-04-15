@@ -12,8 +12,7 @@
   (let [argument-type @(rf/subscribe [:form/argument-type])
         checked? (= button-type argument-type)]
     [:label.btn.btn-outline-primary.rounded-4
-     (when checked?
-       {:class "active"})
+     (when checked? {:class "active"})
      [:input {:id (str "argument-type-button-" id) :type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
               :title (labels tooltip)
