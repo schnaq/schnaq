@@ -93,20 +93,19 @@
 
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
-  (let [header
-        {:page/heading (labels :startpage/heading)
-         :page/subheading (labels :startpage/subheading)
-         :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}]
-    [pages/with-nav-and-header
-     header
-     [:<>
-      [:section.container
-       [startpage-features/feature-rows]
-       [mailchimp-form]
-       [testimonials/view]]
-      [early-adopters]
-      [:section.container
-       [supporters]]]]))
+  [pages/with-nav-and-header
+   {:page/heading (labels :startpage/heading)
+    :page/subheading (labels :startpage/subheading)
+    :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})
+    :page/gradient? true}
+   [:<>
+    [:section.container
+     [startpage-features/feature-rows]
+     [mailchimp-form]
+     [testimonials/view]]
+    [early-adopters]
+    [:section.container
+     [supporters]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
