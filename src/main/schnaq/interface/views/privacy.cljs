@@ -70,7 +70,7 @@
    [:p.lead
     (gstring/format "%s " (labels :privacy.link-to-privacy/lead))
     [:a {:href (reitfe/href :routes/privacy-extended)}
-     (labels :privacy.link-to-privacy/privacy)]
+     (labels :privacy/note)]
     "."]])
 
 (defn- page []

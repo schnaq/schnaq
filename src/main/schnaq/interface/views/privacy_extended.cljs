@@ -151,8 +151,7 @@
 
 (defn- page []
   [pages/with-nav-and-header
-   {:page/heading (labels :privacy/heading)
-    :page/subheading (labels :privacy/subheading)}
+   {:page/heading (labels :privacy/note)}
    [:section.container
     [verantwortlicher]
     [allgemeines]

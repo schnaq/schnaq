@@ -208,7 +208,7 @@
          [:p "At any time you can contact us and request to view or delete your data."]]
 
         :privacy.link-to-privacy/lead "More information can be found in the comprehensive "
-        :privacy.link-to-privacy/privacy "Privacy notice"
+        :privacy/note "Privacy notice"
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
@@ -744,7 +744,7 @@
          [:p "Jederzeit kannst du uns kontaktieren und die Einsicht oder Löschung deiner Daten beantragen."]]
 
         :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen "
-        :privacy.link-to-privacy/privacy "Datenschutzerklärung"
+        :privacy/note "Datenschutzerklärung"
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."
