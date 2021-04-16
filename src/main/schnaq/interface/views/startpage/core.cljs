@@ -12,7 +12,7 @@
   []
   [:section.row.pt-5.pb-5
    [:div.col-12.col-md-4.my-auto
-    [:img.img-fluid {:src (img-path :schnaqqifant/share)}]]
+    [:img.img-fluid {:src (img-path :schnaqqifant/mail)}]]
    [:div.col-12.col-md-8.my-auto
     [:h3.text-center (labels :startpage.newsletter/heading)]
     [:form
