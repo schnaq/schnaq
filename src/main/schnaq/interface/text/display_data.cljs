@@ -90,7 +90,7 @@
          [:p.text-center.mb-0
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:info@schnaq.com"}
-           "Write us if you want to test the Hub feature"]]]
+           "Contact us if you want to test the Hub feature"]]]
 
         :startpage.early-adopter/title "Gotten Curious?"
         :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
