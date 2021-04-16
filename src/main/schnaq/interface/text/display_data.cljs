@@ -1116,6 +1116,7 @@
      :schnaqqifant/talk "/imgs/elephants/talk.png"
      :schnaqqifant.300w/talk "/imgs/elephants/talk300w.png"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
+     :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
      :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
 
 (defn video
