@@ -90,13 +90,12 @@
          [:p.text-center.mb-0
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:info@schnaq.com"}
-           "Try out hubs for three months free of charge"]]
-         [:p.text-muted.text-center [:small "You do not need to make any payment options upfront"]]]
+           "Write us if you want to test the Hub feature"]]]
 
         :startpage.early-adopter/title "Gotten Curious?"
         :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
         :startpage.early-adopter/or "or"
-        :startpage.early-adopter/test "Test hubs for three months free of charge"
+        :startpage.early-adopter/test "Test new schnaq features"
 
         :startpage.newsletter/heading "Be the first to know when you can profit from new features!"
         :startpage.newsletter/button "Give me exclusive previews!"
@@ -626,13 +625,12 @@
          [:p.text-center.mb-0
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:info@schnaq.com"}
-           "Testet Hubs drei Monate kostenfrei"]]
-         [:p.text-muted.text-center [:small "Kein Hinterlegen von Zahlungsmitteln notwendig."]]]
+           "Schreib uns wenn du das neue Hub Feature testen möchtest"]]]
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
         :startpage.early-adopter/or "oder"
-        :startpage.early-adopter/test "Teste Hubs drei Monate kostenfrei"
+        :startpage.early-adopter/test "Teste neue Features"
 
         :startpage.newsletter/heading "Gehöre zu den Ersten, die von neuen Funktionen profitieren!"
         :startpage.newsletter/button "Exklusive Informationen anfordern!"
