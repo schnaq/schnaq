@@ -606,7 +606,7 @@
         :startpage.features.meeting-organisation/body
         [:<>
          [:p "Mit Chat-Tools oder E-Mails ist es schwierig Entscheidungen so zu treffen, dass jede:r Wissen einbringen kann. Die Nachvollziehbarkeit leidet sehr."]
-         [:p "Mit schnaq Diskussionen können alle gleichberechtigt und verteilt an verschiedenen Zeitpunkten an einer Diskussion teilnehmen. So können alle im Team dazu beitragen eine gut informierte Entscheidung zu treffen. Dabei ist es unwichtig, wo die einzelnen Teammitglieder:innen sitzen."]]
+         [:p "Mit schnaq Diskussionen können alle gleichberechtigt und verteilt an verschiedenen Zeitpunkten an einer Diskussion teilnehmen. So können alle im Team dazu beitragen eine gut informierte Entscheidung zu treffen. Dabei ist es unwichtig, wo die einzelnen Teammitglieder sitzen."]]
 
         :startpage.features.discussion/lead "Onboarding war nie einfacher"
         :startpage.features.discussion/title "Einfache Team Q&A Funktion"
@@ -620,7 +620,7 @@
         :startpage.features.graph/title "Persönliche Bereiche für jedes Team"
         :startpage.features.graph/body
         [:<>
-         [:p "Jedes Team kann einen eigenen Hub bekommen. Auf diesen Bereich haben nur die Teammitglieder:innen, die ihr hinzufügt, Zugriff."]
+         [:p "Jedes Team kann einen eigenen Hub bekommen. Auf diesen Bereich haben nur die Teammitglieder, die ihr hinzufügt, Zugriff."]
          [:p "Schnaq bietet auch die Möglichkeit bereits bestehende Logins, die ihr im Unternehmen nutzt, einzubinden. So braucht ihr keinen extra Account. Braucht ihr weitere Anbindungen? " [:a {:href "mailto:info@schnaq.com"} "Kontaktiert uns!"]]
          [:p.text-center.mb-0
           [:a.btn.btn-primary {:role "button"
@@ -1074,7 +1074,7 @@
         :hub.remove.schnaq.error/body "Etwas ist beim Entfernen schiefgelaufen. Bitte versuche es erneut."
         :hub.remove.schnaq/prompt "Soll der schnaq wirklich aus dem Hub entfernt werden?"
         :hub.remove.schnaq/tooltip "Schnaq aus Hub entfernen"
-        :hub.members/heading "Mitglieder:innen"}})
+        :hub.members/heading "Mitglieder"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
