@@ -22,7 +22,7 @@
   "Feature box showcasing the graph."
   []
   [rows/image-right
-   :startpage.features/discussion-graph
+   :schnaqqifant/admin
    :startpage.features.graph])
 
 ;; -----------------------------------------------------------------------------
@@ -30,7 +30,7 @@
 (defn feature-rows
   "Collection of feature rows."
   []
-  [:section.pt-5
+  [:<>
    [meeting-organisation]
    [structured-discussions]
    [graph-visualization]])

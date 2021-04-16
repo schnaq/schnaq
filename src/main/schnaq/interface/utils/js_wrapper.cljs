@@ -79,3 +79,9 @@
   "Check for a ctrl + `keyCode` kombination in `event`."
   [event keyCode]
   (and (.-ctrlKey event) (= keyCode (.-keyCode event))))
+
+(defn browser-language
+  "Returns the user's browser language"
+  []
+  (or (.-language js/navigator)
+      (.-userLanguage js/navigator)))

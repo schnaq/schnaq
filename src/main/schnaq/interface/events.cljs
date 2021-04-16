@@ -74,7 +74,7 @@
     (let [locale-string (case lang-short
                           :de "de-DE"
                           :en "en-US"
-                          "en-US")]
+                          "de-DE")]
       (.setAttribute (.-documentElement js/document) "lang" locale-string))))
 
 (rf/reg-event-fx

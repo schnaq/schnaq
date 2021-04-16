@@ -1,11 +1,11 @@
 (ns schnaq.interface.views.startpage.call-to-actions
-  (:require [schnaq.interface.text.display-data :refer [fa labels video]]
+  (:require [schnaq.interface.text.display-data :refer [fa labels video img-path]]
             [re-frame.core :as rf]))
 
 (defn- header-animation
   "Display header animation video."
   []
-  [:section
+  [:section.panel-light-background.mb-3
    [:video.w-100.startpage-animation {:auto-play true :loop false :muted true :plays-inline true}
     [:source {:src (video :start-page.features.sample-discussion/webm) :type "video/webm"}]
     [:source {:src (video :start-page.features.sample-discussion/mp4) :type "video/mp4"}]]])
@@ -29,14 +29,23 @@
    [:div.col-10.col-lg-11
     [:span.icon-points-text (labels desc-label)]]])
 
+(defn- social-proof
+  "A small section showing the user, that the risk was already taken by others."
+  []
+  [:p.text-social-proof.text-center.pt-2
+   [:img.social-proof-icon
+    {:src (img-path :schnaqqifant/white)}]
+   (labels :startpage.social-proof/numbers)])
+
 (defn features-call-to-action
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
-  [:section.row {:key "HeaderExtras-Bullet-Points-and-Animation"}
+  [:section.row.mt-3 {:key "HeaderExtras-Bullet-Points-and-Animation"}
    [:div.col-lg-6.py-lg-4.pr-lg-5
     [header-animation]
-    [start-schnaq-button]]
-   [:div.col-lg-6.py-lg-5
+    [start-schnaq-button]
+    [social-proof]]
+   [:div.col-lg-6.py-lg-5.pt-5
     [bullet-point :clipboard :feature/what]
     [bullet-point :user/group :feature/share]
     [bullet-point :site-map :feature/graph]

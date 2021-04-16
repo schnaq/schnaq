@@ -18,6 +18,11 @@
   color: $white;
 }
 
+.btn-primary {
+  @include button-template(0.5rem, 1rem);
+  color: $white;
+}
+
 .btn-outline-secondary:hover {
   color: $white;
 }

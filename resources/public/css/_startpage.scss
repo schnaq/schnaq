@@ -1,7 +1,8 @@
-@import 'variables';
+@use 'variables' as vars;
 
-$header-color: $primary;
+$header-color: vars.$primary;
 $header-opacity: 1;
+$gradient-target: #3b9be3;
 
 .masthead {
   background-color: $header-color;
@@ -10,7 +11,7 @@ $header-opacity: 1;
   position: relative;
 
   .overlay {
-    background-color: $gray-900;
+    background-color: vars.$gray-900;
     height: 100%;
     left: 0;
     opacity: 0.3;
@@ -37,6 +38,11 @@ $header-opacity: 1;
   }
 }
 
+.masthead-gradient {
+  @extend .masthead;
+  background: linear-gradient(to bottom, $header-color, $gradient-target);
+}
+
 .wavy-curve {
   background-color: transparent;
   fill: $header-color;
@@ -44,6 +50,11 @@ $header-opacity: 1;
   max-height: 11rem;
   opacity: $header-opacity;
   width: 100%;
+}
+
+.wavy-curve-gradient {
+  @extend .wavy-curve;
+  fill: $gradient-target;
 }
 
 .feature-text-box {
@@ -55,7 +66,7 @@ $header-opacity: 1;
 }
 
 .feature-row {
-  padding-bottom: 3rem;
+  padding-bottom: 5rem;
   white-space: pre-line;
 
   img {
@@ -64,8 +75,8 @@ $header-opacity: 1;
 }
 
 .early-adopter {
-  background-color: $primary;
-  color: $white;
+  background-color: vars.$primary;
+  color: vars.$white;
   padding: 2rem 0;
 }
 

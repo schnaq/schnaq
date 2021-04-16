@@ -77,19 +77,21 @@
 (rf/reg-event-fx
   :schnaq.create/new
   (fn [{:keys [db]} [_ form-elements]]
-    (let [authenticated? (get-in db [:user :authenticated?] false)
+    (let [use-origin? (and (get-in db [:user :authenticated?] false)
+                           (seq (get-in db [:user :groups] [])))
           nickname (get-in db [:user :names :display] default-anonymous-display-name)
           discussion-title (oget form-elements [:schnaq-title :value])
           public? (oget form-elements [:public-discussion :checked])
-          exclusive? (when authenticated? (oget form-elements [:hub-exclusive :checked]))
-          origin-hub (when authenticated? (oget form-elements [:exclusive-hub-select :value]))]
+          exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
+          origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))]
       {:fx [(http/xhrio-request db :post "/schnaq/add"
                                 [:schnaq/created]
-                                {:nickname nickname
-                                 :discussion {:discussion/title discussion-title}
-                                 :public-discussion? public?
-                                 :hub-exclusive? exclusive?
-                                 :origin origin-hub}
+                                (cond->
+                                  {:nickname nickname
+                                   :discussion {:discussion/title discussion-title}
+                                   :public-discussion? public?}
+                                  use-origin? (merge {:hub-exclusive? exclusive?
+                                                      :origin origin-hub}))
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
