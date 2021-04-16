@@ -13,7 +13,7 @@
    [:h3.pt-4 title]
    body])
 
-(defn- allgemeines []
+(defn- intro []
   [privacy-entry
    "Allgemeines zur Datenverarbeitung"
    [:<>
@@ -87,7 +87,7 @@
 
     [privacy/open-privacy-settings]]])
 
-(defn- rechte-der-betroffenen []
+(defn- rights-of-the-affected []
   [privacy-entry
    "Rechte der Betroffenen"
    [:<>
@@ -119,7 +119,7 @@
     [:p [:strong "Widerruf der Einwilligung:"]
      " Sie haben das Recht, Ihre datenschutzrechtliche Einwilligungserklärung jederzeit zu widerrufen. Durch den Widerruf der Einwilligung wird die Rechtmäßigkeit der aufgrund der Einwilligung bis zum Widerruf erfolgten Verarbeitung nicht berührt."]]])
 
-(defn- recht-auf-beschwerde []
+(defn- right-to-complain []
   [privacy-entry
    "Recht auf Beschwerde bei einer Aufsichtsbehörde"
    [:<>
@@ -134,7 +134,7 @@
     [:h4 "Abschluss eines Auftragsdatenverarbeitungsvertrags (AV-Vertrag)"]
     [:p "Wir haben mit der Hetzner Online GmbH einen AV-Vertrag abgeschlossen, welcher unsere Kunden schützt und Hetzner verpflichtet die erhobenen Daten nicht an Dritte weiterzugeben."]]])
 
-(defn- verantwortlicher []
+(defn- responsible []
   [privacy-entry
    "Verantwortlicher"
    [:<>
@@ -153,14 +153,14 @@
   [pages/with-nav-and-header
    {:page/heading (labels :privacy/note)}
    [:section.container
-    [verantwortlicher]
-    [allgemeines]
+    [responsible]
+    [intro]
     [logfiles]
     [cookies]
     [personal-data]
     [matomo]
-    [rechte-der-betroffenen]
-    [recht-auf-beschwerde]
+    [rights-of-the-affected]
+    [right-to-complain]
     [hosting]]])
 
 (defn view []
