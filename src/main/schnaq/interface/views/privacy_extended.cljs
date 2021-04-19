@@ -2,7 +2,6 @@
   "Page explaining our privacy and how we are storing data."
   (:require [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.privacy :as privacy]
             [schnaq.interface.views.common :as common]))
 
