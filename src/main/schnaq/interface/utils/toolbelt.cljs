@@ -55,8 +55,16 @@
   [string? nat-int? :ret string?]
   (let [s (string/split text #" ")]
     (if (< n-words (count s))
-      (string/join " " (conj (vec (take n-words s)) "..."))
+      (string/join " " (conj (vec (take n-words s)) "…"))
       text)))
+
+(>defn truncate-to-n-chars
+  "Truncate a string to the first x chars."
+  [text char-count]
+  [string? nat-int? :ret string?]
+  (if (< char-count (count text))
+    (apply str (concat (take char-count text) "…"))
+    text))
 
 (defn obfuscate-mail
   "Hide real mail address."

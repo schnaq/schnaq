@@ -7,7 +7,8 @@
             [goog.string :as gstring]
             [oops.core :refer [oget oset!]]
             [reagent.core :as reagent]
-            [reitit.frontend.easy :as reitfe]))
+            [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (>defn identicon
   "Generate unique identicon."
@@ -38,7 +39,9 @@
   [map? number? :ret vector?]
   [:div.text-center.min-content
    [avatar user size]
-   [:p.small.mt-1.avatar-username display-name]])
+   [:p.small.mt-1.avatar-username
+    {:title display-name}
+    (toolbelt/truncate-to-n-chars display-name 20)]])
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
