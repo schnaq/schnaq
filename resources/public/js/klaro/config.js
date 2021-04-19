@@ -27,7 +27,7 @@ var klaroConfig = {
   //cookieDomain: '.github.com',
 
   // Put a link to your privacy policy here (relative or absolute).
-  privacyPolicy: 'https://disqtec.com/datenschutz',
+  privacyPolicy: 'https://schnaq.com/privacy',
 
   // Defines the default state for applications (true=enabled by default).
   default: false,
@@ -111,7 +111,7 @@ var klaroConfig = {
       default: true,
 
       // The title of you app as listed in the consent modal.
-      title: 'Matomo (analytics.dialogo.io, self-hosted)',
+      title: 'Matomo (analytics.schnaq.com, self-hosted)',
 
       // The purpose(s) of this app. Will be listed on the consent notice.
       // Do not forget to add translations for all purposes you list here.
