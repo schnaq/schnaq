@@ -146,6 +146,7 @@ build-frontend-staging-image:
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
+      --build-arg ROBOTS_TXT=./robots-staging.txt
       -t ${FRONTEND_IMAGE_TAGGED}-staging .
     - docker tag ${FRONTEND_IMAGE_TAGGED}-staging $FRONTEND_IMAGE:staging
     - docker push ${FRONTEND_IMAGE_TAGGED}-staging

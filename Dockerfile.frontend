@@ -27,13 +27,16 @@ COPY . .
 RUN sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
 RUN yarn shadow-cljs release app
 
-
 # ------------------------------------------------------------------------------
 
 FROM nginx:alpine
+# Default value is robots.txt, only on other environments a custom var is needed
+ARG ROBOTS_TXT=./robots.txt
 RUN apk add --no-cache tzdata
+
 WORKDIR /usr/share/nginx/html
 COPY --from=shadow-build /code/resources/public .
 COPY nginx/schnaq.conf /etc/nginx/conf.d/default.conf
+COPY ${ROBOTS_TXT} ./robots.txt
 
 EXPOSE 80
