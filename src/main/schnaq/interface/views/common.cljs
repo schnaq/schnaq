@@ -36,9 +36,9 @@
   "Create an image based on the nickname and also print the nickname."
   [{:user.registered/keys [display-name] :as user} size]
   [map? number? :ret vector?]
-  [:div.text-center
+  [:div.text-center.min-content
    [avatar user size]
-   [:p.small.mt-1 display-name]])
+   [:p.small.mt-1.avatar-username display-name]])
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
