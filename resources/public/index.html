@@ -1,33 +1,33 @@
 <!DOCTYPE html>
-<html lang="de-de">
+<html lang="de-DE">
 
 <head>
-    <title>schnaq</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/main.min.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
-    <link rel="manifest" href="/favicons/site.webmanifest">
-    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#1292ee">
-    <link rel="shortcut icon" href="/favicons/favicon.ico">
-    <meta name="msapplication-TileColor" content="#ff772d">
-    <meta name="msapplication-config" content="/favicons/browserconfig.xml">
-    <meta name="theme-color" content="#ff772d">
+  <title>schnaq</title>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="/css/main.min.css" rel="stylesheet">
+  <link href="/favicons/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+  <link href="/favicons/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+  <link href="/favicons/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+  <link href="/favicons/site.webmanifest" rel="manifest">
+  <link color="#1292ee" href="/favicons/safari-pinned-tab.svg" rel="mask-icon">
+  <link href="/favicons/favicon.ico" rel="shortcut icon">
+  <meta content="#ff772d" name="msapplication-TileColor">
+  <meta content="/favicons/browserconfig.xml" name="msapplication-config">
+  <meta content="#ff772d" name="theme-color">
 </head>
 
 <body>
 <div id="app"></div>
 
 <script src="/js/klaro/config.js"></script>
-<script src="/js/klaro/klaro-no-css.js" defer></script>
+<script defer src="/js/klaro/klaro-no-css.js"></script>
 
 <script src="/js/compiled/base.js"></script>
 
-<script type="text/plain"
+<script data-name="matomo"
         data-type="text/javascript"
-        data-name="matomo">
+        type="text/plain">
   var _paq = window._paq || [];
   /* tracker methods like 'setCustomDimension' should be called before 'trackPageView' */
   _paq.push(['setCookieDomain', '*.schnaq.com']);
@@ -36,7 +36,7 @@
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function () {
-    var u = '//analytics.dialogo.io/';
+    var u = '//analytics.schnaq.com/';
     _paq.push(['setTrackerUrl', u + 'matomo.php']);
     _paq.push(['setSiteId', '2']);
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
@@ -46,6 +46,8 @@
     g.src = u + 'matomo.js';
     s.parentNode.insertBefore(g, s);
   })();
+
+
 
 </script>
 </body>
