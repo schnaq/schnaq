@@ -12,7 +12,7 @@
     <orderEntry type="library" name="Deps: metosin/reitit-middleware:0.5.12" level="project" />
     <orderEntry type="library" name="Deps: org.bouncycastle/bcprov-jdk15on:1.58" level="project" />
     <orderEntry type="library" name="Deps: buddy/buddy-core:1.4.0" level="project" />
-    <orderEntry type="library" name="Deps: org.clojure/data.json:2.1.1" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/data.json:2.2.0" level="project" />
     <orderEntry type="library" name="Deps: org.lz4/lz4-java:1.7.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/clojure:1.10.3" level="project" />
     <orderEntry type="library" name="Deps: thheller/shadow-cljsjs:0.0.21" level="project" />

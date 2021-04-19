@@ -73,26 +73,30 @@
          [:a.nav-link {:role "button" :href (reitfe/href :routes/analytics)}
           (labels :router/analytics)]]]])))
 
-(defn user-handling-dropdown
-  "Dropdown menu to change user name, to log in, ..."
+(defn user-handling-menu
+  "Menu elements to change user name, to log in, ..."
   [button-class]
   (let [username @(rf/subscribe [:user/display-name])
-        authenticated? @(rf/subscribe [:user/authenticated?])
-        login-logout-event (if authenticated? :keycloak/logout :keycloak/login)]
-    [:ul.navbar-nav.dropdown
-     [:a#profile-dropdown.nav-link
-      {:href "#" :role "button" :data-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
-      [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
-       [admin-star]
-       username]]
-     [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
-      (when-not authenticated?
-        [username-bar-view])
-      (when authenticated?
-        [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
-         (labels :user.profile/settings)])
-      [:button.dropdown-item {:on-click #(rf/dispatch [login-logout-event])}
+        authenticated? @(rf/subscribe [:user/authenticated?])]
+    [:<>
+     [:ul.navbar-nav.dropdown
+      [:a#profile-dropdown.nav-link
+       {:href "#" :role "button" :data-toggle "dropdown"
+        :aria-haspopup "true" :aria-expanded "false"}
+       [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
+        [admin-star]
+        username]]
+      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
        (if authenticated?
-         (labels :user/logout)
-         (labels :user/login))]]]))
+         [:<>
+          [:a.dropdown-item {:href (reitfe/href :routes.user.manage/account)}
+           (labels :user.profile/settings)]
+          [:a.dropdown-item {:href "#"                      ;; For the :active states and pointer to behave
+                             :on-click #(rf/dispatch [:keycloak/logout])}
+           (labels :user/logout)]]
+         [username-bar-view])]]
+     (when-not authenticated?
+       [:ul.navbar-nav
+        [:li.nav-item {:on-click #(rf/dispatch [:keycloak/login])}
+         [:button.btn.btn-primary.rounded-2
+          (labels :user/login)]]])]))
