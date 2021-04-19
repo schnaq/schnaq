@@ -104,4 +104,4 @@
           {:on-click #(language/set-language :de)} "Deutsch"]]]
        [blog-link]
        [um/admin-dropdown "btn-outline-secondary"]
-       [um/user-handling-dropdown "btn-outline-primary"]]]]))
+       [um/user-handling-menu "btn-outline-primary"]]]]))

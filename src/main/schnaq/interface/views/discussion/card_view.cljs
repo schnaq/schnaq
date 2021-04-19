@@ -42,7 +42,7 @@
       (when edit-hash
         [admin-buttons/admin-center share-hash edit-hash])
       ;; name input
-      [um/user-handling-dropdown "btn-outline-light"]
+      [um/user-handling-menu "btn-outline-light"]
       [:div.d-md-none
        [:hr]
        [:h6.text-left (labels :history/title)]
