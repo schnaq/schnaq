@@ -2,6 +2,7 @@
   "Texts used as labels in the whole application."
   (:require [schnaq.interface.config :refer [user-language marketing-num-schnaqs marketing-num-statements]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [taoensso.tempura :refer [tr]]))
 
 (def ^:private translations
@@ -222,6 +223,118 @@
 
         :privacy.link-to-privacy/lead "More information can be found in the comprehensive "
         :privacy/note "Privacy notice"
+
+        :privacy.extended.intro/title "General information on data processing"
+        :privacy.extended.intro/body
+        [:<>
+         [:p "As a matter of principle, we only process personal data insofar as this is necessary to provide a functional website and our content. Personal data is regularly processed only with the consent of the user."]
+         [:p "Insofar as consent is required for processing operations of personal data, Art. 6 (1) lit. a EU General Data Protection Regulation (GDPR) serves as the legal basis.\nIf the processing is necessary to protect a legitimate interest on our part or on the part of a third party and your interests, fundamental rights and freedoms do not override the former interest, Art. 6 (1) lit. f GDPR serves as the legal basis for the processing."]
+         [:p "Personal data will be deleted as soon as the purpose of storage ceases to apply. Storage may also take place if this has been provided for by the European or national legislator in Union regulations, laws or other provisions to which we are subject. Data will also be deleted if a storage period prescribed by the aforementioned standards expires."]]
+        :privacy.extended.logfiles/title "Provision of the website and creation of log files"
+        :privacy.extended.logfiles/body
+        [:<>
+         [:p "Each time our website is accessed, our system automatically collects data and information (browser type / version used, operating system, IP address, date and time of access, websites from which our website was accessed, websites accessed via our website) from the computer system of the accessing computer. The data is stored in the log files of our system. This data is not stored together with other personal data of the user. The legal basis for the temporary storage of the data and the log files is Art. 6 para. 1 lit. f GDPR."]
+         [:p "The temporary storage of the IP address by the system is necessary to enable delivery of the website to the user's computer. For this purpose, the IP address must remain stored for the duration of the session. The storage in log files is done to ensure the functionality of the website. In addition, we use the data to optimize the website and to ensure the security of our information technology systems. These purposes are also our legitimate interest in data processing according to Art. 6 para. 1 lit. f GDPR."]
+         [:p "The data is deleted as soon as it is no longer required to achieve the purpose for which it was collected. In the case of the collection of data for the provision of the website, this is the case when the respective session has ended. In the case of storage of data in log files, this is the case after seven days at the latest. Storage beyond this period is possible. In this case, the IP addresses of the users are deleted or anonymized."]
+         [:p "The collection of data for the provision of the website and the storage of the data in log files is mandatory for the operation of the website. Consequently, there is no possibility to object."]]
+        :privacy.extended.cookies/title "Cookies"
+        :privacy.extended.cookies/body
+        [:<>
+         [:p "We use so-called cookies on our homepage. Cookies are data packages that your browser stores in your terminal device at our instigation. A distinction is made between two types of cookies: temporary, so-called session cookies, and persistent cookies."]
+         [:p "Session cookies are automatically deleted when you close the browser. These store a so-called session ID, with which various requests of your browser can be assigned to the common session. This allows your computer to be recognized when you return to our website. The use of session cookies is necessary so that we can provide you with the website. The legal basis for the processing of your personal data using session cookies is Art. 6 para. 1 lit. f GDPR."]
+         [:p "Persistent cookies are automatically deleted after a predefined period of time, which may differ depending on the cookie. These cookies remain on your end device for a predefined time and are usually used to recognize you when you visit our homepage again. The use of persistent cookies on our homepage is based on the legal basis of Art. 6 para. 1 lit. f GDPR."]
+         [:p "You can set your internet browser so that our cookies cannot be stored on your end device or so that cookies that have already been stored are deleted. If you do not accept cookies, this may lead to restrictions in the function of the Internet pages."]
+         [:p "Specifically, we have these types of cookies:"]
+         [:ul
+          [:li "CSRF token (session cookie), which secures the contact form against unobserved content submission. This is a random arrangement of characters, which is used only for sending the form. This cookie is deleted after you leave our website. This protection mechanism complies with common security standards and can, for example "
+           [:a {:href "https://en.wikipedia.org/wiki/Cross-site_request_forgery"}
+            "here"]
+           " be researched further."]
+          [:li "Login cookie (persistent cookie), which recognizes you as the:user:in you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site."]
+          [:li "Analysis cookie (persistent cookie), which can optionally be set so that we can understand your behavior and interests anonymously. For more information, see the section on the use of Matomo."]]
+         [:p "All cookies we use generate random strings that are used to match corresponding strings on our server."]]
+
+        :privacy.extended.personal-data/title "Personal data"
+        :privacy.extended.personal-data/body
+        [:<>
+         [:h4 "Use of schnaq without user accounts"]
+         [:p "If you use schnaq without registering, you are so called \"Anonymous User\". Here, in addition to the data necessary for server operation, only your contribution and an optional self-selected name will be saved. When saving the contribution, this string is then loosely saved with the contribution. An allocation to an identity does not take place thereby. If someone with the same name participates in any schnaq, the contributions appear to the outside as if they came from the same person."]
+         [:p "By sending your contribution you agree to the storage. Since we can later no longer trace who made the contribution, you have no right to delete this contribution, because there is no proof of authorship."]
+         [:h4 "Use of schnaq as registered user"]
+         [:p "When you register, your mail address and your first and last name are stored. These are necessary for the operation of schnaq, the collection is thus made according to Art. 6 para. 1 lit. f GDPR. Registration is optional for the normal operation of schnaq. With the mail address, automatic notifications of new contributions are enabled. With the names, your contributions are displayed together on the interface of schnaq. Further affiliations, for example to the hubs or other schnaqs, are also visually displayed with it."]
+         [:p "This data is stored on our own servers and is not passed on to third parties."]
+         [:p "There are options to expand your own user profile. This includes, for example, uploading your own optional profile picture. This profile picture is then displayed as your avatar and is presented whenever your user account appears, for example, when people look at your posts."]
+         [:h4 "Text contributions"]
+         [:p "The text contributions must originate from you and may not violate any copyrights. The text contributions will not be passed on to third parties. Internally, your contributions can be used for further scientific evaluations and the training of your own neural networks. You will never lose your authorship of these contributions. This is used, for example, to automatically calculate machine-generated summaries or statistics. These summaries and statistics are intended for the evaluation of your schnaq and will not be passed on to any third party."]]
+        :privacy.extended.matomo/title "Web analysis by Matomo (formerly PIWIK)"
+        :privacy.extended.matomo/body
+        [:<>
+         [:h4 "Description and scope of data processing"]
+         [:p "We use the open source software tool Matomo (formerly PIWIK) on our website to analyze the use of our internet presence. For example, we are interested in which pages are accessed how often and whether smartphones, tablets or computers with large screens are used. The software sets a cookie on the user's computer (for cookies, see above). If individual pages of our website are called up, the following data is stored:"]
+         [:ol
+          [:li "Two bytes of the IP address of the calling system"]
+          [:li "The accessed web page"]
+          [:li "The website through which our website was accessed (referrer)"]
+          [:li "The subpages that are called from the called web page"]
+          [:li "The time spent on the website"]
+          [:li "The frequency of access to the website"]]
+         [:p "Matomo is set so that the IP addresses are not stored in full, but two bytes of the IP address are masked (example: 192.168.xxx.xxx). In this way, an assignment of the shortened IP address to the calling computer is no longer possible."]
+         [:p "Matomo is used exclusively on schnaq servers. Personal data of the users is only stored there. The data is not passed on to third parties."]
+         [:h4 "Purpose of data processing"]
+         [:p "The processing of anonymized user data enables us to analyze the use of our website. By evaluating the data obtained, we are able to compile information about the use of the individual components of our website. This helps us to continuously improve our services and their user-friendliness. By anonymizing the IP address, the interest of the user in the protection of his personal data is sufficiently taken into account."]
+         [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]]
+        :privacy.extended.rights-of-the-affected/title "Rights of the data subjects"
+        :privacy.extended.rights-of-the-affected/body
+        [:<>
+         [:p "If personal data is processed by you, you are a data subject in the sense of the GDPR and you are entitled to the rights described below. Please address your request, preferably by e-mail, to the above-mentioned data controller."]
+         [:p [:strong "Information:"]
+          " You have the right to receive from us at any time free information and confirmation of the personal data stored about you and a copy of this information."]
+         [:p [:strong "Correction:"]
+          " You have the right to rectification and/or completion if the personal data processed concerning you is inaccurate or incomplete."]
+         [:p [:strong "Restriction of processing:"]
+          " You have the right to request the restriction of processing if one of the following conditions is met:"]
+         [:ul
+          [:li "You dispute the accuracy of the personal data for a period of time that allows us to verify the accuracy of the personal data."]
+          [:li "The processing is unlawful, you object to the erasure of the personal data and request instead the restriction of the use of the personal data."]
+          [:li "We no longer need the personal data for the purposes of processing, but you need it to assert, exercise or defend legal claims."]
+          [:li "You have objected to the processing pursuant to Art. 21 (1) GDPR and it is not yet clear whether our legitimate grounds outweigh yours."]]
+         [:p [:strong "Deletion:"]
+          " You have the right to have the personal data concerning you erased without delay, provided that one of the following reasons applies and insofar as the processing is not necessary:"]
+         [:ul
+          [:li "The personal data were collected or otherwise processed for such purposes for which they are no longer necessary. "]
+          [:li "You withdraw your consent on which the processing was based and there is no other legal basis for the processing. "]
+          [:li "You object to the processing pursuant to Article 21(1) of the GDPR and there are no overriding legitimate grounds for the processing, or you object to the processing pursuant to Article 21(2) of the GDPR. "]
+          [:li "The personal data have been processed unlawfully. "]
+          [:li "The deletion of the personal data is necessary for compliance with a legal obligation under Union or Member State law to which we are subject. "]
+          [:li "The personal data was collected in relation to information society services offered pursuant to Art. 8 (1) GDPR. "]]
+         [:p [:strong "Data portability:"]
+          " You have the right to receive the personal data concerning you that you have provided to the controller in a structured, common and machine-readable format. You also have the right to transfer this data to another controller without hindrance from the controller to whom the personal data was provided. In exercising this right, you also have the right to obtain that the personal data concerning you be transferred directly from us to another controller, insofar as this is technically feasible. The freedoms and rights of other persons must not be affected by this."]
+         [:p [:strong "Opposition:"]
+          " You have the right to object at any time to the processing of personal data concerning you that is carried out on the basis of Art. 6 (1) lit. f GDPR. We will no longer process the personal data in the event of the objection, unless we can demonstrate compelling legitimate grounds for the processing which override your interests, rights and freedoms, or the processing serves the assertion, exercise or defense of legal claims."]
+         [:p [:strong "Revocation of consent:"]
+          " You have the right to revoke your declaration of consent under data protection law at any time. The revocation of consent does not affect the lawfulness of the processing carried out on the basis of the consent until the revocation."]]
+        :privacy.extended.right-to-complain/title "Right to complain to a supervisory authority"
+        :privacy.extended.right-to-complain/body
+        [:<>
+         [:p "Without prejudice to any other administrative or judicial remedy, you have the right to lodge a complaint with a supervisory authority, in particular in the Member State of your residence, if you consider that the processing of personal data concerning you infringes the GDPR.\nThe data protection supervisory authority responsible for the operator of this site is:"]
+         [:p "The State Commissioner for Data Protection and Freedom of Information of North Rhine-Westphalia, Kavalleriestr. 2-4, 40102 Düsseldorf, Tel.: +49211/38424-0, e-mail: poststelle{at}ldi.nrw.de"]]
+        :privacy.extended.hosting/title "Hosting der Webseite"
+        :privacy.extended.hosting/body
+        [:<>
+         [:p "The schnaq website is hosted on servers of Hetzner Online GmbH in Germany. For further information, please refer to the websites of Hetzner Online GmbH."]
+         [:h4 "Conclusion of a commissioned data processing contract (AV contract)"]
+         [:p "We have concluded an AV contract with Hetzner Online GmbH, which protects our customers and obliges Hetzner not to pass on the collected data to third parties."]]
+        :privacy.extended.responsible/title "Person responsible in the sense of the GDPR"
+        :privacy.extended.responsible/body
+        [:<>
+         [:p
+          "schnaq (not founded)" [:br]
+          "represented by Christian Meter" [:br]
+          "Am Hagen 6" [:br]
+          "42855 Remscheid" [:br]
+          (toolbelt/obfuscate-mail "info@schnaq.com")]
+         [:p "Legally binding is the German version of this privacy policy."]]
+
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
@@ -764,6 +877,118 @@
 
         :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen "
         :privacy/note "Datenschutzerklärung"
+
+        :privacy.extended.intro/title "Allgemeines zur Datenverarbeitung"
+        :privacy.extended.intro/body
+        [:<>
+         [:p "Wir verarbeiten personenbezogene Daten grundsätzlich nur, soweit dies zur Bereitstellung einer funktionsfähigen Website sowie unserer Inhalte erforderlich ist. Die Verarbeitung personenbezogener Daten erfolgt regelmäßig nur nach Einwilligung der Nutzer:innen."]
+         [:p "Soweit für Verarbeitungsvorgänge personenbezogener Daten eine Einwilligung notwendig ist, dient Art. 6 Abs. 1 lit. a EU-Datenschutzgrundverordnung (DSGVO) als Rechtsgrundlage.\nIst die Verarbeitung zur Wahrung eines berechtigten Interesses unsererseits oder eines Dritten erforderlich und überwiegen Ihre Interessen, Grundrechte und Grundfreiheiten das erstgenannte Interesse nicht, so dient Art. 6 Abs. 1 lit. f DSGVO als Rechtsgrundlage für die Verarbeitung. "]
+         [:p "Personenbezogene Daten werden gelöscht, sobald der Zweck der Speicherung entfällt. Eine Speicherung kann darüber hinaus erfolgen, wenn dies durch den europäischen oder nationalen Gesetzgeber in unionsrechtlichen Verordnungen, Gesetzen oder sonstigen Vorschriften, denen wir unterliegen, vorgesehen wurde. Eine Löschung der Daten erfolgt auch dann, wenn eine durch die genannten Normen vorgeschriebene Speicherfrist abläuft."]]
+        :privacy.extended.logfiles/title "Bereitstellung der Website und Erstellung von Logfiles"
+        :privacy.extended.logfiles/body
+        [:<>
+         [:p "Bei jedem Aufruf unserer Internetseite erfasst unser System automatisiert Daten und Informationen (Browsertyp / verwendete Version, Betriebssystem, IP-Adresse, Datum und Uhrzeit des Zugriffs, Websites, von denen auf unsere Internetseite gelangt wurde, Websites, die über unsere Website aufgerufen werden) vom Computersystem des aufrufenden Rechners. Die Daten werden in den Logfiles unseres Systems gespeichert. Eine Speicherung dieser Daten zusammen mit anderen personenbezogenen Daten des Nutzers findet nicht statt. Rechtsgrundlage für die vorübergehende Speicherung der Daten und der Logfiles ist Art. 6 Abs. 1 lit. f DSGVO."]
+         [:p "Die vorübergehende Speicherung der IP-Adresse durch das System ist notwendig, um eine Auslieferung der Website an den Rechner der Nutzer:innen zu ermöglichen. Hierfür muss die IP-Adresse für die Dauer der Sitzung gespeichert bleiben. Die Speicherung in Logfiles erfolgt, um die Funktionsfähigkeit der Website sicherzustellen. Zudem dienen uns die Daten zur Optimierung der Website und zur Sicherstellung der Sicherheit unserer informationstechnischen Systeme. In diesen Zwecken liegt auch unser berechtigtes Interesse an der Datenverarbeitung nach Art. 6 Abs. 1 lit. f DSGVO."]
+         [:p "Die Daten werden gelöscht, sobald sie für die Erreichung des Zweckes ihrer Erhebung nicht mehr erforderlich sind. Im Falle der Erfassung der Daten zur Bereitstellung der Website ist dies der Fall, wenn die jeweilige Sitzung beendet ist. Im Falle der Speicherung der Daten in Logfiles ist dies nach spätestens sieben Tagen der Fall. Eine darüberhinausgehende Speicherung ist möglich. In diesem Fall werden die IP-Adressen der Nutzer gelöscht oder anonymisiert."]
+         [:p "Die Erfassung der Daten zur Bereitstellung der Website und die Speicherung der Daten in Logfiles ist für den Betrieb der Internetseite zwingend erforderlich. Es besteht folglich keine Widerspruchsmöglichkeit."]]
+        :privacy.extended.cookies/title "Cookies"
+        :privacy.extended.cookies/body
+        [:<>
+         [:p "Wir setzen auf unserer Homepage sogenannte Cookies ein. Cookies sind Datenpakete, die Ihr Browser auf unsere Veranlassung in Ihrem Endgerät speichert. Dabei werden zwei Arten von Cookies unterschieden: temporäre, sogenannte Session-Cookies, und persistente Cookies."]
+         [:p "Session-Cookies werden automatisiert gelöscht, wenn Sie den Browser schließen. Diese speichern eine sogenannte Session-ID, mit welcher sich verschiedene Anfragen Ihres Browsers der gemeinsamen Sitzung zuordnen lassen. Dadurch kann Ihr Rechner wiedererkannt werden, wenn Sie auf unsere Website zurückkehren. Der Einsatz von Session Cookies ist erforderlich, damit wir Ihnen die Webseite zur Verfügung stellen können. Die Rechtsgrundlage für die Verarbeitung Ihrer personenbezogenen Daten unter Verwendung von Session-Cookies ist Art. 6 Abs. 1 lit. f DSGVO."]
+         [:p "Persistente Cookies werden automatisiert nach einer vorgegebenen Dauer gelöscht, die sich je nach Cookie unterscheiden kann. Diese Cookies verbleiben für eine vordefinierte Zeit auf Ihrem Endgerät dienen in der Regel dazu, Sie bei einem erneuten Besuch unserer Homepage wiederzuerkennen. Der Einsatz von persistenten Cookies auf unserer Homepage erfolgt auf Rechtsgrundlage des Art. 6 Abs. 1 lit. f DSGVO."]
+         [:p "Sie können Ihren Internetbrowser so einstellen, dass unsere Cookies nicht auf Ihrem Endgerät ablegt werden können oder bereits abgelegte Cookies gelöscht werden. Wenn Sie keine Cookies akzeptieren, kann dies zu Einschränkungen der Funktion der Internetseiten führen."]
+         [:p "Konkret haben wir diese Arten von Cookies:"]
+         [:ul
+          [:li "CSRF-Token (Session-Cookie), womit das Kontaktformular vor unbeobachtetem Abschicken von Inhalten abgesichert wird. Es handelt sich hier um eine zufällige Anordnung von Zeichen, welche nur für den Versand des Formulars verwendet wird. Dieser Cookie wird nach dem Verlassen unserer Website gelöscht. Dieser Schutzmechanismus entspricht gängigen Sicherheitsstandards und kann beispielsweise "
+           [:a {:href "https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery"}
+            "hier"]
+           " weiter recherchiert werden."]
+          [:li "Login-Cookie (persistenter Cookie), welcher Sie als den:die Benutzer:in wiedererkennt, mit dem Sie sich eingeloggt haben. Nach 14 Tagen läuft Ihr Cookie ab und wird gelöscht. Wenn Sie diesen Cookie löschen, müssen Sie sich beim nächsten Besuch der Seite erneut einloggen."]
+          [:li "Analyse-Cookie (persistenter Cookie), welcher optional gesetzt werden kann, damit wir Ihr Verhalten und Ihre Interessen anonymisiert verstehen können. Weiteres dazu finden Sie in dem Abschnitt zur Verwendung von Matomo."]]
+         [:p "Alle von uns eingesetzten Cookies generieren zufällige Zeichenketten, die zum Abgleich mit korrespondierenden Zeichenketten auf unserem Server verwendet werden."]]
+
+        :privacy.extended.personal-data/title "Persönliche Daten"
+        :privacy.extended.personal-data/body
+        [:<>
+         [:h4 "Verwendung von schnaq ohne Nutzer:innen Accounts"]
+         [:p "Wenn Sie schnaq verwenden ohne sich zu registrieren, sind so sogenannte \"Anonyme Nutzer:in\". Dabei werden zusätzlich zu den für den Serverbetrieb notwendigen Daten nur Ihr Beitrag und ein optionaler selbstgewählter Name abgespeichert werden. Beim Speichern des Beitrags wird dann diese Zeichenkette lose mit dem Beitrag abgesichert. Eine Zuordnung zu einer Identität erfolgt dabei nicht. Nimmt jemand mit demselben Namen an irgendeinem schnaq teil, so erscheinen die Beiträge nach außen hin so als kämen sie von der selben Person."]
+         [:p "Mit dem Abschicken Ihres Beitrages stimmen Sie der Speicherung zu. Da wir später nicht mehr nachvollziehen können, von wem der Beitrag stand, haben Sie kein Recht darauf diesen Beitrag zu löschen, denn es fehlt der Nachweis der Autor:innenschaft."]
+         [:h4 "Verwendung von schnaq als registrierte:r Nutzer:in"]
+         [:p "Bei der Registrierung werden von Ihnen Ihre Mailadresse und Ihr Vor- und Nachname gespeichert. Diese sind für den Betrieb von schnaq erforderlich, die Erfassung erfolgt somit nach Art. 6 Abs. 1 lit. f DSGVO. Die Registrierung ist für den normalen Betrieb von schnaq optional. Mit der Mailadresse werden automatische Benachrichtigungen auf neue Beiträge ermöglicht. Mit den Namen werden Ihre Beiträge auf der Oberfläche von schnaq zusammen dargestellt. Auch weitere Zugehörigkeiten, beispielsweise zu den Hubs oder weiteren schnaqs, werden damit visuell dargestellt."]
+         [:p "Diese Daten werden auf unseren eigenen Servern gespeichert und nicht an Dritte weitergegeben."]
+         [:p "Es gibt Möglichkeiten das eigene Nutzer:innenprofil zu erweitern. Dazu gehört beispielsweise ein eigenes optionales Profilbild hochzuladen. Dieses Profilbild wird dann als Ihr Avatar dargestellt und immer dann präsentiert, wenn Ihr Nutzer:innenaccount in Erscheinung tritt, beispielsweise wenn man sich Ihre Beiträge anschaut."]
+         [:h4 "Textbeiträge"]
+         [:p "Die Textbeiträge müssen von Ihnen selbst stammen und dürfen keine Urheberrechte verletzen. Die Textbeiträge werden nicht an Dritte weitergegeben. Intern können Ihre Beiträge für weitere wissenschaftliche Auswertungen und dem Training von eigenen neuronalen Netzen verwendet werden. Sie verlieren dabei niemals Ihre Autor:innenschaft an diesen Beiträgen. Damit werden beispielsweise automatisiert maschinell erstellte Zusammenfassungen oder Statistiken berechnet. Diese Zusammenfassungen und Statistiken sind für die Auswertung Ihres schnaqs vorgesehen und werden an keine Dritten weitergegeben."]]
+        :privacy.extended.matomo/title "Webanalyse durch Matomo (ehemals PIWIK)"
+        :privacy.extended.matomo/body
+        [:<>
+         [:h4 "Beschreibung und Umfang der Datenverarbeitung"]
+         [:p "Wir nutzen auf unserer Website das Open-Source-Software-Tool Matomo (ehemals PIWIK) zur Analyse der Nutzung unseres Internet-Auftritts. Uns interessiert zum Beispiel, welche Seiten wie häufig aufgerufen werden und ob dabei Smartphones, Tablets oder Rechner mit großen Bildschirmen eingesetzt werden. Die Software setzt einen Cookie auf dem Rechner der Nutzer:innen (zu Cookies siehe bereits oben). Werden Einzelseiten unserer Website aufgerufen, so werden folgende Daten gespeichert:"]
+         [:ol
+          [:li "Zwei Bytes der IP-Adresse des aufrufenden Systems"]
+          [:li "Die aufgerufene Webseite"]
+          [:li "Die Website, über die unsere Webseite gelangt aufgerufen wurde (Referrer)"]
+          [:li "Die Unterseiten, die von der aufgerufenen Webseite aus aufgerufen werden"]
+          [:li "Die Verweildauer auf der Webseite"]
+          [:li "Die Häufigkeit des Aufrufs der Webseite"]]
+         [:p "Matomo ist so eingestellt, dass die IP-Adressen nicht vollständig gespeichert werden, sondern zwei Bytes der IP-Adresse maskiert werden (Bsp.:  192.168.xxx.xxx). Auf diese Weise ist eine Zuordnung der gekürzten IP-Adresse zum aufrufenden Rechner nicht mehr möglich."]
+         [:p "Matomo kommt ausschließlich auf Servern von schnaq zum Einsatz. Eine Speicherung der personenbezogenen Daten der Nutzer:innen findet nur dort statt. Eine Weitergabe der Daten an Dritte erfolgt nicht."]
+         [:h4 "Zweck der Datenverarbeitung"]
+         [:p "Die Verarbeitung der anonymisierten Daten der Nutzer:innen ermöglicht uns eine Analyse der Nutzung unserer Webseite. Wir sind in durch die Auswertung der gewonnen Daten in der Lage, Informationen über die Nutzung der einzelnen Komponenten unserer Webseite zusammenzustellen. Dies hilft uns dabei unsere Dienste und deren Nutzer:innenfreundlichkeit stetig zu verbessern. Durch die Anonymisierung der IP-Adresse wird dem Interesse der:die Nutzer:in an deren Schutz personenbezogener Daten hinreichend Rechnung getragen."]
+         [:p "Es werden keine Profile erstellt, die uns einen tieferen Einblick in das Nutzungsverhalten der einzelnen Nutzer:innen geben würden. Die Auswertung erfolgt ausschließlich anonymisiert und aggregiert, dass kein Schluss auf einzelne Personen zu ziehen ist."]]
+        :privacy.extended.rights-of-the-affected/title "Rechte der Betroffenen"
+        :privacy.extended.rights-of-the-affected/body
+        [:<>
+         [:p "Werden von Ihnen personenbezogene Daten verarbeitet, sind Sie Betroffene:r im Sinne der. DSGVO und es stehen Ihnen die im weiteren beschrieben Rechte uns gegenüber zu. Richten Sie Ihr Verlangen bitte, am besten per E-Mail, an den o.g. Verantwortlichen."]
+         [:p [:strong "Auskunft:"]
+          " Sie haben das Recht, jederzeit von uns unentgeltliche Auskunft sowie Bestätigung über die zu Ihrer Person gespeicherten personenbezogenen Daten und eine Kopie dieser Auskunft zu erhalten."]
+         [:p [:strong "Berichtigung:"]
+          " Sie haben das Recht auf Berichtigung und/oder Vervollständigung, sofern die verarbeiteten personenbezogenen Daten, die Sie betreffen, unrichtig oder unvollständig sind."]
+         [:p [:strong "Einschränkung der Verarbeitung:"]
+          " Sie haben das Recht die Einschränkung der Verarbeitung zu verlangen, wenn eine der folgenden Voraussetzungen gegeben ist:"]
+         [:ul
+          [:li "Die Richtigkeit der personenbezogenen Daten wird von Ihnen bestritten, und zwar für eine Dauer, die es uns ermöglicht, die Richtigkeit der personenbezogenen Daten zu überprüfen. "]
+          [:li "Die Verarbeitung ist unrechtmäßig, Sie lehnen die Löschung der personenbezogenen Daten ab und verlangen stattdessen die Einschränkung der Nutzung der personenbezogenen Daten. "]
+          [:li "Wir benötigen die personenbezogenen Daten für die Zwecke der Verarbeitung nicht länger, Sie benötigen sie jedoch zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen. "]
+          [:li "Sie haben Widerspruch gegen die Verarbeitung gem. Art. 21 Abs. 1 DSGVO eingelegt und es steht noch nicht fest, ob unsere berechtigten Gründe gegenüber Ihren überwiegen. "]]
+         [:p [:strong "Löschung:"]
+          " Sie haben das Recht, dass die sie betreffenden personenbezogenen Daten unverzüglich gelöscht werden, sofern einer der folgenden Gründe zutrifft und soweit die Verarbeitung nicht erforderlich ist:"]
+         [:ul
+          [:li "Die personenbezogenen Daten wurden für solche Zwecke erhoben oder auf sonstige Weise verarbeitet, für welche sie nicht mehr notwendig sind. "]
+          [:li "Sie widerrufen Ihre Einwilligung, auf die sich die Verarbeitung stützte und es fehlt an einer anderweitigen Rechtsgrundlage für die Verarbeitung. "]
+          [:li "Sie legen gemäß Art. 21 Abs. 1 DSGVO Widerspruch gegen die Verarbeitung ein, und es liegen keine vorrangigen berechtigten Gründe für die Verarbeitung vor, oder Sie legen gemäß Art. 21 Abs. 2 DSGVO Widerspruch gegen die Verarbeitung ein. "]
+          [:li "Die personenbezogenen Daten wurden unrechtmäßig verarbeitet. "]
+          [:li "Die Löschung der personenbezogenen Daten ist zur Erfüllung einer rechtlichen Verpflichtung nach dem Unionsrecht oder dem Recht der Mitgliedstaaten erforderlich, dem wir unterliegen. "]
+          [:li "Die personenbezogenen Daten wurden in Bezug auf angebotene Dienste der Informationsgesellschaft gemäß Art. 8 Abs. 1 DSGVO erhoben. "]]
+         [:p [:strong "Datenübertragbarkeit:"]
+          " Sie haben das Recht, die Sie betreffenden personenbezogenen Daten, die Sie dem Verantwortlichen bereitgestellt haben, in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten. Außerdem haben Sie das Recht diese Daten einem anderen Verantwortlichen ohne Behinderung durch den Verantwortlichen, dem die personenbezogenen Daten bereitgestellt wurden, zu übermitteln. In Ausübung dieses Rechts haben Sie ferner das Recht, zu erwirken, dass die Sie betreffenden personenbezogenen Daten direkt von uns einem anderen Verantwortlichen übermittelt werden, soweit dies technisch machbar ist. Freiheiten und Rechte anderer Personen dürfen hierdurch nicht beeinträchtigt werden."]
+         [:p [:strong "Widerspruch:"]
+          " Sie haben das Recht, jederzeit gegen die Verarbeitung Sie betreffender personenbezogener Daten, die aufgrund von Art. 6 Abs. 1 lit. f DSGVO erfolgt, Widerspruch einzulegen. Wir verarbeiten die personenbezogenen Daten im Falle des Widerspruchs nicht mehr, es sei denn, wir können zwingende schutzwürdige Gründe für die Verarbeitung nachweisen, die gegenüber Ihren Interessen, Rechten und Freiheiten überwiegen, oder die Verarbeitung dient der Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen."]
+         [:p [:strong "Widerruf der Einwilligung:"]
+          " Sie haben das Recht, Ihre datenschutzrechtliche Einwilligungserklärung jederzeit zu widerrufen. Durch den Widerruf der Einwilligung wird die Rechtmäßigkeit der aufgrund der Einwilligung bis zum Widerruf erfolgten Verarbeitung nicht berührt."]]
+        :privacy.extended.right-to-complain/title "Recht auf Beschwerde bei einer Aufsichtsbehörde"
+        :privacy.extended.right-to-complain/body
+        [:<>
+         [:p "Unbeschadet eines anderweitigen verwaltungsrechtlichen oder gerichtlichen Rechtsbehelfs steht Ihnen das Recht auf Beschwerde bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres Aufenthaltsorts, zu, wenn Sie der Ansicht sind, dass die Verarbeitung der Sie betreffenden personenbezogenen Daten gegen die DSGVO verstößt.\nDie für den Betreiber dieser Seite zustände Datenschutzaufsichtsbehörde ist:"]
+         [:p "Die Landesbeauftragte für Datenschutz und Informationsfreiheit NRW, Kavalleriestr. 2-4, 40102 Düsseldorf, Tel.: +49211/38424-0, E-Mail: poststelle{at}ldi.nrw.de"]]
+        :privacy.extended.hosting/title "Hosting der Webseite"
+        :privacy.extended.hosting/body
+        [:<>
+         [:p "Der Internetauftritt von schnaq wird auf Servern der Hetzner Online GmbH in Deutschland gehostet. Bezüglich weiterer Informationen verweisen wir auf die Webseiten der Hetzner Online GmbH."]
+         [:h4 "Abschluss eines Auftragsdatenverarbeitungsvertrags (AV-Vertrag)"]
+         [:p "Wir haben mit der Hetzner Online GmbH einen AV-Vertrag abgeschlossen, welcher unsere Kunden schützt und Hetzner verpflichtet die erhobenen Daten nicht an Dritte weiterzugeben."]]
+        :privacy.extended.responsible/title "Verantwortlicher im Sinne der DSGVO"
+        :privacy.extended.responsible/body
+        [:<>
+         [:p
+          "schnaq (nicht gegründet)" [:br]
+          "vertreten durch Christian Meter" [:br]
+          "Am Hagen 6" [:br]
+          "42855 Remscheid" [:br]
+          (toolbelt/obfuscate-mail "info@schnaq.com")]
+         [:p "Rechtlich bindend ist die deutsche Fassung dieser Datenschutzerklärung."]]
+
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."
