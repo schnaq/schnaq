@@ -250,7 +250,7 @@
            [:a {:href "https://en.wikipedia.org/wiki/Cross-site_request_forgery"}
             "here"]
            " be researched further."]
-          [:li "Login cookie (persistent cookie), which recognizes you as the:user:in you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site."]
+          [:li "Login cookie (persistent cookie), which recognizes you as the user you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site."]
           [:li "Analysis cookie (persistent cookie), which can optionally be set so that we can understand your behavior and interests anonymously. For more information, see the section on the use of Matomo."]]
          [:p "All cookies we use generate random strings that are used to match corresponding strings on our server."]]
 
