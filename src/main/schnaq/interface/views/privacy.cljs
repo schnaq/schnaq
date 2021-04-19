@@ -5,9 +5,17 @@
             [hodgepodge.core :refer [local-storage clear!]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [reitit.frontend.easy :as reitfe]))
+
+(defn open-privacy-settings
+  "Open privacy settings."
+  []
+  [:button.btn.btn-outline-primary {:on-click (js-wrap/show-js-klaro)}
+   (labels :privacy/open-settings)])
 
 (defn- localstorage-explanation []
   (notify!
@@ -31,7 +39,9 @@
 
 (defn- personal-data-row []
   [rows/icon-left
-   [:i {:class (str "m-auto fas fa-lg " (fa :user/lock))}]
+   [:<>
+    [:i {:class (str "m-auto fas fa-lg " (fa :user/lock))}]
+    [:div [open-privacy-settings]]]
    :privacy.personal-data])
 
 (defn- localstorage-row
@@ -39,23 +49,28 @@
   []
   [rows/icon-right
    [:<>
-    [:i#cookie-icon {:class (str "m-auto fas fa-lg " (fa :cookie/complete))}]
+    [:i {:class (str "m-auto fas fa-lg " (fa :cookie/complete))}]
     [:div [:button.btn.btn-outline-primary
            {:on-click localstorage-explanation}
            (labels :privacy.localstorage/show-data)]]]
    :privacy.localstorage])
 
-(defn- data-processing []
+(defn- data-processing-anonymous []
   [rows/icon-left
-   [:i#data-proc {:class (str "m-auto fas fa-lg " (fa :server))}]
-   :privacy.data-processing])
+   [:i {:class (str "m-auto fas fa-lg " (fa :user/ninja))}]
+   :privacy.data-processing.anonymous])
+
+(defn- data-processing-registered []
+  [rows/icon-right
+   [:i {:class (str "m-auto fas fa-lg " (fa :user/plus))}]
+   :privacy.data-processing.registered])
 
 (defn- link-to-privacy []
   [:section.text-center.pb-5
    [:p.lead
     (gstring/format "%s " (labels :privacy.link-to-privacy/lead))
-    [:a {:href "https://disqtec.com/datenschutz"}
-     (labels :privacy.link-to-privacy/privacy)]
+    [:a {:href (reitfe/href :routes/privacy-extended)}
+     (labels :privacy/note)]
     "."]])
 
 (defn- page []
@@ -66,7 +81,8 @@
     [gdpr-row]
     [personal-data-row]
     [localstorage-row]
-    [data-processing]
+    [data-processing-anonymous]
+    [data-processing-registered]
     [link-to-privacy]]])
 
 

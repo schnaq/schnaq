@@ -26,7 +26,7 @@
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
   [heading subheading gradient? & more]
   (let [header-class (if gradient? "masthead-gradient" "masthead")]
-    [:div.pb-5
+    [:div
      [:header.text-white
       {:class header-class}
       [:div.container

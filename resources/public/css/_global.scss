@@ -81,3 +81,8 @@ h6 {
   height: 1.1em;
   width: 1.1em;
 }
+
+.obfuscate {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
