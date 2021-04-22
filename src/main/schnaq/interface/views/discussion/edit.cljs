@@ -3,17 +3,20 @@
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]))
+            [schnaq.interface.utils.js-wrapper :as jq]))
 
 (defn edit-card
   "The same as a statement-card, but currently being an editable input."
   [statement]
-  (let [statement-html-id (str "statement-edit-" (:db/id statement))]
+  (let [statement-html-id (str "statement-edit-" (:db/id statement))
+        dispatch-fn #(rf/dispatch [:statement.edit/send (:db/id statement) statement-html-id
+                                   (oget % [:currentTarget :elements])])]
     [:form.card.statement-card.py-2.px-3
      {:on-submit (fn [e]
-                   (js-wrap/prevent-default e)
-                   (rf/dispatch [:statement.edit/send (:db/id statement) statement-html-id
-                                 (oget e [:target :elements])]))}
+                   (jq/prevent-default e)
+                   (dispatch-fn e))
+      :on-key-down (fn [e]
+                     (when (jq/ctrl-press e 13) (dispatch-fn e)))}
      [:div.form-group
       [:label {:for statement-html-id} (labels :statement.edit/label)]
       [:textarea.form-control {:name statement-html-id
@@ -23,7 +26,7 @@
      [:div.text-right
       [:button.btn.btn-outline-secondary
        {:on-click (fn [e]
-                    (js-wrap/prevent-default e)
+                    (jq/prevent-default e)
                     (rf/dispatch [:statement.edit/deactivate-edit (:db/id statement)]))}
        (labels :statement.edit.button/cancel)]
       [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]))
