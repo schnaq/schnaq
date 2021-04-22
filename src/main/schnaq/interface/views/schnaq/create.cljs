@@ -50,26 +50,26 @@
             (get-in hubs [group-id :hub/name])])]])]))
 
 (defn- create-schnaq-page []
-  [pages/with-nav-and-header
-   {:page/heading (labels :schnaq.create/heading)}
-   [:div.container
-    [:div.py-3.mt-3
-     [:form
-      {:on-submit (fn [e]
-                    (jq/prevent-default e)
-                    (rf/dispatch [:schnaq.create/new (oget e [:target :elements])]))
-       :on-key-down (fn [e]
-                      (when (jq/ctrl-press e 13)
-                        (rf/dispatch [:schnaq.create/new (oget e [:currentTarget :elements])])))}
-      [:div.panel-white.row.p-4
-       [:div.col-12
-        [common/form-input {:id :schnaq-title
-                            :placeholder (labels :schnaq.create.input/placeholder)
-                            :css "font-150"}]]]
-      [create-schnaq-options]
-      [:div.pt-3.text-center
-       [:button.btn.button-primary (labels :schnaq.create.button/save)]]]
-     [how-to-elements/quick-how-to-create]]]])
+  (let [dispatch-fn #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
+    [pages/with-nav-and-header
+     {:page/heading (labels :schnaq.create/heading)}
+     [:div.container
+      [:div.py-3.mt-3
+       [:form
+        {:on-submit (fn [e]
+                      (jq/prevent-default e)
+                      (dispatch-fn e))
+         :on-key-down (fn [e]
+                        (when (jq/ctrl-press e 13) (dispatch-fn e)))}
+        [:div.panel-white.row.p-4
+         [:div.col-12
+          [common/form-input {:id :schnaq-title
+                              :placeholder (labels :schnaq.create.input/placeholder)
+                              :css "font-150"}]]]
+        [create-schnaq-options]
+        [:div.pt-3.text-center
+         [:button.btn.button-primary (labels :schnaq.create.button/save)]]]
+       [how-to-elements/quick-how-to-create]]]]))
 
 (defn create-schnaq-view []
   [create-schnaq-page])
