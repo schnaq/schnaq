@@ -12,6 +12,17 @@
             [taoensso.timbre :as log])
   (:import (clojure.lang ExceptionInfo)))
 
+(def statement-rules
+  '[[(statements-from-argument ?argument ?statements)
+     [?argument :argument/conclusion ?statements]]
+    [(statements-from-argument ?argument ?statements)
+     [?argument :argument/premises ?statements]]
+    [(statements ?discussion ?statements)
+     (or-join [?discussion ?statements]
+              [?discussion :discussion/starting-statements ?statements]
+              (and [?arguments :argument/discussions ?discussion]
+                   (statements-from-argument ?arguments ?statements)))]])
+
 (def statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
