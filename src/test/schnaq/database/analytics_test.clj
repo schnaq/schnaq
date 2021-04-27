@@ -43,7 +43,7 @@
     (let [user-id (user-db/add-user-if-not-exists "Wegi")
           share-hash "asd"]
       (discussion-db/new-discussion {:discussion/title "test"
-                                     :discusison/edit-hash "ahsdasd"
+                                     :discussion/edit-hash "ahsdasd"
                                      :discussion/share-hash share-hash
                                      :discussion/author user-id} true)
       (discussion-db/add-starting-statement! share-hash user-id "test")
