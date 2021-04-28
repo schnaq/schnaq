@@ -1,5 +1,6 @@
 (ns schnaq.database.analytics
   (:require [ghostwheel.core :refer [>defn >defn-]]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.meeting.database :as main-db])
   (:import (java.util Date)
            (java.time Instant)))
@@ -79,21 +80,17 @@
      (ffirst
        (main-db/query
          '[:find (count ?statements)
-           :in $ ?since
+           :in $ % ?since
            :where
            ;; Make sure the discussion is not deleted where the statements are from
            (not [?discussions :discussion/states :discussion.state/deleted])
-           [?arguments :argument/discussions ?discussions]
-           (or-join [?discussions ?arguments ?statements]
-                    [?arguments :argument/premises ?statements]
-                    [?arguments :argument/conclusion ?statements]
-                    [?discussions :discussion/starting-statements ?statements])
+           (statements ?discussions ?statements)
            ;; Make sure statements are not deleted
            (not [?statements :statement/deleted? true])
            [?statements :statement/content _ ?tx]
            [?tx :db/txInstant ?start-date]
            [(< ?since ?start-date)]]
-         (Date/from since)))
+         discussion-db/statement-rules (Date/from since)))
      0)))
 
 (>defn average-number-of-statements
