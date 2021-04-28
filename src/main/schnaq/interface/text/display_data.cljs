@@ -1385,6 +1385,7 @@
   (identifier
     {:feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
      :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
+     :founders-note "https://s3.disqtec.com/startpage/founders_letter.png"
      :how-to/taskbar "/imgs/howto/taskbar.svg"
      :icon-add "/imgs/buttons/add-button.svg"
      :icon-community "/imgs/community.svg"

@@ -111,12 +111,13 @@
 (defn- founders-note
   "A personal note from the founders, to the visitor of the page. Give a last personal touch."
   []
-  [:section.py-5
+  [:section.pb-5
    [:h4.text-center (labels :startpage.founders-note/title)]
-   [:div.w-50.mx-auto
+   [:div.mx-auto
     ;; Platzhalter
-    [:img.img-fluid {:src (img-path :schnaqqifant/hippie)}]]
-   [:p [:strong "– Alexander, Christian, Michael und Philip"]]])
+    {:style {:width "60%"}}
+    [:img.img-fluid.mb-2 {:src (img-path :founders-note)}]]
+   [:p.text-center [:strong "– Alexander, Christian, Michael und Philip"]]])
 
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
