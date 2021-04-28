@@ -260,10 +260,10 @@
     routes))
 
 (defn- on-navigate [new-match]
+  (js/setTimeout (.scrollTo js/window 0 0) 100)
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
-    (rf/dispatch [:navigation/navigate :routes/cause-not-found]))
-  (.scrollTo js/window 0 0))
+    (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
 
 (defn init-routes! []
   (reitit-front-easy/start!
