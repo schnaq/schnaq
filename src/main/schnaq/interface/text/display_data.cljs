@@ -131,6 +131,8 @@
         Our goal is to make communication and knowledge-sharing at the workplace as flexible and easy as possible.
         This way we heighten the potential of every person in the company, and thus of the company itself."
 
+        :startpage.founders-note/title "A note from the founders"
+
         ;; Login page
         :page.login/heading "Please Login"
         :page.login/subheading "You need to login to access this resource"
@@ -809,6 +811,8 @@
         :startpage.faq.why/answer "schnaq ist für dich, wenn du eine moderne, offene und gleichberechtigte Arbeitskultur unterstützt.
         Unser Ziel ist es Kommunikation und Wissensaustausch am Arbeitsplatz flexibel zu gestalten. So heben wir
         nicht nur das Potential einzelner Teammitglieder, sondern auch des gesamten Unternehmens."
+
+        :startpage.founders-note/title "Ein Brief von den Gründern"
 
         ;; Login Page
         :page.login/heading "Bitte logg dich ein"

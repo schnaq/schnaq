@@ -108,6 +108,16 @@
     [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.faq.start/link-name)]]
    [:p [:strong (labels :startpage.faq.why/question)] " " (labels :startpage.faq.why/answer)]])
 
+(defn- founders-note
+  "A personal note from the founders, to the visitor of the page. Give a last personal touch."
+  []
+  [:section.py-5
+   [:h4.text-center (labels :startpage.founders-note/title)]
+   [:div.w-50.mx-auto
+    ;; Platzhalter
+    [:img.img-fluid {:src (img-path :schnaqqifant/hippie)}]]
+   [:p [:strong "– Alexander, Christian, Michael und Philip"]]])
+
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
   [pages/with-nav-and-header
@@ -123,6 +133,7 @@
      [faq]]
     [early-adopters]
     [:section.container
+     [founders-note]
      [supporters]]]])
 
 (defn startpage-view
