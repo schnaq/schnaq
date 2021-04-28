@@ -3,7 +3,8 @@
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jq]))
+            [schnaq.interface.utils.js-wrapper :as jq]
+            [schnaq.interface.views.discussion.input :as input]))
 
 (defn edit-card
   "The same as a statement-card, but currently being an editable input."
