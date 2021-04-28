@@ -96,27 +96,17 @@
   "Handle some still open questions from the user."
   []
   [:section.pt-5
-   [:h4.text-center "Frequently Asked Questions"]
-   [:p [:strong "Was passiert mit meinen Daten?"] " "
-    "Um einen möglichst sicheren Datenschutz zu gewährleisten speichern
-     wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer "
-    [:a {:href (reitfe/href :routes/privacy)} "Datenschutzerklärung"]
-    " zusammengefasst."]
-   [:p [:strong "Kann ich schnaq mit meiner bestehenden Software integrieren?"] " "
-    "Wir arbeiten mit hochdruck an einer Integration für Slack, MS Team und andere gängige Kommunikationssoftware.
-    Wenn du sofort informiert werden willst, wenn die Integration live geht, melde dich für den "
-    [:a {:href "#newsletter"} "Newsletter an."]]
-   [:p [:strong "Gibt es versteckte Kosten?"] " "
-    "schnaq ist derzeit in einer Testphase und kostenlos benutzbar. Es gibt keinerlei Kosten. Wir freuen uns
-    aber über ehrliches Feedback als Gegenleistung."]
-   [:p [:strong "Wie kann ich mit schnaq starten?"] " "
-    "Du kannst schnaq entweder anonym nutzen, oder dich registrieren und anmelden um deine schnaqs und Beiträge von
-    überall aus einsehen und verwalten zu können. Probier es einfach aus und "
-    [:a {:href (reitfe/href :routes.schnaq/create)} "starte einen schnaq."]]
-   [:p [:strong "Warum sollte ich schnaq nutzen?"] " "
-    "schnaq ist für dich, wenn du eine moderne, offene und gleichberechtigte Arbeitskultur unterstützt.
-    Unser Ziel ist es Kommunikation und Wissensaustausch am Arbeitsplatz flexibel zu gestalten. So heben wir
-    nicht nur das Potential einzelner Teammitglieder, sondern auch des gesamten Unternehmens."]])
+   [:h4.text-center (labels :startpage.faq/title)]
+   [:p [:strong (labels :startpage.faq.data/question)] " "
+    (labels :startpage.faq.data/answer-1)
+    [:a {:href (reitfe/href :routes/privacy)} (labels :startpage.faq.data/link-name)]
+    (labels :startpage.faq.data/answer-2)]
+   [:p [:strong (labels :startpage.faq.integration/question)] " " (labels :startpage.faq.integration/answer)
+    [:a {:href "#newsletter"} (labels :startpage.faq.integration/link-name)]]
+   [:p [:strong (labels :startpage.faq.costs/question)] " " (labels :startpage.faq.costs/answer)]
+   [:p [:strong (labels :startpage.faq.start/question)] " " (labels :startpage.faq.start/answer)
+    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.faq.start/link-name)]]
+   [:p [:strong (labels :startpage.faq.why/question)] " " (labels :startpage.faq.why/answer)]])
 
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
