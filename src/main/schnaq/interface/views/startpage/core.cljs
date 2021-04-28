@@ -116,7 +116,7 @@
    [:div.mx-auto
     ;; Platzhalter
     {:style {:width "60%"}}
-    [:img.img-fluid.mb-2 {:src (img-path :founders-note)}]]
+    [:img.img-fluid.mb-2.shadow-sm {:src (img-path :founders-note)}]]
    [:p.text-center [:strong "– Alexander, Christian, Michael und Philip"]]])
 
 ;; -----------------------------------------------------------------------------
