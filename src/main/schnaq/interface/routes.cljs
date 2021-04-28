@@ -1,6 +1,5 @@
 (ns schnaq.interface.routes
   (:require [goog.object :as gobj]
-            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.coercion.spec]
             [reitit.frontend :as reitit-front]
