@@ -109,6 +109,28 @@
         :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our "
         :startpage.newsletter/privacy-policy "privacy policy"
 
+        :startpage.faq/title "Frequently Asked Questions"
+        :startpage.faq.data/question "What happens with my data?"
+        :startpage.faq.data/answer-1 "We only store data on german servers, to provide the best possible data protection. All details are explained
+        in an understandable manner in our "
+        :startpage.faq.data/link-name "privacy policy"
+        :startpage.faq.data/answer-2 "."
+        :startpage.faq.integration/question "Can I integrate schnaq with the software I'm already using?"
+        :startpage.faq.integration/answer "We currently work on integrations for Slack, MS Teams and other popular communication software.
+        If you want to be the first to know, when we launch the feature, subscribe to our "
+        :startpage.faq.integration/link-name "newsletter."
+        :startpage.faq.costs/question "Are there any hidden costs?"
+        :startpage.faq.costs/answer "schnaq is currently in a test-phase and completely free. No hidden payments.
+        Although we are always happy about your honest feedback as a form of payment."
+        :startpage.faq.start/question "How can I start using schnaq?"
+        :startpage.faq.start/answer "You can either use schnaq anonymously, or register to have the possibility to see and administrate your schnaqs
+        and statements from anywhere. Give it a try and "
+        :startpage.faq.start/link-name "create a schnaq."
+        :startpage.faq.why/question "Why should I use schnaq?"
+        :startpage.faq.why/answer "schnaq is for you, if you support a modern, open and equal work-culture.
+        Our goal is to make communication and knowledge-sharing at the workplace as flexible and easy as possible.
+        This way we heighten the potential of every person in the company, and thus of the company itself."
+
         ;; Login page
         :page.login/heading "Please Login"
         :page.login/subheading "You need to login to access this resource"
@@ -766,7 +788,7 @@
         :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer "
         :startpage.newsletter/privacy-policy "Datenschutzerklärung"
 
-        :startpage.faq/title "Frequently Asked Questions"
+        :startpage.faq/title "Häufig gestellte Fragen"
         :startpage.faq.data/question "Was passiert mit meinen Daten?"
         :startpage.faq.data/answer-1 "Um einen möglichst sicheren Datenschutz zu gewährleisten speichern
         wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer "
