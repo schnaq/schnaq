@@ -35,11 +35,15 @@
     (let [share-hash "simple-hash"
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                             "This is a new support" :argument.type/support false)]
-      (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/support (:argument/type new-attack))))))
+          new-support (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+                                              "This is a new support" :argument.type/support false)
+          another-new-statement (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+                                                        "this is a secret support" :argument.type/support true)]
+      (is (= "This is a new support" (-> new-support :argument/premises first :statement/content)))
+      (is (= "Brainstorming ist total wichtig" (-> new-support :argument/conclusion :statement/content)))
+      (is (= :argument.type/support (:argument/type new-support)))
+      (is (= "this is a secret support" (-> another-new-statement :argument/premises first :statement/content)))
+      (is (string? (-> another-new-statement :argument/premises first :statement/creation-secret))))))
 
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
