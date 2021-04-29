@@ -4,7 +4,7 @@
             [datomic.client.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
-            [schnaq.database.main :refer [transact new-connection query] :as main-db]
+            [schnaq.database.main :refer [transact new-connection query fast-pull] :as main-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.toolbelt :as toolbelt]
@@ -40,6 +40,20 @@
    {:argument/author user-db/combined-user-pattern}
    {:argument/type [:db/ident]}
    {:argument/premises statement-pattern}
+   {:argument/conclusion
+    (conj statement-pattern
+          :argument/version
+          {:argument/author user-db/combined-user-pattern}
+          {:argument/type [:db/ident]}
+          {:argument/premises statement-pattern}
+          {:argument/conclusion statement-pattern})}])
+
+(def ^:private argument-pattern-with-secret-premises
+  [:db/id
+   :argument/version
+   {:argument/author user-db/combined-user-pattern}
+   {:argument/type [:db/ident]}
+   {:argument/premises (conj statement-pattern :statement/creation-secret)}
    {:argument/conclusion
     (conj statement-pattern
           :argument/version
@@ -374,9 +388,10 @@
   (let [argument-id
         (get-in
           (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction registered-user?)
-          [:tempids (str "argument-" reacting-string)])]
+          [:tempids (str "argument-" reacting-string)])
+        argument-pattern (if registered-user? argument-pattern argument-pattern-with-secret-premises)]
     (toolbelt/pull-key-up
-      (d/pull (d/db (main-db/new-connection)) argument-pattern argument-id)
+      (fast-pull argument-id argument-pattern)
       :db/ident)))
 
 (>defn new-discussion

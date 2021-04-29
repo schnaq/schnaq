@@ -21,6 +21,7 @@
             [schnaq.database.hub :as hub-db]
             [schnaq.database.reaction :as reaction-db]
             [schnaq.database.main :as db]
+            [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
@@ -292,6 +293,15 @@
 ;; -----------------------------------------------------------------------------
 ;; Discussion
 
+(>defn- add-creation-secret
+  "Add creatino-secret to a collection of statements. Only add to matching target-id."
+  [statements target-id]
+  [(s/coll-of ::specs/statement) :db/id :ret (s/coll-of ::specs/statement)]
+  (map #(if (= target-id (:db/id %))
+         (merge % (db/fast-pull target-id '[:statement/creation-secret]))
+         %)
+       statements))
+
 (defn- valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [data]
@@ -312,11 +322,7 @@
            processors/hide-deleted-statement-content
            processors/with-votes))))
   ([share-hash secret-statement-id]
-   (map
-     #(if (= secret-statement-id (:db/id %))
-        (merge % (db/fast-pull secret-statement-id '[:statement/creation-secret]))
-        %)
-     (starting-conclusions-with-processors share-hash))))
+   (add-creation-secret (starting-conclusions-with-processors share-hash) secret-statement-id)))
 
 (defn- with-sub-discussion-info
   [statements]
