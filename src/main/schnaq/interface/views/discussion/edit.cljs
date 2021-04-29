@@ -24,13 +24,16 @@
                                :rows 3
                                :placeholder (:statement/content statement)
                                :defaultValue (:statement/content statement)}]]
-     [:div.text-right
-      [:button.btn.btn-outline-secondary
-       {:on-click (fn [e]
-                    (jq/prevent-default e)
-                    (rf/dispatch [:statement.edit/deactivate-edit (:db/id statement)]))}
-       (labels :statement.edit.button/cancel)]
-      [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]))
+     [:div.d-flex.justify-content-between.flex-wrap
+      [:div.d-flex.mb-3
+       [input/argument-type-choose-button :edit/argument-type :edit/argument-type!]]
+      [:div.d-flex.mb-3
+       [:button.btn.btn-outline-secondary
+        {:on-click (fn [e]
+                     (jq/prevent-default e)
+                     (rf/dispatch [:statement.edit/deactivate-edit (:db/id statement)]))}
+        (labels :statement.edit.button/cancel)]
+       [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]]))
 
 (rf/reg-event-fx
   :statement.edit/send
@@ -88,3 +91,13 @@
   :statement.edit/ongoing?
   (fn [db [_ statement-id]]
     (contains? (get-in db [:statements :currently-edited] #{}) statement-id)))
+
+(rf/reg-event-db
+  :edit/argument-type!
+  (fn [db [_ argument-type]]
+    (assoc-in db [:edit :current :argument/type] argument-type)))
+
+(rf/reg-sub
+  :edit/argument-type
+  (fn [db]
+    (get-in db [:edit :current :argument/type] :argument.type/neutral)))
