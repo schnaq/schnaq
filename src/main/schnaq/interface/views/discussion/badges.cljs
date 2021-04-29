@@ -28,17 +28,26 @@
                     (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
       :title (labels :discussion.badges/delete-statement)}
      [:i {:class (str "m-auto fas " (fa :trash))}]]))
-
+;; TODO konvertiere die Beiträge zum registrierten User, nach der Registrierung.
 (defn- edit-button
   "Give the registered user the ability to edit their statement."
   [statement]
-  (let [user-id @(rf/subscribe [:user/id])]
-    (when (and (= user-id (:db/id (:statement/author statement)))
-               (not (:statement/deleted? statement)))
+  (let [user-id @(rf/subscribe [:user/id])
+        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        anonymous-owner (contains? creation-secrets (:db/id statement))
+        on-click-fn (if anonymous-owner
+                      #(js/alert "Wowow, halte ein unregistrierter Pleb")
+                      ;; TODO continue here
+                      #(rf/dispatch [:statement.edit/activate-edit (:db/id statement)]))]
+    (when (or anonymous-owner
+              ; User is registered author
+              (and (= user-id (:db/id (:statement/author statement)))
+                   (not (:statement/deleted? statement))))
       [:span.badge.badge-pill.badge-transparent.badge-clickable
        {:tabIndex 40
-        :on-click (fn [e] (js-wrap/stop-propagation e)
-                    (rf/dispatch [:statement.edit/activate-edit (:db/id statement)]))
+        :on-click (fn [e]
+                    (js-wrap/stop-propagation e)
+                    (on-click-fn))
         :title (labels :discussion.badges/edit-statement)}
        [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])))
 

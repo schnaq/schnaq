@@ -77,6 +77,11 @@
   (fn [db _]
     (assoc-in db [:discussion :statements :creation-secrets] (:discussion/creation-secrets local-storage))))
 
+(rf/reg-sub
+  :schnaq.discussion.statements/creation-secrets
+  (fn [db _]
+    (get-in db [:discussion :statements :creation-secrets])))
+
 (rf/reg-event-fx
   :notification/new-content
   (fn [_ _]
