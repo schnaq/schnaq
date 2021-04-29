@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables' as vars;
 
 .modal-wrapper {
   display: flex;
@@ -10,9 +10,15 @@
   z-index: 1040;
 }
 
+.modal-header {
+  background-color: vars.$primary-light;
+  box-shadow: vars.$light-shadow;
+  color: vars.$gray-100;
+}
+
 .modal-backdrop {
   animation: fade-in 0.2s;
-  background-color: $black;
+  background-color: vars.$black;
   height: 100%;
   opacity: 0.6;
   position: fixed;

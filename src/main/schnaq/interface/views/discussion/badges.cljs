@@ -35,8 +35,13 @@
   "Show this modal to anonymous users trying to edit statements."
   []
   [modal/modal-template
-   "Bitte anmelden zum editieren"
-   [:p "Nanana, musst schon anmelden du bübele"]])
+   (labels :discussion.anonymous-edit.modal/title)
+   [:<>
+    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels :discussion.anonymous-edit.modal/explain)]
+    [:p (labels :discussion.anonymous-edit.modal/persuade)]
+    [:button.btn.btn-primary.mx-auto.d-block
+     {:on-click #(rf/dispatch [:keycloak/login])}
+     (labels :discussion.anonymous-edit.modal/cta)]]])
 
 (defn- edit-button
   "Give the registered user the ability to edit their statement."

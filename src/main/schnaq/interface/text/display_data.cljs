@@ -205,6 +205,12 @@
         :discussion.state/read-only-label "read-only"
         :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
+        ;; Conversion-Edit-Funnel
+        :discussion.anonymous-edit.modal/title "Please sign in to edit"
+        :discussion.anonymous-edit.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit a statement."]]
+        :discussion.anonymous-edit.modal/persuade "Statements you made recently will automatically be converted to your logged in account."
+        :discussion.anonymous-edit.modal/cta "Sign in / Sign up"
+
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
         :privacy/subheading "We lead you through it step by step!"
@@ -886,6 +892,12 @@
         :discussion.privacy/private "Private Diskussion"
         :discussion.state/read-only-label "schreibgeschützt"
         :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Sie können hier nur lesen aber nicht schreiben."
+
+        ;; Conversion-Edit-Funnel
+        :discussion.anonymous-edit.modal/title "Bitte anmelden zum editieren"
+        :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum editieren anmelden."]]
+        :discussion.anonymous-edit.modal/persuade "Beiträge die in letzter Zeit von dir erstellt wurden, werden dabei automatisch umgewandelt."
+        :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
