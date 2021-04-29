@@ -518,10 +518,11 @@
           [?discussion :discussion/starting-statements ?statement]]
         statement-id share-hash))))
 
-(>defn change-statement-text
+(>defn change-statement-text-and-type
   "Changes the content of a statement to `new-content`."
-  [statement-id new-content]
-  [:db/id :statement/content :ret ::specs/statement]
+  [statement-id type new-content]
+  [:db/id :db/ident :statement/content :ret ::specs/statement]
+  (print "Type: " type)
   (transact [[:db/add statement-id :statement/content new-content]])
   (log/info "Statement" statement-id "edited with new content.")
   (get-statement statement-id))

@@ -8,9 +8,9 @@
 
 (defn- argument-type-button
   "Button to select the attitude of an argument. Current attitude is subscribed via get-subscription.
-  On-Click triggers the set-subscription."
+  On-Click triggers the set-subscription with argument-type as last argument."
   [id button-type label tooltip get-subscription set-subscription]
-  (let [argument-type @(rf/subscribe [get-subscription])
+  (let [argument-type @(rf/subscribe get-subscription)
         checked? (= button-type argument-type)]
     [:label.btn.btn-outline-primary.rounded-4
      (when checked? {:class "active"})
@@ -18,7 +18,7 @@
               :defaultChecked checked?
               :title (labels tooltip)
               :on-click (fn [e] (jq/prevent-default e)
-                          (rf/dispatch [set-subscription button-type]))}]
+                          (rf/dispatch (conj set-subscription button-type)))}]
      (labels label)]))
 
 (defn argument-type-choose-button
@@ -58,7 +58,7 @@
      [:div.d-flex.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
       (when-not (or (= :routes.schnaq/start current-route-name) pro-con-disabled?)
         [:div.input-group-prepend
-         [argument-type-choose-button :form/argument-type :form/argument-type!]])
+         [argument-type-choose-button [:form/argument-type] [:form/argument-type!]]])
       [:div.input-group-append
        [:button.btn
         {:type "submit" :class current-color

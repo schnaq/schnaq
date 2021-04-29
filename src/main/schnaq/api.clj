@@ -415,14 +415,14 @@
 (defn- edit-statement!
   "Edits the content of a statement, when the user is the registered author."
   [{:keys [params identity]}]
-  (let [{:keys [statement-id new-content share-hash]} params
+  (let [{:keys [statement-id statement-type new-content share-hash]} params
         user-identity (:sub identity)
         statement (db/fast-pull statement-id [{:statement/author [:user.registered/keycloak-id]}
                                               :statement/deleted?])]
     (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
       (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
                (not (:statement/deleted? statement)))
-        (ok {:updated-statement (discussion-db/change-statement-text statement-id new-content)})
+        (ok {:updated-statement (discussion-db/change-statement-text-and-type statement-id statement-type new-content)})
         (bad-request {:error "You can not edit a closed / deleted discussion or statement."}))
       (validator/deny-access invalid-rights-message))))
 

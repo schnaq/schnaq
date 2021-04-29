@@ -9,9 +9,11 @@
 (defn edit-card
   "The same as a statement-card, but currently being an editable input."
   [statement]
-  (let [statement-html-id (str "statement-edit-" (:db/id statement))
-        dispatch-fn #(rf/dispatch [:statement.edit/send (:db/id statement) statement-html-id
-                                   (oget % [:currentTarget :elements])])]
+  (let [statement-id (:db/id statement)
+        has-history? (not (zero? (count @(rf/subscribe [:discussion-history]))))
+        statement-html-id (str "statement-edit-" statement-id)
+        dispatch-fn #(rf/dispatch
+                       [:statement.edit/send (:db/id statement) statement-html-id (oget % [:currentTarget :elements])])]
     [:form.card.statement-card.py-2.px-3
      {:on-submit (fn [e]
                    (jq/prevent-default e)
@@ -26,7 +28,8 @@
                                :defaultValue (:statement/content statement)}]]
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
-       [input/argument-type-choose-button :edit/argument-type :edit/argument-type!]]
+       (when has-history?
+         [input/argument-type-choose-button [:edit/argument-type statement-id] [:edit/argument-type! statement-id]])]
       [:div.d-flex.mb-3
        [:button.btn.btn-outline-secondary
         {:on-click (fn [e]
@@ -38,10 +41,12 @@
 (rf/reg-event-fx
   :statement.edit/send
   (fn [{:keys [db]} [_ statement-id html-selector form]]
-    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+    (let [share-hash (get-in db [:current-route :path-params :share-hash])
+          type (get-in db [:statements :edit-type statement-id] :argument.type/neutral)]
       {:fx [(http/xhrio-request db :put "/discussion/statement/edit"
                                 [:statement.edit.send/success form]
                                 {:statement-id statement-id
+                                 :statement-type type
                                  :share-hash share-hash
                                  :new-content (oget+ form [html-selector :value])}
                                 [:statement.edit.send/failure])]})))
@@ -94,10 +99,10 @@
 
 (rf/reg-event-db
   :edit/argument-type!
-  (fn [db [_ argument-type]]
-    (assoc-in db [:edit :current :argument/type] argument-type)))
+  (fn [db [_ id argument-type]]
+    (assoc-in db [:statements :edit-type id] argument-type)))
 
 (rf/reg-sub
   :edit/argument-type
-  (fn [db]
-    (get-in db [:edit :current :argument/type] :argument.type/neutral)))
+  (fn [db [_ id]]
+    (get-in db [:statements :edit-type id] :argument.type/neutral)))
