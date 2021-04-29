@@ -28,7 +28,7 @@
                                :defaultValue (:statement/content statement)}]]
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
-       (when has-history?
+       (when has-history?                                   ;todo add check if admin disables pro con
          [input/argument-type-choose-button [:edit/argument-type statement-id] [:edit/argument-type! statement-id]])]
       [:div.d-flex.mb-3
        [:button.btn.btn-outline-secondary
@@ -57,13 +57,22 @@
   ;; Merge instead of overwriting, to preserve meta information
   (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))
 
+(defn- update-argument-type-in-list
+  "Updates the argument-type meta info of an argument in a collection."
+  [coll id new-type]
+  (when new-type
+    (map #(if (= id (:db/id %)) (merge % [:meta/argument-type new-type]) %) coll)))
+
 (rf/reg-event-fx
   :statement.edit.send/success
   (fn [{:keys [db]} [_ form response]]
-    (let [updated-statement (:updated-statement response)]
+    (let [updated-statement (:updated-statement response)
+          statement-id (:db/id updated-statement)
+          updated-type (get-in db [:statements :edit-type (:db/id updated-statement)] nil)]
       {:db (-> db
                (update-in [:discussion :conclusions :starting] #(update-statement-in-list % updated-statement))
-               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement)))
+               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement))
+               (update-in [:discussion :premises :current] #(update-argument-type-in-list % statement-id updated-type)))
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
 

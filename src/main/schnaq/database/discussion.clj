@@ -518,14 +518,26 @@
           [?discussion :discussion/starting-statements ?statement]]
         statement-id share-hash))))
 
+(defn- find-argument-of-statement [statement-id]
+  (ffirst (query
+            '[:find (pull ?argument in-pattern)
+              :in $ ?in-id in-pattern
+              :where
+              [?argument :argument/premises ?premises-id]
+              [(= ?premises-id ?in-id)]]
+            statement-id argument-pattern)))
+
 (>defn change-statement-text-and-type
-  "Changes the content of a statement to `new-content`."
-  [statement-id type new-content]
+  "Changes the content of a statement to `new-content` and the type to `new-type` if it's an argument."
+  [statement-id new-type new-content]
   [:db/id :db/ident :statement/content :ret ::specs/statement]
-  (print "Type: " type)
-  (transact [[:db/add statement-id :statement/content new-content]])
-  (log/info "Statement" statement-id "edited with new content.")
-  (get-statement statement-id))
+  (let [argument (find-argument-of-statement statement-id)]
+    (transact [[:db/add statement-id :statement/content new-content]])
+    (log/info "Statement" statement-id "edited with new content.")
+    (when-let [argument-id (:db/id argument)]
+      (log/info "Argument" argument-id "updated to new type " new-type)
+      (transact [[:db/add argument-id :argument/type new-type]]))
+    (get-statement statement-id)))
 
 (>defn add-admin-to-discussion
   "Adds an admin user to a discussion."
