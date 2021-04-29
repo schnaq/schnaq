@@ -36,7 +36,7 @@
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                             "This is a new support" :argument.type/support)]
+                                             "This is a new support" :argument.type/support false)]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/support (:argument/type new-attack))))))
@@ -47,7 +47,7 @@
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                             "This is a new attack" :argument.type/attack)]
+                                             "This is a new attack" :argument.type/attack false)]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/attack (:argument/type new-attack))))))
