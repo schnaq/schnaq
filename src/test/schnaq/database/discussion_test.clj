@@ -236,10 +236,11 @@
     (let [cat-dog-discussion (first (db/all-discussions-by-title "Cat or Dog?"))
           initial-content "Unmodified-statement"
           modified-content "Whats up in dis here house?"
+          modified-type :argument.type/neutral
           new-user (user-db/add-user-if-not-exists "Wugiperson")
           new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
                                                        new-user initial-content)]
       (is (= initial-content (:statement/content (db/get-statement new-statement-id))))
-      (let [modified-statement (db/change-statement-text new-statement-id modified-content)]
+      (let [modified-statement (db/change-statement-text-and-type new-statement-id modified-type modified-content)]
         (is (= modified-content (:statement/content modified-statement)))
         (is (s/valid? ::specs/statement modified-statement))))))
