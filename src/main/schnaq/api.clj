@@ -379,7 +379,7 @@
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
                 {:new-argument
-                 (discussion-db/react-to-statement! share-hash user-id conclusion-id premise argument-type)})))
+                 (discussion-db/react-to-statement! share-hash user-id conclusion-id premise argument-type keycloak-id)})))
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials

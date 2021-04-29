@@ -188,14 +188,16 @@
 
 (>defn- pack-premises
   "Packs premises into a statement-structure."
-  [premises user-id]
-  [(s/coll-of :statement/content) :db/id
-   :ret (s/coll-of map?)]
-  (mapv (fn [premise] {:db/id (str "premise-" premise)
-                       :statement/author user-id
-                       :statement/content premise
-                       :statement/version 1})
-        premises))
+  ([premises user-id]
+   [(s/coll-of :statement/content) :db/id :ret (s/coll-of map?)]
+   (mapv (fn [premise] {:db/id (str "premise-" premise)
+                        :statement/author user-id
+                        :statement/content premise
+                        :statement/version 1})
+         premises))
+  ([premises user-id creation-secrets]
+   [(s/coll-of :statement/content) :db/id (s/coll-of :statement/creation-secret) :ret (s/coll-of map?)]
+   (mapv #(assoc %1 :statement/creation-secret %2) (pack-premises premises user-id) creation-secrets)))
 
 (>defn prepare-new-argument
   "Prepares a new argument for transaction. Optionally sets a temporary id."
@@ -350,13 +352,15 @@
 
 (>defn- new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
-  [share-hash user-id new-conclusion-id new-statement-string argument-type]
-  [:discussion/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
+  [share-hash user-id new-conclusion-id new-statement-string argument-type registered-user?]
+  [:discussion/share-hash :db/id :db/id :statement/content :argument/type any? :ret associative?]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author user-id
-          :argument/premises (pack-premises [new-statement-string] user-id)
+          :argument/premises (if registered-user?
+                               (pack-premises [new-statement-string] user-id)
+                               (pack-premises [new-statement-string] user-id [(.toString (UUID/randomUUID))]))
           :argument/conclusion new-conclusion-id
           :argument/version 1
           :argument/type argument-type
@@ -365,11 +369,11 @@
 
 (>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
-  [share-hash user-id statement-id reacting-string reaction]
-  [:discussion/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
+  [share-hash user-id statement-id reacting-string reaction registered-user?]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/argument]
   (let [argument-id
         (get-in
-          (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction)
+          (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction registered-user?)
           [:tempids (str "argument-" reacting-string)])]
     (toolbelt/pull-key-up
       (d/pull (d/db (main-db/new-connection)) argument-pattern argument-id)
