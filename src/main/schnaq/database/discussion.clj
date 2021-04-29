@@ -522,9 +522,7 @@
   (ffirst (query
             '[:find (pull ?argument in-pattern)
               :in $ ?in-id in-pattern
-              :where
-              [?argument :argument/premises ?premises-id]
-              [(= ?premises-id ?in-id)]]
+              :where [?argument :argument/premises ?in-id]]
             statement-id argument-pattern)))
 
 (>defn change-statement-text-and-type
