@@ -50,7 +50,8 @@
           [:dispatch [:load/last-added-schnaq]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
           [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]
-          [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
+          [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]
+          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]]}))
 
 (rf/reg-event-db
   :init-from-backend

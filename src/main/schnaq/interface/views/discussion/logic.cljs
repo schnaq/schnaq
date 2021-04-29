@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.logic
   (:require [ghostwheel.core :refer [>defn]]
+            [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
@@ -60,7 +61,7 @@
                       conj new-premise)
        :fx [[:dispatch [:notification/new-content]]
             [:dispatch [:discussion.statements/add-creation-secret new-premise]]]})))
-;; TODO load creation-secrets on startup
+;; TODO assoc for starting-statements as well
 (rf/reg-event-fx
   :discussion.statements/add-creation-secret
   (fn [{:keys [db]} [_ statement]]
@@ -70,6 +71,11 @@
                               (:statement/creation-secret statement))]
         {:db (assoc-in db [:discussion :statements :creation-secrets] updated-secrets)
          :fx [[:localstorage/assoc [:discussion/creation-secrets updated-secrets]]]}))))
+
+(rf/reg-event-db
+  :schnaq.discussion-secrets/load-from-localstorage
+  (fn [db _]
+    (assoc-in db [:discussion :statements :creation-secrets] (:discussion/creation-secrets local-storage))))
 
 (rf/reg-event-fx
   :notification/new-content
