@@ -300,16 +300,23 @@
       processors/with-votes))
 
 (defn- starting-conclusions-with-processors
-  "Returns starting conclusions for a discussion, with processors applied."
-  [share-hash]
-  (let [starting-statements (discussion-db/starting-statements share-hash)
-        statement-ids (map :db/id starting-statements)
-        info-map (discussion-db/child-node-info statement-ids)]
-    (map
-      #(assoc % :meta/sub-discussion-info (get info-map (:db/id %)))
-      (-> starting-statements
-          processors/hide-deleted-statement-content
-          processors/with-votes))))
+  "Returns starting conclusions for a discussion, with processors applied.
+  Optionally a statement-id can be passed to enrich the statement with its creation-secret."
+  ([share-hash]
+   (let [starting-statements (discussion-db/starting-statements share-hash)
+         statement-ids (map :db/id starting-statements)
+         info-map (discussion-db/child-node-info statement-ids)]
+     (map
+       #(assoc % :meta/sub-discussion-info (get info-map (:db/id %)))
+       (-> starting-statements
+           processors/hide-deleted-statement-content
+           processors/with-votes))))
+  ([share-hash secret-statement-id]
+   (map
+     #(if (= secret-statement-id (:db/id %))
+        (merge % (db/fast-pull secret-statement-id '[:statement/creation-secret]))
+        %)
+     (starting-conclusions-with-processors share-hash))))
 
 (defn- with-sub-discussion-info
   [statements]
@@ -355,11 +362,9 @@
                   [:user.registered/keycloak-id keycloak-id]
                   (user-db/user-by-nickname nickname))]
     (if (validator/valid-writeable-discussion? share-hash)
-      (do
-        (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)
+      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)]
         (log/info "Starting statement added for discussion" share-hash)
-        ;; TODO return creation-secret here and nowhere else
-        (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
+        (ok {:starting-conclusions (starting-conclusions-with-processors share-hash new-starting-id)}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
@@ -376,7 +381,6 @@
                         :argument.type/support)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       ;; TODO return creation-secret here and nowhere else
-      ;; TODO check if statements are created elsewhere
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
                 {:new-argument
