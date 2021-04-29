@@ -109,6 +109,30 @@
         :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our "
         :startpage.newsletter/privacy-policy "privacy policy"
 
+        :startpage.faq/title "Frequently Asked Questions"
+        :startpage.faq.data/question "What happens with my data?"
+        :startpage.faq.data/answer-1 "We only store data on german servers, to provide the best possible data protection. All details are explained
+        in an understandable manner in our "
+        :startpage.faq.data/link-name "privacy policy"
+        :startpage.faq.data/answer-2 "."
+        :startpage.faq.integration/question "Can I integrate schnaq with the software I'm already using?"
+        :startpage.faq.integration/answer "We currently work on integrations for Slack, MS Teams and other popular communication software.
+        If you want to be the first to know, when we launch the feature, subscribe to our "
+        :startpage.faq.integration/link-name "newsletter."
+        :startpage.faq.costs/question "Are there any hidden costs?"
+        :startpage.faq.costs/answer "schnaq is currently in a test-phase and completely free. No hidden payments.
+        Although we are always happy about your honest feedback as a form of payment."
+        :startpage.faq.start/question "How can I start using schnaq?"
+        :startpage.faq.start/answer "You can either use schnaq anonymously, or register to have the possibility to see and administrate your schnaqs
+        and statements from anywhere. Give it a try and "
+        :startpage.faq.start/link-name "create a schnaq."
+        :startpage.faq.why/question "Why should I use schnaq?"
+        :startpage.faq.why/answer "schnaq is for you, if you support a modern, open and equal work-culture.
+        Our goal is to make communication and knowledge-sharing at the workplace as flexible and easy as possible.
+        This way we heighten the potential of every person in the company, and thus of the company itself."
+
+        :startpage.founders-note/title "A Note from the Founders"
+
         ;; Login page
         :page.login/heading "Please Login"
         :page.login/subheading "You need to login to access this resource"
@@ -766,6 +790,30 @@
         :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer "
         :startpage.newsletter/privacy-policy "Datenschutzerklärung"
 
+        :startpage.faq/title "Häufig gestellte Fragen"
+        :startpage.faq.data/question "Was passiert mit meinen Daten?"
+        :startpage.faq.data/answer-1 "Um einen möglichst sicheren Datenschutz zu gewährleisten, speichern
+        wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer "
+        :startpage.faq.data/link-name "Datenschutzerklärung"
+        :startpage.faq.data/answer-2 " zusammengefasst."
+        :startpage.faq.integration/question "Kann ich schnaq mit meiner bestehenden Software integrieren?"
+        :startpage.faq.integration/answer "Wir arbeiten mit Hochdruck an einer Integration für Slack, MS Team und andere gängige Kommunikationssoftware.
+        Wenn du sofort informiert werden willst, wenn die Integration live geht, melde dich für den "
+        :startpage.faq.integration/link-name "Newsletter an."
+        :startpage.faq.costs/question "Gibt es versteckte Kosten?"
+        :startpage.faq.costs/answer "schnaq ist derzeit in einer Testphase und kostenlos benutzbar. Es gibt keinerlei Kosten. Wir freuen uns
+        aber über ehrliches Feedback als Gegenleistung."
+        :startpage.faq.start/question "Wie kann ich mit schnaq starten?"
+        :startpage.faq.start/answer "Du kannst schnaq entweder anonym nutzen, oder dich registrieren und anmelden, um deine schnaqs und Beiträge von
+        überall aus einsehen und verwalten zu können. Probier es einfach aus und "
+        :startpage.faq.start/link-name "starte einen schnaq."
+        :startpage.faq.why/question "Warum sollte ich schnaq nutzen?"
+        :startpage.faq.why/answer "schnaq ist für dich, wenn du eine moderne, offene und gleichberechtigte Arbeitskultur unterstützt.
+        Unser Ziel ist es Kommunikation und Wissensaustausch am Arbeitsplatz flexibel zu gestalten. So heben wir
+        nicht nur das Potenzial einzelner Teammitglieder, sondern auch des gesamten Unternehmens."
+
+        :startpage.founders-note/title "Ein Brief von den Gründern"
+
         ;; Login Page
         :page.login/heading "Bitte logg dich ein"
         :page.login/subheading "Um auf die folgende Ressource zugreifen zu können, musst du eingeloggt sein"
@@ -1337,6 +1385,7 @@
   (identifier
     {:feature.meetings/hero-image "/imgs/stock/meeting_landing_hero_500w.jpeg"
      :feature.meetings/schedule-meetings "/imgs/startpage/features/meeting-erstellen.png"
+     :founders-note "https://s3.disqtec.com/startpage/founders_letter.png"
      :how-to/taskbar "/imgs/howto/taskbar.svg"
      :icon-add "/imgs/buttons/add-button.svg"
      :icon-community "/imgs/community.svg"

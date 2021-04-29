@@ -74,7 +74,6 @@
   ;; after shadow-cljs hot-reloads code. We force a UI update by clearing
   ;; the Reframe subscription cache.
   (rf/clear-subscription-cache!)
-  (routes/init-routes!)
   (render))
 
 (defn- say-hello

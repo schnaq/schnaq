@@ -1,8 +1,10 @@
 (ns schnaq.interface.routes
-  (:require [re-frame.core :as rf]
+  (:require [goog.object :as gobj]
+            [re-frame.core :as rf]
             [reitit.coercion.spec]
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
+            [reitit.frontend.history :as rfh]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.text.display-data :refer [labels]]
@@ -260,6 +262,7 @@
     routes))
 
 (defn- on-navigate [new-match]
+  (.scrollTo js/window 0 0)
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
@@ -268,7 +271,12 @@
   (reitit-front-easy/start!
     router
     on-navigate
-    {:use-fragment false}))
+    {:use-fragment false
+     :ignore-anchor-click? (fn [router e el uri]
+                             (and (rfh/ignore-anchor-click? router e el uri)
+                                  (not= "false" (gobj/get (.-dataset el) "reititHandleClick"))
+                                  ;; Ignore anchor-click when there is no fragment present e.g. schnaq.com/#newsletter
+                                  (empty? (.-hash el))))}))
 
 (defn parse-route
   "Parses a URL with the schnaq routes and returns the full match object."
