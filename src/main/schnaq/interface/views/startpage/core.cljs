@@ -11,6 +11,7 @@
 (defn- mailchimp-form
   []
   [:section.row.pt-5.pb-5
+   {:id "newsletter"}
    [:div.col-12.col-md-4.my-auto
     [:img.img-fluid {:src (img-path :schnaqqifant/mail)}]]
    [:div.col-12.col-md-8.my-auto
@@ -91,6 +92,33 @@
        {:src (img-path :logos/digihub)
         :alt "digihub logo"}]]]]])
 
+(defn- faq
+  "Handle some still open questions from the user."
+  []
+  [:section.pt-5
+   [:h4.text-center (labels :startpage.faq/title)]
+   [:p [:strong (labels :startpage.faq.data/question)] " "
+    (labels :startpage.faq.data/answer-1)
+    [:a {:href (reitfe/href :routes/privacy)} (labels :startpage.faq.data/link-name)]
+    (labels :startpage.faq.data/answer-2)]
+   [:p [:strong (labels :startpage.faq.integration/question)] " " (labels :startpage.faq.integration/answer)
+    [:a {:href "#newsletter"} (labels :startpage.faq.integration/link-name)]]
+   [:p [:strong (labels :startpage.faq.costs/question)] " " (labels :startpage.faq.costs/answer)]
+   [:p [:strong (labels :startpage.faq.start/question)] " " (labels :startpage.faq.start/answer)
+    [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.faq.start/link-name)]]
+   [:p [:strong (labels :startpage.faq.why/question)] " " (labels :startpage.faq.why/answer)]])
+
+(defn- founders-note
+  "A personal note from the founders, to the visitor of the page. Give a last personal touch."
+  []
+  [:section.pb-5
+   [:h4.text-center (labels :startpage.founders-note/title)]
+   [:div.mx-auto
+    ;; Platzhalter
+    {:style {:width "60%"}}
+    [:img.img-fluid.mb-2.shadow-sm {:src (img-path :founders-note)}]]
+   [:p.text-center [:strong "– Alexander, Christian, Michael und Philip"]]])
+
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
   [pages/with-nav-and-header
@@ -102,9 +130,11 @@
     [:section.container
      [startpage-features/feature-rows]
      [mailchimp-form]
-     [testimonials/view]]
+     [testimonials/view]
+     [faq]]
     [early-adopters]
     [:section.container
+     [founders-note]
      [supporters]]]])
 
 (defn startpage-view

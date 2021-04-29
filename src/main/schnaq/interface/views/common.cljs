@@ -56,7 +56,7 @@
   namespace."
   [prepend-namespace to-keyword]
   [(s/or :keyword keyword? :string string?) keyword? :ret keyword?]
-  (keyword (str (name prepend-namespace) "/" (name to-keyword))))
+  (keyword (str (name prepend-namespace)) (str (name to-keyword))))
 
 (defn tab-builder
   "Create a tabbed view. Prefix must be unique on this page."
