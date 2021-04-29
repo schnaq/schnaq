@@ -2,8 +2,8 @@
   (:require [compojure.core :refer [GET POST DELETE PUT routes wrap-routes context]]
             [ring.util.http-response :refer [ok forbidden bad-request]]
             [schnaq.auth :as auth]
-            [schnaq.meeting.database :refer [fast-pull]]
             [schnaq.database.hub :as hub-db]
+            [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.user :as user-db]
             [schnaq.processors :as processors]
             [schnaq.validator :as validators]))

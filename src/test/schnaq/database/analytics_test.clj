@@ -2,8 +2,8 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.analytics :as db]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.main :as main-db]
             [schnaq.database.user :as user-db]
-            [schnaq.meeting.database :as main-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.time Instant)))
 

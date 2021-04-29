@@ -1,6 +1,6 @@
 (ns schnaq.validator-test
   (:require [clojure.test :refer [use-fixtures is deftest testing]]
-            [schnaq.meeting.database :as db]
+            [schnaq.database.main :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
             [schnaq.validator :refer [user-schnaq-admin?]]))
 

@@ -2,9 +2,9 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.meeting.database :refer [fast-pull]]
             [schnaq.user :as user]))
 
 (>defn- premise-ids

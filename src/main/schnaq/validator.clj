@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [schnaq.database.discussion :as db]
-            [schnaq.meeting.database :refer [fast-pull]]
+            [schnaq.database.main :refer [fast-pull]]
             [ring.util.http-response :refer [forbidden]]))
 
 (s/def :ring/response (s/keys :req-un [:http/status :http/headers]))

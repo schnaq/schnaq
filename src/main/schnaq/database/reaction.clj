@@ -1,6 +1,6 @@
 (ns schnaq.database.reaction
   (:require [ghostwheel.core :refer [>defn >defn- ?]]
-            [schnaq.meeting.database :refer [transact query]]))
+            [schnaq.database.main :refer [transact query]]))
 
 ;; ----------------------------------------------------------------------------
 ;; voting
