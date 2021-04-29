@@ -10,7 +10,8 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
-  (:import (clojure.lang ExceptionInfo)))
+  (:import (clojure.lang ExceptionInfo)
+           (java.util UUID)))
 
 (def statement-rules
   '[[(statements-from-argument ?argument ?statements)
@@ -227,9 +228,12 @@
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
-  [share-hash user-id statement-content]
-  [:discussion/share-hash :db/id :statement/content :ret :db/id]
-  (let [new-statement (build-new-statement user-id statement-content "add/starting-argument")
+  [share-hash user-id statement-content registered-user?]
+  [:discussion/share-hash :db/id :statement/content any? :ret :db/id]
+  (let [minimum-statement (build-new-statement user-id statement-content "add/starting-argument")
+        new-statement (if registered-user?
+                        minimum-statement
+                        (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
         temporary-id (:db/id new-statement)
         discussion-id (:db/id (discussion-by-share-hash share-hash))]
     (get-in (transact [new-statement

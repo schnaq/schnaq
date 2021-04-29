@@ -355,9 +355,11 @@
                   [:user.registered/keycloak-id keycloak-id]
                   (user-db/user-by-nickname nickname))]
     (if (validator/valid-writeable-discussion? share-hash)
-      (do (discussion-db/add-starting-statement! share-hash user-id statement)
-          (log/info "Starting statement added for discussion" share-hash)
-          (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
+      (do
+        (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)
+        (log/info "Starting statement added for discussion" share-hash)
+        ;; TODO return creation-secret here and nowhere else
+        (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!

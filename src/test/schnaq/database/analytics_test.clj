@@ -46,7 +46,7 @@
                                      :discussion/edit-hash "ahsdasd"
                                      :discussion/share-hash share-hash
                                      :discussion/author user-id} true)
-      (discussion-db/add-starting-statement! share-hash user-id "test")
+      (discussion-db/add-starting-statement! share-hash user-id "test" false)
       (is (= 39 (db/number-of-statements))))))
 
 (deftest average-number-of-statements-test

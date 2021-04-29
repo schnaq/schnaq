@@ -80,7 +80,7 @@
     (let [statement "Wow look at this"
           user-id (user-db/user-by-nickname "Test-person")
           meeting-hash "graph-hash"
-          _ (db/add-starting-statement! meeting-hash user-id statement)
+          _ (db/add-starting-statement! meeting-hash user-id statement false)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 3 (count starting-statements)))))))
@@ -176,8 +176,8 @@
                                 :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                                true)
           christian-id (user-db/user-by-nickname "Christian")
-          first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
-          second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
+          first-id (db/add-starting-statement! share-hash christian-id "this is sparta" false)
+          second-id (db/add-starting-statement! share-hash christian-id "this is kreta" false)]
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-for-discussion second-id "Wegi-ist-der-schönste")))))
 
@@ -238,7 +238,7 @@
           modified-content "Whats up in dis here house?"
           new-user (user-db/add-user-if-not-exists "Wugiperson")
           new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
-                                                       new-user initial-content)]
+                                                       new-user initial-content false)]
       (is (= initial-content (:statement/content (db/get-statement new-statement-id))))
       (let [modified-statement (db/change-statement-text new-statement-id modified-content)]
         (is (= modified-content (:statement/content modified-statement)))
