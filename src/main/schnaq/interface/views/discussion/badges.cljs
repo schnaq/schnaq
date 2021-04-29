@@ -6,6 +6,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
+            [schnaq.interface.views.modals.modal :as modal]
             [schnaq.user :as user]))
 
 (>defn- build-author-list
@@ -29,6 +30,14 @@
       :title (labels :discussion.badges/delete-statement)}
      [:i {:class (str "m-auto fas " (fa :trash))}]]))
 ;; TODO konvertiere die Beiträge zum registrierten User, nach der Registrierung.
+
+(defn- anonymous-edit-modal
+  "Show this modal to anonymous users trying to edit statements."
+  []
+  [modal/modal-template
+   "Bitte anmelden zum editieren"
+   [:p "Nanana, musst schon anmelden du bübele"]])
+
 (defn- edit-button
   "Give the registered user the ability to edit their statement."
   [statement]
@@ -36,8 +45,8 @@
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         anonymous-owner (contains? creation-secrets (:db/id statement))
         on-click-fn (if anonymous-owner
-                      #(js/alert "Wowow, halte ein unregistrierter Pleb")
-                      ;; TODO continue here
+                      #(rf/dispatch [:modal {:show? true
+                                             :child [anonymous-edit-modal]}])
                       #(rf/dispatch [:statement.edit/activate-edit (:db/id statement)]))]
     (when (or anonymous-owner
               ; User is registered author
