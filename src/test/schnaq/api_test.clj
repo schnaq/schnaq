@@ -128,6 +128,7 @@
         request #(-> (mock/request :put "/discussion/statement/edit")
                      (assoc-in [:identity :sub] %)
                      (assoc-in [:params :share-hash] share-hash)
+                     (assoc-in [:params :statement-type] :argument.type/neutral)
                      (assoc-in [:params :statement-id] (:db/id statement))
                      (assoc-in [:params :new-content] "any-text"))]
     (testing "Only requests from valid author should be allowed."
