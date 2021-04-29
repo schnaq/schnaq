@@ -95,6 +95,7 @@
 (rf/reg-event-db
   :statement.edit/deactivate-edit
   (fn [db [_ statement-id]]
+    (update-in db [:statements :edit-type] dissoc statement-id)
     (update-in db [:statements :currently-edited] disj statement-id)))
 
 (rf/reg-event-db
