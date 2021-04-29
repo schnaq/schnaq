@@ -14,7 +14,7 @@
         checked? (= button-type argument-type)]
     [:label.btn.btn-outline-primary.rounded-4
      (when checked? {:class "active"})
-     [:input {:id (str "argument-type-button-" id) :type "radio" :name "options" :autoComplete "off"
+     [:input {:id (str "argument-type-button-" id "-" get-subscription) :type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
               :title (labels tooltip)
               :on-click (fn [e] (jq/prevent-default e)

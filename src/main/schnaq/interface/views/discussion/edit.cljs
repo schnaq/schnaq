@@ -11,6 +11,7 @@
   [statement]
   (let [statement-id (:db/id statement)
         has-history? (not (zero? (count @(rf/subscribe [:discussion-history]))))
+        pro-con-enabled? (not @(rf/subscribe [:schnaq.selected/pro-con?]))
         statement-html-id (str "statement-edit-" statement-id)
         dispatch-fn #(rf/dispatch
                        [:statement.edit/send (:db/id statement) statement-html-id (oget % [:currentTarget :elements])])]
@@ -28,7 +29,7 @@
                                :defaultValue (:statement/content statement)}]]
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
-       (when has-history?                                   ;todo add check if admin disables pro con
+       (when (and has-history? pro-con-enabled?)
          [input/argument-type-choose-button [:edit/argument-type statement-id] [:edit/argument-type! statement-id]])]
       [:div.d-flex.mb-3
        [:button.btn.btn-outline-secondary

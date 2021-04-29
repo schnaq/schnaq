@@ -530,7 +530,7 @@
 (>defn change-statement-text-and-type
   "Changes the content of a statement to `new-content` and the type to `new-type` if it's an argument."
   [statement-id new-type new-content]
-  [:db/id :db/ident :statement/content :ret ::specs/statement]
+  [:db/id :argument/type :statement/content :ret ::specs/statement]
   (let [argument (find-argument-of-statement statement-id)]
     (transact [[:db/add statement-id :statement/content new-content]])
     (log/info "Statement" statement-id "edited with new content.")
