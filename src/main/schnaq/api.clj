@@ -386,7 +386,6 @@
                         :neutral :argument.type/neutral
                         :argument.type/support)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
-      ;; TODO return creation-secret here and nowhere else
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
                 {:new-argument

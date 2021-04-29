@@ -43,7 +43,6 @@
       (is (= "This is a new support" (-> new-support :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-support :argument/conclusion :statement/content)))
       (is (= :argument.type/support (:argument/type new-support)))
-      (println another-new-argument)
       (is (= "this is a secret support" (-> another-new-argument :argument/premises first :statement/content)))
       (is (string? (-> another-new-argument :argument/premises first :statement/creation-secret))))))
 
