@@ -363,7 +363,7 @@
           :argument/discussions [discussion-id]}]]
     (transact new-arguments)))
 
-(>defn- react-to-statement!
+(>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
   [share-hash user-id statement-id reacting-string reaction]
   [:discussion/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
@@ -374,24 +374,6 @@
     (toolbelt/pull-key-up
       (d/pull (d/db (main-db/new-connection)) argument-pattern argument-id)
       :db/ident)))
-
-(>defn support-statement!
-  "Create a new statement supporting another statement. Returns the newly created argument."
-  [share-hash user-id statement-id supporting-string]
-  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash user-id statement-id supporting-string :argument.type/support))
-
-(>defn neutral-statement!
-  "Create a new neutral statement. Returns the newly created argument."
-  [share-hash user-id statement-id attacking-string]
-  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/neutral))
-
-(>defn attack-statement!
-  "Create a new statement attacking another statement. Returns the newly created argument."
-  [share-hash user-id statement-id attacking-string]
-  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
 
 (>defn new-discussion
   "Adds a new discussion to the database."

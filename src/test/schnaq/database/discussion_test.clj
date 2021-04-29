@@ -35,8 +35,8 @@
     (let [share-hash "simple-hash"
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/support-statement! share-hash user-id (:db/id starting-conclusion)
-                                            "This is a new support")]
+          new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+                                             "This is a new support" :argument.type/support)]
       (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/support (:argument/type new-attack))))))
@@ -46,8 +46,8 @@
     (let [share-hash "simple-hash"
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/attack-statement! share-hash user-id (:db/id starting-conclusion)
-                                           "This is a new attack")]
+          new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+                                             "This is a new attack" :argument.type/attack)]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/attack (:argument/type new-attack))))))
