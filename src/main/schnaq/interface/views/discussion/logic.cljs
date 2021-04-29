@@ -61,7 +61,7 @@
                       conj new-premise)
        :fx [[:dispatch [:notification/new-content]]
             [:dispatch [:discussion.statements/add-creation-secret new-premise]]]})))
-;; TODO assoc for starting-statements as well
+
 (rf/reg-event-fx
   :discussion.statements/add-creation-secret
   (fn [{:keys [db]} [_ statement]]
