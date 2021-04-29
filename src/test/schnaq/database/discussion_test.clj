@@ -37,7 +37,8 @@
           starting-conclusion (first (db/starting-statements share-hash))
           new-support (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
                                               "This is a new support" :argument.type/support false)
-          another-new-statement (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+          another-new-statement (db/react-to-statement! share-hash user-id
+                                                        (-> new-support :argument/premises first :db/id)
                                                         "this is a secret support" :argument.type/support true)]
       (is (= "This is a new support" (-> new-support :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-support :argument/conclusion :statement/content)))
