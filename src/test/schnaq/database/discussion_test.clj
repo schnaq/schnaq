@@ -257,7 +257,7 @@
           registered-user (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"])]
       ;; Using the wrong secret should do nothing
       (db/update-authors-from-secrets {(:db/id statement) "wrong-secret"} (:db/id registered-user))
-      (is (= original-author (-> (first (db/starting-statements "simple-hash")) :statement/author)))
+      (is (= original-author (-> (first (db/starting-statements "simple-hash")) :statement/author :db/id)))
       ;; Now update the author
       (db/update-authors-from-secrets {(:db/id statement) "secret-creation-secret"} (:db/id registered-user))
-      (is (= (:db/id registered-user) (-> (first (db/starting-statements "simple-hash")) :statement/author))))))
+      (is (= (:db/id registered-user) (-> (first (db/starting-statements "simple-hash")) :statement/author :db/id))))))
