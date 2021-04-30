@@ -13,12 +13,11 @@
   }
 }
 
-.panel-light-background {
-  @extend .shadow-sm;
-  @include rounded.rounded-2;
-  background: vars.$light-background;
+
+.animation-background {
+  @include rounded.rounded-3;
+  box-shadow: vars.$wide-shadow;
   overflow: hidden;
-  padding: 1rem;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
