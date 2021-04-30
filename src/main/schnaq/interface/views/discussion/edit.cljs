@@ -55,26 +55,22 @@
 
 (defn- update-statement-in-list
   "Updates the content of a statement in a collection."
-  [coll new-statement]
-  ;; Merge instead of overwriting, to preserve meta information
-  (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))
-
-(defn- update-argument-type-in-list
-  "Updates the argument-type meta info of an argument in a collection."
-  [coll id new-type]
-  (when new-type
-    (map #(if (= id (:db/id %)) (merge % [:meta/argument-type new-type]) %) coll)))
+  ([coll new-statement]
+   (update-statement-in-list coll new-statement nil))
+  ([coll new-statement new-type]
+   (let [new-statement (if new-type (assoc new-statement :meta/argument-type new-type)
+                                    new-statement)]
+     ;; Merge instead of overwriting, to preserve meta information
+     (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))))
 
 (rf/reg-event-fx
   :statement.edit.send/success
   (fn [{:keys [db]} [_ form response]]
     (let [updated-statement (:updated-statement response)
-          statement-id (:db/id updated-statement)
           updated-type (get-in db [:statements :edit-type (:db/id updated-statement)] nil)]
       {:db (-> db
                (update-in [:discussion :conclusions :starting] #(update-statement-in-list % updated-statement))
-               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement))
-               (update-in [:discussion :premises :current] #(update-argument-type-in-list % statement-id updated-type)))
+               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement updated-type)))
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
 
