@@ -3,6 +3,7 @@
             [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
             [schnaq.database.discussion-test-data :as test-data]
+            [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -248,3 +249,15 @@
       (let [modified-statement (db/change-statement-text new-statement-id modified-content)]
         (is (= modified-content (:statement/content modified-statement)))
         (is (s/valid? ::specs/statement modified-statement))))))
+
+(deftest update-authors-from-secrets-test
+  (testing "Change of author, when a registered user claims the statement."
+    (let [statement (first (db/starting-statements "simple-hash"))
+          original-author (user-db/user-by-nickname "Christian")
+          registered-user (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"])]
+      ;; Using the wrong secret should do nothing
+      (db/update-authors-from-secrets {(:db/id statement) "wrong-secret"} (:db/id registered-user))
+      (is (= original-author (-> (first (db/starting-statements "simple-hash")) :statement/author)))
+      ;; Now update the author
+      (db/update-authors-from-secrets {(:db/id statement) "secret-creation-secret"} (:db/id registered-user))
+      (is (= (:db/id registered-user) (-> (first (db/starting-statements "simple-hash")) :statement/author))))))

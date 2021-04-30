@@ -1,6 +1,7 @@
 (ns schnaq.database.discussion
   "Discussion related functions interacting with the database."
-  (:require [clojure.spec.alpha :as s]
+  (:require [clojure.data :as cdata]
+            [clojure.spec.alpha :as s]
             [datomic.client.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
@@ -537,3 +538,25 @@
   [:discussion/share-hash :user.registered/keycloak-id :ret associative?]
   (transact [[:db/add [:discussion/share-hash share-hash] :discussion/admins
               [:user.registered/keycloak-id keycloak-id]]]))
+
+(>defn- build-secrets-map
+  "Creates a secrets map for a collection of statements.
+  When there is no secret, the statement is skipped."
+  [statement-ids]
+  [:db/id :ret map?]
+  (into {}
+        (query
+          '[:find ?statement ?secret
+            :in $ [?statement ...]
+            :where [?statement :statement/creation-secret ?secret]]
+          statement-ids)))
+;; TODO check if author is updated in the frontend without reload (should be because login is always a reload)
+(>defn update-authors-from-secrets
+  "Takes a dictionary of statement-ids mapped to creation secrets and sets the passed author
+  as their author, if the secrets are correct."
+  [secrets-map author-id]
+  [map? :db/id :ret any?]
+  (let [validated-secrets-map (build-secrets-map (keys secrets-map))
+        [_ _ valid-secrets] (cdata/diff secrets-map validated-secrets-map)]
+    (transact
+      (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets)))))

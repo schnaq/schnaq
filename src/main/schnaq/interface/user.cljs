@@ -49,10 +49,12 @@
   :user/register
   (fn [{:keys [db]} [_ result]]
     (when result
-      {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success])]})))
+      {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
+                                {:creation-secrets (get-in db [:discussion :statements :creation-secrets])})]})))
 
 (rf/reg-event-db
   :user.register/success
+  ;; todo clear the creation secrets here
   (fn [db [_ {:keys [registered-user]}]]
     (let [{:user.registered/keys [display-name first-name last-name email profile-picture]} registered-user]
       (-> db

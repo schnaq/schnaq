@@ -5,6 +5,7 @@
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
             [schnaq.media :as media]
             [schnaq.s3 :as s3]
@@ -13,10 +14,12 @@
 
 (defn- register-user-if-they-not-exist
   "Register a new user if they do not exist. In all cases return the user."
-  [{:keys [identity]}]
+  [{:keys [identity params]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (ok {:registered-user (user-db/register-new-user identity)}))
+  (let [queried-user (user-db/register-new-user identity)]
+    (discussion-db/update-authors-from-secrets (:creation-secrets params) (:db/id queried-user))
+    (ok {:registered-user queried-user})))
 
 (defn- create-UUID-file-name
   "Generates a UUID based on a unique id with a file type suffix."

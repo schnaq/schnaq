@@ -365,6 +365,7 @@
     :argument/conclusion {:db/id "statement/brainstorm"
                           :statement/author "user/rambo"
                           :statement/content "Brainstorming ist total wichtig"
+                          :statement/creation-secret "secret-creation-secret"
                           :statement/version 1}
     :argument/version 1
     :argument/type :argument.type/support
