@@ -208,7 +208,7 @@
         ;; Conversion-Edit-Funnel
         :discussion.anonymous-edit.modal/title "Please sign in to edit"
         :discussion.anonymous-edit.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit a statement."]]
-        :discussion.anonymous-edit.modal/persuade "Statements you made recently will automatically be converted to your logged in account."
+        :discussion.anonymous-edit.modal/persuade "Statements you made recently with this browsers will automatically be converted to your logged in account."
         :discussion.anonymous-edit.modal/cta "Sign in / Sign up"
 
         ;; Privacy Page
@@ -896,7 +896,7 @@
         ;; Conversion-Edit-Funnel
         :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
         :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren anmelden."]]
-        :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir erstellt wurden, werden dabei automatisch umgewandelt."
+        :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei automatisch umgewandelt."
         :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
 
         ;; Privacy Page
