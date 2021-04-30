@@ -51,9 +51,10 @@
         on-click-fn (if anonymous-owner
                       #(rf/dispatch [:modal {:show? true
                                              :child [anonymous-edit-modal]}])
-                      (fn [] (rf/dispatch [:statement.edit/activate-edit (:db/id statement)]
-                             (rf/dispatch [:statement.edit/change-argument-type (:db/id statement)
-                                            (:meta/argument-type statement)]))))]
+                      (fn []
+                        (rf/dispatch [:statement.edit/activate-edit (:db/id statement)])
+                        (rf/dispatch [:statement.edit/change-argument-type (:db/id statement)
+                                      (:meta/argument-type statement)])))]
     (when (or anonymous-owner
               ; User is registered author
               (and (= user-id (:db/id (:statement/author statement)))
