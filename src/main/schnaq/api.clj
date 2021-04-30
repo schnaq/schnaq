@@ -20,12 +20,13 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
             [schnaq.database.reaction :as reaction-db]
+            [schnaq.database.main :as db]
+            [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
             [schnaq.media :as media]
-            [schnaq.meeting.database :as db]
             [schnaq.processors :as processors]
             [schnaq.s3 :as s3]
             [schnaq.translations :refer [email-templates]]
@@ -292,6 +293,15 @@
 ;; -----------------------------------------------------------------------------
 ;; Discussion
 
+(>defn- add-creation-secret
+  "Add creatino-secret to a collection of statements. Only add to matching target-id."
+  [statements target-id]
+  [(s/coll-of ::specs/statement) :db/id :ret (s/coll-of ::specs/statement)]
+  (map #(if (= target-id (:db/id %))
+         (merge % (db/fast-pull target-id '[:statement/creation-secret]))
+         %)
+       statements))
+
 (defn- valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [data]
@@ -300,16 +310,19 @@
       processors/with-votes))
 
 (defn- starting-conclusions-with-processors
-  "Returns starting conclusions for a discussion, with processors applied."
-  [share-hash]
-  (let [starting-statements (discussion-db/starting-statements share-hash)
-        statement-ids (map :db/id starting-statements)
-        info-map (discussion-db/child-node-info statement-ids)]
-    (map
-      #(assoc % :meta/sub-discussion-info (get info-map (:db/id %)))
-      (-> starting-statements
-          processors/hide-deleted-statement-content
-          processors/with-votes))))
+  "Returns starting conclusions for a discussion, with processors applied.
+  Optionally a statement-id can be passed to enrich the statement with its creation-secret."
+  ([share-hash]
+   (let [starting-statements (discussion-db/starting-statements share-hash)
+         statement-ids (map :db/id starting-statements)
+         info-map (discussion-db/child-node-info statement-ids)]
+     (map
+       #(assoc % :meta/sub-discussion-info (get info-map (:db/id %)))
+       (-> starting-statements
+           processors/hide-deleted-statement-content
+           processors/with-votes))))
+  ([share-hash secret-statement-id]
+   (add-creation-secret (starting-conclusions-with-processors share-hash) secret-statement-id)))
 
 (defn- with-sub-discussion-info
   [statements]
@@ -355,9 +368,9 @@
                   [:user.registered/keycloak-id keycloak-id]
                   (user-db/user-by-nickname nickname))]
     (if (validator/valid-writeable-discussion? share-hash)
-      (do (discussion-db/add-starting-statement! share-hash user-id statement)
-          (log/info "Starting statement added for discussion" share-hash)
-          (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)}))
+      (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)]
+        (log/info "Starting statement added for discussion" share-hash)
+        (ok {:starting-conclusions (starting-conclusions-with-processors share-hash new-starting-id)}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
@@ -367,15 +380,16 @@
         keycloak-id (:sub identity)
         user-id (if keycloak-id
                   [:user.registered/keycloak-id keycloak-id]
-                  (user-db/user-by-nickname nickname))]
+                  (user-db/user-by-nickname nickname))
+        argument-type (case reaction
+                        :attack :argument.type/attack
+                        :neutral :argument.type/neutral
+                        :argument.type/support)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
                 {:new-argument
-                 (case reaction
-                   :attack (discussion-db/attack-statement! share-hash user-id conclusion-id premise)
-                   :neutral (discussion-db/neutral-statement! share-hash user-id conclusion-id premise)
-                   (discussion-db/support-statement! share-hash user-id conclusion-id premise))})))
+                 (discussion-db/react-to-statement! share-hash user-id conclusion-id premise argument-type keycloak-id)})))
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials

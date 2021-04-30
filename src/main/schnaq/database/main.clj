@@ -1,4 +1,4 @@
-(ns schnaq.meeting.database
+(ns schnaq.database.main
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [datomic.client.api :as d]

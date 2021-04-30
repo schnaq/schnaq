@@ -1,16 +1,18 @@
 (ns schnaq.database.discussion
   "Discussion related functions interacting with the database."
-  (:require [clojure.spec.alpha :as s]
+  (:require [clojure.data :as cdata]
+            [clojure.spec.alpha :as s]
             [datomic.client.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
+            [schnaq.database.main :refer [transact new-connection query fast-pull] :as main-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.meeting.database :refer [transact new-connection query] :as main-db]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
-  (:import (clojure.lang ExceptionInfo)))
+  (:import (clojure.lang ExceptionInfo)
+           (java.util UUID)))
 
 (def statement-rules
   '[[(statements-from-argument ?argument ?statements)
@@ -39,6 +41,20 @@
    {:argument/author user-db/combined-user-pattern}
    {:argument/type [:db/ident]}
    {:argument/premises statement-pattern}
+   {:argument/conclusion
+    (conj statement-pattern
+          :argument/version
+          {:argument/author user-db/combined-user-pattern}
+          {:argument/type [:db/ident]}
+          {:argument/premises statement-pattern}
+          {:argument/conclusion statement-pattern})}])
+
+(def ^:private argument-pattern-with-secret-premises
+  [:db/id
+   :argument/version
+   {:argument/author user-db/combined-user-pattern}
+   {:argument/type [:db/ident]}
+   {:argument/premises (conj statement-pattern :statement/creation-secret)}
    {:argument/conclusion
     (conj statement-pattern
           :argument/version
@@ -187,14 +203,16 @@
 
 (>defn- pack-premises
   "Packs premises into a statement-structure."
-  [premises user-id]
-  [(s/coll-of :statement/content) :db/id
-   :ret (s/coll-of map?)]
-  (mapv (fn [premise] {:db/id (str "premise-" premise)
-                       :statement/author user-id
-                       :statement/content premise
-                       :statement/version 1})
-        premises))
+  ([premises user-id]
+   [(s/coll-of :statement/content) :db/id :ret (s/coll-of map?)]
+   (mapv (fn [premise] {:db/id (str "premise-" premise)
+                        :statement/author user-id
+                        :statement/content premise
+                        :statement/version 1})
+         premises))
+  ([premises user-id creation-secrets]
+   [(s/coll-of :statement/content) :db/id (s/coll-of :statement/creation-secret) :ret (s/coll-of map?)]
+   (mapv #(assoc %1 :statement/creation-secret %2) (pack-premises premises user-id) creation-secrets)))
 
 (>defn prepare-new-argument
   "Prepares a new argument for transaction. Optionally sets a temporary id."
@@ -227,9 +245,12 @@
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
-  [share-hash user-id statement-content]
-  [:discussion/share-hash :db/id :statement/content :ret :db/id]
-  (let [new-statement (build-new-statement user-id statement-content "add/starting-argument")
+  [share-hash user-id statement-content registered-user?]
+  [:discussion/share-hash :db/id :statement/content any? :ret :db/id]
+  (let [minimum-statement (build-new-statement user-id statement-content "add/starting-argument")
+        new-statement (if registered-user?
+                        minimum-statement
+                        (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
         temporary-id (:db/id new-statement)
         discussion-id (:db/id (discussion-by-share-hash share-hash))]
     (get-in (transact [new-statement
@@ -346,48 +367,33 @@
 
 (>defn- new-premises-for-statement!
   "Creates a new argument based on a statement, which is used as conclusion."
-  [share-hash user-id new-conclusion-id new-statement-string argument-type]
-  [:discussion/share-hash :db/id :db/id :statement/content :argument/type :ret associative?]
+  [share-hash user-id new-conclusion-id new-statement-string argument-type registered-user?]
+  [:discussion/share-hash :db/id :db/id :statement/content :argument/type any? :ret associative?]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author user-id
-          :argument/premises (pack-premises [new-statement-string] user-id)
+          :argument/premises (if registered-user?
+                               (pack-premises [new-statement-string] user-id)
+                               (pack-premises [new-statement-string] user-id [(.toString (UUID/randomUUID))]))
           :argument/conclusion new-conclusion-id
           :argument/version 1
           :argument/type argument-type
           :argument/discussions [discussion-id]}]]
     (transact new-arguments)))
 
-(>defn- react-to-statement!
+(>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
-  [share-hash user-id statement-id reacting-string reaction]
-  [:discussion/share-hash :db/id :db/id :statement/content keyword? :ret ::specs/argument]
+  [share-hash user-id statement-id reacting-string reaction registered-user?]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/argument]
   (let [argument-id
         (get-in
-          (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction)
-          [:tempids (str "argument-" reacting-string)])]
+          (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction registered-user?)
+          [:tempids (str "argument-" reacting-string)])
+        argument-pattern (if registered-user? argument-pattern argument-pattern-with-secret-premises)]
     (toolbelt/pull-key-up
-      (d/pull (d/db (main-db/new-connection)) argument-pattern argument-id)
+      (fast-pull argument-id argument-pattern)
       :db/ident)))
-
-(>defn support-statement!
-  "Create a new statement supporting another statement. Returns the newly created argument."
-  [share-hash user-id statement-id supporting-string]
-  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash user-id statement-id supporting-string :argument.type/support))
-
-(>defn neutral-statement!
-  "Create a new neutral statement. Returns the newly created argument."
-  [share-hash user-id statement-id attacking-string]
-  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/neutral))
-
-(>defn attack-statement!
-  "Create a new statement attacking another statement. Returns the newly created argument."
-  [share-hash user-id statement-id attacking-string]
-  [:discussion/share-hash :db/id :db/id :statement/content :ret ::specs/argument]
-  (react-to-statement! share-hash user-id statement-id attacking-string :argument.type/attack))
 
 (>defn new-discussion
   "Adds a new discussion to the database."
@@ -532,3 +538,27 @@
   [:discussion/share-hash :user.registered/keycloak-id :ret associative?]
   (transact [[:db/add [:discussion/share-hash share-hash] :discussion/admins
               [:user.registered/keycloak-id keycloak-id]]]))
+
+(>defn- build-secrets-map
+  "Creates a secrets map for a collection of statements.
+  When there is no secret, the statement is skipped."
+  [statement-ids]
+  [:db/id :ret map?]
+  (when statement-ids
+    (into {}
+          (query
+            '[:find ?statement ?secret
+              :in $ [?statement ...]
+              :where [?statement :statement/creation-secret ?secret]]
+            statement-ids))))
+
+(>defn update-authors-from-secrets
+  "Takes a dictionary of statement-ids mapped to creation secrets and sets the passed author
+  as their author, if the secrets are correct."
+  [secrets-map author-id]
+  [(? map?) :db/id :ret any?]
+  (let [validated-secrets-map (build-secrets-map (keys secrets-map))
+        [_ _ valid-secrets] (cdata/diff secrets-map validated-secrets-map)]
+    (when valid-secrets
+      (transact
+        (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))

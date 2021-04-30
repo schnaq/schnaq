@@ -6,7 +6,7 @@
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [ok bad-request forbidden]]
-            [schnaq.meeting.database :as d]
+            [schnaq.database.main :as d]
             [schnaq.s3 :as s3]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log])

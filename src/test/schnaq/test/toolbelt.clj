@@ -4,7 +4,7 @@
             [expound.alpha :as expound]
             [ghostwheel.core :refer [>defn]]
             [ring.mock.request :as mock]
-            [schnaq.meeting.database :as database]
+            [schnaq.database.main :as database]
             [schnaq.toolbelt :as schnaq-toolbelt]))
 
 

@@ -6,6 +6,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
+            [schnaq.interface.views.modals.modal :as modal]
             [schnaq.user :as user]))
 
 (>defn- build-author-list
@@ -29,16 +30,37 @@
       :title (labels :discussion.badges/delete-statement)}
      [:i {:class (str "m-auto fas " (fa :trash))}]]))
 
+(defn- anonymous-edit-modal
+  "Show this modal to anonymous users trying to edit statements."
+  []
+  [modal/modal-template
+   (labels :discussion.anonymous-edit.modal/title)
+   [:<>
+    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels :discussion.anonymous-edit.modal/explain)]
+    [:p (labels :discussion.anonymous-edit.modal/persuade)]
+    [:button.btn.btn-primary.mx-auto.d-block
+     {:on-click #(rf/dispatch [:keycloak/login])}
+     (labels :discussion.anonymous-edit.modal/cta)]]])
+
 (defn- edit-button
   "Give the registered user the ability to edit their statement."
   [statement]
-  (let [user-id @(rf/subscribe [:user/id])]
-    (when (and (= user-id (:db/id (:statement/author statement)))
-               (not (:statement/deleted? statement)))
+  (let [user-id @(rf/subscribe [:user/id])
+        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        anonymous-owner (contains? creation-secrets (:db/id statement))
+        on-click-fn (if anonymous-owner
+                      #(rf/dispatch [:modal {:show? true
+                                             :child [anonymous-edit-modal]}])
+                      #(rf/dispatch [:statement.edit/activate-edit (:db/id statement)]))]
+    (when (or anonymous-owner
+              ; User is registered author
+              (and (= user-id (:db/id (:statement/author statement)))
+                   (not (:statement/deleted? statement))))
       [:span.badge.badge-pill.badge-transparent.badge-clickable
        {:tabIndex 40
-        :on-click (fn [e] (js-wrap/stop-propagation e)
-                    (rf/dispatch [:statement.edit/activate-edit (:db/id statement)]))
+        :on-click (fn [e]
+                    (js-wrap/stop-propagation e)
+                    (on-click-fn))
         :title (labels :discussion.badges/edit-statement)}
        [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])))
 

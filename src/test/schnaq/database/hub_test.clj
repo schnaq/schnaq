@@ -3,7 +3,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :refer [add-discussions-to-hub] :as hub]
             [schnaq.database.hub-test-data :as hub-test-data]
-            [schnaq.meeting.database :refer [fast-pull]]
+            [schnaq.database.main :refer [fast-pull]]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.util UUID)))
 

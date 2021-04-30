@@ -3,6 +3,7 @@
             [clojure.test :refer [deftest testing use-fixtures is are]]
             [schnaq.database.discussion :as db]
             [schnaq.database.discussion-test-data :as test-data]
+            [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -35,19 +36,24 @@
     (let [share-hash "simple-hash"
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/support-statement! share-hash user-id (:db/id starting-conclusion)
-                                            "This is a new support")]
-      (is (= "This is a new support" (-> new-attack :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/support (:argument/type new-attack))))))
+          new-support (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+                                              "This is a new support" :argument.type/support true)
+          another-new-argument (db/react-to-statement! share-hash user-id
+                                                       (-> new-support :argument/premises first :db/id)
+                                                       "this is a secret support" :argument.type/support false)]
+      (is (= "This is a new support" (-> new-support :argument/premises first :statement/content)))
+      (is (= "Brainstorming ist total wichtig" (-> new-support :argument/conclusion :statement/content)))
+      (is (= :argument.type/support (:argument/type new-support)))
+      (is (= "this is a secret support" (-> another-new-argument :argument/premises first :statement/content)))
+      (is (string? (-> another-new-argument :argument/premises first :statement/creation-secret))))))
 
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
     (let [share-hash "simple-hash"
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
-          new-attack (db/attack-statement! share-hash user-id (:db/id starting-conclusion)
-                                           "This is a new attack")]
+          new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
+                                             "This is a new attack" :argument.type/attack true)]
       (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
       (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
       (is (= :argument.type/attack (:argument/type new-attack))))))
@@ -80,7 +86,7 @@
     (let [statement "Wow look at this"
           user-id (user-db/user-by-nickname "Test-person")
           meeting-hash "graph-hash"
-          _ (db/add-starting-statement! meeting-hash user-id statement)
+          _ (db/add-starting-statement! meeting-hash user-id statement false)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 3 (count starting-statements)))))))
@@ -176,8 +182,8 @@
                                 :discussion/author (user-db/add-user-if-not-exists "Wegi")}
                                true)
           christian-id (user-db/user-by-nickname "Christian")
-          first-id (db/add-starting-statement! share-hash christian-id "this is sparta")
-          second-id (db/add-starting-statement! share-hash christian-id "this is kreta")]
+          first-id (db/add-starting-statement! share-hash christian-id "this is sparta" false)
+          second-id (db/add-starting-statement! share-hash christian-id "this is kreta" false)]
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-for-discussion second-id "Wegi-ist-der-schönste")))))
 
@@ -238,8 +244,20 @@
           modified-content "Whats up in dis here house?"
           new-user (user-db/add-user-if-not-exists "Wugiperson")
           new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
-                                                       new-user initial-content)]
+                                                       new-user initial-content false)]
       (is (= initial-content (:statement/content (db/get-statement new-statement-id))))
       (let [modified-statement (db/change-statement-text new-statement-id modified-content)]
         (is (= modified-content (:statement/content modified-statement)))
         (is (s/valid? ::specs/statement modified-statement))))))
+
+(deftest update-authors-from-secrets-test
+  (testing "Change of author, when a registered user claims the statement."
+    (let [statement (first (db/starting-statements "simple-hash"))
+          original-author (user-db/user-by-nickname "Christian")
+          registered-user (fast-pull [:user.registered/keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"])]
+      ;; Using the wrong secret should do nothing
+      (db/update-authors-from-secrets {(:db/id statement) "wrong-secret"} (:db/id registered-user))
+      (is (= original-author (-> (first (db/starting-statements "simple-hash")) :statement/author :db/id)))
+      ;; Now update the author
+      (db/update-authors-from-secrets {(:db/id statement) "secret-creation-secret"} (:db/id registered-user))
+      (is (= (:db/id registered-user) (-> (first (db/starting-statements "simple-hash")) :statement/author :db/id))))))
