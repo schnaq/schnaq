@@ -551,7 +551,7 @@
               :in $ [?statement ...]
               :where [?statement :statement/creation-secret ?secret]]
             statement-ids))))
-;; TODO check if author is updated in the frontend without reload (should be because login is always a reload)
+
 (>defn update-authors-from-secrets
   "Takes a dictionary of statement-ids mapped to creation secrets and sets the passed author
   as their author, if the secrets are correct."

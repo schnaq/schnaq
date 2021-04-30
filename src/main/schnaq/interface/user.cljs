@@ -54,8 +54,9 @@
 
 (rf/reg-event-fx
   :user.register/success
-  (fn [{:keys [db]} [_ {:keys [registered-user]}]]
-    (let [{:user.registered/keys [display-name first-name last-name email profile-picture]} registered-user]
+  (fn [{:keys [db]} [_ {:keys [registered-user updated-statements?]}]]
+    (let [{:user.registered/keys [display-name first-name last-name email profile-picture]} registered-user
+          current-route (get-in db [:current-route :data :name])]
       {:db (-> db
                (assoc-in [:user :names :display] display-name)
                (assoc-in [:user :email] email)
@@ -65,7 +66,10 @@
                (cond-> last-name (assoc-in [:user :names :last] last-name))
                ;; Clear secrets, they have been persisted.
                (assoc-in [:discussion :statements :creation-secrets] {}))
-       :fx [[:localstorage/dissoc :discussion/creation-secrets]]})))
+       :fx [[:localstorage/dissoc :discussion/creation-secrets]
+            (when (and updated-statements? (= current-route :routes.schnaq.select/statement))
+              ;; The starting-statement view is updated automatically anyway
+              [:dispatch [:discussion.query.statement/by-id]])]})))
 
 (rf/reg-sub
   :user/id

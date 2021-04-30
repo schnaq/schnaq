@@ -17,9 +17,11 @@
   [{:keys [identity params]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [queried-user (user-db/register-new-user identity)]
-    (discussion-db/update-authors-from-secrets (:creation-secrets params) (:db/id queried-user))
-    (ok {:registered-user queried-user})))
+  (let [queried-user (user-db/register-new-user identity)
+        updated-statements? (associative? (discussion-db/update-authors-from-secrets
+                                   (:creation-secrets params) (:db/id queried-user)))]
+    (ok {:registered-user queried-user
+         :updated-statements? updated-statements?})))
 
 (defn- create-UUID-file-name
   "Generates a UUID based on a unique id with a file type suffix."
