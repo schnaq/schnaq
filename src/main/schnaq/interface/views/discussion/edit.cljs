@@ -30,7 +30,8 @@
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
        (when (and has-history? pro-con-enabled?)
-         [input/argument-type-choose-button [:edit/argument-type statement-id] [:edit/argument-type! statement-id]])]
+         [input/argument-type-choose-button [:statement.edit/argument-type statement-id]
+          [:statement.edit/change-argument-type statement-id]])]
       [:div.d-flex.mb-3
        [:button.btn.btn-outline-secondary
         {:on-click (fn [e]
@@ -109,11 +110,11 @@
     (contains? (get-in db [:statements :currently-edited] #{}) statement-id)))
 
 (rf/reg-event-db
-  :edit/argument-type!
+  :statement.edit/change-argument-type
   (fn [db [_ id argument-type]]
     (assoc-in db [:statements :edit-type id] argument-type)))
 
 (rf/reg-sub
-  :edit/argument-type
+  :statement.edit/argument-type
   (fn [db [_ id]]
     (get-in db [:statements :edit-type id] :argument.type/neutral)))

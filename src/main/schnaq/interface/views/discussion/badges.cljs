@@ -39,7 +39,8 @@
        {:tabIndex 40
         :on-click (fn [e] (js-wrap/stop-propagation e)
                     (rf/dispatch [:statement.edit/activate-edit (:db/id statement)])
-                    (rf/dispatch [:edit/argument-type! (:db/id statement) (:meta/argument-type statement)]))
+                    (rf/dispatch [:statement.edit/change-argument-type (:db/id statement)
+                                  (:meta/argument-type statement)]))
         :title (labels :discussion.badges/edit-statement)}
        [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])))
 
