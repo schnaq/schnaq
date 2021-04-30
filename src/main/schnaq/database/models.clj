@@ -83,6 +83,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "A list of users that downvoted the statement."}
+   {:db/ident :statement/creation-secret
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "A secret to claim ownership of a statement as an anonymous user."}
 
    ;; Argument Types
    {:db/ident :argument.type/support}

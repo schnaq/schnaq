@@ -4,10 +4,10 @@
             [ring.mock.request :as mock]
             [schnaq.api :as api]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]
-            [schnaq.meeting.database :as db]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)

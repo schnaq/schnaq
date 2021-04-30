@@ -59,20 +59,22 @@
                                   :discussion/header-image-url :discussion/edit-hash
                                   :db/txInstant :discussion/admins :discussion/hub-origin]))
 
-(s/def :hub/name string?)
-(s/def :hub/keycloak-name string?)
+(s/def :hub/name ::non-blank-string)
+(s/def :hub/keycloak-name ::non-blank-string)
 (s/def :hub/schnaqs (s/coll-of ::discussion))
 (s/def ::hub (s/keys :req [:hub/name :hub/keycloak-name]
                      :opt [:hub/schnaqs :db/txInstant]))
 
 ;; Statement
-(s/def :statement/content string?)
+(s/def :statement/content ::non-blank-string)
 (s/def :statement/version number?)
 (s/def :statement/author ::any-user)
 (s/def :statement/upvotes (s/coll-of ::user-or-reference))
 (s/def :statement/downvotes (s/coll-of ::user-or-reference))
+(s/def :statement/creation-secret ::non-blank-string)
 (s/def ::statement
-  (s/keys :req [:statement/content :statement/version :statement/author]))
+  (s/keys :req [:statement/content :statement/version :statement/author]
+          :opt [:statement/creation-secret]))
 
 ;; Argument
 (s/def :argument/type

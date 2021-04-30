@@ -1,8 +1,8 @@
 (ns schnaq.database.user
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn- ?]]
+            [schnaq.database.main :refer [transact fast-pull clean-db-vals query]]
             [schnaq.database.specs :as specs]
-            [schnaq.meeting.database :refer [transact fast-pull clean-db-vals query]]
             [taoensso.timbre :as log]))
 
 (def registered-user-pattern

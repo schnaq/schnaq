@@ -205,6 +205,12 @@
         :discussion.state/read-only-label "read-only"
         :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
+        ;; Conversion-Edit-Funnel
+        :discussion.anonymous-edit.modal/title "Please sign in to edit"
+        :discussion.anonymous-edit.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit a statement."]]
+        :discussion.anonymous-edit.modal/persuade "Statements you made recently with this browsers will automatically be converted to your logged in account."
+        :discussion.anonymous-edit.modal/cta "Sign in / Sign up"
+
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
         :privacy/subheading "We lead you through it step by step!"
@@ -887,11 +893,17 @@
         :discussion.state/read-only-label "schreibgeschützt"
         :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Sie können hier nur lesen aber nicht schreiben."
 
+        ;; Conversion-Edit-Funnel
+        :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
+        :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren anmelden."]]
+        :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei automatisch umgewandelt."
+        :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
+
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
         :privacy/subheading "Wir erklären es dir gerne!"
         :privacy/open-settings "Einstellungen prüfen"
-        :privacy.made-in-germany/lead "EU-Konformes Vorgehen"
+        :privacy.made-in-germany/lead "EU-konformes Vorgehen"
         :privacy.made-in-germany/title "Datenschutz ist uns wichtig!"
         :privacy.made-in-germany/body
         [:<>
@@ -903,7 +915,7 @@
         :privacy.localstorage/lead "Welche Daten schicke ich an die Server?"
         :privacy.localstorage/title "Datenaustausch"
         :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten von dir auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicke auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in deinem Browser (im LocalStorage) abgespeichert. Besuchst du dann schnaq erneut, schickt dein Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ kannst du dir die Zugangslinks per E-Mail schicken lassen und hältst so alle für den Betrieb notwendigen Daten selbst in der Hand."]
-                                    [:p "Im Unterschied zu herkömmlichen Cookies verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von dir an uns zurückschickt. Schaue selbst nach, welche Daten das genau sind, indem du auf den Button klickst."]]
+                                    [:p "Im Unterschied zu herkömmlichen Cookies, verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von dir an uns zurückschickt. Schaue selbst nach, welche Daten das genau sind, indem du auf den Button klickst."]]
         :privacy.localstorage/show-data "Deine Daten anzeigen"
         :privacy.localstorage.notification/title "Diese Daten hat dein Browser gespeichert"
         :privacy.localstorage.notification/body "Hinweis: \"Kryptische\" Zeichenketten sind die Zugangscodes zu den schnaqs."

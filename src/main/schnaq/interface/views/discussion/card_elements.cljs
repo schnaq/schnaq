@@ -150,12 +150,16 @@
 (rf/reg-event-fx
   :discussion.add.statement/starting-success
   (fn [_ [_ form new-starting-statements]]
-    {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :discussion.notification/new-content-title)
-                                     :body (labels :discussion.notification/new-content-body)
-                                     :context :success}]]
-          [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
-          [:form/clear form]]}))
+    (let [statement-with-creation-secret (first (filter :statement/creation-secret
+                                                        (:starting-conclusions new-starting-statements)))]
+      {:fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :discussion.notification/new-content-title)
+                                       :body (labels :discussion.notification/new-content-body)
+                                       :context :success}]]
+            [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
+            (when statement-with-creation-secret
+              [:dispatch [:discussion.statements/add-creation-secret statement-with-creation-secret]])
+            [:form/clear form]]})))
 
 (rf/reg-event-fx
   :discussion.query.conclusions/starting

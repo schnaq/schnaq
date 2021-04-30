@@ -2,8 +2,8 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.analytics :as db]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.main :as main-db]
             [schnaq.database.user :as user-db]
-            [schnaq.meeting.database :as main-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
   (:import (java.time Instant)))
 
@@ -46,7 +46,7 @@
                                      :discussion/edit-hash "ahsdasd"
                                      :discussion/share-hash share-hash
                                      :discussion/author user-id} true)
-      (discussion-db/add-starting-statement! share-hash user-id "test")
+      (discussion-db/add-starting-statement! share-hash user-id "test" false)
       (is (= 39 (db/number-of-statements))))))
 
 (deftest average-number-of-statements-test

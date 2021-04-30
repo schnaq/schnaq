@@ -1,7 +1,7 @@
-(ns schnaq.meeting.database-test
+(ns schnaq.database.main-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.meeting.database :as db]
+            [schnaq.database.main :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)

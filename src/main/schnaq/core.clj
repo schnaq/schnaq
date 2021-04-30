@@ -1,7 +1,7 @@
 (ns schnaq.core
   (:require [clojure.spec.test.alpha :as spec-test]
             [schnaq.config :as config]
-            [schnaq.meeting.database :as db]))
+            [schnaq.database.main :as db]))
 
 (def production-mode?
   (= "production" config/env-mode))
