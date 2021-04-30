@@ -3,14 +3,18 @@
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jq]))
+            [schnaq.interface.utils.js-wrapper :as jq]
+            [schnaq.interface.views.discussion.input :as input]))
 
 (defn edit-card
   "The same as a statement-card, but currently being an editable input."
   [statement]
-  (let [statement-html-id (str "statement-edit-" (:db/id statement))
-        dispatch-fn #(rf/dispatch [:statement.edit/send (:db/id statement) statement-html-id
-                                   (oget % [:currentTarget :elements])])]
+  (let [statement-id (:db/id statement)
+        is-not-start? (not= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+        pro-con-enabled? (not @(rf/subscribe [:schnaq.selected/pro-con?]))
+        statement-html-id (str "statement-edit-" statement-id)
+        dispatch-fn #(rf/dispatch
+                       [:statement.edit/send (:db/id statement) statement-html-id (oget % [:currentTarget :elements])])]
     [:form.card.statement-card.py-2.px-3
      {:on-submit (fn [e]
                    (jq/prevent-default e)
@@ -23,38 +27,50 @@
                                :rows 3
                                :placeholder (:statement/content statement)
                                :defaultValue (:statement/content statement)}]]
-     [:div.text-right
-      [:button.btn.btn-outline-secondary
-       {:on-click (fn [e]
-                    (jq/prevent-default e)
-                    (rf/dispatch [:statement.edit/deactivate-edit (:db/id statement)]))}
-       (labels :statement.edit.button/cancel)]
-      [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]))
+     [:div.d-flex.justify-content-between.flex-wrap
+      [:div.d-flex.mb-3
+       (when (and is-not-start? pro-con-enabled?)
+         [input/argument-type-choose-button [:statement.edit/argument-type statement-id]
+          [:statement.edit/change-argument-type statement-id]])]
+      [:div.d-flex.mb-3
+       [:button.btn.btn-outline-secondary
+        {:on-click (fn [e]
+                     (jq/prevent-default e)
+                     (rf/dispatch [:statement.edit/deactivate-edit (:db/id statement)]))}
+        (labels :statement.edit.button/cancel)]
+       [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :statement.edit.button/submit)]]]]))
 
 (rf/reg-event-fx
   :statement.edit/send
   (fn [{:keys [db]} [_ statement-id html-selector form]]
-    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+    (let [share-hash (get-in db [:current-route :path-params :share-hash])
+          new-type (get-in db [:statements :edit-type statement-id] :argument.type/neutral)]
       {:fx [(http/xhrio-request db :put "/discussion/statement/edit"
                                 [:statement.edit.send/success form]
                                 {:statement-id statement-id
+                                 :statement-type new-type
                                  :share-hash share-hash
                                  :new-content (oget+ form [html-selector :value])}
                                 [:statement.edit.send/failure])]})))
 
 (defn- update-statement-in-list
   "Updates the content of a statement in a collection."
-  [coll new-statement]
-  ;; Merge instead of overwriting, to preserve meta information
-  (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))
+  ([coll new-statement]
+   (update-statement-in-list coll new-statement nil))
+  ([coll new-statement new-type]
+   (let [new-statement (if new-type (assoc new-statement :meta/argument-type new-type)
+                                    new-statement)]
+     ;; Merge instead of overwriting, to preserve meta information
+     (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))))
 
 (rf/reg-event-fx
   :statement.edit.send/success
   (fn [{:keys [db]} [_ form response]]
-    (let [updated-statement (:updated-statement response)]
+    (let [updated-statement (:updated-statement response)
+          updated-type (get-in db [:statements :edit-type (:db/id updated-statement)] nil)]
       {:db (-> db
                (update-in [:discussion :conclusions :starting] #(update-statement-in-list % updated-statement))
-               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement)))
+               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement updated-type)))
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
 
@@ -76,6 +92,7 @@
 (rf/reg-event-db
   :statement.edit/deactivate-edit
   (fn [db [_ statement-id]]
+    (update-in db [:statements :edit-type] dissoc statement-id)
     (update-in db [:statements :currently-edited] disj statement-id)))
 
 (rf/reg-event-db
@@ -87,3 +104,13 @@
   :statement.edit/ongoing?
   (fn [db [_ statement-id]]
     (contains? (get-in db [:statements :currently-edited] #{}) statement-id)))
+
+(rf/reg-event-db
+  :statement.edit/change-argument-type
+  (fn [db [_ id argument-type]]
+    (assoc-in db [:statements :edit-type id] argument-type)))
+
+(rf/reg-sub
+  :statement.edit/argument-type
+  (fn [db [_ id]]
+    (get-in db [:statements :edit-type id] :argument.type/neutral)))

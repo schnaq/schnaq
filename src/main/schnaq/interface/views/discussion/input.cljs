@@ -7,26 +7,34 @@
             [schnaq.interface.views.discussion.logic :as logic]))
 
 (defn- argument-type-button
-  "Button to select current attitude."
-  [id button-type label tooltip]
-  (let [argument-type @(rf/subscribe [:form/argument-type])
+  "Button to select the attitude of an argument. Current attitude is subscribed via get-subscription.
+  On-Click triggers the set-subscription with argument-type as last argument."
+  [id button-type label tooltip get-subscription set-subscription]
+  (let [argument-type @(rf/subscribe get-subscription)
         checked? (= button-type argument-type)]
     [:label.btn.btn-outline-primary.rounded-4
      (when checked? {:class "active"})
-     [:input {:id (str "argument-type-button-" id) :type "radio" :name "options" :autoComplete "off"
+     [:input {:id (str "argument-type-button-" id "-" get-subscription) :type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
               :title (labels tooltip)
               :on-click (fn [e] (jq/prevent-default e)
-                          (rf/dispatch [:form/argument-type! button-type]))}]
+                          (rf/dispatch (conj set-subscription button-type)))}]
      (labels label)]))
 
-(defn- argument-type-choose-button
-  "Switch to differentiate between the argument types."
-  []
+(defn argument-type-choose-button
+  "Button group to differentiate between the argument types. The button with a matching get-subscription will be checked.
+  Clicking a button will dispatch the set-subscription with the button-type as argument."
+  [get-subscription set-subscription]
   [:div.btn-group.btn-group-toggle {:data-toggle "buttons"}
-   [argument-type-button "support" :argument.type/support :discussion.add.button/support :discussion/add-premise-against]
-   [argument-type-button "neutral" :argument.type/neutral :discussion.add.button/neutral :discussion/add-premise-neutral]
-   [argument-type-button "attack" :argument.type/attack :discussion.add.button/attack :discussion/add-premise-supporting]])
+   [argument-type-button "support" :argument.type/support
+    :discussion.add.button/support :discussion/add-premise-against
+    get-subscription set-subscription]
+   [argument-type-button "neutral" :argument.type/neutral
+    :discussion.add.button/neutral :discussion/add-premise-neutral
+    get-subscription set-subscription]
+   [argument-type-button "attack" :argument.type/attack
+    :discussion.add.button/attack :discussion/add-premise-supporting
+    get-subscription set-subscription]])
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."
@@ -50,7 +58,7 @@
      [:div.d-flex.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
       (when-not (or (= :routes.schnaq/start current-route-name) pro-con-disabled?)
         [:div.input-group-prepend
-         [argument-type-choose-button]])
+         [argument-type-choose-button [:form/argument-type] [:form/argument-type!]]])
       [:div.input-group-append
        [:button.btn
         {:type "submit" :class current-color
