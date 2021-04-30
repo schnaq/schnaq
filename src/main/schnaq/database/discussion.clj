@@ -544,12 +544,13 @@
   When there is no secret, the statement is skipped."
   [statement-ids]
   [:db/id :ret map?]
-  (into {}
-        (query
-          '[:find ?statement ?secret
-            :in $ [?statement ...]
-            :where [?statement :statement/creation-secret ?secret]]
-          statement-ids)))
+  (when statement-ids
+    (into {}
+          (query
+            '[:find ?statement ?secret
+              :in $ [?statement ...]
+              :where [?statement :statement/creation-secret ?secret]]
+            statement-ids))))
 ;; TODO check if author is updated in the frontend without reload (should be because login is always a reload)
 (>defn update-authors-from-secrets
   "Takes a dictionary of statement-ids mapped to creation secrets and sets the passed author
