@@ -522,12 +522,13 @@
   "Changes the content of a statement to `new-content` and the type to `new-type` if it's an argument."
   [statement-id new-type new-content]
   [:db/id :argument/type :statement/content :ret ::specs/statement]
-  (transact [[:db/add statement-id :statement/content new-content]])
   (log/info "Statement" statement-id "edited with new content.")
-  (when-let [argument (main-db/fast-pull statement-id '[:argument/_premises])]
+  (if-let [argument (main-db/fast-pull statement-id '[:argument/_premises])]
     (let [argument-id (-> argument :argument/_premises first :db/id)]
       (log/info "Argument" argument-id "updated to new type " new-type)
-      (transact [[:db/add argument-id :argument/type new-type]])))
+      (transact [[:db/add statement-id :statement/content new-content]
+                 [:db/add argument-id :argument/type new-type]]))
+    (transact [[:db/add statement-id :statement/content new-content]]))
   (get-statement statement-id))
 
 (>defn add-admin-to-discussion
