@@ -894,9 +894,9 @@
         :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Sie können hier nur lesen aber nicht schreiben."
 
         ;; Conversion-Edit-Funnel
-        :discussion.anonymous-edit.modal/title "Bitte anmelden zum editieren"
-        :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum editieren anmelden."]]
-        :discussion.anonymous-edit.modal/persuade "Beiträge die in letzter Zeit von dir erstellt wurden, werden dabei automatisch umgewandelt."
+        :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
+        :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren anmelden."]]
+        :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir erstellt wurden, werden dabei automatisch umgewandelt."
         :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
 
         ;; Privacy Page
