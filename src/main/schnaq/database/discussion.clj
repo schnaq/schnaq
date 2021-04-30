@@ -555,8 +555,9 @@
   "Takes a dictionary of statement-ids mapped to creation secrets and sets the passed author
   as their author, if the secrets are correct."
   [secrets-map author-id]
-  [map? :db/id :ret any?]
+  [(? map?) :db/id :ret any?]
   (let [validated-secrets-map (build-secrets-map (keys secrets-map))
         [_ _ valid-secrets] (cdata/diff secrets-map validated-secrets-map)]
-    (transact
-      (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets)))))
+    (when valid-secrets
+      (transact
+        (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))

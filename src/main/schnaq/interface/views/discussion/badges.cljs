@@ -29,7 +29,6 @@
                     (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
       :title (labels :discussion.badges/delete-statement)}
      [:i {:class (str "m-auto fas " (fa :trash))}]]))
-;; TODO konvertiere die Beiträge zum registrierten User, nach der Registrierung.
 
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
