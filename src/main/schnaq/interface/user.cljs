@@ -52,18 +52,20 @@
       {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
                                 {:creation-secrets (get-in db [:discussion :statements :creation-secrets])})]})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :user.register/success
-  ;; todo clear the creation secrets here
-  (fn [db [_ {:keys [registered-user]}]]
+  (fn [{:keys [db]} [_ {:keys [registered-user]}]]
     (let [{:user.registered/keys [display-name first-name last-name email profile-picture]} registered-user]
-      (-> db
-          (assoc-in [:user :names :display] display-name)
-          (assoc-in [:user :email] email)
-          (assoc-in [:user :id] (:db/id registered-user))
-          (assoc-in [:user :profile-picture :display] profile-picture)
-          (cond-> first-name (assoc-in [:user :names :first] first-name))
-          (cond-> last-name (assoc-in [:user :names :last] last-name))))))
+      {:db (-> db
+               (assoc-in [:user :names :display] display-name)
+               (assoc-in [:user :email] email)
+               (assoc-in [:user :id] (:db/id registered-user))
+               (assoc-in [:user :profile-picture :display] profile-picture)
+               (cond-> first-name (assoc-in [:user :names :first] first-name))
+               (cond-> last-name (assoc-in [:user :names :last] last-name))
+               ;; Clear secrets, they have been persisted.
+               (assoc-in [:discussion :statements :creation-secrets] {}))
+       :fx [[:localstorage/dissoc :discussion/creation-secrets]]})))
 
 (rf/reg-sub
   :user/id
