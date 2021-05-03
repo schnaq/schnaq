@@ -16,12 +16,22 @@ The dev-Setup has different parts for Backend and Frontend.
 
 == Preparation
 
-We are using `datomic dev-local` as our in-memory database, which can be used during development and testing.
-Get the jar file containing datomic via this URL: https://docs.datomic.com/dev-local/get-dev-local.html
+We are using `datomic pro` as our database, which can be used during development and testing.
+Get a fresh licence for datomic pro starter via this URL: https://my.datomic.com/
 
-Then, store the jar in "local_jars/dev-local/dev-local.jar".
-This database stores the data in a ".datomic/" folder.
-Remove the folder to reset the database or call the suitable function in the database namespace.
+Then, after registering visit: https://my.datomic.com/account.
+Follow the instructions to set your `~/.m2/settings.xml` server to contain credentials for my.datomic.com.
+You will need to create a new account after one year.
+
+=== Starting the local transactor (for the database)
+
+Go to https://my.datomic.com/account and copy the `wget` command with the desired version.
+Execute it in the schnaq folder and name it datomic-pro, or wherever you desire.
+
+- unzip
+- Enter your licence-key into the datomic-pro/dev-transactor.properties
+
+Start the transactor to dev with: `bin/transactor dev-transactor.properties`.
 
 == Backend
 

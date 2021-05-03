@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [datomic.client.api :as d]
+            [datomic.api :as datomic]
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.config :as config]
             [schnaq.database.models :as models]
@@ -14,48 +15,32 @@
   (atom {:client nil
          :database-name nil}))
 
-(>defn- reset-datomic-client!
-  "Sets a new datomic client for transactions."
-  [datomic-config]
-  [map? :ret any?]
-  (swap! datomic-info assoc :client (d/client datomic-config)))
+#_(>defn- reset-datomic-client!
+    "Sets a new datomic client for transactions."
+    [datomic-config]
+    [map? :ret any?]
+    (swap! datomic-info assoc :client (d/client datomic-config)))
 
-(>defn- reset-datomic-db-name!
-  "Sets a new database-name for transactions."
-  [database-name]
-  [string? :ret any?]
-  (swap! datomic-info assoc :database-name database-name))
+#_(>defn- reset-datomic-db-name!
+    "Sets a new database-name for transactions."
+    [database-name]
+    [string? :ret any?]
+    (swap! datomic-info assoc :database-name database-name))
 
 (defn new-connection
   "Connects to the database and returns a connection."
   []
-  (let [{:keys [client database-name]} @datomic-info]
-    (d/connect client {:db-name database-name})))
+  (datomic/connect config/datomic-uri))
 
 (defn transact
   "Shorthand for transaction."
   [data]
-  (d/transact (new-connection) {:tx-data data}))
+  (datomic/transact (new-connection) data))
 
 (defn query
   "Shorthand to not type out the same first param every time"
   [query-vector & args]
   (apply d/q query-vector (d/db (new-connection)) args))
-
-(defn- create-discussion-schema
-  "Creates the schema for discussions inside the database."
-  [connection]
-  (d/transact connection {:tx-data models/datomic-schema}))
-
-(>defn create-database!
-  "Create a new database. Does not check whether there already is an existing
-  database with the same name."
-  []
-  [:ret boolean?]
-  (let [{:keys [client database-name]} @datomic-info]
-    (d/create-database
-      client
-      {:db-name database-name})))
 
 (>defn delete-database!
   "Delete a database by its name."
@@ -72,14 +57,16 @@
   If no parameters are provided, the function reads its configuration from the
   config-namespace."
   ([]
-   (init! {:datomic config/datomic
-           :name config/db-name}))
-  ([config]
-   (reset-datomic-client! (:datomic config))
-   (reset-datomic-db-name! (:name config))
-   (when-not (= :peer-server (-> (:datomic config) :server-type))
-     (create-database!))
-   (create-discussion-schema (new-connection))))
+   (init! config/datomic-uri))
+  ([datomic-uri]
+   (datomic/create-database datomic-uri)
+   (transact models/datomic-schema)))
+(comment
+  (new-connection)
+  (datomic/create-database config/datomic-uri)
+  (transact models/datomic-schema)
+  (init!)
+  )
 
 (defn init-and-seed!
   "Initializing the datomic database and feeding it with test-data.
