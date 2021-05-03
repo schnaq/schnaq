@@ -10,10 +10,12 @@
             [schnaq.toolbelt :as toolbelt])
   (:import (java.util UUID Date)))
 
+(def ^:private current-datomic-uri (atom config/datomic-uri))
+
 (defn new-connection
   "Connects to the database and returns a connection."
   []
-  (datomic/connect config/datomic-uri))
+  (datomic/connect @current-datomic-uri))
 
 (defn transact
   "Shorthand for transaction."
@@ -33,6 +35,7 @@
   ([]
    (init! config/datomic-uri))
   ([datomic-uri]
+   (reset! current-datomic-uri datomic-uri)
    (datomic/create-database datomic-uri)
    (transact models/datomic-schema)))
 
