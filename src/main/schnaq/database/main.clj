@@ -1,31 +1,14 @@
 (ns schnaq.database.main
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [datomic.client.api :as d]
             [datomic.api :as datomic]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.database.models :as models]
             [schnaq.database.specs :as specs]
             [schnaq.test-data :as test-data]
             [schnaq.toolbelt :as toolbelt])
   (:import (java.util UUID Date)))
-
-(def ^:private datomic-info
-  (atom {:client nil
-         :database-name nil}))
-
-#_(>defn- reset-datomic-client!
-    "Sets a new datomic client for transactions."
-    [datomic-config]
-    [map? :ret any?]
-    (swap! datomic-info assoc :client (d/client datomic-config)))
-
-#_(>defn- reset-datomic-db-name!
-    "Sets a new database-name for transactions."
-    [database-name]
-    [string? :ret any?]
-    (swap! datomic-info assoc :database-name database-name))
 
 (defn new-connection
   "Connects to the database and returns a connection."
@@ -40,16 +23,7 @@
 (defn query
   "Shorthand to not type out the same first param every time"
   [query-vector & args]
-  (apply d/q query-vector (d/db (new-connection)) args))
-
-(>defn delete-database!
-  "Delete a database by its name."
-  []
-  [:ret boolean?]
-  (let [{:keys [client database-name]} @datomic-info]
-    (d/delete-database
-      client
-      {:db-name database-name})))
+  (apply datomic/q query-vector (datomic/db (new-connection)) args))
 
 (defn init!
   "Initialization function, which does everything needed at a fresh app-install.
@@ -61,24 +35,17 @@
   ([datomic-uri]
    (datomic/create-database datomic-uri)
    (transact models/datomic-schema)))
-(comment
-  (new-connection)
-  (datomic/create-database config/datomic-uri)
-  (transact models/datomic-schema)
-  (init!)
-  )
 
 (defn init-and-seed!
   "Initializing the datomic database and feeding it with test-data.
   If no parameters are provided, the function reads its configuration from the
   config-namespace."
   ([]
-   (init-and-seed! {:datomic config/datomic
-                    :name config/db-name}))
-  ([config]
-   (init-and-seed! config test-data/schnaq-test-data))
-  ([config test-data]
-   (init! config)
+   (init-and-seed! config/datomic-uri))
+  ([datomic-uri]
+   (init-and-seed! datomic-uri test-data/schnaq-test-data))
+  ([datomic-uri test-data]
+   (init! datomic-uri)
    (transact test-data)))
 
 (>defn merge-entity-and-transaction
@@ -86,6 +53,21 @@
   [[entity transaction]]
   [(s/coll-of map?) :ret map?]
   (merge entity transaction))
+
+(comment
+  ;; For playing around until we go live with new db
+  (new-connection)
+  (datomic/create-database config/datomic-uri)
+  (transact models/datomic-schema)
+  (datomic/delete-database config/datomic-uri)
+  (init-and-seed!)
+  (datomic/q
+    '[:find ?name ?score
+      :in $ ?search
+      :where [(fulltext $ :statement/content ?search) [[?entity ?name ?tx ?score]]]]
+    (datomic/db (datomic/connect config/datomic-uri))
+    "dog")
+  :end)
 
 ;; -----------------------------------------------------------------------------
 ;; Pull Patterns
@@ -111,7 +93,7 @@
   ([id]
    (fast-pull id '[*]))
   ([id pattern]
-   (d/pull (d/db (new-connection)) pattern id)))
+   (datomic/pull (datomic/db (new-connection)) pattern id)))
 
 (>defn clean-and-add-to-db!
   "Removes empty strings and nil values from map before transacting it to the

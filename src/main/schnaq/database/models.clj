@@ -66,6 +66,7 @@
    {:db/ident :statement/content
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/fulltext true
     :db/doc "The text-content of the statement"}
    {:db/ident :statement/version
     :db/valueType :db.type/long
