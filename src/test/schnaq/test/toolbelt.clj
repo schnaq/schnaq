@@ -5,43 +5,36 @@
             [expound.alpha :as expound]
             [ghostwheel.core :refer [>defn]]
             [ring.mock.request :as mock]
-            [schnaq.config :as config]
-            [schnaq.database.main :as database]
-            [schnaq.toolbelt :as schnaq-toolbelt]))
+            [schnaq.database.main :as database]))
 
 
 ;; -----------------------------------------------------------------------------
 ;; Fixtures
-(def ^:private test-config
-  {:datomic {:system "test"
-             :server-type :dev-local
-             :storage-dir (schnaq-toolbelt/create-directory! ".datomic/dev-local/test-data")}
-   :name "test-db"})
+(def ^:private datomic-test-uri "datomic:mem://test-db")
 
 (defn clean-database-fixture
   "Cleans the database. Should be used with :once to start with a clean sheet."
   [f]
-  (database/init! test-config)
-  (datomic/delete-database config/datomic-uri)
+  (datomic/delete-database datomic-test-uri)
   (f))
 
 (defn init-db-test-fixture
   "Fixture to initialize, test, and afterwards delete the database."
   ([f]
-   (database/init-and-seed! test-config)
+   (database/init-and-seed! datomic-test-uri)
    (f))
   ([f test-data]
-   (database/init-and-seed! test-config test-data)
+   (database/init-and-seed! datomic-test-uri test-data)
    (f)))
 
 (defn init-test-delete-db-fixture
   "Fixture to initialize, test, and afterwards delete the database."
   ([f]
    (init-db-test-fixture f)
-   (datomic/delete-database config/datomic-uri))
+   (datomic/delete-database datomic-test-uri))
   ([f test-data]
    (init-db-test-fixture f test-data)
-   (datomic/delete-database config/datomic-uri)))
+   (datomic/delete-database datomic-test-uri)))
 
 
 ;; -----------------------------------------------------------------------------
