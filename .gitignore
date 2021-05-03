@@ -13,6 +13,7 @@ out/
 
 .datomic/
 datomic/
+datomic-pro/
 datomic-*.zip
 
 .clj-kondo/.cache/
