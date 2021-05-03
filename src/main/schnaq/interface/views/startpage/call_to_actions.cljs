@@ -5,10 +5,11 @@
 (defn- header-animation
   "Display header animation video."
   []
-  [:section.panel-light-background.mb-3
-   [:video.w-100.startpage-animation {:auto-play true :loop false :muted true :plays-inline true}
-    [:source {:src (video :start-page.features.sample-discussion/webm) :type "video/webm"}]
-    [:source {:src (video :start-page.features.sample-discussion/mp4) :type "video/mp4"}]]])
+  [:section.animation-background.mb-3
+   [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
+   [:video.w-100.video-scalable {:auto-play true :loop true :muted true :plays-inline true}
+    [:source {:src (video :how-to.discussion/webm) :type "video/webm"}]
+    [:source {:src (video :how-to.discussion/mp4) :type "video/mp4"}]]])
 
 (defn- start-schnaq-button
   "Tell user to create a schnaq now."
@@ -41,11 +42,11 @@
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
   [:section.row.mt-3 {:key "HeaderExtras-Bullet-Points-and-Animation"}
-   [:div.col-lg-6.py-lg-4.pr-lg-5
+   [:div.col-lg-5.py-lg-4.pr-lg-5
     [header-animation]
     [start-schnaq-button]
     [social-proof]]
-   [:div.col-lg-6.py-lg-5.pt-5
+   [:div.col-lg-6.offset-lg-1.py-lg-5.pt-5
     [bullet-point :clipboard :feature/what]
     [bullet-point :user/group :feature/share]
     [bullet-point :site-map :feature/graph]

@@ -1,14 +1,9 @@
-@import 'variables';
-
-.startpage-animation {
-  border-radius: 40px;
-  overflow: hidden;
-}
+@use 'variables' as vars;
 
 .how-to-animations {
   background-color: $gray-100;
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 2px 50px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: vars.$wide-shadow;
   overflow: hidden;
 }
 
@@ -24,7 +19,7 @@
 .video-scalable {
   background-color: $gray-100;
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 2px 50px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: vars.$wide-shadow;
   height: auto !important;
   overflow: hidden;
   width: 100% !important;
