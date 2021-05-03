@@ -1444,8 +1444,6 @@
      :how-to.pro-con/mp4 "https://s3.disqtec.com/schnaq-how-to/discussion-2.mp4"
      :how-to.why/webm "https://s3.disqtec.com/schnaq-how-to/why.webm"
      :how-to.why/mp4 "https://s3.disqtec.com/schnaq-how-to/why.mp4"
-     :start-page.features.sample-discussion/webm "/animations/sample_discussion.webm"
-     :start-page.features.sample-discussion/mp4 "/animations/sample_discussion.mp4"
      :start-page.work-together/webm "/animations/WorkTogether.webm"
      :start-page.work-together/mp4 "/animations/WorkTogether.mp4"}))
 
