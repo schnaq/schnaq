@@ -40,7 +40,11 @@
   ([hub-query]
    (pull-hub hub-query hub-essential-info-pattern))
   ([hub-query pattern]
-   (let [hub (main-db/fast-pull hub-query pattern)]
+   (pull-hub hub-query pattern nil))
+  ([hub-query pattern db]
+   (let [hub (if db
+               (main-db/fast-pull hub-query pattern db)
+               (main-db/fast-pull hub-query pattern))]
      (when (:db/id hub)
        (assoc hub :hub/schnaqs (all-schnaqs-for-hub (:db/id hub)))))))
 
@@ -48,13 +52,13 @@
   "Create a hub and reference it to the keycloak-name."
   [hub-name keycloak-name]
   [:hub/name :hub/keycloak-name :ret ::specs/hub]
-  (let [new-hub (get-in
-                  @(transact [{:db/id "temp"
-                               :hub/name hub-name
-                               :hub/keycloak-name keycloak-name}])
-                  [:tempids "temp"])]
+  (let [tx @(transact [{:db/id "temp"
+                        :hub/name hub-name
+                        :hub/keycloak-name keycloak-name}])
+        new-hub (get-in tx [:tempids "temp"])
+        new-db (:db-after tx)]
     (log/info "Created hub" new-hub)
-    (pull-hub new-hub)))
+    (pull-hub new-hub hub-essential-info-pattern new-db)))
 
 (>defn create-hubs-if-not-existing
   "Create all hubs that are not yet existent. Returns the input, when no exception was caused."
@@ -88,6 +92,7 @@
   [string? :ret ::specs/hub]
   (pull-hub [:hub/keycloak-name keycloak-name]))
 
+;; TODO potentially remove flatten here
 (>defn hubs-by-keycloak-names
   "Takes a list of keycloak-names and returns the hub entities."
   [keycloak-names]
@@ -106,8 +111,9 @@
   "Change a hub's name."
   [keycloak-name new-name]
   [string? string? :ret ::specs/hub]
-  (transact [[:db/add [:hub/keycloak-name keycloak-name]
-              :hub/name new-name]])
-  (toolbelt/pull-key-up
-    (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern)
-    :db/ident))
+  (let [new-db (:db-after
+                 @(transact [[:db/add [:hub/keycloak-name keycloak-name]
+                              :hub/name new-name]]))]
+    (toolbelt/pull-key-up
+      (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db)
+      :db/ident)))

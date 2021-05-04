@@ -105,7 +105,9 @@
   ([id]
    (fast-pull id '[*]))
   ([id pattern]
-   (datomic/pull (datomic/db (new-connection)) pattern id)))
+   (datomic/pull (datomic/db (new-connection)) pattern id))
+  ([id pattern db]
+   (datomic/pull db pattern id)))
 
 (>defn clean-and-add-to-db!
   "Removes empty strings and nil values from map before transacting it to the
