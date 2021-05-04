@@ -92,7 +92,6 @@
   [string? :ret ::specs/hub]
   (pull-hub [:hub/keycloak-name keycloak-name]))
 
-;; TODO potentially remove flatten here
 (>defn hubs-by-keycloak-names
   "Takes a list of keycloak-names and returns the hub entities."
   [keycloak-names]
