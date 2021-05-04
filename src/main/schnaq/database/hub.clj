@@ -102,8 +102,7 @@
              :in $ [?hub-names ...] hub-pattern transaction-pattern
              :where [?hub :hub/keycloak-name ?hub-names ?tx]]
            keycloak-names hub-pattern main-db/transaction-pattern)
-         (map main-db/merge-entity-and-transaction)
-         flatten)
+         (map main-db/merge-entity-and-transaction))
     :db/ident))
 
 (>defn change-hub-name
