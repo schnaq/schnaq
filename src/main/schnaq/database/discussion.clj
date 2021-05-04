@@ -11,8 +11,7 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
-  (:import (clojure.lang ExceptionInfo)
-           (java.util UUID)))
+  (:import (java.util UUID)))
 
 (def statement-rules
   '[[(statements-from-argument ?argument ?statements)
@@ -327,26 +326,23 @@
 (>defn statements-by-content
   "Returns all statements that have the matching `content`."
   [content]
-  [:statement/content
-   :ret (s/coll-of ::specs/statement)]
-  (map first
-       (let [db (d/db (new-connection))]
-         (d/q
-           '[:find (pull ?statements statement-pattern)
-             :in $ statement-pattern ?content
-             :where [?statements :statement/content ?content]]
-           db statement-pattern content))))
+  [:statement/content :ret (s/coll-of ::specs/statement)]
+  (query
+    '[:find [(pull ?statements statement-pattern) ...]
+      :in $ statement-pattern ?content
+      :where [?statements :statement/content ?content]]
+    statement-pattern content))
 
 (>defn delete-discussion
   "Adds the deleted state to a discussion"
   [share-hash]
   [:discussion/share-hash :ret (? :discussion/share-hash)]
   (try
-    (transact [[:db/add [:discussion/share-hash share-hash]
-                :discussion/states :discussion.state/deleted]])
+    @(transact [[:db/add [:discussion/share-hash share-hash]
+                 :discussion/states :discussion.state/deleted]])
     (log/info (format "Schnaq with share-hash %s has been set to deleted." share-hash))
     share-hash
-    (catch ExceptionInfo e
+    (catch Exception e
       (log/error
         (format "Deletion of discussion with share-hash %s failed. Exception:\n%s"
                 share-hash e)))))
@@ -380,7 +376,7 @@
           :argument/version 1
           :argument/type argument-type
           :argument/discussions [discussion-id]}]]
-    (transact new-arguments)))
+    @(transact new-arguments)))
 
 (>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
