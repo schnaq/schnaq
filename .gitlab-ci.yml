@@ -144,6 +144,7 @@ build-frontend-staging-image:
       docker build -f Dockerfile.frontend
       --build-arg REST_API_URL=https://api.staging.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      --build-arg DATOMIC_DISCUSSION_DB_NAME=staging
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
       --build-arg ROBOTS_TXT=./robots-staging.txt
@@ -168,6 +169,7 @@ build-backend-staging-image:
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      --build-arg DATOMIC_DISCUSSION_DB_NAME=production
       -t ${BACKEND_IMAGE_TAGGED}-staging .
     - docker tag ${BACKEND_IMAGE_TAGGED}-staging $BACKEND_IMAGE:staging
     - docker push ${BACKEND_IMAGE_TAGGED}-staging
