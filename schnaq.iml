@@ -131,7 +131,6 @@
     <orderEntry type="library" name="Deps: instaparse:1.4.8" level="project" />
     <orderEntry type="library" name="Deps: org.apache.geronimo.specs/geronimo-json_1.0_spec:1.0-alpha-1" level="project" />
     <orderEntry type="library" name="Deps: buddy/buddy-hashers:1.3.0" level="project" />
-    <orderEntry type="library" name="Deps: com.datomic/client-pro:0.9.66" level="project" />
     <orderEntry type="library" name="Deps: com.lambdaworks/scrypt:1.4.0" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-js:0.8.861" level="project" />
     <orderEntry type="library" name="Deps: org.imgscalr/imgscalr-lib:4.2" level="project" />
@@ -153,7 +152,6 @@
     <orderEntry type="library" name="Deps: binaryage/env-config:0.2.2" level="project" />
     <orderEntry type="library" name="Deps: riddley:0.2.0" level="project" />
     <orderEntry type="library" name="Deps: progrock:0.1.2" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect/http-client:0.1.105" level="project" />
     <orderEntry type="library" name="Deps: org.javassist/javassist:3.18.1-GA" level="project" />
     <orderEntry type="library" name="Deps: org.checkerframework/checker-compat-qual:2.5.5" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.xnio/xnio-nio:3.8.0.Final" level="project" />
@@ -215,7 +213,6 @@
     <orderEntry type="library" name="Deps: net.java.dev.jna/jna:3.2.2" level="project" />
     <orderEntry type="library" name="Deps: cheshire:5.10.0" level="project" />
     <orderEntry type="library" name="Deps: tigris:0.1.2" level="project" />
-    <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-client:9.4.27.v20200227" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-sieppari:0.5.13" level="project" />
     <orderEntry type="library" name="Deps: com.andrewmcveigh/cljs-time:0.5.2" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-io:9.4.40.v20210413" level="project" />
