@@ -11,9 +11,11 @@
    :server-type :dev-local
    :storage-dir (toolbelt/create-directory! ".datomic/dev-local/data")})
 
-(def datomic-uri (or (System/getenv "DATOMIC_URI") "datomic:dev://localhost:4334/dev-db"))
-
 (def db-name (or (System/getenv "DATOMIC_DISCUSSION_DB_NAME") "dev-db"))
+
+(def datomic-uri
+  (format (or (System/getenv "DATOMIC_URI") "datomic:dev://localhost:4334/%s")
+          db-name))
 
 (def api
   {:port (Integer/parseInt (or (System/getenv "API_PORT") "3000"))})
