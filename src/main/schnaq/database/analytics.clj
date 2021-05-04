@@ -15,14 +15,13 @@
   ([attribute since]
    [keyword? inst? :ret int?]
    (or
-     (ffirst
-       (main-db/query
-         '[:find (count ?entities)
-           :in $ ?since ?attribute
-           :where [?entities ?attribute _ ?tx]
-           [?tx :db/txInstant ?start-date]
-           [(< ?since ?start-date)]]
-         (Date/from since) attribute))
+     (main-db/query
+       '[:find (count ?entities) .
+         :in $ ?since ?attribute
+         :where [?entities ?attribute _ ?tx]
+         [?tx :db/txInstant ?start-date]
+         [(< ?since ?start-date)]]
+       (Date/from since) attribute)
      0)))
 
 (>defn- number-of-entities-with-value-since
@@ -33,14 +32,13 @@
   ([attribute value since]
    [keyword? any? inst? :ret int?]
    (or
-     (ffirst
-       (main-db/query
-         '[:find (count ?entities)
-           :in $ ?since ?attribute ?value
-           :where [?entities ?attribute ?value ?tx]
-           [?tx :db/txInstant ?start-date]
-           [(< ?since ?start-date)]]
-         (Date/from since) attribute value))
+     (main-db/query
+       '[:find (count ?entities) .
+         :in $ ?since ?attribute ?value
+         :where [?entities ?attribute ?value ?tx]
+         [?tx :db/txInstant ?start-date]
+         [(< ?since ?start-date)]]
+       (Date/from since) attribute value)
      0)))
 
 (defn number-of-discussions
@@ -49,16 +47,15 @@
    (number-of-discussions max-time-back))
   ([since]
    (or
-     (ffirst
-       (main-db/query
-         '[:find (count ?discussions)
-           :in $ ?since
-           :where [?discussions :discussion/title _ ?tx]
-           (not-join [?discussions]
-                     [?discussions :discussion/states :discussion.state/deleted])
-           [?tx :db/txInstant ?start-date]
-           [(< ?since ?start-date)]]
-         (Date/from since)))
+     (main-db/query
+       '[:find (count ?discussions) .
+         :in $ ?since
+         :where [?discussions :discussion/title _ ?tx]
+         (not-join [?discussions]
+                   [?discussions :discussion/states :discussion.state/deleted])
+         [?tx :db/txInstant ?start-date]
+         [(< ?since ?start-date)]]
+       (Date/from since))
      0)))
 
 (defn number-of-usernames
@@ -77,20 +74,19 @@
    (number-of-statements max-time-back))
   ([since]
    (or
-     (ffirst
-       (main-db/query
-         '[:find (count ?statements)
-           :in $ % ?since
-           :where
-           ;; Make sure the discussion is not deleted where the statements are from
-           (not [?discussions :discussion/states :discussion.state/deleted])
-           (statements ?discussions ?statements)
-           ;; Make sure statements are not deleted
-           (not [?statements :statement/deleted? true])
-           [?statements :statement/content _ ?tx]
-           [?tx :db/txInstant ?start-date]
-           [(< ?since ?start-date)]]
-         discussion-db/statement-rules (Date/from since)))
+     (main-db/query
+       '[:find (count ?statements) .
+         :in $ % ?since
+         :where
+         ;; Make sure the discussion is not deleted where the statements are from
+         (not [?discussions :discussion/states :discussion.state/deleted])
+         (statements ?discussions ?statements)
+         ;; Make sure statements are not deleted
+         (not [?statements :statement/deleted? true])
+         [?statements :statement/content _ ?tx]
+         [?tx :db/txInstant ?start-date]
+         [(< ?since ?start-date)]]
+       discussion-db/statement-rules (Date/from since))
      0)))
 
 (>defn average-number-of-statements
@@ -106,20 +102,6 @@
        0
        (/ statements discussions)))))
 
-(>defn active-discussion-authors
-  "Returns all authors active in a discussion during a period since the provided
-  timestamp."
-  [since]
-  [inst? :ret sequential?]
-  (flatten
-    (main-db/query
-      '[:find ?authors
-        :in $ ?since
-        :where [?statements :statement/author ?authors ?tx]
-        [?tx :db/txInstant ?start-date]
-        [(< ?since ?start-date)]]
-      (Date/from since))))
-
 (>defn number-of-active-discussion-users
   "Returns the number of active users (With at least one statement or suggestion)."
   ([]
@@ -127,24 +109,27 @@
    (number-of-active-discussion-users max-time-back))
   ([since]
    [inst? :ret int?]
-   (let [discussion-authors (active-discussion-authors since)]
-     (count (set discussion-authors)))))
+   (main-db/query
+     '[:find (count ?authors) .
+       :in $ ?since
+       :where [?statements :statement/author ?authors ?tx]
+       [?tx :db/txInstant ?start-date]
+       [(< ?since ?start-date)]]
+     (Date/from since))))
 
 (>defn statement-length-stats
   "Returns a map of stats about statement-length."
   ([] [:ret map?]
    (statement-length-stats max-time-back))
   ([since] [inst? :ret map?]
-   (let [sorted-contents (->>
+   (let [sorted-contents (sort-by count
                            (main-db/query
-                             '[:find ?contents
+                             '[:find [?contents ...]
                                :in $ ?since
                                :where [_ :statement/content ?contents ?tx]
                                [?tx :db/txInstant ?add-date]
                                [(< ?since ?add-date)]]
-                             (Date/from since))
-                           flatten
-                           (sort-by count))
+                             (Date/from since)))
          content-count (count sorted-contents)
          max-length (count (last sorted-contents))
          min-length (count (first sorted-contents))
