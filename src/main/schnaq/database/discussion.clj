@@ -253,8 +253,8 @@
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
         temporary-id (:db/id new-statement)
         discussion-id (:db/id (discussion-by-share-hash share-hash))]
-    (get-in (transact [new-statement
-                       [:db/add discussion-id :discussion/starting-statements temporary-id]])
+    (get-in @(transact [new-statement
+                        [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
 
 (defn all-arguments-for-conclusion

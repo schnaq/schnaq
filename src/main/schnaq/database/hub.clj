@@ -49,9 +49,9 @@
   [hub-name keycloak-name]
   [:hub/name :hub/keycloak-name :ret ::specs/hub]
   (let [new-hub (get-in
-                  (transact [{:db/id "temp"
-                              :hub/name hub-name
-                              :hub/keycloak-name keycloak-name}])
+                  @(transact [{:db/id "temp"
+                               :hub/name hub-name
+                               :hub/keycloak-name keycloak-name}])
                   [:tempids "temp"])]
     (log/info "Created hub" new-hub)
     (pull-hub new-hub)))

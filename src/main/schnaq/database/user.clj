@@ -28,8 +28,8 @@
   [string? :ret int?]
   (when (s/valid? :user/nickname nickname)
     (get-in
-      (transact [{:db/id "temp-user"
-                  :user/nickname nickname}])
+      @(transact [{:db/id "temp-user"
+                   :user/nickname nickname}])
       [:tempids "temp-user"])))
 
 (>defn user-by-nickname
@@ -110,7 +110,7 @@
         (update-user-info identity existing-user)
         (update-groups id groups)
         existing-user)
-      (-> (transact [(clean-db-vals new-user)])
+      (-> @(transact [(clean-db-vals new-user)])
           (get-in [:tempids temp-id])
           (fast-pull registered-user-pattern)))))
 

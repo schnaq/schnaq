@@ -19,7 +19,7 @@
   (datomic/connect @current-datomic-uri))
 
 (defn transact
-  "Shorthand for transaction."
+  "Shorthand for transaction. Deref the result, if you need to further use it."
   [data]
   (datomic/transact (new-connection) data))
 
@@ -118,7 +118,7 @@
                            (.toString (UUID/randomUUID)))]
     (when (s/valid? spec clean-entity)
       (get-in
-        (transact [(assoc clean-entity :db/id identifier)])
+        @(transact [(assoc clean-entity :db/id identifier)])
         [:tempids identifier]))))
 
 ;; -----------------------------------------------------------------------------
