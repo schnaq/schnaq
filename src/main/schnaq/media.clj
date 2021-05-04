@@ -20,8 +20,8 @@
 (def ^:private success-img "Setting image succeeded")
 
 (defn- add-bucket-url-to-database [relative-file-path share-hash]
-  (d/transact [{:db/id [:discussion/share-hash share-hash]
-                :discussion/header-image-url relative-file-path}]))
+  @(d/transact [[:db/add [:discussion/share-hash share-hash]
+                 :discussion/header-image-url relative-file-path]]))
 
 (defn- upload-img-and-store-url [url file-name share-hash]
   (try
