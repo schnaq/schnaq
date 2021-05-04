@@ -7,7 +7,8 @@
             [schnaq.database.models :as models]
             [schnaq.database.specs :as specs]
             [schnaq.test-data :as test-data]
-            [schnaq.toolbelt :as toolbelt])
+            [schnaq.toolbelt :as toolbelt]
+            [shadow.jvm-log :as log])
   (:import (java.util UUID Date)))
 
 (def ^:private current-datomic-uri (atom config/datomic-uri))
@@ -70,6 +71,14 @@
       :where [(fulltext $ :statement/content ?search) [[?entity ?name ?tx ?score]]]]
     (datomic/db (datomic/connect config/datomic-uri))
     "dog")
+  (query '[:find (pull ?any [*]) (pull ?tx [:db/txInstant])
+           :where [?any :statement/content _ ?tx]])
+  ;; IMPORT of dev-local-export
+  ;; DO NOT CHANGE OR DELETE HERE
+  (let [txs (read-string (slurp "db-export.edn"))]
+    (doseq [tx txs]
+      (transact tx))
+    (log/debug "Finished import"))
   :end)
 
 ;; -----------------------------------------------------------------------------
