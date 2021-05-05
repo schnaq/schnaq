@@ -115,7 +115,7 @@
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]
-     [:small.text-muted [time/timestamp-with-tooltip (:db/txInstant schnaq) locale]]]))
+     [:small.text-muted [time/timestamp-with-tooltip (:discussion/created-at schnaq) locale]]]))
 
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"

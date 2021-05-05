@@ -221,7 +221,7 @@
     [:div.d-flex.mb-4
      [discussion-privacy-badge discussion]
      [:div.ml-auto
-      [user/user-info (:author content) 42 (:db/txInstant content)]]]
+      [user/user-info (:author content) 42 (:statement/created-at content)]]]
     [title-and-input-element content input is-topic?]]
    ;; up-down votes and statistics
    [:div.col-2.pr-3
@@ -239,7 +239,7 @@
     [:div.p-0
      [discussion-privacy-badge discussion]
      [:div.d-flex
-      [:div.ml-auto.mr-2 [user/user-info (:author content) 32 (:db/txInstant content)]]
+      [:div.ml-auto.mr-2 [user/user-info (:author content) 32 (:statement/created-at content)]]
       info-content]]]
    ;; title
    [title-and-input-element content input]])
