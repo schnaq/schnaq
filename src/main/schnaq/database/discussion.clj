@@ -10,7 +10,7 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
-  (:import (java.util UUID)))
+  (:import (java.util UUID Date)))
 
 (def statement-rules
   '[[(statements-from-argument ?argument ?statements)
@@ -203,7 +203,8 @@
    (mapv (fn [premise] {:db/id (str "premise-" premise)
                         :statement/author user-id
                         :statement/content premise
-                        :statement/version 1})
+                        :statement/version 1
+                        :statement/created-at (Date.)})
          premises))
   ([premises user-id creation-secrets]
    [(s/coll-of :statement/content) :db/id (s/coll-of :statement/creation-secret) :ret (s/coll-of map?)]
@@ -223,7 +224,8 @@
     :argument/conclusion {:db/id (str "conclusion-" conclusion)
                           :statement/author user-id
                           :statement/content conclusion
-                          :statement/version 1}
+                          :statement/version 1
+                          :statement/created-at (Date.)}
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions [discussion-id]}))
@@ -236,7 +238,8 @@
    {:db/id temp-id
     :statement/author user-id
     :statement/content content
-    :statement/version 1}))
+    :statement/version 1
+    :statement/created-at (Date.)}))
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
