@@ -253,6 +253,8 @@
         :privacy.link-to-privacy/lead "More information can be found in the comprehensive "
         :privacy/note "Privacy notice"
 
+        :privacy.extended/heading "Privacy"
+        :privacy.extended/subheading "We are compliant to GDPR"
         :privacy.extended.intro/title "General information on data processing"
         :privacy.extended.intro/body
         [:<>
@@ -980,6 +982,8 @@
         :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen "
         :privacy/note "Datenschutzerklärung"
 
+        :privacy.extended/heading "Datenschutzerklärung"
+        :privacy.extended/subheading "Wir sind DSGVO konform"
         :privacy.extended.intro/title "Allgemeines zur Datenverarbeitung"
         :privacy.extended.intro/body
         [:<>
@@ -1080,7 +1084,7 @@
          [:p "Der Internetauftritt von schnaq wird auf Servern der Hetzner Online GmbH in Deutschland gehostet. Bezüglich weiterer Informationen verweisen wir auf die Webseiten der Hetzner Online GmbH."]
          [:h4 "Abschluss eines Auftragsdatenverarbeitungsvertrags (AV-Vertrag)"]
          [:p "Wir haben mit der Hetzner Online GmbH einen AV-Vertrag abgeschlossen, welcher unsere Kunden schützt und Hetzner verpflichtet die erhobenen Daten nicht an Dritte weiterzugeben."]]
-        :privacy.extended.responsible/title "Verantwortlicher im Sinne der DSGVO"
+        :privacy.extended.responsible/title "Verantwortliche Person"
         :privacy.extended.responsible/body
         [:<>
          [:p
@@ -1089,7 +1093,7 @@
           "Am Hagen 6" [:br]
           "42855 Remscheid" [:br]
           (toolbelt/obfuscate-mail "info@schnaq.com")]
-         [:p "Rechtlich bindend ist die deutsche Fassung dieser Datenschutzerklärung."]]
+         [:p "Rechtlich bindend ist die deutsche Fassung dieser Seite."]]
 
         ;; About us
         :about-us.unity/title "Die Einheit schnaq"

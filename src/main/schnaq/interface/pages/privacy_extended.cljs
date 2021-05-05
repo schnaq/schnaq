@@ -48,7 +48,8 @@
 
 (defn- page []
   [pages/with-nav-and-header
-   {:page/heading (labels :router/privacy)}
+   {:page/heading (labels :privacy.extended/heading)
+    :page/subheading (labels :privacy.extended/subheading)}
    [:section.container
     [responsible]
     [intro]
