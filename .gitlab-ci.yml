@@ -96,6 +96,7 @@ coverage-report:
 # Stage "build-docker-images"
 
 build-frontend-image:
+  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -118,6 +119,7 @@ build-frontend-image:
     - deploy
 
 build-backend-image:
+  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -139,6 +141,7 @@ build-backend-image:
     - deploy
 
 build-frontend-staging-image:
+  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -163,6 +166,7 @@ build-frontend-staging-image:
     - develop
 
 build-backend-staging-image:
+  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
