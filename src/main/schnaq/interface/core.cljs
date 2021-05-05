@@ -23,6 +23,7 @@
             [schnaq.interface.utils.time]
             [schnaq.interface.utils.updates :as updates]
             [schnaq.interface.views :as views]
+            [schnaq.interface.views.about-us]
             [schnaq.interface.views.admin.control-center]
             [schnaq.interface.views.common]
             [schnaq.interface.views.discussion.admin-center]

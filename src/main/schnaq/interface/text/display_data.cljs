@@ -1047,6 +1047,36 @@
           (toolbelt/obfuscate-mail "info@schnaq.com")]
          [:p "Rechtlich bindend ist die deutsche Fassung dieser Datenschutzerklärung."]]
 
+        :about-us.unity/title "Die Einheit schnaq"
+        :about-us.unity/body [:<> [:p "schnaq bringt digitale Diskussionen in die Zukunft. Wir bieten Unternehmen die Möglichkeit transparente Entscheidungsprozesse durchzuführen, in denen das gesamte Team gehört werden kann, sodass chancengleiche und nachvollziehbare Diskurse stattfinden. Unsere Analysen helfen Ihnen zu verstehen, welches Teammitglied zu wenig gehört wurde und mit einbezogen werden sollte. Durch das Teilen von Wissen über Diskussionen auf unserer Plattform, verhindern wir Wissenssilos und implizites Firmenwissen, indem wir das Firmenwissen für alle verfügbar machen, sei es geschriebene oder später auch gesprochene Kommunikation."]
+                              [:p "Unser Team steht dafür ein, dass jede Stimme gehört werden kann!"]]
+
+        :about-us.value/title "Unsere Werte"
+        :about-us.value/subtitle "Wir folgen Werten, die unser Handeln und unsere Produkte definieren."
+        :about-us.honesty/title "Ehrlichkeit"
+        :about-us.honesty/body "Wir setzen darauf, unsere Produkte und deren Fähigkeiten ehrlich und ohne Übertreibung darzustellen. Wir sind fest davon überzeugt, dass unsere Produkte für sich selbst stehen können, ohne jegliche Überhöhung."
+        :about-us.collaborate/title "Kollaborationswille"
+        :about-us.collaborate/body "Wir glauben fest daran, dass wir gemeinsam mehr erreichen können als alleine. Deshalb pflegen wir gerne eine Kultur der Kollaboration. Egal ob untereinander im Team oder mit unseren Kund:innen und Kooperationspartner:innen. Zusammen können wir Großartiges schaffen."
+        :about-us.action/title "Tatendrang"
+        :about-us.action/body "Wir treffen Entscheidungen nicht aus dem Blauen heraus, sondern gestützt auf allen Daten, die wir zur Verfügung haben. Aber sobald nach Diskussionen eine Entscheidung getroffen wurde, stehen wir gemeinsam dahinter und ziehen an einem Strang, um effizient vorwärts zu kommen."
+        :about-us.quality/title "Qualität"
+        :about-us.quality/body "Wir sind stolz auf unsere Arbeit und das, was wir schaffen. Wir mögen unser Werk, wir sehen es als einen Teil von uns und wir haben Spaß daran, Menschen überall auf der Welt miteinander zu verbinden. Deshalb liegt es uns am Herzen, dass unsere Produkte von größtmöglicher Qualität sind."
+        :about-us.diversity/title "Vielfalt"
+        :about-us.diversity/body "Jeder Mensch bringt seine einzigartige Perspektive auf die Welt mit. Und gerade weil wir Menschen miteinander in Kontakt bringen, wollen wir, dass möglichst viele dieser Perspektiven in unser Schaffen einfließen."
+
+        :about-us.numbers/title "schnaq in Zahlen"
+        :about-us.numbers/research "Jahre Forschung"
+        :about-us.numbers/users "Nutzer:innen"
+        :about-us.numbers/statements "Aussagen strukturiert"
+        :about-us.numbers/loc "Zeilen Code"
+
+        :about-us.team/title "Team im Fokus"
+        :about-us.team/alexander "Gründer - Operative Führung"
+        :about-us.team/christian "Gründer - Technische Führung"
+        :about-us.team/mike "Gründer - Führung Produktdesign"
+
+        :about-us.page/heading "Über uns"
+        :about-us.page/subheading "Informationen zu uns"
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."
@@ -1424,7 +1454,11 @@
      :schnaqqifant.300w/talk "/imgs/elephants/talk300w.png"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
-     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
+     :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
+     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"
+     :team/alexander "https://s3.disqtec.com/team/alexanderschneider.jpg"
+     :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
+     :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"}))
 
 (defn video
   "Returns an video path"

@@ -10,6 +10,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.about-us :as about-us]
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
@@ -243,6 +244,9 @@
                                  (rf/dispatch [:graph/load-data-for-discussion]))
                         :stop (fn []
                                 (rf/dispatch [:updates.periodic/graph false]))}]}]]]]]
+   ["about"
+    {:name :routes/about-us
+     :view about-us/page}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
