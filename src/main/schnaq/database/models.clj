@@ -173,6 +173,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The statements at the source of the discussion-graph"}
+   {:db/ident :discussion/starting-arguments
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "DEPRECATED, WILL BE DELETED AFTER BIG ON PREM MIGRATION"}
    {:db/ident :discussion/hub-origin
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one

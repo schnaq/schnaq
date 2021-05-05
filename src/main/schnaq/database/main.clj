@@ -62,7 +62,8 @@
   ;; For playing around until we go live with new db
   (new-connection)
   (datomic/create-database config/datomic-uri)
-  (transact models/datomic-schema)
+  (transact (vec (concat [{:db/id        "datomic.tx"
+                           :db/txInstant #inst "2015-01-01"}] models/datomic-schema)))
   (datomic/delete-database config/datomic-uri)
   (init-and-seed!)
   (datomic/q
@@ -77,8 +78,7 @@
   ;; DO NOT CHANGE OR DELETE HERE
   (let [txs (read-string (slurp "db-export.edn"))]
     (doseq [tx txs]
-      (transact tx))
-    (log/debug "Finished import"))
+      @(transact tx)))
   :end)
 
 ;; -----------------------------------------------------------------------------
