@@ -76,8 +76,10 @@
            :where [?any :statement/content _ ?tx]])
   ;; IMPORT of dev-local-export
   ;; DO NOT CHANGE OR DELETE HERE
-  (let [txs (read-string (slurp "db-export.edn"))]
-    (doseq [tx txs]
+  (let [txs (read-string (slurp "db-export.edn"))
+        better-txs (toolbelt/pull-key-up txs :db/ident)
+        even-better-txs (toolbelt/db-to-ref better-txs)]
+    (doseq [tx even-better-txs]
       @(transact tx)))
   :end)
 
