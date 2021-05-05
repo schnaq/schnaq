@@ -4,7 +4,7 @@
             [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
-            [schnaq.database.main :refer [transact new-connection query fast-pull] :as main-db]
+            [schnaq.database.main :refer [transact query fast-pull] :as main-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.toolbelt :as toolbelt]
