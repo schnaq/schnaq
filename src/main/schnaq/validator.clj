@@ -1,9 +1,10 @@
 (ns schnaq.validator
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
+            [ring.util.http-response :refer [forbidden]]
             [schnaq.database.discussion :as db]
             [schnaq.database.main :refer [fast-pull]]
-            [ring.util.http-response :refer [forbidden]]))
+            [schnaq.database.specs :as specs]))
 
 (s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
 
@@ -12,10 +13,12 @@
   [share-hash]
   (try
     (let [discussion (db/discussion-by-share-hash share-hash)]
-      (and discussion
+      (and (s/valid? ::specs/discussion discussion)
            (not (some #{:discussion.state/deleted} (:discussion/states discussion)))))
     (catch Exception _
       false)))
+
+(db/discussion-by-share-hash "123")
 
 (defn valid-writeable-discussion?
   "Check if a schnaq-hash ist valid and writeable. Returns false, when the discussion is deleted or
