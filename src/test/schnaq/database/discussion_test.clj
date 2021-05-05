@@ -119,7 +119,7 @@
                :statement/author user-id,
                :statement/content (second premises),
                :statement/version 1}]
-             premise-entities)))))
+             (map #(dissoc % :statement/created-at) premise-entities))))))
 
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."
