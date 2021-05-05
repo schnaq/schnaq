@@ -76,9 +76,8 @@
    [:i {:class (str "fas " (fa :terminal))}]
    (labels :footer.tagline/developed-with)
    [:i {:class (str "m-auto fas " (fa :flask))}]
-   " in NRW, Germany. "
-   "© " [:a {:href "https://disqtec.com"
-             :target :_blank} "DisqTec"]
+   " in NRW, Germany "
+   "© schnaq"
    " "
    (.getFullYear (js/Date.))])
 
