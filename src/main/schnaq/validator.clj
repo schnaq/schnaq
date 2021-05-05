@@ -18,8 +18,6 @@
     (catch Exception _
       false)))
 
-(db/discussion-by-share-hash "123")
-
 (defn valid-writeable-discussion?
   "Check if a schnaq-hash ist valid and writeable. Returns false, when the discussion is deleted or
   should not be written to for any reason."
