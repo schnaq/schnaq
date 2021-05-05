@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.about-us
+(ns schnaq.interface.pages.about-us
   (:require [goog.string :as gstring]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.views.pages :as pages]))
