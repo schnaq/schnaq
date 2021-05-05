@@ -51,28 +51,12 @@
    (init! datomic-uri)
    (transact test-data)))
 
-(>defn merge-entity-and-transaction
-  "When pulling entity and transaction, merge the results into a single map."
-  [[entity transaction]]
-  [(s/coll-of map?) :ret map?]
-  (merge entity transaction))
-
-;; TODO look for transaction-pattern as well
 (comment
   ;; For playing around until we go live with new db
   (new-connection)
   (datomic/create-database config/datomic-uri)
   (transact models/datomic-schema)
   (datomic/delete-database config/datomic-uri)
-  (init-and-seed!)
-  (datomic/q
-    '[:find ?name ?score
-      :in $ ?search
-      :where [(fulltext $ :statement/content ?search) [[?entity ?name ?tx ?score]]]]
-    (datomic/db (datomic/connect config/datomic-uri))
-    "dog")
-  (query '[:find (pull ?any [*]) (pull ?tx [:db/txInstant])
-           :where [?any :statement/content _ ?tx]])
   ;; IMPORT of dev-local-export
   ;; DO NOT CHANGE OR DELETE HERE
   (let [txs (read-string (slurp "db-export.edn"))
@@ -80,13 +64,6 @@
         even-better-txs (toolbelt/db-to-ref better-txs)]
     @(transact even-better-txs))
   :end)
-
-;; -----------------------------------------------------------------------------
-;; Pull Patterns
-
-(def transaction-pattern
-  "Pull transaction information."
-  [:db/txInstant])
 
 ;; ##### Input functions #####
 (defn now [] (Date.))

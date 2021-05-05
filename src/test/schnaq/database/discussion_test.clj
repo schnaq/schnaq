@@ -246,7 +246,7 @@
           new-user (user-db/add-user-if-not-exists "Wugiperson")
           new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
                                                        new-user initial-content false)]
-      (is (= initial-content (:statement/content (db/get-statement new-statement-id))))
+      (is (= initial-content (:statement/content (fast-pull new-statement-id db/statement-pattern))))
       (let [modified-statement (db/change-statement-text-and-type new-statement-id modified-type modified-content)]
         (is (= modified-content (:statement/content modified-statement)))
         (is (s/valid? ::specs/statement modified-statement))))))

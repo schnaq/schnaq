@@ -87,29 +87,16 @@
    :discussion/created-at
    {:discussion/author user-db/combined-user-pattern}])
 
-(>defn get-statement
-  "Returns the statement given an id."
-  [statement-id]
-  [:db/id :ret ::specs/statement]
-  (main-db/merge-entity-and-transaction
-    (query
-      '[:find [(pull ?statement statement-pattern) (pull ?tx transaction-pattern)]
-        :in $ ?statement statement-pattern transaction-pattern
-        ;; Get the earliest creation tx
-        :where [?statement :statement/version 1 ?tx]]
-      statement-id statement-pattern main-db/transaction-pattern)))
-
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
   [share-hash]
   [:db/id :ret (s/coll-of ::specs/statement)]
-  (->> (query
-         '[:find (pull ?statements statement-pattern) (pull ?tx transaction-pattern)
-           :in $ ?share-hash statement-pattern transaction-pattern
-           :where [?discussion :discussion/share-hash ?share-hash]
-           [?discussion :discussion/starting-statements ?statements ?tx]]
-         share-hash statement-pattern main-db/transaction-pattern)
-       (map main-db/merge-entity-and-transaction)))
+  (query
+    '[:find [(pull ?statements statement-pattern) ...]
+      :in $ ?share-hash statement-pattern
+      :where [?discussion :discussion/share-hash ?share-hash]
+      [?discussion :discussion/starting-statements ?statements]]
+    share-hash statement-pattern))
 
 (defn transitive-child-rules
   "Returns a set of rules for finding transitive children entities of a given
@@ -152,46 +139,32 @@
                     [?authors :user.registered/display-name ?nickname])]
                 (transitive-child-rules 7) statement-ids))))
 
-(>defn discussion-by-share-hash-template
-  "Returns one discussion which can be reached by a certain share-hash. (schnaqs only ever have one)
-  Apply the pull-patern you like."
-  [share-hash template-pattern]
-  [string? vector? :ret (? map?)]
-  (let [entities (query
-                   '[:find [(pull ?discussion discussion-pattern) (pull ?tx transaction-pattern)]
-                     :in $ ?share-hash discussion-pattern transaction-pattern
-                     :where [?discussion :discussion/share-hash ?share-hash ?tx]]
-                   share-hash template-pattern main-db/transaction-pattern)]
-    (when (seq entities)
-      (-> entities
-          (toolbelt/pull-key-up :db/ident)
-          main-db/merge-entity-and-transaction))))
-
 (defn discussion-by-share-hash
   "Query discussion and apply public discussion pattern to it."
   [share-hash]
-  (discussion-by-share-hash-template share-hash discussion-pattern))
+  (toolbelt/pull-key-up
+    (fast-pull [:discussion/share-hash share-hash] discussion-pattern)
+    :db/ident))
 
 (defn discussion-by-share-hash-private
   "Query discussion and apply the private discussion pattern."
   [share-hash]
-  (discussion-by-share-hash-template share-hash discussion-pattern-private))
+  (toolbelt/pull-key-up
+    (fast-pull [:discussion/share-hash share-hash] discussion-pattern-private)
+    :db/ident))
 
 (>defn valid-discussions-by-hashes
   "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
   [share-hashes]
   [(s/coll-of :discussion/share-hash) :ret (s/coll-of ::specs/discussion)]
-  (as-> (query
-          '[:find (pull ?discussions discussion-pattern) (pull ?tx transaction-pattern)
-            :in $ [?share-hashes ...] discussion-pattern transaction-pattern
-            :where [?discussions :discussion/share-hash ?share-hashes ?tx]
-            (not-join [?discussions]
-                      [?discussions :discussion/states :discussion.state/deleted])]
-          share-hashes discussion-pattern-minimal main-db/transaction-pattern)
-        result
-        (map main-db/merge-entity-and-transaction result)
-        (toolbelt/pull-key-up result :db/ident)
-        (filter #(s/valid? ::specs/discussion %) result)))
+  (-> (query
+        '[:find [(pull ?discussions discussion-pattern) ...]
+          :in $ [?share-hashes ...] discussion-pattern
+          :where [?discussions :discussion/share-hash ?share-hashes]
+          (not-join [?discussions]
+                    [?discussions :discussion/states :discussion.state/deleted])]
+        share-hashes discussion-pattern-minimal)
+      (toolbelt/pull-key-up :db/ident)))
 
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
@@ -273,15 +246,15 @@
   [conclusion-id]
   (let [statements
         (query
-          '[:find (pull ?statements statement-pattern) (pull ?type [:db/ident]) (pull ?tx transaction-pattern)
-            :keys :statement :argument-type :transaction
-            :in $ statement-pattern ?conclusion transaction-pattern
-            :where [?arguments :argument/conclusion ?conclusion ?tx]
+          '[:find (pull ?statements statement-pattern) (pull ?type [:db/ident])
+            :keys :statement :argument-type
+            :in $ statement-pattern ?conclusion
+            :where [?arguments :argument/conclusion ?conclusion]
             [?arguments :argument/premises ?statements]
             [?arguments :argument/type ?type]]
-          statement-pattern conclusion-id main-db/transaction-pattern)]
-    (map (fn [{:keys [statement argument-type transaction]}]
-           (-> (merge statement transaction)
+          statement-pattern conclusion-id)]
+    (map (fn [{:keys [statement argument-type]}]
+           (-> statement
                (assoc :meta/argument-type argument-type)
                (toolbelt/pull-key-up :db/ident)))
          statements)))
@@ -433,17 +406,14 @@
 (defn public-discussions
   "Returns all public discussions."
   []
-  (as->
-    (query
-      '[:find (pull ?public-discussions discussion-pattern) (pull ?tx transaction-pattern)
-        :in $ discussion-pattern transaction-pattern
-        :where [?public-discussions :discussion/states :discussion.state/public ?tx]
-        (not-join [?public-discussions]
-                  [?public-discussions :discussion/states :discussion.state/deleted])]
-      discussion-pattern main-db/transaction-pattern)
-    result
-    (map main-db/merge-entity-and-transaction result)
-    (toolbelt/pull-key-up result :db/ident)))
+  (-> (query
+        '[:find [(pull ?public-discussions discussion-pattern) ...]
+          :in $ discussion-pattern
+          :where [?public-discussions :discussion/states :discussion.state/public]
+          (not-join [?public-discussions]
+                    [?public-discussions :discussion/states :discussion.state/deleted])]
+        discussion-pattern)
+      (toolbelt/pull-key-up :db/ident)))
 
 (>defn all-statements
   "Returns all statements belonging to a discussion."
@@ -524,7 +494,7 @@
       @(transact [[:db/add statement-id :statement/content new-content]
                   [:db/add argument-id :argument/type new-type]]))
     @(transact [[:db/add statement-id :statement/content new-content]]))
-  (get-statement statement-id))
+  (fast-pull statement-id statement-pattern))
 
 (>defn add-admin-to-discussion
   "Adds an admin user to a discussion."

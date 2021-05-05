@@ -2,9 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.main
-             :refer [transact fast-pull query merge-entity-and-transaction]
-             :as main-db]
+            [schnaq.database.main :refer [transact fast-pull query] :as main-db]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
@@ -27,16 +25,12 @@
   "Return all schnaqs belonging to a hub. Includes the tx."
   [hub-id]
   [:db/id :ret any?]
-  (as->
-    (query
-      '[:find (pull ?discussions discussion-pattern) (pull ?tx transaction-pattern)
-        :in $ ?hub discussion-pattern transaction-pattern
-        :where [?hub :hub/schnaqs ?discussions]
-        [?discussions :discussion/title _ ?tx]]
-      hub-id discussion-db/discussion-pattern-minimal main-db/transaction-pattern)
-    result
-    (toolbelt/pull-key-up result :db/ident)
-    (map merge-entity-and-transaction result)))
+  (-> (query
+        '[:find [(pull ?discussions discussion-pattern) ...]
+          :in $ ?hub discussion-pattern
+          :where [?hub :hub/schnaqs ?discussions]]
+        hub-id discussion-db/discussion-pattern-minimal)
+      (toolbelt/pull-key-up :db/ident)))
 
 (defn- pull-hub
   "Pull a hub from the database and include all txs pull db/ident up."
@@ -102,12 +96,11 @@
   [keycloak-names]
   [(s/coll-of string?) :ret (s/coll-of ::specs/hub)]
   (toolbelt/pull-key-up
-    (->> (main-db/query
-           '[:find (pull ?hub hub-pattern) (pull ?tx transaction-pattern)
-             :in $ [?hub-names ...] hub-pattern transaction-pattern
-             :where [?hub :hub/keycloak-name ?hub-names ?tx]]
-           keycloak-names hub-pattern main-db/transaction-pattern)
-         (map main-db/merge-entity-and-transaction))
+    (main-db/query
+      '[:find [(pull ?hub hub-pattern) ...]
+        :in $ [?hub-names ...] hub-pattern
+        :where [?hub :hub/keycloak-name ?hub-names]]
+      keycloak-names hub-pattern)
     :db/ident))
 
 (>defn change-hub-name
