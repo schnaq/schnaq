@@ -132,7 +132,7 @@
   "Adds a feedback to the database. Returns the id of the newly added feedback."
   [feedback]
   [::specs/feedback :ret int?]
-  (clean-and-add-to-db! feedback ::specs/feedback))
+  (clean-and-add-to-db! (assoc feedback :feedback/created-at (now)) ::specs/feedback))
 
 (defn all-feedbacks
   "Return complete feedbacks from database, sorted by descending timestamp."
