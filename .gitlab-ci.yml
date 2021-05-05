@@ -20,16 +20,19 @@ variables:
   BACKEND_IMAGE_TAGGED: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID
   FRONTEND_IMAGE_TAGGED: $CI_REGISTRY_IMAGE/frontend:$CI_PIPELINE_IID
 
+.with-datomic-pro:
+  before_script:
+    - mv settings.xml ~/.m2/settings.xml
 
 # ------------------------------------------------------------------------------
 # Stage "test"
 
 test:
+  extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
-    - mv .m2/settings.xml ~/.m2/settings.xml
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
   artifacts:
     paths:
@@ -37,6 +40,7 @@ test:
     expire_in: 1 hour
 
 test-cljs:
+  extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:
     - apk add yarn
@@ -45,6 +49,7 @@ test-cljs:
     - yarn shadow-cljs compile test
 
 lint:
+  extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
@@ -63,6 +68,7 @@ css-lint:
   when: always
 
 up-to-date?:
+  extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:
     - apk add git

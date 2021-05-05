@@ -5,8 +5,6 @@ target/
 pom.xml
 out/
 .m2/
-# Keep the settings.xml so datomic can be loaded
-!.m2/settings.xml
 
 
 # Calva-related
