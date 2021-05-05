@@ -29,9 +29,8 @@ test:
   before_script:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
-    - echo $DATOMIC_REPO_USERNAME
-    - export $DATOMIC_REPO_USERNAME
-    - export $DATOMIC_REPO_PASSWORD
+    - export DATOMIC_REPO_USERNAME
+    - export DATOMIC_REPO_PASSWORD
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
   artifacts:
     paths:
