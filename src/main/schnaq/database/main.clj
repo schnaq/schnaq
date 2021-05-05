@@ -7,8 +7,7 @@
             [schnaq.database.models :as models]
             [schnaq.database.specs :as specs]
             [schnaq.test-data :as test-data]
-            [schnaq.toolbelt :as toolbelt]
-            [shadow.jvm-log :as log])
+            [schnaq.toolbelt :as toolbelt])
   (:import (java.util UUID Date)))
 
 (def ^:private current-datomic-uri (atom config/datomic-uri))
@@ -58,6 +57,9 @@
   [(s/coll-of map?) :ret map?]
   (merge entity transaction))
 
+;; TODO update creation of 4 entities with created-at time
+;; TODO also update patterns of those entities
+;; TODO look for transaction-pattern as well
 (comment
   ;; For playing around until we go live with new db
   (new-connection)
@@ -140,5 +142,4 @@
            :in $ transaction-pattern
            :where [?feedback :feedback/description _ ?tx]]
          transaction-pattern)
-       (map merge-entity-and-transaction)
-       (sort-by :db/txInstant toolbelt/ascending)))
+       (sort-by :feedback/created-at toolbelt/ascending)))

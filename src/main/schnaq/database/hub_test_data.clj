@@ -15,9 +15,11 @@
 (def hub-test-data
   [{:hub/keycloak-name "test-keycloak"
     :hub/name "YouHub"
-    :hub/schnaqs hub-schnaqs}
+    :hub/schnaqs hub-schnaqs
+    :hub/created-at #inst "2021-03-04"}
    {:hub/keycloak-name "some-empty-hub"
-    :hub/name "Phub"}
+    :hub/name "Phub"
+    :hub/created-at #inst "2020-04-03"}
 
    {:db/id "user/hub-tester"
     :user/nickname "Hub Tester"}])
