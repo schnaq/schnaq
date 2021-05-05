@@ -44,20 +44,10 @@
     coll))
 
 (>defn db-to-ref
-  "Finds any occurrence of a member of `key-name` in `coll`. Then replaced the corresponding
-   value with the value of its key-name entry.
-   E.g.
-   ```
-   (ident-map->value {:foo {:db/ident :bar}, :baz {:db/ident :oof}} :db/ident)
-   => {:foo :bar, :baz :oof}
-
-   (ident-map->value {:foo {:db/ident :bar}} :not-found)
-   => {:foo {:db/ident :bar}}
-   ```"
   [coll]
   [(? coll?) :ret (? coll?)]
-  (walk/postwalk
-    #(if (and (= PersistentArrayMap (type %)) (contains? % :db/id))
+  (walk/prewalk
+    #(if (and (map? %) (contains? % :db/id))
        (update % :db/id str)
        %)
     coll))
