@@ -30,8 +30,6 @@ variables:
 test:
   extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
   artifacts:
@@ -51,8 +49,6 @@ test-cljs:
 lint:
   extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:clj-kondo --lint src
   allow_failure: true
@@ -72,7 +68,6 @@ up-to-date?:
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:
     - apk add git
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:outdated
   allow_failure: true
@@ -126,8 +121,6 @@ build-backend-image:
   services:
     - docker:stable-dind
   stage: build-docker-images
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
@@ -173,8 +166,6 @@ build-backend-staging-image:
   services:
     - docker:stable-dind
   stage: build-docker-images
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
