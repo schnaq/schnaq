@@ -29,7 +29,7 @@ test:
   before_script:
     - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
-    - cat ~/.m2/settings.xml
+    - mv .m2/settings ~/.m2/settings.xml
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
   artifacts:
     paths:
