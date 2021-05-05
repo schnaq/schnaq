@@ -138,8 +138,6 @@
   "Return complete feedbacks from database, sorted by descending timestamp."
   []
   (->> (query
-         '[:find (pull ?feedback [*]) (pull ?tx transaction-pattern)
-           :in $ transaction-pattern
-           :where [?feedback :feedback/description _ ?tx]]
-         transaction-pattern)
+         '[:find [(pull ?feedback [*]) ...]
+           :where [?feedback :feedback/description _ ?tx]])
        (sort-by :feedback/created-at toolbelt/ascending)))

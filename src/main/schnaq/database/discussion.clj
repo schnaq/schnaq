@@ -529,7 +529,7 @@
   "Creates a secrets map for a collection of statements.
   When there is no secret, the statement is skipped."
   [statement-ids]
-  [:db/id :ret map?]
+  [(s/coll-of :db/id) :ret (? map?)]
   (when statement-ids
     (into {}
           (query

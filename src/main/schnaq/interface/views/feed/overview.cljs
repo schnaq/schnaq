@@ -51,7 +51,6 @@
    [:div.meetings-list
     (let [schnaqs @(rf/subscribe subscription-vector)
           sort-method @(rf/subscribe [:feed/sort])
-          _ (println schnaqs)
           sorted-schnaqs (if (= :alphabetical sort-method)
                            (sort-by :discussion/title schnaqs)
                            (sort-by :discussion/created-at > schnaqs))]
