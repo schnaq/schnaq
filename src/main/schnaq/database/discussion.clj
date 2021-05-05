@@ -29,6 +29,7 @@
    :statement/content
    :statement/version
    :statement/deleted?
+   :statement/created-at
    {:statement/author user-db/combined-user-pattern}])
 
 (def argument-pattern
@@ -70,6 +71,7 @@
    {:discussion/starting-statements statement-pattern}
    :discussion/share-hash
    :discussion/header-image-url
+   :discussion/created-at
    {:discussion/author user-db/combined-user-pattern}])
 
 (def discussion-pattern-private
@@ -82,6 +84,7 @@
    {:discussion/states [:db/ident]}
    :discussion/share-hash
    :discussion/header-image-url
+   :discussion/created-at
    {:discussion/author user-db/combined-user-pattern}])
 
 (>defn get-statement

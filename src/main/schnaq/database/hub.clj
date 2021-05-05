@@ -13,12 +13,14 @@
 (def ^:private hub-essential-info-pattern
   [:db/id
    :hub/name
-   :hub/keycloak-name])
+   :hub/keycloak-name
+   :hub/created-at])
 
 (def ^:private hub-pattern
   [:db/id
    :hub/name
    :hub/keycloak-name
+   :hub/created-at
    {:hub/schnaqs discussion-db/discussion-pattern}])
 
 (>defn- all-schnaqs-for-hub

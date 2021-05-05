@@ -57,8 +57,6 @@
   [(s/coll-of map?) :ret map?]
   (merge entity transaction))
 
-;; TODO update creation of 4 entities with created-at time
-;; TODO also update patterns of those entities
 ;; TODO look for transaction-pattern as well
 (comment
   ;; For playing around until we go live with new db
