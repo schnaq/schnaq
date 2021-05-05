@@ -107,7 +107,6 @@
         subscribe you to the newsletter. You can unsubscribe at any time, by clicking the appropriate link in the emails you will receive.
         Alternatively you can write us an email, and we will unsubscribe you personally."
         :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our "
-        :startpage.newsletter/privacy-policy "privacy policy"
 
         :startpage.faq/title "Frequently Asked Questions"
         :startpage.faq.data/question "What happens with my data?"
@@ -254,6 +253,8 @@
         :privacy.link-to-privacy/lead "More information can be found in the comprehensive "
         :privacy/note "Privacy notice"
 
+        :privacy.extended/heading "Privacy"
+        :privacy.extended/subheading "We are compliant to GDPR"
         :privacy.extended.intro/title "General information on data processing"
         :privacy.extended.intro/body
         [:<>
@@ -354,7 +355,7 @@
          [:p "The schnaq website is hosted on servers of Hetzner Online GmbH in Germany. For further information, please refer to the websites of Hetzner Online GmbH."]
          [:h4 "Conclusion of a commissioned data processing contract (AV contract)"]
          [:p "We have concluded an AV contract with Hetzner Online GmbH, which protects our customers and obliges Hetzner not to pass on the collected data to third parties."]]
-        :privacy.extended.responsible/title "Person responsible in the sense of the GDPR"
+        :privacy.extended.responsible/title "Responsible Person"
         :privacy.extended.responsible/body
         [:<>
          [:p
@@ -363,8 +364,52 @@
           "Am Hagen 6" [:br]
           "42855 Remscheid" [:br]
           (toolbelt/obfuscate-mail "info@schnaq.com")]
-         [:p "Legally binding is the German version of this privacy policy."]]
+         [:p "Legally binding is the German version of this page."]]
 
+        ;; About us
+        :about-us.unity/title "The Unit schnaq"
+        :about-us.unity/body [:<> [:p "schnaq brings digital discussions into the future. We offer companies the opportunity to conduct transparent decision-making processes in which the entire team can be heard, so that equal-opportunity and comprehensible discourse takes place. Our analytics help you understand which team member has not been heard enough and should be included. By sharing knowledge through discussions on our platform, we prevent knowledge silos and tacit company knowledge by making company knowledge available to all, be it written or later spoken communication."]
+                              [:p "Our team is committed to ensuring that every voice can be heard!"]]
+
+        :about-us.value/title "Our Values"
+        :about-us.value/subtitle "We follow values that define our actions and our products."
+        :about-us.honesty/title "Honesty"
+        :about-us.honesty/body "We focus on presenting our products and their capabilities honestly and without exaggeration. We firmly believe that our products can stand for themselves without any exaggeration."
+        :about-us.collaborate/title "Will to Collaborate"
+        :about-us.collaborate/body "We firmly believe that we can achieve more together than alone. That's why we like to cultivate a culture of collaboration. Whether it's among ourselves as a team or with our customers and cooperation partners. Together we can create great things."
+        :about-us.action/title "Drive"
+        :about-us.action/body "We don't make decisions out of the blue, but based on all the data we have available. But once a decision has been made after discussions, we stand behind it together and pull together to move forward efficiently."
+        :about-us.quality/title "Quality"
+        :about-us.quality/body "We are proud of our work and what we create. We like our work, we see it as a part of us and we enjoy connecting people all over the world. That's why we care that our products are of the highest possible quality."
+        :about-us.diversity/title "Diversity"
+        :about-us.diversity/body "Every person brings their own unique perspective on the world. And precisely because we bring people into contact with each other, we want as many of these perspectives as possible to flow into our work."
+
+        :about-us.numbers/title "schnaq in Numbers"
+        :about-us.numbers/research "Years of Research"
+        :about-us.numbers/users "Users"
+        :about-us.numbers/statements "Statements Structured"
+        :about-us.numbers/loc "Lines of Code"
+
+        :about-us.team/title "Focus on the Team"
+        :about-us.team/alexander "Founder - Operational Management"
+        :about-us.team/christian "Founder - Technical Management"
+        :about-us.team/mike "Founder - Product Design Management"
+
+        :about-us.page/heading "About Us"
+        :about-us.page/subheading "Information about us"
+
+        ;; Legal Note
+        :legal-note.page/heading "Legal Note"
+        :legal-note.page/disclaimer "Disclaimer"
+
+        :legal-note.contents/title "Liability for Contents"
+        :legal-note.contents/body "As a service provider, we are responsible for our own content on these pages in accordance with general legislation pursuant to Section 7 (1) of the German Telemedia Act (TMG). According to §§ 8 to 10 TMG, however, we are not obligated as a service provider to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under the general laws remain unaffected. However, liability in this regard is only possible from the point in time at which a concrete infringement of the law becomes known. If we become aware of such infringements, we will remove this content immediately."
+        :legal-note.links/title "Liability for Links"
+        :legal-note.links/body "Our offer contains links to external websites of third parties, on whose contents we have no influence. Therefore, we cannot assume any liability for these external contents. The respective provider or operator of the pages is always responsible for the content of the linked pages. The linked pages were checked for possible legal violations at the time of linking. Illegal contents were not recognizable at the time of linking. However, a permanent control of the contents of the linked pages is not reasonable without concrete evidence of a violation of the law. If we become aware of any infringements, we will remove such links immediately."
+        :legal-note.copyright/title "Copyright"
+        :legal-note.copyright/body "The content and works created by the site operators on these pages are subject to German copyright law. The reproduction, editing, distribution and any kind of exploitation outside the limits of copyright require the written consent of the respective author or creator. Downloads and copies of this site are only permitted for private, non-commercial use. Insofar as the content on this site was not created by the operator, the copyrights of third parties are respected. In particular, third-party content is identified as such. Should you nevertheless become aware of a copyright infringement, please inform us accordingly. If we become aware of any infringements, we will remove such content immediately."
+        :legal-note.privacy/title "Privacy Policy"
+        :legal-note.privacy/body "You can find our privacy policy here."
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
@@ -606,7 +651,7 @@
         :pricing.faq.privacy/body-3 " for more information."
         :pricing/headline "Schnaq subscription"
         :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live: "
-        :pricing.newsletter/name "DisqTec newsletter."
+        :pricing.newsletter/name "schnaq newsletter."
 
         ;; feature list
         :feature/what "Decisions become more transparent and well-informed"
@@ -794,7 +839,6 @@
         den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ können Sie uns auch eine E-Mail
         schreiben und wir kümmern uns dann um Ihr Anliegen."
         :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer "
-        :startpage.newsletter/privacy-policy "Datenschutzerklärung"
 
         :startpage.faq/title "Häufig gestellte Fragen"
         :startpage.faq.data/question "Was passiert mit meinen Daten?"
@@ -938,6 +982,8 @@
         :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen "
         :privacy/note "Datenschutzerklärung"
 
+        :privacy.extended/heading "Datenschutzerklärung"
+        :privacy.extended/subheading "Wir sind DSGVO konform"
         :privacy.extended.intro/title "Allgemeines zur Datenverarbeitung"
         :privacy.extended.intro/body
         [:<>
@@ -1038,7 +1084,7 @@
          [:p "Der Internetauftritt von schnaq wird auf Servern der Hetzner Online GmbH in Deutschland gehostet. Bezüglich weiterer Informationen verweisen wir auf die Webseiten der Hetzner Online GmbH."]
          [:h4 "Abschluss eines Auftragsdatenverarbeitungsvertrags (AV-Vertrag)"]
          [:p "Wir haben mit der Hetzner Online GmbH einen AV-Vertrag abgeschlossen, welcher unsere Kunden schützt und Hetzner verpflichtet die erhobenen Daten nicht an Dritte weiterzugeben."]]
-        :privacy.extended.responsible/title "Verantwortlicher im Sinne der DSGVO"
+        :privacy.extended.responsible/title "Verantwortliche Person"
         :privacy.extended.responsible/body
         [:<>
          [:p
@@ -1047,8 +1093,52 @@
           "Am Hagen 6" [:br]
           "42855 Remscheid" [:br]
           (toolbelt/obfuscate-mail "info@schnaq.com")]
-         [:p "Rechtlich bindend ist die deutsche Fassung dieser Datenschutzerklärung."]]
+         [:p "Rechtlich bindend ist die deutsche Fassung dieser Seite."]]
 
+        ;; About us
+        :about-us.unity/title "Die Einheit schnaq"
+        :about-us.unity/body [:<> [:p "schnaq bringt digitale Diskussionen in die Zukunft. Wir bieten Unternehmen die Möglichkeit transparente Entscheidungsprozesse durchzuführen, in denen das gesamte Team gehört werden kann, sodass chancengleiche und nachvollziehbare Diskurse stattfinden. Unsere Analysen helfen Ihnen zu verstehen, welches Teammitglied zu wenig gehört wurde und mit einbezogen werden sollte. Durch das Teilen von Wissen über Diskussionen auf unserer Plattform, verhindern wir Wissenssilos und implizites Firmenwissen, indem wir das Firmenwissen für alle verfügbar machen, sei es geschriebene oder später auch gesprochene Kommunikation."]
+                              [:p "Unser Team steht dafür ein, dass jede Stimme gehört werden kann!"]]
+
+        :about-us.value/title "Unsere Werte"
+        :about-us.value/subtitle "Wir folgen Werten, die unser Handeln und unsere Produkte definieren."
+        :about-us.honesty/title "Ehrlichkeit"
+        :about-us.honesty/body "Wir setzen darauf, unsere Produkte und deren Fähigkeiten ehrlich und ohne Übertreibung darzustellen. Wir sind fest davon überzeugt, dass unsere Produkte für sich selbst stehen können, ohne jegliche Überhöhung."
+        :about-us.collaborate/title "Kollaborationswille"
+        :about-us.collaborate/body "Wir glauben fest daran, dass wir gemeinsam mehr erreichen können als alleine. Deshalb pflegen wir gerne eine Kultur der Kollaboration. Egal ob untereinander im Team oder mit unseren Kund:innen und Kooperationspartner:innen. Zusammen können wir Großartiges schaffen."
+        :about-us.action/title "Tatendrang"
+        :about-us.action/body "Wir treffen Entscheidungen nicht aus dem Blauen heraus, sondern gestützt auf allen Daten, die wir zur Verfügung haben. Aber sobald nach Diskussionen eine Entscheidung getroffen wurde, stehen wir gemeinsam dahinter und ziehen an einem Strang, um effizient vorwärts zu kommen."
+        :about-us.quality/title "Qualität"
+        :about-us.quality/body "Wir sind stolz auf unsere Arbeit und das, was wir schaffen. Wir mögen unser Werk, wir sehen es als einen Teil von uns und wir haben Spaß daran, Menschen überall auf der Welt miteinander zu verbinden. Deshalb liegt es uns am Herzen, dass unsere Produkte von größtmöglicher Qualität sind."
+        :about-us.diversity/title "Vielfalt"
+        :about-us.diversity/body "Jeder Mensch bringt seine einzigartige Perspektive auf die Welt mit. Und gerade weil wir Menschen miteinander in Kontakt bringen, wollen wir, dass möglichst viele dieser Perspektiven in unser Schaffen einfließen."
+
+        :about-us.numbers/title "schnaq in Zahlen"
+        :about-us.numbers/research "Jahre Forschung"
+        :about-us.numbers/users "Nutzer:innen"
+        :about-us.numbers/statements "Aussagen strukturiert"
+        :about-us.numbers/loc "Zeilen Code"
+
+        :about-us.team/title "Team im Fokus"
+        :about-us.team/alexander "Gründer - Operative Führung"
+        :about-us.team/christian "Gründer - Technische Führung"
+        :about-us.team/mike "Gründer - Führung Produktdesign"
+
+        :about-us.page/heading "Über uns"
+        :about-us.page/subheading "Informationen zu uns"
+
+        ;; Legal Note
+        :legal-note.page/heading "Impressum"
+        :legal-note.page/disclaimer "Haftungsausschluss (Disclaimer)"
+
+        :legal-note.contents/title "Haftung für Inhalte"
+        :legal-note.contents/body "Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen."
+        :legal-note.links/title "Haftung für Links"
+        :legal-note.links/body "Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen."
+        :legal-note.copyright/title "Urheberrecht"
+        :legal-note.copyright/body "Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen."
+        :legal-note.privacy/title "Datenschutzerklärung"
+        :legal-note.privacy/body "Unsere Datenschutzerklärung finden Sie hier."
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."
@@ -1296,7 +1386,7 @@
         :pricing.faq.privacy/body-3 " findest du mehr Informationen"
         :pricing/headline "Schnaq Abonnement"
         :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht: "
-        :pricing.newsletter/name "DisqTec Newsletter."
+        :pricing.newsletter/name "schnaq Newsletter."
 
         ;; feature list
         :feature/what "Entscheidungen werden nachvollziehbarer und informierter"
@@ -1426,7 +1516,11 @@
      :schnaqqifant.300w/talk "/imgs/elephants/talk300w.png"
      :schnaqqifant/white "/imgs/schnaqqifant_white.svg"
      :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
-     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"}))
+     :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
+     :startpage.features/admin-center "/imgs/startpage/features/admin-center.png"
+     :team/alexander "https://s3.disqtec.com/team/alexanderschneider.jpg"
+     :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
+     :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"}))
 
 (defn video
   "Returns an video path"
