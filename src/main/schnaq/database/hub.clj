@@ -7,7 +7,8 @@
              :as main-db]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as toolbelt]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log])
+  (:import (java.util Date)))
 
 (def ^:private hub-essential-info-pattern
   [:db/id
@@ -54,7 +55,8 @@
   [:hub/name :hub/keycloak-name :ret ::specs/hub]
   (let [tx @(transact [{:db/id "temp"
                         :hub/name hub-name
-                        :hub/keycloak-name keycloak-name}])
+                        :hub/keycloak-name keycloak-name
+                        :hub/created-at (Date.)}])
         new-hub (get-in tx [:tempids "temp"])
         new-db (:db-after tx)]
     (log/info "Created hub" new-hub)
@@ -67,7 +69,8 @@
   (let [non-existent-keycloak-names
         (remove #(fast-pull [:hub/keycloak-name %] [:hub/keycloak-name]) keycloak-names)
         transaction (mapv #(hash-map :hub/keycloak-name %
-                                     :hub/name %)
+                                     :hub/name %
+                                     :hub/created-at (Date.))
                           non-existent-keycloak-names)]
     (transact transaction)
     keycloak-names))

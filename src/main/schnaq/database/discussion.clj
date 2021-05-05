@@ -393,7 +393,9 @@
   (let [default-states [:discussion.state/open]
         states (cond-> default-states
                        public? (conj :discussion.state/public))]
-    (main-db/clean-and-add-to-db! (assoc discussion-data :discussion/states states)
+    (main-db/clean-and-add-to-db! (assoc discussion-data
+                                    :discussion/states states
+                                    :discussion/created-at (Date.))
                                   ::specs/discussion)))
 
 (>defn private-discussion-data
