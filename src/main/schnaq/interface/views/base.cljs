@@ -68,7 +68,7 @@
      (labels :router/privacy)]]
    [:li.list-inline-item
     [:a.btn.btn-outline-white
-     {:href "https://disqtec.com/impressum"}
+     {:href (reitfe/href :routes/legal-note)}
      (labels :footer.buttons/legal-note)]]])
 
 (defn- developed-in-nrw []

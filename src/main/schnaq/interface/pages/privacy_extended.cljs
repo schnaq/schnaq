@@ -41,7 +41,7 @@
 (defn- hosting []
   [privacy-entry :privacy.extended.hosting])
 
-(defn- responsible []
+(defn responsible []
   [privacy-entry :privacy.extended.responsible])
 
 ;; -----------------------------------------------------------------------------

@@ -8,6 +8,7 @@
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.pages.about-us :as about-us]
+            [schnaq.interface.pages.legal-note :as legal-note]
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.text.display-data :refer [labels]]
@@ -247,6 +248,9 @@
    ["about"
     {:name :routes/about-us
      :view about-us/page}]
+   ["legal-note"
+    {:name :routes/legal-note
+     :view legal-note/page}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
