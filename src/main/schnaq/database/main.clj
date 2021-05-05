@@ -62,8 +62,7 @@
   ;; For playing around until we go live with new db
   (new-connection)
   (datomic/create-database config/datomic-uri)
-  (transact (vec (concat [{:db/id        "datomic.tx"
-                           :db/txInstant #inst "2015-01-01"}] models/datomic-schema)))
+  (transact models/datomic-schema)
   (datomic/delete-database config/datomic-uri)
   (init-and-seed!)
   (datomic/q
@@ -79,8 +78,7 @@
   (let [txs (read-string (slurp "db-export.edn"))
         better-txs (toolbelt/pull-key-up txs :db/ident)
         even-better-txs (toolbelt/db-to-ref better-txs)]
-    (doseq [tx even-better-txs]
-      @(transact tx)))
+    @(transact even-better-txs))
   :end)
 
 ;; -----------------------------------------------------------------------------
