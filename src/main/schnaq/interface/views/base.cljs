@@ -60,7 +60,7 @@
     [:a.btn.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
      (labels :coc/heading)]]
    [:li.list-inline-item
-    [:a.btn.btn-outline-white {:href "https://disqtec.com/ueber-uns"}
+    [:a.btn.btn-outline-white {:href (reitfe/href :routes/about-us)}
      (labels :footer.buttons/about-us)]]
    [:li.list-inline-item
     [:a.btn.btn-outline-white
