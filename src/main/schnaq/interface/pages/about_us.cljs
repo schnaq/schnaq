@@ -60,7 +60,7 @@
 
 (def ^:private schnaq-in-numbers
   [:section
-   [:h2.text-center.pb-3 "schnaq in Zahlen"]
+   [:h2.text-center.pb-3 (labels :about-us.numbers/title)]
    [:div.row
     [:div.col (number-cell "6+" (labels :about-us.numbers/research))]
     [:div.col (number-cell "400+" (labels :about-us.numbers/users))]
@@ -69,7 +69,7 @@
 
 (def ^:private team-focus
   [:section
-   [:h2.text-center "Team im Fokus"]
+   [:h2.text-center (labels :about-us.team/title)]
    [:div.card-deck.pb-5
     [:div.col
      (person-card :team/alexander "Dr. Alexander Schneider" (labels :about-us.team/alexander))]
