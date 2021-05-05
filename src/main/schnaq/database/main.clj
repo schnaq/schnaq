@@ -15,6 +15,7 @@
 (defn new-connection
   "Connects to the database and returns a connection."
   []
+  (println @current-datomic-uri)
   (datomic/connect @current-datomic-uri))
 
 (defn transact
