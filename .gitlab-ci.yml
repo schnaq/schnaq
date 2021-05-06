@@ -107,6 +107,8 @@ build-frontend-image:
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
+      --build-arg DATOMIC_REPO_USERNAME
+      --build-arg DATOMIC_REPO_PASSWORD
       -t $FRONTEND_IMAGE_TAGGED .
     - docker tag $FRONTEND_IMAGE_TAGGED $FRONTEND_IMAGE:latest
     - docker push $FRONTEND_IMAGE_TAGGED
@@ -127,6 +129,8 @@ build-backend-image:
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      --build-arg DATOMIC_REPO_USERNAME
+      --build-arg DATOMIC_REPO_PASSWORD
       -t $BACKEND_IMAGE_TAGGED .
     - docker tag $BACKEND_IMAGE_TAGGED $BACKEND_IMAGE:latest
     - docker push $BACKEND_IMAGE_TAGGED
@@ -151,6 +155,8 @@ build-frontend-staging-image:
       --build-arg DATOMIC_DISCUSSION_DB_NAME=staging
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
+      --build-arg DATOMIC_REPO_USERNAME
+      --build-arg DATOMIC_REPO_PASSWORD
       --build-arg ROBOTS_TXT=./robots-staging.txt
       -t ${FRONTEND_IMAGE_TAGGED}-staging .
     - docker tag ${FRONTEND_IMAGE_TAGGED}-staging $FRONTEND_IMAGE:staging
@@ -173,6 +179,8 @@ build-backend-staging-image:
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg DATOMIC_DISCUSSION_DB_NAME=production
+      --build-arg DATOMIC_REPO_USERNAME
+      --build-arg DATOMIC_REPO_PASSWORD
       -t ${BACKEND_IMAGE_TAGGED}-staging .
     - docker tag ${BACKEND_IMAGE_TAGGED}-staging $BACKEND_IMAGE:staging
     - docker push ${BACKEND_IMAGE_TAGGED}-staging
