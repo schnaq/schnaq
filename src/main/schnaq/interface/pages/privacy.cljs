@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.privacy
+(ns schnaq.interface.pages.privacy
   "Page explaining our privacy and how we are storing data."
   (:require [cljs.pprint :refer [pprint]]
             [goog.string :as gstring]

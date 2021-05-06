@@ -7,6 +7,10 @@
             [reitit.frontend.history :as rfh]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
+            [schnaq.interface.pages.about-us :as about-us]
+            [schnaq.interface.pages.legal-note :as legal-note]
+            [schnaq.interface.pages.privacy :as privacy]
+            [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -22,8 +26,6 @@
             [schnaq.interface.views.hub.settings :as hub-settings]
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.privacy :as privacy]
-            [schnaq.interface.views.privacy-extended :as privacy-extended]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
@@ -243,6 +245,12 @@
                                  (rf/dispatch [:graph/load-data-for-discussion]))
                         :stop (fn []
                                 (rf/dispatch [:updates.periodic/graph false]))}]}]]]]]
+   ["about"
+    {:name :routes/about-us
+     :view about-us/page}]
+   ["legal-note"
+    {:name :routes/legal-note
+     :view legal-note/page}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub

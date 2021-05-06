@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.base
-  (:require [reitit.frontend.easy :as reitfe]
+  (:require [goog.string :as gstring]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]))
 
 (defn wavy-curve
@@ -60,7 +61,7 @@
     [:a.btn.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
      (labels :coc/heading)]]
    [:li.list-inline-item
-    [:a.btn.btn-outline-white {:href "https://disqtec.com/ueber-uns"}
+    [:a.btn.btn-outline-white {:href (reitfe/href :routes/about-us)}
      (labels :footer.buttons/about-us)]]
    [:li.list-inline-item
     [:a.btn.btn-outline-white
@@ -68,7 +69,7 @@
      (labels :router/privacy)]]
    [:li.list-inline-item
     [:a.btn.btn-outline-white
-     {:href "https://disqtec.com/impressum"}
+     {:href (reitfe/href :routes/legal-note)}
      (labels :footer.buttons/legal-note)]]])
 
 (defn- developed-in-nrw []
@@ -76,11 +77,7 @@
    [:i {:class (str "fas " (fa :terminal))}]
    (labels :footer.tagline/developed-with)
    [:i {:class (str "m-auto fas " (fa :flask))}]
-   " in NRW, Germany. "
-   "© " [:a {:href "https://disqtec.com"
-             :target :_blank} "DisqTec"]
-   " "
-   (.getFullYear (js/Date.))])
+   (gstring/format " in NRW, Germany © schnaq %d" (.getFullYear (js/Date.)))])
 
 (defn- social-media []
   [:section

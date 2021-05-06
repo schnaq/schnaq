@@ -44,7 +44,8 @@
        [:div.collapse {:id "collapse-more-newsletter"}
         [:p.small (labels :startpage.newsletter/policy-disclaimer)
          [:br] (labels :startpage.newsletter/privacy-policy-lead)
-         [:a {:href "https://disqtec.com/datenschutz"} (labels :startpage.newsletter/privacy-policy)] "."]]]]
+         [:a {:href (reitfe/href :routes/privacy-extended)}
+          (labels :privacy/note)] "."]]]]
 
      [:div.form-group
       [:input
