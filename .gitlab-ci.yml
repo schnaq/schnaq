@@ -129,7 +129,6 @@ build-backend-image:
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      --build-arg DATOMIC_DISCUSSION_DB_NAME=production
       --build-arg DATOMIC_REPO_USERNAME
       --build-arg DATOMIC_REPO_PASSWORD
       -t $BACKEND_IMAGE_TAGGED .
@@ -178,7 +177,6 @@ build-backend-staging-image:
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
-      --build-arg DATOMIC_DISCUSSION_DB_NAME=staging
       --build-arg DATOMIC_REPO_USERNAME
       --build-arg DATOMIC_REPO_PASSWORD
       -t ${BACKEND_IMAGE_TAGGED}-staging .
