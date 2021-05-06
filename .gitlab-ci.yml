@@ -13,6 +13,7 @@ cache:
   key: one-key-to-rule-them-all
   paths:
     - ./.m2/repository
+    - ./node_modules
 
 variables:
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
