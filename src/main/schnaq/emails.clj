@@ -3,6 +3,7 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
+            [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :refer [info error]]))
 
 (def ^:private conn {:host (:sender-host config/email)
@@ -47,3 +48,24 @@
   (reset! failed-sendings '())
   (run! (partial send-mail title content) recipients)
   {:failed-sendings @failed-sendings})
+
+(>defn send-welcome-mail
+  "Sends a welcome e-mail to a recipient. The mail template is stored in s3."
+  [recipient]
+  [string? :ret any?]
+  (let [welcome-title (email-templates :welcome/title)
+        welcome-template-text (email-templates :welcome/body)
+        welcome-template-html (slurp "https://s3.disqtec.com/welcome-mail/welcome_template.html")]
+    (if (valid-mail recipient)
+      (try
+        (send-message conn {:from (:sender-address config/email)
+                            :to recipient
+                            :subject welcome-title
+                            :body [:alternative
+                                   {:type "text/plain; charset=utf-8" :content welcome-template-text}
+                                   {:type "text/html; charset=utf-8" :content welcome-template-html}]})
+        (info "Sent welcome mail to " recipient)
+        (catch Exception exception
+          (error "Failed to send welcome mail to" recipient)
+          (error exception)))
+      (error "Recipient's mail address is invalid: " recipient))))

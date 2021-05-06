@@ -22,4 +22,18 @@ Rufen Sie folgende Adresse auf, um Ihren schnaq zu administrieren:\n\n%s\n\n" em
 %s hat eine Demo für ein Unternehmen angefragt.\n
 E-Mail: %s\n
 Firma (optional): %s\n
-Telefon (optional): %s")}))
+Telefon (optional): %s")
+     :welcome/title "Willkommen"
+     :welcome/body
+     (str
+       "Schön, dass du da bist!"
+       "\n"
+       "Danke, dass du dich bei schnaq registriert hast! "
+       "Wir wollen dir helfen, deinen modernen Arbeitsalltag so effizient wie möglich zu gestalten."
+       "\n"
+       "In einem schnaq sammelst du Wissen über ein Thema und es wird automatisch visualisiert. "
+       "Probiere es direkt aus! Erstelle ein schnaq und diskutiere mit deinen Kolleg:Innen!"
+       "\n"
+       "Du kannst vorher natürlich auch erst dein Profil individualisieren."
+       "\n\n"
+       "Liebe Grüße\nDein Team von schnaq")}))
