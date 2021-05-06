@@ -294,12 +294,12 @@
 ;; Discussion
 
 (>defn- add-creation-secret
-  "Add creatino-secret to a collection of statements. Only add to matching target-id."
+  "Add creation-secret to a collection of statements. Only add to matching target-id."
   [statements target-id]
   [(s/coll-of ::specs/statement) :db/id :ret (s/coll-of ::specs/statement)]
   (map #(if (= target-id (:db/id %))
-         (merge % (db/fast-pull target-id '[:statement/creation-secret]))
-         %)
+          (merge % (db/fast-pull target-id '[:statement/creation-secret]))
+          %)
        statements))
 
 (defn- valid-statements-with-votes
@@ -541,6 +541,7 @@
         allowed-origins [allowed-origin]
         allowed-origins' (if schnaq-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middle-ware
+    (say-hello)
     (schnaq-core/-main)
     (reset! current-server
             (server/run-server
@@ -550,7 +551,6 @@
                   (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
                   (wrap-defaults api-defaults))
               {:port port}))
-    (say-hello)
     (log/info (format "Running web-server at http://127.0.0.1:%s/" port))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
 
