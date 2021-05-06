@@ -28,8 +28,8 @@
   [string? :ret int?]
   (when (s/valid? :user/nickname nickname)
     (get-in
-      (transact [{:db/id "temp-user"
-                  :user/nickname nickname}])
+      @(transact [{:db/id "temp-user"
+                   :user/nickname nickname}])
       [:tempids "temp-user"])))
 
 (>defn user-by-nickname
@@ -37,14 +37,13 @@
   If there is no user with said nickname returns nil."
   [nickname]
   [string? :ret (? number?)]
-  (ffirst
-    (query
-      '[:find ?user
-        :in $ ?user-name
-        :where [?user :user/nickname ?original-nickname]
-        [(.toLowerCase ^String ?original-nickname) ?lower-name]
-        [(= ?lower-name ?user-name)]]
-      (.toLowerCase ^String nickname))))
+  (query
+    '[:find ?user .
+      :in $ ?user-name
+      :where [?user :user/nickname ?original-nickname]
+      [(.toLowerCase ^String ?original-nickname) ?lower-name]
+      [(= ?lower-name ?user-name)]]
+    (.toLowerCase ^String nickname)))
 
 (>defn canonical-username
   "Return the canonical username (regarding case) that is saved."
@@ -110,7 +109,7 @@
         (update-user-info identity existing-user)
         (update-groups id groups)
         existing-user)
-      (-> (transact [(clean-db-vals new-user)])
+      (-> @(transact [(clean-db-vals new-user)])
           (get-in [:tempids temp-id])
           (fast-pull registered-user-pattern)))))
 
@@ -118,9 +117,10 @@
   "Updates a user's field in the database and return updated user."
   [keycloak-id field value]
   [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
-  (transact [[:db/add [:user.registered/keycloak-id keycloak-id]
-              field value]])
-  (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern))
+  (let [new-db (:db-after
+                 @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
+                              field value]]))]
+    (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern new-db)))
 
 (>defn update-display-name
   "Update the name of an existing user."
@@ -138,9 +138,8 @@
   "Returns all members of a certain group."
   [group-name]
   [::specs/non-blank-string :ret (s/coll-of ::specs/user-or-reference)]
-  (flatten
-    (query
-      '[:find (pull ?users combined-user-pattern)
-        :in $ ?group combined-user-pattern
-        :where [?users :user.registered/groups ?group]]
-      group-name combined-user-pattern)))
+  (query
+    '[:find [(pull ?users combined-user-pattern) ...]
+      :in $ ?group combined-user-pattern
+      :where [?users :user.registered/groups ?group]]
+    group-name combined-user-pattern))

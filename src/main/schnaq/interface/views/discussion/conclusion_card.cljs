@@ -77,7 +77,7 @@
        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
       [:div.card-view.card-body.py-0.pb-1
        [:div.d-flex.justify-content-end.mt-2
-        [user/user-info (:statement/author statement) 32 (:db/txInstant statement)]]
+        [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
        [:div.my-1 [:p (:statement/content statement)]]
        [:div.d-flex
         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
@@ -107,7 +107,7 @@
     (if (seq conclusions)
       (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
             keyfn (case sort-method
-                    :newest :db/txInstant
+                    :newest :statement/created-at
                     :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
             sorted-conclusions (sort-by keyfn > conclusions)]
         [:div.card-columns.card-columns-discussion.pb-3

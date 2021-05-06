@@ -14,14 +14,33 @@ endif::[]
 
 The dev-Setup has different parts for Backend and Frontend.
 
-== Preparation
+== Database
 
-We are using `datomic dev-local` as our in-memory database, which can be used during development and testing.
-Get the jar file containing datomic via this URL: https://docs.datomic.com/dev-local/get-dev-local.html
+We are using `datomic pro` as our database, which can be used during development and testing.
+Get a fresh licence for datomic pro starter via this URL: https://my.datomic.com/
 
-Then, store the jar in "local_jars/dev-local/dev-local.jar".
-This database stores the data in a ".datomic/" folder.
-Remove the folder to reset the database or call the suitable function in the database namespace.
+Then, after registering visit: https://my.datomic.com/account.
+Follow the instructions to set your `~/.m2/settings.xml` server to contain credentials for my.datomic.com.
+You will need to create a new account after one year.
+
+=== Development: Starting the local transactor (for the database)
+
+Go to https://my.datomics.com/account and copy the `wget` command with the desired version.
+Execute it in the schnaq folder and name it datomic-pro, or wherever you desire.
+
+- unzip
+- Enter your licence-key into the datomic-pro/dev-transactor.properties (Copy it over from datomic-pro/config/samples/dev-transactor-template.properties)
+
+Start the transactor to dev with: `bin/transactor dev-transactor.properties`.
+
+=== Production
+
+To connect to a database, provide the proper connection string. You can find the
+connection string when starting your datomic instance.
+
+We put the connection string into the project's environment variables and build
+them into the Docker image. The connection string from us is a **format string**.
+We replaced `<DB-NAME>` with `%s`. Set your database in the config namespace.
 
 == Backend
 

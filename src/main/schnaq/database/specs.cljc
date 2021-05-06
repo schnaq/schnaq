@@ -42,6 +42,7 @@
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
+(s/def :discussion/created-at inst?)
 (s/def :discussion/hub-origin (s/or :reference :db/id
                                     :hub ::hub))
 (s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
@@ -57,13 +58,15 @@
                                   :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
-                                  :db/txInstant :discussion/admins :discussion/hub-origin]))
+                                  :discussion/admins :discussion/hub-origin
+                                  :discussion/created-at]))
 
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
 (s/def :hub/schnaqs (s/coll-of ::discussion))
+(s/def :hub/created-at inst?)
 (s/def ::hub (s/keys :req [:hub/name :hub/keycloak-name]
-                     :opt [:hub/schnaqs :db/txInstant]))
+                     :opt [:hub/schnaqs :hub/created-at]))
 
 ;; Statement
 (s/def :statement/content ::non-blank-string)
@@ -72,9 +75,10 @@
 (s/def :statement/upvotes (s/coll-of ::user-or-reference))
 (s/def :statement/downvotes (s/coll-of ::user-or-reference))
 (s/def :statement/creation-secret ::non-blank-string)
+(s/def :statement/created-at inst?)
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]
-          :opt [:statement/creation-secret]))
+          :opt [:statement/creation-secret :statement/created-at]))
 
 ;; Argument
 (s/def :argument/type
@@ -100,6 +104,7 @@
 (s/def :feedback/contact-mail string?)
 (s/def :feedback/description ::non-blank-string)
 (s/def :feedback/has-image? boolean?)
+(s/def :feedback/created-at inst?)
 (s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
                           :opt [:feedback/contact-name :feedback/contact-mail
-                                :db/txInstant]))
+                                :feedback/created-at]))

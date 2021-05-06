@@ -32,7 +32,7 @@
               (when-not (string/blank? (:feedback/contact-mail feedback))
                 [:a {:href (gstring/format "mailto:%s" (:feedback/contact-mail feedback))}
                  [:i.far.fa-envelope.pl-1]])]
-             [:td (time/format-distance (:db/txInstant feedback) locale)]
+             [:td (time/format-distance (:feedback/created-at feedback) locale)]
              [:td (:feedback/description feedback)]
              [:td.image
               (when (:feedback/has-image? feedback)

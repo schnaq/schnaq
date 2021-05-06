@@ -45,8 +45,8 @@
   (testing "Test whether the schnaqs for a hub are correctly pulled."
     (let [test-schnaqs (#'hub/all-schnaqs-for-hub [:hub/keycloak-name "test-keycloak"])]
       (is (= 2 (count test-schnaqs)))
-      (is (contains? (first test-schnaqs) :db/txInstant))
-      (is (contains? (second test-schnaqs) :db/txInstant))
+      (is (contains? (first test-schnaqs) :discussion/created-at))
+      (is (contains? (second test-schnaqs) :discussion/created-at))
       (is (some #{(-> test-schnaqs first :discussion/title)} ["Another Hub Discussion" "Hub Discussion"]))
       (is (empty? (#'hub/all-schnaqs-for-hub [:hub/keycloak-name "some-empty-hub"]))))))
 

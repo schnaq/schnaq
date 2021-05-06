@@ -57,6 +57,10 @@
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one
     :db/doc "Indicate wether a user provided an image."}
+   {:db/ident :feedback/created-at
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db/doc "The time at which this entity has been created."}
 
    ;; Statement
    {:db/ident :statement/author
@@ -66,6 +70,7 @@
    {:db/ident :statement/content
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/fulltext true
     :db/doc "The text-content of the statement"}
    {:db/ident :statement/version
     :db/valueType :db.type/long
@@ -87,6 +92,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "A secret to claim ownership of a statement as an anonymous user."}
+   {:db/ident :statement/created-at
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db/doc "The time at which this entity has been created."}
 
    ;; Argument Types
    {:db/ident :argument.type/support}
@@ -176,6 +185,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The hub in which the schnaq is originated in. The quasi owner of the schnaq."}
+   {:db/ident :discussion/created-at
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db/doc "The time at which this entity has been created."}
 
    {:db/ident :hub/name
     :db/valueType :db.type/string
@@ -189,4 +202,8 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/value
-    :db/doc "Map this entity to the group in our keycloak instance."}])
+    :db/doc "Map this entity to the group in our keycloak instance."}
+   {:db/ident :hub/created-at
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db/doc "The time at which this entity has been created."}])

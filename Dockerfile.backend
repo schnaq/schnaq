@@ -5,13 +5,20 @@ RUN apk add --no-cache tzdata
 WORKDIR /code
 
 # Cache and install Clojure dependencies
+ARG DATOMIC_REPO_USERNAME
+ENV DATOMIC_REPO_USERNAME=$DATOMIC_REPO_USERNAME
+ARG DATOMIC_REPO_PASSWORD
+ENV DATOMIC_REPO_PASSWORD=$DATOMIC_REPO_PASSWORD
 COPY deps.edn .
+COPY settings.xml ~/.m2/settings.xml
 RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -e "(prn \"Downloading deps\")"
 
 # ------------------------------------------------------------------------------
 
 ARG BUILD_HASH
 ENV BUILD_HASH=$BUILD_HASH
+ARG DATOMIC_DISCUSSION_DB_NAME
+ENV DATOMIC_DISCUSSION_DB_NAME=$DATOMIC_DISCUSSION_DB_NAME
 EXPOSE 3000
 
 COPY . .

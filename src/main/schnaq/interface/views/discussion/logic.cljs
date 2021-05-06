@@ -56,7 +56,7 @@
                           :argument/premises
                           first
                           (assoc :meta/argument-type (:argument/type new-argument)
-                                 :db/txInstant (.now js/Date)))]
+                                 :statement/created-at (.now js/Date)))]
       {:db (update-in db [:discussion :premises :current]
                       conj new-premise)
        :fx [[:dispatch [:notification/new-content]]

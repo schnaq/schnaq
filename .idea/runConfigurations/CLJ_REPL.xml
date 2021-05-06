@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CLJ REPL" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
     <module name="schnaq" />
+    <setting name="displayName" value="CLJ REPL" />
     <setting name="replType" value="NREPL" />
     <setting name="execution" value="DEPS" />
     <setting name="jvmArgs" value="-Dghostwheel.enabled=true" />
     <setting name="parameters" value="" />
     <setting name="workingDir" value="$PROJECT_DIR$" />
     <setting name="profiles" value="" />
-    <setting name="aliases" value="run-server,test" />
+    <setting name="aliases" value="run-server" />
     <setting name="fixLineNumbers" value="false" />
     <method v="2" />
-    <setting name="displayName" value="CLJ REPL" />
   </configuration>
 </component>
-

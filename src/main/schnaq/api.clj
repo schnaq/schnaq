@@ -354,7 +354,8 @@
   (let [{:keys [share-hash statement-id]} body-params]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
-            {:conclusion (first (with-sub-discussion-info [(discussion-db/get-statement statement-id)]))
+            {:conclusion (first (with-sub-discussion-info
+                                  [(db/fast-pull statement-id discussion-db/statement-pattern)]))
              :premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion statement-id))
              :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id statement-id))}))
       (validator/deny-access invalid-rights-message))))

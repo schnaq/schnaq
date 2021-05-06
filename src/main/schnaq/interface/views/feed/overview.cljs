@@ -52,8 +52,8 @@
     (let [schnaqs @(rf/subscribe subscription-vector)
           sort-method @(rf/subscribe [:feed/sort])
           sorted-schnaqs (if (= :alphabetical sort-method)
-                           (sort-by #(first (:discussion/title %)) schnaqs)
-                           (sort-by :db/txInstant > schnaqs))]
+                           (sort-by :discussion/title schnaqs)
+                           (sort-by :discussion/created-at > schnaqs))]
       (if (empty? schnaqs)
         [no-schnaqs-found]
         (for [schnaq sorted-schnaqs]

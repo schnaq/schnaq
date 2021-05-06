@@ -20,14 +20,16 @@ variables:
   BACKEND_IMAGE_TAGGED: $CI_REGISTRY_IMAGE/backend:$CI_PIPELINE_IID
   FRONTEND_IMAGE_TAGGED: $CI_REGISTRY_IMAGE/frontend:$CI_PIPELINE_IID
 
+.with-datomic-pro:
+  before_script:
+    - mv settings.xml ~/.m2/settings.xml
 
 # ------------------------------------------------------------------------------
 # Stage "test"
 
 test:
+  extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:test
   artifacts:
@@ -36,6 +38,7 @@ test:
     expire_in: 1 hour
 
 test-cljs:
+  extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:
     - apk add yarn
@@ -44,9 +47,8 @@ test-cljs:
     - yarn shadow-cljs compile test
 
 lint:
+  extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:clj-kondo --lint src
   allow_failure: true
@@ -62,10 +64,10 @@ css-lint:
   when: always
 
 up-to-date?:
+  extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
   before_script:
     - apk add git
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:outdated
   allow_failure: true
@@ -89,6 +91,7 @@ coverage-report:
 # Stage "build-docker-images"
 
 build-frontend-image:
+  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -111,14 +114,13 @@ build-frontend-image:
     - deploy
 
 build-backend-image:
+  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
@@ -132,6 +134,7 @@ build-backend-image:
     - deploy
 
 build-frontend-staging-image:
+  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
@@ -144,6 +147,7 @@ build-frontend-staging-image:
       docker build -f Dockerfile.frontend
       --build-arg REST_API_URL=https://api.staging.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      --build-arg DATOMIC_DISCUSSION_DB_NAME=staging
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT_STAGING
       --build-arg ROBOTS_TXT=./robots-staging.txt
@@ -155,19 +159,19 @@ build-frontend-staging-image:
     - develop
 
 build-backend-staging-image:
+  extends: .with-datomic-pro
   image: docker
   tags:
     - ht
   services:
     - docker:stable-dind
   stage: build-docker-images
-  before_script:
-    - wget $DOWNLOAD_DEV_LOCAL && mkdir -p local_jars/dev-local && mv dev-local.jar local_jars/dev-local
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
       docker build -f Dockerfile.backend
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      --build-arg DATOMIC_DISCUSSION_DB_NAME=production
       -t ${BACKEND_IMAGE_TAGGED}-staging .
     - docker tag ${BACKEND_IMAGE_TAGGED}-staging $BACKEND_IMAGE:staging
     - docker push ${BACKEND_IMAGE_TAGGED}-staging

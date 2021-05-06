@@ -1,8 +1,8 @@
 (ns schnaq.database.main
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [datomic.client.api :as d]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [datomic.api :as datomic]
+            [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.database.models :as models]
             [schnaq.database.specs :as specs]
@@ -10,61 +10,22 @@
             [schnaq.toolbelt :as toolbelt])
   (:import (java.util UUID Date)))
 
-(def ^:private datomic-info
-  (atom {:client nil
-         :database-name nil}))
-
-(>defn- reset-datomic-client!
-  "Sets a new datomic client for transactions."
-  [datomic-config]
-  [map? :ret any?]
-  (swap! datomic-info assoc :client (d/client datomic-config)))
-
-(>defn- reset-datomic-db-name!
-  "Sets a new database-name for transactions."
-  [database-name]
-  [string? :ret any?]
-  (swap! datomic-info assoc :database-name database-name))
+(def ^:private current-datomic-uri (atom config/datomic-uri))
 
 (defn new-connection
   "Connects to the database and returns a connection."
   []
-  (let [{:keys [client database-name]} @datomic-info]
-    (d/connect client {:db-name database-name})))
+  (datomic/connect @current-datomic-uri))
 
 (defn transact
-  "Shorthand for transaction."
+  "Shorthand for transaction. Deref the result, if you need to further use it."
   [data]
-  (d/transact (new-connection) {:tx-data data}))
+  (datomic/transact (new-connection) data))
 
 (defn query
   "Shorthand to not type out the same first param every time"
   [query-vector & args]
-  (apply d/q query-vector (d/db (new-connection)) args))
-
-(defn- create-discussion-schema
-  "Creates the schema for discussions inside the database."
-  [connection]
-  (d/transact connection {:tx-data models/datomic-schema}))
-
-(>defn create-database!
-  "Create a new database. Does not check whether there already is an existing
-  database with the same name."
-  []
-  [:ret boolean?]
-  (let [{:keys [client database-name]} @datomic-info]
-    (d/create-database
-      client
-      {:db-name database-name})))
-
-(>defn delete-database!
-  "Delete a database by its name."
-  []
-  [:ret boolean?]
-  (let [{:keys [client database-name]} @datomic-info]
-    (d/delete-database
-      client
-      {:db-name database-name})))
+  (apply datomic/q query-vector (datomic/db (new-connection)) args))
 
 (defn init!
   "Initialization function, which does everything needed at a fresh app-install.
@@ -72,40 +33,37 @@
   If no parameters are provided, the function reads its configuration from the
   config-namespace."
   ([]
-   (init! {:datomic config/datomic
-           :name config/db-name}))
-  ([config]
-   (reset-datomic-client! (:datomic config))
-   (reset-datomic-db-name! (:name config))
-   (when-not (= :peer-server (-> (:datomic config) :server-type))
-     (create-database!))
-   (create-discussion-schema (new-connection))))
+   (init! config/datomic-uri))
+  ([datomic-uri]
+   (reset! current-datomic-uri datomic-uri)
+   (datomic/create-database datomic-uri)
+   (transact models/datomic-schema)))
 
 (defn init-and-seed!
   "Initializing the datomic database and feeding it with test-data.
   If no parameters are provided, the function reads its configuration from the
   config-namespace."
   ([]
-   (init-and-seed! {:datomic config/datomic
-                    :name config/db-name}))
-  ([config]
-   (init-and-seed! config test-data/schnaq-test-data))
-  ([config test-data]
-   (init! config)
+   (init-and-seed! config/datomic-uri))
+  ([datomic-uri]
+   (init-and-seed! datomic-uri test-data/schnaq-test-data))
+  ([datomic-uri test-data]
+   (init! datomic-uri)
    (transact test-data)))
 
-(>defn merge-entity-and-transaction
-  "When pulling entity and transaction, merge the results into a single map."
-  [[entity transaction]]
-  [(s/coll-of map?) :ret map?]
-  (merge entity transaction))
-
-;; -----------------------------------------------------------------------------
-;; Pull Patterns
-
-(def transaction-pattern
-  "Pull transaction information."
-  [:db/txInstant])
+(comment
+  ;; For playing around until we go live with new db
+  (new-connection)
+  (datomic/create-database config/datomic-uri)
+  (transact models/datomic-schema)
+  (datomic/delete-database config/datomic-uri)
+  ;; IMPORT of dev-local-export
+  ;; DO NOT CHANGE OR DELETE HERE
+  (let [txs (read-string (slurp "db-export.edn"))
+        better-txs (toolbelt/pull-key-up txs :db/ident)
+        even-better-txs (toolbelt/db-to-ref better-txs)]
+    @(transact even-better-txs))
+  :end)
 
 ;; ##### Input functions #####
 (defn now [] (Date.))
@@ -124,7 +82,9 @@
   ([id]
    (fast-pull id '[*]))
   ([id pattern]
-   (d/pull (d/db (new-connection)) pattern id)))
+   (datomic/pull (datomic/db (new-connection)) pattern id))
+  ([id pattern db]
+   (datomic/pull db pattern id)))
 
 (>defn clean-and-add-to-db!
   "Removes empty strings and nil values from map before transacting it to the
@@ -137,7 +97,7 @@
                            (.toString (UUID/randomUUID)))]
     (when (s/valid? spec clean-entity)
       (get-in
-        (transact [(assoc clean-entity :db/id identifier)])
+        @(transact [(assoc clean-entity :db/id identifier)])
         [:tempids identifier]))))
 
 ;; -----------------------------------------------------------------------------
@@ -147,15 +107,12 @@
   "Adds a feedback to the database. Returns the id of the newly added feedback."
   [feedback]
   [::specs/feedback :ret int?]
-  (clean-and-add-to-db! feedback ::specs/feedback))
+  (clean-and-add-to-db! (assoc feedback :feedback/created-at (now)) ::specs/feedback))
 
 (defn all-feedbacks
   "Return complete feedbacks from database, sorted by descending timestamp."
   []
   (->> (query
-         '[:find (pull ?feedback [*]) (pull ?tx transaction-pattern)
-           :in $ transaction-pattern
-           :where [?feedback :feedback/description _ ?tx]]
-         transaction-pattern)
-       (map merge-entity-and-transaction)
-       (sort-by :db/txInstant toolbelt/ascending)))
+         '[:find [(pull ?feedback [*]) ...]
+           :where [?feedback :feedback/description _ ?tx]])
+       (sort-by :feedback/created-at toolbelt/ascending)))

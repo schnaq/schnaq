@@ -43,6 +43,15 @@
        %)
     coll))
 
+(>defn db-to-ref
+  [coll]
+  [(? coll?) :ret (? coll?)]
+  (walk/prewalk
+    #(if (and (map? %) (contains? % :db/id))
+       (update % :db/id str)
+       %)
+    coll))
+
 (>defn ascending
   "Comparator, can be used to sort collections in an ascending way."
   [a b]
