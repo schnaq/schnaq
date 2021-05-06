@@ -22,7 +22,7 @@ variables:
 
 .with-datomic-pro:
   before_script:
-    - mv settings.xml ~/.m2/settings.xml
+    - cp settings.xml ~/.m2/settings.xml
 
 # ------------------------------------------------------------------------------
 # Stage "test"
