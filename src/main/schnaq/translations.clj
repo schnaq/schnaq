@@ -32,7 +32,7 @@ Telefon (optional): %s")
        "Wir wollen dir helfen, deinen modernen Arbeitsalltag so effizient wie möglich zu gestalten."
        "\n"
        "In einem schnaq sammelst du Wissen über ein Thema und es wird automatisch visualisiert. "
-       "Probiere es direkt aus! Erstelle ein schnaq und diskutiere mit deinen Kolleg:Innen!"
+       "Probiere es direkt aus! Erstelle einen schnaq und diskutiere mit deinen Kolleg:innen!"
        "\n"
        "Du kannst vorher natürlich auch erst dein Profil individualisieren."
        "\n\n"
