@@ -51,28 +51,6 @@
    (init! datomic-uri)
    (transact test-data)))
 
-(comment
-  ;; For playing around until we go live with new db
-  (new-connection)
-  (d/create-database config/datomic-uri)
-  (transact models/datomic-schema)
-  (d/delete-database config/datomic-uri)
-  ;; IMPORT of dev-local-export
-  ;; DO NOT CHANGE OR DELETE HERE
-  (let [txs (read-string (slurp "db-export.edn"))
-        better-txs (toolbelt/pull-key-up txs :db/ident)
-        even-better-txs (toolbelt/db-to-ref better-txs)]
-    @(transact even-better-txs))
-  ;; GC Collection
-  (d/request-index (new-connection))
-  (->> (new-connection) d/db d/basis-t (d/sync-index (new-connection)) deref)
-  ;; blocks until done indexing
-  (d/gc-storage (new-connection) (java.util.Date.))
-  config/datomic-uri
-  "datomic:sql://staging?jdbc:postgresql://localhost:5432/datomic?user=datomic&password=46afa38372db5a61d57bdb481c6174d9be64663af54554dc97a6f429b27a00ba"
-  "file:/Users/wegi/schnaq/schnaq/db-backup"
-  :end)
-
 ;; ##### Input functions #####
 (defn now [] (Date.))
 
