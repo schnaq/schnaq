@@ -19,10 +19,10 @@
   [{:keys [identity params]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [queried-user (user-db/register-new-user identity)
+  (let [[new-user? queried-user] (user-db/register-new-user identity)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
                                             (:creation-secrets params) (:db/id queried-user)))]
-    (when-not (:user.registered/existing-id queried-user)
+    (when new-user?
       (mail/send-welcome-mail (:email identity)))
     (ok {:registered-user queried-user
          :updated-statements? updated-statements?})))
