@@ -50,11 +50,10 @@
      (main-db/query
        '[:find (count ?discussions) .
          :in $ ?since
-         :where [?discussions :discussion/title _ ?tx]
+         :where [?discussions :discussion/created-at ?timestamp]
          (not-join [?discussions]
                    [?discussions :discussion/states :discussion.state/deleted])
-         [?tx :db/txInstant ?start-date]
-         [(< ?since ?start-date)]]
+         [(< ?since ?timestamp)]]
        (Date/from since))
      0)))
 
@@ -83,9 +82,8 @@
          (statements ?discussions ?statements)
          ;; Make sure statements are not deleted
          (not [?statements :statement/deleted? true])
-         [?statements :statement/content _ ?tx]
-         [?tx :db/txInstant ?start-date]
-         [(< ?since ?start-date)]]
+         [?statements :statement/created-at ?timestamp]
+         [(< ?since ?timestamp)]]
        discussion-db/statement-rules (Date/from since))
      0)))
 
@@ -97,7 +95,7 @@
   ([since]
    [inst? :ret number?]
    (let [discussions (number-of-discussions since)
-         statements (number-of-entities-since :statement/content since)]
+         statements (number-of-statements since)]
      (if (zero? discussions)
        0
        (/ statements discussions)))))
@@ -123,13 +121,13 @@
    (statement-length-stats max-time-back))
   ([since] [inst? :ret map?]
    (let [sorted-contents (sort-by count
-                           (main-db/query
-                             '[:find [?contents ...]
-                               :in $ ?since
-                               :where [_ :statement/content ?contents ?tx]
-                               [?tx :db/txInstant ?add-date]
-                               [(< ?since ?add-date)]]
-                             (Date/from since)))
+                                  (main-db/query
+                                    '[:find [?contents ...]
+                                      :in $ ?since
+                                      :where [?statement :statement/content ?contents]
+                                      [?statement :statement/created-at ?timestamp]
+                                      [(< ?since ?timestamp)]]
+                                    (Date/from since)))
          content-count (count sorted-contents)
          max-length (count (last sorted-contents))
          min-length (count (first sorted-contents))
