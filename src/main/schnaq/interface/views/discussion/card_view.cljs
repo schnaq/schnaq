@@ -1,7 +1,9 @@
 (ns schnaq.interface.views.discussion.card-view
-  (:require [re-frame.core :as rf]
+  (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [img-path labels fa]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]
@@ -16,13 +18,28 @@
   [:form
    {:on-submit (fn [e]
                  (jq/prevent-default e)
-                 (js/alert "okay, nichts gefunden bye"))}
+                 (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
    [:div.input-group
-    [:input.form-control.my-auto {:type "text" :aria-label "Search…" :placeholder "Search…"}]
+    [:input.form-control.my-auto {:type "text" :aria-label "Search…" :placeholder "Search…" :name "search-input"}]
     [:div.input-group-append
      [:button.btn.btn-secondary
       {:type "submit"}
       [:i {:class (str "m-auto fas " (fa :search))}]]]]])
+
+(rf/reg-event-fx
+  :schnaq/search
+  (fn [{:keys [db]} [_ search-string]]
+    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+      {:db (assoc-in db [:search :schnaq :current :search-string] search-string)
+       :fx [(http/xhrio-request db :get "/schnaq/search" [:schnaq.search/success]
+                                {:share-hash share-hash
+                                 :search-string search-string})
+            [:dispatch [:navigation/navigate :routes.search/schnaq {:share-hash share-hash}]]]})))
+
+(rf/reg-event-db
+  :schnaq.search/success
+  (fn [db [_ {:keys [matching-ids]}]]
+    (assoc-in db [:search :schnaq :current :result] matching-ids)))
 
 (defn- card-meeting-header
   "Overview header for a meeting with a name input"

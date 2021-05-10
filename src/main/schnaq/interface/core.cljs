@@ -33,6 +33,7 @@
             [schnaq.interface.views.discussion.conclusion-card]
             [schnaq.interface.views.discussion.history]
             [schnaq.interface.views.discussion.logic]
+            [schnaq.interface.views.discussion.search]
             [schnaq.interface.views.errors]
             [schnaq.interface.views.feedback.admin]
             [schnaq.interface.views.feedback.collect]
