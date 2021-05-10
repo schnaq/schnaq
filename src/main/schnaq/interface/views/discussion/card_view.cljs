@@ -12,7 +12,7 @@
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar.user-management :as um]))
 
-(defn- search-bar
+(defn search-bar
   "A search-bar to search inside a schnaq."
   []
   [:form
