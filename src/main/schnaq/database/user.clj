@@ -105,7 +105,7 @@
                   :user.registered/first-name given_name
                   :user.registered/last-name family_name
                   :user.registered/groups groups}]
-    (conj {:user.registered/existing-id (:db/id existing-user)}
+    (merge {:user.registered/existing-id (:db/id existing-user)}
           (if (:db/id existing-user)
             (do
               (update-user-info identity existing-user)
