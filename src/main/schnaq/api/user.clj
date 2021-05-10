@@ -7,19 +7,23 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
+            [schnaq.emails :as mail]
             [schnaq.media :as media]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
   (:import (java.util UUID)))
 
 (defn- register-user-if-they-not-exist
-  "Register a new user if they do not exist. In all cases return the user."
+  "Register a new user if they do not exist. In all cases return the user. New users will receive a welcome
+  mail."
   [{:keys [identity params]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [queried-user (user-db/register-new-user identity)
+  (let [[new-user? queried-user] (user-db/register-new-user identity)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
-                                   (:creation-secrets params) (:db/id queried-user)))]
+                                            (:creation-secrets params) (:db/id queried-user)))]
+    (when new-user?
+      (mail/send-welcome-mail (:email identity)))
     (ok {:registered-user queried-user
          :updated-statements? updated-statements?})))
 

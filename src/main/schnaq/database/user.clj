@@ -92,9 +92,10 @@
 
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
-  Returns the user, after updating their groups, when they exist."
+  Returns the user, after updating their groups, when they exist. Returns a tuple which contains
+  whether the user is newly created and the user entity itself."
   [{:keys [id email preferred_username given_name family_name groups] :as identity}]
-  [associative? :ret ::specs/registered-user]
+  [associative? :ret (s/tuple boolean? ::specs/registered-user)]
   (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-pattern)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
@@ -108,10 +109,10 @@
       (do
         (update-user-info identity existing-user)
         (update-groups id groups)
-        existing-user)
-      (-> @(transact [(clean-db-vals new-user)])
-          (get-in [:tempids temp-id])
-          (fast-pull registered-user-pattern)))))
+        [false existing-user])
+      [true (-> @(transact [(clean-db-vals new-user)])
+                (get-in [:tempids temp-id])
+                (fast-pull registered-user-pattern))])))
 
 (>defn- update-user-field
   "Updates a user's field in the database and return updated user."
