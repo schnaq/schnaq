@@ -1,13 +1,28 @@
 (ns schnaq.interface.views.discussion.card-view
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [img-path labels]]
+            [schnaq.interface.text.display-data :refer [img-path labels fa]]
+            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar.user-management :as um]))
+
+(defn- search-bar
+  "A search-bar to search inside a schnaq."
+  []
+  [:form
+   {:on-submit (fn [e]
+                 (jq/prevent-default e)
+                 (js/alert "okay, nichts gefunden bye"))}
+   [:div.input-group
+    [:input.form-control.my-auto {:type "text" :aria-label "Search…" :placeholder "Search…"}]
+    [:div.input-group-append
+     [:button.btn.btn-secondary
+      {:type "submit"}
+      [:i {:class (str "m-auto fas " (fa :search))}]]]]])
 
 (defn- card-meeting-header
   "Overview header for a meeting with a name input"
@@ -37,6 +52,7 @@
        [toolbelt/desktop-mobile-switch
         [:h3.mx-5 title]
         [:h3.mx-5.display-6 title]]]
+      [search-bar]
       [admin-buttons/share-link share-hash]
       [admin-buttons/txt-export share-hash title]
       (when edit-hash
