@@ -348,6 +348,16 @@
              :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement)))}))
       (validator/deny-access invalid-rights-message))))
 
+(defn- search-schnaq
+  "Search through any valid schnaq."
+  [{:keys [params]}]
+  (let [{:keys [share-hash search-string]} params]
+    (if (validator/valid-discussion? share-hash)
+      (ok {:matching-statements (-> (discussion-db/search-schnaq share-hash search-string)
+                                    with-sub-discussion-info
+                                    valid-statements-with-votes)})
+      (validator/deny-access))))
+
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following premises / undercuts."
   [{:keys [body-params]}]
@@ -459,6 +469,7 @@
       (GET "/export/txt" [] export-txt-data)
       (GET "/ping" [] ping)
       (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
+      (GET "/schnaq/search" [] search-schnaq)
       (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
       (GET "/schnaqs/public" [] public-schnaqs)
       (-> (GET "/admin/feedbacks" [] all-feedbacks)

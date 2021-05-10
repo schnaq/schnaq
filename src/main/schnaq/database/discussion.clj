@@ -526,3 +526,14 @@
     (when valid-secrets
       @(transact
          (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))
+
+(>defn search-schnaq
+  "Searches the content of statements in a schnaq and returns the corresponding statements."
+  [share-hash search-string]
+  [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
+  (query '[:find [(pull ?statements statement-pattern) ...]
+           :in $ % statement-pattern ?share-hash ?search-string
+           :where [?discussion :discussion/share-hash ?share-hash]
+           (statements ?discussion ?statements)
+           [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
+         statement-rules statement-pattern share-hash search-string))

@@ -59,6 +59,14 @@ h6 {
   }
 }
 
+.w-lg-50 {
+  width: 100%;
+
+  @include media-breakpoint-up(lg) {
+    width: 50%;
+  }
+}
+
 .display-5 {
   font-size: 2.5rem;
   font-weight: 300;

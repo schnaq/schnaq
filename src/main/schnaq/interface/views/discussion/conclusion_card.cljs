@@ -67,37 +67,37 @@
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
       [:div.vote-box.down-vote [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
-(defn- statement-card
+(defn statement-card
   [edit-hash statement attitude]
-  (let [fa-label (logic/attitude->symbol attitude)]
-    [:article.card.statement-card.clickable
-     {:class (str "statement-card-" (name attitude))}
-     [:div.d-flex.flex-row
-      [:div.m-auto
-       [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
-      [:div.card-view.card-body.py-0.pb-1
-       [:div.d-flex.justify-content-end.mt-2
-        [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
-       [:div.my-1 [:p (:statement/content statement)]]
-       [:div.d-flex
-        [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
-        [up-down-vote statement]]]]]))
+  (let [fa-label (logic/attitude->symbol attitude)
+        path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
+    [:div {:on-click (fn [_e]
+                       (let [selection (js-wrap/to-string (.getSelection js/window))]
+                         (when (zero? (count selection))
+                           (rf/dispatch [:discussion.select/conclusion statement])
+                           (rf/dispatch [:discussion.history/push statement])
+                           (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
+                                         (assoc path-params :statement-id (:db/id statement))]))))}
+     [:article.card.statement-card.clickable
+      {:class (str "statement-card-" (name attitude))}
+      [:div.d-flex.flex-row
+       [:div.m-auto
+        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
+       [:div.card-view.card-body.py-0.pb-1
+        [:div.d-flex.justify-content-end.mt-2
+         [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
+        [:div.my-1 [:p (:statement/content statement)]]
+        [:div.d-flex
+         [:div.mr-auto [badges/extra-discussion-info-badges statement edit-hash]]
+         [up-down-vote statement]]]]]]))
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."
   [statement edit-hash]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-        currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+  (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card statement]
-      [:div {:on-click (fn [_e]
-                         (let [selection (js-wrap/to-string (.getSelection js/window))]
-                           (when (zero? (count selection))
-                             (rf/dispatch [:discussion.select/conclusion statement])
-                             (rf/dispatch [:discussion.history/push statement])
-                             (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
-                                           (assoc path-params :statement-id (:db/id statement))]))))}
-       [statement-card edit-hash statement (logic/arg-type->attitude (:meta/argument-type statement))]])))
+      [statement-card edit-hash statement (logic/arg-type->attitude (:meta/argument-type statement))])))
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
