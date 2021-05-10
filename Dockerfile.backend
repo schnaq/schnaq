@@ -22,4 +22,4 @@ EXPOSE 3000
 COPY . .
 RUN clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -X:uberjar
 
-CMD ["java", "-cp", "/code/target/schnaq-standalone.jar", "clojure.main", "-m", "schnaq.api"]
+CMD ["java", "-cp", "/code/target/schnaq-standalone.jar", "-Dclojure.main.report=stderr", "clojure.main", "-m", "schnaq.api"]
