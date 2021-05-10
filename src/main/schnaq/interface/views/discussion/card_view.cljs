@@ -20,7 +20,8 @@
                  (jq/prevent-default e)
                  (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
    [:div.input-group
-    [:input.form-control.my-auto {:type "text" :aria-label "Search…" :placeholder "Search…" :name "search-input"}]
+    [:input.form-control.my-auto {:type "text" :aria-label "Search" :placeholder
+                                  (labels :schnaq.search/input) :name "search-input"}]
     [:div.input-group-append
      [:button.btn.btn-secondary
       {:type "submit"}

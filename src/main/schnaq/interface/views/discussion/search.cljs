@@ -1,5 +1,7 @@
 (ns schnaq.interface.views.discussion.search
-  (:require [re-frame.core :as rf]
+  (:require [goog.string :as gstring]
+            [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.conclusion-card :as card]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.pages :as pages]))
@@ -19,12 +21,11 @@
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         results @(rf/subscribe [:schnaq.search.current/result])]
     [pages/with-nav
-     {:page/title "Suche"}
-     [:div.container
-      [:p "Du hast gesucht!"]
-      [:p "Nach: " search-string]
+     {:page/title (labels :schnaq.search/title)}
+     [:div.container.mt-4
+      [:h4.text-center (gstring/format (labels :schnaq.search/heading) search-string)]
       (for [statement results]
-        [:div.py-2
+        [:div.p-2.w-lg-50.d-inline-block
          {:key (:db/id statement)}
          [card/statement-card
           nil statement (logic/arg-type->attitude (:meta/argument-type statement))]])]]))
