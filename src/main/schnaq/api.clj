@@ -108,14 +108,6 @@
               (discussion-db/discussion-by-share-hash hash))))
       (validator/deny-access))))
 
-(defn- search-schnaq
-  "Search through any valid schnaq."
-  [{:keys [params]}]
-  (let [{:keys [share-hash search-string]} params]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:matching-ids (discussion-db/search-schnaq share-hash search-string)})
-      (validator/deny-access))))
-
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
   they have access to. If only one schnaq shall be loaded, compojure packs it
@@ -355,6 +347,16 @@
             {:premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion (:db/id selected-statement)))
              :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement)))}))
       (validator/deny-access invalid-rights-message))))
+
+(defn- search-schnaq
+  "Search through any valid schnaq."
+  [{:keys [params]}]
+  (let [{:keys [share-hash search-string]} params]
+    (if (validator/valid-discussion? share-hash)
+      (ok {:matching-ids (-> (discussion-db/search-schnaq share-hash search-string)
+                             with-sub-discussion-info
+                             valid-statements-with-votes)})
+      (validator/deny-access))))
 
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following premises / undercuts."
