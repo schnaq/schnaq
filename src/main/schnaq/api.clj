@@ -108,6 +108,14 @@
               (discussion-db/discussion-by-share-hash hash))))
       (validator/deny-access))))
 
+(defn- search-schnaq
+  "Search through any valid schnaq."
+  [{:keys [params]}]
+  (let [{:keys [share-hash search-string]} params]
+    (if (validator/valid-discussion? share-hash)
+      (ok {:matching-ids (discussion-db/search-schnaq share-hash search-string)})
+      (validator/deny-access))))
+
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
   they have access to. If only one schnaq shall be loaded, compojure packs it
@@ -459,6 +467,7 @@
       (GET "/export/txt" [] export-txt-data)
       (GET "/ping" [] ping)
       (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
+      (GET "/schnaq/search" [] search-schnaq)
       (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
       (GET "/schnaqs/public" [] public-schnaqs)
       (-> (GET "/admin/feedbacks" [] all-feedbacks)
