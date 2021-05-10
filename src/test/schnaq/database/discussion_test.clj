@@ -262,3 +262,10 @@
       ;; Now update the author
       (db/update-authors-from-secrets {(:db/id statement) "secret-creation-secret"} (:db/id registered-user))
       (is (= (:db/id registered-user) (-> (first (db/starting-statements "simple-hash")) :statement/author :db/id))))))
+
+(deftest search-schnaq-test
+  (testing "Statements with corresponding content should be found when share-hash is known."
+    (let [share-hash "cat-dog-hash"]
+      (is (= 9 (count (db/search-schnaq share-hash "cats"))))
+      (is (= 2 (count (db/search-schnaq share-hash "dogs"))))
+      (is (= 1 (count (db/search-schnaq share-hash "both")))))))
