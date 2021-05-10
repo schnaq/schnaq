@@ -145,8 +145,9 @@
    ;; Discussion
    {:db/ident :discussion/title
     :db/valueType :db.type/string
+    :db/fulltext true
     :db/cardinality :db.cardinality/one
-    :db/doc "The title / heading of a discussion. This should be system-widely unique."}
+    :db/doc "The title / heading of a discussion."}
    {:db/ident :discussion/share-hash
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
