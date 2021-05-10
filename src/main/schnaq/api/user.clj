@@ -14,7 +14,8 @@
   (:import (java.util UUID)))
 
 (defn- register-user-if-they-not-exist
-  "Register a new user if they do not exist. In all cases return the user."
+  "Register a new user if they do not exist. In all cases return the user. New users will receive a welcome
+  mail."
   [{:keys [identity params]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
