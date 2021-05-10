@@ -3,7 +3,6 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.database.main :refer [transact fast-pull clean-db-vals query]]
             [schnaq.database.specs :as specs]
-            [schnaq.emails :as mail]
             [taoensso.timbre :as log]))
 
 (def registered-user-pattern
@@ -106,16 +105,15 @@
                   :user.registered/first-name given_name
                   :user.registered/last-name family_name
                   :user.registered/groups groups}]
-    (if (:db/id existing-user)
-      (do
-        (update-user-info identity existing-user)
-        (update-groups id groups)
-        existing-user)
-      (do
-        (mail/send-welcome-mail (:email identity))
-        (-> @(transact [(clean-db-vals new-user)])
-            (get-in [:tempids temp-id])
-            (fast-pull registered-user-pattern))))))
+    (conj {:user.registered/existing-id (:db/id existing-user)}
+          (if (:db/id existing-user)
+            (do
+              (update-user-info identity existing-user)
+              (update-groups id groups)
+              existing-user)
+            (-> @(transact [(clean-db-vals new-user)])
+                (get-in [:tempids temp-id])
+                (fast-pull registered-user-pattern))))))
 
 (>defn- update-user-field
   "Updates a user's field in the database and return updated user."

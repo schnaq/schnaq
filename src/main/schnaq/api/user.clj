@@ -7,6 +7,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
+            [schnaq.emails :as mail]
             [schnaq.media :as media]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
@@ -19,7 +20,9 @@
             ", username:" (:preferred_username identity))
   (let [queried-user (user-db/register-new-user identity)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
-                                   (:creation-secrets params) (:db/id queried-user)))]
+                                            (:creation-secrets params) (:db/id queried-user)))]
+    (when-not (:user.registered/existing-id queried-user)
+      (mail/send-welcome-mail (:email identity)))
     (ok {:registered-user queried-user
          :updated-statements? updated-statements?})))
 
