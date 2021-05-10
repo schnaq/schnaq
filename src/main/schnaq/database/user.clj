@@ -92,8 +92,8 @@
 
 (>defn register-new-user
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
-  Returns the user, after updating their groups, when they exist. Also sends an welcome
-  mail when creating a new user."
+  Returns the user, after updating their groups, when they exist. Existing users
+  contain their id to differentiate between new users."
   [{:keys [id email preferred_username given_name family_name groups] :as identity}]
   [associative? :ret ::specs/registered-user]
   (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-pattern)
