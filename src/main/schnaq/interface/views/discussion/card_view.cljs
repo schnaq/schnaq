@@ -38,8 +38,8 @@
 
 (rf/reg-event-db
   :schnaq.search/success
-  (fn [db [_ {:keys [matching-ids]}]]
-    (assoc-in db [:search :schnaq :current :result] matching-ids)))
+  (fn [db [_ {:keys [matching-statements]}]]
+    (assoc-in db [:search :schnaq :current :result] matching-statements)))
 
 (defn- card-meeting-header
   "Overview header for a meeting with a name input"

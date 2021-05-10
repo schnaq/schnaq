@@ -353,9 +353,9 @@
   [{:keys [params]}]
   (let [{:keys [share-hash search-string]} params]
     (if (validator/valid-discussion? share-hash)
-      (ok {:matching-ids (-> (discussion-db/search-schnaq share-hash search-string)
-                             with-sub-discussion-info
-                             valid-statements-with-votes)})
+      (ok {:matching-statements (-> (discussion-db/search-schnaq share-hash search-string)
+                                    with-sub-discussion-info
+                                    valid-statements-with-votes)})
       (validator/deny-access))))
 
 (defn- get-statement-info
