@@ -4,8 +4,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as card-view]
             [schnaq.interface.views.discussion.conclusion-card :as card]
-            [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.discussion.logic :as logic]))
 
 (rf/reg-sub
   :schnaq.search.current/search-string
@@ -19,16 +18,15 @@
 
 (defn- search-view
   []
-  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
+  (let [current-discussion @(rf/subscribe [:schnaq/selected])
+        search-string @(rf/subscribe [:schnaq.search.current/search-string])
         results @(rf/subscribe [:schnaq.search.current/result])]
-    [pages/with-nav
-     {:page/title (labels :schnaq.search/title)}
+    [:<>
+     [card-view/card-discussion-header current-discussion]
      [:div.container.mt-4
       (if (= "" search-string)
         [:div.w-100.text-center
-         [:h4 (labels :schnaq.search/new-search-title)]
-         [:div.d-inline-block.w-50
-          [card-view/search-bar]]]
+         [:h4 (labels :schnaq.search/new-search-title)]]
         [:<>
          [:h4.text-center (gstring/format (labels :schnaq.search/heading) search-string)]
          (for [statement results]

@@ -741,7 +741,7 @@
         :schnaq.search/heading "Search results for: \"%s\""
         :schnaq.search/title "Search"
         :schnaq.search/input "Search for…"
-        :schnaq.search/new-search-title "Start new search:"}
+        :schnaq.search/new-search-title "There are no results. Start a new search."}
 
    :de {;; Common
         :common/language "Sprache"
@@ -1483,7 +1483,7 @@
         :schnaq.search/heading "Suchergebnisse für: \"%s\""
         :schnaq.search/title "Suche"
         :schnaq.search/input "Suche nach…"
-        :schnaq.search/new-search-title "Neue Suche starten:"}})
+        :schnaq.search/new-search-title "Es gibt keine Ergebnisse. Starte eine neue Suche."}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
