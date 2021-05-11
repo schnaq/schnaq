@@ -12,7 +12,7 @@
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
             [schnaq.interface.views.navbar.user-management :as um]))
 
-(defn search-bar
+(defn- search-bar
   "A search-bar to search inside a schnaq."
   []
   [:form
@@ -42,8 +42,8 @@
   (fn [db [_ {:keys [matching-statements]}]]
     (assoc-in db [:search :schnaq :current :result] matching-statements)))
 
-(defn- card-meeting-header
-  "Overview header for a meeting with a name input"
+(defn card-discussion-header
+  "Overview header for a discussion."
   [{:discussion/keys [title share-hash] :as discussion}]
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
@@ -134,7 +134,7 @@
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
         current-route-name @(rf/subscribe [:navigation/current-route-name])]
     [:<>
-     [card-meeting-header current-discussion]
+     [card-discussion-header current-discussion]
      (if (= :routes.schnaq/start current-route-name)
        [discussion-start-view current-discussion]
        [selected-conclusion-view current-discussion])]))
