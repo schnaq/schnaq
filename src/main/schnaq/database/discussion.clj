@@ -418,26 +418,14 @@
   "Returns all statements belonging to a discussion."
   [share-hash]
   [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
-  (distinct
-    (concat
-      (query
-        '[:find [(pull ?statements statement-pattern) ...]
-          :in $ ?share-hash statement-pattern
-          :where [?discussion :discussion/share-hash ?share-hash]
-          [?arguments :argument/discussions ?discussion]
-          (or
-            [?arguments :argument/conclusion ?statements]
-            [?arguments :argument/premises ?statements])
-          [?statements :statement/version _]]
-        share-hash statement-pattern)
-      ;; When there are no reactions to the starting statement, the starting statements
-      ;; need to be checked explicitly, because there will be no arguments containing them.
-      (query
-        '[:find [(pull ?statements statement-pattern) ...]
-          :in $ ?share-hash statement-pattern
-          :where [?discussion :discussion/share-hash ?share-hash]
-          [?discussion :discussion/starting-statements ?statements]]
-        share-hash statement-pattern))))
+  (->
+    (query '[:find [(pull ?statements statement-pattern) ...]
+             :in $ ?share-hash statement-pattern
+             :where [?discussion :discussion/share-hash ?share-hash]
+             [?statements :statement/discussions ?discussion]
+             (not [?statements :statement/deleted? true])]
+           share-hash statement-pattern)
+    (toolbelt/pull-key-up :db/ident)))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
