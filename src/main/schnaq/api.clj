@@ -503,7 +503,6 @@
       (POST "/credentials/validate" [] check-credentials)
       (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
       (POST "/discussion/react-to/statement" [] react-to-any-statement!)
-      ;; todo im here
       (-> (PUT "/discussion/statement/edit" [] edit-statement!)
           (wrap-routes auth/auth-middleware))
       (POST "/discussion/statement/info" [] get-statement-info)

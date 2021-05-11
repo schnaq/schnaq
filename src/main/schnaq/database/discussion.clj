@@ -223,25 +223,26 @@
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
-  ([user-id content]
-   (build-new-statement user-id content (str "conclusion-" content)))
-  ([user-id content temp-id]
+  ([user-id content discussion-id]
+   (build-new-statement user-id content discussion-id (str "conclusion-" content)))
+  ([user-id content discussion-id temp-id]
    {:db/id temp-id
     :statement/author user-id
     :statement/content content
     :statement/version 1
-    :statement/created-at (Date.)}))
+    :statement/created-at (Date.)
+    :statement/discussions [discussion-id]}))
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
   [share-hash user-id statement-content registered-user?]
   [:discussion/share-hash :db/id :statement/content any? :ret :db/id]
-  (let [minimum-statement (build-new-statement user-id statement-content "add/starting-argument")
+  (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
+        minimum-statement (build-new-statement user-id statement-content discussion-id "add/starting-argument")
         new-statement (if registered-user?
                         minimum-statement
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
-        temporary-id (:db/id new-statement)
-        discussion-id (:db/id (discussion-by-share-hash share-hash))]
+        temporary-id (:db/id new-statement)]
     (get-in @(transact [new-statement
                         [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
@@ -557,9 +558,6 @@
            (statements ?discussion ?statements)
            [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
          statement-rules statement-pattern share-hash search-string))
-
-;; TODO Update all starting-statement-creation
-;; TODO Update all statement creation
 
 (defn migrate-argument-data-to-statements
   "Migrates argument-data to statements, no more need for arguments."
