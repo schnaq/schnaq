@@ -69,6 +69,8 @@
                      :opt [:hub/schnaqs :hub/created-at]))
 
 ;; Statement
+(s/def :statement/type #{:statement.type/attack :statement.type/support :statement.type/neutral})
+(s/def :statement/parent (s/or :id :db/id :statement ::statement))
 (s/def :statement/content ::non-blank-string)
 (s/def :statement/version number?)
 (s/def :statement/author ::any-user)
@@ -78,7 +80,8 @@
 (s/def :statement/created-at inst?)
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]
-          :opt [:statement/creation-secret :statement/created-at]))
+          :opt [:statement/creation-secret :statement/created-at
+                :statement/type :statement/parent]))
 
 ;; Argument
 (s/def :argument/type

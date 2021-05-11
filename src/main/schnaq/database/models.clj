@@ -96,6 +96,19 @@
     :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
     :db/doc "The time at which this entity has been created."}
+   {:db/ident :statement/parent
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The parent statement which this statement is referencing (if any)."}
+   {:db/ident :statement/type
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The type of the statement. (Is it supportive, attacking or neutral to the parent)"}
+
+   ;; Statement Types
+   {:db/ident :statement.type/support}
+   {:db/ident :statement.type/attack}
+   {:db/ident :statement.type/neutral}
 
    ;; Argument Types
    {:db/ident :argument.type/support}
@@ -128,6 +141,7 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The discussions in which the argument is used"}
+
    ;; Discussion States
    {:db/ident :discussion.state/open}
    {:db/ident :discussion.state/closed}
