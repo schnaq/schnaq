@@ -58,8 +58,7 @@
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
     (is (= 4 (db/number-of-active-discussion-users)))
-    (let [_ (user-db/add-user-if-not-exists "wooooggler")
-          woggler-id (user-db/user-by-nickname "wooooggler")]
+    (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
       (is (= 4 (db/number-of-active-discussion-users)))
       (main-db/transact
         [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
