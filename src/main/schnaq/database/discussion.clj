@@ -12,6 +12,13 @@
             [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
 
+(defn- argument-type-to-statement-type
+  [argument-type]
+  (case argument-type
+    :argument.type/support :statement.type/support
+    :argument.type/attack :statement.type/attack
+    :argument.type/neutral :statement.type/neutral))
+
 (def statement-rules
   '[[(statements-from-argument ?argument ?statements)
      [?argument :argument/conclusion ?statements]]
@@ -345,10 +352,7 @@
   [share-hash user-id new-conclusion-id new-statement-string argument-type registered-user?]
   [:discussion/share-hash :db/id :db/id :statement/content :argument/type any? :ret associative?]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        statement-type (case argument-type
-                         :argument.type/attack :statement.type/attack
-                         :argument.type/support :statement.type/support
-                         :statement.type/neutral)
+        statement-type (argument-type-to-statement-type argument-type)
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author user-id
@@ -503,9 +507,11 @@
   [:db/id :argument/type :statement/content :ret ::specs/statement]
   (log/info "Statement" statement-id "edited with new content.")
   (if-let [argument (main-db/fast-pull statement-id '[:argument/_premises])]
-    (let [argument-id (-> argument :argument/_premises first :db/id)]
+    (let [argument-id (-> argument :argument/_premises first :db/id)
+          statement-type (argument-type-to-statement-type new-type)]
       (log/info "Argument" argument-id "updated to new type " new-type)
       @(transact [[:db/add statement-id :statement/content new-content]
+                  [:db/add statement-id :statement/type statement-type]
                   [:db/add argument-id :argument/type new-type]]))
     @(transact [[:db/add statement-id :statement/content new-content]]))
   (fast-pull statement-id statement-pattern))
