@@ -163,7 +163,7 @@
    ;; Discussion
    {:db/ident :discussion/title
     :db/valueType :db.type/string
-    :db/fulltext true
+    ;; :db/fulltext true
     :db/cardinality :db.cardinality/one
     :db/doc "The title / heading of a discussion."}
    {:db/ident :discussion/share-hash

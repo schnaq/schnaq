@@ -538,10 +538,11 @@
            [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
          statement-rules statement-pattern share-hash search-string))
 
+;; TODO Update all starting-statement-creation
+;; TODO Update all statement creation
+
 (defn migrate-argument-data-to-statements
   "Migrates argument-data to statements, no more need for arguments."
-  ;; TODO all arguments should have the pointer to discussions (even the starting statements)
-  ;; Die Premises müssen umgeschrieben werden! (Nimm immer die erste wir haben eh keine Groups)
   []
   (let [type-conversion-fn #(case %
                               :argument.type/support :statement.type/support
@@ -563,8 +564,13 @@
                              :statement/parent (-> % :argument/conclusion :db/id)
                              :statement/type (-> % :argument/type :db/ident type-conversion-fn)
                              :statement/discussions (->> % :argument/discussions (mapv :db/id)))
-                  arguments)]
-    @(transact txs)))
+                  arguments)
+        ;; Migrate starting-statements to contain discussions as well
+        discussions-with-startings (query '[:find ?starting ?discussions
+                                            :where [?discussions :discussion/starting-statements ?starting]])
+        starting-txs (mapv #(vector :db/add (first %) :statement/discussions (second %)) discussions-with-startings)]
+    @(transact txs)
+    @(transact starting-txs)))
 
 (defn migrate-titles-to-fulltext-search
   "Creates new titles that are fulltext-searchable"
@@ -586,7 +592,8 @@
 
 (comment
   (migrate-titles-to-fulltext-search)
+
   (migrate-argument-data-to-statements)
 
-  (fast-pull 17592186045472 '[*])
+  (fast-pull 17592186045446 '[*])
   )
