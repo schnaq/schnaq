@@ -108,17 +108,25 @@
 
 (deftest pack-premises-test
   (testing "Test the creation of statement-entities from strings"
-    (let [premises ["What a beautifull day" "Hello test"]
+    (let [premises ["What a beautiful day" "Hello test"]
           user-id (user-db/user-by-nickname "Test-person")
-          premise-entities (@#'db/pack-premises premises user-id)]
-      (is (= [{:db/id "premise-What a beautifull day",
+          conclusion-id (:db/id (first (db/starting-statements "cat-dog-hash")))
+          discussion-id (:db/id (db/discussion-by-share-hash "cat-dog-hash"))
+          premise-entities (@#'db/pack-premises premises conclusion-id discussion-id :statement.type/support user-id)]
+      (is (= [{:db/id "premise-What a beautiful day",
                :statement/author user-id,
                :statement/content (first premises),
-               :statement/version 1}
+               :statement/version 1
+               :statement/parent conclusion-id
+               :statement/discussions [discussion-id]
+               :statement/type :statement.type/support}
               {:db/id "premise-Hello test",
                :statement/author user-id,
                :statement/content (second premises),
-               :statement/version 1}]
+               :statement/version 1
+               :statement/parent conclusion-id
+               :statement/discussions [discussion-id]
+               :statement/type :statement.type/support}]
              (map #(dissoc % :statement/created-at) premise-entities))))))
 
 (deftest starting-statements-test

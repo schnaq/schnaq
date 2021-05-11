@@ -163,6 +163,7 @@
    ;; Discussion
    {:db/ident :discussion/title
     :db/valueType :db.type/string
+    ;; TODO activate again after migration
     ;; :db/fulltext true
     :db/cardinality :db.cardinality/one
     :db/doc "The title / heading of a discussion."}

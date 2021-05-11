@@ -174,19 +174,26 @@
 
 (>defn- pack-premises
   "Packs premises into a statement-structure."
-  ([premises user-id]
-   [(s/coll-of :statement/content) :db/id :ret (s/coll-of map?)]
+  ([premises new-conclusion-id discussion-id statement-type user-id]
+   [(s/coll-of :statement/content) :db/id :db/id :statement/type :db/id :ret (s/coll-of map?)]
    (mapv (fn [premise] {:db/id (str "premise-" premise)
                         :statement/author user-id
                         :statement/content premise
                         :statement/version 1
-                        :statement/created-at (Date.)})
+                        :statement/created-at (Date.)
+                        :statement/parent new-conclusion-id
+                        :statement/discussions [discussion-id]
+                        :statement/type statement-type})
          premises))
-  ([premises user-id creation-secrets]
-   [(s/coll-of :statement/content) :db/id (s/coll-of :statement/creation-secret) :ret (s/coll-of map?)]
-   (mapv #(assoc %1 :statement/creation-secret %2) (pack-premises premises user-id) creation-secrets)))
+  ([premises new-conclusion-id discussion-id statement-type user-id creation-secrets]
+   [(s/coll-of :statement/content) :db/id :db/id :statement/type :db/id (s/coll-of :statement/creation-secret)
+    :ret (s/coll-of map?)]
+   (mapv #(assoc %1 :statement/creation-secret %2)
+         (pack-premises premises new-conclusion-id discussion-id statement-type user-id)
+         creation-secrets)))
 
 (>defn prepare-new-argument
+  ;; TODO this shit is not used anymore?!
   "Prepares a new argument for transaction. Optionally sets a temporary id."
   ([discussion-id user-id conclusion premises temporary-id]
    [:db/id :db/id :statement/content (s/coll-of :statement/content) :db/id :ret map?]
@@ -196,7 +203,8 @@
   ([discussion-id user-id conclusion premises]
    [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret map?]
    {:argument/author user-id
-    :argument/premises (pack-premises premises user-id)
+    :argument/premises
+    (pack-premises premises (str "conclusion-" conclusion) discussion-id :statement.type/support user-id)
     :argument/conclusion {:db/id (str "conclusion-" conclusion)
                           :statement/author user-id
                           :statement/content conclusion
@@ -337,12 +345,18 @@
   [share-hash user-id new-conclusion-id new-statement-string argument-type registered-user?]
   [:discussion/share-hash :db/id :db/id :statement/content :argument/type any? :ret associative?]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
+        statement-type (case argument-type
+                         :argument.type/attack :statement.type/attack
+                         :argument.type/support :statement.type/support
+                         :statement.type/neutral)
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author user-id
-          :argument/premises (if registered-user?
-                               (pack-premises [new-statement-string] user-id)
-                               (pack-premises [new-statement-string] user-id [(.toString (UUID/randomUUID))]))
+          :argument/premises
+          (if registered-user?
+            (pack-premises [new-statement-string] new-conclusion-id discussion-id statement-type user-id)
+            (pack-premises [new-statement-string] new-conclusion-id discussion-id statement-type user-id
+                           [(.toString (UUID/randomUUID))]))
           :argument/conclusion new-conclusion-id
           :argument/version 1
           :argument/type argument-type
