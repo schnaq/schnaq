@@ -37,6 +37,8 @@
    :statement/version
    :statement/deleted?
    :statement/created-at
+   :statement/parent
+   {:statement/type [:db/ident]}
    {:statement/author user-db/combined-user-pattern}])
 
 (def argument-pattern
@@ -225,14 +227,14 @@
                         [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
 
-(defn all-arguments-for-conclusion
-  "Get all arguments for a given conclusion."
-  [conclusion-id]
-  (-> (query
-        '[:find [(pull ?arguments argument-pattern) ...]
-          :in $ argument-pattern ?conclusion
-          :where [?arguments :argument/conclusion ?conclusion]]
-        argument-pattern conclusion-id)
+(>defn children-for-statement
+  "Returns all children for a statement. (Statements that have the input set as a parent)."
+  [parent-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (-> (query '[:find [(pull ?children statement-pattern) ...]
+               :in $ ?parent statement-pattern
+               :where [?children :statement/parent ?parent]]
+             parent-id statement-pattern)
       (toolbelt/pull-key-up :db/ident)))
 
 (defn all-premises-for-conclusion

@@ -164,23 +164,6 @@
     {}
     (reduce update-controversy-map {} edges)))
 
-(>defn- build-meta-premises
-  "Builds a meta-premise with additional information for the frontend out of a
-  list of arguments."
-  [arguments]
-  [sequential? :ret (s/coll-of ::specs/statement)]
-  (flatten
-    (map (fn [args]
-           (map (fn [premise] (assoc premise :meta/argument-type (:argument/type args)))
-                (:argument/premises args)))
-         arguments)))
-
-(>defn premises-for-conclusion-id
-  "Builds all meta-premises for a given conclusion."
-  [conclusion-id]
-  [number? :ret (s/coll-of ::specs/statement)]
-  (build-meta-premises (discussion-db/all-arguments-for-conclusion conclusion-id)))
-
 (>defn- annotate-undercut-premise-meta
   "Annotates undercut-statements with proper meta-information."
   [statements]

@@ -72,15 +72,6 @@
       (is (contains? #{:argument.type/undercut :argument.type/support :argument.type/attack}
                      (:argument/type (rand-nth (db/all-arguments-for-discussion share-hash))))))))
 
-(deftest statements-undercutting-premise-test
-  (testing "Get arguments, that are undercutting an argument with a certain premise"
-    (let [share-hash "simple-hash"
-          starting-conclusion (first (db/starting-statements share-hash))
-          simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
-          premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
-          desired-statement (first (db/statements-undercutting-premise premise-to-undercut-id))]
-      (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (:statement/content desired-statement))))))
-
 (deftest add-starting-statement!-test
   (testing "Test the creation of a valid argument-entity from strings"
     (let [statement "Wow look at this"
