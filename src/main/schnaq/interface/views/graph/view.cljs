@@ -34,7 +34,6 @@
   "Add colors depending on node type."
   [nodes]
   [sequential? :ret sequential?]
-  (println nodes)
   (map
     #(let [color (case (:type %)
                    :statement.type/starting (colors :blue/light)

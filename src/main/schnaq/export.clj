@@ -53,7 +53,7 @@
         starting-statements (db/starting-statements share-hash)
         all-nodes (discussion/nodes-for-agenda statements share-hash)
         starting-nodes (filter #(= :statement.type/starting (:type %)) all-nodes)
-        links (discussion/links-for-starting all-nodes starting-statements share-hash)]
+        links (discussion/links-for-starting starting-statements share-hash)]
     (loop [queue (map #(vector "" %) starting-nodes)
            text ""
            level 0]

@@ -42,19 +42,15 @@
     ;; This works because we do not have premise-groups implemented
     (flatten premises-list)))
 
-(>defn- create-link
-  [statement arguments]
-  [map? sequential? :ret sequential?]
-  (let [children (direct-children (:id statement) arguments)]
-    (map (fn [child]
-           {:from (:db/id child) :to (:id statement) :type (:type child)})
-         children)))
-
 (>defn- create-links
   "Create a link for every argument."
-  [statements arguments]
-  [sequential? sequential? :ret sequential?]
-  (remove empty? (flatten (map #(create-link % arguments) statements))))
+  [statements]
+  [sequential? :ret sequential?]
+  (->> statements
+       (filter :statement/parent)
+       (map (fn [statement]
+              {:from (:db/id statement) :to (-> statement :statement/parent :db/id)
+               :type (:statement/type statement)}))))
 
 (>defn sub-discussion-information
   "Returns statistics about the sub-discussion starting with `root-statement-id`.
@@ -122,11 +118,11 @@
 
 (>defn links-for-starting
   "Creates all links for a discussion with its discussion topic as root."
-  [statements starting-statements share-hash]
-  [sequential? sequential? :discussion/share-hash :ret sequential?]
-  (let [arguments (discussion-db/all-arguments-for-discussion share-hash)]
+  [starting-statements share-hash]
+  [sequential? :discussion/share-hash :ret sequential?]
+  (let [statements (discussion-db/all-statements share-hash)]
     (concat
-      (create-links statements arguments)
+      (create-links statements)
       (starting-links share-hash starting-statements))))
 
 (>defn- update-controversy-map
