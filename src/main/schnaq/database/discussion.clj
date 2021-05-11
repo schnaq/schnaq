@@ -537,3 +537,8 @@
            (statements ?discussion ?statements)
            [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
          statement-rules statement-pattern share-hash search-string))
+
+(defn migrate-argument-data-to-statements
+  "Migrates argument-data to statements, no more need for arguments."
+  []
+  :todo)
