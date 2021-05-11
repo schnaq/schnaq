@@ -14,6 +14,7 @@
    {:db/id "user/test-person"
     :user/nickname "Test-person"}])
 
+;; TODO update the starting statements with discussion
 (def ^:private cat-or-dog-statements
   [{:db/id "statement/get-dog"
     :statement/author "user/wegi"                           ; Use the tempid above
@@ -38,7 +39,10 @@
                          :statement/author "user/wegi"
                          :statement/content "dogs can act as watchdogs"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/parent "statement/get-dog"
+                         :statement/type :statement.type/support
+                         :statement/version 1
+                         :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}]
     :argument/conclusion "statement/get-dog"
     :argument/version 1
     :argument/type :argument.type/support
@@ -50,11 +54,15 @@
                          :statement/content
                          "you have to take the dog for a walk every day, which is tedious"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/get-dog"
+                         :statement/type :statement.type/attack
+                         :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}]
     :argument/conclusion "statement/get-dog"
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
+   ;; todo undercut, marked for deletion
    {:argument/author "user/stinky"
     :argument/premises [{:db/id "statement/no-use"
                          :statement/author "user/stinky"
@@ -65,6 +73,7 @@
     :argument/version 1
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
+   ;; todo undercut, marked for deletion
    {:argument/author "user/stinky"
     :argument/premises [{:db/id "statement/exercise"
                          :statement/author "user/stinky"
@@ -82,7 +91,10 @@
                          :statement/author "user/rambo"
                          :statement/content "it would be no problem"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/get-both"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/get-both"
     :argument/version 1
     :argument/type :argument.type/support
@@ -92,12 +104,16 @@
                          :statement/author "user/wegi"
                          :statement/content "we do not have enough money for two pets"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/no-problem"
+                         :statement/type :statement.type/attack
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/no-problem"
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog"]}
    ;; Here be premise groups
+   ;; todo undercut, marked for deletion
    {:db/id "argument/hate"
     :argument/author "user/stinky"
     :argument/premises [{:db/id "statement/best-friends"
@@ -121,11 +137,15 @@
                          :statement/author "user/schredder"
                          :statement/content "cats are very independent"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/get-cat"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
+   ;; todo undercut, marked for deletion
    {:argument/author "user/wegi"
     :argument/premises [{:db/id "statement/take-care-baby"
                          :statement/author "user/wegi"
@@ -142,7 +162,10 @@
                          :statement/author "user/wegi"
                          :statement/content "this is not true for overbred races"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/independent"
+                         :statement/type :statement.type/attack
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/independent"
     :argument/version 1
     :argument/type :argument.type/attack
@@ -152,7 +175,10 @@
                          :statement/author "user/schredder"
                          :statement/content "this lies in their natural conditions"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/independent"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/independent"
     :argument/version 1
     :argument/type :argument.type/support
@@ -165,11 +191,15 @@
                          (str "cats ancestors are animals in wildlife, who are"
                               " hunting alone and not in groups")
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/independent"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/independent"
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
+   ;; todo undercut, marked for deletion
    {:argument/author "user/wegi"
     :argument/premises [{:db/id "statement/wild-thang"
                          :statement/author "user/wegi"
@@ -186,11 +216,15 @@
                          :statement/author "user/schredder"
                          :statement/content "a cat does not cost taxes like a dog does"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/get-cat"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
+   ;; todo undercut, marked for deletion
    {:argument/author "user/stinky"
     :argument/premises [{:db/id "statement/credibility"
                          :statement/author "user/stinky"
@@ -206,7 +240,10 @@
                          :statement/author "user/rambo"
                          :statement/content "in germany a second dog costs even more taxes"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/taxes"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/taxes"
     :argument/version 1
     :argument/type :argument.type/support
@@ -216,7 +253,10 @@
                          :statement/author "user/rambo"
                          :statement/content "other costs of living for cats and dogs are nearly the same"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/taxes"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/taxes"
     :argument/version 1
     :argument/type :argument.type/support
@@ -227,11 +267,15 @@
                          :statement/author "user/wegi"
                          :statement/content "cats are capricious"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/get-cat"
+                         :statement/type :statement.type/attack
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog"]}
+   ;; todo undercut, marked for deletion
    {:argument/author "user/schredder"
     :argument/premises [{:db/id "statement/race-dogs"
                          :statement/author "user/schredder"
@@ -244,6 +288,7 @@
     :argument/version 1
     :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
+   ;; todo undercut, marked for deletion
    {:argument/author "user/schredder"
     :argument/premises [{:db/id "statement/stinky-cats"
                          :statement/author "user/schredder"
@@ -261,7 +306,10 @@
                          (str "the fact, that cats are capricious, is based on the"
                               " cats race")
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/moody"
+                         :statement/type :statement.type/attack
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/moody"
     :argument/version 1
     :argument/type :argument.type/attack
@@ -271,7 +319,10 @@
                          :statement/author "user/schredder"
                          :statement/content "not every cat is capricious"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/moody"
+                         :statement/type :statement.type/attack
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/moody"
     :argument/version 1
     :argument/type :argument.type/attack
@@ -283,7 +334,10 @@
                          :statement/content (str "several cats of my friends are real"
                                                  " assholes")
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/moody"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/cat-or-dog"]}]
     :argument/conclusion "statement/moody"
     :argument/version 1
     :argument/type :argument.type/support
@@ -323,7 +377,10 @@
                          :statement/author "user/rambo"
                          :statement/content "Foo"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/warm"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/graph"]}]
     :argument/conclusion {:db/id "statement/warm"
                           :statement/author "user/rambo"
                           :statement/content "Es ist warm"
@@ -338,7 +395,10 @@
                          :statement/author "user/rambo"
                          :statement/content "B"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/GrossFoo"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/graph"]}]
     :argument/conclusion "statement/GrossFoo"
     :argument/version 1
     :argument/type :argument.type/support
@@ -349,7 +409,10 @@
                          :statement/author "user/rambo"
                          :statement/content "Die Sonne scheint!"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/warm"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/graph"]}]
     :argument/conclusion "statement/warm"
     :argument/version 1
     :argument/type :argument.type/support
@@ -360,7 +423,10 @@
                          :statement/author "user/rambo"
                          :statement/content "Die Sonne gibt Vitamin C"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/SonneScheint"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/graph"]}]
     :argument/conclusion "statement/SonneScheint"
     :argument/version 1
     :argument/type :argument.type/support
@@ -371,7 +437,10 @@
                          :statement/author "user/rambo"
                          :statement/content "Bar"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/foo"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/graph"]}]
     :argument/conclusion {:db/id "statement/foo"
                           :statement/author "user/rambo"
                           :statement/content "foo"
@@ -397,7 +466,10 @@
                          :statement/author "user/rambo"
                          :statement/content "Man denkt viel nach dabei"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/brainstorm"
+                         :statement/type :statement.type/support
+                         :statement/discussions ["discussion/simple"]}]
     :argument/conclusion {:db/id "statement/brainstorm"
                           :statement/author "user/rambo"
                           :statement/content "Brainstorming ist total wichtig"
@@ -407,6 +479,7 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/simple"]}
+   ;; todo undercut, marked for deletion
    {:db/id "argument/denken-nix-brainstorm"
     :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/denken-nix-brainstorm"
@@ -424,7 +497,10 @@
                          :statement/author "user/rambo"
                          :statement/content "Denken sorgt nur für Kopfschmerzen. Lieber den Donaldo machen!"
                          :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
+                         :statement/version 1
+                         :statement/parent "statement/denken"
+                         :statement/type :statement.type/attack
+                         :statement/discussions ["discussion/simple"]}]
     :argument/conclusion "statement/denken"
     :argument/version 1
     :argument/type :argument.type/attack
