@@ -455,13 +455,13 @@
   "Delete this after migration."
   [_]
   (discussion-db/migrate-argument-data-to-statements)
-  (ok "Migration successful."))
+  (ok {:text "Migration successful."}))
 
 (defn- migrate-titles
   "Delete this after migration."
   [_]
   (discussion-db/migrate-titles-to-fulltext-search)
-  (ok "Migration successful."))
+  (ok {:text "Migration successful."}))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
