@@ -540,5 +540,17 @@
 
 (defn migrate-argument-data-to-statements
   "Migrates argument-data to statements, no more need for arguments."
+  ;; TODO all arguments should have the pointer to discussions (even the starting statements)
   []
-  :todo)
+  (let [arguments
+        (query '[:find [(pull ?arguments argument-pattern) ...]
+                 :in $ argument-pattern
+                 :where [?arguments :argument/version _]]
+               '[{:argument/type [:db/ident]}
+                 {:argument/premises [:db/id]}
+                 {:argument/conclusion [:db/id]}])]
+    arguments))
+
+(comment
+  (migrate-argument-data-to-statements)
+  )
