@@ -14,23 +14,25 @@
    {:db/id "user/test-person"
     :user/nickname "Test-person"}])
 
-;; TODO update the starting statements with discussion
 (def ^:private cat-or-dog-statements
   [{:db/id "statement/get-dog"
     :statement/author "user/wegi"                           ; Use the tempid above
     :statement/content "we should get a dog"
     :statement/created-at #inst "2020-01-01"
-    :statement/version 1}
+    :statement/version 1
+    :statement/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "statement/get-cat"
     :statement/author "user/schredder"                      ; Use the tempid above
     :statement/content "we should get a cat"
     :statement/created-at #inst "2020-01-01"
-    :statement/version 1}
+    :statement/version 1
+    :statement/discussions ["discussion/cat-or-dog"]}
    {:db/id "statement/get-both"
     :statement/author "user/rambo"                          ; Use the tempid above
     :statement/content "we could get both, a dog and a cat"
     :statement/created-at #inst "2020-01-01"
-    :statement/version 1}])
+    :statement/version 1
+    :statement/discussions ["discussion/cat-or-dog"]}])
 
 (def ^:private cat-or-dog-arguments
   [{:db/id "argument/watchdogs"
