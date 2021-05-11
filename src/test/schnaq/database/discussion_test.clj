@@ -91,21 +91,6 @@
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 3 (count starting-statements)))))))
 
-(deftest prepare-new-argument-test
-  (testing "Test the creation of a valid argument-entity from strings"
-    (let [premises ["What a beautifull day" "Hello test"]
-          conclusion "Wow look at this"
-          user-id (user-db/user-by-nickname "Test-person")
-          meeting-hash "graph-hash"
-          discussion-id (:db/id (db/discussion-by-share-hash meeting-hash))
-          with-id (db/prepare-new-argument discussion-id user-id conclusion premises "temp-id-here")]
-      (is (contains? with-id :argument/premises))
-      (is (contains? with-id :argument/conclusion))
-      (is (contains? with-id :argument/author))
-      (is (contains? with-id :argument/version))
-      (is (contains? with-id :argument/type))
-      (is (contains? with-id :argument/discussions)))))
-
 (deftest pack-premises-test
   (testing "Test the creation of statement-entities from strings"
     (let [premises ["What a beautiful day" "Hello test"]

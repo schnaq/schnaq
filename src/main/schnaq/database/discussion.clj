@@ -199,28 +199,6 @@
          (pack-premises premises new-conclusion-id discussion-id statement-type user-id)
          creation-secrets)))
 
-(>defn prepare-new-argument
-  ;; TODO this shit is not used anymore?!
-  "Prepares a new argument for transaction. Optionally sets a temporary id."
-  ([discussion-id user-id conclusion premises temporary-id]
-   [:db/id :db/id :statement/content (s/coll-of :statement/content) :db/id :ret map?]
-   (merge
-     (prepare-new-argument discussion-id user-id conclusion premises)
-     {:db/id temporary-id}))
-  ([discussion-id user-id conclusion premises]
-   [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret map?]
-   {:argument/author user-id
-    :argument/premises
-    (pack-premises premises (str "conclusion-" conclusion) discussion-id :statement.type/support user-id)
-    :argument/conclusion {:db/id (str "conclusion-" conclusion)
-                          :statement/author user-id
-                          :statement/content conclusion
-                          :statement/version 1
-                          :statement/created-at (Date.)}
-    :argument/version 1
-    :argument/type :argument.type/support
-    :argument/discussions [discussion-id]}))
-
 (defn- build-new-statement
   "Builds a new statement for transaction."
   ([user-id content discussion-id]
