@@ -541,17 +541,30 @@
 (defn migrate-argument-data-to-statements
   "Migrates argument-data to statements, no more need for arguments."
   ;; TODO all arguments should have the pointer to discussions (even the starting statements)
-  ;; TODO check if its _not_ an undercut
   ;; Die Premises müssen umgeschrieben werden! (Nimm immer die erste wir haben eh keine Groups)
   []
-  (let [arguments
-        (query '[:find [(pull ?arguments argument-pattern) ...]
-                 :in $ argument-pattern
-                 :where [?arguments :argument/version _]]
-               '[{:argument/type [:db/ident]}
-                 {:argument/premises [:db/id]}
-                 {:argument/conclusion [:db/id]}])]
-    arguments))
+  (let [type-conversion-fn #(case %
+                              :argument.type/support :statement.type/support
+                              :argument.type/attack :statement.type/attack
+                              :argument.type/neutral :statement.type/neutral)
+        arguments
+        (->>
+          (query '[:find [(pull ?arguments argument-pattern) ...]
+                   :in $ argument-pattern
+                   :where [?arguments :argument/version _]]
+                 '[{:argument/type [:db/ident]}
+                   {:argument/premises [:db/id]}
+                   {:argument/conclusion [:db/id
+                                          :argument/version]}
+                   :argument/discussions])
+          (map #(update % :argument/premises first))
+          (remove #(get-in % [:argument/conclusion :argument/version])))
+        txs (mapv #(hash-map :db/id (-> % :argument/premises :db/id)
+                             :statement/parent (-> % :argument/conclusion :db/id)
+                             :statement/type (-> % :argument/type :db/ident type-conversion-fn)
+                             :statement/discussions (->> % :argument/discussions (mapv :db/id)))
+                  arguments)]
+    @(transact txs)))
 
 (defn migrate-titles-to-fulltext-search
   "Creates new titles that are fulltext-searchable"
@@ -574,4 +587,6 @@
 (comment
   (migrate-titles-to-fulltext-search)
   (migrate-argument-data-to-statements)
+
+  (fast-pull 17592186045472 '[*])
   )

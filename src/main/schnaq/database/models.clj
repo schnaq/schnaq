@@ -104,6 +104,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
     :db/doc "The type of the statement. (Is it supportive, attacking or neutral to the parent)"}
+   {:db/ident :statement/discussions
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "In which discussions is this statement used?"}
 
    ;; Statement Types
    {:db/ident :statement.type/support}
