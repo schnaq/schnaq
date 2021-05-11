@@ -451,18 +451,6 @@
         (bad-request {:error "You can not edit a closed / deleted discussion or statement."}))
       (validator/deny-access invalid-rights-message))))
 
-(defn- migrate-database
-  "Delete this after migration."
-  [_]
-  (discussion-db/migrate-argument-data-to-statements)
-  (ok {:text "Migration successful."}))
-
-(defn- migrate-titles
-  "Delete this after migration."
-  [_]
-  (discussion-db/migrate-titles-to-fulltext-search)
-  (ok {:text "Migration successful."}))
-
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -487,12 +475,6 @@
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
       (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
-          (wrap-routes auth/is-admin-middleware)
-          (wrap-routes auth/auth-middleware))
-      (-> (POST "/admin/migrations/migrate" [] migrate-database)
-          (wrap-routes auth/is-admin-middleware)
-          (wrap-routes auth/auth-middleware))
-      (-> (POST "/admin/migrations/titles" [] migrate-titles)
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
       (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
