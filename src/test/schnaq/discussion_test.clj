@@ -42,20 +42,19 @@
       (is (contains? author-names "Wegi"))
       (is (contains? author-names "Der Schredder")))))
 
-
 (deftest nodes-for-agenda-test
   (testing "Validate data for graph nodes."
     (let [share-hash "cat-dog-hash"
           statements (db/all-statements-for-graph share-hash)
-          contents (set (map :content statements))
+          contents (set (map :label statements))
           nodes (discussion/nodes-for-agenda statements share-hash)
           statement-nodes (remove #(= :agenda (:type %)) nodes)]
-      (testing "Nodes contain agenda as data thus containing one more element than the statements."
+      (testing "Nodes contain the discussion topic as data thus containing one more element than the statements."
         (is (= (count statements) (dec (count nodes)))))
       (testing "Only one agenda point."
         (is (= 1 (count (filter #(= :agenda (:type %)) nodes)))))
       (testing (str "Check if all content from statements is present in nodes.")
-        (is (= (count statement-nodes) (count (filter #(contents (:content %)) statement-nodes))))))))
+        (is (= (count statement-nodes) (count (filter #(contents (:label %)) statement-nodes))))))))
 
 (deftest links-for-agenda-test
   (testing "Validate data for graph links"

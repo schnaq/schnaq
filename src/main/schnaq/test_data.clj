@@ -387,7 +387,8 @@
                           :statement/author "user/rambo"
                           :statement/content "Es ist warm"
                           :statement/created-at #inst "2020-01-01"
-                          :statement/version 1}
+                          :statement/version 1
+                          :statement/discussions ["discussion/graph"]}
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}
@@ -447,7 +448,8 @@
                           :statement/author "user/rambo"
                           :statement/content "foo"
                           :statement/created-at #inst "2020-01-01"
-                          :statement/version 1}
+                          :statement/version 1
+                          :statement/discussions ["discussion/graph"]}
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/graph"]}])
