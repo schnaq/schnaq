@@ -12,6 +12,13 @@
             [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
 
+(defn- argument-type-to-statement-type
+  [argument-type]
+  (case argument-type
+    :argument.type/support :statement.type/support
+    :argument.type/attack :statement.type/attack
+    :argument.type/neutral :statement.type/neutral))
+
 (def statement-rules
   '[[(statements-from-argument ?argument ?statements)
      [?argument :argument/conclusion ?statements]]
@@ -174,59 +181,46 @@
 
 (>defn- pack-premises
   "Packs premises into a statement-structure."
-  ([premises user-id]
-   [(s/coll-of :statement/content) :db/id :ret (s/coll-of map?)]
+  ([premises new-conclusion-id discussion-id statement-type user-id]
+   [(s/coll-of :statement/content) :db/id :db/id :statement/type :db/id :ret (s/coll-of map?)]
    (mapv (fn [premise] {:db/id (str "premise-" premise)
                         :statement/author user-id
                         :statement/content premise
                         :statement/version 1
-                        :statement/created-at (Date.)})
+                        :statement/created-at (Date.)
+                        :statement/parent new-conclusion-id
+                        :statement/discussions [discussion-id]
+                        :statement/type statement-type})
          premises))
-  ([premises user-id creation-secrets]
-   [(s/coll-of :statement/content) :db/id (s/coll-of :statement/creation-secret) :ret (s/coll-of map?)]
-   (mapv #(assoc %1 :statement/creation-secret %2) (pack-premises premises user-id) creation-secrets)))
-
-(>defn prepare-new-argument
-  "Prepares a new argument for transaction. Optionally sets a temporary id."
-  ([discussion-id user-id conclusion premises temporary-id]
-   [:db/id :db/id :statement/content (s/coll-of :statement/content) :db/id :ret map?]
-   (merge
-     (prepare-new-argument discussion-id user-id conclusion premises)
-     {:db/id temporary-id}))
-  ([discussion-id user-id conclusion premises]
-   [:db/id :db/id :statement/content (s/coll-of :statement/content) :ret map?]
-   {:argument/author user-id
-    :argument/premises (pack-premises premises user-id)
-    :argument/conclusion {:db/id (str "conclusion-" conclusion)
-                          :statement/author user-id
-                          :statement/content conclusion
-                          :statement/version 1
-                          :statement/created-at (Date.)}
-    :argument/version 1
-    :argument/type :argument.type/support
-    :argument/discussions [discussion-id]}))
+  ([premises new-conclusion-id discussion-id statement-type user-id creation-secrets]
+   [(s/coll-of :statement/content) :db/id :db/id :statement/type :db/id (s/coll-of :statement/creation-secret)
+    :ret (s/coll-of map?)]
+   (mapv #(assoc %1 :statement/creation-secret %2)
+         (pack-premises premises new-conclusion-id discussion-id statement-type user-id)
+         creation-secrets)))
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
-  ([user-id content]
-   (build-new-statement user-id content (str "conclusion-" content)))
-  ([user-id content temp-id]
+  ([user-id content discussion-id]
+   (build-new-statement user-id content discussion-id (str "conclusion-" content)))
+  ([user-id content discussion-id temp-id]
    {:db/id temp-id
     :statement/author user-id
     :statement/content content
     :statement/version 1
-    :statement/created-at (Date.)}))
+    :statement/created-at (Date.)
+    :statement/discussions [discussion-id]}))
 
 (>defn add-starting-statement!
   "Adds a new starting-statement and returns the newly created id."
   [share-hash user-id statement-content registered-user?]
   [:discussion/share-hash :db/id :statement/content any? :ret :db/id]
-  (let [minimum-statement (build-new-statement user-id statement-content "add/starting-argument")
+  (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
+        minimum-statement (build-new-statement user-id statement-content discussion-id "add/starting-argument")
         new-statement (if registered-user?
                         minimum-statement
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
-        temporary-id (:db/id new-statement)
-        discussion-id (:db/id (discussion-by-share-hash share-hash))]
+        temporary-id (:db/id new-statement)]
     (get-in @(transact [new-statement
                         [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
@@ -337,12 +331,15 @@
   [share-hash user-id new-conclusion-id new-statement-string argument-type registered-user?]
   [:discussion/share-hash :db/id :db/id :statement/content :argument/type any? :ret associative?]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
+        statement-type (argument-type-to-statement-type argument-type)
         new-arguments
         [{:db/id (str "argument-" new-statement-string)
           :argument/author user-id
-          :argument/premises (if registered-user?
-                               (pack-premises [new-statement-string] user-id)
-                               (pack-premises [new-statement-string] user-id [(.toString (UUID/randomUUID))]))
+          :argument/premises
+          (if registered-user?
+            (pack-premises [new-statement-string] new-conclusion-id discussion-id statement-type user-id)
+            (pack-premises [new-statement-string] new-conclusion-id discussion-id statement-type user-id
+                           [(.toString (UUID/randomUUID))]))
           :argument/conclusion new-conclusion-id
           :argument/version 1
           :argument/type argument-type
@@ -489,9 +486,11 @@
   [:db/id :argument/type :statement/content :ret ::specs/statement]
   (log/info "Statement" statement-id "edited with new content.")
   (if-let [argument (main-db/fast-pull statement-id '[:argument/_premises])]
-    (let [argument-id (-> argument :argument/_premises first :db/id)]
+    (let [argument-id (-> argument :argument/_premises first :db/id)
+          statement-type (argument-type-to-statement-type new-type)]
       (log/info "Argument" argument-id "updated to new type " new-type)
       @(transact [[:db/add statement-id :statement/content new-content]
+                  [:db/add statement-id :statement/type statement-type]
                   [:db/add argument-id :argument/type new-type]]))
     @(transact [[:db/add statement-id :statement/content new-content]]))
   (fast-pull statement-id statement-pattern))
@@ -537,3 +536,60 @@
            (statements ?discussion ?statements)
            [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
          statement-rules statement-pattern share-hash search-string))
+
+(defn migrate-argument-data-to-statements
+  "Migrates argument-data to statements, no more need for arguments."
+  []
+  (let [type-conversion-fn #(case %
+                              :argument.type/support :statement.type/support
+                              :argument.type/attack :statement.type/attack
+                              :argument.type/neutral :statement.type/neutral)
+        arguments
+        (->>
+          (query '[:find [(pull ?arguments argument-pattern) ...]
+                   :in $ argument-pattern
+                   :where [?arguments :argument/version _]]
+                 '[{:argument/type [:db/ident]}
+                   {:argument/premises [:db/id]}
+                   {:argument/conclusion [:db/id
+                                          :argument/version]}
+                   :argument/discussions])
+          (map #(update % :argument/premises first))
+          (remove #(get-in % [:argument/conclusion :argument/version])))
+        txs (mapv #(hash-map :db/id (-> % :argument/premises :db/id)
+                             :statement/parent (-> % :argument/conclusion :db/id)
+                             :statement/type (-> % :argument/type :db/ident type-conversion-fn)
+                             :statement/discussions (->> % :argument/discussions (mapv :db/id)))
+                  arguments)
+        ;; Migrate starting-statements to contain discussions as well
+        discussions-with-startings (query '[:find ?starting ?discussions
+                                            :where [?discussions :discussion/starting-statements ?starting]])
+        starting-txs (mapv #(vector :db/add (first %) :statement/discussions (second %)) discussions-with-startings)]
+    @(transact txs)
+    @(transact starting-txs)))
+
+(defn migrate-titles-to-fulltext-search
+  "Creates new titles that are fulltext-searchable"
+  []
+  (let [rename-tx [{:db/id :discussion/title
+                    :db/ident :discussion/deprecated-title-2021-05-11}]
+        fresh-tx [{:db/ident :discussion/title
+                   :db/valueType :db.type/string
+                   :db/fulltext true
+                   :db/cardinality :db.cardinality/one
+                   :db/doc "The title / heading of a discussion."}]
+        discussions (query '[:find [(pull ?discussions [*]) ...]
+                             :where [?discussions :discussion/share-hash _]])
+        title-txs (mapv #(vector :db/add (:db/id %) :discussion/title (:discussion/deprecated-title-2021-05-11 %))
+                        discussions)]
+    @(transact rename-tx)
+    @(transact fresh-tx)
+    @(transact title-txs)))
+
+(comment
+  (migrate-titles-to-fulltext-search)
+
+  (migrate-argument-data-to-statements)
+
+  (fast-pull 17592186045446 '[*])
+  )

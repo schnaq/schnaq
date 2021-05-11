@@ -57,15 +57,12 @@
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
-    (let [cat-or-dog-id (:db/id (first (discussion-db/all-discussions-by-title "Cat or Dog?")))]
+    (is (= 4 (db/number-of-active-discussion-users)))
+    (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
       (is (= 4 (db/number-of-active-discussion-users)))
-      (let [_ (user-db/add-user-if-not-exists "wooooggler")
-            woggler-id (user-db/user-by-nickname "wooooggler")]
-        (is (= 4 (db/number-of-active-discussion-users)))
-        (main-db/transact
-          [(discussion-db/prepare-new-argument cat-or-dog-id woggler-id "Alles doof"
-                                               ["weil alles doof war"])]))
-      (is (= 5 (db/number-of-active-discussion-users))))))
+      (main-db/transact
+        [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
+    (is (= 5 (db/number-of-active-discussion-users)))))
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"

@@ -78,7 +78,25 @@
     [:h4 (labels :admin.center.delete.public/heading)]
     [public-meeting-deletion-form]
     [:h4 (labels :admin.center.delete.private/heading)]
-    [private-meeting-deletion-form]]])
+    [private-meeting-deletion-form]
+    [:hr]
+    [:section
+     [:h4 "Migrations"]
+     [:button.btn.btn-primary {:on-click #(rf/dispatch [:migrate/start-migration])}
+      "Argumente zu Statements machen 🪄"]
+     [:br]
+     [:button.btn.btn-primary {:on-click #(rf/dispatch [:migrate/start-migration-titles])}
+      "Mach titles durchsuchbar 🔎"]]]])
+
+(rf/reg-event-fx
+  :migrate/start-migration
+  (fn [{:keys [db]} _]
+    {:fx [(http/xhrio-request db :post "/admin/migrations/migrate" [:ajax.error/as-notification])]}))
+
+(rf/reg-event-fx
+  :migrate/start-migration-titles
+  (fn [{:keys [db]} _]
+    {:fx [(http/xhrio-request db :post "/admin/migrations/titles" [:ajax.error/as-notification])]}))
 
 (defn center-overview-route
   []
