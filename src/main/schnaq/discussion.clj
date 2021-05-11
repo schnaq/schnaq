@@ -21,27 +21,6 @@
         argument-ids (map :db/id subset-arguments)]
     (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
 
-(>defn- assoc-type-to-premises
-  "Assocs a type to a list of premises"
-  [argument]
-  [map? :ret sequential?]
-  (let [premises (:argument/premises argument)]
-    (map #(assoc % :type (:argument/type argument)) premises)))
-
-(>defn- direct-children
-  "Looks up all direct children of a node. An undercut is considered a child of the premise
-  of an argument."
-  [root-id all-arguments]
-  [(s/or :id int? :share-hash :discussion/share-hash) sequential? :ret sequential?]
-  (let [arguments-with-root (filter
-                              #(= root-id (get-in % [:argument/conclusion :db/id]))
-                              all-arguments)
-        potential-undercuts (undercuts-for-root root-id all-arguments)
-        children (concat arguments-with-root potential-undercuts)
-        premises-list (map assoc-type-to-premises children)]
-    ;; This works because we do not have premise-groups implemented
-    (flatten premises-list)))
-
 (>defn- create-links
   "Create a link for every argument."
   [statements]
@@ -51,24 +30,6 @@
        (map (fn [statement]
               {:from (:db/id statement) :to (-> statement :statement/parent :db/id)
                :type (:statement/type statement)}))))
-
-(>defn sub-discussion-information
-  "Returns statistics about the sub-discussion starting with `root-statement-id`.
-  Does not watch out for cycles in the graph, only aggregates information for root-statement."
-  [root-statement-id arguments]
-  [int? sequential? :ret map?]
-  (loop [current-root root-statement-id
-         descendants (direct-children current-root arguments)
-         sub-statements-count 0
-         authors #{}]
-    (if (seq descendants)
-      (let [[next-child & rest-children] descendants]
-        (recur (:db/id next-child)
-               (concat rest-children (direct-children (:db/id next-child) arguments))
-               (inc sub-statements-count)
-               (conj authors (or (:statement/author next-child) (:argument/author next-child)))))
-      {:sub-statements sub-statements-count
-       :authors authors})))
 
 (>defn- create-node
   "Adds a type to the node.

@@ -12,6 +12,8 @@
             [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
 
+;; todo remove undercuts from anywhere
+
 (defn- argument-type-to-statement-type
   [argument-type]
   (case argument-type
@@ -277,17 +279,6 @@
           :in $ discussion-pattern ?title
           :where [?discussions :discussion/title ?title]]
         discussion-pattern title)
-      (toolbelt/pull-key-up :db/ident)))
-
-(defn all-arguments-for-discussion
-  "Returns all arguments belonging to a discussion, identified by share-hash."
-  [share-hash]
-  (-> (query
-        '[:find [(pull ?discussion-arguments argument-pattern) ...]
-          :in $ argument-pattern ?share-hash
-          :where [?discussion :discussion/share-hash ?share-hash]
-          [?discussion-arguments :argument/discussions ?discussion]]
-        argument-pattern share-hash)
       (toolbelt/pull-key-up :db/ident)))
 
 (>defn statements-by-content

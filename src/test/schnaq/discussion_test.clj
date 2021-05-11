@@ -7,41 +7,6 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
-(deftest undercuts-for-root-test
-  (testing "Test whether all undercut descendants are found in a sub-discussion."
-    (let [undercuts-for-root @#'discussion/undercuts-for-root
-          share-hash "ameisenbär-hash"
-          all-arguments (db/all-arguments-for-discussion share-hash)
-          matching-argument (first (filter #(= :argument.type/attack (:argument/type %)) all-arguments))
-          root-statement (first (:argument/premises matching-argument))
-          matching-undercut (first (undercuts-for-root (:db/id root-statement) all-arguments))]
-      (is (= "going for a walk with the dog every day is good for social interaction and physical exercise"
-             (-> matching-undercut :argument/premises first :statement/content)))
-      (is (= "Der miese Peter" (-> matching-undercut :argument/author :user/nickname)))
-      (is (empty? (undercuts-for-root [] all-arguments))))))
-
-(deftest direct-children-test
-  (testing "Test whether all direct children are found."
-    (let [direct-children @#'discussion/direct-children
-          share-hash "ameisenbär-hash"
-          root-id (:db/id (first (db/starting-statements share-hash)))
-          all-arguments (db/all-arguments-for-discussion share-hash)
-          children (direct-children root-id all-arguments)]
-      (is (= 2 (count children)))
-      (is (empty? (direct-children -1 all-arguments))))))
-
-(deftest sub-discussion-information-test
-  (testing "Test information regarding sub-discussions."
-    (let [share-hash "ameisenbär-hash"
-          arguments (db/all-arguments-for-discussion share-hash)
-          root-id (:db/id (first (db/starting-statements share-hash)))
-          infos (discussion/sub-discussion-information root-id arguments)
-          author-names (into #{} (map :user/nickname (:authors infos)))]
-      (is (= 3 (:sub-statements infos)))
-      (is (contains? author-names "Der miese Peter"))
-      (is (contains? author-names "Wegi"))
-      (is (contains? author-names "Der Schredder")))))
-
 (deftest nodes-for-agenda-test
   (testing "Validate data for graph nodes."
     (let [share-hash "cat-dog-hash"
