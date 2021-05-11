@@ -541,6 +541,8 @@
 (defn migrate-argument-data-to-statements
   "Migrates argument-data to statements, no more need for arguments."
   ;; TODO all arguments should have the pointer to discussions (even the starting statements)
+  ;; TODO check if its _not_ an undercut
+  ;; Die Premises müssen umgeschrieben werden! (Nimm immer die erste wir haben eh keine Groups)
   []
   (let [arguments
         (query '[:find [(pull ?arguments argument-pattern) ...]
@@ -551,6 +553,25 @@
                  {:argument/conclusion [:db/id]}])]
     arguments))
 
+(defn migrate-titles-to-fulltext-search
+  "Creates new titles that are fulltext-searchable"
+  []
+  (let [rename-tx [{:db/id :discussion/title
+                    :db/ident :discussion/deprecated-title-2021-05-11}]
+        fresh-tx [{:db/ident :discussion/title
+                   :db/valueType :db.type/string
+                   :db/fulltext true
+                   :db/cardinality :db.cardinality/one
+                   :db/doc "The title / heading of a discussion."}]
+        discussions (query '[:find [(pull ?discussions [*]) ...]
+                             :where [?discussions :discussion/share-hash _]])
+        title-txs (mapv #(vector :db/add (:db/id %) :discussion/title (:discussion/deprecated-title-2021-05-11 %))
+                        discussions)]
+    @(transact rename-tx)
+    @(transact fresh-tx)
+    @(transact title-txs)))
+
 (comment
+  (migrate-titles-to-fulltext-search)
   (migrate-argument-data-to-statements)
   )
