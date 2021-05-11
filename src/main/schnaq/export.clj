@@ -51,8 +51,8 @@
   [:discussion/share-hash :ret string?]
   (let [statements (db/all-statements-for-graph share-hash)
         starting-statements (db/starting-statements share-hash)
-        all-nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
-        starting-nodes (filter #(= :argument.type/starting (:type %)) all-nodes)
+        all-nodes (discussion/nodes-for-agenda statements share-hash)
+        starting-nodes (filter #(= :statement.type/starting (:type %)) all-nodes)
         links (discussion/links-for-starting all-nodes starting-statements share-hash)]
     (loop [queue (map #(vector "" %) starting-nodes)
            text ""

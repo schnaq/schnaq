@@ -423,7 +423,7 @@
             starting-statements (discussion-db/starting-statements share-hash)
             edges (discussion/links-for-starting statements starting-statements share-hash)
             controversy-vals (discussion/calculate-controversy edges)]
-        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
+        (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
                      :edges edges
                      :controversy-values controversy-vals}}))
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))

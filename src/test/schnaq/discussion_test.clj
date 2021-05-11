@@ -46,12 +46,10 @@
 (deftest nodes-for-agenda-test
   (testing "Validate data for graph nodes."
     (let [share-hash "cat-dog-hash"
-          share-hash-tapir-only "ameisenbär-hash"
           statements (db/all-statements-for-graph share-hash)
           contents (set (map :content statements))
-          starting-statements (db/starting-statements share-hash-tapir-only)
-          nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
-          statement-nodes (filter #(= "statement" (:type %)) nodes)]
+          nodes (discussion/nodes-for-agenda statements share-hash)
+          statement-nodes (remove #(= :agenda (:type %)) nodes)]
       (testing "Nodes contain agenda as data thus containing one more element than the statements."
         (is (= (count statements) (dec (count nodes)))))
       (testing "Only one agenda point."

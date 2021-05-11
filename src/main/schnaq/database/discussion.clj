@@ -437,7 +437,8 @@
        :id (:db/id statement)
        :label (if (:statement/deleted? statement)
                 config/deleted-statement-text
-                (:statement/content statement))})
+                (:statement/content statement))
+       :type (:statement/type statement)})
     (all-statements share-hash)))
 
 (defn all-discussions

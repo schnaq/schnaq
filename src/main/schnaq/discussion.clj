@@ -89,11 +89,9 @@
 
 (>defn- create-nodes
   "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
-  [statements share-hash starting-statements]
-  [sequential? :discussion/share-hash sequential? :ret sequential?]
-  (let [arguments (discussion-db/all-arguments-for-discussion share-hash)
-        starting-statement-ids (into #{} (map :db/id starting-statements))]
-    (map #(create-node % arguments starting-statement-ids) statements)))
+  [statements]
+  [sequential? :ret sequential?]
+  (map #(if (:type %) % (assoc % :type :statement.type/starting)) statements))
 
 (>defn- starting-node
   "Creates node data for a starting point representing the discussion."
@@ -117,9 +115,9 @@
 
 (>defn nodes-for-agenda
   "Returns all nodes for a discussion including its agenda."
-  [statements starting-statements share-hash]
-  [sequential? sequential? :discussion/share-hash :ret sequential?]
-  (conj (create-nodes statements share-hash starting-statements)
+  [statements share-hash]
+  [sequential? :discussion/share-hash :ret sequential?]
+  (conj (create-nodes statements)
         (starting-node share-hash)))
 
 (>defn links-for-starting
