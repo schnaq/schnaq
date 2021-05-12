@@ -29,6 +29,7 @@
             [schnaq.media :as media]
             [schnaq.processors :as processors]
             [schnaq.s3 :as s3]
+            [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log])
@@ -363,8 +364,9 @@
   (let [{:keys [share-hash statement-id]} body-params]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
-            {:conclusion (first (with-sub-discussion-info
-                                  [(db/fast-pull statement-id discussion-db/statement-pattern)]))
+            {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
+                                    with-sub-discussion-info
+                                    (toolbelt/pull-key-up :db/ident)))
              :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))}))
       (validator/deny-access invalid-rights-message))))
 
