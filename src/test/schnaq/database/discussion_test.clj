@@ -41,7 +41,7 @@
           another-new-argument (db/react-to-statement! share-hash user-id (:db/id new-support)
                                                        "this is a secret support" :statement.type/support false)]
       (is (= "This is a new support" (:statement/content new-support)))
-      (is (= (:db/id starting-conclusion) (:statement/parent new-support)))
+      (is (= (:db/id starting-conclusion) (:db/id (:statement/parent new-support))))
       (is (= :statement.type/support (:statement/type new-support)))
       (is (= "this is a secret support" (:statement/content another-new-argument)))
       (is (string? (:statement/creation-secret another-new-argument))))))
@@ -54,7 +54,7 @@
           new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
                                              "This is a new attack" :statement.type/attack true)]
       (is (= "This is a new attack" (:statement/content new-attack)))
-      (is (= (:db/id starting-conclusion) (:statement/parent new-attack)))
+      (is (= (:db/id starting-conclusion) (:db/id (:statement/parent new-attack))))
       (is (= :statement.type/attack (:statement/type new-attack))))))
 
 (deftest statements-by-content-test
