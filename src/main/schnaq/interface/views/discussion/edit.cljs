@@ -30,7 +30,7 @@
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
        (when (and is-not-start? pro-con-enabled?)
-         [input/argument-type-choose-button [:statement.edit/argument-type statement-id]
+         [input/statement-type-choose-button [:statement.edit/argument-type statement-id]
           [:statement.edit/change-statement-type statement-id]])]
       [:div.d-flex.mb-3
        [:button.btn.btn-outline-secondary

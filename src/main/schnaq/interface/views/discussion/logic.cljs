@@ -78,15 +78,15 @@
                                      :context :success}]]]}))
 
 (defn submit-new-premise
-  "Submits a newly created premise as an undercut, rebut or support."
+  "Submits a newly created child statement as an attack, support or neutral statement."
   [form]
   (let [new-text-element (oget form [:premise-text])
         new-text (oget new-text-element [:value])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        argument-type @(rf/subscribe [:form/argument-type])
+        statement-type @(rf/subscribe [:form/statement-type])
         choice (if pro-con-disabled?
                  :neutral
-                 (keyword (name argument-type)))]
+                 (keyword (name statement-type)))]
     (rf/dispatch [:discussion.reaction.statement/send choice new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
@@ -105,7 +105,7 @@
   :discussion.query.statement/by-id-success
   (fn [{:keys [db]} [_ {:keys [conclusion premises]}]]
     {:db (-> db
-           (assoc-in [:discussion :conclusions :selected] conclusion)
-           (assoc-in [:discussion :premises :current] premises))
+             (assoc-in [:discussion :conclusions :selected] conclusion)
+             (assoc-in [:discussion :premises :current] premises))
      :fx [[:dispatch [:discussion.history/push conclusion]]
           [:dispatch [:visited/set-visited-statements conclusion]]]}))

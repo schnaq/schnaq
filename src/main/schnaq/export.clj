@@ -38,7 +38,7 @@
   Returns nodes as a list of tuples with the type of the link leading to the node
   being the first element.
 
-  E.g. [:argument.type/attack {:db/id …}]"
+  E.g. [:statement.type/attack {:db/id …}]"
   [source-node all-statements links]
   [:db/id sequential? sequential? :ret sequential?]
   (let [indexed-nodes (into {} (map #(vector (:id %) %) all-statements))]

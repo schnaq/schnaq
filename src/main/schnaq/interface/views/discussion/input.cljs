@@ -6,33 +6,33 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.logic :as logic]))
 
-(defn- argument-type-button
-  "Button to select the attitude of an argument. Current attitude is subscribed via get-subscription.
-  On-Click triggers the set-event with argument-type as last argument."
+(defn- statement-type-button
+  "Button to select the attitude of a statement. Current attitude is subscribed via get-subscription.
+  On-Click triggers the set-event with statement-type as last parameter."
   [statement-type label tooltip get-subscription set-event]
-  (let [argument-type @(rf/subscribe get-subscription)
-        checked? (= statement-type argument-type)]
+  (let [current-attitude @(rf/subscribe get-subscription)
+        checked? (= statement-type current-attitude)]
     [:label.btn.btn-outline-primary.rounded-4
      (when checked? {:class "active"})
-     [:input {:id (str "argument-type-button-" statement-type (second get-subscription)) :type "radio" :name "options" :autoComplete "off"
+     [:input {:id (str "statement-type-button-" statement-type (second get-subscription)) :type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
               :title (labels tooltip)
               :on-click (fn [e] (jq/prevent-default e)
                           (rf/dispatch (conj set-event statement-type)))}]
      (labels label)]))
 
-(defn argument-type-choose-button
-  "Button group to differentiate between the argument types. The button with a matching get-subscription will be checked.
-  Clicking a button will dispatch the set-subscription with the button-type as argument."
+(defn statement-type-choose-button
+  "Button group to differentiate between the statement types. The button with a matching get-subscription will be checked.
+  Clicking a button will dispatch the set-subscription with the button-type as parameter."
   [get-subscription set-event]
   [:div.btn-group.btn-group-toggle {:data-toggle "buttons"}
-   [argument-type-button :statement.type/support
+   [statement-type-button :statement.type/support
     :discussion.add.button/support :discussion/add-premise-against
     get-subscription set-event]
-   [argument-type-button :statement.type/neutral
+   [statement-type-button :statement.type/neutral
     :discussion.add.button/neutral :discussion/add-premise-neutral
     get-subscription set-event]
-   [argument-type-button :statement.type/attack
+   [statement-type-button :statement.type/attack
     :discussion.add.button/attack :discussion/add-premise-supporting
     get-subscription set-event]])
 
@@ -40,9 +40,9 @@
   "Input, where users provide (starting) conclusions."
   [textarea-name]
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        argument-type @(rf/subscribe [:form/argument-type])
+        statement-type @(rf/subscribe [:form/statement-type])
         current-route-name @(rf/subscribe [:navigation/current-route-name])
-        current-color (case argument-type
+        current-color (case statement-type
                         :statement.type/support "text-primary"
                         :statement.type/attack "text-secondary"
                         :statement.type/neutral "text-dark")]
@@ -58,7 +58,7 @@
      [:div.d-flex.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
       (when-not (or (= :routes.schnaq/start current-route-name) pro-con-disabled?)
         [:div.input-group-prepend
-         [argument-type-choose-button [:form/argument-type] [:form/argument-type!]]])
+         [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
       [:div.input-group-append
        [:button.btn
         {:type "submit" :class current-color
@@ -85,11 +85,11 @@
       [textarea-for-statements textarea-name]]]))
 
 (rf/reg-event-db
-  :form/argument-type!
-  (fn [db [_ argument-type]]
-    (assoc-in db [:form :argument/type] argument-type)))
+  :form/statement-type!
+  (fn [db [_ statement-type]]
+    (assoc-in db [:form :statement-type] statement-type)))
 
 (rf/reg-sub
-  :form/argument-type
+  :form/statement-type
   (fn [db]
-    (get-in db [:form :argument/type] :statement.type/neutral)))
+    (get-in db [:form :statement-type] :statement.type/neutral)))
