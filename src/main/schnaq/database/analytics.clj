@@ -142,6 +142,6 @@
   ([] [:ret map?]
    (argument-type-stats max-time-back))
   ([since] [inst? :ret map?]
-   {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
-    :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
-    :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))
+   {:supports (number-of-entities-with-value-since :statement/type :statement.type/support since)
+    :attacks (number-of-entities-with-value-since :statement/type :statement.type/attack since)
+    :neutrals (number-of-entities-with-value-since :statement/type :statement.type/neutral since)}))

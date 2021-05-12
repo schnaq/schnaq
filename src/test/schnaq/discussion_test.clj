@@ -57,8 +57,8 @@
 
 (deftest calculate-controversy-test
   (testing "Test the creation of a controversy-map"
-    (let [edges [{:to 123 :type :argument.type/support} {:to 1234 :type :statement.type/support}
-                 {:to 1234 :type :argument.type/attack} {:to 1235 :type :statement.type/starting}]]
+    (let [edges [{:to 123 :type :statement.type/support} {:to 1234 :type :statement.type/support}
+                 {:to 1234 :type :statement.type/attack} {:to 1235 :type :statement.type/starting}]]
       (is (= {123 0
               1234 50.0}
              (discussion/calculate-controversy edges))))))

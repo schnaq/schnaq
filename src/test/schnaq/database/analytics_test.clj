@@ -78,4 +78,4 @@
     (let [stats (db/argument-type-stats)]
       (is (= 7 (:attacks stats)))
       (is (= 15 (:supports stats)))
-      (is (= 9 (:undercuts stats))))))
+      (is (= 0 (:neutrals stats))))))
