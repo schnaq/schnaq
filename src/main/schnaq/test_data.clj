@@ -479,7 +479,8 @@
                           :statement/content "Brainstorming ist total wichtig"
                           :statement/created-at #inst "2020-01-01"
                           :statement/creation-secret "secret-creation-secret"
-                          :statement/version 1}
+                          :statement/version 1
+                          :statement/discussions ["discussion/simple"]}
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/simple"]}

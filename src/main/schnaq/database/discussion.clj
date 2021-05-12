@@ -241,7 +241,7 @@
         (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID))))]))
 
 (>defn react-to-statement!
-  "Create a new statement reacting to another statement. Returns the newly created argument."
+  "Create a new statement reacting to another statement. Returns the newly created statement."
   [share-hash user-id statement-id reacting-string reaction registered-user?]
   [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/statement]
   (let [result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
@@ -346,21 +346,12 @@
   "Checks whether the statement-id matches the share-hash."
   [statement-id share-hash]
   [:db/id :discussion/share-hash :ret (? :db/id)]
-  (or
-    (query
-      '[:find ?discussion .
-        :in $ ?statement ?hash
-        :where [?discussion :discussion/share-hash ?hash]
-        [?argument :argument/discussions ?discussion]
-        (or [?argument :argument/premises ?statement]
-            [?argument :argument/conclusion ?statement])]
-      statement-id share-hash)
-    (query
-      '[:find ?discussion .
-        :in $ ?statement ?hash
-        :where [?discussion :discussion/share-hash ?hash]
-        [?discussion :discussion/starting-statements ?statement]]
-      statement-id share-hash)))
+  (query
+    '[:find ?discussion .
+      :in $ ?statement ?hash
+      :where [?discussion :discussion/share-hash ?hash]
+      [?statement :statement/discussions ?discussion]]
+    statement-id share-hash))
 
 (>defn change-statement-text-and-type
   "Changes the content of a statement to `new-content` and the type to `new-type` if it's an argument."
