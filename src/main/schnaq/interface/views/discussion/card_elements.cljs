@@ -8,7 +8,6 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.badges :as badges]
-            [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
             [schnaq.interface.utils.http :as http]
@@ -39,7 +38,7 @@
              nickname (user-utils/statement-author statement)]
          [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
           {:key (str "history-" (:db/id statement))}
-          (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+          (let [attitude (name (:statement/type statement))]
             [:div.card-history.clickable.mt-md-4
              {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
@@ -112,7 +111,7 @@
              [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
              [:div.d-inline-block.d-md-block.text-dark
               {:key (str "history-" (:db/id statement))}
-              (let [attitude (name (logic/arg-type->attitude (:meta/argument-type statement)))]
+              (let [attitude (name (:statement/type statement))]
                 [:div.card-history.clickable
                  {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
                   :on-click #(rf/dispatch [:discussion.history/time-travel index])}

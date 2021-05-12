@@ -2,6 +2,7 @@
   "Discussion related functions interacting with the database."
   (:require [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
+            [datomic.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.database.main :refer [transact query fast-pull] :as main-db]
@@ -43,6 +44,9 @@
    {:statement/type [:db/ident]}
    {:statement/author user-db/combined-user-pattern}])
 
+(def ^:private statement-pattern-with-secret
+  (conj statement-pattern :statement/creation-secret))
+
 (def argument-pattern
   "Defines the default pattern for arguments. Oftentimes used in pull-patterns
   in a Datalog query bind the data to this structure."
@@ -51,20 +55,6 @@
    {:argument/author user-db/combined-user-pattern}
    {:argument/type [:db/ident]}
    {:argument/premises statement-pattern}
-   {:argument/conclusion
-    (conj statement-pattern
-          :argument/version
-          {:argument/author user-db/combined-user-pattern}
-          {:argument/type [:db/ident]}
-          {:argument/premises statement-pattern}
-          {:argument/conclusion statement-pattern})}])
-
-(def ^:private argument-pattern-with-secret-premises
-  [:db/id
-   :argument/version
-   {:argument/author user-db/combined-user-pattern}
-   {:argument/type [:db/ident]}
-   {:argument/premises (conj statement-pattern :statement/creation-secret)}
    {:argument/conclusion
     (conj statement-pattern
           :argument/version
@@ -183,26 +173,6 @@
   [(s/coll-of :db/id) :ret associative?]
   (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))
 
-(>defn- pack-premises
-  "Packs premises into a statement-structure."
-  ([premises new-conclusion-id discussion-id statement-type user-id]
-   [(s/coll-of :statement/content) :db/id :db/id :statement/type :db/id :ret (s/coll-of map?)]
-   (mapv (fn [premise] {:db/id (str "premise-" premise)
-                        :statement/author user-id
-                        :statement/content premise
-                        :statement/version 1
-                        :statement/created-at (Date.)
-                        :statement/parent new-conclusion-id
-                        :statement/discussions [discussion-id]
-                        :statement/type statement-type})
-         premises))
-  ([premises new-conclusion-id discussion-id statement-type user-id creation-secrets]
-   [(s/coll-of :statement/content) :db/id :db/id :statement/type :db/id (s/coll-of :statement/creation-secret)
-    :ret (s/coll-of map?)]
-   (mapv #(assoc %1 :statement/creation-secret %2)
-         (pack-premises premises new-conclusion-id discussion-id statement-type user-id)
-         creation-secrets)))
-
 (defn- build-new-statement
   "Builds a new statement for transaction."
   ([user-id content discussion-id]
@@ -319,37 +289,32 @@
         (into #{} q)
         (contains? q :discussion.state/deleted)))
 
-(>defn- new-premises-for-statement!
-  "Creates a new argument based on a statement, which is used as conclusion."
-  [share-hash user-id new-conclusion-id new-statement-string argument-type registered-user?]
-  [:discussion/share-hash :db/id :db/id :statement/content :argument/type any? :ret associative?]
-  (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        statement-type (argument-type-to-statement-type argument-type)
-        new-arguments
-        [{:db/id (str "argument-" new-statement-string)
-          :argument/author user-id
-          :argument/premises
-          (if registered-user?
-            (pack-premises [new-statement-string] new-conclusion-id discussion-id statement-type user-id)
-            (pack-premises [new-statement-string] new-conclusion-id discussion-id statement-type user-id
-                           [(.toString (UUID/randomUUID))]))
-          :argument/conclusion new-conclusion-id
-          :argument/version 1
-          :argument/type argument-type
-          :argument/discussions [discussion-id]}]]
-    @(transact new-arguments)))
+(>defn- new-child-statement!
+  "Creates a new child statement, that references a parent."
+  [discussion-id parent-id new-content statement-type user-id registered-user?]
+  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id boolean? :ret associative?]
+  @(transact
+     [(cond->
+        {:db/id (str "new-child-" new-content)
+         :statement/author user-id
+         :statement/content new-content
+         :statement/version 1
+         :statement/created-at (Date.)
+         :statement/parent parent-id
+         :statement/discussions [discussion-id]
+         :statement/type statement-type}
+        (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID))))]))
 
 (>defn react-to-statement!
   "Create a new statement reacting to another statement. Returns the newly created argument."
   [share-hash user-id statement-id reacting-string reaction registered-user?]
-  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/argument]
-  (let [argument-id
-        (get-in
-          (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction registered-user?)
-          [:tempids (str "argument-" reacting-string)])
-        argument-pattern (if registered-user? argument-pattern argument-pattern-with-secret-premises)]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/statement]
+  (let [result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
+                                     reaction user-id registered-user?)
+        db-after (:db-after result)
+        new-child-id (get-in result [:tempids (str "new-child-" reacting-string)])]
     (toolbelt/pull-key-up
-      (fast-pull argument-id argument-pattern)
+      (d/pull db-after statement-pattern-with-secret new-child-id)
       :db/ident)))
 
 (>defn new-discussion

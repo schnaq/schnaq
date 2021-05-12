@@ -8,33 +8,33 @@
 
 (defn- argument-type-button
   "Button to select the attitude of an argument. Current attitude is subscribed via get-subscription.
-  On-Click triggers the set-subscription with argument-type as last argument."
-  [id button-type label tooltip get-subscription set-subscription]
+  On-Click triggers the set-event with argument-type as last argument."
+  [statement-type label tooltip get-subscription set-event]
   (let [argument-type @(rf/subscribe get-subscription)
-        checked? (= button-type argument-type)]
+        checked? (= statement-type argument-type)]
     [:label.btn.btn-outline-primary.rounded-4
      (when checked? {:class "active"})
-     [:input {:id (str "argument-type-button-" id "-" get-subscription) :type "radio" :name "options" :autoComplete "off"
+     [:input {:id (str "argument-type-button-" statement-type (second get-subscription)) :type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
               :title (labels tooltip)
               :on-click (fn [e] (jq/prevent-default e)
-                          (rf/dispatch (conj set-subscription button-type)))}]
+                          (rf/dispatch (conj set-event statement-type)))}]
      (labels label)]))
 
 (defn argument-type-choose-button
   "Button group to differentiate between the argument types. The button with a matching get-subscription will be checked.
   Clicking a button will dispatch the set-subscription with the button-type as argument."
-  [get-subscription set-subscription]
+  [get-subscription set-event]
   [:div.btn-group.btn-group-toggle {:data-toggle "buttons"}
-   [argument-type-button "support" :argument.type/support
+   [argument-type-button :statement.type/support
     :discussion.add.button/support :discussion/add-premise-against
-    get-subscription set-subscription]
-   [argument-type-button "neutral" :argument.type/neutral
+    get-subscription set-event]
+   [argument-type-button :statement.type/neutral
     :discussion.add.button/neutral :discussion/add-premise-neutral
-    get-subscription set-subscription]
-   [argument-type-button "attack" :argument.type/attack
+    get-subscription set-event]
+   [argument-type-button :statement.type/attack
     :discussion.add.button/attack :discussion/add-premise-supporting
-    get-subscription set-subscription]])
+    get-subscription set-event]])
 
 (defn- textarea-for-statements
   "Input, where users provide (starting) conclusions."

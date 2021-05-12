@@ -37,15 +37,14 @@
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-support (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                              "This is a new support" :argument.type/support true)
-          another-new-argument (db/react-to-statement! share-hash user-id
-                                                       (-> new-support :argument/premises first :db/id)
-                                                       "this is a secret support" :argument.type/support false)]
-      (is (= "This is a new support" (-> new-support :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> new-support :argument/conclusion :statement/content)))
-      (is (= :argument.type/support (:argument/type new-support)))
-      (is (= "this is a secret support" (-> another-new-argument :argument/premises first :statement/content)))
-      (is (string? (-> another-new-argument :argument/premises first :statement/creation-secret))))))
+                                              "This is a new support" :statement.type/support true)
+          another-new-argument (db/react-to-statement! share-hash user-id (:db/id new-support)
+                                                       "this is a secret support" :statement.type/support false)]
+      (is (= "This is a new support" (:statement/content new-support)))
+      (is (= (:db/id starting-conclusion) (:statement/parent new-support)))
+      (is (= :statement.type/support (:statement/type new-support)))
+      (is (= "this is a secret support" (:statement/content another-new-argument)))
+      (is (string? (:statement/creation-secret another-new-argument))))))
 
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
@@ -53,10 +52,10 @@
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                             "This is a new attack" :argument.type/attack true)]
-      (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/attack (:argument/type new-attack))))))
+                                             "This is a new attack" :statement.type/attack true)]
+      (is (= "This is a new attack" (:statement/content new-attack)))
+      (is (= (:db/id starting-conclusion) (:statement/parent new-attack)))
+      (is (= :statement.type/attack (:statement/type new-attack))))))
 
 (deftest statements-by-content-test
   (testing "Statements are identified by identical content."
@@ -73,29 +72,6 @@
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 3 (count starting-statements)))))))
-
-(deftest pack-premises-test
-  (testing "Test the creation of statement-entities from strings"
-    (let [premises ["What a beautiful day" "Hello test"]
-          user-id (user-db/user-by-nickname "Test-person")
-          conclusion-id (:db/id (first (db/starting-statements "cat-dog-hash")))
-          discussion-id (:db/id (db/discussion-by-share-hash "cat-dog-hash"))
-          premise-entities (@#'db/pack-premises premises conclusion-id discussion-id :statement.type/support user-id)]
-      (is (= [{:db/id "premise-What a beautiful day",
-               :statement/author user-id,
-               :statement/content (first premises),
-               :statement/version 1
-               :statement/parent conclusion-id
-               :statement/discussions [discussion-id]
-               :statement/type :statement.type/support}
-              {:db/id "premise-Hello test",
-               :statement/author user-id,
-               :statement/content (second premises),
-               :statement/version 1
-               :statement/parent conclusion-id
-               :statement/discussions [discussion-id]
-               :statement/type :statement.type/support}]
-             (map #(dissoc % :statement/created-at) premise-entities))))))
 
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."

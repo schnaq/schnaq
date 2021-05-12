@@ -137,15 +137,21 @@
   }
 }
 
-.mobile-attitude-agree {
+.mobile-attitude-support {
   @include media-breakpoint-down(sm) {
     background: vars.$primary;
   }
 }
 
-.mobile-attitude-disagree {
+.mobile-attitude-attack {
   @include media-breakpoint-down(sm) {
     background: vars.$secondary;
+  }
+}
+
+.mobile-attitude-neutral {
+  @include media-breakpoint-down(sm) {
+    background: vars.$gray-300;
   }
 }
 
@@ -156,7 +162,7 @@
   white-space: pre-line;
 }
 
-.statement-card-agree {
+.statement-card-support {
   @extend .statement-card;
   background: vars.$primary;
 
@@ -165,7 +171,7 @@
   }
 }
 
-.statement-card-disagree {
+.statement-card-attack {
   @extend .statement-card;
   background: vars.$secondary;
 

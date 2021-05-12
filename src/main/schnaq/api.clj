@@ -392,15 +392,15 @@
         user-id (if keycloak-id
                   [:user.registered/keycloak-id keycloak-id]
                   (user-db/user-by-nickname nickname))
-        argument-type (case reaction
-                        :attack :argument.type/attack
-                        :neutral :argument.type/neutral
-                        :argument.type/support)]
+        statement-type (case reaction
+                         :attack :statement.type/attack
+                         :support :statement.type/support
+                         :statement.type/neutral)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
-                {:new-argument
-                 (discussion-db/react-to-statement! share-hash user-id conclusion-id premise argument-type keycloak-id)})))
+                {:new-statement
+                 (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)})))
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials

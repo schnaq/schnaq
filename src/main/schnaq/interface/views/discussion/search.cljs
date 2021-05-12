@@ -4,7 +4,6 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as card-view]
             [schnaq.interface.views.discussion.conclusion-card :as card]
-            [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-sub
@@ -34,8 +33,7 @@
          (for [statement results]
            [:div.p-2.w-lg-50.d-inline-block
             {:key (:db/id statement)}
-            [card/statement-card
-             nil statement (logic/arg-type->attitude (:meta/argument-type statement))]])])]]))
+            [card/statement-card nil statement]])])]]))
 
 (defn view []
   [search-view])
