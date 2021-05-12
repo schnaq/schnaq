@@ -137,10 +137,10 @@
       :average average-length
       :median median-length})))
 
-(>defn argument-type-stats
+(>defn statement-type-stats
   "Returns the number of attacks, supports and undercuts since a certain timestamp."
   ([] [:ret map?]
-   (argument-type-stats max-time-back))
+   (statement-type-stats max-time-back))
   ([since] [inst? :ret map?]
    {:supports (number-of-entities-with-value-since :statement/type :statement.type/support since)
     :attacks (number-of-entities-with-value-since :statement/type :statement.type/attack since)

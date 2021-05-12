@@ -43,9 +43,9 @@
         argument-type @(rf/subscribe [:form/argument-type])
         current-route-name @(rf/subscribe [:navigation/current-route-name])
         current-color (case argument-type
-                        :argument.type/support "text-primary"
-                        :argument.type/attack "text-secondary"
-                        :argument.type/neutral "text-dark")]
+                        :statement.type/support "text-primary"
+                        :statement.type/attack "text-secondary"
+                        :statement.type/neutral "text-dark")]
     [:div.input-group
      [:textarea.form-control.discussion-text-input-area
       {:name textarea-name :wrap "soft" :rows 1
@@ -92,4 +92,4 @@
 (rf/reg-sub
   :form/argument-type
   (fn [db]
-    (get-in db [:form :argument/type] :argument.type/neutral)))
+    (get-in db [:form :argument/type] :statement.type/neutral)))

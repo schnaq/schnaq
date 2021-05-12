@@ -227,7 +227,7 @@
 (>defn- new-child-statement!
   "Creates a new child statement, that references a parent."
   [discussion-id parent-id new-content statement-type user-id registered-user?]
-  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id boolean? :ret associative?]
+  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? :ret associative?]
   @(transact
      [(cond->
         {:db/id (str "new-child-" new-content)

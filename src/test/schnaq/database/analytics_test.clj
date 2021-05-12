@@ -75,7 +75,7 @@
 
 (deftest argument-type-stats-test
   (testing "Statistics about argument types should be working."
-    (let [stats (db/argument-type-stats)]
+    (let [stats (db/statement-type-stats)]
       (is (= 7 (:attacks stats)))
       (is (= 15 (:supports stats)))
       (is (= 0 (:neutrals stats))))))

@@ -65,7 +65,7 @@
           statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
           active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
-          argument-types @(rf/subscribe [:analytics/argument-type-stats])]
+          statement-types @(rf/subscribe [:analytics/statement-type-stats])]
       [:div.container.px-5.py-3
        [analytics-controls]
        [:div.card-columns
@@ -76,7 +76,7 @@
         [analytics-card (labels :analytics/statements-num-title) statements-num]
         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
         [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
-        [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])]])
+        [multi-arguments-card (labels :analytics/argument-types-title) statement-types]]])]])
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])
@@ -187,8 +187,8 @@
 
 (rf/reg-event-db
   :analytics/argument-type-stats-loaded
-  (fn [db [_ {:keys [argument-type-stats]}]]
-    (assoc-in db [:analytics :arguments :types] argument-type-stats)))
+  (fn [db [_ {:keys [statement-type-stats]}]]
+    (assoc-in db [:analytics :arguments :types] statement-type-stats)))
 
 (rf/reg-event-db
   :analytics/all-stats-loaded
@@ -200,7 +200,7 @@
                                        :lengths (:statement-length-stats stats)
                                        :average-per-discussion (:average-statements stats)}
                           :active-users-num {:overall (:active-users-num stats)}
-                          :arguments {:types (:argument-type-stats stats)}})))
+                          :arguments {:types (:statement-type-stats stats)}})))
 
 ;; #### Subs ####
 
@@ -240,6 +240,6 @@
     (get-in db [:analytics :statements :lengths])))
 
 (rf/reg-sub
-  :analytics/argument-type-stats
+  :analytics/statement-type-stats
   (fn [db _]
     (get-in db [:analytics :arguments :types])))

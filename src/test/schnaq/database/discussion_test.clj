@@ -38,13 +38,13 @@
           starting-conclusion (first (db/starting-statements share-hash))
           new-support (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
                                               "This is a new support" :statement.type/support true)
-          another-new-argument (db/react-to-statement! share-hash user-id (:db/id new-support)
+          another-new-reaction (db/react-to-statement! share-hash user-id (:db/id new-support)
                                                        "this is a secret support" :statement.type/support false)]
       (is (= "This is a new support" (:statement/content new-support)))
       (is (= (:db/id starting-conclusion) (:db/id (:statement/parent new-support))))
       (is (= :statement.type/support (:statement/type new-support)))
-      (is (= "this is a secret support" (:statement/content another-new-argument)))
-      (is (string? (:statement/creation-secret another-new-argument))))))
+      (is (= "this is a secret support" (:statement/content another-new-reaction)))
+      (is (string? (:statement/creation-secret another-new-reaction))))))
 
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"

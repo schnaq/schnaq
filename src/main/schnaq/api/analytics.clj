@@ -40,10 +40,10 @@
   [_]
   (ok {:statement-length-stats (analytics-db/statement-length-stats)}))
 
-(defn- argument-type-stats
+(defn- statement-type-stats
   "Returns statistics about the statement length."
   [_]
-  (ok {:argument-type-stats (analytics-db/argument-type-stats)}))
+  (ok {:statement-type-stats (analytics-db/statement-type-stats)}))
 
 (defn- all-stats
   "Returns all statistics at once."
@@ -55,7 +55,7 @@
                  :statements-num (analytics-db/number-of-statements timestamp-since)
                  :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
                  :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
-                 :argument-type-stats (analytics-db/argument-type-stats timestamp-since)
+                 :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
                  :registered-users-num (analytics-db/number-or-registered-users)}})))
 
 
@@ -68,7 +68,7 @@
         (GET "/" [] all-stats)                              ;; matches /analytics and /analytics/
         (GET "/active-users" [] number-of-active-users)
         (GET "/statements-per-discussion" [] statements-per-discussion)
-        (GET "/argument-types" [] argument-type-stats)
+        (GET "/argument-types" [] statement-type-stats)
         (GET "/discussions" [] number-of-discussions)
         (GET "/statement-lengths" [] statement-lengths-stats)
         (GET "/statements" [] number-of-statements)
