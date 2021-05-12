@@ -6,12 +6,6 @@
             [schnaq.database.user :as user-db]
             [schnaq.user :as user]))
 
-(>defn- premise-ids
-  "Return all premise-ids of a single argument."
-  [argument]
-  [map? :ret (s/coll-of int?)]
-  (map :db/id (:argument/premises argument)))
-
 (>defn- create-links
   "Create a link for every argument."
   [statements]
@@ -21,19 +15,6 @@
        (map (fn [statement]
               {:from (:db/id statement) :to (-> statement :statement/parent :db/id)
                :type (:statement/type statement)}))))
-
-(>defn- create-node
-  "Adds a type to the node.
-  Checks if the node is a starting statement.
-  If the current node is no starting statement checks if the current node is present as a premise in an argument.
-  If so add the type of the argument to the node."
-  [statement arguments starting-statements]
-  [map? sequential? set? :ret map?]
-  (let [statement-id (:id statement)
-        premise (first (filter #((set (premise-ids %)) statement-id) arguments))]
-    (if (contains? starting-statements statement-id)
-      (assoc statement :type :argument.type/starting)
-      (assoc statement :type (:argument/type premise)))))
 
 (>defn- create-nodes
   "Iterates over every node and marks starting nodes and premise types. Used in the graph view"
