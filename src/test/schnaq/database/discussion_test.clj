@@ -64,7 +64,7 @@
     (is (empty? (db/statements-by-content "foo-baar-ajshdjkahsjdkljsadklja")))))
 
 (deftest add-starting-statement!-test
-  (testing "Test the creation of a valid argument-entity from strings"
+  (testing "Test the creation of a valid statement-entity from strings"
     (let [statement "Wow look at this"
           user-id (user-db/add-user-if-not-exists "Test-person")
           meeting-hash "graph-hash"

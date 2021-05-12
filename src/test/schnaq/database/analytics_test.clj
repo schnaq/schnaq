@@ -73,8 +73,8 @@
       (is (> (:max stats) (:average stats)))
       (is float? (:average stats)))))
 
-(deftest argument-type-stats-test
-  (testing "Statistics about argument types should be working."
+(deftest statement-type-stats-test
+  (testing "Statistics about statement types should be working."
     (let [stats (db/statement-type-stats)]
       (is (= 7 (:attacks stats)))
       (is (= 15 (:supports stats)))

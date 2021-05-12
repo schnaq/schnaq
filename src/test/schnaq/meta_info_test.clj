@@ -15,7 +15,7 @@
           all-statements (discussion-db/all-statements share-hash)
           total-count (count all-statements)
           meta-infos (#'meta-info/discussion-meta-info share-hash author)
-          ;; add starting argument
+          ;; add starting statement
           statement "Clojure can melt steelbeams"
           user-id (user-db/add-user "New Person")
           _ (discussion-db/add-starting-statement! share-hash user-id statement false)

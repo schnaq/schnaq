@@ -48,7 +48,7 @@
         :how-to.schnaq/title "How do I schnaq?"
         :how-to.schnaq/body "Share your opinion! Others can react to your post or add a comment. The mindmap is automatically generated and updated whenever there is a new statement. Fancy a post? Just click on it and jump right at it."
         :how-to.pro-con/title "To Agree or Disagree ..."
-        :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro arguments are highlighted blue and contra arguments are highlighted orange. You can add multiple pro arguments as well as contra arguments to the same statement."
+        :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro statements are highlighted blue and contra statements are highlighted orange. You can add multiple pro statements as well as contra statements in response to the same statement."
         :how-to.call-to-action/title "Now you know!"
         :how-to.call-to-action/body "That's actually all there is to know about schnaq. Now use it!"
         :how-to/ask-question "Not sure how to schnaq? "     ;; whitespace intended
@@ -505,7 +505,7 @@
         :analytics/statements-num-title "# of statements"
         :analytics/active-users-num-title "Active users"
         :analytics/statement-lengths-title "Length of statements"
-        :analytics/argument-types-title "Argument types"
+        :analytics/statement-types-title "Argument types"
         :analytics/fetch-data-button "Retrieving data…"
 
         ;; Supporters
@@ -1244,7 +1244,7 @@
         :analytics/statements-num-title "Anzahl Statements"
         :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
         :analytics/statement-lengths-title "Beitragslängen"
-        :analytics/argument-types-title "Argumenttypen"
+        :analytics/statement-types-title "Argumenttypen"
         :analytics/fetch-data-button "Hole Daten"
 
         ;; Supporters

@@ -30,7 +30,7 @@
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
        (when (and is-not-start? pro-con-enabled?)
-         [input/statement-type-choose-button [:statement.edit/argument-type statement-id]
+         [input/statement-type-choose-button [:statement.edit/statement-type statement-id]
           [:statement.edit/change-statement-type statement-id]])]
       [:div.d-flex.mb-3
        [:button.btn.btn-outline-secondary
@@ -105,6 +105,6 @@
     (assoc-in db [:statements :edit-type id] statement-type)))
 
 (rf/reg-sub
-  :statement.edit/argument-type
+  :statement.edit/statement-type
   (fn [db [_ id]]
     (get-in db [:statements :edit-type id] :statement.type/neutral)))

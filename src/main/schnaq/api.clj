@@ -369,7 +369,7 @@
       (validator/deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
-  "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
+  "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params identity]}]
   (let [{:keys [share-hash statement nickname]} body-params
         keycloak-id (:sub identity)
