@@ -8,7 +8,7 @@
             [schnaq.database.specs :as specs]
             [schnaq.test-data :as test-data]
             [schnaq.toolbelt :as toolbelt])
-  (:import (java.util UUID Date)))
+  (:import (java.util Date UUID)))
 
 (def ^:private current-datomic-uri (atom config/datomic-uri))
 

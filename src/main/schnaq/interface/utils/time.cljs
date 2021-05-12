@@ -1,7 +1,7 @@
 (ns schnaq.interface.utils.time
   (:require ["date-fns" :as df]
-            ["date-fns/locale" :as df-locale]
             ["date-fns-tz" :as df-tz]
+            ["date-fns/locale" :as df-locale]
             [ghostwheel.core :refer [>defn]]
             [schnaq.interface.config :as config]
             [schnaq.interface.utils.tooltip :as tooltip]))

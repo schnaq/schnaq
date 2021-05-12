@@ -3,12 +3,12 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.hub.common :as hub]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.discussion.badges :as badges]))
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."

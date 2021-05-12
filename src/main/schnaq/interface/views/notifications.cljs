@@ -15,15 +15,15 @@
                               :context :danger
                               :stay-visible? true
                               :on-close-fn #(rf/dispatch [:clear-error])}]}`"
-  (:require [cljs.spec.alpha :as s]
+  (:require ["framer-motion" :refer [AnimatePresence]]
+            [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn- >defn]]
             [goog.string :as gstring]
-            [schnaq.interface.text.display-data :refer [fa]]
-            [schnaq.interface.views.common :as common]
-            [reagent.dom]
             [re-frame.core :as rf]
-            ["framer-motion" :refer [AnimatePresence]]))
+            [reagent.dom]
+            [schnaq.interface.text.display-data :refer [fa]]
+            [schnaq.interface.views.common :as common]))
 
 (def ^:private display-time
   "Milliseconds, that a notification stays visible."

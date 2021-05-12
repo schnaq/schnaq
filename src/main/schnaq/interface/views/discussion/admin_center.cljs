@@ -12,8 +12,8 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.views.pages :as pages]))
 

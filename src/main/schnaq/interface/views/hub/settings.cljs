@@ -4,12 +4,12 @@
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.feed.overview :as feed]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.hub.overview :as hubs]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.views.feed.overview :as feed]
+            [schnaq.interface.views.hub.overview :as hubs]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- settings-body []
   (let [{:hub/keys [name]} @(rf/subscribe [:hub/current])

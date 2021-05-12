@@ -3,14 +3,14 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.badges :as badges]
+            [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
-            [schnaq.interface.utils.http :as http]
             [schnaq.user :as user-utils]))
 
 (defn- home-button-mobile

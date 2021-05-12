@@ -2,9 +2,9 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.utils.language :as language]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
