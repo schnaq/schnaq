@@ -138,7 +138,7 @@
       :median median-length})))
 
 (>defn statement-type-stats
-  "Returns the number of attacks, supports and undercuts since a certain timestamp."
+  "Returns the number of attacks, supports and neutrals since a certain timestamp."
   ([] [:ret map?]
    (statement-type-stats max-time-back))
   ([since] [inst? :ret map?]

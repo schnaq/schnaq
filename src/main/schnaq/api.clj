@@ -358,7 +358,7 @@
       (validator/deny-access))))
 
 (defn- get-statement-info
-  "Return the sought after conclusion (by id) and the following premises / undercuts."
+  "Return the sought after conclusion (by id) and the following children."
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement-id]} body-params]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)

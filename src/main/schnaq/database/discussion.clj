@@ -13,8 +13,6 @@
             [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
 
-;; todo remove undercuts from anywhere
-
 (def statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
