@@ -3,9 +3,7 @@
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as card-view]
-            [schnaq.interface.views.discussion.conclusion-card :as card]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.discussion.logic :as logic]))
+            [schnaq.interface.views.discussion.conclusion-card :as card]))
 
 (rf/reg-sub
   :schnaq.search.current/search-string
