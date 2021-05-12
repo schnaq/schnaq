@@ -148,7 +148,7 @@
 (rf/reg-event-fx
   :analytics/load-argument-type-stats
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/argument-types" :analytics/argument-type-stats-loaded)))
+    (fetch-statistics db "/analytics/statement-types" :analytics/argument-type-stats-loaded)))
 
 (rf/reg-event-db
   :analytics/discussions-num-loaded

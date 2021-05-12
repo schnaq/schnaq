@@ -23,9 +23,9 @@
   before a new starting-conclusion is detected."
   [old-text level node relation]
   (let [relation-symbol (case relation
-                          :argument.type/attack "- "
-                          :argument.type/undercut "- "
-                          :argument.type/support "+ "
+                          :statement.type/attack "- "
+                          :statement.type/support "+ "
+                          :statement.type/neutral "o "
                           "")
         spacing (if (zero? level) "\n\n" "\n")
         ;; Indent multiline-text correctly. Additional level is to compensate for relation-symbol
