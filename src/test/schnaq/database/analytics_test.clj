@@ -38,7 +38,7 @@
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
-    (is (= 38 (db/number-of-statements)))
+    (is (= 27 (db/number-of-statements)))
     (is (zero? (db/number-of-statements (Instant/now))))
     (let [user-id (user-db/add-user-if-not-exists "Wegi")
           share-hash "asd"]
@@ -47,13 +47,13 @@
                                      :discussion/share-hash share-hash
                                      :discussion/author user-id} true)
       (discussion-db/add-starting-statement! share-hash user-id "test" false)
-      (is (= 39 (db/number-of-statements))))))
+      (is (= 28 (db/number-of-statements))))))
 
 (deftest average-number-of-statements-test
   (testing "Test whether the average number of statements fits."
-    (is (= 38/4 (db/average-number-of-statements)))
+    (is (= 27/4 (db/average-number-of-statements)))
     (any-discussion)
-    (is (= 38/5 (db/average-number-of-statements)))))
+    (is (= 27/5 (db/average-number-of-statements)))))
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
