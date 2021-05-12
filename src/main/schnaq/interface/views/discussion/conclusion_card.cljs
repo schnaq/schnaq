@@ -79,7 +79,7 @@
                            (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
                                          (assoc path-params :statement-id (:db/id statement))]))))}
      [:article.card.statement-card.clickable
-      {:class (str "statement-card-" (name (:statement/type statement)))}
+      {:class (str "statement-card-" (name (or (:statement/type statement) :neutral)))}
       [:div.d-flex.flex-row
        [:div.m-auto
         [:i.card-view-type {:class (str "fas " (fa fa-label))}]]

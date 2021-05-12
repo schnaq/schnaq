@@ -38,7 +38,7 @@
              nickname (user-utils/statement-author statement)]
          [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
           {:key (str "history-" (:db/id statement))}
-          (let [attitude (name (:statement/type statement))]
+          (let [attitude (name (or (:statement/type statement) :neutral))]
             [:div.card-history.clickable.mt-md-4
              {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
               :on-click #(rf/dispatch [:discussion.history/time-travel index])}
@@ -111,7 +111,7 @@
              [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
              [:div.d-inline-block.d-md-block.text-dark
               {:key (str "history-" (:db/id statement))}
-              (let [attitude (name (:statement/type statement))]
+              (let [attitude (name (or (:statement/type statement) :neutral))]
                 [:div.card-history.clickable
                  {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
                   :on-click #(rf/dispatch [:discussion.history/time-travel index])}

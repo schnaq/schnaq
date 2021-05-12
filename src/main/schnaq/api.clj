@@ -366,7 +366,7 @@
       (ok (valid-statements-with-votes
             {:conclusion (first (with-sub-discussion-info
                                   [(db/fast-pull statement-id discussion-db/statement-pattern)]))
-             :premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion statement-id))
+             :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))
              :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id statement-id))}))
       (validator/deny-access invalid-rights-message))))
 
