@@ -7,7 +7,7 @@
             [schnaq.user :as user]))
 
 (>defn- create-links
-  "Create a link for every argument."
+  "Create a link for every child-parent-relation."
   [statements]
   [sequential? :ret sequential?]
   (->> statements
@@ -39,7 +39,7 @@
   [:discussion/share-hash sequential? :ret sequential?]
   (map (fn [statement] {:from (:db/id statement)
                         :to share-hash
-                        :type :argument.type/starting})
+                        :type :statement.type/starting})
        starting-statements))
 
 (>defn nodes-for-agenda
@@ -63,8 +63,8 @@
   [controversy-map edge]
   [map? map? :ret map?]
   (let [sentiment (case (:type edge)
-                    :argument.type/attack :negative
-                    :argument.type/support :positive
+                    :statement.type/attack :negative
+                    :statement.type/support :positive
                     :none)]
     (if (= sentiment :none)
       controversy-map
