@@ -1,11 +1,11 @@
 (ns schnaq.interface.views.modals.modal
-  (:require [re-frame.core :as rf]
-            [schnaq.interface.views.modals.events]
-            [schnaq.interface.views.modals.subs]
-            [schnaq.interface.text.display-data :refer [labels]]
-            [ghostwheel.core :refer [>defn]]
+  (:require [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]))
+            [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.views.modals.events]
+            [schnaq.interface.views.modals.subs]))
 
 (defn modal-panel
   [{:keys [child show? large?]}]

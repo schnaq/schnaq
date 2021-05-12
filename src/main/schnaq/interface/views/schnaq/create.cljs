@@ -1,13 +1,13 @@
 (ns schnaq.interface.views.schnaq.create
   (:require [oops.core :refer [oget]]
+            [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.howto.elements :as how-to-elements]
-            [schnaq.interface.views.pages :as pages]
-            [re-frame.core :as rf]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- create-schnaq-options
   "Options that can be chosen when creating a schnaq."

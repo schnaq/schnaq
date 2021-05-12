@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.feedback.survey
   (:require [oops.core :refer [oget]]
-            [schnaq.interface.text.display-data :refer [labels]]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [labels]]))
 
 (def ^:private survey-iframe
   "Include Google Form."

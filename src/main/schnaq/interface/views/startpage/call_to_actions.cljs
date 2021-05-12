@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.startpage.call-to-actions
-  (:require [schnaq.interface.text.display-data :refer [fa labels video img-path]]
-            [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [fa labels video img-path]]))
 
 (defn- header-animation
   "Display header animation video."

@@ -2,8 +2,8 @@
   "Page explaining our privacy and how we are storing data."
   (:require [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn- privacy-entry
   "Define a privacy entry."

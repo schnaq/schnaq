@@ -3,13 +3,13 @@
   (:require [cljs.pprint :refer [pprint]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage clear!]]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels fa]]
-            [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.interface.views.pages :as pages]
-            [reitit.frontend.easy :as reitfe]))
+            [schnaq.interface.views.pages :as pages]))
 
 (defn open-privacy-settings
   "Open privacy settings."

@@ -1,3 +1,4 @@
 {:lint-as {ghostwheel.core/>defn clojure.core/defn
            ghostwheel.core/>defn- clojure.core/defn}
- :linters {:single-key-in {:level :warning}}}
+ :linters {:single-key-in {:level :warning}
+           :unsorted-required-namespaces {:level :warning}}}

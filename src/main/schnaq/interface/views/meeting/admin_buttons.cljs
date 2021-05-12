@@ -6,8 +6,8 @@
             [schnaq.interface.config :refer [config]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
-            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.utils.file-download :as file-download]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]))
 
 (defn admin-center

@@ -1,9 +1,9 @@
 (ns schnaq.processors-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.meta-info :as meta-info]
             [schnaq.processors :as processors]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]
-            [schnaq.meta-info :as meta-info]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)

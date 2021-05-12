@@ -2,8 +2,8 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
-            [schnaq.interface.config :refer [config]]
-            [oops.core :refer [oset! oget]]))
+            [oops.core :refer [oset! oget]]
+            [schnaq.interface.config :refer [config]]))
 
 (def production?
   "Checks the configuration for the current environment."

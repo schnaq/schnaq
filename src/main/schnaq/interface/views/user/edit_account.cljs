@@ -3,6 +3,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.http :as http]
@@ -11,8 +12,7 @@
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.image-upload :as image]
-            [schnaq.interface.views.user.settings :as settings]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.interface.views.user.settings :as settings]))
 
 (defn- avatar-input [input-id]
   (let [user @(rf/subscribe [:user/current])

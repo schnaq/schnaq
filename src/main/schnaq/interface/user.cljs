@@ -2,9 +2,9 @@
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.modals.modal :as modal]))
 
 (rf/reg-event-fx
