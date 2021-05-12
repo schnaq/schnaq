@@ -1,6 +1,5 @@
 (ns schnaq.database.analytics
   (:require [ghostwheel.core :refer [>defn >defn-]]
-            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db])
   (:import (java.util Date)
            (java.time Instant)))
@@ -68,23 +67,23 @@
   ([since] (number-of-entities-since :user.registered/display-name since)))
 
 (defn number-of-statements
-  "Returns the number of different usernames in the database."
+  "Returns the number of different statements in the database."
   ([]
    (number-of-statements max-time-back))
   ([since]
    (or
      (main-db/query
        '[:find (count ?statements) .
-         :in $ % ?since
+         :in $ ?since
          :where
          ;; Make sure the discussion is not deleted where the statements are from
          (not [?discussions :discussion/states :discussion.state/deleted])
-         (statements ?discussions ?statements)
+         [?statements :statement/discussions ?discussions]
          ;; Make sure statements are not deleted
          (not [?statements :statement/deleted? true])
          [?statements :statement/created-at ?timestamp]
          [(< ?since ?timestamp)]]
-       discussion-db/statement-rules (Date/from since))
+       (Date/from since))
      0)))
 
 (>defn average-number-of-statements

@@ -15,17 +15,6 @@
 
 ;; todo remove undercuts from anywhere
 
-(def statement-rules
-  '[[(statements-from-argument ?argument ?statements)
-     [?argument :argument/conclusion ?statements]]
-    [(statements-from-argument ?argument ?statements)
-     [?argument :argument/premises ?statements]]
-    [(statements ?discussion ?statements)
-     (or-join [?discussion ?statements]
-              [?discussion :discussion/starting-statements ?statements]
-              (and [?arguments :argument/discussions ?discussion]
-                   (statements-from-argument ?arguments ?statements)))]])
-
 (def statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
@@ -452,9 +441,11 @@
   "Searches the content of statements in a schnaq and returns the corresponding statements."
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-  (query '[:find [(pull ?statements statement-pattern) ...]
-           :in $ % statement-pattern ?share-hash ?search-string
-           :where [?discussion :discussion/share-hash ?share-hash]
-           (statements ?discussion ?statements)
-           [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
-         statement-rules statement-pattern share-hash search-string))
+  (->
+    (query '[:find [(pull ?statements statement-pattern) ...]
+             :in $ statement-pattern ?share-hash ?search-string
+             :where [?discussion :discussion/share-hash ?share-hash]
+             [?statements :statement/discussions ?discussion]
+             [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
+           statement-pattern share-hash search-string)
+    (toolbelt/pull-key-up :db/ident)))
