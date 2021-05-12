@@ -354,7 +354,7 @@
     statement-id share-hash))
 
 (>defn change-statement-text-and-type
-  "Changes the content of a statement to `new-content` and the type to `new-type` if it's an argument."
+  "Changes the content of a statement to `new-content` and the type to `new-type` if it has a parent."
   [statement new-type new-content]
   [map? :statement/type :statement/content :ret ::specs/statement]
   (let [statement-id (:db/id statement)]

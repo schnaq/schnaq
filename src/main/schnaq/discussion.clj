@@ -12,14 +12,6 @@
   [map? :ret (s/coll-of int?)]
   (map :db/id (:argument/premises argument)))
 
-(>defn- undercuts-for-root
-  "Find all undercuts, where root-statement is undercut. (Root is set as a premise)"
-  [root-id all-arguments]
-  [(s/or :id int? :share-hash :discussion/share-hash) sequential? :ret sequential?]
-  (let [subset-arguments (filter #((set (premise-ids %)) root-id) all-arguments)
-        argument-ids (map :db/id subset-arguments)]
-    (filter #((set argument-ids) (get-in % [:argument/conclusion :db/id])) all-arguments)))
-
 (>defn- create-links
   "Create a link for every argument."
   [statements]
