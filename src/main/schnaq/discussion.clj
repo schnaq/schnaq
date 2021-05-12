@@ -3,7 +3,6 @@
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
-            [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.user :as user]))
 
@@ -118,17 +117,3 @@
     #(assoc %1 (key %2) (single-controversy-val (val %2)))
     {}
     (reduce update-controversy-map {} edges)))
-
-(>defn- annotate-undercut-premise-meta
-  "Annotates undercut-statements with proper meta-information."
-  [statements]
-  [(s/coll-of ::specs/statement) :ret (s/coll-of ::specs/statement)]
-  (map #(assoc % :meta/argument-type :argument.type/undercut) statements))
-
-(>defn premises-undercutting-argument-with-premise-id
-  "Return all statements that are used to undercut an argument where `statement-id`
-  is used as one of the premises in the undercut argument. Return values are enriched
-  with meta-information."
-  [statement-id]
-  [:db/id :ret (s/coll-of ::specs/statement)]
-  (annotate-undercut-premise-meta (discussion-db/statements-undercutting-premise statement-id)))

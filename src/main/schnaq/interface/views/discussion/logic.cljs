@@ -103,9 +103,9 @@
 
 (rf/reg-event-fx
   :discussion.query.statement/by-id-success
-  (fn [{:keys [db]} [_ {:keys [conclusion premises undercuts]}]]
-    {:db (->
-           (assoc-in db [:discussion :conclusions :selected] conclusion)
-           (assoc-in [:discussion :premises :current] (concat premises undercuts)))
+  (fn [{:keys [db]} [_ {:keys [conclusion premises]}]]
+    {:db (-> db
+           (assoc-in [:discussion :conclusions :selected] conclusion)
+           (assoc-in [:discussion :premises :current] premises))
      :fx [[:dispatch [:discussion.history/push conclusion]]
           [:dispatch [:visited/set-visited-statements conclusion]]]}))

@@ -130,8 +130,8 @@
 
 (rf/reg-event-db
   :discussion.premises/set-current
-  (fn [db [_ {:keys [premises undercuts]}]]
-    (assoc-in db [:discussion :premises :current] (concat premises undercuts))))
+  (fn [db [_ {:keys [premises]}]]
+    (assoc-in db [:discussion :premises :current] premises)))
 
 (rf/reg-sub
   :local-votes

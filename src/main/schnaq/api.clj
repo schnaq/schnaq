@@ -344,8 +344,7 @@
   (let [{:keys [share-hash selected-statement]} body-params]
     (if (validator/valid-discussion? share-hash)
       (ok (valid-statements-with-votes
-            {:premises (with-sub-discussion-info (discussion-db/children-for-statement (:db/id selected-statement)))
-             :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement)))}))
+            {:premises (with-sub-discussion-info (discussion-db/children-for-statement (:db/id selected-statement)))}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- search-schnaq
@@ -366,8 +365,7 @@
       (ok (valid-statements-with-votes
             {:conclusion (first (with-sub-discussion-info
                                   [(db/fast-pull statement-id discussion-db/statement-pattern)]))
-             :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))
-             :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id statement-id))}))
+             :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
