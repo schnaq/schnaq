@@ -64,29 +64,6 @@
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
-   ;; todo undercut, marked for deletion
-   {:argument/author "user/stinky"
-    :argument/premises [{:db/id "statement/no-use"
-                         :statement/author "user/stinky"
-                         :statement/content "we have no use for a watchdog"
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/watchdogs"
-    :argument/version 1
-    :argument/type :argument.type/undercut
-    :argument/discussions ["discussion/cat-or-dog"]}
-   ;; todo undercut, marked for deletion
-   {:argument/author "user/stinky"
-    :argument/premises [{:db/id "statement/exercise"
-                         :statement/author "user/stinky"
-                         :statement/content
-                         "going for a walk with the dog every day is good for social interaction and physical exercise"
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/tedious-dogs"
-    :argument/version 1
-    :argument/type :argument.type/undercut
-    :argument/discussions ["discussion/cat-or-dog" "discussion/tapir-or-ameisenbaer"]}
    {:db/id "argument/both-is-fine"
     :argument/author "user/rambo"
     :argument/premises [{:db/id "statement/no-problem"
@@ -114,25 +91,6 @@
     :argument/version 1
     :argument/type :argument.type/attack
     :argument/discussions ["discussion/cat-or-dog"]}
-   ;; Here be premise groups
-   ;; todo undercut, marked for deletion
-   {:db/id "argument/hate"
-    :argument/author "user/stinky"
-    :argument/premises [{:db/id "statement/best-friends"
-                         :statement/author "user/stinky"
-                         :statement/content "won't be best friends"
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}
-                        {:db/id "statement/strong-hate"
-                         :statement/author "user/stinky"
-                         :statement/content
-                         "a cat and a dog will generally not get along well"
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/both-is-fine"
-    :argument/version 1
-    :argument/type :argument.type/undercut
-    :argument/discussions ["discussion/cat-or-dog"]}
    {:db/id "argument/independent-cats"
     :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/independent"
@@ -146,18 +104,6 @@
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/support
-    :argument/discussions ["discussion/cat-or-dog"]}
-   ;; todo undercut, marked for deletion
-   {:argument/author "user/wegi"
-    :argument/premises [{:db/id "statement/take-care-baby"
-                         :statement/author "user/wegi"
-                         :statement/content
-                         "the purpose of a pet is to have something to take care of"
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/independent-cats"
-    :argument/version 1
-    :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
    {:argument/author "user/wegi"
     :argument/premises [{:db/id "statement/overbred"
@@ -201,17 +147,6 @@
     :argument/version 1
     :argument/type :argument.type/support
     :argument/discussions ["discussion/cat-or-dog"]}
-   ;; todo undercut, marked for deletion
-   {:argument/author "user/wegi"
-    :argument/premises [{:db/id "statement/wild-thang"
-                         :statement/author "user/wegi"
-                         :statement/content "house cats are not wild cats anymore"
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/hunters"
-    :argument/version 1
-    :argument/type :argument.type/undercut
-    :argument/discussions ["discussion/cat-or-dog"]}
    {:db/id "argument/no-taxes"
     :argument/author "user/schredder"
     :argument/premises [{:db/id "statement/taxes"
@@ -225,17 +160,6 @@
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/support
-    :argument/discussions ["discussion/cat-or-dog"]}
-   ;; todo undercut, marked for deletion
-   {:argument/author "user/stinky"
-    :argument/premises [{:db/id "statement/credibility"
-                         :statement/author "user/stinky"
-                         :statement/content "thats what you just say without a credible source"
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/no-taxes"
-    :argument/version 1
-    :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
    {:argument/author "user/rambo"
     :argument/premises [{:db/id "statement/germoney"
@@ -276,30 +200,6 @@
     :argument/conclusion "statement/get-cat"
     :argument/version 1
     :argument/type :argument.type/attack
-    :argument/discussions ["discussion/cat-or-dog"]}
-   ;; todo undercut, marked for deletion
-   {:argument/author "user/schredder"
-    :argument/premises [{:db/id "statement/race-dogs"
-                         :statement/author "user/schredder"
-                         :statement/content
-                         (str "this is based on the cats race and on the breeding"
-                              ", and is not inherent for cats.")
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/moody-cats"
-    :argument/version 1
-    :argument/type :argument.type/undercut
-    :argument/discussions ["discussion/cat-or-dog"]}
-   ;; todo undercut, marked for deletion
-   {:argument/author "user/schredder"
-    :argument/premises [{:db/id "statement/stinky-cats"
-                         :statement/author "user/schredder"
-                         :statement/content "cats are only moody if youre stinky."
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/moody-cats"
-    :argument/version 1
-    :argument/type :argument.type/undercut
     :argument/discussions ["discussion/cat-or-dog"]}
    {:argument/author "user/schredder"
     :argument/premises [{:db/id "statement/catcatcatcat"
@@ -483,18 +383,6 @@
                           :statement/discussions ["discussion/simple"]}
     :argument/version 1
     :argument/type :argument.type/support
-    :argument/discussions ["discussion/simple"]}
-   ;; todo undercut, marked for deletion
-   {:db/id "argument/denken-nix-brainstorm"
-    :argument/author "user/schredder"
-    :argument/premises [{:db/id "statement/denken-nix-brainstorm"
-                         :statement/author "user/rambo"
-                         :statement/content "Brainstorm hat nichts mit aktiv denken zu tun"
-                         :statement/created-at #inst "2020-01-01"
-                         :statement/version 1}]
-    :argument/conclusion "argument/simple-start"
-    :argument/version 1
-    :argument/type :argument.type/undercut
     :argument/discussions ["discussion/simple"]}
    {:db/id "argument/denken-tut-weh"
     :argument/author "user/schredder"
