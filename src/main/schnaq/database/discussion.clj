@@ -94,8 +94,7 @@
                   (symbol (str "transitive-child-" i)))]
     (apply concat
            '[[(transitive-child-1 ?parent ?child)
-              [?args :argument/conclusion ?parent]
-              [?args :argument/premises ?child]]]
+              [?child :statement/parent ?parent]]]
            (for [i (range 2 (inc depth))]
              [[(list (sib-sym i) '?parent '?child)
                (list 'transitive-child-1 '?parent '?child)]
