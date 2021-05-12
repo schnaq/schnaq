@@ -31,9 +31,9 @@
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (= 6 (db/number-of-usernames)))
+    (is (= 3 (db/number-of-usernames)))
     (user-db/add-user-if-not-exists "Some-Testdude")
-    (is (= 7 (db/number-of-usernames)))
+    (is (= 4 (db/number-of-usernames)))
     (is (zero? (db/number-of-usernames (Instant/now))))))
 
 (deftest number-of-statements-test
@@ -57,12 +57,12 @@
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
-    (is (= 4 (db/number-of-active-discussion-users)))
+    (is (= 3 (db/number-of-active-discussion-users)))
     (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
-      (is (= 4 (db/number-of-active-discussion-users)))
+      (is (= 3 (db/number-of-active-discussion-users)))
       (main-db/transact
         [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
-    (is (= 5 (db/number-of-active-discussion-users)))))
+    (is (= 4 (db/number-of-active-discussion-users)))))
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"

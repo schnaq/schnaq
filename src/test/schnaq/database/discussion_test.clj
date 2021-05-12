@@ -60,13 +60,13 @@
 (deftest statements-by-content-test
   (testing "Statements are identified by identical content."
     (is (= 1 (count (db/statements-by-content "dogs can act as watchdogs"))))
-    (is (= 1 (count (db/statements-by-content "we have no use for a watchdog"))))
+    (is (= 1 (count (db/statements-by-content "we should get a cat"))))
     (is (empty? (db/statements-by-content "foo-baar-ajshdjkahsjdkljsadklja")))))
 
 (deftest add-starting-statement!-test
   (testing "Test the creation of a valid argument-entity from strings"
     (let [statement "Wow look at this"
-          user-id (user-db/user-by-nickname "Test-person")
+          user-id (user-db/add-user-if-not-exists "Test-person")
           meeting-hash "graph-hash"
           _ (db/add-starting-statement! meeting-hash user-id statement false)
           starting-statements (db/starting-statements meeting-hash)]

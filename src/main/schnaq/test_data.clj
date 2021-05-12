@@ -1,18 +1,14 @@
 (ns schnaq.test-data)
 
+;; TODO remove arguments and only leave statements
+
 (def ^:private cat-or-dog-authors-and-users
   [{:db/id "user/wegi"
     :user/nickname "Wegi"}
-   {:db/id "user/mike"
-    :user/nickname "Mike"}
    {:db/id "user/schredder"
     :user/nickname "Der Schredder"}
    {:db/id "user/rambo"
-    :user/nickname "Christian"}
-   {:db/id "user/stinky"
-    :user/nickname "Der miese Peter"}
-   {:db/id "user/test-person"
-    :user/nickname "Test-person"}])
+    :user/nickname "Christian"}])
 
 (def ^:private cat-or-dog-statements
   [{:db/id "statement/get-dog"
