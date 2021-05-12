@@ -44,7 +44,7 @@
   :statement.edit/send
   (fn [{:keys [db]} [_ statement-id html-selector form]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])
-          new-type (get-in db [:statements :edit-type statement-id] :argument.type/neutral)]
+          new-type (get-in db [:statements :edit-type statement-id] :statement.type/neutral)]
       {:fx [(http/xhrio-request db :put "/discussion/statement/edit"
                                 [:statement.edit.send/success form]
                                 {:statement-id statement-id

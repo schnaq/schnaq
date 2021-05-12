@@ -15,13 +15,6 @@
 
 ;; todo remove undercuts from anywhere
 
-(defn- argument-type-to-statement-type
-  [argument-type]
-  (case argument-type
-    :argument.type/support :statement.type/support
-    :argument.type/attack :statement.type/attack
-    :argument.type/neutral :statement.type/neutral))
-
 (def statement-rules
   '[[(statements-from-argument ?argument ?statements)
      [?argument :argument/conclusion ?statements]]
@@ -173,7 +166,7 @@
   [share-hash user-id statement-content registered-user?]
   [:discussion/share-hash :db/id :statement/content any? :ret :db/id]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        minimum-statement (build-new-statement user-id statement-content discussion-id "add/starting-argument")
+        minimum-statement (build-new-statement user-id statement-content discussion-id)
         new-statement (if registered-user?
                         minimum-statement
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
@@ -412,18 +405,17 @@
 
 (>defn change-statement-text-and-type
   "Changes the content of a statement to `new-content` and the type to `new-type` if it's an argument."
-  [statement-id new-type new-content]
-  [:db/id :argument/type :statement/content :ret ::specs/statement]
-  (log/info "Statement" statement-id "edited with new content.")
-  (if-let [argument (main-db/fast-pull statement-id '[:argument/_premises])]
-    (let [argument-id (-> argument :argument/_premises first :db/id)
-          statement-type (argument-type-to-statement-type new-type)]
-      (log/info "Argument" argument-id "updated to new type " new-type)
-      @(transact [[:db/add statement-id :statement/content new-content]
-                  [:db/add statement-id :statement/type statement-type]
-                  [:db/add argument-id :argument/type new-type]]))
-    @(transact [[:db/add statement-id :statement/content new-content]]))
-  (fast-pull statement-id statement-pattern))
+  [statement new-type new-content]
+  [map? :statement/type :statement/content :ret ::specs/statement]
+  (let [statement-id (:db/id statement)]
+    (log/info "Statement" statement-id "edited with new content.")
+    (if (:statement/parent statement)
+      (do
+        (log/info "Statement" statement-id "updated to new type " new-type)
+        @(transact [[:db/add statement-id :statement/content new-content]
+                    [:db/add statement-id :statement/type new-type]]))
+      @(transact [[:db/add statement-id :statement/content new-content]]))
+    (toolbelt/pull-key-up (fast-pull statement-id statement-pattern) :db/ident)))
 
 (>defn add-admin-to-discussion
   "Adds an admin user to a discussion."

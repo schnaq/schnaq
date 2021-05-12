@@ -194,13 +194,15 @@
     (let [cat-dog-discussion (first (db/all-discussions-by-title "Cat or Dog?"))
           initial-content "Unmodified-statement"
           modified-content "Whats up in dis here house?"
-          modified-type :argument.type/neutral
+          modified-type :statement.type/neutral
           new-user (user-db/add-user-if-not-exists "Wugiperson")
           new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
-                                                       new-user initial-content false)]
-      (is (= initial-content (:statement/content (fast-pull new-statement-id db/statement-pattern))))
-      (let [modified-statement (db/change-statement-text-and-type new-statement-id modified-type modified-content)]
+                                                       new-user initial-content false)
+          statement (fast-pull new-statement-id db/statement-pattern)]
+      (is (= initial-content (:statement/content statement)))
+      (let [modified-statement (db/change-statement-text-and-type statement modified-type modified-content)]
         (is (= modified-content (:statement/content modified-statement)))
+        (is (nil? (:statement/type modified-statement)))
         (is (s/valid? ::specs/statement modified-statement))))))
 
 (deftest update-authors-from-secrets-test
