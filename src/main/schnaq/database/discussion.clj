@@ -47,22 +47,6 @@
 (def ^:private statement-pattern-with-secret
   (conj statement-pattern :statement/creation-secret))
 
-(def argument-pattern
-  "Defines the default pattern for arguments. Oftentimes used in pull-patterns
-  in a Datalog query bind the data to this structure."
-  [:db/id
-   :argument/version
-   {:argument/author user-db/combined-user-pattern}
-   {:argument/type [:db/ident]}
-   {:argument/premises statement-pattern}
-   {:argument/conclusion
-    (conj statement-pattern
-          :argument/version
-          {:argument/author user-db/combined-user-pattern}
-          {:argument/type [:db/ident]}
-          {:argument/premises statement-pattern}
-          {:argument/conclusion statement-pattern})}])
-
 (def discussion-pattern
   "Representation of a discussion. Oftentimes used in a Datalog pull pattern."
   [:db/id
