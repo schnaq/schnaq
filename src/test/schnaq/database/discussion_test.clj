@@ -139,13 +139,13 @@
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-for-discussion second-id "Wegi-ist-der-schönste")))))
 
-(deftest all-premises-for-conclusion
-  (testing "Get arguments (with meta-information), that have a certain conclusion"
+(deftest children-for-statement-test
+  (testing "Get statements (with meta-information), that have a certain parent."
     (let [share-hash "simple-hash"
           starting-conclusion (first (db/starting-statements share-hash))
-          meta-premise (first (db/all-premises-for-conclusion (:db/id starting-conclusion)))]
+          meta-premise (first (db/children-for-statement (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
-      (is (= :argument.type/support (:meta/argument-type meta-premise))))))
+      (is (= :statement.type/support (:statement/type meta-premise))))))
 
 (deftest valid-discussions-by-hashes-test
   (let [new-discussion-hash "hello-i-am-new-here"

@@ -344,7 +344,7 @@
   (let [{:keys [share-hash selected-statement]} body-params]
     (if (validator/valid-discussion? share-hash)
       (ok (valid-statements-with-votes
-            {:premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion (:db/id selected-statement)))
+            {:premises (with-sub-discussion-info (discussion-db/children-for-statement (:db/id selected-statement)))
              :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement)))}))
       (validator/deny-access invalid-rights-message))))
 
