@@ -538,7 +538,7 @@
   (log/info (format "Build Hash: %s" config/build-hash))
   (log/info (format "Environment: %s" config/env-mode))
   (log/info (format "Database Name: %s" config/db-name))
-  (log/info (format "Database URI: %s" (subs config/datomic-uri 0 20)))
+  (log/info (format "Database URI: %s" (subs config/datomic-uri 0 30)))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def allowed-origin
