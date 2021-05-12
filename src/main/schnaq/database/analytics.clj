@@ -1,6 +1,5 @@
 (ns schnaq.database.analytics
   (:require [ghostwheel.core :refer [>defn >defn-]]
-            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db])
   (:import (java.util Date)
            (java.time Instant)))
@@ -68,23 +67,23 @@
   ([since] (number-of-entities-since :user.registered/display-name since)))
 
 (defn number-of-statements
-  "Returns the number of different usernames in the database."
+  "Returns the number of different statements in the database."
   ([]
    (number-of-statements max-time-back))
   ([since]
    (or
      (main-db/query
        '[:find (count ?statements) .
-         :in $ % ?since
+         :in $ ?since
          :where
          ;; Make sure the discussion is not deleted where the statements are from
          (not [?discussions :discussion/states :discussion.state/deleted])
-         (statements ?discussions ?statements)
+         [?statements :statement/discussions ?discussions]
          ;; Make sure statements are not deleted
          (not [?statements :statement/deleted? true])
          [?statements :statement/created-at ?timestamp]
          [(< ?since ?timestamp)]]
-       discussion-db/statement-rules (Date/from since))
+       (Date/from since))
      0)))
 
 (>defn average-number-of-statements
@@ -138,11 +137,11 @@
       :average average-length
       :median median-length})))
 
-(>defn argument-type-stats
-  "Returns the number of attacks, supports and undercuts since a certain timestamp."
+(>defn statement-type-stats
+  "Returns the number of attacks, supports and neutrals since a certain timestamp."
   ([] [:ret map?]
-   (argument-type-stats max-time-back))
+   (statement-type-stats max-time-back))
   ([since] [inst? :ret map?]
-   {:supports (number-of-entities-with-value-since :argument/type :argument.type/support since)
-    :attacks (number-of-entities-with-value-since :argument/type :argument.type/attack since)
-    :undercuts (number-of-entities-with-value-since :argument/type :argument.type/undercut since)}))
+   {:supports (number-of-entities-with-value-since :statement/type :statement.type/support since)
+    :attacks (number-of-entities-with-value-since :statement/type :statement.type/attack since)
+    :neutrals (number-of-entities-with-value-since :statement/type :statement.type/neutral since)}))

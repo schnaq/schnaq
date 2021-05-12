@@ -65,7 +65,7 @@
           statements-num @(rf/subscribe [:analytics/number-of-statements-overall])
           active-users-num @(rf/subscribe [:analytics/number-of-active-users-overall])
           statement-lengths @(rf/subscribe [:analytics/statement-lengths-stats])
-          argument-types @(rf/subscribe [:analytics/argument-type-stats])]
+          statement-types @(rf/subscribe [:analytics/statement-type-stats])]
       [:div.container.px-5.py-3
        [analytics-controls]
        [:div.card-columns
@@ -76,7 +76,7 @@
         [analytics-card (labels :analytics/statements-num-title) statements-num]
         [analytics-card (labels :analytics/active-users-num-title) active-users-num]
         [multi-arguments-card (labels :analytics/statement-lengths-title) statement-lengths]
-        [multi-arguments-card (labels :analytics/argument-types-title) argument-types]]])]])
+        [multi-arguments-card (labels :analytics/statement-types-title) statement-types]]])]])
 
 (defn analytics-dashboard-entrypoint []
   [analytics-dashboard-view])
@@ -93,7 +93,7 @@
           [:dispatch [:analytics/load-statements-num]]
           [:dispatch [:analytics/load-active-users]]
           [:dispatch [:analytics/load-statement-length-stats]]
-          [:dispatch [:analytics/load-argument-type-stats]]]}))
+          [:dispatch [:analytics/load-statements-type-stats]]]}))
 
 (>defn- fetch-statistics
   "Fetches something from an endpoint with an authentication header."
@@ -146,9 +146,9 @@
     (fetch-statistics db "/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
 
 (rf/reg-event-fx
-  :analytics/load-argument-type-stats
+  :analytics/load-statements-type-stats
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/argument-types" :analytics/argument-type-stats-loaded)))
+    (fetch-statistics db "/analytics/statement-types" :analytics/statement-type-stats-loaded)))
 
 (rf/reg-event-db
   :analytics/discussions-num-loaded
@@ -186,9 +186,9 @@
     (assoc-in db [:analytics :statements :lengths] statement-length-stats)))
 
 (rf/reg-event-db
-  :analytics/argument-type-stats-loaded
-  (fn [db [_ {:keys [argument-type-stats]}]]
-    (assoc-in db [:analytics :arguments :types] argument-type-stats)))
+  :analytics/statement-type-stats-loaded
+  (fn [db [_ {:keys [statement-type-stats]}]]
+    (assoc-in db [:analytics :statements :types] statement-type-stats)))
 
 (rf/reg-event-db
   :analytics/all-stats-loaded
@@ -198,9 +198,9 @@
                                       :registered (:registered-users-num stats)}
                           :statements {:number {:overall (:statements-num stats)}
                                        :lengths (:statement-length-stats stats)
-                                       :average-per-discussion (:average-statements stats)}
-                          :active-users-num {:overall (:active-users-num stats)}
-                          :arguments {:types (:argument-type-stats stats)}})))
+                                       :average-per-discussion (:average-statements stats)
+                                       :types (:statement-type-stats stats)}
+                          :active-users-num {:overall (:active-users-num stats)}})))
 
 ;; #### Subs ####
 
@@ -240,6 +240,6 @@
     (get-in db [:analytics :statements :lengths])))
 
 (rf/reg-sub
-  :analytics/argument-type-stats
+  :analytics/statement-type-stats
   (fn [db _]
-    (get-in db [:analytics :arguments :types])))
+    (get-in db [:analytics :statements :types])))

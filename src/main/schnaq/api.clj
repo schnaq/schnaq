@@ -344,8 +344,7 @@
   (let [{:keys [share-hash selected-statement]} body-params]
     (if (validator/valid-discussion? share-hash)
       (ok (valid-statements-with-votes
-            {:premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion (:db/id selected-statement)))
-             :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id (:db/id selected-statement)))}))
+            {:premises (with-sub-discussion-info (discussion-db/children-for-statement (:db/id selected-statement)))}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- search-schnaq
@@ -359,19 +358,18 @@
       (validator/deny-access))))
 
 (defn- get-statement-info
-  "Return the sought after conclusion (by id) and the following premises / undercuts."
+  "Return the sought after conclusion (by id) and the following children."
   [{:keys [body-params]}]
   (let [{:keys [share-hash statement-id]} body-params]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
             {:conclusion (first (with-sub-discussion-info
                                   [(db/fast-pull statement-id discussion-db/statement-pattern)]))
-             :premises (with-sub-discussion-info (discussion-db/all-premises-for-conclusion statement-id))
-             :undercuts (with-sub-discussion-info (discussion/premises-undercutting-argument-with-premise-id statement-id))}))
+             :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- add-starting-statement!
-  "Adds a new starting argument to a discussion. Returns the list of starting-conclusions."
+  "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [body-params identity]}]
   (let [{:keys [share-hash statement nickname]} body-params
         keycloak-id (:sub identity)
@@ -392,15 +390,15 @@
         user-id (if keycloak-id
                   [:user.registered/keycloak-id keycloak-id]
                   (user-db/user-by-nickname nickname))
-        argument-type (case reaction
-                        :attack :argument.type/attack
-                        :neutral :argument.type/neutral
-                        :argument.type/support)]
+        statement-type (case reaction
+                         :attack :statement.type/attack
+                         :support :statement.type/support
+                         :statement.type/neutral)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (ok (valid-statements-with-votes
-                {:new-argument
-                 (discussion-db/react-to-statement! share-hash user-id conclusion-id premise argument-type keycloak-id)})))
+                {:new-statement
+                 (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)})))
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials
@@ -421,9 +419,9 @@
     (if (validator/valid-discussion? share-hash)
       (let [statements (discussion-db/all-statements-for-graph share-hash)
             starting-statements (discussion-db/starting-statements share-hash)
-            edges (discussion/links-for-starting statements starting-statements share-hash)
+            edges (discussion/links-for-starting starting-statements share-hash)
             controversy-vals (discussion/calculate-controversy edges)]
-        (ok {:graph {:nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
+        (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
                      :edges edges
                      :controversy-values controversy-vals}}))
       (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
@@ -438,30 +436,20 @@
       (validator/deny-access invalid-rights-message))))
 
 (defn- edit-statement!
-  "Edits the content of a statement, when the user is the registered author."
+  "Edits the content (and possibly type) of a statement, when the user is the registered author."
   [{:keys [params identity]}]
   (let [{:keys [statement-id statement-type new-content share-hash]} params
         user-identity (:sub identity)
-        statement (db/fast-pull statement-id [{:statement/author [:user.registered/keycloak-id]}
+        statement (db/fast-pull statement-id [:db/id
+                                              :statement/parent
+                                              {:statement/author [:user.registered/keycloak-id]}
                                               :statement/deleted?])]
     (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
       (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
                (not (:statement/deleted? statement)))
-        (ok {:updated-statement (discussion-db/change-statement-text-and-type statement-id statement-type new-content)})
+        (ok {:updated-statement (discussion-db/change-statement-text-and-type statement statement-type new-content)})
         (bad-request {:error "You can not edit a closed / deleted discussion or statement."}))
       (validator/deny-access invalid-rights-message))))
-
-(defn- migrate-database
-  "Delete this after migration."
-  [_]
-  (discussion-db/migrate-argument-data-to-statements)
-  (ok {:text "Migration successful."}))
-
-(defn- migrate-titles
-  "Delete this after migration."
-  [_]
-  (discussion-db/migrate-titles-to-fulltext-search)
-  (ok {:text "Migration successful."}))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
@@ -487,12 +475,6 @@
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
       (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
-          (wrap-routes auth/is-admin-middleware)
-          (wrap-routes auth/auth-middleware))
-      (-> (POST "/admin/migrations/migrate" [] migrate-database)
-          (wrap-routes auth/is-admin-middleware)
-          (wrap-routes auth/auth-middleware))
-      (-> (POST "/admin/migrations/titles" [] migrate-titles)
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
       (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
@@ -556,7 +538,7 @@
   (log/info (format "Build Hash: %s" config/build-hash))
   (log/info (format "Environment: %s" config/env-mode))
   (log/info (format "Database Name: %s" config/db-name))
-  (log/info (format "Database URI: %s" (subs config/datomic-uri 0 20)))
+  (log/info (format "Database URI: %s" (subs config/datomic-uri 0 30)))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def allowed-origin

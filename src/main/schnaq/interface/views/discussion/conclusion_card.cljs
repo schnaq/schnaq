@@ -68,8 +68,8 @@
       [:div.vote-box.down-vote [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
 (defn statement-card
-  [edit-hash statement attitude]
-  (let [fa-label (logic/attitude->symbol attitude)
+  [edit-hash statement]
+  (let [fa-label (logic/attitude->symbol (:statement/type statement))
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div {:on-click (fn [_e]
                        (let [selection (js-wrap/to-string (.getSelection js/window))]
@@ -79,7 +79,7 @@
                            (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
                                          (assoc path-params :statement-id (:db/id statement))]))))}
      [:article.card.statement-card.clickable
-      {:class (str "statement-card-" (name attitude))}
+      {:class (str "statement-card-" (name (or (:statement/type statement) :neutral)))}
       [:div.d-flex.flex-row
        [:div.m-auto
         [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
@@ -97,7 +97,7 @@
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card statement]
-      [statement-card edit-hash statement (logic/arg-type->attitude (:meta/argument-type statement))])))
+      [statement-card edit-hash statement])))
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
@@ -130,8 +130,8 @@
 
 (rf/reg-event-db
   :discussion.premises/set-current
-  (fn [db [_ {:keys [premises undercuts]}]]
-    (assoc-in db [:discussion :premises :current] (concat premises undercuts))))
+  (fn [db [_ {:keys [premises]}]]
+    (assoc-in db [:discussion :premises :current] premises)))
 
 (rf/reg-sub
   :local-votes

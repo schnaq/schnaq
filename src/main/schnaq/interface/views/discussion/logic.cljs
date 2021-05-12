@@ -17,21 +17,13 @@
       (+ (:meta/upvotes statement) up-vote-change)
       (+ (:meta/downvotes statement) down-vote-change))))
 
-(defn arg-type->attitude
-  "Returns an attitude deduced from an argument-type."
-  [arg-type]
-  (cond
-    (#{:argument.type/attack :argument.type/undercut} arg-type) "disagree"
-    (#{:argument.type/support} arg-type) "agree"
-    :else "neutral"))
-
 (defn attitude->symbol
   "Returns an fa symbol identifier based on attitude"
   [attitude]
-  (cond
-    (= "disagree" (str attitude)) :minus
-    (= "agree" (str attitude)) :plus
-    :else :circle))
+  (case attitude
+    :statement.type/attack :minus
+    :statement.type/support :plus
+    :circle))
 
 (rf/reg-event-fx
   :discussion.reaction.statement/send
@@ -51,16 +43,11 @@
 (rf/reg-event-fx
   :discussion.reaction.statement/added
   (fn [{:keys [db]} [_ response]]
-    (let [new-argument (:new-argument response)
-          new-premise (-> new-argument
-                          :argument/premises
-                          first
-                          (assoc :meta/argument-type (:argument/type new-argument)
-                                 :statement/created-at (.now js/Date)))]
+    (let [new-statement (:new-statement response)]
       {:db (update-in db [:discussion :premises :current]
-                      conj new-premise)
+                      conj new-statement)
        :fx [[:dispatch [:notification/new-content]]
-            [:dispatch [:discussion.statements/add-creation-secret new-premise]]]})))
+            [:dispatch [:discussion.statements/add-creation-secret new-statement]]]})))
 
 (rf/reg-event-fx
   :discussion.statements/add-creation-secret
@@ -91,15 +78,15 @@
                                      :context :success}]]]}))
 
 (defn submit-new-premise
-  "Submits a newly created premise as an undercut, rebut or support."
+  "Submits a newly created child statement as an attack, support or neutral statement."
   [form]
   (let [new-text-element (oget form [:premise-text])
         new-text (oget new-text-element [:value])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        argument-type @(rf/subscribe [:form/argument-type])
+        statement-type @(rf/subscribe [:form/statement-type])
         choice (if pro-con-disabled?
                  :neutral
-                 (keyword (name argument-type)))]
+                 (keyword (name statement-type)))]
     (rf/dispatch [:discussion.reaction.statement/send choice new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
@@ -116,9 +103,9 @@
 
 (rf/reg-event-fx
   :discussion.query.statement/by-id-success
-  (fn [{:keys [db]} [_ {:keys [conclusion premises undercuts]}]]
-    {:db (->
-           (assoc-in db [:discussion :conclusions :selected] conclusion)
-           (assoc-in [:discussion :premises :current] (concat premises undercuts)))
+  (fn [{:keys [db]} [_ {:keys [conclusion premises]}]]
+    {:db (-> db
+             (assoc-in [:discussion :conclusions :selected] conclusion)
+             (assoc-in [:discussion :premises :current] premises))
      :fx [[:dispatch [:discussion.history/push conclusion]]
           [:dispatch [:visited/set-visited-statements conclusion]]]}))

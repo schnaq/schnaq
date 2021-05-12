@@ -27,14 +27,6 @@
       (is (number? (db/add-feedback! feedback)))
       (is (= 1 (count (db/all-feedbacks)))))))
 
-(deftest all-arguments-for-conclusion-test
-  (testing "Get arguments, that have a certain conclusion"
-    (let [share-hash "simple-hash"
-          starting-conclusion (first (discussion-db/starting-statements share-hash))
-          simple-argument (first (discussion-db/all-arguments-for-conclusion (:db/id starting-conclusion)))]
-      (is (= "Man denkt viel nach dabei" (-> simple-argument :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> simple-argument :argument/conclusion :statement/content))))))
-
 (deftest all-discussions-by-title-test
   (testing "Should return discussions if title matches at least one discussion."
     (is (empty? (discussion-db/all-discussions-by-title "")))

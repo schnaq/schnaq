@@ -37,15 +37,14 @@
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-support (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                              "This is a new support" :argument.type/support true)
-          another-new-argument (db/react-to-statement! share-hash user-id
-                                                       (-> new-support :argument/premises first :db/id)
-                                                       "this is a secret support" :argument.type/support false)]
-      (is (= "This is a new support" (-> new-support :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> new-support :argument/conclusion :statement/content)))
-      (is (= :argument.type/support (:argument/type new-support)))
-      (is (= "this is a secret support" (-> another-new-argument :argument/premises first :statement/content)))
-      (is (string? (-> another-new-argument :argument/premises first :statement/creation-secret))))))
+                                              "This is a new support" :statement.type/support true)
+          another-new-reaction (db/react-to-statement! share-hash user-id (:db/id new-support)
+                                                       "this is a secret support" :statement.type/support false)]
+      (is (= "This is a new support" (:statement/content new-support)))
+      (is (= (:db/id starting-conclusion) (:db/id (:statement/parent new-support))))
+      (is (= :statement.type/support (:statement/type new-support)))
+      (is (= "this is a secret support" (:statement/content another-new-reaction)))
+      (is (string? (:statement/creation-secret another-new-reaction))))))
 
 (deftest attack-statement!-test
   (testing "Add a new attacking statement to a discussion"
@@ -53,66 +52,26 @@
           user-id (user-db/user-by-nickname "Wegi")
           starting-conclusion (first (db/starting-statements share-hash))
           new-attack (db/react-to-statement! share-hash user-id (:db/id starting-conclusion)
-                                             "This is a new attack" :argument.type/attack true)]
-      (is (= "This is a new attack" (-> new-attack :argument/premises first :statement/content)))
-      (is (= "Brainstorming ist total wichtig" (-> new-attack :argument/conclusion :statement/content)))
-      (is (= :argument.type/attack (:argument/type new-attack))))))
+                                             "This is a new attack" :statement.type/attack true)]
+      (is (= "This is a new attack" (:statement/content new-attack)))
+      (is (= (:db/id starting-conclusion) (:db/id (:statement/parent new-attack))))
+      (is (= :statement.type/attack (:statement/type new-attack))))))
 
 (deftest statements-by-content-test
   (testing "Statements are identified by identical content."
     (is (= 1 (count (db/statements-by-content "dogs can act as watchdogs"))))
-    (is (= 1 (count (db/statements-by-content "we have no use for a watchdog"))))
+    (is (= 1 (count (db/statements-by-content "we should get a cat"))))
     (is (empty? (db/statements-by-content "foo-baar-ajshdjkahsjdkljsadklja")))))
 
-(deftest all-arguments-for-discussion-test
-  (testing "Should return valid arguments for valid discussion."
-    (let [share-hash "cat-dog-hash"]
-      (is (empty? (db/all-arguments-for-discussion "non-existing-hash-1923hwudahsi")))
-      (is (seq (db/all-arguments-for-discussion share-hash)))
-      (is (contains? #{:argument.type/undercut :argument.type/support :argument.type/attack}
-                     (:argument/type (rand-nth (db/all-arguments-for-discussion share-hash))))))))
-
-(deftest statements-undercutting-premise-test
-  (testing "Get arguments, that are undercutting an argument with a certain premise"
-    (let [share-hash "simple-hash"
-          starting-conclusion (first (db/starting-statements share-hash))
-          simple-argument (first (db/all-arguments-for-conclusion (:db/id starting-conclusion)))
-          premise-to-undercut-id (-> simple-argument :argument/premises first :db/id)
-          desired-statement (first (db/statements-undercutting-premise premise-to-undercut-id))]
-      (is (= "Brainstorm hat nichts mit aktiv denken zu tun" (:statement/content desired-statement))))))
-
 (deftest add-starting-statement!-test
-  (testing "Test the creation of a valid argument-entity from strings"
+  (testing "Test the creation of a valid statement-entity from strings"
     (let [statement "Wow look at this"
-          user-id (user-db/user-by-nickname "Test-person")
+          user-id (user-db/add-user-if-not-exists "Test-person")
           meeting-hash "graph-hash"
           _ (db/add-starting-statement! meeting-hash user-id statement false)
           starting-statements (db/starting-statements meeting-hash)]
       (testing "Must have three more statements than the vanilla set and one more starting conclusion"
         (is (= 3 (count starting-statements)))))))
-
-(deftest pack-premises-test
-  (testing "Test the creation of statement-entities from strings"
-    (let [premises ["What a beautiful day" "Hello test"]
-          user-id (user-db/user-by-nickname "Test-person")
-          conclusion-id (:db/id (first (db/starting-statements "cat-dog-hash")))
-          discussion-id (:db/id (db/discussion-by-share-hash "cat-dog-hash"))
-          premise-entities (@#'db/pack-premises premises conclusion-id discussion-id :statement.type/support user-id)]
-      (is (= [{:db/id "premise-What a beautiful day",
-               :statement/author user-id,
-               :statement/content (first premises),
-               :statement/version 1
-               :statement/parent conclusion-id
-               :statement/discussions [discussion-id]
-               :statement/type :statement.type/support}
-              {:db/id "premise-Hello test",
-               :statement/author user-id,
-               :statement/content (second premises),
-               :statement/version 1
-               :statement/parent conclusion-id
-               :statement/discussions [discussion-id]
-               :statement/type :statement.type/support}]
-             (map #(dissoc % :statement/created-at) premise-entities))))))
 
 (deftest starting-statements-test
   (testing "Should return all starting-statements from a discussion."
@@ -180,13 +139,13 @@
       (is (db/check-valid-statement-id-for-discussion first-id "Wegi-ist-der-schönste"))
       (is (db/check-valid-statement-id-for-discussion second-id "Wegi-ist-der-schönste")))))
 
-(deftest all-premises-for-conclusion
-  (testing "Get arguments (with meta-information), that have a certain conclusion"
+(deftest children-for-statement-test
+  (testing "Get statements (with meta-information), that have a certain parent."
     (let [share-hash "simple-hash"
           starting-conclusion (first (db/starting-statements share-hash))
-          meta-premise (first (db/all-premises-for-conclusion (:db/id starting-conclusion)))]
+          meta-premise (first (db/children-for-statement (:db/id starting-conclusion)))]
       (is (= "Man denkt viel nach dabei" (:statement/content meta-premise)))
-      (is (= :argument.type/support (:meta/argument-type meta-premise))))))
+      (is (= :statement.type/support (:statement/type meta-premise))))))
 
 (deftest valid-discussions-by-hashes-test
   (let [new-discussion-hash "hello-i-am-new-here"
@@ -235,13 +194,15 @@
     (let [cat-dog-discussion (first (db/all-discussions-by-title "Cat or Dog?"))
           initial-content "Unmodified-statement"
           modified-content "Whats up in dis here house?"
-          modified-type :argument.type/neutral
+          modified-type :statement.type/neutral
           new-user (user-db/add-user-if-not-exists "Wugiperson")
           new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
-                                                       new-user initial-content false)]
-      (is (= initial-content (:statement/content (fast-pull new-statement-id db/statement-pattern))))
-      (let [modified-statement (db/change-statement-text-and-type new-statement-id modified-type modified-content)]
+                                                       new-user initial-content false)
+          statement (fast-pull new-statement-id db/statement-pattern)]
+      (is (= initial-content (:statement/content statement)))
+      (let [modified-statement (db/change-statement-text-and-type statement modified-type modified-content)]
         (is (= modified-content (:statement/content modified-statement)))
+        (is (nil? (:statement/type modified-statement)))
         (is (s/valid? ::specs/statement modified-statement))))))
 
 (deftest update-authors-from-secrets-test
@@ -259,6 +220,6 @@
 (deftest search-schnaq-test
   (testing "Statements with corresponding content should be found when share-hash is known."
     (let [share-hash "cat-dog-hash"]
-      (is (= 9 (count (db/search-schnaq share-hash "cats"))))
+      (is (= 6 (count (db/search-schnaq share-hash "cats"))))
       (is (= 2 (count (db/search-schnaq share-hash "dogs"))))
       (is (= 1 (count (db/search-schnaq share-hash "both")))))))

@@ -85,21 +85,6 @@
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions]))
 
-;; Argument
-(s/def :argument/type
-  #{:argument.type/attack :argument.type/support :argument.type/undercut :argument.type/neutral})
-(s/def :argument/version number?)
-(s/def :argument/author (s/or :user ::user :registered-user ::registered-user))
-(s/def :argument/conclusion (s/or :statement ::statement
-                                  :argument ::argument))
-(s/def :argument/premises (s/coll-of ::statement))
-(s/def :argument/discussions (s/coll-of ::discussion))
-(s/def ::argument
-  (s/keys :req [:argument/author :argument/premises :argument/conclusion
-                :argument/type :argument/version]
-          :opt [:argument/discussions
-                :db/txInstant]))
-
 ;; Common
 (s/def :db/id (s/or :transacted number? :temporary any?))
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))

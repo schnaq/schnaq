@@ -36,11 +36,10 @@
   [sequential? :ret sequential?]
   (map
     #(let [color (case (:type %)
-                   :argument.type/starting (colors :blue/light)
-                   :argument.type/support (colors :blue/default)
-                   :argument.type/attack (colors :orange/default)
-                   :argument.type/undercut (colors :orange/default)
-                   :argument.type/neutral (colors :gray/medium)
+                   :statement.type/starting (colors :blue/light)
+                   :statement.type/support (colors :blue/default)
+                   :statement.type/attack (colors :orange/default)
+                   :statement.type/neutral (colors :gray/medium)
                    :agenda (colors :white)
                    (colors :blue/default))]
        (assoc % :color {:background color

@@ -53,8 +53,8 @@
                                              :child [anonymous-edit-modal]}])
                       (fn []
                         (rf/dispatch [:statement.edit/activate-edit (:db/id statement)])
-                        (rf/dispatch [:statement.edit/change-argument-type (:db/id statement)
-                                      (:meta/argument-type statement)])))]
+                        (rf/dispatch [:statement.edit/change-statement-type (:db/id statement)
+                                      (:statement/type statement)])))]
     (when (or anonymous-owner
               ; User is registered author
               (and (= user-id (:db/id (:statement/author statement)))

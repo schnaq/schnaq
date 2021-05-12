@@ -23,9 +23,9 @@
   before a new starting-conclusion is detected."
   [old-text level node relation]
   (let [relation-symbol (case relation
-                          :argument.type/attack "- "
-                          :argument.type/undercut "- "
-                          :argument.type/support "+ "
+                          :statement.type/attack "- "
+                          :statement.type/support "+ "
+                          :statement.type/neutral "o "
                           "")
         spacing (if (zero? level) "\n\n" "\n")
         ;; Indent multiline-text correctly. Additional level is to compensate for relation-symbol
@@ -38,7 +38,7 @@
   Returns nodes as a list of tuples with the type of the link leading to the node
   being the first element.
 
-  E.g. [:argument.type/attack {:db/id …}]"
+  E.g. [:statement.type/attack {:db/id …}]"
   [source-node all-statements links]
   [:db/id sequential? sequential? :ret sequential?]
   (let [indexed-nodes (into {} (map #(vector (:id %) %) all-statements))]
@@ -51,9 +51,9 @@
   [:discussion/share-hash :ret string?]
   (let [statements (db/all-statements-for-graph share-hash)
         starting-statements (db/starting-statements share-hash)
-        all-nodes (discussion/nodes-for-agenda statements starting-statements share-hash)
-        starting-nodes (filter #(= :argument.type/starting (:type %)) all-nodes)
-        links (discussion/links-for-starting all-nodes starting-statements share-hash)]
+        all-nodes (discussion/nodes-for-agenda statements share-hash)
+        starting-nodes (filter #(= :statement.type/starting (:type %)) all-nodes)
+        links (discussion/links-for-starting starting-statements share-hash)]
     (loop [queue (map #(vector "" %) starting-nodes)
            text ""
            level 0]

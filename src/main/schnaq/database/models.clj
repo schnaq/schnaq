@@ -114,38 +114,6 @@
    {:db/ident :statement.type/attack}
    {:db/ident :statement.type/neutral}
 
-   ;; Argument Types
-   {:db/ident :argument.type/support}
-   {:db/ident :argument.type/attack}
-   {:db/ident :argument.type/undercut}
-   {:db/ident :argument.type/neutral}
-
-   ;; Argument
-   {:db/ident :argument/author
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The author of an argument"}
-   {:db/ident :argument/premises
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "The premises of an argument constituting a premise-group."}
-   {:db/ident :argument/type
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The type of the arguments edge"}
-   {:db/ident :argument/conclusion
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "The conclusion of an argument"}
-   {:db/ident :argument/version
-    :db/valueType :db.type/long
-    :db/cardinality :db.cardinality/one
-    :db/doc "The version of an argument"}
-   {:db/ident :argument/discussions
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/many
-    :db/doc "The discussions in which the argument is used"}
-
    ;; Discussion States
    {:db/ident :discussion.state/open}
    {:db/ident :discussion.state/closed}
@@ -163,8 +131,7 @@
    ;; Discussion
    {:db/ident :discussion/title
     :db/valueType :db.type/string
-    ;; TODO activate again after migration
-    ;; :db/fulltext true
+    :db/fulltext true
     :db/cardinality :db.cardinality/one
     :db/doc "The title / heading of a discussion."}
    {:db/ident :discussion/share-hash

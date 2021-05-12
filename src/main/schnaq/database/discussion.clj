@@ -2,6 +2,7 @@
   "Discussion related functions interacting with the database."
   (:require [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
+            [datomic.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.database.main :refer [transact query fast-pull] :as main-db]
@@ -12,24 +13,6 @@
             [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
 
-(defn- argument-type-to-statement-type
-  [argument-type]
-  (case argument-type
-    :argument.type/support :statement.type/support
-    :argument.type/attack :statement.type/attack
-    :argument.type/neutral :statement.type/neutral))
-
-(def statement-rules
-  '[[(statements-from-argument ?argument ?statements)
-     [?argument :argument/conclusion ?statements]]
-    [(statements-from-argument ?argument ?statements)
-     [?argument :argument/premises ?statements]]
-    [(statements ?discussion ?statements)
-     (or-join [?discussion ?statements]
-              [?discussion :discussion/starting-statements ?statements]
-              (and [?arguments :argument/discussions ?discussion]
-                   (statements-from-argument ?arguments ?statements)))]])
-
 (def statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
   [:db/id
@@ -37,37 +20,12 @@
    :statement/version
    :statement/deleted?
    :statement/created-at
+   :statement/parent
+   {:statement/type [:db/ident]}
    {:statement/author user-db/combined-user-pattern}])
 
-(def argument-pattern
-  "Defines the default pattern for arguments. Oftentimes used in pull-patterns
-  in a Datalog query bind the data to this structure."
-  [:db/id
-   :argument/version
-   {:argument/author user-db/combined-user-pattern}
-   {:argument/type [:db/ident]}
-   {:argument/premises statement-pattern}
-   {:argument/conclusion
-    (conj statement-pattern
-          :argument/version
-          {:argument/author user-db/combined-user-pattern}
-          {:argument/type [:db/ident]}
-          {:argument/premises statement-pattern}
-          {:argument/conclusion statement-pattern})}])
-
-(def ^:private argument-pattern-with-secret-premises
-  [:db/id
-   :argument/version
-   {:argument/author user-db/combined-user-pattern}
-   {:argument/type [:db/ident]}
-   {:argument/premises (conj statement-pattern :statement/creation-secret)}
-   {:argument/conclusion
-    (conj statement-pattern
-          :argument/version
-          {:argument/author user-db/combined-user-pattern}
-          {:argument/type [:db/ident]}
-          {:argument/premises statement-pattern}
-          {:argument/conclusion statement-pattern})}])
+(def ^:private statement-pattern-with-secret
+  (conj statement-pattern :statement/creation-secret))
 
 (def discussion-pattern
   "Representation of a discussion. Oftentimes used in a Datalog pull pattern."
@@ -116,8 +74,7 @@
                   (symbol (str "transitive-child-" i)))]
     (apply concat
            '[[(transitive-child-1 ?parent ?child)
-              [?args :argument/conclusion ?parent]
-              [?args :argument/premises ?child]]]
+              [?child :statement/parent ?parent]]]
            (for [i (range 2 (inc depth))]
              [[(list (sib-sym i) '?parent '?child)
                (list 'transitive-child-1 '?parent '?child)]
@@ -179,26 +136,6 @@
   [(s/coll-of :db/id) :ret associative?]
   (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))
 
-(>defn- pack-premises
-  "Packs premises into a statement-structure."
-  ([premises new-conclusion-id discussion-id statement-type user-id]
-   [(s/coll-of :statement/content) :db/id :db/id :statement/type :db/id :ret (s/coll-of map?)]
-   (mapv (fn [premise] {:db/id (str "premise-" premise)
-                        :statement/author user-id
-                        :statement/content premise
-                        :statement/version 1
-                        :statement/created-at (Date.)
-                        :statement/parent new-conclusion-id
-                        :statement/discussions [discussion-id]
-                        :statement/type statement-type})
-         premises))
-  ([premises new-conclusion-id discussion-id statement-type user-id creation-secrets]
-   [(s/coll-of :statement/content) :db/id :db/id :statement/type :db/id (s/coll-of :statement/creation-secret)
-    :ret (s/coll-of map?)]
-   (mapv #(assoc %1 :statement/creation-secret %2)
-         (pack-premises premises new-conclusion-id discussion-id statement-type user-id)
-         creation-secrets)))
-
 (defn- build-new-statement
   "Builds a new statement for transaction."
   ([user-id content discussion-id]
@@ -216,7 +153,7 @@
   [share-hash user-id statement-content registered-user?]
   [:discussion/share-hash :db/id :statement/content any? :ret :db/id]
   (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        minimum-statement (build-new-statement user-id statement-content discussion-id "add/starting-argument")
+        minimum-statement (build-new-statement user-id statement-content discussion-id)
         new-statement (if registered-user?
                         minimum-statement
                         (assoc minimum-statement :statement/creation-secret (.toString (UUID/randomUUID))))
@@ -225,45 +162,15 @@
                         [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
 
-(defn all-arguments-for-conclusion
-  "Get all arguments for a given conclusion."
-  [conclusion-id]
-  (-> (query
-        '[:find [(pull ?arguments argument-pattern) ...]
-          :in $ argument-pattern ?conclusion
-          :where [?arguments :argument/conclusion ?conclusion]]
-        argument-pattern conclusion-id)
+(>defn children-for-statement
+  "Returns all children for a statement. (Statements that have the input set as a parent)."
+  [parent-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (-> (query '[:find [(pull ?children statement-pattern) ...]
+               :in $ ?parent statement-pattern
+               :where [?children :statement/parent ?parent]]
+             parent-id statement-pattern)
       (toolbelt/pull-key-up :db/ident)))
-
-(defn all-premises-for-conclusion
-  "Get all premises for a given conclusion."
-  [conclusion-id]
-  (let [statements
-        (query
-          '[:find (pull ?statements statement-pattern) (pull ?type [:db/ident])
-            :keys :statement :argument-type
-            :in $ statement-pattern ?conclusion
-            :where [?arguments :argument/conclusion ?conclusion]
-            [?arguments :argument/premises ?statements]
-            [?arguments :argument/type ?type]]
-          statement-pattern conclusion-id)]
-    (map (fn [{:keys [statement argument-type]}]
-           (-> statement
-               (assoc :meta/argument-type argument-type)
-               (toolbelt/pull-key-up :db/ident)))
-         statements)))
-
-(defn statements-undercutting-premise
-  "Return all statements that are used to undercut an argument where `statement-id`
-  is used as one of the premises in the undercut argument."
-  [statement-id]
-  (query
-    '[:find [(pull ?undercutting-statements statement-pattern) ...]
-      :in $ statement-pattern ?statement-id
-      :where [?arguments :argument/premises ?statement-id]
-      [?undercutting-arguments :argument/conclusion ?arguments]
-      [?undercutting-arguments :argument/premises ?undercutting-statements]]
-    statement-pattern statement-id))
 
 (>defn all-discussions-by-title
   "Query all discussions based on the title. Could possible be multiple
@@ -275,17 +182,6 @@
           :in $ discussion-pattern ?title
           :where [?discussions :discussion/title ?title]]
         discussion-pattern title)
-      (toolbelt/pull-key-up :db/ident)))
-
-(defn all-arguments-for-discussion
-  "Returns all arguments belonging to a discussion, identified by share-hash."
-  [share-hash]
-  (-> (query
-        '[:find [(pull ?discussion-arguments argument-pattern) ...]
-          :in $ argument-pattern ?share-hash
-          :where [?discussion :discussion/share-hash ?share-hash]
-          [?discussion-arguments :argument/discussions ?discussion]]
-        argument-pattern share-hash)
       (toolbelt/pull-key-up :db/ident)))
 
 (>defn statements-by-content
@@ -326,37 +222,32 @@
         (into #{} q)
         (contains? q :discussion.state/deleted)))
 
-(>defn- new-premises-for-statement!
-  "Creates a new argument based on a statement, which is used as conclusion."
-  [share-hash user-id new-conclusion-id new-statement-string argument-type registered-user?]
-  [:discussion/share-hash :db/id :db/id :statement/content :argument/type any? :ret associative?]
-  (let [discussion-id (:db/id (discussion-by-share-hash share-hash))
-        statement-type (argument-type-to-statement-type argument-type)
-        new-arguments
-        [{:db/id (str "argument-" new-statement-string)
-          :argument/author user-id
-          :argument/premises
-          (if registered-user?
-            (pack-premises [new-statement-string] new-conclusion-id discussion-id statement-type user-id)
-            (pack-premises [new-statement-string] new-conclusion-id discussion-id statement-type user-id
-                           [(.toString (UUID/randomUUID))]))
-          :argument/conclusion new-conclusion-id
-          :argument/version 1
-          :argument/type argument-type
-          :argument/discussions [discussion-id]}]]
-    @(transact new-arguments)))
+(>defn- new-child-statement!
+  "Creates a new child statement, that references a parent."
+  [discussion-id parent-id new-content statement-type user-id registered-user?]
+  [(s/or :id :db/id :tuple vector?) :db/id :statement/content :statement/type :db/id any? :ret associative?]
+  @(transact
+     [(cond->
+        {:db/id (str "new-child-" new-content)
+         :statement/author user-id
+         :statement/content new-content
+         :statement/version 1
+         :statement/created-at (Date.)
+         :statement/parent parent-id
+         :statement/discussions [discussion-id]
+         :statement/type statement-type}
+        (not registered-user?) (assoc :statement/creation-secret (.toString (UUID/randomUUID))))]))
 
 (>defn react-to-statement!
-  "Create a new statement reacting to another statement. Returns the newly created argument."
+  "Create a new statement reacting to another statement. Returns the newly created statement."
   [share-hash user-id statement-id reacting-string reaction registered-user?]
-  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/argument]
-  (let [argument-id
-        (get-in
-          (new-premises-for-statement! share-hash user-id statement-id reacting-string reaction registered-user?)
-          [:tempids (str "argument-" reacting-string)])
-        argument-pattern (if registered-user? argument-pattern argument-pattern-with-secret-premises)]
+  [:discussion/share-hash :db/id :db/id :statement/content keyword? any? :ret ::specs/statement]
+  (let [result (new-child-statement! [:discussion/share-hash share-hash] statement-id reacting-string
+                                     reaction user-id registered-user?)
+        db-after (:db-after result)
+        new-child-id (get-in result [:tempids (str "new-child-" reacting-string)])]
     (toolbelt/pull-key-up
-      (fast-pull argument-id argument-pattern)
+      (d/pull db-after statement-pattern-with-secret new-child-id)
       :db/ident)))
 
 (>defn new-discussion
@@ -416,26 +307,14 @@
   "Returns all statements belonging to a discussion."
   [share-hash]
   [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
-  (distinct
-    (concat
-      (query
-        '[:find [(pull ?statements statement-pattern) ...]
-          :in $ ?share-hash statement-pattern
-          :where [?discussion :discussion/share-hash ?share-hash]
-          [?arguments :argument/discussions ?discussion]
-          (or
-            [?arguments :argument/conclusion ?statements]
-            [?arguments :argument/premises ?statements])
-          [?statements :statement/version _]]
-        share-hash statement-pattern)
-      ;; When there are no reactions to the starting statement, the starting statements
-      ;; need to be checked explicitly, because there will be no arguments containing them.
-      (query
-        '[:find [(pull ?statements statement-pattern) ...]
-          :in $ ?share-hash statement-pattern
-          :where [?discussion :discussion/share-hash ?share-hash]
-          [?discussion :discussion/starting-statements ?statements]]
-        share-hash statement-pattern))))
+  (->
+    (query '[:find [(pull ?statements statement-pattern) ...]
+             :in $ ?share-hash statement-pattern
+             :where [?discussion :discussion/share-hash ?share-hash]
+             [?statements :statement/discussions ?discussion]
+             (not [?statements :statement/deleted? true])]
+           share-hash statement-pattern)
+    (toolbelt/pull-key-up :db/ident)))
 
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
@@ -447,7 +326,8 @@
        :id (:db/id statement)
        :label (if (:statement/deleted? statement)
                 config/deleted-statement-text
-                (:statement/content statement))})
+                (:statement/content statement))
+       :type (:statement/type statement)})
     (all-statements share-hash)))
 
 (defn all-discussions
@@ -464,36 +344,26 @@
   "Checks whether the statement-id matches the share-hash."
   [statement-id share-hash]
   [:db/id :discussion/share-hash :ret (? :db/id)]
-  (or
-    (query
-      '[:find ?discussion .
-        :in $ ?statement ?hash
-        :where [?discussion :discussion/share-hash ?hash]
-        [?argument :argument/discussions ?discussion]
-        (or [?argument :argument/premises ?statement]
-            [?argument :argument/conclusion ?statement])]
-      statement-id share-hash)
-    (query
-      '[:find ?discussion .
-        :in $ ?statement ?hash
-        :where [?discussion :discussion/share-hash ?hash]
-        [?discussion :discussion/starting-statements ?statement]]
-      statement-id share-hash)))
+  (query
+    '[:find ?discussion .
+      :in $ ?statement ?hash
+      :where [?discussion :discussion/share-hash ?hash]
+      [?statement :statement/discussions ?discussion]]
+    statement-id share-hash))
 
 (>defn change-statement-text-and-type
-  "Changes the content of a statement to `new-content` and the type to `new-type` if it's an argument."
-  [statement-id new-type new-content]
-  [:db/id :argument/type :statement/content :ret ::specs/statement]
-  (log/info "Statement" statement-id "edited with new content.")
-  (if-let [argument (main-db/fast-pull statement-id '[:argument/_premises])]
-    (let [argument-id (-> argument :argument/_premises first :db/id)
-          statement-type (argument-type-to-statement-type new-type)]
-      (log/info "Argument" argument-id "updated to new type " new-type)
-      @(transact [[:db/add statement-id :statement/content new-content]
-                  [:db/add statement-id :statement/type statement-type]
-                  [:db/add argument-id :argument/type new-type]]))
-    @(transact [[:db/add statement-id :statement/content new-content]]))
-  (fast-pull statement-id statement-pattern))
+  "Changes the content of a statement to `new-content` and the type to `new-type` if it has a parent."
+  [statement new-type new-content]
+  [map? :statement/type :statement/content :ret ::specs/statement]
+  (let [statement-id (:db/id statement)]
+    (log/info "Statement" statement-id "edited with new content.")
+    (if (:statement/parent statement)
+      (do
+        (log/info "Statement" statement-id "updated to new type " new-type)
+        @(transact [[:db/add statement-id :statement/content new-content]
+                    [:db/add statement-id :statement/type new-type]]))
+      @(transact [[:db/add statement-id :statement/content new-content]]))
+    (toolbelt/pull-key-up (fast-pull statement-id statement-pattern) :db/ident)))
 
 (>defn add-admin-to-discussion
   "Adds an admin user to a discussion."
@@ -530,66 +400,11 @@
   "Searches the content of statements in a schnaq and returns the corresponding statements."
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-  (query '[:find [(pull ?statements statement-pattern) ...]
-           :in $ % statement-pattern ?share-hash ?search-string
-           :where [?discussion :discussion/share-hash ?share-hash]
-           (statements ?discussion ?statements)
-           [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
-         statement-rules statement-pattern share-hash search-string))
-
-(defn migrate-argument-data-to-statements
-  "Migrates argument-data to statements, no more need for arguments."
-  []
-  (let [type-conversion-fn #(case %
-                              :argument.type/support :statement.type/support
-                              :argument.type/attack :statement.type/attack
-                              :argument.type/neutral :statement.type/neutral)
-        arguments
-        (->>
-          (query '[:find [(pull ?arguments argument-pattern) ...]
-                   :in $ argument-pattern
-                   :where [?arguments :argument/version _]]
-                 '[{:argument/type [:db/ident]}
-                   {:argument/premises [:db/id]}
-                   {:argument/conclusion [:db/id
-                                          :argument/version]}
-                   :argument/discussions])
-          (map #(update % :argument/premises first))
-          (remove #(get-in % [:argument/conclusion :argument/version])))
-        txs (mapv #(hash-map :db/id (-> % :argument/premises :db/id)
-                             :statement/parent (-> % :argument/conclusion :db/id)
-                             :statement/type (-> % :argument/type :db/ident type-conversion-fn)
-                             :statement/discussions (->> % :argument/discussions (mapv :db/id)))
-                  arguments)
-        ;; Migrate starting-statements to contain discussions as well
-        discussions-with-startings (query '[:find ?starting ?discussions
-                                            :where [?discussions :discussion/starting-statements ?starting]])
-        starting-txs (mapv #(vector :db/add (first %) :statement/discussions (second %)) discussions-with-startings)]
-    @(transact txs)
-    @(transact starting-txs)))
-
-(defn migrate-titles-to-fulltext-search
-  "Creates new titles that are fulltext-searchable"
-  []
-  (let [rename-tx [{:db/id :discussion/title
-                    :db/ident :discussion/deprecated-title-2021-05-11}]
-        fresh-tx [{:db/ident :discussion/title
-                   :db/valueType :db.type/string
-                   :db/fulltext true
-                   :db/cardinality :db.cardinality/one
-                   :db/doc "The title / heading of a discussion."}]
-        discussions (query '[:find [(pull ?discussions [*]) ...]
-                             :where [?discussions :discussion/share-hash _]])
-        title-txs (mapv #(vector :db/add (:db/id %) :discussion/title (:discussion/deprecated-title-2021-05-11 %))
-                        discussions)]
-    @(transact rename-tx)
-    @(transact fresh-tx)
-    @(transact title-txs)))
-
-(comment
-  (migrate-titles-to-fulltext-search)
-
-  (migrate-argument-data-to-statements)
-
-  (fast-pull 17592186045446 '[*])
-  )
+  (->
+    (query '[:find [(pull ?statements statement-pattern) ...]
+             :in $ statement-pattern ?share-hash ?search-string
+             :where [?discussion :discussion/share-hash ?share-hash]
+             [?statements :statement/discussions ?discussion]
+             [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
+           statement-pattern share-hash search-string)
+    (toolbelt/pull-key-up :db/ident)))

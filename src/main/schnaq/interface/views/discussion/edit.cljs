@@ -30,8 +30,8 @@
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
        (when (and is-not-start? pro-con-enabled?)
-         [input/argument-type-choose-button [:statement.edit/argument-type statement-id]
-          [:statement.edit/change-argument-type statement-id]])]
+         [input/statement-type-choose-button [:statement.edit/statement-type statement-id]
+          [:statement.edit/change-statement-type statement-id]])]
       [:div.d-flex.mb-3
        [:button.btn.btn-outline-secondary
         {:on-click (fn [e]
@@ -44,7 +44,7 @@
   :statement.edit/send
   (fn [{:keys [db]} [_ statement-id html-selector form]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])
-          new-type (get-in db [:statements :edit-type statement-id] :argument.type/neutral)]
+          new-type (get-in db [:statements :edit-type statement-id] :statement.type/neutral)]
       {:fx [(http/xhrio-request db :put "/discussion/statement/edit"
                                 [:statement.edit.send/success form]
                                 {:statement-id statement-id
@@ -55,22 +55,16 @@
 
 (defn- update-statement-in-list
   "Updates the content of a statement in a collection."
-  ([coll new-statement]
-   (update-statement-in-list coll new-statement nil))
-  ([coll new-statement new-type]
-   (let [new-statement (if new-type (assoc new-statement :meta/argument-type new-type)
-                                    new-statement)]
-     ;; Merge instead of overwriting, to preserve meta information
-     (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))))
+  [coll new-statement]
+  (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))
 
 (rf/reg-event-fx
   :statement.edit.send/success
   (fn [{:keys [db]} [_ form response]]
-    (let [updated-statement (:updated-statement response)
-          updated-type (get-in db [:statements :edit-type (:db/id updated-statement)] nil)]
+    (let [updated-statement (:updated-statement response)]
       {:db (-> db
                (update-in [:discussion :conclusions :starting] #(update-statement-in-list % updated-statement))
-               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement updated-type)))
+               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement)))
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
 
@@ -106,11 +100,11 @@
     (contains? (get-in db [:statements :currently-edited] #{}) statement-id)))
 
 (rf/reg-event-db
-  :statement.edit/change-argument-type
-  (fn [db [_ id argument-type]]
-    (assoc-in db [:statements :edit-type id] argument-type)))
+  :statement.edit/change-statement-type
+  (fn [db [_ id statement-type]]
+    (assoc-in db [:statements :edit-type id] statement-type)))
 
 (rf/reg-sub
-  :statement.edit/argument-type
+  :statement.edit/statement-type
   (fn [db [_ id]]
-    (get-in db [:statements :edit-type id] :argument.type/neutral)))
+    (get-in db [:statements :edit-type id] :statement.type/neutral)))

@@ -31,14 +31,14 @@
 (deftest number-of-usernames-test
   (testing "Return the correct number of usernames"
     ;; There are at least the 4 users from the test-set
-    (is (= 6 (db/number-of-usernames)))
+    (is (= 3 (db/number-of-usernames)))
     (user-db/add-user-if-not-exists "Some-Testdude")
-    (is (= 7 (db/number-of-usernames)))
+    (is (= 4 (db/number-of-usernames)))
     (is (zero? (db/number-of-usernames (Instant/now))))))
 
 (deftest number-of-statements-test
   (testing "Return the correct number of statements."
-    (is (= 38 (db/number-of-statements)))
+    (is (= 28 (db/number-of-statements)))
     (is (zero? (db/number-of-statements (Instant/now))))
     (let [user-id (user-db/add-user-if-not-exists "Wegi")
           share-hash "asd"]
@@ -47,22 +47,22 @@
                                      :discussion/share-hash share-hash
                                      :discussion/author user-id} true)
       (discussion-db/add-starting-statement! share-hash user-id "test" false)
-      (is (= 39 (db/number-of-statements))))))
+      (is (= 29 (db/number-of-statements))))))
 
 (deftest average-number-of-statements-test
   (testing "Test whether the average number of statements fits."
-    (is (= 38/4 (db/average-number-of-statements)))
+    (is (= 28/4 (db/average-number-of-statements)))
     (any-discussion)
-    (is (= 38/5 (db/average-number-of-statements)))))
+    (is (= 28/5 (db/average-number-of-statements)))))
 
 (deftest number-of-active-users-test
   (testing "Test whether the active users are returned correctly."
-    (is (= 4 (db/number-of-active-discussion-users)))
+    (is (= 3 (db/number-of-active-discussion-users)))
     (let [woggler-id (user-db/add-user-if-not-exists "wooooggler")]
-      (is (= 4 (db/number-of-active-discussion-users)))
+      (is (= 3 (db/number-of-active-discussion-users)))
       (main-db/transact
         [(discussion-db/add-starting-statement! "cat-dog-hash" woggler-id "Alles doof" false)]))
-    (is (= 5 (db/number-of-active-discussion-users)))))
+    (is (= 4 (db/number-of-active-discussion-users)))))
 
 (deftest statement-length-stats-test
   (testing "Testing the function that returns lengths of statements statistics"
@@ -73,9 +73,9 @@
       (is (> (:max stats) (:average stats)))
       (is float? (:average stats)))))
 
-(deftest argument-type-stats-test
-  (testing "Statistics about argument types should be working."
-    (let [stats (db/argument-type-stats)]
+(deftest statement-type-stats-test
+  (testing "Statistics about statement types should be working."
+    (let [stats (db/statement-type-stats)]
       (is (= 7 (:attacks stats)))
       (is (= 15 (:supports stats)))
-      (is (= 9 (:undercuts stats))))))
+      (is (= 0 (:neutrals stats))))))
