@@ -1,0 +1,54 @@
+@use 'rounded' as rounded;
+@use 'variables' as vars;
+
+.speech-bubble {
+  @include rounded.rounded-2;
+  background: vars.$white;
+  color: vars.$black;
+  line-height: 2em;
+  padding: 0.5rem;
+  position: relative;
+
+  &::after {
+    border: 0.625rem solid transparent;
+    border-left-color: #fff;
+    border-right: 0;
+    content: '';
+    height: 0;
+    margin-right: -0.625em;
+    margin-top: -0.625em;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0;
+  }
+}
+
+
+
+//.speech-bubble {
+//  @include rounded.rounded-5;
+//  background: #fff;
+//  color: #000;
+//  font-family: sans-serif;
+//  font-size: 1rem;
+//  line-height: 1rem;
+//  padding: 1rem;
+//  position: relative;
+//  text-align: center;
+//  width: 100px;
+//}
+//
+//.speech-bubble-bottom-right::before {
+//  border-bottom: 20px solid transparent;
+//  border-left: 15px solid transparent;
+//  border-right: 24px solid #fff;
+//  border-top: 12px solid #fff;
+//  bottom: -1rem;
+//  content: '';
+//  height: 0;
+//  left: 3rem;
+//  position: absolute;
+//  transform: rotate(-20deg);
+//  width: 0;
+//}

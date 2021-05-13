@@ -8,6 +8,7 @@
             [oops.core :refer [oget oset!]]
             [reagent.core :as reagent]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.text.display-data :refer [img-path]]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (>defn identicon
@@ -138,6 +139,18 @@
   (let [new-title (gstring/format "schnaq - %s" title)]
     (oset! js/document [:title] new-title)))
 
+
+;; -----------------------------------------------------------------------------
+;; schnaqqi stuff
+
+(defn schnaqqi-speech-bubble
+  "Create a speech bubble left of schnaqqi and let him speak to the audience."
+  [schnaqqi-size bubble-content]
+  [:article.d-flex
+   [:div.speech-bubble bubble-content]
+   [:img {:style {:width schnaqqi-size}
+          :alt "schnaqqi speaking"
+          :src (img-path :schnaqqifant/white)}]])
 
 ;; -----------------------------------------------------------------------------
 ;; Form-related
