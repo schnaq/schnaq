@@ -5,7 +5,7 @@
   @include rounded.rounded-2;
   background: vars.$white;
   color: vars.$black;
-  line-height: 2em;
+  line-height: 2rem;
   padding: 0.5rem;
   position: relative;
 
@@ -15,8 +15,8 @@
     border-right: 0;
     content: '';
     height: 0;
-    margin-right: -0.625em;
-    margin-top: -0.625em;
+    margin-right: -0.625rem;
+    margin-top: -0.625rem;
     position: absolute;
     right: 0;
     top: 50%;
