@@ -14,25 +14,7 @@
     (let [old-name (ls/get-item :username)
           username (or (:username local-storage) old-name)]
       (if username
-        {:db (assoc-in db [:user :names :display] username)}
-        {:fx [[:dispatch [:username/notification-set-name]]]}))))
-
-(rf/reg-event-fx
-  :username/notification-set-name
-  (fn [_ _]
-    (let [notification-id "username/notification-set-name"]
-      {:fx [[:dispatch
-             [:notification/add
-              #:notification{:id notification-id
-                             :title (labels :user.set-name/dialog-header)
-                             :body [:<>
-                                    [:p (labels :user.set-name/dialog-lead)]
-                                    [:p (labels :user.set-name/dialog-body)]
-                                    [:div.mt-2.btn.btn-sm.btn-outline-primary
-                                     {:on-click #(rf/dispatch [:username/open-dialog])}
-                                     (labels :user.set-name/dialog-button)]]
-                             :context :info
-                             :stay-visible? true}]]]})))
+        {:db (assoc-in db [:user :names :display] username)}))))
 
 (rf/reg-event-fx
   :username/open-dialog
