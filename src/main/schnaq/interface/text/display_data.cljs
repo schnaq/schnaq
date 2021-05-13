@@ -39,8 +39,11 @@
         ;; how-to
         :how-to/button "How to schnaq?"
         :how-to/title "How to schnaq?"
-        :how-to.create/title "Which topic do you want to schnaq about and with whom?"
-        :how-to.create/body "Put in a descriptive title and choose whether you want to schnaq with the whole world or rather schnaq in private"
+        :how-to.create/title "What would you like to schnaq about with your team??"
+        :how-to.create/body
+        [:<>
+         [:p [:i "\"Which systems do we use and when?\", \"What price do we offer educational institutions?\", \"What is our vision?\""]]
+         [:p "Give your schnaq a meaningful title and let the whole team discuss. All contributions are important and offer an individual perspective on the discussion."]]
         :how-to.why/title "Why should I schnaq?"
         :how-to.why/body "Fluffed your lines? Didn't get a chance to speak? Did everyone get everything? No clue why the discussion took so long?\nSave your time and store your knowledge in schnaq. Participate whenever you like. The mindmap of the discussion is on the house."
         :how-to.admin/title "Administer your schnaq or invite someone to help you"
@@ -156,7 +159,7 @@
         :schnaq.header-image.url/failed-setting-body "The image will not be used as preview image."
 
         ;; Create schnaq
-        :schnaq.create.input/placeholder "What should the name of your schnaq be?"
+        :schnaq.create.input/placeholder "What would you like to discuss with your team?"
         :schnaq.create.public/help-text "Publicly lists your schnaq."
         :schnaq.create.hub/help-text "Directly assign your schnaq to a hub."
         :meeting/copy-link-tooltip "Click here to copy your link"
@@ -193,6 +196,8 @@
 
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
+        :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
+        :schnaq.create/schnaqqi-speech "Create your schnaq and invite your whole team in the next step!"
         :schnaq.create.button/save "Start a new schnaq"
 
         ;; Discussion Creation
@@ -772,8 +777,11 @@
         ;; how-to
         :how-to/button "Wie schnaqqe ich?"
         :how-to/title "Wie verwende ich schnaq?"
-        :how-to.create/title "Worüber möchtest du schnaqqen und mit wem?"
-        :how-to.create/body "Gib deinem schnaq einen aussagekräftigen Titel und wähle aus, ob du mit der ganzen Welt schnaqqen willst, oder lieber selbst entscheidest wer mitschnaqqt."
+        :how-to.create/title "Worüber möchtest du mit deinem Team schnaqqen?"
+        :how-to.create/body
+        [:<>
+         [:p [:i "\"Welche Systeme nutzen wir wann?\", \"Welchen Preis bieten wir Bildungseinrichtungen?\", \"Was ist unsere Vision?\""]]
+         [:p "Gib deinem schnaq einen aussagekräftigen Titel und lasse das ganze Team diskutieren. Alle Beiträge sind wichtig und bieten eine individuelle Sicht auf die Diskussion."]]
         :how-to.why/title "Wieso soll ich schnaqqen?"
         :how-to.why/body "Faden verloren? Nicht zu Wort gekommen? Haben alle alles verstanden? Mal wieder keine Ahnung warum so viel diskutiert wurde?\nSpar dir Zeit und halte Wissen mit schnaq fest. Nimm teil, wann du Zeit hast. Die Mindmap der Diskussion gibt's geschenkt."
         :how-to.admin/title "Administriere deinen schnaq oder lass dir helfen"
@@ -892,7 +900,7 @@
 
 
         ;; Create schnaq
-        :schnaq.create.input/placeholder "Wie soll dein schnaq heißen?"
+        :schnaq.create.input/placeholder "Worüber möchtest du mit deinem Team diskutieren?"
         :schnaq.create.public/help-text "Damit wird dein schnaq öffentlich gelistet und zugänglich sein."
         :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
         :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
@@ -928,6 +936,8 @@
 
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
+        :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
+        :schnaq.create/schnaqqi-speech "Erstelle deinen schnaq und lade im nächsten Schritt dein ganzes Team ein!"
         :schnaq.create.button/save "Schnaq starten"
 
         ;; Discussion Creation

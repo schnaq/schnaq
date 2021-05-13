@@ -1,0 +1,25 @@
+@use 'rounded' as rounded;
+@use 'variables' as vars;
+
+.speech-bubble {
+  @include rounded.rounded-2;
+  background: vars.$white;
+  color: vars.$black;
+  line-height: 2rem;
+  padding: 0.5rem;
+  position: relative;
+
+  &::after {
+    border: 0.625rem solid transparent;
+    border-left-color: #fff;
+    border-right: 0;
+    content: '';
+    height: 0;
+    margin-right: -0.625rem;
+    margin-top: -0.625rem;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0;
+  }
+}
