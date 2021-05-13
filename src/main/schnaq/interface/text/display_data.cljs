@@ -197,7 +197,7 @@
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
         :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
-        :schnaq.create/schnaqqi-speech "Create your schnaq and invite your whole team in the next step"
+        :schnaq.create/schnaqqi-speech "Create your schnaq and invite your whole team in the next step!"
         :schnaq.create.button/save "Start a new schnaq"
 
         ;; Discussion Creation
@@ -937,7 +937,7 @@
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
         :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
-        :schnaq.create/schnaqqi-speech "Erstelle deinen schnaq und lade im nächsten Schritt dein ganzes Team ein"
+        :schnaq.create/schnaqqi-speech "Erstelle deinen schnaq und lade im nächsten Schritt dein ganzes Team ein!"
         :schnaq.create.button/save "Schnaq starten"
 
         ;; Discussion Creation

@@ -53,9 +53,7 @@
   [:div.d-flex.justify-content-end.pt-3
    [common/schnaqqi-speech-bubble
     "100px"
-    [:<>
-     (labels :schnaq.create/schnaqqi-speech) " "
-     [:i.fa.far.fa-heart]]]])
+    (labels :schnaq.create/schnaqqi-speech)]])
 
 (defn- create-schnaq-page []
   (let [dispatch-fn #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
