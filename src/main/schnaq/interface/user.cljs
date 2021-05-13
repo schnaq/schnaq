@@ -2,7 +2,6 @@
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.views.modals.modal :as modal]))
@@ -13,7 +12,7 @@
     ;; DEPRECATED, deleted after 2021-09-22: Remove old-name and only use name from first or clause
     (let [old-name (ls/get-item :username)
           username (or (:username local-storage) old-name)]
-      (if username
+      (when username
         {:db (assoc-in db [:user :names :display] username)}))))
 
 (rf/reg-event-fx
