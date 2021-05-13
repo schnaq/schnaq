@@ -10,9 +10,9 @@
 (defn text-box
   "Text box with title and a body."
   [title body]
-  [:article.feature-text-box.pb-5
+  [:article.feature-text-box.pb-3
    [:h5 (labels title)]
-   [:p (labels body)]])
+   (labels body)])
 
 (defn feature-row-video-left
   "Feature row where the video is located on the right side."
@@ -52,10 +52,10 @@
           [text-box title body]
           [:div.feature-text-box
            [:p (labels :how-to/ask-question-2)
-            [:a {:href (reitfe/href :routes/how-to)}
+            [:a.btn.btn-link {:href (reitfe/href :routes/how-to)}
              (labels :how-to/answer-question)]]
            [:p (labels :how-to/question-dont-show-again)
-            [:button.btn.btn-link.clickable-no-hover
+            [:button.btn.btn-link
              {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
              (labels :how-to/answer-dont-show-again)]]]]
          [:div.col-12.col-lg-4.offset-lg-1

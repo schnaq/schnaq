@@ -49,10 +49,20 @@
                      :key group-id}
             (get-in hubs [group-id :hub/name])])]])]))
 
+(defn- schnaqqi-intro-bubble []
+  [:div.d-flex.justify-content-end.pt-3
+   [common/schnaqqi-speech-bubble
+    "100px"
+    [:<>
+     (labels :schnaq.create/schnaqqi-speech) " "
+     [:i.fa.far.fa-heart]]]])
+
 (defn- create-schnaq-page []
   (let [dispatch-fn #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
     [pages/with-nav-and-header
-     {:page/heading (labels :schnaq.create/heading)}
+     {:page/heading (labels :schnaq.create/heading)
+      :page/subheading (labels :schnaq.create/subheading)
+      :page/more-for-heading (with-meta [schnaqqi-intro-bubble] {:key "schnaqqi-create-speechbubble"})}
      [:div.container
       [:div.py-3.mt-3
        [:form
