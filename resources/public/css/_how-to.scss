@@ -1,3 +1,4 @@
+@use 'rounded' as rounded;
 @import 'variables';
 
 .how-to-video-row {
@@ -6,11 +7,11 @@
 }
 
 .chat-background {
-  background-image: url('../imgs/backrgound/background_clutter.svg');
+  background-image: url('../imgs/background/background_clutter.svg');
 }
 
 .bubble-background {
-  background-image: url('../imgs/backrgound/bubble-fade.svg');
+  background-image: url('../imgs/background/bubble-fade.svg');
   background-repeat: no-repeat;
 }
 
@@ -20,7 +21,7 @@
 }
 
 .quick-how-to {
-  @include rounded-3;
+  @include rounded.rounded-3;
   background-color: $gray-200;
   box-shadow: $regular-shadow;
   color: $text-dark;

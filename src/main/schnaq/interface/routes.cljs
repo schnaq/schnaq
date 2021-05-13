@@ -127,11 +127,11 @@
       :controllers [{:start (fn []
                               (rf/dispatch [:schnaqs.visited/load]))}]}]]
    ["schnaq"
+    {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
     ["/create"
      {:name :routes.schnaq/create
       :view create/create-schnaq-view
-      :link-text (labels :router/create-schnaq)
-      :controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}]
+      :link-text (labels :router/create-schnaq)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}

@@ -2,7 +2,6 @@
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.views.modals.modal :as modal]))
@@ -13,26 +12,8 @@
     ;; DEPRECATED, deleted after 2021-09-22: Remove old-name and only use name from first or clause
     (let [old-name (ls/get-item :username)
           username (or (:username local-storage) old-name)]
-      (if username
-        {:db (assoc-in db [:user :names :display] username)}
-        {:fx [[:dispatch [:username/notification-set-name]]]}))))
-
-(rf/reg-event-fx
-  :username/notification-set-name
-  (fn [_ _]
-    (let [notification-id "username/notification-set-name"]
-      {:fx [[:dispatch
-             [:notification/add
-              #:notification{:id notification-id
-                             :title (labels :user.set-name/dialog-header)
-                             :body [:<>
-                                    [:p (labels :user.set-name/dialog-lead)]
-                                    [:p (labels :user.set-name/dialog-body)]
-                                    [:div.mt-2.btn.btn-sm.btn-outline-primary
-                                     {:on-click #(rf/dispatch [:username/open-dialog])}
-                                     (labels :user.set-name/dialog-button)]]
-                             :context :info
-                             :stay-visible? true}]]]})))
+      (when username
+        {:db (assoc-in db [:user :names :display] username)}))))
 
 (rf/reg-event-fx
   :username/open-dialog

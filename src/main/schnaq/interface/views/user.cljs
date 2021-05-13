@@ -57,8 +57,7 @@
           [[:dispatch [:notification/add
                        #:notification{:title (labels :user.button/set-name)
                                       :body (labels :user.button/success-body)
-                                      :context :success}]]
-           [:dispatch [:notification/remove "username/notification-set-name"]]]]
+                                      :context :success}]]]]
       ;; Show notification if user is not default anonymous display name
       (cond-> {:db (assoc-in db [:controls :username-input :show?] false)}
               (not= default-anonymous-display-name username) (assoc :fx notification)))))
