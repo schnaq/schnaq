@@ -31,7 +31,8 @@
   (fn [{:keys [db]} [_ result]]
     (when result
       {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
-                                {:creation-secrets (get-in db [:discussion :statements :creation-secrets])})]})))
+                                {:creation-secrets (get-in db [:discussion :statements :creation-secrets])
+                                 :visited-hashes (get-in db [:schnaqs :visited-hashes])})]})))
 
 (rf/reg-event-fx
   :user.register/success

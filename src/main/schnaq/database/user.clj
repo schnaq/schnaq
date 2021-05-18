@@ -72,6 +72,13 @@
     (transact add-new-groups)
     groups))
 
+(defn- update-visited-schnaqs
+  "Updates the users visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."
+  [keycloak-id visited-schnaqs]
+  (let [txs (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/visited-schnaqs %)
+                  visited-schnaqs)]
+    (transact txs)))
+
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
   [{:keys [id given_name family_name email]} existing-user]
@@ -94,8 +101,8 @@
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist. Returns a tuple which contains
   whether the user is newly created and the user entity itself."
-  [{:keys [id email preferred_username given_name family_name groups] :as identity}]
-  [associative? :ret (s/tuple boolean? ::specs/registered-user)]
+  [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs]
+  [associative? (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-pattern)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
@@ -104,11 +111,13 @@
                   :user.registered/display-name preferred_username
                   :user.registered/first-name given_name
                   :user.registered/last-name family_name
-                  :user.registered/groups groups}]
+                  :user.registered/groups groups
+                  :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       (do
         (update-user-info identity existing-user)
         (update-groups id groups)
+        (update-visited-schnaqs id visited-schnaqs)
         [false existing-user])
       [true (-> @(transact [(clean-db-vals new-user)])
                 (get-in [:tempids temp-id])
