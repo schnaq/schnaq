@@ -22,4 +22,13 @@
     top: 50%;
     width: 0;
   }
+
+}
+
+.speech-bubble-bordered {
+  border: 1px solid vars.$gray-600;
+
+  &::after {
+    border-left-color: vars.$gray-600;
+  }
 }

@@ -6,7 +6,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
-            [schnaq.interface.views.modals.modal :as modal]
+            [schnaq.interface.views.modal :as modal]
             [schnaq.user :as user]))
 
 (>defn- build-author-list
@@ -78,7 +78,7 @@
         authors (conj (-> statement :meta/sub-discussion-info :authors)
                       (user/statement-author statement))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
-    [:p.mb-0
+    [:<>
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       (if new?
         [:i.secondary-color pill-class]

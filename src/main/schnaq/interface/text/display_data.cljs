@@ -163,8 +163,8 @@
         :schnaq.create.public/help-text "Publicly lists your schnaq."
         :schnaq.create.hub/help-text "Directly assign your schnaq to a hub."
         :meeting/copy-link-tooltip "Click here to copy your link"
-        :meeting/link-copied-heading "Link copied"
-        :meeting/link-copied-success "The link was copied to your clipboard!"
+        :schnaq/link-copied-heading "Link copied"
+        :schnaq/link-copied-success "The link was copied to your clipboard!"
         :schnaq/created-success-heading "Your schnaq was created!"
         :schnaq/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
         :schnaqs/continue-with-schnaq-after-creation "Did you invite everybody? Lets go!"
@@ -188,6 +188,7 @@
         :discussion.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
         :discussion.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
 
+        :statement/reply "Reply"
         :statement.edit.send.failure/title "Edit could not be made"
         :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
         :statement.edit/label "Edit statement"
@@ -416,6 +417,12 @@
         :legal-note.privacy/title "Privacy Policy"
         :legal-note.privacy/body "You can find our privacy policy here."
 
+        ;; Celebrations
+        :celebrations.schnaq-filled/title "🎉 Congratulations 🎉"
+        :celebrations.schnaq-filled/lead "You have filled a new schnaq with a first statement. This is the first milestone towards a successful discussion 💪"
+        :celebrations.schnaq-filled/share-now "Now share the schnaq with your team!"
+        :celebrations.schnaq-filled/button "Sharing Options"
+
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
         :schnaqs.not-found/alert-body "Invite people to your first schnaq after you created it."
@@ -439,8 +446,12 @@
         :meeting.admin-center.edit/administrate "Administrate schnaq"
         :meeting/admin-center-export "Download schnaq as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
-        :meeting/share-link-tooltip "Copy share-link"
+        :share-link/copy "Copy share-link"
 
+        :sharing/tooltip "Share"
+        :sharing.modal/title "Share your schnaq"
+        :sharing.modal/lead "Invite your whole team to fill this schnaq with knowledge."
+        :sharing.modal/schnaqqi-help "Fill the schnaq with your ideas. Your colleagues will find it easier to get started."
 
         ;; Discussion Language
         :discussion/create-argument-action "Add Statement"
@@ -904,8 +915,8 @@
         :schnaq.create.public/help-text "Damit wird dein schnaq öffentlich gelistet und zugänglich sein."
         :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
         :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
-        :meeting/link-copied-heading "Link kopiert"
-        :meeting/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
+        :schnaq/link-copied-heading "Link kopiert"
+        :schnaq/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
         :schnaq/created-success-heading "Dein schnaq wurde erstellt!"
         :schnaq/created-success-subheading "Nun kannst du den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
         :schnaqs/continue-with-schnaq-after-creation "Alle eingeladen? Los geht's!"
@@ -928,6 +939,7 @@
         :discussion.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
         :discussion.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
 
+        :statement/reply "Antworten"
         :statement.edit.send.failure/title "Änderung nicht gespeichert"
         :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
         :statement.edit/label "Beitrag bearbeiten"
@@ -1152,6 +1164,12 @@
         :legal-note.privacy/title "Datenschutzerklärung"
         :legal-note.privacy/body "Unsere Datenschutzerklärung finden Sie hier."
 
+        ;; Celebrations
+        :celebrations.schnaq-filled/title "🎉 Glückwunsch 🎉"
+        :celebrations.schnaq-filled/lead "Du hast einen neuen schnaq mit einer ersten Aussage befüllt. Das ist der erste Meilenstein zu einer erfolgreichen Diskussion 💪"
+        :celebrations.schnaq-filled/share-now "Teile nun den schnaq mit deinem Team!"
+        :celebrations.schnaq-filled/button "Optionen zum Teilen"
+
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."
         :schnaqs.not-found/alert-body "Lade zu deinem ersten schnaq ein, indem du einen erstellst."
@@ -1175,7 +1193,12 @@
         :meeting.admin-center.edit/administrate "schnaq administrieren"
         :meeting/admin-center-export "schnaq als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
-        :meeting/share-link-tooltip "Zugangslink kopieren"
+        :share-link/copy "Zugangslink kopieren"
+
+        :sharing/tooltip "Teilen"
+        :sharing.modal/title "Teile deinen schnaq"
+        :sharing.modal/lead "Lade dein ganzes Team mit ein, um diesen schnaq mit Wissen zu befüllen"
+        :sharing.modal/schnaqqi-help "Befülle den schnaq schonmal mit deinen Ideen. Deine Kolleg:innen finden so einen leichteren Einstieg."
 
         ;; Discussion Language
         :discussion/create-argument-action "Beitrag hinzufügen"

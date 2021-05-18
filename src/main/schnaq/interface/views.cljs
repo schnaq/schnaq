@@ -2,7 +2,7 @@
   (:require [re-frame.core :as rf]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.feedback.collect :as feedback]
-            [schnaq.interface.views.modals.modal :as modal]
+            [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :as notifications]))
 
 (defn- base-page
@@ -11,7 +11,7 @@
     [:div.base-wrapper {:key language}
      (when current-route
        [:<>
-        [modal/modal]
+        [modal/modal-view]
         (if-let [current-view (-> current-route :data :view)]
           [current-view]
           [:div])])]))

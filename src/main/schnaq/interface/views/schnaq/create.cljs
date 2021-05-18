@@ -51,7 +51,7 @@
 
 (defn- schnaqqi-intro-bubble []
   [:div.d-flex.justify-content-end.pt-3
-   [common/schnaqqi-speech-bubble
+   [common/schnaqqi-speech-bubble-white
     "100px"
     (labels :schnaq.create/schnaqqi-speech)]])
 

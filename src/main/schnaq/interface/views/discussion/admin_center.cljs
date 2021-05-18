@@ -39,8 +39,8 @@
             :on-click (fn [e]
                         (js-wrap/prevent-default e)
                         (clipboard/copy-to-clipboard! display-content)
-                        (notify! (labels :meeting/link-copied-heading)
-                                 (labels :meeting/link-copied-success)
+                        (notify! (labels :schnaq/link-copied-heading)
+                                 (labels :schnaq/link-copied-success)
                                  :info
                                  false))
             :data-toggle "tooltip"

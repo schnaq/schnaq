@@ -8,7 +8,9 @@
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.file-download :as file-download]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.modal :as modal]
+            [schnaq.interface.views.notifications :refer [notify!]]))
 
 (defn admin-center
   "Button to access admin menu."
@@ -20,21 +22,47 @@
                   :routes.schnaq/admin-center
                   {:share-hash share-hash :edit-hash edit-hash}])])
 
+(defn- share-modal
+  "Modal showing sharing options."
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [modal/modal-template
+     (labels :sharing.modal/title)
+     [:section
+      [:p.lead (labels :sharing.modal/lead)]
+      [:div.input-group
+       [:input.form-control
+        {:value (common/get-share-link share-hash)
+         :readOnly true}]
+       [:div.input-group-append
+        [:button.btn.btn-outline-secondary
+         {:on-click (fn []
+                      (clipboard/copy-to-clipboard! (common/get-share-link share-hash))
+                      (notify! (labels :schnaq/link-copied-heading)
+                               (labels :schnaq/link-copied-success)
+                               :info
+                               false))}
+         (labels :share-link/copy)]]]
+      [:div.w-75.mx-auto.py-5
+       [common/schnaqqi-speech-bubble-blue
+        "100px"
+        (labels :sharing.modal/schnaqqi-help)]]]]))
+
+(defn open-share-modal
+  "Open the share-schnaq dialog."
+  []
+  (rf/dispatch [:modal {:show? true
+                        :large? true
+                        :child [share-modal]}]))
+
+
 (defn share-link
-  "Button to access admin menu."
-  [share-hash]
+  "Button to copy access link and notify the user."
+  []
   [tooltip/tooltip-button "bottom"
-   (labels :meeting/share-link-tooltip)
+   (labels :sharing/tooltip)
    [:i {:class (str "m-auto fas " (fa :share))}]
-   (fn []
-     (clipboard/copy-to-clipboard! (common/get-share-link share-hash))
-     (rf/dispatch [:notification/add
-                   #:notification{:id (str "content-added" (random-uuid))
-                                  :title (labels :user.action/link-copied)
-                                  :body [:<>
-                                         [:p (labels :user.action/link-copied-body)]]
-                                  :context :info
-                                  :stay-visible? false}]))])
+   open-share-modal])
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
