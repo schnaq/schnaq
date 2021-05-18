@@ -78,7 +78,7 @@
         authors (conj (-> statement :meta/sub-discussion-info :authors)
                       (user/statement-author statement))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
-    [:p.mb-0
+    [:<>
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       (if new?
         [:i.secondary-color pill-class]
