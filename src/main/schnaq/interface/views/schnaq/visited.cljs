@@ -79,3 +79,13 @@
   :schnaqs/public
   (fn [db _]
     (get-in db [:schnaqs :public])))
+
+(rf/reg-event-fx
+  :schnaqs.visited/merge-registered-users-visits
+  ;; Takes the schnaqs the registered user has and merges them with the local ones.
+  ;; This event should only be called, after the app is fully initialized (i.e. ls-schnaqs are already inside the db)
+  (fn [{:keys [db]} [_ registered-visited-hashes]]
+    (let [db-schnaqs (get-in db [:schnaqs :visited-hashes])
+          merged-schnaqs (distinct (concat registered-visited-hashes db-schnaqs))]
+      {:db (assoc-in db [:schnaqs :visited-hashes] merged-schnaqs)
+       :fx [[:localstorage/assoc [:schnaqs/visited merged-schnaqs]]]})))

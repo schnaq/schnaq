@@ -12,7 +12,8 @@
    :user.registered/email
    :user.registered/last-name
    :user.registered/first-name
-   :user.registered/profile-picture])
+   :user.registered/profile-picture
+   {:user.registered/visited-schnaqs [:discussion/share-hash]}])
 
 (def minimal-user-pattern
   "Minimal user pull pattern."
