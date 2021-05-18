@@ -15,7 +15,7 @@
   :celebrate/schnaq-filled
   (fn []
     {:fx [[:dispatch [:notification/add
-                      #:notification{:title "🎉 Glückwunsch 🎉"
+                      #:notification{:title (labels :celebrations.schnaq-filled/title)
                                      :body [schnaq-filled-body]
                                      :context :primary
                                      :stay-visible? true}]]]}))
