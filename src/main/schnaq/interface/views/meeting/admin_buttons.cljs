@@ -4,13 +4,13 @@
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [config]]
-            [schnaq.interface.text.display-data :refer [labels fa img-path]]
+            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.file-download :as file-download]
             [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.modal :as modal]
-            [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.interface.utils.clipboard :as clipboard]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.notifications :refer [notify!]]))
 
 (defn admin-center
   "Button to access admin menu."
