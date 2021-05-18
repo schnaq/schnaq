@@ -18,47 +18,43 @@
     (apply str (map #(str "<li>" % "</li>") users))
     "</ul>"))
 
-(defn- delete-clicker
-  "Give admin the ability to delete a statement."
-  [statement edit-hash]
-  (when-not (:statement/deleted? statement)
-    [:span.badge.badge-pill.badge-transparent.badge-clickable
-     {:tabIndex 30
-      :on-click (fn [e] (js-wrap/stop-propagation e)
-                  (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
-                    (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
-      :title (labels :discussion.badges/delete-statement)}
-     [:i {:class (str "m-auto fas " (fa :trash))}]]))
+(defn- anonymous-modal
+  "Basic modal which is presented to anonymous users trying to alter statements."
+  [header-label shield-label info-label]
+  [modal/modal-template
+   (labels header-label)
+   [:<>
+    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels shield-label)]
+    [:p (labels :discussion.anonymous-edit.modal/persuade)]
+    [:button.btn.btn-primary.mx-auto.d-block
+     {:on-click #(rf/dispatch [:keycloak/login])}
+     (labels info-label)]]])
 
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
   []
-  [modal/modal-template
-   (labels :discussion.anonymous-edit.modal/title)
-   [:<>
-    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels :discussion.anonymous-edit.modal/explain)]
-    [:p (labels :discussion.anonymous-edit.modal/persuade)]
-    [:button.btn.btn-primary.mx-auto.d-block
-     {:on-click #(rf/dispatch [:keycloak/login])}
-     (labels :discussion.anonymous-edit.modal/cta)]]])
+  (anonymous-modal :discussion.anonymous-edit.modal/title
+                   :discussion.anonymous-edit.modal/explain
+                   :discussion.anonymous-edit.modal/cta))
 
 (defn- edit-button
   "Give the registered user the ability to edit their statement."
   [statement]
   (let [user-id @(rf/subscribe [:user/id])
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
-        anonymous-owner (contains? creation-secrets (:db/id statement))
-        on-click-fn (if anonymous-owner
+        anonymous-owner? (contains? creation-secrets (:db/id statement))
+        on-click-fn (if anonymous-owner?
                       #(rf/dispatch [:modal {:show? true
                                              :child [anonymous-edit-modal]}])
                       (fn []
                         (rf/dispatch [:statement.edit/activate-edit (:db/id statement)])
                         (rf/dispatch [:statement.edit/change-statement-type (:db/id statement)
                                       (:statement/type statement)])))]
-    (when (or anonymous-owner
-              ; User is registered author
-              (and (= user-id (:db/id (:statement/author statement)))
-                   (not (:statement/deleted? statement))))
+    ; only show when statement is not deleted
+    (when (and (not (:statement/deleted? statement))
+               (or anonymous-owner?
+                   ; User is registered author
+                   (= user-id (:db/id (:statement/author statement)))))
       [:span.badge.badge-pill.badge-transparent.badge-clickable
        {:tabIndex 40
         :on-click (fn [e]
@@ -66,6 +62,38 @@
                     (on-click-fn))
         :title (labels :discussion.badges/edit-statement)}
        [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])))
+
+(defn- anonymous-delete-modal
+  "Show this modal to anonymous users trying to delete statements."
+  []
+  (anonymous-modal :discussion.anonymous-delete.modal/title
+                   :discussion.anonymous-delete.modal/explain
+                   :discussion.anonymous-delete.modal/cta))
+
+(defn- delete-button
+  "Give admin and author the ability to delete a statement."
+  [statement edit-hash]
+  (let [user-id @(rf/subscribe [:user/id])
+        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        anonymous-owner? (contains? creation-secrets (:db/id statement))
+        on-click-fn (if anonymous-owner?
+                      #(rf/dispatch [:modal {:show? true
+                                             :child [anonymous-delete-modal]}])
+                      #(when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
+                         (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))]
+    ; only show when statement is not deleted
+    (when (and (not (:statement/deleted? statement))
+               (or edit-hash
+                   anonymous-owner?
+                   ; User is registered author
+                   (= user-id (:db/id (:statement/author statement)))))
+      [:span.badge.badge-pill.badge-transparent.badge-clickable
+       {:tabIndex 30
+        :on-click (fn [e]
+                    (js-wrap/stop-propagation e)
+                    (on-click-fn))
+        :title (labels :discussion.badges/delete-statement)}
+       [:i {:class (str "m-auto fas " (fa :trash))}]])))
 
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
@@ -97,8 +125,7 @@
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (count authors)]
      [edit-button statement]
-     (when edit-hash
-       [delete-clicker statement edit-hash])]))
+     [delete-button statement edit-hash]]))
 
 (defn static-info-badges
   "Badges that display schnaq info."

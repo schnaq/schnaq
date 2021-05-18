@@ -216,6 +216,12 @@
         :discussion.anonymous-edit.modal/persuade "Statements you made recently with this browsers will automatically be converted to your logged in account."
         :discussion.anonymous-edit.modal/cta "Sign in / Sign up"
 
+        ;; Conversion-Delete-Funnel
+        :discussion.anonymous-delete.modal/title "Please sign in to delete"
+        :discussion.anonymous-delete.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to delete a statement."]]
+        :discussion.anonymous-delete.modal/persuade "Statements you made recently with this browsers will automatically be converted to your logged in account."
+        :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
+
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
         :privacy/subheading "We lead you through it step by step!"
@@ -968,6 +974,12 @@
         :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren anmelden."]]
         :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei automatisch umgewandelt."
         :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
+
+        ;; Conversion-Delete-Funnel
+        :discussion.anonymous-delete.modal/title "Bitte melde dich an zum Löschen"
+        :discussion.anonymous-delete.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Löschen anmelden."]]
+        :discussion.anonymous-delete.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei deinem Konto hinzugefügt."
+        :discussion.anonymous-delete.modal/cta "Anmelden / Registrieren"
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
