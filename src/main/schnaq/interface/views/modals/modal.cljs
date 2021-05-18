@@ -65,11 +65,11 @@
       :value (labels :user.button/set-name)}]]])
 
 (defn enter-name-modal []
-  (modal-template
-    (labels :user.set-name.modal/header)
-    [:<>
-     [:p (labels :user.set-name.modal/primer)]
-     [modal-name-input (labels :user.button/set-name-placeholder)]]))
+  [modal-template
+   (labels :user.set-name.modal/header)
+   [:<>
+    [:p (labels :user.set-name.modal/primer)]
+    [modal-name-input (labels :user.button/set-name-placeholder)]]])
 
 
 ;; -----------------------------------------------------------------------------
