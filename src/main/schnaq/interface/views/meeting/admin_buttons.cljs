@@ -22,7 +22,7 @@
                   :routes.schnaq/admin-center
                   {:share-hash share-hash :edit-hash edit-hash}])])
 
-(defn share-modal
+(defn- share-modal
   "Modal showing sharing options."
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
@@ -48,15 +48,21 @@
         "100px"
         (labels :sharing.modal/schnaqqi-help)]]]]))
 
+(defn open-share-modal
+  "Open the share-schnaq dialog."
+  []
+  (rf/dispatch [:modal {:show? true
+                        :large? true
+                        :child [share-modal]}]))
+
+
 (defn share-link
   "Button to copy access link and notify the user."
   []
   [tooltip/tooltip-button "bottom"
    (labels :sharing/tooltip)
    [:i {:class (str "m-auto fas " (fa :share))}]
-   #(rf/dispatch [:modal {:show? true
-                          :large? true
-                          :child [share-modal]}])])
+   open-share-modal])
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."

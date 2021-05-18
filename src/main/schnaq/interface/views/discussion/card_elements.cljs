@@ -149,13 +149,16 @@
 (rf/reg-event-fx
   :discussion.add.statement/starting-success
   (fn [_ [_ form new-starting-statements]]
-    (let [statement-with-creation-secret (first (filter :statement/creation-secret
-                                                        (:starting-conclusions new-starting-statements)))]
+    (let [starting-conclusions (:starting-conclusions new-starting-statements)
+          statement-with-creation-secret (first (filter :statement/creation-secret
+                                                        starting-conclusions))]
       {:fx [[:dispatch [:notification/add
                         #:notification{:title (labels :discussion.notification/new-content-title)
                                        :body (labels :discussion.notification/new-content-body)
                                        :context :success}]]
             [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
+            (when (= 1 (count starting-conclusions))
+              [:dispatch [:celebrate/schnaq-filled]])
             (when statement-with-creation-secret
               [:dispatch [:discussion.statements/add-creation-secret statement-with-creation-secret]])
             [:form/clear form]]})))

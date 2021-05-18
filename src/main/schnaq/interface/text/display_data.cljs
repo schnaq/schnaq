@@ -417,6 +417,12 @@
         :legal-note.privacy/title "Privacy Policy"
         :legal-note.privacy/body "You can find our privacy policy here."
 
+        ;; Celebrations
+        :celebrations.schnaq-filled/title "🎉 Congratulations 🎉"
+        :celebrations.schnaq-filled/lead "You have filled a new schnaq with a first statement. This is the first milestone towards a successful discussion 💪"
+        :celebrations.schnaq-filled/share-now "Now share the schnaq with your team!"
+        :celebrations.schnaq-filled/button "Sharing Options"
+
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
         :schnaqs.not-found/alert-body "Invite people to your first schnaq after you created it."
@@ -1157,6 +1163,12 @@
         :legal-note.copyright/body "Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen."
         :legal-note.privacy/title "Datenschutzerklärung"
         :legal-note.privacy/body "Unsere Datenschutzerklärung finden Sie hier."
+
+        ;; Celebrations
+        :celebrations.schnaq-filled/title "🎉 Glückwunsch 🎉"
+        :celebrations.schnaq-filled/lead "Du hast einen neuen schnaq mit einer ersten Aussage befüllt. Das ist der erste Meilenstein zu einer erfolgreichen Diskussion 💪"
+        :celebrations.schnaq-filled/share-now "Teile nun den schnaq mit deinem Team!"
+        :celebrations.schnaq-filled/button "Optionen zum Teilen"
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."
