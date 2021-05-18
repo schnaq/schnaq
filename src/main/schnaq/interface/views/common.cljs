@@ -141,16 +141,30 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; schnaqqi stuff
+;; schnaqqi speak
 
-(defn schnaqqi-speech-bubble
-  "Create a speech bubble left of schnaqqi and let him speak to the audience."
-  [schnaqqi-size bubble-content]
-  [:article.d-flex
-   [:div.speech-bubble bubble-content]
+(defn- schnaqqi-speech-bubble-builder
+  "Build a schnaqqi-speech composition."
+  [schnaqqi-size bubble-content css-classes image-key]
+  [number? vector? string? keyword?]
+  [:section.d-flex
+   [:div.speech-bubble.text-center {:class css-classes} bubble-content]
    [:img {:style {:width schnaqqi-size}
           :alt "schnaqqi speaking"
-          :src (img-path :schnaqqifant/white)}]])
+          :src (img-path image-key)}]])
+
+(defn schnaqqi-speech-bubble-white
+  "Create a speech bubble left of a white schnaqqi and let him speak to the audience."
+  [schnaqqi-size bubble-content]
+  [schnaqqi-speech-bubble-builder
+   schnaqqi-size bubble-content nil :schnaqqifant/white])
+
+(defn schnaqqi-speech-bubble-blue
+  "Create a speech bubble left of a blue schnaqqi and let him speak to the audience."
+  [schnaqqi-size bubble-content]
+  [schnaqqi-speech-bubble-builder
+   schnaqqi-size bubble-content "speech-bubble-bordered" :schnaqqifant/original])
+
 
 ;; -----------------------------------------------------------------------------
 ;; Form-related
