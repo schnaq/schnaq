@@ -31,13 +31,16 @@
   (fn [{:keys [db]} [_ result]]
     (when result
       {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
-                                {:creation-secrets (get-in db [:discussion :statements :creation-secrets])})]})))
+                                {:creation-secrets (get-in db [:discussion :statements :creation-secrets])
+                                 :visited-hashes (get-in db [:schnaqs :visited-hashes])})]})))
 
 (rf/reg-event-fx
   :user.register/success
   (fn [{:keys [db]} [_ {:keys [registered-user updated-statements?]}]]
-    (let [{:user.registered/keys [display-name first-name last-name email profile-picture]} registered-user
-          current-route (get-in db [:current-route :data :name])]
+    (let [{:user.registered/keys [display-name first-name last-name email profile-picture visited-schnaqs]}
+          registered-user
+          current-route (get-in db [:current-route :data :name])
+          visited-hashes (map :discussion/share-hash visited-schnaqs)]
       {:db (-> db
                (assoc-in [:user :names :display] display-name)
                (assoc-in [:user :email] email)
@@ -48,6 +51,7 @@
                ;; Clear secrets, they have been persisted.
                (assoc-in [:discussion :statements :creation-secrets] {}))
        :fx [[:localstorage/dissoc :discussion/creation-secrets]
+            [:dispatch [:schnaqs.visited/merge-registered-users-visits visited-hashes]]
             (when (and updated-statements? (= current-route :routes.schnaq.select/statement))
               ;; The starting-statement view is updated automatically anyway
               [:dispatch [:discussion.query.statement/by-id]])]})))

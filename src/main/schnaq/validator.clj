@@ -9,7 +9,7 @@
 (s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
 
 (defn valid-discussion?
-  "Check if a schnaq-hash ist valid. Returns false, when the discussion is deleted."
+  "Check if a schnaq-hash is valid. Returns false, when the discussion is deleted."
   [share-hash]
   (try
     (let [discussion (db/discussion-by-share-hash share-hash)]

@@ -39,6 +39,10 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "URL to where the profile picture was uploaded to."}
+   {:db/ident :user.registered/visited-schnaqs
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The schnaqs that are known to the registered user, i.e. they can open and view."}
 
    ;; Feedback
    {:db/ident :feedback/contact-name
