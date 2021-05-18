@@ -56,7 +56,7 @@
     (labels :schnaq.create/schnaqqi-speech)]])
 
 (defn- create-schnaq-page []
-  (let [dispatch-fn #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
+  (let [dispatch-schnaq-creation #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
     [pages/with-nav-and-header
      {:page/heading (labels :schnaq.create/heading)
       :page/subheading (labels :schnaq.create/subheading)
@@ -66,9 +66,7 @@
        [:form
         {:on-submit (fn [e]
                       (jq/prevent-default e)
-                      (dispatch-fn e))
-         :on-key-down (fn [e]
-                        (when (jq/ctrl-press e 13) (dispatch-fn e)))}
+                      (dispatch-schnaq-creation e))}
         [:div.panel-white.row.p-4
          [:div.col-12
           [common/form-input {:id :schnaq-title
@@ -117,4 +115,4 @@
                                        :context :success}]]
             [:localstorage/assoc [:schnaq.last-added/share-hash share-hash]]
             [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
-            [:dispatch [:schnaqs.save-admin-access/to-localstorage share-hash edit-hash]]]})))
+            [:dispatch [:schnaqs.save-admin-access/to-localstorage-and-db share-hash edit-hash]]]})))

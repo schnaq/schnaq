@@ -396,7 +396,7 @@
     (get-in db [:schnaqs :admin-access])))
 
 (rf/reg-event-fx
-  :schnaqs.save-admin-access/to-localstorage
+  :schnaqs.save-admin-access/to-localstorage-and-db
   (fn [{:keys [db]} [_ share-hash edit-hash]]
     ;; PARTIALLY DEPRECATED, deleted after 2021-09-22: Remove the old ls/add-key-value-… stuff and only load native structure
     (let [deprecated-map (ls/add-key-value-and-build-map-from-localstorage :schnaqs/admin-access)
