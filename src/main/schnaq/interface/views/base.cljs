@@ -58,6 +58,9 @@
 (defn- footer-nav []
   [:ul.list-inline
    [:li.list-inline-item
+    [:a.btn.btn-outline-white {:href (reitfe/href :routes/how-to)}
+     (labels :router/how-to)]]
+   [:li.list-inline-item
     [:a.btn.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
      (labels :coc/heading)]]
    [:li.list-inline-item
