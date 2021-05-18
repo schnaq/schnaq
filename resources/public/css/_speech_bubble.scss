@@ -26,9 +26,9 @@
 }
 
 .speech-bubble-bordered {
-  border: 1px solid vars.$gray-600 !important;
+  border: 1px solid vars.$gray-600;
 
   &::after {
-    border-left-color: vars.$gray-600 !important;
+    border-left-color: vars.$gray-600;
   }
 }
