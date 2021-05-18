@@ -11,7 +11,7 @@
     [:div.base-wrapper {:key language}
      (when current-route
        [:<>
-        [modal/modal]
+        [modal/modal-view]
         (if-let [current-view (-> current-route :data :view)]
           [current-view]
           [:div])])]))

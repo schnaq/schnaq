@@ -21,18 +21,17 @@
                   {:share-hash share-hash :edit-hash edit-hash}])])
 
 (defn share-link
-  "Button to access admin menu."
+  "Button to copy access link and notify the user."
   [share-hash]
   [tooltip/tooltip-button "bottom"
-   (labels :meeting/share-link-tooltip)
+   (labels :share-link/copy)
    [:i {:class (str "m-auto fas " (fa :share))}]
    (fn []
      (clipboard/copy-to-clipboard! (common/get-share-link share-hash))
      (rf/dispatch [:notification/add
                    #:notification{:id (str "content-added" (random-uuid))
                                   :title (labels :user.action/link-copied)
-                                  :body [:<>
-                                         [:p (labels :user.action/link-copied-body)]]
+                                  :body [:p (labels :user.action/link-copied-body)]
                                   :context :info
                                   :stay-visible? false}]))])
 

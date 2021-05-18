@@ -3,13 +3,11 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.modals.events]
-            [schnaq.interface.views.modals.subs]))
+            [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn modal-panel
   [{:keys [child show? large?]}]
-  [:div {:class "modal-wrapper"}
+  [:div.modal-wrapper
    [:div {:class "modal-backdrop"
           :on-click (fn [event]
                       (rf/dispatch [:modal {:show? (not show?)
@@ -20,11 +18,12 @@
      [:div {:class (if large? (str classes " modal-lg") classes)}
       child])])
 
-(defn modal []
-  (let [modal (rf/subscribe [:modal])]
-    [:<>
-     (when (:show? @modal)
-       [modal-panel @modal])]))
+(defn modal-view
+  "Include modal in view."
+  []
+  (let [modal @(rf/subscribe [:modal])]
+    (when (:show? modal)
+      [modal-panel modal])))
 
 (defn close-modal []
   (rf/dispatch [:modal {:show? false :child nil}]))
@@ -71,3 +70,15 @@
     [:<>
      [:p (labels :user.set-name.modal/primer)]
      [modal-name-input (labels :user.button/set-name-placeholder)]]))
+
+
+;; -----------------------------------------------------------------------------
+
+(rf/reg-sub
+  :modal
+  (fn [db] (:modal db)))
+
+(rf/reg-event-db
+  :modal
+  (fn [db [_ data]]
+    (assoc db :modal data)))
