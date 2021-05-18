@@ -439,7 +439,7 @@
         :meeting.admin-center.edit/administrate "Administrate schnaq"
         :meeting/admin-center-export "Download schnaq as a text-file"
         :meeting/admin-center-tooltip "Administrate schnaq"
-        :meeting/share-link-tooltip "Copy share-link"
+        :share-link/copy "Copy share-link"
 
 
         ;; Discussion Language
@@ -1175,7 +1175,7 @@
         :meeting.admin-center.edit/administrate "schnaq administrieren"
         :meeting/admin-center-export "schnaq als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
-        :meeting/share-link-tooltip "Zugangslink kopieren"
+        :share-link/copy "Zugangslink kopieren"
 
         ;; Discussion Language
         :discussion/create-argument-action "Beitrag hinzufügen"
