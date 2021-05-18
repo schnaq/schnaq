@@ -48,7 +48,7 @@
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
         history @(rf/subscribe [:discussion-history])]
-    [:nav.navbar.navbar-expand-lg.py-3.navbar-primary
+    [:nav.navbar.navbar-expand-lg.py-3.navbar-dark.navbar-primary
      ;; schnaq logo
      [:a.navbar-brand.mr-auto {:href (reitfe/href :routes.schnaqs/personal)}
       [:img.d-inline-block.align-middle.mr-2
