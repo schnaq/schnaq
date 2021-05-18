@@ -403,7 +403,9 @@
           admin-access-map (assoc (:schnaqs/admin-access local-storage) share-hash edit-hash)
           merged-access (merge deprecated-map admin-access-map)]
       {:db (assoc-in db [:schnaqs :admin-access] merged-access)
-       :fx [[:localstorage/assoc [:schnaqs/admin-access merged-access]]]})))
+       :fx [[:localstorage/assoc [:schnaqs/admin-access merged-access]]
+            (when (= 1 (count admin-access-map))
+              [:dispatch [:celebrate/first-schnaq-created]])]})))
 
 (rf/reg-event-db
   ;; PARTIALLY DEPRECATED FROM 2021-09-22: Remove the second or clause

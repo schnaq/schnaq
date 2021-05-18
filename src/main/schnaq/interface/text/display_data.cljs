@@ -422,6 +422,8 @@
         :celebrations.schnaq-filled/lead "You have filled a new schnaq with a first statement. This is the first milestone towards a successful discussion 💪"
         :celebrations.schnaq-filled/share-now "Now share the schnaq with your team!"
         :celebrations.schnaq-filled/button "Sharing Options"
+        :celebrations.first-schnaq-created/title "You have created your first schnaq 🎈"
+        :celebrations.first-schnaq-created/lead "Do you want to connect your schnaq to an account? Then register with a few clicks 🚀"
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
@@ -1169,6 +1171,8 @@
         :celebrations.schnaq-filled/lead "Du hast einen neuen schnaq mit einer ersten Aussage befüllt. Das ist der erste Meilenstein zu einer erfolgreichen Diskussion 💪"
         :celebrations.schnaq-filled/share-now "Teile nun den schnaq mit deinem Team!"
         :celebrations.schnaq-filled/button "Optionen zum Teilen"
+        :celebrations.first-schnaq-created/title "Du hast deinen ersten schnaq erstellt 🎈"
+        :celebrations.first-schnaq-created/lead "Möchtest du deinen schnaq mit einem Account verbinden? Dann registriere dich mit wenigen Klicks 🚀"
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."

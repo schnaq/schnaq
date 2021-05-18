@@ -3,7 +3,9 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
 
-(defn- schnaq-filled-body []
+(defn- schnaq-filled-body
+  "Celebrate user that she added the first statement to a new schnaq."
+  []
   [:<>
    [:p (labels :celebrations.schnaq-filled/lead)]
    [:p (labels :celebrations.schnaq-filled/share-now)]
@@ -19,3 +21,25 @@
                                      :body [schnaq-filled-body]
                                      :context :primary
                                      :stay-visible? true}]]]}))
+
+
+;; -----------------------------------------------------------------------------
+
+(defn- first-schnaq-created-body
+  "Celebrate non-registered user for her first created schnaq."
+  []
+  [:<>
+   [:p (labels :celebrations.first-schnaq-created/lead)]
+   [:button.btn.btn-sm.btn-secondary
+    {:on-click #(rf/dispatch [:keycloak/login])}
+    (labels :user/login)]])
+
+(rf/reg-event-fx
+  :celebrate/first-schnaq-created
+  (fn [{:keys [db]}]
+    (when-not (get-in db [:user :authenticated?])
+      {:fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :celebrations.first-schnaq-created/title)
+                                       :body [first-schnaq-created-body]
+                                       :context :primary
+                                       :stay-visible? true}]]]})))
