@@ -3,6 +3,7 @@
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
@@ -76,22 +77,23 @@
   (let [user-id @(rf/subscribe [:user/id])
         creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
         anonymous-owner? (contains? creation-secrets (:db/id statement))
-        on-click-fn (if anonymous-owner?
-                      #(rf/dispatch [:modal {:show? true
-                                             :child [anonymous-delete-modal]}])
-                      #(when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
-                         (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))]
-    ; only show when statement is not deleted
+        confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
+                                            dispatch-fn))
+        admin-delete-fn #(confirmation-fn (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
+        user-delete-fn (if anonymous-owner? #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
+                                            #(confirmation-fn (rf/dispatch [:statement/delete (:db/id statement)])))]
+    ; only show trash icon when statement is not deleted and user is author or admin
     (when (and (not (:statement/deleted? statement))
                (or edit-hash
                    anonymous-owner?
                    ; User is registered author
                    (= user-id (:db/id (:statement/author statement)))))
       [:span.badge.badge-pill.badge-transparent.badge-clickable
-       {:tabIndex 30
+       {:tabIndex 50
         :on-click (fn [e]
                     (js-wrap/stop-propagation e)
-                    (on-click-fn))
+                    (if edit-hash (admin-delete-fn)
+                                  (user-delete-fn)))
         :title (labels :discussion.badges/delete-statement)}
        [:i {:class (str "m-auto fas " (fa :trash))}]])))
 
@@ -150,6 +152,18 @@
   (let [read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
     (when read-only?
       [:p [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)]])))
+
+;; ### events ###
+
+(rf/reg-event-fx
+  :statement/delete
+  (fn [{:keys [db]} [_ statement-id]]
+    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+      {:fx [(http/xhrio-request db :put "/discussion/statement/delete"
+                                [:discussion.admin/delete-statement-success statement-id]
+                                {:statement-id statement-id
+                                 :share-hash share-hash}
+                                [:ajax.error/as-notification])]})))
 
 ;; #### Subs ####
 

@@ -453,6 +453,23 @@
         (bad-request {:error "You can not edit a closed / deleted discussion or statement."}))
       (validator/deny-access invalid-rights-message))))
 
+(defn- delete-statement!
+  "Deletes a statement, when the user is the registered author."
+  [{:keys [params identity]}]
+  (let [{:keys [statement-id share-hash]} params
+        user-identity (:sub identity)
+        statement (db/fast-pull statement-id [:db/id
+                                              :statement/parent
+                                              {:statement/author [:user.registered/keycloak-id]}
+                                              :statement/deleted?])]
+    (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
+      (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
+               (not (:statement/deleted? statement)))
+        (do (discussion-db/delete-statements! [statement-id])
+            (ok {:deleted-statement statement-id}))
+        (bad-request {:error "You can not Delete a closed / deleted discussion or statement."}))
+      (validator/deny-access invalid-rights-message))))
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -488,6 +505,8 @@
       (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
       (POST "/discussion/react-to/statement" [] react-to-any-statement!)
       (-> (PUT "/discussion/statement/edit" [] edit-statement!)
+          (wrap-routes auth/auth-middleware))
+      (-> (PUT "/discussion/statement/delete" [] delete-statement!)
           (wrap-routes auth/auth-middleware))
       (POST "/discussion/statement/info" [] get-statement-info)
       (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
