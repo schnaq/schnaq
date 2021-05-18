@@ -6,7 +6,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
-            [schnaq.interface.views.modals.modal :as modal]
+            [schnaq.interface.views.modal :as modal]
             [schnaq.user :as user]))
 
 (>defn- build-author-list

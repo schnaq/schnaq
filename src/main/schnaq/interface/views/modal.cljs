@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.modals.modal
+(ns schnaq.interface.views.modal
   (:require [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]

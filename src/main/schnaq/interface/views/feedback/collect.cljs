@@ -12,7 +12,7 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feedback.survey :as survey]
-            [schnaq.interface.views.modals.modal :as modal]))
+            [schnaq.interface.views.modal :as modal]))
 
 (defonce screenshot-url (reagent/atom nil))
 

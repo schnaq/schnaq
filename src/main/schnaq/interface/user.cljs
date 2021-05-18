@@ -4,7 +4,7 @@
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.views.modals.modal :as modal]))
+            [schnaq.interface.views.modal :as modal]))
 
 (rf/reg-event-fx
   :username/from-localstorage

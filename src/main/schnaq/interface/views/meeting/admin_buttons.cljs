@@ -7,7 +7,7 @@
             [schnaq.interface.text.display-data :refer [labels fa img-path]]
             [schnaq.interface.utils.file-download :as file-download]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.modals.modal :as modal]
+            [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :refer [notify!]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.views.common :as common]))
