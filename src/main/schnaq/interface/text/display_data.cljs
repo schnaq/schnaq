@@ -163,8 +163,8 @@
         :schnaq.create.public/help-text "Publicly lists your schnaq."
         :schnaq.create.hub/help-text "Directly assign your schnaq to a hub."
         :meeting/copy-link-tooltip "Click here to copy your link"
-        :meeting/link-copied-heading "Link copied"
-        :meeting/link-copied-success "The link was copied to your clipboard!"
+        :schnaq/link-copied-heading "Link copied"
+        :schnaq/link-copied-success "The link was copied to your clipboard!"
         :schnaq/created-success-heading "Your schnaq was created!"
         :schnaq/created-success-subheading "Distribute your personal share-link or invite participants via email 🎉"
         :schnaqs/continue-with-schnaq-after-creation "Did you invite everybody? Lets go!"
@@ -441,6 +441,10 @@
         :meeting/admin-center-tooltip "Administrate schnaq"
         :share-link/copy "Copy share-link"
 
+        :sharing/tooltip "Share"
+        :sharing.modal/title "Share your schnaq"
+        :sharing.modal/lead "Invite your whole team to fill this schnaq with knowledge."
+        :sharing.modal/schnaqqi-help "Fill the schnaq with your ideas. Your colleagues will find it easier to get started."
 
         ;; Discussion Language
         :discussion/create-argument-action "Add Statement"
@@ -904,8 +908,8 @@
         :schnaq.create.public/help-text "Damit wird dein schnaq öffentlich gelistet und zugänglich sein."
         :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
         :meeting/copy-link-tooltip "Hier klicken, um Link zu kopieren"
-        :meeting/link-copied-heading "Link kopiert"
-        :meeting/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
+        :schnaq/link-copied-heading "Link kopiert"
+        :schnaq/link-copied-success "Der Link wurde in deine Zwischenablage kopiert!"
         :schnaq/created-success-heading "Dein schnaq wurde erstellt!"
         :schnaq/created-success-subheading "Nun kannst du den Zugangslink verteilen oder andere Personen per Mail einladen 🎉"
         :schnaqs/continue-with-schnaq-after-creation "Alle eingeladen? Los geht's!"
@@ -1176,6 +1180,11 @@
         :meeting/admin-center-export "schnaq als Textdatei runterladen"
         :meeting/admin-center-tooltip "Schnaq administrieren"
         :share-link/copy "Zugangslink kopieren"
+
+        :sharing/tooltip "Teilen"
+        :sharing.modal/title "Teile deinen schnaq"
+        :sharing.modal/lead "Lade dein ganzes Team mit ein, um diesen schnaq mit Wissen zu befüllen"
+        :sharing.modal/schnaqqi-help "Befülle den schnaq schonmal mit deinen Ideen. Deine Kolleg:innen finden so einen leichteren Einstieg."
 
         ;; Discussion Language
         :discussion/create-argument-action "Beitrag hinzufügen"

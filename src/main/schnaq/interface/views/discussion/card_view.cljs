@@ -71,7 +71,7 @@
         [:h3.mx-5 title]
         [:h3.mx-5.display-6 title]]]
       [search-bar]
-      [admin-buttons/share-link share-hash]
+      [admin-buttons/share-link]
       [admin-buttons/txt-export share-hash title]
       (when edit-hash
         [admin-buttons/admin-center share-hash edit-hash])
