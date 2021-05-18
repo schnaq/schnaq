@@ -79,7 +79,7 @@
     [:<>
      [:section.row
       [:div.list-group.col-6.col-md-12
-       [feed-button :router/my-schnaqs :routes.schnaqs/personal]
+       [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
        [feed-button :router/public-discussions :routes.schnaqs/public]
        (when-not (nil? edit-hash)
          [feed-button :nav.schnaqs/last-added
