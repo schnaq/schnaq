@@ -439,8 +439,8 @@
 
 (defn- check-statement-author-and-state
   "Checks if a statement is authored by this user-identity and is valid, i.e. not deleted.
-  If the statement is valid and authored by this user success-fn is called, if it's not valid bad-request-fn
-  will be called and if the authored user does not match deny-access-fn will be called."
+  If the statement is valid and authored by this user, `success-fn` is called. if the statement is not valid, `bad-request-fn`
+  is called. And if the authored user does not match `deny-access-fn` will be called."
   [user-identity statement-id share-hash statement success-fn bad-request-fn deny-access-fn]
   (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
     (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
@@ -478,6 +478,7 @@
       (bad-request {:error "You can not delete a closed / deleted discussion or statement."})
       (validator/deny-access invalid-rights-message))))
 
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -514,7 +515,7 @@
       (POST "/discussion/react-to/statement" [] react-to-any-statement!)
       (-> (PUT "/discussion/statement/edit" [] edit-statement!)
           (wrap-routes auth/auth-middleware))
-      (-> (PUT "/discussion/statement/delete" [] delete-statement!)
+      (-> (DELETE "/discussion/statement/delete" [] delete-statement!)
           (wrap-routes auth/auth-middleware))
       (POST "/discussion/statement/info" [] get-statement-info)
       (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)

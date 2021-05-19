@@ -54,7 +54,6 @@
     ; only show when statement is not deleted
     (when (and (not (:statement/deleted? statement))
                (or anonymous-owner?
-                   ; User is registered author
                    (= user-id (:db/id (:statement/author statement)))))
       [:span.badge.badge-pill.badge-transparent.badge-clickable
        {:tabIndex 40
@@ -85,9 +84,7 @@
           user-delete-fn (if anonymous-owner? #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
                                               #(confirmation-fn (rf/dispatch [:statement/delete (:db/id statement)])))]
       ; only show trash icon when statement is not deleted and user is author or admin
-      (when (or edit-hash
-                anonymous-owner?
-                registered-owner?)
+      (when (or edit-hash anonymous-owner? registered-owner?)
         [:span.badge.badge-pill.badge-transparent.badge-clickable
          {:tabIndex 50
           :on-click (fn [e]
@@ -153,19 +150,18 @@
     (when read-only?
       [:p [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)]])))
 
-;; ### events ###
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
   :statement/delete
   (fn [{:keys [db]} [_ statement-id]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])]
-      {:fx [(http/xhrio-request db :put "/discussion/statement/delete"
+      {:fx [(http/xhrio-request db :delete "/discussion/statement/delete"
                                 [:discussion.admin/delete-statement-success statement-id]
                                 {:statement-id statement-id
                                  :share-hash share-hash}
                                 [:ajax.error/as-notification])]})))
-
-;; #### Subs ####
 
 (rf/reg-sub
   :visited/statement-nums
