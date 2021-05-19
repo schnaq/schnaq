@@ -5,7 +5,7 @@
 
 (defn- value-card
   [fa-icon title body]
-  [:div.card.value-card.p-3.mb-4
+  [:div.card.p-3.mb-4.border-0
    [:div.card-img-top.text-center [:i {:class (gstring/format "text-primary fas %s fa-3x fa-fw" fa-icon)}]]
    [:div.card-body
     [:h5.card-title.text-center (labels title)]
@@ -17,14 +17,12 @@
    [:h2 number]
    [:h5 text]])
 
-(defn ^:private person-card
-  [photo-keyword name & title]
-  [:div.card.person-card.shadow
-   [:div.person-card-inner
-    [:img.img-fluid.card-img-top {:src (img-path photo-keyword) :alt (str "Picture of " name)}]
-    [:div.card-body
-     [:p.card-text name]
-     [:p.card-text [:i title]]]]])
+(defn- person-card [photo-keyword name & title]
+  [:article.card.shadow
+   [:img.img-fluid.card-img-top {:src (img-path photo-keyword) :alt (str "Picture of " name)}]
+   [:div.card-body
+    [:h6.card-title name]
+    [:p.card-subtitle.text-muted [:i title]]]])
 
 (def ^:private schnaq-unity
   [:section
@@ -39,10 +37,7 @@
 (def ^:private our-values
   [:section
    [:h2.text-center (labels :about-us.value/title)]
-   [:h4.text-center.text-muted (labels :about-us.value/subtitle)]
-
-   [:div.pb-5]
-
+   [:h4.text-center.text-muted.pb-5 (labels :about-us.value/subtitle)]
    [:div.row.justify-content-around
     [:div.col-lg-4
      (value-card "fa-envelope-open-text" :about-us.honesty/title :about-us.honesty/body)]
@@ -70,7 +65,7 @@
 (def ^:private team-focus
   [:section
    [:h2.text-center (labels :about-us.team/title)]
-   [:div.card-deck.pb-5
+   [:div.card-deck.pb-5.pt-4
     [:div.col
      (person-card :team/alexander "Dr. Alexander Schneider" (labels :about-us.team/alexander))]
     [:div.col
