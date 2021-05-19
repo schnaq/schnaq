@@ -24,6 +24,10 @@ footer {
   #{$a-tags} {
     color: $gray-100;
   }
+
+  .list-inline-item {
+    padding-bottom: 0.25rem;
+  }
 }
 
 .social-media-icon {
