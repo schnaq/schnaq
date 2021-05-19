@@ -123,7 +123,7 @@
     ["/my"
      {:name :routes.schnaqs/personal
       :view feed/personal-discussions-view
-      :link-text (labels :router/my-schnaqs)
+      :link-text (labels :router/visited-schnaqs)
       :controllers [{:start (fn []
                               (rf/dispatch [:schnaqs.visited/load]))}]}]]
    ["schnaq"

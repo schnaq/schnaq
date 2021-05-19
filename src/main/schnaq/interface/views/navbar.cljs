@@ -28,7 +28,7 @@
 (defn- my-schnaqs-link [visited-hashes]
   (when-not (empty? visited-hashes)
     (create-dropdown-item (reitfe/href :routes.schnaqs/personal)
-                          :router/my-schnaqs)))
+                          :router/visited-schnaqs)))
 
 (defn- all-schnaqs-link []
   (when-not toolbelt/production?
@@ -74,7 +74,12 @@
         [toolbelt/desktop-mobile-switch
          ;; desktop view
          [:li.nav-item
-          [:a.nav-link {:role "button" :href (reitfe/href :routes.schnaqs/public)}
+          [:a.nav-link
+           {:role "button"
+            :href (reitfe/href
+                    (if (zero? (count visited-hashes))
+                      :routes.schnaqs/public
+                      :routes.schnaqs/personal))}
            (labels :nav/schnaqs)]]
          ;; mobile view
          [:li.nav-item.dropdown
