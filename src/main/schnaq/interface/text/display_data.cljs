@@ -213,13 +213,13 @@
         ;; Conversion-Edit-Funnel
         :discussion.anonymous-edit.modal/title "Please sign in to edit"
         :discussion.anonymous-edit.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit a statement."]]
-        :discussion.anonymous-edit.modal/persuade "Statements you made recently with this browsers will automatically be converted to your logged in account."
+        :discussion.anonymous-edit.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
         :discussion.anonymous-edit.modal/cta "Sign in / Sign up"
 
         ;; Conversion-Delete-Funnel
         :discussion.anonymous-delete.modal/title "Please sign in to delete"
         :discussion.anonymous-delete.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to delete a statement."]]
-        :discussion.anonymous-delete.modal/persuade "Statements you made recently with this browsers will automatically be converted to your logged in account."
+        :discussion.anonymous-delete.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
         :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
 
         ;; Privacy Page
