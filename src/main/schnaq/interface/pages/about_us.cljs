@@ -27,10 +27,9 @@
 (def ^:private schnaq-unity
   [:section
    [:div.row.pt-3
-    [:div.col-lg-4
-     [:img.img-fluid {:src (img-path :stock/team)}]
-     [:small.text-muted "Photo by Javier Allegue Barros on Unsplash"]]
-    [:div.offset-lg-1.col-lg-7
+    [:div.col-lg-5
+     [:img.img-fluid.shadow {:src (img-path :team/at-table-with-laptop)}]]
+    [:div.offset-lg-1.col-lg-6
      [:h2 (labels :about-us.unity/title)]
      (labels :about-us.unity/body)]]])
 
