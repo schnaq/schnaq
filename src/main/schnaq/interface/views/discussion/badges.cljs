@@ -74,28 +74,28 @@
 (defn- delete-button
   "Give admin and author the ability to delete a statement."
   [statement edit-hash]
-  (let [user-id @(rf/subscribe [:user/id])
-        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
-        anonymous-owner? (contains? creation-secrets (:db/id statement))
-        confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
-                                            dispatch-fn))
-        admin-delete-fn #(confirmation-fn (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
-        user-delete-fn (if anonymous-owner? #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
-                                            #(confirmation-fn (rf/dispatch [:statement/delete (:db/id statement)])))]
-    ; only show trash icon when statement is not deleted and user is author or admin
-    (when (and (not (:statement/deleted? statement))
-               (or edit-hash
-                   anonymous-owner?
-                   ; User is registered author
-                   (= user-id (:db/id (:statement/author statement)))))
-      [:span.badge.badge-pill.badge-transparent.badge-clickable
-       {:tabIndex 50
-        :on-click (fn [e]
-                    (js-wrap/stop-propagation e)
-                    (if edit-hash (admin-delete-fn)
-                                  (user-delete-fn)))
-        :title (labels :discussion.badges/delete-statement)}
-       [:i {:class (str "m-auto fas " (fa :trash))}]])))
+  (when-not (:statement/deleted? statement)
+    (let [user-id @(rf/subscribe [:user/id])
+          creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+          anonymous-owner? (contains? creation-secrets (:db/id statement))
+          registered-owner? (= user-id (:db/id (:statement/author statement)))
+          confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
+                                              dispatch-fn))
+          admin-delete-fn #(confirmation-fn (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
+          user-delete-fn (if anonymous-owner? #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
+                                              #(confirmation-fn (rf/dispatch [:statement/delete (:db/id statement)])))]
+      ; only show trash icon when statement is not deleted and user is author or admin
+      (when (or edit-hash
+                anonymous-owner?
+                registered-owner?)
+        [:span.badge.badge-pill.badge-transparent.badge-clickable
+         {:tabIndex 50
+          :on-click (fn [e]
+                      (js-wrap/stop-propagation e)
+                      (if edit-hash (admin-delete-fn)
+                                    (user-delete-fn)))
+          :title (labels :discussion.badges/delete-statement)}
+         [:i {:class (str "m-auto fas " (fa :trash))}]]))))
 
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
