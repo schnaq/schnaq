@@ -319,9 +319,7 @@
          info-map (discussion-db/child-node-info statement-ids)]
      (map
        #(assoc % :meta/sub-discussion-info (get info-map (:db/id %)))
-       (-> starting-statements
-           processors/hide-deleted-statement-content
-           processors/with-votes))))
+       (valid-statements-with-votes starting-statements))))
   ([share-hash secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash) secret-statement-id)))
 
@@ -342,10 +340,13 @@
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [body-params]}]
-  (let [{:keys [share-hash selected-statement]} body-params]
+  (let [{:keys [share-hash selected-statement]} body-params
+        prepared-statements (-> (:db/id selected-statement)
+                                discussion-db/children-for-statement
+                                valid-statements-with-votes
+                                with-sub-discussion-info)]
     (if (validator/valid-discussion? share-hash)
-      (ok (valid-statements-with-votes
-            {:premises (with-sub-discussion-info (discussion-db/children-for-statement (:db/id selected-statement)))}))
+      (ok {:premises prepared-statements})
       (validator/deny-access invalid-rights-message))))
 
 (defn- search-schnaq
