@@ -134,6 +134,7 @@
   "Deletes all statements, without explicitly checking anything."
   [statement-ids]
   [(s/coll-of :db/id) :ret associative?]
+  (log/info "Statement ids scheduled for deletion:" statement-ids)
   (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))
 
 (defn- build-new-statement
