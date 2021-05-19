@@ -437,20 +437,30 @@
           (ok {:string-representation (export/generate-text-export share-hash)}))
       (validator/deny-access invalid-rights-message))))
 
+(defn- check-statement-author-and-state
+  "Checks if a statement is authored by this user-identity and is valid, i.e. not deleted.
+  If the statement is valid and authored by this user success-fn is called, if it's not valid bad-request-fn
+  will be called and if the authored user does not match deny-access-fn will be called."
+  [user-identity statement-id share-hash statement success-fn bad-request-fn deny-access-fn]
+  (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
+    (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
+             (not (:statement/deleted? statement)))
+      success-fn
+      bad-request-fn)
+    deny-access-fn))
+
 (defn- edit-statement!
   "Edits the content (and possibly type) of a statement, when the user is the registered author."
   [{:keys [params identity]}]
   (let [{:keys [statement-id statement-type new-content share-hash]} params
         user-identity (:sub identity)
-        statement (db/fast-pull statement-id [:db/id
-                                              :statement/parent
+        statement (db/fast-pull statement-id [:db/id :statement/parent
                                               {:statement/author [:user.registered/keycloak-id]}
                                               :statement/deleted?])]
-    (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
-      (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
-               (not (:statement/deleted? statement)))
-        (ok {:updated-statement (discussion-db/change-statement-text-and-type statement statement-type new-content)})
-        (bad-request {:error "You can not edit a closed / deleted discussion or statement."}))
+    (check-statement-author-and-state
+      user-identity statement-id share-hash statement
+      (ok {:updated-statement (discussion-db/change-statement-text-and-type statement statement-type new-content)})
+      (bad-request {:error "You can not edit a closed / deleted discussion or statement."})
       (validator/deny-access invalid-rights-message))))
 
 (defn- delete-statement!
@@ -458,16 +468,14 @@
   [{:keys [params identity]}]
   (let [{:keys [statement-id share-hash]} params
         user-identity (:sub identity)
-        statement (db/fast-pull statement-id [:db/id
-                                              :statement/parent
+        statement (db/fast-pull statement-id [:db/id :statement/parent
                                               {:statement/author [:user.registered/keycloak-id]}
                                               :statement/deleted?])]
-    (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
-      (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
-               (not (:statement/deleted? statement)))
-        (do (discussion-db/delete-statements! [statement-id])
-            (ok {:deleted-statement statement-id}))
-        (bad-request {:error "You can not Delete a closed / deleted discussion or statement."}))
+    (check-statement-author-and-state
+      user-identity statement-id share-hash statement
+      (do (discussion-db/delete-statements! [statement-id])
+          (ok {:deleted-statement statement-id}))
+      (bad-request {:error "You can not delete a closed / deleted discussion or statement."})
       (validator/deny-access invalid-rights-message))))
 
 ;; -----------------------------------------------------------------------------
