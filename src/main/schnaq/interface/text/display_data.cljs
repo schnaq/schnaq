@@ -976,7 +976,7 @@
         :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
 
         ;; Conversion-Delete-Funnel
-        :discussion.anonymous-delete.modal/title "Bitte melde dich an zum Löschen"
+        :discussion.anonymous-delete.modal/title "Bitte melde dich an, um deinen Beitrag zu löschen"
         :discussion.anonymous-delete.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Löschen anmelden."]]
         :discussion.anonymous-delete.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei deinem Konto hinzugefügt."
         :discussion.anonymous-delete.modal/cta "Anmelden / Registrieren"
