@@ -5,14 +5,14 @@
             [schnaq.database.reaction :as reaction-db]
             [schnaq.database.specs :as specs]
             [schnaq.meta-info :as meta-info])
-  (:import (clojure.lang PersistentArrayMap)))
+  (:import (clojure.lang IEditableCollection)))
 
 (>defn with-votes
   "Enrich every statement map with its vote-counts."
   [data]
   [any? :ret any?]
   (walk/postwalk
-    #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content))
+    #(if (and (instance? IEditableCollection %) (contains? % :statement/content))
        (assoc % :meta/upvotes (reaction-db/upvotes-for-statement (:db/id %))
                 :meta/downvotes (reaction-db/downvotes-for-statement (:db/id %)))
        %)
@@ -23,7 +23,7 @@
   [data]
   [any? :ret any?]
   (walk/postwalk
-    #(if (and (instance? PersistentArrayMap %) (contains? % :statement/content) (:statement/deleted? %))
+    #(if (and (instance? IEditableCollection %) (contains? % :statement/content) (:statement/deleted? %))
        (assoc % :statement/content config/deleted-statement-text)
        %)
     data))
