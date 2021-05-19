@@ -446,9 +446,9 @@
   (if (= user-identity (-> statement :statement/author :user.registered/keycloak-id))
     (if (and (validator/valid-writeable-discussion-and-statement? statement-id share-hash)
              (not (:statement/deleted? statement)))
-      success-fn
-      bad-request-fn)
-    deny-access-fn))
+      (success-fn)
+      (bad-request-fn))
+    (deny-access-fn)))
 
 (defn- edit-statement!
   "Edits the content (and possibly type) of a statement, when the user is the registered author."
@@ -460,9 +460,9 @@
                                               :statement/deleted?])]
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
-      (ok {:updated-statement (discussion-db/change-statement-text-and-type statement statement-type new-content)})
-      (bad-request {:error "You can not edit a closed / deleted discussion or statement."})
-      (validator/deny-access invalid-rights-message))))
+      #(ok {:updated-statement (discussion-db/change-statement-text-and-type statement statement-type new-content)})
+      #(bad-request {:error "You can not edit a closed / deleted discussion or statement."})
+      #(validator/deny-access invalid-rights-message))))
 
 (defn- delete-statement!
   "Deletes a statement, when the user is the registered author."
@@ -474,10 +474,10 @@
                                               :statement/deleted?])]
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
-      (do (discussion-db/delete-statements! [statement-id])
-          (ok {:deleted-statement statement-id}))
-      (bad-request {:error "You can not delete a closed / deleted discussion or statement."})
-      (validator/deny-access invalid-rights-message))))
+      #(do (discussion-db/delete-statements! [statement-id])
+           (ok {:deleted-statement statement-id}))
+      #(bad-request {:error "You can not delete a closed / deleted discussion or statement."})
+      #(validator/deny-access invalid-rights-message))))
 
 
 ;; -----------------------------------------------------------------------------
