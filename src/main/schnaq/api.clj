@@ -348,20 +348,6 @@
             {:premises (with-sub-discussion-info (discussion-db/children-for-statement (:db/id selected-statement)))}))
       (validator/deny-access invalid-rights-message))))
 
-(comment
-
-  (defn- get-statements-for-conclusion
-    "Return all premises and fitting undercut-premises for a given statement."
-    [{:keys [body-params]}]
-    (let [{:keys [share-hash selected-statement]} body-params]
-      (if (validator/valid-discussion? share-hash)
-        (ok {:premises (with-sub-discussion-info
-                         (valid-statements-with-votes
-                           (discussion-db/children-for-statement (:db/id selected-statement))))})
-        (validator/deny-access invalid-rights-message))))
-
-  )
-
 (defn- search-schnaq
   "Search through any valid schnaq."
   [{:keys [params]}]
