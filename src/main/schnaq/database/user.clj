@@ -154,3 +154,12 @@
       :in $ ?group combined-user-pattern
       :where [?users :user.registered/groups ?group]]
     group-name combined-user-pattern))
+
+(defn user-by-email
+  "Returns the registered user by email."
+  [user-email]
+  (query
+    '[:find (pull ?user registered-user-pattern) .
+      :in $ ?email registered-user-pattern
+      :where [?user :user.registered/email ?email]]
+    user-email registered-user-pattern))
