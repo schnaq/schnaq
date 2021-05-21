@@ -30,7 +30,6 @@
        [:div.text-right.my-3
         [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
          (labels :hub.settings/save)]]]]
-     ;; TODO zeige bisherige Mitglieder in settings an
      ;; TODO labelize this
      [pages/settings-panel
       "Mitglieder hinzufügen"
@@ -57,7 +56,9 @@
      {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
      [feed/feed-navigation]
      [settings-body]
-     [hubs/hub-panel]]))
+     [:<>
+      [hubs/hub-panel]
+      [hubs/member-list]]]))
 
 (defn settings
   "Renders all schnaqs belonging to the hub."
