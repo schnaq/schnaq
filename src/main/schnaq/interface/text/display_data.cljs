@@ -758,6 +758,12 @@
         :hub.remove.schnaq/tooltip "Remove the schnaq from hub"
         :hub.members/heading "Members"
 
+        :hub.members.add.result.success/title "Success"
+        :hub.members.add.result.success/body "User was added to the Hub"
+        :hub.members.add.result.error/title "Error"
+        :hub.members.add.result.error/unregistered-user "There seems to be no user with the email address you entered"
+        :hub.members.add.result.error/generic-error "Something went wrong. Please check the email you entered and try again"
+
         :schnaq.search/heading "Search results for: \"%s\""
         :schnaq.search/title "Search"
         :schnaq.search/input "Search for…"
@@ -1520,6 +1526,12 @@
         :hub.remove.schnaq/prompt "Soll der schnaq wirklich aus dem Hub entfernt werden?"
         :hub.remove.schnaq/tooltip "Schnaq aus Hub entfernen"
         :hub.members/heading "Mitglieder"
+
+        :hub.members.add.result.success/title "Erfolg"
+        :hub.members.add.result.success/body "Nutzer:in wurde erfolgreich zum Hub hinzugefügt"
+        :hub.members.add.result.error/title "Fehler"
+        :hub.members.add.result.error/unregistered-user "Unter der gesuchten E-Mail-Adresse existiert kein schnaq Account"
+        :hub.members.add.result.error/generic-error "Etwas ist schief gelaufen. Überprüfe die E-Mail und versuche es noch einmal."
 
         :schnaq.search/heading "Suchergebnisse für: \"%s\""
         :schnaq.search/title "Suche"

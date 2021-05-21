@@ -69,12 +69,30 @@
   (fn [{:keys [db]} [_ new-member-mail]]
     (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
       {:fx [(http/xhrio-request
-              db :put
+              db :post
               (gstring/format "/hub/%s/add-member" keycloak-name)
               [:hub.members.add/success]
               {:new-member-mail new-member-mail})]})))
 
-;; TODO add event for success case
+(rf/reg-event-fx
+  :hub.members.add/success
+  (fn [_ [_ {:keys [status]}]]
+    (let [[body-title body-text context]
+          (case status
+            :user-added [:hub.members.add.result.success/title
+                         :hub.members.add.result.success/body
+                         :success]
+            :user-not-registered [:hub.members.add.result.error/title
+                                  :hub.members.add.result.error/unregistered-user
+                                  :warning]
+            :error-adding-user [:hub.members.add.result.error/title
+                                :hub.members.add.result.error/generic-error
+                                :danger])]
+      {:fx [[:dispatch
+             [:notification/add
+              #:notification{:title (labels body-title)
+                             :body (labels body-text)
+                             :context context}]]]})))
 
 (rf/reg-event-fx
   :hub.name/update
