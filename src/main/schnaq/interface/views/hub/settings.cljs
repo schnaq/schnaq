@@ -31,13 +31,14 @@
         [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
          (labels :hub.settings/save)]]]]
      ;; TODO zeige bisherige Mitglieder in settings an
+     ;; TODO labelize this
      [pages/settings-panel
       "Mitglieder hinzufügen"
       [:form
        {:on-submit (fn [e]
-                     (let [new-member (oget+ e [:target :elements :add-member-input :value])]
+                     (let [new-member-mail (oget+ e [:target :elements :add-member-input :value])]
                        (js-wrap/prevent-default e)
-                       (rf/dispatch [:hub.members/add new-member])))}
+                       (rf/dispatch [:hub.members/add new-member-mail])))}
        [:div.d-flex.flex-row
         [common/form-input {:id :add-member-input
                             :placeholder "contact@email.com"
@@ -62,6 +63,18 @@
   "Renders all schnaqs belonging to the hub."
   []
   [settings-view])
+
+(rf/reg-event-fx
+  :hub.members/add
+  (fn [{:keys [db]} [_ new-member-mail]]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      {:fx [(http/xhrio-request
+              db :put
+              (gstring/format "/hub/%s/add-member" keycloak-name)
+              [:hub.members.add/success]
+              {:new-member-mail new-member-mail})]})))
+
+;; TODO add event for success case
 
 (rf/reg-event-fx
   :hub.name/update
