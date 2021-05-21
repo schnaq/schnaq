@@ -763,6 +763,8 @@
         :hub.members.add.result.error/title "Error"
         :hub.members.add.result.error/unregistered-user "There seems to be no user with the email address you entered"
         :hub.members.add.result.error/generic-error "Something went wrong. Please check the email you entered and try again"
+        :hub.members.add.form/title "Add Members"
+        :hub.members.add.form/button "Add user now!"
 
         :schnaq.search/heading "Search results for: \"%s\""
         :schnaq.search/title "Search"
@@ -1532,6 +1534,8 @@
         :hub.members.add.result.error/title "Fehler"
         :hub.members.add.result.error/unregistered-user "Unter der gesuchten E-Mail-Adresse existiert kein schnaq Account"
         :hub.members.add.result.error/generic-error "Etwas ist schief gelaufen. Überprüfe die E-Mail und versuche es noch einmal."
+        :hub.members.add.form/title "Mitglieder hinzufügen"
+        :hub.members.add.form/button "Nutzer:in hinzufügen!"
 
         :schnaq.search/heading "Suchergebnisse für: \"%s\""
         :schnaq.search/title "Suche"

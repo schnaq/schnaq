@@ -30,9 +30,8 @@
        [:div.text-right.my-3
         [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
          (labels :hub.settings/save)]]]]
-     ;; TODO labelize this
      [pages/settings-panel
-      "Mitglieder hinzufügen"
+      (labels :hub.members.add.form/title)
       [:form
        {:on-submit (fn [e]
                      (let [new-member-mail (oget+ e [:target :elements :add-member-input :value])]
@@ -44,7 +43,7 @@
                             :css "font-150"}]]
        [:div.text-right.my-3
         [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
-         "Nutzer hinzufügen"]]]]]))
+         (labels :hub.members.add.form/button)]]]]]))
 
 (>defn- settings-view
   "Show the CRUD view for a hub."
