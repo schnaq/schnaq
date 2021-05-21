@@ -14,21 +14,37 @@
 (defn- settings-body []
   (let [{:hub/keys [name]} @(rf/subscribe [:hub/current])
         input-id :change-hub-name-input]
-    [pages/settings-panel
-     (labels :hub.settings/change-name)
-     [:form
-      {:on-submit (fn [e]
-                    (let [new-hub-name (oget+ e [:target :elements input-id :value])]
-                      (js-wrap/prevent-default e)
-                      (rf/dispatch [:hub.name/update new-hub-name])))}
-      [:div.d-flex.flex-row
-       [:div.mr-4 [common/identicon name 50]]
-       [common/form-input {:id input-id
-                           :default-value name
-                           :css "font-150"}]]
-      [:div.text-right.my-3
-       [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
-        (labels :hub.settings/save)]]]]))
+    [:<>
+     [pages/settings-panel
+      (labels :hub.settings/change-name)
+      [:form
+       {:on-submit (fn [e]
+                     (let [new-hub-name (oget+ e [:target :elements input-id :value])]
+                       (js-wrap/prevent-default e)
+                       (rf/dispatch [:hub.name/update new-hub-name])))}
+       [:div.d-flex.flex-row
+        [:div.mr-4 [common/identicon name 50]]
+        [common/form-input {:id input-id
+                            :default-value name
+                            :css "font-150"}]]
+       [:div.text-right.my-3
+        [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
+         (labels :hub.settings/save)]]]]
+     ;; TODO zeige bisherige Mitglieder in settings an
+     [pages/settings-panel
+      "Mitglieder hinzufügen"
+      [:form
+       {:on-submit (fn [e]
+                     (let [new-member (oget+ e [:target :elements :add-member-input :value])]
+                       (js-wrap/prevent-default e)
+                       (rf/dispatch [:hub.members/add new-member])))}
+       [:div.d-flex.flex-row
+        [common/form-input {:id :add-member-input
+                            :placeholder "contact@email.com"
+                            :css "font-150"}]]
+       [:div.text-right.my-3
+        [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
+         "Nutzer hinzufügen"]]]]]))
 
 (>defn- settings-view
   "Show the CRUD view for a hub."
