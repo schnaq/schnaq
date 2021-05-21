@@ -33,7 +33,7 @@
 
 (def kc-client
   (-> (client-conf {:auth-server-url (format "%sauth/" server)
-                    :realm "development"
+                    :realm realm
                     :client-id "admin-cli"})
       (keycloak-client backend-admin-id backend-admin-secret)))
 
