@@ -27,15 +27,15 @@
       (json/read-str :key-fn keyword)
       :public_key))
 
-(def backend-client-id (or (System/getenv "KEYCLOAK_CLIENT_ID") "development-backend"))
+(def backend-admin-id (or (System/getenv "KEYCLOAK_ADMIN_ID") "info@schnaq.com"))
 
-(def backend-client-secret (or (System/getenv "KEYCLOAK_CLIENT_SECRET") "17ce03e6-8dd4-4728-b27b-41693c2bd6d7"))
+(def backend-admin-secret (or (System/getenv "KEYCLOAK_ADMIN_SECRET") "***REMOVED***"))
 
 (def kc-client
   (-> (client-conf {:auth-server-url (format "%sauth/" server)
-                    :realm realm
+                    :realm "development"
                     :client-id "admin-cli"})
-      (keycloak-client backend-client-id backend-client-secret)))
+      (keycloak-client backend-admin-id backend-admin-secret)))
 
 ;; -----------------------------------------------------------------------------
 

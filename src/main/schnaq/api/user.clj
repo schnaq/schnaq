@@ -1,9 +1,11 @@
 (ns schnaq.api.user
   (:require [clojure.string :as string]
             [compojure.core :refer [PUT routes wrap-routes context]]
+            [keycloak.admin :as kc-admin]
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
+            [schnaq.config.keycloak :as keycloak-conf :refer [kc-client]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
@@ -57,7 +59,7 @@
                     :message (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types))}))))
 
 (defn- change-display-name
-  "change the display name of a registered user"
+  "Change the display name of a registered user"
   [{:keys [body-params identity]}]
   (let [{:keys [display-name]} body-params]
     (ok {:updated-user (user-db/update-display-name (:id identity) display-name)})))
@@ -71,3 +73,12 @@
         (PUT "/name" [] change-display-name)))
     (wrap-routes auth/auth-middleware)
     (wrap-routes auth/wrap-jwt-authentication)))
+
+(comment
+  (.findAll (.realms kc-client))
+  (kc-admin/create-group! kc-client keycloak-conf/realm "new-groups")
+  (kc-admin/add-user-to-group! kc-client keycloak-conf/realm
+                               "ce855514-31f4-44b5-8683-2632e479cf07"
+                               "eaf34ef9-2e81-4409-8228-48a5c8e2a19f")
+  (kc-admin/get-group-id kc-client keycloak-conf/realm "new-group")
+  )
