@@ -1,9 +1,11 @@
 (ns schnaq.api.hub
   (:require [compojure.core :refer [GET POST DELETE PUT routes wrap-routes context]]
+            [keycloak.admin :as kc-admin]
             [ring.util.http-response :refer [ok forbidden bad-request]]
             [schnaq.auth :as auth]
+            [schnaq.config.keycloak :as kc-config :refer [kc-client]]
             [schnaq.database.hub :as hub-db]
-            [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.user :as user-db]
             [schnaq.processors :as processors]
             [schnaq.validator :as validators]))
@@ -66,8 +68,26 @@
       (let [hub (hub-db/change-hub-name keycloak-name new-hub-name)
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
         (ok {:hub processed-hub}))
-      (forbidden {:message "You are not a member of the group."}))))
+      (forbidden {:message "You are not a member of the hub."}))))
 
+(defn- add-member-to-hub
+  "Add a member to a hub using their email-address. If the user is already a member
+  nothing should change. If the user is not registered yet, return an appropriate status."
+  [{:keys [params identity]}]
+  (let [new-member-mail (:new-member-mail params)
+        group-name (:keycloak-name params)]
+    (if (auth/member-of-group? identity group-name)
+      (if-let [new-user-keycloak-id (:user.registered/keycloak-id (user-db/user-by-email new-member-mail))]
+        (let [group-id (kc-admin/get-group-id kc-client kc-config/realm group-name)]
+          (try
+            (transact [[:db/add [:user.registered/keycloak-id new-user-keycloak-id]
+                        :user.registered/groups group-name]])
+            (kc-admin/add-user-to-group! kc-client kc-config/realm group-id new-user-keycloak-id)
+            (ok {:status :user-added})
+            (catch Exception _e
+              (ok {:status :error-adding-user}))))
+        (ok {:status :user-not-registered}))
+      (forbidden {:message "You are not allowed to add new members to the hub"}))))
 
 ;; -----------------------------------------------------------------------------
 
@@ -79,6 +99,7 @@
       (context "/hub" []
         (GET "/:keycloak-name" [] hub-by-keycloak-name)
         (POST "/:keycloak-name/add" [] add-schnaq-to-hub)
+        (POST "/:keycloak-name/add-member" [] add-member-to-hub)
         (PUT "/:keycloak-name/name" [] change-hub-name)
         (DELETE "/:keycloak-name/remove" [] remove-schnaq-from-hub)))
     (wrap-routes auth/auth-middleware)

@@ -75,7 +75,7 @@
      [:hr]
      [feed/sidebar-common]]))
 
-(defn- member-list
+(defn member-list
   "Lists all members of a hub."
   []
   (let [members @(rf/subscribe [:hub.current/members])]

@@ -110,7 +110,7 @@
          (let [graph-object @(rf/subscribe [:graph/get-object])
                gravity @(rf/subscribe [:graph.settings/gravity])]
            (when graph-object
-             (.setOptions graph-object
+             (.setOptions ^Network graph-object
                           (clj->js (assoc-in options [:physics :barnesHut :avoidOverlap]
                                              gravity))))
            [:div {:id graph-id}]))

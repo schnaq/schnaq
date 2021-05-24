@@ -3,6 +3,7 @@
             [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.string :as string]
+            [keycloak.deployment :refer [keycloak-client client-conf]]
             [schnaq.config.shared :as shared-config]
             [taoensso.timbre :as log]))
 
@@ -25,6 +26,16 @@
       :body
       (json/read-str :key-fn keyword)
       :public_key))
+
+(def backend-admin-id (or (System/getenv "KEYCLOAK_ADMIN_ID") "info@schnaq.com"))
+
+(def backend-admin-secret (or (System/getenv "KEYCLOAK_ADMIN_SECRET") "***REMOVED***"))
+
+(def kc-client
+  (-> (client-conf {:auth-server-url (format "%sauth/" server)
+                    :realm realm
+                    :client-id "admin-cli"})
+      (keycloak-client backend-admin-id backend-admin-secret)))
 
 ;; -----------------------------------------------------------------------------
 
