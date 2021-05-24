@@ -1,5 +1,6 @@
 (ns schnaq.interface.pages.press
-  (:require [schnaq.interface.text.display-data :refer [img-path labels]]
+  (:require [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.text.display-data :refer [img-path labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- card [title photo-keyword link-url]
@@ -24,12 +25,24 @@
 (defn- not-to-do-list []
   (let [fa-icon [:span.fa-li.text-danger [:i.fas.fa-times-circle]]]
     [:<>
-     [:h5.pt-3 (labels :press-kit.not-to-do/heading)]
+     [:h5.pt-4 (labels :press-kit.not-to-do/heading)]
      [:ul.fa-ul.press-dont-list
       [:li fa-icon (labels :press-kit.not-to-do/bullet-1)]
       [:li fa-icon (labels :press-kit.not-to-do/bullet-2)]
       [:li fa-icon (labels :press-kit.not-to-do/bullet-3)]
       [:li fa-icon (labels :press-kit.not-to-do/bullet-4)]]]))
+
+(defn- more-information []
+  [:<>
+   [:h4.pt-3 (labels :press-kit.about-us/heading)]
+   [:p (labels :press-kit.about-us/body)]
+   [:a.btn.btn-primary {:href (reitfe/href :routes/about-us)}
+    (labels :footer.buttons/about-us)]
+   [:a.btn.btn-primary.ml-3 {:href (reitfe/href :routes/publications)}
+    (labels :footer.buttons/publications)]])
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- content []
   [pages/with-nav-and-header
@@ -43,10 +56,9 @@
      [:h4.pt-3 (labels :press-kit.spelling/heading)]
      [:p (labels :press-kit.spelling/content-1) [:strong " schnaq "] (labels :press-kit.spelling/content-2)]
 
+     [more-information]
      [not-to-do-list]]
-
     [materials]]])
-
 
 (defn view []
   [content])
