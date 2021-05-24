@@ -142,6 +142,7 @@
         :footer.buttons/about-us "About us"
         :footer.buttons/legal-note "Legal Note"
         :footer.buttons/privacy "Privacy Notice"
+        :footer.buttons/press-kit "Press Kit"
         :footer.tagline/developed-with " Developed with "
         :footer.sponsors/heading "Our servers are hosted by"
 
@@ -928,6 +929,7 @@
         :footer.buttons/about-us "Über uns"
         :footer.buttons/legal-note "Impressum"
         :footer.buttons/privacy "Datenschutz"
+        :footer.buttons/press-kit "Presse"
         :footer.tagline/developed-with " Entwickelt mit "
         :footer.sponsors/heading "Unsere Server werden gehostet bei"
 
