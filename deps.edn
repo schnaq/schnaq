@@ -53,6 +53,7 @@
                   :main-opts ["-m" "kaocha.runner"]}
 
            :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
+                      :extra-paths ["extra-configs/outdated"]
                       :main-opts ["-m" "antq.core"
                                   "--exclude=com.datomic/datomic-pro"]}
 
