@@ -66,11 +66,11 @@
    [:h2.text-center (labels :about-us.team/title)]
    [:div.card-deck.pb-5.pt-4
     [:div.col
-     (person-card :team/alexander "Dr. Alexander Schneider" (labels :about-us.team/alexander))]
+     [person-card :team/alexander "Dr. Alexander Schneider" (labels :about-us.team/alexander)]]
     [:div.col
-     (person-card :team/christian "Dr. Christian Meter" (labels :about-us.team/christian))]
+     [person-card :team/christian "Dr. Christian Meter" (labels :about-us.team/christian)]]
     [:div.col
-     (person-card :team/mike "Michael Birkhoff" (labels :about-us.team/mike))]]])
+     [person-card :team/mike "Michael Birkhoff" (labels :about-us.team/mike)]]]])
 
 
 ;; ----------------------------------------------------------------------------
