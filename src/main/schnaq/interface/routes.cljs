@@ -8,6 +8,7 @@
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.pages.about-us :as about-us]
+            [schnaq.interface.pages.lead-magnet :as lead-magnet]
             [schnaq.interface.pages.legal-note :as legal-note]
             [schnaq.interface.pages.press :as press]
             [schnaq.interface.pages.privacy :as privacy]
@@ -263,6 +264,9 @@
    ["legal-note"
     {:name :routes/legal-note
      :view legal-note/page}]
+   ["datenschutzkonform-arbeiten"
+    {:name :routes/lead-magnet
+     :view lead-magnet/view}]
    ["error"
     {:name :routes/cause-not-found
      :view error-views/not-found-view-stub
