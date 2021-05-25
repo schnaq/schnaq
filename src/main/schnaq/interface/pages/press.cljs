@@ -17,10 +17,10 @@
   [:section.py-5
    [:h3.text-center.pb-4 (labels :press-kit.materials/heading)]
    [:div.card-deck
-    [card :press-kit.materials/fact-sheet :press-kit/fact-sheet "https://drive.google.com/file/d/1ISIjpex7l3bPSku05LKy-6AxbiAMSRwF/view"]
-    [card :press-kit.materials/logos :press-kit/logo "https://drive.google.com/drive/folders/1uO_DCumcqPhfk0rvZ7gYKRUf07uS28yx"]
-    [card :press-kit.materials/team :press-kit/team "https://drive.google.com/drive/folders/1zcSi05Q6O5bHRH-Ph2vCikmvOKapHDwQ"]
-    [card :press-kit.materials/product :press-kit/product "https://drive.google.com/drive/folders/1m0vrJLstrHhJCOBlU_Ta86fm6X2hLPwr"]]])
+    [card :press-kit.materials/fact-sheet :press-kit/fact-sheet "https://s3.disqtec.com/schnaq-presskit/fact-sheet-schnaq.pdf"]
+    [card :press-kit.materials/logos :press-kit/logo "https://s3.disqtec.com/schnaq-presskit/logos-schnaq.zip"]
+    [card :press-kit.materials/team :press-kit/team "https://s3.disqtec.com/schnaq-presskit/images-schnaq.zip"]
+    [card :press-kit.materials/product :press-kit/product "https://s3.disqtec.com/schnaq-presskit/screenshots-schnaq.zip"]]])
 
 (defn- not-to-do-list []
   (let [fa-icon [:span.fa-li.text-danger [:i.fas.fa-times-circle]]]
