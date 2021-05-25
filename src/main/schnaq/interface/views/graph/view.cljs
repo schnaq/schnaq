@@ -85,29 +85,29 @@
   (->> nodes
        node-types->colors
        (mark-controversy controversy-values)
-       (node-content-color)))
+       node-content-color))
 
 (defn- graph-canvas
   "Visualization of Discussion Graph."
   [{:keys [nodes edges controversy-values]}]
-  (let [nodes-vis (reagent/atom (DataSet.))
-        edges-vis (reagent/atom (DataSet.))
+  (let [nodes-vis (DataSet.)
+        edges-vis (DataSet.)
         nodes-store (reagent/atom nodes)
         edges-store (reagent/atom edges)
         width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
         route-params (get-in @(rf/subscribe [:navigation/current-route]) [:parameters :path])
         share-hash (:discussion/share-hash @(rf/subscribe [:schnaq/selected]))
+        gravity @(rf/subscribe [:graph.settings/gravity])
         options {:width (str width)
                  :height (str height)
                  :layout {:randomSeed :constant}
-                 :physics {:barnesHut {:avoidOverlap
-                                       @(rf/subscribe [:graph.settings/gravity])}}}]
+                 :physics {:barnesHut {:avoidOverlap gravity}}}]
     (reagent/create-class
       {:display-name "Visualization of Discussion Graph"
        :reagent-render
        (fn [_graph]
-         (let [^Network graph-object @(rf/subscribe [:graph/get-object])
+         (let [^js graph-object @(rf/subscribe [:graph/get-object])
                gravity @(rf/subscribe [:graph.settings/gravity])]
            (when graph-object
              (.setOptions graph-object
@@ -116,13 +116,13 @@
            [:div {:id graph-id}]))
        :component-did-mount
        (fn [this]
-         (.add @nodes-vis (clj->js (convert-nodes-for-vis nodes controversy-values)))
-         (.add @edges-vis (clj->js edges))
+         (.add nodes-vis (clj->js (convert-nodes-for-vis nodes controversy-values)))
+         (.add edges-vis (clj->js edges))
          (let [root-node (rdom/dom-node this)
-               data #js {:nodes @nodes-vis
-                         :edges @edges-vis}
-               graph (Network. root-node data (clj->js options))
-               _ (rf/dispatch [:graph/store-object graph])]
+               data #js {:nodes nodes-vis
+                         :edges edges-vis}
+               graph (Network. root-node data (clj->js options))]
+           (rf/dispatch [:graph/store-object graph])
            (.on graph "doubleClick"
                 (fn [properties]
                   (let [node-id (first (get (js->clj properties) "nodes"))]
@@ -130,14 +130,13 @@
                       (rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])
                       (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
                                     (assoc route-params :statement-id node-id)])))))))
-
        :component-did-update
        (fn [this _argv]
          (let [[_ {:keys [nodes edges controversy-values]}] (reagent/argv this)
                new-nodes (set/difference (set nodes) (set @nodes-store))
                new-edges (set/difference (set edges) (set @edges-store))]
-           (.add @nodes-vis (clj->js (convert-nodes-for-vis new-nodes controversy-values)))
-           (.add @edges-vis (clj->js new-edges))
+           (.add nodes-vis (clj->js (convert-nodes-for-vis new-nodes controversy-values)))
+           (.add edges-vis (clj->js new-edges))
            (reset! nodes-store nodes)
            (reset! edges-store edges)))
        :component-will-unmount
