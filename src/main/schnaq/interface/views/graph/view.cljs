@@ -107,10 +107,10 @@
       {:display-name "Visualization of Discussion Graph"
        :reagent-render
        (fn [_graph]
-         (let [graph-object @(rf/subscribe [:graph/get-object])
+         (let [^Network graph-object @(rf/subscribe [:graph/get-object])
                gravity @(rf/subscribe [:graph.settings/gravity])]
            (when graph-object
-             (.setOptions ^Network graph-object
+             (.setOptions graph-object
                           (clj->js (assoc-in options [:physics :barnesHut :avoidOverlap]
                                              gravity))))
            [:div {:id graph-id}]))
