@@ -5,7 +5,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/extra-configs/outdated" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/extra-configs" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -131,7 +131,7 @@
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
     <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.2.20" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
-    <orderEntry type="library" name="Deps: superstructor/re-highlight:0.0.1" level="project" />
+    <orderEntry type="library" name="Deps: superstructor/re-highlight:0.0.2" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: fipp:0.6.23" level="project" />
     <orderEntry type="library" name="Deps: org.apache.tomcat/tomcat-jdbc:7.0.27" level="project" />
@@ -323,7 +323,7 @@
     <orderEntry type="library" name="Deps: org.jboss.resteasy/resteasy-client:3.9.3.Final" level="project" />
     <orderEntry type="library" name="Deps: jakarta.activation/jakarta.activation-api:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: medley:1.3.0" level="project" />
-    <orderEntry type="library" name="Deps: day8.re-frame/re-frame-10x:1.0.2" level="project" />
+    <orderEntry type="library" name="Deps: day8.re-frame/re-frame-10x:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: clojure-msgpack:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.async:1.3.618" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.dataformat/jackson-dataformat-smile:2.10.2" level="project" />

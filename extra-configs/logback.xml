@@ -1,0 +1,3 @@
+<configuration>
+    <logger name="Keycloak.*" level="WARN"/>
+</configuration>
