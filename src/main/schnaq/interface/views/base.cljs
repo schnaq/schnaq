@@ -56,24 +56,33 @@
     (labels :startpage/heading)]])
 
 (defn- footer-nav []
-  [:ul.list-inline
-   [:li.list-inline-item
-    [:a.btn.btn-outline-white {:href (reitfe/href :routes/how-to)}
-     (labels :router/how-to)]]
-   [:li.list-inline-item
-    [:a.btn.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
-     (labels :coc/heading)]]
-   [:li.list-inline-item
-    [:a.btn.btn-outline-white {:href (reitfe/href :routes/about-us)}
-     (labels :footer.buttons/about-us)]]
-   [:li.list-inline-item
-    [:a.btn.btn-outline-white
-     {:role "button" :href (reitfe/href :routes/privacy)}
-     (labels :router/privacy)]]
-   [:li.list-inline-item
-    [:a.btn.btn-outline-white
-     {:href (reitfe/href :routes/legal-note)}
-     (labels :footer.buttons/legal-note)]]])
+  [:<>
+   [:ul.list-inline
+    [:li.list-inline-item
+     [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href :routes/how-to)}
+      (labels :router/how-to)]]
+    [:li.list-inline-item
+     [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
+      (labels :coc/heading)]]
+    [:li.list-inline-item
+     [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href :routes/about-us)}
+      (labels :footer.buttons/about-us)]]
+    [:li.list-inline-item
+     [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href :routes/press)}
+      (labels :footer.buttons/press-kit)]]
+    [:li.list-inline-item
+     [:a.btn.btn-sm.btn-outline-white
+      {:href (reitfe/href :routes/publications)}
+      (labels :footer.buttons/publications)]]]
+   [:ul.list-inline
+    [:li.list-inline-item
+     [:a.btn.btn-sm.btn-outline-white
+      {:role "button" :href (reitfe/href :routes/privacy)}
+      (labels :router/privacy)]]
+    [:li.list-inline-item
+     [:a.btn.btn-sm.btn-outline-white
+      {:href (reitfe/href :routes/legal-note)}
+      (labels :footer.buttons/legal-note)]]]])
 
 (defn- developed-in-nrw []
   [:p.pt-3

@@ -16,6 +16,7 @@
             [schnaq.interface.events]
             [schnaq.interface.navigation]
             [schnaq.interface.pages.about-us]
+            [schnaq.interface.pages.press]
             [schnaq.interface.pages.privacy]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]

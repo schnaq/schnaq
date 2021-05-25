@@ -142,6 +142,8 @@
         :footer.buttons/about-us "About us"
         :footer.buttons/legal-note "Legal Note"
         :footer.buttons/privacy "Privacy Notice"
+        :footer.buttons/press-kit "Press Kit"
+        :footer.buttons/publications "Publications"
         :footer.tagline/developed-with " Developed with "
         :footer.sponsors/heading "Our servers are hosted by"
 
@@ -221,6 +223,54 @@
         :discussion.anonymous-delete.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to delete a statement."]]
         :discussion.anonymous-delete.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
         :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
+
+        ;; Press Kit
+        :press-kit/heading "Press & Media"
+        :press-kit/subheading "We are happy to be available for interviews and articles!"
+        :press-kit.intro/heading "Thank you for your interest in schnaq!"
+        :press-kit.intro/lead "Please take a moment to read our brand guidelines. If you have any press enquiries or would like to write about us, please email presse@schnaq.com. We would love to talk to you!"
+        :press-kit.spelling/heading "Correct Spelling and Pronunciation"
+        :press-kit.spelling/content-1 "Our product is called"
+        :press-kit.spelling/content-2 "(spoken: [ˈʃnak]) and is written with a \"q\". It is pronounced with a soft \"sch\", analogous to the North German \"schnacken\". Except at the beginning of sentences, schnaq should be written in lower case."
+        :press-kit.not-to-do/heading "Please note the following points"
+        :press-kit.not-to-do/bullet-1 "Do not use any other images, illustrations, content or other assets from this domain without permission."
+        :press-kit.not-to-do/bullet-2 "Avoid displaying these graphics in a way that implies a relationship, affiliation or endorsement by schnaq. If you are unsure, please feel free to contact us."
+        :press-kit.not-to-do/bullet-3 "Do not use these graphics as part of the name of your own product, business or service."
+        :press-kit.not-to-do/bullet-4 "Please avoid altering these graphics in any way or combining them with other graphics without our written consent."
+        :press-kit.materials/heading "Assets"
+        :press-kit.materials/fact-sheet "Fact-Sheet"
+        :press-kit.materials/logos "Logos"
+        :press-kit.materials/product "Product Images"
+        :press-kit.materials/team "Team Pictures"
+        :press-kit.materials/download "Download"
+        :press-kit.about-us/heading "Further Information"
+        :press-kit.about-us/body "Further information on our founders, scientific publications and other appearances in newspapers and media, can be found on the following pages:"
+
+        ;; Publications
+        :publications/heading "Publications and Articles"
+        :publications/subheading "The Science behind schnaq"
+        :publications.primer/heading "From Science into Practice"
+        :publications.primer/body "The software we develop is based not only on experience, but also on many years of research in the fields of discussion and communication. Here you will find scientific articles, newspaper articles and other publications that originate from our team or have been produced in cooperation with our team."
+
+        :publications.perspective-daily/summary "An article about our research in Perspective Daily. Focus on structured discussion."
+        :publications.salto/summary "An interview with our founders Dr. Christian Meter and Dr. Alexander Schneider about discussions on the internet, trolls and how to fight them."
+        :publications.dissertation-alex/summary "Dr. Alexander Schneider's dissertation deals with the question of whether structured discussions can be carried out on the internet via decentralised systems."
+        :publications.dissertation-christian/summary "In Dr. Christian Meter's dissertation, several novel procedures and approaches are highlighted to be able to conduct structured discussions on the internet."
+        :publications.structure-or-content/summary "This paper analyses whether Pagerank as an algorithm can make reliable statements about argument relevance and how its performance compares to newer algorithms."
+        :publications.overview-paper/summary "A presentation of a wide variety of methods that make it possible to improve real discussions on the internet."
+        :publications.dbas/summary "The description of a formal prototype for dialogue-based online argumentation including evaluation."
+        :publications.dbas-politics/summary "A presentation of the concept of dialogue-based online discussions for lay people."
+        :publications.eden/summary "The presentation of a software package that allows the operation of decentralised servers that give users access to online discussion systems."
+        :publications.jebediah/summary "The paper demonstrates a social bot based on Google's Dialogflow Engine. The bot is able to communicate with its users in social networks based on dialogue."
+        :publications.dbas-experiment/summary "In a field experiment with over 100 test persons, we will investigate how well a dialogue-based argumentation system can be used by laypersons."
+        :publications.reusable-statements/summary "The authors explore the idea of making online arguments and their interrelationships usable and reusable as a resource."
+        :publications.discuss/summary "If structured discussions are possible via software, is it also possible to let these discussions take place in any web context? The authors explore this question."
+        :publications.kind/article "Article"
+        :publications.kind/dissertation "Dissertation (english)"
+        :publications.kind/interview "Interview"
+        :publications.kind/newspaper-article "Newspaper Article"
+        :publications.kind/paper "Paper (english)"
+        :publications.kind/short-paper "Shortpaper (english)"
 
         ;; Privacy Page
         :privacy/heading "What happens to your data?"
@@ -908,6 +958,8 @@
         :footer.buttons/about-us "Über uns"
         :footer.buttons/legal-note "Impressum"
         :footer.buttons/privacy "Datenschutz"
+        :footer.buttons/press-kit "Presse"
+        :footer.buttons/publications "Publikationen"
         :footer.tagline/developed-with " Entwickelt mit "
         :footer.sponsors/heading "Unsere Server werden gehostet bei"
 
@@ -923,8 +975,6 @@
         :schnaq.header-image.url/successful-set-body "Das Bild wird nun in der Übersicht dargestellt."
         :schnaq.header-image.url/failed-setting-title "Fehler beim Hinzufügen des Bildes"
         :schnaq.header-image.url/failed-setting-body "Das Bild wird nicht in der Vorschau genutzt."
-
-
 
         ;; Create schnaq
         :schnaq.create.input/placeholder "Worüber möchtest du mit deinem Team diskutieren?"
@@ -988,6 +1038,54 @@
         :discussion.anonymous-delete.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Löschen anmelden."]]
         :discussion.anonymous-delete.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei deinem Konto hinzugefügt."
         :discussion.anonymous-delete.modal/cta "Anmelden / Registrieren"
+
+        ;; Press Kit
+        :press-kit/heading "Presse & Medien"
+        :press-kit/subheading "Wir stehen gerne für Interviews und Artikel zur Verfügung!"
+        :press-kit.intro/heading "Vielen Dank für Ihr Interesse an schnaq!"
+        :press-kit.intro/lead "Bitte nehmen Sie sich einen Moment Zeit, um unsere Markenrichtlinien zu lesen. Wenn Sie Presseanfragen haben oder über uns schreiben möchten, senden Sie eine E-Mail an presse@schnaq.com. Wir würden uns sehr gerne mit Ihnen unterhalten!"
+        :press-kit.spelling/heading "Richtige Schreibweise und Aussprache"
+        :press-kit.spelling/content-1 "Unser Produkt heißt"
+        :press-kit.spelling/content-2 "(gesprochen: [ˈʃnak]) und wird mit einem \"q\" geschrieben. Ausgesprochen wird es mit einem weichen \"sch\", analog zum norddeutschen \"schnacken\". Außer an Satzanfängen sollte schnaq kleingeschrieben werden. Das grammatikalische Geschlecht von schnaq ist männlich, somit heißt es beispielsweise \"der schnaq\" oder \"einen schnaq erstellen\"."
+        :press-kit.not-to-do/heading "Bitte beachten Sie folgende Punkte"
+        :press-kit.not-to-do/bullet-1 "Verwenden Sie keine anderen Bilder, Illustrationen, Inhalte oder andere Assets aus dieser Domain ohne Genehmigung."
+        :press-kit.not-to-do/bullet-2 "Vermeiden Sie es diese Grafiken in einer Weise anzeigen, die eine Beziehung, Zugehörigkeit oder Befürwortung durch schnaq impliziert. Sollten Sie unsicher sein, so kontaktieren Sie uns gerne."
+        :press-kit.not-to-do/bullet-3 "Verwenden Sie diese Grafiken nicht als Teil des Namens Ihres eigenen Produkts, Geschäfts oder Ihrer Dienstleistung."
+        :press-kit.not-to-do/bullet-4 "Vermeiden Sie es bitte diese Grafiken in irgendeiner Weise zu verändern oder sie mit anderen Grafiken zu kombinieren, ohne unsere schriftliche Zustimmung."
+        :press-kit.materials/heading "Materialien"
+        :press-kit.materials/fact-sheet "Fact-Sheet"
+        :press-kit.materials/logos "Logos"
+        :press-kit.materials/product "Produktbilder"
+        :press-kit.materials/team "Teamfotos"
+        :press-kit.materials/download "Herunterladen"
+        :press-kit.about-us/heading "Weitere Informationen"
+        :press-kit.about-us/body "Weitere Informationen zu unseren Gründern, wissenschaftliche Publikationen sowie weitere Erscheinungen in Zeitungen und Medien, finden Sie auf den folgenden Seiten:"
+
+        ;; Publications
+        :publications/heading "Publikationen und Artikel"
+        :publications/subheading "Die Wissenschaft hinter schnaq"
+        :publications.primer/heading "Von der Wissenschaft in die Praxis"
+        :publications.primer/body "Die Software, die wir entwickeln, basiert nicht nur auf Erfahrung, sondern auch auf langjähriger Forschung auf den Gebieten der Diskussion und Kommunikation. Hier finden Sie wissenschaftliche Artikel, Zeitungsbeiträge und weitere Publikationen, die von unserem Team stammen, oder in Kooperation mit unserem Team entstanden sind"
+
+        :publications.perspective-daily/summary "Ein Artikel über unsere Forschung in der Perspective Daily. Schwerpunkt ist strukturiertes Diskutieren"
+        :publications.salto/summary "Ein Interview mit unseren Gründern Dr. Christian Meter und Dr. Alexander Schneider über Diskussionen im Internet, Trolle und wie man dagegen vorgehen könnte."
+        :publications.dissertation-alex/summary "In der Dissertation von Dr. Alexander Schneider geht es um die Frage, ob man strukturierte Diskussionen im Internet per dezentralen Systemen durchführen kann."
+        :publications.dissertation-christian/summary "In der Dissertation von Dr. Christian Meter werden mehrere neuartige Verfahren und Herangehensweisen beleuchtet, um im Internet strukturierte Diskussionen durchführen zu können."
+        :publications.structure-or-content/summary "In diesem Paper wird analysiert, ob Pagerank als Algorithmus zuverlässige Aussagen über Argumentrelevanz treffen kann und wie die Performance im Vergleich zu neueren Algorithmen ist."
+        :publications.overview-paper/summary "Eine Präsentation von verschiedensten Methoden, die es ermöglichen, echte Diskussionen im Internet zu verbessern."
+        :publications.dbas/summary "Die Beschreibung eines formalen Prototypen für dialogbasierte Online-Argumentation inklusive Evaluierung."
+        :publications.dbas-politics/summary "Eine Vorstellung des Konzeptes der dialogbasierten Online-Diskussionen für Laien."
+        :publications.eden/summary "Die Vorstellung eines Software-Paketes, welches den Betrieb von dezentral organisierten Servern erlaubt, die Nutzer:innen Zugang zu Online-Diskussionssystemen geben."
+        :publications.jebediah/summary "Das Paper demonstriert einen sozialen Bot auf Basis von Googles Dialogflow Engine. Der Bot ist in der Lage in sozialen Netzwerken dialogbasiert mit seinen Nutzer:innen zu kommunizieren."
+        :publications.dbas-experiment/summary "In einem Feldexperiment mit über 100 Proband:innen wird untersucht wie gut ein dialogbasiertes Argumentationssystem von Laien bedient werden kann."
+        :publications.reusable-statements/summary "Die Autoren untersuchen den Gedanken, wie man online getätigte Argumente und deren Interrelationen als Resource verwertbar und wiederverwendbar machen kann."
+        :publications.discuss/summary "Wenn strukturierte Diskussionen per Software möglich sind, ist es dann auch möglich diese Diskussionen in beliebigen Web-Kontexten stattfinden zu lassen? Dieser Frage gehen die Autoren nach."
+        :publications.kind/article "Artikel"
+        :publications.kind/dissertation "Dissertation (englisch)"
+        :publications.kind/interview "Interview"
+        :publications.kind/newspaper-article "Zeitungsartikel"
+        :publications.kind/paper "Paper (englisch)"
+        :publications.kind/short-paper "Shortpaper (englisch)"
 
         ;; Privacy Page
         :privacy/heading "Was geschieht mit deinen Daten?"
@@ -1567,6 +1665,10 @@
      :logos/doctronic "https://s3.disqtec.com/schnaq-common/logos/doctronic_logo.png"
      :logos/ignition "https://s3.disqtec.com/schnaq-common/logos/ignition_logo.png"
      :logos/hetzner "https://s3.disqtec.com/schnaq-common/logos/logo-hetzner.svg"
+     :press-kit/fact-sheet "https://s3.disqtec.com/schnaq-presskit/factsheet_preview.png"
+     :press-kit/logo "https://s3.disqtec.com/schnaq-presskit/logo_card.png"
+     :press-kit/product "https://s3.disqtec.com/schnaq-presskit/schnaq_liste_auf_tablet.jpg"
+     :press-kit/team "https://s3.disqtec.com/schnaq-presskit/team.jpg"
      :pricing.others/confluence "https://s3.disqtec.com/schnaq-common/startpage/pricing/confluence.jpeg"
      :pricing.others/loomio "https://s3.disqtec.com/schnaq-common/startpage/pricing/loomio.png"
      :pricing.others/miro "https://s3.disqtec.com/schnaq-common/startpage/pricing/miro.png"
@@ -1585,6 +1687,7 @@
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
      :team/alexander "https://s3.disqtec.com/team/alexanderschneider.jpg"
      :team/at-table-with-laptop "https://s3.disqtec.com/team/team_hinter_laptop_am_tisch.jpg"
+     :team/vision-mindmap-team "https://s3.disqtec.com/team/vision_mindmap_team.jpg"
      :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
      :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"}))
 

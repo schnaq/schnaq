@@ -9,8 +9,10 @@
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.legal-note :as legal-note]
+            [schnaq.interface.pages.press :as press]
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
+            [schnaq.interface.pages.publications :as publications]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -113,6 +115,12 @@
     {:name :routes/how-to
      :view how-to/view
      :link-text (labels :router/how-to)}]
+   ["press"
+    {:name :routes/press
+     :view press/view}]
+   ["publications"
+    {:name :routes/publications
+     :view publications/view}]
    ["schnaqs"
     ["/public"
      {:name :routes.schnaqs/public

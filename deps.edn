@@ -6,9 +6,9 @@
         binaryage/oops {:mvn/version "0.7.1"}
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.3"}
-        clj-http/clj-http {:mvn/version "3.12.1"}
-        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.1024"}
-        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.1024"}
+        clj-http/clj-http {:mvn/version "3.12.2"}
+        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.1025"}
+        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.1025"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/datomic-pro {:mvn/version "1.0.6269"}
         com.draines/postal {:mvn/version "2.0.4"}
