@@ -1,4 +1,4 @@
-{:paths ["src/main" "src/test" "extra-configs/outdated"]    ;; remove the configs, when keycloak-clojure removes prints
+{:paths ["src/main" "src/test" "extra-configs"]
  :deps {amazonica/amazonica {:mvn/version "0.3.156"
                              :exclusions [com.amazonaws/aws-java-sdk
                                           com.amazonaws/amazon-kinesis-client]}
