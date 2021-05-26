@@ -55,7 +55,7 @@
   usable by slurp. Title and body are keys for the email-templates map. Format-args if provided are applied to
   the body and html-template."
   [recipient title text-body html-template-path email-type & format-args]
-  [string? keyword? keyword? string? any? :ret any?]
+  [string? keyword? keyword? string? any? any? :ret any?]
   (if (valid-mail recipient)
     (try
       (send-message conn {:from (:sender-address config/email)
