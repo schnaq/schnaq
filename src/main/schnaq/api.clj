@@ -17,6 +17,7 @@
             [schnaq.api.user :as user-api]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
+            [schnaq.config.mailchimp :as mailchimp-config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
@@ -486,21 +487,13 @@
   [{:keys [params]}]
   (let [email (:email params)
         options {:timeout 10000
-                 :basic-auth ["user" api-key]
+                 :basic-auth ["user" mailchimp-config/api-key]
                  :body (json/write-str {:email_address email
                                         :status "subscribed"
                                         :email_type "html"
                                         :tags ["lead-magnet" "datenschutz"]})
                  :user-agent "schnaq Backend Application"}]
-    (http-client/post subscribe-uri options
-                      (fn [{:keys [status headers body error]}] ;; asynchronous response handling
-                        (if error
-                          (do
-                            (println "Failed, exception is " error)
-                            (println "Body: " body))
-                          (do
-                            (println "Async HTTP GET: " status)
-                            (println "Body: " body)))))))
+    (http-client/post mailchimp-config/subscribe-uri options)))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
