@@ -4,7 +4,8 @@
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
             [schnaq.translations :refer [email-templates]]
-            [taoensso.timbre :refer [info error]]))
+            [taoensso.timbre :refer [info error]])
+  (:import (java.util UUID)))
 
 (def ^:private conn {:host (:sender-host config/email)
                      :ssl true
@@ -51,8 +52,9 @@
 
 (>defn send-html-mail
   "Sends a html mail and an alternative text version to any contact. The html-template should be a url or file-path
-  usable by slurp. Title and body are keys for the email-templates map."
-  [recipient title text-body html-template-path email-type]
+  usable by slurp. Title and body are keys for the email-templates map. Format-args if provided are applied to
+  the body and html-template."
+  [recipient title text-body html-template-path email-type & format-args]
   [string? keyword? keyword? string? any? :ret any?]
   (if (valid-mail recipient)
     (try
@@ -60,8 +62,10 @@
                           :to recipient
                           :subject (email-templates title)
                           :body [:alternative
-                                 {:type "text/plain; charset=utf-8" :content (email-templates text-body)}
-                                 {:type "text/html; charset=utf-8" :content (slurp html-template-path)}]})
+                                 {:type "text/plain; charset=utf-8" :content
+                                  (apply format (email-templates text-body) format-args)}
+                                 {:type "text/html; charset=utf-8" :content
+                                  (apply format (slurp html-template-path) format-args)}]})
       (info "Sent" email-type "mail to" recipient)
       :ok
       (catch Exception exception
@@ -83,5 +87,7 @@
   [string? :ret any?]
   (send-html-mail recipient :lead-magnet/title :lead-magnet/body
                   :todo
-                  "lead-magnet remote work"))
+                  "lead-magnet remote work"
+                  "https://s3.disqtec.com/downloads/Datenschutzkonform%20arbeiten%20schnaq.com.pdf"
+                  (.toString (UUID/randomUUID))))
 ;;TODO

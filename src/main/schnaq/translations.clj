@@ -1,5 +1,4 @@
-(ns schnaq.translations
-  (:import (java.util UUID)))
+(ns schnaq.translations)
 
 (def ^:private email-footer
   "Falls Sie mehr Infos zu schnaq möchten, besuchen Sie https://schnaq.com")
@@ -40,14 +39,11 @@ Telefon (optional): %s")
        "Liebe Grüße\nDein Team von schnaq")
      :lead-magnet/title "schnaq.com – Datenschutzkonform verteilt arbeiten Checkliste"
      :lead-magnet/body
-     (format
-       (str
-         "Schön, dass du den ersten Schritt getan hast um flexibel und sicher arbeiten zu können!"
-         "\n"
-         "Hier ist dein persönlicher Downloadlink: %s?key=%s"
-         "\n"
-         "Willst du mehr zu dem Thema erfahren? Schaue öfter mal in unserem Blog vorbei: https://schnaq.com/blog/"
-         "\n\n"
-         "Liebe Grüße\nDein schnaq-Team")
-       :link (.toString (UUID/randomUUID)))}))
-;; TODO downloadlink einfügen
+     (str
+       "Schön, dass du den ersten Schritt getan hast um flexibel und sicher arbeiten zu können!"
+       "\n"
+       "Hier ist dein persönlicher Downloadlink: %s?key=%s"
+       "\n"
+       "Willst du mehr zu dem Thema erfahren? Schaue öfter mal in unserem Blog vorbei: https://schnaq.com/blog/"
+       "\n\n"
+       "Liebe Grüße\nDein schnaq-Team")}))
