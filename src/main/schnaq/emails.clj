@@ -49,23 +49,29 @@
   (run! (partial send-mail title content) recipients)
   {:failed-sendings @failed-sendings})
 
+(>defn send-html-mail
+  "Sends a html mail and an alternative text version to any contact. The html-template should be a url or file-path
+  usable by slurp. Title and body are keys for the email-templates map."
+  [recipient title text-body html-template-path email-type]
+  [string? keyword? keyword? string? any? :ret any?]
+  (if (valid-mail recipient)
+    (try
+      (send-message conn {:from (:sender-address config/email)
+                          :to recipient
+                          :subject (email-templates title)
+                          :body [:alternative
+                                 {:type "text/plain; charset=utf-8" :content (email-templates text-body)}
+                                 {:type "text/html; charset=utf-8" :content (slurp html-template-path)}]})
+      (info "Sent" email-type "mail to" recipient)
+      (catch Exception exception
+        (error "Failed to send" email-type "mail to" recipient)
+        (error exception)))
+    (error "Recipient's mail address is invalid: " recipient)))
+
 (>defn send-welcome-mail
   "Sends a welcome e-mail to a recipient. The mail template is stored in s3."
   [recipient]
   [string? :ret any?]
-  (let [welcome-title (email-templates :welcome/title)
-        welcome-template-text (email-templates :welcome/body)
-        welcome-template-html (slurp "https://s3.disqtec.com/welcome-mail/welcome_template.html")]
-    (if (valid-mail recipient)
-      (try
-        (send-message conn {:from (:sender-address config/email)
-                            :to recipient
-                            :subject welcome-title
-                            :body [:alternative
-                                   {:type "text/plain; charset=utf-8" :content welcome-template-text}
-                                   {:type "text/html; charset=utf-8" :content welcome-template-html}]})
-        (info "Sent welcome mail to " recipient)
-        (catch Exception exception
-          (error "Failed to send welcome mail to" recipient)
-          (error exception)))
-      (error "Recipient's mail address is invalid: " recipient))))
+  (send-html-mail recipient :welcome/title :welcome/body
+                  "https://s3.disqtec.com/welcome-mail/welcome_template.html"
+                  "welcome"))
