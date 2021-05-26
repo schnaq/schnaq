@@ -40,7 +40,7 @@
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-upvote statement]))}
        [:div.vote-box.up-vote
-        [:i {:class (str "m-auto fas " (fa :arrow-up))}]]]]
+        [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]]]
      [:h6.d-flex.p-2.m-0 (logic/calculate-votes statement votes)]
      [:div.d-flex
       [:div.px-2
@@ -48,7 +48,7 @@
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-downvote statement]))}
        [:div.vote-box.down-vote.align-bottom
-        [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]]]))
+        [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]]]]))
 
 (defn- up-down-vote
   "Add inline panel for up and down votes."
@@ -65,7 +65,7 @@
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:div.vote-box.down-vote [:i {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
+      [:div.vote-box.down-vote [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
 (defn statement-card
   [edit-hash statement]
