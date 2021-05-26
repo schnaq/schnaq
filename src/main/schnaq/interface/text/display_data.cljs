@@ -1638,7 +1638,16 @@
         :schnaq.search/heading "Suchergebnisse für: \"%s\""
         :schnaq.search/title "Suche"
         :schnaq.search/input "Suche nach…"
-        :schnaq.search/new-search-title "Es gibt keine Ergebnisse. Starte eine neue Suche."}})
+        :schnaq.search/new-search-title "Es gibt keine Ergebnisse. Starte eine neue Suche."
+
+        :lead-magnet.privacy/consent "Ich möchte die Checkliste für Datenschutzkonformes Arbeiten als .pdf Datei per E-Mail erhalten und mich hiermit zum schnaq Newsletter anmelden, um in Zukunft regelmäßig Informationen von schnaq.com erhalten."
+        :lead-magnet.form/button "Shicke mir die Checkliste zu!"
+        :lead-magnet/heading "Datenschutzkonform verteilt arbeiten"
+        :lead-magnet/subheading "Eine handliche Checkliste um in allen Bereichen gerüstet zu sein"
+        :lead-magnet.cover/alt-text "Das Cover von der Checkliste zum Datenschutzgerechten verteilten arbeiten"
+        :lead-magnet.form/label "Wir versenden den Downloadlink zum PDF per E-Mail"
+        :lead-magnet.requested/part-1 "Dein erster Schritt Richtung datenschutzkonformes Arbeiten ist getan!"
+        :lead-magnet.requested/part-2 "Du solltest den Downloadlink in einigen Minuten erhalten. Schaue auch im Spam-Ordner nach."}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
@@ -1689,7 +1698,8 @@
      :team/at-table-with-laptop "https://s3.disqtec.com/team/team_hinter_laptop_am_tisch.jpg"
      :team/vision-mindmap-team "https://s3.disqtec.com/team/vision_mindmap_team.jpg"
      :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
-     :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"}))
+     :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"
+     :lead-magnet/cover "https://s3.disqtec.com/downloads/checkliste_cover.png"}))
 
 (defn video
   "Returns an video path"

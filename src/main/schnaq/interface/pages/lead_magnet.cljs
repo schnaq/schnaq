@@ -2,7 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.views.pages :as pages]))
@@ -11,16 +11,26 @@
   :lead-magnet/subscribe
   (fn [{:keys [db]} [_ email]]
     {:fx [(http/xhrio-request db :post "/lead-magnet/subscribe" :lead-magnet.subscribe/success {:email email})]}))
-;; TODO success case
+
+(rf/reg-event-db
+  :lead-magnet.subscribe/success
+  (fn [db _]
+    (assoc-in db [:lead-magnet :requested?] true)))
+
+(rf/reg-sub
+  :lead-magnet/requested?
+  (fn [db _]
+    (get-in db [:lead-magnet :requested?] false)))
 
 (defn- subscription-form
   []
-  [:form
+  [:form.text-left
    {:on-submit (fn [e]
                  (jq/prevent-default e)
                  (rf/dispatch [:lead-magnet/subscribe (oget e [:target :elements "EMAIL" :value])]))}
 
    [:div.form-group
+    [:label {:for "EMAIL"} (labels :lead-magnet.form/label)]
     [:input
      {:required true
       :placeholder (labels :startpage.newsletter/address-placeholder)
@@ -31,7 +41,7 @@
     [:div.form-check
      [:input#nochmal-nachfragen.form-check-input {:type "checkbox" :required true}]
      [:label.form-check-label {:for "nochmal-nachfragen"}
-      (labels :startpage.newsletter/consent)]
+      (labels :lead-magnet.privacy/consent)]
      [:p
       [:a {:href "#" :type "button" :data-toggle "collapse" :data-target "#collapse-more-newsletter"
            :aria-expanded "false" :aria-controls "#collapse-more-newsletter"}
@@ -44,16 +54,30 @@
 
    [:div.form-group
     [:input
-     {:name "subscribe" :value (labels :startpage.newsletter/button) :type "submit" :readOnly true
+     {:name "subscribe" :value (labels :lead-magnet.form/button) :type "submit" :readOnly true
       :class "btn btn-primary d-block mx-auto"}]]])
+
+(defn- thank-you-view
+  []
+  [:div.pb-5]
+  [:section.panel-white
+   [:img.img-fluid
+    {:src (img-path :schnaqqifant.300w/talk)}]
+   [:p (labels :lead-magnet.requested/part-1)]
+   [:p (labels :lead-magnet.requested/part-2)]])
 
 (defn- lead-magnet
   []
   [pages/with-nav-and-header
-   {:page/heading "Datenschutzkonform verteilt arbeiten"
-    :page/subheading "Eine handliche Checkliste um in allen Bereichen gerüstet zu sein"}
-   [:section.container
-    [subscription-form]]])
+   {:page/heading (labels :lead-magnet/heading)
+    :page/subheading (labels :lead-magnet/subheading)}
+   [:section.container.text-center.pb-5
+    [:img.img-fluid.mb-5.mx-auto.text-center.shadow
+     {:src (img-path :lead-magnet/cover)
+      :alt (labels :lead-magnet.cover/alt-text)}]
+    (if @(rf/subscribe [:lead-magnet/requested?])
+      [thank-you-view]
+      [subscription-form])]])
 
 (defn view []
   [lead-magnet])
