@@ -63,6 +63,7 @@
                                  {:type "text/plain; charset=utf-8" :content (email-templates text-body)}
                                  {:type "text/html; charset=utf-8" :content (slurp html-template-path)}]})
       (info "Sent" email-type "mail to" recipient)
+      :ok
       (catch Exception exception
         (error "Failed to send" email-type "mail to" recipient)
         (error exception)))
@@ -75,3 +76,12 @@
   (send-html-mail recipient :welcome/title :welcome/body
                   "https://s3.disqtec.com/welcome-mail/welcome_template.html"
                   "welcome"))
+
+(>defn send-remote-work-lead-magnet
+  "Sends the lead magnet pdf to a recipient. The mail template is stored in s3."
+  [recipient]
+  [string? :ret any?]
+  (send-html-mail recipient :lead-magnet/title :lead-magnet/body
+                  :todo
+                  "lead-magnet remote work"))
+;;TODO

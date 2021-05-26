@@ -493,7 +493,10 @@
                                         :email_type "html"
                                         :tags ["lead-magnet" "datenschutz"]})
                  :user-agent "schnaq Backend Application"}]
-    (http-client/post mailchimp-config/subscribe-uri options)))
+    (http-client/post mailchimp-config/subscribe-uri options)
+    (if (emails/send-remote-work-lead-magnet email)
+      (ok {:status :ok})
+      (bad-request {:error "Something went wrong. Check your Email-Address and try again."}))))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
