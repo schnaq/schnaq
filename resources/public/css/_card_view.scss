@@ -98,10 +98,15 @@
 .discussion-input-container {
   background: vars.$gray-200;
   border: 0;
-  border-bottom: 2px solid vars.$white;
-  border-radius: 2rem;
+  border-radius: 1rem;
   overflow: hidden;
-  padding: 0.5rem 1rem;
+}
+
+.discussion-input-content {
+  background: vars.$gray-100;
+  border: 0;
+  box-shadow: vars.$inner-shadow;
+  padding: 0.5rem 0.75rem;
 }
 
 .primary-icon-button {
@@ -159,6 +164,7 @@
   @include rounded.rounded-1;
   border: 0;
   overflow: hidden;
+  padding-left: 1rem;
   white-space: pre-line;
 }
 

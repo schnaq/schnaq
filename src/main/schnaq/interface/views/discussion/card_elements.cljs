@@ -123,7 +123,7 @@
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary.rounded-2
+  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.rounded-2
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
@@ -306,7 +306,7 @@
   (let [is-topic? (nil? history)]
     [:div.container-fluid
      [:div.row.px-0.mx-0
-      [:div.col-2.py-4
+      [:div.col-3.py-4
        [history-view history]]
       [:div.col-9.py-4.px-0
        [topic-view current-discussion conclusions
