@@ -4,8 +4,8 @@
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.discussion.logic :as logic]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.discussion.logic :as logic]))
 
 (defn- statement-type-button
   "Button to select the attitude of a statement. Current attitude is subscribed via get-subscription.
