@@ -306,7 +306,7 @@
   (let [is-topic? (nil? history)]
     [:div.container-fluid
      [:div.row.px-0.mx-0
-      [:div.col-2.py-4
+      [:div.col-3.py-4
        [history-view history]]
       [:div.col-9.py-4.px-0
        [topic-view current-discussion conclusions
