@@ -1,5 +1,6 @@
 (ns schnaq.interface.routes
   (:require [goog.object :as gobj]
+            [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reitit.coercion.spec]
             [reitit.frontend :as reitit-front]
@@ -286,8 +287,11 @@
     routes))
 
 (defn- on-navigate [new-match]
-  (when (empty? (.. js/window -location -hash))
-    (.scrollTo js/window 0 0))
+  (let [window-hash (.. js/window -location -hash)]
+    (if (empty? window-hash)
+      (.scrollTo js/window 0 0)
+      (oset! js/document "onreadystatechange"
+             #(js-wrap/scroll-to-id window-hash))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

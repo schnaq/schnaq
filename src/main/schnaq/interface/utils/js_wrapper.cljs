@@ -85,3 +85,11 @@
   []
   (or (.-language js/navigator)
       (.-userLanguage js/navigator)))
+
+(defn scroll-to-id
+  [id]
+  (let [clean-id (if (= \# (first id)) (subs id 1) id)
+        element (.getElementById js/document clean-id)
+        state (.-readyState js/document)]
+    (when (and element (= state "complete"))
+      (.scrollIntoView element))))
