@@ -286,7 +286,8 @@
     routes))
 
 (defn- on-navigate [new-match]
-  (.scrollTo js/window 0 0)
+  (when (empty? (.. js/window -location -hash))
+    (.scrollTo js/window 0 0))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
