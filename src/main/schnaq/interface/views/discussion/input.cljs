@@ -50,8 +50,7 @@
                                        :statement.type/support "support"
                                        :statement.type/attack "attack"
                                        :statement.type/neutral "neutral"))]
-    [:div
-     {:class (str "statement-card-" attitude " mobile-attitude-" attitude)}
+    [:div {:class (str "statement-card-" attitude " mobile-attitude-" attitude)}
      [:div.discussion-input-content
       [:div.d-flex.flex-row.justify-content-end.pr-lg-2
        ;; hide 'new post from you' text on mobile
