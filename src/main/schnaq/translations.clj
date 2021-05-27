@@ -42,7 +42,7 @@ Telefon (optional): %s")
      (str
        "Schön, dass du den ersten Schritt getan hast um flexibel und sicher arbeiten zu können!"
        "\n"
-       "Hier ist dein persönlicher Downloadlink: %s?key=%s"
+       "Hier ist dein persönlicher Downloadlink: $DOWNLOAD_LINK"
        "\n"
        "Willst du mehr zu dem Thema erfahren? Schaue öfter mal in unserem Blog vorbei: https://schnaq.com/blog/"
        "\n\n"

@@ -10,7 +10,7 @@
 (rf/reg-event-fx
   :lead-magnet/subscribe
   (fn [{:keys [db]} [_ email]]
-    {:fx [(http/xhrio-request db :post "/lead-magnet/subscribe" :lead-magnet.subscribe/success {:email email})]}))
+    {:fx [(http/xhrio-request db :post "/lead-magnet/subscribe" [:lead-magnet.subscribe/success] {:email email})]}))
 
 (rf/reg-event-db
   :lead-magnet.subscribe/success
