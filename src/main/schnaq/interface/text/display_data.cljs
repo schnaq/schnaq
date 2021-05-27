@@ -197,7 +197,7 @@
         :statement.edit.button/submit "Submit"
         :statement.edit.button/cancel "Cancel"
 
-        ;; schnaq creation
+        ;; schnaq creationDatenschutzkonform verteilt arbeiten
         :schnaq.create/heading "Start schnaq"
         :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
         :schnaq.create/schnaqqi-speech "Create your schnaq and invite your whole team in the next step!"
@@ -819,7 +819,16 @@
         :schnaq.search/heading "Search results for: \"%s\""
         :schnaq.search/title "Search"
         :schnaq.search/input "Search for…"
-        :schnaq.search/new-search-title "There are no results. Start a new search."}
+        :schnaq.search/new-search-title "There are no results. Start a new search."
+
+        :lead-magnet.privacy/consent "I want to receive a checklist of tools which comply with german privacy laws as .pdf file in German via mail and register for the newsletter as well. The newsletter is currently available in German only."
+        :lead-magnet.form/button "Send me a copy!"
+        :lead-magnet/heading "German laws take privacy very serious and so do we"
+        :lead-magnet/subheading "Our checklist for working remotely according to german privacy laws (in German only)"
+        :lead-magnet.cover/alt-text "cover of the checklist for working remotely according to german privacy laws"
+        :lead-magnet.form/label "We will send a download link via mail"
+        :lead-magnet.requested/part-1 "First step done to comply with german privacy laws when working remotely!"
+        :lead-magnet.requested/part-2 "You should receive the download link within a few minutes. Please check your spam folder in case you did not receive any mail."}
 
    :de {;; Common
         :common/language "Sprache"
