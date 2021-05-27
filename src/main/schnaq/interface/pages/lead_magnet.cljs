@@ -59,7 +59,6 @@
 
 (defn- thank-you-view
   []
-  [:div.pb-5]
   [:section.panel-white
    [:img.img-fluid
     {:src (img-path :schnaqqifant.300w/talk)}]
