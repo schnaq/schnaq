@@ -17,14 +17,6 @@
       (+ (:meta/upvotes statement) up-vote-change)
       (+ (:meta/downvotes statement) down-vote-change))))
 
-(defn attitude->symbol
-  "Returns an fa symbol identifier based on attitude"
-  [attitude]
-  (case attitude
-    :statement.type/attack :minus
-    :statement.type/support :plus
-    :circle))
-
 (rf/reg-event-fx
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ reaction new-premise]]

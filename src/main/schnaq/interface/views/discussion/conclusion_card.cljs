@@ -69,8 +69,7 @@
 
 (defn statement-card
   [edit-hash statement]
-  (let [fa-label (logic/attitude->symbol (:statement/type statement))
-        path-params (:path-params @(rf/subscribe [:navigation/current-route]))
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         on-click-fn (fn [_e]
                       (let [selection (js-wrap/to-string (.getSelection js/window))]
                         (when (zero? (count selection))
@@ -81,19 +80,16 @@
     [:div {:on-click on-click-fn}
      [:article.card.statement-card.clickable
       {:class (str "statement-card-" (name (or (:statement/type statement) :neutral)))}
-      [:div.d-flex.flex-row
-       [:div.m-auto
-        [:i.card-view-type {:class (str "fas " (fa fa-label))}]]
-       [:div.card-view.card-body.py-0.pb-1
-        [:div.d-flex.justify-content-end.mt-2
-         [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
-        [:div.my-1 [:p (:statement/content statement)]]
-        [:div.d-flex
-         [:a.badge.badge-primary.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
-          (labels :statement/reply)]
-         [badges/extra-discussion-info-badges statement edit-hash]
-         [:div.ml-auto
-          [up-down-vote statement]]]]]]]))
+      [:div.card-view.card-body.py-0.pb-1
+       [:div.d-flex.justify-content-end.pt-2
+        [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
+       [:div.my-1 [:p (:statement/content statement)]]
+       [:div.d-flex
+        [:a.badge.badge-primary.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
+         (labels :statement/reply)]
+        [badges/extra-discussion-info-badges statement edit-hash]
+        [:div.ml-auto
+         [up-down-vote statement]]]]]]))
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."
