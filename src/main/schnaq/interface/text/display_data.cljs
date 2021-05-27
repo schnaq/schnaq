@@ -1652,8 +1652,8 @@
         :lead-magnet.privacy/consent "Ich möchte die Checkliste für datenschutzkonformes Arbeiten als .pdf Datei per E-Mail erhalten und mich hiermit zum schnaq Newsletter anmelden, um in Zukunft regelmäßig Informationen von schnaq.com erhalten."
         :lead-magnet.form/button "Schicke mir die Checkliste zu!"
         :lead-magnet/heading "Datenschutzkonform verteilt arbeiten"
-        :lead-magnet/subheading "Eine handliche Checkliste um in allen Bereichen gerüstet zu sein"
-        :lead-magnet.cover/alt-text "Das Cover von der Checkliste zum datenschutzgerechten verteilten arbeiten"
+        :lead-magnet/subheading "Eine handliche Checkliste, um in allen Bereichen gerüstet zu sein"
+        :lead-magnet.cover/alt-text "Das Cover von der Checkliste zum datenschutzgerechten verteilten Arbeiten"
         :lead-magnet.form/label "Wir versenden den Downloadlink zum PDF per E-Mail"
         :lead-magnet.requested/part-1 "Dein erster Schritt Richtung datenschutzkonformes Arbeiten ist getan!"
         :lead-magnet.requested/part-2 "Du solltest den Downloadlink in einigen Minuten erhalten. Schaue auch im Spam-Ordner nach."}})
