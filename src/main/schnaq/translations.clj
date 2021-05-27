@@ -36,4 +36,14 @@ Telefon (optional): %s")
        "\n"
        "Du kannst vorher natürlich auch erst dein Profil individualisieren."
        "\n\n"
-       "Liebe Grüße\nDein Team von schnaq")}))
+       "Liebe Grüße\nDein Team von schnaq")
+     :lead-magnet/title "schnaq.com – Datenschutzkonform verteilt arbeiten Checkliste"
+     :lead-magnet/body
+     (str
+       "Schön, dass du den ersten Schritt getan hast um flexibel und sicher arbeiten zu können!"
+       "\n"
+       "Hier ist dein persönlicher Downloadlink: $DOWNLOAD_LINK"
+       "\n"
+       "Willst du mehr zu dem Thema erfahren? Schaue öfter mal in unserem Blog vorbei: https://schnaq.com/blog/"
+       "\n\n"
+       "Liebe Grüße\nDein schnaq-Team")}))

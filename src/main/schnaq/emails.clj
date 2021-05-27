@@ -1,10 +1,12 @@
 (ns schnaq.emails
   (:require [clojure.spec.alpha :as s]
+            [clojure.string :as cstring]
             [ghostwheel.core :refer [>defn >defn- ?]]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
             [schnaq.translations :refer [email-templates]]
-            [taoensso.timbre :refer [info error]]))
+            [taoensso.timbre :refer [info error]])
+  (:import (java.util UUID)))
 
 (def ^:private conn {:host (:sender-host config/email)
                      :ssl true
@@ -49,23 +51,45 @@
   (run! (partial send-mail title content) recipients)
   {:failed-sendings @failed-sendings})
 
-(>defn send-welcome-mail
-  "Sends a welcome e-mail to a recipient. The mail template is stored in s3."
-  [recipient]
-  [string? :ret any?]
-  (let [welcome-title (email-templates :welcome/title)
-        welcome-template-text (email-templates :welcome/body)
-        welcome-template-html (slurp "https://s3.disqtec.com/welcome-mail/welcome_template.html")]
+(>defn send-html-mail
+  "Sends a html mail and an alternative text version to any contact. The html-template should be a url or file-path
+  usable by slurp. Title and body are keys for the email-templates map. Format-map is used to substitute things
+  in the text-body and html template. The keys are substituted by their values."
+  [recipient title text-body html-template-path email-type format-map]
+  [string? keyword? keyword? string? any? map? :ret any?]
+  (let [replace-fn #(cstring/replace %1 (first %2) (second %2))]
     (if (valid-mail recipient)
       (try
         (send-message conn {:from (:sender-address config/email)
                             :to recipient
-                            :subject welcome-title
+                            :subject (email-templates title)
                             :body [:alternative
-                                   {:type "text/plain; charset=utf-8" :content welcome-template-text}
-                                   {:type "text/html; charset=utf-8" :content welcome-template-html}]})
-        (info "Sent welcome mail to " recipient)
+                                   {:type "text/plain; charset=utf-8" :content
+                                    (reduce replace-fn (email-templates text-body) format-map)}
+                                   {:type "text/html; charset=utf-8" :content
+                                    (reduce replace-fn (slurp html-template-path) format-map)}]})
+        (info "Sent" email-type "mail to" recipient)
+        :ok
         (catch Exception exception
-          (error "Failed to send welcome mail to" recipient)
+          (error "Failed to send" email-type "mail to" recipient)
           (error exception)))
       (error "Recipient's mail address is invalid: " recipient))))
+
+(>defn send-welcome-mail
+  "Sends a welcome e-mail to a recipient. The mail template is stored in s3."
+  [recipient]
+  [string? :ret any?]
+  (send-html-mail recipient :welcome/title :welcome/body
+                  "https://s3.disqtec.com/welcome-mail/welcome_template.html"
+                  "welcome" {}))
+
+(>defn send-remote-work-lead-magnet
+  "Sends the lead magnet pdf to a recipient. The mail template is stored in s3."
+  [recipient]
+  [string? :ret any?]
+  (send-html-mail recipient :lead-magnet/title :lead-magnet/body
+                  "https://s3.disqtec.com/email/lead-magnet/dsgvo-check-mail.html"
+                  "lead-magnet remote work"
+                  {"$DOWNLOAD_LINK"
+                   (str "https://s3.disqtec.com/downloads/Datenschutzkonform%20arbeiten%20schnaq.com.pdf?key="
+                        (.toString (UUID/randomUUID)))}))

@@ -5,6 +5,7 @@
     <item key="clojure.core/defmulti" resolves-as="clojure.core/defn" />
     <item key="cljs.spec.alpha/fdef" resolves-as="clojure.core/def" />
     <item key="compojure.core/defroutes" resolves-as="clojure.core/def" />
+    <item key="org.httpkit.client/defreq" resolves-as="clojure.core/declare" />
     <item key="clojure.test/are" resolves-as="clojure.core/def" />
     <item key="ghostwheel.core/&gt;defn" resolves-as="clojure.core/defn" />
     <item key="clojure.core/defonce" resolves-as="clojure.core/def" />

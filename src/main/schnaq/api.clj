@@ -1,10 +1,12 @@
 (ns schnaq.api
-  (:require [clojure.java.io :as io]
+  (:require [clojure.data.json :as json]
+            [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [compojure.core :refer [GET POST PUT DELETE routes wrap-routes]]
             [compojure.route :as route]
             [ghostwheel.core :refer [>defn-]]
+            [org.httpkit.client :as http-client]
             [org.httpkit.server :as server]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
@@ -16,6 +18,7 @@
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
+            [schnaq.config.mailchimp :as mailchimp-config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
@@ -479,6 +482,21 @@
       #(bad-request {:error "You can not delete a closed / deleted discussion or statement."})
       #(validator/deny-access invalid-rights-message))))
 
+(defn- subscribe-lead-magnet!
+  "Subscribes to the mailing list and sends the lead magnet to the email-address."
+  [{:keys [params]}]
+  (let [email (:email params)
+        options {:timeout 10000
+                 :basic-auth ["user" mailchimp-config/api-key]
+                 :body (json/write-str {:email_address email
+                                        :status "subscribed"
+                                        :email_type "html"
+                                        :tags ["lead-magnet" "datenschutz"]})
+                 :user-agent "schnaq Backend Application"}]
+    (http-client/post mailchimp-config/subscribe-uri options)
+    (if (emails/send-remote-work-lead-magnet email)
+      (ok {:status :ok})
+      (bad-request {:error "Something went wrong. Check your Email-Address and try again."}))))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
@@ -526,6 +544,7 @@
       (POST "/feedback/add" [] add-feedback)
       (POST "/graph/discussion" [] graph-data-for-agenda)
       (POST "/header-image/image" [] media/set-preview-image)
+      (POST "/lead-magnet/subscribe" [] subscribe-lead-magnet!)
       (POST "/schnaq/add" [] add-schnaq)
       (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
       (POST "/votes/down/toggle" [] toggle-downvote-statement)
