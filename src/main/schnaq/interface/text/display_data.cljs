@@ -7,7 +7,6 @@
 
 (def ^:private translations
   {:en {;; Common
-        :common/language "Language"
         :error/export-failed "Export failed. Please try again later."
 
         ;; navbar labels
@@ -833,7 +832,6 @@
         :lead-magnet.requested/part-2 "You should receive the download link within a few minutes. Please check your spam folder in case you did not receive any mail."}
 
    :de {;; Common
-        :common/language "Sprache"
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
 
         ;; navbar labels
