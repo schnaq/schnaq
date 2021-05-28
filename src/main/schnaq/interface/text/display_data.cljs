@@ -453,9 +453,10 @@
         :about-us.numbers/loc "Lines of Code"
 
         :about-us.team/title "Focus on the Team"
-        :about-us.team/alexander "Founder - Operational Management"
-        :about-us.team/christian "Founder - Technical Management"
-        :about-us.team/mike "Founder - Product Design Management"
+        :about-us.team/alexander "Co-Founder - Operational Management"
+        :about-us.team/christian "Co-Founder - Technical Management"
+        :about-us.team/mike "Co-Founder - Product Design Management"
+        :about-us.team/philip "Co-Founder - Chief of Customer Success"
 
         :about-us.page/heading "About Us"
         :about-us.page/subheading "Information about us"
@@ -1274,9 +1275,10 @@
         :about-us.numbers/loc "Zeilen Code"
 
         :about-us.team/title "Team im Fokus"
-        :about-us.team/alexander "Gründer - Operative Führung"
-        :about-us.team/christian "Gründer - Technische Führung"
-        :about-us.team/mike "Gründer - Führung Produktdesign"
+        :about-us.team/alexander "Co-Gründer - Operative Führung"
+        :about-us.team/christian "Co-Gründer - Technische Führung"
+        :about-us.team/mike "Co-Gründer - Führung Produktdesign"
+        :about-us.team/philip "Co-Gründer - Chief of Customer Success"
 
         :about-us.page/heading "Über uns"
         :about-us.page/subheading "Informationen zu uns"
@@ -1710,6 +1712,7 @@
      :team/vision-mindmap-team "https://s3.disqtec.com/team/vision_mindmap_team.jpg"
      :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
      :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"
+     :team/philip "https://s3.disqtec.com/team/philipbernardy.jpg"
      :lead-magnet/cover "https://s3.disqtec.com/downloads/checkliste_cover.png"}))
 
 (defn video
