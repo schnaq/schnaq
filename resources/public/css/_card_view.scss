@@ -25,10 +25,6 @@
 
 .card-view {
   background: vars.$white;
-
-  &:hover {
-    background: vars.$white-shade;
-  }
 }
 
 .card-view-type {
@@ -171,26 +167,14 @@
 .statement-card-support {
   @extend .statement-card;
   background: vars.$primary;
-
-  &:hover {
-    background: vars.$primary-selected;
-  }
 }
 
 .statement-card-attack {
   @extend .statement-card;
   background: vars.$secondary;
-
-  &:hover {
-    background: vars.$secondary-selected;
-  }
 }
 
 .statement-card-neutral {
   @extend .statement-card;
   background: vars.$gray-300;
-
-  &:hover {
-    background: vars.$gray-200;
-  }
 }
