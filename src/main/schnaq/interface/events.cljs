@@ -68,6 +68,15 @@
   (fn [db _]
     (get db :locale)))
 
+(rf/reg-sub
+  :current-language
+  (fn [_ _]
+    (rf/subscribe [:current-locale]))
+  (fn [locale _]
+    (case locale
+      :de "Deutsch"
+      :en "English")))
+
 (rf/reg-fx
   ;; Changes the HTML lang attribute accordingly.
   :change-document-lang

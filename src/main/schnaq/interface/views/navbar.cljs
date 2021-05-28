@@ -53,7 +53,8 @@
   "Navbar definition for the default pages."
   []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
-        visited-hashes @(rf/subscribe [:schnaqs.visited/all-hashes])]
+        visited-hashes @(rf/subscribe [:schnaqs.visited/all-hashes])
+        current-language @(rf/subscribe [:current-language])]
     ;; collapsable navbar
     [:nav.navbar.navbar-expand-lg.py-3.navbar-light.bg-light
      ;; logo
@@ -101,7 +102,7 @@
         [:a#schnaq-dropdown.nav-link.dropdown-toggle
          {:href "#" :role "button" :data-toggle "dropdown"
           :aria-haspopup "true" :aria-expanded "false"}
-         [:i {:class (str "far " (fa :flag))}] " " (labels :common/language)]
+         [:i {:class (str "fas " (fa :language))}] " " current-language]
         [:div.dropdown-menu {:aria-labelledby "schnaq-dropdown"}
          [:button.dropdown-item
           {:on-click #(language/set-language :en)} "English"]
