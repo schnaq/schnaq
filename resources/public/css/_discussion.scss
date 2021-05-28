@@ -1,27 +1,26 @@
 @import 'rounded';
 @import 'variables';
 
-.statement-outer {
-  background: transparent;
-  border: 0;
-  color: $white;
-  padding: 0.5rem 1rem;
-
-  @include media-breakpoint-down(sm) {
-    padding: 0 0.8rem;
-  }
-}
-
-.statement {
-  border-radius: 2rem 0.5rem 0.5rem 2rem;
-  box-shadow: $regular-shadow;
-  color: $white;
-  padding: 0.5em 1rem;
-
-  @include media-breakpoint-down(sm) {
-    border-radius: 1rem;
-  }
-}
+//.statement-outer {
+//  background: transparent;
+//  border: 0;
+//  color: $white;
+//  padding: 0.5rem 1rem;
+//
+//  @include media-breakpoint-down(sm) {
+//    padding: 0 0.8rem;
+//  }
+//}
+//
+//.statement {
+//  border-radius: 2rem 0.5rem 0.5rem 2rem;
+//  color: $white;
+//  padding: 0.5em 1rem;
+//
+//  @include media-breakpoint-down(sm) {
+//    border-radius: 1rem;
+//  }
+//}
 
 .privacy-indicator {
   @include media-breakpoint-down(sm) {
@@ -29,40 +28,40 @@
   }
 }
 
-.statement-content {
-  padding: 1rem;
-
-  @include media-breakpoint-down(sm) {
-    padding: 0 0.5rem;
-  }
-}
-
-.statement-agree {
-  background: $primary;
-  cursor: pointer;
-}
-
-.statement-agree:hover {
-  background: $primary-selected;
-}
-
-.statement-disagree {
-  background: $secondary;
-  cursor: pointer;
-}
-
-.statement-disagree:hover {
-  background: $secondary-selected;
-}
-
-.statement-neutral {
-  background: $primary-light;
-  cursor: pointer;
-}
-
-.statement-neutral:hover {
-  background: $primary-light-selected;
-}
+//.statement-content {
+//  padding: 1rem;
+//
+//  @include media-breakpoint-down(sm) {
+//    padding: 0 0.5rem;
+//  }
+//}
+//
+//.statement-agree {
+//  background: $primary;
+//  cursor: pointer;
+//}
+//
+//.statement-agree:hover {
+//  background: $primary-selected;
+//}
+//
+//.statement-disagree {
+//  background: $secondary;
+//  cursor: pointer;
+//}
+//
+//.statement-disagree:hover {
+//  background: $secondary-selected;
+//}
+//
+//.statement-neutral {
+//  background: $primary-light;
+//  cursor: pointer;
+//}
+//
+//.statement-neutral:hover {
+//  background: $primary-light-selected;
+//}
 
 .discussion-view-rounded {
   @include rounded-4;

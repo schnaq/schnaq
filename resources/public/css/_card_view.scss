@@ -105,7 +105,6 @@
 .discussion-input-content {
   background: vars.$gray-100;
   border: 0;
-  box-shadow: vars.$inner-shadow;
   padding: 0.5rem 0.75rem;
 }
 
@@ -161,6 +160,7 @@
 }
 
 .statement-card {
+  @extend .shadow-sm;
   @include rounded.rounded-1;
   border: 0;
   overflow: hidden;

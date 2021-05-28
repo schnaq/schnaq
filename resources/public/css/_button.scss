@@ -3,9 +3,9 @@
 
 
 @mixin button-template($padding-top-bottom, $padding-left-right) {
+  @extend .shadow-sm;
   border: 0;
   border-radius: 1.5rem;
-  box-shadow: $regular-shadow;
   color: $white;
   font-weight: bold;
   padding: $padding-top-bottom $padding-left-right;
