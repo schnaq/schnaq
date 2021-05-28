@@ -52,6 +52,14 @@
    [:div.mr-4 [avatar user size]]
    [:h4.my-auto display-name]])
 
+(defn inline-avatar
+  "Creates an inline image and name."
+  [{:user.registered/keys [display-name] :as user} size]
+  [:<>
+   [:div.d-inline-block.pr-1
+    [avatar user size]]
+   [:p.d-inline-block display-name]])
+
 (>defn add-namespace-to-keyword
   "Prepend a namespace to a keyword. Replaces existing namespace with new
   namespace."
