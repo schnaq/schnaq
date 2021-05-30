@@ -81,10 +81,11 @@
   (let [members @(rf/subscribe [:hub.current/members])]
     (when (seq members)
       [:section.panel-white.mt-3
-       [:h5.text-center (labels :hub.members/heading)]
-       (for [member members]
-         [:article.d-inline-block.py-1.px-2.align-top {:key (:db/id member)}
-          [common/avatar-with-nickname member 50]])])))
+       [:h5.text-center.pb-2 (labels :hub.members/heading)]
+       [:ul.list-group
+        (for [member members]
+          [:li.list-group-item.border-0.py-0 {:key (:db/id member)}
+           [common/inline-avatar member 30]])]])))
 
 (defn sidebar-right []
   [:<>
