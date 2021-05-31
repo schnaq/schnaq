@@ -2,11 +2,14 @@
 @import 'variables';
 
 @mixin feed-button-base {
-  @include button-template(1rem, 2rem);
   background-color: transparent;
+  border: 0;
+  border-radius: 1.5rem;
   box-shadow: none;
+  color: $white;
   font-size: 1.25rem;
   font-weight: bolder;
+  padding: 1rem 2rem;
 
   &:hover {
     background-color: $white-shade;
@@ -22,11 +25,13 @@
 
 .feed-button-focused {
   @include feed-button-base;
+  box-shadow: none;
   color: $primary;
 }
 
 .feed-button {
   @include feed-button-base;
+  box-shadow: none;
   color: $text-dark;
 }
 

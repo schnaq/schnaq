@@ -1777,6 +1777,7 @@
      :plane "fa-paper-plane"
      :plus "fa-plus"
      :project/diagram "fa-project-diagram"
+     :reply "fa-comment-dots"
      :search "fa-search"
      :server "fa-server"
      :share "fa-share-alt"

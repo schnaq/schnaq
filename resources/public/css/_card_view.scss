@@ -25,10 +25,6 @@
 
 .card-view {
   background: vars.$white;
-
-  &:hover {
-    background: vars.$white-shade;
-  }
 }
 
 .card-view-type {
@@ -105,7 +101,6 @@
 .discussion-input-content {
   background: vars.$gray-100;
   border: 0;
-  box-shadow: vars.$inner-shadow;
   padding: 0.5rem 0.75rem;
 }
 
@@ -161,6 +156,7 @@
 }
 
 .statement-card {
+  @extend .shadow-sm;
   @include rounded.rounded-1;
   border: 0;
   overflow: hidden;
@@ -171,28 +167,16 @@
 .statement-card-support {
   @extend .statement-card;
   background: vars.$primary;
-
-  &:hover {
-    background: vars.$primary-selected;
-  }
 }
 
 .statement-card-attack {
   @extend .statement-card;
   background: vars.$secondary;
-
-  &:hover {
-    background: vars.$secondary-selected;
-  }
 }
 
 .statement-card-neutral {
   @extend .statement-card;
   background: vars.$gray-300;
-
-  &:hover {
-    background: vars.$gray-200;
-  }
 }
 
 .search-bar {

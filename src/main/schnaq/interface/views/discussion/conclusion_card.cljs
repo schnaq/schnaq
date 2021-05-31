@@ -78,20 +78,19 @@
                           (rf/dispatch [:discussion.history/push statement])
                           (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
                                         (assoc path-params :statement-id (:db/id statement))]))))]
-    [:div {:on-click on-click-fn}
-     [:article.card.statement-card.clickable
-      {:class (str "statement-card-" (name (or (:statement/type statement) :neutral)))}
-      [:div.card-view.card-body.py-0.pb-1
-       [:div.d-flex.justify-content-end.pt-2
-        [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
-       [:div.my-1
+    [:article.card.statement-card
+     {:class (str "statement-card-" (name (or (:statement/type statement) :neutral)))}
+     [:div.card-view.card-body.py-0.pb-1
+      [:div.d-flex.justify-content-end.pt-2
+       [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
+      [:div.my-1
         [md/as-markdown (:statement/content statement)]]
-       [:div.d-flex
-        [:a.badge.badge-primary.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
-         (labels :statement/reply)]
-        [badges/extra-discussion-info-badges statement edit-hash]
-        [:div.ml-auto
-         [up-down-vote statement]]]]]]))
+      [:div.d-flex
+       [:a.badge.badge-pill.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
+        [:i {:class (str "m-auto fas " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
+       [badges/extra-discussion-info-badges statement edit-hash]
+       [:div.ml-auto
+        [up-down-vote statement]]]]]))
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."
