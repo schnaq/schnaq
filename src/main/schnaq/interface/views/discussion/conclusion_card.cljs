@@ -1,5 +1,7 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [clojure.string :as cstring]
+  (:require ["react-markdown" :as ReactMarkdown]
+            ["remark-gfm" :as gfm]
+            [clojure.string :as cstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
@@ -68,24 +70,7 @@
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
       [:div.vote-box.down-vote [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
-(defn- parse-links-in-text
-  ;; TODO Text fängt mit Leerzeichen an
-  ;; TODO optimizations
   ;; TODO links in topic-cards parsen
-  "Takes a String and returns hiccup-syntax where all text is wrapped in a <p> tag
-  while the links are properly formatted."
-  [input-text]
-  (loop [acc [:p]
-         inbetween-str ""
-         rest-text (cstring/split input-text #" ")]
-    (let [current (first rest-text)]
-      (if current
-        (if (cstring/starts-with? current "http")
-          (if (empty? inbetween-str)
-            (recur (conj acc [:a {:href current} current]) "" (rest rest-text))
-            (recur (conj acc (str inbetween-str " ") [:a {:href current} current]) "" (rest rest-text)))
-          (recur acc (str inbetween-str " " current) (rest rest-text)))
-        (conj acc inbetween-str)))))
 
 (defn statement-card
   [edit-hash statement]
@@ -103,7 +88,9 @@
       [:div.card-view.card-body.py-0.pb-1
        [:div.d-flex.justify-content-end.pt-2
         [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
-       [:div.my-1 (parse-links-in-text (:statement/content statement))]
+       [:div.my-1
+        [:> ReactMarkdown {:children (:statement/content statement)
+                           :remarkPlugins [gfm]}]]
        [:div.d-flex
         [:a.badge.badge-primary.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
          (labels :statement/reply)]
