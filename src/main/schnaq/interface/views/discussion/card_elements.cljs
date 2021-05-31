@@ -4,6 +4,7 @@
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
@@ -199,7 +200,7 @@
 (defn- title-and-input-element
   "Element containing Title and textarea input"
   [content input is-topic?]
-  (let [title (:content content)
+  (let [title [md/as-markdown (:content content)]
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
      [toolbelt/desktop-mobile-switch

@@ -1,13 +1,11 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require ["react-markdown" :as ReactMarkdown]
-            ["remark-gfm" :as gfm]
-            [clojure.string :as cstring]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [fa labels img-path]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
@@ -70,8 +68,6 @@
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
       [:div.vote-box.down-vote [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
-  ;; TODO links in topic-cards parsen
-
 (defn statement-card
   [edit-hash statement]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
@@ -89,8 +85,7 @@
        [:div.d-flex.justify-content-end.pt-2
         [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
        [:div.my-1
-        [:> ReactMarkdown {:children (:statement/content statement)
-                           :remarkPlugins [gfm]}]]
+        [md/as-markdown (:statement/content statement)]]
        [:div.d-flex
         [:a.badge.badge-primary.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
          (labels :statement/reply)]
