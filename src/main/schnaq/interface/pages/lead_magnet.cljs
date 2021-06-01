@@ -71,16 +71,11 @@
    {:page/heading (labels :lead-magnet/heading)
     :page/subheading (labels :lead-magnet/subheading)}
    [:section.container.text-center.pb-5
-    [:a.btn.button-secondary.mb-3 {:href "#dsgvo-checklist"} "Direkt zur Checkliste"]
-    [:h4 "Was ist die Checkliste für datenschutzkonforme remote-arbeit?"]
-    [:p.text-left "Wir haben aktuelle Software für remote Arbeit auf die Beachtung des Datenschutzes (im speziellen DSGVO) untersucht. "
-     "Die Ergebnisse sind in einer Checkliste zusammengefasst. Enthalten sind dabei alle wichtigen Kategorien, die man für flexible Arbeit benötigt.
-     So kannst du egal, ob beim Homeoffice, bei der mobilen Arbeit oder bei deinem hybriden Arbeitsplatz auf den Datenschutz achten."]
-    [:h4 "Wie funktioniert die Checkliste?"]
-    [:p.text-left.pb-3 "Dabei ist die Checkliste nach Kategorien aufgebaut. Zu jeder Kategorie, wie z.B. Chat-Plattformen, finden sich mehrere Alternativen.
-    Jede Alternative ist mit einer Ampelfarbe markiert. Grün zeigt dabei die Unbedenklichkeit zum Zeitpunkt unseres Tests. Während Rot vor
-    möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
-    Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."]
+    [:a.btn.button-secondary.mb-3 {:href "#dsgvo-checklist"} (labels :lead-magnet.cta/button)]
+    [:h4 (labels :lead-magnet.explain.what/heading)]
+    [:p.text-left (labels :lead-magnet.explain.what/text)]
+    [:h4 (labels :lead-magnet.explain.how/heading)]
+    [:p.text-left.pb-3 (labels :lead-magnet.explain.how/text)]
     [:a {:href "#dsgvo-checklist"}
      [:img.img-fluid.mb-5.mx-auto.text-center.shadow
       {:src (img-path :lead-magnet/cover)
