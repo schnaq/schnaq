@@ -10,6 +10,7 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
+            [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
@@ -201,11 +202,14 @@
   "Element containing Title and textarea input"
   [statement input is-topic?]
   (let [title [md/as-markdown (:statement/content statement)]
+        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
      (if is-topic?
        [:h2.text-center.h6-md-down title]
-       [:h2.h6 title])
+       (if edit-active?
+         [edit/edit-card statement]
+         [:h2.h6 title]))
      [:div.line-divider.my-4]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
