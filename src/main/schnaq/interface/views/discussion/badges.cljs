@@ -79,10 +79,10 @@
           anonymous-owner? (contains? creation-secrets (:db/id statement))
           registered-owner? (= user-id (:db/id (:statement/author statement)))
           confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
-                                              dispatch-fn))
-          admin-delete-fn #(confirmation-fn (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash]))
+                                              (dispatch-fn)))
+          admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
           user-delete-fn (if anonymous-owner? #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
-                                              #(confirmation-fn (rf/dispatch [:statement/delete (:db/id statement)])))]
+                                              #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
       ; only show trash icon when statement is not deleted and user is author or admin
       (when (or edit-hash anonymous-owner? registered-owner?)
         [:span.badge.badge-pill.badge-transparent.badge-clickable
