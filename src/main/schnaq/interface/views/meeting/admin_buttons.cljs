@@ -79,7 +79,7 @@
   "Download the current graph as a png file."
   [surrounding-div]
   [tooltip/tooltip-button "bottom" (labels :graph.download/as-png)
-   [:i {:class (str "fas " (fa :graph))}]
+   [:i {:class (str "m-auto fas " (fa :graph))}]
    (fn []
      (let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
            anchor (.createElement js/document "a")]
@@ -99,5 +99,5 @@
                                         :error-handler show-error})]
     (when share-hash
       [tooltip/tooltip-button "bottom" (labels :meeting/admin-center-export)
-       [:i {:class (str "fas " (fa :file-download))}]
+       [:i {:class (str "m-auto fas " (fa :file-download))}]
        #(request-fn)])))

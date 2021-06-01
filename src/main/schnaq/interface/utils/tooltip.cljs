@@ -39,5 +39,5 @@
 (defn tooltip-button
   [tooltip-location tooltip content on-click-fn]
   [tooltip-builder
-   :button.btn-rounded-2.btn-secondary.btn-lg.my-2.mx-3
+   :button.btn-rounded-2.btn-secondary.my-2.mx-3
    tooltip-location tooltip content on-click-fn])

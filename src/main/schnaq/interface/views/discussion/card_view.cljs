@@ -15,7 +15,7 @@
 (defn- search-bar
   "A search-bar to search inside a schnaq."
   []
-  [:form
+  [:form.mx-3
    {:on-submit (fn [e]
                  (jq/prevent-default e)
                  (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
@@ -24,7 +24,7 @@
      {:type "text" :aria-label "Search" :placeholder
       (labels :schnaq.search/input) :name "search-input"}]
     [:div.input-group-append
-     [:button.btn.btn-secondary
+     [:button.btn.btn-secondary.btn-rounded-2
       {:type "submit"}
       [:i {:class (str "m-auto fas " (fa :search))}]]]]])
 
