@@ -203,11 +203,9 @@
   (let [title [md/as-markdown (:statement/content statement)]
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
-     [toolbelt/desktop-mobile-switch
-      (if is-topic?
-        [:h2.align-self-center title]
-        [:h6 title])
-      [:h2.align-self-center.display-6 title]]
+     (if is-topic?
+       [:h2.text-center.h6-md-down title]
+       [:h2.h6 title])
      [:div.line-divider.my-4]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
