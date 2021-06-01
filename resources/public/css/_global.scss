@@ -79,6 +79,12 @@ h6 {
   line-height: 1.2;
 }
 
+.h6-md-down {
+  @include media-breakpoint-down(md) {
+    font-size: 1em;
+  }
+}
+
 @media (min-width: 2560px) {
   .container {
     max-width: 1600px;

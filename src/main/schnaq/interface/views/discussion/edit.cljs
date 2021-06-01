@@ -10,7 +10,6 @@
   "The same as a statement-card, but currently being an editable input."
   [statement]
   (let [statement-id (:db/id statement)
-        is-not-start? (not= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         pro-con-enabled? (not @(rf/subscribe [:schnaq.selected/pro-con?]))
         statement-html-id (str "statement-edit-" statement-id)
         dispatch-fn #(rf/dispatch
@@ -29,7 +28,7 @@
                                :defaultValue (:statement/content statement)}]]
      [:div.d-flex.justify-content-between.flex-wrap
       [:div.d-flex.mb-3
-       (when (and is-not-start? pro-con-enabled?)
+       (when (and pro-con-enabled? (:statement/parent statement))
          [input/statement-type-choose-button [:statement.edit/statement-type statement-id]
           [:statement.edit/change-statement-type statement-id]])]
       [:div.d-flex.mb-3
@@ -64,7 +63,8 @@
     (let [updated-statement (:updated-statement response)]
       {:db (-> db
                (update-in [:discussion :conclusions :starting] #(update-statement-in-list % updated-statement))
-               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement)))
+               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement))
+               (update-in [:history :full-context] #(vec (update-statement-in-list % updated-statement))))
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
 

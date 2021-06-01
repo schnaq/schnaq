@@ -10,6 +10,7 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
+            [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
@@ -199,21 +200,22 @@
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
-  [content input is-topic?]
-  (let [title [md/as-markdown (:content content)]
+  [statement input is-topic?]
+  (let [title [md/as-markdown (:statement/content statement)]
+        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
-     [toolbelt/desktop-mobile-switch
-      (if is-topic?
-        [:h2.align-self-center title]
-        [:h6 title])
-      [:h2.align-self-center.display-6 title]]
+     (if is-topic?
+       [:h2.text-center.h6-md-down title]
+       (if edit-active?
+         [edit/edit-card statement]
+         [:h2.h6 title]))
      [:div.line-divider.my-4]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        input)]))
 
-(defn- topic-bubble-desktop [{:discussion/keys [share-hash] :as discussion} content input badges info-content is-topic?]
+(defn- topic-bubble-desktop [{:discussion/keys [share-hash] :as discussion} statement input badges info-content is-topic?]
   [:div.row
    ;; graph
    [:div.col-2
@@ -224,14 +226,14 @@
     [:div.d-flex.mb-4
      [discussion-privacy-badge discussion]
      [:div.ml-auto
-      [user/user-info (:author content) 42 (:statement/created-at content)]]]
-    [title-and-input-element content input is-topic?]]
+      [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]]]
+    [title-and-input-element statement input is-topic?]]
    ;; up-down votes and statistics
    [:div.col-2.pr-3
     [:div.float-right
      info-content]]])
 
-(defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} content input badges info-content]
+(defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} statement input badges info-content]
   [:<>
    [:div.d-flex.mb-4
     ;; graph and badges
@@ -242,10 +244,10 @@
     [:div.p-0
      [discussion-privacy-badge discussion]
      [:div.d-flex
-      [:div.ml-auto.mr-2 [user/user-info (:author content) 32 (:statement/created-at content)]]
+      [:div.ml-auto.mr-2 [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
       info-content]]]
    ;; title
-   [title-and-input-element content input]])
+   [title-and-input-element statement input]])
 
 (defn- topic-bubble [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
@@ -293,11 +295,11 @@
 (defn discussion-view-mobile
   "Discussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
-  [current-discussion content input badges info-content conclusions history]
+  [current-discussion statement input badges info-content conclusions history]
   (let [is-topic? (nil? history)]
     [:<>
      [topic-view current-discussion conclusions
-      [topic-bubble-mobile current-discussion content input badges info-content]]
+      [topic-bubble-mobile current-discussion statement input badges info-content]]
      [show-how-to is-topic?]]))
 
 (defn discussion-view-desktop
