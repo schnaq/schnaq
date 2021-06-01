@@ -7,8 +7,8 @@
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.3"}
         clj-http/clj-http {:mvn/version "3.12.2"}
-        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.1029"}
-        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.1029"}
+        com.amazonaws/aws-java-sdk-core {:mvn/version "1.11.1030"}
+        com.amazonaws/aws-java-sdk-s3 {:mvn/version "1.11.1030"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.datomic/datomic-pro {:mvn/version "1.0.6269"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -39,7 +39,7 @@
         ring/ring-mock {:mvn/version "0.4.0"}
         ring/ring {:mvn/version "1.9.3"}
         ring/ring-defaults {:mvn/version "0.3.2"}
-        thheller/shadow-cljs {:mvn/version "2.14.1"}}
+        thheller/shadow-cljs {:mvn/version "2.14.2"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}

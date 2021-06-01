@@ -109,9 +109,8 @@
         badges [badges/extra-discussion-info-badges
                 current-conclusion (:discussion/edit-hash current-discussion)]
         input-form [input/input-form "premise-text"]
-        title (:statement/content current-conclusion)
         author (:statement/author current-conclusion)
-        content {:content title :author author}]
+        content {:content (:statement/content current-conclusion) :author author}]
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop

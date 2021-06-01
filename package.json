@@ -26,6 +26,8 @@
     "react-flip-move": "^3.0.4",
     "react-highlight": "^0.14.0",
     "react-highlight.js": "1.0.7",
+    "react-markdown": "^6.0.2",
+    "remark-gfm": "^1.0.0",
     "shadow-cljs": "2.13.0",
     "timsort": "^0.3.0",
     "uuid": "^8.3.2",

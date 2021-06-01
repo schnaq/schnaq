@@ -5,6 +5,7 @@
             [schnaq.interface.text.display-data :refer [fa labels img-path]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
@@ -82,7 +83,8 @@
      [:div.card-view.card-body.py-0.pb-1
       [:div.d-flex.justify-content-end.pt-2
        [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
-      [:div.my-1 [:p (:statement/content statement)]]
+      [:div.my-1
+        [md/as-markdown (:statement/content statement)]]
       [:div.d-flex
        [:a.badge.badge-pill.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
         [:i {:class (str "m-auto fas " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
