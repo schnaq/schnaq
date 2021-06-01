@@ -31,7 +31,7 @@
 
    [:div.form-group
     [:label {:for "EMAIL"} (labels :lead-magnet.form/label)]
-    [:input
+    [:input#dsgvo-checklist
      {:required true
       :placeholder (labels :startpage.newsletter/address-placeholder)
       :name "EMAIL" :defaultValue "" :type "email"
@@ -71,9 +71,15 @@
    {:page/heading (labels :lead-magnet/heading)
     :page/subheading (labels :lead-magnet/subheading)}
    [:section.container.text-center.pb-5
-    [:img.img-fluid.mb-5.mx-auto.text-center.shadow
-     {:src (img-path :lead-magnet/cover)
-      :alt (labels :lead-magnet.cover/alt-text)}]
+    [:a.btn.button-secondary.mb-3 {:href "#dsgvo-checklist"} (labels :lead-magnet.cta/button)]
+    [:h4 (labels :lead-magnet.explain.what/heading)]
+    [:p.text-left (labels :lead-magnet.explain.what/text)]
+    [:h4 (labels :lead-magnet.explain.how/heading)]
+    [:p.text-left.pb-3 (labels :lead-magnet.explain.how/text)]
+    [:a {:href "#dsgvo-checklist"}
+     [:img.img-fluid.mb-5.mx-auto.text-center.shadow
+      {:src (img-path :lead-magnet/cover)
+       :alt (labels :lead-magnet.cover/alt-text)}]]
     (if @(rf/subscribe [:lead-magnet/requested?])
       [thank-you-view]
       [subscription-form])]])
