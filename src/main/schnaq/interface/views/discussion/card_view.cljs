@@ -86,10 +86,10 @@
 
 (defn- discussion-start-view
   "The first step after starting a discussion."
-  [{:discussion/keys [title author] :as schnaq}]
+  [{:discussion/keys [title author created-at] :as schnaq}]
   (let [current-starting @(rf/subscribe [:discussion.conclusions/starting])
         input-form [input/input-form "statement-text"]
-        content {:content title :author author}
+        content {:statement/content title :statement/author author :statement/created-at created-at}
         badges [badges/static-info-badges schnaq]]
     [:<>
      [toolbelt/desktop-mobile-switch
@@ -108,15 +108,13 @@
                       current-conclusion (:discussion/edit-hash current-discussion)]
         badges [badges/extra-discussion-info-badges
                 current-conclusion (:discussion/edit-hash current-discussion)]
-        input-form [input/input-form "premise-text"]
-        author (:statement/author current-conclusion)
-        content {:content (:statement/content current-conclusion) :author author}]
+        input-form [input/input-form "premise-text"]]
     [:<>
      [toolbelt/desktop-mobile-switch
       [elements/discussion-view-desktop
-       current-discussion content input-form badges info-content current-premises history]
+       current-discussion current-conclusion input-form badges info-content current-premises history]
       [elements/discussion-view-mobile
-       current-discussion content input-form badges info-content current-premises history]]]))
+       current-discussion current-conclusion input-form badges info-content current-premises history]]]))
 
 (rf/reg-sub
   :discussion.premises/current
