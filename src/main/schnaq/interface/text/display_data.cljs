@@ -833,7 +833,7 @@
         :lead-magnet.cta/button "Take me to the checklist!"
         :lead-magnet.explain.what/heading "What is the checklist for privacy sensitive remote work?"
         :lead-magnet.explain.what/text "We checked current software for conformity with european GDPR regulations.
-        The results are summarized in this checklist. We included all categories of software that are helpfull while working remotely.
+        The results are summarized in this checklist. We included all categories of software that are helpful while working remotely.
         This way you can take privacy into account while working from home, the office or in a hybrid fashion."
         :lead-magnet.explain.how/heading "How does the checklist work?"
         :lead-magnet.explain.how/text "The checklist is structured in categories. Every category, like e.g. chat-software, contains several alternatives.
@@ -1665,15 +1665,15 @@
         :lead-magnet.form/button "Schicke mir die Checkliste zu!"
         :lead-magnet/heading "Datenschutzkonform verteilt arbeiten"
         :lead-magnet/subheading "Eine handliche Checkliste, um in allen Bereichen gerüstet zu sein"
-        :lead-magnet.cover/alt-text "Das Cover von der Checkliste zum datenschutzgerechten verteilten Arbeiten"
+        :lead-magnet.cover/alt-text "Das Cover von der Checkliste zum Datenschutzrechte verteilten Arbeiten"
         :lead-magnet.form/label "Wir versenden den Downloadlink zum PDF per E-Mail"
         :lead-magnet.requested/part-1 "Dein erster Schritt Richtung datenschutzkonformes Arbeiten ist getan!"
         :lead-magnet.requested/part-2 "Du solltest den Downloadlink in einigen Minuten erhalten. Schaue auch im Spam-Ordner nach."
         :lead-magnet.cta/button "Direkt zur Checkliste"
         :lead-magnet.explain.what/heading "Was ist die Checkliste für datenschutzkonforme Remote-Arbeit?"
-        :lead-magnet.explain.what/text "Wir haben aktuelle Software für remote Arbeit auf die Beachtung des Datenschutzes (im speziellen DSGVO) untersucht.
+        :lead-magnet.explain.what/text "Wir haben aktuelle Software für Remote-Arbeit auf die Beachtung des Datenschutzes (im speziellen DSGVO) untersucht.
         Die Ergebnisse sind in einer Checkliste zusammengefasst. Enthalten sind dabei alle wichtigen Kategorien, die man für flexible Arbeit benötigt.
-        So kannst du egal, ob beim Homeoffice, bei der mobilen Arbeit oder bei deinem hybriden Arbeitsplatz auf den Datenschutz achten."
+        So kannst du, egal ob beim Homeoffice, bei der mobilen Arbeit oder bei deinem hybriden Arbeitsplatz, auf den Datenschutz achten."
         :lead-magnet.explain.how/heading "Wie funktioniert die Checkliste?"
         :lead-magnet.explain.how/text "Die Checkliste ist nach Kategorien aufgebaut. Zu jeder Kategorie, wie z.B. Chat-Plattformen, finden sich mehrere Alternativen.
         Jede Alternative ist mit einer Ampelfarbe markiert. Grün zeigt dabei die Unbedenklichkeit zum Zeitpunkt unseres Tests. Während Rot vor
