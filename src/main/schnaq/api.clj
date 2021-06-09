@@ -19,6 +19,7 @@
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.mailchimp :as mailchimp-config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
@@ -593,7 +594,7 @@
   (log/info (format "Build Hash: %s" config/build-hash))
   (log/info (format "Environment: %s" config/env-mode))
   (log/info (format "Database Name: %s" config/db-name))
-  (log/info (format "Database URI: %s" (subs config/datomic-uri 0 30)))
+  (log/info (format "Database URI (truncated): %s" (subs config/datomic-uri 0 30)))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def allowed-origin
@@ -603,8 +604,7 @@
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
-  (let [port (:port config/api)
-        allowed-origins [allowed-origin]
+  (let [allowed-origins [allowed-origin]
         allowed-origins' (if schnaq-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middle-ware
     (say-hello)
@@ -616,8 +616,8 @@
                              :access-control-allow-methods [:get :put :post :delete])
                   (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
                   (wrap-defaults api-defaults))
-              {:port port}))
-    (log/info (format "Running web-server at http://127.0.0.1:%s/" port))
+              {:port shared-config/api-port}))
+    (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
 
 (comment
