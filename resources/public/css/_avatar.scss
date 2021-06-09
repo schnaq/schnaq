@@ -19,14 +19,12 @@
 }
 
 .profile-pic-fill {
-  @include rounded.rounded-1;
   align-items: center;
-  display: flex;
   justify-content: center;
-  overflow: hidden;
 }
 
 .profile-pic-image {
+  @include rounded.rounded-1;
   background-position: center center;
   height: 100%;
   object-fit: cover;
