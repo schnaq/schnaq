@@ -126,14 +126,14 @@
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.rounded-2.mx-auto.topic-card-button
+  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-2.topic-card-button
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
    [:img
     {:src (img-path :icon-graph) :alt (labels :graph.button/text)
      :title (labels :graph.button/text)
-     :width "40rem"}]
+     :height "30px"}]
    [:div (labels :graph.button/text)]])
 
 (defn- summary-button
