@@ -67,31 +67,36 @@
 
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
-  [{:keys [body-params identity]}]
-  (let [{:keys [discussion nickname public-discussion? hub-exclusive? origin]} body-params
-        keycloak-id (:sub identity)
-        authorized-for-hub (some #(= % origin) (:groups identity))
-        author (if keycloak-id
-                 [:user.registered/keycloak-id keycloak-id]
-                 (user-db/add-user-if-not-exists nickname))
-        discussion-data (cond-> {:discussion/title (:discussion/title discussion)
-                                 :discussion/share-hash (.toString (UUID/randomUUID))
-                                 :discussion/edit-hash (.toString (UUID/randomUUID))
-                                 :discussion/author author}
-                                (and hub-exclusive? authorized-for-hub)
-                                (assoc :discussion/hub-origin [:hub/keycloak-name origin]))
-        new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
-    (if new-discussion-id
-      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
-        (when (and hub-exclusive? origin authorized-for-hub)
-          (hub-db/add-discussions-to-hub [:hub/keycloak-name origin] [new-discussion-id]))
-        (log/info "Discussion created: " new-discussion-id " - "
-                  (:discussion/title created-discussion) " – Public? " public-discussion?
-                  "Exclusive?" hub-exclusive? "for" origin)
-        (created "" {:new-discussion created-discussion}))
-      (do
-        (log/info "Did not create discussion from following data:\n" discussion-data)
-        (bad-request "The input you provided could not be used to create a discussion.")))))
+  [{:keys [params identity] :as request}]
+  (prn request)
+  (let [nickname (:nickname params)
+        discussion-title (:discussion-title params)]
+    (if (or (empty? nickname) (empty? discussion-title))
+      (bad-request (format "You must at least provide a nickname and a discussion title. We received nickname: %s, discussion-title: %s" nickname discussion-title))
+      (let [{:keys [public-discussion? hub-exclusive? origin]} params
+            keycloak-id (:sub identity)
+            authorized-for-hub (some #(= % origin) (:groups identity))
+            author (if keycloak-id
+                     [:user.registered/keycloak-id keycloak-id]
+                     (user-db/add-user-if-not-exists nickname))
+            discussion-data (cond-> {:discussion/title discussion-title
+                                     :discussion/share-hash (.toString (UUID/randomUUID))
+                                     :discussion/edit-hash (.toString (UUID/randomUUID))
+                                     :discussion/author author}
+                                    (and hub-exclusive? authorized-for-hub)
+                                    (assoc :discussion/hub-origin [:hub/keycloak-name origin]))
+            new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
+        (if new-discussion-id
+          (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
+            (when (and hub-exclusive? origin authorized-for-hub)
+              (hub-db/add-discussions-to-hub [:hub/keycloak-name origin] [new-discussion-id]))
+            (log/info "Discussion created: " new-discussion-id " - "
+                      (:discussion/title created-discussion) " – Public? " public-discussion?
+                      "Exclusive?" hub-exclusive? "for" origin)
+            (created "" {:new-discussion created-discussion}))
+          (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
+            (log/info error-msg)
+            (bad-request error-msg)))))))
 
 (defn- add-author
   "Adds an author to the database."
