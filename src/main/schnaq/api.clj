@@ -30,6 +30,7 @@
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
+            [schnaq.links :as links]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
             [schnaq.s3 :as s3]
@@ -68,8 +69,7 @@
 
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
-  [{:keys [params identity] :as request}]
-  (prn request)
+  [{:keys [params identity]}]
   (let [nickname (:nickname params)
         discussion-title (:discussion-title params)]
     (if (or (empty? nickname) (empty? discussion-title))
@@ -94,7 +94,7 @@
             (log/info "Discussion created: " new-discussion-id " - "
                       (:discussion/title created-discussion) " – Public? " public-discussion?
                       "Exclusive?" hub-exclusive? "for" origin)
-            (created "" {:new-discussion created-discussion}))
+            (created "" {:new-discussion (links/add-share-link created-discussion)}))
           (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
             (log/info error-msg)
             (bad-request error-msg)))))))
