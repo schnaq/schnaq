@@ -57,11 +57,10 @@
   "Adds a user if they do not exist yet. Returns the (new) user-id."
   [nickname]
   [:user/nickname :ret int?]
-  (when nickname
-    (if-let [user-id (user-by-nickname nickname)]
-      user-id
-      (do (log/info "Added a new user: " nickname)
-        (add-user nickname)))))
+  (if-let [user-id (user-by-nickname nickname)]
+    user-id
+    (do (log/info "Added a new user: " nickname)
+        (add-user nickname))))
 
 (>defn update-groups
   "Updates the user groups to be equal to the new input."
