@@ -4,6 +4,9 @@
   (:require [schnaq.config.shared :as shared-config]
             [schnaq.toolbelt :as toolbelt]))
 
+(def frontend-url
+  (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
+
 (def env-mode
   (or (System/getenv "ENVIRONMENT") "development"))
 
