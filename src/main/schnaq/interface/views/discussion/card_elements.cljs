@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.card-elements
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.http :as http]
@@ -125,7 +126,7 @@
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.rounded-2
+  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.rounded-2.mx-auto.topic-card-button
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
@@ -134,6 +135,15 @@
      :title (labels :graph.button/text)
      :width "40rem"}]
    [:div (labels :graph.button/text)]])
+
+(defn- summary-button
+  "Button to navigate to the summary view."
+  [share-hash]
+  [:a.btn.btn-sm.btn-outline-primary.shadow-sm.rounded-2.mx-auto.my-2.topic-card-button
+   {:href (rfe/href :routes/summary-view {:share-hash share-hash})}
+   [:i {:style {:font-size "30px"}
+        :class (str "m-auto fas fa-lg " (fa :text-width))}]
+   [:p.m-0 (labels :summary.link.button/text)]])
 
 (rf/reg-event-fx
   :discussion.add.statement/starting
@@ -219,7 +229,9 @@
   [:div.row
    ;; graph
    [:div.col-2
-    [graph-button share-hash]
+    [:div.text-center
+     [graph-button share-hash]
+     [summary-button share-hash]]
     [:div.mt-3 badges]]
    ;; title
    [:div.col-8
@@ -239,6 +251,7 @@
     ;; graph and badges
     [:div.mr-auto
      [graph-button share-hash]
+     [summary-button share-hash]
      [:div.mt-2 badges]]
     ;; settings
     [:div.p-0

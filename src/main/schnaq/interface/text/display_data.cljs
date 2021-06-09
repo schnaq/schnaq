@@ -839,7 +839,9 @@
         :lead-magnet.explain.how/text "The checklist is structured in categories. Every category, like e.g. chat-software, contains several alternatives.
         Every alternative is marked with a color. Green shows that there are no privacy concerns. While red warns about
         several major concerns. Orange signals a few minor problems, but an overall okay result.
-        Besides the color ranking we've included a few keywords which can be used for further research."}
+        Besides the color ranking we've included a few keywords which can be used for further research."
+
+        :summary.link.button/text "Summary"}
 
    :de {;; Common
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -1678,7 +1680,9 @@
         :lead-magnet.explain.how/text "Die Checkliste ist nach Kategorien aufgebaut. Zu jeder Kategorie, wie z.B. Chat-Plattformen, finden sich mehrere Alternativen.
         Jede Alternative ist mit einer Ampelfarbe markiert. Grün zeigt dabei die Unbedenklichkeit zum Zeitpunkt unseres Tests. Während Rot vor
         möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
-        Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."}})
+        Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
+
+        :summary.link.button/text "Zusammenfassung"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
@@ -1805,6 +1809,7 @@
      :site-map "fa-sitemap"
      :star "fa-star"
      :terminal "fa-terminal"
+     :text-width "fa-text-width"
      :trash "fa-trash-alt"
      :user/group "fa-users"
      :user/group-edit "fa-users-cog"
