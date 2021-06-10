@@ -509,6 +509,16 @@
       (validator/deny-access "You are not allowed to use this feature"))
     (validator/deny-access "You need to be logged in to access this endpoint.")))
 
+(defn- get-summary
+  "Return a summary for the specified share-hash."
+  [{:keys [params identity]}]
+  (if identity
+    (if (and (some beta-tester-groups (:groups identity))
+             (validator/valid-discussion? (:share-hash params)))
+      (ok {:summary (discussion-db/summary (:share-hash params))})
+      (validator/deny-access "You are not allowed to use this feature"))
+    (validator/deny-access "You need to be logged in to access this endpoint.")))
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -527,6 +537,8 @@
       (GET "/ping" [] ping)
       (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
       (GET "/schnaq/search" [] search-schnaq)
+      (-> (GET "/schnaq/summary" [] get-summary)
+          (wrap-routes auth/auth-middleware))
       (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
       (GET "/schnaqs/public" [] public-schnaqs)
       (-> (GET "/admin/feedbacks" [] all-feedbacks)

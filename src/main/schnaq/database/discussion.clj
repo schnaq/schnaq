@@ -423,18 +423,22 @@
   (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date.)]])]
     (fast-pull summary summary-pattern (:db-after tx-result))))
 
+(defn summary
+  "Return a summary or nil."
+  [share-hash]
+  (query '[:find (pull ?summary summary-pattern) .
+           :in $ ?share-hash summary-pattern
+           :where [?discussion :discussion/share-hash ?share-hash]
+           [?summary :summary/discussion ?discussion]]
+         share-hash summary-pattern))
+
 (defn summary-request
   "Creates a new summary-request if there is none for the discussion. Otherwise updates the request-time."
   [share-hash]
-  (let [summary (query '[:find ?summary .
-                         :in $ ?share-hash
-                         :where [?discussion :discussion/share-hash ?share-hash]
-                         [?summary :summary/discussion ?discussion]]
-                       share-hash)]
+  (let [summary (:db/id (summary share-hash))]
     (if summary
       (update-summary summary)
       (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
                          :summary/requested-at (Date.)}]
         (transact [new-summary])
         new-summary))))
-

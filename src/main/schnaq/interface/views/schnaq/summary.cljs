@@ -68,3 +68,19 @@
   :schnaq/summary
   (fn [db [_ share-hash]]
     (get-in db [:schnaq :summary :result share-hash])))
+
+(rf/reg-event-fx
+  :schnaq.summary/load
+  (fn [{:keys [db]} [_ share-hash]]
+    (println "lelele")
+    {:fx [(http/xhrio-request db :get "/schnaq/summary" [:schnaq.summary.load/success share-hash]
+                              {:share-hash share-hash})]}))
+
+(rf/reg-event-db
+  :schnaq.summary.load/success
+  (fn [db [_ share-hash result]]
+    (let [{:summary/keys [created-at requested-at text] :as summary} (:summary result)]
+      (cond-> (assoc-in db [:schnaq :summary :result share-hash] summary)
+              (or (and requested-at (not text))             ;; Requested, but not finished
+                  (and created-at requested-at (> requested-at created-at))) ; Requested update
+              (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)))))

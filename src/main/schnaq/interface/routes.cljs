@@ -156,10 +156,12 @@
      ["/search"
       {:name :routes.search/schnaq
        :view discussion-search/view}]
-     ;; TODO load summary via controller
      ["/summary"
       {:name :routes.schnaq/summary
-       :view summary/public-user-view}]
+       :view summary/public-user-view
+       :controllers [{:parameters {:path [:share-hash]}
+                      :start (fn [{:keys [path]}]
+                               (rf/dispatch [:scheduler.after/login [:schnaq.summary/load (:share-hash path)]]))}]}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement
        :parameters {:path {:statement-id int?}}
