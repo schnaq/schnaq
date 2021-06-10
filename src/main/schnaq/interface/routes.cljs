@@ -156,6 +156,7 @@
      ["/search"
       {:name :routes.search/schnaq
        :view discussion-search/view}]
+     ;; TODO load summary via controller
      ["/summary"
       {:name :routes.schnaq/summary
        :view summary/public-user-view}]

@@ -1,8 +1,9 @@
 (ns schnaq.interface.views.schnaq.summary
   "All views and events important to extractive summaries can be found here."
   (:require [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [fa]]
+            [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.time :as time]
             [schnaq.interface.views.pages :as pages]))
 
 ;; todo Show modal if person is not registered / not in beta
@@ -10,6 +11,8 @@
   "Requests a summary or a refresh."
   [share-hash]
   (let [request-status @(rf/subscribe [:schnaq.summary/status share-hash])
+        summary @(rf/subscribe [:schnaq/summary share-hash])
+        locale @(rf/subscribe [:current-locale])
         button-text (case request-status
                       ;; todo labelize
                       :request-succeeded "Summary requested, please wait."
@@ -21,9 +24,11 @@
         {:disabled true}
         {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
       button-text]
-     ;; todo status text that changes
      [:p.small.text-muted.mt-2
-      "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done."]]))
+      (if summary
+        [:span "A summary is currently being generated. Last requested: "
+         (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
+        "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done.")]]))
 
 (defn- user-summary-view
   []
@@ -58,3 +63,8 @@
   :schnaq.summary/status
   (fn [db [_ share-hash]]
     (get-in db [:schnaq :summary :status share-hash])))
+
+(rf/reg-sub
+  :schnaq/summary
+  (fn [db [_ share-hash]]
+    (get-in db [:schnaq :summary :result share-hash])))
