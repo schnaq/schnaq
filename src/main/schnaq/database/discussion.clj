@@ -420,7 +420,7 @@
 (defn- update-summary
   "Updates a existing summary and returns the updated version."
   [summary]
-  (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date .)]])]
+  (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date.)]])]
     (fast-pull summary summary-pattern (:db-after tx-result))))
 
 (defn summary-request
@@ -433,7 +433,7 @@
     (if summary
       (update-summary summary)
       (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
-                         :summary/requested-at (Date .)}]
+                         :summary/requested-at (Date.)}]
         (transact [new-summary])
         new-summary))))
 
