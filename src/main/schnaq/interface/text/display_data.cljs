@@ -1807,6 +1807,7 @@
      :share "fa-share-alt"
      :shield "fa-shield-alt"
      :site-map "fa-sitemap"
+     :spinner "fa-spinner"
      :star "fa-star"
      :terminal "fa-terminal"
      :text-width "fa-text-width"

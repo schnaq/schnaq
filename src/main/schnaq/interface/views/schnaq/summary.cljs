@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.summary
   "All views and events important to extractive summaries can be found here."
   (:require [re-frame.core :as rf]
+            [schnaq.interface.text.display-data :refer [fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.pages :as pages]))
 
@@ -8,18 +9,25 @@
 (defn- summary-request-button
   "Requests a summary or a refresh."
   [share-hash]
-  [:section.d-block.text-center
-   [:button.btn.btn-secondary
-    {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])}
-    ;; todo labelize
-    ;; todo button that changes text
-    "Request summary"]
-   ;; todo status text that changes
-   [:p.small.text-muted.mt-2
-    "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done."]])
+  (let [request-status @(rf/subscribe [:schnaq.summary/status share-hash])
+        button-text (case request-status
+                      ;; todo labelize
+                      :request-succeeded "Summary requested, please wait."
+                      :requested "Requesting summary …"
+                      "Request summary")]
+    [:section.d-block.text-center
+     [:button.btn.btn-secondary
+      (if request-status
+        {:disabled true}
+        {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
+      button-text]
+     ;; todo status text that changes
+     [:p.small.text-muted.mt-2
+      "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done."]]))
 
 (defn- user-summary-view
   []
+  ;; todo only show view when user is allowed to see it
   (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-nav
      ;; todo labelize
@@ -44,4 +52,9 @@
   (fn [db [_ share-hash result]]
     (-> db
         (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)
-        (assoc-in [:schnaq :summary :result share-hash] result))))
+        (assoc-in [:schnaq :summary :result share-hash] (:summary result)))))
+
+(rf/reg-sub
+  :schnaq.summary/status
+  (fn [db [_ share-hash]]
+    (get-in db [:schnaq :summary :status share-hash])))
