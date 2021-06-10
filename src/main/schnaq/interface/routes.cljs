@@ -32,6 +32,7 @@
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.create :as create]
+            [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.user.edit-account :as edit-account]))
@@ -155,6 +156,9 @@
      ["/search"
       {:name :routes.search/schnaq
        :view discussion-search/view}]
+     ["/summary"
+      {:name :routes.schnaq/summary
+       :view summary/public-user-view}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement
        :parameters {:path {:statement-id int?}}

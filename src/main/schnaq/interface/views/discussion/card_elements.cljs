@@ -140,7 +140,7 @@
   "Button to navigate to the summary view."
   [share-hash]
   [:a.btn.btn-sm.btn-outline-primary.shadow-sm.rounded-2.mx-auto.my-2.topic-card-button
-   {:href (rfe/href :routes/summary-view {:share-hash share-hash})}
+   {:href (rfe/href :routes.schnaq/summary {:share-hash share-hash})}
    [:i {:style {:font-size "30px"}
         :class (str "m-auto fas fa-lg " (fa :text-width))}]
    [:p.m-0 (labels :summary.link.button/text)]])
