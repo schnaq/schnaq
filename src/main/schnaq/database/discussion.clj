@@ -429,7 +429,8 @@
   (let [summary (query '[:find ?summary .
                          :in $ ?share-hash
                          :where [?discussion :discussion/share-hash ?share-hash]
-                         [?summary :summary/discussion ?discussion]])]
+                         [?summary :summary/discussion ?discussion]]
+                       share-hash)]
     (if summary
       (update-summary summary)
       (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
