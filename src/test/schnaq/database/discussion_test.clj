@@ -223,3 +223,12 @@
       (is (= 6 (count (db/search-schnaq share-hash "cats"))))
       (is (= 2 (count (db/search-schnaq share-hash "dogs"))))
       (is (= 1 (count (db/search-schnaq share-hash "both")))))))
+
+(deftest summary-request-test
+  (testing "Create a new summary when requested, otherwise update the requested at tag."
+    (let [share-hash "cat-dog-hash"
+          new-summary (db/summary-request share-hash)]
+      (is (map? new-summary))
+      (let [updated-summary (db/summary-request share-hash)]
+        (is (> (:summary/requested-at updated-summary)
+               (:summary/requested-at new-summary)))))))

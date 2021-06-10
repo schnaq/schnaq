@@ -19,6 +19,7 @@
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.mailchimp :as mailchimp-config]
+            [schnaq.config.shared :refer [beta-tester-groups]]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
@@ -498,6 +499,16 @@
       (ok {:status :ok})
       (bad-request {:error "Something went wrong. Check your Email-Address and try again."}))))
 
+(defn- request-summary
+  "Request a summary of a discussion. Works only if person is in a beta group."
+  [{:keys [params identity]}]
+  (if identity
+    (if (and (some beta-tester-groups (:groups identity))
+             (validator/valid-discussion? (:share-hash params)))
+      (ok {:summary (discussion-db/summary-request (:share-hash params))})
+      (validator/deny-access "You are not allowed to use this feature"))
+    (validator/deny-access "You need to be logged in to access this endpoint.")))
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -546,6 +557,8 @@
       (POST "/header-image/image" [] media/set-preview-image)
       (POST "/lead-magnet/subscribe" [] subscribe-lead-magnet!)
       (POST "/schnaq/add" [] add-schnaq)
+      (-> (POST "/schnaq/summary/request" [] request-summary)
+          (wrap-routes auth/auth-middleware))
       (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
       (POST "/votes/down/toggle" [] toggle-downvote-statement)
       (POST "/votes/up/toggle" [] toggle-upvote-statement)

@@ -1,8 +1,9 @@
 (ns schnaq.interface.views.schnaq.summary
   "All views and events important to extractive summaries can be found here."
-  (:require [schnaq.interface.views.pages :as pages]
-            [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [schnaq.interface.views.pages :as pages]))
 
+;; todo Show modal if person is not registered / not in beta
 (defn- summary-request-button
   "Requests a summary or a refresh."
   [schnaq]

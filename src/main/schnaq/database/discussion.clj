@@ -409,3 +409,31 @@
              [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
            statement-pattern share-hash search-string)
     (toolbelt/pull-key-up :db/ident)))
+
+(def ^:private summary-pattern
+  [:db/id
+   :summary/discussion
+   :summary/requested-at
+   :summary/text
+   :summary/created-at])
+
+(defn- update-summary
+  "Updates a existing summary and returns the updated version."
+  [summary]
+  (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date .)]])]
+    (fast-pull summary summary-pattern (:db-after tx-result))))
+
+(defn summary-request
+  "Creates a new summary-request if there is none for the discussion. Otherwise updates the request-time."
+  [share-hash]
+  (let [summary (query '[:find ?summary .
+                         :in $ ?share-hash
+                         :where [?discussion :discussion/share-hash ?share-hash]
+                         [?summary :summary/discussion ?discussion]])]
+    (if summary
+      (update-summary summary)
+      (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
+                         :summary/requested-at (Date .)}]
+        (transact [new-summary])
+        new-summary))))
+
