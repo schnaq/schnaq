@@ -230,5 +230,6 @@
           new-summary (db/summary-request share-hash)]
       (is (map? new-summary))
       (let [updated-summary (db/summary-request share-hash)]
-        (is (> (:summary/requested-at updated-summary)
-               (:summary/requested-at new-summary)))))))
+        (is (= 1
+               (compare (:summary/requested-at updated-summary)
+                        (:summary/requested-at new-summary))))))))
