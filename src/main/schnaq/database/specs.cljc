@@ -100,3 +100,12 @@
 (s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
                           :opt [:feedback/contact-name :feedback/contact-mail
                                 :feedback/created-at]))
+
+;; Summary
+(s/def :summary/discussion (s/or :id :db/id
+                                 :discussion ::discussion))
+(s/def :summary/requested-at inst?)
+(s/def :summary/created-at inst?)
+(s/def :summary/text ::non-blank-string)
+(s/def ::summary (s/keys :req [:summary/discussion :requested-at]
+                         :opt [:summary/text :summary/created-at]))
