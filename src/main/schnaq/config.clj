@@ -4,6 +4,12 @@
   (:require [schnaq.config.shared :as shared-config]
             [schnaq.toolbelt :as toolbelt]))
 
+(def frontend-url
+  (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
+
+(def env-mode
+  (or (System/getenv "ENVIRONMENT") "development"))
+
 (def datomic
   "When we are production ready, put here the original production config and use
   dev-locals `divert-system` to use dev-local instead of a datomic cluster."
@@ -16,12 +22,6 @@
 (def datomic-uri
   (format (or (System/getenv "DATOMIC_URI") "datomic:dev://localhost:4334/%s")
           db-name))
-
-(def api
-  {:port (Integer/parseInt (or (System/getenv "API_PORT") "3000"))})
-
-(def env-mode
-  (or (System/getenv "ENVIRONMENT") "development"))
 
 (def build-hash
   (or (System/getenv "BUILD_HASH") "dev"))

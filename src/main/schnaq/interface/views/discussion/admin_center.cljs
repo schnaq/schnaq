@@ -15,7 +15,8 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.links :as links]))
 
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
@@ -211,7 +212,7 @@
                                 {:recipients recipients
                                  :share-hash share-hash
                                  :edit-hash edit-hash
-                                 :share-link (common/get-share-link share-hash)}
+                                 :share-link (links/get-share-link share-hash)}
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -353,7 +354,7 @@
    {:link (labels :meeting.admin-center.invite/via-link)
     :view [:<>
            [educate-element]
-           [copy-link-form common/get-share-link "share-hash"]]}
+           [copy-link-form links/get-share-link "share-hash"]]}
    ;; participants access via mail
    {:link (labels :meeting.admin-center.invite/via-mail)
     :view [invite-participants-form]}

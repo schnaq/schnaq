@@ -94,7 +94,7 @@
                                 [:schnaq/created]
                                 (cond->
                                   {:nickname nickname
-                                   :discussion {:discussion/title discussion-title}
+                                   :discussion-title discussion-title
                                    :public-discussion? public?}
                                   use-origin? (merge {:hub-exclusive? exclusive?
                                                       :origin origin-hub}))

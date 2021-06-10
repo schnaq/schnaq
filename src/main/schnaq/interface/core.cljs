@@ -7,6 +7,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.dom]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.specs]
             [schnaq.interface.analytics.core]
             [schnaq.interface.auth]
@@ -86,7 +87,7 @@
   []
   (log/info "Welcome to schnaq 🎉")
   (log/info (gstring/format "Build Hash: %s" config/build-hash))
-  (log/info (gstring/format "API: %s" config/api-url))
+  (log/info (gstring/format "API: %s" shared-config/api-url))
   (log/info (gstring/format "Environment: %s" config/environment))
   (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client)))
 

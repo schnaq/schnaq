@@ -19,6 +19,7 @@
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.mailchimp :as mailchimp-config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
@@ -29,6 +30,7 @@
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
+            [schnaq.links :as links]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
             [schnaq.s3 :as s3]
@@ -67,31 +69,35 @@
 
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
-  [{:keys [body-params identity]}]
-  (let [{:keys [discussion nickname public-discussion? hub-exclusive? origin]} body-params
-        keycloak-id (:sub identity)
-        authorized-for-hub (some #(= % origin) (:groups identity))
-        author (if keycloak-id
-                 [:user.registered/keycloak-id keycloak-id]
-                 (user-db/add-user-if-not-exists nickname))
-        discussion-data (cond-> {:discussion/title (:discussion/title discussion)
-                                 :discussion/share-hash (.toString (UUID/randomUUID))
-                                 :discussion/edit-hash (.toString (UUID/randomUUID))
-                                 :discussion/author author}
-                                (and hub-exclusive? authorized-for-hub)
-                                (assoc :discussion/hub-origin [:hub/keycloak-name origin]))
-        new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
-    (if new-discussion-id
-      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
-        (when (and hub-exclusive? origin authorized-for-hub)
-          (hub-db/add-discussions-to-hub [:hub/keycloak-name origin] [new-discussion-id]))
-        (log/info "Discussion created: " new-discussion-id " - "
-                  (:discussion/title created-discussion) " – Public? " public-discussion?
-                  "Exclusive?" hub-exclusive? "for" origin)
-        (created "" {:new-discussion created-discussion}))
-      (do
-        (log/info "Did not create discussion from following data:\n" discussion-data)
-        (bad-request "The input you provided could not be used to create a discussion.")))))
+  [{:keys [params identity]}]
+  (let [nickname (:nickname params)
+        discussion-title (:discussion-title params)]
+    (if (or (empty? nickname) (empty? discussion-title))
+      (bad-request (format "You must at least provide a nickname and a discussion title. We received nickname: %s, discussion-title: %s" nickname discussion-title))
+      (let [{:keys [public-discussion? hub-exclusive? origin]} params
+            keycloak-id (:sub identity)
+            authorized-for-hub (some #(= % origin) (:groups identity))
+            author (if keycloak-id
+                     [:user.registered/keycloak-id keycloak-id]
+                     (user-db/add-user-if-not-exists nickname))
+            discussion-data (cond-> {:discussion/title discussion-title
+                                     :discussion/share-hash (.toString (UUID/randomUUID))
+                                     :discussion/edit-hash (.toString (UUID/randomUUID))
+                                     :discussion/author author}
+                                    (and hub-exclusive? authorized-for-hub)
+                                    (assoc :discussion/hub-origin [:hub/keycloak-name origin]))
+            new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
+        (if new-discussion-id
+          (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
+            (when (and hub-exclusive? origin authorized-for-hub)
+              (hub-db/add-discussions-to-hub [:hub/keycloak-name origin] [new-discussion-id]))
+            (log/info "Discussion created: " new-discussion-id " - "
+                      (:discussion/title created-discussion) " – Public? " public-discussion?
+                      "Exclusive?" hub-exclusive? "for" origin)
+            (created "" {:new-discussion (links/add-share-link created-discussion)}))
+          (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
+            (log/info error-msg)
+            (bad-request error-msg)))))))
 
 (defn- add-author
   "Adds an author to the database."
@@ -588,7 +594,7 @@
   (log/info (format "Build Hash: %s" config/build-hash))
   (log/info (format "Environment: %s" config/env-mode))
   (log/info (format "Database Name: %s" config/db-name))
-  (log/info (format "Database URI: %s" (subs config/datomic-uri 0 30)))
+  (log/info (format "Database URI (truncated): %s" (subs config/datomic-uri 0 30)))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def allowed-origin
@@ -598,8 +604,7 @@
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
-  (let [port (:port config/api)
-        allowed-origins [allowed-origin]
+  (let [allowed-origins [allowed-origin]
         allowed-origins' (if schnaq-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middle-ware
     (say-hello)
@@ -611,8 +616,8 @@
                              :access-control-allow-methods [:get :put :post :delete])
                   (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
                   (wrap-defaults api-defaults))
-              {:port port}))
-    (log/info (format "Running web-server at http://127.0.0.1:%s/" port))
+              {:port shared-config/api-port}))
+    (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
 
 (comment
