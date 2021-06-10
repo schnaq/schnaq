@@ -7,6 +7,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.discussion.card-view :as card-view]
             [schnaq.interface.views.navbar :as navbar]))
 
 (declare with-nav-and-header)
@@ -97,6 +98,18 @@
     options
     [:<>
      [navbar/navbar]
+     body]]])
+
+(>defn with-discussion-nav
+  "Default page with discussion header."
+  [{:page/keys [title heading] :as options} discussion body]
+  [::page-options map? (s/+ vector?) :ret vector?]
+  (common/set-website-title! (or title heading))
+  [scheduler/middleware
+   [validate-conditions-middleware
+    options
+    [:<>
+     [card-view/card-discussion-header discussion]
      body]]])
 
 (>defn three-column-layout
