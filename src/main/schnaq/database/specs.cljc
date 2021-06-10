@@ -107,5 +107,5 @@
 (s/def :summary/requested-at inst?)
 (s/def :summary/created-at inst?)
 (s/def :summary/text ::non-blank-string)
-(s/def ::summary (s/keys :req [:summary/discussion :requested-at]
+(s/def ::summary (s/keys :req [:summary/discussion :summary/requested-at]
                          :opt [:summary/text :summary/created-at]))
