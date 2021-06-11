@@ -284,6 +284,9 @@
    ["403/"
     {:name :routes/forbidden-page
      :view error-views/forbidden-page}]
+   ["beta-tester-only/"
+    {:name :routes/beta-only
+     :view error-views/only-beta-tester}]
    ["404/"
     {:name :routes/true-404-view
      :view error-views/true-404-entrypoint

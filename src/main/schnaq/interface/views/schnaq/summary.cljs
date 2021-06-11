@@ -32,7 +32,6 @@
 
 (defn- user-summary-view
   []
-  ;; todo show denial, when user is not in beta-groups
   (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-nav
      ;; todo labelize
