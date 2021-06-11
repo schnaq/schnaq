@@ -30,6 +30,18 @@
          (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
         "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done.")]]))
 
+(defn- summary-body
+  "Contains the summary an possibly some meta information."
+  [schnaq]
+  (let [{:summary/keys [created-at text]} @(rf/subscribe [:schnaq/summary (:discussion/share-hash schnaq)])
+        [updated-at text] (if text
+                            [created-at text]
+                            ["-" "-"])]
+    [:<>
+     [:h2.text-center "Zusammenfassung: " (:discussion/title schnaq)]
+     [:small.text-muted "Last updated: " updated-at]
+     [:p text]]))
+
 (defn- user-summary-view
   []
   (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
@@ -40,7 +52,8 @@
       :condition/needs-beta-tester? true}
      current-schnaq
      [:div.container.panel-white.mt-3
-      [summary-request-button (:discussion/share-hash current-schnaq)]]]))
+      [summary-request-button (:discussion/share-hash current-schnaq)]
+      [summary-body current-schnaq]]]))
 
 (defn public-user-view []
   [user-summary-view])
