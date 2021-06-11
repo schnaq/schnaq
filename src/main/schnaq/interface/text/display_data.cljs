@@ -634,6 +634,9 @@
         :error.403/heading "You do not have the rights to view this site 🧙‍♂️"
         :error.403/body "You either have insufficient rights to view this site, or a typo happened."
 
+        :error.beta/heading "You do not have the rights to view this site 🧙‍♂️"
+        :error.beta/body "Only schnaq beta-testers can access this page. If you are one, please log in. If you would like to be a beta-tester, write us an email at hello@schnaq.com."
+
         ;; Graph Texts
         :graph/heading "Discussion Overview"
         :graph.button/text "Mindmap"
@@ -1471,6 +1474,9 @@
 
         :error.403/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
         :error.403/body "Dir fehlt die Berechtigung diese Seite aufzurufen oder es handelt sich um einen Tippfehler in deiner URL."
+
+        :error.beta/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+        :error.beta/body "Dieses Feature ist nur für Beta-Tester:innen verfügbar. Wenn du zu den Tester:innen gehörst, melde dich bitte an. Wenn du Beta-Tester:in werden möchtest, dann schreibe uns eine E-Mail an hello@schnaq.com."
 
         ;; Graph Texts
         :graph/heading "Diskussionsübersicht"

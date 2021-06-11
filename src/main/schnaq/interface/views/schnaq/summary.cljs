@@ -32,12 +32,13 @@
 
 (defn- user-summary-view
   []
-  ;; todo only show view when user is allowed to see it
+  ;; todo show denial, when user is not in beta-groups
   (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-nav
      ;; todo labelize
      {:page/heading "Summaries"
-      :page/subheading "See the discussion in a few sentences"}
+      :page/subheading "See the discussion in a few sentences"
+      :condition/needs-beta-tester? true}
      current-schnaq
      [:div.container.panel-white.mt-3
       [summary-request-button (:discussion/share-hash current-schnaq)]]]))

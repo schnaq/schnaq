@@ -7,6 +7,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
+            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.views.discussion.card-view :as card-view]
             [schnaq.interface.views.navbar :as navbar]))
 
@@ -49,14 +50,17 @@
 
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."
-  [{:condition/keys [needs-authentication? needs-administrator?]} page]
+  [{:condition/keys [needs-authentication? needs-administrator? needs-beta-tester?]} page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        admin? @(rf/subscribe [:user/administrator?])]
+        admin? @(rf/subscribe [:user/administrator?])
+        groups @(rf/subscribe [:user/groups])]
     (cond
       (and (or needs-authentication? needs-administrator?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
+      (and needs-beta-tester?
+           (not (some shared-conf/beta-tester-groups groups))) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
       :else page)))
 
 
