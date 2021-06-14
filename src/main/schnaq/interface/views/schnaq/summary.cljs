@@ -36,11 +36,12 @@
   (let [{:summary/keys [created-at text]} @(rf/subscribe [:schnaq/summary (:discussion/share-hash schnaq)])
         [updated-at text] (if text
                             [created-at text]
-                            ["-" "-"])]
+                            ["-" "-"])
+        locale @(rf/subscribe [:current-locale])]
     [:<>
      [:h2.text-center "Zusammenfassung: " (:discussion/title schnaq)]
-     [:small.text-muted "Last updated: " updated-at]
-     [:p text]]))
+     [:small.text-muted "Last updated: " (time/timestamp-with-tooltip updated-at locale)]
+     [:p (str text)]]))
 
 (defn- user-summary-view
   []
