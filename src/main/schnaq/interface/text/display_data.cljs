@@ -226,6 +226,12 @@
         :discussion.anonymous-delete.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
         :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
 
+        ;; Beta Only Funnel
+        :beta.modal/title "Beta-Feature"
+        :beta.modal/explain [:<> "This feature is in a test-state and you need to " [:strong "be a beta-tester to use it."]]
+        :beta.modal/persuade "You can write us an email if you would like to become a beta-tester."
+        :beta.modal/cta "Request Access"
+
         ;; Press Kit
         :press-kit/heading "Press & Media"
         :press-kit/subheading "We are happy to be available for interviews and articles!"
@@ -1068,6 +1074,12 @@
         :discussion.anonymous-delete.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Löschen anmelden."]]
         :discussion.anonymous-delete.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei deinem Konto hinzugefügt."
         :discussion.anonymous-delete.modal/cta "Anmelden / Registrieren"
+
+        ;; Beta Only Funnel
+        :beta.modal/title "Beta-Feature"
+        :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können musst du " [:strong "Beta-Tester:in sein."]]
+        :beta.modal/persuade "Schreib uns eine E-Mail, wenn du auch zu den Beta-Tester:innen gehören möchtest."
+        :beta.modal/cta "Anfrage Senden"
 
         ;; Press Kit
         :press-kit/heading "Presse & Medien"

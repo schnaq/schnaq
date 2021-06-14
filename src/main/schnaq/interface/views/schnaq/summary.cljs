@@ -6,7 +6,6 @@
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.views.pages :as pages]))
 
-;; todo Show modal if person is not registered / not in beta
 (defn- summary-request-button
   "Requests a summary or a refresh."
   [share-hash]
