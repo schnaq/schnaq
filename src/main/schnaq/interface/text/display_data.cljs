@@ -231,6 +231,7 @@
         :beta.modal/explain [:<> "This feature is in a test-state and you need to " [:strong "be a beta-tester to use it."]]
         :beta.modal/persuade "You can write us an email if you would like to become a beta-tester."
         :beta.modal/cta "Request Access"
+        :page.beta.modal/cta "If you are interested in joining our beta-tester programm, please write us an email at "
 
         ;; Press Kit
         :press-kit/heading "Press & Media"
@@ -853,7 +854,16 @@
         several major concerns. Orange signals a few minor problems, but an overall okay result.
         Besides the color ranking we've included a few keywords which can be used for further research."
 
-        :summary.link.button/text "Summary"}
+        :summary.link.button/text "Summary"
+        :summary.user.request-succeeded/label "Summary requested, please wait."
+        :summary.user.requested/label "Requesting summary …"
+        :summary.user.not-requested/label "Request summary"
+        :summary.user.status/label "A summary is currently being generated. Last requested: "
+        :summary.user/cta "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done."
+        :summary.user/label "Summary: "
+        :summary.user/last-updated "Last updated: "
+        :summary.user/heading "Summaries"
+        :summary.user/subheading "See the discussion in a few sentences"}
 
    :de {;; Common
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -1080,6 +1090,7 @@
         :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können musst du " [:strong "Beta-Tester:in sein."]]
         :beta.modal/persuade "Schreib uns eine E-Mail, wenn du auch zu den Beta-Tester:innen gehören möchtest."
         :beta.modal/cta "Anfrage Senden"
+        :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter "
 
         ;; Press Kit
         :press-kit/heading "Presse & Medien"
@@ -1706,7 +1717,16 @@
         möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
         Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
 
-        :summary.link.button/text "Zusammenfassung"}})
+        :summary.link.button/text "Zusammenfassung"
+        :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
+        :summary.user.requested/label "Zusammenfassung wird angefordert …"
+        :summary.user.not-requested/label "Zusammenfassung anfordern"
+        :summary.user.status/label "Eine Zusammenfassung wird gerade erstellt. Letzte Anfrage: "
+        :summary.user/cta "Drücke den Knopf um eine Zusammenfassung anzufragen. Der Prozess dauert unter Umständen einige Stunden. Die Zusammenfassung wird hier auftauchen, wenn sie fertig ist."
+        :summary.user/label "Zusammenfassung: "
+        :summary.user/last-updated "Zuletzt aktualisiert: "
+        :summary.user/heading "Zusammenfassungen"
+        :summary.user/subheading "Schau dir die Diskussion in wenigen Sätzen an."}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup

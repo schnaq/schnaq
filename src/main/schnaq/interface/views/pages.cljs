@@ -56,8 +56,7 @@
    {:page/heading (labels :page.beta/heading)
     :page/subheading (labels :page.beta/subheading)}
    [:div.container.text-center.pt-5
-    ;;todo labelize
-    [:p "If you are interested in joining our beta-tester programm, please write us an email at " [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-mail "info@schnaq.com")] "."]]])
+    [:p (labels :page.beta.modal/cta) [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-mail "info@schnaq.com")] "."]]])
 
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."

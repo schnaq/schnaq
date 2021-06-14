@@ -13,10 +13,9 @@
         summary @(rf/subscribe [:schnaq/summary share-hash])
         locale @(rf/subscribe [:current-locale])
         button-text (case request-status
-                      ;; todo labelize
-                      :request-succeeded "Summary requested, please wait."
-                      :requested "Requesting summary …"
-                      "Request summary")]
+                      :request-succeeded (labels :summary.user.request-succeeded/label)
+                      :requested (labels :summary.user.requested/label)
+                      (labels :summary.user.not-requested/label))]
     [:section.d-block.text-center
      [:button.btn.btn-secondary
       (if request-status
@@ -25,31 +24,28 @@
       button-text]
      [:p.small.text-muted.mt-2
       (if summary
-        [:span "A summary is currently being generated. Last requested: "
-         (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
-        "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done.")]]))
+        [:span (labels :summary.user.status/label) (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
+        (labels :summary.user/cta))]]))
 
 (defn- summary-body
   "Contains the summary an possibly some meta information."
   [schnaq]
-  ;; todo labelize
   (let [{:summary/keys [created-at text]} @(rf/subscribe [:schnaq/summary (:discussion/share-hash schnaq)])
         locale @(rf/subscribe [:current-locale])
         [updated-at text] (if text
                             [(time/timestamp-with-tooltip created-at locale) text]
                             ["-" "-"])]
     [:<>
-     [:h2.text-center "Zusammenfassung: " (:discussion/title schnaq)]
-     [:small.text-muted "Last updated: " updated-at]
+     [:h2.text-center (labels :summary.user/label) (:discussion/title schnaq)]
+     [:small.text-muted (labels :summary.user/last-updated) updated-at]
      [:p (str text)]]))
 
 (defn- user-summary-view
   []
   (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-nav
-     ;; todo labelize
-     {:page/heading "Summaries"
-      :page/subheading "See the discussion in a few sentences"
+     {:page/heading (labels :summary.user/heading)
+      :page/subheading (labels :summary.user/subheading)
       :condition/needs-beta-tester? true}
      current-schnaq
      [:div.container.panel-white.mt-3
