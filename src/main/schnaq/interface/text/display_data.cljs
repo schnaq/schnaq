@@ -138,6 +138,9 @@
         :page.login/heading "Please Login"
         :page.login/subheading "You need to login to access this resource"
 
+        :page.beta/heading "Beta-Feature"
+        :page.beta/subheading "This feature is currently only enabled for beta-testers. Please log in if you are one."
+
         :footer.buttons/about-us "About us"
         :footer.buttons/legal-note "Legal Note"
         :footer.buttons/privacy "Privacy Notice"
@@ -978,6 +981,9 @@
         ;; Login Page
         :page.login/heading "Bitte logg dich ein"
         :page.login/subheading "Um auf die folgende Ressource zugreifen zu können, musst du eingeloggt sein"
+
+        :page.beta/heading "Beta-Feature"
+        :page.beta/subheading "Diese Funktion ist nur für Beta-Tester:innen freigeschaltet. Bitte logge dich ein, wenn du zu der Gruppe gehörst."
 
         :footer.buttons/about-us "Über uns"
         :footer.buttons/legal-note "Impressum"

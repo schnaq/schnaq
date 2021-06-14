@@ -33,14 +33,15 @@
 (defn- summary-body
   "Contains the summary an possibly some meta information."
   [schnaq]
+  ;; todo labelize
   (let [{:summary/keys [created-at text]} @(rf/subscribe [:schnaq/summary (:discussion/share-hash schnaq)])
+        locale @(rf/subscribe [:current-locale])
         [updated-at text] (if text
-                            [created-at text]
-                            ["-" "-"])
-        locale @(rf/subscribe [:current-locale])]
+                            [(time/timestamp-with-tooltip created-at locale) text]
+                            ["-" "-"])]
     [:<>
      [:h2.text-center "Zusammenfassung: " (:discussion/title schnaq)]
-     [:small.text-muted "Last updated: " (time/timestamp-with-tooltip updated-at locale)]
+     [:small.text-muted "Last updated: " updated-at]
      [:p (str text)]]))
 
 (defn- user-summary-view
@@ -86,7 +87,6 @@
 (rf/reg-event-fx
   :schnaq.summary/load
   (fn [{:keys [db]} [_ share-hash]]
-    (println "lelele")
     {:fx [(http/xhrio-request db :get "/schnaq/summary" [:schnaq.summary.load/success share-hash]
                               {:share-hash share-hash})]}))
 

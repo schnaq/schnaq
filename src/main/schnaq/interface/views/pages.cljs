@@ -3,11 +3,12 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
-            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.views.discussion.card-view :as card-view]
             [schnaq.interface.views.navbar :as navbar]))
 
@@ -48,19 +49,28 @@
      {:on-click #(rf/dispatch [:keycloak/login])}
      (labels :user/login)]]])
 
+(defn- beta-only
+  "Default page indicating, that only beta users are allowed."
+  []
+  [with-nav-and-header
+   {:page/heading (labels :page.beta/heading)
+    :page/subheading (labels :page.beta/subheading)}
+   [:div.container.text-center.pt-5
+    ;;todo labelize
+    [:p "If you are interested in joining our beta-tester programm, please write us an email at " [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-mail "info@schnaq.com")] "."]]])
+
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."
   [{:condition/keys [needs-authentication? needs-administrator? needs-beta-tester?]} page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         admin? @(rf/subscribe [:user/administrator?])
-        groups @(rf/subscribe [:user/groups])]
+        user-groups @(rf/subscribe [:user/groups])]
     (cond
-      (and (or needs-authentication? needs-administrator?)
+      (and (or needs-authentication? needs-administrator? needs-beta-tester?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
-      (and needs-beta-tester?
-           (not (some shared-conf/beta-tester-groups groups))) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
+      (and needs-beta-tester? (not (some shared-conf/beta-tester-groups user-groups))) [beta-only]
       :else page)))
 
 
