@@ -211,8 +211,8 @@
   (fn [summaries _ _]
     (sort-by
       :summary/requested-at
-      (remove #(or (:summary/text %)                        ;; No summary provided yet
-                   (> (:summary/requested-at %) (:summary/created-at %))) ;; Update requested after last summary
+      (remove #(and (:summary/text %)                       ;; No summary provided yet
+                    (< (:summary/requested-at %) (:summary/created-at %))) ;; Update requested after last summary
               summaries))))
 
 (rf/reg-sub
