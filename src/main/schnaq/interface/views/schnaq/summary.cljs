@@ -68,14 +68,13 @@
          locale @(rf/subscribe [:current-locale])]
      (if summaries
        [:<>
-        ;; todo labels
-        [:h4 (gstring/format "Number of Open Summaries: %s" (count summaries))]
+        [:h4 (gstring/format (labels :summary.admin/open-summaries) (count summaries))]
         [:table.table.table-striped
          [:thead
           [:tr
-           [:th {:width "25%"} "Discussion"]
-           [:th {:width "15%"} "Requested at"]
-           [:th {:width "60%"} "Summary"]]]
+           [:th {:width "25%"} (labels :summary.admin/discussion)]
+           [:th {:width "15%"} (labels :summary.admin/requested-at)]
+           [:th {:width "60%"} (labels :summary.admin/summary)]]]
          [:tbody
           (for [summary summaries]
             (let [share-hash (-> summary :summary/discussion :discussion/share-hash)
@@ -91,7 +90,7 @@
                                    (rf/dispatch
                                      [:summary.admin/send share-hash (str summary-id) (oget e [:currentTarget :elements])]))}
                      [:textarea.form-control {:name (str summary-id) :rows 3 :defaultValue (:summary/text summary)}]
-                     [:button.btn.btn-outline-primary.ml-1 {:type "submit"} "Submit"]]]]))]]]
+                     [:button.btn.btn-outline-primary.ml-1 {:type "submit"} (labels :summary.admin/submit)]]]]))]]]
        [loading/loading-placeholder]))])
 
 (defn- list-closed-summaries
@@ -102,15 +101,14 @@
          locale @(rf/subscribe [:current-locale])]
      (if summaries
        [:<>
-        ;; todo labels
-        [:h4 (gstring/format "Number of Closed Summaries: %s" (count summaries))]
+        [:h4 (gstring/format (labels :summary.admin/closed-summaries) (count summaries))]
         [:table.table.table-striped
          [:thead
           [:tr
-           [:th {:width "20%"} "Discussion"]
-           [:th {:width "15%"} "Requested at"]
-           [:th {:width "50%"} "Summary"]
-           [:th {:width "15%"} "Closed at"]]]
+           [:th {:width "20%"} (labels :summary.admin/discussion)]
+           [:th {:width "15%"} (labels :summary.admin/requested-at)]
+           [:th {:width "50%"} (labels :summary.admin/summary)]
+           [:th {:width "15%"} (labels :summary.admin/closed-at)]]]
          [:tbody
           (for [summary summaries]
             [:tr {:key (str "row-" (:db/id summary))}

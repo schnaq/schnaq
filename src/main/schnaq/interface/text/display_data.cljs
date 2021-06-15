@@ -864,7 +864,14 @@
         :summary.user/label "Summary: "
         :summary.user/last-updated "Last updated: "
         :summary.user/heading "Summaries"
-        :summary.user/subheading "See the discussion in a few sentences"}
+        :summary.user/subheading "See the discussion in a few sentences"
+        :summary.admin/open-summaries "Open Summaries: %s"
+        :summary.admin/closed-summaries "Closed Summaries: %s"
+        :summary.admin/discussion "Discussion"
+        :summary.admin/requested-at "Requested at"
+        :summary.admin/summary "Summary"
+        :summary.admin/submit "Submit"
+        :summary.admin/closed-at "Closed at"}
 
    :de {;; Common
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -1728,7 +1735,14 @@
         :summary.user/label "Zusammenfassung: "
         :summary.user/last-updated "Zuletzt aktualisiert: "
         :summary.user/heading "Zusammenfassungen"
-        :summary.user/subheading "Schau dir die Diskussion in wenigen Sätzen an."}})
+        :summary.user/subheading "Schau dir die Diskussion in wenigen Sätzen an."
+        :summary.admin/open-summaries "Offene Zusammenfassungen: %s"
+        :summary.admin/closed-summaries "Geschlossene Zusammenfassungen: %s"
+        :summary.admin/discussion "Diskussion"
+        :summary.admin/requested-at "Angefragt am"
+        :summary.admin/summary "Zusammenfassung"
+        :summary.admin/submit "Abschicken"
+        :summary.admin/closed-at "Geschlossen am"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
