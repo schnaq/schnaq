@@ -109,7 +109,13 @@
      {:name :routes/analytics
       :view analytics/analytics-dashboard-entrypoint
       :link-text (labels :router/analytics)
-      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:analytics/load-dashboard]]))}]}]]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:analytics/load-dashboard]]))}]}]
+    ["/summaries"
+     {:name :routes.admin/summaries
+      :view summary/admin-summaries-view
+      :controllers []
+      ;; todo add controllers that load all summaries.
+      }]]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view

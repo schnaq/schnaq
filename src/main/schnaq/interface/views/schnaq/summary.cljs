@@ -1,9 +1,14 @@
 (ns schnaq.interface.views.schnaq.summary
   "All views and events important to extractive summaries can be found here."
-  (:require [re-frame.core :as rf]
+  (:require [goog.string :as gstring]
+            [oops.core :refer [oget oget+]]
+            [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.time :as time]
+            [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- summary-request-button
@@ -54,6 +59,65 @@
 
 (defn public-user-view []
   [user-summary-view])
+
+(defn- list-open-summaries
+  "Shows a list of all feedback."
+  []
+  [:div.container.py-4
+   (let [summaries [] #_@(rf/subscribe [:summaries.admin/open]) ;; todo add event
+         locale @(rf/subscribe [:current-locale])]
+     (if summaries
+       [:<>
+        ;; todo labels
+        [:h4 (gstring/format "Number of Open Summaries: %s" (count summaries))]
+        [:table.table.table-striped
+         [:thead
+          [:tr
+           [:th {:width "25%"} "Discussion"]
+           [:th {:width "15%"} "Requested-at"]
+           [:th {:width "60%"} "Summary"]]]
+         [:tbody
+          (for [summary summaries]
+            [:tr {:key (:db/id (str "row-" summary))}
+             [:td [:a {:href (rfe/href :routes.schnaq/start
+                                       {:share-hash (-> summary :summary/discussion :discussion/share-hash)})}
+                   (-> summary :summary/discussion :discussion/title)]]
+             [:td (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
+             [:td [:form
+                   {:on-click (fn [e]
+                                (jq/prevent-default e)
+                                (rf/dispatch
+                                  [:summary.admin/send (:db/id summary) (oget e [:currentTarget :elements])]))}
+                   [:textarea.form-control {:name (:db/id summary) :rows 3}]
+                   [:button.btn.btn-outline-primary.ml-1 {:type "submit"} "Submit"]]]])]]]
+       [loading/loading-placeholder]))])
+
+(defn- admin-summaries
+  "Shows all summaries to the admins."
+  []
+  (pages/with-nav-and-header
+    {:page/heading "Zusammenfassungen"
+     :page/subheading "Beim drücken von senden, werden diese sofort erstellt."
+     :condition/needs-administrator? true}
+    [:<>
+     [list-open-summaries]]))
+
+(defn admin-summaries-view []
+  [admin-summaries])
+
+(rf/reg-event-fx
+  :summary.admin/send
+  (fn [{:keys [db]} [_ html-selector form]]
+    {:fx [(http/xhrio-request db :put "/admin/summary/send"
+                              [:summary.admin.send/success form]
+                              {:new-summary-text (oget+ form [html-selector :value])})]}))
+
+(rf/reg-event-fx
+  :summary.admin.send/success
+  (fn [{:keys [db]} [_ form response]]
+    (let [new-summary (:new-summary response)]
+      {:db db                                               ;; todo add new / updated summary to list
+       :fx [[:form/clear form]]})))
 
 (rf/reg-event-fx
   :schnaq.summary/request
