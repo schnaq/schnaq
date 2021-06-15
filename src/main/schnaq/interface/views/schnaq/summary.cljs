@@ -61,10 +61,10 @@
   [user-summary-view])
 
 (defn- list-open-summaries
-  "Shows a list of all feedback."
+  "Shows a list of all still open summaries."
   []
   [:div.container.py-4
-   (let [summaries [] #_@(rf/subscribe [:summaries/open]) ;; todo add event
+   (let [summaries @(rf/subscribe [:summaries/open])
          locale @(rf/subscribe [:current-locale])]
      (if summaries
        [:<>
@@ -74,7 +74,7 @@
          [:thead
           [:tr
            [:th {:width "25%"} "Discussion"]
-           [:th {:width "15%"} "Requested-at"]
+           [:th {:width "15%"} "Requested at"]
            [:th {:width "60%"} "Summary"]]]
          [:tbody
           (for [summary summaries]
@@ -92,6 +92,34 @@
                    [:button.btn.btn-outline-primary.ml-1 {:type "submit"} "Submit"]]]])]]]
        [loading/loading-placeholder]))])
 
+(defn- list-closed-summaries
+  "Shows a list of all closed summaries."
+  []
+  [:div.container.py-4
+   (let [summaries @(rf/subscribe [:summaries/closed])
+         locale @(rf/subscribe [:current-locale])]
+     (if summaries
+       [:<>
+        ;; todo labels
+        [:h4 (gstring/format "Number of Closed Summaries: %s" (count summaries))]
+        [:table.table.table-striped
+         [:thead
+          [:tr
+           [:th {:width "20%"} "Discussion"]
+           [:th {:width "15%"} "Requested at"]
+           [:th {:width "50%"} "Summary"]
+           [:th {:width "15%"} "Closed at"]]]
+         [:tbody
+          (for [summary summaries]
+            [:tr {:key (str "row-" (:db/id summary))}
+             [:td [:a {:href (rfe/href :routes.schnaq/start
+                                       {:share-hash (-> summary :summary/discussion :discussion/share-hash)})}
+                   (-> summary :summary/discussion :discussion/title)]]
+             [:td (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
+             [:td (:summary/text summary)]
+             [:td (time/timestamp-with-tooltip (:summary/created-at summary) locale)]])]]]
+       [loading/loading-placeholder]))])
+
 (defn- admin-summaries
   "Shows all summaries to the admins."
   []
@@ -100,7 +128,9 @@
      :page/subheading "Beim drücken von senden, werden diese sofort erstellt."
      :condition/needs-administrator? true}
     [:<>
-     [list-open-summaries]]))
+     [list-open-summaries]
+     [:hr]
+     [list-closed-summaries]]))
 
 (defn admin-summaries-view []
   [admin-summaries])
@@ -173,3 +203,25 @@
   :summaries/all
   (fn [db _]
     (get-in db [:summaries :all] [])))
+
+(rf/reg-sub
+  :summaries/open
+  (fn [_ _]
+    (rf/subscribe [:summaries/all]))
+  (fn [summaries _ _]
+    (sort-by
+      :summary/requested-at
+      (remove #(or (:summary/text %)                        ;; No summary provided yet
+                   (> (:summary/requested-at %) (:summary/created-at %))) ;; Update requested after last summary
+              summaries))))
+
+(rf/reg-sub
+  :summaries/closed
+  (fn [_ _]
+    (rf/subscribe [:summaries/all]))
+  (fn [summaries _ _]
+    (sort-by
+      :summary/created-at
+      (filter #(and (:summary/text %)
+                    (< (:summary/requested-at %) (:summary/created-at %)))
+              summaries))))
