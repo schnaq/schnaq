@@ -78,18 +78,20 @@
            [:th {:width "60%"} "Summary"]]]
          [:tbody
           (for [summary summaries]
-            [:tr {:key (str "row-" (:db/id summary))}
-             [:td [:a {:href (rfe/href :routes.schnaq/start
-                                       {:share-hash (-> summary :summary/discussion :discussion/share-hash)})}
-                   (-> summary :summary/discussion :discussion/title)]]
-             [:td (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
-             [:td [:form
-                   {:on-click (fn [e]
-                                (jq/prevent-default e)
-                                (rf/dispatch
-                                  [:summary.admin/send (:db/id summary) (oget e [:currentTarget :elements])]))}
-                   [:textarea.form-control {:name (:db/id summary) :rows 3}]
-                   [:button.btn.btn-outline-primary.ml-1 {:type "submit"} "Submit"]]]])]]]
+            (let [share-hash (-> summary :summary/discussion :discussion/share-hash)
+                  summary-id (:db/id summary)]
+              [:tr {:key (str "row-" summary-id)}
+               [:td [:a {:href (rfe/href :routes.schnaq/start
+                                         {:share-hash share-hash})}
+                     (-> summary :summary/discussion :discus)]]
+               [:td (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
+               [:td [:form
+                     {:on-submit (fn [e]
+                                   (jq/prevent-default e)
+                                   (rf/dispatch
+                                     [:summary.admin/send share-hash (str summary-id) (oget e [:currentTarget :elements])]))}
+                     [:textarea.form-control {:name (str summary-id) :rows 3 :defaultValue (:summary/text summary)}]
+                     [:button.btn.btn-outline-primary.ml-1 {:type "submit"} "Submit"]]]]))]]]
        [loading/loading-placeholder]))])
 
 (defn- list-closed-summaries
@@ -137,11 +139,12 @@
 
 (rf/reg-event-fx
   :summary.admin/send
-  (fn [{:keys [db]} [_ html-selector form]]
+  (fn [{:keys [db]} [_ share-hash html-selector form]]
     {:fx [(http/xhrio-request db :put "/admin/summary/send"
                               ;; todo implement route
                               [:summary.admin.send/success form]
-                              {:new-summary-text (oget+ form [html-selector :value])})]}))
+                              {:new-summary-text (oget+ form [html-selector :value])
+                               :share-hash share-hash})]}))
 
 (rf/reg-event-fx
   :summary.admin.send/success

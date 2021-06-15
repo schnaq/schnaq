@@ -417,7 +417,7 @@
    :summary/text
    :summary/created-at])
 
-(def ^:private summary-with-discussion
+(def ^:private summary-with-discussion-pattern
   [:db/id
    {:summary/discussion [:discussion/title
                          :discussion/share-hash
@@ -426,8 +426,8 @@
    :summary/text
    :summary/created-at])
 
-(defn- update-summary
-  "Updates a existing summary and returns the updated version."
+(defn- request-summary
+  "Updates a existing summary request and returns the updated version."
   [summary]
   (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date.)]])]
     (fast-pull summary summary-pattern (:db-after tx-result))))
@@ -446,7 +446,7 @@
   [share-hash]
   (let [summary (:db/id (summary share-hash))]
     (if summary
-      (update-summary summary)
+      (request-summary summary)
       (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
                          :summary/requested-at (Date.)}]
         (transact [new-summary])
@@ -456,4 +456,12 @@
   (query '[:find [(pull ?summary summary-pattern) ...]
            :in $ summary-pattern
            :where [?summary :summary/requested-at _]]
-         summary-with-discussion))
+         summary-with-discussion-pattern))
+
+(defn update-summary [share-hash new-text]
+  (let [summary (:db/id (summary share-hash))]
+    (when summary
+      (let [tx-result @(transact [{:db/id summary
+                                   :summary/text new-text
+                                   :summary/created-at (Date.)}])]
+        (fast-pull summary summary-with-discussion-pattern (:db-after tx-result))))))

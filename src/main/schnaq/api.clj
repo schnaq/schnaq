@@ -524,6 +524,11 @@
       (validator/deny-access "You are not allowed to use this feature"))
     (validator/deny-access "You need to be logged in to access this endpoint.")))
 
+(defn- new-summary
+  "Update a summary. If a text exists, it is overwritten. Admin access is already checked by middleware."
+  [{:keys [params]}]
+  (ok {:new-summary (discussion-db/update-summary (:share-hash params) (:new-summary-text params))}))
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -582,6 +587,9 @@
       (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
       (POST "/votes/down/toggle" [] toggle-downvote-statement)
       (POST "/votes/up/toggle" [] toggle-upvote-statement)
+      (-> (PUT "/admin/summary/send" [] new-summary)
+          (wrap-routes auth/is-admin-middleware)
+          (wrap-routes auth/auth-middleware))
       analytics/analytics-routes
       hub/hub-routes
       user-api/user-routes)
