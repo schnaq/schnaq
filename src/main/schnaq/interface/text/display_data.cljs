@@ -781,6 +781,7 @@
         :router/true-404-view "404 error page"
         :router/public-discussions "Public schnaqs"
         :router/code-of-conduct "Code of Conduct"
+        :router/summaries "Summaries"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -1643,6 +1644,7 @@
         :router/true-404-view "404 Fehlerseite"
         :router/public-discussions "Öffentliche schnaqs"
         :router/code-of-conduct "Verhaltensregeln"
+        :router/summaries "Zusammenfassungen"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
