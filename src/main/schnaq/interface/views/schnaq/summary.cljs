@@ -83,7 +83,7 @@
               [:tr {:key (str "row-" summary-id)}
                [:td [:a {:href (rfe/href :routes.schnaq/start
                                          {:share-hash share-hash})}
-                     (-> summary :summary/discussion :discus)]]
+                     (-> summary :summary/discussion :discussion/title)]]
                [:td (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
                [:td [:form
                      {:on-submit (fn [e]
@@ -141,7 +141,6 @@
   :summary.admin/send
   (fn [{:keys [db]} [_ share-hash html-selector form]]
     {:fx [(http/xhrio-request db :put "/admin/summary/send"
-                              ;; todo implement route
                               [:summary.admin.send/success form]
                               {:new-summary-text (oget+ form [html-selector :value])
                                :share-hash share-hash})]}))
@@ -149,8 +148,10 @@
 (rf/reg-event-fx
   :summary.admin.send/success
   (fn [{:keys [db]} [_ form response]]
-    (let [new-summary (:new-summary response)]
-      {:db db                                               ;; todo add new / updated summary to list
+    (let [new-summary (:new-summary response)
+          updated-summaries (map #(if (= (:db/id new-summary) (:db/id %)) new-summary %)
+                                 (get-in db [:summaries :all]))]
+      {:db (assoc-in db [:summaries :all] updated-summaries)
        :fx [[:form/clear form]]})))
 
 (rf/reg-event-fx

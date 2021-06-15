@@ -527,6 +527,7 @@
 (defn- new-summary
   "Update a summary. If a text exists, it is overwritten. Admin access is already checked by middleware."
   [{:keys [params]}]
+  (log/info "Updating Summary for" (:share-hash params))
   (ok {:new-summary (discussion-db/update-summary (:share-hash params) (:new-summary-text params))}))
 
 ;; -----------------------------------------------------------------------------
