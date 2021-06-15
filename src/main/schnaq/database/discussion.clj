@@ -417,6 +417,15 @@
    :summary/text
    :summary/created-at])
 
+(def ^:private summary-with-discussion
+  [:db/id
+   {:summary/discussion [:discussion/title
+                         :discussion/share-hash
+                         :db/id]}
+   :summary/requested-at
+   :summary/text
+   :summary/created-at])
+
 (defn- update-summary
   "Updates a existing summary and returns the updated version."
   [summary]
@@ -442,3 +451,9 @@
                          :summary/requested-at (Date.)}]
         (transact [new-summary])
         new-summary))))
+
+(defn all-summaries []
+  (query '[:find [(pull ?summary summary-pattern) ...]
+           :in $ summary-pattern
+           :where [?summary :summary/requested-at _]]
+         summary-with-discussion))

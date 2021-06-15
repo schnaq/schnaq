@@ -64,7 +64,7 @@
   "Shows a list of all feedback."
   []
   [:div.container.py-4
-   (let [summaries [] #_@(rf/subscribe [:summaries.admin/open]) ;; todo add event
+   (let [summaries [] #_@(rf/subscribe [:summaries/open]) ;; todo add event
          locale @(rf/subscribe [:current-locale])]
      (if summaries
        [:<>
@@ -78,7 +78,7 @@
            [:th {:width "60%"} "Summary"]]]
          [:tbody
           (for [summary summaries]
-            [:tr {:key (:db/id (str "row-" summary))}
+            [:tr {:key (str "row-" (:db/id summary))}
              [:td [:a {:href (rfe/href :routes.schnaq/start
                                        {:share-hash (-> summary :summary/discussion :discussion/share-hash)})}
                    (-> summary :summary/discussion :discussion/title)]]
@@ -109,6 +109,7 @@
   :summary.admin/send
   (fn [{:keys [db]} [_ html-selector form]]
     {:fx [(http/xhrio-request db :put "/admin/summary/send"
+                              ;; todo implement route
                               [:summary.admin.send/success form]
                               {:new-summary-text (oget+ form [html-selector :value])})]}))
 
@@ -157,3 +158,18 @@
               (or (and requested-at (not text))             ;; Requested, but not finished
                   (and created-at requested-at (> requested-at created-at))) ; Requested update
               (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)))))
+
+(rf/reg-event-fx
+  :summaries/load-all
+  (fn [{:keys [db]} _]
+    {:fx [(http/xhrio-request db :get "/admin/summaries/all" [:summaries.load-all/success])]}))
+
+(rf/reg-event-db
+  :summaries.load-all/success
+  (fn [db [_ result]]
+    (assoc-in db [:summaries :all] (:summaries result))))
+
+(rf/reg-sub
+  :summaries/all
+  (fn [db _]
+    (get-in db [:summaries :all] [])))

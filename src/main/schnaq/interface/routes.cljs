@@ -113,9 +113,7 @@
     ["/summaries"
      {:name :routes.admin/summaries
       :view summary/admin-summaries-view
-      :controllers []
-      ;; todo add controllers that load all summaries.
-      }]]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:summaries/load-all]]))}]}]]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view

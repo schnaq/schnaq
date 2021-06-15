@@ -263,6 +263,11 @@
   [_]
   (ok (db/all-feedbacks)))
 
+(defn- all-summaries
+  "Returns all summaries form the db."
+  [_]
+  (ok {:summaries (discussion-db/all-summaries)}))
+
 (>defn- send-invite-emails
   "Expects a list of recipients and the meeting which shall be send."
   [{:keys [body-params]}]
@@ -542,6 +547,9 @@
       (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
       (GET "/schnaqs/public" [] public-schnaqs)
       (-> (GET "/admin/feedbacks" [] all-feedbacks)
+          (wrap-routes auth/is-admin-middleware)
+          (wrap-routes auth/auth-middleware))
+      (-> (GET "/admin/summaries/all" [] all-summaries)
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
       (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
