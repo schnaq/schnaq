@@ -10,7 +10,8 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.modal :as modal]
-            [schnaq.interface.views.notifications :refer [notify!]]))
+            [schnaq.interface.views.notifications :refer [notify!]]
+            [schnaq.links :as links]))
 
 (defn admin-center
   "Button to access admin menu."
@@ -32,12 +33,12 @@
       [:p.lead (labels :sharing.modal/lead)]
       [:div.input-group
        [:input.form-control
-        {:value (common/get-share-link share-hash)
+        {:value (links/get-share-link share-hash)
          :readOnly true}]
        [:div.input-group-append
         [:button.btn.btn-outline-secondary
          {:on-click (fn []
-                      (clipboard/copy-to-clipboard! (common/get-share-link share-hash))
+                      (clipboard/copy-to-clipboard! (links/get-share-link share-hash))
                       (notify! (labels :schnaq/link-copied-heading)
                                (labels :schnaq/link-copied-success)
                                :info

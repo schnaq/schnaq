@@ -152,7 +152,7 @@
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
-     ["/"
+     ["/"                                                   ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers schnaq-start-controllers
        :name :routes.schnaq/start
        :view discussion-card-view/view

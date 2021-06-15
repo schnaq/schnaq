@@ -41,6 +41,7 @@
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
 (s/def :discussion/share-hash ::non-blank-string)
+(s/def :discussion/share-link ::non-blank-string)
 (s/def :discussion/edit-hash ::non-blank-string)
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
@@ -61,7 +62,7 @@
                             :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin
-                                  :discussion/created-at]))
+                                  :discussion/created-at :discussion/share-link]))
 
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)

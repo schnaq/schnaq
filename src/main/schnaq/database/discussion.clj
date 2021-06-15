@@ -254,7 +254,7 @@
 (>defn new-discussion
   "Adds a new discussion to the database."
   [discussion-data public?]
-  [map? boolean? :ret :db/id]
+  [map? (? boolean?) :ret :db/id]
   (let [default-states [:discussion.state/open]
         states (cond-> default-states
                        public? (conj :discussion.state/public))]
