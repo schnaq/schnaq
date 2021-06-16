@@ -43,7 +43,10 @@
     [:<>
      [:h2.text-center (labels :summary.user/label) (:discussion/title schnaq)]
      [:small.text-muted (labels :summary.user/last-updated) updated-at]
-     [:p (str text)]]))
+     [:p.p-3
+      (if-let [summary (str text)] summary "-")]
+     [:hr.py-2]
+     [summary-request-button (:discussion/share-hash schnaq)]]))
 
 (defn- user-summary-view
   []
@@ -54,7 +57,6 @@
       :condition/needs-beta-tester? true}
      current-schnaq
      [:div.container.panel-white.mt-3
-      [summary-request-button (:discussion/share-hash current-schnaq)]
       [summary-body current-schnaq]]]))
 
 (defn public-user-view []
