@@ -32,6 +32,7 @@
             [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.create :as create]
+            [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.user.edit-account :as edit-account]))
@@ -108,7 +109,11 @@
      {:name :routes/analytics
       :view analytics/analytics-dashboard-entrypoint
       :link-text (labels :router/analytics)
-      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:analytics/load-dashboard]]))}]}]]
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:analytics/load-dashboard]]))}]}]
+    ["/summaries"
+     {:name :routes.admin/summaries
+      :view summary/admin-summaries-view
+      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:summaries/load-all]]))}]}]]
    ["code-of-conduct"
     {:name :routes/code-of-conduct
      :view coc/view
@@ -155,6 +160,12 @@
      ["/search"
       {:name :routes.search/schnaq
        :view discussion-search/view}]
+     ["/summary"
+      {:name :routes.schnaq/summary
+       :view summary/public-user-view
+       :controllers [{:parameters {:path [:share-hash]}
+                      :start (fn [{:keys [path]}]
+                               (rf/dispatch [:scheduler.after/login [:schnaq.summary/load (:share-hash path)]]))}]}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement
        :parameters {:path {:statement-id int?}}
@@ -277,6 +288,9 @@
    ["403/"
     {:name :routes/forbidden-page
      :view error-views/forbidden-page}]
+   ["beta-tester-only/"
+    {:name :routes/beta-only
+     :view error-views/only-beta-tester}]
    ["404/"
     {:name :routes/true-404-view
      :view error-views/true-404-entrypoint

@@ -71,7 +71,10 @@
           (labels :router/all-feedbacks)]]
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/analytics)}
-          (labels :router/analytics)]]]])))
+          (labels :router/analytics)]]
+        [:li.nav-item
+         [:a.nav-link {:role "button" :href (reitfe/href :routes.admin/summaries)}
+          (labels :router/summaries)]]]])))
 
 (defn user-handling-menu
   "Menu elements to change user name, to log in, ..."

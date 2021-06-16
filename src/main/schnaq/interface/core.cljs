@@ -57,6 +57,7 @@
             [schnaq.interface.views.notifications]
             [schnaq.interface.views.pages]
             [schnaq.interface.views.schnaq.create]
+            [schnaq.interface.views.schnaq.summary]
             [schnaq.interface.views.schnaq.visited]
             [schnaq.interface.views.startpage.core]
             [schnaq.interface.views.user]

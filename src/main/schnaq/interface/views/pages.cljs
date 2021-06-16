@@ -3,10 +3,13 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.discussion.card-view :as card-view]
             [schnaq.interface.views.navbar :as navbar]))
 
 (declare with-nav-and-header)
@@ -46,16 +49,27 @@
      {:on-click #(rf/dispatch [:keycloak/login])}
      (labels :user/login)]]])
 
+(defn- beta-only
+  "Default page indicating, that only beta users are allowed."
+  []
+  [with-nav-and-header
+   {:page/heading (labels :page.beta/heading)
+    :page/subheading (labels :page.beta/subheading)}
+   [:div.container.text-center.pt-5
+    [:p (labels :page.beta.modal/cta) [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-mail "info@schnaq.com")] "."]]])
+
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."
-  [{:condition/keys [needs-authentication? needs-administrator?]} page]
+  [{:condition/keys [needs-authentication? needs-administrator? needs-beta-tester?]} page]
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        admin? @(rf/subscribe [:user/administrator?])]
+        admin? @(rf/subscribe [:user/administrator?])
+        user-groups @(rf/subscribe [:user/groups])]
     (cond
-      (and (or needs-authentication? needs-administrator?)
+      (and (or needs-authentication? needs-administrator? needs-beta-tester?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
+      (and needs-beta-tester? (not (some shared-conf/beta-tester-groups user-groups))) [beta-only]
       :else page)))
 
 
@@ -97,6 +111,18 @@
     options
     [:<>
      [navbar/navbar]
+     body]]])
+
+(>defn with-discussion-nav
+  "Default page with discussion header."
+  [{:page/keys [title heading] :as options} discussion body]
+  [::page-options map? (s/+ vector?) :ret vector?]
+  (common/set-website-title! (or title heading))
+  [scheduler/middleware
+   [validate-conditions-middleware
+    options
+    [:<>
+     [card-view/card-discussion-header discussion]
      body]]])
 
 (>defn three-column-layout
