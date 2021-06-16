@@ -7,7 +7,7 @@
   []
   [:section.animation-background.mb-3
    [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-   [:video.w-100.video-scalable {:auto-play true :loop true :muted true :plays-inline true}
+   [:video.w-100.video-scalable-with-shadow-and-border {:auto-play true :loop true :muted true :plays-inline true}
     [:source {:src (video :how-to.discussion/webm) :type "video/webm"}]
     [:source {:src (video :how-to.discussion/mp4) :type "video/mp4"}]]])
 

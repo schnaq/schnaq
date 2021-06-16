@@ -64,7 +64,7 @@
             {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
             [:i {:class (str "m-auto fas " (fa :cross))}]]]
           [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
-          [:video.video-scalable {:auto-play true :loop true :muted true :plays-inline true}
+          [:video.video-scalable-with-shadow-and-border {:auto-play true :loop true :muted true :plays-inline true}
            [:source {:src (video video-key-webm) :type "video/webm"}]
            [:source {:src (video vide-key-webm) :type "video/mp4"}]]]]]])))
 

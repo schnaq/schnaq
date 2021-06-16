@@ -11,6 +11,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.edit :as edit]
+            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
@@ -231,7 +232,8 @@
    ;; up-down votes and statistics
    [:div.col-2.pr-3
     [:div.float-right
-     info-content]]])
+     info-content]
+    [input/input-celebration-first]]])
 
 (defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} statement input badges info-content]
   [:<>
