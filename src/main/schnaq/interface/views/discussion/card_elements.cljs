@@ -310,10 +310,10 @@
   [current-discussion statement input badges info-content conclusions history]
   (let [is-topic? (nil? history)]
     [:div.container-fluid
-     [:div.row.px-0.mx-0
+     [:div.row
       [:div.col-3.py-4
        [history-view history]]
-      [:div.col-9.py-4.px-0
+      [:div.col-9.py-4
        [topic-view current-discussion conclusions
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
