@@ -444,13 +444,12 @@
 (defn summary-request
   "Creates a new summary-request if there is none for the discussion. Otherwise updates the request-time."
   [share-hash]
-  (let [summary (:db/id (summary share-hash))]
-    (if summary
-      (request-summary summary)
-      (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
+  (if-let [summary (:db/id (summary share-hash))]
+    (request-summary summary)
+    (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
                          :summary/requested-at (Date.)}]
         (transact [new-summary])
-        new-summary))))
+        new-summary)))
 
 (defn all-summaries []
   (query '[:find [(pull ?summary summary-pattern) ...]
@@ -459,9 +458,8 @@
          summary-with-discussion-pattern))
 
 (defn update-summary [share-hash new-text]
-  (let [summary (:db/id (summary share-hash))]
-    (when summary
-      (let [tx-result @(transact [{:db/id summary
-                                   :summary/text new-text
-                                   :summary/created-at (Date.)}])]
-        (fast-pull summary summary-with-discussion-pattern (:db-after tx-result))))))
+  (when-let [summary (:db/id (summary share-hash))]
+    (let [tx-result @(transact [{:db/id summary
+                                 :summary/text new-text
+                                 :summary/created-at (Date.)}])]
+      (fast-pull summary summary-with-discussion-pattern (:db-after tx-result)))))
