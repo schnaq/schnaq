@@ -16,7 +16,7 @@
 (rf/reg-event-fx
   :celebrate/schnaq-filled
   (fn []
-    {:fx [[:dispatch [:celebrate/state :first true]]
+    {:fx [[:dispatch [:celebrate/state :first-post true]]
           [:dispatch [:notification/add
                       #:notification{:title (labels :celebrations.schnaq-filled/title)
                                      :body [schnaq-filled-body]

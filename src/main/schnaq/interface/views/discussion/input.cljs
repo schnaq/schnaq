@@ -80,14 +80,15 @@
 (defn input-celebration-first
   "Show an celebration animation on each first post."
   []
-  (let [show-celebration? @(rf/subscribe [:celebrate/state? :first])]
-    (when show-celebration?
-      [:div.d-flex.h-100
-       [:video.video-scalable.mt-auto
+  (when @(rf/subscribe [:celebrate/state? :first-post])
+    [:div.d-flex.h-100
+     [:div.mt-auto
+      [common/delayed-fade-in
+       [:video.video-scalable
         {:auto-play true :loop false :muted true :plays-inline true
-         :onEnded (fn [] (rf/dispatch [:celebrate/state :first false]))}
+         :onEnded (fn [] (rf/dispatch [:celebrate/state :first-post false]))}
         [:source {:src (video :celebration.schnaqqi/webm) :type "video/webm"}]
-        [:source {:src (video :celebration.schnaqqi/mp4) :type "video/mp4"}]]])))
+        [:source {:src (video :celebration.schnaqqi/mp4) :type "video/mp4"}]]]]]))
 
 (defn input-form
   "Form to collect the user's statements."
