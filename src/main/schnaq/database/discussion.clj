@@ -409,3 +409,57 @@
              [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
            statement-pattern share-hash search-string)
     (toolbelt/pull-key-up :db/ident)))
+
+(def ^:private summary-pattern
+  [:db/id
+   :summary/discussion
+   :summary/requested-at
+   :summary/text
+   :summary/created-at])
+
+(def ^:private summary-with-discussion-pattern
+  [:db/id
+   {:summary/discussion [:discussion/title
+                         :discussion/share-hash
+                         :db/id]}
+   :summary/requested-at
+   :summary/text
+   :summary/created-at])
+
+(defn- request-summary
+  "Updates a existing summary request and returns the updated version."
+  [summary]
+  (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date.)]])]
+    (fast-pull summary summary-pattern (:db-after tx-result))))
+
+(defn summary
+  "Return a summary or nil."
+  [share-hash]
+  (query '[:find (pull ?summary summary-pattern) .
+           :in $ ?share-hash summary-pattern
+           :where [?discussion :discussion/share-hash ?share-hash]
+           [?summary :summary/discussion ?discussion]]
+         share-hash summary-pattern))
+
+(defn summary-request
+  "Creates a new summary-request if there is none for the discussion. Otherwise updates the request-time."
+  [share-hash]
+  (if-let [summary (:db/id (summary share-hash))]
+    (request-summary summary)
+    (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
+                         :summary/requested-at (Date.)}]
+        (transact [new-summary])
+        new-summary)))
+
+(defn all-summaries []
+  (query '[:find [(pull ?summary summary-pattern) ...]
+           :in $ summary-pattern
+           :where [?summary :summary/requested-at _]]
+         summary-with-discussion-pattern))
+
+(defn update-summary [share-hash new-text]
+  (when-let [summary (:db/id (summary share-hash))]
+    (let [tx-result @(transact [{:db/id summary
+                                 :summary/text new-text
+                                 :summary/created-at (Date.)}])]
+      (fast-pull summary summary-with-discussion-pattern (:db-after tx-result)))))

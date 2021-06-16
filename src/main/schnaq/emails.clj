@@ -91,5 +91,5 @@
                   "https://s3.disqtec.com/email/lead-magnet/dsgvo-check-mail.html"
                   "lead-magnet remote work"
                   {"$DOWNLOAD_LINK"
-                   (str "https://s3.disqtec.com/downloads/Datenschutzkonform%20arbeiten%20schnaq.com.pdf?key="
+                   (str "https://s3.disqtec.com/downloads/Datenschutzkonform_arbeiten_schnaq.com.pdf?key="
                         (.toString (UUID/randomUUID)))}))

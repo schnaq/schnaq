@@ -21,6 +21,13 @@
      [:p body]
      [:p (labels :error.generic/contact-us)]]]])
 
+(defn only-beta-tester
+  "Show a page that explains only beta users can access page"
+  []
+  (error-page-layout
+    (labels :error.beta/heading)
+    (labels :error.beta/body)))
+
 (defn forbidden-page
   "Show the forbidden page."
   []

@@ -19,7 +19,7 @@
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.mailchimp :as mailchimp-config]
-            [schnaq.config.shared :as shared-config]
+            [schnaq.config.shared :as shared-config :refer [beta-tester-groups]]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
@@ -268,6 +268,11 @@
   [_]
   (ok (db/all-feedbacks)))
 
+(defn- all-summaries
+  "Returns all summaries form the db."
+  [_]
+  (ok {:summaries (discussion-db/all-summaries)}))
+
 (>defn- send-invite-emails
   "Expects a list of recipients and the meeting which shall be send."
   [{:keys [body-params]}]
@@ -504,6 +509,32 @@
       (ok {:status :ok})
       (bad-request {:error "Something went wrong. Check your Email-Address and try again."}))))
 
+(defn- request-summary
+  "Request a summary of a discussion. Works only if person is in a beta group."
+  [{:keys [params identity]}]
+  (if identity
+    (if (and (some beta-tester-groups (:groups identity))
+             (validator/valid-discussion? (:share-hash params)))
+      (ok {:summary (discussion-db/summary-request (:share-hash params))})
+      (validator/deny-access "You are not allowed to use this feature"))
+    (validator/deny-access "You need to be logged in to access this endpoint.")))
+
+(defn- get-summary
+  "Return a summary for the specified share-hash."
+  [{:keys [params identity]}]
+  (if identity
+    (if (and (some beta-tester-groups (:groups identity))
+             (validator/valid-discussion? (:share-hash params)))
+      (ok {:summary (discussion-db/summary (:share-hash params))})
+      (validator/deny-access "You are not allowed to use this feature"))
+    (validator/deny-access "You need to be logged in to access this endpoint.")))
+
+(defn- new-summary
+  "Update a summary. If a text exists, it is overwritten. Admin access is already checked by middleware."
+  [{:keys [params]}]
+  (log/info "Updating Summary for" (:share-hash params))
+  (ok {:new-summary (discussion-db/update-summary (:share-hash params) (:new-summary-text params))}))
+
 ;; -----------------------------------------------------------------------------
 ;; Routes
 ;; About applying middlewares: We need to chain `wrap-routes` calls, because
@@ -522,9 +553,14 @@
       (GET "/ping" [] ping)
       (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
       (GET "/schnaq/search" [] search-schnaq)
+      (-> (GET "/schnaq/summary" [] get-summary)
+          (wrap-routes auth/auth-middleware))
       (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
       (GET "/schnaqs/public" [] public-schnaqs)
       (-> (GET "/admin/feedbacks" [] all-feedbacks)
+          (wrap-routes auth/is-admin-middleware)
+          (wrap-routes auth/auth-middleware))
+      (-> (GET "/admin/summaries/all" [] all-summaries)
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
       (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
@@ -552,9 +588,14 @@
       (POST "/header-image/image" [] media/set-preview-image)
       (POST "/lead-magnet/subscribe" [] subscribe-lead-magnet!)
       (POST "/schnaq/add" [] add-schnaq)
+      (-> (POST "/schnaq/summary/request" [] request-summary)
+          (wrap-routes auth/auth-middleware))
       (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
       (POST "/votes/down/toggle" [] toggle-downvote-statement)
       (POST "/votes/up/toggle" [] toggle-upvote-statement)
+      (-> (PUT "/admin/summary/send" [] new-summary)
+          (wrap-routes auth/is-admin-middleware)
+          (wrap-routes auth/auth-middleware))
       analytics/analytics-routes
       hub/hub-routes
       user-api/user-routes)

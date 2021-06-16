@@ -138,6 +138,9 @@
         :page.login/heading "Please Login"
         :page.login/subheading "You need to login to access this resource"
 
+        :page.beta/heading "Beta-Feature"
+        :page.beta/subheading "This feature is currently only enabled for beta-testers. Please log in if you are one."
+
         :footer.buttons/about-us "About us"
         :footer.buttons/legal-note "Legal Note"
         :footer.buttons/privacy "Privacy Notice"
@@ -222,6 +225,13 @@
         :discussion.anonymous-delete.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to delete a statement."]]
         :discussion.anonymous-delete.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
         :discussion.anonymous-delete.modal/cta "Sign in / Sign up"
+
+        ;; Beta Only Funnel
+        :beta.modal/title "Beta-Feature"
+        :beta.modal/explain [:<> "This feature is in a test-state and you need to " [:strong "be a beta-tester to use it."]]
+        :beta.modal/persuade "You can write us an email if you would like to become a beta-tester."
+        :beta.modal/cta "Request Access"
+        :page.beta.modal/cta "If you are interested in joining our beta-tester programm, please write us an email at "
 
         ;; Press Kit
         :press-kit/heading "Press & Media"
@@ -634,6 +644,9 @@
         :error.403/heading "You do not have the rights to view this site 🧙‍♂️"
         :error.403/body "You either have insufficient rights to view this site, or a typo happened."
 
+        :error.beta/heading "You do not have the rights to view this site 🧙‍♂️"
+        :error.beta/body "Only schnaq beta-testers can access this page. If you are one, please log in. If you would like to be a beta-tester, write us an email at hello@schnaq.com."
+
         ;; Graph Texts
         :graph/heading "Discussion Overview"
         :graph.button/text "Mindmap"
@@ -768,6 +781,7 @@
         :router/true-404-view "404 error page"
         :router/public-discussions "Public schnaqs"
         :router/code-of-conduct "Code of Conduct"
+        :router/summaries "Summaries"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -839,7 +853,25 @@
         :lead-magnet.explain.how/text "The checklist is structured in categories. Every category, like e.g. chat-software, contains several alternatives.
         Every alternative is marked with a color. Green shows that there are no privacy concerns. While red warns about
         several major concerns. Orange signals a few minor problems, but an overall okay result.
-        Besides the color ranking we've included a few keywords which can be used for further research."}
+        Besides the color ranking we've included a few keywords which can be used for further research."
+
+        :summary.link.button/text "Summary"
+        :summary.user.request-succeeded/label "Summary requested, please wait."
+        :summary.user.requested/label "Requesting summary …"
+        :summary.user.not-requested/label "Request summary"
+        :summary.user.status/label "A summary is currently being generated. Last requested: "
+        :summary.user/cta "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done."
+        :summary.user/label "Summary: "
+        :summary.user/last-updated "Last updated: "
+        :summary.user/heading "Summaries"
+        :summary.user/subheading "See the discussion in a few sentences"
+        :summary.admin/open-summaries "Open Summaries: %s"
+        :summary.admin/closed-summaries "Closed Summaries: %s"
+        :summary.admin/discussion "Discussion"
+        :summary.admin/requested-at "Requested at"
+        :summary.admin/summary "Summary"
+        :summary.admin/submit "Submit"
+        :summary.admin/closed-at "Closed at"}
 
    :de {;; Common
         :error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
@@ -974,6 +1006,9 @@
         :page.login/heading "Bitte logg dich ein"
         :page.login/subheading "Um auf die folgende Ressource zugreifen zu können, musst du eingeloggt sein"
 
+        :page.beta/heading "Beta-Feature"
+        :page.beta/subheading "Diese Funktion ist nur für Beta-Tester:innen freigeschaltet. Bitte logge dich ein, wenn du zu der Gruppe gehörst."
+
         :footer.buttons/about-us "Über uns"
         :footer.buttons/legal-note "Impressum"
         :footer.buttons/privacy "Datenschutz"
@@ -1057,6 +1092,13 @@
         :discussion.anonymous-delete.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Löschen anmelden."]]
         :discussion.anonymous-delete.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei deinem Konto hinzugefügt."
         :discussion.anonymous-delete.modal/cta "Anmelden / Registrieren"
+
+        ;; Beta Only Funnel
+        :beta.modal/title "Beta-Feature"
+        :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können musst du " [:strong "Beta-Tester:in sein."]]
+        :beta.modal/persuade "Schreib uns eine E-Mail, wenn du auch zu den Beta-Tester:innen gehören möchtest."
+        :beta.modal/cta "Anfrage Senden"
+        :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter "
 
         ;; Press Kit
         :press-kit/heading "Presse & Medien"
@@ -1470,6 +1512,9 @@
         :error.403/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
         :error.403/body "Dir fehlt die Berechtigung diese Seite aufzurufen oder es handelt sich um einen Tippfehler in deiner URL."
 
+        :error.beta/heading "Du hast nicht die Berechtigung diese Seite aufzurufen 🧙‍♂️"
+        :error.beta/body "Dieses Feature ist nur für Beta-Tester:innen verfügbar. Wenn du zu den Tester:innen gehörst, melde dich bitte an. Wenn du Beta-Tester:in werden möchtest, dann schreibe uns eine E-Mail an hello@schnaq.com."
+
         ;; Graph Texts
         :graph/heading "Diskussionsübersicht"
         :graph.button/text "Mindmap"
@@ -1606,6 +1651,7 @@
         :router/true-404-view "404 Fehlerseite"
         :router/public-discussions "Öffentliche schnaqs"
         :router/code-of-conduct "Verhaltensregeln"
+        :router/summaries "Zusammenfassungen"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -1678,7 +1724,25 @@
         :lead-magnet.explain.how/text "Die Checkliste ist nach Kategorien aufgebaut. Zu jeder Kategorie, wie z.B. Chat-Plattformen, finden sich mehrere Alternativen.
         Jede Alternative ist mit einer Ampelfarbe markiert. Grün zeigt dabei die Unbedenklichkeit zum Zeitpunkt unseres Tests. Während Rot vor
         möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
-        Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."}})
+        Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
+
+        :summary.link.button/text "Zusammenfassung"
+        :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
+        :summary.user.requested/label "Zusammenfassung wird angefordert …"
+        :summary.user.not-requested/label "Zusammenfassung anfordern"
+        :summary.user.status/label "Eine Zusammenfassung wird gerade erstellt. Letzte Anfrage: "
+        :summary.user/cta "Drücke den Knopf um eine Zusammenfassung anzufragen. Der Prozess dauert unter Umständen einige Stunden. Die Zusammenfassung wird hier auftauchen, wenn sie fertig ist."
+        :summary.user/label "Zusammenfassung: "
+        :summary.user/last-updated "Zuletzt aktualisiert: "
+        :summary.user/heading "Zusammenfassungen"
+        :summary.user/subheading "Schau dir die Diskussion in wenigen Sätzen an."
+        :summary.admin/open-summaries "Offene Zusammenfassungen: %s"
+        :summary.admin/closed-summaries "Geschlossene Zusammenfassungen: %s"
+        :summary.admin/discussion "Diskussion"
+        :summary.admin/requested-at "Angefragt am"
+        :summary.admin/summary "Zusammenfassung"
+        :summary.admin/submit "Abschicken"
+        :summary.admin/closed-at "Geschlossen am"}})
 
 (defn labels
   "Get a localized resource for the requested key. Returns either a string or a hiccup
@@ -1805,8 +1869,10 @@
      :share "fa-share-alt"
      :shield "fa-shield-alt"
      :site-map "fa-sitemap"
+     :spinner "fa-spinner"
      :star "fa-star"
      :terminal "fa-terminal"
+     :text-width "fa-text-width"
      :trash "fa-trash-alt"
      :user/group "fa-users"
      :user/group-edit "fa-users-cog"
