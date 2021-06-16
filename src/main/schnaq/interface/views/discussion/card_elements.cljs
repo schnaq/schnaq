@@ -13,6 +13,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.edit :as edit]
+            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.user :as user]
@@ -262,7 +263,8 @@
    ;; up-down votes and statistics
    [:div.col-2.pr-3
     [:div.float-right
-     info-content]]])
+     info-content]
+    [input/input-celebration-first]]])
 
 (defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} statement input badges info-content]
   [:<>
@@ -340,10 +342,10 @@
   [current-discussion statement input badges info-content conclusions history]
   (let [is-topic? (nil? history)]
     [:div.container-fluid
-     [:div.row.px-0.mx-0
+     [:div.row
       [:div.col-3.py-4
        [history-view history]]
-      [:div.col-9.py-4.px-0
+      [:div.col-9.py-4
        [topic-view current-discussion conclusions
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))

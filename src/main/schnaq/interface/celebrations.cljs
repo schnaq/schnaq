@@ -16,11 +16,22 @@
 (rf/reg-event-fx
   :celebrate/schnaq-filled
   (fn []
-    {:fx [[:dispatch [:notification/add
+    {:fx [[:dispatch [:celebrate/state :first-post true]]
+          [:dispatch [:notification/add
                       #:notification{:title (labels :celebrations.schnaq-filled/title)
                                      :body [schnaq-filled-body]
                                      :context :primary
                                      :stay-visible? true}]]]}))
+
+(rf/reg-event-db
+  :celebrate/state
+  (fn [db [_ celebration-type celebration-state]]
+    (assoc-in db [:celebration celebration-type] celebration-state)))
+
+(rf/reg-sub
+  :celebrate/state?
+  (fn [db [_ celebration-type]]
+    (get-in db [:celebration celebration-type] false)))
 
 
 ;; -----------------------------------------------------------------------------

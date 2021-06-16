@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.input
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.text.display-data :refer [fa labels video]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]
@@ -76,6 +76,19 @@
           [:div.d-flex.flex-row
            [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
            [:i {:class (str "m-auto fas " (fa :plane))}]]]]]]]]))
+
+(defn input-celebration-first
+  "Show an celebration animation on each first post."
+  []
+  (when @(rf/subscribe [:celebrate/state? :first-post])
+    [:div.d-flex.h-100
+     [:div.mt-auto
+      [common/delayed-fade-in
+       [:video.video-scalable
+        {:auto-play true :loop false :muted true :plays-inline true
+         :onEnded (fn [] (rf/dispatch [:celebrate/state :first-post false]))}
+        [:source {:src (video :celebration.schnaqqi/webm) :type "video/webm"}]
+        [:source {:src (video :celebration.schnaqqi/mp4) :type "video/mp4"}]]]]]))
 
 (defn input-form
   "Form to collect the user's statements."

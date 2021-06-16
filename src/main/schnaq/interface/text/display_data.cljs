@@ -1803,6 +1803,8 @@
   (identifier
     {:animation-discussion/webm "https://s3.disqtec.com/schnaq-how-to/animation_discussion.webm"
      :animation-discussion/mp4 "https://s3.disqtec.com/schnaq-how-to/animation_discussion.mp4"
+     :celebration.schnaqqi/webm "https://s3.disqtec.com/schnaq-common/celebration/celebration_confetti.webm"
+     :celebration.schnaqqi/mp4 "https://s3.disqtec.com/schnaq-common/celebration/celebration_confetti.mp4"
      :how-to.admin/webm "https://s3.disqtec.com/schnaq-how-to/admin.webm"
      :how-to.admin/mp4 "https://s3.disqtec.com/schnaq-how-to/admin.mp4"
      :how-to.create/webm "https://s3.disqtec.com/schnaq-how-to/create.webm"
