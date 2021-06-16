@@ -65,7 +65,7 @@
 (defn- list-open-summaries
   "Shows a list of all still open summaries."
   []
-  [:div.container.py-4
+  [:div.py-4
    (let [summaries @(rf/subscribe [:summaries/open])
          locale @(rf/subscribe [:current-locale])]
      (if summaries
@@ -98,7 +98,7 @@
 (defn- list-closed-summaries
   "Shows a list of all closed summaries."
   []
-  [:div.container.py-4
+  [:div.py-4
    (let [summaries @(rf/subscribe [:summaries/closed])
          locale @(rf/subscribe [:current-locale])]
      (if summaries
@@ -129,13 +129,19 @@
     {:page/heading "Zusammenfassungen"
      :page/subheading "Beim drücken von senden, werden diese sofort erstellt."
      :condition/needs-administrator? true}
-    [:<>
+    [:section.container
      [list-open-summaries]
      [:hr]
      [list-closed-summaries]]))
 
+
+;; -----------------------------------------------------------------------------
+
 (defn admin-summaries-view []
   [admin-summaries])
+
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
   :summary.admin/send
