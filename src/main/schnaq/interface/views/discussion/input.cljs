@@ -77,8 +77,9 @@
            [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
            [:i {:class (str "m-auto fas " (fa :plane))}]]]]]]]]))
 
-(defn input-celebration-first []
+(defn input-celebration-first
   "Show an celebration animation on each first post."
+  []
   (let [show-celebration? @(rf/subscribe [:celebrate/state? :first])]
     (when show-celebration?
       [:div.d-flex.h-100
