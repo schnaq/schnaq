@@ -447,9 +447,9 @@
   (if-let [summary (:db/id (summary share-hash))]
     (request-summary summary)
     (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
-                         :summary/requested-at (Date.)}]
-        (transact [new-summary])
-        new-summary)))
+                       :summary/requested-at (Date.)}]
+      (transact [new-summary])
+      new-summary)))
 
 (defn all-summaries []
   (query '[:find [(pull ?summary summary-pattern) ...]

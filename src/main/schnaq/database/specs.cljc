@@ -108,5 +108,7 @@
 (s/def :summary/requested-at inst?)
 (s/def :summary/created-at inst?)
 (s/def :summary/text ::non-blank-string)
+(s/def :summary/requester (s/or :id :db/id
+                                :registered-user ::registered-user))
 (s/def ::summary (s/keys :req [:summary/discussion :summary/requested-at]
-                         :opt [:summary/text :summary/created-at]))
+                         :opt [:summary/text :summary/created-at :summary/requester]))
