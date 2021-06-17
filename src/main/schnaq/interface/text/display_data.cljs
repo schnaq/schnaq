@@ -937,6 +937,7 @@
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
+        ;; TODO falls wir subpages mit features einrichten, dann kann man sich hier bedienen
         :startpage.features.meeting-organisation/lead "Gut informiert an jedem Punkt"
         :startpage.features.meeting-organisation/title "Optimale Entscheidungen treffen"
         :startpage.features.meeting-organisation/body
@@ -962,6 +963,31 @@
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:info@schnaq.com"}
            "Schreib uns wenn du das neue Hub Feature testen möchtest"]]]
+
+        :startpage.objections/title "Kannst du mir das bitte nochmal per Mail zusammenfassen?"
+        :startpage.objections/body
+        [:<>
+         [:p "Kommen dir die Fragen bekannt vor? Dann bist du hier genau richtig. Know-how im Unternehmen nachhaltig zu bündeln und zugänglich zu machen, kann schwierig sein, muss es aber nicht."]
+         [:p "Mach es dir einfach und nutze schnaq für deine Teamkommunikation. Was sagst du? Bitte nicht noch ein Tool? Keine Angst: Wir haben mit schnaq die perfekte Ergänzung zu deiner bestehenden Infrastruktur entwickelt – einfach, strukturiert und vor allem datensicher."]]
+
+
+        :startpage.promise/title "Wo ist mein Know-how?"
+        :startpage.promise/body
+        [:<>
+         [:p "Mit schnaq geht wertvolles Know-how in E-mails, Chats, Meetings und Videokonferenzen oder beim Onboarding nicht mehr verloren. Das spart Zeit und Geld. Zudem lässt sich das gesammelte Wissen ideal für die Entwicklung neuer Zukunftsthemen nutzen."]
+         [:p "Wir versprechen dir nachhaltiges Wissensmanagement das Zeit und Ressourcen spart. Neugierig geworden? Dann lass uns unverbindlich schnaqqen."]
+         [:p.text-center.mb-0
+          [:a.btn.btn-primary {:role "button"
+                               :href "mailto:hallo@schnaq.com"}
+           "Lass dich unverbindlich beraten"]]]
+
+        :startpage.elephant-in-the-room/title "Reden wir über den Elefanten im Raum"
+        :startpage.elephant-in-the-room/body
+        [:<>
+         [:p "Was hat ein Elefant mit nachhaltiger Kommunikation zu tun? Zum einen sind die Herdentiere auf ständigen Austausch angewiesen, zum anderen vergisst der Elefant nichts."
+          "Eine Eigenschaft, die jedes Wissensmanagement im Unternehmen haben sollte."]
+         [:p "Wir arbeiten täglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört und das gesamte Unternehmenswissen automatisiert strukturiert wird, um es allen zugänglich zu machen."]]
+        :startpage.elephant-in-the-room/button "Lerne das Team hinterm Elefanten kennen"
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
