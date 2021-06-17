@@ -424,7 +424,10 @@
                          :db/id]}
    :summary/requested-at
    :summary/text
-   :summary/created-at])
+   :summary/created-at
+   {:summary/requester [:user.registered/email
+                        :user.registered/display-name
+                        :user.registered/keycloak-id]}])
 
 (defn- request-summary
   "Updates a existing summary request and returns the updated version."
@@ -447,9 +450,9 @@
   (if-let [summary (:db/id (summary share-hash))]
     (request-summary summary)
     (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
-                         :summary/requested-at (Date.)}]
-        (transact [new-summary])
-        new-summary)))
+                       :summary/requested-at (Date.)}]
+      (transact [new-summary])
+      new-summary)))
 
 (defn all-summaries []
   (query '[:find [(pull ?summary summary-pattern) ...]

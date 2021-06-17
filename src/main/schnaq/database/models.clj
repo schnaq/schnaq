@@ -215,4 +215,8 @@
    {:db/ident :summary/text
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
-    :db/doc "The most current summary, if there is one."}])
+    :db/doc "The most current summary, if there is one."}
+   {:db/ident :summary/requester
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The last requester (registered user) of a summary."}])

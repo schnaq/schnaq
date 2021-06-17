@@ -28,6 +28,8 @@
         {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
       button-text]
      [:p.small.text-muted.mt-2
+      [:span (labels :summary.user/privacy-warning)]
+      [:br]
       (if summary
         [:span (labels :summary.user.status/label) (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
         (labels :summary.user/cta))]]))
