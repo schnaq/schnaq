@@ -1731,7 +1731,7 @@
         :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
         :summary.user.requested/label "Zusammenfassung wird angefordert …"
         :summary.user.not-requested/label "Zusammenfassung anfordern"
-        :summary.user/privacy-warning "Diese Funktion befindet sich noch im Beta-Stadium. Zu Zwecken der Verbesserung der Funktion, werden menschliche Mitarbeiter Inhalte der Zusammenfassung vertraulich einsehen können, wenn diese erstellt wird."
+        :summary.user/privacy-warning "Diese Funktion befindet sich noch im Beta-Stadium. Zu Zwecken der Verbesserung der Funktion, werden menschliche Mitarbeiter:innen Inhalte der Zusammenfassung vertraulich einsehen können, wenn diese erstellt wird."
         :summary.user.status/label "Eine Zusammenfassung wird gerade erstellt. Letzte Anfrage: "
         :summary.user/cta "Drücke den Knopf um eine Zusammenfassung anzufragen. Der Prozess dauert unter Umständen einige Stunden. Die Zusammenfassung wird hier auftauchen, wenn sie fertig ist."
         :summary.user/label "Zusammenfassung: "
