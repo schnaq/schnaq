@@ -60,8 +60,8 @@
         :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
         ;; Startpage
-        :startpage/heading "Better Decisions Together"
-        :startpage/subheading "Software, that helps remote-teams structure their shared knowledge. Democratizing discussions – because everybody has valuable insights."
+        :startpage/heading "Manage your knowledge safely and sustainably"
+        :startpage/subheading "Schnaq extracts knowledge from communication during your work day, structures it, and makes it easily searchable"
         :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
                                          " discussions which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
 
@@ -929,8 +929,8 @@
 
 
         ;; Startpage
-        :startpage/heading "Gemeinsam bessere Entscheidungen treffen"
-        :startpage/subheading "Kommunikationssoftware, die Remote-Teams hilft strukturiert Wissen auszutauschen. Demokratisiere Diskussionen – Weil jede:r im Team etwas beitragen kann."
+        :startpage/heading "Wissen nachhaltig und sicher managen"
+        :startpage/subheading "Schnaq extrahiert Wissen aus Gesprächen im Arbeitsaltag, strukturiert es und macht es einfach durchsuchbar"
         :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
                                          " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
