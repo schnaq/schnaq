@@ -536,8 +536,7 @@
   (let [summary (discussion-db/update-summary (:share-hash params) (:new-summary-text params))]
     (when (:summary/requester summary)
       (let [title (-> summary :summary/discussion :discussion/title)
-            share-hash (-> summary :summary/discussion :discussion/share-hash)
-            link (format "%s/schnaq/%s/summary" config/frontend-url share-hash)]
+            share-hash (-> summary :summary/discussion :discussion/share-hash)]
         (emails/send-mail
           (format "Schnaq summary for: %s" (-> summary :summary/discussion :discussion/title))
           (format "Hallo\n
@@ -546,7 +545,7 @@
           Viele Grüße
           \n
           Dein schnaq Team"
-                  title link)
+                  title (links/get-summary-link share-hash))
           (-> summary :summary/requester :user.registered/email))))
     (ok {:new-summary summary})))
 
