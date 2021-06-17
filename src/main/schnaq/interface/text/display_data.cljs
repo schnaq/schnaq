@@ -964,9 +964,11 @@
                                :href "mailto:info@schnaq.com"}
            "Schreib uns wenn du das neue Hub Feature testen möchtest"]]]
 
+        ;; TODO translate the stripes from here on
         :startpage.objections/title "Kannst du mir das bitte nochmal per Mail zusammenfassen?"
         :startpage.objections/body
         [:<>
+         [:p "Wer schreibt das Protokoll? Warum hast du das nicht ins Team-Wiki geschrieben?"]
          [:p "Kommen dir die Fragen bekannt vor? Dann bist du hier genau richtig. Know-how im Unternehmen nachhaltig zu bündeln und zugänglich zu machen, kann schwierig sein, muss es aber nicht."]
          [:p "Mach es dir einfach und nutze schnaq für deine Teamkommunikation. Was sagst du? Bitte nicht noch ein Tool? Keine Angst: Wir haben mit schnaq die perfekte Ergänzung zu deiner bestehenden Infrastruktur entwickelt – einfach, strukturiert und vor allem datensicher."]]
 
