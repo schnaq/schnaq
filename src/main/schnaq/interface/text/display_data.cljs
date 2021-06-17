@@ -60,8 +60,8 @@
         :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
         ;; Startpage
-        :startpage/heading "Manage your knowledge safely and sustainably"
-        :startpage/subheading "Schnaq extracts knowledge from communication during your work day, structures it, and makes it easily searchable"
+        :startpage/heading "The Elephant-Brain for your Company"
+        :startpage/subheading "Software to manage your knowledge safely and sustainably"
         :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
                                          " discussions which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
 
@@ -738,12 +738,12 @@
         :pricing.newsletter/name "schnaq newsletter."
 
         ;; feature list
-        :feature/what "Decisions become more transparent and well-informed"
-        :feature/share "Everybody can contribute their knowledge equally"
-        :feature/graph "Relevant knowledge is automatically transformed into a mindmap"
-        :feature/processing "Information is easy to find"
-        :feature/secure "Data is kept safe with german engineering"
         :schnaq.startpage.cta/button "Discuss with your coworkers"
+        :feature/integration "A few clicks to integrate into your existing software and infrastructure"
+        :feature/organization "Easy extraction and organisation of Knowledge"
+        :feature/datenschutz "Privacy focused and GDPR-compliant work"
+        :feature/inputs "Never again lose know-how from emails, chats, meetings or video-conferences"
+        :feature/equality "Everybody is able to contribute knowledge equally"
 
         ;; tooltips
         :tooltip/history-statement "Back to statement made by "
@@ -929,8 +929,8 @@
 
 
         ;; Startpage
-        :startpage/heading "Wissen nachhaltig und sicher managen"
-        :startpage/subheading "Schnaq extrahiert Wissen aus Gesprächen im Arbeitsaltag, strukturiert es und macht es einfach durchsuchbar"
+        :startpage/heading "Das Elefantenhirn für dein Unternehmen"
+        :startpage/subheading "Software um Wissen nachhaltig und sicher managen"
         :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
                                          " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
@@ -1609,12 +1609,12 @@
         :pricing.newsletter/name "schnaq Newsletter."
 
         ;; feature list
-        :feature/what "Entscheidungen werden nachvollziehbarer und informierter"
-        :feature/share "Alle können gleichberechtigt ihr Wissen einbringen"
-        :feature/graph "Relevantes Wissen wird automatisch in eine Mindmap überführt"
-        :feature/processing "Informationen sind einfach wiederzufinden"
-        :feature/secure "Daten werden nach deutschen Standards geschützt"
         :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
+        :feature/integration "Per Mausklick in bestehende Software und Infrastruktur integrieren"
+        :feature/organization "Einfach und strukturiert Wissen einfangen und organisieren"
+        :feature/datenschutz "Datenschutzkonform und sicher arbeiten"
+        :feature/inputs "Nie wieder Know-How aus Emails, Chats, Meetings oder Videokonferenzen verlieren"
+        :feature/equality "Alle Mitarbeiter:innen können gleichberechtigt Wissen beitragen"
 
         ;; Tooltips
         :tooltip/history-statement "Zurück zum Beitrag von "
@@ -1865,6 +1865,7 @@
      :plane "fa-paper-plane"
      :plus "fa-plus"
      :project/diagram "fa-project-diagram"
+     :puzzle "fa-puzzle-piece"
      :reply "fa-comment-dots"
      :search "fa-search"
      :server "fa-server"

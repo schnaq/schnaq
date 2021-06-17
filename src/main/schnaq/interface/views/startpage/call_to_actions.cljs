@@ -24,8 +24,8 @@
   "Display a bullet-point with a leading icon.
   _call-to-action.scss contains the related styling."
   [icon-label desc-label]
-  [:div.row.py-3
-   [:div.col-2.col-lg-1
+  [:div.row.py-2
+   [:div.col-2.col-lg-1.my-auto
     [:i.icon-points-icon {:class (str "fas fa-2x " (fa icon-label))}]]
    [:div.col-10.col-lg-11
     [:span.icon-points-text (labels desc-label)]]])
@@ -38,6 +38,16 @@
     {:src (img-path :schnaqqifant/white)}]
    (labels :startpage.social-proof/numbers)])
 
+(defn- intro-bullets
+  "The teaser bullets for above the fold."
+  []
+  [:<>
+   [bullet-point :puzzle :feature/integration]
+   [bullet-point :clipboard :feature/organization]
+   [bullet-point :shield :feature/datenschutz]
+   [bullet-point :comment :feature/inputs]
+   [bullet-point :user/group :feature/equality]])
+
 (defn features-call-to-action
   "Displays a list of features with a call-to-action button to start a schnaq"
   []
@@ -46,9 +56,5 @@
     [header-animation]
     [start-schnaq-button]
     [social-proof]]
-   [:div.col-lg-6.offset-lg-1.py-lg-5.pt-5
-    [bullet-point :clipboard :feature/what]
-    [bullet-point :user/group :feature/share]
-    [bullet-point :site-map :feature/graph]
-    [bullet-point :search :feature/processing]
-    [bullet-point :shield :feature/secure]]])
+   [:div.col-lg-6.offset-lg-1.py-lg-5
+    [intro-bullets]]])
