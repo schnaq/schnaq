@@ -32,6 +32,29 @@
      {:href (rfe/href :routes/about-us)}
      (labels :startpage.elephant-in-the-room/button)]]])
 
+(defn- feature-columns
+  "Arguments for getting schnaq in three columns."
+  []
+  ;; TODO labelize
+  ;; TODO Add icons or other graphical Elements
+  [:div.row
+   [:div.col-12.col-md-4
+    [:h4.text-center "Know-how sichern"]
+    [:p "Digitalisierung und Mobile Office haben die Art, wie wir kommunizieren, verändert.
+    Doch auch in modernen Prozessen bleibt die Herausforderung, Wissen im Unternehmen zu bündeln.
+    Wir bieten dir mit unserem Produkt die Lösung, zeitgemäß zu kommunizieren und dabei das Know-how aller Experten zusammen zu bringen."]]
+   [:div.col-12.col-md-4
+    [:h4.text-center "Diskussionen demokratisieren"]
+    [:p "Wer viel redet, muss nicht recht haben.
+    Umgekehrt sind die größten Genies auf ihrem Gebiet manchmal eher introvertiert und reden ungerne vor anderen Menschen.
+    Mit schnaq räumen wir mit diesem Missstand auf.
+    Expert:innen können ihr Know-how einbringen und in konstruktive Diskussionen einsteigen – auch ohne viele Worte."]]
+   [:div.col-12.col-md-4
+    [:h4.text-center "Learnings nutzen"]
+    [:p "Moderne Prozesse haben einen Haken: die Dokumentation.
+    Oft werden die Learnings generiert, landen dann aber bestenfalls in Protokollen, die archiviert, aber nie wieder geöffnet werden.
+    Schnaq schafft ein lebendiges Wissensmanagement, das einlädt, in Learnings zu stöbern und neue Wege zu gehen."]]])
+
 ;; -----------------------------------------------------------------------------
 
 (defn feature-rows
@@ -40,4 +63,5 @@
   [:<>
    [what-is-schnaq]
    [schnaq-promise]
-   [elephant-in-the-room]])
+   [elephant-in-the-room]
+   [feature-columns]])
