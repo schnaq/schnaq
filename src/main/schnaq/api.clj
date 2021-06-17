@@ -533,7 +533,22 @@
   "Update a summary. If a text exists, it is overwritten. Admin access is already checked by middleware."
   [{:keys [params]}]
   (log/info "Updating Summary for" (:share-hash params))
-  (ok {:new-summary (discussion-db/update-summary (:share-hash params) (:new-summary-text params))}))
+  (let [summary (discussion-db/update-summary (:share-hash params) (:new-summary-text params))]
+    (when (:summary/requester summary)
+      (let [title (-> summary :summary/discussion :discussion/title)
+            share-hash (-> summary :summary/discussion :discussion/share-hash)
+            link (format "%s/schnaq/%s/summary" config/frontend-url share-hash)]
+        (emails/send-mail
+          (format "Schnaq summary for: %s" (-> summary :summary/discussion :discussion/title))
+          (format "Hallo\n
+          Eine neue Zusammenfassung wurde für die Diskussion %s erstellt und kann und kann unter folgendem Link abgerufen werden %s
+          \n\n
+          Viele Grüße
+          \n
+          Dein schnaq Team"
+                  title link)
+          (-> summary :summary/requester :user.registered/email))))
+    (ok {:new-summary summary})))
 
 ;; -----------------------------------------------------------------------------
 ;; Routes

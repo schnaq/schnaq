@@ -424,7 +424,10 @@
                          :db/id]}
    :summary/requested-at
    :summary/text
-   :summary/created-at])
+   :summary/created-at
+   {:summary/requester [:user.registered/email
+                        :user.registered/display-name
+                        :user.registered/keycloak-id]}])
 
 (defn- request-summary
   "Updates a existing summary request and returns the updated version."

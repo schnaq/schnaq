@@ -23,7 +23,7 @@
 
 (def ^:private failed-sendings (atom '()))
 
-(>defn- send-mail
+(>defn send-mail
   "Sends a single mail to the recipient. Title and content are used as passed."
   [title content recipient]
   [string? string? string? :ret (? coll?)]
