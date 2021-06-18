@@ -5,9 +5,8 @@
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [goog.string :as gstring]
-            [oops.core :refer [oget oset!]]
+            [oops.core :refer [oset!]]
             [reagent.core :as reagent]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [img-path]]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
