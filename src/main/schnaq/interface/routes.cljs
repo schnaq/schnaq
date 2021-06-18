@@ -6,6 +6,7 @@
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.frontend.history :as rfh]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.pages.about-us :as about-us]
@@ -17,7 +18,6 @@
             [schnaq.interface.pages.publications :as publications]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
@@ -202,7 +202,7 @@
       :view privacy-extended/view}]]
    ["meetings"
     {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
-    (when-not toolbelt/production?
+    (when-not shared-config/production?
       [""
        {:name :routes/schnaqs
         :view meetings-overview/meeting-view-entry

@@ -579,7 +579,7 @@
 
 (def ^:private app-routes
   "Building routes for app."
-  (if schnaq-core/production-mode?
+  (if shared-config/production?
     (routes common-routes
             (route/not-found not-found-msg))
     (routes common-routes
@@ -604,7 +604,7 @@
   []
   (log/info "Welcome to schnaq's Backend 🧙")
   (log/info (format "Build Hash: %s" config/build-hash))
-  (log/info (format "Environment: %s" config/env-mode))
+  (log/info (format "Environment: %s" shared-config/schnaq-environment))
   (log/info (format "Database Name: %s" config/db-name))
   (log/info (format "Database URI (truncated): %s" (subs config/datomic-uri 0 30)))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
@@ -617,7 +617,7 @@
   "This is our main entry point for the REST API Server."
   [& _args]
   (let [allowed-origins [allowed-origin]
-        allowed-origins' (if schnaq-core/production-mode? allowed-origins (conj allowed-origins #".*"))]
+        allowed-origins' (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
     ; Run the server with Ring.defaults middle-ware
     (say-hello)
     (schnaq-core/-main)

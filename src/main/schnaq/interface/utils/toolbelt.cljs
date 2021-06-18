@@ -2,12 +2,7 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
-            [oops.core :refer [oset! oget]]
-            [schnaq.interface.config :refer [config]]))
-
-(def production?
-  "Checks the configuration for the current environment."
-  (= "production" (:environment config)))
+            [oops.core :refer [oset! oget]]))
 
 (defn height-to-scrollheight!
   "Get current scroll height and set the height of the element accordingly.
