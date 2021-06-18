@@ -10,7 +10,7 @@
    :animation-discussion/webm
    :animation-discussion/mp4
    :startpage.objections
-   true "video-background-primary"])
+   true "video-background-primary-with-shadow"])
 
 (defn- schnaq-promise
   "Box describing schnaq and its advantages"
@@ -19,7 +19,7 @@
    :start-page.work-together/webm
    :start-page.work-together/mp4
    :startpage.promise
-   true "video-background-primary"])
+   true "video-background-primary-with-shadow"])
 
 (defn- elephant-in-the-room
   "Feature box showcasing the elephant in the room."
@@ -28,7 +28,7 @@
    :start-page.address-elephant/webm
    :start-page.address-elephant/mp4
    :startpage.elephant-in-the-room
-   true "video-background-primary"
+   true "video-background-primary-with-shadow"
    [:p.text-center.mb-0
     [:a.btn.btn-primary
      {:href (rfe/href :routes/about-us)}

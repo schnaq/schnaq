@@ -42,8 +42,8 @@
   "The teaser bullets for above the fold."
   []
   [:<>
-   [bullet-point :puzzle :feature/integration]
    [bullet-point :clipboard :feature/organization]
+   [bullet-point :puzzle :feature/integration]
    [bullet-point :shield :feature/datenschutz]
    [bullet-point :comment :feature/inputs]
    [bullet-point :user/group :feature/equality]])
