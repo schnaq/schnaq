@@ -4,11 +4,11 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
-            [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.utils.localstorage :as ls]))
 
 ;; Note: this lives in the common namespace to prevent circles through the routes import
 (rf/reg-event-fx
@@ -26,7 +26,7 @@
 (rf/reg-event-fx
   :load/schnaqs
   (fn [{:keys [db]} _]
-    (when-not toolbelt/production?
+    (when-not shared-config/production?
       {:fx [(http/xhrio-request db :get "/schnaqs" [:init-from-backend])]})))
 
 (rf/reg-event-fx
