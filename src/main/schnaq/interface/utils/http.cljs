@@ -2,8 +2,8 @@
   (:require [ajax.core :as ajax]
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
-            [schnaq.interface.auth :as auth]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.config.shared :as shared-config]
+            [schnaq.interface.auth :as auth]))
 
 (s/def ::http-methods #{:get :post :put :delete :patch})
 

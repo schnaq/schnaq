@@ -31,11 +31,6 @@
     (create-dropdown-item (reitfe/href :routes.schnaqs/personal)
                           :router/visited-schnaqs)))
 
-(defn- all-schnaqs-link []
-  (when-not shared-config/production?
-    (create-dropdown-item (reitfe/href :routes/schnaqs)
-                          :nav.schnaqs/show-all)))
-
 (defn- all-public-schnaqs-link []
   (create-dropdown-item (reitfe/href :routes.schnaqs/public)
                         :nav.schnaqs/show-all-public))

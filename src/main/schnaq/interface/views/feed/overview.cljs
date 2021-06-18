@@ -2,7 +2,6 @@
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
