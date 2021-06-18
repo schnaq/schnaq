@@ -24,7 +24,9 @@
   "A single testimonial of a user."
   [img company-name company-body reference-name]
   [:div.card.p-4
-   [:img.card-img-top {:src (img-path img) :alt "todo"}]
+   [:img.card-img-top
+    {:src (img-path img)
+     :alt (gstring/format "A company logo of %s" (labels company-name))}]
    [:div.card-body
     [:h5.card-title.text-center (labels company-name)]
     [:p.card-text (gstring/format "\"%s\"" (labels company-body))]
