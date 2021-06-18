@@ -17,6 +17,16 @@
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
 
+(>defn get-admin-center-link
+  "Building a URL to the admin-center of a schnaq.."
+  [share-hash edit-hash]
+  [string? string? :ret string?]
+  #?(
+     :cljs (let [path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
+                                                                :edit-hash edit-hash})
+                 location (oget js/window :location)]
+             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
+
 (>defn get-summary-link
   "Takes a share-hash and returns the link to the summary view."
   [share-hash]

@@ -5,7 +5,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.links :as links]))
 
 (def ^:private image-form-name "image-url")
 
@@ -48,7 +48,7 @@
                                 {:image-url (oget+ form [image-form-name :value])
                                  :share-hash share-hash
                                  :edit-hash edit-hash
-                                 :admin-center (common/get-admin-center-link current-route)}
+                                 :admin-center (links/get-admin-center-link share-hash edit-hash)}
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
