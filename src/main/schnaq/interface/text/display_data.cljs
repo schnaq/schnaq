@@ -598,8 +598,17 @@
 
         ;; Testimonials
         :testimonials/heading "Testimonials"
+        :testimonials.doctronic/company "doctronic GmbH & Co. KG"
         :testimonials.doctronic/quote "We observe the development of schnaq with great interest for our own use and for the use of our customers."
-        :testimonials.doctronic/author "Ingo Küper, Managing Director doctronic GmbH & Co. KG"
+        :testimonials.doctronic/author "Ingo Küper, Managing Director"
+
+        :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
+        :testimonials.leetdesk/quote "Cool Software bro, Id like to type in stuff all day with my fancy Keyboard."
+        :testimonials.leetdesk/author "Meiko Tse, Managing Director"
+
+        :testimonials.hhu/company "Heinrich Heine University Düsseldorf"
+        :testimonials.hhu/quote "We like our students, thats why we let them discuss all day in schnaq!"
+        :testimonials.hhu/author "Klauke Fring, Scientific Advisory to the Chancelor"
 
         ;; User related
         :user.button/set-name "Save name"
@@ -1514,8 +1523,17 @@
 
         ;; Testimonials
         :testimonials/heading "Was andere über uns denken:"
+        :testimonials.doctronic/company "doctronic GmbH & Co. KG"
         :testimonials.doctronic/quote "Wir beobachten die Entwicklung von schnaq mit großem Interesse für den eigenen Einsatz und für den Einsatz bei unseren Kunden."
-        :testimonials.doctronic/author "Ingo Küper, Geschäftsführer doctronic GmbH & Co. KG"
+        :testimonials.doctronic/author "Ingo Küper, Geschäftsführer"
+
+        :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
+        :testimonials.leetdesk/quote "Die Software ist schon ziemlich geil, würde ich mit meiner neuen Tastatur viel reintippen."
+        :testimonials.leetdesk/author "Meiko Tse, Geschäftsführer"
+
+        :testimonials.hhu/company "Heinrich-Heine-Universität Düsseldorf"
+        :testimonials.hhu/quote "Wir mögen unsere Studierenden, deshalb nutzen wir schnaq! Guck wie toll sie diskutieren."
+        :testimonials.hhu/author "Klauke Fring, Wissenschaftliche Mitarbeiterin"
 
         ;; User related
         :user.button/set-name "Name speichern"
@@ -1817,6 +1835,8 @@
      :logos/digihub "https://s3.disqtec.com/schnaq-common/logos/digihub_logo.png"
      :logos/doctronic "https://s3.disqtec.com/schnaq-common/logos/doctronic_logo.png"
      :logos/ignition "https://s3.disqtec.com/schnaq-common/logos/ignition_logo.png"
+     :logos/leetdesk "https://s3.disqtec.com/schnaq-common/logos/leetdesk_logo.png"
+     :logos/hhu "https://s3.disqtec.com/schnaq-common/logos/hhu_logo.png"
      :logos/hetzner "https://s3.disqtec.com/schnaq-common/logos/logo-hetzner.svg"
      :press-kit/fact-sheet "https://s3.disqtec.com/schnaq-presskit/factsheet_preview.png"
      :press-kit/logo "https://s3.disqtec.com/schnaq-presskit/logo_card.png"
