@@ -17,7 +17,7 @@
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
 
-(>defn get-admin-center-link
+(>defn get-admin-link
   "Building a URL to the admin-center of a schnaq.."
   [share-hash edit-hash]
   [string? string? :ret string?]
@@ -36,9 +36,9 @@
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
 
-(>defn add-share-link
+(>defn add-links-to-discussion
   "Takes a discussion and adds a share-link to the structure."
-  [discussion]
+  [{:discussion/keys [share-hash edit-hash] :as discussion}]
   [::specs/discussion :ret ::specs/discussion]
-  (assoc discussion :discussion/share-link
-                    (get-share-link (:discussion/share-hash discussion))))
+  (assoc discussion :discussion/share-link (get-share-link share-hash)
+                    :discussion/admin-link (get-admin-link share-hash edit-hash)))
