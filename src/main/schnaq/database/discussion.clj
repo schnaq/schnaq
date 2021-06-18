@@ -430,9 +430,10 @@
                         :user.registered/keycloak-id]}])
 
 (defn- request-summary
-  "Updates a existing summary request and returns the updated version."
-  [summary]
-  (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date.)]])]
+  "Updates an existing summary request and returns the updated version."
+  [summary requester]
+  (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date.)]
+                              [:db/add summary :summary/requester requester]])]
     (fast-pull summary summary-pattern (:db-after tx-result))))
 
 (defn summary
@@ -446,11 +447,12 @@
 
 (defn summary-request
   "Creates a new summary-request if there is none for the discussion. Otherwise updates the request-time."
-  [share-hash]
+  [share-hash keycloak-id]
   (if-let [summary (:db/id (summary share-hash))]
-    (request-summary summary)
+    (request-summary summary [:user.registered/keycloak-id keycloak-id])
     (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
-                       :summary/requested-at (Date.)}]
+                       :summary/requested-at (Date.)
+                       :summary/requester [:user.registered/keycloak-id keycloak-id]}]
       (transact [new-summary])
       new-summary)))
 
