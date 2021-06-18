@@ -127,8 +127,8 @@
    [:<>
     [:section.container
      [startpage-features/feature-rows]
-     [mailchimp-form]
      [testimonials/view]
+     [mailchimp-form]
      [faq]]
     [early-adopters]
     [:section.container

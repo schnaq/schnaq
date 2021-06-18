@@ -59,6 +59,7 @@
      :lightbulb
      :startpage.feature-box.learnings/body]]
    [:p.text-center
+    ;; TODO let it go to the feature site when its ready
     [:a.btn.btn-primary.text-center "Entdecke schnaq"]]])
 
 ;; -----------------------------------------------------------------------------
