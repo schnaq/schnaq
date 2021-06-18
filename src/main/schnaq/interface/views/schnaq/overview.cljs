@@ -60,8 +60,8 @@
   []
   [schnaq-overview :schnaqs/public])
 
-(defn meeting-view-visited
-  "Render visited meetings."
+(defn visited-schnaqs
+  "Render visited schnaqs."
   []
   [schnaq-overview :schnaqs.visited/all])
 

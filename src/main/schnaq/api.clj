@@ -64,7 +64,7 @@
   (ok {:text "🧙‍♂️"}))
 
 (defn- all-schnaqs
-  "Returns all meetings from the db."
+  "Returns all schnaqs from the db."
   [_req]
   (ok (discussion-db/all-discussions)))
 
@@ -279,14 +279,14 @@
   [{:keys [body-params]}]
   [:ring/request :ret :ring/response]
   (let [{:keys [share-hash edit-hash recipients share-link]} body-params
-        meeting-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))]
+        discussion-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Invite Emails for some meeting sent")
           (ok (merge
                 {:message "Emails sent successfully"}
                 (emails/send-mails
-                  (format (email-templates :invitation/title) meeting-title)
-                  (format (email-templates :invitation/body) meeting-title share-link)
+                  (format (email-templates :invitation/title) discussion-title)
+                  (format (email-templates :invitation/body) discussion-title share-link)
                   recipients))))
       (validator/deny-access))))
 
