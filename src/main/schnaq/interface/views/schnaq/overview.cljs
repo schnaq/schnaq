@@ -1,11 +1,11 @@
-(ns schnaq.interface.views.meeting.overview
+(ns schnaq.interface.views.schnaq.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.pages :as pages]))
 
-(defn- no-meetings-found
+(defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
   []
   [:div.alert.alert-primary.text-center
@@ -16,9 +16,6 @@
    [:div.btn.btn-outline-primary
     {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
     (labels :nav.schnaqs/create-schnaq)]])
-
-
-;; -----------------------------------------------------------------------------
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
@@ -41,7 +38,7 @@
   [:div.meetings-list
    (let [schnaqs @(rf/subscribe [subscription-key])]
      (if (empty? schnaqs)
-       [no-meetings-found]
+       [no-schnaqs-found]
        (for [schnaq schnaqs]
          [:div.py-3 {:key (:db/id schnaq)}
           [schnaq-entry schnaq]])))])
@@ -68,7 +65,8 @@
   []
   [schnaq-overview :schnaqs.visited/all])
 
-;; #### Subs ####
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-sub
   :schnaqs/all
