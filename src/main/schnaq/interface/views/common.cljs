@@ -122,20 +122,12 @@
            :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-4")}
           (:view fourth-tab)])]])))
 
-(>defn get-share-link
-  [share-hash]
-  [map? :ret string?]
-  (let [path (reitfe/href :routes.schnaq/start {:share-hash share-hash})
-        location (oget js/window :location)]
-    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
-
 (>defn get-admin-center-link
   "Building the current URL with validated path, and without extra-stuff, like
   internal hashtag-routing."
-  [current-route]
-  [map? :ret string?]
-  (let [{:keys [share-hash edit-hash]} (:path-params current-route)
-        path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
+  [share-hash edit-hash]
+  [string? string? :ret string?]
+  (let [path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
                                                        :edit-hash edit-hash})
         location (oget js/window :location)]
     (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
