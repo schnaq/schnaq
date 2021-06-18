@@ -71,7 +71,7 @@
                                     (reduce replace-fn (email-templates text-body) format-map)}
                                    {:type "text/html; charset=utf-8" :content
                                     (reduce replace-fn (slurp html-template-path) format-map)}]})
-        (info "Sent" email-type "mail to" recipient)
+        (log/info "Sent" email-type "mail to" recipient)
         :ok
         (catch Exception exception
           (log/error "Failed to send" email-type "mail to" recipient)

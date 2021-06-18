@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.navbar
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.toolbelt :as toolbelt]
