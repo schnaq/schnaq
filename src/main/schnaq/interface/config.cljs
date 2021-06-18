@@ -3,14 +3,9 @@
             [schnaq.config.shared :as shared-config]))
 
 ;; Second parameter is a default value
-(goog-define environment "development")
 (goog-define build-hash "dev")
 
 (def deleted-statement-text "[deleted]")
-
-(def config
-  {:rest-backend shared-config/api-url
-   :environment environment})
 
 (def user-language (atom :de))
 

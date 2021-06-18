@@ -3,7 +3,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.file-download :as file-download]
@@ -92,7 +92,7 @@
   "Request a txt-export of the discussion."
   [share-hash title]
   (let [request-fn #(ajax/ajax-request {:method :get
-                                        :uri (str (:rest-backend config) "/export/txt")
+                                        :uri (str shared-config/api-url "/export/txt")
                                         :format (ajax/transit-request-format)
                                         :params {:share-hash share-hash}
                                         :response-format (ajax/transit-response-format)

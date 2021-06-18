@@ -5,7 +5,9 @@
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
             [schnaq.translations :refer [email-templates]]
-            [taoensso.timbre :refer [info error]])
+            [taoensso.timbre :refer [info error]]
+            [schnaq.config.shared :as shared-config]
+            [taoensso.timbre :as log])
   (:import (java.util UUID)))
 
 (def ^:private conn {:host (:sender-host config/email)
@@ -27,20 +29,22 @@
   "Sends a single mail to the recipient. Title and content are used as passed."
   [title content recipient]
   [string? string? string? :ret (? coll?)]
-  (if (valid-mail recipient)
-    (try
-      (send-message conn {:from (:sender-address config/email)
-                          :to recipient
-                          :subject title
-                          :body [{:type "text/plain; charset=utf-8"
-                                  :content content}]})
-      (info "Sent mail to" recipient)
-      (Thread/sleep 100)
-      (catch Exception exception
-        (error "Failed to send mail to" recipient)
-        (error exception)
-        (swap! failed-sendings conj recipient)))
-    (swap! failed-sendings conj recipient)))
+  (if shared-config/production?
+    (if (valid-mail recipient)
+      (try
+        (send-message conn {:from (:sender-address config/email)
+                            :to recipient
+                            :subject title
+                            :body [{:type "text/plain; charset=utf-8"
+                                    :content content}]})
+        (info "Sent mail to" recipient)
+        (Thread/sleep 100)
+        (catch Exception exception
+          (error "Failed to send mail to" recipient)
+          (error exception)
+          (swap! failed-sendings conj recipient)))
+      (swap! failed-sendings conj recipient))
+    (log/info "Should send an email now, but environment is set to development.")))
 
 (>defn send-mails
   "Sends an email with a `title` and `content` to all valid recipients.
