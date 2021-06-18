@@ -39,24 +39,27 @@
    [:h4.text-center (labels title)]
    [:p.text-center.text-primary.mt-0.py-0
     [:i {:class (str " m-auto fas fa-3x " (fa icon))}]]
-   [:p (labels body)]])
+   [:p.text-justify (labels body)]])
 
 (defn- feature-columns
   "Arguments for getting schnaq in three columns."
   []
-  [:div.row
-   [feature-box
-    :startpage.feature-box.know-how/title
-    :book
-    :startpage.feature-box.know-how/body]
-   [feature-box
-    :startpage.feature-box.discussion/title
-    :comment
-    :startpage.feature-box.discussion/body]
-   [feature-box
-    :startpage.feature-box.learnings/title
-    :lightbulb
-    :startpage.feature-box.learnings/body]])
+  [:<>
+   [:div.row
+    [feature-box
+     :startpage.feature-box.know-how/title
+     :book
+     :startpage.feature-box.know-how/body]
+    [feature-box
+     :startpage.feature-box.discussion/title
+     :comment
+     :startpage.feature-box.discussion/body]
+    [feature-box
+     :startpage.feature-box.learnings/title
+     :lightbulb
+     :startpage.feature-box.learnings/body]]
+   [:p.text-center
+    [:a.btn.btn-primary.text-center "Entdecke schnaq"]]])
 
 ;; -----------------------------------------------------------------------------
 
