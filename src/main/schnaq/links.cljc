@@ -21,7 +21,7 @@
   "Building a URL to the admin-center of a schnaq.."
   [share-hash edit-hash]
   [string? string? :ret string?]
-  #?(
+  #?(:clj  (format "%s/schnaq/%s/manage/%s" config/frontend-url share-hash edit-hash)
      :cljs (let [path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
                                                                 :edit-hash edit-hash})
                  location (oget js/window :location)]
