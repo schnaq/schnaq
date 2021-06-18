@@ -991,6 +991,25 @@
          [:p "Wir arbeiten täglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört und das gesamte Unternehmenswissen automatisiert strukturiert wird, um es allen zugänglich zu machen."]]
         :startpage.elephant-in-the-room/button "Lerne das Team hinterm Elefanten kennen"
 
+        :startpage.feature-box.know-how/title "Know-how sichern"
+        :startpage.feature-box.know-how/body
+        "Digitalisierung und Mobile Office haben die Art, wie wir kommunizieren, verändert.
+         Doch auch in modernen Prozessen bleibt die Herausforderung, Wissen im Unternehmen zu bündeln.
+         Wir bieten dir mit unserem Produkt die Lösung, zeitgemäß zu kommunizieren und dabei das Know-how aller Experten zusammen zu bringen."
+        :startpage.feature-box.discussion/title "Diskussionen demokratisieren"
+        :startpage.feature-box.discussion/body
+        "Wer viel redet, muss nicht recht haben.
+         Umgekehrt sind die größten Genies auf ihrem Gebiet manchmal eher introvertiert und reden ungerne vor anderen Menschen.
+         Mit schnaq räumen wir mit diesem Missstand auf.
+         Expert:innen können ihr Know-how einbringen und in konstruktive Diskussionen einsteigen – auch ohne viele Worte."
+        :startpage.feature-box.learnings/title "Learnings nutzen"
+        :startpage.feature-box.learnings/body
+        "Moderne Prozesse haben einen Haken: die Dokumentation.
+         Oft werden die Learnings generiert, landen dann aber bestenfalls in Protokollen, die archiviert, aber nie wieder geöffnet werden.
+         Schnaq schafft ein lebendiges Wissensmanagement, das einlädt, in Learnings zu stöbern und neue Wege zu gehen."
+
+        ;; End translation to do
+
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
         :startpage.early-adopter/or "oder"
