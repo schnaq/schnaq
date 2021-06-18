@@ -46,7 +46,7 @@
                                  false))
             :data-toggle "tooltip"
             :data-placement "bottom"
-            :title (labels :meeting/copy-link-tooltip)}
+            :title (labels :schnaq/copy-link-tooltip)}
            [:input.form-control.form-round.copy-link-form.clickable-no-hover
             {:id meeting-link-id
              :type "text"
@@ -66,10 +66,10 @@
   [:div.row.mb-3
    [:div.col-12.col-md-6.share-link-icons
     [img-text (img-path :schnaqqifant/share)
-     (labels :meeting/educate-on-link-text)]]
+     (labels :schnaq/educate-on-link-text)]]
    [:div.col-12.col-md-6.share-link-icons
     [img-text (img-path :schnaqqifant/talk)
-     (labels :meetings/educate-on-link-text-subtitle)]]])
+     (labels :schnaq/educate-on-link-text-subtitle)]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -79,24 +79,24 @@
   [:ret :re-frame/component]
   (let [input-id "participant-email-addresses"]
     [:<>
-     [:h4.mt-4 (labels :meeting.admin/send-invites-heading)]
+     [:h4.mt-4 (labels :schnaq.admin/send-invites-heading)]
      [:form.form.text-left.mb-5
       {:on-submit (fn [e]
                     (js-wrap/prevent-default e)
                     (rf/dispatch [:discussion.admin/send-email-invites
                                   (oget e [:target :elements])]))}
       [:div.form-group
-       [:label.m-1 {:for input-id} (labels :meeting.admin/addresses-label)]
+       [:label.m-1 {:for input-id} (labels :schnaq.admin/addresses-label)]
        [:textarea.form-control.m-1.rounded-3
         {:id input-id
          :name "participant-addresses" :wrap "soft" :rows 3
          :auto-complete "off"
          :required true
-         :placeholder (labels :meeting.admin/addresses-placeholder)}]
+         :placeholder (labels :schnaq.admin/addresses-placeholder)}]
        [:small.form-text.text-muted.float-right
-        (labels :meeting.admin/addresses-privacy)]]
+        (labels :schnaq.admin/addresses-privacy)]]
       [:button.btn.btn-outline-primary
-       (labels :meeting.admin/send-invites-button-text)]]]))
+       (labels :schnaq.admin/send-invites-button-text)]]]))
 
 (rf/reg-event-fx
   :discussion.admin/send-admin-center-link
@@ -161,8 +161,8 @@
   :discussion.admin/delete-statements-success
   (fn [_ [_ form _return]]
     {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :meeting.admin.notifications/statements-deleted-title)
-                                     :body (labels :meeting.admin.notifications/statements-deleted-lead)
+                      #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
+                                     :body (labels :schnaq.admin.notifications/statements-deleted-lead)
                                      :context :success}]]
           [:form/clear form]]}))
 
@@ -182,8 +182,8 @@
   :discussion.admin/delete-statement-success
   (fn [_ [_ statement-id _return]]
     {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :meeting.admin.notifications/statements-deleted-title)
-                                     :body (labels :meeting.admin.notifications/statements-deleted-lead)
+                      #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
+                                     :body (labels :schnaq.admin.notifications/statements-deleted-lead)
                                      :context :success}]]
           [:dispatch [:discussion.delete/purge-stores statement-id]]]}))
 
@@ -219,15 +219,15 @@
   :discussion.admin/send-email-success
   (fn [_ [_ form {:keys [failed-sendings]}]]
     {:fx [[:dispatch [:notification/add
-                      #:notification{:title (labels :meeting.admin.notifications/emails-successfully-sent-title)
-                                     :body (labels :meeting.admin.notifications/emails-successfully-sent-body-text)
+                      #:notification{:title (labels :schnaq.admin.notifications/emails-successfully-sent-title)
+                                     :body (labels :schnaq.admin.notifications/emails-successfully-sent-body-text)
                                      :context :success}]]
           [:form/clear form]
           (when (seq failed-sendings)
             [:dispatch [:notification/add
-                        #:notification{:title (labels :meeting.admin.notifications/sending-failed-title)
+                        #:notification{:title (labels :schnaq.admin.notifications/sending-failed-title)
                                        :body [:<>
-                                              (labels :meeting.admin.notifications/sending-failed-lead)
+                                              (labels :schnaq.admin.notifications/sending-failed-lead)
                                               [:ul
                                                (for [failed-sending failed-sendings]
                                                  [:li {:key failed-sending} failed-sending])]]
@@ -238,17 +238,17 @@
   "Send admin link via mail to the creator."
   []
   [:section
-   [:p.lead (labels :meeting.admin-center.edit.link/primer)]
+   [:p.lead (labels :schnaq.admin.edit.link/primer)]
    [:section.row.mb-3
     ;; elephant admin
     [:div.col-md-6
      [:div.share-link-icons
       [img-text (img-path :schnaqqifant/admin)
-       (labels :meeting.admin-center.edit.link/admin)]]]
+       (labels :schnaq.admin.edit.link/admin)]]]
     ;; elephant edit
     [:div.col-md-6.share-link-icons
      [img-text (img-path :schnaqqifant/erase)
-      (labels :meeting.admin-center.edit.link/admin-privileges)]]]
+      (labels :schnaq.admin.edit.link/admin-privileges)]]]
    ;; admin mail input
    (let [input-id "admin-link-mail-address"]
      [:form.form.text-left.mb-5
@@ -257,17 +257,17 @@
                     (rf/dispatch [:discussion.admin/send-admin-center-link
                                   (oget e [:target :elements])]))}
       [:div.form-group
-       [:label {:for input-id} (labels :meeting.admin-center.edit.link.form/label)]
+       [:label {:for input-id} (labels :schnaq.admin.edit.link.form/label)]
        [:input.form-control.m-1.rounded-3
         {:id input-id
          :name "admin-center-recipient"
          :auto-complete "off"
          :required true
-         :placeholder (labels :meeting.admin-center.edit.link.form/placeholder)}]
+         :placeholder (labels :schnaq.admin.edit.link.form/placeholder)}]
        [:small.form-text.text-muted.float-right
-        (labels :meeting.admin/addresses-privacy)]]
+        (labels :schnaq.admin/addresses-privacy)]]
       [:button.btn.btn-outline-primary
-       (labels :meeting.admin-center.edit.link.form/submit-button)]])])
+       (labels :schnaq.admin.edit.link.form/submit-button)]])])
 
 (defn- enable-discussion-read-only
   "A Checkbox that makes the current discussion read-only or writeable."
@@ -285,8 +285,8 @@
         :on-change (fn [e] (js-wrap/prevent-default e)
                      (rf/dispatch [dispatch]))}]
       [:label.form-check-label.display-6.pl-1 {:for :enable-read-only?}
-       (labels :discussion.admin.configurations.read-only/checkbox)]]
-     [:span (labels :discussion.admin.configurations.read-only/explanation)]]))
+       (labels :schnaq.admin.configurations.read-only/checkbox)]]
+     [:span (labels :schnaq.admin.configurations.read-only/explanation)]]))
 
 (defn- disable-pro-con []
   (let [pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
@@ -302,8 +302,8 @@
           (js-wrap/prevent-default e)
           (rf/dispatch [:schnaq.admin/disable-pro-con (not pro-con-disabled?)]))}]
       [:label.form-check-label.display-6.pl-1 {:for :disable-pro-con-checkbox?}
-       (labels :discussion.admin.configurations.disable-pro-con/label)]]
-     [:span (labels :discussion.admin.configurations.disable-pro-con/explanation)]]))
+       (labels :schnaq.admin.configurations.disable-pro-con/label)]]
+     [:span (labels :schnaq.admin.configurations.disable-pro-con/explanation)]]))
 
 (rf/reg-sub
   :schnaq.selected/pro-con?
@@ -340,7 +340,7 @@
   [:<>
    [header-image/image-url-input]
    [:div.text-left.my-5
-    [:h4.mt-4 (labels :discussion.admin.configurations/heading)]]
+    [:h4.mt-4 (labels :schnaq.admin.configurations/heading)]]
    [:div.row
     [:div.col [enable-discussion-read-only]]
     [:div.col [disable-pro-con]]]])
@@ -351,18 +351,18 @@
   [common/tab-builder
    "invite-participants"
    ;; participants access via link
-   {:link (labels :meeting.admin-center.invite/via-link)
+   {:link (labels :schnaq.admin.invite/via-link)
     :view [:<>
            [educate-element]
            [copy-link-form links/get-share-link "share-hash"]]}
    ;; participants access via mail
-   {:link (labels :meeting.admin-center.invite/via-mail)
+   {:link (labels :schnaq.admin.invite/via-mail)
     :view [invite-participants-form]}
    ;; admin access via mail
-   {:link (labels :meeting.admin-center.edit.link/header)
+   {:link (labels :schnaq.admin.edit.link/header)
     :view [send-admin-center-link]}
    ;; manage discussion / delete posts
-   {:link (labels :meeting.admin-center.edit/administrate)
+   {:link (labels :schnaq.admin.edit/administrate)
     :view [administrate-discussion]}])
 
 ;; -----------------------------------------------------------------------------
@@ -373,8 +373,8 @@
   (let [{:discussion/keys [share-hash title]} @(rf/subscribe [:schnaq/last-added])]
     ;; display admin center
     [pages/with-nav-and-header
-     {:page/heading (labels :schnaq.admin-center/heading)
-      :page/subheading (gstring/format (labels :schnaq.admin-center/subheading) title)}
+     {:page/heading (labels :schnaq.admin/heading)
+      :page/subheading (gstring/format (labels :schnaq.admin/subheading) title)}
      [:div.container.px-3.px-md-5.py-3.text-center
       [invite-participants-tabs]
       [:div.pb-5.mt-3]
