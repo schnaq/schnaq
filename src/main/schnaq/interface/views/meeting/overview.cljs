@@ -58,11 +58,6 @@
    [:div.container.py-4
     [schnaq-list-view subscription-key]]])
 
-(defn meeting-view-entry
-  "Render all meetings."
-  []
-  [schnaq-overview :schnaqs/all])
-
 (defn public-discussions-view
   "Render all public discussions."
   []

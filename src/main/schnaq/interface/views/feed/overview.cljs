@@ -84,8 +84,6 @@
        (when-not (nil? edit-hash)
          [feed-button :nav.schnaqs/last-added
           :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
-       (when-not shared-config/production?
-         [feed-button :nav.schnaqs/show-all :routes/schnaqs])
        [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]
       [:div.col-md-12.col-6
        [:hr.d-none.d-md-block]

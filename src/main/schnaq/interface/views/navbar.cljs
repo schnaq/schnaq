@@ -94,8 +94,7 @@
            [:div.dropdown-divider]
            [last-added-schnaq-link share-hash edit-hash]
            [my-schnaqs-link visited-hashes]
-           [all-public-schnaqs-link]
-           [all-schnaqs-link]]]]
+           [all-public-schnaqs-link]]]]
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
           (labels :router/privacy)]]]
