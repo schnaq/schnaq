@@ -24,9 +24,11 @@
 (defn- elephant-in-the-room
   "Feature box showcasing the elephant in the room."
   []
-  [rows/image-right
-   :schnaqqifant/admin
+  [rows/video-right
+   :start-page.address-elephant/webm
+   :start-page.address-elephant/mp4
    :startpage.elephant-in-the-room
+   true "video-background-primary"
    [:p.text-center.mb-0
     [:a.btn.btn-primary
      {:href (rfe/href :routes/about-us)}

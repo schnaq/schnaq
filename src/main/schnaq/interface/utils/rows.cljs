@@ -47,7 +47,7 @@
 
 (defn video-left
   "Feature row where the video is located on the right side."
-  [video-key-webm vide-key-webm text-namespace & [looping? video-class]]
+  [video-key-webm video-key-mp4 text-namespace & [looping? video-class]]
   (let [attributes {:auto-play true :muted true :plays-inline true}]
     (row-builder-text-right
       [:video.w-100.feature-animations
@@ -55,12 +55,12 @@
                looping? (assoc :loop looping?)
                video-class (assoc :class video-class))
        [:source {:src (video video-key-webm) :type "video/webm"}]
-       [:source {:src (video vide-key-webm) :type "video/mp4"}]]
+       [:source {:src (video video-key-mp4) :type "video/mp4"}]]
       [build-text-box text-namespace])))
 
 (defn video-right
   "Feature row where the video is located on the right side."
-  [video-key-webm vide-key-webm text-namespace & [looping? video-class]]
+  [video-key-webm video-key-mp4 text-namespace & [looping? video-class more]]
   (let [attributes {:auto-play true :muted true :plays-inline true}]
     (row-builder-text-left
       [build-text-box text-namespace]
@@ -69,7 +69,8 @@
                looping? (assoc :loop looping?)
                video-class (assoc :class video-class))
        [:source {:src (video video-key-webm) :type "video/webm"}]
-       [:source {:src (video vide-key-webm) :type "video/mp4"}]])))
+       [:source {:src (video video-key-mp4) :type "video/mp4"}]]
+      more)))
 
 (defn icon-right
   "Build a row with text on the left side and the icon on the right side."
