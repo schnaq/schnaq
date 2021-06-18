@@ -227,9 +227,10 @@
 (deftest summary-request-test
   (testing "Create a new summary when requested, otherwise update the requested at tag."
     (let [share-hash "cat-dog-hash"
-          new-summary (db/summary-request share-hash)]
+          keycloak-user-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
+          new-summary (db/summary-request share-hash keycloak-user-id)]
       (is (map? new-summary))
-      (let [updated-summary (db/summary-request share-hash)]
+      (let [updated-summary (db/summary-request share-hash keycloak-user-id)]
         (is (= 1
                (compare (:summary/requested-at updated-summary)
                         (:summary/requested-at new-summary))))))))
