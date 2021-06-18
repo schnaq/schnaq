@@ -7,8 +7,8 @@
   "Box describing schnaq and its advantages"
   []
   [rows/video-right
-   :animation-discussion/webm
-   :animation-discussion/mp4
+   :start-page.questions/webm
+   :start-page.questions/mp4
    :startpage.objections
    true "video-background-primary-with-shadow"])
 
