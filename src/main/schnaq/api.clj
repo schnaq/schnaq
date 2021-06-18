@@ -515,7 +515,7 @@
   (if identity
     (if (and (some beta-tester-groups (:groups identity))
              (validator/valid-discussion? (:share-hash params)))
-      (ok {:summary (discussion-db/summary-request (:share-hash params))})
+      (ok {:summary (discussion-db/summary-request (:share-hash params) (:id identity))})
       (validator/deny-access "You are not allowed to use this feature"))
     (validator/deny-access "You need to be logged in to access this endpoint.")))
 
@@ -539,12 +539,12 @@
             share-hash (-> summary :summary/discussion :discussion/share-hash)]
         (emails/send-mail
           (format "Schnaq summary for: %s" (-> summary :summary/discussion :discussion/title))
-          (format "Hallo\n
-          Eine neue Zusammenfassung wurde für die Diskussion %s erstellt und kann und kann unter folgendem Link abgerufen werden %s
-          \n\n
-          Viele Grüße
-          \n
-          Dein schnaq Team"
+          (format "Hallo%n
+Eine neue Zusammenfassung wurde für die Diskussion %s erstellt und kann und kann unter folgendem Link abgerufen werden %s
+%n%n
+Viele Grüße
+%n
+Dein schnaq Team"
                   title (links/get-summary-link share-hash))
           (-> summary :summary/requester :user.registered/email))))
     (ok {:new-summary summary})))
