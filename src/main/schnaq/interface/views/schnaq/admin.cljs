@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.meeting.admin-buttons
+(ns schnaq.interface.views.schnaq.admin
   (:require [ajax.core :as ajax]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]

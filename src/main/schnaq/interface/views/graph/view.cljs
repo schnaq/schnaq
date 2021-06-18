@@ -13,7 +13,7 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.loading :as loading]
-            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]))
+            [schnaq.interface.views.schnaq.admin :as admin]))
 
 (def ^:private graph-id "graph")
 
@@ -156,8 +156,8 @@
       [:div.col-7 [:h2 title]]
       [:div.col-4.pull-right
        [graph-settings/open-settings]
-       [admin-buttons/graph-download-as-png (gstring/format "#%s" graph-id)]
-       [admin-buttons/txt-export share-hash title]]]]))
+       [admin/graph-download-as-png (gstring/format "#%s" graph-id)]
+       [admin/txt-export share-hash title]]]]))
 
 (defn- graph-view
   "The core Graph visualization wrapper."
