@@ -39,7 +39,7 @@
     {:fx [(http/xhrio-request db :get (str "/schnaq/by-hash/" hash) [:schnaq/select-current])]}))
 
 (rf/reg-event-fx
-  :meeting/check-admin-credentials
+  :schnaq/check-admin-credentials
   (fn [{:keys [db]} [_ share-hash edit-hash]]
     {:fx [(http/xhrio-request db :post "/credentials/validate" [:meeting/check-admin-credentials-success]
                               {:share-hash share-hash
