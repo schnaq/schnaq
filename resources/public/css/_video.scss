@@ -18,6 +18,7 @@
 
 .video-background-primary-with-shadow {
   @extend .video-scalable;
+  @extend .shadow;
   box-shadow: vars.$wide-shadow;
 }
 
