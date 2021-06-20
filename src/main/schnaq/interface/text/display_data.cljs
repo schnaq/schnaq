@@ -985,8 +985,8 @@
         :startpage.promise/title "Wo ist mein Know-how?"
         :startpage.promise/body
         [:<>
-         [:p "Mit schnaq geht wertvolles Know-how in E-mails, Chats, Meetings und Videokonferenzen oder beim Onboarding nicht mehr verloren. Das spart Zeit und Geld. Zudem lässt sich das gesammelte Wissen ideal für die Entwicklung neuer Zukunftsthemen nutzen."]
-         [:p "Wir versprechen dir nachhaltiges Wissensmanagement das Zeit und Ressourcen spart. Neugierig geworden? Dann lass uns unverbindlich schnaqqen."]
+         [:p "Mit schnaq geht wertvolles Know-how in E-Mails, Chats, Meetings und Videokonferenzen oder beim Onboarding nicht mehr verloren. Das spart Zeit und Geld. Zudem lässt sich das gesammelte Wissen ideal für die Entwicklung neuer Zukunftsthemen nutzen."]
+         [:p "Wir versprechen dir nachhaltiges Wissensmanagement das Zeit und Ressourcen spart. Neugierig geworden? Dann lass uns doch mal schnaqqen."]
          [:p.text-center.mb-0
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:hallo@schnaq.com"}
@@ -1007,8 +1007,8 @@
          Wir bieten dir mit unserem Produkt die Lösung, zeitgemäß zu kommunizieren und dabei das Know-how aller Experten zusammen zu bringen."
         :startpage.feature-box.discussion/title "Diskussionen demokratisieren"
         :startpage.feature-box.discussion/body
-        "Wer viel redet, muss nicht recht haben.
-         Umgekehrt sind die größten Genies auf ihrem Gebiet manchmal eher introvertiert und reden ungerne vor anderen Menschen.
+        "Wer viel redet, muss nicht Recht haben.
+         Umgekehrt sind die größten Genies auf ihrem Gebiet manchmal eher introvertiert und reden ungern vor anderen Menschen.
          Mit schnaq räumen wir mit diesem Missstand auf.
          Expert:innen können ihr Know-how einbringen und in konstruktive Diskussionen einsteigen – auch ohne viele Worte."
         :startpage.feature-box.learnings/title "Learnings nutzen"
