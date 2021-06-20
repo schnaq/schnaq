@@ -1,29 +1,70 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.utils.rows :as rows]))
+  (:require [reitit.frontend.easy :as rfe]
+            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.utils.rows :as rows]))
 
-(defn- meeting-organisation
-  "Featuring meeting-organisation with an image."
+(defn- what-is-schnaq
+  "Box describing schnaq and its advantages"
   []
   [rows/video-right
-   :start-page.work-together/webm
-   :start-page.work-together/mp4
-   :startpage.features.meeting-organisation])
+   :start-page.questions/webm
+   :start-page.questions/mp4
+   :startpage.objections
+   true "video-background-primary-with-shadow"])
 
-(defn- structured-discussions
-  "Overview of structured discussions."
+(defn- schnaq-promise
+  "Box describing schnaq and its advantages"
   []
-  [rows/video-left
-   :animation-discussion/webm
-   :animation-discussion/mp4
-   :startpage.features.discussion
-   true "video-background-primary"])
+  [:div.dot-background
+   [rows/video-left
+    :start-page.work-together/webm
+    :start-page.work-together/mp4
+    :startpage.promise
+    true "video-background-primary-with-shadow"]])
 
-(defn- graph-visualization
-  "Feature box showcasing the graph."
+(defn- elephant-in-the-room
+  "Feature box showcasing the elephant in the room."
   []
-  [rows/image-right
-   :schnaqqifant/admin
-   :startpage.features.graph])
+  [rows/video-right
+   :start-page.address-elephant/webm
+   :start-page.address-elephant/mp4
+   :startpage.elephant-in-the-room
+   true "video-background-primary-with-shadow"
+   [:p.text-center.mb-0
+    [:a.btn.btn-primary
+     {:href (rfe/href :routes/about-us)}
+     (labels :startpage.elephant-in-the-room/button)]]])
+
+(defn- feature-box
+  "A Single feature box that can be put in a row. All inputs are keys."
+  [title icon body]
+  [:div.col-12.col-md-4
+   [:h4.text-center (labels title)]
+   [:p.text-center.text-primary.mt-0.py-0
+    [:i {:class (str " m-auto fas fa-3x " (fa icon))}]]
+   [:p.text-justify (labels body)]])
+
+(defn- feature-columns
+  "Arguments for getting schnaq in three columns."
+  []
+  [:<>
+   [:div.row.pt-5
+    [feature-box
+     :startpage.feature-box.know-how/title
+     :book
+     :startpage.feature-box.know-how/body]
+    [feature-box
+     :startpage.feature-box.discussion/title
+     :comment
+     :startpage.feature-box.discussion/body]
+    [feature-box
+     :startpage.feature-box.learnings/title
+     :lightbulb
+     :startpage.feature-box.learnings/body]]
+   [:p.text-center.pb-5
+    [:a.btn.btn-primary.text-center
+     {:href (rfe/href :routes.schnaq/create)}
+     (labels :startpage.feature-box/explore-schnaq)]]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -31,6 +72,7 @@
   "Collection of feature rows."
   []
   [:<>
-   [meeting-organisation]
-   [structured-discussions]
-   [graph-visualization]])
+   [what-is-schnaq]
+   [schnaq-promise]
+   [elephant-in-the-room]
+   [feature-columns]])

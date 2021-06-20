@@ -60,8 +60,8 @@
         :how-to/answer-dont-show-again "Don't show this tip anymore!"
 
         ;; Startpage
-        :startpage/heading "Better Decisions Together"
-        :startpage/subheading "Software, that helps remote-teams structure their shared knowledge. Democratizing discussions – because everybody has valuable insights."
+        :startpage/heading "The Elephant-Brain for your Company"
+        :startpage/subheading "Software to manage your knowledge safely and sustainably"
         :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
                                          " discussions which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
 
@@ -94,6 +94,42 @@
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:info@schnaq.com"}
            "Contact us if you want to test the Hub feature"]]]
+
+        :startpage.objections/title "Can you please summarise this for me again by email?"
+        :startpage.objections/body
+        [:<>
+         [:p "Who writes the minutes? Why didn't you write it in the team wiki?"]
+         [:p "Do these questions sound familiar? Then you've come to the right place. It can be difficult to sustainably bundle know-how within a company and make it accessible, but it doesn't have to be."]
+         [:p "Make it easy on yourself and use schnaq for your team communication. What do you say? Please not another tool? Don't worry: With schnaq, we have developed the perfect complement to your existing infrastructure - simple, structured and, above all, data secure."]]
+
+
+        :startpage.promise/title "Where's my know-how?"
+        :startpage.promise/body
+        [:<>
+         [:p "With schnaq, valuable know-how is no longer lost in emails, chats, meetings and video conferences or during onboarding. This saves time and money. In addition, the collected knowledge can be ideally used for the development of new future topics."]
+         [:p "We promise you sustainable knowledge management that saves time and resources. Curious now? Then let's have a chat."]
+         [:p.text-center.mb-0
+          [:a.btn.btn-primary {:role "button"
+                               :href "mailto:hello@schnaq.com"}
+           "Get advice without obligation"]]]
+
+        :startpage.elephant-in-the-room/title "Let's talk about the elephant in the room"
+        :startpage.elephant-in-the-room/body
+        [:<>
+         [:p "What does an elephant have to do with sustainable communication? On the one hand, herd animals depend on constant exchange, and on the other hand, the elephant doesn't forget anything. A characteristic that every knowledge management system in a company should have."]
+         [:p "We work every day to contribute to a business world where everyone is heard and all corporate knowledge is structured in an automated way to make it accessible to all."]]
+        :startpage.elephant-in-the-room/button "Meet the team behind the elephant"
+
+        :startpage.feature-box.know-how/title "Secure Know-How"
+        :startpage.feature-box.know-how/body
+        "Digitalisation and mobile offices have changed the way we communicate. But even in modern processes, the challenge of bundling knowledge within the company remains. With our product, we offer you the solution to communicate in a contemporary way and to bring together the know-how of all experts."
+
+        :startpage.feature-box.discussion/title "Democratise Discussions"
+        :startpage.feature-box.discussion/body "People who talk a lot don't have to be right. Conversely, the greatest geniuses in their field are sometimes rather introverted and don't like to talk in front of other people. With schnaq, we are putting an end to this. Experts can contribute their know-how and enter into constructive discussions - even without many words."
+
+        :startpage.feature-box.learnings/title "Use Learnings"
+        :startpage.feature-box.learnings/body "Modern processes have a catch: documentation. Often the learnings are generated, but then end up at best in protocols that are archived but never opened again. Schnaq creates a living knowledge management that invites you to rummage through learnings and explore new paths."
+        :startpage.feature-box/explore-schnaq "Explore schnaq"
 
         :startpage.early-adopter/title "Gotten Curious?"
         :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
@@ -598,8 +634,17 @@
 
         ;; Testimonials
         :testimonials/heading "Testimonials"
+        :testimonials.doctronic/company "doctronic GmbH & Co. KG"
         :testimonials.doctronic/quote "We observe the development of schnaq with great interest for our own use and for the use of our customers."
-        :testimonials.doctronic/author "Ingo Küper, Managing Director doctronic GmbH & Co. KG"
+        :testimonials.doctronic/author "Ingo Küper, Managing Director"
+
+        :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
+        :testimonials.leetdesk/quote "Cool Software bro, Id like to type in stuff all day with my fancy Keyboard."
+        :testimonials.leetdesk/author "Meiko Tse, Managing Director"
+
+        :testimonials.hhu/company "Heinrich Heine University Düsseldorf"
+        :testimonials.hhu/quote "We like our students, thats why we let them discuss all day in schnaq!"
+        :testimonials.hhu/author "Klauke Fring, Scientific Advisory to the Chancelor"
 
         ;; User related
         :user.button/set-name "Save name"
@@ -738,12 +783,12 @@
         :pricing.newsletter/name "schnaq newsletter."
 
         ;; feature list
-        :feature/what "Decisions become more transparent and well-informed"
-        :feature/share "Everybody can contribute their knowledge equally"
-        :feature/graph "Relevant knowledge is automatically transformed into a mindmap"
-        :feature/processing "Information is easy to find"
-        :feature/secure "Data is kept safe with german engineering"
         :schnaq.startpage.cta/button "Discuss with your coworkers"
+        :feature/integration "A few clicks to integrate into your existing software and infrastructure"
+        :feature/organization "Easy extraction and organisation of Knowledge"
+        :feature/datenschutz "Privacy focused and GDPR-compliant work"
+        :feature/inputs "Never again lose know-how from emails, chats, meetings or video-conferences"
+        :feature/equality "Everybody is able to contribute knowledge equally"
 
         ;; tooltips
         :tooltip/history-statement "Back to statement made by "
@@ -928,14 +973,15 @@
 
 
         ;; Startpage
-        :startpage/heading "Gemeinsam bessere Entscheidungen treffen"
-        :startpage/subheading "Kommunikationssoftware, die Remote-Teams hilft strukturiert Wissen auszutauschen. Demokratisiere Diskussionen – Weil jede:r im Team etwas beitragen kann."
+        :startpage/heading "Das Elefantenhirn für dein Unternehmen"
+        :startpage/subheading "Wissen sammeln und sicher managen"
         :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
                                          " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
+        ;; falls wir subpages mit features einrichten, dann kann man sich hier bedienen
         :startpage.features.meeting-organisation/lead "Gut informiert an jedem Punkt"
         :startpage.features.meeting-organisation/title "Optimale Entscheidungen treffen"
         :startpage.features.meeting-organisation/body
@@ -961,6 +1007,49 @@
           [:a.btn.btn-primary {:role "button"
                                :href "mailto:info@schnaq.com"}
            "Schreib uns wenn du das neue Hub Feature testen möchtest"]]]
+
+        :startpage.objections/title "Kannst du mir das bitte nochmal per Mail zusammenfassen?"
+        :startpage.objections/body
+        [:<>
+         [:p "Wer schreibt das Protokoll? Warum hast du das nicht ins Team-Wiki geschrieben?"]
+         [:p "Kommen dir diese Fragen bekannt vor? Dann bist du hier genau richtig. Know-how im Unternehmen nachhaltig zu bündeln und zugänglich zu machen, kann schwierig sein, muss es aber nicht."]
+         [:p "Mach es dir einfach und nutze schnaq für deine Teamkommunikation. Was sagst du? Bitte nicht noch ein Tool? Keine Angst: Wir haben mit schnaq die perfekte Ergänzung zu deiner bestehenden Infrastruktur entwickelt – einfach, strukturiert und vor allem datensicher."]]
+
+        :startpage.promise/title "Wo ist mein Know-how?"
+        :startpage.promise/body
+        [:<>
+         [:p "Mit schnaq geht wertvolles Know-how in E-Mails, Chats, Meetings und Videokonferenzen oder beim Onboarding nicht mehr verloren. Das spart Zeit und Geld. Zudem lässt sich das gesammelte Wissen ideal für die Entwicklung neuer Zukunftsthemen nutzen."]
+         [:p "Wir versprechen dir nachhaltiges Wissensmanagement das Zeit und Ressourcen spart. Neugierig geworden? Dann lass uns doch mal schnaqqen."]
+         [:p.text-center.mb-0
+          [:a.btn.btn-primary {:role "button"
+                               :href "mailto:hallo@schnaq.com"}
+           "Lass dich unverbindlich beraten"]]]
+
+        :startpage.elephant-in-the-room/title "Reden wir über den Elefanten im Raum"
+        :startpage.elephant-in-the-room/body
+        [:<>
+         [:p "Was hat ein Elefant mit nachhaltiger Kommunikation zu tun? Zum einen sind die Herdentiere auf ständigen Austausch angewiesen, zum anderen vergisst der Elefant nichts. "
+          "Eine Eigenschaft, die jedes Wissensmanagement im Unternehmen haben sollte."]
+         [:p "Wir arbeiten täglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört und das gesamte Unternehmenswissen automatisiert strukturiert wird, um es allen zugänglich zu machen."]]
+        :startpage.elephant-in-the-room/button "Lerne das Team hinter dem Elefanten kennen"
+
+        :startpage.feature-box.know-how/title "Know-how sichern"
+        :startpage.feature-box.know-how/body
+        "Digitalisierung und Mobile Office haben die Art, wie wir kommunizieren, verändert.
+         Doch auch in modernen Prozessen bleibt die Herausforderung, Wissen im Unternehmen zu bündeln.
+         Wir bieten dir mit unserem Produkt die Lösung, zeitgemäß zu kommunizieren und dabei das Know-how aller Experten zusammen zu bringen."
+        :startpage.feature-box.discussion/title "Diskussionen demokratisieren"
+        :startpage.feature-box.discussion/body
+        "Wer viel redet, muss nicht Recht haben.
+         Umgekehrt sind die größten Genies auf ihrem Gebiet manchmal eher introvertiert und reden ungern vor anderen Menschen.
+         Mit schnaq räumen wir mit diesem Missstand auf.
+         Expert:innen können ihr Know-how einbringen und in konstruktive Diskussionen einsteigen – auch ohne viele Worte."
+        :startpage.feature-box.learnings/title "Learnings nutzen"
+        :startpage.feature-box.learnings/body
+        "Moderne Prozesse haben einen Haken: die Dokumentation.
+         Oft werden die Learnings generiert, landen dann aber bestenfalls in Protokollen, die archiviert, aber nie wieder geöffnet werden.
+         Schnaq schafft ein lebendiges Wissensmanagement, das einlädt, in Learnings zu stöbern und neue Wege zu gehen."
+        :startpage.feature-box/explore-schnaq "Entdecke schnaq"
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
@@ -1465,8 +1554,17 @@
 
         ;; Testimonials
         :testimonials/heading "Was andere über uns denken:"
+        :testimonials.doctronic/company "doctronic GmbH & Co. KG"
         :testimonials.doctronic/quote "Wir beobachten die Entwicklung von schnaq mit großem Interesse für den eigenen Einsatz und für den Einsatz bei unseren Kunden."
-        :testimonials.doctronic/author "Ingo Küper, Geschäftsführer doctronic GmbH & Co. KG"
+        :testimonials.doctronic/author "Ingo Küper, Geschäftsführer"
+
+        :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
+        :testimonials.leetdesk/quote "Die Software ist schon ziemlich geil, würde ich mit meiner neuen Tastatur viel reintippen."
+        :testimonials.leetdesk/author "Meiko Tse, Geschäftsführer"
+
+        :testimonials.hhu/company "Heinrich-Heine-Universität Düsseldorf"
+        :testimonials.hhu/quote "Wir mögen unsere Studierenden, deshalb nutzen wir schnaq! Guck wie toll sie diskutieren."
+        :testimonials.hhu/author "Klauke Fring, Wissenschaftliche Mitarbeiterin"
 
         ;; User related
         :user.button/set-name "Name speichern"
@@ -1607,12 +1705,12 @@
         :pricing.newsletter/name "schnaq Newsletter."
 
         ;; feature list
-        :feature/what "Entscheidungen werden nachvollziehbarer und informierter"
-        :feature/share "Alle können gleichberechtigt ihr Wissen einbringen"
-        :feature/graph "Relevantes Wissen wird automatisch in eine Mindmap überführt"
-        :feature/processing "Informationen sind einfach wiederzufinden"
-        :feature/secure "Daten werden nach deutschen Standards geschützt"
-        :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
+        :schnaq.startpage.cta/button "Mit Kolleg:innen schnaqqen"
+        :feature/integration "Per Mausklick in bestehende Software und Infrastruktur integrieren"
+        :feature/organization "Einfach und strukturiert Wissen einfangen und organisieren"
+        :feature/datenschutz "Datenschutzkonform und sicher arbeiten"
+        :feature/inputs "Nie wieder Know-How aus Emails, Chats, Meetings oder Videokonferenzen verlieren"
+        :feature/equality "Alle Mitarbeiter:innen können gleichberechtigt Wissen beitragen"
 
         ;; Tooltips
         :tooltip/history-statement "Zurück zum Beitrag von "
@@ -1767,6 +1865,8 @@
      :logos/digihub "https://s3.disqtec.com/schnaq-common/logos/digihub_logo.png"
      :logos/doctronic "https://s3.disqtec.com/schnaq-common/logos/doctronic_logo.png"
      :logos/ignition "https://s3.disqtec.com/schnaq-common/logos/ignition_logo.png"
+     :logos/leetdesk "https://s3.disqtec.com/schnaq-common/logos/leetdesk_logo.png"
+     :logos/hhu "https://s3.disqtec.com/schnaq-common/logos/hhu_logo.png"
      :logos/hetzner "https://s3.disqtec.com/schnaq-common/logos/logo-hetzner.svg"
      :press-kit/fact-sheet "https://s3.disqtec.com/schnaq-presskit/factsheet_preview.png"
      :press-kit/logo "https://s3.disqtec.com/schnaq-presskit/logo_card.png"
@@ -1790,6 +1890,7 @@
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
      :team/alexander "https://s3.disqtec.com/team/alexanderschneider.jpg"
      :team/at-table-with-laptop "https://s3.disqtec.com/team/team_hinter_laptop_am_tisch.jpg"
+     :team/sitting-on-couches "https://s3.disqtec.com/team/team_auf_couches.jpg"
      :team/vision-mindmap-team "https://s3.disqtec.com/team/vision_mindmap_team.jpg"
      :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
      :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"
@@ -1814,6 +1915,10 @@
      :how-to.pro-con/mp4 "https://s3.disqtec.com/schnaq-how-to/discussion-2.mp4"
      :how-to.why/webm "https://s3.disqtec.com/schnaq-how-to/why.webm"
      :how-to.why/mp4 "https://s3.disqtec.com/schnaq-how-to/why.mp4"
+     :start-page.address-elephant/webm "https://s3.disqtec.com/schnaq-schnaqqifanten/wilfried.webm"
+     :start-page.address-elephant/mp4 "https://s3.disqtec.com/schnaq-schnaqqifanten/wilfried.webm"
+     :start-page.questions/webm "https://s3.disqtec.com/startpage/discussion.webm"
+     :start-page.questions/mp4 "https://s3.disqtec.com/startpage/discussion.mp4"
      :start-page.work-together/webm "https://s3.disqtec.com/schnaq-how-to/WorkTogether.webm"
      :start-page.work-together/mp4 "https://s3.disqtec.com/schnaq-how-to/WorkTogether.mp4"}))
 
@@ -1826,6 +1931,7 @@
      :arrow-left "fa-arrow-left"
      :arrow-right "fa-arrow-right"
      :arrow-up "fa-arrow-up"
+     :book "fa-book"
      :calendar "fa-calendar-plus"
      :camera "fa-camera"
      :carry "fa-people-carry"
@@ -1856,12 +1962,14 @@
      :info "fa-question-circle"
      :language "fa-language"
      :laptop "fa-laptop-code"
+     :lightbulb "fa-lightbulb"
      :lock-open "fa-lock-open"
      :minus "fa-minus"
      :newspaper "fa-newspaper"
      :plane "fa-paper-plane"
      :plus "fa-plus"
      :project/diagram "fa-project-diagram"
+     :puzzle "fa-puzzle-piece"
      :reply "fa-comment-dots"
      :search "fa-search"
      :server "fa-server"

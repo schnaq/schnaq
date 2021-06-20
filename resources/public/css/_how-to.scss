@@ -21,9 +21,9 @@
 }
 
 .quick-how-to {
+  @extend .shadow-sm;
   @include rounded.rounded-3;
   background-color: $gray-200;
-  box-shadow: $regular-shadow;
   color: $text-dark;
   margin: 2rem 0;
   overflow: hidden;

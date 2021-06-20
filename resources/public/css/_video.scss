@@ -16,6 +16,12 @@
   background-color: $primary;
 }
 
+.video-background-primary-with-shadow {
+  @extend .video-scalable;
+  @extend .shadow;
+  box-shadow: vars.$wide-shadow;
+}
+
 .video-scalable {
   height: auto !important;
   overflow: hidden;

@@ -28,7 +28,7 @@
   [heading subheading gradient? & more]
   (let [header-class (if gradient? "masthead-gradient" "masthead")]
     [:div
-     [:header.text-white
+     [:div.text-white
       {:class header-class}
       [:div.container
        [:h1 heading]
