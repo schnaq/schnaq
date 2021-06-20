@@ -129,6 +129,7 @@
 
         :startpage.feature-box.learnings/title "Use Learnings"
         :startpage.feature-box.learnings/body "Modern processes have a catch: documentation. Often the learnings are generated, but then end up at best in protocols that are archived but never opened again. Schnaq creates a living knowledge management that invites you to rummage through learnings and explore new paths."
+        :startpage.feature-box/explore-schnaq "Explore schnaq"
 
         :startpage.early-adopter/title "Gotten Curious?"
         :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
@@ -1049,6 +1050,7 @@
         "Moderne Prozesse haben einen Haken: die Dokumentation.
          Oft werden die Learnings generiert, landen dann aber bestenfalls in Protokollen, die archiviert, aber nie wieder geöffnet werden.
          Schnaq schafft ein lebendiges Wissensmanagement, das einlädt, in Learnings zu stöbern und neue Wege zu gehen."
+        :startpage.feature-box/explore-schnaq "Entdecke schnaq"
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"

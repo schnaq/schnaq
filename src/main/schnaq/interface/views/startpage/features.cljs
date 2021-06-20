@@ -48,7 +48,7 @@
   "Arguments for getting schnaq in three columns."
   []
   [:<>
-   [:div.row
+   [:div.row.pt-5
     [feature-box
      :startpage.feature-box.know-how/title
      :book
@@ -61,9 +61,10 @@
      :startpage.feature-box.learnings/title
      :lightbulb
      :startpage.feature-box.learnings/body]]
-   [:p.text-center
-    ;; TODO let it go to the feature site when its ready
-    [:a.btn.btn-primary.text-center "Entdecke schnaq"]]])
+   [:p.text-center.pb-5
+    [:a.btn.btn-primary.text-center
+     {:href (rfe/href :routes.schnaq/create)}
+     (labels :startpage.feature-box/explore-schnaq)]]])
 
 ;; -----------------------------------------------------------------------------
 
