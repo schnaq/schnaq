@@ -939,7 +939,7 @@
 
         ;; Startpage
         :startpage/heading "Das Elefantenhirn für dein Unternehmen"
-        :startpage/subheading "Software um Wissen nachhaltig und sicher managen"
+        :startpage/subheading "Wissen sammeln und sicher managen"
         :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
                                          " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
@@ -978,7 +978,7 @@
         :startpage.objections/body
         [:<>
          [:p "Wer schreibt das Protokoll? Warum hast du das nicht ins Team-Wiki geschrieben?"]
-         [:p "Kommen dir die Fragen bekannt vor? Dann bist du hier genau richtig. Know-how im Unternehmen nachhaltig zu bündeln und zugänglich zu machen, kann schwierig sein, muss es aber nicht."]
+         [:p "Kommen dir diese Fragen bekannt vor? Dann bist du hier genau richtig. Know-how im Unternehmen nachhaltig zu bündeln und zugänglich zu machen, kann schwierig sein, muss es aber nicht."]
          [:p "Mach es dir einfach und nutze schnaq für deine Teamkommunikation. Was sagst du? Bitte nicht noch ein Tool? Keine Angst: Wir haben mit schnaq die perfekte Ergänzung zu deiner bestehenden Infrastruktur entwickelt – einfach, strukturiert und vor allem datensicher."]]
 
 
@@ -995,10 +995,10 @@
         :startpage.elephant-in-the-room/title "Reden wir über den Elefanten im Raum"
         :startpage.elephant-in-the-room/body
         [:<>
-         [:p "Was hat ein Elefant mit nachhaltiger Kommunikation zu tun? Zum einen sind die Herdentiere auf ständigen Austausch angewiesen, zum anderen vergisst der Elefant nichts."
+         [:p "Was hat ein Elefant mit nachhaltiger Kommunikation zu tun? Zum einen sind die Herdentiere auf ständigen Austausch angewiesen, zum anderen vergisst der Elefant nichts. "
           "Eine Eigenschaft, die jedes Wissensmanagement im Unternehmen haben sollte."]
          [:p "Wir arbeiten täglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört und das gesamte Unternehmenswissen automatisiert strukturiert wird, um es allen zugänglich zu machen."]]
-        :startpage.elephant-in-the-room/button "Lerne das Team hinterm Elefanten kennen"
+        :startpage.elephant-in-the-room/button "Lerne das Team hinter dem Elefanten kennen"
 
         :startpage.feature-box.know-how/title "Know-how sichern"
         :startpage.feature-box.know-how/body
@@ -1674,7 +1674,7 @@
         :pricing.newsletter/name "schnaq Newsletter."
 
         ;; feature list
-        :schnaq.startpage.cta/button "Mit Kolleg:innen diskutieren"
+        :schnaq.startpage.cta/button "Mit Kolleg:innen schnaqqen"
         :feature/integration "Per Mausklick in bestehende Software und Infrastruktur integrieren"
         :feature/organization "Einfach und strukturiert Wissen einfangen und organisieren"
         :feature/datenschutz "Datenschutzkonform und sicher arbeiten"
