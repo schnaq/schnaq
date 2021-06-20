@@ -52,7 +52,7 @@ lint:
   extends: .with-datomic-pro
   image: clojure:openjdk-14-tools-deps-alpine
   script:
-    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -M:clj-kondo --lint src
+    - clojure -Sdeps '{:mvn/local-repo "./.m2/repository"}' -A:clj-kondo --lint src
   allow_failure: true
   when: always
 
