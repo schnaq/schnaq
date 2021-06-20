@@ -95,6 +95,41 @@
                                :href "mailto:info@schnaq.com"}
            "Contact us if you want to test the Hub feature"]]]
 
+        :startpage.objections/title "Can you please summarise this for me again by email?"
+        :startpage.objections/body
+        [:<>
+         [:p "Who writes the minutes? Why didn't you write it in the team wiki?"]
+         [:p "Do these questions sound familiar? Then you've come to the right place. It can be difficult to sustainably bundle know-how within a company and make it accessible, but it doesn't have to be."]
+         [:p "Make it easy on yourself and use schnaq for your team communication. What do you say? Please not another tool? Don't worry: With schnaq, we have developed the perfect complement to your existing infrastructure - simple, structured and, above all, data secure."]]
+
+
+        :startpage.promise/title "Where's my know-how?"
+        :startpage.promise/body
+        [:<>
+         [:p "With schnaq, valuable know-how is no longer lost in emails, chats, meetings and video conferences or during onboarding. This saves time and money. In addition, the collected knowledge can be ideally used for the development of new future topics."]
+         [:p "We promise you sustainable knowledge management that saves time and resources. Curious now? Then let's have a chat."]
+         [:p.text-center.mb-0
+          [:a.btn.btn-primary {:role "button"
+                               :href "mailto:hello@schnaq.com"}
+           "Get advice without obligation"]]]
+
+        :startpage.elephant-in-the-room/title "Let's talk about the elephant in the room"
+        :startpage.elephant-in-the-room/body
+        [:<>
+         [:p "What does an elephant have to do with sustainable communication? On the one hand, herd animals depend on constant exchange, and on the other hand, the elephant doesn't forget anything. A characteristic that every knowledge management system in a company should have."]
+         [:p "We work every day to contribute to a business world where everyone is heard and all corporate knowledge is structured in an automated way to make it accessible to all."]]
+        :startpage.elephant-in-the-room/button "Meet the team behind the elephant"
+
+        :startpage.feature-box.know-how/title "Secure Know-How"
+        :startpage.feature-box.know-how/body
+        "Digitalisation and mobile offices have changed the way we communicate. But even in modern processes, the challenge of bundling knowledge within the company remains. With our product, we offer you the solution to communicate in a contemporary way and to bring together the know-how of all experts."
+
+        :startpage.feature-box.discussion/title "Democratise Discussions"
+        :startpage.feature-box.discussion/body "People who talk a lot don't have to be right. Conversely, the greatest geniuses in their field are sometimes rather introverted and don't like to talk in front of other people. With schnaq, we are putting an end to this. Experts can contribute their know-how and enter into constructive discussions - even without many words."
+
+        :startpage.feature-box.learnings/title "Use Learnings"
+        :startpage.feature-box.learnings/body "Modern processes have a catch: documentation. Often the learnings are generated, but then end up at best in protocols that are archived but never opened again. Schnaq creates a living knowledge management that invites you to rummage through learnings and explore new paths."
+
         :startpage.early-adopter/title "Gotten Curious?"
         :startpage.early-adopter/body "Be one of the first to use schnaq hubs"
         :startpage.early-adopter/or "or"
@@ -946,7 +981,7 @@
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
 
-        ;; TODO falls wir subpages mit features einrichten, dann kann man sich hier bedienen
+        ;; falls wir subpages mit features einrichten, dann kann man sich hier bedienen
         :startpage.features.meeting-organisation/lead "Gut informiert an jedem Punkt"
         :startpage.features.meeting-organisation/title "Optimale Entscheidungen treffen"
         :startpage.features.meeting-organisation/body
@@ -973,14 +1008,12 @@
                                :href "mailto:info@schnaq.com"}
            "Schreib uns wenn du das neue Hub Feature testen möchtest"]]]
 
-        ;; TODO translate the stripes from here on
         :startpage.objections/title "Kannst du mir das bitte nochmal per Mail zusammenfassen?"
         :startpage.objections/body
         [:<>
          [:p "Wer schreibt das Protokoll? Warum hast du das nicht ins Team-Wiki geschrieben?"]
          [:p "Kommen dir diese Fragen bekannt vor? Dann bist du hier genau richtig. Know-how im Unternehmen nachhaltig zu bündeln und zugänglich zu machen, kann schwierig sein, muss es aber nicht."]
          [:p "Mach es dir einfach und nutze schnaq für deine Teamkommunikation. Was sagst du? Bitte nicht noch ein Tool? Keine Angst: Wir haben mit schnaq die perfekte Ergänzung zu deiner bestehenden Infrastruktur entwickelt – einfach, strukturiert und vor allem datensicher."]]
-
 
         :startpage.promise/title "Wo ist mein Know-how?"
         :startpage.promise/body
@@ -1016,8 +1049,6 @@
         "Moderne Prozesse haben einen Haken: die Dokumentation.
          Oft werden die Learnings generiert, landen dann aber bestenfalls in Protokollen, die archiviert, aber nie wieder geöffnet werden.
          Schnaq schafft ein lebendiges Wissensmanagement, das einlädt, in Learnings zu stöbern und neue Wege zu gehen."
-
-        ;; End translation to do
 
         :startpage.early-adopter/title "Neugierig geworden?"
         :startpage.early-adopter/body "Sei einer der ersten die schnaq Hubs nutzen"
