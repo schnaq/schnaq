@@ -5,8 +5,8 @@
 (defn- testimonial-card
   "A single testimonial of a user."
   [img company-name company-body reference-name]
-  [:div.card.p-4
-   [:img.card-img-top
+  [:div.card.p-4.shadow
+   [:img.card-img-top.p-4
     {:src (img-path img)
      :alt (gstring/format "A company logo of %s" (labels company-name))}]
    [:div.card-body

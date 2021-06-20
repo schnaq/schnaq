@@ -1893,6 +1893,7 @@
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
      :team/alexander "https://s3.disqtec.com/team/alexanderschneider.jpg"
      :team/at-table-with-laptop "https://s3.disqtec.com/team/team_hinter_laptop_am_tisch.jpg"
+     :team/sitting-on-couches "https://s3.disqtec.com/team/team_auf_couches.jpg"
      :team/vision-mindmap-team "https://s3.disqtec.com/team/vision_mindmap_team.jpg"
      :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
      :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"
