@@ -1,9 +1,9 @@
-(ns schnaq.interface.views.meeting.admin-buttons
+(ns schnaq.interface.views.schnaq.admin
   (:require [ajax.core :as ajax]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [config]]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.file-download :as file-download]
@@ -17,7 +17,7 @@
   "Button to access admin menu."
   [share-hash edit-hash]
   [tooltip/tooltip-button "bottom"
-   (labels :meeting/admin-center-tooltip)
+   (labels :schnaq.admin/tooltip)
    [:i {:class (str "m-auto fas " (fa :cog))}]
    #(rf/dispatch [:navigation/navigate
                   :routes.schnaq/admin-center
@@ -92,13 +92,13 @@
   "Request a txt-export of the discussion."
   [share-hash title]
   (let [request-fn #(ajax/ajax-request {:method :get
-                                        :uri (str (:rest-backend config) "/export/txt")
+                                        :uri (str shared-config/api-url "/export/txt")
                                         :format (ajax/transit-request-format)
                                         :params {:share-hash share-hash}
                                         :response-format (ajax/transit-response-format)
                                         :handler (partial create-txt-download-handler title)
                                         :error-handler show-error})]
     (when share-hash
-      [tooltip/tooltip-button "bottom" (labels :meeting/admin-center-export)
+      [tooltip/tooltip-button "bottom" (labels :schnaq.export/as-text)
        [:i {:class (str "m-auto fas " (fa :file-download))}]
        #(request-fn)])))

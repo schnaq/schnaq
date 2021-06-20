@@ -2,8 +2,8 @@
   (:require [ajax.core :as ajax]
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :refer [config]]))
+            [schnaq.config.shared :as shared-config]
+            [schnaq.interface.auth :as auth]))
 
 (s/def ::http-methods #{:get :post :put :delete :patch})
 
@@ -19,7 +19,7 @@
    [map? ::http-methods string? vector? map? vector? :ret vector?]
    (let [path (if (.startsWith path "/") path (str "/" path))]
      [:http-xhrio {:method method
-                   :uri (str (:rest-backend config) path)
+                   :uri (str shared-config/api-url path)
                    :format (ajax/transit-request-format)
                    :params params
                    :headers (auth/authentication-header db)

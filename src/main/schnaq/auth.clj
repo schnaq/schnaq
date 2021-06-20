@@ -6,7 +6,7 @@
             [ghostwheel.core :refer [>defn]]
             [ring.util.http-response :refer [unauthorized forbidden]]
             [schnaq.config.keycloak :as keycloak-config]
-            [schnaq.core :as schnaq-core]))
+            [schnaq.config.shared :as shared-config]))
 
 (def ^:private public-key-for-test-backend
   "Public key just for testing purposes."
@@ -26,7 +26,7 @@
 (defn wrap-jwt-authentication
   "Use buddys jwt backend with our public key for authentication."
   [handler]
-  (if schnaq-core/production-mode?
+  (if shared-config/production?
     (wrap-authentication handler signed-jwt-backend)
     (wrap-authentication handler signed-jwt-backend signed-jwt-backend-for-testing)))
 

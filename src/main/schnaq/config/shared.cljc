@@ -25,6 +25,12 @@
      :feedbacks/screenshots "schnaq-feedback-screenshots"}
     bucket-name))
 
+#?(:clj  (def environment (or (System/getenv "ENVIRONMENT") "development"))
+   :cljs (goog-define environment "development"))
+
+(def production?
+  "Checks the configuration for the current environment."
+  (= "production" environment))
 
 ;; -----------------------------------------------------------------------------
 ;; Profile Image Upload

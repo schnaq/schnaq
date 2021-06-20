@@ -4,8 +4,9 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.translations :refer [email-templates]]
-            [taoensso.timbre :refer [info error]])
+            [taoensso.timbre :as log])
   (:import (java.util UUID)))
 
 (def ^:private conn {:host (:sender-host config/email)
@@ -19,7 +20,7 @@
   [string? :ret (? string?)]
   (if (re-matches #"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,10}" mail)
     mail
-    (info (format "Mail validation failed for address %s" mail))))
+    (log/info (format "Mail validation failed for address %s" mail))))
 
 (def ^:private failed-sendings (atom '()))
 
@@ -27,20 +28,22 @@
   "Sends a single mail to the recipient. Title and content are used as passed."
   [title content recipient]
   [string? string? string? :ret (? coll?)]
-  (if (valid-mail recipient)
-    (try
-      (send-message conn {:from (:sender-address config/email)
-                          :to recipient
-                          :subject title
-                          :body [{:type "text/plain; charset=utf-8"
-                                  :content content}]})
-      (info "Sent mail to" recipient)
-      (Thread/sleep 100)
-      (catch Exception exception
-        (error "Failed to send mail to" recipient)
-        (error exception)
-        (swap! failed-sendings conj recipient)))
-    (swap! failed-sendings conj recipient)))
+  (if shared-config/production?
+    (if (valid-mail recipient)
+      (try
+        (send-message conn {:from (:sender-address config/email)
+                            :to recipient
+                            :subject title
+                            :body [{:type "text/plain; charset=utf-8"
+                                    :content content}]})
+        (log/info "Sent mail to" recipient)
+        (Thread/sleep 100)
+        (catch Exception exception
+          (log/error "Failed to send mail to" recipient)
+          (log/error exception)
+          (swap! failed-sendings conj recipient)))
+      (swap! failed-sendings conj recipient))
+    (log/info "Should send an email now, but environment is set to development.")))
 
 (>defn send-mails
   "Sends an email with a `title` and `content` to all valid recipients.
@@ -68,12 +71,12 @@
                                     (reduce replace-fn (email-templates text-body) format-map)}
                                    {:type "text/html; charset=utf-8" :content
                                     (reduce replace-fn (slurp html-template-path) format-map)}]})
-        (info "Sent" email-type "mail to" recipient)
+        (log/info "Sent" email-type "mail to" recipient)
         :ok
         (catch Exception exception
-          (error "Failed to send" email-type "mail to" recipient)
-          (error exception)))
-      (error "Recipient's mail address is invalid: " recipient))))
+          (log/error "Failed to send" email-type "mail to" recipient)
+          (log/error exception)))
+      (log/error "Recipient's mail address is invalid: " recipient))))
 
 (>defn send-welcome-mail
   "Sends a welcome e-mail to a recipient. The mail template is stored in s3."

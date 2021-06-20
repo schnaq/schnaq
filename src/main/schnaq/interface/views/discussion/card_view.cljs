@@ -9,8 +9,8 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.input :as input]
-            [schnaq.interface.views.meeting.admin-buttons :as admin-buttons]
-            [schnaq.interface.views.navbar.user-management :as um]))
+            [schnaq.interface.views.navbar.user-management :as um]
+            [schnaq.interface.views.schnaq.admin :as admin]))
 
 (defn- search-bar
   "A search-bar to search inside a schnaq."
@@ -72,10 +72,10 @@
         [:h3.mx-5 title]
         [:h3.mx-5.display-6 title]]]
       [search-bar]
-      [admin-buttons/share-link]
-      [admin-buttons/txt-export share-hash title]
+      [admin/share-link]
+      [admin/txt-export share-hash title]
       (when edit-hash
-        [admin-buttons/admin-center share-hash edit-hash])
+        [admin/admin-center share-hash edit-hash])
       ;; name input
       [um/user-handling-menu "btn-outline-light"]
       [:div.d-md-none

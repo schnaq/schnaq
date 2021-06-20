@@ -19,11 +19,11 @@
     {:fx [(http/xhrio-request db :delete "/admin/schnaq/delete" [:admin.schnaq.delete/success]
                               {:share-hash share-hash} [:ajax.error/as-notification])]}))
 
-(defn- public-meeting-deletion-form
-  "Easily delete one of the public meetings."
+(defn- public-schnaq-deletion-form
+  "Easily delete one of the public schnaqs."
   []
   [:form.form
-   {:id "public-meeting-form"
+   {:id "public-schnaq-form"
     :on-submit (fn [e]
                  (js-wrap/prevent-default e)
                  (when (js/confirm (labels :admin.center.delete/confirmation))
@@ -45,12 +45,11 @@
     [:div.col-auto
      [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
 
-(defn- private-meeting-deletion-form
-  "Easily delete any meetings."
+(defn- private-schnaq-deletion-form
+  "Easily delete any schnaq."
   []
-  [:form.form
-   {:id "private-meeting-form"
-    :on-submit (fn [e]
+  [:form.form#private-schnaq-form
+   {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
                  (when (js/confirm (labels :admin.center.delete/confirmation))
                    (rf/dispatch [:admin.schnaq/delete
@@ -58,10 +57,10 @@
    [:div.form-row.align-items-center
     [:div.col-auto
      [:label
-      {:for "private-meeting-hash"} (labels :admin.center.delete.private/label)]]
+      {:for "private-schnaq-hash"} (labels :admin.center.delete.private/label)]]
     [:div.col-auto
      [:input.form-control
-      {:id "private-meeting-hash"}]]
+      {:id "private-schnaq-hash"}]]
     [:div.col-auto
      [:button.btn.btn-secondary {:type "submit"} (labels :admin.center.delete.public/button)]]]])
 
@@ -76,9 +75,9 @@
    [:div.container
     [:h2 (labels :admin.center.delete/heading)]
     [:h4 (labels :admin.center.delete.public/heading)]
-    [public-meeting-deletion-form]
+    [public-schnaq-deletion-form]
     [:h4 (labels :admin.center.delete.private/heading)]
-    [private-meeting-deletion-form]]])
+    [private-schnaq-deletion-form]]])
 
 (defn center-overview-route
   []

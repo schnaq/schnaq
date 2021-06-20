@@ -4,11 +4,11 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
-            [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.utils.localstorage :as ls]))
 
 ;; Note: this lives in the common namespace to prevent circles through the routes import
 (rf/reg-event-fx
@@ -26,7 +26,7 @@
 (rf/reg-event-fx
   :load/schnaqs
   (fn [{:keys [db]} _]
-    (when-not toolbelt/production?
+    (when-not shared-config/production?
       {:fx [(http/xhrio-request db :get "/schnaqs" [:init-from-backend])]})))
 
 (rf/reg-event-fx
@@ -113,3 +113,70 @@
   (fn [_ [_ locale redirect-url]]
     {:fx [[:switch-language locale]
           [:change-location redirect-url]]}))
+
+(rf/reg-event-fx
+  :schnaq/select-current
+  (fn [{:keys [db]} [_ {:discussion/keys [share-hash edit-hash] :as discussion}]]
+    {:db (cond->
+           db
+           true (assoc-in [:schnaq :selected] discussion)
+           edit-hash (update-in [:schnaqs :admin-access]
+                                assoc share-hash edit-hash))
+     :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]]}))
+
+(rf/reg-sub
+  :schnaq/selected
+  (fn [db _]
+    (get-in db [:schnaq :selected])))
+
+(rf/reg-sub
+  :schnaq/share-hash
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (:discussion/share-hash selected-schnaq)))
+
+(rf/reg-sub
+  :schnaq.selected/read-only?
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (not (nil? (some #{:discussion.state/read-only} (:discussion/states selected-schnaq))))))
+
+(rf/reg-event-fx
+  :schnaq/load-by-share-hash
+  (fn [{:keys [db]} [_ hash]]
+    {:fx [(http/xhrio-request db :get (str "/schnaq/by-hash/" hash) [:schnaq/select-current])]}))
+
+(rf/reg-event-fx
+  :schnaq/check-admin-credentials
+  (fn [{:keys [db]} [_ share-hash edit-hash]]
+    {:fx [(http/xhrio-request db :post "/credentials/validate" [:schnaq/check-admin-credentials-success]
+                              {:share-hash share-hash
+                               :edit-hash edit-hash}
+                              [:ajax.error/as-notification])]}))
+
+(rf/reg-event-fx
+  ;; Response tells whether the user is allowed to see the view. (Actions are still checked by
+  ;; the backend every time)
+  :schnaq/check-admin-credentials-success
+  (fn [_ [_ {:keys [valid-credentials?]}]]
+    (when-not valid-credentials?
+      {:fx [[:dispatch [:navigation/navigate :routes/forbidden-page]]]})))
+
+(rf/reg-event-db
+  :schnaq/save-as-last-added
+  (fn [db [_ {:keys [discussion]}]]
+    (assoc-in db [:schnaq :last-added] discussion)))
+
+(rf/reg-sub
+  :schnaq/last-added
+  (fn [db _]
+    (get-in db [:schnaq :last-added])))
+
+(rf/reg-event-fx
+  :schnaq/load-by-hash-as-admin
+  (fn [{:keys [db]} [_ share-hash edit-hash]]
+    {:fx [(http/xhrio-request db :post "/schnaq/by-hash-as-admin" [:schnaq/save-as-last-added]
+                              {:share-hash share-hash
+                               :edit-hash edit-hash})]}))

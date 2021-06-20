@@ -49,14 +49,14 @@
             [schnaq.interface.views.hub.overview]
             [schnaq.interface.views.hub.settings]
             [schnaq.interface.views.loading]
-            [schnaq.interface.views.meeting.meetings]
-            [schnaq.interface.views.meeting.overview]
             [schnaq.interface.views.modal]
             [schnaq.interface.views.navbar]
             [schnaq.interface.views.navbar.user-management]
             [schnaq.interface.views.notifications]
             [schnaq.interface.views.pages]
+            [schnaq.interface.views.schnaq.admin]
             [schnaq.interface.views.schnaq.create]
+            [schnaq.interface.views.schnaq.overview]
             [schnaq.interface.views.schnaq.summary]
             [schnaq.interface.views.schnaq.visited]
             [schnaq.interface.views.startpage.core]
@@ -89,7 +89,7 @@
   (log/info "Welcome to schnaq 🎉")
   (log/info (gstring/format "Build Hash: %s" config/build-hash))
   (log/info (gstring/format "API: %s" shared-config/api-url))
-  (log/info (gstring/format "Environment: %s" config/environment))
+  (log/info (gstring/format "Environment: %s" shared-config/environment))
   (log/info (gstring/format "[Keycloak] Realm: %s, Client: %s" config/keycloak-realm config/keycloak-client)))
 
 (defn init

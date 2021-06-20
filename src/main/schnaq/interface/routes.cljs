@@ -17,7 +17,6 @@
             [schnaq.interface.pages.publications :as publications]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
@@ -29,7 +28,6 @@
             [schnaq.interface.views.howto.how-to :as how-to]
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.hub.settings :as hub-settings]
-            [schnaq.interface.views.meeting.overview :as meetings-overview]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
@@ -149,6 +147,7 @@
       :link-text (labels :router/create-schnaq)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
+      :name :routes.schnaq/by-share-hash
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
@@ -166,6 +165,18 @@
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load (:share-hash path)]]))}]}]
+     ["/manage/:edit-hash"
+      {:name :routes.schnaq/admin-center
+       :view discussion-admin/admin-center-view
+       :link-text (labels :router/last-added-schnaq)
+       :parameters {:path {:edit-hash string?}}
+       :controllers [{:parameters {:path [:share-hash :edit-hash]}
+                      :start (fn [{:keys [path]}]
+                               (let [{:keys [share-hash edit-hash]} path]
+                                 (rf/dispatch [:schnaq/check-admin-credentials share-hash edit-hash])
+                                 (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
+                                 (rf/dispatch [:schnaqs.save-admin-access/to-localstorage-and-db
+                                               share-hash edit-hash])))}]}]
      ["/statement/:statement-id"
       {:name :routes.schnaq.select/statement
        :parameters {:path {:statement-id int?}}
@@ -200,76 +211,12 @@
     ["/extended"
      {:name :routes/privacy-extended
       :view privacy-extended/view}]]
-   ["meetings"
-    {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
-    (when-not toolbelt/production?
-      [""
-       {:name :routes/schnaqs
-        :view meetings-overview/meeting-view-entry
-        :link-text (labels :router/all-meetings)}])
-    ["/:share-hash"
-     {:parameters {:path {:share-hash string?}}
-      :controllers [{:parameters {:path [:share-hash]}
-                     :start (fn [{:keys [path]}]
-                              (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
-     ["/:edit-hash"
-      {:parameters {:path {:edit-hash string?}}
-       :controllers [{:parameters {:path [:share-hash :edit-hash]}
-                      :start (fn [{:keys [path]}]
-                               (let [{:keys [share-hash edit-hash]} path]
-                                 (rf/dispatch [:meeting/check-admin-credentials share-hash edit-hash])))}]}
-      ["/manage"
-       {:name :routes.schnaq/admin-center
-        :view discussion-admin/admin-center-view
-        :link-text (labels :router/meeting-created)
-        :controllers [{:parameters {:path [:share-hash :edit-hash]}
-                       :start (fn [{:keys [path]}]
-                                (let [share-hash (:share-hash path)
-                                      edit-hash (:edit-hash path)]
-                                  (rf/dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash])
-                                  (rf/dispatch [:schnaqs.save-admin-access/to-localstorage-and-db
-                                                share-hash edit-hash])))}]}]]
-     ["/"
-      ;; DEPRECATED: Do not use at all. This has the same effect as `:routes.schnaq/start`
-      {:name :routes.meeting/show
-       :view discussion-card-view/view
-       :link-text (labels :router/show-single-meeting)
-       :controllers schnaq-start-controllers}]
-     ["/agenda"
-      ["/:id"
-       {:parameters {:path {:id int?}}}
-       ["/discussion"
-        ["/start"
-         ;; DEPRECATED: Use the shorter `:routes.schnaq/start`
-         {:controllers [{:parameters {:path [:share-hash :id]}
-                         :start (fn []
-                                  (rf/dispatch [:discussion.history/clear])
-                                  (rf/dispatch [:updates.periodic/starting-conclusions true])
-                                  (rf/dispatch [:discussion.query.conclusions/starting]))
-                         :stop (fn []
-                                 (rf/dispatch [:updates.periodic/starting-conclusions false]))}]
-          :name :routes.discussion/start
-          :view discussion-card-view/view
-          :link-text (labels :router/start-discussion)}]
-        ["/selected/:statement-id"
-         ;; DEPRECATED: Use the shorter `:routes.schnaq.select/statement`
-         {:name :routes.discussion.select/statement
-          :parameters {:path {:statement-id int?}}
-          :view discussion-card-view/view
-          :controllers [{:parameters {:path [:share-hash :id :statement-id]}
-                         :start (fn []
-                                  (rf/dispatch [:discussion.query.statement/by-id]))}]}]]
-       ["/graph"
-        ;; DEPRECATED: Use the shorter `:routes/graph-view`
-        {:name :routes/graph-view-old
-         :view graph-view/graph-view-entrypoint
-         :link-text (labels :router/graph-view)
-         :controllers [{:identity (fn [] (random-uuid))
-                        :start (fn []
-                                 (rf/dispatch [:updates.periodic/graph true])
-                                 (rf/dispatch [:graph/load-data-for-discussion]))
-                        :stop (fn []
-                                (rf/dispatch [:updates.periodic/graph false]))}]}]]]]]
+   ["meetings/:share-hash/:edit-hash/manage"
+    ;; DEPRECATED: Don't use at all. We do not support meetings anymore.
+    {:parameters {:path {:edit-hash string? :share-hash string?}}
+     :controllers [{:parameters {:path [:share-hash :edit-hash]}
+                    :start (fn [{:keys [path]}]
+                             (rf/dispatch [:navigation/navigate :routes.schnaq/admin-center path]))}]}]
    ["about"
     {:name :routes/about-us
      :view about-us/page}]

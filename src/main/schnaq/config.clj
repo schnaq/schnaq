@@ -7,9 +7,6 @@
 (def frontend-url
   (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
 
-(def env-mode
-  (or (System/getenv "ENVIRONMENT") "development"))
-
 (def datomic
   "When we are production ready, put here the original production config and use
   dev-locals `divert-system` to use dev-local instead of a datomic cluster."
