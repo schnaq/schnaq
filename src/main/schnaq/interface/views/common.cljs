@@ -5,9 +5,8 @@
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [goog.string :as gstring]
-            [oops.core :refer [oget oset!]]
+            [oops.core :refer [oset!]]
             [reagent.core :as reagent]
-            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [img-path]]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
@@ -121,24 +120,6 @@
           {:id (str tab-prefix "-link-4")
            :role "tabpanel" :aria-labelledby (str tab-prefix "-link-tab-4")}
           (:view fourth-tab)])]])))
-
-(>defn get-share-link
-  [share-hash]
-  [map? :ret string?]
-  (let [path (reitfe/href :routes.schnaq/start {:share-hash share-hash})
-        location (oget js/window :location)]
-    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
-
-(>defn get-admin-center-link
-  "Building the current URL with validated path, and without extra-stuff, like
-  internal hashtag-routing."
-  [current-route]
-  [map? :ret string?]
-  (let [{:keys [share-hash edit-hash]} (:path-params current-route)
-        path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
-                                                       :edit-hash edit-hash})
-        location (oget js/window :location)]
-    (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path)))
 
 (>defn set-website-title!
   "Set a document's website title."

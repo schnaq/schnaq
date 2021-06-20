@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.meeting.admin-buttons
+(ns schnaq.interface.views.schnaq.admin
   (:require [ajax.core :as ajax]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
@@ -17,7 +17,7 @@
   "Button to access admin menu."
   [share-hash edit-hash]
   [tooltip/tooltip-button "bottom"
-   (labels :meeting/admin-center-tooltip)
+   (labels :schnaq.admin/tooltip)
    [:i {:class (str "m-auto fas " (fa :cog))}]
    #(rf/dispatch [:navigation/navigate
                   :routes.schnaq/admin-center
@@ -99,6 +99,6 @@
                                         :handler (partial create-txt-download-handler title)
                                         :error-handler show-error})]
     (when share-hash
-      [tooltip/tooltip-button "bottom" (labels :meeting/admin-center-export)
+      [tooltip/tooltip-button "bottom" (labels :schnaq.export/as-text)
        [:i {:class (str "m-auto fas " (fa :file-download))}]
        #(request-fn)])))

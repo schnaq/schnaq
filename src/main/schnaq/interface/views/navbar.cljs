@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.navbar
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -30,11 +29,6 @@
   (when-not (empty? visited-hashes)
     (create-dropdown-item (reitfe/href :routes.schnaqs/personal)
                           :router/visited-schnaqs)))
-
-(defn- all-schnaqs-link []
-  (when-not shared-config/production?
-    (create-dropdown-item (reitfe/href :routes/schnaqs)
-                          :nav.schnaqs/show-all)))
 
 (defn- all-public-schnaqs-link []
   (create-dropdown-item (reitfe/href :routes.schnaqs/public)
@@ -94,8 +88,7 @@
            [:div.dropdown-divider]
            [last-added-schnaq-link share-hash edit-hash]
            [my-schnaqs-link visited-hashes]
-           [all-public-schnaqs-link]
-           [all-schnaqs-link]]]]
+           [all-public-schnaqs-link]]]]
         [:li.nav-item
          [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
           (labels :router/privacy)]]]

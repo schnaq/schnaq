@@ -17,6 +17,16 @@
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
 
+(>defn get-admin-link
+  "Building a URL to the admin-center of a schnaq.."
+  [share-hash edit-hash]
+  [string? string? :ret string?]
+  #?(:clj  (format "%s/schnaq/%s/manage/%s" config/frontend-url share-hash edit-hash)
+     :cljs (let [path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
+                                                                :edit-hash edit-hash})
+                 location (oget js/window :location)]
+             (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
+
 (>defn get-summary-link
   "Takes a share-hash and returns the link to the summary view."
   [share-hash]
@@ -26,9 +36,9 @@
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
 
-(>defn add-share-link
+(>defn add-links-to-discussion
   "Takes a discussion and adds a share-link to the structure."
-  [discussion]
+  [{:discussion/keys [share-hash edit-hash] :as discussion}]
   [::specs/discussion :ret ::specs/discussion]
-  (assoc discussion :discussion/share-link
-                    (get-share-link (:discussion/share-hash discussion))))
+  (assoc discussion :discussion/share-link (get-share-link share-hash)
+                    :discussion/admin-link (get-admin-link share-hash edit-hash)))

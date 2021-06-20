@@ -6,7 +6,7 @@
             [schnaq.toolbelt :as toolbelt]))
 
 (defn- number-of-discussions
-  "Returns the number of all meetings."
+  "Returns the number of all discussions."
   [_]
   (ok {:discussions-num (analytics-db/number-of-discussions)}))
 
@@ -21,7 +21,7 @@
   (ok {:registered-users-num (analytics-db/number-or-registered-users)}))
 
 (defn- statements-per-discussion
-  "Returns the average numbers of meetings"
+  "Returns the average numbers of statements per discussion."
   [_]
   (ok {:average-statements (float (analytics-db/average-number-of-statements))}))
 

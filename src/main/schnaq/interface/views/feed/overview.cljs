@@ -2,7 +2,6 @@
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
@@ -84,8 +83,6 @@
        (when-not (nil? edit-hash)
          [feed-button :nav.schnaqs/last-added
           :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
-       (when-not shared-config/production?
-         [feed-button :nav.schnaqs/show-all :routes/schnaqs])
        [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]
       [:div.col-md-12.col-6
        [:hr.d-none.d-md-block]
