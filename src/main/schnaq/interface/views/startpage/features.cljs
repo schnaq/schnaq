@@ -15,11 +15,12 @@
 (defn- schnaq-promise
   "Box describing schnaq and its advantages"
   []
-  [rows/video-left
-   :start-page.work-together/webm
-   :start-page.work-together/mp4
-   :startpage.promise
-   true "video-background-primary-with-shadow"])
+  [:div.dot-background
+   [rows/video-left
+    :start-page.work-together/webm
+    :start-page.work-together/mp4
+    :startpage.promise
+    true "video-background-primary-with-shadow"]])
 
 (defn- elephant-in-the-room
   "Feature box showcasing the elephant in the room."
