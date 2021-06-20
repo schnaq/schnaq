@@ -604,7 +604,7 @@
   []
   (log/info "Welcome to schnaq's Backend 🧙")
   (log/info (format "Build Hash: %s" config/build-hash))
-  (log/info (format "Environment: %s" shared-config/schnaq-environment))
+  (log/info (format "Environment: %s" shared-config/environment))
   (log/info (format "Database Name: %s" config/db-name))
   (log/info (format "Database URI (truncated): %s" (subs config/datomic-uri 0 30)))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
