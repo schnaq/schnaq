@@ -43,10 +43,10 @@
   []
   [:<>
    [bullet-point :clipboard :feature/organization]
-   [bullet-point :puzzle :feature/integration]
-   [bullet-point :shield :feature/datenschutz]
    [bullet-point :comment :feature/inputs]
-   [bullet-point :user/group :feature/equality]])
+   [bullet-point :puzzle :feature/integration]
+   [bullet-point :user/group :feature/equality]
+   [bullet-point :shield :feature/datenschutz]])
 
 (defn features-call-to-action
   "Displays a list of features with a call-to-action button to start a schnaq"
