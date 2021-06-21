@@ -1,7 +1,6 @@
 (ns schnaq.interface.text.display-data
   "Texts used as labels in the whole application."
-  (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.config :refer [user-language marketing-num-schnaqs marketing-num-statements]]
+  (:require [schnaq.interface.config :refer [user-language marketing-num-schnaqs marketing-num-statements]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [taoensso.tempura :refer [tr]]))
@@ -118,11 +117,8 @@
         :startpage.elephant-in-the-room/body
         [:<>
          [:p "What does an elephant have to do with sustainable communication? On the one hand, herd animals depend on constant exchange, and on the other hand, the elephant doesn't forget anything. A characteristic that every knowledge management system in a company should have."]
-         [:p "We work every day to contribute to a business world where everyone is heard and all corporate knowledge is structured in an automated way to make it accessible to all."]
-         [:p.text-center.mb-0 {:key "button-elephant-room"}
-          [:a.btn.btn-primary
-           {:href (rfe/href :routes/about-us)}
-           "Meet the team behind the elephant"]]]
+         [:p "We work every day to contribute to a business world where everyone is heard and all corporate knowledge is structured in an automated way to make it accessible to all."]]
+        :startpage.elephant-in-the-room/button "Meet the team behind the elephant"
 
         :startpage.feature-box.know-how/title "Secure Know-How"
         :startpage.feature-box.know-how/body
@@ -1036,11 +1032,8 @@
         [:<>
          [:p "Was hat ein Elefant mit nachhaltiger Kommunikation zu tun? Zum einen sind die Herdentiere auf ständigen Austausch angewiesen, zum anderen vergisst der Elefant nichts. "
           "Eine Eigenschaft, die jedes Wissensmanagement im Unternehmen haben sollte."]
-         [:p "Wir arbeiten täglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört und das gesamte Unternehmenswissen automatisiert strukturiert wird, um es allen zugänglich zu machen."]
-         [:p.text-center.mb-0 {:key "button-elephant-room"}
-          [:a.btn.btn-primary
-           {:href (rfe/href :routes/about-us)}
-           "Lerne das Team hinter dem Elefanten kennen"]]]
+         [:p "Wir arbeiten täglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört und das gesamte Unternehmenswissen automatisiert strukturiert wird, um es allen zugänglich zu machen."]]
+        :startpage.elephant-in-the-room/button "Lerne das Team hinter dem Elefanten kennen"
 
         :startpage.feature-box.know-how/title "Know-how sichern"
         :startpage.feature-box.know-how/body

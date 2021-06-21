@@ -5,11 +5,15 @@
 (defn- build-text-box
   "Composing the text-part of a feature-row. Takes a `text-namespace` which
   looks up the corresponding text entries, which are then rendered."
-  [text-namespace]
-  (let [prepend-namespace (partial common/add-namespace-to-keyword text-namespace)]
-    [:article.feature-text-box
-     [:h3 (labels (prepend-namespace :title))]
-     [:section (labels (prepend-namespace :body))]]))
+  ([text-namespace]
+   [build-text-box text-namespace nil])
+  ([text-namespace more]
+   (let [prepend-namespace (partial common/add-namespace-to-keyword text-namespace)]
+     [:article.feature-text-box
+      [:h3 (labels (prepend-namespace :title))]
+      [:section (labels (prepend-namespace :body))
+       (when more
+         more)]])))
 
 (defn- row-builder-text-right
   "Generic builder to align text and asset. Here, text is on the right
@@ -58,10 +62,10 @@
 
 (defn video-right
   "Feature row where the video is located on the right side."
-  [video-key-webm video-key-mp4 text-namespace & [looping? video-class]]
+  [video-key-webm video-key-mp4 text-namespace & [looping? video-class more]]
   (let [attributes {:auto-play true :muted true :plays-inline true}]
     [row-builder-text-left
-     [build-text-box text-namespace]
+     [build-text-box text-namespace more]
      [:video.w-100.feature-animations
       (cond-> attributes
               looping? (assoc :loop looping?)
