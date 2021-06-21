@@ -69,7 +69,7 @@
     :testimonial-picture/frank_stampa]])
 
 (defn- testimonial-column-3
-  "Columns displaying the second set of testimonials of our users."
+  "Columns displaying the third set of testimonials of our users."
   []
   [:div.card-deck
    [testimonial-card
@@ -92,7 +92,7 @@
     :testimonial-picture/frauke_kling]])
 
 (defn- testimonial-column-4
-  "Columns displaying the second set of testimonials of our users."
+  "Columns displaying the fourth set of testimonials of our users."
   []
   [:div.card-deck
    [testimonial-card
