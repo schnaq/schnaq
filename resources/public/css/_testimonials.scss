@@ -2,17 +2,17 @@
 
 
 .testimonial {
+  max-width: 33%;
   min-width: 20rem;
+}
 
-  img {
-
-    height: 8rem;
-    object-fit: contain;
-  }
+.testimonial-logo {
+  height: 8rem;
+  object-fit: contain;
 }
 
 .carousel-testimonial {
-  min-height: 40rem;
+  min-height: 45rem;
 }
 
 .carousel-indicator-testimonial {
