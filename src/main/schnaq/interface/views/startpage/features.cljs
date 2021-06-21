@@ -29,7 +29,11 @@
    :start-page.address-elephant/webm
    :start-page.address-elephant/mp4
    :startpage.elephant-in-the-room
-   true "video-background-primary-with-shadow"])
+   true "video-background-primary-with-shadow"
+   [:p.text-center.mb-0 {:key "button-elephant-room"}
+    [:a.btn.btn-primary
+     {:href (rfe/href :routes/about-us)}
+     (labels :startpage.elephant-in-the-room/button)]]])
 
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
