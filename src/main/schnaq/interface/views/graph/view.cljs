@@ -41,11 +41,14 @@
                    :statement.type/attack (colors :orange/default)
                    :statement.type/neutral (colors :gray/medium)
                    :agenda (colors :white)
-                   (colors :blue/default))]
+                   (colors :blue/default))
+           border-color (case (:type %)
+                          :agenda (colors :gray/medium)
+                          color)]
        (assoc % :color {:background color
                         :highlight {:background color}
                         :hover {:background color}
-                        :border color}))
+                        :border border-color}))
     nodes))
 
 (>defn- mark-controversy
