@@ -1,10 +1,14 @@
 @use 'variables' as vars;
 
 
-.testimonial img {
+.testimonial {
+  min-width: 20rem;
 
-  max-height: 6rem;
-  object-fit: contain;
+  img {
+
+    height: 8rem;
+    object-fit: contain;
+  }
 }
 
 .carousel-testimonial {
@@ -36,4 +40,5 @@
 .carousel-control-testimonial {
   max-width: 2rem;
 }
+
 

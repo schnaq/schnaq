@@ -1574,8 +1574,16 @@
         :testimonials.lokay/quote "Ich hatte die Ehre, den Kolleg:innen in der Anfangsphase einmal ein Feedback geben zu dürfen und bin beeindruckt von diesem Geist der Wertigkeit und Praxisorientierung."
         :testimonials.lokay/author "Oliver Lokay, Mediator und Konfliktlösungsberater"
 
-        :testimonials.bib/company "Universitäts- und Landesbibliothek"
-        :testimonials.bib/quote "Wir konnten durch Schnaq auch bei online stattfindenden Veranstaltungen Diskussionen und Austausch zwischen den Studierenden anregen, was den Erfolg der Events maßgeblich beeinflusst hat."
+        :testimonials.hck/company "Chief Digital Officer"
+        :testimonials.hck/quote "Als Experte der digitalen Transformation in Unternehmen habe ich das Potenzial von schnaq schnell erkannt und stehe dem Team seither als Mentor zur Verfügung. Starke Idee und kompetentes Gründerteam, von dem wir noch hören werden!"
+        :testimonials.hck/author "Hans-Christoph Kaiser, CDO"
+
+        :testimonials.franky/company "FoxBase GmbH"
+        :testimonials.franky/quote "Schnaq ist Raketenwissenschaft im Backend, und Dreirad im Frontend"
+        :testimonials.franky/author "Frank Stampa, Head of Sales"
+
+        :testimonials.bib/company "Wissenschaftliche Mitarbeiterin"
+        :testimonials.bib/quote "Wir konnten durch schnaq auch bei online stattfindenden Veranstaltungen Diskussionen und Austausch zwischen den Studierenden anregen, was den Erfolg der Events maßgeblich beeinflusst hat."
         :testimonials.bib/author "Frauke Kling, Wissenschaftliche Mitarbeiterin"
 
         ;; User related
@@ -1876,11 +1884,15 @@
      :logo-white "https://s3.disqtec.com/schnaq-common/logos/schnaq_white.png"
      :logos/digihub "https://s3.disqtec.com/schnaq-common/logos/digihub_logo.png"
      :logos/doctronic "https://s3.disqtec.com/schnaq-common/logos/doctronic_logo.png"
+     :logos/franky "https://s3.disqtec.com/schnaq-common/logos/franky.jpg"
+     :logos/frauke "https://s3.disqtec.com/schnaq-common/logos/frauke.jpg"
      :logos/ignition "https://s3.disqtec.com/schnaq-common/logos/ignition_logo.png"
      :logos/leetdesk "https://s3.disqtec.com/schnaq-common/logos/leetdesk_logo.png"
+     :logos/hck "https://s3.disqtec.com/schnaq-common/logos/hck.jpg"
      :logos/hhu "https://s3.disqtec.com/schnaq-common/logos/hhu_logo.png"
      :logos/hetzner "https://s3.disqtec.com/schnaq-common/logos/logo-hetzner.svg"
      :logos/lokay "https://s3.disqtec.com/schnaq-common/logos/lokay.jpeg"
+     :logos/sensor "https://s3.disqtec.com/schnaq-common/logos/sensor.jpg"
      :press-kit/fact-sheet "https://s3.disqtec.com/schnaq-presskit/factsheet_preview.png"
      :press-kit/logo "https://s3.disqtec.com/schnaq-presskit/logo_card.png"
      :press-kit/product "https://s3.disqtec.com/schnaq-presskit/schnaq_liste_auf_tablet.jpg"

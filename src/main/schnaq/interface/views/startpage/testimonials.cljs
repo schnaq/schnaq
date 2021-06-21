@@ -45,12 +45,27 @@
     :testimonials.lokay/quote
     :testimonials.lokay/author]
    [testimonial-card
-    nil
+    :logos/hck
+    :testimonials.hck/company
+    :testimonials.hck/quote
+    :testimonials.hck/author]
+   [testimonial-card
+    :logos/franky
+    :testimonials.franky/company
+    :testimonials.franky/quote
+    :testimonials.franky/author]])
+
+(defn- testimonial-column-3
+  "Columns displaying the second set of testimonials of our users."
+  []
+  [:div.card-deck
+   [testimonial-card
+    :logos/sensor
     :testimonials.sensor/company
     :testimonials.sensor/quote
     :testimonials.sensor/author]
    [testimonial-card
-    nil
+    :logos/frauke
     :testimonials.bib/company
     :testimonials.bib/quote
     :testimonials.bib/author]])
@@ -59,12 +74,15 @@
   [:div#carouselTestimonialIndicators.carousel-testimonial.carousel.slide {:data-ride "carousel"}
    [:ol.carousel-indicators.carousel-indicator-testimonial
     [:li.active {:data-target "#carouselTestimonialIndicators" :data-slide-to "0"}]
-    [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "1"}]]
+    [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "1"}]
+    [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "2"}]]
    [:div.carousel-inner.p-4
     [:div.carousel-item.active
      [testimonial-column-1]]
     [:div.carousel-item
-     [testimonial-column-2]]]
+     [testimonial-column-2]]
+    [:div.carousel-item
+     [testimonial-column-3]]]
    [:a.carousel-control-prev.carousel-control-testimonial {:href "#carouselTestimonialIndicators" :role "button" :data-slide "prev"}
     [:span.carousel-control-prev-icon.carousel-control-color {:aria-hidden "true"}]
     [:span.sr-only "Previous"]]
