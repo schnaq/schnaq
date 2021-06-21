@@ -14,16 +14,16 @@
 (defn- row-builder-text-right
   "Generic builder to align text and asset. Here, text is on the right
   and the remainder is on the left."
-  [left right & more]
+  [left right]
   [:div.row.feature-row
    [:div.col-12.col-lg-5.my-auto left]
-   [:div.col-12.col-lg-6.offset-lg-1.my-auto right more]])
+   [:div.col-12.col-lg-6.offset-lg-1.my-auto right]])
 
 (defn- row-builder-text-left
   "Build a row, like the feature rows. Here, the text is on the left side."
-  [left right & more]
+  [left right]
   [:div.row.feature-row
-   [:div.col-12.col-lg-6.my-auto left more]
+   [:div.col-12.col-lg-6.my-auto left]
    [:div.col-12.col-lg-5.offset-lg-1.my-auto right]])
 
 
@@ -31,57 +31,54 @@
 
 (defn image-left
   "Build a row, where the image is located on the left side."
-  [image-key text-namespace & more]
-  (row-builder-text-right
-    [:img.img-fluid {:src (img-path image-key)}]
-    [build-text-box text-namespace]
-    more))
+  [image-key text-namespace]
+  [row-builder-text-right
+   [:img.img-fluid {:src (img-path image-key)}]
+   [build-text-box text-namespace]])
 
 (defn image-right
   "Build a row, where the image is located on the right side."
-  [image-key text-namespace & more]
-  (row-builder-text-left
-    [build-text-box text-namespace]
-    [:img.img-fluid {:src (img-path image-key)}]
-    more))
+  [image-key text-namespace]
+  [row-builder-text-left
+   [build-text-box text-namespace]
+   [:img.img-fluid {:src (img-path image-key)}]])
 
 (defn video-left
   "Feature row where the video is located on the right side."
   [video-key-webm video-key-mp4 text-namespace & [looping? video-class]]
   (let [attributes {:auto-play true :muted true :plays-inline true}]
-    (row-builder-text-right
-      [:video.w-100.feature-animations
-       (cond-> attributes
-               looping? (assoc :loop looping?)
-               video-class (assoc :class video-class))
-       [:source {:src (video video-key-webm) :type "video/webm"}]
-       [:source {:src (video video-key-mp4) :type "video/mp4"}]]
-      [build-text-box text-namespace])))
+    [row-builder-text-right
+     [:video.w-100.feature-animations
+      (cond-> attributes
+              looping? (assoc :loop looping?)
+              video-class (assoc :class video-class))
+      [:source {:src (video video-key-webm) :type "video/webm"}]
+      [:source {:src (video video-key-mp4) :type "video/mp4"}]]
+     [build-text-box text-namespace]]))
 
 (defn video-right
   "Feature row where the video is located on the right side."
-  [video-key-webm video-key-mp4 text-namespace & [looping? video-class more]]
+  [video-key-webm video-key-mp4 text-namespace & [looping? video-class]]
   (let [attributes {:auto-play true :muted true :plays-inline true}]
-    (row-builder-text-left
-      [build-text-box text-namespace]
-      [:video.w-100.feature-animations
-       (cond-> attributes
-               looping? (assoc :loop looping?)
-               video-class (assoc :class video-class))
-       [:source {:src (video video-key-webm) :type "video/webm"}]
-       [:source {:src (video video-key-mp4) :type "video/mp4"}]]
-      more)))
+    [row-builder-text-left
+     [build-text-box text-namespace]
+     [:video.w-100.feature-animations
+      (cond-> attributes
+              looping? (assoc :loop looping?)
+              video-class (assoc :class video-class))
+      [:source {:src (video video-key-webm) :type "video/webm"}]
+      [:source {:src (video video-key-mp4) :type "video/mp4"}]]]))
 
 (defn icon-right
   "Build a row with text on the left side and the icon on the right side."
   [icon text-namespace]
-  (row-builder-text-left
-    [build-text-box text-namespace]
-    [:div.display-1.text-center.text-primary icon]))
+  [row-builder-text-left
+   [build-text-box text-namespace]
+   [:div.display-1.text-center.text-primary icon]])
 
 (defn icon-left
   "Build a row with text on the right side and the icon on the left side."
   [icon text-namespace]
-  (row-builder-text-right
-    [:div.display-1.text-center.text-primary icon]
-    [build-text-box text-namespace]))
+  [row-builder-text-right
+   [:div.display-1.text-center.text-primary icon]
+   [build-text-box text-namespace]])
