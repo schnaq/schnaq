@@ -1559,7 +1559,7 @@
         :testimonials.doctronic/author "Ingo Küper, Geschäftsführer"
 
         :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
-        :testimonials.leetdesk/quote "Die Software ist schon ziemlich geil, würde ich mit meiner neuen Tastatur viel reintippen."
+        :testimonials.leetdesk/quote "Auch bei unserem recht kleinen Team ist es hilfreich, unsere Gedanken zu sammeln, um eine Diskussion ordentlich antreiben zu können. Dies ist uns durch schnaq sehr gut ermöglicht worden, effizientere Meetings waren die Folge."
         :testimonials.leetdesk/author "Meiko Tse, Geschäftsführer"
 
         :testimonials.hhu/company "Heinrich-Heine-Universität Düsseldorf"
