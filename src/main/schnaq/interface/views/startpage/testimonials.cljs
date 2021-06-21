@@ -15,7 +15,7 @@
     [:p.card-text (gstring/format "\"%s\"" (labels company-body))]
     [:p.card-text.text-right [:small.text-muted "- " (labels reference-name)]]]])
 
-(defn- testimonial-columns
+(defn- testimonial-column-1
   "Columns displaying the testimonials of our users."
   []
   [:div.card-deck
@@ -35,6 +35,43 @@
     :testimonials.bjorn/quote
     :testimonials.bjorn/author]])
 
+(defn- testimonial-column-2
+  "Columns displaying the second set of testimonials of our users."
+  []
+  [:div.card-deck
+   [testimonial-card
+    :logos/lokay
+    :testimonials.lokay/company
+    :testimonials.lokay/quote
+    :testimonials.lokay/author]
+   [testimonial-card
+    nil
+    :testimonials.sensor/company
+    :testimonials.sensor/quote
+    :testimonials.sensor/author]
+   [testimonial-card
+    nil
+    :testimonials.bib/company
+    :testimonials.bib/quote
+    :testimonials.bib/author]])
+
+(defn testimonial-carousel []
+  [:div#carouselTestimonialIndicators.carousel-testimonial.carousel.slide {:data-ride "carousel"}
+   [:ol.carousel-indicators.carousel-indicator-testimonial
+    [:li.active {:data-target "#carouselTestimonialIndicators" :data-slide-to "0"}]
+    [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "1"}]]
+   [:div.carousel-inner.p-4
+    [:div.carousel-item.active
+     [testimonial-column-1]]
+    [:div.carousel-item
+     [testimonial-column-2]]]
+   [:a.carousel-control-prev.carousel-control-testimonial {:href "#carouselTestimonialIndicators" :role "button" :data-slide "prev"}
+    [:span.carousel-control-prev-icon.carousel-control-color {:aria-hidden "true"}]
+    [:span.sr-only "Previous"]]
+   [:a.carousel-control-next.carousel-control-testimonial {:href "#carouselTestimonialIndicators" :role "button" :data-slide "next"}
+    [:span.carousel-control-next-icon.carousel-control-color {:aria-hidden "true"}]
+    [:span.sr-only "Next"]]])
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -44,4 +81,4 @@
   [:section.pb-5.pt-3
    [:p.h4.text-center.pb-4
     (labels :testimonials/heading)]
-   [testimonial-columns]])
+   [testimonial-carousel]])

@@ -1,5 +1,39 @@
+@use 'variables' as vars;
+
+
 .testimonial img {
 
   max-height: 6rem;
   object-fit: contain;
 }
+
+.carousel-testimonial {
+  min-height: 40rem;
+}
+
+.carousel-indicator-testimonial {
+  margin-bottom: 0;
+
+  li {
+    background-color: vars.$gray-300;
+    border: 0;
+    cursor: pointer;
+    display: inline-block;
+    height: 0.25rem;
+    margin: 0.5rem;
+    width: 3rem;
+  }
+}
+
+.carousel-indicator-testimonial .active {
+  background-color: vars.$gray-500;
+}
+
+.carousel-control-color {
+  filter: invert(50%);
+}
+
+.carousel-control-testimonial {
+  max-width: 2rem;
+}
+
