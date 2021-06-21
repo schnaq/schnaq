@@ -1575,7 +1575,7 @@
         :testimonials.hck/author "Hans-Christoph Kaiser, CDO"
 
         :testimonials.franky/company "FoxBase GmbH"
-        :testimonials.franky/quote "Schnaq ist Raketenwissenschaft im Backend, und Dreirad im Frontend"
+        :testimonials.franky/quote "Schnaq ist Raketenwissenschaft im Backend, und Dreirad im Frontend."
         :testimonials.franky/author "Frank Stampa, Head of Sales"
 
         :testimonials.metro/company "Metro Digital"
