@@ -38,12 +38,12 @@
       (let [title (-> summary :summary/discussion :discussion/title)
             share-hash (-> summary :summary/discussion :discussion/share-hash)]
         (emails/send-mail
-          (format "Schnaq summary for: %s" (-> summary :summary/discussion :discussion/title))
-          (format "Hallo%n
-Eine neue Zusammenfassung wurde für die Diskussion %s erstellt und kann und kann unter folgendem Link abgerufen werden %s
-%n%n
+          (format "Deine schnaq-Zusammenfassung ist bereit 🥳 \"%s\"" (-> summary :summary/discussion :discussion/title))
+          (format "Hallo,%n
+eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s
+
 Viele Grüße
-%n
+
 Dein schnaq Team"
                   title (links/get-summary-link share-hash))
           (-> summary :summary/requester :user.registered/email))))
