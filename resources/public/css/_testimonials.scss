@@ -4,7 +4,13 @@
 .testimonial {
   max-width: 33%;
   min-width: 20rem;
+
+  @include media-breakpoint-down(md) {
+    max-width: 100%;
+    min-width: 10rem;
+  }
 }
+
 
 .testimonial-logo {
   height: 8rem;
@@ -13,6 +19,10 @@
 
 .carousel-testimonial {
   min-height: 45rem;
+
+  @include media-breakpoint-down(md) {
+    min-height: 100rem;
+  }
 }
 
 .carousel-indicator-testimonial {

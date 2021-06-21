@@ -114,7 +114,7 @@
     [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "1"}]
     [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "2"}]
     [:li {:data-target "#carouselTestimonialIndicators" :data-slide-to "3"}]]
-   [:div.carousel-inner.p-4
+   [:div.carousel-inner.md-p-4
     [:div.carousel-item.active
      [testimonial-column-1]]
     [:div.carousel-item
