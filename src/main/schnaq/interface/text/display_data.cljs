@@ -641,12 +641,44 @@
         :testimonials.doctronic/author "Ingo Küper, Managing Director"
 
         :testimonials.leetdesk/company "Leetdesk – ODYN GmbH"
-        :testimonials.leetdesk/quote "Cool Software bro, Id like to type in stuff all day with my fancy Keyboard."
+        :testimonials.leetdesk/quote "Even with our quite small team, it is helpful to collect our thoughts in order to be able to properly drive a discussion. This has been made possible for us very well by schnaq. More efficient meetings were the result."
         :testimonials.leetdesk/author "Meiko Tse, Managing Director"
 
         :testimonials.hhu/company "Heinrich Heine University Düsseldorf"
-        :testimonials.hhu/quote "We like our students, thats why we let them discuss all day in schnaq!"
-        :testimonials.hhu/author "Klauke Fring, Scientific Advisory to the Chancelor"
+        :testimonials.bjorn/quote "For internal coordination and agreement we used schnaq so that all participants could write down their thoughts and put them into context. Finally, concrete tasks were derived and we could go into the work phase in a structured way."
+        :testimonials.bjorn/author "Björn Ebbinghaus, Research assistant"
+
+        :testimonials.lokay/company "Mediator and Conflict Resolution Advisor"
+        :testimonials.lokay/quote "I had the honour of giving feedback to the colleagues in the initial phase and I am impressed by their spirited values and practical orientation."
+        :testimonials.lokay/author "Oliver Lokay, Mediator and Conflict Resolution Advisor"
+
+        :testimonials.hck/company "Chief Digital Officer"
+        :testimonials.hck/quote "As an expert in digital transformation of companies, I quickly recognised the potential of schnaq and have been available to the team as a mentor ever since. A strong idea and a competent founding team that we will for sure be hearing more from!"
+        :testimonials.hck/author "Hans-Christoph Kaiser, CDO"
+
+        :testimonials.franky/company "FoxBase GmbH"
+        :testimonials.franky/quote "Schnaq is rocket science on the backend, and a tricycle on the frontend."
+        :testimonials.franky/author "Frank Stampa, Head of Sales"
+
+        :testimonials.metro/company "Metro Digital"
+        :testimonials.metro/quote "As an asyncronous work evangelist, I really appreciate schnaq for breaking down information silos and making it available to all employees in a transparent and clear way."
+        :testimonials.metro/author "Dr. Tobias Schröder, Product Manager"
+
+        :testimonials.eugenbialon/company "EugenBialonArchitekt GmbH"
+        :testimonials.eugenbialon/quote "In an architect's office, there are several parallel projects with a large number of players involved. Schnaq supports us in cross-project information management, whether in the office, in the home office or on the construction site!"
+        :testimonials.eugenbialon/author "Dipl.-Ing. Eugen Bialon, Managing Partner and Architect, EugenBialonArchitekt GmbH"
+
+        :testimonials.bialon/quote "With schnaq, I am able to process the mass of information regarding the digitisation of a university in a structured and clear way. This allows me to act quickly in any project context."
+        :testimonials.bialon/author "Raphael Bialon, Personal Assistant to the Prorector for Digitisation, Heinrich Heine University Düsseldorf"
+
+        :testimonials.sensor/company "Enterprise company in the field of sensor and measurement technology"
+        :testimonials.sensor/quote "As part of the familiarisation process with new service products, we used schnaq to collect our ideas and open questions centrally throughout the team. This enabled us to go into exchange meetings well prepared and address specific points.
+Now we write down questions and discuss them and can still understand what we have decided three weeks later."
+        :testimonials.sensor/author "Florian Clever, Sales employee"
+
+        :testimonials.bib/company "Research Assistant"
+        :testimonials.bib/quote "We were also able to stimulate discussion and exchange between students at online events through schnaq, which had a significant impact on the success of the events."
+        :testimonials.bib/author "Frauke Kling, Research assistant"
 
         ;; User related
         :user.button/set-name "Save name"
@@ -1910,16 +1942,16 @@
      :logos/hetzner "https://s3.disqtec.com/schnaq-common/logos/logo-hetzner.svg"
      :logos/lokay "https://s3.disqtec.com/schnaq-common/testimonials/lokay_logo.jpg"
      :logos/sensor "https://s3.disqtec.com/schnaq-common/testimonials/sensor.jpg"
-     :testimonial-picture/raphael_bialon "https://s3.disqtec.com/schnaq-common/testimonials/bialon_picture.jpg"
-     :testimonial-picture/eugen_bialon "https://s3.disqtec.com/schnaq-common/testimonials/eugen_bialon_picture.jpg"
+     :testimonial-picture/raphael-bialon "https://s3.disqtec.com/schnaq-common/testimonials/bialon_picture.jpg"
+     :testimonial-picture/eugen-bialon "https://s3.disqtec.com/schnaq-common/testimonials/eugen_bialon_picture.jpg"
      :testimonial-picture/bjorn "https://s3.disqtec.com/schnaq-common/testimonials/bjorn_picture.jpg"
-     :testimonial-picture/frank_stampa "https://s3.disqtec.com/schnaq-common/testimonials/frank_stampa_picture.jpg"
-     :testimonial-picture/frauke_kling "https://s3.disqtec.com/schnaq-common/testimonials/frauke_picture.jpg"
+     :testimonial-picture/frank-stampa "https://s3.disqtec.com/schnaq-common/testimonials/frank_stampa_picture.jpg"
+     :testimonial-picture/frauke-kling "https://s3.disqtec.com/schnaq-common/testimonials/frauke_picture.jpg"
      :testimonial-picture/hck "https://s3.disqtec.com/schnaq-common/testimonials/hck_picture.jpg"
-     :testimonial-picture/ingo_kupers "https://s3.disqtec.com/schnaq-common/testimonials/ingo_kupers_picture.jpg"
+     :testimonial-picture/ingo-kupers "https://s3.disqtec.com/schnaq-common/testimonials/ingo_kupers_picture.jpg"
      :testimonial-picture/lokay "https://s3.disqtec.com/schnaq-common/testimonials/lokay_picture.jpeg"
-     :testimonial-picture/meiko_tse "https://s3.disqtec.com/schnaq-common/testimonials/meiko_picture.jpg"
-     :testimonial-picture/tobias_schroeder "https://s3.disqtec.com/schnaq-common/testimonials/tobias_picture.jpg"
+     :testimonial-picture/meiko-tse "https://s3.disqtec.com/schnaq-common/testimonials/meiko_picture.jpg"
+     :testimonial-picture/tobias-schroeder "https://s3.disqtec.com/schnaq-common/testimonials/tobias_picture.jpg"
      :press-kit/fact-sheet "https://s3.disqtec.com/schnaq-presskit/factsheet_preview.png"
      :press-kit/logo "https://s3.disqtec.com/schnaq-presskit/logo_card.png"
      :press-kit/product "https://s3.disqtec.com/schnaq-presskit/schnaq_liste_auf_tablet.jpg"

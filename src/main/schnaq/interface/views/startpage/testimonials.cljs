@@ -31,19 +31,19 @@
     :testimonials.doctronic/company
     :testimonials.doctronic/quote
     :testimonials.doctronic/author
-    :testimonial-picture/ingo_kupers]
+    :testimonial-picture/ingo-kupers]
    [testimonial-card
     :logos/leetdesk
     :testimonials.leetdesk/company
     :testimonials.leetdesk/quote
     :testimonials.leetdesk/author
-    :testimonial-picture/meiko_tse]
+    :testimonial-picture/meiko-tse]
    [testimonial-card
     :logos/hhu
     :testimonials.hhu/company
     :testimonials.bialon/quote
     :testimonials.bialon/author
-    :testimonial-picture/raphael_bialon]])
+    :testimonial-picture/raphael-bialon]])
 
 (defn- testimonial-column-2
   "Columns displaying the second set of testimonials of our users."
@@ -66,7 +66,7 @@
     :testimonials.franky/company
     :testimonials.franky/quote
     :testimonials.franky/author
-    :testimonial-picture/frank_stampa]])
+    :testimonial-picture/frank-stampa]])
 
 (defn- testimonial-column-3
   "Columns displaying the third set of testimonials of our users."
@@ -77,7 +77,7 @@
     :testimonials.metro/company
     :testimonials.metro/quote
     :testimonials.metro/author
-    :testimonial-picture/tobias_schroeder]
+    :testimonial-picture/tobias-schroeder]
    [testimonial-card
     :logos/hhu
     :testimonials.hhu/company
@@ -89,7 +89,7 @@
     :testimonials.bib/company
     :testimonials.bib/quote
     :testimonials.bib/author
-    :testimonial-picture/frauke_kling]])
+    :testimonial-picture/frauke-kling]])
 
 (defn- testimonial-column-4
   "Columns displaying the fourth set of testimonials of our users."
@@ -100,7 +100,7 @@
     :testimonials.eugenbialon/company
     :testimonials.eugenbialon/quote
     :testimonials.eugenbialon/author
-    :testimonial-picture/eugen_bialon]
+    :testimonial-picture/eugen-bialon]
    [testimonial-card
     :logos/sensor
     :testimonials.sensor/company
