@@ -184,6 +184,8 @@
         :footer.buttons/publications "Publications"
         :footer.tagline/developed-with " Developed with "
         :footer.sponsors/heading "Our servers are hosted by"
+        :footer.registered/rights-reserved "All rights reserved"
+        :footer.registered/is-registered "is a registered trademark"
 
         ;; Create schnaqs
         :schnaqs/create "Create schnaq"
@@ -1105,6 +1107,8 @@
         :footer.buttons/publications "Publikationen"
         :footer.tagline/developed-with " Entwickelt mit "
         :footer.sponsors/heading "Unsere Server werden gehostet bei"
+        :footer.registered/rights-reserved "Alle Rechte vorbehalten"
+        :footer.registered/is-registered "ist eine eingetragene Marke"
 
         ;; Create schnaqs
         :schnaqs/create "schnaq anlegen"
