@@ -6,9 +6,10 @@
   "A single testimonial of a user."
   [img company-name company-body reference-name]
   [:div.card.p-4.testimonial.shadow
-   [:img.card-img-top.p-4
-    {:src (img-path img)
-     :alt (gstring/format "A company logo of %s" (labels company-name))}]
+   (when img
+     [:img.card-img-top.p-4
+      {:src (img-path img)
+       :alt (gstring/format "A company logo of %s" (labels company-name))}])
    [:div.card-body
     [:h5.card-title.text-center (labels company-name)]
     [:p.card-text (gstring/format "\"%s\"" (labels company-body))]
@@ -31,8 +32,8 @@
    [testimonial-card
     :logos/hhu
     :testimonials.hhu/company
-    :testimonials.hhu/quote
-    :testimonials.hhu/author]])
+    :testimonials.bjorn/quote
+    :testimonials.bjorn/author]])
 
 
 ;; -----------------------------------------------------------------------------

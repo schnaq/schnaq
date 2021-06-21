@@ -1563,8 +1563,20 @@
         :testimonials.leetdesk/author "Meiko Tse, Geschäftsführer"
 
         :testimonials.hhu/company "Heinrich-Heine-Universität Düsseldorf"
-        :testimonials.hhu/quote "Wir mögen unsere Studierenden, deshalb nutzen wir schnaq! Guck wie toll sie diskutieren."
-        :testimonials.hhu/author "Klauke Fring, Wissenschaftliche Mitarbeiterin"
+        :testimonials.bjorn/quote "Zur internen Koordination und Abstimmung haben wir schnaq verwendet, sodass alle Teilnehmer:innen ihre Gedanken aufschreiben und in einen Kontext setzen konnten. Abschließend wurden konkrete Aufgaben abgeleitet und wir konnten strukturiert in die Arbeitsphase gehen."
+        :testimonials.bjorn/author "Björn Ebbinghaus, Wissenschaftlicher Mitarbeiter"
+
+        :testimonials.sensor/company "Enterprise Unternehmen im Bereich Sensorik und Messtechnik"
+        :testimonials.sensor/quote "Im Rahmen der Einarbeitung in neue Serviceprodukte haben wir schnaq genutzt, um im ganzen Team zentral unsere Ideen und offene Fragen zu sammeln. Somit konnten wir gut vorbereitet in Austauschmeetings gehen und konkrete Punkte ansprechen.\nJetzt schreiben wir Fragen auf und diskutieren sie und können auch in drei Wochen noch nachvollziehen, was wir beschlossen haben."
+        :testimonials.sensor/author "Florian Clever, Vertriebsangestellter"
+
+        :testimonials.lokay/company "Mediator und Konfliktlösungsberater"
+        :testimonials.lokay/quote "Ich hatte die Ehre, den Kolleg:innen in der Anfangsphase einmal ein Feedback geben zu dürfen und bin beeindruckt von diesem Geist der Wertigkeit und Praxisorientierung."
+        :testimonials.lokay/author "Oliver Lokay, Mediator und Konfliktlösungsberater"
+
+        :testimonials.bib/company "Bibliothek"
+        :testimonials.bib/quote "Schnaq hilft uns bei digitalen Veranstaltungen den Überblick zu bewahren und mit einer Vielzahl an Nutzer:innen in Kontakt zu treten. "
+        :testimonials.bib/author "Frauke Kling, Wissenschaftliche Mitarbeiterin"
 
         ;; User related
         :user.button/set-name "Name speichern"
