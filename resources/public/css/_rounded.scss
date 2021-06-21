@@ -10,7 +10,8 @@ $roundings: (
   'rounded-2': 1rem,
   'rounded-3': 1.5rem,
   'rounded-4': 2rem,
-  'rounded-5': 3rem
+  'rounded-5': 3rem,
+  'rounded-50': 50%
 );
 
 @each $rounded, $value in $roundings {

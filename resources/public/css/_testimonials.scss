@@ -1,24 +1,54 @@
-.testimonial img {
-  margin-left: 1rem;
-  max-width: 60%;
-  opacity: 0.7;
-  padding-top: 2rem;
+@use 'variables' as vars;
 
-  &:hover {
-    opacity: 1;
+
+.testimonial {
+  max-width: 33%;
+  min-width: 20rem;
+
+  @include media-breakpoint-down(md) {
+    max-width: 100%;
+    min-width: 10rem;
   }
 }
 
-@include media-breakpoint-up(md) {
-  .testimonial img {
-    max-width: 90%;
-    padding-top: 0;
+
+.testimonial-logo {
+  height: 8rem;
+  object-fit: contain;
+}
+
+.carousel-testimonial {
+  min-height: 45rem;
+
+  @include media-breakpoint-down(md) {
+    min-height: 100rem;
   }
 }
 
-@include media-breakpoint-up(xl) {
-  .testimonial img {
-    margin-left: 3rem;
-    max-width: 80%;
+.carousel-indicator-testimonial {
+  margin-bottom: 0;
+
+  li {
+    background-color: vars.$gray-300;
+    border: 0;
+    cursor: pointer;
+    display: inline-block;
+    height: 0.25rem;
+    margin: 0.5rem;
+    width: 3rem;
   }
 }
+
+.carousel-indicator-testimonial .active {
+  background-color: vars.$gray-500;
+}
+
+.carousel-control-color {
+  filter: invert(50%);
+}
+
+.carousel-control-testimonial {
+  max-width: 2rem;
+}
+
+

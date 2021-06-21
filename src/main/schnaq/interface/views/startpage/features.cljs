@@ -30,7 +30,7 @@
    :start-page.address-elephant/mp4
    :startpage.elephant-in-the-room
    true "video-background-primary-with-shadow"
-   [:p.text-center.mb-0
+   [:p.text-center.mb-0 {:key "button-elephant-room"}
     [:a.btn.btn-primary
      {:href (rfe/href :routes/about-us)}
      (labels :startpage.elephant-in-the-room/button)]]])
