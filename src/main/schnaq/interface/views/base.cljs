@@ -85,7 +85,7 @@
       (labels :footer.buttons/legal-note)]]]])
 
 (defn- developed-in-nrw []
-  [:p.pt-3
+  [:section.pt-3
    [:i {:class (str "fas " (fa :terminal))}]
    (labels :footer.tagline/developed-with)
    [:i {:class (str "m-auto fas " (fa :flask))}]
@@ -111,6 +111,17 @@
     [:a {:href "https://www.hetzner.com/cloud" :target :_blank}
      [:img {:src (img-path :logos/hetzner)}]]]])
 
+(defn- registered-trademark []
+  [:section
+   [:small
+    (labels :footer.registered/rights-reserved)
+    ". schnaq" [:sup "®"] " "
+    (labels :footer.registered/is-registered)
+    "."]])
+
+
+;; -----------------------------------------------------------------------------
+
 (defn footer
   "Footer to display at the bottom the page."
   []
@@ -120,10 +131,11 @@
      [:div.col-md-4.col-12
       [logo-and-slogan]]
      [:div.col-md-8.col-12.text-md-right.pt-3.pt-md-0
-      [footer-nav]
-      [social-media]]]
+      [footer-nav]]]
     [:div.row
      [:div.col-md-6.col-12
-      [developed-in-nrw]]
+      [developed-in-nrw]
+      [registered-trademark]]
      [:div.col-md-6.col-12.text-md-right.pt-3.pt-md-0
+      [social-media]
       [sponsors]]]]])
