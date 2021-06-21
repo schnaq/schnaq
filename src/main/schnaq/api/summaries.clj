@@ -12,12 +12,19 @@
 (defn- request-summary
   "Request a summary of a discussion. Works only if person is in a beta group."
   [{:keys [params identity]}]
-  (if identity
-    (if (and (some beta-tester-groups (:groups identity))
-             (validator/valid-discussion? (:share-hash params)))
-      (ok {:summary (discussion-db/summary-request (:share-hash params) (:id identity))})
-      (validator/deny-access "You are not allowed to use this feature"))
-    (validator/deny-access "You need to be logged in to access this endpoint.")))
+  (let [share-hash (:share-hash params)]
+    (log/info "Requesting new summary for schnaq" share-hash)
+    (if identity
+      (if (and (some beta-tester-groups (:groups identity))
+               (validator/valid-discussion? share-hash))
+        (do
+          (emails/send-mail
+            "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
+            (format "Bitte im Chat absprechen und Zusammenfassung zu folgendem schnaq anlegen: %s" (links/get-share-link share-hash))
+            "info@schnaq.com")
+          (ok {:summary (discussion-db/summary-request share-hash (:id identity))}))
+        (validator/deny-access "You are not allowed to use this feature"))
+      (validator/deny-access "You need to be logged in to access this endpoint."))))
 
 (defn- get-summary
   "Return a summary for the specified share-hash."
@@ -38,12 +45,12 @@
       (let [title (-> summary :summary/discussion :discussion/title)
             share-hash (-> summary :summary/discussion :discussion/share-hash)]
         (emails/send-mail
-          (format "Schnaq summary for: %s" (-> summary :summary/discussion :discussion/title))
-          (format "Hallo%n
-Eine neue Zusammenfassung wurde für die Diskussion %s erstellt und kann und kann unter folgendem Link abgerufen werden %s
-%n%n
+          (format "Deine schnaq-Zusammenfassung ist bereit 🥳 \"%s\"" (-> summary :summary/discussion :discussion/title))
+          (format "Hallo,%n
+eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s
+
 Viele Grüße
-%n
+
 Dein schnaq Team"
                   title (links/get-summary-link share-hash))
           (-> summary :summary/requester :user.registered/email))))

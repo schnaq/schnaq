@@ -4,7 +4,6 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]
             [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log])
   (:import (java.util UUID)))
@@ -13,6 +12,9 @@
                      :ssl true
                      :user (:sender-address config/email)
                      :pass (:sender-password config/email)})
+
+(def ^:private mail-configured?
+  (every? not-empty (vals config/email)))
 
 (>defn- valid-mail
   "Check valid mail"
@@ -28,7 +30,7 @@
   "Sends a single mail to the recipient. Title and content are used as passed."
   [title content recipient]
   [string? string? string? :ret (? coll?)]
-  (if shared-config/production?
+  (if mail-configured?
     (if (valid-mail recipient)
       (try
         (send-message conn {:from (:sender-address config/email)
@@ -43,7 +45,7 @@
           (log/error exception)
           (swap! failed-sendings conj recipient)))
       (swap! failed-sendings conj recipient))
-    (log/info "Should send an email now, but environment is set to development.")))
+    (log/info "Should send an email now, but email is not configured.")))
 
 (>defn send-mails
   "Sends an email with a `title` and `content` to all valid recipients.
