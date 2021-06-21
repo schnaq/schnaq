@@ -1916,7 +1916,7 @@
      :how-to.why/webm "https://s3.disqtec.com/schnaq-how-to/why.webm"
      :how-to.why/mp4 "https://s3.disqtec.com/schnaq-how-to/why.mp4"
      :start-page.address-elephant/webm "https://s3.disqtec.com/schnaq-schnaqqifanten/wilfried.webm"
-     :start-page.address-elephant/mp4 "https://s3.disqtec.com/schnaq-schnaqqifanten/wilfried.webm"
+     :start-page.address-elephant/mp4 "https://s3.disqtec.com/schnaq-schnaqqifanten/wilfried.mp4"
      :start-page.questions/webm "https://s3.disqtec.com/startpage/discussion.webm"
      :start-page.questions/mp4 "https://s3.disqtec.com/startpage/discussion.mp4"
      :start-page.work-together/webm "https://s3.disqtec.com/schnaq-how-to/WorkTogether.webm"
