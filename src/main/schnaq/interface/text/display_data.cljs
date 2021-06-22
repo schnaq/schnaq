@@ -674,7 +674,7 @@
         :testimonials.sensor/company "Enterprise company in the field of sensor and measurement technology"
         :testimonials.sensor/quote "As part of the familiarisation process with new service products, we used schnaq to collect our ideas and open questions centrally throughout the team. This enabled us to go into exchange meetings well prepared and address specific points.
 Now we write down questions and discuss them and can still understand what we have decided three weeks later."
-        :testimonials.sensor/author "Florian Clever, Sales employee"
+        :testimonials.sensor/author "Florian Clever, Customer Consultant for Service Processes Automation"
 
         :testimonials.bib/company "Research Assistant"
         :testimonials.bib/quote "We were also able to stimulate discussion and exchange between students at online events through schnaq, which had a significant impact on the success of the events."
@@ -1627,7 +1627,7 @@ Now we write down questions and discuss them and can still understand what we ha
 
         :testimonials.sensor/company "Enterprise Unternehmen im Bereich Sensorik und Messtechnik"
         :testimonials.sensor/quote "Im Rahmen der Einarbeitung in neue Serviceprodukte haben wir schnaq genutzt, um im ganzen Team zentral unsere Ideen und offene Fragen zu sammeln. Somit konnten wir gut vorbereitet in Austauschmeetings gehen und konkrete Punkte ansprechen.\nJetzt schreiben wir Fragen auf und diskutieren sie und können auch in drei Wochen noch nachvollziehen, was wir beschlossen haben."
-        :testimonials.sensor/author "Florian Clever, Vertriebsangestellter"
+        :testimonials.sensor/author "Florian Clever, Kundenberater Service Prozessautomation"
 
         :testimonials.bib/company "Wissenschaftliche Mitarbeiterin"
         :testimonials.bib/quote "Wir konnten durch schnaq auch bei online stattfindenden Veranstaltungen Diskussionen und Austausch zwischen den Studierenden anregen, was den Erfolg der Events maßgeblich beeinflusst hat."
@@ -1945,6 +1945,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :testimonial-picture/raphael-bialon "https://s3.disqtec.com/schnaq-common/testimonials/bialon_picture.jpg"
      :testimonial-picture/eugen-bialon "https://s3.disqtec.com/schnaq-common/testimonials/eugen_bialon_picture.jpg"
      :testimonial-picture/bjorn "https://s3.disqtec.com/schnaq-common/testimonials/bjorn_picture.jpg"
+     :testimonial-picture/florian-clever "https://s3.disqtec.com/schnaq-common/testimonials/florian_picture.jpg"
      :testimonial-picture/frank-stampa "https://s3.disqtec.com/schnaq-common/testimonials/frank_stampa_picture.jpg"
      :testimonial-picture/frauke-kling "https://s3.disqtec.com/schnaq-common/testimonials/frauke_picture.jpg"
      :testimonial-picture/hck "https://s3.disqtec.com/schnaq-common/testimonials/hck_picture.jpg"

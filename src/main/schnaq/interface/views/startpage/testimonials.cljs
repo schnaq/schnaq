@@ -105,7 +105,8 @@
     :logos/sensor
     :testimonials.sensor/company
     :testimonials.sensor/quote
-    :testimonials.sensor/author]])
+    :testimonials.sensor/author
+    :testimonial-picture/florian-clever]])
 
 (defn testimonial-carousel []
   [:div#carouselTestimonialIndicators.carousel-testimonial.carousel.slide {:data-ride "carousel"}
