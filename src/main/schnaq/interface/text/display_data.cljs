@@ -657,7 +657,7 @@
         :testimonials.hck/author "Hans-Christoph Kaiser, CDO"
 
         :testimonials.franky/company "FoxBase GmbH"
-        :testimonials.franky/quote "Schnaq is rocket science on the backend, and a tricycle on the frontend."
+        :testimonials.franky/quote "Schnaq's backend is rocket science while its frontend is as simple as riding a tricycle."
         :testimonials.franky/author "Frank Stampa, Head of Sales"
 
         :testimonials.metro/company "Metro Digital"
