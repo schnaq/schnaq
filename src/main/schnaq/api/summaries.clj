@@ -20,7 +20,7 @@
         (do
           (emails/send-mail
             "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
-            (format "Bitte im Chat absprechen und Zusammenfassung zu folgendem schnaq anlegen: %s" (links/get-share-link share-hash))
+            (format "Bitte im Chat absprechen und Zusammenfassung zu folgendem schnaq anlegen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
             "info@schnaq.com")
           (ok {:summary (discussion-db/summary-request share-hash (:id identity))}))
         (validator/deny-access "You are not allowed to use this feature"))
