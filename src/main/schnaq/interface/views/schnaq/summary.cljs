@@ -129,7 +129,7 @@
   []
   (pages/with-nav-and-header
     {:page/heading "Zusammenfassungen"
-     :page/subheading "Beim drücken von senden, werden diese sofort erstellt."
+     :page/subheading "Beim Drücken von Senden, werden diese sofort erstellt."
      :condition/needs-administrator? true}
     [:section.container
      [list-open-summaries]
