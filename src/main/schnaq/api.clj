@@ -4,10 +4,23 @@
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [compojure.core :refer [GET POST PUT DELETE routes wrap-routes]]
-            [compojure.route :as route]
             [ghostwheel.core :refer [>defn-]]
+            [muuntaja.core :as m]
             [org.httpkit.client :as http-client]
             [org.httpkit.server :as server]
+            [reitit.coercion.spec]
+            [reitit.dev.pretty :as pretty]
+            [reitit.coercion :as rc]
+            [reitit.ring.middleware.multipart :as multipart]
+            [reitit.spec :as rs]
+            [reitit.ring :as ring]
+            [reitit.ring.coercion :as coercion]
+            [reitit.ring.middleware.exception :as exception]
+            [reitit.ring.middleware.muuntaja :as muuntaja]
+            [reitit.ring.middleware.parameters :as parameters]
+            [reitit.swagger :as swagger]
+            [reitit.swagger-ui :as swagger-ui]
+            [ring.logger :as ring-logger]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.format :refer [wrap-restful-format]]
@@ -38,7 +51,9 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log])
+            [taoensso.timbre :as log]
+            [expound.alpha :as expound]
+            [clojure.pprint :as pprint])
   (:import (java.util Base64 UUID))
   (:gen-class))
 
@@ -70,12 +85,12 @@
 
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
-  [{:keys [params identity]}]
-  (let [nickname (:nickname params)
-        discussion-title (:discussion-title params)]
+  [{:keys [body-params identity]}]
+  (let [nickname (:nickname body-params)
+        discussion-title (:discussion-title body-params)]
     (if (or (empty? nickname) (empty? discussion-title))
       (bad-request (format "You must at least provide a nickname and a discussion title. We received nickname: %s, discussion-title: %s" nickname discussion-title))
-      (let [{:keys [public-discussion? hub-exclusive? origin]} params
+      (let [{:keys [public-discussion? hub-exclusive? origin]} body-params
             keycloak-id (:sub identity)
             authorized-for-hub (some #(= % origin) (:groups identity))
             author (if keycloak-id
@@ -518,19 +533,21 @@
 ;; vector of middlewares, where these functions can simply put into.
 ;; See more on wrap-routes: https://github.com/weavejester/compojure/issues/192
 
-(def ^:private not-found-msg
-  "Error, page not found!")
-
 (def ^:private common-routes
   "Common routes for all modes, already wrapped with jwt-parsing."
   (->
     (routes
       (GET "/export/txt" [] export-txt-data)
       (GET "/ping" [] ping)
+
       (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
       (GET "/schnaq/search" [] search-schnaq)
+      (POST "/schnaq/add" [] add-schnaq)
+      (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
+
       (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
       (GET "/schnaqs/public" [] public-schnaqs)
+
       (-> (GET "/admin/feedbacks" [] all-feedbacks)
           (wrap-routes auth/is-admin-middleware)
           (wrap-routes auth/auth-middleware))
@@ -544,6 +561,7 @@
       (POST "/admin/discussions/make-writeable" [] make-discussion-writeable!)
       (POST "/admin/schnaq/disable-pro-con" [] disable-pro-con!)
       (POST "/admin/statements/delete" [] delete-statements!)
+
       (POST "/author/add" [] add-author)
       (POST "/credentials/validate" [] check-credentials)
       (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
@@ -555,14 +573,13 @@
       (POST "/discussion/statement/info" [] get-statement-info)
       (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
       (POST "/discussion/statements/starting/add" [] add-starting-statement!)
+
       (POST "/emails/send-admin-center-link" [] send-admin-center-link)
       (POST "/emails/send-invites" [] send-invite-emails)
       (POST "/feedback/add" [] add-feedback)
       (POST "/graph/discussion" [] graph-data-for-agenda)
       (POST "/header-image/image" [] media/set-preview-image)
       (POST "/lead-magnet/subscribe" [] subscribe-lead-magnet!)
-      (POST "/schnaq/add" [] add-schnaq)
-      (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
       (POST "/votes/down/toggle" [] toggle-downvote-statement)
       (POST "/votes/up/toggle" [] toggle-upvote-statement)
       analytics/analytics-routes
@@ -571,20 +588,6 @@
       summaries/summary-admin-routes
       user-api/user-routes)
     (wrap-routes auth/wrap-jwt-authentication)))
-
-(def ^:private development-routes
-  "Exclusive Routes only available outside of production."
-  (routes
-    (GET "/schnaqs" [] all-schnaqs)))
-
-(def ^:private app-routes
-  "Building routes for app."
-  (if shared-config/production?
-    (routes common-routes
-            (route/not-found not-found-msg))
-    (routes common-routes
-            development-routes
-            (route/not-found not-found-msg))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -613,6 +616,89 @@
   "Regular expression, which defines the allowed origins for API requests."
   #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
+(def app
+  (ring/ring-handler
+    (ring/router
+      [["/ping" {:get {:handler ping}}]
+       ["/export/txt" {:get export-txt-data
+                       :swagger {:tags ["exports"]}}]
+       ["/author/add" {:post add-author}]
+       ["/credentials/validate" {:post check-credentials}]
+       ["/feedback/add" {:post add-feedback}]
+       ["/graph/discussion" {:post graph-data-for-agenda}]
+       ["/header-image/image" {:post media/set-preview-image}]
+       ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!}]
+       ["/votes/down/toggle" {:post toggle-downvote-statement}]
+       ["/votes/up/toggle" {:post toggle-upvote-statement}]
+
+       ["/discussions" {:swagger {:tags ["discussions"]}}
+        ["/conclusions/starting" {:post get-starting-conclusions}]
+        ["/react-to/statement" {:post react-to-any-statement!}]
+        ["/statement/info" {:post get-statement-info}]
+        ["/statements/for-conclusion" {:post get-statements-for-conclusion}]
+        ["/statements/starting/add" {:post add-starting-statement!}]
+        ["" {:middleware [auth/auth-middleware]}
+         ["/statement/edit" {:put edit-statement!}]
+         ["/statement/delete" {:delete delete-statement!}]]]
+
+       ["/emails" {:swagger {:tags ["emails"]}}
+        ["/send-admin-center-link" {:post send-admin-center-link}]
+        ["/send-invites" {:post send-invite-emails}]]
+
+       ["/schnaq" {:swagger {:tags ["schnaqs"]}}
+        ["/by-hash/:hash" {:get discussion-by-hash
+                           :parameters {:path {:hash uuid?}}}]
+        ["/search" {:get search-schnaq}]
+        ["/add" {:post add-schnaq
+                 :parameters {:body {:nickname string?
+                                     :discussion-title string?}}}]
+        ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin}]]
+
+       ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
+        ["/by-hashes" {:get schnaqs-by-hashes}]
+        ["/public" {:get public-schnaqs}]]
+
+       ["/admin" {:swagger {:tags ["admin"]}
+                  :middleware [auth/auth-middleware auth/is-admin-middleware]}
+        ["/feedbacks" {:get all-feedbacks}]
+        ["/summaries/all" {:get all-summaries}]
+        ["/schnaq/delete" {:delete delete-schnaq!}]
+        ["/discussions/make-read-only" {:post make-discussion-read-only!}]
+        ["/discussions/make-writeable" {:post make-discussion-writeable!}]
+        ["/statements/delete" {:post delete-statements!}]]
+
+       ["/swagger.json"
+        {:get {:no-doc true
+               :swagger {:info {:title "schnaq API"}}
+               :handler (swagger/create-swagger-handler)}}]]
+      {:exception pretty/exception
+       ::rs/explain expound/expound-str
+       :data {:coercion reitit.coercion.spec/coercion
+              :muuntaja m/instance
+              :middleware [swagger/swagger-feature
+                           parameters/parameters-middleware ;; query-params & form-params
+                           muuntaja/format-negotiate-middleware ;; content-negotiation
+                           muuntaja/format-response-middleware ;; encoding response body
+                           exception/exception-middleware   ;; exception handling
+                           muuntaja/format-request-middleware ;; decoding request body
+                           coercion/coerce-response-middleware ;; coercing response bodys
+                           coercion/coerce-request-middleware ;; coercing request parameters
+                           multipart/multipart-middleware]}})
+    (ring/routes
+      (swagger-ui/create-swagger-ui-handler
+        {:path "/"
+         :config {:validatorUrl nil
+                  :operationsSorter "alpha"}})
+      (ring/create-default-handler))))
+
+
+(comment
+
+  (app {:request-method :get
+        :uri "/schnaq/by-hash/42a"})
+
+  :nil)
+
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
@@ -623,11 +709,11 @@
     (schnaq-core/-main)
     (reset! current-server
             (server/run-server
-              (-> #'app-routes
+              (-> #'app
                   (wrap-cors :access-control-allow-origin allowed-origins'
                              :access-control-allow-methods [:get :put :post :delete])
-                  (wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
-                  (wrap-defaults api-defaults))
+                  #_(wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
+                  #_(wrap-defaults api-defaults))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
