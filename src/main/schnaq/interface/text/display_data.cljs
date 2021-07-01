@@ -2038,6 +2038,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :copy "fa-copy"
      :cross "fa-times"
      :delete-icon "fa-times-circle"
+     :dots "fa-ellipsis-h"
      :edit "fa-edit"
      :eraser "fa-eraser"
      :file-download "fa-file-download"

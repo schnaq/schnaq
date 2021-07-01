@@ -23,10 +23,6 @@
   }
 }
 
-.card-view {
-  background: vars.$white;
-}
-
 .card-view-type {
   color: vars.$gray-100;
   margin-left: 0.1rem;
@@ -159,7 +155,6 @@
   @extend .shadow-sm;
   @include rounded.rounded-1;
   border: 0;
-  overflow: hidden;
   white-space: pre-line;
 }
 
