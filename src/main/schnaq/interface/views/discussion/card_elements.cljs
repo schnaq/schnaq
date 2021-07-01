@@ -6,6 +6,7 @@
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -13,7 +14,6 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.edit :as edit]
-            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.user :as user]
@@ -128,7 +128,7 @@
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-2.topic-card-button
+  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.topic-card-button
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
@@ -155,7 +155,7 @@
   [share-hash]
   (let [groups @(rf/subscribe [:user/groups])
         beta-user? (some shared-conf/beta-tester-groups groups)]
-    [:a.btn.btn-sm.btn-outline-primary.shadow-sm.rounded-2.mx-auto.my-2.topic-card-button
+    [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.topic-card-button
      (if beta-user?
        {:href (rfe/href :routes.schnaq/summary {:share-hash share-hash})}
        {:on-click #(rf/dispatch [:modal {:show? true
@@ -229,7 +229,7 @@
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
-  [statement input is-topic?]
+  [statement input is-topic? badges info-content]
   (let [title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
@@ -239,31 +239,21 @@
        (if edit-active?
          [edit/edit-card statement]
          [:h2.h6 title]))
+     [:div.d-flex.flex-row.my-4
+      [:div.mr-auto info-content]
+      [:div.ml-auto badges]]
      [:div.line-divider.my-4]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        input)]))
 
-(defn- topic-bubble-desktop [{:discussion/keys [share-hash] :as discussion} statement input badges info-content is-topic?]
-  [:div.row
-   ;; graph
-   [:div.col-2
-    [:div.text-center
-     [graph-button share-hash]
-     [summary-button share-hash]]
-    [:div.mt-3 badges]]
-   ;; title
-   [:div.col-8
-    [:div.d-flex.mb-4
-     [discussion-privacy-badge discussion]
-     [:div.ml-auto
-      [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]]]
-    [title-and-input-element statement input is-topic?]]
-   ;; up-down votes and statistics
-   [:div.col-2.pr-3
-    [:div.float-right
-     info-content]
-    [input/input-celebration-first]]])
+(defn- topic-bubble-desktop [discussion statement input badges info-content is-topic?]
+  [:div
+   [:div.d-flex.mb-4
+    [discussion-privacy-badge discussion]
+    [:div.ml-auto
+     [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]]]
+   [title-and-input-element statement input is-topic? badges info-content]])
 
 (defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} statement input badges info-content]
   [:<>
@@ -326,6 +316,32 @@
     [how-to-elements/quick-how-to-schnaq]
     [how-to-elements/quick-how-to-pro-con]))
 
+(defn search-bar
+  "A search-bar to search inside a schnaq."
+  []
+  [:form.mx-3.h-100
+   {:on-submit (fn [e]
+                 (jq/prevent-default e)
+                 (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
+   [:div.input-group.search-bar.h-100
+    [:input.form-control.my-auto.rounded-1.h-100
+     {:type "text" :aria-label "Search" :placeholder
+      (labels :schnaq.search/input) :name "search-input"}]
+    [:div.input-group-append.h-100
+     [:button.btn.btn-primary.btn-rounded-1.h-100
+      {:type "submit"}
+      [:i {:class (str "m-auto fas " (fa :search))}]]]]])
+
+(defn action-view [share-hash]
+  [:div.d-inline-block.text-dark.w-100.my-3
+   [:div.row
+    [:div.col-2
+     [graph-button share-hash]]
+    [:div.col-2
+     [summary-button share-hash]]
+    [:div.col
+     [search-bar]]]])
+
 (defn discussion-view-mobile
   "Discussion view for mobile devices
   No history but fullscreen topic bubble and conclusions"
@@ -352,10 +368,11 @@
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
        [history-view history]]
       [:div.col-6.col-lg-7.py-4
+       [action-view share-hash]
        [cards/conclusion-cards-list conclusions share-hash]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
 
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the topic bubble."
   [statement]
-  [cards/up-down-vote-breaking statement])
+  [cards/up-down-vote statement])

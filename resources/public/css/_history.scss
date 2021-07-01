@@ -2,14 +2,14 @@
 @use 'rounded' as rounded;
 
 .history-wrapper {
-  @include rounded.rounded-3;
-  background-color: vars.$gray-200;
+  @include rounded.rounded-1;
+  background-color: transparent;
   margin-top: 1rem;
+  max-width: 30rem;
   padding: 0.5rem;
 }
 
 .history-card-content {
-  background: vars.$white;
   height: 100%;
   padding: 1rem;
   white-space: pre-line;

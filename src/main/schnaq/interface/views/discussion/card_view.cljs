@@ -1,32 +1,14 @@
 (ns schnaq.interface.views.discussion.card-view
-  (:require [oops.core :refer [oget]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [img-path labels fa]]
+            [schnaq.interface.text.display-data :refer [img-path labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
-
-(defn- search-bar
-  "A search-bar to search inside a schnaq."
-  []
-  [:form.mx-3
-   {:on-submit (fn [e]
-                 (jq/prevent-default e)
-                 (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
-   [:div.input-group.search-bar
-    [:input.form-control.my-auto
-     {:type "text" :aria-label "Search" :placeholder
-      (labels :schnaq.search/input) :name "search-input"}]
-    [:div.input-group-append
-     [:button.btn.btn-secondary.btn-rounded-2
-      {:type "submit"}
-      [:i {:class (str "m-auto fas " (fa :search))}]]]]])
 
 (rf/reg-event-fx
   :schnaq/search
@@ -71,7 +53,6 @@
        [toolbelt/desktop-mobile-switch
         [:h3.mx-5 title]
         [:h3.mx-5.display-6 title]]]
-      [search-bar]
       [admin/share-link]
       [admin/txt-export share-hash title]
       (when edit-hash
@@ -82,7 +63,9 @@
        [:hr]
        [:h6.text-left (labels :history/title)]
        [:div.row.px-3
-        [elements/history-view-mobile history]]]]]))
+        [elements/history-view-mobile history]]
+       [:hr]
+       [elements/search-bar]]]]))
 
 (defn- discussion-start-view
   "The first step after starting a discussion."

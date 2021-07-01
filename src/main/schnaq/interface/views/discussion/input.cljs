@@ -13,7 +13,7 @@
   [statement-type label tooltip get-subscription set-event]
   (let [current-attitude @(rf/subscribe get-subscription)
         checked? (= statement-type current-attitude)]
-    [:label.btn.btn-outline-primary.rounded-4.shadow-sm
+    [:label.btn.btn-outline-primary.rounded-1.shadow-sm
      (when checked? {:class "active"})
      [:input {:type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
@@ -71,7 +71,7 @@
           [:div.input-group-prepend
            [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
         [:div.input-group-append
-         [:button.btn.btn-outline-primary.rounded-4.shadow-sm.ml-2
+         [:button.btn.btn-outline-primary.rounded-1.shadow-sm.ml-2
           {:type "submit" :title (labels :discussion/create-argument-action)}
           [:div.d-flex.flex-row
            [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
