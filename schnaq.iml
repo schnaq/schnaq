@@ -277,7 +277,6 @@
     <orderEntry type="library" name="Deps: org.clojure/test.check:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-frontend:0.5.13" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider:2.10.1" level="project" />
-    <orderEntry type="library" name="Deps: ring-logger:1.0.1" level="project" />
     <orderEntry type="library" name="Deps: amazonica:0.3.156" level="project" />
     <orderEntry type="library" name="Deps: com.sun.xml.fastinfoset/FastInfoset:1.2.15" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-spec:0.5.13" level="project" />

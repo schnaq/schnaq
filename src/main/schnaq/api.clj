@@ -10,7 +10,6 @@
             [org.httpkit.server :as server]
             [reitit.coercion.spec]
             [reitit.dev.pretty :as pretty]
-            [reitit.coercion :as rc]
             [reitit.ring.middleware.multipart :as multipart]
             [reitit.spec :as rs]
             [reitit.ring :as ring]
@@ -20,10 +19,7 @@
             [reitit.ring.middleware.parameters :as parameters]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
-            [ring.logger :as ring-logger]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
-            [ring.middleware.format :refer [wrap-restful-format]]
             [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.api.analytics :as analytics]
             [schnaq.api.hub :as hub]
@@ -78,11 +74,6 @@
   [_]
   (ok {:text "🧙‍♂️"}))
 
-(defn- all-schnaqs
-  "Returns all schnaqs from the db."
-  [_req]
-  (ok (discussion-db/all-discussions)))
-
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
   [{:keys [body-params identity]}]
@@ -120,7 +111,7 @@
   [req]
   (let [author-name (:nickname (:body-params req))]
     (user-db/add-user-if-not-exists author-name)
-    (ok {:text "POST successful"})))
+    (ok {:text "Author successfully created."})))
 
 (defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
@@ -138,14 +129,14 @@
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
   they have access to. If only one schnaq shall be loaded, compojure packs it
   into a single string:
-  `{:params {:share-hashes \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"}}`
+  `{:parameters {:query {:share-hashes #uuid\"57ce1947-e57f-4395-903e-e2866d2f305c\"}}}`
 
-  If multiple share-hashes are sent to the backend, compojure wraps them into a
+  If multiple share-hashes are sent to the backend, reitit wraps them into a
   collection:
-  `{:params {:share-hashes [\"bb328b5e-297d-4725-8c11-f1ed7db39109\"
-                            \"4bdd505e-2fd7-4d35-bfea-5df260b82609\"]}}`"
-  [req]
-  (if-let [hashes (get-in req [:params :share-hashes])]
+  `{:parameters {:query {:share-hashes [#uuid\"57ce1947-e57f-4395-903e-e2866d2f305c\"
+                                        #uuid\"b2645217-6d7f-4d00-85c1-b8928fad43f7\"]}}}"
+  [request]
+  (if-let [hashes (get-in request [:parameters :query :share-hashes])]
     (let [hashes-list (if (string? hashes) [hashes] hashes)]
       (ok {:discussions
            (map processors/add-meta-info-to-schnaq
@@ -153,7 +144,7 @@
     (bad-request {:error "Schnaqs could not be loaded."})))
 
 (defn- public-schnaqs
-  "Return all public meetings."
+  "Return all public schnaqs."
   [_req]
   (ok {:discussions (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
 
@@ -619,7 +610,7 @@
 (def app
   (ring/ring-handler
     (ring/router
-      [["/ping" {:get {:handler ping}}]
+      [["/ping" {:get ping}]
        ["/export/txt" {:get export-txt-data
                        :swagger {:tags ["exports"]}}]
        ["/author/add" {:post add-author}]
@@ -655,7 +646,10 @@
         ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin}]]
 
        ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
-        ["/by-hashes" {:get schnaqs-by-hashes}]
+        ["/by-hashes" {:get schnaqs-by-hashes
+                       :description "Takes one or more share-hashes as query parameters."
+                       :parameters {:query {:share-hashes (s/or :hashes (s/coll-of string?)
+                                                                :hash string?)}}}]
         ["/public" {:get public-schnaqs}]]
 
        ["/admin" {:swagger {:tags ["admin"]}
@@ -683,7 +677,8 @@
                            muuntaja/format-request-middleware ;; decoding request body
                            coercion/coerce-response-middleware ;; coercing response bodys
                            coercion/coerce-request-middleware ;; coercing request parameters
-                           multipart/multipart-middleware]}})
+                           multipart/multipart-middleware
+                           auth/wrap-jwt-authentication]}})
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
         {:path "/"
