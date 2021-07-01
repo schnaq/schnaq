@@ -61,7 +61,7 @@
                     (js-wrap/stop-propagation e)
                     (on-click-fn))
         :title (labels :discussion.badges/edit-statement)}
-       [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])))
+       [:i {:class (str "m-auto fas " (fa :edit))}]])))
 
 (defn- anonymous-delete-modal
   "Show this modal to anonymous users trying to delete statements."

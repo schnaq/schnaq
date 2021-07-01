@@ -40,16 +40,14 @@
        {:on-click (fn [e]
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-upvote statement]))}
-       [:div.vote-box.up-vote
-        [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]]]
+       [:i.vote-arrow.up-vote {:class (str "m-auto fas " (fa :arrow-up))}]]]
      [:h6.d-flex.p-2.m-0 (logic/calculate-votes statement votes)]
      [:div.d-flex
       [:div.px-2
        {:on-click (fn [e]
                     (js-wrap/stop-propagation e)
                     (rf/dispatch [:discussion/toggle-downvote statement]))}
-       [:div.vote-box.down-vote.align-bottom
-        [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]]]]))
+       [:i.vote-arrow.down-vote.align-bottom {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
 (defn- up-down-vote
   "Add inline panel for up and down votes."
@@ -60,13 +58,13 @@
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
-      [:div.vote-box.up-vote [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]]
+      [:i.vote-arrow.up-vote {:class (str "m-auto fas " (fa :arrow-up))}]]
      [:h6.m-0 (logic/calculate-votes statement votes)]
      [:div.pl-2
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:div.vote-box.down-vote [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
+      [:i.vote-arrow.down-vote {:class (str "m-auto fas " (fa :arrow-down))}]]]))
 
 (defn statement-card
   [edit-hash statement]
@@ -88,10 +86,10 @@
         [md/as-markdown (:statement/content statement)]]
        [:div.d-flex
         [:a.badge.badge-pill.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
-         [:i {:class (str "m-auto fas " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
-        [badges/extra-discussion-info-badges statement edit-hash]
+         [:i {:class (str "m-auto far " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
+        [up-down-vote statement]
         [:div.ml-auto
-         [up-down-vote statement]]]]]]))
+         [badges/extra-discussion-info-badges statement edit-hash]]]]]]))
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."

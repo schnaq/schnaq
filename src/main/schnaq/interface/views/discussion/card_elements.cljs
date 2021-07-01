@@ -344,14 +344,14 @@
         has-history? (seq history)]
     [:div.container-fluid
      [:div.row
-      [:div.col-5.py-4
+      [:div.col-6.col-lg-5.py-4
        ;; back button
        [back-button has-history?]
        ;; current statement / topic
        [topic-view current-discussion nil
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
        [history-view history]]
-      [:div.col-7.py-4
+      [:div.col-6.col-lg-7.py-4
        [cards/conclusion-cards-list conclusions share-hash]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
 

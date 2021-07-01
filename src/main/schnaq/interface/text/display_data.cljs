@@ -2057,7 +2057,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :plus "fa-plus"
      :project/diagram "fa-project-diagram"
      :puzzle "fa-puzzle-piece"
-     :reply "fa-comment-dots"
+     :reply "fa-comment-alt"
      :search "fa-search"
      :server "fa-server"
      :share "fa-share-alt"
