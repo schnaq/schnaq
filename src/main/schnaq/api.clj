@@ -115,8 +115,8 @@
 
 (defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
-  [{:keys [params identity]}]
-  (let [hash (:hash params)
+  [{:keys [parameters identity]}]
+  (let [hash (get-in parameters [:path :hash])
         keycloak-id (:sub identity)]
     (if (validator/valid-discussion? hash)
       (ok (processors/add-meta-info-to-schnaq
@@ -352,8 +352,8 @@
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash]} body-params]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
       (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
       (validator/deny-access invalid-rights-message))))
@@ -622,8 +622,9 @@
        ["/votes/down/toggle" {:post toggle-downvote-statement}]
        ["/votes/up/toggle" {:post toggle-upvote-statement}]
 
-       ["/discussions" {:swagger {:tags ["discussions"]}}
-        ["/conclusions/starting" {:post get-starting-conclusions}]
+       ["/discussion" {:swagger {:tags ["discussions"]}}
+        ["/conclusions/starting" {:get get-starting-conclusions
+                                  :parameters {:query {:share-hash string?}}}]
         ["/react-to/statement" {:post react-to-any-statement!}]
         ["/statement/info" {:post get-statement-info}]
         ["/statements/for-conclusion" {:post get-statements-for-conclusion}]
@@ -638,7 +639,7 @@
 
        ["/schnaq" {:swagger {:tags ["schnaqs"]}}
         ["/by-hash/:hash" {:get discussion-by-hash
-                           :parameters {:path {:hash uuid?}}}]
+                           :parameters {:path {:hash string?}}}]
         ["/search" {:get search-schnaq}]
         ["/add" {:post add-schnaq
                  :parameters {:body {:nickname string?
@@ -660,6 +661,8 @@
         ["/discussions/make-read-only" {:post make-discussion-read-only!}]
         ["/discussions/make-writeable" {:post make-discussion-writeable!}]
         ["/statements/delete" {:post delete-statements!}]]
+
+       user-api/user-routes
 
        ["/swagger.json"
         {:get {:no-doc true

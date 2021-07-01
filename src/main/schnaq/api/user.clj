@@ -1,6 +1,6 @@
 (ns schnaq.api.user
-  (:require [clojure.string :as string]
-            [compojure.core :refer [PUT routes wrap-routes context]]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.string :as string]
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
@@ -16,13 +16,14 @@
 (defn- register-user-if-they-not-exist
   "Register a new user if they do not exist. In all cases return the user. New users will receive a welcome
   mail."
-  [{:keys [identity params]}]
+  [{:keys [identity parameters]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [visited-schnaqs (map :db/id (discussion-db/valid-discussions-by-hashes (:visited-hashes params)))
+  (let [{:keys [creation-secrets visited-hashes]} (:body parameters)
+        visited-schnaqs (map :db/id (discussion-db/valid-discussions-by-hashes visited-hashes))
         [new-user? queried-user] (user-db/register-new-user identity visited-schnaqs)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
-                                            (:creation-secrets params) (:db/id queried-user)))]
+                                            creation-secrets (:db/id queried-user)))]
     (when new-user?
       (mail/send-welcome-mail (:email identity)))
     (ok {:registered-user queried-user
@@ -33,15 +34,23 @@
   [id file-type]
   (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type))
 
+(s/def :image/type string?)
+(s/def :image/name string?)
+(s/def :image/content string?)
+(s/def ::image
+  (s/keys :req-un [:image/type :image/name :image/content]))
+
 (defn- change-profile-picture
   "Change the profile picture of a user.
   This includes uploading an image to s3 and updating the associated url in the database."
-  [{:keys [identity params]}]
-  (let [image-type (get-in params [:image :type])]
-    (log/info "User" (:id identity) "trying to set profile picture to:" (get-in params [:image :name]))
+  [{:keys [identity parameters]}]
+  (let [image-type (get-in parameters [:body :image :type])
+        image-name (get-in parameters [:body :image :name])
+        image-content (get-in parameters [:body :image :content])]
+    (log/info "User" (:id identity) "trying to set profile picture to:" image-name)
     (if (shared-config/allowed-mime-types image-type)
       (if-let [{:keys [input-stream image-type content-type]}
-               (media/scale-image-to-height (get-in params [:image :content]) config/profile-picture-height)]
+               (media/scale-image-to-height image-content config/profile-picture-height)]
         (let [image-name (create-UUID-file-name (:id identity) image-type)
               absolute-url (s3/upload-stream :user/profile-pictures
                                              input-stream
@@ -58,16 +67,20 @@
 
 (defn- change-display-name
   "Change the display name of a registered user"
-  [{:keys [body-params identity]}]
-  (let [{:keys [display-name]} body-params]
+  [{:keys [parameters identity]}]
+  (let [display-name (get-in parameters [:body :display-name])]
     (ok {:updated-user (user-db/update-display-name (:id identity) display-name)})))
 
+
+;; -----------------------------------------------------------------------------
+
 (def user-routes
-  (->
-    (routes
-      (context "/user" []
-        (PUT "/register" [] register-user-if-they-not-exist)
-        (PUT "/picture" [] change-profile-picture)
-        (PUT "/name" [] change-display-name)))
-    (wrap-routes auth/auth-middleware)
-    (wrap-routes auth/wrap-jwt-authentication)))
+  ["/user" {:swagger {:tags ["user"]}
+            :middlewares [auth/auth-middleware]}
+   ["/register" {:put register-user-if-they-not-exist
+                 :parameters {:body {:creation-secrets (s/? map?)
+                                     :visited-hashes (s/coll-of string?)}}}]
+   ["/picture" {:put change-profile-picture
+                :parameters {:body {:image ::image}}}]
+   ["/name" {:put change-display-name
+             :parameters {:body {:display-name string?}}}]])

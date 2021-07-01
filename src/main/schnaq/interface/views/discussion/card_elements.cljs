@@ -199,7 +199,7 @@
   :discussion.query.conclusions/starting
   (fn [{:keys [db]} _]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
-      {:fx [(http/xhrio-request db :post "/discussion/conclusions/starting"
+      {:fx [(http/xhrio-request db :get "/discussion/conclusions/starting"
                                 [:discussion.query.conclusions/set-starting]
                                 {:share-hash share-hash})]})))
 
