@@ -76,7 +76,7 @@
 
 (def user-routes
   ["/user" {:swagger {:tags ["user"]}
-            :middlewares [auth/auth-middleware]}
+            :middleware [auth/auth-middleware]}
    ["/register" {:put register-user-if-they-not-exist
                  :parameters {:body {:creation-secrets (s/? map?)
                                      :visited-hashes (s/coll-of string?)}}}]
