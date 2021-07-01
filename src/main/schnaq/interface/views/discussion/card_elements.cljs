@@ -117,12 +117,13 @@
               {:key (str "history-" (:db/id statement))}
               (let [attitude (name (or (:statement/type statement) :neutral))]
                 [:div.card-history.clickable
-                 {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
-                  :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-                 [:div.history-card-content
-                  (if (zero? index)
-                    history-content
-                    [tooltip/block-element :right tooltip history-content])]])]]))])]))
+                 {:on-click #(rf/dispatch [:discussion.history/time-travel index])}
+                 [:div.d-flex.flex-row
+                  [:div {:class (str "highlight-card-" attitude)}]
+                  [:div.history-card-content
+                   (if (zero? index)
+                     history-content
+                     [tooltip/block-element :right tooltip history-content])]]])]]))])]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
