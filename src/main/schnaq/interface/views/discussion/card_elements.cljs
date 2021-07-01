@@ -94,8 +94,6 @@
   (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)
         has-history? (seq indexed-history)]
     [:<>
-     ;; my schnaqs button
-     [back-button has-history?]
      ;; discussion start button
      (when has-history?
        [:section.history-wrapper
@@ -319,7 +317,8 @@
   [:<>
    [topic-bubble topic-content]
    [sort-options]
-   [cards/conclusion-cards-list conclusions share-hash]])
+   (when conclusions
+     [cards/conclusion-cards-list conclusions share-hash])])
 
 (defn- show-how-to [is-topic?]
   (if is-topic?
@@ -339,15 +338,20 @@
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [current-discussion statement input badges info-content conclusions history]
-  (let [is-topic? (nil? history)]
+  [{:keys [discussion/share-hash] :as current-discussion} statement input badges info-content conclusions history]
+  (let [is-topic? (nil? history)
+        has-history? (seq history)]
     [:div.container-fluid
      [:div.row
-      [:div.col-3.py-4
-       [history-view history]]
-      [:div.col-9.py-4
-       [topic-view current-discussion conclusions
+      [:div.col-5.py-4
+       ;; back button
+       [back-button has-history?]
+       ;; current statement / topic
+       [topic-view current-discussion nil
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
+       [history-view history]]
+      [:div.col-7.py-4
+       [cards/conclusion-cards-list conclusions share-hash]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
 
 (defn info-content-conclusion
