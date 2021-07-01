@@ -1,8 +1,8 @@
 @use 'variables' as vars;
 
-$header-color: vars.$primary;
+$header-color: vars.$primary-selected;
 $header-opacity: 1;
-$gradient-target: vars.$primary-light;
+$gradient-target: vars.$primary;
 
 .masthead {
   background-color: $header-color;
