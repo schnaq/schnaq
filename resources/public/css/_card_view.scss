@@ -2,7 +2,7 @@
 @use 'variables' as vars;
 
 .panel-white {
-  @extend .shadow;
+  @extend .shadow-sm;
   @include rounded.rounded-2;
   background: vars.$white;
   overflow: hidden;
