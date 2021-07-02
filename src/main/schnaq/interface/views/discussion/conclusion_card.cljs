@@ -49,7 +49,7 @@
                     (rf/dispatch [:discussion/toggle-downvote statement]))}
        [:i.vote-arrow.down-vote.align-bottom {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
 
-(defn- up-down-vote
+(defn up-down-vote
   "Add inline panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
