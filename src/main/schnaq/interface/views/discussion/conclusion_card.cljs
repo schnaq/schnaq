@@ -79,10 +79,10 @@
     [:article.card.statement-card
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
-      [:div.card-view.card-body.py-0.pb-1
-       [:div.d-flex.justify-content-end.pt-2
-        [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
-       [:div.my-1
+      [:div.card-view.card-body.py-2
+       [:div.d-flex.justify-content-start.pt-2
+        [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]]
+       [:div.my-4
         [md/as-markdown (:statement/content statement)]]
        [:div.d-flex
         [:a.badge.badge-pill.rounded-2.mr-2 {:href "#" :on-click on-click-fn}

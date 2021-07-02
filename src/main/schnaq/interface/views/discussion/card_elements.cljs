@@ -218,13 +218,13 @@
   "A small badge displaying who can see the discussion!"
   [{:keys [discussion/states]}]
   (let [public? (contains? (set states) :discussion.state/public)]
-    [:div.text-center.privacy-indicator
+    [:<>
      (if public?
-       [:span.badge.badge-secondary-outline
-        [:i {:class (str "m-auto fas fa-lg " (fa :lock-open))}] " "
+       [:span.badge
+        [:i.primary-light-color {:class (str "m-auto fas fa-lg " (fa :lock-open))}] " "
         (labels :discussion.privacy/public)]
-       [:span.badge.badge-primary-outline
-        [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " "
+       [:span.badge
+        [:i.secondary-color {:class (str "m-auto fas fa-lg " (fa :lock-closed))}] " "
         (labels :discussion.privacy/private)])]))
 
 (defn- title-and-input-element
@@ -248,11 +248,11 @@
        input)]))
 
 (defn- topic-bubble-desktop [discussion statement input badges info-content is-topic?]
-  [:div
+  [:div.p-2
    [:div.d-flex.mb-4
-    [discussion-privacy-badge discussion]
-    [:div.ml-auto
-     [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]]]
+    [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]
+    [:div.ml-auto.my-auto
+     [discussion-privacy-badge discussion]]]
    [title-and-input-element statement input is-topic? badges info-content]])
 
 (defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} statement input badges info-content]

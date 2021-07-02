@@ -2052,6 +2052,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :laptop "fa-laptop-code"
      :lightbulb "fa-lightbulb"
      :lock-open "fa-lock-open"
+     :lock-closed "fa-lock"
      :minus "fa-minus"
      :newspaper "fa-newspaper"
      :plane "fa-paper-plane"

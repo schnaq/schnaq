@@ -16,12 +16,12 @@
         display-name (user-utils/display-name user)
         name-class (if authenticated? "text-primary" "text-muted")]
     [:div.d-flex.flex-row.text-muted
+     [common/avatar user avatar-size]
+     [:small.mx-2.my-auto {:class name-class} display-name]
      (when time
-       [:small.font-weight-light.d-inline.mr-1
+       [:small.font-weight-light.d-inline.my-auto
         [time/timestamp-with-tooltip time locale]
-        (labels :discussion.badges/statement-by)])
-     [:small.mr-2 {:class name-class} display-name]
-     [common/avatar user avatar-size]]))
+        (labels :discussion.badges/statement-by)])]))
 
 (rf/reg-event-fx
   :user/set-display-name
