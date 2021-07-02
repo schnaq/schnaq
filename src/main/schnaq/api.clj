@@ -20,7 +20,7 @@
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.util.http-response :refer [ok created bad-request]]
+            [ring.util.http-response :refer [ok created bad-request forbidden]]
             [schnaq.api.analytics :as analytics]
             [schnaq.api.hub :as hub]
             [schnaq.api.summaries :as summaries]
@@ -431,7 +431,9 @@
         keycloak-id (:sub identity)]
     (when (and valid-credentials? keycloak-id)
       (discussion-db/add-admin-to-discussion share-hash keycloak-id))
-    (ok {:valid-credentials? valid-credentials?})))
+    (if valid-credentials?
+      (ok {:valid-credentials? valid-credentials?})
+      (forbidden {:valid-credentials? valid-credentials?}))))
 
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
