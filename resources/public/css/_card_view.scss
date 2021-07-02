@@ -2,7 +2,6 @@
 @use 'variables' as vars;
 
 .panel-white {
-  @extend .shadow-sm;
   @include rounded.rounded-2;
   background: vars.$white;
   overflow: hidden;
@@ -152,7 +151,6 @@
 }
 
 .statement-card {
-  @extend .shadow-sm;
   @include rounded.rounded-1;
   border: 0;
   white-space: pre-line;

@@ -24,6 +24,7 @@
 }
 
 .profile-pic-image {
+  @extend .shadow-sm;
   @include rounded.rounded-50;
   background-position: center center;
   height: 100%;
