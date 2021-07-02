@@ -573,7 +573,7 @@
       (POST "/lead-magnet/subscribe" [] subscribe-lead-magnet!)
       (POST "/votes/down/toggle" [] toggle-downvote-statement)
       (POST "/votes/up/toggle" [] toggle-upvote-statement)
-      analytics/analytics-routes
+
 
       summaries/summary-routes
       summaries/summary-admin-routes)
@@ -664,6 +664,7 @@
 
        user-api/user-routes
        hub/hub-routes
+       analytics/analytics-routes
 
        ["/swagger.json"
         {:get {:no-doc true

@@ -1,6 +1,5 @@
 (ns schnaq.api.hub
-  (:require [compojure.core :refer [GET POST DELETE PUT routes wrap-routes context]]
-            [keycloak.admin :as kc-admin]
+  (:require [keycloak.admin :as kc-admin]
             [ring.util.http-response :refer [ok forbidden bad-request]]
             [schnaq.auth :as auth]
             [schnaq.config.keycloak :as kc-config :refer [kc-client]]

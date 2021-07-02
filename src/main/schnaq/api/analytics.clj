@@ -1,6 +1,5 @@
 (ns schnaq.api.analytics
-  (:require [compojure.core :refer [GET routes wrap-routes context]]
-            [ring.util.http-response :refer [ok]]
+  (:require [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
             [schnaq.database.analytics :as analytics-db]
             [schnaq.toolbelt :as toolbelt]))
@@ -47,8 +46,8 @@
 
 (defn- all-stats
   "Returns all statistics at once."
-  [{:keys [params]}]
-  (let [timestamp-since (toolbelt/now-minus-days (Integer/parseInt (:days-since params)))]
+  [{:keys [parameters]}]
+  (let [timestamp-since (toolbelt/now-minus-days (get-in parameters [:query :days-since]))]
     (ok {:stats {:discussions-num (analytics-db/number-of-discussions timestamp-since)
                  :usernames-num (analytics-db/number-of-usernames timestamp-since)
                  :average-statements (float (analytics-db/average-number-of-statements timestamp-since))
@@ -62,18 +61,15 @@
 ;; -----------------------------------------------------------------------------
 
 (def analytics-routes
-  (->
-    (routes
-      (context "/analytics" []
-        (GET "/" [] all-stats)                              ;; matches /analytics and /analytics/
-        (GET "/active-users" [] number-of-active-users)
-        (GET "/statements-per-discussion" [] statements-per-discussion)
-        (GET "/statement-types" [] statement-type-stats)
-        (GET "/discussions" [] number-of-discussions)
-        (GET "/statement-lengths" [] statement-lengths-stats)
-        (GET "/statements" [] number-of-statements)
-        (GET "/usernames" [] number-of-usernames)
-        (GET "/registered-users" [] number-of-registered-users)))
-    (wrap-routes auth/is-admin-middleware)
-    (wrap-routes auth/auth-middleware)
-    (wrap-routes auth/wrap-jwt-authentication)))
+  ["/analytics" {:swagger {:tags ["analytics"]}
+                 :middleware [auth/auth-middleware auth/is-admin-middleware]}
+   ["" {:get all-stats
+        :parameters {:query {:days-since nat-int?}}}]
+   ["/active-users" {:get number-of-active-users}]
+   ["/statements-per-discussion" {:get statements-per-discussion}]
+   ["/statement-types" {:get statement-type-stats}]
+   ["/discussions" {:get number-of-discussions}]
+   ["/statement-lengths" {:get statement-lengths-stats}]
+   ["/statements" {:get number-of-statements}]
+   ["/usernames" {:get number-of-usernames}]
+   ["/registered-users" {:get number-of-registered-users}]])
