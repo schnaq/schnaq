@@ -572,11 +572,8 @@
       (POST "/header-image/image" [] media/set-preview-image)
       (POST "/lead-magnet/subscribe" [] subscribe-lead-magnet!)
       (POST "/votes/down/toggle" [] toggle-downvote-statement)
-      (POST "/votes/up/toggle" [] toggle-upvote-statement)
+      (POST "/votes/up/toggle" [] toggle-upvote-statement))
 
-
-      summaries/summary-routes
-      summaries/summary-admin-routes)
 
     (wrap-routes auth/wrap-jwt-authentication)))
 
@@ -665,6 +662,7 @@
        user-api/user-routes
        hub/hub-routes
        analytics/analytics-routes
+       summaries/summary-routes
 
        ["/swagger.json"
         {:get {:no-doc true

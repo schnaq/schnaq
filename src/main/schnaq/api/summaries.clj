@@ -1,6 +1,5 @@
 (ns schnaq.api.summaries
-  (:require [compojure.core :refer [GET POST PUT routes wrap-routes]]
-            [ring.util.http-response :refer [ok]]
+  (:require [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
             [schnaq.config.shared :refer [beta-tester-groups]]
             [schnaq.database.discussion :as discussion-db]
@@ -11,8 +10,8 @@
 
 (defn- request-summary
   "Request a summary of a discussion. Works only if person is in a beta group."
-  [{:keys [params identity]}]
-  (let [share-hash (:share-hash params)]
+  [{:keys [parameters identity]}]
+  (let [share-hash (get-in parameters [:body :share-hash])]
     (log/info "Requesting new summary for schnaq" share-hash)
     (if identity
       (if (and (some beta-tester-groups (:groups identity))
@@ -28,19 +27,22 @@
 
 (defn- get-summary
   "Return a summary for the specified share-hash."
-  [{:keys [params identity]}]
+  [{:keys [parameters identity]}]
   (if identity
-    (if (and (some beta-tester-groups (:groups identity))
-             (validator/valid-discussion? (:share-hash params)))
-      (ok {:summary (discussion-db/summary (:share-hash params))})
-      (validator/deny-access "You are not allowed to use this feature"))
+    (let [share-hash (get-in parameters [:query :share-hash])]
+      (if (and (some beta-tester-groups (:groups identity))
+               (validator/valid-discussion? share-hash))
+        (ok {:summary (discussion-db/summary share-hash)})
+        (validator/deny-access "You are not allowed to use this feature")))
     (validator/deny-access "You need to be logged in to access this endpoint.")))
 
 (defn new-summary
   "Update a summary. If a text exists, it is overwritten. Admin access is already checked by middleware."
-  [{:keys [params]}]
-  (log/info "Updating Summary for" (:share-hash params))
-  (let [summary (discussion-db/update-summary (:share-hash params) (:new-summary-text params))]
+  [{:keys [parameters]}]
+  (let [share-hash (get-in parameters [:body :share-hash])
+        new-summary-text (get-in parameters [:body :new-summary-text])
+        summary (discussion-db/update-summary share-hash new-summary-text)]
+    (log/info "Updating Summary for" share-hash)
     (when (:summary/requester summary)
       (let [title (-> summary :summary/discussion :discussion/title)
             share-hash (-> summary :summary/discussion :discussion/share-hash)]
@@ -56,14 +58,17 @@ Dein schnaq Team"
           (-> summary :summary/requester :user.registered/email))))
     (ok {:new-summary summary})))
 
-(def summary-routes
-  (->
-    (routes
-      (GET "/schnaq/summary" [] get-summary)
-      (POST "/schnaq/summary/request" [] request-summary))
-    (wrap-routes auth/auth-middleware)))
 
-(def summary-admin-routes
-  (-> (PUT "/admin/summary/send" [] new-summary)
-      (wrap-routes auth/is-admin-middleware)
-      (wrap-routes auth/auth-middleware)))
+;; -----------------------------------------------------------------------------
+
+(def summary-routes
+  [["/schnaq/summary" {:swagger {:tags ["summaries"]}
+                       :middleware [auth/auth-middleware]
+                       :parameters {:body {:share-hash string?}}}
+    ["" {:get get-summary}]
+    ["/request" {:post request-summary}]]
+   ["/admin/summary/send" {:swagger {:tags ["summaries"]}
+                           :middleware [auth/auth-middleware auth/is-admin-middleware]
+                           :parameters {:body {:share-hash string?
+                                               :new-summary-text string?}}
+                           :put new-summary}]])
