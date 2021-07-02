@@ -13,6 +13,7 @@
   height: 100%;
   padding: 1rem;
   white-space: pre-line;
+  width: 100%;
 
   @include media-breakpoint-down(sm) {
     padding: 0.35rem 0 0;

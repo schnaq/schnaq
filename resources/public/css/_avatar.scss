@@ -24,7 +24,7 @@
 }
 
 .profile-pic-image {
-  @include rounded.rounded-1;
+  @include rounded.rounded-50;
   background-position: center center;
   height: 100%;
   object-fit: cover;
