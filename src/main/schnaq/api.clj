@@ -687,16 +687,20 @@
        ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
         ["/by-hashes" {:get schnaqs-by-hashes
                        :description "Takes one or more share-hashes as query parameters."
-                       :parameters {:query {:share-hashes (s/or :hashes (s/coll-of string?)
-                                                                :hash string?)}}}]
+                       :parameters {:query {:share-hashes (s/or :hashes (s/coll-of :discussion/share-hash)
+                                                                :hash :discussion/share-hash)}}}]
         ["/public" {:get public-schnaqs}]]
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :middleware [auth/auth-middleware auth/is-admin-middleware]}
         ["/feedbacks" {:get all-feedbacks}]
         ["/summaries/all" {:get all-summaries}]
-        ["/schnaq/delete" {:delete delete-schnaq!}]
-        ["/statements/delete" {:post delete-statements!}]]
+        ["/schnaq/delete" {:delete delete-schnaq!
+                           :parameters {:body {:share-hash :discussion/share-hash}}}]
+        ["/statements/delete" {:post delete-statements!
+                               :parameters {:body {:share-hash :discussion/share-hash
+                                                   :edit-hash :discussion/edit-hash
+                                                   :statement-ids :db/id}}}]]
        ["/manage" {:swagger {:tags ["manage"]}}
         ["/schnaq" {:parameters {:body {:share-hash :discussion/share-hash
                                         :edit-hash :discussion/edit-hash}}}
@@ -737,14 +741,6 @@
          :config {:validatorUrl nil
                   :operationsSorter "alpha"}})
       (ring/create-default-handler))))
-
-
-(comment
-
-  (app {:request-method :get
-        :uri "/schnaq/by-hash/42a"})
-
-  :nil)
 
 (defn -main
   "This is our main entry point for the REST API Server."

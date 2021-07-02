@@ -69,6 +69,6 @@ Dein schnaq Team"
     ["/request" {:post request-summary}]]
    ["/admin/summary/send" {:swagger {:tags ["summaries"]}
                            :middleware [auth/auth-middleware auth/is-admin-middleware]
-                           :parameters {:body {:share-hash string?
-                                               :new-summary-text string?}}
+                           :parameters {:body {:share-hash :discussion/share-hash
+                                               :new-summary-text :summary/text}}
                            :put new-summary}]])

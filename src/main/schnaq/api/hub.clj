@@ -100,13 +100,13 @@
                       :get all-hubs-for-user}]
    ["/hub" {:swagger {:tags ["hubs"]}
             :middleware [auth/auth-middleware]}
-    ["/:keycloak-name" {:parameters {:path {:keycloak-name string?}}}
+    ["/:keycloak-name" {:parameters {:path {:keycloak-name :hub/keycloak-name}}}
      ["" {:get hub-by-keycloak-name}]
      ["/add" {:post add-schnaq-to-hub
-              :parameters {:body {:share-hash string?}}}]
+              :parameters {:body {:share-hash :discussion/share-hash}}}]
      ["/add-member" {:post add-member-to-hub
-                     :parameters {:body {:new-member-mail string?}}}]
+                     :parameters {:body {:new-member-mail :user.registered/email}}}]
      ["/name" {:put change-hub-name
-               :parameters {:body {:new-hub-name string?}}}]
+               :parameters {:body {:new-hub-name :hub/name}}}]
      ["/remove" {:delete remove-schnaq-from-hub
-                 :parameters {:body {:share-hash string?}}}]]]])
+                 :parameters {:body {:share-hash :discussion/share-hash}}}]]]])

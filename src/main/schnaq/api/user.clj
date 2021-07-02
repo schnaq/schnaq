@@ -79,8 +79,8 @@
             :middleware [auth/auth-middleware]}
    ["/register" {:put register-user-if-they-not-exist
                  :parameters {:body {:creation-secrets (s/? map?)
-                                     :visited-hashes (s/coll-of string?)}}}]
+                                     :visited-hashes (s/coll-of :discussion/share-hash)}}}]
    ["/picture" {:put change-profile-picture
                 :parameters {:body {:image ::image}}}]
    ["/name" {:put change-display-name
-             :parameters {:body {:display-name string?}}}]])
+             :parameters {:body {:display-name :user/nickname}}}]])
