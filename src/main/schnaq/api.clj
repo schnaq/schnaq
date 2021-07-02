@@ -3,20 +3,20 @@
             [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
-            [compojure.core :refer [GET POST PUT DELETE routes wrap-routes]]
+            [expound.alpha :as expound]
             [ghostwheel.core :refer [>defn-]]
             [muuntaja.core :as m]
             [org.httpkit.client :as http-client]
             [org.httpkit.server :as server]
             [reitit.coercion.spec]
             [reitit.dev.pretty :as pretty]
-            [reitit.ring.middleware.multipart :as multipart]
-            [reitit.spec :as rs]
             [reitit.ring :as ring]
             [reitit.ring.coercion :as coercion]
             [reitit.ring.middleware.exception :as exception]
+            [reitit.ring.middleware.multipart :as multipart]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.parameters :as parameters]
+            [reitit.spec :as rs]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cors :refer [wrap-cors]]
@@ -47,9 +47,7 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log]
-            [expound.alpha :as expound]
-            [clojure.pprint :as pprint])
+            [taoensso.timbre :as log])
   (:import (java.util Base64 UUID))
   (:gen-class))
 
@@ -281,9 +279,9 @@
 
 (>defn- send-invite-emails
   "Expects a list of recipients and the meeting which shall be send."
-  [{:keys [body-params]}]
+  [{:keys [parameters]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash recipients share-link]} body-params
+  (let [{:keys [share-hash edit-hash recipients share-link]} (:body parameters)
         discussion-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Invite Emails for some meeting sent")
@@ -371,8 +369,8 @@
 
 (defn- search-schnaq
   "Search through any valid schnaq."
-  [{:keys [params]}]
-  (let [{:keys [share-hash search-string]} params]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash search-string]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
       (ok {:matching-statements (-> (discussion-db/search-schnaq share-hash search-string)
                                     with-sub-discussion-info
@@ -472,8 +470,8 @@
 
 (defn- edit-statement!
   "Edits the content (and possibly type) of a statement, when the user is the registered author."
-  [{:keys [params identity]}]
-  (let [{:keys [statement-id statement-type new-content share-hash]} params
+  [{:keys [parameters identity]}]
+  (let [{:keys [statement-id statement-type new-content share-hash]} (:body parameters)
         user-identity (:sub identity)
         statement (db/fast-pull statement-id [:db/id :statement/parent
                                               {:statement/author [:user.registered/keycloak-id]}
@@ -518,64 +516,6 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Routes
-;; About applying middlewares: We need to chain `wrap-routes` calls, because
-;; compojure can't handle natively more than one custom middleware. reitit has a
-;; vector of middlewares, where these functions can simply put into.
-;; See more on wrap-routes: https://github.com/weavejester/compojure/issues/192
-
-(def ^:private common-routes
-  "Common routes for all modes, already wrapped with jwt-parsing."
-  (->
-    (routes
-      (GET "/export/txt" [] export-txt-data)
-      (GET "/ping" [] ping)
-
-      (GET "/schnaq/by-hash/:hash" [] discussion-by-hash)
-      (GET "/schnaq/search" [] search-schnaq)
-      (POST "/schnaq/add" [] add-schnaq)
-      (POST "/schnaq/by-hash-as-admin" [] schnaq-by-hash-as-admin)
-
-      (GET "/schnaqs/by-hashes" [] schnaqs-by-hashes)
-      (GET "/schnaqs/public" [] public-schnaqs)
-
-      (-> (GET "/admin/feedbacks" [] all-feedbacks)
-          (wrap-routes auth/is-admin-middleware)
-          (wrap-routes auth/auth-middleware))
-      (-> (GET "/admin/summaries/all" [] all-summaries)
-          (wrap-routes auth/is-admin-middleware)
-          (wrap-routes auth/auth-middleware))
-      (-> (DELETE "/admin/schnaq/delete" [] delete-schnaq!)
-          (wrap-routes auth/is-admin-middleware)
-          (wrap-routes auth/auth-middleware))
-      (POST "/admin/discussions/make-read-only" [] make-discussion-read-only!)
-      (POST "/admin/discussions/make-writeable" [] make-discussion-writeable!)
-      (POST "/admin/schnaq/disable-pro-con" [] disable-pro-con!)
-      (POST "/admin/statements/delete" [] delete-statements!)
-
-      (POST "/author/add" [] add-author)
-      (POST "/credentials/validate" [] check-credentials)
-      (POST "/discussion/conclusions/starting" [] get-starting-conclusions)
-      (POST "/discussion/react-to/statement" [] react-to-any-statement!)
-      (-> (PUT "/discussion/statement/edit" [] edit-statement!)
-          (wrap-routes auth/auth-middleware))
-      (-> (DELETE "/discussion/statement/delete" [] delete-statement!)
-          (wrap-routes auth/auth-middleware))
-      (POST "/discussion/statement/info" [] get-statement-info)
-      (POST "/discussion/statements/for-conclusion" [] get-statements-for-conclusion)
-      (POST "/discussion/statements/starting/add" [] add-starting-statement!)
-
-      (POST "/emails/send-admin-center-link" [] send-admin-center-link)
-      (POST "/emails/send-invites" [] send-invite-emails)
-      (POST "/feedback/add" [] add-feedback)
-      (POST "/graph/discussion" [] graph-data-for-agenda)
-      (POST "/header-image/image" [] media/set-preview-image)
-      (POST "/lead-magnet/subscribe" [] subscribe-lead-magnet!)
-      (POST "/votes/down/toggle" [] toggle-downvote-statement)
-      (POST "/votes/up/toggle" [] toggle-upvote-statement))
-
-
-    (wrap-routes auth/wrap-jwt-authentication)))
-
 
 ;; -----------------------------------------------------------------------------
 ;; General
@@ -666,7 +606,7 @@
                                                         :admin-center string?}}}]
         ["/send-invites" {:post send-invite-emails
                           :parameters {:body {:recipients (s/coll-of string?)
-                                              :share-link string?}}}]]
+                                              :share-link :discussion/share-link}}}]]
 
        ["/schnaq" {:swagger {:tags ["schnaqs"]}}
         ["/by-hash/:share-hash" {:get discussion-by-hash
