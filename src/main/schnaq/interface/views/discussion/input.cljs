@@ -50,32 +50,34 @@
                                        :statement.type/support "support"
                                        :statement.type/attack "attack"
                                        :statement.type/neutral "neutral"))]
-    [:div {:class (str "statement-card-" attitude " mobile-attitude-" attitude)}
-     [:div.discussion-input-content
-      [:div.d-flex.flex-row.justify-content-end.pr-lg-2
-       ;; hide 'new post from you' text on mobile
-       [:small.d-none.d-md-block.text-muted.mr-2 (labels :discussion.add.statement/new)]
-       [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                        :display-name (get-in user [:names :display])} 32]]
-      [:div.input-group
-       [:textarea.form-control.discussion-text-input-area
-        {:name textarea-name :wrap "soft" :rows 1
-         :auto-complete "off"
-         :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
-         ;; first reset input then set height +1px in order to prevent scrolling
-         :required true
-         :data-dynamic-height true
-         :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-       [:div.d-flex.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
-        (when-not (or starting-route? pro-con-disabled?)
-          [:div.input-group-prepend
-           [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
-        [:div.input-group-append
-         [:button.btn.btn-outline-primary.shadow-sm.ml-2
-          {:type "submit" :title (labels :discussion/create-argument-action)}
-          [:div.d-flex.flex-row
-           [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
-           [:i {:class (str "m-auto fas " (fa :plane))}]]]]]]]]))
+    [:div.discussion-input-content
+     [:div.d-flex.flex-row
+      [:div {:class (str "highlight-card-" attitude)}]
+      [:div.w-100
+       [:div.d-flex.flex-row.justify-content-end.pr-lg-2
+        ;; hide 'new post from you' text on mobile
+        [:small.d-none.d-md-block.text-muted.mr-2 (labels :discussion.add.statement/new)]
+        [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
+                                         :display-name (get-in user [:names :display])} 32]]
+       [:div.input-group
+        [:textarea.form-control.discussion-text-input-area
+         {:name textarea-name :wrap "soft" :rows 1
+          :auto-complete "off"
+          :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
+          ;; first reset input then set height +1px in order to prevent scrolling
+          :required true
+          :data-dynamic-height true
+          :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
+        [:div.d-flex.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
+         (when-not (or starting-route? pro-con-disabled?)
+           [:div.input-group-prepend
+            [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
+         [:div.input-group-append
+          [:button.btn.btn-outline-primary.shadow-sm.ml-2
+           {:type "submit" :title (labels :discussion/create-argument-action)}
+           [:div.d-flex.flex-row
+            [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
+            [:i {:class (str "m-auto fas " (fa :plane))}]]]]]]]]]))
 
 (defn input-celebration-first
   "Show an celebration animation on each first post."
