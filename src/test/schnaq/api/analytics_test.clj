@@ -1,23 +1,23 @@
 (ns schnaq.api.analytics-test
   (:require [clojure.test :refer [use-fixtures deftest is are testing]]
-            [ring.mock.request :as mock]
-            [schnaq.api.analytics :as sut]
+            [ring.mock.request :refer [request]]
+            [schnaq.api :as api]
             [schnaq.test.toolbelt :as toolbelt :refer [token-schnaqqifant-user token-n2o-admin]]))
 
 (use-fixtures :each toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once toolbelt/clean-database-fixture)
 
 (defn- response-status [path token]
-  (:status (sut/analytics-routes
-             (-> (mock/request :get (format "/analytics%s" path))
-                 (toolbelt/mock-authorization-header token)))))
+  (-> (request :get (format "/analytics%s" path))
+      (toolbelt/mock-authorization-header token)
+      api/app
+      :status))
 
 (defn- response-status-main-route [token]
-  (:status
-    (sut/analytics-routes
-      (-> (mock/request :get "/analytics")
-          (toolbelt/mock-query-params :days-since "7")
-          (toolbelt/mock-authorization-header token)))))
+  (-> {:request-method :get :uri "/analytics" :query-params {:days-since 7}}
+      (toolbelt/mock-authorization-header token)
+      api/app
+      :status))
 
 (deftest permission-test
   (testing "Analytics should only be accessible from logged in super users."
