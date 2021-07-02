@@ -89,6 +89,9 @@
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions]))
 
+;; Statement via API
+(s/def :statement/unqualified-types #{:attack :support :neutral})
+
 ;; Common
 (s/def :db/id (s/or :transacted number? :temporary any?))
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))
@@ -99,9 +102,10 @@
 (s/def :feedback/description ::non-blank-string)
 (s/def :feedback/has-image? boolean?)
 (s/def :feedback/created-at inst?)
+(s/def :feedback/screenshot ::non-blank-string)
 (s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
                           :opt [:feedback/contact-name :feedback/contact-mail
-                                :feedback/created-at]))
+                                :feedback/created-at :feedback/screenshot]))
 
 ;; Summary
 (s/def :summary/discussion (s/or :id :db/id

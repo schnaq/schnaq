@@ -108,8 +108,8 @@
 
 (defn- add-author
   "Adds an author to the database."
-  [req]
-  (let [author-name (:nickname (:body-params req))]
+  [{:keys [parameters]}]
+  (let [author-name (get-in parameters [:body :nickname])]
     (user-db/add-user-if-not-exists author-name)
     (ok {:text "Author successfully created."})))
 
@@ -160,8 +160,8 @@
 
 (defn- make-discussion-read-only!
   "Makes a discussion read-only if discussion-admin credentials are there."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash edit-hash]} body-params]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash edit-hash]} (:body parameters)]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/info "Setting discussion to read-only: " share-hash)
           (discussion-db/set-discussion-read-only share-hash)
@@ -170,16 +170,18 @@
 
 (defn- make-discussion-writeable!
   "Makes a discussion writeable if discussion-admin credentials are there."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash edit-hash]} body-params]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash edit-hash]} (:body parameters)]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/info "Removing read-only from discussion: " share-hash)
           (discussion-db/remove-read-only share-hash)
           (ok {:share-hash share-hash}))
       (validator/deny-access "You do not have the rights to access this action."))))
 
-(defn- disable-pro-con! [{:keys [body-params]}]
-  (let [{:keys [disable-pro-con? share-hash edit-hash]} body-params]
+(defn- disable-pro-con!
+  "Disable pro-con option for a schnaq."
+  [{:keys [parameters]}]
+  (let [{:keys [disable-pro-con? share-hash edit-hash]} (:body parameters)]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
           (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
@@ -190,8 +192,8 @@
   "Deletes the passed list of statements if the admin-rights are fitting.
   Important: Needs to check whether the statement-id really belongs to the discussion with
   the passed edit-hash."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash edit-hash statement-ids]} body-params]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash edit-hash statement-ids]} (:body parameters)]
     (if (validator/valid-credentials? share-hash edit-hash)
       ;; could optimize with a collection query here
       (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
@@ -202,8 +204,8 @@
 
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash]} body-params]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash]} (:body parameters)]
     (if (discussion-db/delete-discussion share-hash)
       (ok {:share-hash share-hash})
       (bad-request {:error "An error occurred, while deleting the schnaq."}))))
@@ -231,16 +233,16 @@
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
-  [{:keys [body-params identity]}]
+  [{:keys [parameters identity]}]
   (toggle-vote-statement
-    body-params identity reaction-db/upvote-statement! reaction-db/remove-upvote!
+    (:body parameters) identity reaction-db/upvote-statement! reaction-db/remove-upvote!
     reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
 
 (defn- toggle-downvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement."
-  [{:keys [body-params identity]}]
+  [{:keys [parameters identity]}]
   (toggle-vote-statement
-    body-params identity reaction-db/downvote-statement! reaction-db/remove-downvote!
+    (:body parameters) identity reaction-db/downvote-statement! reaction-db/remove-downvote!
     reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
 
 
@@ -261,10 +263,10 @@
 
 (defn- add-feedback
   "Add new feedback from schnaqs frontend."
-  [{:keys [body-params]}]
-  (let [feedback (:feedback body-params)
+  [{:keys [parameters]}]
+  (let [feedback (get-in parameters [:body :feedback])
         feedback-id (db/add-feedback! feedback)
-        screenshot (:screenshot body-params)]
+        screenshot (get-in parameters [:body :screenshot])]
     (when screenshot
       (upload-screenshot! screenshot feedback-id))
     (log/info "Feedback created")
@@ -408,8 +410,8 @@
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement."
-  [{:keys [body-params identity]}]
-  (let [{:keys [share-hash conclusion-id nickname premise reaction]} body-params
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash conclusion-id nickname premise reaction]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (if keycloak-id
                   [:user.registered/keycloak-id keycloak-id]
@@ -428,8 +430,8 @@
 (defn- check-credentials
   "Checks whether share-hash and edit-hash match.
   If the user is logged in and the credentials are valid, they are added as an admin."
-  [{:keys [params identity]}]
-  (let [{:keys [share-hash edit-hash]} params
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash edit-hash]} (:body parameters)
         valid-credentials? (validator/valid-credentials? share-hash edit-hash)
         keycloak-id (:sub identity)]
     (when (and valid-credentials? keycloak-id)
@@ -438,8 +440,8 @@
 
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
-  [{:keys [body-params]}]
-  (let [share-hash (:share-hash body-params)]
+  [{:keys [parameters]}]
+  (let [share-hash (get-in parameters [:body :share-hash])]
     (if (validator/valid-discussion? share-hash)
       (let [statements (discussion-db/all-statements-for-graph share-hash)
             starting-statements (discussion-db/starting-statements share-hash)
@@ -452,8 +454,8 @@
 
 (defn- export-txt-data
   "Exports the discussion data as a string."
-  [{:keys [params]}]
-  (let [{:keys [share-hash]} params]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
       (do (log/info "User is generating a txt export for discussion" share-hash)
           (ok {:string-representation (export/generate-text-export share-hash)}))
@@ -487,8 +489,8 @@
 
 (defn- delete-statement!
   "Deletes a statement, when the user is the registered author."
-  [{:keys [params identity]}]
-  (let [{:keys [statement-id share-hash]} params
+  [{:keys [parameters identity]}]
+  (let [{:keys [statement-id share-hash]} (:body parameters)
         user-identity (:sub identity)
         statement (db/fast-pull statement-id [:db/id :statement/parent
                                               {:statement/author [:user.registered/keycloak-id]}
@@ -502,8 +504,8 @@
 
 (defn- subscribe-lead-magnet!
   "Subscribes to the mailing list and sends the lead magnet to the email-address."
-  [{:keys [params]}]
-  (let [email (:email params)
+  [{:keys [parameters]}]
+  (let [email (get-in parameters [:body :email])
         options {:timeout 10000
                  :basic-auth ["user" mailchimp-config/api-key]
                  :body (json/write-str {:email_address email
@@ -609,20 +611,40 @@
     (ring/router
       [["/ping" {:get ping}]
        ["/export/txt" {:get export-txt-data
-                       :swagger {:tags ["exports"]}}]
-       ["/author/add" {:post add-author}]
-       ["/credentials/validate" {:post check-credentials}]
-       ["/feedback/add" {:post add-feedback}]
-       ["/graph/discussion" {:post graph-data-for-agenda}]
-       ["/header-image/image" {:post media/set-preview-image}]
-       ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!}]
-       ["/votes/down/toggle" {:post toggle-downvote-statement}]
-       ["/votes/up/toggle" {:post toggle-upvote-statement}]
+                       :swagger {:tags ["exports"]}
+                       :parameters {:query {:share-hash :discussion/share-hash}}}]
+       ["/author/add" {:post add-author
+                       :parameters {:body {:nickname :user/nickname}}}]
+       ["/credentials/validate" {:post check-credentials
+                                 :parameters {:body {:share-hash :discussion/share-hash
+                                                     :edit-hash :discussion/edit-hash}}}]
+       ["/feedback/add" {:post add-feedback
+                         :parameters {:body {:feedback :feedback/description
+                                             :screenshot :feedback/screenshot}}}]
+       ["/graph/discussion" {:post graph-data-for-agenda
+                             :parameters {:body {:share-hash :discussion/share-hash}}}]
+       ["/header-image/image" {:post media/set-preview-image
+                               :parameters {:body {:share-hash :discussion/share-hash
+                                                   :edit-hash :discussion/edit-hash
+                                                   :image-url :discussion/header-image-url}}}]
+       ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
+                                  :parameters {:body {:email string?}}}]
+       ["/votes" {:swagger {:tags ["votes"]}
+                  :parameters {:body {:share-hash :discussion/share-hash
+                                      :statement-id :db/id
+                                      :nickname :user/nickname}}}
+        ["/down/toggle" {:post toggle-downvote-statement}]
+        ["/up/toggle" {:post toggle-upvote-statement}]]
 
        ["/discussion" {:swagger {:tags ["discussions"]}}
         ["/conclusions/starting" {:get get-starting-conclusions
                                   :parameters {:query {:share-hash string?}}}]
-        ["/react-to/statement" {:post react-to-any-statement!}]
+        ["/react-to/statement" {:post react-to-any-statement!
+                                :parameters {:body {:share-hash :discussion/share-hash
+                                                    :conclusion-id :db/id
+                                                    :nickname :user/nickname
+                                                    :premise :statement/content
+                                                    :reaction :statement/unqualified-types}}}]
         ["/statement/info" {:post get-statement-info}]
         ["/statements/for-conclusion" {:post get-statements-for-conclusion}]
         ["/statements/starting/add" {:post add-starting-statement!}]
@@ -655,9 +677,17 @@
         ["/feedbacks" {:get all-feedbacks}]
         ["/summaries/all" {:get all-summaries}]
         ["/schnaq/delete" {:delete delete-schnaq!}]
-        ["/discussions/make-read-only" {:post make-discussion-read-only!}]
-        ["/discussions/make-writeable" {:post make-discussion-writeable!}]
         ["/statements/delete" {:post delete-statements!}]]
+       ["/manage" {:swagger {:tags ["manage"]}}
+        ["/schnaq" {:parameters {:body {:share-hash :discussion/share-hash
+                                        :edit-hash :discussion/edit-hash}}}
+         ["/disable-pro-con" {:post disable-pro-con!
+                              :parameters {:body {:disable-pro-con? boolean?}}}]
+         ["/schnaq/make-read-only" {:post make-discussion-read-only!}]
+         ["/schnaq/make-writeable" {:post make-discussion-writeable!}]]
+        ["/statements/delete" {:post delete-statement!
+                               :parameters {:body {:statement-id :db/id
+                                                   :share-hash :discussion/share-hash}}}]]
 
        user-api/user-routes
        hub/hub-routes

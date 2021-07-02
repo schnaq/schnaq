@@ -47,9 +47,9 @@
 (>defn set-preview-image
   "Check an image url for a valid source and then upload it to s3
   and set a datomic entry to the corresponding schnaq"
-  [{:keys [body-params]}]
+  [{:keys [parameters]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash image-url]} body-params
+  (let [{:keys [share-hash edit-hash image-url]} (:body parameters)
         file-name (str "header-" share-hash)]
     (if (validator/valid-credentials? share-hash edit-hash)
       (case (check-and-upload-image image-url file-name share-hash)
