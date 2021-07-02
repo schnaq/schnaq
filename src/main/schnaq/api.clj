@@ -76,14 +76,12 @@
 
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
-  [{:keys [body-params identity]}]
-  (let [nickname (:nickname body-params)
-        discussion-title (:discussion-title body-params)]
+  [{:keys [parameters identity]}]
+  (let [{:keys [nickname discussion-title public-discussion? hub-exclusive? hub]} (:body parameters)]
     (if (or (empty? nickname) (empty? discussion-title))
       (bad-request (format "You must at least provide a nickname and a discussion title. We received nickname: %s, discussion-title: %s" nickname discussion-title))
-      (let [{:keys [public-discussion? hub-exclusive? origin]} body-params
-            keycloak-id (:sub identity)
-            authorized-for-hub (some #(= % origin) (:groups identity))
+      (let [keycloak-id (:sub identity)
+            authorized-for-hub (some #(= % hub) (:groups identity))
             author (if keycloak-id
                      [:user.registered/keycloak-id keycloak-id]
                      (user-db/add-user-if-not-exists nickname))
@@ -92,15 +90,15 @@
                                      :discussion/edit-hash (.toString (UUID/randomUUID))
                                      :discussion/author author}
                                     (and hub-exclusive? authorized-for-hub)
-                                    (assoc :discussion/hub-origin [:hub/keycloak-name origin]))
+                                    (assoc :discussion/hub-origin [:hub/keycloak-name hub]))
             new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
         (if new-discussion-id
           (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
-            (when (and hub-exclusive? origin authorized-for-hub)
-              (hub-db/add-discussions-to-hub [:hub/keycloak-name origin] [new-discussion-id]))
+            (when (and hub-exclusive? hub authorized-for-hub)
+              (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
             (log/info "Discussion created: " new-discussion-id " - "
                       (:discussion/title created-discussion) " – Public? " public-discussion?
-                      "Exclusive?" hub-exclusive? "for" origin)
+                      "Exclusive?" hub-exclusive? "for" hub)
             (created "" {:new-discussion (links/add-links-to-discussion created-discussion)}))
           (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
             (log/info error-msg)
@@ -151,9 +149,8 @@
 (defn- schnaq-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
   processing in the frontend."
-  [{:keys [body-params]}]
-  (let [share-hash (:share-hash body-params)
-        edit-hash (:edit-hash body-params)]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash edit-hash]} (:body parameters)]
     (if (validator/valid-credentials? share-hash edit-hash)
       (ok {:discussion (discussion-db/discussion-by-share-hash-private share-hash)})
       (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
@@ -300,9 +297,9 @@
 
 (>defn- send-admin-center-link
   "Send URL to admin-center via mail to recipient."
-  [{:keys [body-params]}]
+  [{:keys [parameters]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash recipient admin-center]} body-params
+  (let [{:keys [share-hash edit-hash recipient admin-center]} (:body parameters)
         meeting-title (:discussion/title (discussion-db/discussion-by-share-hash share-hash))]
     (if (validator/valid-credentials? share-hash edit-hash)
       (do (log/debug "Send admin link for meeting " meeting-title " via E-Mail")
@@ -362,9 +359,9 @@
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash selected-statement]} body-params
-        prepared-statements (-> (:db/id selected-statement)
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash conclusion]} (:body parameters)
+        prepared-statements (-> (:db/id conclusion)
                                 discussion-db/children-for-statement
                                 valid-statements-with-votes
                                 with-sub-discussion-info)]
@@ -384,8 +381,8 @@
 
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following children."
-  [{:keys [body-params]}]
-  (let [{:keys [share-hash statement-id]} body-params]
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash statement-id]} (:body parameters)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
@@ -396,8 +393,8 @@
 
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
-  [{:keys [body-params identity]}]
-  (let [{:keys [share-hash statement nickname]} body-params
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash statement nickname]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (if keycloak-id
                   [:user.registered/keycloak-id keycloak-id]
@@ -645,25 +642,47 @@
                                                     :nickname :user/nickname
                                                     :premise :statement/content
                                                     :reaction :statement/unqualified-types}}}]
-        ["/statement/info" {:post get-statement-info}]
-        ["/statements/for-conclusion" {:post get-statements-for-conclusion}]
-        ["/statements/starting/add" {:post add-starting-statement!}]
-        ["" {:middleware [auth/auth-middleware]}
-         ["/statement/edit" {:put edit-statement!}]
-         ["/statement/delete" {:delete delete-statement!}]]]
+        ["/statements" {:parameters {:body {:share-hash :discussion/share-hash}}}
+         ["/for-conclusion" {:post get-statements-for-conclusion
+                             :parameters {:body {:conclusion (s/keys :req [:db/id])}}}]
+         ["/starting/add" {:post add-starting-statement!
+                           :parameters {:body {:statement :statement/content
+                                               :nickname :user/nickname}}}]]
+        ["/statement" {:parameters {:body {:share-hash :discussion/share-hash
+                                           :statement-id :db/id}}}
+         ["/info" {:post get-statement-info}]
+         ["/edit" {:put edit-statement!
+                   :middleware [auth/auth-middleware]
+                   :parameters {:body {:statement-type :statement/unqualified-types
+                                       :new-content :statement/content}}}]
+         ["/delete" {:delete delete-statement!
+                     :middleware [auth/auth-middleware]}]]]
 
-       ["/emails" {:swagger {:tags ["emails"]}}
-        ["/send-admin-center-link" {:post send-admin-center-link}]
-        ["/send-invites" {:post send-invite-emails}]]
+       ["/emails" {:swagger {:tags ["emails"]}
+                   :parameters {:body {:share-hash :discussion/share-hash
+                                       :edit-hash :discussion/edit-hash}}}
+        ["/send-admin-center-link" {:post send-admin-center-link
+                                    :parameters {:body {:recipient string?
+                                                        :admin-center string?}}}]
+        ["/send-invites" {:post send-invite-emails
+                          :parameters {:body {:recipients (s/coll-of string?)
+                                              :share-link string?}}}]]
 
        ["/schnaq" {:swagger {:tags ["schnaqs"]}}
-        ["/by-hash/:hash" {:get discussion-by-hash
-                           :parameters {:path {:hash string?}}}]
-        ["/search" {:get search-schnaq}]
+        ["/by-hash/:share-hash" {:get discussion-by-hash
+                                 :parameters {:path {:share-hash :discussion/share-hash}}}]
+        ["/search" {:get search-schnaq
+                    :parameters {:query {:share-hash :discussion/share-hash
+                                         :search-string string?}}}]
         ["/add" {:post add-schnaq
-                 :parameters {:body {:nickname string?
-                                     :discussion-title string?}}}]
-        ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin}]]
+                 :parameters {:body {:nickname :user/nickname
+                                     :discussion-title :discussion/title
+                                     :public-discussion? boolean?
+                                     :hub-exclusive? boolean?
+                                     :hub :hub/keycloak-name}}}]
+        ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
+                              :parameters {:body {:share-hash :discussion/share-hash
+                                                  :edit-hash :discussion/edit-hash}}}]]
 
        ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
         ["/by-hashes" {:get schnaqs-by-hashes

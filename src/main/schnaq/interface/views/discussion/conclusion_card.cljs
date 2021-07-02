@@ -84,7 +84,7 @@
       [:div.d-flex.justify-content-end.pt-2
        [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
       [:div.my-1
-        [md/as-markdown (:statement/content statement)]]
+       [md/as-markdown (:statement/content statement)]]
       [:div.d-flex
        [:a.badge.badge-pill.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
         [:i {:class (str "m-auto fas " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
@@ -125,7 +125,7 @@
       {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
        :fx [(http/xhrio-request db :post "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]
-                                {:selected-statement conclusion
+                                {:conclusion conclusion
                                  :share-hash share-hash}
                                 [:ajax.error/as-notification])]})))
 

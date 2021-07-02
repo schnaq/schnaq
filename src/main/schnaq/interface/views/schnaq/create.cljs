@@ -97,7 +97,7 @@
                                    :discussion-title discussion-title
                                    :public-discussion? public?}
                                   use-origin? (merge {:hub-exclusive? exclusive?
-                                                      :origin origin-hub}))
+                                                      :hub origin-hub}))
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
