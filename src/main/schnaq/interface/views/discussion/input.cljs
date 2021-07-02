@@ -83,7 +83,7 @@
   "Show an celebration animation on each first post."
   []
   (when @(rf/subscribe [:celebrate/state? :first-post])
-    [:div.d-flex.h-100
+    [:div.d-flex
      [:div.mt-auto
       [common/delayed-fade-in
        [:video.video-scalable

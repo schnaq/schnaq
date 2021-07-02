@@ -14,6 +14,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.edit :as edit]
+            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.user :as user]
@@ -369,6 +370,7 @@
       [:div.col-6.col-lg-7.py-4
        [action-view share-hash has-history?]
        [cards/conclusion-cards-list conclusions share-hash]
+       [input/input-celebration-first]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
 
 (defn info-content-conclusion
