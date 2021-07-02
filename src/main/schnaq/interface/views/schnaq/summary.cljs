@@ -76,17 +76,20 @@
         [:table.table.table-striped
          [:thead
           [:tr
-           [:th {:width "25%"} (labels :summary.admin/discussion)]
+           [:th {:width "15%"} (labels :summary.admin/discussion)]
+           [:th {:width "15%"} (labels :summary.admin/requester)]
            [:th {:width "15%"} (labels :summary.admin/requested-at)]
-           [:th {:width "60%"} (labels :summary.admin/summary)]]]
+           [:th {:width "55%"} (labels :summary.admin/summary)]]]
          [:tbody
           (for [summary summaries]
-            (let [share-hash (-> summary :summary/discussion :discussion/share-hash)
+            (let [requester (-> summary :summary/requester :user.registered/display-name)
+                  share-hash (-> summary :summary/discussion :discussion/share-hash)
                   summary-id (:db/id summary)]
               [:tr {:key (str "row-" summary-id)}
                [:td [:a {:href (rfe/href :routes.schnaq/start
                                          {:share-hash share-hash})}
                      (-> summary :summary/discussion :discussion/title)]]
+               [:td requester]
                [:td (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
                [:td [:form
                      {:on-submit (fn [e]
