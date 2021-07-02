@@ -12,9 +12,9 @@
 
 (defn- hub-by-keycloak-name
   "Query hub by its referenced name in keycloak."
-  [request]
-  (let [keycloak-name (get-in request [:params :keycloak-name])]
-    (if (auth/member-of-group? (:identity request) keycloak-name)
+  [{:keys [identity parameters]}]
+  (let [keycloak-name (get-in parameters [:path :keycloak-name])]
+    (if (auth/member-of-group? identity keycloak-name)
       (let [hub (hub-db/hub-by-keycloak-name keycloak-name)
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
         (ok {:hub processed-hub
@@ -36,8 +36,9 @@
 (defn- add-schnaq-to-hub
   "Adds a schnaq to a hub identified by the group-name. Only allow the adding when
   the schnaq is not exclusively tied to another hub. Also check for appropriate group membership."
-  [{:keys [params identity]}]
-  (let [{:keys [keycloak-name share-hash]} params]
+  [{:keys [parameters identity]}]
+  (let [keycloak-name (get-in parameters [:path :keycloak-name])
+        share-hash (get-in parameters [:body :share-hash])]
     (if (auth/member-of-group? identity keycloak-name)
       (if (validators/valid-discussion? share-hash)
         ;; NOTE: When hub-exclusive schnaqs are in, check it in the if above.
@@ -51,8 +52,9 @@
 
 (defn- remove-schnaq-from-hub
   "Removes a schnaq from the specified hub. Only happens when the caller is member of the hub."
-  [{:keys [params identity]}]
-  (let [{:keys [keycloak-name share-hash]} params]
+  [{:keys [parameters identity]}]
+  (let [keycloak-name (get-in parameters [:path :keycloak-name])
+        share-hash (get-in parameters [:body :share-hash])]
     (if (auth/member-of-group? identity keycloak-name)
       (let [hub (hub-db/remove-discussion-from-hub [:hub/keycloak-name keycloak-name]
                                                    [:discussion/share-hash share-hash])
@@ -62,8 +64,9 @@
 
 (defn- change-hub-name
   "Change hub name."
-  [{:keys [params identity]}]
-  (let [{:keys [keycloak-name new-hub-name]} params]
+  [{:keys [parameters identity]}]
+  (let [keycloak-name (get-in parameters [:path :keycloak-name])
+        new-hub-name (get-in parameters [:body :new-hub-name])]
     (if (auth/member-of-group? identity keycloak-name)
       (let [hub (hub-db/change-hub-name keycloak-name new-hub-name)
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
@@ -73,15 +76,15 @@
 (defn- add-member-to-hub
   "Add a member to a hub using their email-address. If the user is already a member
   nothing should change. If the user is not registered yet, return an appropriate status."
-  [{:keys [params identity]}]
-  (let [new-member-mail (:new-member-mail params)
-        group-name (:keycloak-name params)]
-    (if (auth/member-of-group? identity group-name)
+  [{:keys [parameters identity]}]
+  (let [keycloak-name (get-in parameters [:path :keycloak-name])
+        new-member-mail (get-in parameters [:body :new-member-mail])]
+    (if (auth/member-of-group? identity keycloak-name)
       (if-let [new-user-keycloak-id (:user.registered/keycloak-id (user-db/user-by-email new-member-mail))]
-        (let [group-id (kc-admin/get-group-id kc-client kc-config/realm group-name)]
+        (let [group-id (kc-admin/get-group-id kc-client kc-config/realm keycloak-name)]
           (try
             (transact [[:db/add [:user.registered/keycloak-id new-user-keycloak-id]
-                        :user.registered/groups group-name]])
+                        :user.registered/groups keycloak-name]])
             (kc-admin/add-user-to-group! kc-client kc-config/realm group-id new-user-keycloak-id)
             (ok {:status :user-added})
             (catch Exception _e
@@ -89,18 +92,22 @@
         (ok {:status :user-not-registered}))
       (forbidden {:message "You are not allowed to add new members to the hub"}))))
 
+
 ;; -----------------------------------------------------------------------------
 
 (def hub-routes
-  (->
-    (routes
-      (context "/hubs" []
-        (GET "/personal" [] all-hubs-for-user))
-      (context "/hub" []
-        (GET "/:keycloak-name" [] hub-by-keycloak-name)
-        (POST "/:keycloak-name/add" [] add-schnaq-to-hub)
-        (POST "/:keycloak-name/add-member" [] add-member-to-hub)
-        (PUT "/:keycloak-name/name" [] change-hub-name)
-        (DELETE "/:keycloak-name/remove" [] remove-schnaq-from-hub)))
-    (wrap-routes auth/auth-middleware)
-    (wrap-routes auth/wrap-jwt-authentication)))
+  [["/hubs/personal" {:swagger {:tags ["hubs"]}
+                      :middleware [auth/auth-middleware]
+                      :get all-hubs-for-user}]
+   ["/hub" {:swagger {:tags ["hubs"]}
+            :middleware [auth/auth-middleware]}
+    ["/:keycloak-name" {:parameters {:path {:keycloak-name string?}}}
+     ["" {:get hub-by-keycloak-name}]
+     ["/add" {:post add-schnaq-to-hub
+              :parameters {:body {:share-hash string?}}}]
+     ["/add-member" {:post add-member-to-hub
+                     :parameters {:body {:new-member-mail string?}}}]
+     ["/name" {:put change-hub-name
+               :parameters {:body {:new-hub-name string?}}}]
+     ["/remove" {:delete remove-schnaq-from-hub
+                 :parameters {:body {:share-hash string?}}}]]]])

@@ -574,10 +574,10 @@
       (POST "/votes/down/toggle" [] toggle-downvote-statement)
       (POST "/votes/up/toggle" [] toggle-upvote-statement)
       analytics/analytics-routes
-      hub/hub-routes
+
       summaries/summary-routes
-      summaries/summary-admin-routes
-      user-api/user-routes)
+      summaries/summary-admin-routes)
+
     (wrap-routes auth/wrap-jwt-authentication)))
 
 
@@ -663,6 +663,7 @@
         ["/statements/delete" {:post delete-statements!}]]
 
        user-api/user-routes
+       hub/hub-routes
 
        ["/swagger.json"
         {:get {:no-doc true
