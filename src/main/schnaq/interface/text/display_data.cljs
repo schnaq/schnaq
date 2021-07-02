@@ -1890,7 +1890,7 @@ Now we write down questions and discuss them and can still understand what we ha
         möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
         Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
 
-        :summary.link.button/text "Zusammenfassung"
+        :summary.link.button/text "Kurzfassung"
         :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
         :summary.user.requested/label "Zusammenfassung wird angefordert …"
         :summary.user.not-requested/label "Zusammenfassung anfordern"

@@ -60,18 +60,14 @@
   (let [back-feed [:navigation/navigate :routes.schnaqs/personal]
         back-history [:discussion.history/time-travel 1]
         navigation (if has-history? back-history back-feed)
-        label (if has-history? :history.back/text :history.all-schnaqs/text)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
-    [:div.d-inline-block.text-dark.w-100
-     [:div.clickable.card-history-home
-      {:on-click
-       #(rf/dispatch navigation)}
-      [tooltip/block-element
-       :right
-       (labels tooltip)
-       [:div.d-flex
-        [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
-        [:div [:h5 (labels label)]]]]]]))
+    [:button.btn.btn-dark.w-100.h-100
+     {:on-click #(rf/dispatch navigation)}
+     [tooltip/block-element
+      :bottom
+      (labels tooltip)
+      [:div.d-flex
+       [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]]))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -214,6 +210,20 @@
     (assoc db :votes {:up {}
                       :down {}})))
 
+(defn- sort-options
+  "Displays the different sort options for card elements."
+  []
+  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
+    [:section.h-100
+     [:button.btn.btn-outline-primary.mr-2.h-100
+      {:class (when (= sort-method :newest) "active")
+       :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
+      (labels :badges.sort/newest)]
+     [:button.btn.btn-outline-primary.h-100
+      {:class (when (= sort-method :popular) "active")
+       :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+      (labels :badges.sort/popular)]]))
+
 (defn- discussion-privacy-badge
   "A small badge displaying who can see the discussion!"
   [{:keys [discussion/states]}]
@@ -270,12 +280,15 @@
       [:div.ml-auto.mr-2 [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
       info-content]]]
    ;; title
-   [title-and-input-element statement input]])
+   [title-and-input-element statement input]
+   [:div.ml-3
+    (labels :badges.sort/sort)
+    [sort-options]]])
 
 (defn- topic-bubble [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
     (common/set-website-title! title)
-    [:div.panel-white.md-4
+    [:div.panel-white.mb-4
      [:div.discussion-light-background content]]))
 
 (rf/reg-event-db
@@ -288,26 +301,9 @@
   (fn [db _]
     (get-in db [:discussion :statements :sort-method] :newest)))
 
-(defn- sort-options
-  "Displays the different sort options for card elements."
-  []
-  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-    [:section.py-2.text-right
-     [:p.small.mb-0
-      (labels :badges.sort/sort)
-      [:button.btn.btn-outline-primary.btn-sm.mx-1
-       {:class (when (= sort-method :newest) "active")
-        :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-       (labels :badges.sort/newest)]
-      [:button.btn.btn-outline-primary.btn-sm
-       {:class (when (= sort-method :popular) "active")
-        :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-       (labels :badges.sort/popular)]]]))
-
 (defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
   [:<>
    [topic-bubble topic-content]
-   [sort-options]
    (when conclusions
      [cards/conclusion-cards-list conclusions share-hash])])
 
@@ -324,23 +320,28 @@
                  (jq/prevent-default e)
                  (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
    [:div.input-group.search-bar.h-100
-    [:input.form-control.my-auto.rounded-1.h-100
+    [:input.form-control.my-auto.search-bar-input.h-100
      {:type "text" :aria-label "Search" :placeholder
       (labels :schnaq.search/input) :name "search-input"}]
-    [:div.input-group-append.h-100
-     [:button.btn.btn-primary.btn-rounded-1.h-100
+    [:div.input-group-append
+     [:button.btn.button-muted.h-100
       {:type "submit"}
       [:i {:class (str "m-auto fas " (fa :search))}]]]]])
 
-(defn action-view [share-hash]
-  [:div.d-inline-block.text-dark.w-100.my-3
-   [:div.row
-    [:div.col-2
-     [graph-button share-hash]]
-    [:div.col-2
-     [summary-button share-hash]]
-    [:div.col
-     [search-bar]]]])
+(defn action-view [share-hash has-history?]
+  [:div.d-inline-block.text-dark.w-100.mb-3
+   [:div.d-flex.flex-row
+    [:div.mr-1
+     [back-button has-history?]]
+    [:div.mx-1
+     [search-bar]]
+    [:div.mx-1
+     [sort-options]]
+    [:div.d-flex.flex-row.ml-auto
+     [:div.mx-1
+      [graph-button share-hash]]
+     [:div.mx-1
+      [summary-button share-hash]]]]])
 
 (defn discussion-view-mobile
   "Discussion view for mobile devices
@@ -361,14 +362,12 @@
     [:div.container-fluid
      [:div.row
       [:div.col-6.col-lg-5.py-4
-       ;; back button
-       [back-button has-history?]
        ;; current statement / topic
        [topic-view current-discussion nil
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
        [history-view history]]
       [:div.col-6.col-lg-7.py-4
-       [action-view share-hash]
+       [action-view share-hash has-history?]
        [cards/conclusion-cards-list conclusions share-hash]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
 

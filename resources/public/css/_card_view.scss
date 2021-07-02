@@ -179,5 +179,18 @@
 }
 
 .search-bar {
+  @include rounded.rounded-1;
+  background: vars.$white;
   min-width: 200px;
+}
+
+.search-bar-input {
+  @include rounded.rounded-1;
+  border: 0;
+
+  &:focus {
+    background: transparent;
+    border: 0;
+    outline: 0;
+  }
 }
