@@ -1221,9 +1221,9 @@ Now we write down questions and discuss them and can still understand what we ha
 
         ;; Beta Only Funnel
         :beta.modal/title "Beta-Feature"
-        :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können musst du " [:strong "Beta-Tester:in sein."]]
+        :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können, musst du " [:strong "Beta-Tester:in sein."]]
         :beta.modal/persuade "Schreib uns eine E-Mail, wenn du auch zu den Beta-Tester:innen gehören möchtest."
-        :beta.modal/cta "Anfrage Senden"
+        :beta.modal/cta "Anfrage senden"
         :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter "
 
         ;; Press Kit
