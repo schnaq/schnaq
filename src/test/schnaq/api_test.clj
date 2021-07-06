@@ -6,7 +6,6 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
-            [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
