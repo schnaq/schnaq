@@ -71,23 +71,23 @@
                     "schnaqqi.com"
                     "schnaq.dev"
                     "fakeschnaq.com"))))
-;
-;(deftest schnaq-by-hash-as-admin-test
-;  (let [schnaq-by-hash-as-admin #'api/schnaq-by-hash-as-admin
-;        share-hash "graph-hash"
-;        edit-hash "graph-edit-hash"
-;        request {:body-params {:share-hash share-hash
-;                               :edit-hash edit-hash}}
-;        req-wrong-edit-hash {:body-params {:share-hash share-hash
-;                                           :edit-hash "👾"}}
-;        req-wrong-share-hash {:body-params {:share-hash "razupaltuff"
-;                                            :edit-hash edit-hash}}]
-;    (testing "Valid hashes are ok."
-;      (is (= 200 (:status (schnaq-by-hash-as-admin request)))))
-;    (testing "Wrong hashes are forbidden."
-;      (is (= 403 (:status (schnaq-by-hash-as-admin req-wrong-edit-hash))))
-;      (is (= 403 (:status (schnaq-by-hash-as-admin req-wrong-share-hash)))))))
-;
+
+(deftest schnaq-by-hash-as-admin-test
+  (let [schnaq-by-hash-as-admin #'api/schnaq-by-hash-as-admin
+        share-hash "graph-hash"
+        edit-hash "graph-edit-hash"
+        request {:parameters {:body {:share-hash share-hash
+                                     :edit-hash edit-hash}}}
+        req-wrong-edit-hash {:parameters {:body {:share-hash share-hash
+                                                 :edit-hash "👾"}}}
+        req-wrong-share-hash {:parameters {:body {:share-hash "razupaltuff"
+                                                  :edit-hash edit-hash}}}]
+    (testing "Valid hashes are ok."
+      (is (= 200 (:status (schnaq-by-hash-as-admin request)))))
+    (testing "Wrong hashes are forbidden."
+      (is (= 403 (:status (schnaq-by-hash-as-admin req-wrong-edit-hash))))
+      (is (= 403 (:status (schnaq-by-hash-as-admin req-wrong-share-hash)))))))
+
 ;(deftest schnaqs-by-hashes-test
 ;  (let [schnaqs-by-hashes #'api/schnaqs-by-hashes
 ;        share-hash1 "cat-dog-hash"
