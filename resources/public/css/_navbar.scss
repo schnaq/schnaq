@@ -8,7 +8,7 @@
 .schnaq-navbar {
   @include rounded.rounded-1;
   background: vars.$white;
-  min-height: 4.25rem;
+  height: 4.25rem;
   overflow: hidden;
 
   @include media-breakpoint-down(sm) {
