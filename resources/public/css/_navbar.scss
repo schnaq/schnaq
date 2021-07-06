@@ -1,0 +1,23 @@
+@use 'rounded' as rounded;
+@use 'variables' as vars;
+
+.schnaq-navbar-space {
+  min-height: 4.25rem;
+}
+
+.schnaq-navbar {
+  @include rounded.rounded-1;
+  background: vars.$white;
+  min-height: 4.25rem;
+  overflow: hidden;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
+}
+
+.schnaq-logo-container {
+  background-image: linear-gradient(to right, vars.$primary-selected 1%, rgba(63, 80, 230, 0));
+  height: 100%;
+  padding: 1rem 4rem 1rem 1rem;
+}
