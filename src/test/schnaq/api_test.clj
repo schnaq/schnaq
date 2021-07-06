@@ -46,33 +46,31 @@
         (is (= 400 (:status (api/app {:request-method :post :uri "/graph/discussion"
                                       :body-params {:share-hash "bad-hash"}}))))))))
 
-
-;
-;(deftest cors-origin-tests
-;  (let [test-regex (partial re-matches api/allowed-origin)]
-;    (testing "Valid origins for production mode."
-;      (are [origin] (not (nil? (test-regex origin)))
-;                    "api.schnaq.com"
-;                    "schnaq.com"
-;                    "schnaq.de"
-;                    "www.schnaq.de"
-;                    "www.schnaq.com"
-;                    "https://api.schnaq.com"
-;                    "https://schnaq.com"
-;                    "https://schnaq.com/?kangaroo=rocks"
-;                    "api.staging.schnaq.com"
-;                    "staging.schnaq.com"
-;                    "https://api.staging.schnaq.com"
-;                    "https://staging.schnaq.com"
-;                    "https://staging.schnaq.com/meetings/create"))
-;    (testing "Invalid origins."
-;      (are [origin] (nil? (test-regex origin))
-;                    "localhost"
-;                    "penguin.books"
-;                    "christian.rocks"
-;                    "schnaqqi.com"
-;                    "schnaq.dev"
-;                    "fakeschnaq.com"))))
+(deftest cors-origin-tests
+  (let [test-regex (partial re-matches api/allowed-origin)]
+    (testing "Valid origins for production mode."
+      (are [origin] (not (nil? (test-regex origin)))
+                    "api.schnaq.com"
+                    "schnaq.com"
+                    "schnaq.de"
+                    "www.schnaq.de"
+                    "www.schnaq.com"
+                    "https://api.schnaq.com"
+                    "https://schnaq.com"
+                    "https://schnaq.com/?kangaroo=rocks"
+                    "api.staging.schnaq.com"
+                    "staging.schnaq.com"
+                    "https://api.staging.schnaq.com"
+                    "https://staging.schnaq.com"
+                    "https://staging.schnaq.com/meetings/create"))
+    (testing "Invalid origins."
+      (are [origin] (nil? (test-regex origin))
+                    "localhost"
+                    "penguin.books"
+                    "christian.rocks"
+                    "schnaqqi.com"
+                    "schnaq.dev"
+                    "fakeschnaq.com"))))
 ;
 ;(deftest schnaq-by-hash-as-admin-test
 ;  (let [schnaq-by-hash-as-admin #'api/schnaq-by-hash-as-admin
