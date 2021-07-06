@@ -112,7 +112,7 @@
 (defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
   [{:keys [parameters identity]}]
-  (let [hash (get-in parameters [:path :hash])
+  (let [hash (get-in parameters [:path :share-hash])
         keycloak-id (:sub identity)]
     (if (validator/valid-discussion? hash)
       (ok (processors/add-meta-info-to-schnaq
