@@ -117,28 +117,28 @@
                     (map (partial s/valid? ::specs/discussion)
                          (get-in api-call [:body :discussions]))))))))
 
-;(deftest edit-statement!-test
-;  (let [edit-statement! #'api/edit-statement!
-;        share-hash "simple-hash"
-;        keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
-;        statement (first (discussion-db/starting-statements share-hash))
-;        request #(-> (mock/request :put "/discussion/statement/edit")
-;                     (assoc-in [:identity :sub] %)
-;                     (assoc-in [:params :share-hash] share-hash)
-;                     (assoc-in [:params :statement-type] :statement.type/neutral)
-;                     (assoc-in [:params :statement-id] (:db/id statement))
-;                     (assoc-in [:params :new-content] "any-text"))]
-;    (testing "Only requests from valid author should be allowed."
-;      ;; The author is not the registered user, rest is fine
-;      (is (= 403 (:status (edit-statement! (request keycloak-id)))))
-;      ;; Make the author the user
-;      (db/transact [[:db/add (:db/id statement) :statement/author [:user.registered/keycloak-id keycloak-id]]])
-;      ;; Everything should be fine
-;      (is (= 200 (:status (edit-statement! (request keycloak-id)))))
-;      ;; Statement is deleted
-;      (db/transact [[:db/add (:db/id statement) :statement/deleted? true]])
-;      (is (= 400 (:status (edit-statement! (request keycloak-id)))))
-;      ;; Statement is fine but discussion is read-only
-;      (db/transact [[:db/add (:db/id statement) :statement/deleted? false]])
-;      (discussion-db/set-discussion-read-only share-hash)
-;      (is (= 400 (:status (edit-statement! (request keycloak-id))))))))
+(deftest edit-statement!-test
+  (let [edit-statement! #'api/edit-statement!
+        share-hash "simple-hash"
+        keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
+        statement (first (discussion-db/starting-statements share-hash))
+        request #(-> (mock/request :put "/discussion/statement/edit")
+                     (assoc-in [:identity :sub] %)
+                     (assoc-in [:parameters :body :share-hash] share-hash)
+                     (assoc-in [:parameters :body :statement-type] :statement.type/neutral)
+                     (assoc-in [:parameters :body :statement-id] (:db/id statement))
+                     (assoc-in [:parameters :body :new-content] "any-text"))]
+    (testing "Only requests from valid author should be allowed."
+      ;; The author is not the registered user, rest is fine
+      (is (= 403 (:status (edit-statement! (request keycloak-id)))))
+      ;; Make the author the user
+      (db/transact [[:db/add (:db/id statement) :statement/author [:user.registered/keycloak-id keycloak-id]]])
+      ;; Everything should be fine
+      (is (= 200 (:status (edit-statement! (request keycloak-id)))))
+      ;; Statement is deleted
+      (db/transact [[:db/add (:db/id statement) :statement/deleted? true]])
+      (is (= 400 (:status (edit-statement! (request keycloak-id)))))
+      ;; Statement is fine but discussion is read-only
+      (db/transact [[:db/add (:db/id statement) :statement/deleted? false]])
+      (discussion-db/set-discussion-read-only share-hash)
+      (is (= 400 (:status (edit-statement! (request keycloak-id))))))))
