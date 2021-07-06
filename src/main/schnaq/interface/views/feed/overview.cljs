@@ -39,11 +39,11 @@
       [:div
        [:div.px-4.d-flex
         [:div.meeting-entry-title
-         [:h5 title]]
-        [:div.ml-auto.mt-3
-         [badges/read-only-badge schnaq]]]
+         [:h5 title]]]
        [:div.px-4
         [badges/static-info-badges schnaq]]]
+      [:div.mt-auto.pb-2
+       [badges/read-only-badge schnaq]]
       [:div.my-auto.ml-auto.mr-4
        [user/user-info-left-to-right (:discussion/author schnaq) 42 (:discussion/created-at schnaq)]]]]))
 

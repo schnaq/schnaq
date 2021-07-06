@@ -177,7 +177,7 @@
   [schnaq]
   (let [read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
     (when read-only?
-      [:p [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)]])))
+      [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)])))
 
 
 ;; -----------------------------------------------------------------------------
