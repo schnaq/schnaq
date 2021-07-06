@@ -1,9 +1,6 @@
 {:deps true
-
- ;; set an nrepl port for connection to a REPL.
  :nrepl {:port 8777}
- :builds {;; example build config, usage suitable for user apps
-          :app {:target :browser
+ :builds {:app {:target :browser
                 :modules {:base {:init-fn schnaq.interface.core/init}}
                 :output-dir "resources/public/js/compiled"
                 :asset-path "/js/compiled"
