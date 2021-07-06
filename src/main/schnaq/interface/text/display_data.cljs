@@ -247,6 +247,9 @@
         :discussion.create.public-checkbox/label "Make this schnaq public"
         :discussion.create.hub-exclusive-checkbox/label "Add schnaq to a Hub"
 
+        :discussion.navbar/title "Title"
+        :discussion.navbar/posts "Posts"
+        :discussion.navbar/members "Members"
         :discussion.privacy/public "Public Discussion"
         :discussion.privacy/private "Private Discussion"
         :discussion.state/read-only-label "read-only"
@@ -1202,6 +1205,9 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.create.public-checkbox/label "Diesen schnaq öffentlich machen"
         :discussion.create.hub-exclusive-checkbox/label "Schnaq zu einem Hub hinzufügen"
 
+        :discussion.navbar/title "Titel"
+        :discussion.navbar/posts "Beiträge"
+        :discussion.navbar/members "Mitglieder"
         :discussion.privacy/public "Öffentliche Diskussion"
         :discussion.privacy/private "Private Diskussion"
         :discussion.state/read-only-label "schreibgeschützt"

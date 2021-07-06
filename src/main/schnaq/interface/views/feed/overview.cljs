@@ -3,6 +3,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.header-image :as header-image]
@@ -39,7 +40,7 @@
       [:div
        [:div.px-4.d-flex
         [:div.meeting-entry-title
-         [:h5 title]]]
+         (toolbelt/truncate-to-n-chars title 40)]]
        [:div.px-4
         [badges/static-info-badges schnaq]]]
       [:div.mt-auto.pb-2
