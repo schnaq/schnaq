@@ -32,34 +32,25 @@
   }
 }
 
-.vote-box {
-  border-radius: 0.25rem;
-  box-shadow: $regular-shadow;
-  color: $white;
+.vote-arrow {
   cursor: pointer;
   max-height: 1.25rem;
   max-width: 1.25rem;
-  padding: 0 0.2rem;
-}
-
-.vote-arrow {
   vertical-align: baseline;
 }
 
 .up-vote {
-  background: $primary;
+  color: $primary;
 }
 
 .up-vote:hover {
-  background: $primary-selected;
-  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.2);
+  color: $primary-selected;
 }
 
 .down-vote {
-  background: $secondary;
+  color: $secondary;
 }
 
 .down-vote:hover {
-  background: $secondary-selected;
-  box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.2);
+  color: $secondary-selected;
 }

@@ -1221,9 +1221,9 @@ Now we write down questions and discuss them and can still understand what we ha
 
         ;; Beta Only Funnel
         :beta.modal/title "Beta-Feature"
-        :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können musst du " [:strong "Beta-Tester:in sein."]]
+        :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können, musst du " [:strong "Beta-Tester:in sein."]]
         :beta.modal/persuade "Schreib uns eine E-Mail, wenn du auch zu den Beta-Tester:innen gehören möchtest."
-        :beta.modal/cta "Anfrage Senden"
+        :beta.modal/cta "Anfrage senden"
         :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter "
 
         ;; Press Kit
@@ -1890,7 +1890,7 @@ Now we write down questions and discuss them and can still understand what we ha
         möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
         Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
 
-        :summary.link.button/text "Zusammenfassung"
+        :summary.link.button/text "Kurzfassung"
         :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
         :summary.user.requested/label "Zusammenfassung wird angefordert …"
         :summary.user.not-requested/label "Zusammenfassung anfordern"
@@ -2038,6 +2038,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :copy "fa-copy"
      :cross "fa-times"
      :delete-icon "fa-times-circle"
+     :dots "fa-ellipsis-h"
      :edit "fa-edit"
      :eraser "fa-eraser"
      :file-download "fa-file-download"
@@ -2051,13 +2052,14 @@ Now we write down questions and discuss them and can still understand what we ha
      :laptop "fa-laptop-code"
      :lightbulb "fa-lightbulb"
      :lock-open "fa-lock-open"
+     :lock-closed "fa-lock"
      :minus "fa-minus"
      :newspaper "fa-newspaper"
      :plane "fa-paper-plane"
      :plus "fa-plus"
      :project/diagram "fa-project-diagram"
      :puzzle "fa-puzzle-piece"
-     :reply "fa-comment-dots"
+     :reply "fa-comment-alt"
      :search "fa-search"
      :server "fa-server"
      :share "fa-share-alt"

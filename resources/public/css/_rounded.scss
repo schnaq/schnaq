@@ -46,3 +46,7 @@ $roundings: (
 @mixin rounded-5 {
   border-radius: map.get($roundings, 'rounded-5');
 }
+
+@mixin rounded-50 {
+  border-radius: map.get($roundings, 'rounded-50');
+}
