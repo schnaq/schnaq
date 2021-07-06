@@ -9,7 +9,7 @@
 
 (defn clickable-title [{:discussion/keys [title share-hash] :as discussion}]
   [:<>
-   [:small.text-primary (labels :discussion.title)]
+   [:small.text-primary (labels :discussion.navbar/title)]
    [:div.clickable-no-hover {:on-click
                              (fn []
                                (rf/dispatch [:navigation/navigate :routes.schnaq/start
@@ -30,10 +30,10 @@
      [:div.mx-4
       [clickable-title discussion]]
      [:div.mx-4.ml-auto
-      [:small.text-primary (labels :discussion.posts)]
+      [:small.text-primary (labels :discussion.navbar/posts)]
       [:h5.text-center statement-count]]
      [:div.mx-4
-      [:small.text-primary (labels :discussion.members)]
+      [:small.text-primary (labels :discussion.navbar/members)]
       [:h5.text-center user-count]]]))
 
 (defn graph-button
