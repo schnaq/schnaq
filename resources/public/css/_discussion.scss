@@ -1,12 +1,6 @@
 @import 'rounded';
 @import 'variables';
 
-.privacy-indicator {
-  @include media-breakpoint-down(sm) {
-    margin-bottom: 1rem;
-  }
-}
-
 .discussion-view-rounded {
   @include rounded-4;
   background: $white;

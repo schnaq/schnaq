@@ -38,30 +38,6 @@
                    :discussion.anonymous-edit.modal/explain
                    :discussion.anonymous-edit.modal/cta))
 
-(defn- edit-button
-  "Give the registered user the ability to edit their statement."
-  [statement]
-  (let [user-id @(rf/subscribe [:user/id])
-        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
-        anonymous-owner? (contains? creation-secrets (:db/id statement))
-        on-click-fn (if anonymous-owner?
-                      #(rf/dispatch [:modal {:show? true
-                                             :child [anonymous-edit-modal]}])
-                      (fn []
-                        (rf/dispatch [:statement.edit/activate-edit (:db/id statement)])
-                        (rf/dispatch [:statement.edit/change-statement-type (:db/id statement)
-                                      (:statement/type statement)])))]
-    ; only show when statement is not deleted
-    (when (and (not (:statement/deleted? statement))
-               (or anonymous-owner?
-                   (= user-id (:db/id (:statement/author statement)))))
-      [:span.badge.badge-pill.badge-transparent.badge-clickable
-       {:tabIndex 40
-        :on-click (fn [e]
-                    (js-wrap/stop-propagation e)
-                    (on-click-fn))
-        :title (labels :discussion.badges/edit-statement)}
-       [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])))
 
 (defn- anonymous-delete-modal
   "Show this modal to anonymous users trying to delete statements."
@@ -70,29 +46,83 @@
                    :discussion.anonymous-delete.modal/explain
                    :discussion.anonymous-delete.modal/cta))
 
-(defn- delete-button
+(defn- delete-dropdown-button
   "Give admin and author the ability to delete a statement."
+  [statement edit-hash]
+  (let [creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        anonymous-owner? (contains? creation-secrets (:db/id statement))
+        confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
+                                            (dispatch-fn)))
+        admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
+        user-delete-fn (if anonymous-owner? #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
+                                            #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
+    [:button.dropdown-item
+     {:tabIndex 50
+      :on-click (fn [e]
+                  (js-wrap/stop-propagation e)
+                  (if edit-hash (admin-delete-fn)
+                                (user-delete-fn)))
+      :title (labels :discussion.badges/delete-statement)}
+     [:i {:class (str "m-auto fas " (fa :trash))}] " " (labels :discussion.badges/delete-statement)]))
+
+(defn- edit-dropdown-button
+  "Give the registered user the ability to edit their statement."
+  [statement]
+  (let [creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        anonymous-owner? (contains? creation-secrets (:db/id statement))
+        on-click-fn (if anonymous-owner?
+                      #(rf/dispatch [:modal {:show? true
+                                             :child [anonymous-edit-modal]}])
+                      (fn []
+                        (rf/dispatch [:statement.edit/activate-edit (:db/id statement)])
+                        (rf/dispatch [:statement.edit/change-statement-type (:db/id statement)
+                                      (:statement/type statement)])))]
+    [:button.dropdown-item
+     {:tabIndex 40
+      :on-click (fn [e]
+                  (js-wrap/stop-propagation e)
+                  (on-click-fn))
+      :title (labels :discussion.badges/edit-statement)}
+     [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)]))
+
+(defn- is-deletable?
+  "Checks if a statement can be deleted"
   [statement edit-hash]
   (when-not (:statement/deleted? statement)
     (let [user-id @(rf/subscribe [:user/id])
           creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
           anonymous-owner? (contains? creation-secrets (:db/id statement))
-          registered-owner? (= user-id (:db/id (:statement/author statement)))
-          confirmation-fn (fn [dispatch-fn] (when (js/confirm (labels :discussion.badges/delete-statement-confirmation))
-                                              (dispatch-fn)))
-          admin-delete-fn #(confirmation-fn (fn [] (rf/dispatch [:discussion.delete/statement (:db/id statement) edit-hash])))
-          user-delete-fn (if anonymous-owner? #(rf/dispatch [:modal {:show? true :child [anonymous-delete-modal]}])
-                                              #(confirmation-fn (fn [] (rf/dispatch [:statement/delete (:db/id statement)]))))]
-      ; only show trash icon when statement is not deleted and user is author or admin
-      (when (or edit-hash anonymous-owner? registered-owner?)
-        [:span.badge.badge-pill.badge-transparent.badge-clickable
-         {:tabIndex 50
-          :on-click (fn [e]
-                      (js-wrap/stop-propagation e)
-                      (if edit-hash (admin-delete-fn)
-                                    (user-delete-fn)))
-          :title (labels :discussion.badges/delete-statement)}
-         [:i {:class (str "m-auto fas " (fa :trash))}]]))))
+          registered-owner? (= user-id (:db/id (:statement/author statement)))]
+      (or edit-hash anonymous-owner? registered-owner?))))
+
+(defn- is-editable?
+  "Checks if a statement can be edited"
+  [statement]
+  (let [user-id @(rf/subscribe [:user/id])
+        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        anonymous-owner? (contains? creation-secrets (:db/id statement))]
+    (and (not (:statement/deleted? statement))
+         (or anonymous-owner?
+             (= user-id (:db/id (:statement/author statement)))))))
+
+(defn- edit-statement-dropdown-menu [{:keys [statement-id] :as statement} edit-hash]
+  (let [dropdown-id (str "drop-down-conclusion-card-" statement-id)
+        deletable? (is-deletable? statement edit-hash)
+        editable? (is-editable? statement)]
+    (when (or deletable? editable?)
+      [:div.dropdown
+       [:a.dropdown-toggle.m-0.p-0
+        {:id dropdown-id
+         :href "#" :role "button" :data-toggle "dropdown"
+         :aria-haspopup "true" :aria-expanded "false"}
+        [:i {:class (str "fas " (fa :dots))}]]
+       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+        (when editable?
+          [:dropdown-item
+           [edit-dropdown-button statement]])
+        (when deletable?
+          [:dropdown-item
+           [delete-dropdown-button statement edit-hash]])]])))
 
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
@@ -105,7 +135,7 @@
         authors (conj (-> statement :meta/sub-discussion-info :authors)
                       (user/statement-author statement))
         pill-class {:class (str "m-auto fas " (fa :comment))}]
-    [:<>
+    [:div.d-flex.flex-row
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       (if new?
         [:i.secondary-color pill-class]
@@ -123,8 +153,7 @@
        :data-content (build-author-list authors)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (count authors)]
-     [edit-button statement]
-     [delete-button statement edit-hash]]))
+     [edit-statement-dropdown-menu statement edit-hash]]))
 
 (defn static-info-badges
   "Badges that display schnaq info."
@@ -148,7 +177,7 @@
   [schnaq]
   (let [read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
     (when read-only?
-      [:p [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)]])))
+      [:span.badge.badge-pill.badge-secondary-outline (labels :discussion.state/read-only-label)])))
 
 
 ;; -----------------------------------------------------------------------------

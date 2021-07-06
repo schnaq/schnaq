@@ -1,8 +1,8 @@
 @use 'variables' as vars;
 
-$header-color: vars.$primary;
+$header-color: vars.$primary-selected;
 $header-opacity: 1;
-$gradient-target: #2195eb;
+$gradient-target: vars.$primary;
 
 .masthead {
   background-color: $header-color;
@@ -70,7 +70,7 @@ $gradient-target: #2195eb;
 }
 
 .early-adopter {
-  background-color: vars.$primary;
+  background-color: vars.$primary-selected;
   color: vars.$white;
   padding: 2rem 0;
 }

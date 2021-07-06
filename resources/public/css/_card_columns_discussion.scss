@@ -1,10 +1,16 @@
-@media (min-width: 34em) {
+@media (min-width: 24em) {
+  .card-columns-discussion {
+    column-count: 1;
+  }
+}
+
+@media (min-width: 96em) {
   .card-columns-discussion {
     column-count: 2;
   }
 }
 
-@media (min-width: 110em) {
+@media (min-width: 144em) {
   .card-columns-discussion {
     column-count: 3;
   }

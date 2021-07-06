@@ -7,7 +7,8 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.hub.common :as hub]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.user :as user]))
 
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
@@ -33,14 +34,18 @@
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])
                   (rf/dispatch [:schnaq/select-current schnaq]))}
-     [:div [:img.meeting-entry-title-header-image {:src url}]]
-     [:div.px-4.d-flex
-      [:div.meeting-entry-title
-       [:h5 title]]
-      [:div.ml-auto.mt-3
-       [badges/read-only-badge schnaq]]]
-     [:div.px-4
-      [badges/static-info-badges schnaq]]]))
+     [:div.row
+      [:div [:img.meeting-entry-title-header-image {:src url}]]
+      [:div
+       [:div.px-4.d-flex
+        [:div.meeting-entry-title
+         [:h5 title]]]
+       [:div.px-4
+        [badges/static-info-badges schnaq]]]
+      [:div.mt-auto.pb-2
+       [badges/read-only-badge schnaq]]
+      [:div.my-auto.ml-auto.mr-4
+       [user/user-info-left-to-right (:discussion/author schnaq) 42 (:discussion/created-at schnaq)]]]]))
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."

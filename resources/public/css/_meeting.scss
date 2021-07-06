@@ -1,10 +1,11 @@
-@import 'variables';
+@use 'variables' as vars;
+@use 'rounded' as rounded;
 
 .meeting-entry-no-hover {
   @extend .shadow-sm;
-  background-color: $white;
-  border-radius: 2rem;
-  min-height: 15rem;
+  @include rounded.rounded-1;
+  background-color: vars.$white;
+  min-height: 5rem;
   overflow: hidden;
 }
 
@@ -19,11 +20,10 @@
   }
 
   &:hover {
-    background: $white-shade;
-    box-shadow: $hover-shadow;
+    background: vars.$white-shade;
+    box-shadow: vars.$hover-shadow;
   }
 }
-
 
 .meeting-entry-title {
   background-color: transparent;
@@ -34,7 +34,7 @@
 
 .meeting-entry-title-header-image {
   background-position: center center;
-  max-height: 10rem;
+  max-height: 5rem;
   min-height: 100%;
   min-width: 100%;
   object-fit: cover;
@@ -61,14 +61,14 @@
   background: transparent;
   border: 0;
   border-radius: 1.5rem 1.5rem 0 0;
-  color: $white;
+  color: vars.$white;
   font-size: 2rem;
   padding: 3rem 2rem;
 }
 
 .meeting-edit-title:focus {
   background: rgba(255, 255, 255, 0.05);
-  color: $white;
+  color: vars.$white;
 }
 
 .meeting-edit-title:hover {
@@ -78,14 +78,14 @@
 .meeting-edit-description {
   background: rgba(0, 0, 0, 0.05);
   border: 0;
-  color: $white;
+  color: vars.$white;
   font-size: 1.5rem;
   padding: 1rem 2rem 0;
 }
 
 .meeting-edit-description:focus {
   background: rgba(255, 255, 255, 0.05);
-  color: $white;
+  color: vars.$white;
 }
 
 .meeting-edit-description:hover {

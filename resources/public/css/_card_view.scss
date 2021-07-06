@@ -2,7 +2,6 @@
 @use 'variables' as vars;
 
 .panel-white {
-  @extend .shadow;
   @include rounded.rounded-2;
   background: vars.$white;
   overflow: hidden;
@@ -23,10 +22,6 @@
   }
 }
 
-.card-view {
-  background: vars.$white;
-}
-
 .card-view-type {
   color: vars.$gray-100;
   margin-left: 0.1rem;
@@ -44,7 +39,7 @@
   border: 0;
   border-radius: 1rem;
   overflow: hidden;
-  padding: 0 0 0 0.5rem;
+  padding: 0;
 
   @include media-breakpoint-down(sm) {
     height: 3rem;
@@ -92,16 +87,16 @@
 }
 
 .discussion-input-container {
+  @include rounded.rounded-1;
   background: vars.$gray-200;
   border: 0;
-  border-radius: 1rem;
   overflow: hidden;
 }
 
 .discussion-input-content {
   background: vars.$gray-100;
   border: 0;
-  padding: 0.5rem 0.75rem;
+  padding: 1rem 1rem 1rem 0;
 }
 
 .primary-icon-button {
@@ -156,29 +151,46 @@
 }
 
 .statement-card {
-  @extend .shadow-sm;
   @include rounded.rounded-1;
   border: 0;
-  overflow: hidden;
-  padding-left: 1rem;
   white-space: pre-line;
 }
 
-.statement-card-support {
-  @extend .statement-card;
-  background: vars.$primary;
+.highlight-card {
+  border-radius: 0 1rem 1rem 0;
+  margin: 0.75rem 0;
+  min-height: 100%;
+  min-width: 0.5rem;
 }
 
-.statement-card-attack {
-  @extend .statement-card;
-  background: vars.$secondary;
-}
-
-.statement-card-neutral {
-  @extend .statement-card;
+.highlight-card-neutral {
+  @extend .highlight-card;
   background: vars.$gray-300;
 }
 
+.highlight-card-support {
+  @extend .highlight-card;
+  background: vars.$primary;
+}
+
+.highlight-card-attack {
+  @extend .highlight-card;
+  background: vars.$secondary;
+}
+
 .search-bar {
+  @include rounded.rounded-1;
+  background: vars.$white;
   min-width: 200px;
+}
+
+.search-bar-input {
+  @include rounded.rounded-1;
+  border: 0;
+
+  &:focus {
+    background: transparent;
+    border: 0;
+    outline: 0;
+  }
 }

@@ -6,6 +6,7 @@
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -60,18 +61,14 @@
   (let [back-feed [:navigation/navigate :routes.schnaqs/personal]
         back-history [:discussion.history/time-travel 1]
         navigation (if has-history? back-history back-feed)
-        label (if has-history? :history.back/text :history.all-schnaqs/text)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
-    [:div.d-inline-block.text-dark.w-100
-     [:div.clickable.card-history-home
-      {:on-click
-       #(rf/dispatch navigation)}
-      [tooltip/block-element
-       :right
-       (labels tooltip)
-       [:div.d-flex
-        [:i.mt-1.mr-3 {:class (str "fa " (fa :arrow-left))}]
-        [:div [:h5 (labels label)]]]]]]))
+    [:button.btn.btn-dark.w-100.h-100
+     {:on-click #(rf/dispatch navigation)}
+     [tooltip/block-element
+      :bottom
+      (labels tooltip)
+      [:div.d-flex
+       [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]]))
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -94,8 +91,6 @@
   (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)
         has-history? (seq indexed-history)]
     [:<>
-     ;; my schnaqs button
-     [back-button has-history?]
      ;; discussion start button
      (when has-history?
        [:section.history-wrapper
@@ -119,17 +114,18 @@
               {:key (str "history-" (:db/id statement))}
               (let [attitude (name (or (:statement/type statement) :neutral))]
                 [:div.card-history.clickable
-                 {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
-                  :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-                 [:div.history-card-content
-                  (if (zero? index)
-                    history-content
-                    [tooltip/block-element :right tooltip history-content])]])]]))])]))
+                 {:on-click #(rf/dispatch [:discussion.history/time-travel index])}
+                 [:div.d-flex.flex-row
+                  [:div {:class (str "highlight-card-" attitude)}]
+                  [:div.history-card-content
+                   (if (zero? index)
+                     history-content
+                     [tooltip/block-element :right tooltip history-content])]]])]]))])]))
 
 (defn- graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-2.topic-card-button
+  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.topic-card-button
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
@@ -156,7 +152,7 @@
   [share-hash]
   (let [groups @(rf/subscribe [:user/groups])
         beta-user? (some shared-conf/beta-tester-groups groups)]
-    [:a.btn.btn-sm.btn-outline-primary.shadow-sm.rounded-2.mx-auto.my-2.topic-card-button
+    [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.topic-card-button
      (if beta-user?
        {:href (rfe/href :routes.schnaq/summary {:share-hash share-hash})}
        {:on-click #(rf/dispatch [:modal {:show? true
@@ -215,22 +211,36 @@
     (assoc db :votes {:up {}
                       :down {}})))
 
+(defn- sort-options
+  "Displays the different sort options for card elements."
+  []
+  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
+    [:section.h-100
+     [:button.btn.btn-outline-primary.mr-2.h-100
+      {:class (when (= sort-method :newest) "active")
+       :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
+      (labels :badges.sort/newest)]
+     [:button.btn.btn-outline-primary.h-100
+      {:class (when (= sort-method :popular) "active")
+       :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
+      (labels :badges.sort/popular)]]))
+
 (defn- discussion-privacy-badge
   "A small badge displaying who can see the discussion!"
   [{:keys [discussion/states]}]
   (let [public? (contains? (set states) :discussion.state/public)]
-    [:div.text-center.privacy-indicator
+    [:<>
      (if public?
-       [:span.badge.badge-secondary-outline
-        [:i {:class (str "m-auto fas fa-lg " (fa :lock-open))}] " "
+       [:span.badge
+        [:i.primary-light-color {:class (str "m-auto fas fa-lg " (fa :lock-open))}] " "
         (labels :discussion.privacy/public)]
-       [:span.badge.badge-primary-outline
-        [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " "
+       [:span.badge
+        [:i.secondary-color {:class (str "m-auto fas fa-lg " (fa :lock-closed))}] " "
         (labels :discussion.privacy/private)])]))
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
-  [statement input is-topic?]
+  [statement input is-topic? badges info-content]
   (let [title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
@@ -240,31 +250,21 @@
        (if edit-active?
          [edit/edit-card statement]
          [:h2.h6 title]))
+     [:div.d-flex.flex-row.my-4
+      [:div.mr-auto info-content]
+      [:div.ml-auto badges]]
      [:div.line-divider.my-4]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        input)]))
 
-(defn- topic-bubble-desktop [{:discussion/keys [share-hash] :as discussion} statement input badges info-content is-topic?]
-  [:div.row
-   ;; graph
-   [:div.col-2
-    [:div.text-center
-     [graph-button share-hash]
-     [summary-button share-hash]]
-    [:div.mt-3 badges]]
-   ;; title
-   [:div.col-8
-    [:div.d-flex.mb-4
-     [discussion-privacy-badge discussion]
-     [:div.ml-auto
-      [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]]]
-    [title-and-input-element statement input is-topic?]]
-   ;; up-down votes and statistics
-   [:div.col-2.pr-3
-    [:div.float-right
-     info-content]
-    [input/input-celebration-first]]])
+(defn- topic-bubble-desktop [discussion statement input badges info-content is-topic?]
+  [:div.p-2
+   [:div.d-flex.mb-4
+    [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]
+    [:div.ml-auto.my-auto
+     [discussion-privacy-badge discussion]]]
+   [title-and-input-element statement input is-topic? badges info-content]])
 
 (defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} statement input badges info-content]
   [:<>
@@ -281,12 +281,15 @@
       [:div.ml-auto.mr-2 [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
       info-content]]]
    ;; title
-   [title-and-input-element statement input]])
+   [title-and-input-element statement input]
+   [:div.ml-3
+    (labels :badges.sort/sort)
+    [sort-options]]])
 
 (defn- topic-bubble [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
     (common/set-website-title! title)
-    [:div.panel-white.md-4
+    [:div.panel-white.mb-4
      [:div.discussion-light-background content]]))
 
 (rf/reg-event-db
@@ -299,32 +302,47 @@
   (fn [db _]
     (get-in db [:discussion :statements :sort-method] :newest)))
 
-(defn- sort-options
-  "Displays the different sort options for card elements."
-  []
-  (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
-    [:section.py-2.text-right
-     [:p.small.mb-0
-      (labels :badges.sort/sort)
-      [:button.btn.btn-outline-primary.btn-sm.mx-1
-       {:class (when (= sort-method :newest) "active")
-        :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
-       (labels :badges.sort/newest)]
-      [:button.btn.btn-outline-primary.btn-sm
-       {:class (when (= sort-method :popular) "active")
-        :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
-       (labels :badges.sort/popular)]]]))
-
 (defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
   [:<>
    [topic-bubble topic-content]
-   [sort-options]
-   [cards/conclusion-cards-list conclusions share-hash]])
+   (when conclusions
+     [cards/conclusion-cards-list conclusions share-hash])])
 
 (defn- show-how-to [is-topic?]
   (if is-topic?
     [how-to-elements/quick-how-to-schnaq]
     [how-to-elements/quick-how-to-pro-con]))
+
+(defn search-bar
+  "A search-bar to search inside a schnaq."
+  []
+  [:form.mx-3.h-100
+   {:on-submit (fn [e]
+                 (jq/prevent-default e)
+                 (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
+   [:div.input-group.search-bar.h-100
+    [:input.form-control.my-auto.search-bar-input.h-100
+     {:type "text" :aria-label "Search" :placeholder
+      (labels :schnaq.search/input) :name "search-input"}]
+    [:div.input-group-append
+     [:button.btn.button-muted.h-100
+      {:type "submit"}
+      [:i {:class (str "m-auto fas " (fa :search))}]]]]])
+
+(defn action-view [share-hash has-history?]
+  [:div.d-inline-block.text-dark.w-100.mb-3
+   [:div.d-flex.flex-row
+    [:div.mr-1
+     [back-button has-history?]]
+    [:div.mx-1
+     [search-bar]]
+    [:div.mx-1
+     [sort-options]]
+    [:div.d-flex.flex-row.ml-auto
+     [:div.mx-1
+      [graph-button share-hash]]
+     [:div.mx-1
+      [summary-button share-hash]]]]])
 
 (defn discussion-view-mobile
   "Discussion view for mobile devices
@@ -339,18 +357,23 @@
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [current-discussion statement input badges info-content conclusions history]
-  (let [is-topic? (nil? history)]
+  [{:keys [discussion/share-hash] :as current-discussion} statement input badges info-content conclusions history]
+  (let [is-topic? (nil? history)
+        has-history? (seq history)]
     [:div.container-fluid
      [:div.row
-      [:div.col-3.py-4
-       [history-view history]]
-      [:div.col-9.py-4
-       [topic-view current-discussion conclusions
+      [:div.col-6.col-lg-5.py-4
+       ;; current statement / topic
+       [topic-view current-discussion nil
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
+       [history-view history]]
+      [:div.col-6.col-lg-7.py-4
+       [action-view share-hash has-history?]
+       [cards/conclusion-cards-list conclusions share-hash]
+       [input/input-celebration-first]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
 
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the topic bubble."
   [statement]
-  [cards/up-down-vote-breaking statement])
+  [cards/up-down-vote statement])
