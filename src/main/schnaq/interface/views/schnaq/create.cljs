@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.create
-  (:require [oops.core :refer [oget]]
+  (:require [goog.string :as gstring]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels]]
@@ -83,21 +84,25 @@
 (rf/reg-event-fx
   :schnaq.create/new
   (fn [{:keys [db]} [_ form-elements]]
-    (let [use-origin? (and (get-in db [:user :authenticated?] false)
+    (let [authenticated? (get-in db [:user :authenticated?] false)
+          use-origin? (and authenticated?
                            (seq (get-in db [:user :groups] [])))
           nickname (get-in db [:user :names :display] default-anonymous-display-name)
           discussion-title (oget form-elements [:schnaq-title :value])
           public? (oget form-elements [:public-discussion :checked])
           exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
-          origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))]
-      {:fx [(http/xhrio-request db :post "/schnaq/add"
+          origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))
+          payload (cond-> {:discussion-title discussion-title
+                           :public-discussion? public?}
+                          origin-hub (assoc :hub-exclusive? exclusive?
+                                            :hub origin-hub)
+                          (not authenticated?) (assoc :nickname nickname))
+          route (cond origin-hub "/with-hub"
+                      authenticated? ""
+                      :else "/anonymous")]
+      {:fx [(http/xhrio-request db :post (gstring/format "/schnaq/add%s" route)
                                 [:schnaq/created]
-                                (cond->
-                                  {:nickname nickname
-                                   :discussion-title discussion-title
-                                   :public-discussion? public?}
-                                  use-origin? (merge {:hub-exclusive? exclusive?
-                                                      :hub origin-hub}))
+                                payload
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx

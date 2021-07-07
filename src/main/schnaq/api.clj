@@ -75,32 +75,30 @@
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
   [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title public-discussion? hub-exclusive? hub]} (:body parameters)]
-    (if (or (empty? nickname) (empty? discussion-title))
-      (bad-request (format "You must at least provide a nickname and a discussion title. We received nickname: %s, discussion-title: %s" nickname discussion-title))
-      (let [keycloak-id (:sub identity)
-            authorized-for-hub (some #(= % hub) (:groups identity))
-            author (if keycloak-id
-                     [:user.registered/keycloak-id keycloak-id]
-                     (user-db/add-user-if-not-exists nickname))
-            discussion-data (cond-> {:discussion/title discussion-title
-                                     :discussion/share-hash (.toString (UUID/randomUUID))
-                                     :discussion/edit-hash (.toString (UUID/randomUUID))
-                                     :discussion/author author}
-                                    (and hub-exclusive? authorized-for-hub)
-                                    (assoc :discussion/hub-origin [:hub/keycloak-name hub]))
-            new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
-        (if new-discussion-id
-          (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
-            (when (and hub-exclusive? hub authorized-for-hub)
-              (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
-            (log/info "Discussion created: " new-discussion-id " - "
-                      (:discussion/title created-discussion) " – Public? " public-discussion?
-                      "Exclusive?" hub-exclusive? "for" hub)
-            (created "" {:new-discussion (links/add-links-to-discussion created-discussion)}))
-          (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
-            (log/info error-msg)
-            (bad-request error-msg)))))))
+  (let [{:keys [nickname discussion-title public-discussion? hub-exclusive? hub]} (:body parameters)
+        keycloak-id (:sub identity)
+        authorized-for-hub? (some #(= % hub) (:groups identity))
+        author (if keycloak-id
+                 [:user.registered/keycloak-id keycloak-id]
+                 (user-db/add-user-if-not-exists nickname))
+        discussion-data (cond-> {:discussion/title discussion-title
+                                 :discussion/share-hash (.toString (UUID/randomUUID))
+                                 :discussion/edit-hash (.toString (UUID/randomUUID))
+                                 :discussion/author author}
+                                (and hub-exclusive? authorized-for-hub?)
+                                (assoc :discussion/hub-origin [:hub/keycloak-name hub]))
+        new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
+    (if new-discussion-id
+      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
+        (when (and hub-exclusive? hub authorized-for-hub?)
+          (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
+        (log/info "Discussion created: " new-discussion-id " - "
+                  (:discussion/title created-discussion) " – Public? " public-discussion?
+                  "Exclusive?" hub-exclusive? "for" hub)
+        (created "" {:new-discussion (links/add-links-to-discussion created-discussion)}))
+      (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
+        (log/info error-msg)
+        (bad-request error-msg)))))
 
 (defn- add-author
   "Adds an author to the database."
@@ -617,11 +615,12 @@
                     :parameters {:query {:share-hash :discussion/share-hash
                                          :search-string string?}}}]
         ["/add" {:post add-schnaq
-                 :parameters {:body {:nickname :user/nickname
-                                     :discussion-title :discussion/title
-                                     :public-discussion? boolean?
-                                     :hub-exclusive? boolean?
-                                     :hub :hub/keycloak-name}}}]
+                 :parameters {:body {:discussion-title :discussion/title
+                                     :public-discussion? boolean?}}}
+         [""]
+         ["/anonymous" {:parameters {:body {:nickname :user/nickname}}}]
+         ["/with-hub" {:parameters {:body {:hub-exclusive? boolean?
+                                           :hub :hub/keycloak-name}}}]]
         ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
                               :parameters {:body {:share-hash :discussion/share-hash
                                                   :edit-hash :discussion/edit-hash}}}]]
