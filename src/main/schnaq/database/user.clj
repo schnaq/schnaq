@@ -56,7 +56,7 @@
 (>defn add-user-if-not-exists
   "Adds a user if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  [:user/nickname :ret int?]
+  [:user/nickname :ret :db/id]
   (if-let [user-id (user-by-nickname nickname)]
     user-id
     (do (log/info "Added a new user: " nickname)

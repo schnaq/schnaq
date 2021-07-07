@@ -101,11 +101,13 @@
         (bad-request error-msg)))))
 
 (defn- add-author
-  "Adds an author to the database."
+  "Generate a user based on the nickname. This is an *anonymous* user, and we
+  can only refer to the user by the nickname. So this function is idempotent and
+  returns always the same id when providing the same nickname."
   [{:keys [parameters]}]
-  (let [author-name (get-in parameters [:body :nickname])]
-    (user-db/add-user-if-not-exists author-name)
-    (ok {:text "Author successfully created."})))
+  (let [author-name (get-in parameters [:body :nickname])
+        user-id (user-db/add-user-if-not-exists author-name)]
+    (created "" {:user-id user-id})))
 
 (defn- discussion-by-hash
   "Returns a meeting, identified by its share-hash."
@@ -255,7 +257,9 @@
       {:content-length (count decodedBytes)})))
 
 (defn- add-feedback
-  "Add new feedback from schnaqs frontend."
+  "Add new feedback from schnaq's frontend. If a screenshot is provided, it will
+  be uploaded in our s3 bucket. Screenshot must be a base64 encoded string. The
+  screenshot-field is optional."
   [{:keys [parameters]}]
   (let [feedback (get-in parameters [:body :feedback])
         feedback-id (db/add-feedback! feedback)
@@ -420,7 +424,7 @@
                  (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)})))
       (validator/deny-access invalid-rights-message))))
 
-(defn- check-credentials
+(defn- check-credentials!
   "Checks whether share-hash and edit-hash match.
   If the user is logged in and the credentials are valid, they are added as an admin."
   [{:keys [parameters identity]}]
@@ -543,6 +547,8 @@
   "Regular expression, which defines the allowed origins for API requests."
   #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
+(s/def :feedback.api/feedback ::specs/feedback-dto)
+
 (def app
   (ring/ring-handler
     (ring/router
@@ -550,14 +556,20 @@
        ["/export/txt" {:get export-txt-data
                        :swagger {:tags ["exports"]}
                        :parameters {:query {:share-hash :discussion/share-hash}}}]
-       ["/author/add" {:post add-author
+       ["/author/add" {:put add-author
+                       :responses {201 {:body {:user-id :db/id}}}
+                       :description (:doc (meta #'add-author))
                        :parameters {:body {:nickname :user/nickname}}}]
-       ["/credentials/validate" {:post check-credentials
+       ["/credentials/validate" {:post check-credentials!
+                                 :description (:doc (meta #'check-credentials!))
+                                 :responses {200 {:body {:valid-credentials? boolean?}}
+                                             403 {:body {:valid-credentials? boolean?}}}
                                  :parameters {:body {:share-hash :discussion/share-hash
                                                      :edit-hash :discussion/edit-hash}}}]
        ["/feedback/add" {:post add-feedback
-                         :parameters {:body {:feedback :feedback/description
-                                             :screenshot :feedback/screenshot}}}]
+                         :description (:doc (meta #'add-feedback))
+                         :responses {201 {:body {:feedback ::specs/feedback}}}
+                         :parameters {:body (s/keys :req-un [:feedback.api/feedback] :opt-un [:feedback/screenshot])}}]
        ["/graph/discussion" {:post graph-data-for-agenda
                              :parameters {:body {:share-hash :discussion/share-hash}}}]
        ["/header-image/image" {:post media/set-preview-image

@@ -92,7 +92,7 @@
 (>defn add-feedback!
   "Adds a feedback to the database. Returns the id of the newly added feedback."
   [feedback]
-  [::specs/feedback :ret int?]
+  [::specs/feedback-dto :ret :db/id]
   (clean-and-add-to-db! (assoc feedback :feedback/created-at (now)) ::specs/feedback))
 
 (defn all-feedbacks

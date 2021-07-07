@@ -106,6 +106,8 @@
 (s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
                           :opt [:feedback/contact-name :feedback/contact-mail
                                 :feedback/created-at :feedback/screenshot]))
+(s/def ::feedback-dto (s/keys :req [:feedback/description :feedback/has-image?]
+                              :opt [:feedback/contact-name :feedback/contact-mail]))
 
 ;; Summary
 (s/def :summary/discussion (s/or :id :db/id
