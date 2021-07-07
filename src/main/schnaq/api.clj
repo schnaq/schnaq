@@ -526,9 +526,6 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; Routes
-
-;; -----------------------------------------------------------------------------
 ;; General
 
 (defonce current-server (atom nil))
@@ -582,10 +579,6 @@
                              :parameters {:query {:share-hash :discussion/share-hash}}
                              :responses {200 {:body {:graph ::specs/graph}}
                                          400 {:body ::at/error-body}}}]
-       ["/header-image/image" {:post media/set-preview-image
-                               :parameters {:body {:share-hash :discussion/share-hash
-                                                   :edit-hash :discussion/edit-hash
-                                                   :image-url :discussion/header-image-url}}}]
        ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
                                   :parameters {:body {:email string?}}}]
        ["/votes" {:swagger {:tags ["votes"]}
@@ -597,28 +590,30 @@
 
        ["/discussion" {:swagger {:tags ["discussions"]}}
         ["/conclusions/starting" {:get get-starting-conclusions
-                                  :parameters {:query {:share-hash string?}}}]
-        ["/react-to/statement" {:post react-to-any-statement!
-                                :parameters {:body {:share-hash :discussion/share-hash
-                                                    :conclusion-id :db/id
-                                                    :nickname :user/nickname
-                                                    :premise :statement/content
-                                                    :reaction :statement/unqualified-types}}}]
-        ["/statements" {:parameters {:body {:share-hash :discussion/share-hash}}}
-         ["/for-conclusion" {:post get-statements-for-conclusion
-                             :parameters {:body {:conclusion (s/keys :req [:db/id])}}}]
-         ["/starting/add" {:post add-starting-statement!
-                           :parameters {:body {:statement :statement/content
-                                               :nickname :user/nickname}}}]]
-        ["/statement" {:parameters {:body {:share-hash :discussion/share-hash
-                                           :statement-id :db/id}}}
-         ["/info" {:post get-statement-info}]
-         ["/edit" {:put edit-statement!
-                   :middleware [auth/auth-middleware]
-                   :parameters {:body {:statement-type :statement/unqualified-types
-                                       :new-content :statement/content}}}]
-         ["/delete" {:delete delete-statement!
-                     :middleware [auth/auth-middleware]}]]]
+                                  :parameters {:query {:share-hash :discussion/share-hash}}}]
+        ["" {:parameters {:body {:share-hash :discussion/share-hash}}}
+         ["/header-image" {:post media/set-preview-image
+                           :parameters {:body {:edit-hash :discussion/edit-hash
+                                               :image-url :discussion/header-image-url}}}]
+         ["/react-to/statement" {:post react-to-any-statement!
+                                 :parameters {:body {:conclusion-id :db/id
+                                                     :nickname :user/nickname
+                                                     :premise :statement/content
+                                                     :reaction :statement/unqualified-types}}}]
+         ["/statements"
+          ["/for-conclusion" {:post get-statements-for-conclusion
+                              :parameters {:body {:conclusion (s/keys :req [:db/id])}}}]
+          ["/starting/add" {:post add-starting-statement!
+                            :parameters {:body {:statement :statement/content
+                                                :nickname :user/nickname}}}]]
+         ["/statement" {:parameters {:body {:statement-id :db/id}}}
+          ["/info" {:post get-statement-info}]
+          ["/edit" {:put edit-statement!
+                    :middleware [auth/auth-middleware]
+                    :parameters {:body {:statement-type :statement/unqualified-types
+                                        :new-content :statement/content}}}]
+          ["/delete" {:delete delete-statement!
+                      :middleware [auth/auth-middleware]}]]]]
 
        ["/emails" {:swagger {:tags ["emails"]}
                    :parameters {:body {:share-hash :discussion/share-hash
@@ -679,6 +674,7 @@
        hub/hub-routes
        analytics/analytics-routes
        summaries/summary-routes
+
 
        ["/swagger.json"
         {:get {:no-doc true

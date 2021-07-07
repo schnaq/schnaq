@@ -43,7 +43,7 @@
   (fn [{:keys [db]} [_ form]]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/header-image/image"
+      {:fx [(http/xhrio-request db :post "/discussion/header-image"
                                 [:schnaq.admin/set-header-image-url-success form]
                                 {:image-url (oget+ form [image-form-name :value])
                                  :share-hash share-hash
