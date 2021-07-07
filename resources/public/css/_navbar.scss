@@ -9,7 +9,6 @@
   @include rounded.rounded-1;
   background: vars.$white;
   height: 4.25rem;
-  overflow: hidden;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
@@ -17,7 +16,10 @@
 }
 
 .schnaq-logo-container {
-  background-image: linear-gradient(to right, vars.$primary-selected 1%, rgba(63, 80, 230, 0));
+  @include rounded.rounded-1;
+  background-image: url('https://s3.disqtec.com/schnaq-common/logos/logo_background.svg');
+  background-repeat: no-repeat;
   height: 100%;
+  overflow: hidden;
   padding: 1rem 4rem 1rem 1rem;
 }
