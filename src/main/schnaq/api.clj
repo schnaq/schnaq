@@ -24,6 +24,7 @@
             [schnaq.api.analytics :as analytics]
             [schnaq.api.hub :as hub]
             [schnaq.api.summaries :as summaries]
+            [schnaq.api.toolbelt :as at]
             [schnaq.api.user :as user-api]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
@@ -440,7 +441,7 @@
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [parameters]}]
-  (let [share-hash (get-in parameters [:body :share-hash])]
+  (let [share-hash (get-in parameters [:query :share-hash])]
     (if (validator/valid-discussion? share-hash)
       (let [statements (discussion-db/all-statements-for-graph share-hash)
             starting-statements (discussion-db/starting-statements share-hash)
@@ -449,7 +450,13 @@
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
                      :edges edges
                      :controversy-values controversy-vals}}))
-      (bad-request {:error "Invalid meeting hash. You are not allowed to view this data."}))))
+      (bad-request (at/build-error-body :invalid-share-hash "Invalid share-hash. You are not allowed to view this data.")))))
+
+(comment
+  (validator/valid-discussion? "0080b626-d713-4655-adca-3717aa052eea")
+  (graph-data-for-agenda {:parameters {:body {:share-hash "f1507b02-c5e7-4191-9437-f4282d60f436"}}})
+
+  :nil)
 
 (defn- export-txt-data
   "Exports the discussion data as a string."
@@ -570,8 +577,11 @@
                          :description (:doc (meta #'add-feedback))
                          :responses {201 {:body {:feedback ::specs/feedback}}}
                          :parameters {:body (s/keys :req-un [:feedback.api/feedback] :opt-un [:feedback/screenshot])}}]
-       ["/graph/discussion" {:post graph-data-for-agenda
-                             :parameters {:body {:share-hash :discussion/share-hash}}}]
+       ["/graph/discussion" {:get graph-data-for-agenda
+                             :description (:doc (meta #'graph-data-for-agenda))
+                             :parameters {:query {:share-hash :discussion/share-hash}}
+                             :responses {200 {:body {:graph ::specs/graph}}
+                                         400 {:body ::at/error-body}}}]
        ["/header-image/image" {:post media/set-preview-image
                                :parameters {:body {:share-hash :discussion/share-hash
                                                    :edit-hash :discussion/edit-hash

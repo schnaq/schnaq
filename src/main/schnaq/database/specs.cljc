@@ -106,8 +106,8 @@
 (s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
                           :opt [:feedback/contact-name :feedback/contact-mail
                                 :feedback/created-at :feedback/screenshot]))
-(s/def ::feedback-dto (s/keys :req [:feedback/description :feedback/has-image?]
-                              :opt [:feedback/contact-name :feedback/contact-mail]))
+(s/def ::feedback-dto (s/keys :req-un [:feedback/description :feedback/has-image?]
+                              :opt-un [:feedback/contact-name :feedback/contact-mail]))
 
 ;; Summary
 (s/def :summary/discussion (s/or :id :db/id
@@ -119,3 +119,22 @@
                                 :registered-user ::registered-user))
 (s/def ::summary (s/keys :req [:summary/discussion :summary/requested-at]
                          :opt [:summary/text :summary/created-at :summary/requester]))
+
+;; Graph
+(s/def :node/id (s/or :share-hash :discussion/share-hash
+                      :id :db/id))
+(s/def :node/label string?)
+(s/def :node/author string?)
+(s/def :node/type #{:statement.type/starting :statement.type/support :statement.type/attack
+                    :statement.type/neutral :agenda})
+(s/def :graph/node (s/keys :req-un [:node/id :node/label :node/author :node/type]))
+
+(s/def :edge/from :node/id)
+(s/def :edge/to :node/id)
+(s/def :edge/type :node/type)
+(s/def :graph/edge (s/keys :req-un [:edge/from :edge/to :edge/type]))
+
+(s/def :graph/nodes (s/coll-of :graph/node))
+(s/def :graph/edges (s/coll-of :graph/edge))
+(s/def :graph/controversy-values associative?)
+(s/def ::graph (s/keys :req-un [:graph/nodes :graph/edges :graph/controversy-values]))

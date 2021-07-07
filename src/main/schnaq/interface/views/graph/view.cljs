@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.graph.view
   (:require ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
             [clojure.set :as set]
-            [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [re-frame.core :as rf]
@@ -17,23 +16,10 @@
 
 (def ^:private graph-id "graph")
 
-(defn- wrap-line
-  "Takes a set of `nodes` and changes their labels to wrap properly after `break` characters."
-  [size text]
-  (string/join "\n"
-               (re-seq (re-pattern (str ".{1," size "}\\s|.{1," size "}"))
-                       (string/replace text #"\n" " "))))
-
-(>defn- wrap-node-labels
-  "Wrap the labels of all nodes inside a sequence."
-  [size nodes]
-  [sequential? int? :ret sequential?]
-  (map #(update % :label (fn [label] (wrap-line size label))) nodes))
-
 (>defn- node-types->colors
   "Add colors depending on node type."
   [nodes]
-  [sequential? :ret sequential?]
+  [:graph/nodes :ret :graph/nodes]
   (map
     #(let [color (case (:type %)
                    :statement.type/starting (colors :blue/light)
@@ -54,7 +40,7 @@
 (>defn- mark-controversy
   "Marks controversy in nodes."
   [controversy-map nodes]
-  [map? sequential? :ret sequential?]
+  [:graph/controversy-values :graph/nodes :ret sequential?]
   (map
     #(let [controversy-score (get controversy-map (:id %))]
        (if (< (- 100 conf/graph-controversy-upper-bound)
@@ -67,8 +53,9 @@
          %))
     nodes))
 
-(defn- node-content-color
+(>defn- node-content-color
   [nodes]
+  [:graph/nodes :ret :graph/nodes]
   (map
     #(let [text-color (case (:type %)
                         :agenda (colors :gray/dark)
@@ -84,7 +71,7 @@
 (>defn- convert-nodes-for-vis
   "Converts the nodes received from backend specifically for viz."
   [nodes controversy-values]
-  [sequential? map? :ret sequential?]
+  [:graph/nodes :graph/controversy-values :ret :graph/nodes]
   (->> nodes
        node-types->colors
        (mark-controversy controversy-values)
@@ -182,13 +169,13 @@
   :graph/load-data-for-discussion
   (fn [{:keys [db]} _]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
-      {:fx [(http/xhrio-request db :post "/graph/discussion" [:graph/set-current] {:share-hash share-hash})]})))
+      {:fx [(http/xhrio-request db :get "/graph/discussion" [:graph/set-current] {:share-hash share-hash})]})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :graph/set-current
-  (fn [db [_ graph-data]]
-    (rf/dispatch [:spinner/active! false])
-    (assoc-in db [:graph :current] graph-data)))
+  (fn [{:keys [db]} [_ graph-data]]
+    {:fx [[:dispatch [:spinner/active! false]]]
+     :db (assoc-in db [:graph :current] graph-data)}))
 
 (rf/reg-sub
   :graph/current
