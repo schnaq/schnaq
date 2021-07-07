@@ -41,9 +41,9 @@
         (is (= 400 (:status bad-response))))
       (testing "Check with complete app"
         (is (= 200 (:status (api/app {:request-method :get :uri "/graph/discussion"
-                                      :body-params {:share-hash share-hash}}))))
+                                      :query-params {:share-hash share-hash}}))))
         (is (= 400 (:status (api/app {:request-method :get :uri "/graph/discussion"
-                                      :body-params {:share-hash "bad-hash"}}))))))))
+                                      :query-params {:share-hash "bad-hash"}}))))))))
 
 (deftest cors-origin-tests
   (let [test-regex (partial re-matches api/allowed-origin)]
