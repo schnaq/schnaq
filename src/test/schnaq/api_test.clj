@@ -26,7 +26,7 @@
 (deftest graph-data-for-agenda-test
   (testing "Check if graph data is correct"
     (let [graph-data-for-agenda @#'api/graph-data-for-agenda
-          graph-request (fn [share-hash] (graph-data-for-agenda {:parameters {:body {:share-hash share-hash}}}))
+          graph-request (fn [share-hash] (graph-data-for-agenda {:parameters {:query {:share-hash share-hash}}}))
           share-hash "cat-dog-hash"
           valid-response (graph-request "cat-dog-hash")
           bad-response (graph-request "qweoiuqwe")]
@@ -40,9 +40,9 @@
       (testing "bad request"
         (is (= 400 (:status bad-response))))
       (testing "Check with complete app"
-        (is (= 200 (:status (api/app {:request-method :post :uri "/graph/discussion"
+        (is (= 200 (:status (api/app {:request-method :get :uri "/graph/discussion"
                                       :body-params {:share-hash share-hash}}))))
-        (is (= 400 (:status (api/app {:request-method :post :uri "/graph/discussion"
+        (is (= 400 (:status (api/app {:request-method :get :uri "/graph/discussion"
                                       :body-params {:share-hash "bad-hash"}}))))))))
 
 (deftest cors-origin-tests
