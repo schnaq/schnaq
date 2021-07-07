@@ -10,7 +10,7 @@
 (>defn build-error-body
   "Builds common error responses. Provide an `error-message` and it builds a
   body for an api response."
-  [error-message error-type]
+  [error-type error-message]
   [::error ::message :ret ::error-body]
   {:error error-type
    :message error-message})

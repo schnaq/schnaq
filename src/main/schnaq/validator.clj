@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [ring.util.http-response :refer [forbidden]]
+            [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as db]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]))
@@ -61,4 +62,4 @@
   ([]
    (deny-access "You are not allowed to access this resource."))
   ([message]
-   (forbidden {:error message})))
+   (forbidden (at/build-error-body :access-denied message))))

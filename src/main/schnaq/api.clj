@@ -558,8 +558,10 @@
     (ring/router
       [["/ping" {:get ping}]
        ["/export/txt" {:get export-txt-data
+                       :description (:doc (meta #'export-txt-data))
                        :swagger {:tags ["exports"]}
-                       :parameters {:query {:share-hash :discussion/share-hash}}}]
+                       :parameters {:query {:share-hash :discussion/share-hash}}
+                       :responses {200 {:body {:string-representation string?}}}}]
        ["/author/add" {:put add-author
                        :responses {201 {:body {:user-id :db/id}}}
                        :description (:doc (meta #'add-author))
