@@ -59,7 +59,8 @@
 (s/def :ring/route-params map?)
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
 
-(def ^:private invalid-rights-message "Sie haben nicht genügend Rechte, um diese Diskussion zu betrachten.")
+(def ^:private invalid-rights-message "You to not have enough permissions to access this data.")
+(def ^:private invalid-share-hash "Invalid share-hash. You are not allowed to view this data.")
 
 (defn- extract-user
   "Returns a user-id, either from nickname if anonymous user or from identity, if jwt token is present."
@@ -450,13 +451,7 @@
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
                      :edges edges
                      :controversy-values controversy-vals}}))
-      (bad-request (at/build-error-body :invalid-share-hash "Invalid share-hash. You are not allowed to view this data.")))))
-
-(comment
-  (validator/valid-discussion? "0080b626-d713-4655-adca-3717aa052eea")
-  (graph-data-for-agenda {:parameters {:body {:share-hash "f1507b02-c5e7-4191-9437-f4282d60f436"}}})
-
-  :nil)
+      (bad-request (at/build-error-body :invalid-share-hash invalid-share-hash)))))
 
 (defn- export-txt-data
   "Exports the discussion data as a string."
@@ -465,7 +460,7 @@
     (if (validator/valid-discussion? share-hash)
       (do (log/info "User is generating a txt export for discussion" share-hash)
           (ok {:string-representation (export/generate-text-export share-hash)}))
-      (validator/deny-access invalid-rights-message))))
+      (bad-request (at/build-error-body :invalid-share-hash invalid-share-hash)))))
 
 (defn- check-statement-author-and-state
   "Checks if a statement is authored by this user-identity and is valid, i.e. not deleted.
@@ -561,7 +556,8 @@
                        :description (:doc (meta #'export-txt-data))
                        :swagger {:tags ["exports"]}
                        :parameters {:query {:share-hash :discussion/share-hash}}
-                       :responses {200 {:body {:string-representation string?}}}}]
+                       :responses {200 {:body {:string-representation string?}}
+                                   400 {:body ::at/error-body}}}]
        ["/author/add" {:put add-author
                        :responses {201 {:body {:user-id :db/id}}}
                        :description (:doc (meta #'add-author))
