@@ -517,7 +517,7 @@
     (http-client/post mailchimp-config/subscribe-uri options)
     (if (emails/send-remote-work-lead-magnet email)
       (ok {:status :ok})
-      (bad-request {:error "Something went wrong. Check your Email-Address and try again."}))))
+      (bad-request (at/build-error-body :failed-subscription "Something went wrong. Check your Email-Address and try again.")))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -578,7 +578,10 @@
                              :responses {200 {:body {:graph ::specs/graph}}
                                          400 {:body ::at/error-body}}}]
        ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
-                                  :parameters {:body {:email string?}}}]
+                                  :description (:doc (meta #'subscribe-lead-magnet!))
+                                  :parameters {:body {:email string?}}
+                                  :responses {200 {:body {:status keyword?}}
+                                              400 {:body ::at/error-body}}}]
        ["/votes" {:swagger {:tags ["votes"]}
                   :parameters {:body {:share-hash :discussion/share-hash
                                       :statement-id :db/id
