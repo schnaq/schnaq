@@ -5,6 +5,7 @@
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modal :as modal]
+            [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
 (defn clickable-title [{:discussion/keys [title share-hash] :as discussion}]
@@ -85,7 +86,8 @@
        [admin/share-link]]
       [admin/txt-export share-hash title]
       (when edit-hash
-        [admin/admin-center share-hash edit-hash])]
+        [admin/admin-center share-hash edit-hash])
+      [um/user-handling-menu "btn-outline-primary"]]
      [:div.d-flex.flex-row
       [:div.mx-2 [summary-button edit-hash]]
       [:div.mx-2 [graph-button edit-hash]]]]))
