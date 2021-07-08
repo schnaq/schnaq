@@ -89,6 +89,8 @@
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions]))
 
+(s/def :statement.vote/operation #{:removed :switched :added})
+
 ;; Statement via API
 (s/def :statement/unqualified-types #{:attack :support :neutral})
 

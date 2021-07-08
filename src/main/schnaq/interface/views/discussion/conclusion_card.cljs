@@ -141,7 +141,7 @@
 (rf/reg-event-fx
   :discussion/toggle-upvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [(http/xhrio-request db :post "/votes/up/toggle" [:upvote-success statement]
+    {:fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
                               {:statement-id id
                                :nickname (get-in db [:user :names :display] default-anonymous-display-name)
                                :share-hash (-> db :schnaq :selected :discussion/share-hash)}
@@ -150,7 +150,7 @@
 (rf/reg-event-fx
   :discussion/toggle-downvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [(http/xhrio-request db :post "/votes/down/toggle" [:downvote-success statement]
+    {:fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
                               {:statement-id id
                                :nickname (get-in db [:user :names :display] default-anonymous-display-name)
                                :share-hash (-> db :schnaq :selected :discussion/share-hash)}

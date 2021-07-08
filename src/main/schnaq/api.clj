@@ -229,14 +229,18 @@
     (bad-request {:error "Vote could not be registered"})))
 
 (defn- toggle-upvote-statement
-  "Upvote if no upvote has been made, otherwise remove upvote for statement."
+  "Upvote if no upvote has been made, otherwise remove upvote for statement.
+  `nickname` is optional and used for anonymous votes. If no `nickname` is
+  provided, request must contain a valid authentication token."
   [{:keys [parameters identity]}]
   (toggle-vote-statement
     (:body parameters) identity reaction-db/upvote-statement! reaction-db/remove-upvote!
     reaction-db/did-user-upvote-statement reaction-db/did-user-downvote-statement))
 
 (defn- toggle-downvote-statement
-  "Upvote if no upvote has been made, otherwise remove upvote for statement."
+  "Upvote if no upvote has been made, otherwise remove upvote for statement.
+  `nickname` is optional and used for anonymous votes. If no `nickname` is
+  provided, request must contain a valid authentication token."
   [{:keys [parameters identity]}]
   (toggle-vote-statement
     (:body parameters) identity reaction-db/downvote-statement! reaction-db/remove-downvote!
@@ -582,12 +586,6 @@
                                   :parameters {:body {:email string?}}
                                   :responses {200 {:body {:status keyword?}}
                                               400 {:body ::at/error-body}}}]
-       ["/votes" {:swagger {:tags ["votes"]}
-                  :parameters {:body {:share-hash :discussion/share-hash
-                                      :statement-id :db/id
-                                      :nickname :user/nickname}}}
-        ["/down/toggle" {:post toggle-downvote-statement}]
-        ["/up/toggle" {:post toggle-upvote-statement}]]
 
        ["/discussion" {:swagger {:tags ["discussions"]}}
         ["/conclusions/starting" {:get get-starting-conclusions
@@ -614,7 +612,15 @@
                     :parameters {:body {:statement-type :statement/unqualified-types
                                         :new-content :statement/content}}}]
           ["/delete" {:delete delete-statement!
-                      :middleware [auth/auth-middleware]}]]]]
+                      :middleware [auth/auth-middleware]}]
+          ["/vote" {:parameters {:body {:statement-id :db/id
+                                        :nickname :user/nickname}}}
+           ["/down" {:post toggle-downvote-statement
+                     :description (:doc (meta #'toggle-downvote-statement))
+                     :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}}}]
+           ["/up" {:post toggle-upvote-statement
+                   :description (:doc (meta #'toggle-upvote-statement))
+                   :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}}}]]]]]
 
        ["/emails" {:swagger {:tags ["emails"]}
                    :parameters {:body {:share-hash :discussion/share-hash
