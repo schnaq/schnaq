@@ -124,3 +124,15 @@
      [:div.col-12.col-md-3 left]
      [:div.col-12.col-md-6 middle]
      [:div.col-12.col-md-3 right]]]])
+
+(>defn with-discussion-header
+  "Page layout with discussion header."
+  [{:page/keys [title heading] :as options} body]
+  [::page-options (s/+ vector?) :ret vector?]
+  (common/set-website-title! (or title heading))
+  [scheduler/middleware
+   [validate-conditions-middleware
+    options
+    [:<>
+     [discussion-navbar/header]
+     body]]])
