@@ -131,16 +131,16 @@
      {:name :routes.schnaqs/public
       :view feed/public-discussions-view
       :link-text (labels :router/public-discussions)
-      :controllers [{:start (fn []
-                              (rf/dispatch [:schnaqs.public/load]))}]}]
-    ["/my"
+      :controllers [{:start #(rf/dispatch [:schnaqs.public/load])}]}]
+    [""
      {:name :routes.schnaqs/personal
       :view feed/personal-discussions-view
       :link-text (labels :router/visited-schnaqs)
-      :controllers [{:start (fn []
-                              (rf/dispatch [:schnaqs.visited/load]))}]}]]
+      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
+    ["/my"                                                  ;; Deprecated old route. Remove sometime.
+     {:controllers [{:start #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}]}]]
    ["schnaq"
-    {:controllers [{:start (fn [_] (rf/dispatch [:username/open-dialog]))}]}
+    {:controllers [{:start #(rf/dispatch [:username/open-dialog])}]}
     ["/create"
      {:name :routes.schnaq/create
       :view create/create-schnaq-view
