@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.navbar.schnaq-nav-bar
+(ns schnaq.interface.views.navbar.for-discussions
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-conf]
@@ -18,7 +18,7 @@
                                (rf/dispatch [:schnaq/select-current discussion]))}
     [:h5 (toolbelt/truncate-to-n-chars title 30)]]])
 
-(defn navbar-schnaq []
+(defn navbar []
   (let [discussion @(rf/subscribe [:schnaq/selected])
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)

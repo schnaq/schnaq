@@ -14,7 +14,7 @@
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.howto.elements :as how-to-elements]
-            [schnaq.interface.views.navbar.schnaq-nav-bar :as schnaq-nav-bar]
+            [schnaq.interface.views.navbar.for-discussions :as discussion-navbar]
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
 
@@ -230,8 +230,8 @@
    [:div.d-flex.mb-4
     ;; graph and badges
     [:div.mr-auto
-     [schnaq-nav-bar/graph-button share-hash]
-     [schnaq-nav-bar/summary-button share-hash]
+     [discussion-navbar/graph-button share-hash]
+     [discussion-navbar/summary-button share-hash]
      [:div.mt-2 badges]]
     ;; settings
     [:div.p-0
@@ -319,12 +319,12 @@
      [:div.row
       [:div.col-6.col-lg-5.py-4
        ;; current statement / topic
-       [schnaq-nav-bar/navbar-schnaq]
+       [discussion-navbar/navbar]
        [topic-view current-discussion nil
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
        [history-view history]]
       [:div.col-6.col-lg-7.py-4
-       [schnaq-nav-bar/navbar-statements]
+       [discussion-navbar/navbar-statements]
        [action-view has-history?]
        [cards/conclusion-cards-list conclusions share-hash]
        [input/input-celebration-first]

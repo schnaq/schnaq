@@ -53,11 +53,10 @@
 (defn- user-summary-view
   []
   (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
-    [pages/with-discussion-nav
+    [pages/with-nav
      {:page/heading (labels :summary.user/heading)
       :page/subheading (labels :summary.user/subheading)
       :condition/needs-beta-tester? true}
-     current-schnaq
      [:div.container.panel-white.mt-3
       [summary-body current-schnaq]]]))
 
