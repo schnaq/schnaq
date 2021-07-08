@@ -4,7 +4,6 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
