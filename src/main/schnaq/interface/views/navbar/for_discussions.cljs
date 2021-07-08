@@ -88,7 +88,13 @@
       [admin/txt-export share-hash title]
       (when edit-hash
         [admin/admin-center share-hash edit-hash])
-      [um/user-handling-menu "btn-outline-primary"]]
-     [:div.d-flex.flex-row.ml-auto
+      [um/user-handling-menu "btn-outline-primary"]
       [:div.mx-2 [summary-button share-hash]]
       [:div.mx-2 [graph-button share-hash]]]]))
+
+(defn header
+  "Overview header for a discussion."
+  []
+  [:div.d-flex.flex-row.flex-wrap
+   [navbar]
+   [navbar-statements]])

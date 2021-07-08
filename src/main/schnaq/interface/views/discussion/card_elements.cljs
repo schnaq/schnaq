@@ -318,13 +318,10 @@
     [:div.container-fluid
      [:div.row
       [:div.col-6.col-lg-5.py-4
-       ;; current statement / topic
-       [discussion-navbar/navbar]
        [topic-view current-discussion nil
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
        [history-view history]]
       [:div.col-6.col-lg-7.py-4
-       [discussion-navbar/navbar-statements]
        [action-view has-history?]
        [cards/conclusion-cards-list conclusions share-hash]
        [input/input-celebration-first]

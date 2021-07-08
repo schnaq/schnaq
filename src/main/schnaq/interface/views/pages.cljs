@@ -9,6 +9,7 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.navbar.for-discussions :as discussion-navbar]
             [schnaq.interface.views.navbar.for-pages :as navbar-pages]))
 
 (declare with-nav-and-header)
@@ -123,3 +124,15 @@
       [:div.col-12.col-md-3 left]
       [:div.col-12.col-md-6 middle]
       [:div.col-12.col-md-3 right]]]))
+
+(>defn with-discussion-header
+  "Page layout with discussion header."
+  [{:page/keys [title heading] :as options} body]
+  [::page-options (s/+ vector?) :ret vector?]
+  (common/set-website-title! (or title heading))
+  [scheduler/middleware
+   [validate-conditions-middleware
+    options
+    [:<>
+     [discussion-navbar/header]
+     body]]])
