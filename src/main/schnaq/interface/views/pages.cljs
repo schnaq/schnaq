@@ -9,6 +9,7 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
+            [schnaq.interface.views.navbar.for-discussions :as discussion-navbar]
             [schnaq.interface.views.navbar.for-pages :as navbar-pages]))
 
 (declare with-nav-and-header)
