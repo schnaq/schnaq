@@ -19,7 +19,7 @@
   []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         results @(rf/subscribe [:schnaq.search.current/result])]
-    [pages/with-nav-and-header
+    [pages/with-discussion-header
      {:page/heading (labels :schnaq.search/title)}
      [:div.container.mt-4
       (if (= "" search-string)
