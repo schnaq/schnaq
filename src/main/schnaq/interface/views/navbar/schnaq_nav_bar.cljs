@@ -90,5 +90,5 @@
         [admin/admin-center share-hash edit-hash])
       [um/user-handling-menu "btn-outline-primary"]]
      [:div.d-flex.flex-row.ml-auto
-      [:div.mx-2 [summary-button edit-hash]]
-      [:div.mx-2 [graph-button edit-hash]]]]))
+      [:div.mx-2 [summary-button share-hash]]
+      [:div.mx-2 [graph-button share-hash]]]]))
