@@ -24,12 +24,6 @@
                                 [:hub.schnaqs/add-failure])]})))
 
 (rf/reg-event-fx
-  :load/schnaqs
-  (fn [{:keys [db]} _]
-    (when-not shared-config/production?
-      {:fx [(http/xhrio-request db :get "/schnaqs" [:init-from-backend])]})))
-
-(rf/reg-event-fx
   :load/last-added-schnaq
   (fn [_ _]
     ;; PARTIALLY DEPRECATED, deleted after 2021-09-22: Remove old ls/get-item and only use new.
@@ -43,8 +37,7 @@
 (rf/reg-event-fx
   :initialize/schnaq
   (fn [_ _]
-    {:fx [[:dispatch [:load/schnaqs]]
-          [:dispatch [:username/from-localstorage]]
+    {:fx [[:dispatch [:username/from-localstorage]]
           [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
           [:dispatch [:keycloak/init]]
           [:dispatch [:load/last-added-schnaq]]
