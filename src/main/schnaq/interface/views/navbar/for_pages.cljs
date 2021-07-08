@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.navbar
+(ns schnaq.interface.views.navbar.for-pages
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]

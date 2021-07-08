@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.navbar.schnaq-nav-bar
+(ns schnaq.interface.views.navbar.for-discussions
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-conf]
@@ -18,7 +18,7 @@
                                (rf/dispatch [:schnaq/select-current discussion]))}
     [:h5 (toolbelt/truncate-to-n-chars title 30)]]])
 
-(defn navbar-schnaq []
+(defn navbar []
   (let [discussion @(rf/subscribe [:schnaq/selected])
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)
@@ -70,7 +70,7 @@
         beta-user? (some shared-conf/beta-tester-groups groups)]
     [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.h-100
      (if beta-user?
-       {:href (reitfe/href :routes.schnaq/summary {:share-hash share-hash})}
+       {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}
        {:on-click #(rf/dispatch [:modal {:show? true
                                          :child [beta-only-modal]}])})
      [:i {:style {:font-size "30px"}
