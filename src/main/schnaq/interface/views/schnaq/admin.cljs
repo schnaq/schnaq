@@ -56,7 +56,6 @@
                         :large? true
                         :child [share-modal]}]))
 
-
 (defn share-link
   "Button to copy access link and notify the user."
   []

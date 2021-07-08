@@ -372,7 +372,7 @@
   []
   (let [{:discussion/keys [share-hash title]} @(rf/subscribe [:schnaq/last-added])]
     ;; display admin center
-    [pages/with-nav-and-header
+    [pages/with-discussion-header
      {:page/heading (labels :schnaq.admin/heading)
       :page/subheading (gstring/format (labels :schnaq.admin/subheading) title)}
      [:div.container.px-3.px-md-5.py-3.text-center

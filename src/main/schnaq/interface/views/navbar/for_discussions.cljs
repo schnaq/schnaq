@@ -95,6 +95,6 @@
 (defn header
   "Overview header for a discussion."
   []
-  [:div.d-flex.flex-row.flex-wrap
+  [:div.d-flex.flex-row.flex-wrap.p-md-3
    [navbar]
    [navbar-statements]])
