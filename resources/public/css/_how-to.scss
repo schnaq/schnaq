@@ -1,5 +1,5 @@
 @use 'rounded' as rounded;
-@import 'variables';
+@use 'variables' as vars;
 
 .how-to-video-row {
   padding-bottom: 10rem;
@@ -22,9 +22,9 @@
 
 .quick-how-to {
   @extend .shadow-sm;
-  @include rounded.rounded-3;
-  background-color: $gray-200;
-  color: $text-dark;
+  @include rounded.rounded-1;
+  background-color: vars.$white;
+  color: vars.$text-dark;
   margin: 2rem 0;
   overflow: hidden;
   padding: 1rem 2rem;
