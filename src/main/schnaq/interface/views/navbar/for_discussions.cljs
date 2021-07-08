@@ -70,7 +70,7 @@
         beta-user? (some shared-conf/beta-tester-groups groups)]
     [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.h-100
      (if beta-user?
-       {:href (reitfe/href :routes.schnaq/summary {:share-hash share-hash})}
+       {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}
        {:on-click #(rf/dispatch [:modal {:show? true
                                          :child [beta-only-modal]}])})
      [:i {:style {:font-size "30px"}
