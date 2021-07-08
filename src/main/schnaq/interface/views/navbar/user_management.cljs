@@ -86,7 +86,7 @@
       [:a#profile-dropdown.nav-link
        {:href "#" :role "button" :data-toggle "dropdown"
         :aria-haspopup "true" :aria-expanded "false"}
-       [:button.btn.dropdown-toggle.rounded-2 {:class button-class}
+       [:button.btn.dropdown-toggle.rounded-1.mx-2 {:class button-class}
         [admin-star]
         username]]
       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
@@ -101,5 +101,5 @@
      (when-not authenticated?
        [:ul.navbar-nav
         [:li.nav-item {:on-click #(rf/dispatch [:keycloak/login])}
-         [:button.btn.btn-primary.rounded-2
+         [:button.btn.btn-primary.rounded-1.mx-2
           (labels :user/login)]]])]))
