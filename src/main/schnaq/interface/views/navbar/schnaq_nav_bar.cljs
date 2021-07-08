@@ -25,9 +25,10 @@
         user-count (count (:authors meta-info))]
     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4
      ;; schnaq logo
-     [:a.schnaq-logo-container {:href (reitfe/href :routes.schnaqs/personal)}
+     [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
       [:img.d-inline-block.align-middle.mr-2
-       {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]
+       {:src (img-path :logo-white) :alt "schnaq logo"
+        :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
      [:div.mx-4
       [clickable-title discussion]]
      [:div.mx-4.ml-auto
@@ -80,14 +81,14 @@
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
-    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4
-     [:div.d-flex.align-items-center.schnaq-navbar.px-4.ml-auto.mr-4
+    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap-reverse.ml-auto
+     [:div.d-flex.align-items-center.schnaq-navbar.px-4.ml-auto
       [:div.mx-2
        [admin/share-link]]
       [admin/txt-export share-hash title]
       (when edit-hash
         [admin/admin-center share-hash edit-hash])
       [um/user-handling-menu "btn-outline-primary"]]
-     [:div.d-flex.flex-row
+     [:div.d-flex.flex-row.ml-auto
       [:div.mx-2 [summary-button edit-hash]]
       [:div.mx-2 [graph-button edit-hash]]]]))
