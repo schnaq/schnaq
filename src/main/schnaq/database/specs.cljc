@@ -89,6 +89,17 @@
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions]))
 
+(s/def :meta/upvotes number?)
+(s/def :meta/downvotes number?)
+(s/def :meta/sub-statements number?)
+(s/def :meta/authors (s/coll-of :user/nickname))
+(s/def :meta/sub-discussion-info
+  (s/keys :req-un [:meta/sub-statements :meta/authors]))
+(s/def ::statement-dto
+  (s/keys :req [:db/id :statement/content :statement/version :statement/created-at
+                :statement/author :meta/upvotes :meta/downvotes]
+          :opt [:meta/sub-discussion-info]))
+
 (s/def :statement.vote/operation #{:removed :switched :added})
 
 ;; Statement via API

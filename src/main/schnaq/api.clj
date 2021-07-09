@@ -20,7 +20,7 @@
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.util.http-response :refer [ok created bad-request forbidden]]
+            [ring.util.http-response :refer [ok created bad-request forbidden not-found]]
             [schnaq.api.analytics :as analytics]
             [schnaq.api.hub :as hub]
             [schnaq.api.summaries :as summaries]
@@ -60,7 +60,10 @@
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
 
 (def ^:private invalid-rights-message "You to not have enough permissions to access this data.")
-(def ^:private invalid-share-hash "Invalid share-hash. You are not allowed to view this data.")
+(def ^:private invalid-share-hash "Invalid share-hash.")
+(def ^:private not-found-with-error-message
+  (not-found
+    (at/build-error-body :invalid-share-hash invalid-share-hash)))
 
 (defn- extract-user
   "Returns a user-id, either from nickname if anonymous user or from identity, if jwt token is present."
@@ -331,29 +334,33 @@
 
 (defn- valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
-  [data]
-  (-> data
+  [statements]
+  (-> statements
       processors/hide-deleted-statement-content
       processors/with-votes))
+
+(defn- with-sub-discussion-info
+  "Add sub-discussion-info, if necessary. Sub-Discussion-infos are number of
+  sub-statements, authors, ..."
+  [statements]
+  (let [statement-ids (map :db/id statements)
+        info-map (discussion-db/child-node-info statement-ids)]
+    (map (fn [statement]
+           (if-let [sub-discussions (get info-map (:db/id statement))]
+             (assoc statement :meta/sub-discussion-info sub-discussions)
+             statement))
+         statements)))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
   Optionally a statement-id can be passed to enrich the statement with its creation-secret."
   ([share-hash]
-   (let [starting-statements (discussion-db/starting-statements share-hash)
-         statement-ids (map :db/id starting-statements)
-         info-map (discussion-db/child-node-info statement-ids)]
-     (map
-       #(assoc % :meta/sub-discussion-info (get info-map (:db/id %)))
-       (valid-statements-with-votes starting-statements))))
+   (-> share-hash
+       discussion-db/starting-statements
+       valid-statements-with-votes
+       with-sub-discussion-info))
   ([share-hash secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash) secret-statement-id)))
-
-(defn- with-sub-discussion-info
-  [statements]
-  (let [statement-ids (map :db/id statements)
-        info-map (discussion-db/child-node-info statement-ids)]
-    (map #(assoc % :meta/sub-discussion-info (get info-map (:db/id %))) statements)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
@@ -361,7 +368,7 @@
   (let [{:keys [share-hash]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
       (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
-      (validator/deny-access invalid-rights-message))))
+      not-found-with-error-message)))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
@@ -373,7 +380,7 @@
                                 with-sub-discussion-info)]
     (if (validator/valid-discussion? share-hash)
       (ok {:premises prepared-statements})
-      (validator/deny-access invalid-rights-message))))
+      not-found-with-error-message)))
 
 (defn- search-schnaq
   "Search through any valid schnaq."
@@ -383,7 +390,7 @@
       (ok {:matching-statements (-> (discussion-db/search-schnaq share-hash search-string)
                                     with-sub-discussion-info
                                     valid-statements-with-votes)})
-      (validator/deny-access))))
+      not-found-with-error-message)))
 
 (defn- get-statement-info
   "Return the sought after conclusion (by id) and the following children."
@@ -589,7 +596,10 @@
 
        ["/discussion" {:swagger {:tags ["discussions"]}}
         ["/conclusions/starting" {:get get-starting-conclusions
-                                  :parameters {:query {:share-hash :discussion/share-hash}}}]
+                                  :description (:doc (meta #'get-starting-conclusions))
+                                  :parameters {:query {:share-hash :discussion/share-hash}}
+                                  :responses {200 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
+                                              404 {:body ::at/error-body}}}]
         ["" {:parameters {:body {:share-hash :discussion/share-hash}}}
          ["/header-image" {:post media/set-preview-image
                            :parameters {:body {:edit-hash :discussion/edit-hash
@@ -681,7 +691,6 @@
        hub/hub-routes
        analytics/analytics-routes
        summaries/summary-routes
-
 
        ["/swagger.json"
         {:get {:no-doc true
