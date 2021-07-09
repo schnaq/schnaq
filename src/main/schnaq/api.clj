@@ -611,39 +611,35 @@
                                   :parameters {:query {:share-hash :discussion/share-hash}}
                                   :responses {200 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
                                               404 response-error-body}}]
-        ["/header-image" {:post media/set-preview-image
-                          :description (get-doc #'media/set-preview-image)
-                          :parameters {:body {:share-hash :discussion/share-hash
-                                              :edit-hash :discussion/edit-hash
-                                              :image-url :discussion/header-image-url}}
-                          :responses {201 {:body {:message string?}}
-                                      403 response-error-body}}]
-        ["/react-to/statement" {:post react-to-any-statement!
-                                :description (get-doc #'react-to-any-statement!)
-                                :parameters {:body {:share-hash :discussion/share-hash
-                                                    :conclusion-id :db/id
-                                                    :nickname :user/nickname
-                                                    :premise :statement/content
-                                                    :reaction keyword? #_:statement/unqualified-types}}
-                                :responses {201 {:body {:new-statement ::specs/statement-dto}}
-                                            403 response-error-body}}]
-        ["/statements"
-         ["/for-conclusion" {:post get-statements-for-conclusion
-                             :description (get-doc #'get-statements-for-conclusion)
-                             :parameters {:body {:share-hash :discussion/share-hash
-                                                 :conclusion-id :db/id}}
-                             :responses {200 {:body {:premises (s/coll-of ::specs/statement-dto)}}
-                                         404 response-error-body}}]
-         ["/starting/add" {:post add-starting-statement!
-                           :description (get-doc #'add-starting-statement!)
-                           :parameters {:body {:share-hash :discussion/share-hash
-                                               :statement :statement/content
-                                               :nickname :user/nickname}}
-                           :responses {201 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
-                                       403 response-error-body}}]]
-        ["/statement" {:parameters {:body {:statement-id :db/id}}}
-         ["/info" {:post get-statement-info}]
-         ["" {:parameters {:body {:share-hash :discussion/share-hash}}}
+        ["" {:parameters {:body {:share-hash :discussion/share-hash}}}
+         ["/header-image" {:post media/set-preview-image
+                           :description (get-doc #'media/set-preview-image)
+                           :parameters {:body {:edit-hash :discussion/edit-hash
+                                               :image-url :discussion/header-image-url}}
+                           :responses {201 {:body {:message string?}}
+                                       403 response-error-body}}]
+         ["/react-to/statement" {:post react-to-any-statement!
+                                 :description (get-doc #'react-to-any-statement!)
+                                 :parameters {:body {:conclusion-id :db/id
+                                                     :nickname :user/nickname
+                                                     :premise :statement/content
+                                                     :reaction keyword? #_:statement/unqualified-types}}
+                                 :responses {201 {:body {:new-statement ::specs/statement-dto}}
+                                             403 response-error-body}}]
+         ["/statements"
+          ["/for-conclusion" {:post get-statements-for-conclusion
+                              :description (get-doc #'get-statements-for-conclusion)
+                              :parameters {:body {:conclusion-id :db/id}}
+                              :responses {200 {:body {:premises (s/coll-of ::specs/statement-dto)}}
+                                          404 response-error-body}}]
+          ["/starting/add" {:post add-starting-statement!
+                            :description (get-doc #'add-starting-statement!)
+                            :parameters {:body {:statement :statement/content
+                                                :nickname :user/nickname}}
+                            :responses {201 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
+                                        403 response-error-body}}]]
+         ["/statement" {:parameters {:body {:statement-id :db/id}}}
+          ["/info" {:post get-statement-info}]
           ["/edit" {:put edit-statement!
                     :middleware [auth/auth-middleware]
                     :parameters {:body {:statement-type :statement/unqualified-types
