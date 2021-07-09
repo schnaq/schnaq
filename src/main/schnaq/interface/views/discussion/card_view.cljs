@@ -30,7 +30,7 @@
         input-form [input/input-form "statement-text"]
         content {:statement/content title :statement/author author :statement/created-at created-at}
         badges [badges/static-info-badges schnaq]]
-    [elements/discussion-view-desktop
+    [elements/discussion-view
      schnaq content input-form badges nil current-starting nil]))
 
 (defn- selected-conclusion-view
@@ -45,7 +45,7 @@
         badges [badges/extra-discussion-info-badges
                 current-conclusion (:discussion/edit-hash current-discussion)]
         input-form [input/input-form "premise-text"]]
-    [elements/discussion-view-desktop
+    [elements/discussion-view
      current-discussion current-conclusion input-form badges info-content current-premises history]))
 
 (rf/reg-sub

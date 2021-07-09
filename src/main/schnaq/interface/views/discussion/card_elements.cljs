@@ -216,7 +216,7 @@
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        input)]))
 
-(defn- topic-bubble-desktop [discussion statement input badges info-content is-topic?]
+(defn- topic-bubble-view [discussion statement input badges info-content is-topic?]
   [:div.p-2
    [:div.d-flex.mb-4
     [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]
@@ -278,7 +278,7 @@
      [sort-options]]
     [:div.d-flex.flex-row.ml-auto]]])
 
-(defn discussion-view-desktop
+(defn discussion-view
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
   [{:keys [discussion/share-hash] :as current-discussion} statement input badges info-content conclusions history]
@@ -288,7 +288,7 @@
      [:div.row
       [:div.col-md-6.col-lg-5.py-4.px-0.px-md-3
        [topic-view current-discussion nil
-        [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
+        [topic-bubble-view current-discussion statement input badges info-content is-topic?]]
        [:div.d-none.d-md-block [history-view history]]]
       [:div.col-md-6.col-lg-7.py-4.px-0.px-md-3
        [action-view has-history?]
