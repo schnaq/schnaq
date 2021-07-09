@@ -411,11 +411,11 @@
         keycloak-id (:sub identity)
         user-id (if keycloak-id
                   [:user.registered/keycloak-id keycloak-id]
-                  (user-db/user-by-nickname nickname))]
+                  (user-db/add-user-if-not-exists nickname))]
     (if (validator/valid-writeable-discussion? share-hash)
       (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)]
         (log/info "Starting statement added for discussion" share-hash)
-        (ok {:starting-conclusions (starting-conclusions-with-processors share-hash new-starting-id)}))
+        (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash new-starting-id)}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
@@ -633,8 +633,11 @@
                               :responses {200 {:body {:premises (s/coll-of ::specs/statement-dto)}}
                                           404 response-error-body}}]
           ["/starting/add" {:post add-starting-statement!
+                            :description (get-doc #'add-starting-statement!)
                             :parameters {:body {:statement :statement/content
-                                                :nickname :user/nickname}}}]]
+                                                :nickname :user/nickname}}
+                            :responses {201 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
+                                        403 response-error-body}}]]
          ["/statement" {:parameters {:body {:statement-id :db/id}}}
           ["/info" {:post get-statement-info}]
           ["/edit" {:put edit-statement!

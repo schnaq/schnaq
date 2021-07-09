@@ -26,7 +26,7 @@
 (>defn add-user
   "Add a new anonymous user / author to the database."
   [nickname]
-  [string? :ret int?]
+  [:user/nickname :ret :db/id]
   (when (s/valid? :user/nickname nickname)
     (get-in
       @(transact [{:db/id "temp-user"
@@ -37,7 +37,7 @@
   "Return the **schnaq** user-id by nickname. The nickname is not case sensitive.
   If there is no user with said nickname returns nil."
   [nickname]
-  [string? :ret (? number?)]
+  [:user/nickname :ret (? :db/id)]
   (query
     '[:find ?user .
       :in $ ?user-name
