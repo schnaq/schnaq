@@ -23,7 +23,7 @@
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
-    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4
+    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-0.mb-md-4
      ;; schnaq logo
      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
       [:img.d-inline-block.align-middle.mr-2
@@ -31,24 +31,22 @@
         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
      [:div.mx-4
       [clickable-title discussion]]
-     [:div.mx-4.ml-auto
+     [:div.mx-4.ml-auto.d-none.md-block
       [:small.text-primary (labels :discussion.navbar/posts)]
       [:h5.text-center statement-count]]
-     [:div.mx-4
+     [:div.mx-4.d-none.md-block
       [:small.text-primary (labels :discussion.navbar/members)]
       [:h5.text-center user-count]]]))
 
 (defn graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.h-100
+  [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
-   [:img
-    {:src (img-path :icon-graph) :alt (labels :graph.button/text)
-     :title (labels :graph.button/text)
-     :height "30px"}]
+   [:i {:style {:font-size "30px"}
+        :class (str "m-auto fas fa-lg " (fa :graph))}]
    [:div (labels :graph.button/text)]])
 
 (defn- beta-only-modal
@@ -68,29 +66,31 @@
   [share-hash]
   (let [groups @(rf/subscribe [:user/groups])
         beta-user? (some shared-conf/beta-tester-groups groups)]
-    [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.h-100
+    [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
      (if beta-user?
        {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}
        {:on-click #(rf/dispatch [:modal {:show? true
                                          :child [beta-only-modal]}])})
      [:i {:style {:font-size "30px"}
-          :class (str "m-auto fas fa-lg " (fa :text-width))}]
+          :class (str "m-auto fas fa-lg " (fa :paragraph))}]
      [:p.m-0 (labels :summary.link.button/text)]]))
 
 (defn navbar-statements []
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
-    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap-reverse.ml-auto
+    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.ml-auto.flex-wrap
      [:div.d-flex.align-items-center.schnaq-navbar.px-4.ml-auto
       [:div.mx-2
        [admin/share-link]]
       [admin/txt-export share-hash title]
       (when edit-hash
-        [admin/admin-center share-hash edit-hash])
-      [um/user-handling-menu "btn-outline-primary"]
+        [admin/admin-center share-hash edit-hash])]
+     [:div.d-flex.align-items-center
+      [:div.mx-2 [graph-button share-hash]]
       [:div.mx-2 [summary-button share-hash]]
-      [:div.mx-2 [graph-button share-hash]]]]))
+      [:div.d-flex.align-items-center.schnaq-navbar
+       [um/user-handling-menu "btn-outline-primary"]]]]))
 
 (defn header
   "Overview header for a discussion."

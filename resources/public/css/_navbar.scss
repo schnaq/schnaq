@@ -12,6 +12,8 @@
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
+    max-height: 8rem;
+    width: 100%;
   }
 }
 
@@ -25,4 +27,8 @@
   height: 100% !important;
   overflow: hidden;
   padding: 1rem 4rem 1rem 1rem;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
 }
