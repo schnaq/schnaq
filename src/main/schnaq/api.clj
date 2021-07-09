@@ -419,7 +419,9 @@
       (validator/deny-access invalid-rights-message))))
 
 (defn- react-to-any-statement!
-  "Adds a support or attack regarding a certain statement."
+  "Adds a support or attack regarding a certain statement. `conclusion-id` is the
+  statement you want to react to. `reaction` is one of `attack`, `support` or `neutral`.
+  `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash conclusion-id nickname premise reaction]} (:body parameters)
         keycloak-id (:sub identity)
@@ -432,9 +434,10 @@
                          :statement.type/neutral)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
-          (ok (valid-statements-with-votes
-                {:new-statement
-                 (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)})))
+          (created ""
+                   {:new-statement
+                    (valid-statements-with-votes
+                      (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id))}))
       (validator/deny-access invalid-rights-message))))
 
 (defn- check-credentials!
@@ -558,6 +561,8 @@
   #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
 (s/def :feedback.api/feedback ::specs/feedback-dto)
+(def ^:private response-error-body
+  {:body ::at/error-body})
 
 (def app
   (ring/ring-handler
@@ -568,7 +573,7 @@
                        :swagger {:tags ["exports"]}
                        :parameters {:query {:share-hash :discussion/share-hash}}
                        :responses {200 {:body {:string-representation string?}}
-                                   400 {:body ::at/error-body}}}]
+                                   400 response-error-body}}]
        ["/author/add" {:put add-author
                        :responses {201 {:body {:user-id :db/id}}}
                        :description (:doc (meta #'add-author))
@@ -587,31 +592,34 @@
                              :description (:doc (meta #'graph-data-for-agenda))
                              :parameters {:query {:share-hash :discussion/share-hash}}
                              :responses {200 {:body {:graph ::specs/graph}}
-                                         400 {:body ::at/error-body}}}]
+                                         400 response-error-body}}]
        ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
                                   :description (:doc (meta #'subscribe-lead-magnet!))
                                   :parameters {:body {:email string?}}
                                   :responses {200 {:body {:status keyword?}}
-                                              400 {:body ::at/error-body}}}]
+                                              400 response-error-body}}]
 
        ["/discussion" {:swagger {:tags ["discussions"]}}
         ["/conclusions/starting" {:get get-starting-conclusions
                                   :description (:doc (meta #'get-starting-conclusions))
                                   :parameters {:query {:share-hash :discussion/share-hash}}
                                   :responses {200 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
-                                              404 {:body ::at/error-body}}}]
+                                              404 response-error-body}}]
         ["" {:parameters {:body {:share-hash :discussion/share-hash}}}
          ["/header-image" {:post media/set-preview-image
                            :description (:doc (meta #'media/set-preview-image))
                            :parameters {:body {:edit-hash :discussion/edit-hash
                                                :image-url :discussion/header-image-url}}
                            :responses {201 {:body {:message string?}}
-                                       403 {:body ::at/error-body}}}]
+                                       403 response-error-body}}]
          ["/react-to/statement" {:post react-to-any-statement!
+                                 :description (:doc (meta #'react-to-any-statement!))
                                  :parameters {:body {:conclusion-id :db/id
                                                      :nickname :user/nickname
                                                      :premise :statement/content
-                                                     :reaction :statement/unqualified-types}}}]
+                                                     :reaction keyword? #_:statement/unqualified-types}}
+                                 :responses {201 {:body {:new-statement ::specs/statement-dto}}
+                                             403 response-error-body}}]
          ["/statements"
           ["/for-conclusion" {:post get-statements-for-conclusion
                               :parameters {:body {:conclusion (s/keys :req [:db/id])}}}]
@@ -705,10 +713,8 @@
               :muuntaja m/instance
               :middleware [swagger/swagger-feature
                            parameters/parameters-middleware ;; query-params & form-params
-                           muuntaja/format-negotiate-middleware ;; content-negotiation
-                           muuntaja/format-response-middleware ;; encoding response body
+                           muuntaja/format-middleware
                            exception/exception-middleware   ;; exception handling
-                           muuntaja/format-request-middleware ;; decoding request body
                            coercion/coerce-response-middleware ;; coercing response bodys
                            coercion/coerce-request-middleware ;; coercing request parameters
                            multipart/multipart-middleware
