@@ -12,7 +12,8 @@
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
-    height: 8rem;
+    max-height: 8rem;
+    width: 100%;
   }
 }
 
