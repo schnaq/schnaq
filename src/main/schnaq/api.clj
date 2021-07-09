@@ -602,8 +602,11 @@
                                               404 {:body ::at/error-body}}}]
         ["" {:parameters {:body {:share-hash :discussion/share-hash}}}
          ["/header-image" {:post media/set-preview-image
+                           :description (:doc (meta #'media/set-preview-image))
                            :parameters {:body {:edit-hash :discussion/edit-hash
-                                               :image-url :discussion/header-image-url}}}]
+                                               :image-url :discussion/header-image-url}}
+                           :responses {201 {:body {:message string?}}
+                                       403 {:body ::at/error-body}}}]
          ["/react-to/statement" {:post react-to-any-statement!
                                  :parameters {:body {:conclusion-id :db/id
                                                      :nickname :user/nickname
