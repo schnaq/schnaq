@@ -89,8 +89,8 @@
       (when edit-hash
         [admin/admin-center share-hash edit-hash])
       [um/user-handling-menu "btn-outline-primary"]
-      [:div.mx-2 [summary-button share-hash]]
-      [:div.mx-2 [graph-button share-hash]]]]))
+      [:div.mx-2 [graph-button share-hash]]
+      [:div.mx-2 [summary-button share-hash]]]]))
 
 (defn header
   "Overview header for a discussion."
