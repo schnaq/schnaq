@@ -2,7 +2,7 @@
 @use 'variables' as vars;
 
 .panel-white {
-  @include rounded.rounded-2;
+  @include rounded.rounded-1;
   background: vars.$white;
   overflow: hidden;
   padding: 1rem;

@@ -53,11 +53,10 @@
 (defn- user-summary-view
   []
   (let [current-schnaq @(rf/subscribe [:schnaq/selected])]
-    [pages/with-discussion-nav
+    [pages/with-discussion-header
      {:page/heading (labels :summary.user/heading)
       :page/subheading (labels :summary.user/subheading)
       :condition/needs-beta-tester? true}
-     current-schnaq
      [:div.container.panel-white.mt-3
       [summary-body current-schnaq]]]))
 
@@ -130,14 +129,14 @@
 (defn- admin-summaries
   "Shows all summaries to the admins."
   []
-  (pages/with-nav-and-header
-    {:page/heading "Zusammenfassungen"
-     :page/subheading "Beim Drücken von Senden, werden diese sofort erstellt."
-     :condition/needs-administrator? true}
-    [:section.container
-     [list-open-summaries]
-     [:hr]
-     [list-closed-summaries]]))
+  [pages/with-nav-and-header
+   {:page/heading "Zusammenfassungen"
+    :page/subheading "Beim Drücken von Senden, werden diese sofort erstellt."
+    :condition/needs-administrator? true}
+   [:section.container
+    [list-open-summaries]
+    [:hr]
+    [list-closed-summaries]]])
 
 
 ;; -----------------------------------------------------------------------------

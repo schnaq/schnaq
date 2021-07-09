@@ -2,8 +2,8 @@
   (:require [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels]]
-            [schnaq.interface.views.discussion.card-view :as card-view]
-            [schnaq.interface.views.discussion.conclusion-card :as card]))
+            [schnaq.interface.views.discussion.conclusion-card :as card]
+            [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-sub
   :schnaq.search.current/search-string
@@ -17,11 +17,10 @@
 
 (defn- search-view
   []
-  (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        search-string @(rf/subscribe [:schnaq.search.current/search-string])
+  (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         results @(rf/subscribe [:schnaq.search.current/result])]
-    [:<>
-     [card-view/card-discussion-header current-discussion]
+    [pages/with-discussion-header
+     {:page/heading (labels :schnaq.search/title)}
      [:div.container.mt-4
       (if (= "" search-string)
         [:div.w-100.text-center

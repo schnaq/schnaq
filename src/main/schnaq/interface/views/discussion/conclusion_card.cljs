@@ -8,6 +8,7 @@
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
+            [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
@@ -68,14 +69,7 @@
 
 (defn statement-card
   [edit-hash statement]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-        on-click-fn (fn [_e]
-                      (let [selection (js-wrap/to-string (.getSelection js/window))]
-                        (when (zero? (count selection))
-                          (rf/dispatch [:discussion.select/conclusion statement])
-                          (rf/dispatch [:discussion.history/push statement])
-                          (rf/dispatch [:navigation/navigate :routes.schnaq.select/statement
-                                        (assoc path-params :statement-id (:db/id statement))]))))]
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:article.card.statement-card
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
@@ -85,7 +79,8 @@
        [:div.my-4]
        [md/as-markdown (:statement/content statement)]
        [:div.d-flex
-        [:a.badge.badge-pill.rounded-2.mr-2 {:href "#" :on-click on-click-fn}
+        [:a.badge.badge-pill.rounded-2.mr-2
+         {:href "#" :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
          [:i {:class (str "m-auto far " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-auto

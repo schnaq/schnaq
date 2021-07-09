@@ -1,10 +1,8 @@
 (ns schnaq.interface.views.discussion.card-elements
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
-            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.markdown :as md]
@@ -16,7 +14,7 @@
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.howto.elements :as how-to-elements]
-            [schnaq.interface.views.modal :as modal]
+            [schnaq.interface.views.navbar.for-discussions :as discussion-navbar]
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
 
@@ -122,45 +120,6 @@
                      history-content
                      [tooltip/block-element :right tooltip history-content])]]])]]))])]))
 
-(defn- graph-button
-  "Rounded square button to navigate to the graph view"
-  [share-hash]
-  [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.topic-card-button
-   {:on-click #(rf/dispatch
-                 [:navigation/navigate :routes/graph-view
-                  {:share-hash share-hash}])}
-   [:img
-    {:src (img-path :icon-graph) :alt (labels :graph.button/text)
-     :title (labels :graph.button/text)
-     :height "30px"}]
-   [:div (labels :graph.button/text)]])
-
-(defn- beta-only-modal
-  "Basic modal which is presented to users trying to access beta features."
-  []
-  [modal/modal-template
-   (labels :beta.modal/title)
-   [:<>
-    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels :beta.modal/explain)]
-    [:p (labels :beta.modal/persuade)]
-    [:a.btn.btn-primary.mx-auto.d-block
-     {:href "mailto:hello@schnaq.com"}
-     (labels :beta.modal/cta)]]])
-
-(defn- summary-button
-  "Button to navigate to the summary view."
-  [share-hash]
-  (let [groups @(rf/subscribe [:user/groups])
-        beta-user? (some shared-conf/beta-tester-groups groups)]
-    [:button.btn.btn-sm.btn-outline-primary.shadow-sm.mx-auto.rounded-1.topic-card-button
-     (if beta-user?
-       {:href (rfe/href :routes.schnaq/summary {:share-hash share-hash})}
-       {:on-click #(rf/dispatch [:modal {:show? true
-                                         :child [beta-only-modal]}])})
-     [:i {:style {:font-size "30px"}
-          :class (str "m-auto fas fa-lg " (fa :text-width))}]
-     [:p.m-0 (labels :summary.link.button/text)]]))
-
 (rf/reg-event-fx
   :discussion.add.statement/starting
   (fn [{:keys [db]} [_ form]]
@@ -246,7 +205,7 @@
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:<>
      (if is-topic?
-       [:h2.text-center.h6-md-down title]
+       [:h2.h6-md-down title]
        (if edit-active?
          [edit/edit-card statement]
          [:h2.h6 title]))
@@ -271,8 +230,8 @@
    [:div.d-flex.mb-4
     ;; graph and badges
     [:div.mr-auto
-     [graph-button share-hash]
-     [summary-button share-hash]
+     [discussion-navbar/graph-button share-hash]
+     [discussion-navbar/summary-button share-hash]
      [:div.mt-2 badges]]
     ;; settings
     [:div.p-0
@@ -329,7 +288,7 @@
       {:type "submit"}
       [:i {:class (str "m-auto fas " (fa :search))}]]]]])
 
-(defn action-view [share-hash has-history?]
+(defn action-view [has-history?]
   [:div.d-inline-block.text-dark.w-100.mb-3
    [:div.d-flex.flex-row
     [:div.mr-1
@@ -338,11 +297,7 @@
      [search-bar]]
     [:div.mx-1
      [sort-options]]
-    [:div.d-flex.flex-row.ml-auto
-     [:div.mx-1
-      [graph-button share-hash]]
-     [:div.mx-1
-      [summary-button share-hash]]]]])
+    [:div.d-flex.flex-row.ml-auto]]])
 
 (defn discussion-view-mobile
   "Discussion view for mobile devices
@@ -363,12 +318,11 @@
     [:div.container-fluid
      [:div.row
       [:div.col-6.col-lg-5.py-4
-       ;; current statement / topic
        [topic-view current-discussion nil
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
        [history-view history]]
       [:div.col-6.col-lg-7.py-4
-       [action-view share-hash has-history?]
+       [action-view has-history?]
        [cards/conclusion-cards-list conclusions share-hash]
        [input/input-celebration-first]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
