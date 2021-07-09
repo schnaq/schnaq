@@ -14,7 +14,6 @@
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.howto.elements :as how-to-elements]
-            [schnaq.interface.views.navbar.for-discussions :as discussion-navbar]
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
 
@@ -108,10 +107,10 @@
                                  (toolbelt/truncate-to-n-words statement-content max-word-count)]]
             [:article {:key (str "history-container-" (:db/id statement))}
              [:div.history-thread-line {:key (str "history-divider-" (:db/id statement))}]
-             [:div.d-inline-block.d-md-block.text-dark
+             [:div.d-inline-block.d-md-block.text-dark.w-100
               {:key (str "history-" (:db/id statement))}
               (let [attitude (name (or (:statement/type statement) :neutral))]
-                [:div.card-history.clickable
+                [:div.card-history.clickable.w-100
                  {:on-click #(rf/dispatch [:discussion.history/time-travel index])}
                  [:div.d-flex.flex-row
                   [:div {:class (str "highlight-card-" attitude)}]
@@ -225,26 +224,6 @@
      [discussion-privacy-badge discussion]]]
    [title-and-input-element statement input is-topic? badges info-content]])
 
-(defn- topic-bubble-mobile [{:discussion/keys [share-hash] :as discussion} statement input badges info-content]
-  [:<>
-   [:div.d-flex.mb-4
-    ;; graph and badges
-    [:div.mr-auto
-     [discussion-navbar/graph-button share-hash]
-     [discussion-navbar/summary-button share-hash]
-     [:div.mt-2 badges]]
-    ;; settings
-    [:div.p-0
-     [discussion-privacy-badge discussion]
-     [:div.d-flex
-      [:div.ml-auto.mr-2 [user/user-info (:statement/author statement) 32 (:statement/created-at statement)]]
-      info-content]]]
-   ;; title
-   [title-and-input-element statement input]
-   [:div.ml-3
-    (labels :badges.sort/sort)
-    [sort-options]]])
-
 (defn- topic-bubble [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
     (common/set-website-title! title)
@@ -290,24 +269,14 @@
 
 (defn action-view [has-history?]
   [:div.d-inline-block.text-dark.w-100.mb-3
-   [:div.d-flex.flex-row
-    [:div.mr-1
+   [:div.d-flex.flex-row.flex-wrap
+    [:div.mr-1.my-1
      [back-button has-history?]]
-    [:div.mx-1
+    [:div.m-1
      [search-bar]]
-    [:div.mx-1
+    [:div.m-1
      [sort-options]]
     [:div.d-flex.flex-row.ml-auto]]])
-
-(defn discussion-view-mobile
-  "Discussion view for mobile devices
-  No history but fullscreen topic bubble and conclusions"
-  [current-discussion statement input badges info-content conclusions history]
-  (let [is-topic? (nil? history)]
-    [:<>
-     [topic-view current-discussion conclusions
-      [topic-bubble-mobile current-discussion statement input badges info-content]]
-     [show-how-to is-topic?]]))
 
 (defn discussion-view-desktop
   "Discussion View for desktop devices.
@@ -317,13 +286,14 @@
         has-history? (seq history)]
     [:div.container-fluid
      [:div.row
-      [:div.col-6.col-lg-5.py-4
+      [:div.col-md-6.col-lg-5.py-4.px-0.px-md-3
        [topic-view current-discussion nil
         [topic-bubble-desktop current-discussion statement input badges info-content is-topic?]]
-       [history-view history]]
-      [:div.col-6.col-lg-7.py-4
+       [:div.d-none.d-md-block [history-view history]]]
+      [:div.col-md-6.col-lg-7.py-4.px-0.px-md-3
        [action-view has-history?]
        [cards/conclusion-cards-list conclusions share-hash]
+       [:div.d-md-none [history-view history]]
        [input/input-celebration-first]
        [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
 

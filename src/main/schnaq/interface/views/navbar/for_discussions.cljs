@@ -23,7 +23,7 @@
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
-    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4
+    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-0.mb-md-4
      ;; schnaq logo
      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
       [:img.d-inline-block.align-middle.mr-2
@@ -31,10 +31,10 @@
         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
      [:div.mx-4
       [clickable-title discussion]]
-     [:div.mx-4.ml-auto
+     [:div.mx-4.ml-auto.d-none.md-block
       [:small.text-primary (labels :discussion.navbar/posts)]
       [:h5.text-center statement-count]]
-     [:div.mx-4
+     [:div.mx-4.d-none.md-block
       [:small.text-primary (labels :discussion.navbar/members)]
       [:h5.text-center user-count]]]))
 
@@ -81,8 +81,8 @@
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
-    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap-reverse.ml-auto
-     [:div.d-flex.align-items-center.schnaq-navbar.px-4.ml-auto
+    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.ml-auto
+     [:div.d-flex.align-items-center.schnaq-navbar.px-4.ml-auto.flex-wrap
       [:div.mx-2
        [admin/share-link]]
       [admin/txt-export share-hash title]

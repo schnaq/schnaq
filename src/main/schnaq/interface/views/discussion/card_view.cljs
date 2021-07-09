@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.discussion.card-view
   (:require [re-frame.core :as rf]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.input :as input]
@@ -31,11 +30,8 @@
         input-form [input/input-form "statement-text"]
         content {:statement/content title :statement/author author :statement/created-at created-at}
         badges [badges/static-info-badges schnaq]]
-    [toolbelt/desktop-mobile-switch
-     [elements/discussion-view-desktop
-      schnaq content input-form badges nil current-starting nil]
-     [elements/discussion-view-mobile
-      schnaq content input-form badges nil current-starting nil]]))
+    [elements/discussion-view-desktop
+     schnaq content input-form badges nil current-starting nil]))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
@@ -49,11 +45,8 @@
         badges [badges/extra-discussion-info-badges
                 current-conclusion (:discussion/edit-hash current-discussion)]
         input-form [input/input-form "premise-text"]]
-    [toolbelt/desktop-mobile-switch
-     [elements/discussion-view-desktop
-      current-discussion current-conclusion input-form badges info-content current-premises history]
-     [elements/discussion-view-mobile
-      current-discussion current-conclusion input-form badges info-content current-premises history]]))
+    [elements/discussion-view-desktop
+     current-discussion current-conclusion input-form badges info-content current-premises history]))
 
 (rf/reg-sub
   :discussion.premises/current
