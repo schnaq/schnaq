@@ -119,7 +119,7 @@
       {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
        :fx [(http/xhrio-request db :post "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]
-                                {:conclusion conclusion
+                                {:conclusion-id (:db/id conclusion)
                                  :share-hash share-hash}
                                 [:ajax.error/as-notification])]})))
 

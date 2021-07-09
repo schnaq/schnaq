@@ -373,8 +373,8 @@
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash conclusion]} (:body parameters)
-        prepared-statements (-> (:db/id conclusion)
+  (let [{:keys [share-hash conclusion-id]} (:body parameters)
+        prepared-statements (-> conclusion-id
                                 discussion-db/children-for-statement
                                 valid-statements-with-votes
                                 with-sub-discussion-info)]
@@ -564,56 +564,62 @@
 (def ^:private response-error-body
   {:body ::at/error-body})
 
+(defn- get-doc
+  "Look the docstring up in the meta-description of a function.
+  Usage: `(get-doc #'ping)`"
+  [fn]
+  (:doc (meta fn)))
+
 (def app
   (ring/ring-handler
     (ring/router
       [["/ping" {:get ping}]
        ["/export/txt" {:get export-txt-data
-                       :description (:doc (meta #'export-txt-data))
+                       :description (get-doc #'export-txt-data)
                        :swagger {:tags ["exports"]}
                        :parameters {:query {:share-hash :discussion/share-hash}}
                        :responses {200 {:body {:string-representation string?}}
                                    400 response-error-body}}]
        ["/author/add" {:put add-author
                        :responses {201 {:body {:user-id :db/id}}}
-                       :description (:doc (meta #'add-author))
+                       :description (get-doc #'add-author)
                        :parameters {:body {:nickname :user/nickname}}}]
        ["/credentials/validate" {:post check-credentials!
-                                 :description (:doc (meta #'check-credentials!))
+                                 :description (get-doc #'check-credentials!)
                                  :responses {200 {:body {:valid-credentials? boolean?}}
                                              403 {:body {:valid-credentials? boolean?}}}
                                  :parameters {:body {:share-hash :discussion/share-hash
                                                      :edit-hash :discussion/edit-hash}}}]
        ["/feedback/add" {:post add-feedback
-                         :description (:doc (meta #'add-feedback))
+                         :description (get-doc #'add-feedback)
                          :responses {201 {:body {:feedback ::specs/feedback}}}
                          :parameters {:body (s/keys :req-un [:feedback.api/feedback] :opt-un [:feedback/screenshot])}}]
        ["/graph/discussion" {:get graph-data-for-agenda
-                             :description (:doc (meta #'graph-data-for-agenda))
+                             :description (get-doc #'graph-data-for-agenda)
                              :parameters {:query {:share-hash :discussion/share-hash}}
                              :responses {200 {:body {:graph ::specs/graph}}
                                          400 response-error-body}}]
        ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
-                                  :description (:doc (meta #'subscribe-lead-magnet!))
+                                  :description (get-doc #'subscribe-lead-magnet!)
                                   :parameters {:body {:email string?}}
                                   :responses {200 {:body {:status keyword?}}
                                               400 response-error-body}}]
 
        ["/discussion" {:swagger {:tags ["discussions"]}}
         ["/conclusions/starting" {:get get-starting-conclusions
-                                  :description (:doc (meta #'get-starting-conclusions))
+                                  :description (get-doc #'get-starting-conclusions)
                                   :parameters {:query {:share-hash :discussion/share-hash}}
                                   :responses {200 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
                                               404 response-error-body}}]
         ["" {:parameters {:body {:share-hash :discussion/share-hash}}}
          ["/header-image" {:post media/set-preview-image
-                           :description (:doc (meta #'media/set-preview-image))
+                           :description (get-doc #'media/set-preview-image)
                            :parameters {:body {:edit-hash :discussion/edit-hash
                                                :image-url :discussion/header-image-url}}
                            :responses {201 {:body {:message string?}}
                                        403 response-error-body}}]
          ["/react-to/statement" {:post react-to-any-statement!
-                                 :description (:doc (meta #'react-to-any-statement!))
+                                 :description (get-doc #'react-to-any-statement!)
                                  :parameters {:body {:conclusion-id :db/id
                                                      :nickname :user/nickname
                                                      :premise :statement/content
@@ -622,7 +628,10 @@
                                              403 response-error-body}}]
          ["/statements"
           ["/for-conclusion" {:post get-statements-for-conclusion
-                              :parameters {:body {:conclusion (s/keys :req [:db/id])}}}]
+                              :description (get-doc #'get-statements-for-conclusion)
+                              :parameters {:body {:conclusion-id :db/id}}
+                              :responses {200 {:body {:premises (s/coll-of ::specs/statement-dto)}}
+                                          404 response-error-body}}]
           ["/starting/add" {:post add-starting-statement!
                             :parameters {:body {:statement :statement/content
                                                 :nickname :user/nickname}}}]]
@@ -637,10 +646,10 @@
           ["/vote" {:parameters {:body {:statement-id :db/id
                                         :nickname :user/nickname}}}
            ["/down" {:post toggle-downvote-statement
-                     :description (:doc (meta #'toggle-downvote-statement))
+                     :description (get-doc #'toggle-downvote-statement)
                      :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}}}]
            ["/up" {:post toggle-upvote-statement
-                   :description (:doc (meta #'toggle-upvote-statement))
+                   :description (get-doc #'toggle-upvote-statement)
                    :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}}}]]]]]
 
        ["/emails" {:swagger {:tags ["emails"]}
