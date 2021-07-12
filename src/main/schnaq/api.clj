@@ -675,10 +675,16 @@
                                        :edit-hash :discussion/edit-hash}}}
         ["/send-admin-center-link" {:post send-admin-center-link
                                     :parameters {:body {:recipient string?
-                                                        :admin-center string?}}}]
+                                                        :admin-center string?}}
+                                    :responses {200 {:body {:message string?
+                                                            :failed-sendings (s/coll-of string?)}}
+                                                403 response-error-body}}]
         ["/send-invites" {:post send-invite-emails
                           :parameters {:body {:recipients (s/coll-of string?)
-                                              :share-link :discussion/share-link}}}]]
+                                              :share-link :discussion/share-link}}
+                          :responses {200 {:body {:message string?
+                                                  :failed-sendings (s/coll-of string?)}}
+                                      403 response-error-body}}]]
 
        ["/schnaq" {:swagger {:tags ["schnaqs"]}}
         ["/by-hash/:share-hash" {:get schnaq-by-hash
