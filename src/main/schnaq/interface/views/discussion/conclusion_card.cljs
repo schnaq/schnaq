@@ -117,7 +117,7 @@
   (fn [{:keys [db]} [_ conclusion]]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
       {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
-       :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
+       :fx [(http/xhrio-request db :post "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]
                                 {:conclusion-id (:db/id conclusion)
                                  :share-hash share-hash}
