@@ -88,7 +88,7 @@
       (is (= 403 (:status (schnaq-by-hash-as-admin req-wrong-share-hash)))))))
 
 (deftest schnaqs-by-hashes-test
-  (let [schnaqs-by-hashes #'api/schnaqs-by-hashes
+  (let [schnaqs-by-hashes #'api/discussions-by-hashes
         share-hash1 "cat-dog-hash"
         share-hash2 "graph-hash"]
     (testing "No hash provided, no discussion returned."

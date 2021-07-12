@@ -37,6 +37,16 @@
                                  :reference ::entity-reference
                                  :registered-user ::registered-user))
 
+;; Meta Information
+(s/def :meta/all-statements nat-int?)
+(s/def :meta/upvotes number?)
+(s/def :meta/downvotes number?)
+(s/def :meta/sub-statements number?)
+(s/def :meta/authors (s/coll-of :user/nickname))
+(s/def :meta/sub-discussion-info
+  (s/keys :req-un [:meta/sub-statements :meta/authors]))
+
+
 ;; Discussion
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
@@ -65,9 +75,12 @@
                                   :discussion/admins :discussion/hub-origin
                                   :discussion/created-at :discussion/share-link :discussion/admin-link]))
 
+(s/def :discussion/meta-info
+  (s/keys :req-un [:meta/all-statements :meta/authors]))
 (s/def ::discussion-dto (s/keys :req [:discussion/title :discussion/states :discussion/share-hash :discussion/author
                                       :discussion/share-link :discussion/admin-link :discussion/created-at :db/id
-                                      :discussion/edit-hash]))
+                                      :discussion/edit-hash]
+                                :opt-un [:discussion/meta-info]))
 
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
@@ -93,12 +106,6 @@
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions]))
 
-(s/def :meta/upvotes number?)
-(s/def :meta/downvotes number?)
-(s/def :meta/sub-statements number?)
-(s/def :meta/authors (s/coll-of :user/nickname))
-(s/def :meta/sub-discussion-info
-  (s/keys :req-un [:meta/sub-statements :meta/authors]))
 (s/def ::statement-dto
   (s/keys :req [:db/id :statement/content :statement/version :statement/created-at
                 :statement/author :meta/upvotes :meta/downvotes]

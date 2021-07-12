@@ -48,7 +48,8 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log])
+            [taoensso.timbre :as log]
+            [spec-tools.core :as st])
   (:import (java.util Base64 UUID))
   (:gen-class))
 
@@ -126,23 +127,23 @@
                        (discussion-db/discussion-by-share-hash hash)))})
       (validator/deny-access))))
 
-(defn- schnaqs-by-hashes
+(defn- discussions-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
-  they have access to. If only one schnaq shall be loaded, compojure packs it
+  they have access to. If only one schnaq shall be loaded, ring packs it
   into a single string:
-  `{:parameters {:query {:share-hashes #uuid\"57ce1947-e57f-4395-903e-e2866d2f305c\"}}}`
+  `{:parameters {:query {:share-hashes \"57ce1947-e57f-4395-903e-e2866d2f305c\"}}}`
 
   If multiple share-hashes are sent to the backend, reitit wraps them into a
   collection:
-  `{:parameters {:query {:share-hashes [#uuid\"57ce1947-e57f-4395-903e-e2866d2f305c\"
-                                        #uuid\"b2645217-6d7f-4d00-85c1-b8928fad43f7\"]}}}"
+  `{:parameters {:query {:share-hashes [\"57ce1947-e57f-4395-903e-e2866d2f305c\"
+                                        \"b2645217-6d7f-4d00-85c1-b8928fad43f7\"]}}}"
   [request]
-  (if-let [hashes (get-in request [:parameters :query :share-hashes])]
-    (let [hashes-list (if (string? hashes) [hashes] hashes)]
+  (if-let [share-hashes (get-in request [:parameters :query :share-hashes])]
+    (let [share-hashes-list (if (string? share-hashes) [share-hashes] share-hashes)]
       (ok {:discussions
            (map processors/add-meta-info-to-schnaq
-                (discussion-db/valid-discussions-by-hashes hashes-list))}))
-    (bad-request {:error "Schnaqs could not be loaded."})))
+                (discussion-db/valid-discussions-by-hashes share-hashes-list))}))
+    not-found-with-error-message))
 
 (defn- public-schnaqs
   "Return all public schnaqs."
@@ -715,11 +716,16 @@
                                                   :edit-hash :discussion/edit-hash}}}]]
 
        ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
-        ["/by-hashes" {:get schnaqs-by-hashes
-                       :description "Takes one or more share-hashes as query parameters."
-                       :parameters {:query {:share-hashes (s/or :hashes (s/coll-of :discussion/share-hash)
-                                                                :hash :discussion/share-hash)}}}]
-        ["/public" {:get public-schnaqs}]]
+        ["/by-hashes" {:get discussions-by-hashes
+                       :description (get-doc #'discussions-by-hashes)
+                       :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
+                                                                                        :swagger/collectionFormat "multi"})
+                                                                :share-hash :discussion/share-hash)}}
+                       :responses {200 {:body {:discussions (s/coll-of ::specs/discussion-dto)}}
+                                   404 response-error-body}}]
+        ["/public" {:get public-schnaqs
+                    :description (get-doc #'public-schnaqs)
+                    :responses {200 {:body {:discussions (s/coll-of ::specs/discussion-dto)}}}}]]
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :middleware [auth/auth-middleware auth/is-admin-middleware]}
