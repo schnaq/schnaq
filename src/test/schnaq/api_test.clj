@@ -92,7 +92,7 @@
         share-hash1 "cat-dog-hash"
         share-hash2 "graph-hash"]
     (testing "No hash provided, no discussion returned."
-      (is (= 400 (:status (schnaqs-by-hashes {})))))
+      (is (= 404 (:status (schnaqs-by-hashes {})))))
     (testing "Invalid hash returns no discussion."
       (is (= 200 (:status (schnaqs-by-hashes
                             {:parameters {:query {:share-hashes "something-non-existent"}}}))))
