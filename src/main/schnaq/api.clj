@@ -499,7 +499,7 @@
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
       #(ok {:updated-statement (discussion-db/change-statement-text-and-type statement statement-type new-content)})
-      #(bad-request {:error "You can not edit a closed / deleted discussion or statement."})
+      #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not edit a closed / deleted discussion or statement."))
       #(validator/deny-access invalid-rights-message))))
 
 (defn- delete-statement!
@@ -645,10 +645,15 @@
                                             :premises (s/coll-of ::specs/statement-dto)}}
                                 404 response-error-body}}]
           ["/edit" {:put edit-statement!
+                    :description (get-doc #'edit-statement!)
                     :middleware [auth/auth-middleware]
                     :parameters {:body {:statement-type :statement/unqualified-types
-                                        :new-content :statement/content}}}]
+                                        :new-content :statement/content}}
+                    :responses {200 {:body {:updated-statement ::specs/statement-dto}}
+                                400 response-error-body
+                                403 response-error-body}}]
           ["/delete" {:delete delete-statement!
+                      :description (get-doc #'delete-statement!)
                       :middleware [auth/auth-middleware]}]
           ["/vote" {:parameters {:body {:statement-id :db/id
                                         :nickname :user/nickname}}}
