@@ -283,7 +283,7 @@
 (defn- all-feedbacks
   "Returns all feedbacks from the db."
   [_]
-  (ok (db/all-feedbacks)))
+  (ok {:feedbacks (db/all-feedbacks)}))
 
 (defn- all-summaries
   "Returns all summaries form the db."
@@ -728,8 +728,11 @@
                     :responses {200 {:body {:discussions (s/coll-of ::specs/discussion-dto)}}}}]]
 
        ["/admin" {:swagger {:tags ["admin"]}
+                  :responses {401 nil}
                   :middleware [auth/auth-middleware auth/is-admin-middleware]}
-        ["/feedbacks" {:get all-feedbacks}]
+        ["/feedbacks" {:get all-feedbacks
+                       :description (get-doc #'all-feedbacks)
+                       :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]
         ["/summaries/all" {:get all-summaries}]
         ["/schnaq/delete" {:delete delete-schnaq!
                            :parameters {:body {:share-hash :discussion/share-hash}}}]
