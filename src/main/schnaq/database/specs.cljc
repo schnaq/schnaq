@@ -77,10 +77,11 @@
 
 (s/def :discussion/meta-info
   (s/keys :req-un [:meta/all-statements :meta/authors]))
-(s/def ::discussion-dto (s/keys :req [:discussion/title :discussion/states :discussion/share-hash :discussion/author
-                                      :discussion/share-link :discussion/admin-link :discussion/created-at :db/id
-                                      :discussion/edit-hash]
-                                :opt-un [:discussion/meta-info]))
+(s/def ::discussion-dto
+  (s/keys :req [:discussion/title :discussion/states :discussion/share-hash :discussion/author
+                :discussion/created-at :db/id]
+          :opt [:discussion/share-link :discussion/admin-link :discussion/edit-hash]
+          :opt-un [:discussion/meta-info]))
 
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
