@@ -514,7 +514,7 @@
       user-identity statement-id share-hash statement
       #(do (discussion-db/delete-statements! [statement-id])
            (ok {:deleted-statement statement-id}))
-      #(bad-request {:error "You can not delete a closed / deleted discussion or statement."})
+      #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not delete a closed / deleted discussion or statement."))
       #(validator/deny-access invalid-rights-message))))
 
 (defn- subscribe-lead-magnet!
@@ -654,7 +654,10 @@
                                 403 response-error-body}}]
           ["/delete" {:delete delete-statement!
                       :description (get-doc #'delete-statement!)
-                      :middleware [auth/auth-middleware]}]
+                      :middleware [auth/auth-middleware]
+                      :responses {200 {:body {:updated-statement ::specs/statement-dto}}
+                                  400 response-error-body
+                                  403 response-error-body}}]
           ["/vote" {:parameters {:body {:statement-id :db/id
                                         :nickname :user/nickname}}}
            ["/down" {:post toggle-downvote-statement
