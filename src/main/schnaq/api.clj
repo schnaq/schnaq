@@ -100,10 +100,10 @@
         (log/info "Discussion created: " new-discussion-id " - "
                   (:discussion/title created-discussion) " – Public? " public-discussion?
                   "Exclusive?" hub-exclusive? "for" hub)
-        (created "" {:new-discussion (links/add-links-to-discussion created-discussion)}))
+        (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
       (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
         (log/info error-msg)
-        (bad-request error-msg)))))
+        (bad-request (at/build-error-body :schnaq-creation-failed error-msg))))))
 
 (defn- add-author
   "Generate a user based on the nickname. This is an *anonymous* user, and we
@@ -699,11 +699,16 @@
                                          :search-string string?}}
                     :responses {200 {:body {:matching-statements ::specs/statement-dto}}
                                 404 response-error-body}}]
-        ["/add" {:post add-schnaq
+        ["/add" {:description (get-doc #'add-schnaq)
                  :parameters {:body {:discussion-title :discussion/title
-                                     :public-discussion? boolean?}}}
-         ["/anonymous" {:parameters {:body {:nickname :user/nickname}}}]
-         ["/with-hub" {:parameters {:body {:hub-exclusive? boolean?
+                                     :public-discussion? boolean?}}
+                 :responses {201 {:body {:new-schnaq ::specs/discussion-dto}}
+                             400 response-error-body}}
+         ["" {:post add-schnaq}]
+         ["/anonymous" {:post add-schnaq
+                        :parameters {:body {:nickname :user/nickname}}}]
+         ["/with-hub" {:post add-schnaq
+                       :parameters {:body {:hub-exclusive? boolean?
                                            :hub :hub/keycloak-name}}}]]
         ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
                               :parameters {:body {:share-hash :discussion/share-hash

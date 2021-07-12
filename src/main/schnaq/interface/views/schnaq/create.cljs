@@ -107,13 +107,13 @@
 
 (rf/reg-event-fx
   :schnaq/created
-  (fn [{:keys [db]} [_ {:keys [new-discussion]}]]
-    (let [{:discussion/keys [share-hash edit-hash]} new-discussion]
+  (fn [{:keys [db]} [_ {:keys [new-schnaq]}]]
+    (let [{:discussion/keys [share-hash edit-hash]} new-schnaq]
       {:db (-> db
-               (assoc-in [:schnaq :last-added] new-discussion)
-               (update-in [:schnaqs :all] conj new-discussion))
+               (assoc-in [:schnaq :last-added] new-schnaq)
+               (update-in [:schnaqs :all] conj new-schnaq))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
-            [:dispatch [:schnaq/select-current new-discussion]]
+            [:dispatch [:schnaq/select-current new-schnaq]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :schnaq/created-success-heading)
                                        :body (labels :schnaq/created-success-subheading)

@@ -33,8 +33,8 @@
 ;; Could be anonymous or registered
 (s/def ::any-user (s/or :user ::user :registered-user ::registered-user))
 ;; Any user or reference
-(s/def ::user-or-reference (s/or :reference ::entity-reference
-                                 :user ::user
+(s/def ::user-or-reference (s/or :user ::user
+                                 :reference ::entity-reference
                                  :registered-user ::registered-user))
 
 ;; Discussion
@@ -64,6 +64,10 @@
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin
                                   :discussion/created-at :discussion/share-link :discussion/admin-link]))
+
+(s/def ::discussion-dto (s/keys :req [:discussion/title :discussion/states :discussion/share-hash :discussion/author
+                                      :discussion/share-link :discussion/admin-link :discussion/created-at :db/id
+                                      :discussion/edit-hash]))
 
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
