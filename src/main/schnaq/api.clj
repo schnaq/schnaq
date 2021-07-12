@@ -120,10 +120,10 @@
   (let [hash (get-in parameters [:path :share-hash])
         keycloak-id (:sub identity)]
     (if (validator/valid-discussion? hash)
-      (ok (processors/add-meta-info-to-schnaq
-            (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
-              (discussion-db/discussion-by-share-hash-private hash)
-              (discussion-db/discussion-by-share-hash hash))))
+      (ok {:schnaq (processors/add-meta-info-to-schnaq
+                     (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
+                       (discussion-db/discussion-by-share-hash-private hash)
+                       (discussion-db/discussion-by-share-hash hash)))})
       (validator/deny-access))))
 
 (defn- schnaqs-by-hashes
@@ -674,12 +674,14 @@
                    :parameters {:body {:share-hash :discussion/share-hash
                                        :edit-hash :discussion/edit-hash}}}
         ["/send-admin-center-link" {:post send-admin-center-link
+                                    :description (get-doc #'send-admin-center-link)
                                     :parameters {:body {:recipient string?
                                                         :admin-center string?}}
                                     :responses {200 {:body {:message string?
                                                             :failed-sendings (s/coll-of string?)}}
                                                 403 response-error-body}}]
         ["/send-invites" {:post send-invite-emails
+                          :description (get-doc #'send-invite-emails)
                           :parameters {:body {:recipients (s/coll-of string?)
                                               :share-link :discussion/share-link}}
                           :responses {200 {:body {:message string?
@@ -688,14 +690,18 @@
 
        ["/schnaq" {:swagger {:tags ["schnaqs"]}}
         ["/by-hash/:share-hash" {:get schnaq-by-hash
-                                 :parameters {:path {:share-hash :discussion/share-hash}}}]
+                                 :description (get-doc #'schnaq-by-hash)
+                                 :parameters {:path {:share-hash :discussion/share-hash}}
+                                 :responses {200 {:body {:schnaq ::specs/discussion}}
+                                             403 response-error-body}}]
         ["/search" {:get search-schnaq
                     :parameters {:query {:share-hash :discussion/share-hash
-                                         :search-string string?}}}]
+                                         :search-string string?}}
+                    :responses {200 {:body {:matching-statements ::specs/statement-dto}}
+                                404 response-error-body}}]
         ["/add" {:post add-schnaq
                  :parameters {:body {:discussion-title :discussion/title
                                      :public-discussion? boolean?}}}
-         [""]
          ["/anonymous" {:parameters {:body {:nickname :user/nickname}}}]
          ["/with-hub" {:parameters {:body {:hub-exclusive? boolean?
                                            :hub :hub/keycloak-name}}}]]

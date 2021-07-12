@@ -147,7 +147,6 @@
       :link-text (labels :router/create-schnaq)}]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
-      :name :routes.schnaq/by-share-hash
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}

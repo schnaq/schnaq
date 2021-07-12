@@ -108,13 +108,14 @@
 
 (rf/reg-event-fx
   :schnaq/select-current
-  (fn [{:keys [db]} [_ {:discussion/keys [share-hash edit-hash] :as discussion}]]
-    {:db (cond->
-           db
-           true (assoc-in [:schnaq :selected] discussion)
-           edit-hash (update-in [:schnaqs :admin-access]
-                                assoc share-hash edit-hash))
-     :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]]}))
+  (fn [{:keys [db]} [_ response]]
+    (let [{:discussion/keys [share-hash edit-hash] :as discussion} (:schnaq response)]
+      {:db (cond->
+             db
+             true (assoc-in [:schnaq :selected] discussion)
+             edit-hash (update-in [:schnaqs :admin-access]
+                                  assoc share-hash edit-hash))
+       :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]]})))
 
 (rf/reg-sub
   :schnaq/selected
