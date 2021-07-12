@@ -229,7 +229,8 @@
             (if counter-vote
               (ok {:operation :switched})
               (ok {:operation :added})))))
-    (bad-request {:error "Vote could not be registered"})))
+    (bad-request (at/build-error-body :vote-not-registered
+                                      "Vote could not be registered"))))
 
 (defn- toggle-upvote-statement
   "Upvote if no upvote has been made, otherwise remove upvote for statement.
@@ -662,10 +663,12 @@
                                         :nickname :user/nickname}}}
            ["/down" {:post toggle-downvote-statement
                      :description (get-doc #'toggle-downvote-statement)
-                     :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}}}]
+                     :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
+                                 400 response-error-body}}]
            ["/up" {:post toggle-upvote-statement
                    :description (get-doc #'toggle-upvote-statement)
-                   :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}}}]]]]]
+                   :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
+                               400 response-error-body}}]]]]]
 
        ["/emails" {:swagger {:tags ["emails"]}
                    :parameters {:body {:share-hash :discussion/share-hash
