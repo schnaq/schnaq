@@ -22,7 +22,7 @@
    :statement/created-at
    :statement/parent
    {:statement/type [:db/ident]}
-   {:statement/author user-db/combined-user-pattern}])
+   {:statement/author user-db/public-user-pattern}])
 
 (def ^:private statement-pattern-with-secret
   (conj statement-pattern :statement/creation-secret))
@@ -37,7 +37,7 @@
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
-   {:discussion/author user-db/combined-user-pattern}])
+   {:discussion/author user-db/public-user-pattern}])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."
@@ -50,7 +50,7 @@
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
-   {:discussion/author user-db/combined-user-pattern}])
+   {:discussion/author user-db/public-user-pattern}])
 
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."

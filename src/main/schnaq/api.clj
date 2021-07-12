@@ -114,8 +114,8 @@
         user-id (user-db/add-user-if-not-exists author-name)]
     (created "" {:user-id user-id})))
 
-(defn- discussion-by-hash
-  "Returns a meeting, identified by its share-hash."
+(defn- schnaq-by-hash
+  "Returns a discussion, identified by its share-hash."
   [{:keys [parameters identity]}]
   (let [hash (get-in parameters [:path :share-hash])
         keycloak-id (:sub identity)]
@@ -393,7 +393,7 @@
       not-found-with-error-message)))
 
 (defn- get-statement-info
-  "Return the sought after conclusion (by id) and the following children."
+  "Return premises and conclusion for a given statement id."
   [{:keys [parameters]}]
   (let [{:keys [share-hash statement-id]} (:body parameters)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
@@ -402,7 +402,7 @@
                                     with-sub-discussion-info
                                     (toolbelt/pull-key-up :db/ident)))
              :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))}))
-      (validator/deny-access invalid-rights-message))))
+      not-found-with-error-message)))
 
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
@@ -639,7 +639,11 @@
                             :responses {201 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
                                         403 response-error-body}}]]
          ["/statement" {:parameters {:body {:statement-id :db/id}}}
-          ["/info" {:post get-statement-info}]
+          ["/info" {:post get-statement-info
+                    :description (get-doc #'get-statement-info)
+                    :responses {200 {:body {:conclusion ::specs/statement-dto
+                                            :premises (s/coll-of ::specs/statement-dto)}}
+                                404 response-error-body}}]
           ["/edit" {:put edit-statement!
                     :middleware [auth/auth-middleware]
                     :parameters {:body {:statement-type :statement/unqualified-types
@@ -666,7 +670,7 @@
                                               :share-link :discussion/share-link}}}]]
 
        ["/schnaq" {:swagger {:tags ["schnaqs"]}}
-        ["/by-hash/:share-hash" {:get discussion-by-hash
+        ["/by-hash/:share-hash" {:get schnaq-by-hash
                                  :parameters {:path {:share-hash :discussion/share-hash}}}]
         ["/search" {:get search-schnaq
                     :parameters {:query {:share-hash :discussion/share-hash
