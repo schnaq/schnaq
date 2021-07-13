@@ -1,7 +1,9 @@
 (ns schnaq.api.analytics
   (:require [ring.util.http-response :refer [ok]]
+            [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
             [schnaq.database.analytics :as analytics-db]
+            [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as toolbelt]))
 
 (defn- number-of-discussions
@@ -48,23 +50,26 @@
   "Returns all statistics at once."
   [{:keys [parameters]}]
   (let [timestamp-since (toolbelt/now-minus-days (get-in parameters [:query :days-since]))]
-    (ok {:stats {:discussions-num (analytics-db/number-of-discussions timestamp-since)
-                 :usernames-num (analytics-db/number-of-usernames timestamp-since)
-                 :average-statements (float (analytics-db/average-number-of-statements timestamp-since))
-                 :statements-num (analytics-db/number-of-statements timestamp-since)
-                 :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
-                 :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
-                 :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
-                 :registered-users-num (analytics-db/number-or-registered-users)}})))
+    (ok {:statistics
+         {:discussions-sum (analytics-db/number-of-discussions timestamp-since)
+          :usernames-sum (analytics-db/number-of-usernames timestamp-since)
+          :average-statements-num (float (analytics-db/average-number-of-statements timestamp-since))
+          :statements-num (analytics-db/number-of-statements timestamp-since)
+          :active-users-num (analytics-db/number-of-active-discussion-users timestamp-since)
+          :statement-length-stats (analytics-db/statement-length-stats timestamp-since)
+          :statement-type-stats (analytics-db/statement-type-stats timestamp-since)
+          :registered-users-num (analytics-db/number-or-registered-users)}})))
 
 
 ;; -----------------------------------------------------------------------------
 
 (def analytics-routes
   ["/analytics" {:swagger {:tags ["analytics"]}
-                 :middleware [auth/auth-middleware auth/is-admin-middleware]}
+                 #_#_:middleware [auth/auth-middleware auth/is-admin-middleware]
+                 :responses {401 at/response-error-body}}
    ["" {:get all-stats
-        :parameters {:query {:days-since nat-int?}}}]
+        :parameters {:query {:days-since nat-int?}}
+        :responses {200 {:body {:statistics ::specs/statistics}}}}]
    ["/active-users" {:get number-of-active-users}]
    ["/statements-per-discussion" {:get statements-per-discussion}]
    ["/statement-types" {:get statement-type-stats}]

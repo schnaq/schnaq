@@ -150,3 +150,31 @@
 (s/def :graph/edges (s/coll-of :graph/edge))
 (s/def :graph/controversy-values associative?)
 (s/def ::graph (s/keys :req-un [:graph/nodes :graph/edges :graph/controversy-values]))
+
+;; Statistics
+(s/def :statistics/since inst?)
+(s/def :statistics/discussions-sum nat-int?)
+(s/def :statistics/usernames-sum nat-int?)
+(s/def :statistics/average-statements-num number?)
+(s/def :statistics/statements-num nat-int?)
+(s/def :statistics/active-users-num nat-int?)
+(s/def :statistics.statement.type/supports nat-int?)
+(s/def :statistics.statement.type/attacks nat-int?)
+(s/def :statistics.statement.type/neutrals nat-int?)
+(s/def :statistics/statement-type-stats
+  (s/keys :req-un [:statistics.statement.type/supports :statistics.statement.type/attacks
+                   :statistics.statement.type/neutrals]))
+(s/def :statistics.statement.length/max number?)
+(s/def :statistics.statement.length/min number?)
+(s/def :statistics.statement.length/average number?)
+(s/def :statistics.statement.length/median number?)
+(s/def :statistics/statement-length-stats
+  (s/keys :req-un [:statistics.statement.length/max :statistics.statement.length/min
+                   :statistics.statement.length/average :statistics.statement.length/median]))
+(s/def :statistics/registered-users-num nat-int?)
+
+(s/def ::statistics
+  (s/keys :req-un [:statistics/discussions-sum :statistics/usernames-sum
+                   :statistics/average-statements-num :statistics/statements-num
+                   :statistics/active-users-num :statistics/statement-length-stats
+                   :statistics/statement-type-stats :statistics/registered-users-num]))

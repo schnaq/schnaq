@@ -1,6 +1,7 @@
 (ns schnaq.database.analytics
   (:require [ghostwheel.core :refer [>defn >defn-]]
-            [schnaq.database.main :as main-db])
+            [schnaq.database.main :as main-db]
+            [clojure.spec.alpha :as s])
   (:import (java.util Date)
            (java.time Instant)))
 
@@ -40,11 +41,13 @@
        (Date/from since) attribute value)
      0)))
 
-(defn number-of-discussions
+(>defn number-of-discussions
   "Returns the number of meetings. Optionally takes a date since when this counts."
   ([]
+   [:ret :statistics/discussions-sum]
    (number-of-discussions max-time-back))
   ([since]
+   [:statistics/since :ret :statistics/discussions-sum]
    (or
      (main-db/query
        '[:find (count ?discussions) .
@@ -56,21 +59,31 @@
        (Date/from since))
      0)))
 
-(defn number-of-usernames
+(>defn number-of-usernames
   "Returns the number of different usernames in the database."
-  ([] (number-of-entities-since :user/nickname))
-  ([since] (number-of-entities-since :user/nickname since)))
+  ([]
+   [:ret :statistics/usernames-sum]
+   (number-of-entities-since :user/nickname))
+  ([since]
+   [:statistics/since :ret :statistics/usernames-sum]
+   (number-of-entities-since :user/nickname since)))
 
-(defn number-or-registered-users
+(>defn number-or-registered-users
   "Returns the number of registered users in the database."
-  ([] (number-of-entities-since :user.registered/display-name))
-  ([since] (number-of-entities-since :user.registered/display-name since)))
+  ([]
+   [:ret :statistics/registered-users-num]
+   (number-of-entities-since :user.registered/display-name))
+  ([since]
+   [:statistics/since :ret :statistics/registered-users-num]
+   (number-of-entities-since :user.registered/display-name since)))
 
-(defn number-of-statements
+(>defn number-of-statements
   "Returns the number of different statements in the database."
   ([]
+   [:ret :statistics/statements-num]
    (number-of-statements max-time-back))
   ([since]
+   [:statistics/since :ret :statistics/statements-num]
    (or
      (main-db/query
        '[:find (count ?statements) .
@@ -89,10 +102,10 @@
 (>defn average-number-of-statements
   "Returns the average number of statements per discussion."
   ([]
-   [:ret number?]
+   [:ret :statistics/average-statements-num]
    (average-number-of-statements max-time-back))
   ([since]
-   [inst? :ret number?]
+   [:statistics/since :ret :statistics/average-statements-num]
    (let [discussions (number-of-discussions since)
          statements (number-of-statements since)]
      (if (zero? discussions)
@@ -102,10 +115,10 @@
 (>defn number-of-active-discussion-users
   "Returns the number of active users (With at least one statement or suggestion)."
   ([]
-   [:ret int?]
+   [:ret :statistics/active-users-num]
    (number-of-active-discussion-users max-time-back))
   ([since]
-   [inst? :ret int?]
+   [:statistics/since :ret :statistics/active-users-num]
    (main-db/query
      '[:find (count ?authors) .
        :in $ ?since
@@ -116,9 +129,10 @@
 
 (>defn statement-length-stats
   "Returns a map of stats about statement-length."
-  ([] [:ret map?]
+  ([] [:ret :statistics/statement-length-stats]
    (statement-length-stats max-time-back))
-  ([since] [inst? :ret map?]
+  ([since]
+   [:statistics/since :ret :statistics/statement-length-stats]
    (let [sorted-contents (sort-by count
                                   (main-db/query
                                     '[:find [?contents ...]
@@ -139,9 +153,11 @@
 
 (>defn statement-type-stats
   "Returns the number of attacks, supports and neutrals since a certain timestamp."
-  ([] [:ret map?]
+  ([]
+   [:ret :statistics/statement-type-stats]
    (statement-type-stats max-time-back))
-  ([since] [inst? :ret map?]
+  ([since]
+   [:statistics/since :ret :statistics/statement-type-stats]
    {:supports (number-of-entities-with-value-since :statement/type :statement.type/support since)
     :attacks (number-of-entities-with-value-since :statement/type :statement.type/attack since)
     :neutrals (number-of-entities-with-value-since :statement/type :statement.type/neutral since)}))
