@@ -3,6 +3,7 @@
             [clojure.string :as string]
             [datomic.api :as d]
             [ghostwheel.core :refer [>defn]]
+            [schnaq.api.dto-specs :as dto]
             [schnaq.config :as config]
             [schnaq.database.models :as models]
             [schnaq.database.specs :as specs]
@@ -92,7 +93,7 @@
 (>defn add-feedback!
   "Adds a feedback to the database. Returns the id of the newly added feedback."
   [feedback]
-  [::specs/feedback-dto :ret :db/id]
+  [::dto/feedback :ret :db/id]
   (clean-and-add-to-db! (assoc feedback :feedback/created-at (now)) ::specs/feedback))
 
 (defn all-feedbacks

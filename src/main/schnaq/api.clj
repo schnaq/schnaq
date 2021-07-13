@@ -710,7 +710,7 @@
         ["/add" {:description (get-doc #'add-schnaq)
                  :parameters {:body {:discussion-title :discussion/title
                                      :public-discussion? boolean?}}
-                 :responses {201 {:body {:new-schnaq ::specs/discussion-dto}}
+                 :responses {201 {:body {:new-schnaq ::dto/discussion}}
                              400 response-error-body}}
          ["" {:post add-schnaq}]
          ["/anonymous" {:post add-schnaq
@@ -728,11 +728,11 @@
                        :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
                                                                                         :swagger/collectionFormat "multi"})
                                                                 :share-hash :discussion/share-hash)}}
-                       :responses {200 {:body {:schnaqs (s/coll-of ::specs/discussion-dto)}}
+                       :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
                                    404 response-error-body}}]
         ["/public" {:get public-schnaqs
                     :description (get-doc #'public-schnaqs)
-                    :responses {200 {:body {:schnaqs (s/coll-of ::specs/discussion-dto)}}}}]]
+                    :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 nil}
