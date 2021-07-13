@@ -220,9 +220,9 @@
 (deftest search-schnaq-test
   (testing "Statements with corresponding content should be found when share-hash is known."
     (let [share-hash "cat-dog-hash"]
-      (is (= 6 (count (db/search-schnaq share-hash "cats"))))
-      (is (= 2 (count (db/search-schnaq share-hash "dogs"))))
-      (is (= 1 (count (db/search-schnaq share-hash "both")))))))
+      (is (= 6 (count (db/search-statements share-hash "cats"))))
+      (is (= 2 (count (db/search-statements share-hash "dogs"))))
+      (is (= 1 (count (db/search-statements share-hash "both")))))))
 
 (deftest summary-request-test
   (testing "Create a new summary when requested, otherwise update the requested at tag."

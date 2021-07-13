@@ -22,7 +22,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.http-response :refer [ok created bad-request forbidden not-found]]
             [schnaq.api.analytics :as analytics]
-            [schnaq.api.dto-specs :as specs-dto]
+            [schnaq.api.dto-specs :as dto]
             [schnaq.api.hub :as hub]
             [schnaq.api.summaries :as summaries]
             [schnaq.api.toolbelt :as at]
@@ -390,7 +390,7 @@
   [{:keys [parameters]}]
   (let [{:keys [share-hash search-string]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
-      (ok {:matching-statements (-> (discussion-db/search-schnaq share-hash search-string)
+      (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
                                     with-sub-discussion-info
                                     valid-statements-with-votes)})
       not-found-with-error-message)))
@@ -595,7 +595,7 @@
        ["/feedback/add" {:post add-feedback
                          :description (get-doc #'add-feedback)
                          :responses {201 {:body {:feedback ::specs/feedback}}}
-                         :parameters {:body (s/keys :req-un [::specs-dto/feedback] :opt-un [:feedback/screenshot])}}]
+                         :parameters {:body (s/keys :req-un [::dto/feedback] :opt-un [:feedback/screenshot])}}]
        ["/graph/discussion" {:get graph-data-for-agenda
                              :description (get-doc #'graph-data-for-agenda)
                              :parameters {:query {:share-hash :discussion/share-hash}}
@@ -611,7 +611,7 @@
         ["/conclusions/starting" {:get get-starting-conclusions
                                   :description (get-doc #'get-starting-conclusions)
                                   :parameters {:query {:share-hash :discussion/share-hash}}
-                                  :responses {200 {:body {:starting-conclusions (s/coll-of ::specs-dto/statement)}}
+                                  :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                               404 response-error-body}}]
         ["/header-image" {:post media/set-preview-image
                           :description (get-doc #'media/set-preview-image)
@@ -627,34 +627,34 @@
                                                     :nickname :user/nickname
                                                     :premise :statement/content
                                                     :reaction keyword? #_:statement/unqualified-types}}
-                                :responses {201 {:body {:new-statement ::specs-dto/statement}}
+                                :responses {201 {:body {:new-statement ::dto/statement}}
                                             403 response-error-body}}]
         ["/statements"
          ["/search" {:get search-statements
                      :description (get-doc #'search-statements)
                      :parameters {:query {:share-hash :discussion/share-hash
                                           :search-string string?}}
-                     :responses {200 {:body {:matching-statements ::specs-dto/statement}}
+                     :responses {200 {:body {:matching-statements ::dto/statement}}
                                  404 response-error-body}}]
          ["/for-conclusion" {:post get-statements-for-conclusion
                              :description (get-doc #'get-statements-for-conclusion)
                              :parameters {:body {:share-hash :discussion/share-hash
                                                  :conclusion-id :db/id}}
-                             :responses {200 {:body {:premises (s/coll-of ::specs-dto/statement)}}
+                             :responses {200 {:body {:premises (s/coll-of ::dto/statement)}}
                                          404 response-error-body}}]
          ["/starting/add" {:post add-starting-statement!
                            :description (get-doc #'add-starting-statement!)
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :statement :statement/content
                                                :nickname :user/nickname}}
-                           :responses {201 {:body {:starting-conclusions (s/coll-of ::specs-dto/statement)}}
+                           :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                        403 response-error-body}}]]
         ["/statement" {:parameters {:body {:statement-id :db/id}}}
          ["/info" {:post get-statement-info
                    :description (get-doc #'get-statement-info)
                    :responses {200 {:body {:share-hash :discussion/share-hash
                                            :conclusion ::specs/statement-dto
-                                           :premises (s/coll-of ::specs-dto/statement)}}
+                                           :premises (s/coll-of ::dto/statement)}}
                                404 response-error-body}}]
          ["/edit" {:put edit-statement!
                    :description (get-doc #'edit-statement!)
@@ -662,14 +662,14 @@
                    :parameters {:body {:share-hash :discussion/share-hash
                                        :statement-type :statement/unqualified-types
                                        :new-content :statement/content}}
-                   :responses {200 {:body {:updated-statement ::specs-dto/statement}}
+                   :responses {200 {:body {:updated-statement ::dto/statement}}
                                400 response-error-body
                                403 response-error-body}}]
          ["/delete" {:delete delete-statement!
                      :description (get-doc #'delete-statement!)
                      :middleware [auth/auth-middleware]
                      :responses {200 {:body {:share-hash :discussion/share-hash
-                                             :updated-statement ::specs-dto/statement}}
+                                             :updated-statement ::dto/statement}}
                                  400 response-error-body
                                  403 response-error-body}}]
          ["/vote" {:parameters {:body {:share-hash :discussion/share-hash

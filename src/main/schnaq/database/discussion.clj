@@ -397,8 +397,8 @@
       @(transact
          (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))
 
-(>defn search-schnaq
-  "Searches the content of statements in a schnaq and returns the corresponding statements."
+(>defn search-statements
+  "Searches the content of statements in a discussion and returns the corresponding statements."
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
   (->
