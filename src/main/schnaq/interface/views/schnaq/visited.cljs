@@ -21,7 +21,7 @@
   (let [old-schnaq-string (set (remove empty?
                                        (string/split (ls/get-item :schnaqs/visited)
                                                      (re-pattern hash-separator))))
-        schnaqs-visited (:schnaqs/visited local-storage)
+        schnaqs-visited (set (remove empty? (:schnaqs/visited local-storage)))
         meeting-string (set (remove empty?
                                     (string/split (ls/get-item :meetings/visited)
                                                   (re-pattern hash-separator))))]
