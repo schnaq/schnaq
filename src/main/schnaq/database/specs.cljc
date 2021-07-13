@@ -102,7 +102,7 @@
 (s/def :statement.vote/operation #{:removed :switched :added})
 
 ;; Common
-(s/def :db/id (s/or :transacted number? :temporary any?))
+(s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def ::entity-reference (s/or :transacted int? :temporary any?))
 
 ;; Feedback
