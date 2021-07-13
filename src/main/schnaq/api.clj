@@ -649,18 +649,17 @@
                                                :nickname :user/nickname}}
                            :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                        403 response-error-body}}]]
-        ["/statement" {:parameters {:body {:statement-id :db/id}}}
+        ["/statement" {:parameters {:body {:statement-id :db/id
+                                           :share-hash :discussion/share-hash}}}
          ["/info" {:post get-statement-info
                    :description (get-doc #'get-statement-info)
-                   :responses {200 {:body {:share-hash :discussion/share-hash
-                                           :conclusion ::specs/statement-dto
+                   :responses {200 {:body {:conclusion ::dto/statement
                                            :premises (s/coll-of ::dto/statement)}}
                                404 response-error-body}}]
          ["/edit" {:put edit-statement!
                    :description (get-doc #'edit-statement!)
                    :middleware [auth/auth-middleware]
-                   :parameters {:body {:share-hash :discussion/share-hash
-                                       :statement-type :statement/unqualified-types
+                   :parameters {:body {:statement-type :statement/unqualified-types
                                        :new-content :statement/content}}
                    :responses {200 {:body {:updated-statement ::dto/statement}}
                                400 response-error-body
