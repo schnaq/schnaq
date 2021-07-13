@@ -376,7 +376,7 @@
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash conclusion-id]} (:body parameters)
+  (let [{:keys [share-hash conclusion-id]} (:query parameters)
         prepared-statements (-> conclusion-id
                                 discussion-db/children-for-statement
                                 valid-statements-with-votes
@@ -636,10 +636,10 @@
                                           :search-string string?}}
                      :responses {200 {:body {:matching-statements ::dto/statement}}
                                  404 response-error-body}}]
-         ["/for-conclusion" {:post get-statements-for-conclusion
+         ["/for-conclusion" {:get get-statements-for-conclusion
                              :description (get-doc #'get-statements-for-conclusion)
-                             :parameters {:body {:share-hash :discussion/share-hash
-                                                 :conclusion-id :db/id}}
+                             :parameters {:query {:share-hash :discussion/share-hash
+                                                  :conclusion-id :db/id}}
                              :responses {200 {:body {:premises (s/coll-of ::dto/statement)}}
                                          404 response-error-body}}]
          ["/starting/add" {:post add-starting-statement!
