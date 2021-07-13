@@ -168,7 +168,7 @@
       (do (log/info "Setting discussion to read-only: " share-hash)
           (discussion-db/set-discussion-read-only share-hash)
           (ok {:share-hash share-hash}))
-      (validator/deny-access "You do not have the rights to access this action."))))
+      (validator/deny-access))))
 
 (defn- make-discussion-writeable!
   "Makes a discussion writeable if discussion-admin credentials are there."
@@ -178,7 +178,7 @@
       (do (log/info "Removing read-only from discussion: " share-hash)
           (discussion-db/remove-read-only share-hash)
           (ok {:share-hash share-hash}))
-      (validator/deny-access "You do not have the rights to access this action."))))
+      (validator/deny-access))))
 
 (defn- disable-pro-con!
   "Disable pro-con option for a schnaq."
@@ -188,21 +188,22 @@
       (do (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
           (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
           (ok {:share-hash share-hash}))
-      (validator/deny-access "You do not have the rights to access this action."))))
+      (validator/deny-access))))
 
 (defn- delete-statements!
   "Deletes the passed list of statements if the admin-rights are fitting.
   Important: Needs to check whether the statement-id really belongs to the discussion with
   the passed edit-hash."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash statement-ids]} (:body parameters)]
+  (let [{:keys [share-hash edit-hash statement-ids]} (:body parameters)
+        deny-access (validator/deny-access "You do not have the rights to access this action.")]
     (if (validator/valid-credentials? share-hash edit-hash)
       ;; could optimize with a collection query here
       (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
         (do (discussion-db/delete-statements! statement-ids)
             (ok {:deleted-statements statement-ids}))
-        (bad-request {:error "You are trying to delete statements, without the appropriate rights"}))
-      (validator/deny-access "You do not have the rights to access this action."))))
+        deny-access)
+      deny-access)))
 
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
@@ -210,7 +211,7 @@
   (let [{:keys [share-hash]} (:body parameters)]
     (if (discussion-db/delete-discussion share-hash)
       (ok {:share-hash share-hash})
-      (bad-request {:error "An error occurred, while deleting the schnaq."}))))
+      (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
 
 ;; -----------------------------------------------------------------------------
 ;; Votes
@@ -670,7 +671,7 @@
           ["/delete" {:delete delete-statement!
                       :description (get-doc #'delete-statement!)
                       :middleware [auth/auth-middleware]
-                      :responses {200 {:body {:updated-statement ::dto/statement}}
+                      :responses {200 {:body {:deleted-statement :db/id}}
                                   400 response-error-body
                                   403 response-error-body}}]
           ["/vote" {:parameters {:body {:nickname :user/nickname}}}
@@ -736,7 +737,7 @@
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 nil}
-                  #_#_:middleware [auth/auth-middleware auth/is-admin-middleware]}
+                  :middleware [auth/auth-middleware auth/is-admin-middleware]}
         ["/feedbacks" {:get all-feedbacks
                        :description (get-doc #'all-feedbacks)
                        :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]
@@ -744,21 +745,22 @@
                            :description (get-doc #'all-summaries)
                            :responses {200 {:body {:summaries (s/coll-of ::specs/summary)}}}}]
         ["/schnaq/delete" {:delete delete-schnaq!
-                           :parameters {:body {:share-hash :discussion/share-hash}}}]
-        ["/statements/delete" {:post delete-statements!
-                               :parameters {:body {:share-hash :discussion/share-hash
-                                                   :edit-hash :discussion/edit-hash
-                                                   :statement-ids :db/id}}}]]
-       ["/manage" {:swagger {:tags ["manage"]}}
-        ["/schnaq" {:parameters {:body {:share-hash :discussion/share-hash
-                                        :edit-hash :discussion/edit-hash}}}
+                           :parameters {:body {:share-hash :discussion/share-hash}}
+                           :responses {200 {:share-hash :discussion/share-hash}
+                                       400 response-error-body}}]]
+       ["/manage" {:swagger {:tags ["manage"]}
+                   :parameters {:body {:share-hash :discussion/share-hash
+                                       :edit-hash :discussion/edit-hash}}}
+        ["/schnaq"
          ["/disable-pro-con" {:post disable-pro-con!
                               :parameters {:body {:disable-pro-con? boolean?}}}]
-         ["/schnaq/make-read-only" {:post make-discussion-read-only!}]
-         ["/schnaq/make-writeable" {:post make-discussion-writeable!}]]
-        ["/statements/delete" {:post delete-statement!
-                               :parameters {:body {:statement-id :db/id
-                                                   :share-hash :discussion/share-hash}}}]]
+         ["/make-read-only" {:post make-discussion-read-only!}]
+         ["/make-writeable" {:post make-discussion-writeable!}]]
+        ["/statements/delete" {:delete delete-statements!
+                               :parameters {:body {:statement-ids (s/coll-of :db/id)
+                                                   :share-hash :discussion/share-hash
+                                                   :edit-hash :discussion/edit-hash}}
+                               :responses {200 {:deleted-statements (s/coll-of :db/id)}}}]]
 
        user-api/user-routes
        hub/hub-routes
