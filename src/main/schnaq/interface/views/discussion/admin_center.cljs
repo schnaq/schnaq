@@ -317,7 +317,7 @@
   (fn [{:keys [db]} [_ disable-pro-con?]]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/manage/schnaq/disable-pro-con"
+      {:fx [(http/xhrio-request db :put "/manage/schnaq/disable-pro-con"
                                 [:schnaq.admin/disable-pro-con-success disable-pro-con?]
                                 {:disable-pro-con? disable-pro-con?
                                  :share-hash share-hash

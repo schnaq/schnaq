@@ -119,7 +119,7 @@
 (defn- schnaq-by-hash
   "Returns a discussion, identified by its share-hash."
   [{:keys [parameters identity]}]
-  (let [hash (get-in parameters [:path :share-hash])
+  (let [hash (get-in parameters [:query :share-hash])
         keycloak-id (:sub identity)]
     (if (validator/valid-discussion? hash)
       (ok {:schnaq (processors/add-meta-info-to-schnaq
@@ -157,7 +157,7 @@
   [{:keys [parameters]}]
   (let [{:keys [share-hash edit-hash]} (:body parameters)]
     (if (validator/valid-credentials? share-hash edit-hash)
-      (ok {:discussion (discussion-db/discussion-by-share-hash-private share-hash)})
+      (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})
       (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
 
 (defn- make-discussion-read-only!
@@ -576,7 +576,9 @@
 (def app
   (ring/ring-handler
     (ring/router
-      [["/ping" {:get ping}]
+      [["/ping" {:get ping
+                 :description (get-doc #'ping)
+                 :responses {200 {:body {:ok string?}}}}]
        ["/export/txt" {:get export-txt-data
                        :description (get-doc #'export-txt-data)
                        :swagger {:tags ["exports"]}
@@ -584,9 +586,9 @@
                        :responses {200 {:body {:string-representation string?}}
                                    400 response-error-body}}]
        ["/author/add" {:put add-author
-                       :responses {201 {:body {:user-id :db/id}}}
                        :description (get-doc #'add-author)
-                       :parameters {:body {:nickname :user/nickname}}}]
+                       :parameters {:body {:nickname :user/nickname}}
+                       :responses {201 {:body {:user-id :db/id}}}}]
        ["/credentials/validate" {:post check-credentials!
                                  :description (get-doc #'check-credentials!)
                                  :responses {200 {:body {:valid-credentials? boolean?}}
@@ -595,13 +597,8 @@
                                                      :edit-hash :discussion/edit-hash}}}]
        ["/feedback/add" {:post add-feedback
                          :description (get-doc #'add-feedback)
-                         :responses {201 {:body {:feedback ::specs/feedback}}}
-                         :parameters {:body (s/keys :req-un [::dto/feedback] :opt-un [:feedback/screenshot])}}]
-       ["/graph/discussion" {:get graph-data-for-agenda
-                             :description (get-doc #'graph-data-for-agenda)
-                             :parameters {:query {:share-hash :discussion/share-hash}}
-                             :responses {200 {:body {:graph ::specs/graph}}
-                                         400 response-error-body}}]
+                         :parameters {:body (s/keys :req-un [::dto/feedback] :opt-un [:feedback/screenshot])}
+                         :responses {201 {:body {:feedback ::dto/feedback}}}}]
        ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
                                   :description (get-doc #'subscribe-lead-magnet!)
                                   :parameters {:body {:email string?}}
@@ -614,6 +611,11 @@
                                   :parameters {:query {:share-hash :discussion/share-hash}}
                                   :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                               404 response-error-body}}]
+        ["/graph" {:get graph-data-for-agenda
+                   :description (get-doc #'graph-data-for-agenda)
+                   :parameters {:query {:share-hash :discussion/share-hash}}
+                   :responses {200 {:body {:graph ::specs/graph}}
+                               400 response-error-body}}]
         ["/header-image" {:post media/set-preview-image
                           :description (get-doc #'media/set-preview-image)
                           :parameters {:body {:share-hash :discussion/share-hash
@@ -703,11 +705,11 @@
                                       403 response-error-body}}]]
 
        ["/schnaq" {:swagger {:tags ["schnaqs"]}}
-        ["/by-hash/:share-hash" {:get schnaq-by-hash
-                                 :description (get-doc #'schnaq-by-hash)
-                                 :parameters {:path {:share-hash :discussion/share-hash}}
-                                 :responses {200 {:body {:schnaq ::specs/discussion}}
-                                             403 response-error-body}}]
+        ["/by-hash" {:get schnaq-by-hash
+                     :description (get-doc #'schnaq-by-hash)
+                     :parameters {:query {:share-hash :discussion/share-hash}}
+                     :responses {200 {:body {:schnaq ::specs/discussion}}
+                                 403 response-error-body}}]
         ["/add" {:description (get-doc #'add-schnaq)
                  :parameters {:body {:discussion-title :discussion/title
                                      :public-discussion? boolean?}}
@@ -721,7 +723,8 @@
                                            :hub :hub/keycloak-name}}}]]
         ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
                               :parameters {:body {:share-hash :discussion/share-hash
-                                                  :edit-hash :discussion/edit-hash}}}]]
+                                                  :edit-hash :discussion/edit-hash}}
+                              :responses {200 {:body {:schnaq ::dto/discussion}}}}]]
 
        ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
         ["/by-hashes" {:get schnaqs-by-hashes
@@ -754,7 +757,7 @@
                                        :edit-hash :discussion/edit-hash}}
                    :responses {403 response-error-body}}
         ["/schnaq" {:responses {200 {:body {:share-hash :discussion/share-hash}}}}
-         ["/disable-pro-con" {:post disable-pro-con!
+         ["/disable-pro-con" {:put disable-pro-con!
                               :description (get-doc #'disable-pro-con!)
                               :parameters {:body {:disable-pro-con? boolean?}}}]
          ["/make-read-only" {:put make-discussion-read-only!
@@ -762,6 +765,7 @@
          ["/make-writeable" {:put make-discussion-writeable!
                              :description (get-doc #'make-discussion-writeable!)}]]
         ["/statements/delete" {:delete delete-statements!
+                               :description (get-doc #'delete-statements!)
                                :parameters {:body {:statement-ids (s/coll-of :db/id)}}
                                :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}}}]]
 

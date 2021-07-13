@@ -169,7 +169,7 @@
   :graph/load-data-for-discussion
   (fn [{:keys [db]} _]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
-      {:fx [(http/xhrio-request db :get "/graph/discussion" [:graph/set-current] {:share-hash share-hash})]})))
+      {:fx [(http/xhrio-request db :get "/discussion/graph" [:graph/set-current] {:share-hash share-hash})]})))
 
 (rf/reg-event-fx
   :graph/set-current

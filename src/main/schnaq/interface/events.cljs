@@ -138,8 +138,9 @@
 
 (rf/reg-event-fx
   :schnaq/load-by-share-hash
-  (fn [{:keys [db]} [_ hash]]
-    {:fx [(http/xhrio-request db :get (str "/schnaq/by-hash/" hash) [:schnaq/select-current])]}))
+  (fn [{:keys [db]} [_ share-hash]]
+    {:fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current]
+                              {:share-hash share-hash})]}))
 
 (rf/reg-event-fx
   :schnaq/check-admin-credentials
@@ -159,8 +160,8 @@
 
 (rf/reg-event-db
   :schnaq/save-as-last-added
-  (fn [db [_ {:keys [discussion]}]]
-    (assoc-in db [:schnaq :last-added] discussion)))
+  (fn [db [_ {:keys [schnaq]}]]
+    (assoc-in db [:schnaq :last-added] schnaq)))
 
 (rf/reg-sub
   :schnaq/last-added

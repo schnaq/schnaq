@@ -40,9 +40,9 @@
       (testing "bad request"
         (is (= 400 (:status bad-response))))
       (testing "Check with complete app"
-        (is (= 200 (:status (api/app {:request-method :get :uri "/graph/discussion"
+        (is (= 200 (:status (api/app {:request-method :get :uri "/discussion/graph"
                                       :query-params {:share-hash share-hash}}))))
-        (is (= 400 (:status (api/app {:request-method :get :uri "/graph/discussion"
+        (is (= 400 (:status (api/app {:request-method :get :uri "/discussion/graph"
                                       :query-params {:share-hash "bad-hash"}}))))))))
 
 (deftest cors-origin-tests
