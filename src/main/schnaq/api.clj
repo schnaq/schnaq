@@ -127,7 +127,7 @@
                        (discussion-db/discussion-by-share-hash hash)))})
       (validator/deny-access))))
 
-(defn- discussions-by-hashes
+(defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
   they have access to. If only one schnaq shall be loaded, ring packs it
   into a single string:
@@ -140,7 +140,7 @@
   [request]
   (if-let [share-hashes (get-in request [:parameters :query :share-hashes])]
     (let [share-hashes-list (if (string? share-hashes) [share-hashes] share-hashes)]
-      (ok {:discussions
+      (ok {:schnaqs
            (map processors/add-meta-info-to-schnaq
                 (discussion-db/valid-discussions-by-hashes share-hashes-list))}))
     not-found-with-error-message))
@@ -148,7 +148,7 @@
 (defn- public-schnaqs
   "Return all public schnaqs."
   [_req]
-  (ok {:discussions (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
+  (ok {:schnaqs (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
 
 (defn- schnaq-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
@@ -716,16 +716,16 @@
                                                   :edit-hash :discussion/edit-hash}}}]]
 
        ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
-        ["/by-hashes" {:get discussions-by-hashes
-                       :description (get-doc #'discussions-by-hashes)
+        ["/by-hashes" {:get schnaqs-by-hashes
+                       :description (get-doc #'schnaqs-by-hashes)
                        :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
                                                                                         :swagger/collectionFormat "multi"})
                                                                 :share-hash :discussion/share-hash)}}
-                       :responses {200 {:body {:discussions (s/coll-of ::specs/discussion-dto)}}
+                       :responses {200 {:body {:schnaqs (s/coll-of ::specs/discussion-dto)}}
                                    404 response-error-body}}]
         ["/public" {:get public-schnaqs
                     :description (get-doc #'public-schnaqs)
-                    :responses {200 {:body {:discussions (s/coll-of ::specs/discussion-dto)}}}}]]
+                    :responses {200 {:body {:schnaqs (s/coll-of ::specs/discussion-dto)}}}}]]
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 nil}
