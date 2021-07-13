@@ -398,7 +398,7 @@
 (defn- get-statement-info
   "Return premises and conclusion for a given statement id."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash statement-id]} (:body parameters)]
+  (let [{:keys [share-hash statement-id]} (:query parameters)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
@@ -634,7 +634,7 @@
                      :description (get-doc #'search-statements)
                      :parameters {:query {:share-hash :discussion/share-hash
                                           :search-string string?}}
-                     :responses {200 {:body {:matching-statements ::dto/statement}}
+                     :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
                                  404 response-error-body}}]
          ["/for-conclusion" {:get get-statements-for-conclusion
                              :description (get-doc #'get-statements-for-conclusion)
@@ -649,39 +649,39 @@
                                                :nickname :user/nickname}}
                            :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                        403 response-error-body}}]]
-        ["/statement" {:parameters {:body {:statement-id :db/id
-                                           :share-hash :discussion/share-hash}}}
-         ["/info" {:post get-statement-info
+        ["/statement"
+         ["/info" {:get get-statement-info
                    :description (get-doc #'get-statement-info)
+                   :parameters {:query {:statement-id :db/id
+                                        :share-hash :discussion/share-hash}}
                    :responses {200 {:body {:conclusion ::dto/statement
                                            :premises (s/coll-of ::dto/statement)}}
                                404 response-error-body}}]
-         ["/edit" {:put edit-statement!
-                   :description (get-doc #'edit-statement!)
-                   :middleware [auth/auth-middleware]
-                   :parameters {:body {:statement-type :statement/unqualified-types
-                                       :new-content :statement/content}}
-                   :responses {200 {:body {:updated-statement ::dto/statement}}
-                               400 response-error-body
-                               403 response-error-body}}]
-         ["/delete" {:delete delete-statement!
-                     :description (get-doc #'delete-statement!)
-                     :middleware [auth/auth-middleware]
-                     :responses {200 {:body {:share-hash :discussion/share-hash
-                                             :updated-statement ::dto/statement}}
-                                 400 response-error-body
-                                 403 response-error-body}}]
-         ["/vote" {:parameters {:body {:share-hash :discussion/share-hash
-                                       :statement-id :db/id
-                                       :nickname :user/nickname}}}
-          ["/down" {:post toggle-downvote-statement
-                    :description (get-doc #'toggle-downvote-statement)
-                    :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
-                                400 response-error-body}}]
-          ["/up" {:post toggle-upvote-statement
-                  :description (get-doc #'toggle-upvote-statement)
-                  :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
-                              400 response-error-body}}]]]]
+         ["" {:parameters {:body {:statement-id :db/id
+                                  :share-hash :discussion/share-hash}}}
+          ["/edit" {:put edit-statement!
+                    :description (get-doc #'edit-statement!)
+                    :middleware [auth/auth-middleware]
+                    :parameters {:body {:statement-type :statement/unqualified-types
+                                        :new-content :statement/content}}
+                    :responses {200 {:body {:updated-statement ::dto/statement}}
+                                400 response-error-body
+                                403 response-error-body}}]
+          ["/delete" {:delete delete-statement!
+                      :description (get-doc #'delete-statement!)
+                      :middleware [auth/auth-middleware]
+                      :responses {200 {:body {:updated-statement ::dto/statement}}
+                                  400 response-error-body
+                                  403 response-error-body}}]
+          ["/vote" {:parameters {:body {:nickname :user/nickname}}}
+           ["/down" {:post toggle-downvote-statement
+                     :description (get-doc #'toggle-downvote-statement)
+                     :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
+                                 400 response-error-body}}]
+           ["/up" {:post toggle-upvote-statement
+                   :description (get-doc #'toggle-upvote-statement)
+                   :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
+                               400 response-error-body}}]]]]]
 
        ["/emails" {:swagger {:tags ["emails"]}
                    :parameters {:body {:share-hash :discussion/share-hash

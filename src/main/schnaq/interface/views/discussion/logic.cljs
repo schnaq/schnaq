@@ -87,7 +87,7 @@
   (fn [{:keys [db]} _]
     (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])]
       {:fx [(http/xhrio-request
-              db :post "/discussion/statement/info"
+              db :get "/discussion/statement/info"
               [:discussion.query.statement/by-id-success]
               {:statement-id statement-id
                :share-hash share-hash}
