@@ -65,7 +65,7 @@
 
 (def analytics-routes
   ["/analytics" {:swagger {:tags ["analytics"]}
-                 #_#_:middleware [auth/auth-middleware auth/is-admin-middleware]
+                 :middleware [auth/auth-middleware auth/is-admin-middleware]
                  :responses {401 at/response-error-body}}
    ["" {:get all-stats
         :parameters {:query {:days-since nat-int?}}
