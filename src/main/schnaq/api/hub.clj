@@ -1,13 +1,19 @@
 (ns schnaq.api.hub
-  (:require [keycloak.admin :as kc-admin]
-            [ring.util.http-response :refer [ok forbidden bad-request]]
+  (:require [clojure.spec.alpha :as s]
+            [keycloak.admin :as kc-admin]
+            [ring.util.http-response :refer [ok forbidden not-found internal-server-error]]
+            [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
             [schnaq.config.keycloak :as kc-config :refer [kc-client]]
             [schnaq.database.hub :as hub-db]
             [schnaq.database.main :refer [fast-pull transact]]
+            [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.processors :as processors]
             [schnaq.validator :as validators]))
+
+(def ^:private forbidden-missing-permission
+  (forbidden (at/build-error-body :hub/not-a-member "You are not a member of the hub.")))
 
 (defn- hub-by-keycloak-name
   "Query hub by its referenced name in keycloak."
@@ -18,7 +24,7 @@
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
         (ok {:hub processed-hub
              :hub-members (user-db/members-of-group keycloak-name)}))
-      (forbidden "You are not allowed to access this ressource."))))
+      forbidden-missing-permission)))
 
 (defn- all-hubs-for-user
   "Return all valid hubs for a user."
@@ -46,8 +52,9 @@
               hub (hub-db/add-discussions-to-hub hub-id [discussion-id])
               processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
           (ok {:hub processed-hub}))
-        (bad-request {:message "The discussion could not be found."}))
-      (forbidden {:message "You are not a member of the group."}))))
+        (not-found (at/build-error-body :hub/discussion-not-found
+                                        "The discussion could not be found.")))
+      forbidden-missing-permission)))
 
 (defn- remove-schnaq-from-hub
   "Removes a schnaq from the specified hub. Only happens when the caller is member of the hub."
@@ -59,7 +66,7 @@
                                                    [:discussion/share-hash share-hash])
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
         (ok {:hub processed-hub}))
-      (forbidden {:message "You are not a member of the group."}))))
+      forbidden-missing-permission)))
 
 (defn- change-hub-name
   "Change hub name."
@@ -70,7 +77,7 @@
       (let [hub (hub-db/change-hub-name keycloak-name new-hub-name)
             processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
         (ok {:hub processed-hub}))
-      (forbidden {:message "You are not a member of the hub."}))))
+      forbidden-missing-permission)))
 
 (defn- add-member-to-hub
   "Add a member to a hub using their email-address. If the user is already a member
@@ -87,26 +94,42 @@
             (kc-admin/add-user-to-group! kc-client kc-config/realm group-id new-user-keycloak-id)
             (ok {:status :user-added})
             (catch Exception _e
-              (ok {:status :error-adding-user}))))
+              (internal-server-error (at/build-error-body :hub/error-adding-user
+                                                          "User could not be added")))))
         (ok {:status :user-not-registered}))
-      (forbidden {:message "You are not allowed to add new members to the hub"}))))
+      forbidden-missing-permission)))
 
 
 ;; -----------------------------------------------------------------------------
 
 (def hub-routes
-  [["/hubs/personal" {:swagger {:tags ["hubs"]}
-                      :middleware [auth/auth-middleware]
-                      :get all-hubs-for-user}]
-   ["/hub" {:swagger {:tags ["hubs"]}
-            :middleware [auth/auth-middleware]}
-    ["/:keycloak-name" {:parameters {:path {:keycloak-name :hub/keycloak-name}}}
-     ["" {:get hub-by-keycloak-name}]
-     ["/add" {:post add-schnaq-to-hub
-              :parameters {:body {:share-hash :discussion/share-hash}}}]
-     ["/add-member" {:post add-member-to-hub
-                     :parameters {:body {:new-member-mail :user.registered/email}}}]
-     ["/name" {:put change-hub-name
-               :parameters {:body {:new-hub-name :hub/name}}}]
-     ["/remove" {:delete remove-schnaq-from-hub
-                 :parameters {:body {:share-hash :discussion/share-hash}}}]]]])
+  [["" {:swagger {:tags ["hubs"]}
+        :middleware [auth/auth-middleware]
+        :responses {401 at/response-error-body
+                    403 at/response-error-body}}
+    ["/hubs/personal" {:get all-hubs-for-user
+                       :description (at/get-doc #'all-hubs-for-user)
+                       :responses {200 {:body {:hubs (s/coll-of ::specs/hub)}}}}]
+    ["/hub"
+     ["/:keycloak-name" {:parameters {:path {:keycloak-name :hub/keycloak-name}}}
+      ["" {:get hub-by-keycloak-name
+           :description (at/get-doc #'hub-by-keycloak-name)
+           :responses {200 {:body {:hub ::specs/hub
+                                   :hub-members (s/coll-of ::specs/any-user)}}}}]
+      ["/add" {:post add-schnaq-to-hub
+               :description (at/get-doc #'add-schnaq-to-hub)
+               :parameters {:body {:share-hash :discussion/share-hash}}
+               :responses {200 {:body {:hub ::specs/hub}}
+                           404 at/response-error-body}}]
+      ["/add-member" {:post add-member-to-hub
+                      :description (at/get-doc #'add-member-to-hub)
+                      :parameters {:body {:new-member-mail :user.registered/email}}
+                      :responses {200 {:body {:ok keyword?}}}}]
+      ["/name" {:put change-hub-name
+                :description (at/get-doc #'change-hub-name)
+                :parameters {:body {:new-hub-name :hub/name}}
+                :responses {200 {:body {:hub ::specs/hub}}}}]
+      ["/remove" {:delete remove-schnaq-from-hub
+                  :description (at/get-doc #'remove-schnaq-from-hub)
+                  :parameters {:body {:share-hash :discussion/share-hash}}
+                  :responses {200 {:body {:hub ::specs/hub}}}}]]]]])
