@@ -156,7 +156,7 @@
 (>defn members-of-group
   "Returns all members of a certain group."
   [group-name]
-  [::specs/non-blank-string :ret (s/coll-of ::specs/user-or-reference)]
+  [::specs/non-blank-string :ret (s/coll-of ::specs/any-user)]
   (query
     '[:find [(pull ?users public-user-pattern) ...]
       :in $ ?group public-user-pattern
