@@ -88,18 +88,18 @@
   ["/user" {:swagger {:tags ["user"]}
             :middleware [auth/auth-middleware]}
    ["/register" {:put register-user-if-they-not-exist
-                 :description (:doc (meta #'register-user-if-they-not-exist))
+                 :description (at/get-doc #'register-user-if-they-not-exist)
                  :parameters {:body ::user-register}
                  :responses {201 {:body {:registered-user ::specs/registered-user
                                          :updated-statements? boolean?}}
                              200 {:body {:registered-user ::specs/registered-user
                                          :updated-statements? boolean?}}}}]
    ["/picture" {:put change-profile-picture
-                :description (:doc (meta #'change-profile-picture))
+                :description (at/get-doc #'change-profile-picture)
                 :parameters {:body {:image ::image}}
                 :responses {200 {:body {:updated-user ::specs/registered-user}}
-                            400 {:body ::at/error-body}}}]
+                            400 at/response-error-body}}]
    ["/name" {:put change-display-name
-             :description (:doc (meta #'change-display-name))
+             :description (at/get-doc #'change-display-name)
              :parameters {:body {:display-name :user/nickname}}
              :responses {200 {:body {:updated-user ::specs/registered-user}}}}]])
