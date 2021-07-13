@@ -564,157 +564,148 @@
   "Regular expression, which defines the allowed origins for API requests."
   #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
-(def ^:private response-error-body
-  {:body ::at/error-body})
-
-(defn- get-doc
-  "Look the docstring up in the meta-description of a function.
-  Usage: `(get-doc #'ping)`"
-  [fn]
-  (:doc (meta fn)))
-
 (def app
   (ring/ring-handler
     (ring/router
       [["/ping" {:get ping
-                 :description (get-doc #'ping)
+                 :description (at/get-doc #'ping)
                  :responses {200 {:body {:ok string?}}}}]
        ["/export/txt" {:get export-txt-data
-                       :description (get-doc #'export-txt-data)
+                       :description (at/get-doc #'export-txt-data)
                        :swagger {:tags ["exports"]}
                        :parameters {:query {:share-hash :discussion/share-hash}}
                        :responses {200 {:body {:string-representation string?}}
-                                   400 response-error-body}}]
+                                   400 at/response-error-body}}]
        ["/author/add" {:put add-author
-                       :description (get-doc #'add-author)
+                       :description (at/get-doc #'add-author)
                        :parameters {:body {:nickname :user/nickname}}
                        :responses {201 {:body {:user-id :db/id}}}}]
        ["/credentials/validate" {:post check-credentials!
-                                 :description (get-doc #'check-credentials!)
+                                 :description (at/get-doc #'check-credentials!)
                                  :responses {200 {:body {:valid-credentials? boolean?}}
                                              403 {:body {:valid-credentials? boolean?}}}
                                  :parameters {:body {:share-hash :discussion/share-hash
                                                      :edit-hash :discussion/edit-hash}}}]
        ["/feedback/add" {:post add-feedback
-                         :description (get-doc #'add-feedback)
+                         :description (at/get-doc #'add-feedback)
                          :parameters {:body (s/keys :req-un [::dto/feedback] :opt-un [:feedback/screenshot])}
                          :responses {201 {:body {:feedback ::dto/feedback}}}}]
        ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
-                                  :description (get-doc #'subscribe-lead-magnet!)
+                                  :description (at/get-doc #'subscribe-lead-magnet!)
                                   :parameters {:body {:email string?}}
                                   :responses {200 {:body {:status keyword?}}
-                                              400 response-error-body}}]
+                                              400 at/response-error-body}}]
 
        ["/discussion" {:swagger {:tags ["discussions"]}}
         ["/conclusions/starting" {:get get-starting-conclusions
-                                  :description (get-doc #'get-starting-conclusions)
+                                  :description (at/get-doc #'get-starting-conclusions)
                                   :parameters {:query {:share-hash :discussion/share-hash}}
                                   :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
-                                              404 response-error-body}}]
+                                              404 at/response-error-body}}]
         ["/graph" {:get graph-data-for-agenda
-                   :description (get-doc #'graph-data-for-agenda)
+                   :description (at/get-doc #'graph-data-for-agenda)
                    :parameters {:query {:share-hash :discussion/share-hash}}
                    :responses {200 {:body {:graph ::specs/graph}}
-                               400 response-error-body}}]
+                               400 at/response-error-body}}]
         ["/header-image" {:post media/set-preview-image
-                          :description (get-doc #'media/set-preview-image)
+                          :description (at/get-doc #'media/set-preview-image)
                           :parameters {:body {:share-hash :discussion/share-hash
                                               :edit-hash :discussion/edit-hash
                                               :image-url :discussion/header-image-url}}
                           :responses {201 {:body {:message string?}}
-                                      403 response-error-body}}]
+                                      403 at/response-error-body}}]
         ["/react-to/statement" {:post react-to-any-statement!
-                                :description (get-doc #'react-to-any-statement!)
+                                :description (at/get-doc #'react-to-any-statement!)
                                 :parameters {:body {:share-hash :discussion/share-hash
                                                     :conclusion-id :db/id
                                                     :nickname :user/nickname
                                                     :premise :statement/content
                                                     :reaction keyword? #_:statement/unqualified-types}}
                                 :responses {201 {:body {:new-statement ::dto/statement}}
-                                            403 response-error-body}}]
+                                            403 at/response-error-body}}]
         ["/statements"
          ["/search" {:get search-statements
-                     :description (get-doc #'search-statements)
+                     :description (at/get-doc #'search-statements)
                      :parameters {:query {:share-hash :discussion/share-hash
                                           :search-string string?}}
                      :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
-                                 404 response-error-body}}]
+                                 404 at/response-error-body}}]
          ["/for-conclusion" {:get get-statements-for-conclusion
-                             :description (get-doc #'get-statements-for-conclusion)
+                             :description (at/get-doc #'get-statements-for-conclusion)
                              :parameters {:query {:share-hash :discussion/share-hash
                                                   :conclusion-id :db/id}}
                              :responses {200 {:body {:premises (s/coll-of ::dto/statement)}}
-                                         404 response-error-body}}]
+                                         404 at/response-error-body}}]
          ["/starting/add" {:post add-starting-statement!
-                           :description (get-doc #'add-starting-statement!)
+                           :description (at/get-doc #'add-starting-statement!)
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :statement :statement/content
                                                :nickname :user/nickname}}
                            :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
-                                       403 response-error-body}}]]
+                                       403 at/response-error-body}}]]
         ["/statement"
          ["/info" {:get get-statement-info
-                   :description (get-doc #'get-statement-info)
+                   :description (at/get-doc #'get-statement-info)
                    :parameters {:query {:statement-id :db/id
                                         :share-hash :discussion/share-hash}}
                    :responses {200 {:body {:conclusion ::dto/statement
                                            :premises (s/coll-of ::dto/statement)}}
-                               404 response-error-body}}]
+                               404 at/response-error-body}}]
          ["" {:parameters {:body {:statement-id :db/id
                                   :share-hash :discussion/share-hash}}}
           ["/edit" {:put edit-statement!
-                    :description (get-doc #'edit-statement!)
+                    :description (at/get-doc #'edit-statement!)
                     :middleware [auth/auth-middleware]
                     :parameters {:body {:statement-type :statement/unqualified-types
                                         :new-content :statement/content}}
                     :responses {200 {:body {:updated-statement ::dto/statement}}
-                                400 response-error-body
-                                403 response-error-body}}]
+                                400 at/response-error-body
+                                403 at/response-error-body}}]
           ["/delete" {:delete delete-statement!
-                      :description (get-doc #'delete-statement!)
+                      :description (at/get-doc #'delete-statement!)
                       :middleware [auth/auth-middleware]
                       :responses {200 {:body {:deleted-statement :db/id}}
-                                  400 response-error-body
-                                  403 response-error-body}}]
+                                  400 at/response-error-body
+                                  403 at/response-error-body}}]
           ["/vote" {:parameters {:body {:nickname :user/nickname}}}
            ["/down" {:post toggle-downvote-statement
-                     :description (get-doc #'toggle-downvote-statement)
+                     :description (at/get-doc #'toggle-downvote-statement)
                      :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
-                                 400 response-error-body}}]
+                                 400 at/response-error-body}}]
            ["/up" {:post toggle-upvote-statement
-                   :description (get-doc #'toggle-upvote-statement)
+                   :description (at/get-doc #'toggle-upvote-statement)
                    :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
-                               400 response-error-body}}]]]]]
+                               400 at/response-error-body}}]]]]]
 
        ["/emails" {:swagger {:tags ["emails"]}
                    :parameters {:body {:share-hash :discussion/share-hash
                                        :edit-hash :discussion/edit-hash}}}
         ["/send-admin-center-link" {:post send-admin-center-link
-                                    :description (get-doc #'send-admin-center-link)
+                                    :description (at/get-doc #'send-admin-center-link)
                                     :parameters {:body {:recipient string?
                                                         :admin-center string?}}
                                     :responses {200 {:body {:message string?
                                                             :failed-sendings (s/coll-of string?)}}
-                                                403 response-error-body}}]
+                                                403 at/response-error-body}}]
         ["/send-invites" {:post send-invite-emails
-                          :description (get-doc #'send-invite-emails)
+                          :description (at/get-doc #'send-invite-emails)
                           :parameters {:body {:recipients (s/coll-of string?)
                                               :share-link :discussion/share-link}}
                           :responses {200 {:body {:message string?
                                                   :failed-sendings (s/coll-of string?)}}
-                                      403 response-error-body}}]]
+                                      403 at/response-error-body}}]]
 
        ["/schnaq" {:swagger {:tags ["schnaqs"]}}
         ["/by-hash" {:get schnaq-by-hash
-                     :description (get-doc #'schnaq-by-hash)
+                     :description (at/get-doc #'schnaq-by-hash)
                      :parameters {:query {:share-hash :discussion/share-hash}}
                      :responses {200 {:body {:schnaq ::specs/discussion}}
-                                 403 response-error-body}}]
-        ["/add" {:description (get-doc #'add-schnaq)
+                                 403 at/response-error-body}}]
+        ["/add" {:description (at/get-doc #'add-schnaq)
                  :parameters {:body {:discussion-title :discussion/title
                                      :public-discussion? boolean?}}
                  :responses {201 {:body {:new-schnaq ::dto/discussion}}
-                             400 response-error-body}}
+                             400 at/response-error-body}}
          ["" {:post add-schnaq}]
          ["/anonymous" {:post add-schnaq
                         :parameters {:body {:nickname :user/nickname}}}]
@@ -728,44 +719,44 @@
 
        ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
         ["/by-hashes" {:get schnaqs-by-hashes
-                       :description (get-doc #'schnaqs-by-hashes)
+                       :description (at/get-doc #'schnaqs-by-hashes)
                        :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
                                                                                         :swagger/collectionFormat "multi"})
                                                                 :share-hash :discussion/share-hash)}}
                        :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
-                                   404 response-error-body}}]
+                                   404 at/response-error-body}}]
         ["/public" {:get public-schnaqs
-                    :description (get-doc #'public-schnaqs)
+                    :description (at/get-doc #'public-schnaqs)
                     :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 nil}
                   :middleware [auth/auth-middleware auth/is-admin-middleware]}
         ["/feedbacks" {:get all-feedbacks
-                       :description (get-doc #'all-feedbacks)
+                       :description (at/get-doc #'all-feedbacks)
                        :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]
         ["/summaries/all" {:get all-summaries
-                           :description (get-doc #'all-summaries)
+                           :description (at/get-doc #'all-summaries)
                            :responses {200 {:body {:summaries (s/coll-of ::specs/summary)}}}}]
         ["/schnaq/delete" {:delete delete-schnaq!
-                           :description (get-doc #'delete-schnaq!)
+                           :description (at/get-doc #'delete-schnaq!)
                            :parameters {:body {:share-hash :discussion/share-hash}}
                            :responses {200 {:share-hash :discussion/share-hash}
-                                       400 response-error-body}}]]
+                                       400 at/response-error-body}}]]
        ["/manage" {:swagger {:tags ["manage"]}
                    :parameters {:body {:share-hash :discussion/share-hash
                                        :edit-hash :discussion/edit-hash}}
-                   :responses {403 response-error-body}}
+                   :responses {403 at/response-error-body}}
         ["/schnaq" {:responses {200 {:body {:share-hash :discussion/share-hash}}}}
          ["/disable-pro-con" {:put disable-pro-con!
-                              :description (get-doc #'disable-pro-con!)
+                              :description (at/get-doc #'disable-pro-con!)
                               :parameters {:body {:disable-pro-con? boolean?}}}]
          ["/make-read-only" {:put make-discussion-read-only!
-                             :description (get-doc #'make-discussion-read-only!)}]
+                             :description (at/get-doc #'make-discussion-read-only!)}]
          ["/make-writeable" {:put make-discussion-writeable!
-                             :description (get-doc #'make-discussion-writeable!)}]]
+                             :description (at/get-doc #'make-discussion-writeable!)}]]
         ["/statements/delete" {:delete delete-statements!
-                               :description (get-doc #'delete-statements!)
+                               :description (at/get-doc #'delete-statements!)
                                :parameters {:body {:statement-ids (s/coll-of :db/id)}}
                                :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}}}]]
 
