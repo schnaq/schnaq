@@ -278,7 +278,7 @@
   [:form.mx-3.h-100
    {:on-submit (fn [e]
                  (jq/prevent-default e)
-                 (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
+                 (rf/dispatch [:discussion.statements/search (oget e [:target :elements "search-input" :value])]))}
    [:div.input-group.search-bar.h-100
     [:input.form-control.my-auto.search-bar-input.h-100
      {:type "text" :aria-label "Search" :placeholder

@@ -22,6 +22,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.http-response :refer [ok created bad-request forbidden not-found]]
             [schnaq.api.analytics :as analytics]
+            [schnaq.api.dto-specs :as specs-dto]
             [schnaq.api.hub :as hub]
             [schnaq.api.summaries :as summaries]
             [schnaq.api.toolbelt :as at]
@@ -384,8 +385,8 @@
       (ok {:premises prepared-statements})
       not-found-with-error-message)))
 
-(defn- search-schnaq
-  "Search through any valid schnaq."
+(defn- search-statements
+  "Search through any valid discussion."
   [{:keys [parameters]}]
   (let [{:keys [share-hash search-string]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
@@ -562,7 +563,6 @@
   "Regular expression, which defines the allowed origins for API requests."
   #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
-(s/def :feedback.api/feedback ::specs/feedback-dto)
 (def ^:private response-error-body
   {:body ::at/error-body})
 
@@ -595,7 +595,7 @@
        ["/feedback/add" {:post add-feedback
                          :description (get-doc #'add-feedback)
                          :responses {201 {:body {:feedback ::specs/feedback}}}
-                         :parameters {:body (s/keys :req-un [:feedback.api/feedback] :opt-un [:feedback/screenshot])}}]
+                         :parameters {:body (s/keys :req-un [::specs-dto/feedback] :opt-un [:feedback/screenshot])}}]
        ["/graph/discussion" {:get graph-data-for-agenda
                              :description (get-doc #'graph-data-for-agenda)
                              :parameters {:query {:share-hash :discussion/share-hash}}
@@ -611,65 +611,78 @@
         ["/conclusions/starting" {:get get-starting-conclusions
                                   :description (get-doc #'get-starting-conclusions)
                                   :parameters {:query {:share-hash :discussion/share-hash}}
-                                  :responses {200 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
+                                  :responses {200 {:body {:starting-conclusions (s/coll-of ::specs-dto/statement)}}
                                               404 response-error-body}}]
-        ["" {:parameters {:body {:share-hash :discussion/share-hash}}}
-         ["/header-image" {:post media/set-preview-image
-                           :description (get-doc #'media/set-preview-image)
-                           :parameters {:body {:edit-hash :discussion/edit-hash
-                                               :image-url :discussion/header-image-url}}
-                           :responses {201 {:body {:message string?}}
-                                       403 response-error-body}}]
-         ["/react-to/statement" {:post react-to-any-statement!
-                                 :description (get-doc #'react-to-any-statement!)
-                                 :parameters {:body {:conclusion-id :db/id
-                                                     :nickname :user/nickname
-                                                     :premise :statement/content
-                                                     :reaction keyword? #_:statement/unqualified-types}}
-                                 :responses {201 {:body {:new-statement ::specs/statement-dto}}
-                                             403 response-error-body}}]
-         ["/statements"
-          ["/for-conclusion" {:post get-statements-for-conclusion
-                              :description (get-doc #'get-statements-for-conclusion)
-                              :parameters {:body {:conclusion-id :db/id}}
-                              :responses {200 {:body {:premises (s/coll-of ::specs/statement-dto)}}
-                                          404 response-error-body}}]
-          ["/starting/add" {:post add-starting-statement!
-                            :description (get-doc #'add-starting-statement!)
-                            :parameters {:body {:statement :statement/content
-                                                :nickname :user/nickname}}
-                            :responses {201 {:body {:starting-conclusions (s/coll-of ::specs/statement-dto)}}
-                                        403 response-error-body}}]]
-         ["/statement" {:parameters {:body {:statement-id :db/id}}}
-          ["/info" {:post get-statement-info
-                    :description (get-doc #'get-statement-info)
-                    :responses {200 {:body {:conclusion ::specs/statement-dto
-                                            :premises (s/coll-of ::specs/statement-dto)}}
-                                404 response-error-body}}]
-          ["/edit" {:put edit-statement!
-                    :description (get-doc #'edit-statement!)
-                    :middleware [auth/auth-middleware]
-                    :parameters {:body {:statement-type :statement/unqualified-types
-                                        :new-content :statement/content}}
-                    :responses {200 {:body {:updated-statement ::specs/statement-dto}}
-                                400 response-error-body
-                                403 response-error-body}}]
-          ["/delete" {:delete delete-statement!
-                      :description (get-doc #'delete-statement!)
-                      :middleware [auth/auth-middleware]
-                      :responses {200 {:body {:updated-statement ::specs/statement-dto}}
-                                  400 response-error-body
-                                  403 response-error-body}}]
-          ["/vote" {:parameters {:body {:statement-id :db/id
-                                        :nickname :user/nickname}}}
-           ["/down" {:post toggle-downvote-statement
-                     :description (get-doc #'toggle-downvote-statement)
-                     :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
-                                 400 response-error-body}}]
-           ["/up" {:post toggle-upvote-statement
-                   :description (get-doc #'toggle-upvote-statement)
-                   :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
-                               400 response-error-body}}]]]]]
+        ["/header-image" {:post media/set-preview-image
+                          :description (get-doc #'media/set-preview-image)
+                          :parameters {:body {:share-hash :discussion/share-hash
+                                              :edit-hash :discussion/edit-hash
+                                              :image-url :discussion/header-image-url}}
+                          :responses {201 {:body {:message string?}}
+                                      403 response-error-body}}]
+        ["/react-to/statement" {:post react-to-any-statement!
+                                :description (get-doc #'react-to-any-statement!)
+                                :parameters {:body {:share-hash :discussion/share-hash
+                                                    :conclusion-id :db/id
+                                                    :nickname :user/nickname
+                                                    :premise :statement/content
+                                                    :reaction keyword? #_:statement/unqualified-types}}
+                                :responses {201 {:body {:new-statement ::specs-dto/statement}}
+                                            403 response-error-body}}]
+        ["/statements"
+         ["/search" {:get search-statements
+                     :description (get-doc #'search-statements)
+                     :parameters {:query {:share-hash :discussion/share-hash
+                                          :search-string string?}}
+                     :responses {200 {:body {:matching-statements ::specs-dto/statement}}
+                                 404 response-error-body}}]
+         ["/for-conclusion" {:post get-statements-for-conclusion
+                             :description (get-doc #'get-statements-for-conclusion)
+                             :parameters {:body {:share-hash :discussion/share-hash
+                                                 :conclusion-id :db/id}}
+                             :responses {200 {:body {:premises (s/coll-of ::specs-dto/statement)}}
+                                         404 response-error-body}}]
+         ["/starting/add" {:post add-starting-statement!
+                           :description (get-doc #'add-starting-statement!)
+                           :parameters {:body {:share-hash :discussion/share-hash
+                                               :statement :statement/content
+                                               :nickname :user/nickname}}
+                           :responses {201 {:body {:starting-conclusions (s/coll-of ::specs-dto/statement)}}
+                                       403 response-error-body}}]]
+        ["/statement" {:parameters {:body {:statement-id :db/id}}}
+         ["/info" {:post get-statement-info
+                   :description (get-doc #'get-statement-info)
+                   :responses {200 {:body {:share-hash :discussion/share-hash
+                                           :conclusion ::specs/statement-dto
+                                           :premises (s/coll-of ::specs-dto/statement)}}
+                               404 response-error-body}}]
+         ["/edit" {:put edit-statement!
+                   :description (get-doc #'edit-statement!)
+                   :middleware [auth/auth-middleware]
+                   :parameters {:body {:share-hash :discussion/share-hash
+                                       :statement-type :statement/unqualified-types
+                                       :new-content :statement/content}}
+                   :responses {200 {:body {:updated-statement ::specs-dto/statement}}
+                               400 response-error-body
+                               403 response-error-body}}]
+         ["/delete" {:delete delete-statement!
+                     :description (get-doc #'delete-statement!)
+                     :middleware [auth/auth-middleware]
+                     :responses {200 {:body {:share-hash :discussion/share-hash
+                                             :updated-statement ::specs-dto/statement}}
+                                 400 response-error-body
+                                 403 response-error-body}}]
+         ["/vote" {:parameters {:body {:share-hash :discussion/share-hash
+                                       :statement-id :db/id
+                                       :nickname :user/nickname}}}
+          ["/down" {:post toggle-downvote-statement
+                    :description (get-doc #'toggle-downvote-statement)
+                    :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
+                                400 response-error-body}}]
+          ["/up" {:post toggle-upvote-statement
+                  :description (get-doc #'toggle-upvote-statement)
+                  :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
+                              400 response-error-body}}]]]]
 
        ["/emails" {:swagger {:tags ["emails"]}
                    :parameters {:body {:share-hash :discussion/share-hash
@@ -695,11 +708,6 @@
                                  :parameters {:path {:share-hash :discussion/share-hash}}
                                  :responses {200 {:body {:schnaq ::specs/discussion}}
                                              403 response-error-body}}]
-        ["/search" {:get search-schnaq
-                    :parameters {:query {:share-hash :discussion/share-hash
-                                         :search-string string?}}
-                    :responses {200 {:body {:matching-statements ::specs/statement-dto}}
-                                404 response-error-body}}]
         ["/add" {:description (get-doc #'add-schnaq)
                  :parameters {:body {:discussion-title :discussion/title
                                      :public-discussion? boolean?}}

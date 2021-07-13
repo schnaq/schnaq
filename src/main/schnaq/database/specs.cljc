@@ -75,14 +75,6 @@
                                   :discussion/admins :discussion/hub-origin
                                   :discussion/created-at :discussion/share-link :discussion/admin-link]))
 
-(s/def :discussion/meta-info
-  (s/keys :req-un [:meta/all-statements :meta/authors]))
-(s/def ::discussion-dto
-  (s/keys :req [:discussion/title :discussion/states :discussion/share-hash :discussion/author
-                :discussion/created-at :db/id]
-          :opt [:discussion/share-link :discussion/admin-link :discussion/edit-hash]
-          :opt-un [:discussion/meta-info]))
-
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
 (s/def :hub/schnaqs (s/coll-of ::discussion))
@@ -107,15 +99,7 @@
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions]))
 
-(s/def ::statement-dto
-  (s/keys :req [:db/id :statement/content :statement/version :statement/created-at
-                :statement/author :meta/upvotes :meta/downvotes]
-          :opt [:meta/sub-discussion-info]))
-
 (s/def :statement.vote/operation #{:removed :switched :added})
-
-;; Statement via API
-(s/def :statement/unqualified-types #{:attack :support :neutral})
 
 ;; Common
 (s/def :db/id (s/or :transacted number? :temporary any?))
@@ -131,8 +115,6 @@
 (s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
                           :opt [:feedback/contact-name :feedback/contact-mail
                                 :feedback/created-at :feedback/screenshot]))
-(s/def ::feedback-dto (s/keys :req-un [:feedback/description :feedback/has-image?]
-                              :opt-un [:feedback/contact-name :feedback/contact-mail]))
 
 ;; Summary
 (s/def :summary/discussion (s/or :id :db/id
