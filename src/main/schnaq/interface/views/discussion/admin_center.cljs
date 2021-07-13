@@ -129,7 +129,7 @@
   (fn [{:keys [db]} _]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/manage/schnaq/make-read-only" [:discussion.admin/make-read-only-success]
+      {:fx [(http/xhrio-request db :put "/manage/schnaq/make-read-only" [:discussion.admin/make-read-only-success]
                                 {:share-hash share-hash
                                  :edit-hash edit-hash}
                                 [:ajax.error/as-notification])]})))
@@ -145,7 +145,7 @@
   (fn [{:keys [db]} _]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/manage/schnaq/make-writeable" [:discussion.admin/make-writeable-success]
+      {:fx [(http/xhrio-request db :put "/manage/schnaq/make-writeable" [:discussion.admin/make-writeable-success]
                                 {:share-hash share-hash
                                  :edit-hash edit-hash}
                                 [:ajax.error/as-notification])]})))

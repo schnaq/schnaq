@@ -161,7 +161,7 @@
       (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
 
 (defn- make-discussion-read-only!
-  "Makes a discussion read-only if discussion-admin credentials are there."
+  "Makes a discussion read-only if share- and edit-hash are correct and present."
   [{:keys [parameters]}]
   (let [{:keys [share-hash edit-hash]} (:body parameters)]
     (if (validator/valid-credentials? share-hash edit-hash)
@@ -745,22 +745,25 @@
                            :description (get-doc #'all-summaries)
                            :responses {200 {:body {:summaries (s/coll-of ::specs/summary)}}}}]
         ["/schnaq/delete" {:delete delete-schnaq!
+                           :description (get-doc #'delete-schnaq!)
                            :parameters {:body {:share-hash :discussion/share-hash}}
                            :responses {200 {:share-hash :discussion/share-hash}
                                        400 response-error-body}}]]
        ["/manage" {:swagger {:tags ["manage"]}
                    :parameters {:body {:share-hash :discussion/share-hash
-                                       :edit-hash :discussion/edit-hash}}}
-        ["/schnaq"
+                                       :edit-hash :discussion/edit-hash}}
+                   :responses {403 response-error-body}}
+        ["/schnaq" {:responses {200 {:body {:share-hash :discussion/share-hash}}}}
          ["/disable-pro-con" {:post disable-pro-con!
+                              :description (get-doc #'disable-pro-con!)
                               :parameters {:body {:disable-pro-con? boolean?}}}]
-         ["/make-read-only" {:post make-discussion-read-only!}]
-         ["/make-writeable" {:post make-discussion-writeable!}]]
+         ["/make-read-only" {:put make-discussion-read-only!
+                             :description (get-doc #'make-discussion-read-only!)}]
+         ["/make-writeable" {:put make-discussion-writeable!
+                             :description (get-doc #'make-discussion-writeable!)}]]
         ["/statements/delete" {:delete delete-statements!
-                               :parameters {:body {:statement-ids (s/coll-of :db/id)
-                                                   :share-hash :discussion/share-hash
-                                                   :edit-hash :discussion/edit-hash}}
-                               :responses {200 {:deleted-statements (s/coll-of :db/id)}}}]]
+                               :parameters {:body {:statement-ids (s/coll-of :db/id)}}
+                               :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}}}]]
 
        user-api/user-routes
        hub/hub-routes

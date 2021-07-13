@@ -1212,7 +1212,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.privacy/public "Öffentliche Diskussion"
         :discussion.privacy/private "Private Diskussion"
         :discussion.state/read-only-label "schreibgeschützt"
-        :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Sie können hier nur lesen aber nicht schreiben."
+        :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
 
         ;; Conversion-Edit-Funnel
         :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
