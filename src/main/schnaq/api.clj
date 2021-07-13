@@ -49,8 +49,8 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log]
-            [spec-tools.core :as st])
+            [spec-tools.core :as st]
+            [taoensso.timbre :as log])
   (:import (java.util Base64 UUID))
   (:gen-class))
 
