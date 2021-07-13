@@ -736,11 +736,13 @@
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 nil}
-                  :middleware [auth/auth-middleware auth/is-admin-middleware]}
+                  #_#_:middleware [auth/auth-middleware auth/is-admin-middleware]}
         ["/feedbacks" {:get all-feedbacks
                        :description (get-doc #'all-feedbacks)
                        :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]
-        ["/summaries/all" {:get all-summaries}]
+        ["/summaries/all" {:get all-summaries
+                           :description (get-doc #'all-summaries)
+                           :responses {200 {:body {:summaries (s/coll-of ::specs/summary)}}}}]
         ["/schnaq/delete" {:delete delete-schnaq!
                            :parameters {:body {:share-hash :discussion/share-hash}}}]
         ["/statements/delete" {:post delete-statements!

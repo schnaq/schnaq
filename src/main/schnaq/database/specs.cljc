@@ -1,7 +1,8 @@
 (ns schnaq.database.specs
   (:require #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [schnaq.api.dto-specs :as dto]))
 
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
 
@@ -31,11 +32,15 @@
                                        :user.registered/email :user.registered/visited-schnaqs]))
 
 ;; Could be anonymous or registered
-(s/def ::any-user (s/or :user ::user :registered-user ::registered-user))
+(s/def ::any-user (s/or :dto ::dto/registered-user
+                        :user ::user
+                        :registered-user ::registered-user))
 ;; Any user or reference
-(s/def ::user-or-reference (s/or :user ::user
-                                 :reference ::entity-reference
-                                 :registered-user ::registered-user))
+(s/def ::user-or-reference
+  (s/or :dto ::dto/registered-user
+        :user ::user
+        :reference :db/id
+        :registered-user ::registered-user))
 
 ;; Meta Information
 (s/def :meta/all-statements nat-int?)
@@ -60,7 +65,7 @@
 (s/def :discussion/hub-origin (s/or :reference :db/id
                                     :hub ::hub))
 (s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
-                                           :reference ::entity-reference)))
+                                           :reference :db/id)))
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted
@@ -68,11 +73,10 @@
                :discussion.state/disable-pro-con}
              :distinct true))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
-(s/def ::discussion (s/keys :req [:discussion/title :discussion/states
-                                  :discussion/share-hash :discussion/author]
+(s/def ::discussion (s/keys :req [:discussion/title :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
-                                  :discussion/admins :discussion/hub-origin
+                                  :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link]))
 
 (s/def :hub/name ::non-blank-string)
@@ -93,6 +97,7 @@
 (s/def :statement/creation-secret ::non-blank-string)
 (s/def :statement/created-at inst?)
 (s/def :statement/discussions (s/or :ids (s/coll-of :db/id)
+                                    :dto (s/coll-of ::dto/discussion)
                                     :discussions (s/coll-of ::discussion)))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]
@@ -103,7 +108,6 @@
 
 ;; Common
 (s/def :db/id (s/or :transacted integer? :temporary any?))
-(s/def ::entity-reference (s/or :transacted int? :temporary any?))
 
 ;; Feedback
 (s/def :feedback/contact-name string?)
@@ -118,6 +122,7 @@
 
 ;; Summary
 (s/def :summary/discussion (s/or :id :db/id
+                                 :dto ::dto/discussion
                                  :discussion ::discussion))
 (s/def :summary/requested-at inst?)
 (s/def :summary/created-at inst?)
