@@ -43,12 +43,17 @@
       [name-input username button-class]
       [change-name-button])))
 
-(defn- admin-star
-  "Show a star icon if the user is logged in as admin."
+(defn- role-indicator
+  "Show an icon if the user has special roles."
   []
-  (when @(rf/subscribe [:user/administrator?])
-    [:i.pr-1 {:class (str "far " (fa :star))
-              :title (labels :user.profile/star-tooltip)}]))
+  (let [admin? @(rf/subscribe [:user/administrator?])
+        beta-tester? @(rf/subscribe [:user/beta-tester?])
+        [icon label] (cond
+                       admin? [:star :user.profile.role/admin-tooltip]
+                       beta-tester? [:rocket :user.profile.role/beta-tester-tooltip])]
+    (when icon
+      [:i.pr-1 {:class (fa icon)
+                :title (labels label)}])))
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."
@@ -87,7 +92,7 @@
        {:href "#" :role "button" :data-toggle "dropdown"
         :aria-haspopup "true" :aria-expanded "false"}
        [:button.btn.dropdown-toggle.rounded-1.mx-2 {:class button-class}
-        [admin-star]
+        [role-indicator]
         username]]
       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby "profile-dropdown"}
        (if authenticated?
