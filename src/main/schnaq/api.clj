@@ -651,7 +651,7 @@
                                   :share-hash :discussion/share-hash}}}
           ["/edit" {:put edit-statement!
                     :description (at/get-doc #'edit-statement!)
-                    :middleware [auth/auth-middleware]
+                    :middleware [auth/authenticated?-middleware]
                     :parameters {:body {:statement-type :statement/unqualified-types
                                         :new-content :statement/content}}
                     :responses {200 {:body {:updated-statement ::dto/statement}}
@@ -659,7 +659,7 @@
                                 403 at/response-error-body}}]
           ["/delete" {:delete delete-statement!
                       :description (at/get-doc #'delete-statement!)
-                      :middleware [auth/auth-middleware]
+                      :middleware [auth/authenticated?-middleware]
                       :responses {200 {:body {:deleted-statement :db/id}}
                                   400 at/response-error-body
                                   403 at/response-error-body}}]
@@ -727,7 +727,7 @@
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 at/response-error-body}
-                  :middleware [auth/auth-middleware auth/admin?-middleware]}
+                  :middleware [auth/authenticated?-middleware auth/admin?-middleware]}
         ["/feedbacks" {:get all-feedbacks
                        :description (at/get-doc #'all-feedbacks)
                        :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]

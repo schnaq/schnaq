@@ -86,7 +86,7 @@
 
 (def user-routes
   ["/user" {:swagger {:tags ["user"]}
-            :middleware [auth/auth-middleware]}
+            :middleware [auth/authenticated?-middleware]}
    ["/register" {:put register-user-if-they-not-exist
                  :description (at/get-doc #'register-user-if-they-not-exist)
                  :parameters {:body ::user-register}

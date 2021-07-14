@@ -41,7 +41,7 @@
   (string? (some roles
                  (get-in request [:identity :roles]))))
 
-(defn auth-middleware
+(defn authenticated?-middleware
   "Validate, that user is logged-in."
   [handler]
   (fn [request]
