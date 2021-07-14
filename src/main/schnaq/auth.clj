@@ -5,6 +5,7 @@
             [buddy.core.keys :as keys]
             [ghostwheel.core :refer [>defn]]
             [ring.util.http-response :refer [unauthorized forbidden]]
+            [schnaq.api.toolbelt :as at]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]))
 
@@ -50,7 +51,8 @@
           (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
           (assoc-in [:identity :admin?] (has-admin-role? request))
           handler)
-      (unauthorized "You are not logged in. Maybe your token is malformed / expired."))))
+      (unauthorized (at/build-error-body :auth/not-logged-in
+                                         "You are not logged in. Maybe your token is malformed / expired.")))))
 
 (defn is-admin-middleware
   "Check if user has admin-role."
@@ -58,7 +60,7 @@
   (fn [request]
     (if (has-admin-role? request)
       (handler request)
-      (forbidden "You are not an admin."))))
+      (forbidden (at/build-error-body :auth/not-an-admin "You are not an admin.")))))
 
 (>defn member-of-group?
   "Check if group is available in the JWT token."
