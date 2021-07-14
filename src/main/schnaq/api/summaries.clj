@@ -1,41 +1,41 @@
 (ns schnaq.api.summaries
-  (:require [ring.util.http-response :refer [ok]]
+  (:require [clojure.spec.alpha :as s]
+            [ring.util.http-response :refer [ok not-found]]
+            [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
             [schnaq.config.shared :refer [beta-tester-groups]]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
             [schnaq.links :as links]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log]
-            [schnaq.api.toolbelt :as at]))
+            [taoensso.timbre :as log]))
 
 (defn- request-summary
   "Request a summary of a discussion. Works only if person is in a beta group."
   [{:keys [parameters identity]}]
   (let [share-hash (get-in parameters [:body :share-hash])]
     (log/info "Requesting new summary for schnaq" share-hash)
-    (if identity
-      (if (and (some beta-tester-groups (:groups identity))
-               (validator/valid-discussion? share-hash))
-        (do
-          (emails/send-mail
-            "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
-            (format "Bitte im Chat absprechen und Zusammenfassung zu folgendem schnaq anlegen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
-            "info@schnaq.com")
-          (ok {:summary (discussion-db/summary-request share-hash (:id identity))}))
-        (validator/deny-access "You are not allowed to use this feature"))
-      (validator/deny-access "You need to be logged in to access this endpoint."))))
+    (if (and (some beta-tester-groups (:groups identity))
+             (validator/valid-discussion? share-hash))
+      (do
+        (emails/send-mail
+          "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
+          (format "Bitte im Chat absprechen und Zusammenfassung zu folgendem schnaq anlegen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
+          "info@schnaq.com")
+        (ok {:summary (discussion-db/summary-request share-hash (:id identity))}))
+      (validator/deny-access "You are not allowed to use this feature"))))
 
 (defn- get-summary
   "Return a summary for the specified share-hash."
   [{:keys [parameters identity]}]
-  (if identity
-    (let [share-hash (get-in parameters [:query :share-hash])]
-      (if (and (some beta-tester-groups (:groups identity))
-               (validator/valid-discussion? share-hash))
-        (ok {:summary (discussion-db/summary share-hash)})
-        (validator/deny-access "You are not allowed to use this feature")))
-    (validator/deny-access "You need to be logged in to access this endpoint.")))
+  (let [share-hash (get-in parameters [:query :share-hash])]
+    (if (and (some beta-tester-groups (:groups identity))
+             (validator/valid-discussion? share-hash))
+      (if-let [summary (discussion-db/summary share-hash)]
+        (ok {:summary summary})
+        (not-found (at/build-error-body :summary/not-found "No summary found for this discussion. Maybe there is currently no summary to show.")))
+      (validator/deny-access "You are not allowed to use this feature"))))
 
 (defn new-summary
   "Update a summary. If a text exists, it is overwritten. Admin access is already checked by middleware."
@@ -59,19 +59,33 @@ Dein schnaq Team"
           (-> summary :summary/requester :user.registered/email))))
     (ok {:new-summary summary})))
 
+(defn- all-summaries
+  "Returns all summaries and their discussions."
+  [_]
+  (ok {:summaries (discussion-db/all-summaries-with-discussions)}))
 
 ;; -----------------------------------------------------------------------------
 
 (def summary-routes
   [["" {:swagger {:tags ["summaries" "admin"]}
         :middleware [auth/auth-middleware]
-        :parameters {:body {:share-hash :discussion/share-hash}}}
+        :responses {401 at/response-error-body}}
     ["/schnaq/summary"
      ["" {:get get-summary
-          :description (at/get-doc #'get-summary)}]
+          :description (at/get-doc #'get-summary)
+          :parameters {:query {:share-hash :discussion/share-hash}}
+          :responses {200 {:body {:summary ::specs/summary}}
+                      404 at/response-error-body}}]
      ["/request" {:post request-summary
-                  :description (at/get-doc #'request-summary)}]]
-    ["/admin/summary/send" {:middleware [auth/is-admin-middleware]
-                            :put new-summary
-                            :description (at/get-doc #'new-summary)
-                            :parameters {:body {:new-summary-text :summary/text}}}]]])
+                  :description (at/get-doc #'request-summary)
+                  :parameters {:body {:share-hash :discussion/share-hash}}
+                  :responses {200 {:body {:summary ::specs/summary}}}}]]
+    ["/admin" {#_#_:middleware [auth/admin?-middleware]}
+     ["/summary/send" {:put new-summary
+                       :description (at/get-doc #'new-summary)
+                       :parameters {:body {:share-hash :discussion/share-hash
+                                           :new-summary-text :summary/text}}
+                       :responses {200 {:body {:new-summary ::specs/summary}}}}]
+     ["/summaries" {:get all-summaries
+                    :description (at/get-doc #'all-summaries)
+                    :responses {200 {:body {:summaries (s/coll-of ::specs/summary)}}}}]]]])
