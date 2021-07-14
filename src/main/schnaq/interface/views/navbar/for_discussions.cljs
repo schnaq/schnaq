@@ -45,8 +45,10 @@
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
-   [:i {:style {:font-size "30px"}
-        :class (str "m-auto fas fa-lg " (fa :graph))}]
+   [:img.img-fluid
+    {:src (img-path :icon-graph)
+     :width "25"
+     :alt "graph icon"}]
    [:div (labels :graph.button/text)]])
 
 (defn- beta-only-modal
@@ -71,8 +73,10 @@
        {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}
        {:on-click #(rf/dispatch [:modal {:show? true
                                          :child [beta-only-modal]}])})
-     [:i {:style {:font-size "30px"}
-          :class (str "m-auto fas fa-lg " (fa :paragraph))}]
+     [:img.img-fluid
+      {:src (img-path :icon-summary)
+       :width "25"
+       :alt "summary icon"}]
      [:p.m-0 (labels :summary.link.button/text)]]))
 
 (defn navbar-statements []
@@ -87,8 +91,8 @@
       (when edit-hash
         [admin/admin-center share-hash edit-hash])]
      [:div.d-flex.align-items-center
-      [:div.mx-2 [graph-button share-hash]]
-      [:div.mx-2 [summary-button share-hash]]
+      [:div.h-100.mx-2 [graph-button share-hash]]
+      [:div.h-100.mx-2 [summary-button share-hash]]
       [:div.d-flex.align-items-center.schnaq-navbar
        [um/user-handling-menu "btn-outline-primary"]]]]))
 
