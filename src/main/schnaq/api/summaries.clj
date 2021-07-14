@@ -32,9 +32,7 @@
   (let [share-hash (get-in parameters [:query :share-hash])]
     (if (and (some beta-tester-groups (:groups identity))
              (validator/valid-discussion? share-hash))
-      (if-let [summary (discussion-db/summary share-hash)]
-        (ok {:summary summary})
-        (not-found (at/build-error-body :summary/not-found "No summary found for this discussion. Maybe there is currently no summary to show.")))
+      (ok {:summary (discussion-db/summary share-hash)})
       (validator/deny-access "You are not allowed to use this feature"))))
 
 (defn new-summary
@@ -74,13 +72,13 @@ Dein schnaq Team"
      ["" {:get get-summary
           :description (at/get-doc #'get-summary)
           :parameters {:query {:share-hash :discussion/share-hash}}
-          :responses {200 {:body {:summary ::specs/summary}}
-                      404 at/response-error-body}}]
+          :responses {200 {:body {:summary (s/or :summary ::specs/summary
+                                                 :not-found nil?)}}}}]
      ["/request" {:post request-summary
                   :description (at/get-doc #'request-summary)
                   :parameters {:body {:share-hash :discussion/share-hash}}
                   :responses {200 {:body {:summary ::specs/summary}}}}]]
-    ["/admin" {#_#_:middleware [auth/admin?-middleware]}
+    ["/admin" {:middleware [auth/admin?-middleware]}
      ["/summary/send" {:put new-summary
                        :description (at/get-doc #'new-summary)
                        :parameters {:body {:share-hash :discussion/share-hash
@@ -88,4 +86,5 @@ Dein schnaq Team"
                        :responses {200 {:body {:new-summary ::specs/summary}}}}]
      ["/summaries" {:get all-summaries
                     :description (at/get-doc #'all-summaries)
-                    :responses {200 {:body {:summaries (s/coll-of ::specs/summary)}}}}]]]])
+                    :responses {200 {:body {:summaries (s/or :summaries (s/coll-of ::specs/summary)
+                                                             :empty nil?)}}}}]]]])
