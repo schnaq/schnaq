@@ -8,13 +8,13 @@
 (use-fixtures :once toolbelt/clean-database-fixture)
 
 (defn- response-status [path token]
-  (-> (request :get (format "/analytics%s" path))
+  (-> (request :get (format "/admin/analytics%s" path))
       (toolbelt/mock-authorization-header token)
       api/app
       :status))
 
 (defn- response-status-main-route [token]
-  (-> {:request-method :get :uri "/analytics" :query-params {:days-since 7}}
+  (-> {:request-method :get :uri "/admin/analytics" :query-params {:days-since 7}}
       (toolbelt/mock-authorization-header token)
       api/app
       :status))

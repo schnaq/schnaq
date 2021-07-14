@@ -6,7 +6,8 @@
             [schnaq.emails :as emails]
             [schnaq.links :as links]
             [schnaq.validator :as validator]
-            [taoensso.timbre :as log]))
+            [taoensso.timbre :as log]
+            [schnaq.api.toolbelt :as at]))
 
 (defn- request-summary
   "Request a summary of a discussion. Works only if person is in a beta group."
@@ -62,13 +63,15 @@ Dein schnaq Team"
 ;; -----------------------------------------------------------------------------
 
 (def summary-routes
-  [["/schnaq/summary" {:swagger {:tags ["summaries"]}
-                       :middleware [auth/auth-middleware]
-                       :parameters {:body {:share-hash string?}}}
-    ["" {:get get-summary}]
-    ["/request" {:post request-summary}]]
-   ["/admin/summary/send" {:swagger {:tags ["summaries"]}
-                           :middleware [auth/auth-middleware auth/is-admin-middleware]
-                           :parameters {:body {:share-hash :discussion/share-hash
-                                               :new-summary-text :summary/text}}
-                           :put new-summary}]])
+  [["" {:swagger {:tags ["summaries" "admin"]}
+        :middleware [auth/auth-middleware]
+        :parameters {:body {:share-hash :discussion/share-hash}}}
+    ["/schnaq/summary"
+     ["" {:get get-summary
+          :description (at/get-doc #'get-summary)}]
+     ["/request" {:post request-summary
+                  :description (at/get-doc #'request-summary)}]]
+    ["/admin/summary/send" {:middleware [auth/is-admin-middleware]
+                            :put new-summary
+                            :description (at/get-doc #'new-summary)
+                            :parameters {:body {:new-summary-text :summary/text}}}]]])
