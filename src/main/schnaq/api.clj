@@ -16,6 +16,7 @@
             [reitit.ring.middleware.multipart :as multipart]
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.parameters :as parameters]
+            [reitit.ring.spec :as rrs]
             [reitit.spec :as rs]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
@@ -730,7 +731,7 @@
                     :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
 
        ["/admin" {:swagger {:tags ["admin"]}
-                  :responses {401 nil}
+                  :responses {401 at/response-error-body}
                   :middleware [auth/auth-middleware auth/is-admin-middleware]}
         ["/feedbacks" {:get all-feedbacks
                        :description (at/get-doc #'all-feedbacks)
@@ -770,6 +771,7 @@
                :swagger {:info {:title "schnaq API"}}
                :handler (swagger/create-swagger-handler)}}]]
       {:exception pretty/exception
+       :validate rrs/validate
        ::rs/explain expound/expound-str
        :data {:coercion reitit.coercion.spec/coercion
               :muuntaja m/instance

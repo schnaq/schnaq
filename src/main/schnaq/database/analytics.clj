@@ -1,7 +1,6 @@
 (ns schnaq.database.analytics
   (:require [ghostwheel.core :refer [>defn >defn-]]
-            [schnaq.database.main :as main-db]
-            [clojure.spec.alpha :as s])
+            [schnaq.database.main :as main-db])
   (:import (java.util Date)
            (java.time Instant)))
 
