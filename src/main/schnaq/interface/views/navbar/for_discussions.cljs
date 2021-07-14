@@ -31,10 +31,10 @@
         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
      [:div.mx-4
       [clickable-title discussion]]
-     [:div.mx-4.ml-auto.d-none.md-block
+     [:div.mx-4.ml-auto.d-none.d-md-block
       [:small.text-primary (labels :discussion.navbar/posts)]
       [:h5.text-center statement-count]]
-     [:div.mx-4.d-none.md-block
+     [:div.mx-4.d-none.d-md-block
       [:small.text-primary (labels :discussion.navbar/members)]
       [:h5.text-center user-count]]]))
 
