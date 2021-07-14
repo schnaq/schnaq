@@ -206,7 +206,7 @@
 (rf/reg-event-fx
   :summaries/load-all
   (fn [{:keys [db]} _]
-    {:fx [(http/xhrio-request db :get "/admin/summaries/all" [:summaries.load-all/success])]}))
+    {:fx [(http/xhrio-request db :get "/admin/summaries" [:summaries.load-all/success])]}))
 
 (rf/reg-event-db
   :summaries.load-all/success

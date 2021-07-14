@@ -39,5 +39,8 @@
   "Define a list of allowed mime-types."
   #{"image/jpeg" "image/png"})
 
-(def beta-tester-groups
+(def beta-tester-roles
   #{"schnaqqifantenparty" "beta-tester"})
+
+(def admin-roles
+  #{"admin"})

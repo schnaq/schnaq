@@ -34,12 +34,12 @@
 
 ;; -----------------------------------------------------------------------------
 
-(>defn has-admin-role?
+(>defn has-role?
   "Check if user has realm-wide admin access."
-  [request]
-  [map? :ret boolean?]
-  (= "admin" (some #{"admin"}
-                   (get-in request [:identity :roles]))))
+  [request roles]
+  [map? coll? :ret boolean?]
+  (string? (some roles
+                 (get-in request [:identity :roles]))))
 
 (defn auth-middleware
   "Validate, that user is logged-in."
@@ -49,7 +49,7 @@
       (-> request
           (assoc-in [:identity :id] (get-in request [:identity :sub]))
           (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
-          (assoc-in [:identity :admin?] (has-admin-role? request))
+          (assoc-in [:identity :admin?] (has-role? request shared-config/admin-roles))
           handler)
       (unauthorized (at/build-error-body :auth/not-logged-in
                                          "You are not logged in. Maybe your token is malformed / expired.")))))
@@ -58,9 +58,17 @@
   "Check if user has admin-role."
   [handler]
   (fn [request]
-    (if (has-admin-role? request)
+    (if (has-role? request shared-config/admin-roles)
       (handler request)
       (forbidden (at/build-error-body :auth/not-an-admin "You are not an admin.")))))
+
+(defn beta-tester?-middleware
+  "Check if is eligible for our beta-testers program."
+  [handler]
+  (fn [request]
+    (if (has-role? request #{"failing"})
+      (handler request)
+      (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
 
 (>defn member-of-group?
   "Check if group is available in the JWT token."

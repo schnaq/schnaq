@@ -5,6 +5,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.config :as config]
             [taoensso.timbre :as log]))
 
@@ -163,7 +164,13 @@
   :user/administrator?
   (fn [db _]
     (let [roles (get-in db [:user :roles])]
-      (= "admin" (some #{"admin"} roles)))))
+      (string? (some shared-config/admin-roles roles)))))
+
+(rf/reg-sub
+  :user/beta-tester?
+  (fn [db _]
+    (let [roles (get-in db [:user :roles])]
+      (string? (some shared-config/beta-tester-roles roles)))))
 
 (rf/reg-event-db
   :keycloak.roles/extract

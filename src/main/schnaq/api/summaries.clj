@@ -3,7 +3,7 @@
             [ring.util.http-response :refer [ok not-found]]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
-            [schnaq.config.shared :refer [beta-tester-groups]]
+            [schnaq.config.shared :refer [beta-tester-roles]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
@@ -16,8 +16,7 @@
   [{:keys [parameters identity]}]
   (let [share-hash (get-in parameters [:body :share-hash])]
     (log/info "Requesting new summary for schnaq" share-hash)
-    (if (and (some beta-tester-groups (:groups identity))
-             (validator/valid-discussion? share-hash))
+    (if (validator/valid-discussion? share-hash)
       (do
         (emails/send-mail
           "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
@@ -28,10 +27,9 @@
 
 (defn- get-summary
   "Return a summary for the specified share-hash."
-  [{:keys [parameters identity]}]
+  [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])]
-    (if (and (some beta-tester-groups (:groups identity))
-             (validator/valid-discussion? share-hash))
+    (if (validator/valid-discussion? share-hash)
       (ok {:summary (discussion-db/summary share-hash)})
       (validator/deny-access "You are not allowed to use this feature"))))
 
@@ -65,26 +63,27 @@ Dein schnaq Team"
 ;; -----------------------------------------------------------------------------
 
 (def summary-routes
-  [["" {:swagger {:tags ["summaries" "admin"]}
-        :middleware [auth/auth-middleware]
-        :responses {401 at/response-error-body}}
-    ["/schnaq/summary"
-     ["" {:get get-summary
-          :description (at/get-doc #'get-summary)
-          :parameters {:query {:share-hash :discussion/share-hash}}
-          :responses {200 {:body {:summary (s/or :summary ::specs/summary
-                                                 :not-found nil?)}}}}]
-     ["/request" {:post request-summary
-                  :description (at/get-doc #'request-summary)
-                  :parameters {:body {:share-hash :discussion/share-hash}}
-                  :responses {200 {:body {:summary ::specs/summary}}}}]]
-    ["/admin" {:middleware [auth/admin?-middleware]}
-     ["/summary/send" {:put new-summary
-                       :description (at/get-doc #'new-summary)
-                       :parameters {:body {:share-hash :discussion/share-hash
-                                           :new-summary-text :summary/text}}
-                       :responses {200 {:body {:new-summary ::specs/summary}}}}]
-     ["/summaries" {:get all-summaries
-                    :description (at/get-doc #'all-summaries)
-                    :responses {200 {:body {:summaries (s/or :summaries (s/coll-of ::specs/summary)
-                                                             :empty nil?)}}}}]]]])
+  [["/schnaq/summary" {:swagger {:tags ["summaries" "beta"]}
+                       :middleware [auth/auth-middleware auth/beta-tester?-middleware]
+                       :responses {401 at/response-error-body}}
+    ["" {:get get-summary
+         :description (at/get-doc #'get-summary)
+         :parameters {:query {:share-hash :discussion/share-hash}}
+         :responses {200 {:body {:summary (s/or :summary ::specs/summary
+                                                :not-found nil?)}}}}]
+    ["/request" {:post request-summary
+                 :description (at/get-doc #'request-summary)
+                 :parameters {:body {:share-hash :discussion/share-hash}}
+                 :responses {200 {:body {:summary ::specs/summary}}}}]]
+   ["/admin" {:swagger {:tags ["summaries" "admin"]}
+              :middleware [auth/auth-middleware auth/admin?-middleware]
+              :responses {401 at/response-error-body}}
+    ["/summary/send" {:put new-summary
+                      :description (at/get-doc #'new-summary)
+                      :parameters {:body {:share-hash :discussion/share-hash
+                                          :new-summary-text :summary/text}}
+                      :responses {200 {:body {:new-summary ::specs/summary}}}}]
+    ["/summaries" {:get all-summaries
+                   :description (at/get-doc #'all-summaries)
+                   :responses {200 {:body {:summaries (s/or :summaries (s/coll-of ::specs/summary)
+                                                            :empty nil?)}}}}]]])
