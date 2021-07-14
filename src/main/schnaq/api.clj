@@ -802,9 +802,7 @@
             (server/run-server
               (-> #'app
                   (wrap-cors :access-control-allow-origin allowed-origins'
-                             :access-control-allow-methods [:get :put :post :delete])
-                  #_(wrap-restful-format :formats [:transit-json :transit-msgpack :json-kw :edn :msgpack-kw :yaml-kw :yaml-in-html])
-                  #_(wrap-defaults api-defaults))
+                             :access-control-allow-methods [:get :put :post :delete]))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
