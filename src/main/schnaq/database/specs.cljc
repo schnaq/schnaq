@@ -122,13 +122,16 @@
 
 ;; Summary
 (s/def :summary/discussion (s/or :id :db/id
-                                 :dto ::dto/discussion
-                                 :discussion ::discussion))
+                                 :discussion (s/keys :req [:discussion/title
+                                                           :discussion/share-hash
+                                                           :db/id])))
 (s/def :summary/requested-at inst?)
 (s/def :summary/created-at inst?)
 (s/def :summary/text ::non-blank-string)
 (s/def :summary/requester (s/or :id :db/id
-                                :registered-user ::registered-user))
+                                :registered-user (s/keys :req [:user.registered/email
+                                                               :user.registered/display-name
+                                                               :user.registered/keycloak-id])))
 (s/def ::summary (s/keys :req [:summary/discussion :summary/requested-at]
                          :opt [:summary/text :summary/created-at :summary/requester]))
 

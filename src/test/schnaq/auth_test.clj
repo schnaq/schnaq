@@ -11,7 +11,7 @@
   (routes
     (-> (GET "/test/admin/authentication" []
           (fn [request] (ok (get-in request [:identity :preferred_username]))))
-        (wrap-routes auth/is-admin-middleware)
+        (wrap-routes auth/admin?-middleware)
         (wrap-routes auth/auth-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
     (-> (GET "/test/user/authentication" []

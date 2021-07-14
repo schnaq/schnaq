@@ -288,11 +288,6 @@
   [_]
   (ok {:feedbacks (db/all-feedbacks)}))
 
-(defn- all-summaries
-  "Returns all summaries form the db."
-  [_]
-  (ok {:summaries (discussion-db/all-summaries)}))
-
 (>defn- send-invite-emails
   "Expects a list of recipients and the meeting which shall be send."
   [{:keys [parameters]}]
@@ -732,13 +727,10 @@
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 at/response-error-body}
-                  :middleware [auth/auth-middleware auth/is-admin-middleware]}
+                  :middleware [auth/auth-middleware auth/admin?-middleware]}
         ["/feedbacks" {:get all-feedbacks
                        :description (at/get-doc #'all-feedbacks)
                        :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]
-        ["/summaries/all" {:get all-summaries
-                           :description (at/get-doc #'all-summaries)
-                           :responses {200 {:body {:summaries (s/coll-of ::specs/summary)}}}}]
         ["/schnaq/delete" {:delete delete-schnaq!
                            :description (at/get-doc #'delete-schnaq!)
                            :parameters {:body {:share-hash :discussion/share-hash}}

@@ -62,4 +62,4 @@
   ([]
    (deny-access "You are not allowed to access this resource."))
   ([message]
-   (forbidden (at/build-error-body :access-denied message))))
+   (forbidden (at/build-error-body :auth/access-denied message))))

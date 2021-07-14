@@ -54,7 +54,7 @@
       (unauthorized (at/build-error-body :auth/not-logged-in
                                          "You are not logged in. Maybe your token is malformed / expired.")))))
 
-(defn is-admin-middleware
+(defn admin?-middleware
   "Check if user has admin-role."
   [handler]
   (fn [request]

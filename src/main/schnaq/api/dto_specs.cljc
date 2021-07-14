@@ -32,7 +32,3 @@
   (s/keys :req-un [:feedback/description :feedback/has-image?]
           :opt-un [:feedback/contact-name :feedback/contact-mail]))
 
-
-;; Summaries
-(s/def ::summary
-  (s/keys :req [:db/id]))
