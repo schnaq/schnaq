@@ -104,32 +104,31 @@
 
 (def hub-routes
   [["" {:swagger {:tags ["hubs"]}
-        :middleware [auth/authenticated?-middleware]
+        :middleware [:authenticated?]
         :responses {401 at/response-error-body
                     403 at/response-error-body}}
     ["/hubs/personal" {:get all-hubs-for-user
                        :description (at/get-doc #'all-hubs-for-user)
                        :responses {200 {:body {:hubs (s/coll-of ::specs/hub)}}}}]
-    ["/hub"
-     ["/:keycloak-name" {:parameters {:path {:keycloak-name :hub/keycloak-name}}}
-      ["" {:get hub-by-keycloak-name
-           :description (at/get-doc #'hub-by-keycloak-name)
-           :responses {200 {:body {:hub ::specs/hub
-                                   :hub-members (s/coll-of ::specs/any-user)}}}}]
-      ["/add" {:post add-schnaq-to-hub
-               :description (at/get-doc #'add-schnaq-to-hub)
-               :parameters {:body {:share-hash :discussion/share-hash}}
-               :responses {200 {:body {:hub ::specs/hub}}
-                           404 at/response-error-body}}]
-      ["/add-member" {:post add-member-to-hub
-                      :description (at/get-doc #'add-member-to-hub)
-                      :parameters {:body {:new-member-mail :user.registered/email}}
-                      :responses {200 {:body {:ok keyword?}}}}]
-      ["/name" {:put change-hub-name
-                :description (at/get-doc #'change-hub-name)
-                :parameters {:body {:new-hub-name :hub/name}}
-                :responses {200 {:body {:hub ::specs/hub}}}}]
-      ["/remove" {:delete remove-schnaq-from-hub
-                  :description (at/get-doc #'remove-schnaq-from-hub)
-                  :parameters {:body {:share-hash :discussion/share-hash}}
-                  :responses {200 {:body {:hub ::specs/hub}}}}]]]]])
+    ["/hub/:keycloak-name" {:parameters {:path {:keycloak-name :hub/keycloak-name}}}
+     ["" {:get hub-by-keycloak-name
+          :description (at/get-doc #'hub-by-keycloak-name)
+          :responses {200 {:body {:hub ::specs/hub
+                                  :hub-members (s/coll-of ::specs/any-user)}}}}]
+     ["/add" {:post add-schnaq-to-hub
+              :description (at/get-doc #'add-schnaq-to-hub)
+              :parameters {:body {:share-hash :discussion/share-hash}}
+              :responses {200 {:body {:hub ::specs/hub}}
+                          404 at/response-error-body}}]
+     ["/add-member" {:post add-member-to-hub
+                     :description (at/get-doc #'add-member-to-hub)
+                     :parameters {:body {:new-member-mail :user.registered/email}}
+                     :responses {200 {:body {:ok keyword?}}}}]
+     ["/name" {:put change-hub-name
+               :description (at/get-doc #'change-hub-name)
+               :parameters {:body {:new-hub-name :hub/name}}
+               :responses {200 {:body {:hub ::specs/hub}}}}]
+     ["/remove" {:delete remove-schnaq-from-hub
+                 :description (at/get-doc #'remove-schnaq-from-hub)
+                 :parameters {:body {:share-hash :discussion/share-hash}}
+                 :responses {200 {:body {:hub ::specs/hub}}}}]]]])

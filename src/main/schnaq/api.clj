@@ -10,6 +10,7 @@
             [org.httpkit.server :as server]
             [reitit.coercion.spec]
             [reitit.dev.pretty :as pretty]
+            [reitit.middleware :as middleware]
             [reitit.ring :as ring]
             [reitit.ring.coercion :as coercion]
             [reitit.ring.middleware.exception :as exception]
@@ -651,7 +652,7 @@
                                   :share-hash :discussion/share-hash}}}
           ["/edit" {:put edit-statement!
                     :description (at/get-doc #'edit-statement!)
-                    :middleware [auth/authenticated?-middleware]
+                    :middleware [:authenticated?]
                     :parameters {:body {:statement-type :statement/unqualified-types
                                         :new-content :statement/content}}
                     :responses {200 {:body {:updated-statement ::dto/statement}}
@@ -659,7 +660,7 @@
                                 403 at/response-error-body}}]
           ["/delete" {:delete delete-statement!
                       :description (at/get-doc #'delete-statement!)
-                      :middleware [auth/authenticated?-middleware]
+                      :middleware [:authenticated?]
                       :responses {200 {:body {:deleted-statement :db/id}}
                                   400 at/response-error-body
                                   403 at/response-error-body}}]
@@ -727,7 +728,7 @@
 
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 at/response-error-body}
-                  :middleware [auth/authenticated?-middleware auth/admin?-middleware]}
+                  :middleware [:authenticated? :admin?]}
         ["/feedbacks" {:get all-feedbacks
                        :description (at/get-doc #'all-feedbacks)
                        :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]
@@ -774,7 +775,10 @@
                            coercion/coerce-response-middleware ;; coercing response bodys
                            coercion/coerce-request-middleware ;; coercing request parameters
                            multipart/multipart-middleware
-                           auth/wrap-jwt-authentication]}})
+                           auth/wrap-jwt-authentication]}
+       ::middleware/registry {:authenticated? auth/authenticated?-middleware
+                              :admin? auth/admin?-middleware
+                              :beta-tester? auth/beta-tester?-middleware}})
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
         {:path "/"

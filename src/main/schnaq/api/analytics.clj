@@ -1,7 +1,6 @@
 (ns schnaq.api.analytics
   (:require [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.auth :as auth]
             [schnaq.database.analytics :as analytics-db]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as toolbelt]))
@@ -66,7 +65,7 @@
 (def analytics-routes
   ["/admin/analytics"
    {:swagger {:tags ["analytics" "admin"]}
-    :middleware [auth/authenticated?-middleware auth/admin?-middleware]
+    :middleware [:authenticated? :admin?]
     :responses {401 at/response-error-body}}
    ["" {:get all-stats
         :parameters {:query {:days-since nat-int?}}

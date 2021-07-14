@@ -3,7 +3,6 @@
             [clojure.string :as string]
             [ring.util.http-response :refer [ok bad-request created]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
@@ -86,7 +85,7 @@
 
 (def user-routes
   ["/user" {:swagger {:tags ["user"]}
-            :middleware [auth/authenticated?-middleware]}
+            :middleware [:authenticated?]}
    ["/register" {:put register-user-if-they-not-exist
                  :description (at/get-doc #'register-user-if-they-not-exist)
                  :parameters {:body ::user-register}

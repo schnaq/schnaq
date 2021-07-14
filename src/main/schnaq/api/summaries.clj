@@ -1,9 +1,7 @@
 (ns schnaq.api.summaries
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok not-found]]
+            [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.auth :as auth]
-            [schnaq.config.shared :refer [beta-tester-roles]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
@@ -64,7 +62,7 @@ Dein schnaq Team"
 
 (def summary-routes
   [["/schnaq/summary" {:swagger {:tags ["summaries" "beta"]}
-                       :middleware [auth/authenticated?-middleware auth/beta-tester?-middleware]
+                       :middleware [:authenticated? :beta-tester?]
                        :responses {401 at/response-error-body}}
     ["" {:get get-summary
          :description (at/get-doc #'get-summary)
@@ -75,8 +73,8 @@ Dein schnaq Team"
                  :description (at/get-doc #'request-summary)
                  :parameters {:body {:share-hash :discussion/share-hash}}
                  :responses {200 {:body {:summary ::specs/summary}}}}]]
-   ["/admin" {:swagger {:tags ["summaries" "admin"]}
-              :middleware [auth/authenticated?-middleware auth/admin?-middleware]
+   ["/admin" {:swagger {:tags ["summaries" "admin" "beta"]}
+              :middleware [:authenticated? :admin?]
               :responses {401 at/response-error-body}}
     ["/summary/send" {:put new-summary
                       :description (at/get-doc #'new-summary)
