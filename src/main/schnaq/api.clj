@@ -1,8 +1,6 @@
 (ns schnaq.api
   (:require [clojure.data.json :as json]
-            [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
-            [clojure.string :as string]
             [expound.alpha :as expound]
             [ghostwheel.core :refer [>defn-]]
             [muuntaja.core :as m]
@@ -23,12 +21,12 @@
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.util.http-response :refer [ok created bad-request forbidden not-found]]
-            [schnaq.api.analytics :as analytics]
+            [schnaq.api.analytics :refer [analytics-routes]]
             [schnaq.api.dto-specs :as dto]
-            [schnaq.api.hub :as hub]
-            [schnaq.api.summaries :as summaries]
+            [schnaq.api.hub :refer [hub-routes]]
+            [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.api.user :as user-api]
+            [schnaq.api.user :refer [user-routes]]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
@@ -44,16 +42,16 @@
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
+            [schnaq.api.feedback :refer [feedback-routes]]
             [schnaq.links :as links]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
-            [schnaq.s3 :as s3]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.translations :refer [email-templates]]
             [schnaq.validator :as validator]
             [spec-tools.core :as st]
             [taoensso.timbre :as log])
-  (:import (java.util Base64 UUID))
+  (:import (java.util UUID))
   (:gen-class))
 
 (s/def :http/status nat-int?)
@@ -254,40 +252,6 @@
   (toggle-vote-statement
     (:body parameters) identity reaction-db/downvote-statement! reaction-db/remove-downvote!
     reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
-
-
-;; -----------------------------------------------------------------------------
-;; Feedback
-
-(>defn- upload-screenshot!
-  "Stores a screenshot from a feedback in s3."
-  [screenshot file-name]
-  [string? (s/or :number number? :string string?) :ret string?]
-  (let [[_header image] (string/split screenshot #",")
-        #^bytes decodedBytes (.decode (Base64/getDecoder) ^String image)]
-    (s3/upload-stream
-      :feedbacks/screenshots
-      (io/input-stream decodedBytes)
-      (format "%s.png" file-name)
-      {:content-length (count decodedBytes)})))
-
-(defn- add-feedback
-  "Add new feedback from schnaq's frontend. If a screenshot is provided, it will
-  be uploaded in our s3 bucket. Screenshot must be a base64 encoded string. The
-  screenshot-field is optional."
-  [{:keys [parameters]}]
-  (let [feedback (get-in parameters [:body :feedback])
-        feedback-id (db/add-feedback! feedback)
-        screenshot (get-in parameters [:body :screenshot])]
-    (when screenshot
-      (upload-screenshot! screenshot feedback-id))
-    (log/info "Feedback created")
-    (created "" {:feedback feedback})))
-
-(defn- all-feedbacks
-  "Returns all feedbacks from the db."
-  [_]
-  (ok {:feedbacks (db/all-feedbacks)}))
 
 (>defn- send-invite-emails
   "Expects a list of recipients and the meeting which shall be send."
@@ -594,10 +558,6 @@
                                              403 {:body {:valid-credentials? boolean?}}}
                                  :parameters {:body {:share-hash :discussion/share-hash
                                                      :edit-hash :discussion/edit-hash}}}]
-       ["/feedback/add" {:post add-feedback
-                         :description (at/get-doc #'add-feedback)
-                         :parameters {:body (s/keys :req-un [::dto/feedback] :opt-un [:feedback/screenshot])}
-                         :responses {201 {:body {:feedback ::dto/feedback}}}}]
        ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
                                   :description (at/get-doc #'subscribe-lead-magnet!)
                                   :parameters {:body {:email string?}}
@@ -740,9 +700,6 @@
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 at/response-error-body}
                   :middleware [:authenticated? :admin?]}
-        ["/feedbacks" {:get all-feedbacks
-                       :description (at/get-doc #'all-feedbacks)
-                       :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]
         ["/schnaq/delete" {:delete delete-schnaq!
                            :description (at/get-doc #'delete-schnaq!)
                            :parameters {:body {:share-hash :discussion/share-hash}}
@@ -765,10 +722,11 @@
                                :parameters {:body {:statement-ids (s/coll-of :db/id)}}
                                :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}}}]]
 
-       user-api/user-routes
-       hub/hub-routes
-       analytics/analytics-routes
-       summaries/summary-routes
+       user-routes
+       hub-routes
+       analytics-routes
+       summary-routes
+       feedback-routes
 
        ["/swagger.json"
         {:get {:no-doc true
