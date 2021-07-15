@@ -20,7 +20,7 @@
    [:article.m-3
     [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5
      [:div.col-2.py-md-5.d-flex
-      [:img.w-75.align-self-center {:src (img-path :schnaqqifant/cta)}]]
+      [:img.w-75.align-self-center {:src (img-path :schnaqqifant/flat)}]]
      [:div.col-10.py-md-5
       [:h2 (labels :call-to-contribute/body)]
       [:p.mt-5 (labels :how-to/ask-question)
