@@ -561,10 +561,21 @@
   "Regular expression, which defines the allowed origins for API requests."
   #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
+(def ^:private description
+  "This is the main Backend for schnaq.
+
+  ## Authentication
+  Many routes require authentication. To authenticate you against the backend, grab a JWT token from the authorized Keycloak instance and put in in your header.
+
+  The header should look like this: `Authorization: Token <your token>`.")
+
 (def app
   (ring/ring-handler
     (ring/router
-      [["/ping" {:get ping
+      [(when-not shared-config/production?
+         ["" {:swagger {:tags ["debug"]}}
+          ["/debug/headers" {:get identity}]])
+       ["/ping" {:get ping
                  :description (at/get-doc #'ping)
                  :responses {200 {:body {:ok string?}}}}]
        ["/export/txt" {:get export-txt-data
@@ -761,7 +772,14 @@
 
        ["/swagger.json"
         {:get {:no-doc true
-               :swagger {:info {:title "schnaq API"}}
+               :swagger {:info {:title "schnaq API"
+                                :basePath "/"
+                                :version "1.0.0"
+                                :description description}
+                         :securityDefinitions {:bearerAuth {:type "apiKey"
+                                                            :name "Authorization"
+                                                            :in "header"}}
+                         :security [{:bearerAuth []}]}
                :handler (swagger/create-swagger-handler)}}]]
       {:exception pretty/exception
        :validate rrs/validate
