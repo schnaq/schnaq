@@ -541,7 +541,7 @@
           ["/debug/headers" {:get identity}]])
        ["/ping" {:get ping
                  :description (at/get-doc #'ping)
-                 :responses {200 {:body {:ok string?}}}}]
+                 :responses {200 {:body {:text string?}}}}]
        ["/export/txt" {:get export-txt-data
                        :description (at/get-doc #'export-txt-data)
                        :swagger {:tags ["exports"]}
