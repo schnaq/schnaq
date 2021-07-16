@@ -117,7 +117,7 @@
           statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
           current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :delete "/manage/statements/delete"
+      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
                                 [:discussion.admin/delete-statements-success form]
                                 {:statement-ids statement-ids
                                  :share-hash share-hash
@@ -170,7 +170,7 @@
   :discussion.delete/statement
   (fn [{:keys [db]} [_ statement-id edit-hash]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])]
-      {:fx [(http/xhrio-request db :delete "/manage/statements/delete"
+      {:fx [(http/xhrio-request db :delete "/discussions/statements/delete"
                                 [:discussion.admin/delete-statement-success statement-id]
                                 {:statement-ids [statement-id]
                                  :share-hash share-hash

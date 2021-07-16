@@ -95,21 +95,6 @@
           (ok {:share-hash share-hash}))
       (validator/deny-access))))
 
-(defn- delete-statements!
-  "Deletes the passed list of statements if the admin-rights are fitting.
-  Important: Needs to check whether the statement-id really belongs to the discussion with
-  the passed edit-hash."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash statement-ids]} (:body parameters)
-        deny-access (validator/deny-access "You do not have the rights to access this action.")]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      ;; could optimize with a collection query here
-      (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
-        (do (discussion-db/delete-statements! statement-ids)
-            (ok {:deleted-statements statement-ids}))
-        deny-access)
-      deny-access)))
-
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
   [{:keys [parameters]}]
@@ -241,11 +226,7 @@
          ["/make-read-only" {:put make-discussion-read-only!
                              :description (at/get-doc #'make-discussion-read-only!)}]
          ["/make-writeable" {:put make-discussion-writeable!
-                             :description (at/get-doc #'make-discussion-writeable!)}]]
-        ["/statements/delete" {:delete delete-statements!
-                               :description (at/get-doc #'delete-statements!)
-                               :parameters {:body {:statement-ids (s/coll-of :db/id)}}
-                               :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}}}]]
+                             :description (at/get-doc #'make-discussion-writeable!)}]]]
 
        analytics-routes
        discussion-routes

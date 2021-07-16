@@ -1,20 +1,20 @@
 (ns schnaq.api.discussion
-  (:require [schnaq.api.toolbelt :as at]
-            [schnaq.media :as media]
-            [clojure.spec.alpha :as s]
+  (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn-]]
-            [schnaq.validator :as validator]
-            [taoensso.timbre :as log]
-            [schnaq.database.reaction :as reaction-db]
-            [ring.util.http-response :refer [ok created bad-request forbidden]]
-            [schnaq.database.main :as db]
-            [schnaq.database.specs :as specs]
-            [schnaq.toolbelt :as toolbelt]
-            [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.user :as user-db]
+            [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.api.dto-specs :as dto]
+            [schnaq.api.toolbelt :as at]
+            [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.main :as db]
+            [schnaq.database.reaction :as reaction-db]
+            [schnaq.database.specs :as specs]
+            [schnaq.database.user :as user-db]
+            [schnaq.discussion :as discussion]
+            [schnaq.media :as media]
             [schnaq.processors :as processors]
-            [schnaq.discussion :as discussion]))
+            [schnaq.toolbelt :as toolbelt]
+            [schnaq.validator :as validator]
+            [taoensso.timbre :as log]))
 
 (defn- extract-user
   "Returns a user-id, either from nickname if anonymous user or from identity, if jwt token is present."
@@ -146,6 +146,21 @@
       #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not delete a closed / deleted discussion or statement."))
       #(validator/deny-access at/invalid-rights-message))))
 
+(defn- delete-statements!
+  "Deletes the passed list of statements if the admin-rights are fitting.
+  Important: Needs to check whether the statement-id really belongs to the discussion with
+  the passed edit-hash."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash edit-hash statement-ids]} (:body parameters)
+        deny-access (validator/deny-access "You do not have the rights to access this action.")]
+    (if (validator/valid-credentials? share-hash edit-hash)
+      ;; could optimize with a collection query here
+      (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
+        (do (discussion-db/delete-statements! statement-ids)
+            (ok {:deleted-statements statement-ids}))
+        deny-access)
+      deny-access)))
+
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [parameters identity]}]
@@ -265,6 +280,14 @@
                            :responses {201 {:body {:new-statement ::dto/statement}}
                                        403 at/response-error-body}}]
    ["/statements"
+    ["/delete" {:delete delete-statements!
+                :description (at/get-doc #'delete-statements!)
+                :parameters {:body {:share-hash :discussion/share-hash
+                                    :edit-hash :discussion/edit-hash
+                                    :statement-ids (s/coll-of :db/id)}}
+                :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}
+                            401 at/response-error-body
+                            403 at/response-error-body}}]
     ["/search" {:get search-statements
                 :description (at/get-doc #'search-statements)
                 :parameters {:query {:share-hash :discussion/share-hash
@@ -309,7 +332,7 @@
                  :responses {200 {:body {:deleted-statement :db/id}}
                              400 at/response-error-body
                              403 at/response-error-body}}]
-     ["/vote" {:parameters {:body {:nickname :dto/maybe-nickname}}}
+     ["/vote" {:parameters {:body {:nickname ::dto/maybe-nickname}}}
       ["/down" {:post toggle-downvote-statement
                 :description (at/get-doc #'toggle-downvote-statement)
                 :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
