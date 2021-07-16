@@ -66,7 +66,7 @@
   "Check if is eligible for our beta-testers program."
   [handler]
   (fn [request]
-    (if (has-role? request #{"failing"})
+    (if (has-role? request shared-config/beta-tester-roles)
       (handler request)
       (forbidden (at/build-error-body :auth/not-a-beta-tester "You are not a beta tester.")))))
 
