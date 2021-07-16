@@ -97,7 +97,7 @@
    [validate-conditions-middleware
     options
     [:<>
-     [:div.text-white.masthead-layered
+     [:div.masthead-layered
       [navbar-pages/navbar-transparent]
       [base/header heading subheading more-for-heading]]
      body]]])
