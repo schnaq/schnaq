@@ -170,7 +170,7 @@
   :discussion.delete/statement
   (fn [{:keys [db]} [_ statement-id edit-hash]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])]
-      {:fx [(http/xhrio-request db :delete "/discussions/statements/delete"
+      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
                                 [:discussion.admin/delete-statement-success statement-id]
                                 {:statement-ids [statement-id]
                                  :share-hash share-hash
