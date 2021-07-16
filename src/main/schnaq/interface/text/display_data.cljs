@@ -21,7 +21,7 @@
 
         ;; Call to contribute
         :call-to-contribute/lead "There are currently no contributions"
-        :call-to-contribute/body "You might be the first person to write something about this!"
+        :call-to-contribute/body "Start with your first post"
 
         ;; code of conduct
         :coc/heading "Code of Conduct"
@@ -973,7 +973,7 @@ Now we write down questions and discuss them and can still understand what we ha
 
         ;; Call to contribute
         :call-to-contribute/lead "Bisher gibt es hier noch keine Beiträge"
-        :call-to-contribute/body "Du könntest die erste Person sein, die hierzu etwas schreibt!"
+        :call-to-contribute/body "Starte mit deinem ersten Beitrag"
 
         ;; code of conduct
         :coc/heading "Verhaltensregeln"
@@ -1936,9 +1936,10 @@ Now we write down questions and discuss them and can still understand what we ha
      :icon-add "https://s3.disqtec.com/schnaq-common/buttons/add-button.svg"
      :icon-community "https://s3.disqtec.com/schnaq-common/community.svg"
      :icon-crane "https://s3.disqtec.com/schnaq-common/icons/crane.svg"
-     :icon-graph "https://s3.disqtec.com/schnaq-common/icons/graph.svg"
+     :icon-graph "https://s3.disqtec.com/schnaq-common/icons/mind_map_circle.svg"
      :icon-reports "https://s3.disqtec.com/schnaq-common/icons/reports.svg"
      :icon-robot "https://s3.disqtec.com/schnaq-common/icons/robot.svg"
+     :icon-summary "https://s3.disqtec.com/schnaq-common/icons/layers.svg"
      :logo "https://s3.disqtec.com/schnaq-common/logos/schnaq.svg"
      :logo-white "https://s3.disqtec.com/schnaq-common/logos/schnaq_white.png"
      :logos/bialon "https://s3.disqtec.com/schnaq-common/testimonials/bialon_logo.png"
@@ -1973,6 +1974,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :pricing.others/loomio "https://s3.disqtec.com/schnaq-common/startpage/pricing/loomio.png"
      :pricing.others/miro "https://s3.disqtec.com/schnaq-common/startpage/pricing/miro.png"
      :schnaqqifant/admin "https://s3.disqtec.com/schnaq-schnaqqifanten/admin.png"
+     :schnaqqifant/flat "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_flat_front.png"
      :schnaqqifant/erase "https://s3.disqtec.com/schnaq-schnaqqifanten/erase.png"
      :schnaqqifant/hippie "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqifant-hippie.png"
      :schnaqqifant/original "https://s3.disqtec.com/schnaq-common/logos/schnaqqifant.svg"
@@ -2065,6 +2067,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :lock-open "fa-lock-open"
      :minus "fa-minus"
      :newspaper "fa-newspaper"
+     :paragraph "fa-paragraph"
      :plane "fa-paper-plane"
      :plus "fa-plus"
      :project/diagram "fa-project-diagram"
@@ -2079,7 +2082,6 @@ Now we write down questions and discuss them and can still understand what we ha
      :spinner "fa-spinner"
      :star "fas fa-star"
      :terminal "fa-terminal"
-     :text-width "fa-text-width"
      :trash "fa-trash-alt"
      :user/edit "fa-user-edit"
      :user/group "fa-users"

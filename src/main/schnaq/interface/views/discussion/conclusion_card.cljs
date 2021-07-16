@@ -17,16 +17,15 @@
   "If no contributions are available, add a call to action to engage the users."
   []
   [common/delayed-fade-in
-   [:article.w-75.mx-auto.pt-5
-    [:div.alert.alert-primary.text-center.row
-     [:div.col-sm-8.col-12
-      [:p.lead.pt-3 (labels :call-to-contribute/lead)]
-      [:p (labels :call-to-contribute/body)]
-      [:p (labels :how-to/ask-question)
-       [:a {:href (reitfe/href :routes/how-to)}
-        (labels :how-to/answer-question)]]]
-     [:div.col-sm-4.col-12.p-3.p-md-0
-      [:img.w-75 {:src (img-path :schnaqqifant.300w/talk)}]]]]])
+   [:article.m-3
+    [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5
+     [:div.col-2.py-md-5.d-flex
+      [:img.w-75.align-self-center {:src (img-path :schnaqqifant/flat)}]]
+     [:div.col-10.py-md-5
+      [:h2 (labels :call-to-contribute/body)]
+      [:p.mt-5 (labels :how-to/ask-question)
+       [:a.text-dark {:href (reitfe/href :routes/how-to)}
+        (labels :how-to/answer-question)]]]]]])
 
 
 ;; -----------------------------------------------------------------------------

@@ -126,8 +126,7 @@
   [pages/with-nav-and-header
    {:page/heading (labels :startpage/heading)
     :page/subheading (labels :startpage/subheading)
-    :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})
-    :page/gradient? true}
+    :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
    [:<>
     [:section.container
      [startpage-features/feature-rows]

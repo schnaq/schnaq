@@ -90,7 +90,7 @@
 
 (>defn with-nav-and-header
   "Default page with header and curly wave."
-  [{:page/keys [title heading subheading more-for-heading gradient?] :as options} body]
+  [{:page/keys [title heading subheading more-for-heading] :as options} body]
   [::page-options (s/+ vector?) :ret vector?]
   (common/set-website-title! (or title heading))
   [scheduler/middleware
@@ -98,7 +98,7 @@
     options
     [:<>
      [navbar-pages/navbar]
-     [base/header heading subheading gradient? more-for-heading]
+     [base/header heading subheading more-for-heading]
      body]]])
 
 (>defn with-nav

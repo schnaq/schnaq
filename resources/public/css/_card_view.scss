@@ -41,12 +41,6 @@
   overflow: hidden;
   padding: 0;
 
-  @include media-breakpoint-down(sm) {
-    height: 3rem;
-    padding: 0 0 0 0.4rem;
-    width: 3rem;
-  }
-
   &:hover {
     background: vars.$white-shade;
   }
@@ -60,12 +54,6 @@
   min-height: 4.5rem;
   overflow: hidden;
   padding: 1.5rem 1rem;
-
-  @include media-breakpoint-down(sm) {
-    min-height: 3rem;
-    min-width: 3rem;
-    padding: 0.5rem 0.25rem;
-  }
 
   &:hover {
     background: vars.$white-shade;
@@ -154,6 +142,10 @@
   @include rounded.rounded-1;
   border: 0;
   white-space: pre-line;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
 }
 
 .highlight-card {
@@ -161,6 +153,10 @@
   margin: 0.75rem 0;
   min-height: 100%;
   min-width: 0.5rem;
+
+  @include media-breakpoint-down(sm) {
+    margin-right: 1rem;
+  }
 }
 
 .highlight-card-neutral {
