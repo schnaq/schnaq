@@ -26,15 +26,13 @@
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
   [heading subheading gradient? & more]
-  (let [header-class (if gradient? "masthead-gradient" "masthead")]
-    [:div
-     [:div.text-white
-      {:class header-class}
-      [:div.container
-       [:h1 heading]
-       [:h2.display-6 subheading]
-       more]]
-     [wavy-curve "" gradient?]]))
+  [:div
+   [:div.text-white.masthead-inno
+    [:div.container
+     [:h1 heading]
+     [:h2.display-6 subheading]
+     more]
+    [:div.wave-bottom-light]]])
 
 (defn img-bullet-subtext
   "Create one icon in a grid"
