@@ -340,7 +340,8 @@
     (deny-access-fn)))
 
 (defn- edit-statement!
-  "Edits the content (and possibly type) of a statement, when the user is the registered author."
+  "Edits the content (and possibly type) of a statement, when the user is the registered author.
+  `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`."
   [{:keys [parameters identity]}]
   (let [{:keys [statement-id statement-type new-content share-hash]} (:body parameters)
         user-identity (:sub identity)
