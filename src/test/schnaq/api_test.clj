@@ -36,12 +36,12 @@
         (is (contains? (-> valid-response :body :graph) :edges))
         (is (not (nil? (-> valid-response :body :graph :nodes))))
         (is (not (nil? (-> valid-response :body :graph :edges)))))
-      (testing "bad request"
-        (is (= 400 (:status bad-response))))
+      (testing "Discussion not found"
+        (is (= 404 (:status bad-response))))
       (testing "Check with complete app"
         (is (= 200 (:status (api/app {:request-method :get :uri "/discussion/graph"
                                       :query-params {:share-hash share-hash}}))))
-        (is (= 400 (:status (api/app {:request-method :get :uri "/discussion/graph"
+        (is (= 404 (:status (api/app {:request-method :get :uri "/discussion/graph"
                                       :query-params {:share-hash "bad-hash"}}))))))))
 
 (deftest cors-origin-tests
