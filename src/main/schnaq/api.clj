@@ -26,6 +26,7 @@
             [schnaq.api.emails :refer [email-routes]]
             [schnaq.api.feedback :refer [feedback-routes]]
             [schnaq.api.hub :refer [hub-routes]]
+            [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.toolbelt :as at]
             [schnaq.api.user :refer [user-routes]]
@@ -36,7 +37,6 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.core :as schnaq-core]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.hub :as hub-db]
             [schnaq.database.main :as db]
             [schnaq.database.reaction :as reaction-db]
             [schnaq.database.specs :as specs]
@@ -44,14 +44,11 @@
             [schnaq.discussion :as discussion]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
-            [schnaq.links :as links]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.validator :as validator]
-            [spec-tools.core :as st]
             [taoensso.timbre :as log])
-  (:import (java.util UUID))
   (:gen-class))
 
 (s/def :http/status nat-int?)
@@ -62,10 +59,6 @@
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
 
 (def ^:private invalid-rights-message "You to not have enough permissions to access this data.")
-(def ^:private invalid-share-hash "Invalid share-hash.")
-(def ^:private not-found-with-error-message
-  (not-found
-    (at/build-error-body :invalid-share-hash invalid-share-hash)))
 
 (defn- extract-user
   "Returns a user-id, either from nickname if anonymous user or from identity, if jwt token is present."
@@ -79,34 +72,6 @@
   [_]
   (ok {:text "🧙‍♂️"}))
 
-(defn- add-schnaq
-  "Adds a discussion to the database. Returns the newly-created discussion."
-  [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title public-discussion? hub-exclusive? hub]} (:body parameters)
-        keycloak-id (:sub identity)
-        authorized-for-hub? (some #(= % hub) (:groups identity))
-        author (if keycloak-id
-                 [:user.registered/keycloak-id keycloak-id]
-                 (user-db/add-user-if-not-exists nickname))
-        discussion-data (cond-> {:discussion/title discussion-title
-                                 :discussion/share-hash (.toString (UUID/randomUUID))
-                                 :discussion/edit-hash (.toString (UUID/randomUUID))
-                                 :discussion/author author}
-                                (and hub-exclusive? authorized-for-hub?)
-                                (assoc :discussion/hub-origin [:hub/keycloak-name hub]))
-        new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
-    (if new-discussion-id
-      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
-        (when (and hub-exclusive? hub authorized-for-hub?)
-          (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
-        (log/info "Discussion created: " new-discussion-id " - "
-                  (:discussion/title created-discussion) " – Public? " public-discussion?
-                  "Exclusive?" hub-exclusive? "for" hub)
-        (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
-      (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
-        (log/info error-msg)
-        (bad-request (at/build-error-body :schnaq-creation-failed error-msg))))))
-
 (defn- add-author
   "Generate a user based on the nickname. This is an *anonymous* user, and we
   can only refer to the user by the nickname. So this function is idempotent and
@@ -115,50 +80,6 @@
   (let [author-name (get-in parameters [:body :nickname])
         user-id (user-db/add-user-if-not-exists author-name)]
     (created "" {:user-id user-id})))
-
-(defn- schnaq-by-hash
-  "Returns a discussion, identified by its share-hash."
-  [{:keys [parameters identity]}]
-  (let [hash (get-in parameters [:query :share-hash])
-        keycloak-id (:sub identity)]
-    (if (validator/valid-discussion? hash)
-      (ok {:schnaq (processors/add-meta-info-to-schnaq
-                     (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
-                       (discussion-db/discussion-by-share-hash-private hash)
-                       (discussion-db/discussion-by-share-hash hash)))})
-      (validator/deny-access))))
-
-(defn- schnaqs-by-hashes
-  "Bulk loading of discussions. May be used when users asks for all the schnaqs
-  they have access to. If only one schnaq shall be loaded, ring packs it
-  into a single string:
-  `{:parameters {:query {:share-hashes \"57ce1947-e57f-4395-903e-e2866d2f305c\"}}}`
-
-  If multiple share-hashes are sent to the backend, reitit wraps them into a
-  collection:
-  `{:parameters {:query {:share-hashes [\"57ce1947-e57f-4395-903e-e2866d2f305c\"
-                                        \"b2645217-6d7f-4d00-85c1-b8928fad43f7\"]}}}"
-  [request]
-  (if-let [share-hashes (get-in request [:parameters :query :share-hashes])]
-    (let [share-hashes-list (if (string? share-hashes) [share-hashes] share-hashes)]
-      (ok {:schnaqs
-           (map processors/add-meta-info-to-schnaq
-                (discussion-db/valid-discussions-by-hashes share-hashes-list))}))
-    not-found-with-error-message))
-
-(defn- public-schnaqs
-  "Return all public schnaqs."
-  [_req]
-  (ok {:schnaqs (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
-
-(defn- schnaq-by-hash-as-admin
-  "If user is authenticated, a meeting with an edit-hash is returned for further
-  processing in the frontend."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})
-      (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
 
 (defn- make-discussion-read-only!
   "Makes a discussion read-only if share- and edit-hash are correct and present."
@@ -302,7 +223,7 @@
   (let [{:keys [share-hash]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
       (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
-      not-found-with-error-message)))
+      at/not-found-hash-invalid)))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
@@ -314,7 +235,7 @@
                                 with-sub-discussion-info)]
     (if (validator/valid-discussion? share-hash)
       (ok {:premises prepared-statements})
-      not-found-with-error-message)))
+      at/not-found-hash-invalid)))
 
 (defn- search-statements
   "Search through any valid discussion."
@@ -324,7 +245,7 @@
       (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
                                     with-sub-discussion-info
                                     valid-statements-with-votes)})
-      not-found-with-error-message)))
+      at/not-found-hash-invalid)))
 
 (defn- get-statement-info
   "Return premises and conclusion for a given statement id."
@@ -336,7 +257,7 @@
                                     with-sub-discussion-info
                                     (toolbelt/pull-key-up :db/ident)))
              :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))}))
-      not-found-with-error-message)))
+      at/not-found-hash-invalid)))
 
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
@@ -354,18 +275,14 @@
 
 (defn- react-to-any-statement!
   "Adds a support or attack regarding a certain statement. `conclusion-id` is the
-  statement you want to react to. `reaction` is one of `attack`, `support` or `neutral`.
+  statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
   `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash conclusion-id nickname premise reaction]} (:body parameters)
+  (let [{:keys [share-hash conclusion-id nickname premise statement-type]} (:body parameters)
         keycloak-id (:sub identity)
         user-id (if keycloak-id
                   [:user.registered/keycloak-id keycloak-id]
-                  (user-db/user-by-nickname nickname))
-        statement-type (case reaction
-                         :attack :statement.type/attack
-                         :support :statement.type/support
-                         :statement.type/neutral)]
+                  (user-db/user-by-nickname nickname))]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created ""
@@ -399,7 +316,7 @@
         (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
                      :edges edges
                      :controversy-values controversy-vals}}))
-      (bad-request (at/build-error-body :invalid-share-hash invalid-share-hash)))))
+      at/not-found-hash-invalid)))
 
 (defn- export-txt-data
   "Exports the discussion data as a string."
@@ -408,7 +325,7 @@
     (if (validator/valid-discussion? share-hash)
       (do (log/info "User is generating a txt export for discussion" share-hash)
           (ok {:string-representation (export/generate-text-export share-hash)}))
-      (bad-request (at/build-error-body :invalid-share-hash invalid-share-hash)))))
+      at/not-found-hash-invalid)))
 
 (defn- check-statement-author-and-state
   "Checks if a statement is authored by this user-identity and is valid, i.e. not deleted.
@@ -494,6 +411,10 @@
   "Regular expression, which defines the allowed origins for API requests."
   #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
 
+(s/def ::maybe-nickname
+  (s/or :nil nil?
+        :nickname :user/nickname))
+
 (def ^:private description
   "This is the main Backend for schnaq.
 
@@ -516,7 +437,7 @@
                        :swagger {:tags ["exports"]}
                        :parameters {:query {:share-hash :discussion/share-hash}}
                        :responses {200 {:body {:string-representation string?}}
-                                   400 at/response-error-body}}]
+                                   404 at/response-error-body}}]
        ["/author/add" {:put add-author
                        :description (at/get-doc #'add-author)
                        :parameters {:body {:nickname :user/nickname}}
@@ -543,7 +464,7 @@
                    :description (at/get-doc #'graph-data-for-agenda)
                    :parameters {:query {:share-hash :discussion/share-hash}}
                    :responses {200 {:body {:graph ::specs/graph}}
-                               400 at/response-error-body}}]
+                               404 at/response-error-body}}]
         ["/header-image" {:post media/set-preview-image
                           :description (at/get-doc #'media/set-preview-image)
                           :parameters {:body {:share-hash :discussion/share-hash
@@ -555,9 +476,9 @@
                                 :description (at/get-doc #'react-to-any-statement!)
                                 :parameters {:body {:share-hash :discussion/share-hash
                                                     :conclusion-id :db/id
-                                                    :nickname :user/nickname
+                                                    :nickname ::maybe-nickname
                                                     :premise :statement/content
-                                                    :reaction keyword? #_:statement/unqualified-types}}
+                                                    :statement-type :statement/type}}
                                 :responses {201 {:body {:new-statement ::dto/statement}}
                                             403 at/response-error-body}}]
         ["/statements"
@@ -577,7 +498,7 @@
                            :description (at/get-doc #'add-starting-statement!)
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :statement :statement/content
-                                               :nickname :user/nickname}}
+                                               :nickname ::maybe-nickname}}
                            :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                        403 at/response-error-body}}]]
         ["/statement"
@@ -593,7 +514,8 @@
           ["/edit" {:put edit-statement!
                     :description (at/get-doc #'edit-statement!)
                     :middleware [:authenticated?]
-                    :parameters {:body {:statement-type :statement/unqualified-types
+                    :parameters {:body {:statement-type (s/or :nil nil?
+                                                              :type :statement/type)
                                         :new-content :statement/content}}
                     :responses {200 {:body {:updated-statement ::dto/statement}}
                                 400 at/response-error-body
@@ -604,7 +526,7 @@
                       :responses {200 {:body {:deleted-statement :db/id}}
                                   400 at/response-error-body
                                   403 at/response-error-body}}]
-          ["/vote" {:parameters {:body {:nickname :user/nickname}}}
+          ["/vote" {:parameters {:body {:nickname ::maybe-nickname}}}
            ["/down" {:post toggle-downvote-statement
                      :description (at/get-doc #'toggle-downvote-statement)
                      :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
@@ -613,40 +535,6 @@
                    :description (at/get-doc #'toggle-upvote-statement)
                    :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                                400 at/response-error-body}}]]]]]
-       ["/schnaq" {:swagger {:tags ["schnaqs"]}}
-        ["/by-hash" {:get schnaq-by-hash
-                     :description (at/get-doc #'schnaq-by-hash)
-                     :parameters {:query {:share-hash :discussion/share-hash}}
-                     :responses {200 {:body {:schnaq ::specs/discussion}}
-                                 403 at/response-error-body}}]
-        ["/add" {:description (at/get-doc #'add-schnaq)
-                 :parameters {:body {:discussion-title :discussion/title
-                                     :public-discussion? boolean?}}
-                 :responses {201 {:body {:new-schnaq ::dto/discussion}}
-                             400 at/response-error-body}}
-         ["" {:post add-schnaq}]
-         ["/anonymous" {:post add-schnaq
-                        :parameters {:body {:nickname :user/nickname}}}]
-         ["/with-hub" {:post add-schnaq
-                       :parameters {:body {:hub-exclusive? boolean?
-                                           :hub :hub/keycloak-name}}}]]
-        ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
-                              :parameters {:body {:share-hash :discussion/share-hash
-                                                  :edit-hash :discussion/edit-hash}}
-                              :responses {200 {:body {:schnaq ::dto/discussion}}}}]]
-
-       ["/schnaqs" {:swagger {:tags ["schnaqs"]}}
-        ["/by-hashes" {:get schnaqs-by-hashes
-                       :description (at/get-doc #'schnaqs-by-hashes)
-                       :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
-                                                                                        :swagger/collectionFormat "multi"})
-                                                                :share-hash :discussion/share-hash)}}
-                       :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
-                                   404 at/response-error-body}}]
-        ["/public" {:get public-schnaqs
-                    :description (at/get-doc #'public-schnaqs)
-                    :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
-
        ["/admin" {:swagger {:tags ["admin"]}
                   :responses {401 at/response-error-body}
                   :middleware [:authenticated? :admin?]}
@@ -676,6 +564,7 @@
        email-routes
        feedback-routes
        hub-routes
+       schnaq-routes
        summary-routes
        user-routes
 
