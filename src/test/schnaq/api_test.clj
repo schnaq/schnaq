@@ -1,6 +1,5 @@
 (ns schnaq.api-test
-  (:require [clojure.spec.alpha :as s]
-            [clojure.test :refer [deftest testing is are use-fixtures]]
+  (:require [clojure.test :refer [deftest testing is are use-fixtures]]
             [ring.mock.request :as mock]
             [schnaq.api :as api]
             [schnaq.database.discussion :as discussion-db]

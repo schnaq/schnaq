@@ -9,6 +9,10 @@
   (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
           :opt [:user.registered/profile-picture]))
 
+(s/def ::maybe-nickname
+  (s/or :nil nil?
+        :nickname :user/nickname))
+
 ;; Statements
 (s/def ::statement
   (s/keys :req [:db/id :statement/content :statement/version :statement/created-at

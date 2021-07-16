@@ -19,6 +19,7 @@
   {:error error-type
    :message error-message})
 
+(def invalid-rights-message "You to not have enough permissions to access this data.")
 (def invalid-share-hash-message "Invalid share-hash.")
 (def not-found-hash-invalid
   "Return 403 with invalid-share-hash message."
