@@ -3,7 +3,6 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
