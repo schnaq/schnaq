@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.base
   (:require [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]))
+            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.utils.js-wrapper :as jw]))
 
 (defn wavy-curve
   "Define a wavy curve."
@@ -25,16 +26,13 @@
 
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
-  [heading subheading gradient? & more]
-  (let [header-class (if gradient? "masthead-gradient" "masthead")]
-    [:div
-     [:div.text-white
-      {:class header-class}
-      [:div.container
-       [:h1 heading]
-       [:h2.display-6 subheading]
-       more]]
-     [wavy-curve "" gradient?]]))
+  [heading subheading & more]
+  [:div.text-white.masthead-layered
+   [:div.container
+    [:h1 heading]
+    [:h2.display-6 subheading]
+    more]
+   [:div.wave-bottom-light]])
 
 (defn img-bullet-subtext
   "Create one icon in a grid"
@@ -89,7 +87,7 @@
    [:i {:class (str "fas " (fa :terminal))}]
    (labels :footer.tagline/developed-with)
    [:i {:class (str "m-auto fas " (fa :flask))}]
-   (gstring/format " in NRW, Germany © schnaq %d" (.getFullYear (js/Date.)))])
+   (gstring/format " in NRW, Germany © schnaq %d" jw/get-date-year)])
 
 (defn- social-media []
   [:section
