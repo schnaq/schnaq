@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.base
   (:require [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]))
+            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.utils.js-wrapper :as jw]))
 
 (defn wavy-curve
   "Define a wavy curve."
@@ -87,7 +88,7 @@
    [:i {:class (str "fas " (fa :terminal))}]
    (labels :footer.tagline/developed-with)
    [:i {:class (str "m-auto fas " (fa :flask))}]
-   (gstring/format " in NRW, Germany © schnaq %d" (.getFullYear (js/Date.)))])
+   (gstring/format " in NRW, Germany © schnaq %d" jw/get-date-year)])
 
 (defn- social-media []
   [:section

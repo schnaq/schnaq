@@ -93,3 +93,7 @@
         state (.-readyState js/document)]
     (when (and element (= state "complete"))
       (.scrollIntoView element))))
+
+(def get-date-year
+  "Get the current year"
+  (.getFullYear (js/Date.)))
