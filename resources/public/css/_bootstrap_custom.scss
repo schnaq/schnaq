@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables' as vars;
 
 // Additional colors. Defaults are primary, secondary, ... and here you can add
 // your own color styles.
@@ -6,36 +6,48 @@
 // I.e.: If you add the key "indigo" to this map, there will also be btn-indigo
 // etc. available for use.
 $theme-colors: (
-  'white': $white,
-  'dark-blue': $blue-dark
+  'white': vars.$white,
+  'dark-blue': vars.$blue-dark
 );
 
+@import '../../../node_modules/bootstrap/scss/bootstrap';
 
 // -----------------------------------------------------------------------------
 
 .btn-outline-white {
   a {
-    color: $white;
+    color: vars.$white;
   }
 
   &:hover a {
-    color: $black;
+    color: vars.$black;
   }
 }
 
 .btn-white {
   a {
-    color: $black;
+    color: vars.$black;
   }
 
   &:hover a {
-    color: $black;
+    color: vars.$black;
   }
 }
 
 .navbar-primary {
-  background: $primary;
-  color: $text-light;
+  background: vars.$primary;
+  color: vars.$text-light;
 }
 
-@import '../../../node_modules/bootstrap/scss/bootstrap';
+.navbar-transparent {
+  @extend .navbar-dark;
+
+  .nav-link {
+    color: vars.$gray-200 !important;
+  }
+
+  .nav-link:hover {
+    color: vars.$white !important;
+  }
+}
+

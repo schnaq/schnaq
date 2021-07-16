@@ -97,8 +97,9 @@
    [validate-conditions-middleware
     options
     [:<>
-     [navbar-pages/navbar]
-     [base/header heading subheading more-for-heading]
+     [:div.text-white.masthead-layered
+      [navbar-pages/navbar-transparent]
+      [base/header heading subheading more-for-heading]]
      body]]])
 
 (>defn with-nav
