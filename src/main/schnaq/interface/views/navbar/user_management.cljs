@@ -101,5 +101,5 @@
      (when-not authenticated?
        [:ul.navbar-nav
         [:li.nav-item {:on-click #(rf/dispatch [:keycloak/login])}
-         [:button.btn.btn-primary.rounded-1.mx-2
+         [:button.btn.btn-dark.rounded-1.mx-2
           (labels :user/login)]]])]))

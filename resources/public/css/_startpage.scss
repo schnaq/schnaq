@@ -35,8 +35,10 @@ $gradient-target: vars.$primary;
 
 .masthead-layered {
   @extend .masthead;
+  @extend .text-white;
   background-color: transparent;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/layered_background_square.svg');
+  background-position: bottom;
   background-repeat: no-repeat;
   background-size: cover;
 }
