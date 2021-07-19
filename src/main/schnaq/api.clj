@@ -1,10 +1,7 @@
 (ns schnaq.api
-  (:require [clojure.data.json :as json]
-            [clojure.spec.alpha :as s]
+  (:require [clojure.spec.alpha :as s]
             [expound.alpha :as expound]
-            [ghostwheel.core :refer [>defn-]]
             [muuntaja.core :as m]
-            [org.httpkit.client :as http-client]
             [org.httpkit.server :as server]
             [reitit.coercion.spec]
             [reitit.dev.pretty :as pretty]
@@ -20,27 +17,21 @@
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.util.http-response :refer [ok created bad-request forbidden]]
             [schnaq.api.analytics :refer [analytics-routes]]
+            [schnaq.api.debug :refer [debug-routes]]
             [schnaq.api.discussion :refer [discussion-routes]]
             [schnaq.api.emails :refer [email-routes]]
             [schnaq.api.feedback :refer [feedback-routes]]
             [schnaq.api.hub :refer [hub-routes]]
+            [schnaq.api.common :refer [other-routes]]
             [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
-            [schnaq.api.toolbelt :as at]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.auth :as auth]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
-            [schnaq.config.mailchimp :as mailchimp-config]
             [schnaq.config.shared :as shared-config]
             [schnaq.core :as schnaq-core]
-            [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.user :as user-db]
-            [schnaq.emails :as emails]
-            [schnaq.export :as export]
-            [schnaq.validator :as validator]
             [taoensso.timbre :as log])
   (:gen-class))
 
@@ -50,59 +41,6 @@
 (s/def :ring/body-params map?)
 (s/def :ring/route-params map?)
 (s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
-
-(defn- ping
-  "Route to ping the API. Used in our monitoring system."
-  [_]
-  (ok {:text "🧙‍♂️"}))
-
-(defn- add-author
-  "Generate a user based on the nickname. This is an *anonymous* user, and we
-  can only refer to the user by the nickname. So this function is idempotent and
-  returns always the same id when providing the same nickname."
-  [{:keys [parameters]}]
-  (let [author-name (get-in parameters [:body :nickname])
-        user-id (user-db/add-user-if-not-exists author-name)]
-    (created "" {:user-id user-id})))
-
-(defn- check-credentials!
-  "Checks whether share-hash and edit-hash match.
-  If the user is logged in and the credentials are valid, they are added as an admin."
-  [{:keys [parameters identity]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)
-        valid-credentials? (validator/valid-credentials? share-hash edit-hash)
-        keycloak-id (:sub identity)]
-    (when (and valid-credentials? keycloak-id)
-      (discussion-db/add-admin-to-discussion share-hash keycloak-id))
-    (if valid-credentials?
-      (ok {:valid-credentials? valid-credentials?})
-      (forbidden {:valid-credentials? valid-credentials?}))))
-
-(defn- export-txt-data
-  "Exports the discussion data as a string."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash]} (:query parameters)]
-    (if (validator/valid-discussion? share-hash)
-      (do (log/info "User is generating a txt export for discussion" share-hash)
-          (ok {:string-representation (export/generate-text-export share-hash)}))
-      at/not-found-hash-invalid)))
-
-(defn- subscribe-lead-magnet!
-  "Subscribes to the mailing list and sends the lead magnet to the email-address."
-  [{:keys [parameters]}]
-  (let [email (get-in parameters [:body :email])
-        options {:timeout 10000
-                 :basic-auth ["user" mailchimp-config/api-key]
-                 :body (json/write-str {:email_address email
-                                        :status "subscribed"
-                                        :email_type "html"
-                                        :tags ["lead-magnet" "datenschutz"]})
-                 :user-agent "schnaq Backend Application"}]
-    (http-client/post mailchimp-config/subscribe-uri options)
-    (if (emails/send-remote-work-lead-magnet email)
-      (ok {:status :ok})
-      (bad-request (at/build-error-body :failed-subscription "Something went wrong. Check your Email-Address and try again.")))))
-
 
 ;; -----------------------------------------------------------------------------
 ;; General
@@ -141,40 +79,13 @@
 (def app
   (ring/ring-handler
     (ring/router
-      [(when-not shared-config/production?
-         ["" {:swagger {:tags ["debug"]}}
-          ["/debug/headers" {:get identity}]])
-       ["/ping" {:get ping
-                 :description (at/get-doc #'ping)
-                 :responses {200 {:body {:text string?}}}}]
-       ["/export/txt" {:get export-txt-data
-                       :description (at/get-doc #'export-txt-data)
-                       :swagger {:tags ["exports"]}
-                       :parameters {:query {:share-hash :discussion/share-hash}}
-                       :responses {200 {:body {:string-representation string?}}
-                                   404 at/response-error-body}}]
-       ["/user/add" {:put add-author
-                     :description (at/get-doc #'add-author)
-                     :parameters {:body {:nickname :user/nickname}}
-                     :responses {201 {:body {:user-id :db/id}}}}]
-       ["/credentials/validate" {:post check-credentials!
-                                 :description (at/get-doc #'check-credentials!)
-                                 :responses {200 {:body {:valid-credentials? boolean?}}
-                                             403 {:body {:valid-credentials? boolean?}}}
-                                 :parameters {:body {:share-hash :discussion/share-hash
-                                                     :edit-hash :discussion/edit-hash}}}]
-       ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
-                                  :description (at/get-doc #'subscribe-lead-magnet!)
-                                  :parameters {:body {:email string?}}
-                                  :responses {200 {:body {:status keyword?}}
-                                              400 at/response-error-body}}]
-
-
-       analytics-routes
+      [analytics-routes
+       debug-routes
        discussion-routes
        email-routes
        feedback-routes
        hub-routes
+       other-routes
        schnaq-routes
        summary-routes
        user-routes
