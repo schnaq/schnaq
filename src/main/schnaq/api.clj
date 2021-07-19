@@ -71,10 +71,17 @@
 (def ^:private description
   "This is the main Backend for schnaq.
 
+  ## General
+  Most routes work with anonymous users, where a `nickname` can be set. If you are authenticated and send back a valid JWT token, you most often can omit the `nickname` field in the request. Then, you act as a registered user.
+
   ## Authentication
   Many routes require authentication. To authenticate you against the backend, grab a JWT token from the authorized Keycloak instance and put in in your header.
 
-  The header should look like this: `Authorization: Token <your token>`.")
+  The header should look like this: `Authorization: Token <your token>`. Configure your JWT token in by using the \"Authorize\"-Button.
+
+  ## Content Negotiation
+  You can choose the format of your response by specifying the corresponding header. `json`, `edn`, `transit+json` and `transit+msgpack` are currently supported. For example:
+  `curl https://api.staging.schnaq.com/ping -H \"Accept: application/edn\"`")
 
 (def app
   (ring/ring-handler

@@ -1,11 +1,10 @@
 (ns schnaq.api.common
   (:require [clojure.data.json :as json]
             [org.httpkit.client :as http-client]
-            [ring.util.http-response :refer [ok created bad-request forbidden]]
+            [ring.util.http-response :refer [ok bad-request forbidden]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config.mailchimp :as mailchimp-config]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.user :as user-db]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
             [schnaq.validator :as validator]
