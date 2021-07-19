@@ -75,6 +75,14 @@
   (let [display-name (get-in parameters [:body :display-name])]
     (ok {:updated-user (user-db/update-display-name (:id identity) display-name)})))
 
+(defn- add-anonymous-user
+  "Generate a user based on the nickname. This is an *anonymous* user, and we
+  can only refer to the user by the nickname. So this function is idempotent and
+  returns always the same id when providing the same nickname."
+  [{:keys [parameters]}]
+  (let [author-name (get-in parameters [:body :nickname])
+        user-id (user-db/add-user-if-not-exists author-name)]
+    (created "" {:user-id user-id})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -86,6 +94,10 @@
 (def user-routes
   ["/user" {:swagger {:tags ["user"]}
             :middleware [:authenticated?]}
+   ["/add/anonymous" {:put add-anonymous-user
+                      :description (at/get-doc #'add-anonymous-user)
+                      :parameters {:body {:nickname :user/nickname}}
+                      :responses {201 {:body {:user-id :db/id}}}}]
    ["/register" {:put register-user-if-they-not-exist
                  :description (at/get-doc #'register-user-if-they-not-exist)
                  :parameters {:body ::user-register}

@@ -1,5 +1,6 @@
 (ns schnaq.api.common
   (:require [clojure.data.json :as json]
+            [org.httpkit.client :as http-client]
             [ring.util.http-response :refer [ok created bad-request forbidden]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config.mailchimp :as mailchimp-config]
@@ -14,15 +15,6 @@
   "Route to ping the API. Used in our monitoring system."
   [_]
   (ok {:text "🧙‍♂️"}))
-
-(defn- add-user
-  "Generate a user based on the nickname. This is an *anonymous* user, and we
-  can only refer to the user by the nickname. So this function is idempotent and
-  returns always the same id when providing the same nickname."
-  [{:keys [parameters]}]
-  (let [author-name (get-in parameters [:body :nickname])
-        user-id (user-db/add-user-if-not-exists author-name)]
-    (created "" {:user-id user-id})))
 
 (defn- check-credentials!
   "Checks whether share-hash and edit-hash match.
@@ -75,10 +67,6 @@
                    :parameters {:query {:share-hash :discussion/share-hash}}
                    :responses {200 {:body {:string-representation string?}}
                                404 at/response-error-body}}]
-   ["/user/add" {:put add-user
-                 :description (at/get-doc #'add-user)
-                 :parameters {:body {:nickname :user/nickname}}
-                 :responses {201 {:body {:user-id :db/id}}}}]
    ["/credentials/validate" {:post check-credentials!
                              :description (at/get-doc #'check-credentials!)
                              :responses {200 {:body {:valid-credentials? boolean?}}
