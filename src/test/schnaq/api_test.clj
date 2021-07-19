@@ -71,7 +71,7 @@
                     "fakeschnaq.com"))))
 
 (deftest edit-statement!-test
-  (let [edit-statement! #'api/edit-statement!
+  (let [edit-statement! #'discussion-api/edit-statement!
         share-hash "simple-hash"
         keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
         statement (first (discussion-db/starting-statements share-hash))

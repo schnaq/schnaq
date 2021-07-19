@@ -86,6 +86,14 @@
       (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})
       (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
 
+(defn- delete-schnaq!
+  "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash]} (:body parameters)]
+    (if (discussion-db/delete-discussion share-hash)
+      (ok {:share-hash share-hash})
+      (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -123,4 +131,12 @@
                                 404 at/response-error-body}}]
      ["/public" {:get public-schnaqs
                  :description (at/get-doc #'public-schnaqs)
-                 :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]]])
+                 :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
+    ["/admin" {:swagger {:tags ["admin"]}
+               :responses {401 at/response-error-body}
+               :middleware [:authenticated? :admin?]}
+     ["/schnaq/delete" {:delete delete-schnaq!
+                        :description (at/get-doc #'delete-schnaq!)
+                        :parameters {:body {:share-hash :discussion/share-hash}}
+                        :responses {200 {:share-hash :discussion/share-hash}
+                                    400 at/response-error-body}}]]]])

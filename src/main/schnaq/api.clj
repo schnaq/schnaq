@@ -65,14 +65,6 @@
         user-id (user-db/add-user-if-not-exists author-name)]
     (created "" {:user-id user-id})))
 
-(defn- delete-schnaq!
-  "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash]} (:body parameters)]
-    (if (discussion-db/delete-discussion share-hash)
-      (ok {:share-hash share-hash})
-      (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
-
 (defn- check-credentials!
   "Checks whether share-hash and edit-hash match.
   If the user is logged in and the credentials are valid, they are added as an admin."
@@ -161,10 +153,10 @@
                        :parameters {:query {:share-hash :discussion/share-hash}}
                        :responses {200 {:body {:string-representation string?}}
                                    404 at/response-error-body}}]
-       ["/author/add" {:put add-author
-                       :description (at/get-doc #'add-author)
-                       :parameters {:body {:nickname :user/nickname}}
-                       :responses {201 {:body {:user-id :db/id}}}}]
+       ["/user/add" {:put add-author
+                     :description (at/get-doc #'add-author)
+                     :parameters {:body {:nickname :user/nickname}}
+                     :responses {201 {:body {:user-id :db/id}}}}]
        ["/credentials/validate" {:post check-credentials!
                                  :description (at/get-doc #'check-credentials!)
                                  :responses {200 {:body {:valid-credentials? boolean?}}
@@ -177,14 +169,6 @@
                                   :responses {200 {:body {:status keyword?}}
                                               400 at/response-error-body}}]
 
-       ["/admin" {:swagger {:tags ["admin"]}
-                  :responses {401 at/response-error-body}
-                  :middleware [:authenticated? :admin?]}
-        ["/schnaq/delete" {:delete delete-schnaq!
-                           :description (at/get-doc #'delete-schnaq!)
-                           :parameters {:body {:share-hash :discussion/share-hash}}
-                           :responses {200 {:share-hash :discussion/share-hash}
-                                       400 at/response-error-body}}]]
 
        analytics-routes
        discussion-routes
