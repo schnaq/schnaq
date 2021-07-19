@@ -364,7 +364,7 @@
                              :share-hash :discussion/share-hash}}}
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
-               :middleware [:authenticated?]
+               :middleware [:user/authenticated?]
                :parameters {:body {:statement-type (s/or :nil nil?
                                                          :type :statement/type)
                                    :new-content :statement/content}}
@@ -373,7 +373,7 @@
                            403 at/response-error-body}}]
      ["/delete" {:delete delete-statement!
                  :description (at/get-doc #'delete-statement!)
-                 :middleware [:authenticated?]
+                 :middleware [:user/authenticated?]
                  :responses {200 {:body {:deleted-statement :db/id}}
                              400 at/response-error-body
                              403 at/response-error-body}}]

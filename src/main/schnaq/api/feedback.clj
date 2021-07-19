@@ -54,7 +54,7 @@
                       :responses {201 {:body {:feedback ::dto/feedback}}}}]
     ["/admin" {:swagger {:tags ["admin"]}
                :responses {401 at/response-error-body}
-               :middleware [:authenticated? :admin?]}
+               :middleware [:user/authenticated? :user/admin?]}
      ["/feedbacks" {:get all-feedbacks
                     :description (at/get-doc #'all-feedbacks)
                     :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]]]])

@@ -134,7 +134,7 @@
                  :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
     ["/admin" {:swagger {:tags ["admin"]}
                :responses {401 at/response-error-body}
-               :middleware [:authenticated? :admin?]}
+               :middleware [:user/authenticated? :user/admin?]}
      ["/schnaq/delete" {:delete delete-schnaq!
                         :description (at/get-doc #'delete-schnaq!)
                         :parameters {:body {:share-hash :discussion/share-hash}}

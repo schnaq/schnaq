@@ -114,9 +114,9 @@
                            coercion/coerce-request-middleware ;; coercing request parameters
                            multipart/multipart-middleware
                            auth/wrap-jwt-authentication]}
-       ::middleware/registry {:authenticated? auth/authenticated?-middleware
-                              :admin? auth/admin?-middleware
-                              :beta-tester? auth/beta-tester?-middleware}})
+       ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
+                              :user/admin? auth/admin?-middleware
+                              :user/beta-tester? auth/beta-tester?-middleware}})
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
         {:path "/"

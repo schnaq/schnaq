@@ -62,7 +62,7 @@ Dein schnaq Team"
 
 (def summary-routes
   [["/schnaq/summary" {:swagger {:tags ["summaries" "beta"]}
-                       :middleware [:authenticated? :beta-tester?]
+                       :middleware [:user/authenticated? :user/beta-tester?]
                        :responses {401 at/response-error-body}}
     ["" {:get get-summary
          :description (at/get-doc #'get-summary)
@@ -74,7 +74,7 @@ Dein schnaq Team"
                  :parameters {:body {:share-hash :discussion/share-hash}}
                  :responses {200 {:body {:summary ::specs/summary}}}}]]
    ["/admin" {:swagger {:tags ["summaries" "admin" "beta"]}
-              :middleware [:authenticated? :admin?]
+              :middleware [:user/authenticated? :user/admin?]
               :responses {401 at/response-error-body}}
     ["/summary/send" {:put new-summary
                       :description (at/get-doc #'new-summary)

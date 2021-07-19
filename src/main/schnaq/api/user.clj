@@ -97,7 +97,7 @@
                       :description (at/get-doc #'add-anonymous-user)
                       :parameters {:body {:nickname :user/nickname}}
                       :responses {201 {:body {:user-id :db/id}}}}]
-   ["" {:middleware [:authenticated?]}
+   ["" {:middleware [:user/authenticated?]}
     ["/register" {:put register-user-if-they-not-exist
                   :description (at/get-doc #'register-user-if-they-not-exist)
                   :parameters {:body ::user-register}
