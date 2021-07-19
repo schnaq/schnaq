@@ -65,36 +65,6 @@
         user-id (user-db/add-user-if-not-exists author-name)]
     (created "" {:user-id user-id})))
 
-(defn- make-discussion-read-only!
-  "Makes a discussion read-only if share- and edit-hash are correct and present."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Setting discussion to read-only: " share-hash)
-          (discussion-db/set-discussion-read-only share-hash)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
-
-(defn- make-discussion-writeable!
-  "Makes a discussion writeable if discussion-admin credentials are there."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Removing read-only from discussion: " share-hash)
-          (discussion-db/remove-read-only share-hash)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
-
-(defn- disable-pro-con!
-  "Disable pro-con option for a schnaq."
-  [{:keys [parameters]}]
-  (let [{:keys [disable-pro-con? share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
-          (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
-
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
   [{:keys [parameters]}]
@@ -215,18 +185,6 @@
                            :parameters {:body {:share-hash :discussion/share-hash}}
                            :responses {200 {:share-hash :discussion/share-hash}
                                        400 at/response-error-body}}]]
-       ["/manage" {:swagger {:tags ["manage"]}
-                   :parameters {:body {:share-hash :discussion/share-hash
-                                       :edit-hash :discussion/edit-hash}}
-                   :responses {403 at/response-error-body}}
-        ["/schnaq" {:responses {200 {:body {:share-hash :discussion/share-hash}}}}
-         ["/disable-pro-con" {:put disable-pro-con!
-                              :description (at/get-doc #'disable-pro-con!)
-                              :parameters {:body {:disable-pro-con? boolean?}}}]
-         ["/make-read-only" {:put make-discussion-read-only!
-                             :description (at/get-doc #'make-discussion-read-only!)}]
-         ["/make-writeable" {:put make-discussion-writeable!
-                             :description (at/get-doc #'make-discussion-writeable!)}]]]
 
        analytics-routes
        discussion-routes

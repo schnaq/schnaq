@@ -209,6 +209,40 @@
 
 
 ;; -----------------------------------------------------------------------------
+;; Discussion Options
+
+(defn- make-discussion-read-only!
+  "Makes a discussion read-only if share- and edit-hash are correct and present."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash edit-hash]} (:body parameters)]
+    (if (validator/valid-credentials? share-hash edit-hash)
+      (do (log/info "Setting discussion to read-only: " share-hash)
+          (discussion-db/set-discussion-read-only share-hash)
+          (ok {:share-hash share-hash}))
+      (validator/deny-access))))
+
+(defn- make-discussion-writeable!
+  "Makes a discussion writeable if discussion-admin credentials are there."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash edit-hash]} (:body parameters)]
+    (if (validator/valid-credentials? share-hash edit-hash)
+      (do (log/info "Removing read-only from discussion: " share-hash)
+          (discussion-db/remove-read-only share-hash)
+          (ok {:share-hash share-hash}))
+      (validator/deny-access))))
+
+(defn- disable-pro-con!
+  "Disable pro-con option for a schnaq."
+  [{:keys [parameters]}]
+  (let [{:keys [disable-pro-con? share-hash edit-hash]} (:body parameters)]
+    (if (validator/valid-credentials? share-hash edit-hash)
+      (do (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
+          (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
+          (ok {:share-hash share-hash}))
+      (validator/deny-access))))
+
+
+;; -----------------------------------------------------------------------------
 ;; Votes
 
 (defn- toggle-vote-statement
@@ -263,6 +297,17 @@
               :parameters {:query {:share-hash :discussion/share-hash}}
               :responses {200 {:body {:graph ::specs/graph}}
                           404 at/response-error-body}}]
+   ["/manage" {:parameters {:body {:share-hash :discussion/share-hash
+                                   :edit-hash :discussion/edit-hash}}
+               :responses {403 at/response-error-body}}
+    ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}}
+     ["/disable-pro-con" {:put disable-pro-con!
+                          :description (at/get-doc #'disable-pro-con!)
+                          :parameters {:body {:disable-pro-con? boolean?}}}]
+     ["/make-read-only" {:put make-discussion-read-only!
+                         :description (at/get-doc #'make-discussion-read-only!)}]
+     ["/make-writeable" {:put make-discussion-writeable!
+                         :description (at/get-doc #'make-discussion-writeable!)}]]]
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
                      :parameters {:body {:share-hash :discussion/share-hash

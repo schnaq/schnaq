@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [deftest testing is are use-fixtures]]
             [ring.mock.request :as mock]
             [schnaq.api :as api]
+            [schnaq.api.discussion :as discussion-api]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -23,7 +24,7 @@
 
 (deftest graph-data-for-agenda-test
   (testing "Check if graph data is correct"
-    (let [graph-data-for-agenda @#'api/graph-data-for-agenda
+    (let [graph-data-for-agenda @#'discussion-api/graph-data-for-agenda
           graph-request (fn [share-hash] (graph-data-for-agenda {:parameters {:query {:share-hash share-hash}}}))
           share-hash "cat-dog-hash"
           valid-response (graph-request "cat-dog-hash")
