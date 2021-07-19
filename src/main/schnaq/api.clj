@@ -75,7 +75,7 @@
   Most routes work with anonymous users, where a `nickname` can be set. If you are authenticated and send back a valid JWT token, you most often can omit the `nickname` field in the request. Then, you act as a registered user.
 
   ## Authentication
-  Many routes require authentication. To authenticate you against the backend, grab a JWT token from the authorized Keycloak instance and put in in your header.
+  Many routes require authentication. To authenticate you against the backend, grab a JWT token from the authorized Keycloak instance and put in in your header. Or use the `Authorize`-Button on the right side. Use `swagger` as your client_id.
 
   The header should look like this: `Authorization: Token <your token>`. Configure your JWT token in by using the \"Authorize\"-Button.
 
@@ -96,6 +96,7 @@
        schnaq-routes
        summary-routes
        user-routes
+
        ["/swagger.json"
         {:get {:no-doc true
                :swagger {:info {:title "schnaq API"
