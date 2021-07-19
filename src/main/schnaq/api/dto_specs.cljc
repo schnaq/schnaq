@@ -36,3 +36,7 @@
   (s/keys :req-un [:feedback/description :feedback/has-image?]
           :opt-un [:feedback/contact-name :feedback/contact-mail]))
 
+;; Summaries
+(s/def ::summary
+  (s/keys :req [:summary/requested-at]
+          :opt [:summary/discussion :summary/text :summary/created-at :summary/requester]))

@@ -1,7 +1,15 @@
 (ns schnaq.api.debug
-  (:require [schnaq.config.shared :as shared-config]))
+  (:require [ring.util.http-response :refer [ok]]
+            [schnaq.config.shared :as shared-config]))
+
+(defn- reveal-information [request]
+  (ok {:headers (:headers request)
+       :identity (:identity request)}))
+
+
+;; -----------------------------------------------------------------------------
 
 (def debug-routes
   [(when-not shared-config/production?
      ["" {:swagger {:tags ["debug"]}}
-      ["/debug/headers" {:get identity}]])])
+      ["/debug" {:get reveal-information}]])])

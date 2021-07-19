@@ -1,6 +1,7 @@
 (ns schnaq.api.summaries
   (:require [clojure.spec.alpha :as s]
             [ring.util.http-response :refer [ok]]
+            [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
@@ -67,7 +68,7 @@ Dein schnaq Team"
     ["" {:get get-summary
          :description (at/get-doc #'get-summary)
          :parameters {:query {:share-hash :discussion/share-hash}}
-         :responses {200 {:body {:summary (s/or :summary ::specs/summary
+         :responses {200 {:body {:summary (s/or :summary ::dto/summary
                                                 :not-found nil?)}}}}]
     ["/request" {:post request-summary
                  :description (at/get-doc #'request-summary)
@@ -83,5 +84,5 @@ Dein schnaq Team"
                       :responses {200 {:body {:new-summary ::specs/summary}}}}]
     ["/summaries" {:get all-summaries
                    :description (at/get-doc #'all-summaries)
-                   :responses {200 {:body {:summaries (s/or :summaries (s/coll-of ::specs/summary)
+                   :responses {200 {:body {:summaries (s/or :collection (s/coll-of ::dto/summary)
                                                             :empty nil?)}}}}]]])
