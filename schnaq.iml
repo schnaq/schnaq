@@ -112,7 +112,7 @@
     <orderEntry type="library" name="Deps: com.github.fge/btf:1.2" level="project" />
     <orderEntry type="library" name="Deps: org.glassfish.jaxb/txw2:2.3.1" level="project" />
     <orderEntry type="library" name="Deps: rewrite-clj:0.6.1" level="project" />
-    <orderEntry type="library" name="Deps: org.clojure/clojurescript:1.10.866" level="project" />
+    <orderEntry type="library" name="Deps: org.clojure/clojurescript:1.10.879" level="project" />
     <orderEntry type="library" name="Deps: org.codehaus.plexus/plexus-utils:3.1.0" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-buffer:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Deps: slingshot:0.12.2" level="project" />
