@@ -92,25 +92,25 @@
                                :opt-un [::creation-secrets]))
 
 (def user-routes
-  ["/user" {:swagger {:tags ["user"]}
-            :middleware [:authenticated?]}
-   ["/add/anonymous" {:put add-anonymous-user
+  ["/user" {:swagger {:tags ["user"]}}
+   ["/anonymous/add" {:put add-anonymous-user
                       :description (at/get-doc #'add-anonymous-user)
                       :parameters {:body {:nickname :user/nickname}}
                       :responses {201 {:body {:user-id :db/id}}}}]
-   ["/register" {:put register-user-if-they-not-exist
-                 :description (at/get-doc #'register-user-if-they-not-exist)
-                 :parameters {:body ::user-register}
-                 :responses {201 {:body {:registered-user ::specs/registered-user
-                                         :updated-statements? boolean?}}
-                             200 {:body {:registered-user ::specs/registered-user
-                                         :updated-statements? boolean?}}}}]
-   ["/picture" {:put change-profile-picture
-                :description (at/get-doc #'change-profile-picture)
-                :parameters {:body {:image ::image}}
-                :responses {200 {:body {:updated-user ::specs/registered-user}}
-                            400 at/response-error-body}}]
-   ["/name" {:put change-display-name
-             :description (at/get-doc #'change-display-name)
-             :parameters {:body {:display-name :user/nickname}}
-             :responses {200 {:body {:updated-user ::specs/registered-user}}}}]])
+   ["" {:middleware [:authenticated?]}
+    ["/register" {:put register-user-if-they-not-exist
+                  :description (at/get-doc #'register-user-if-they-not-exist)
+                  :parameters {:body ::user-register}
+                  :responses {201 {:body {:registered-user ::specs/registered-user
+                                          :updated-statements? boolean?}}
+                              200 {:body {:registered-user ::specs/registered-user
+                                          :updated-statements? boolean?}}}}]
+    ["/picture" {:put change-profile-picture
+                 :description (at/get-doc #'change-profile-picture)
+                 :parameters {:body {:image ::image}}
+                 :responses {200 {:body {:updated-user ::specs/registered-user}}
+                             400 at/response-error-body}}]
+    ["/name" {:put change-display-name
+              :description (at/get-doc #'change-display-name)
+              :parameters {:body {:display-name :user/nickname}}
+              :responses {200 {:body {:updated-user ::specs/registered-user}}}}]]])

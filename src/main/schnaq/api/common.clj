@@ -58,23 +58,23 @@
 ;; -----------------------------------------------------------------------------
 
 (def other-routes
-  [["/ping" {:get ping
-             :description (at/get-doc #'ping)
-             :responses {200 {:body {:text string?}}}}]
-   ["/export/txt" {:get export-txt-data
-                   :description (at/get-doc #'export-txt-data)
-                   :swagger {:tags ["exports"]}
-                   :parameters {:query {:share-hash :discussion/share-hash}}
-                   :responses {200 {:body {:string-representation string?}}
-                               404 at/response-error-body}}]
-   ["/credentials/validate" {:post check-credentials!
-                             :description (at/get-doc #'check-credentials!)
-                             :responses {200 {:body {:valid-credentials? boolean?}}
-                                         403 {:body {:valid-credentials? boolean?}}}
-                             :parameters {:body {:share-hash :discussion/share-hash
-                                                 :edit-hash :discussion/edit-hash}}}]
-   ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
-                              :description (at/get-doc #'subscribe-lead-magnet!)
-                              :parameters {:body {:email string?}}
-                              :responses {200 {:body {:status keyword?}}
-                                          400 at/response-error-body}}]])
+  [["" {:swagger {:tags ["other"]}}
+    ["/ping" {:get ping
+              :description (at/get-doc #'ping)
+              :responses {200 {:body {:text string?}}}}]
+    ["/export/txt" {:get export-txt-data
+                    :description (at/get-doc #'export-txt-data)
+                    :parameters {:query {:share-hash :discussion/share-hash}}
+                    :responses {200 {:body {:string-representation string?}}
+                                404 at/response-error-body}}]
+    ["/credentials/validate" {:post check-credentials!
+                              :description (at/get-doc #'check-credentials!)
+                              :responses {200 {:body {:valid-credentials? boolean?}}
+                                          403 {:body {:valid-credentials? boolean?}}}
+                              :parameters {:body {:share-hash :discussion/share-hash
+                                                  :edit-hash :discussion/edit-hash}}}]
+    ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
+                               :description (at/get-doc #'subscribe-lead-magnet!)
+                               :parameters {:body {:email string?}}
+                               :responses {200 {:body {:status keyword?}}
+                                           400 at/response-error-body}}]]])
