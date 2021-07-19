@@ -96,17 +96,18 @@
        schnaq-routes
        summary-routes
        user-routes
-
        ["/swagger.json"
         {:get {:no-doc true
                :swagger {:info {:title "schnaq API"
                                 :basePath "/"
                                 :version "1.0.0"
                                 :description description}
-                         :securityDefinitions {:bearerAuth {:type "apiKey"
-                                                            :name "Authorization"
-                                                            :in "header"}}
-                         :security [{:bearerAuth []}]}
+                         :securityDefinitions {:keycloak {:type "oauth2"
+                                                          :flow "implicit"
+                                                          :name "Authorization"
+                                                          :description "Use `swagger` as the client-id."
+                                                          :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}}
+                         :security [{:keycloak []}]}
                :handler (swagger/create-swagger-handler)}}]]
       {:exception pretty/exception
        :validate rrs/validate
@@ -120,6 +121,7 @@
                            coercion/coerce-response-middleware ;; coercing response bodys
                            coercion/coerce-request-middleware ;; coercing request parameters
                            multipart/multipart-middleware
+                           auth/replace-bearer-with-token
                            auth/wrap-jwt-authentication]}
        ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
                               :user/admin? auth/admin?-middleware
