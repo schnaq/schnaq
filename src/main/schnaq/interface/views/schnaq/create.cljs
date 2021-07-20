@@ -13,24 +13,26 @@
 
 (defn- public-private-discussion []
   (let [user-groups @(rf/subscribe [:user/groups])
-        public? @(rf/subscribe [:schnaq.create/public?])
+        public? (reagent/atom false)
         no-hub-exclusive-fn #(when (seq user-groups)
                                (jq/prop (jq/$ "#hub-exclusive") "checked" false))]
-    [:div {:class (if (empty? user-groups) "col-12" "col-6")}
-     [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
-     [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
-      {:class (when public? "active")
-       :type "button"
-       :on-click (fn [_e] (rf/dispatch [:schnaq.create/public! true])
-                   (no-hub-exclusive-fn))}
-      [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
-      (labels :discussion.create.public-checkbox/public)]
-     [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
-      {:class (when-not public? "active")
-       :type "button"
-       :on-click #(rf/dispatch [:schnaq.create/public! false])}
-      [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
-      (labels :discussion.create.public-checkbox/private)]]))
+    (fn []
+      [:div {:class (if (empty? user-groups) "col-12" "col-6")}
+       [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
+       [:input#input-public-schnaq {:type :hidden :value @public?}]
+       [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
+        {:class (when @public? "active")
+         :type "button"
+         :on-click (fn [_e] (reset! public? true)
+                     (no-hub-exclusive-fn))}
+        [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
+        (labels :discussion.create.public-checkbox/public)]
+       [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
+        {:class (when-not @public? "active")
+         :type "button"
+         :on-click #(reset! public? false)}
+        [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
+        (labels :discussion.create.public-checkbox/private)]])))
 
 (defn- add-schnaq-to-hub []
   (let [user-groups @(rf/subscribe [:user/groups])
@@ -103,7 +105,7 @@
                            (seq (get-in db [:user :groups] [])))
           nickname (get-in db [:user :names :display] default-anonymous-display-name)
           discussion-title (oget form-elements [:schnaq-title :value])
-          public? (get-in db [:schnaq :create :public?] false)
+          public? (= "true" (oget form-elements [:input-public-schnaq :value]))
           exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
           origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))
           payload (cond-> {:discussion-title discussion-title
@@ -128,7 +130,6 @@
                (update-in [:schnaqs :all] conj new-schnaq))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-schnaq]]
-            [:dispatch [:schnaq.create/public! false]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :schnaq/created-success-heading)
                                        :body (labels :schnaq/created-success-subheading)
@@ -136,12 +137,3 @@
             [:localstorage/assoc [:schnaq.last-added/share-hash share-hash]]
             [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
             [:dispatch [:schnaqs.save-admin-access/to-localstorage-and-db share-hash edit-hash]]]})))
-
-(rf/reg-event-db
-  :schnaq.create/public!
-  (fn [db [_ public?]]
-    (assoc-in db [:schnaq :create :public?] public?)))
-
-(rf/reg-sub
-  :schnaq.create/public?
-  (fn [db _] (get-in db [:schnaq :create :public?] false)))
