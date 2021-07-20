@@ -48,7 +48,7 @@
 (defn- private-schnaq-deletion-form
   "Easily delete any schnaq."
   []
-  [:form.form#private-schnaq-form
+  [:form#private-schnaq-form.form
    {:on-submit (fn [e]
                  (js-wrap/prevent-default e)
                  (when (js/confirm (labels :admin.center.delete/confirmation))
