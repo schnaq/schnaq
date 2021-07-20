@@ -81,7 +81,8 @@
 (defn- content [_request]
   [pages/with-nav-and-header
    {:page/heading (labels :publications/heading)
-    :page/subheading [:<> (labels :publications/subheading) " " [:i.fas.fa-flask]]}
+    :page/subheading [:<> (labels :publications/subheading) " " [:i.fas.fa-flask]]
+    :page/vertical-header? true}
    [:div.container
     [publication-primer]
     [publications]]])

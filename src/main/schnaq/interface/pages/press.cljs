@@ -47,7 +47,8 @@
 (defn- content []
   [pages/with-nav-and-header
    {:page/heading (labels :press-kit/heading)
-    :page/subheading (labels :press-kit/subheading)}
+    :page/subheading (labels :press-kit/subheading)
+    :page/vertical-header? true}
    [:div.container.chat-background
     [:section.w-75.mx-auto
      [:h2 (labels :press-kit.intro/heading)]
