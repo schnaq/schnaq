@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables' as vars;
 @import 'fonts';
 
 html {
@@ -20,11 +20,11 @@ h6 {
 }
 
 .background-gray {
-  background-color: $gray-100;
+  background-color: vars.$gray-100;
 }
 
 .base-wrapper {
-  background: $light-background;
+  background: vars.$light-background;
   min-height: 85vh;
 }
 

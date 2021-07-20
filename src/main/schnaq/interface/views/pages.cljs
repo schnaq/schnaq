@@ -90,16 +90,18 @@
 
 (>defn with-nav-and-header
   "Default page with header and curly wave."
-  [{:page/keys [title heading subheading more-for-heading] :as options} body]
+  [{:page/keys [title heading subheading more-for-heading class] :as options} body]
   [::page-options (s/+ vector?) :ret vector?]
   (common/set-website-title! (or title heading))
   [scheduler/middleware
    [validate-conditions-middleware
     options
-    [:<>
+    [:div
+     (when class
+       {:class class})
      [:div.masthead-layered
       [navbar-pages/navbar-transparent]
-      [base/header heading subheading more-for-heading]]
+      [base/header heading subheading options more-for-heading]]
      body]]])
 
 (>defn with-nav

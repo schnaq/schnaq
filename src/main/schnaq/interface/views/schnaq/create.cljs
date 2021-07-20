@@ -49,25 +49,19 @@
                      :key group-id}
             (get-in hubs [group-id :hub/name])])]])]))
 
-(defn- schnaqqi-intro-bubble []
-  [:div.d-flex.justify-content-end.pt-3
-   [common/schnaqqi-speech-bubble-white
-    "100px"
-    (labels :schnaq.create/schnaqqi-speech)]])
-
 (defn- create-schnaq-page []
   (let [dispatch-schnaq-creation #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
     [pages/with-nav-and-header
      {:page/heading (labels :schnaq.create/heading)
       :page/subheading (labels :schnaq.create/subheading)
-      :page/more-for-heading (with-meta [schnaqqi-intro-bubble] {:key "schnaqqi-create-speechbubble"})}
+      :page/class "base-wrapper bg-white"}
      [:div.container
       [:div.py-3.mt-3
        [:form
         {:on-submit (fn [e]
                       (jq/prevent-default e)
                       (dispatch-schnaq-creation e))}
-        [:div.panel-white.row.p-4
+        [:div.panel-grey.row.p-4
          [:div.col-12
           [common/form-input {:id :schnaq-title
                               :placeholder (labels :schnaq.create.input/placeholder)
