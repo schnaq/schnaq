@@ -1208,7 +1208,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.create/title "Schnaq starten"
         :schnaq.create/heading "Starte mit deinem schnaq."
         :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
-        :schnaq.create/info "Gebe deinem Thema einen möglichst einfachen und verständlichen Titel."
+        :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
         :schnaq.create/schnaqqi-speech "Erstelle deinen schnaq und lade im nächsten Schritt dein ganzes Team ein!"
         :schnaq.create.button/save "Weiter"
 
