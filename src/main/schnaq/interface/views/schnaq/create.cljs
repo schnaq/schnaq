@@ -11,7 +11,9 @@
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]))
 
-(defn- public-private-discussion []
+(defn- public-private-discussion
+  "Show buttons to toggle between public and private discussion."
+  []
   (let [user-groups @(rf/subscribe [:user/groups])
         public? (reagent/atom false)
         no-hub-exclusive-fn #(when (seq user-groups)
@@ -34,7 +36,9 @@
         [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
         (labels :discussion.create.public-checkbox/private)]])))
 
-(defn- add-schnaq-to-hub []
+(defn- add-schnaq-to-hub
+  "Selection if schnaq should be added to a hub."
+  []
   (let [user-groups @(rf/subscribe [:user/groups])
         hubs @(rf/subscribe [:hubs/all])]
     (when (seq user-groups)
@@ -96,6 +100,9 @@
 
 (defn create-schnaq-view []
   [create-schnaq-page])
+
+
+;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
   :schnaq.create/new
