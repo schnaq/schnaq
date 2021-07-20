@@ -107,11 +107,16 @@
           [:change-location redirect-url]]}))
 
 (rf/reg-event-fx
+  :schnaq/select-current-from-backend
+  (fn [_ [_ {:keys [schnaq]}]]
+    {:fx [[:dispatch [:schnaq/select-current schnaq]]]}))
+
+(rf/reg-event-fx
   :schnaq/select-current
-  (fn [{:keys [db]} [_ {:discussion/keys [share-hash edit-hash] :as discussion}]]
+  (fn [{:keys [db]} [_ {:discussion/keys [share-hash edit-hash] :as schnaq}]]
     {:db (cond->
            db
-           true (assoc-in [:schnaq :selected] discussion)
+           true (assoc-in [:schnaq :selected] schnaq)
            edit-hash (update-in [:schnaqs :admin-access]
                                 assoc share-hash edit-hash))
      :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]]}))
@@ -137,8 +142,9 @@
 
 (rf/reg-event-fx
   :schnaq/load-by-share-hash
-  (fn [{:keys [db]} [_ hash]]
-    {:fx [(http/xhrio-request db :get (str "/schnaq/by-hash/" hash) [:schnaq/select-current])]}))
+  (fn [{:keys [db]} [_ share-hash]]
+    {:fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
+                              {:share-hash share-hash})]}))
 
 (rf/reg-event-fx
   :schnaq/check-admin-credentials
@@ -158,8 +164,8 @@
 
 (rf/reg-event-db
   :schnaq/save-as-last-added
-  (fn [db [_ {:keys [discussion]}]]
-    (assoc-in db [:schnaq :last-added] discussion)))
+  (fn [db [_ {:keys [schnaq]}]]
+    (assoc-in db [:schnaq :last-added] schnaq)))
 
 (rf/reg-sub
   :schnaq/last-added

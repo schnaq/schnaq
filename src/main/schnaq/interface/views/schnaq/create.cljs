@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.create
-  (:require [oops.core :refer [oget]]
+  (:require [goog.string :as gstring]
+            [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [fa labels]]
@@ -104,32 +105,36 @@
 (rf/reg-event-fx
   :schnaq.create/new
   (fn [{:keys [db]} [_ form-elements]]
-    (let [use-origin? (and (get-in db [:user :authenticated?] false)
+    (let [authenticated? (get-in db [:user :authenticated?] false)
+          use-origin? (and authenticated?
                            (seq (get-in db [:user :groups] [])))
           nickname (get-in db [:user :names :display] default-anonymous-display-name)
           discussion-title (oget form-elements [:schnaq-title :value])
           public? (get-in db [:schnaq :create :public] false)
           exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
-          origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))]
-      {:fx [(http/xhrio-request db :post "/schnaq/add"
+          origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))
+          payload (cond-> {:discussion-title discussion-title
+                           :public-discussion? public?}
+                          origin-hub (assoc :hub-exclusive? exclusive?
+                                            :hub origin-hub)
+                          (not authenticated?) (assoc :nickname nickname))
+          route (cond origin-hub "/with-hub"
+                      authenticated? ""
+                      :else "/anonymous")]
+      {:fx [(http/xhrio-request db :post (gstring/format "/schnaq/add%s" route)
                                 [:schnaq/created]
-                                (cond->
-                                  {:nickname nickname
-                                   :discussion-title discussion-title
-                                   :public-discussion? public?}
-                                  use-origin? (merge {:hub-exclusive? exclusive?
-                                                      :origin origin-hub}))
+                                payload
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :schnaq/created
-  (fn [{:keys [db]} [_ {:keys [new-discussion]}]]
-    (let [{:discussion/keys [share-hash edit-hash]} new-discussion]
+  (fn [{:keys [db]} [_ {:keys [new-schnaq]}]]
+    (let [{:discussion/keys [share-hash edit-hash]} new-schnaq]
       {:db (-> db
-               (assoc-in [:schnaq :last-added] new-discussion)
-               (update-in [:schnaqs :all] conj new-discussion))
+               (assoc-in [:schnaq :last-added] new-schnaq)
+               (update-in [:schnaqs :all] conj new-schnaq))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
-            [:dispatch [:schnaq/select-current new-discussion]]
+            [:dispatch [:schnaq/select-current new-schnaq]]
             [:dispatch [:schnaq.create/public! false]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :schnaq/created-success-heading)

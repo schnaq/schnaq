@@ -117,7 +117,7 @@
           statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
           current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/admin/statements/delete"
+      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
                                 [:discussion.admin/delete-statements-success form]
                                 {:statement-ids statement-ids
                                  :share-hash share-hash
@@ -129,7 +129,7 @@
   (fn [{:keys [db]} _]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/admin/discussions/make-read-only" [:discussion.admin/make-read-only-success]
+      {:fx [(http/xhrio-request db :put "/discussion/manage/make-read-only" [:discussion.admin/make-read-only-success]
                                 {:share-hash share-hash
                                  :edit-hash edit-hash}
                                 [:ajax.error/as-notification])]})))
@@ -145,7 +145,7 @@
   (fn [{:keys [db]} _]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/admin/discussions/make-writeable" [:discussion.admin/make-writeable-success]
+      {:fx [(http/xhrio-request db :put "/discussion/manage/make-writeable" [:discussion.admin/make-writeable-success]
                                 {:share-hash share-hash
                                  :edit-hash edit-hash}
                                 [:ajax.error/as-notification])]})))
@@ -170,7 +170,7 @@
   :discussion.delete/statement
   (fn [{:keys [db]} [_ statement-id edit-hash]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])]
-      {:fx [(http/xhrio-request db :post "/admin/statements/delete"
+      {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
                                 [:discussion.admin/delete-statement-success statement-id]
                                 {:statement-ids [statement-id]
                                  :share-hash share-hash
@@ -317,7 +317,7 @@
   (fn [{:keys [db]} [_ disable-pro-con?]]
     (let [current-route (:current-route db)
           {:keys [share-hash edit-hash]} (:path-params current-route)]
-      {:fx [(http/xhrio-request db :post "/admin/schnaq/disable-pro-con"
+      {:fx [(http/xhrio-request db :put "/discussion/manage/disable-pro-con"
                                 [:schnaq.admin/disable-pro-con-success disable-pro-con?]
                                 {:disable-pro-con? disable-pro-con?
                                  :share-hash share-hash

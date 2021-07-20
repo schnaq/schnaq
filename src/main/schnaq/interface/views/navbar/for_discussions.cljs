@@ -1,22 +1,22 @@
 (ns schnaq.interface.views.navbar.for-discussions
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
-(defn clickable-title [{:discussion/keys [title share-hash] :as discussion}]
-  [:<>
-   [:small.text-primary (labels :discussion.navbar/title)]
-   [:div.clickable-no-hover {:on-click
-                             (fn []
-                               (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                             {:share-hash share-hash}])
-                               (rf/dispatch [:schnaq/select-current discussion]))}
-    [:h5 (toolbelt/truncate-to-n-chars title 30)]]])
+(defn clickable-title []
+  (let [{:discussion/keys [title share-hash] :as schnaq} @(rf/subscribe [:schnaq/selected])]
+    [:<>
+     [:small.text-primary (labels :discussion.navbar/title)]
+     [:div.clickable-no-hover {:on-click
+                               (fn []
+                                 (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                               {:share-hash share-hash}])
+                                 (rf/dispatch [:schnaq/select-current schnaq]))}
+      [:h5 (toolbelt/truncate-to-n-chars title 30)]]]))
 
 (defn navbar []
   (let [discussion @(rf/subscribe [:schnaq/selected])
@@ -30,7 +30,7 @@
        {:src (img-path :logo-white) :alt "schnaq logo"
         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
      [:div.mx-4
-      [clickable-title discussion]]
+      [clickable-title]]
      [:div.mx-4.ml-auto.d-none.d-md-block
       [:small.text-primary (labels :discussion.navbar/posts)]
       [:h5.text-center statement-count]]
@@ -66,8 +66,7 @@
 (defn summary-button
   "Button to navigate to the summary view."
   [share-hash]
-  (let [groups @(rf/subscribe [:user/groups])
-        beta-user? (some shared-conf/beta-tester-groups groups)]
+  (let [beta-user? @(rf/subscribe [:user/beta-tester?])]
     [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
      (if beta-user?
        {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}

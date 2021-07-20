@@ -108,47 +108,47 @@
 (rf/reg-event-fx
   :analytics/load-all-with-time
   (fn [{:keys [db]} [_ days]]
-    (fetch-statistics db "/analytics" :analytics/all-stats-loaded days)))
+    (fetch-statistics db "/admin/analytics" :analytics/all-stats-loaded days)))
 
 (rf/reg-event-fx
   :analytics/load-discussions-num
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/discussions" :analytics/discussions-num-loaded)))
+    (fetch-statistics db "/admin/analytics/discussions" :analytics/discussions-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-usernames-num
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/usernames" :analytics/usernames-num-loaded)))
+    (fetch-statistics db "/admin/analytics/usernames" :analytics/usernames-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-registered-users-num
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/registered-users" :analytics/registered-users-num-loaded)))
+    (fetch-statistics db "/admin/analytics/registered-users" :analytics/registered-users-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-average-number-of-statements
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
+    (fetch-statistics db "/admin/analytics/statements-per-discussion" :analytics/statements-per-discussion-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-statements-num
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/statements" :analytics/statements-num-loaded)))
+    (fetch-statistics db "/admin/analytics/statements" :analytics/statements-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-active-users
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/active-users" :analytics/active-users-num-loaded)))
+    (fetch-statistics db "/admin/analytics/active-users" :analytics/active-users-num-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-statement-length-stats
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
+    (fetch-statistics db "/admin/analytics/statement-lengths" :analytics/statement-length-stats-loaded)))
 
 (rf/reg-event-fx
   :analytics/load-statements-type-stats
   (fn [{:keys [db]} _]
-    (fetch-statistics db "/analytics/statement-types" :analytics/statement-type-stats-loaded)))
+    (fetch-statistics db "/admin/analytics/statement-types" :analytics/statement-type-stats-loaded)))
 
 (rf/reg-event-db
   :analytics/discussions-num-loaded
@@ -192,15 +192,15 @@
 
 (rf/reg-event-db
   :analytics/all-stats-loaded
-  (fn [db [_ {:keys [stats]}]]
-    (assoc db :analytics {:discussions-num {:overall (:discussions-num stats)}
-                          :users-num {:anonymous (:usernames-num stats)
-                                      :registered (:registered-users-num stats)}
-                          :statements {:number {:overall (:statements-num stats)}
-                                       :lengths (:statement-length-stats stats)
-                                       :average-per-discussion (:average-statements stats)
-                                       :types (:statement-type-stats stats)}
-                          :active-users-num {:overall (:active-users-num stats)}})))
+  (fn [db [_ {:keys [statistics]}]]
+    (assoc db :analytics {:discussions-num {:overall (:discussions-num statistics)}
+                          :users-num {:anonymous (:usernames-num statistics)
+                                      :registered (:registered-users-num statistics)}
+                          :statements {:number {:overall (:statements-num statistics)}
+                                       :lengths (:statement-length-stats statistics)
+                                       :average-per-discussion (:average-statements statistics)
+                                       :types (:statement-type-stats statistics)}
+                          :active-users-num {:overall (:active-users-num statistics)}})))
 
 ;; #### Subs ####
 

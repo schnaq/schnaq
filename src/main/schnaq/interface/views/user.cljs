@@ -43,7 +43,7 @@
     ;; only update when string contains
     (when-not (clj-string/blank? username)
       (cond-> {:db (assoc-in db [:user :names :display] username)
-               :fx [(http/xhrio-request db :post "/author/add" [:user/hide-display-name-input username]
+               :fx [(http/xhrio-request db :put "/user/anonymous/add" [:user/hide-display-name-input username]
                                         {:nickname username}
                                         [:ajax.error/as-notification])]}
               (not= default-anonymous-display-name username)

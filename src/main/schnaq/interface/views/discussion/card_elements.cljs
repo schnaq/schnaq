@@ -153,7 +153,7 @@
   :discussion.query.conclusions/starting
   (fn [{:keys [db]} _]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
-      {:fx [(http/xhrio-request db :post "/discussion/conclusions/starting"
+      {:fx [(http/xhrio-request db :get "/discussion/conclusions/starting"
                                 [:discussion.query.conclusions/set-starting]
                                 {:share-hash share-hash})]})))
 
@@ -257,7 +257,7 @@
   [:form.mx-3.h-100
    {:on-submit (fn [e]
                  (jq/prevent-default e)
-                 (rf/dispatch [:schnaq/search (oget e [:target :elements "search-input" :value])]))}
+                 (rf/dispatch [:discussion.statements/search (oget e [:target :elements "search-input" :value])]))}
    [:div.input-group.search-bar.h-100
     [:input.form-control.my-auto.search-bar-input.h-100
      {:type "text" :aria-label "Search" :placeholder

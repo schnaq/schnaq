@@ -5,28 +5,36 @@
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
-(def registered-user-pattern
+(def ^:private registered-user-public-pattern
+  "Small version of a user to show only necessary information."
   [:db/id
    :user.registered/keycloak-id
    :user.registered/display-name
-   :user.registered/email
+   :user.registered/profile-picture])
+
+(def ^:private registered-private-user-pattern
+  [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
-   :user.registered/profile-picture
    {:user.registered/visited-schnaqs [:discussion/share-hash]}])
 
-(def minimal-user-pattern
+(def ^:private minimal-user-pattern
   "Minimal user pull pattern."
   [:db/id
    :user/nickname])
 
-(def combined-user-pattern
-  (concat registered-user-pattern minimal-user-pattern))
+(def public-user-pattern
+  "Use this pattern to query public user information."
+  (concat registered-user-public-pattern minimal-user-pattern))
+
+(def private-user-pattern
+  "When all data is necessary for a user, use this pattern."
+  (concat public-user-pattern registered-private-user-pattern))
 
 (>defn add-user
   "Add a new anonymous user / author to the database."
   [nickname]
-  [string? :ret int?]
+  [:user/nickname :ret :db/id]
   (when (s/valid? :user/nickname nickname)
     (get-in
       @(transact [{:db/id "temp-user"
@@ -37,7 +45,7 @@
   "Return the **schnaq** user-id by nickname. The nickname is not case sensitive.
   If there is no user with said nickname returns nil."
   [nickname]
-  [string? :ret (? number?)]
+  [:user/nickname :ret (? :db/id)]
   (query
     '[:find ?user .
       :in $ ?user-name
@@ -56,7 +64,7 @@
 (>defn add-user-if-not-exists
   "Adds a user if they do not exist yet. Returns the (new) user-id."
   [nickname]
-  [:user/nickname :ret int?]
+  [:user/nickname :ret :db/id]
   (if-let [user-id (user-by-nickname nickname)]
     user-id
     (do (log/info "Added a new user: " nickname)
@@ -104,7 +112,7 @@
   whether the user is newly created and the user entity itself."
   [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs]
   [associative? (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
-  (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-pattern)
+  (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-public-pattern)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -122,7 +130,7 @@
         [false existing-user])
       [true (-> @(transact [(clean-db-vals new-user)])
                 (get-in [:tempids temp-id])
-                (fast-pull registered-user-pattern))])))
+                (fast-pull registered-user-public-pattern))])))
 
 (>defn- update-user-field
   "Updates a user's field in the database and return updated user."
@@ -131,7 +139,7 @@
   (let [new-db (:db-after
                  @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
                               field value]]))]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-pattern new-db)))
+    (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-public-pattern new-db)))
 
 (>defn update-display-name
   "Update the name of an existing user."
@@ -148,18 +156,18 @@
 (>defn members-of-group
   "Returns all members of a certain group."
   [group-name]
-  [::specs/non-blank-string :ret (s/coll-of ::specs/user-or-reference)]
+  [::specs/non-blank-string :ret (s/coll-of ::specs/any-user)]
   (query
-    '[:find [(pull ?users combined-user-pattern) ...]
-      :in $ ?group combined-user-pattern
+    '[:find [(pull ?users public-user-pattern) ...]
+      :in $ ?group public-user-pattern
       :where [?users :user.registered/groups ?group]]
-    group-name combined-user-pattern))
+    group-name public-user-pattern))
 
 (defn user-by-email
   "Returns the registered user by email."
   [user-email]
   (query
-    '[:find (pull ?user registered-user-pattern) .
-      :in $ ?email registered-user-pattern
+    '[:find (pull ?user registered-user-public-pattern) .
+      :in $ ?email registered-user-public-pattern
       :where [?user :user.registered/email ?email]]
-    user-email registered-user-pattern))
+    user-email registered-user-public-pattern))

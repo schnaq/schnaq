@@ -1,7 +1,8 @@
 (ns schnaq.database.specs
   (:require #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [schnaq.api.dto-specs :as dto]))
 
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
 
@@ -25,17 +26,31 @@
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
-(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/email
-                                       :user.registered/display-name]
+(s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
                                  :opt [:user.registered/last-name :user.registered/first-name
-                                       :user.registered/groups :user.registered/profile-picture]))
+                                       :user.registered/groups :user.registered/profile-picture
+                                       :user.registered/email :user.registered/visited-schnaqs]))
 
 ;; Could be anonymous or registered
-(s/def ::any-user (s/or :user ::user :registered-user ::registered-user))
+(s/def ::any-user (s/or :dto ::dto/registered-user
+                        :user ::user
+                        :registered-user ::registered-user))
 ;; Any user or reference
-(s/def ::user-or-reference (s/or :reference ::entity-reference
-                                 :user ::user
-                                 :registered-user ::registered-user))
+(s/def ::user-or-reference
+  (s/or :dto ::dto/registered-user
+        :user ::user
+        :reference :db/id
+        :registered-user ::registered-user))
+
+;; Meta Information
+(s/def :meta/all-statements nat-int?)
+(s/def :meta/upvotes number?)
+(s/def :meta/downvotes number?)
+(s/def :meta/sub-statements number?)
+(s/def :meta/authors (s/coll-of :user/nickname))
+(s/def :meta/sub-discussion-info
+  (s/keys :req-un [:meta/sub-statements :meta/authors]))
+
 
 ;; Discussion
 (s/def :discussion/title string?)
@@ -50,7 +65,7 @@
 (s/def :discussion/hub-origin (s/or :reference :db/id
                                     :hub ::hub))
 (s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
-                                           :reference ::entity-reference)))
+                                           :reference :db/id)))
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted
@@ -58,11 +73,10 @@
                :discussion.state/disable-pro-con}
              :distinct true))
 (s/def :discussion/starting-statements (s/coll-of ::statement))
-(s/def ::discussion (s/keys :req [:discussion/title :discussion/states
-                                  :discussion/share-hash :discussion/author]
+(s/def ::discussion (s/keys :req [:discussion/title :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
-                                  :discussion/admins :discussion/hub-origin
+                                  :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link]))
 
 (s/def :hub/name ::non-blank-string)
@@ -83,15 +97,17 @@
 (s/def :statement/creation-secret ::non-blank-string)
 (s/def :statement/created-at inst?)
 (s/def :statement/discussions (s/or :ids (s/coll-of :db/id)
+                                    :dto (s/coll-of ::dto/discussion)
                                     :discussions (s/coll-of ::discussion)))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]
           :opt [:statement/creation-secret :statement/created-at
                 :statement/type :statement/parent :statement/discussions]))
 
+(s/def :statement.vote/operation #{:removed :switched :added})
+
 ;; Common
-(s/def :db/id (s/or :transacted number? :temporary any?))
-(s/def ::entity-reference (s/or :transacted int? :temporary any?))
+(s/def :db/id (s/or :transacted integer? :temporary any?))
 
 ;; Feedback
 (s/def :feedback/contact-name string?)
@@ -99,17 +115,69 @@
 (s/def :feedback/description ::non-blank-string)
 (s/def :feedback/has-image? boolean?)
 (s/def :feedback/created-at inst?)
+(s/def :feedback/screenshot ::non-blank-string)
 (s/def ::feedback (s/keys :req [:feedback/description :feedback/has-image?]
                           :opt [:feedback/contact-name :feedback/contact-mail
-                                :feedback/created-at]))
+                                :feedback/created-at :feedback/screenshot]))
 
 ;; Summary
 (s/def :summary/discussion (s/or :id :db/id
-                                 :discussion ::discussion))
+                                 :discussion (s/keys :req [:discussion/title
+                                                           :discussion/share-hash
+                                                           :db/id])))
 (s/def :summary/requested-at inst?)
 (s/def :summary/created-at inst?)
 (s/def :summary/text ::non-blank-string)
 (s/def :summary/requester (s/or :id :db/id
-                                :registered-user ::registered-user))
+                                :registered-user (s/keys :req [:user.registered/email
+                                                               :user.registered/display-name
+                                                               :user.registered/keycloak-id])))
 (s/def ::summary (s/keys :req [:summary/discussion :summary/requested-at]
                          :opt [:summary/text :summary/created-at :summary/requester]))
+
+;; Graph
+(s/def :node/id (s/or :share-hash :discussion/share-hash
+                      :id :db/id))
+(s/def :node/label string?)
+(s/def :node/author string?)
+(s/def :node/type #{:statement.type/starting :statement.type/support :statement.type/attack
+                    :statement.type/neutral :agenda})
+(s/def :graph/node (s/keys :req-un [:node/id :node/label :node/author :node/type]))
+
+(s/def :edge/from :node/id)
+(s/def :edge/to :node/id)
+(s/def :edge/type :node/type)
+(s/def :graph/edge (s/keys :req-un [:edge/from :edge/to :edge/type]))
+
+(s/def :graph/nodes (s/coll-of :graph/node))
+(s/def :graph/edges (s/coll-of :graph/edge))
+(s/def :graph/controversy-values associative?)
+(s/def ::graph (s/keys :req-un [:graph/nodes :graph/edges :graph/controversy-values]))
+
+;; Statistics
+(s/def :statistics/since inst?)
+(s/def :statistics/discussions-sum nat-int?)
+(s/def :statistics/usernames-sum nat-int?)
+(s/def :statistics/average-statements-num number?)
+(s/def :statistics/statements-num nat-int?)
+(s/def :statistics/active-users-num nat-int?)
+(s/def :statistics.statement.type/supports nat-int?)
+(s/def :statistics.statement.type/attacks nat-int?)
+(s/def :statistics.statement.type/neutrals nat-int?)
+(s/def :statistics/statement-type-stats
+  (s/keys :req-un [:statistics.statement.type/supports :statistics.statement.type/attacks
+                   :statistics.statement.type/neutrals]))
+(s/def :statistics.statement.length/max number?)
+(s/def :statistics.statement.length/min number?)
+(s/def :statistics.statement.length/average number?)
+(s/def :statistics.statement.length/median number?)
+(s/def :statistics/statement-length-stats
+  (s/keys :req-un [:statistics.statement.length/max :statistics.statement.length/min
+                   :statistics.statement.length/average :statistics.statement.length/median]))
+(s/def :statistics/registered-users-num nat-int?)
+
+(s/def ::statistics
+  (s/keys :req-un [:statistics/discussions-sum :statistics/usernames-sum
+                   :statistics/average-statements-num :statistics/statements-num
+                   :statistics/active-users-num :statistics/statement-length-stats
+                   :statistics/statement-type-stats :statistics/registered-users-num]))

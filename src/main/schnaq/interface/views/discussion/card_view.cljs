@@ -7,17 +7,17 @@
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
-  :schnaq/search
+  :discussion.statements/search
   (fn [{:keys [db]} [_ search-string]]
     (let [share-hash (get-in db [:current-route :path-params :share-hash])]
       {:db (assoc-in db [:search :schnaq :current :search-string] search-string)
-       :fx [(http/xhrio-request db :get "/schnaq/search" [:schnaq.search/success]
+       :fx [(http/xhrio-request db :get "/discussion/statements/search" [:discussion.statements.search/success]
                                 {:share-hash share-hash
                                  :search-string search-string})
             [:dispatch [:navigation/navigate :routes.search/schnaq {:share-hash share-hash}]]]})))
 
 (rf/reg-event-db
-  :schnaq.search/success
+  :discussion.statements.search/success
   (fn [db [_ {:keys [matching-statements]}]]
     (assoc-in db [:search :schnaq :current :result] matching-statements)))
 

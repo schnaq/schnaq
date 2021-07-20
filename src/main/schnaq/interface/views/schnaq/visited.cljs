@@ -21,7 +21,7 @@
   (let [old-schnaq-string (set (remove empty?
                                        (string/split (ls/get-item :schnaqs/visited)
                                                      (re-pattern hash-separator))))
-        schnaqs-visited (:schnaqs/visited local-storage)
+        schnaqs-visited (set (remove empty? (:schnaqs/visited local-storage)))
         meeting-string (set (remove empty?
                                     (string/split (ls/get-item :meetings/visited)
                                                   (re-pattern hash-separator))))]
@@ -51,8 +51,8 @@
 
 (rf/reg-event-db
   :schnaqs.visited/store-from-backend
-  (fn [db [_ {:keys [discussions]}]]
-    (assoc-in db [:schnaqs :visited] discussions)))
+  (fn [db [_ {:keys [schnaqs]}]]
+    (assoc-in db [:schnaqs :visited] schnaqs)))
 
 (rf/reg-event-fx
   :schnaqs.visited/load
@@ -72,8 +72,8 @@
 
 (rf/reg-event-db
   :schnaqs.public/store-from-backend
-  (fn [db [_ {:keys [discussions]}]]
-    (assoc-in db [:schnaqs :public] discussions)))
+  (fn [db [_ {:keys [schnaqs]}]]
+    (assoc-in db [:schnaqs :public] schnaqs)))
 
 (rf/reg-sub
   :schnaqs/public

@@ -3,7 +3,6 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -64,12 +63,12 @@
   [::page-options (s/+ vector?) :ret vector?]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])
         admin? @(rf/subscribe [:user/administrator?])
-        user-groups @(rf/subscribe [:user/groups])]
+        beta-tester? @(rf/subscribe [:user/beta-tester?])]
     (cond
       (and (or needs-authentication? needs-administrator? needs-beta-tester?)
            (not authenticated?)) [please-login]
       (and needs-administrator? (not admin?)) (rf/dispatch [:navigation/navigate :routes/forbidden-page])
-      (and needs-beta-tester? (not (some shared-conf/beta-tester-groups user-groups))) [beta-only]
+      (and needs-beta-tester? (not beta-tester?)) [beta-only]
       :else page)))
 
 
