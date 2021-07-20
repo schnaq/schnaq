@@ -7,15 +7,16 @@
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
-(defn clickable-title [{:discussion/keys [title share-hash] :as discussion}]
-  [:<>
-   [:small.text-primary (labels :discussion.navbar/title)]
-   [:div.clickable-no-hover {:on-click
-                             (fn []
-                               (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                             {:share-hash share-hash}])
-                               (rf/dispatch [:schnaq/select-current discussion]))}
-    [:h5 (toolbelt/truncate-to-n-chars title 30)]]])
+(defn clickable-title []
+  (let [{:discussion/keys [title share-hash] :as schnaq} @(rf/subscribe [:schnaq/selected])]
+    [:<>
+     [:small.text-primary (labels :discussion.navbar/title)]
+     [:div.clickable-no-hover {:on-click
+                               (fn []
+                                 (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                               {:share-hash share-hash}])
+                                 (rf/dispatch [:schnaq/select-current schnaq]))}
+      [:h5 (toolbelt/truncate-to-n-chars title 30)]]]))
 
 (defn navbar []
   (let [discussion @(rf/subscribe [:schnaq/selected])
@@ -29,7 +30,7 @@
        {:src (img-path :logo-white) :alt "schnaq logo"
         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
      [:div.mx-4
-      [clickable-title discussion]]
+      [clickable-title]]
      [:div.mx-4.ml-auto.d-none.d-md-block
       [:small.text-primary (labels :discussion.navbar/posts)]
       [:h5.text-center statement-count]]
