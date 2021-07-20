@@ -2,6 +2,7 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reagent.core :as reagent]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.http :as http]
@@ -10,29 +11,31 @@
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]))
 
-(defn- public-private-discussion [user-groups]
-  (let [public? @(rf/subscribe [:schnaq.create/public?])
+(defn- public-private-discussion []
+  (let [user-groups @(rf/subscribe [:user/groups])
+        public? (reagent/atom false)
         no-hub-exclusive-fn #(when (seq user-groups)
                                (jq/prop (jq/$ "#hub-exclusive") "checked" false))]
-    [:div {:class (if (empty? user-groups) "col-12" "col-6")}
-     [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
-     [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
-      {:class (when public? "active")
-       :type "button"
-       :on-click (fn [_e]
-                   (rf/dispatch [:schnaq.create/public! true])
-                   (no-hub-exclusive-fn))}
-      [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
-      (labels :discussion.create.public-checkbox/public)]
-     [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
-      {:class (when-not public? "active")
-       :type "button"
-       :on-click (fn [_e] (rf/dispatch [:schnaq.create/public! false]))}
-      [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
-      (labels :discussion.create.public-checkbox/private)]]))
+    (fn []
+      [:div {:class (if (empty? user-groups) "col-12" "col-6")}
+       [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
+       [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
+        {:class (when @public? "active")
+         :type "button"
+         :on-click (fn [_e] (reset! public? true)
+                     (no-hub-exclusive-fn))}
+        [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
+        (labels :discussion.create.public-checkbox/public)]
+       [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
+        {:class (when-not @public? "active")
+         :type "button"
+         :on-click #(reset! public? false)}
+        [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
+        (labels :discussion.create.public-checkbox/private)]])))
 
-(defn- add-schnaq-to-hub [user-groups]
-  (let [hubs @(rf/subscribe [:hubs/all])]
+(defn- add-schnaq-to-hub []
+  (let [user-groups @(rf/subscribe [:user/groups])
+        hubs @(rf/subscribe [:hubs/all])]
     (when (seq user-groups)
       [:div.col-6.border-left.pl-5
        [:h4.mb-5 (labels :discussion.create.hub-exclusive-checkbox/title)]
@@ -58,21 +61,17 @@
 (defn- create-schnaq-options
   "Options that can be chosen when creating a schnaq."
   []
-  (let [user-groups @(rf/subscribe [:user/groups])]
-    [:div.row.my-5
-     [public-private-discussion user-groups]
-     [add-schnaq-to-hub user-groups]]))
+  [:div.row.my-5
+   [public-private-discussion]
+   [add-schnaq-to-hub]])
 
 (defn- create-schnaq-page []
   (let [dispatch-schnaq-creation #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
     [pages/with-nav-and-header
-     {:page/title (labels :schnaq.create/title)
-      :page/more-for-heading [:div.row.mt-5.mb-2
-                              [:div.col-4
-                               [:h1 (labels :schnaq.create/heading)]]
-                              [:div.col-4
-                               [:h4 (labels :schnaq.create/subheading)]]]
-      :page/class "base-wrapper bg-white"}
+     {:page/heading (labels :schnaq.create/heading)
+      :page/subheading (labels :schnaq.create/subheading)
+      :page/title (labels :schnaq.create/title)
+      :page/classes "base-wrapper bg-white"}
      [:div.container
       [:div.py-3
        [:form
@@ -131,7 +130,6 @@
                (update-in [:schnaqs :all] conj new-schnaq))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-schnaq]]
-            [:dispatch [:schnaq.create/public! false]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :schnaq/created-success-heading)
                                        :body (labels :schnaq/created-success-subheading)
@@ -139,12 +137,3 @@
             [:localstorage/assoc [:schnaq.last-added/share-hash share-hash]]
             [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
             [:dispatch [:schnaqs.save-admin-access/to-localstorage-and-db share-hash edit-hash]]]})))
-
-(rf/reg-event-db
-  :schnaq.create/public!
-  (fn [db [_ public?]]
-    (assoc-in db [:schnaq :create :public?] public?)))
-
-(rf/reg-sub
-  :schnaq.create/public?
-  (fn [db _] (get-in db [:schnaq :create :public?] false)))
