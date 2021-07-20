@@ -10,15 +10,11 @@
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]))
 
-
 (defn- public-private-discussion [user-groups]
   (let [public? @(rf/subscribe [:schnaq.create/public?])
         no-hub-exclusive-fn #(when (seq user-groups)
                                (jq/prop (jq/$ "#hub-exclusive") "checked" false))]
-    [:div
-     (if (empty? user-groups)
-       {:class "col-12"}
-       {:class "col-6"})
+    [:div {:class (if (empty? user-groups) "col-12" "col-6")}
      [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
      [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
       {:class (when public? "active")
@@ -110,7 +106,7 @@
                            (seq (get-in db [:user :groups] [])))
           nickname (get-in db [:user :names :display] default-anonymous-display-name)
           discussion-title (oget form-elements [:schnaq-title :value])
-          public? (get-in db [:schnaq :create :public] false)
+          public? (get-in db [:schnaq :create :public?] false)
           exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
           origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))
           payload (cond-> {:discussion-title discussion-title
@@ -147,8 +143,8 @@
 (rf/reg-event-db
   :schnaq.create/public!
   (fn [db [_ public?]]
-    (assoc-in db [:schnaq :create :public] public?)))
+    (assoc-in db [:schnaq :create :public?] public?)))
 
 (rf/reg-sub
   :schnaq.create/public?
-  (fn [db _] (get-in db [:schnaq :create :public] false)))
+  (fn [db _] (get-in db [:schnaq :create :public?] false)))
