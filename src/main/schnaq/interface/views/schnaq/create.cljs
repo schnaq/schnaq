@@ -73,7 +73,7 @@
       :page/subheading (labels :schnaq.create/subheading)
       :page/class "base-wrapper bg-white"}
      [:div.container
-      [:div.py-3.mt-3
+      [:div.py-3
        [:form
         {:on-submit (fn [e]
                       (jq/prevent-default e)
@@ -84,11 +84,11 @@
           [common/form-input {:id :schnaq-title
                               :placeholder (labels :schnaq.create.input/placeholder)
                               :css "font-150"}]]]
-        [:div.row.text-primary.my-3.px-3
+        [:div.row.text-primary.p-3
          [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}]
          [:span (labels :schnaq.create/info)]]
         [create-schnaq-options]
-        [:div.row.p-1
+        [:div.row.px-1.py-3
          [:button.btn.btn-dark.p-3.rounded-1.ml-auto
           (labels :schnaq.create.button/save)
           [:i.ml-2 {:class (str "fa " (fa :arrow-right))}]]]]
