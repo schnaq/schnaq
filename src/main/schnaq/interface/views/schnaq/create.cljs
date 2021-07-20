@@ -2,7 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.views.common :as common]
@@ -61,14 +61,20 @@
         {:on-submit (fn [e]
                       (jq/prevent-default e)
                       (dispatch-schnaq-creation e))}
+        [:h3.mb-5 (labels :schnaq.create.input/title)]
         [:div.panel-grey.row.p-4
          [:div.col-12
           [common/form-input {:id :schnaq-title
                               :placeholder (labels :schnaq.create.input/placeholder)
                               :css "font-150"}]]]
+        [:div.row.text-primary.mt-4.px-3
+         [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}]
+         [:span (labels :schnaq.create/info)]]
         [create-schnaq-options]
-        [:div.pt-3.text-center
-         [:button.btn.button-primary (labels :schnaq.create.button/save)]]]
+        [:div.row.p-1
+         [:button.btn.btn-dark.p-3.rounded-1.ml-auto
+          (labels :schnaq.create.button/save)
+          [:i.ml-2 {:class (str "fa " (fa :arrow-right))}]]]]
        [how-to-elements/quick-how-to-create]]]]))
 
 (defn create-schnaq-view []

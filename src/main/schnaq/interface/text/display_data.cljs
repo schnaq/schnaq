@@ -201,7 +201,8 @@
         :schnaq.header-image.url/failed-setting-body "The image will not be used as preview image."
 
         ;; Create schnaq
-        :schnaq.create.input/placeholder "What would you like to discuss with your team?"
+        :schnaq.create.input/title "What would you like to discuss?"
+        :schnaq.create.input/placeholder "Specify Subject"
         :schnaq.create.public/help-text "Publicly lists your schnaq."
         :schnaq.create.hub/help-text "Directly assign your schnaq to a hub."
         :schnaq/copy-link-tooltip "Click here to copy your link"
@@ -240,8 +241,9 @@
         ;; schnaq creation
         :schnaq.create/heading "Start schnaq"
         :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
+        :schnaq.create/info "Add a simple and comprehensible title to your discussion."
         :schnaq.create/schnaqqi-speech "Create your schnaq and invite your whole team in the next step!"
-        :schnaq.create.button/save "Start a new schnaq"
+        :schnaq.create.button/save "Next"
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Make this schnaq public"
@@ -1161,7 +1163,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.header-image.url/failed-setting-body "Das Bild wird nicht in der Vorschau genutzt."
 
         ;; Create schnaq
-        :schnaq.create.input/placeholder "Worüber möchtest du mit deinem Team diskutieren?"
+        :schnaq.create.input/title "Worüber möchtest du diskutieren?"
+        :schnaq.create.input/placeholder "Thema festlegen"
         :schnaq.create.public/help-text "Damit wird dein schnaq öffentlich gelistet und zugänglich sein."
         :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
         :schnaq/copy-link-tooltip "Hier klicken, um Link zu kopieren"
@@ -1199,8 +1202,9 @@ Now we write down questions and discuss them and can still understand what we ha
         ;; schnaq creation
         :schnaq.create/heading "Schnaq starten"
         :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
+        :schnaq.create/info "Gebe deinem Thema einen möglichst einfachen und verständlichen Titel."
         :schnaq.create/schnaqqi-speech "Erstelle deinen schnaq und lade im nächsten Schritt dein ganzes Team ein!"
-        :schnaq.create.button/save "Schnaq starten"
+        :schnaq.create.button/save "Weiter"
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Diesen schnaq öffentlich machen"
@@ -2057,7 +2061,8 @@ Now we write down questions and discuss them and can still understand what we ha
      :graph "fa-project-diagram"
      :heart "fa-heart"
      :home "fa-home"
-     :info "fa-question-circle"
+     :info-question "fa-question-circle"
+     :info "fa-info-circle"
      :language "fa-language"
      :laptop "fa-laptop-code"
      :lightbulb "fa-lightbulb"
