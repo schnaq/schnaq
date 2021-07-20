@@ -19,7 +19,7 @@
        {:class "col-12"}
        {:class "col-6"})
      [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
-     [:button.btn.btn-outline-primary.btn-lg.p-3
+     [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
       {:class (when public? "active")
        :type "button"
        :on-click (fn [_e]
@@ -27,7 +27,7 @@
                    (no-hub-exclusive-fn))}
       [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
       (labels :discussion.create.public-checkbox/public)]
-     [:button.btn.btn-outline-secondary.btn-lg.p-3.mx-4
+     [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
       {:class (when-not public? "active")
        :type "button"
        :on-click (fn [_e] (rf/dispatch [:schnaq.create/public! false]))}
@@ -38,7 +38,7 @@
   (let [hubs @(rf/subscribe [:hubs/all])]
     (when (seq user-groups)
       [:div.col-6.border-left.pl-5
-       [:h4.mb-5 (labels :discussion.create.hub-exclusive-checkbox/label)]
+       [:h4.mb-5 (labels :discussion.create.hub-exclusive-checkbox/title)]
        [:div.form-check.text-center
         [:input.form-check-input.big-checkbox
          {:type :checkbox
@@ -69,8 +69,12 @@
 (defn- create-schnaq-page []
   (let [dispatch-schnaq-creation #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
     [pages/with-nav-and-header
-     {:page/heading (labels :schnaq.create/heading)
-      :page/subheading (labels :schnaq.create/subheading)
+     {:page/title (labels :schnaq.create/title)
+      :page/more-for-heading [:div.row.mt-5.mb-2
+                              [:div.col-4
+                               [:h1 (labels :schnaq.create/heading)]]
+                              [:div.col-4
+                               [:h4 (labels :schnaq.create/subheading)]]]
       :page/class "base-wrapper bg-white"}
      [:div.container
       [:div.py-3

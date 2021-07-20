@@ -239,7 +239,8 @@
         :statement.edit.button/cancel "Cancel"
 
         ;; schnaq creation
-        :schnaq.create/heading "Start schnaq"
+        :schnaq.create/title "Start schnaq"
+        :schnaq.create/heading "Start your schnaq."
         :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
         :schnaq.create/info "Add a simple and comprehensible title to your discussion."
         :schnaq.create/schnaqqi-speech "Create your schnaq and invite your whole team in the next step!"
@@ -249,7 +250,8 @@
         :discussion.create.public-checkbox/label "Make this schnaq public"
         :discussion.create.public-checkbox/public "public"
         :discussion.create.public-checkbox/private "private"
-        :discussion.create.hub-exclusive-checkbox/label "Add schnaq to a Hub"
+        :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
+        :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
 
         :discussion.navbar/title "Title"
         :discussion.navbar/posts "Posts"
@@ -1202,7 +1204,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :statement.edit.button/cancel "Abbrechen"
 
         ;; schnaq creation
-        :schnaq.create/heading "Schnaq starten"
+        :schnaq.create/title "Schnaq starten"
+        :schnaq.create/heading "Starte mit deinem schnaq."
         :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
         :schnaq.create/info "Gebe deinem Thema einen möglichst einfachen und verständlichen Titel."
         :schnaq.create/schnaqqi-speech "Erstelle deinen schnaq und lade im nächsten Schritt dein ganzes Team ein!"
@@ -1212,7 +1215,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.create.public-checkbox/label "Diesen schnaq öffentlich machen"
         :discussion.create.public-checkbox/public "öffentlich"
         :discussion.create.public-checkbox/private "geschlossen"
-        :discussion.create.hub-exclusive-checkbox/label "Schnaq zu einem Hub hinzufügen"
+        :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
+        :discussion.create.hub-exclusive-checkbox/label "Dem Hub hinzufügen"
 
         :discussion.navbar/title "Titel"
         :discussion.navbar/posts "Beiträge"
