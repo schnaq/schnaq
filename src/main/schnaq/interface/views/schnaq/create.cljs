@@ -13,25 +13,24 @@
 
 (defn- public-private-discussion []
   (let [user-groups @(rf/subscribe [:user/groups])
-        public? (reagent/atom false)
+        public? @(rf/subscribe [:schnaq.create/public?])
         no-hub-exclusive-fn #(when (seq user-groups)
                                (jq/prop (jq/$ "#hub-exclusive") "checked" false))]
-    (fn []
-      [:div {:class (if (empty? user-groups) "col-12" "col-6")}
-       [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
-       [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
-        {:class (when @public? "active")
-         :type "button"
-         :on-click (fn [_e] (reset! public? true)
-                     (no-hub-exclusive-fn))}
-        [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
-        (labels :discussion.create.public-checkbox/public)]
-       [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
-        {:class (when-not @public? "active")
-         :type "button"
-         :on-click #(reset! public? false)}
-        [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
-        (labels :discussion.create.public-checkbox/private)]])))
+    [:div {:class (if (empty? user-groups) "col-12" "col-6")}
+     [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
+     [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
+      {:class (when public? "active")
+       :type "button"
+       :on-click (fn [_e] (rf/dispatch [:schnaq.create/public! true])
+                   (no-hub-exclusive-fn))}
+      [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
+      (labels :discussion.create.public-checkbox/public)]
+     [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
+      {:class (when-not public? "active")
+       :type "button"
+       :on-click #(rf/dispatch [:schnaq.create/public! false])}
+      [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
+      (labels :discussion.create.public-checkbox/private)]]))
 
 (defn- add-schnaq-to-hub []
   (let [user-groups @(rf/subscribe [:user/groups])
@@ -66,33 +65,32 @@
    [add-schnaq-to-hub]])
 
 (defn- create-schnaq-page []
-  (let [dispatch-schnaq-creation #(rf/dispatch [:schnaq.create/new (oget % [:currentTarget :elements])])]
-    [pages/with-nav-and-header
-     {:page/heading (labels :schnaq.create/heading)
-      :page/subheading (labels :schnaq.create/subheading)
-      :page/title (labels :schnaq.create/title)
-      :page/classes "base-wrapper bg-white"}
-     [:div.container
-      [:div.py-3
-       [:form
-        {:on-submit (fn [e]
-                      (jq/prevent-default e)
-                      (dispatch-schnaq-creation e))}
-        [:h4.mb-5 (labels :schnaq.create.input/title)]
-        [:div.panel-grey.row.p-4
-         [:div.col-12
-          [common/form-input {:id :schnaq-title
-                              :placeholder (labels :schnaq.create.input/placeholder)
-                              :css "font-150"}]]]
-        [:div.row.text-primary.p-3
-         [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}]
-         [:span (labels :schnaq.create/info)]]
-        [create-schnaq-options]
-        [:div.row.px-1.py-3
-         [:button.btn.btn-dark.p-3.rounded-1.ml-auto
-          (labels :schnaq.create.button/save)
-          [:i.ml-2 {:class (str "fa " (fa :arrow-right))}]]]]
-       [how-to-elements/quick-how-to-create]]]]))
+  [pages/with-nav-and-header
+   {:page/heading (labels :schnaq.create/heading)
+    :page/subheading (labels :schnaq.create/subheading)
+    :page/title (labels :schnaq.create/title)
+    :page/classes "base-wrapper bg-white"}
+   [:div.container
+    [:div.py-3
+     [:form
+      {:on-submit (fn [e]
+                    (jq/prevent-default e)
+                    (rf/dispatch [:schnaq.create/new (oget e [:currentTarget :elements])]))}
+      [:h4.mb-5 (labels :schnaq.create.input/title)]
+      [:div.panel-grey.row.p-4
+       [:div.col-12
+        [common/form-input {:id :schnaq-title
+                            :placeholder (labels :schnaq.create.input/placeholder)
+                            :css "font-150"}]]]
+      [:div.row.text-primary.p-3
+       [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}]
+       [:span (labels :schnaq.create/info)]]
+      [create-schnaq-options]
+      [:div.row.px-1.py-3
+       [:button.btn.btn-dark.p-3.rounded-1.ml-auto
+        (labels :schnaq.create.button/save)
+        [:i.ml-2 {:class (str "fa " (fa :arrow-right))}]]]]
+     [how-to-elements/quick-how-to-create]]]])
 
 (defn create-schnaq-view []
   [create-schnaq-page])
@@ -130,6 +128,7 @@
                (update-in [:schnaqs :all] conj new-schnaq))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-schnaq]]
+            [:dispatch [:schnaq.create/public! false]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :schnaq/created-success-heading)
                                        :body (labels :schnaq/created-success-subheading)
@@ -137,3 +136,12 @@
             [:localstorage/assoc [:schnaq.last-added/share-hash share-hash]]
             [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
             [:dispatch [:schnaqs.save-admin-access/to-localstorage-and-db share-hash edit-hash]]]})))
+
+(rf/reg-event-db
+  :schnaq.create/public!
+  (fn [db [_ public?]]
+    (assoc-in db [:schnaq :create :public?] public?)))
+
+(rf/reg-sub
+  :schnaq.create/public?
+  (fn [db _] (get-in db [:schnaq :create :public?] false)))
