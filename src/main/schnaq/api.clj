@@ -75,7 +75,7 @@
   Most routes work with anonymous users, where a `nickname` can be set. If you are authenticated and send back a valid JWT token, you most often can omit the `nickname` field in the request. Then, you act as a registered user.
 
   ## Authentication
-  Many routes require authentication. To authenticate you against the backend, grab a JWT token from the authorized Keycloak instance and put in in your header.
+  Many routes require authentication. To authenticate you against the backend, grab a JWT token from the authorized Keycloak instance and put in in your header. Or use the `Authorize`-Button on the right side. Use `swagger` as your client_id.
 
   The header should look like this: `Authorization: Token <your token>`. Configure your JWT token in by using the \"Authorize\"-Button.
 
@@ -103,10 +103,12 @@
                                 :basePath "/"
                                 :version "1.0.0"
                                 :description description}
-                         :securityDefinitions {:bearerAuth {:type "apiKey"
-                                                            :name "Authorization"
-                                                            :in "header"}}
-                         :security [{:bearerAuth []}]}
+                         :securityDefinitions {:keycloak {:type "oauth2"
+                                                          :flow "implicit"
+                                                          :name "Authorization"
+                                                          :description "Use `swagger` as the client-id."
+                                                          :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}}
+                         :security [{:keycloak []}]}
                :handler (swagger/create-swagger-handler)}}]]
       {:exception pretty/exception
        :validate rrs/validate
@@ -120,6 +122,7 @@
                            coercion/coerce-response-middleware ;; coercing response bodys
                            coercion/coerce-request-middleware ;; coercing request parameters
                            multipart/multipart-middleware
+                           auth/replace-bearer-with-token
                            auth/wrap-jwt-authentication]}
        ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
                               :user/admin? auth/admin?-middleware
