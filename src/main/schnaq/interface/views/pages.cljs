@@ -16,12 +16,13 @@
 (s/def :page/heading string?)
 (s/def :page/subheading string?)
 (s/def :page/title string?)
+(s/def :page/vertical-header? boolean?)
 (s/def :page/more-for-heading vector?)
 (s/def :condition/needs-authentication? boolean?)
 (s/def :condition/needs-administrator? boolean?)
 (s/def ::page-options
   (s/keys :req [:page/heading]
-          :opt [:page/subheading :page/title :page/more-for-heading
+          :opt [:page/subheading :page/title :page/more-for-heading :page/vertical-header?
                 :condition/needs-authentication? :condition/needs-administrator?]))
 
 
@@ -89,18 +90,16 @@
 
 (>defn with-nav-and-header
   "Default page with header and curly wave."
-  [{:page/keys [title heading subheading more-for-heading class] :as options} body]
+  [{:page/keys [title heading classes] :as options} body]
   [::page-options (s/+ vector?) :ret vector?]
   (common/set-website-title! (or title heading))
   [scheduler/middleware
    [validate-conditions-middleware
     options
-    [:div
-     (when class
-       {:class class})
+    [:div {:class classes}
      [:div.masthead-layered
       [navbar-pages/navbar-transparent]
-      [base/header heading subheading options more-for-heading]]
+      [base/header options]]
      body]]])
 
 (>defn with-nav
