@@ -37,8 +37,8 @@
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring-middleware-format/ring-middleware-format {:mvn/version "0.7.4"}
         ring/ring {:mvn/version "1.9.4"}
-        ring/ring-defaults {:mvn/version "0.3.3"}
         ring/ring-mock {:mvn/version "0.4.0"}
+        ring/ring-defaults {:mvn/version "0.3.3"}
         thheller/shadow-cljs {:mvn/version "2.14.4"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
