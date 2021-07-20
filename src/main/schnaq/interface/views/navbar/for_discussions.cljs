@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.navbar.for-discussions
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.config.shared :as shared-conf]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modal :as modal]
@@ -66,8 +65,7 @@
 (defn summary-button
   "Button to navigate to the summary view."
   [share-hash]
-  (let [groups @(rf/subscribe [:user/groups])
-        beta-user? (some shared-conf/beta-tester-groups groups)]
+  (let [beta-user? @(rf/subscribe [:user/beta-tester?])]
     [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
      (if beta-user?
        {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}

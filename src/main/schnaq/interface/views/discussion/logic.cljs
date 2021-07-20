@@ -19,7 +19,7 @@
 
 (rf/reg-event-fx
   :discussion.reaction.statement/send
-  (fn [{:keys [db]} [_ reaction new-premise]]
+  (fn [{:keys [db]} [_ statement-type new-premise]]
     (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])
           nickname (get-in db [:user :names :display] default-anonymous-display-name)]
       {:fx [(http/xhrio-request
@@ -29,7 +29,7 @@
                :conclusion-id statement-id
                :nickname nickname
                :premise new-premise
-               :reaction reaction}
+               :statement-type statement-type}
               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -75,11 +75,11 @@
   (let [new-text-element (oget form [:premise-text])
         new-text (oget new-text-element [:value])
         pro-con-disabled? @(rf/subscribe [:schnaq.selected/pro-con?])
-        statement-type @(rf/subscribe [:form/statement-type])
-        choice (if pro-con-disabled?
-                 :neutral
-                 (keyword (name statement-type)))]
-    (rf/dispatch [:discussion.reaction.statement/send choice new-text])
+        form-statement-type @(rf/subscribe [:form/statement-type])
+        statement-type (if pro-con-disabled?
+                         :neutral
+                         form-statement-type)]
+    (rf/dispatch [:discussion.reaction.statement/send statement-type new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
 (rf/reg-event-fx
@@ -87,7 +87,7 @@
   (fn [{:keys [db]} _]
     (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])]
       {:fx [(http/xhrio-request
-              db :post "/discussion/statement/info"
+              db :get "/discussion/statement/info"
               [:discussion.query.statement/by-id-success]
               {:statement-id statement-id
                :share-hash share-hash}

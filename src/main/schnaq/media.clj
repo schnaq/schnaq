@@ -5,7 +5,7 @@
             [ghostwheel.core :refer [>defn]]
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
-            [ring.util.http-response :refer [ok bad-request forbidden]]
+            [ring.util.http-response :refer [created bad-request forbidden]]
             [schnaq.database.main :as d]
             [schnaq.s3 :as s3]
             [schnaq.validator :as validator]
@@ -46,16 +46,16 @@
 
 (>defn set-preview-image
   "Check an image url for a valid source and then upload it to s3
-  and set a datomic entry to the corresponding schnaq"
-  [{:keys [body-params]}]
+  and set a datomic entry to the corresponding schnaq."
+  [{:keys [parameters]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash image-url]} body-params
+  (let [{:keys [share-hash edit-hash image-url]} (:body parameters)
         file-name (str "header-" share-hash)]
     (if (validator/valid-credentials? share-hash edit-hash)
       (case (check-and-upload-image image-url file-name share-hash)
         :error-img (bad-request {:error error-img})
         :error-forbidden-cdn (forbidden {:error error-cdn})
-        (ok {:message success-img}))
+        (created "" {:message success-img}))
       (validator/deny-access))))
 
 (>defn scale-image-to-height

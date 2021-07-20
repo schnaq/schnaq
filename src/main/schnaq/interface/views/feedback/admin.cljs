@@ -61,7 +61,7 @@
 
 (rf/reg-event-db
   :feedbacks/store
-  (fn [db [_ all-feedbacks]] (assoc db :feedbacks all-feedbacks)))
+  (fn [db [_ {:keys [feedbacks]}]] (assoc db :feedbacks feedbacks)))
 
 (rf/reg-event-fx
   :feedbacks/fetch

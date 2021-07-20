@@ -22,7 +22,7 @@
    :statement/created-at
    :statement/parent
    {:statement/type [:db/ident]}
-   {:statement/author user-db/combined-user-pattern}])
+   {:statement/author user-db/public-user-pattern}])
 
 (def ^:private statement-pattern-with-secret
   (conj statement-pattern :statement/creation-secret))
@@ -37,7 +37,7 @@
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
-   {:discussion/author user-db/combined-user-pattern}])
+   {:discussion/author user-db/public-user-pattern}])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."
@@ -50,7 +50,7 @@
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
-   {:discussion/author user-db/combined-user-pattern}])
+   {:discussion/author user-db/public-user-pattern}])
 
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
@@ -397,8 +397,8 @@
       @(transact
          (mapv #(vector :db/add % :statement/author author-id) (keys valid-secrets))))))
 
-(>defn search-schnaq
-  "Searches the content of statements in a schnaq and returns the corresponding statements."
+(>defn search-statements
+  "Searches the content of statements in a discussion and returns the corresponding statements."
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
   (->
@@ -429,25 +429,28 @@
                         :user.registered/display-name
                         :user.registered/keycloak-id]}])
 
-(defn- request-summary
+(>defn- request-summary
   "Updates an existing summary request and returns the updated version."
   [summary requester]
+  [::specs/summary :summary/requester :ret ::specs/summary]
   (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date.)]
                               [:db/add summary :summary/requester requester]])]
     (fast-pull summary summary-pattern (:db-after tx-result))))
 
-(defn summary
-  "Return a summary or nil."
+(>defn summary
+  "Return a summary if it exists for a discussion's share-hash."
   [share-hash]
+  [:discussion/share-hash :ret (? ::specs/summary)]
   (query '[:find (pull ?summary summary-pattern) .
            :in $ ?share-hash summary-pattern
            :where [?discussion :discussion/share-hash ?share-hash]
            [?summary :summary/discussion ?discussion]]
          share-hash summary-pattern))
 
-(defn summary-request
+(>defn summary-request
   "Creates a new summary-request if there is none for the discussion. Otherwise updates the request-time."
   [share-hash keycloak-id]
+  [:discussion/share-hash :user.registered/keycloak-id :ret ::specs/summary]
   (if-let [summary (:db/id (summary share-hash))]
     (request-summary summary [:user.registered/keycloak-id keycloak-id])
     (let [new-summary {:summary/discussion [:discussion/share-hash share-hash]
@@ -456,13 +459,18 @@
       (transact [new-summary])
       new-summary)))
 
-(defn all-summaries []
+(>defn all-summaries-with-discussions
+  "Return a collection of all summaries and their discussions."
+  []
+  [:ret (s/coll-of ::specs/summary)]
   (query '[:find [(pull ?summary summary-pattern) ...]
            :in $ summary-pattern
            :where [?summary :summary/requested-at _]]
          summary-with-discussion-pattern))
 
-(defn update-summary [share-hash new-text]
+(>defn update-summary
+  [share-hash new-text]
+  [:discussion/share-hash :summary/text :ret ::specs/summary]
   (when-let [summary (:db/id (summary share-hash))]
     (let [tx-result @(transact [{:db/id summary
                                  :summary/text new-text

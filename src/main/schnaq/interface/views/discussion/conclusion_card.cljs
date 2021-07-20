@@ -75,8 +75,8 @@
       [:div.card-view.card-body.py-2
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]]
-       [:div.my-4
-        [md/as-markdown (:statement/content statement)]]
+       [:div.my-4]
+       [md/as-markdown (:statement/content statement)]
        [:div.d-flex
         [:a.badge.badge-pill.rounded-2.mr-2
          {:href "#" :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
@@ -116,9 +116,9 @@
   (fn [{:keys [db]} [_ conclusion]]
     (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
       {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
-       :fx [(http/xhrio-request db :post "/discussion/statements/for-conclusion"
+       :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]
-                                {:selected-statement conclusion
+                                {:conclusion-id (:db/id conclusion)
                                  :share-hash share-hash}
                                 [:ajax.error/as-notification])]})))
 
@@ -135,7 +135,7 @@
 (rf/reg-event-fx
   :discussion/toggle-upvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [(http/xhrio-request db :post "/votes/up/toggle" [:upvote-success statement]
+    {:fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
                               {:statement-id id
                                :nickname (get-in db [:user :names :display] default-anonymous-display-name)
                                :share-hash (-> db :schnaq :selected :discussion/share-hash)}
@@ -144,7 +144,7 @@
 (rf/reg-event-fx
   :discussion/toggle-downvote
   (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [(http/xhrio-request db :post "/votes/down/toggle" [:downvote-success statement]
+    {:fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
                               {:statement-id id
                                :nickname (get-in db [:user :names :display] default-anonymous-display-name)
                                :share-hash (-> db :schnaq :selected :discussion/share-hash)}
