@@ -28,12 +28,13 @@
 ;; ----------------------------------------------------------------------------
 
 (defn page [_request]
-  (pages/with-nav-and-header
-    {:page/heading (labels :legal-note.page/heading)}
-    [:div.container
-     [privacy-extended/responsible]
-     [:h2 (labels :legal-note.page/disclaimer)]
-     [liability-for-contents]
-     [liability-for-links]
-     [copyright]
-     [privacy]]))
+  [pages/with-nav-and-header
+   {:page/heading (labels :legal-note.page/heading)
+    :page/vertical-header? true}
+   [:div.container
+    [privacy-extended/responsible]
+    [:h2 (labels :legal-note.page/disclaimer)]
+    [liability-for-contents]
+    [liability-for-links]
+    [copyright]
+    [privacy]]])

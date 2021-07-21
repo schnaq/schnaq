@@ -26,13 +26,20 @@
 
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
-  [heading subheading & more]
+  [{:page/keys [heading subheading classes more-for-heading vertical-header?]}]
   [:<>
    [:div.container
-    [:h1 heading]
-    [:h2.display-6 subheading]
-    more]
-   [:div.wave-bottom-light]])
+    (if vertical-header?
+      [:<> [:h1 heading] [:h4.display-6 subheading]]
+      [:div.row.mt-5.mb-2
+       [:div.col-4
+        [:h1 heading]]
+       [:div.col-4
+        [:h2.h4 subheading]]])
+    more-for-heading]
+   (if (gstring/contains (str classes) "bg-white")
+     [:div.wave-bottom-white]
+     [:div.wave-bottom-light])])
 
 (defn img-bullet-subtext
   "Create one icon in a grid"

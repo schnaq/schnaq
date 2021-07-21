@@ -12,6 +12,11 @@
   }
 }
 
+.panel-grey {
+  @extend .panel-white;
+  background: vars.$input-background;
+}
+
 .animation-background {
   @include rounded.rounded-3;
   box-shadow: vars.$wide-shadow;
@@ -76,7 +81,7 @@
 
 .discussion-input-container {
   @include rounded.rounded-1;
-  background: vars.$gray-200;
+  background: vars.$input-background;
   border: 0;
   overflow: hidden;
 }

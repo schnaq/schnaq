@@ -48,7 +48,7 @@
        [:div.quick-how-to
         [:div.row.align-items-center
          [:div.col-12.col-lg-7
-          [:div.mb-2 [:i {:class (str "m-auto fas " (fa :info))}]]
+          [:div.mb-2 [:i {:class (str "m-auto fas " (fa :info-question))}]]
           [text-box title body]
           [:div.feature-text-box
            [:p (labels :how-to/ask-question-2)

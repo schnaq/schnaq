@@ -6,7 +6,8 @@
 (defn- content []
   (let [header
         {:page/heading (labels :coc/heading)
-         :page/subheading (labels :coc/subheading)}]
+         :page/subheading (labels :coc/subheading)
+         :page/vertical-header? true}]
     [pages/with-nav-and-header
      header
      [:section.container

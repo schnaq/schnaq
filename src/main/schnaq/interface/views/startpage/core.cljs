@@ -126,6 +126,7 @@
   [pages/with-nav-and-header
    {:page/heading (labels :startpage/heading)
     :page/subheading (labels :startpage/subheading)
+    :page/vertical-header? true
     :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
    [:<>
     [:section.container

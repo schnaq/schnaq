@@ -56,7 +56,8 @@
 
 (defn- content []
   [pages/with-nav-and-header
-   {:page/heading (labels :how-to/title)}
+   {:page/heading (labels :how-to/title)
+    :page/vertical-header? true}
    [:div.container.chat-background.py-5
     ;; how to videos
     [:div.pb-5.bubble-background [why]]

@@ -76,7 +76,8 @@
 (defn- page []
   [pages/with-nav-and-header
    {:page/heading (labels :privacy/heading)
-    :page/subheading (labels :privacy/subheading)}
+    :page/subheading (labels :privacy/subheading)
+    :page/vertical-header? true}
    [:section.container
     [gdpr-row]
     [personal-data-row]

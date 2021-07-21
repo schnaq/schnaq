@@ -78,14 +78,15 @@
 ;; ----------------------------------------------------------------------------
 
 (defn page [_request]
-  (pages/with-nav-and-header
-    {:page/heading (labels :about-us.page/heading)
-     :page/subheading (labels :about-us.page/subheading)}
-    [:div.container
-     schnaq-unity
-     [:hr.pb-4.mt-5]
-     our-values
-     [:hr.pb-4.mt-5]
-     schnaq-in-numbers
-     [:hr.pb-4.mt-5]
-     team-focus]))
+  [pages/with-nav-and-header
+   {:page/heading (labels :about-us.page/heading)
+    :page/subheading (labels :about-us.page/subheading)
+    :page/vertical-header? true}
+   [:div.container
+    schnaq-unity
+    [:hr.pb-4.mt-5]
+    our-values
+    [:hr.pb-4.mt-5]
+    schnaq-in-numbers
+    [:hr.pb-4.mt-5]
+    team-focus]])
