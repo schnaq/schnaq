@@ -14,27 +14,27 @@
 (defn- public-private-discussion
   "Show buttons to toggle between public and private discussion."
   []
-  (let [user-groups @(rf/subscribe [:user/groups])
-        public? (reagent/atom false)
-        no-hub-exclusive-fn #(when (seq user-groups)
-                               (jq/prop (jq/$ "#hub-exclusive") "checked" false))]
+  (let [public? (reagent/atom false)]
     (fn []
-      [:div {:class (if (empty? user-groups) "col-12" "col-6")}
-       [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
-       [:input#input-public-schnaq {:type :hidden :value @public?}]
-       [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
-        {:class (when @public? "active")
-         :type "button"
-         :on-click (fn [_e] (reset! public? true)
-                     (no-hub-exclusive-fn))}
-        [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
-        (labels :discussion.create.public-checkbox/public)]
-       [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
-        {:class (when-not @public? "active")
-         :type "button"
-         :on-click #(reset! public? false)}
-        [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
-        (labels :discussion.create.public-checkbox/private)]])))
+      (let [user-groups @(rf/subscribe [:user/groups])
+            no-hub-exclusive-fn #(when (seq user-groups)
+                                   (jq/prop (jq/$ "#hub-exclusive") "checked" false))]
+        [:div {:class (if (empty? user-groups) "col-12" "col-6")}
+         [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
+         [:input#input-public-schnaq {:type :hidden :value @public?}]
+         [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
+          {:class (when @public? "active")
+           :type "button"
+           :on-click (fn [_e] (reset! public? true)
+                       (no-hub-exclusive-fn))}
+          [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
+          (labels :discussion.create.public-checkbox/public)]
+         [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
+          {:class (when-not @public? "active")
+           :type "button"
+           :on-click #(reset! public? false)}
+          [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
+          (labels :discussion.create.public-checkbox/private)]]))))
 
 (defn- add-schnaq-to-hub
   "Selection if schnaq should be added to a hub."

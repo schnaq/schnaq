@@ -91,7 +91,7 @@
 (>defn with-nav-and-header
   "Default page with header and curly wave."
   [{:page/keys [title heading classes] :as options} body]
-  [::page-options (s/+ vector?) :ret vector?]
+  [::page-options vector? :ret vector?]
   (common/set-website-title! (or title heading))
   [scheduler/middleware
    [validate-conditions-middleware
