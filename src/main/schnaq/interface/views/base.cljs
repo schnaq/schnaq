@@ -37,9 +37,10 @@
        [:div.col-4
         [:h2.h4 subheading]]])
     more-for-heading]
-   (if (gstring/contains (str classes) "bg-white")
-     [:div.wave-bottom-white]
-     [:div.wave-bottom-light])])
+   (cond
+     (gstring/contains (str classes) "bg-white") [:div.wave-bottom-white]
+     (gstring/contains (str classes) "bg-dark-blue") [:div.wave-bottom-dark-blue]
+     :else [:div.wave-bottom-light])])
 
 (defn img-bullet-subtext
   "Create one icon in a grid"

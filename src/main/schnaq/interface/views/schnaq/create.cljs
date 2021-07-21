@@ -135,7 +135,7 @@
       {:db (-> db
                (assoc-in [:schnaq :last-added] new-schnaq)
                (update-in [:schnaqs :all] conj new-schnaq))
-       :fx [[:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
+       :fx [[:dispatch [:navigation/navigate :routes.schnaq/value {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-schnaq]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :schnaq/created-success-heading)
