@@ -1,8 +1,10 @@
 (ns schnaq.interface.views.base
-  (:require [goog.string :as gstring]
+  (:require [ghostwheel.core :refer [>defn]]
+            [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.utils.js-wrapper :as jw]))
+            [schnaq.interface.utils.js-wrapper :as jw]
+            [schnaq.interface.views.pages :as pages]))
 
 (defn wavy-curve
   "Define a wavy curve."
@@ -24,9 +26,10 @@
        :x "0px"}
       [:path {:d "M0 0 L 0 3 Q 3 3, 6 2 T 12 2 T 19 2 L 19 0"}]])))
 
-(defn header
+(>defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
   [{:page/keys [heading subheading classes more-for-heading vertical-header?]}]
+  [::pages/page-options :ret vector?]
   [:<>
    [:div.container
     (if vertical-header?
