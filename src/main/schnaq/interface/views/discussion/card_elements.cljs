@@ -184,17 +184,15 @@
       (labels :badges.sort/popular)]]))
 
 (defn- discussion-privacy-badge
-  "A small badge displaying who can see the discussion!"
-  [{:keys [discussion/states]}]
-  (let [public? (contains? (set states) :discussion.state/public)]
-    [:<>
-     (if public?
-       [:span.badge
-        [:i.primary-light-color {:class (str "m-auto fas fa-lg " (fa :lock-open))}] " "
-        (labels :discussion.privacy/public)]
-       [:span.badge
-        [:i.secondary-color {:class (str "m-auto fas fa-lg " (fa :lock-closed))}] " "
-        (labels :discussion.privacy/private)])]))
+  "A small badge displaying who can see the discussion."
+  []
+  (let [{:discussion/keys [states share-hash]} @(rf/subscribe [:schnaq/selected])
+        public? (contains? (set states) :discussion.state/public)
+        [label class] (if public? [:discussion.privacy/public (str "primary-light-color m-auto fas fa-lg " (fa :lock-open))]
+                                  [:discussion.privacy/private (str "secondary-color m-auto fas fa-lg " (fa :lock-closed))])]
+    [:span.badge {:key (str "discussion-privacy-badge-" share-hash)}
+     [:i {:class class}] " "
+     (labels label)]))
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
@@ -216,12 +214,12 @@
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
        input)]))
 
-(defn- topic-bubble-view [discussion statement input badges info-content is-topic?]
+(defn- topic-bubble-view [statement input badges info-content is-topic?]
   [:div.p-2
    [:div.d-flex.mb-4
     [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]
     [:div.ml-auto.my-auto
-     [discussion-privacy-badge discussion]]]
+     [discussion-privacy-badge]]]
    [title-and-input-element statement input is-topic? badges info-content]])
 
 (defn- topic-bubble [content]
@@ -288,7 +286,7 @@
      [:div.row
       [:div.col-md-6.col-lg-5.py-4.px-0.px-md-3
        [topic-view current-discussion nil
-        [topic-bubble-view current-discussion statement input badges info-content is-topic?]]
+        [topic-bubble-view statement input badges info-content is-topic?]]
        [:div.d-none.d-md-block [history-view history]]]
       [:div.col-md-6.col-lg-7.py-4.px-0.px-md-3
        [action-view has-history?]
