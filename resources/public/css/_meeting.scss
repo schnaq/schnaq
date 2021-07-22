@@ -32,10 +32,10 @@
 
 .meeting-entry-title-header-image {
   background-position: center center;
-  height: 3rem;
+  min-height: 100%;
   object-fit: cover;
   overflow: hidden;
-  width: 3rem;
+  width: 1rem;
 }
 
 .meeting-entry-desc {

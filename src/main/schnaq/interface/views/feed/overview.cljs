@@ -2,7 +2,8 @@
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
@@ -41,7 +42,7 @@
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
-  [schnaq]
+  [schnaq delete-from-hub?]
   (let [share-hash (:discussion/share-hash schnaq)
         title (:discussion/title schnaq)
         url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
@@ -50,23 +51,31 @@
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])
                   (rf/dispatch [:schnaq/select-current schnaq]))}
-     [:div.row.px-4.py-2
-      [:div.col-5
-       [:div.row.ml-1
-        [user/user-info-only (:discussion/author schnaq) 42]
-        [:div.mt-2 [badges/read-only-badge schnaq]]]
-       [:div.mt-1 [badges/static-info-badges schnaq]]]
-      [:div.col-5
-       [:div.meeting-entry-title
-        (toolbelt/truncate-to-n-chars title 40)]]
-      [:div.col-2
-       [:div.my-auto [:img.meeting-entry-title-header-image.rounded-50 {:src url}]]]]]))
+     [:div.d-flex.flex-row
+      [:div.highlight-card
+       [:img.meeting-entry-title-header-image {:src url}]]
+      [:div.row.px-md-4.py-2.w-100
+       [:div.col-4.col-md-6
+        [:div.row.ml-1
+         [user/user-info-only (:discussion/author schnaq) 42]
+         [:div.mt-2 [badges/read-only-badge schnaq]]]
+        [:div.mt-1 [badges/static-info-badges schnaq]]]
+       [:div.col-8.col-md-6
+        [:div.meeting-entry-title
+         (toolbelt/truncate-to-n-chars title 40)]]]
+      (when delete-from-hub?
+        [:button.btn.btn-outline-dark.btn-small.my-auto.mr-3
+         {:title (labels :hub.remove.schnaq/tooltip)
+          :on-click (fn [e] (js-wrap/stop-propagation e)
+                      (when (js/confirm (labels :hub.remove.schnaq/prompt))
+                        (rf/dispatch [:hub.remove/schnaq share-hash])))}
+         [:i {:class (str "m-auto fas " (fa :cross))}]])]]))
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."
   ([subscription-vector]
-   [schnaq-list-view subscription-vector schnaq-entry])
-  ([subscription-vector single-schnaq-component]
+   [schnaq-list-view subscription-vector false])
+  ([subscription-vector show-delete-from-hub-button?]
    [:div.meetings-list
     (let [schnaqs @(rf/subscribe subscription-vector)
           sort-method @(rf/subscribe [:feed/sort])
@@ -75,14 +84,14 @@
                            (sort-by :discussion/created-at > schnaqs))]
       (if (empty? schnaqs)
         [no-schnaqs-found]
-        [:div.panel-white.rounded-1.px-5
-         [sort-options]
-         [:div.row.px-3
-          [:div.col-5 [:p.text-muted (labels :schnaqs/author)]]
-          [:div.col-5 [:p.text-muted (labels :schnaqs/schnaq)]]]
+        [:div.panel-white.rounded-1.px-md-5
+         [:div.row.pl-5
+          [:div.col-3.col-md-5 [:p.text-muted (labels :schnaqs/author)]]
+          [:div.col-2.col-md-2 [:p.text-muted (labels :schnaqs/schnaq)]]
+          [:div.col-7.col-md-5 [sort-options]]]
          (for [schnaq sorted-schnaqs]
            [:div.pb-4 {:key (:db/id schnaq)}
-            [single-schnaq-component schnaq]])]))]))
+            [schnaq-entry schnaq show-delete-from-hub-button?]])]))]))
 
 (defn- feed-button
   "Create a button for the feed list."
@@ -101,18 +110,17 @@
   []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
     [:<>
-     [:section.row
-      [:div.col-6.col-md-12
-       [:div.panel-white.list-group
-        [:div.col-md-12.col-6
-         [hub/list-hubs-with-heading]
-         [:hr.d-none.d-md-block]]
+     [:section.px-3
+      [:div.row.panel-white
+       [:div.col-md-12.col-6.list-group
+        [hub/list-hubs-with-heading]
+        [:hr.d-none.d-md-block]]
+       [:div.col-md-12.col-6
         [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
         (when-not (nil? edit-hash)
           [feed-button :nav.schnaqs/last-added
            :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
-        [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]]
-      [:hr.d-block.d-md-none]]]))
+        [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]]]]))
 
 (defn- generic-feed-button
   "Generic outline button."
