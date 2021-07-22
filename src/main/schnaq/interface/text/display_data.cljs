@@ -244,7 +244,21 @@
         :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
         :schnaq.create/info "Add a simple and comprehensible title to your discussion."
         :schnaq.create/schnaqqi-speech "Create your schnaq and invite your whole team in the next step!"
-        :schnaq.create.button/save "Next"
+        :schnaq.create.button/save "Start a new schnaq"
+
+        ;; schnaq value
+        :schnaq.value/title "You're ready to go!"
+        :schnaq.value/subtitle "A few tips to help you and your team:"
+        :schnaq.value.security/title "Privacy"
+        :schnaq.value.security/text "Privacy is important to us! Your data is safe on German servers in accordance with European law."
+        :schnaq.value.respect/title "Discuss with respect"
+        :schnaq.value.respect/text "Respectful interaction is important in order to be able to live with one another and is the basis for objective discussions."
+        :schnaq.value.share/title "Share your discussion"
+        :schnaq.value.share/text "Simply invite participants via link or email. No registration necessary!"
+        :schnaq.value.cards/title "Mindmap"
+        :schnaq.value.cards/text "Our mind map is generated automatically and provides a quick overview."
+        :schnaq.value.results/title "Results view"
+        :schnaq.value.results/text "View summaries and analysis of your discussion (beta feature)."
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Make this schnaq public"
@@ -856,6 +870,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/analytics "Analytics dashboard"
         :router/continue-discussion "Continue Discussion"
         :router/create-schnaq "Create schnaq"
+        :router/value "Value of schnaq"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
         :router/invalid-link "Error page"
@@ -1210,7 +1225,21 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
         :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
         :schnaq.create/schnaqqi-speech "Erstelle deinen schnaq und lade im nächsten Schritt dein ganzes Team ein!"
-        :schnaq.create.button/save "Weiter"
+        :schnaq.create.button/save "Schnaq starten"
+
+        ;; schnaq value
+        :schnaq.value/title "Du bist startklar"
+        :schnaq.value/subtitle "Ein paar Tipps, die dir und deinem Team helfen:"
+        :schnaq.value.security/title "Datensicherheit"
+        :schnaq.value.security/text "Datenschutz ist uns wichtig! Deine Daten sind sicher auf deutschen Servern."
+        :schnaq.value.respect/title "Diskutiere mit Respekt"
+        :schnaq.value.respect/text "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen."
+        :schnaq.value.share/title "Teile deine Diskussion"
+        :schnaq.value.share/text "Lade Teilnehmer:innen einfach per Link oder Mail ein. Keine Anmeldung notwendig!"
+        :schnaq.value.cards/title "Mindmap"
+        :schnaq.value.cards/text "Für mehr Überblick sorgt unsere Mindmap, die automatisch generiert wird."
+        :schnaq.value.results/title "Ergebnisansicht"
+        :schnaq.value.results/text "Schau dir Zusammenfassungen und Analysen zu deiner Diskussion an (Beta Feature)."
 
         ;; Discussion Creation
         :discussion.create.public-checkbox/label "Diesen schnaq öffentlich machen"
@@ -2006,6 +2035,11 @@ Now we write down questions and discuss them and can still understand what we ha
      :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
      :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"
      :team/philip "https://s3.disqtec.com/team/philipbernardy.jpg"
+     :value/book "https://s3.disqtec.com/schnaq-common/icons/value/book.svg"
+     :value/bubble "https://s3.disqtec.com/schnaq-common/icons/value/bubble.svg"
+     :value/cards "https://s3.disqtec.com/schnaq-common/icons/value/cards.svg"
+     :value/share "https://s3.disqtec.com/schnaq-common/icons/value/share.svg"
+     :value/shield "https://s3.disqtec.com/schnaq-common/icons/value/shield.svg"
      :lead-magnet/cover "https://s3.disqtec.com/downloads/checkliste_cover.png"}))
 
 (defn video

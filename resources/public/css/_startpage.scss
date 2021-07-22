@@ -59,6 +59,11 @@ $gradient-target: vars.$primary;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-light.svg');
 }
 
+.wave-bottom-dark-blue {
+  @extend .wave-bottom-white;
+  background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-dark-blue.svg');
+}
+
 .wavy-curve {
   background-color: transparent;
   fill: $header-color;
