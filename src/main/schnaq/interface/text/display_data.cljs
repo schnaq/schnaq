@@ -250,7 +250,7 @@
         :schnaq.value/title "You're ready to go!"
         :schnaq.value/subtitle "A few tips to help you and your team:"
         :schnaq.value.security/title "Privacy"
-        :schnaq.value.security/text "Privacy is important to us! Your data is safe on German servers according to European law."
+        :schnaq.value.security/text "Privacy is important to us! Your data is safe on German servers in accordance with European law."
         :schnaq.value.respect/title "Discuss with respect"
         :schnaq.value.respect/text "Respectful interaction is important in order to be able to live with one another and is the basis for objective discussions."
         :schnaq.value.share/title "Share your discussion"
