@@ -1228,7 +1228,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.create.button/save "Schnaq starten"
 
         ;; schnaq value
-        :schnaq.value/title "Du bist startklar."
+        :schnaq.value/title "Du bist startklar"
         :schnaq.value/subtitle "Ein paar Tipps, die dir und deinem Team helfen:"
         :schnaq.value.security/title "Datensicherheit"
         :schnaq.value.security/text "Datenschutz ist uns wichtig! Deine Daten sind sicher auf deutschen Servern."
