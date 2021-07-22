@@ -24,6 +24,21 @@
      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
      (labels :nav.schnaqs/create-schnaq)]]])
 
+(defn sort-options
+  "Displays the different sort options for feed elements."
+  []
+  (let [sort-method @(rf/subscribe [:feed/sort])]
+    [:section.pl-2.text-right
+     [:span.small
+      [:button.btn.btn-outline-primary.btn-sm.mx-1
+       {:class (when (= sort-method :time) "active")
+        :on-click #(rf/dispatch [:feed.sort/set :time])}
+       (labels :badges.sort/newest)]
+      [:button.btn.btn-outline-primary.btn-sm
+       {:class (when (= sort-method :alphabetical) "active")
+        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
+       (labels :badges.sort/alphabetical)]]]))
+
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq]
@@ -35,18 +50,17 @@
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])
                   (rf/dispatch [:schnaq/select-current schnaq]))}
-     [:div.row
-      [:div [:img.meeting-entry-title-header-image {:src url}]]
-      [:div
-       [:div.px-4.d-flex
-        [:div.meeting-entry-title
-         (toolbelt/truncate-to-n-chars title 40)]]
-       [:div.px-4
-        [badges/static-info-badges schnaq]]]
-      [:div.mt-auto.pb-2
-       [badges/read-only-badge schnaq]]
-      [:div.my-auto.ml-auto.mr-4
-       [user/user-info-left-to-right (:discussion/author schnaq) 42 (:discussion/created-at schnaq)]]]]))
+     [:div.row.px-4.py-2
+      [:div.col-5
+       [:div.row.ml-1
+        [user/user-info-only (:discussion/author schnaq) 42]
+        [:div.mt-2 [badges/read-only-badge schnaq]]]
+       [:div.mt-1 [badges/static-info-badges schnaq]]]
+      [:div.col-5
+       [:div.meeting-entry-title
+        (toolbelt/truncate-to-n-chars title 40)]]
+      [:div.col-2
+       [:div.my-auto [:img.meeting-entry-title-header-image.rounded-50 {:src url}]]]]]))
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."
@@ -61,9 +75,14 @@
                            (sort-by :discussion/created-at > schnaqs))]
       (if (empty? schnaqs)
         [no-schnaqs-found]
-        (for [schnaq sorted-schnaqs]
-          [:div.pb-4 {:key (:db/id schnaq)}
-           [single-schnaq-component schnaq]])))]))
+        [:div.panel-white.rounded-1.px-5
+         [sort-options]
+         [:div.row.px-3
+          [:div.col-5 [:p.text-muted (labels :schnaqs/author)]]
+          [:div.col-5 [:p.text-muted (labels :schnaqs/schnaq)]]]
+         (for [schnaq sorted-schnaqs]
+           [:div.pb-4 {:key (:db/id schnaq)}
+            [single-schnaq-component schnaq]])]))]))
 
 (defn- feed-button
   "Create a button for the feed list."
@@ -83,17 +102,17 @@
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
     [:<>
      [:section.row
-      [:div.list-group.col-6.col-md-12
-       [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
-       [feed-button :router/public-discussions :routes.schnaqs/public]
-       (when-not (nil? edit-hash)
-         [feed-button :nav.schnaqs/last-added
-          :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
-       [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]
-      [:div.col-md-12.col-6
-       [:hr.d-none.d-md-block]
-       [hub/list-hubs-with-heading]]]
-     [:hr.d-block.d-md-none]]))
+      [:div.col-6.col-md-12
+       [:div.panel-white.list-group
+        [:div.col-md-12.col-6
+         [hub/list-hubs-with-heading]
+         [:hr.d-none.d-md-block]]
+        [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
+        (when-not (nil? edit-hash)
+          [feed-button :nav.schnaqs/last-added
+           :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
+        [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]]
+      [:hr.d-block.d-md-none]]]))
 
 (defn- generic-feed-button
   "Generic outline button."
@@ -102,24 +121,8 @@
    [:a.feed-button-outlined {:href href-link}
     (labels label)]])
 
-(defn sort-options
-  "Displays the different sort options for feed elements."
-  []
-  (let [sort-method @(rf/subscribe [:feed/sort])]
-    [:section.pl-2.text-right
-     [:span.small.mb-0
-      (labels :badges.sort/sort) [:br]
-      [:button.btn.btn-outline-primary.btn-sm.mx-1
-       {:class (when (= sort-method :time) "active")
-        :on-click #(rf/dispatch [:feed.sort/set :time])}
-       (labels :badges.sort/newest)]
-      [:button.btn.btn-outline-primary.btn-sm
-       {:class (when (= sort-method :alphabetical) "active")
-        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
-       (labels :badges.sort/alphabetical)]]]))
-
 (defn sidebar-common []
-  [:section.text-center.my-3.text-center
+  [:section.text-center.text-center.panel-white
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-feed-button :coc/heading (reitfe/href :routes/code-of-conduct)]
@@ -127,9 +130,8 @@
 
 (defn feed-controls []
   [:<>
-   [:section.panel-white
-    [sidebar-common]]
-   [sort-options]])
+   [:section
+    [sidebar-common]]])
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which

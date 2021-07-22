@@ -22,6 +22,16 @@
        [:small.font-weight-light.d-inline.my-auto
         [time/timestamp-with-tooltip time locale]])]))
 
+(defn user-info-only
+  "User info box displaying user's nickname and the avatar."
+  [user avatar-size]
+  (let [authenticated? (:user.registered/keycloak-id user)
+        display-name (user-utils/display-name user)
+        name-class (if authenticated? "text-primary" "text-muted")]
+    [:div.d-flex.flex-row.text-muted
+     [common/avatar user avatar-size]
+     [:small.mx-2.my-auto {:class name-class} display-name]]))
+
 (defn user-info-left-to-right
   "User info box displaying user's nickname, timestamp and the avatar from left to right."
   [user avatar-size time]
