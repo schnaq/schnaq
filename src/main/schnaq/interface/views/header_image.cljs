@@ -12,9 +12,7 @@
 (defn check-for-header-img
   "Check if url is set and if not return path to placeholder image"
   [url]
-  (if url
-    url
-    config/place-holder-header-img))
+  (or url config/place-holder-header-img))
 
 (defn image-url-input []
   (let [input-id "admin-image-url"]

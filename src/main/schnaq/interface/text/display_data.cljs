@@ -605,6 +605,8 @@
         :schnaqs/header "Overview of your schnaqs"
         :schnaqs/subheader "These are the schnaqs that you are part of"
         :schnaqs.all/header "Public schnaqs"
+        :schnaqs/author "Author"
+        :schnaqs/schnaq "schnaq"
 
         ;; Feedback
         :feedbacks.overview/header "Feedbacks"
@@ -1581,6 +1583,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaqs/header "Übersicht deiner schnaqs"
         :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
         :schnaqs.all/header "Öffentliche schnaqs"
+        :schnaqs/author "Autor"
+        :schnaqs/schnaq "schnaq"
 
         ;; Feedback
         :feedbacks.overview/header "Rückmeldungen"

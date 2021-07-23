@@ -9,9 +9,7 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.feed.overview :as feed]
-            [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.pages :as pages]))
 
@@ -31,34 +29,6 @@
      [:button.btn.btn-primary {:type "submit"}
       [:i {:class (str "m-auto fas " (fa :plus))}]]]]])
 
-(defn- schnaq-entry-with-deletion
-  "Displays a single schnaq of the schnaq list for the hub, with the option to delete it from the hub."
-  [schnaq]
-  (let [share-hash (:discussion/share-hash schnaq)
-        title (:discussion/title schnaq)
-        url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
-    [:article
-     {;; The position is needed for the delete button's absolute positioning to work
-      :style {:position :relative}}
-     [:article.meeting-entry
-      {:on-click (fn []
-                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                 {:share-hash share-hash}])
-                   (rf/dispatch [:schnaq/select-current schnaq]))}
-      [:div [:img.meeting-entry-title-header-image {:src url}]]
-      [:div.px-4.d-flex
-       [:div.meeting-entry-title
-        [:h5 title]]
-       [:div.ml-auto.mt-3
-        [badges/read-only-badge schnaq]]]
-      [:div.px-4
-       [badges/static-info-badges schnaq]]]
-     [:button.btn.btn-rounded-2.btn-secondary.schnaq-delete-button
-      {:title (labels :hub.remove.schnaq/tooltip)
-       :on-click #(when (js/confirm (labels :hub.remove.schnaq/prompt))
-                    (rf/dispatch [:hub.remove/schnaq share-hash]))}
-      [:i {:class (str "m-auto fas " (fa :cross))}]]]))
-
 (defn hub-panel
   "Small overview for the hub."
   []
@@ -73,7 +43,7 @@
        [:i.fas.mr-1 {:class (fa :cog)}]
        (labels :hub/settings)]]
      [:hr]
-     [feed/sidebar-common]]))
+     [feed/sidebar-info-links]]))
 
 (defn member-list
   "Lists all members of a hub."
@@ -90,7 +60,6 @@
 (defn sidebar-right []
   [:<>
    [hub-panel]
-   [feed/sort-options]
    [member-list]])
 
 (>defn- hub-index
@@ -104,7 +73,7 @@
      {:page/heading (gstring/format (labels :hub/heading) keycloak-name)
       :condition/needs-authentication? true}
      [feed/feed-navigation]
-     [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] schnaq-entry-with-deletion]
+     [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] true]
      [sidebar-right]]))
 
 (defn hub-overview
