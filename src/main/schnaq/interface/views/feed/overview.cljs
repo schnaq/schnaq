@@ -85,7 +85,7 @@
      (if (empty? schnaqs)
        [no-schnaqs-found]
        [:div.panel-white.rounded-1.px-md-5
-        [:div.row.pl-5
+        [:div.row.pl-5.mb-3
          [:div.col-3.col-md-5 [:p.text-muted (labels :schnaqs/author)]]
          [:div.col-2.col-md-2 [:p.text-muted (labels :schnaqs/schnaq)]]
          [:div.col-7.col-md-5 [sort-options]]]
