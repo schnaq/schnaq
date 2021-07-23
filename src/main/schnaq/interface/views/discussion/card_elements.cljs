@@ -205,7 +205,7 @@
        [:h2.h6-md-down title]
        (if edit-active?
          [edit/edit-card statement]
-         [:h2.h6 title]))
+         [:h2.h6.font-weight-bold title]))
      [:div.d-flex.flex-row.my-4
       [:div.mr-auto info-content]
       [:div.ml-auto badges]]

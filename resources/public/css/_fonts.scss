@@ -1,8 +1,9 @@
 @import '../../../node_modules/@fontsource/open-sans/scss/mixins';
+@import url('https://fonts.googleapis.com/css?family=Poppins');
 // These imported fonts are customizable. Check the repo for more information:
 // https://github.com/fontsource/fontsource
 
 // Font Mixins
 @mixin body-font {
-  font-family: 'Open Sans', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', 'Open Sans', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
