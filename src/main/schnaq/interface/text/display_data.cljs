@@ -1533,7 +1533,7 @@ Now we write down questions and discuss them and can still understand what we ha
 
         ;; schnaqs not found
         :schnaqs.not-found/alert-lead "Keine schnaqs gefunden"
-        :schnaqs.not-found/alert-body "Erstelle ein schnaq oder lass dich einladen"
+        :schnaqs.not-found/alert-body "Erstelle einen schnaq oder lass dich einladen"
 
         ;; Admin Center
         :schnaq/educate-on-link-text "Teile den untenstehenden Link mit deinen Kolleg:innen und Freund:innen."
