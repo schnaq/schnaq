@@ -76,22 +76,21 @@
   ([subscription-vector]
    [schnaq-list-view subscription-vector false])
   ([subscription-vector show-delete-from-hub-button?]
-   [:div.meetings-list
-    (let [schnaqs @(rf/subscribe subscription-vector)
-          sort-method @(rf/subscribe [:feed/sort])
-          sorted-schnaqs (if (= :alphabetical sort-method)
-                           (sort-by :discussion/title schnaqs)
-                           (sort-by :discussion/created-at > schnaqs))]
-      (if (empty? schnaqs)
-        [no-schnaqs-found]
-        [:div.panel-white.rounded-1.px-md-5
-         [:div.row.pl-5
-          [:div.col-3.col-md-5 [:p.text-muted (labels :schnaqs/author)]]
-          [:div.col-2.col-md-2 [:p.text-muted (labels :schnaqs/schnaq)]]
-          [:div.col-7.col-md-5 [sort-options]]]
-         (for [schnaq sorted-schnaqs]
-           [:div.pb-4 {:key (:db/id schnaq)}
-            [schnaq-entry schnaq show-delete-from-hub-button?]])]))]))
+   (let [schnaqs @(rf/subscribe subscription-vector)
+         sort-method @(rf/subscribe [:feed/sort])
+         sorted-schnaqs (if (= :alphabetical sort-method)
+                          (sort-by :discussion/title schnaqs)
+                          (sort-by :discussion/created-at > schnaqs))]
+     (if (empty? schnaqs)
+       [no-schnaqs-found]
+       [:div.panel-white.rounded-1.px-md-5
+        [:div.row.pl-5
+         [:div.col-3.col-md-5 [:p.text-muted (labels :schnaqs/author)]]
+         [:div.col-2.col-md-2 [:p.text-muted (labels :schnaqs/schnaq)]]
+         [:div.col-7.col-md-5 [sort-options]]]
+        (for [schnaq sorted-schnaqs]
+          [:div.pb-4 {:key (:db/id schnaq)}
+           [schnaq-entry schnaq show-delete-from-hub-button?]])]))))
 
 (defn- feed-button
   "Create a button for the feed list."

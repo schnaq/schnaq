@@ -35,13 +35,12 @@
 (defn- schnaq-list-view
   "Shows a list of schnaqs."
   [subscription-key]
-  [:div.meetings-list
-   (let [schnaqs @(rf/subscribe [subscription-key])]
-     (if (empty? schnaqs)
-       [no-schnaqs-found]
-       (for [schnaq schnaqs]
-         [:div.py-3 {:key (:db/id schnaq)}
-          [schnaq-entry schnaq]])))])
+  (let [schnaqs @(rf/subscribe [subscription-key])]
+    (if (empty? schnaqs)
+      [no-schnaqs-found]
+      (for [schnaq schnaqs]
+        [:div.py-3 {:key (:db/id schnaq)}
+         [schnaq-entry schnaq]]))))
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
