@@ -43,7 +43,7 @@
        [:i.fas.mr-1 {:class (fa :cog)}]
        (labels :hub/settings)]]
      [:hr]
-     [feed/sidebar-common]]))
+     [feed/sidebar-info-links]]))
 
 (defn member-list
   "Lists all members of a hub."

@@ -105,23 +105,6 @@
                                  :href (reitfe/href route route-params)}
       (labels label)])))
 
-(defn feed-navigation
-  "Navigate between the feeds."
-  []
-  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
-    [:<>
-     [:section.px-3
-      [:div.row.panel-white
-       [:div.col-md-12.col-6.list-group
-        [hub/list-hubs-with-heading]
-        [:hr.d-none.d-md-block]]
-       [:div.col-md-12.col-6
-        [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
-        (when-not (nil? edit-hash)
-          [feed-button :nav.schnaqs/last-added
-           :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
-        [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]]]]))
-
 (defn- generic-feed-button
   "Generic outline button."
   [label href-link]
@@ -129,17 +112,28 @@
    [:a.feed-button-outlined {:href href-link}
     (labels label)]])
 
-(defn sidebar-common []
-  [:section.text-center.text-center.panel-white
+(defn- sidebar-info-links []
+  [:section.panel-white.text-center.mt-5
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-feed-button :coc/heading (reitfe/href :routes/code-of-conduct)]
      [generic-feed-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
-(defn feed-controls []
-  [:<>
-   [:section
-    [sidebar-common]]])
+(defn feed-navigation
+  "Navigate between the feeds."
+  []
+  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
+    [:section.px-md-3
+     [:div.panel-white.m-0
+      [hub/list-hubs-with-heading]
+      [:hr.d-none.d-md-block]
+      [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
+      (when-not (nil? edit-hash)
+        [feed-button :nav.schnaqs/last-added
+         :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
+      [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]
+     [:div.d-none.d-md-block
+      [sidebar-info-links]]]))
 
 (>defn- schnaq-overview
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
@@ -152,7 +146,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view subscription-vector]
-   [feed-controls]])
+   [:div.d-md-none [sidebar-info-links]]])
 
 (defn public-discussions-view
   "Render all public discussions."

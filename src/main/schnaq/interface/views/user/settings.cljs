@@ -47,4 +47,4 @@
    [:section.panel-white
     [current-user]
     [:hr.my-4]
-    [feed-overview/sidebar-common]]])
+    [feed-overview/sidebar-info-links]]])
