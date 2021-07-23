@@ -53,7 +53,7 @@
                   (rf/dispatch [:schnaq/select-current schnaq]))}
      [:div.d-flex.flex-row
       [:div.highlight-card
-       [:img.meeting-entry-title-header-image {:src url}]]
+       [:img.schnaq-header-image {:src url}]]
       [:div.row.px-md-4.py-2.w-100
        [:div.col-4.col-md-6
         [:div.row.ml-1

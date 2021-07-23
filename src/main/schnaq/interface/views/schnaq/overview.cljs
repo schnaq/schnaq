@@ -28,7 +28,7 @@
                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                 {:share-hash share-hash}])
                   (rf/dispatch [:schnaq/select-current schnaq]))}
-     [:div [:img.meeting-entry-title-header-image {:src url}]]
+     [:div [:img.schnaq-header-image {:src url}]]
      [:div.meeting-entry-title
       [:h5 title]]]))
 
