@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
-    "@fontsource/open-sans": "^4.2.1",
+    "@fontsource/poppins": "^4.5.0",
     "@fortawesome/fontawesome-free": "^5.14.0",
     "bootstrap": "^4.6.0",
     "caniuse-lite": "^1.0.30001228",
