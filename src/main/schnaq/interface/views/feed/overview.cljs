@@ -112,7 +112,7 @@
    [:a.feed-button-outlined {:href href-link}
     (labels label)]])
 
-(defn- sidebar-info-links []
+(defn sidebar-info-links []
   [:section.panel-white.text-center.mt-5
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
