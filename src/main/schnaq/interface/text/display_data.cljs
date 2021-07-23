@@ -553,8 +553,8 @@
         :celebrations.first-schnaq-created/lead "Do you want to connect your schnaq to an account? Then register with a few clicks 🚀"
 
         ;; schnaqs not found
-        :schnaqs.not-found/alert-lead "Unfortunately, no schnaqs were found."
-        :schnaqs.not-found/alert-body "Invite people to your first schnaq after you created it."
+        :schnaqs.not-found/alert-lead "No schnaqs found"
+        :schnaqs.not-found/alert-body "Create a schnaq or let yourself be invited"
 
         ;; Admin Center
         :schnaq/educate-on-link-text "Share the link below with your coworkers."
@@ -1532,8 +1532,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :celebrations.first-schnaq-created/lead "Möchtest du deinen schnaq mit einem Account verbinden? Dann registriere dich mit wenigen Klicks 🚀"
 
         ;; schnaqs not found
-        :schnaqs.not-found/alert-lead "Leider wurden keine schnaqs gefunden, zu denen du Zugriff hast."
-        :schnaqs.not-found/alert-body "Lade zu deinem ersten schnaq ein, indem du einen erstellst."
+        :schnaqs.not-found/alert-lead "Keine schnaqs gefunden"
+        :schnaqs.not-found/alert-body "Erstelle ein schnaq oder lass dich einladen"
 
         ;; Admin Center
         :schnaq/educate-on-link-text "Teile den untenstehenden Link mit deinen Kolleg:innen und Freund:innen."
