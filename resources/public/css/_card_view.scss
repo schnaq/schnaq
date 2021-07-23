@@ -79,16 +79,10 @@
   white-space: pre-line;
 }
 
-.discussion-input-container {
-  @include rounded.rounded-1;
-  background: vars.$input-background;
-  border: 0;
-  overflow: hidden;
-}
-
 .discussion-input-content {
   background: vars.$gray-100;
   border: 0;
+  min-height: 8rem;
   padding: 1rem 1rem 1rem 0;
 }
 

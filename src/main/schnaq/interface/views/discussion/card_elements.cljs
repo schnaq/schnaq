@@ -59,7 +59,7 @@
         back-history [:discussion.history/time-travel 1]
         navigation (if has-history? back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
-    [:button.btn.btn-dark.w-100.h-100
+    [:button.btn.btn-dark.w-100.h-100.p-3
      {:on-click #(rf/dispatch navigation)}
      [tooltip/block-element
       :bottom
@@ -284,11 +284,11 @@
         has-history? (seq history)]
     [:div.container-fluid
      [:div.row
-      [:div.col-md-6.col-lg-5.py-4.px-0.px-md-3
+      [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
        [topic-view current-discussion nil
         [topic-bubble-view statement input badges info-content is-topic?]]
        [:div.d-none.d-md-block [history-view history]]]
-      [:div.col-md-6.col-lg-7.py-4.px-0.px-md-3
+      [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
        [action-view has-history?]
        [cards/conclusion-cards-list conclusions share-hash]
        [:div.d-md-none [history-view history]]
