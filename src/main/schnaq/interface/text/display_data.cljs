@@ -1583,7 +1583,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaqs/header "Übersicht deiner schnaqs"
         :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
         :schnaqs.all/header "Öffentliche schnaqs"
-        :schnaqs/author "Author"
+        :schnaqs/author "Autor"
         :schnaqs/schnaq "schnaq"
 
         ;; Feedback
