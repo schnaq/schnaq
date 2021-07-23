@@ -121,11 +121,14 @@
 (defn feed-navigation
   "Navigate between the feeds."
   []
-  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])]
+  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
+        hubs @(rf/subscribe [:hubs/all])]
     [:section.px-md-3
      [:div.panel-white.m-0
-      [hub/list-hubs-with-heading]
-      [:hr.d-none.d-md-block]
+      (when hubs
+        [:<>
+         [hub/list-hubs-with-heading]
+         [:hr.d-none.d-md-block]])
       [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
       (when-not (nil? edit-hash)
         [feed-button :nav.schnaqs/last-added

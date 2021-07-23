@@ -14,17 +14,18 @@
 
 (defn hub-list
   "Displays a list of hubs."
-  [hubs]
-  [:div
-   (for [[keycloak-name hub] hubs]
-     (with-meta
-       [single-hub hub]
-       {:key keycloak-name}))])
+  []
+  (let [hubs @(rf/subscribe [:hubs/all])]
+    [:div
+     (for [[keycloak-name hub] hubs]
+       (with-meta
+         [single-hub hub]
+         {:key keycloak-name}))]))
 
 (defn list-hubs-with-heading
   "Show all hubs for a user."
   []
-  (when-let [hubs @(rf/subscribe [:hubs/all])]
+  (when @(rf/subscribe [:hubs/all])
     [:section
      [:p.h5.text-muted.pb-2 (labels :hubs/heading)]
-     [hub-list hubs]]))
+     [hub-list]]))
