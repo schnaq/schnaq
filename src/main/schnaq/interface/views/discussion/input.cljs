@@ -108,8 +108,7 @@
      {:on-submit #(event-to-send %)
       :on-key-down #(when (jq/ctrl-press % 13)
                       (event-to-send %))}
-     [:div
-      [textarea-for-statements textarea-name]]]))
+     [textarea-for-statements textarea-name]]))
 
 (rf/reg-event-db
   :form/statement-type!
