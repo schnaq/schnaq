@@ -16,14 +16,15 @@
   "Show error message when no meetings were loaded."
   []
   [common/delayed-fade-in
-   [:div.alert.alert-primary.text-center
-    [:p.lead
-     "🙈 "
-     (labels :schnaqs.not-found/alert-lead)]
-    [:p (labels :schnaqs.not-found/alert-body)]
-    [:button.btn.btn-outline-primary
-     {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
-     (labels :nav.schnaqs/create-schnaq)]]])
+   [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5.text-center
+    [:div.col-2.py-md-5.d-flex
+     [:div.display-1.align-self-center "🙈"]]
+    [:div.col-10.py-md-5
+     [:h2 (labels :schnaqs.not-found/alert-lead)]
+     [:p (labels :schnaqs.not-found/alert-body)]
+     [:button.btn.btn-outline-light.mt-1
+      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+      (labels :nav.schnaqs/create-schnaq)]]]])
 
 (defn sort-options
   "Displays the different sort options for feed elements."
