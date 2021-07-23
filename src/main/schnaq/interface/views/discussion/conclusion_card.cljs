@@ -74,7 +74,7 @@
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body.py-2
        [:div.d-flex.justify-content-start.pt-2
-        [user/user-info (:statement/author statement) 42 (:statement/created-at statement) true]]
+        [user/user-info (:statement/author statement) 42 (:statement/created-at statement) "w-100"]]
        [:div.my-4]
        [:div.font-weight-bold
         [md/as-markdown (:statement/content statement)]]

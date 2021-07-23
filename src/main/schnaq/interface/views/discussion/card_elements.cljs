@@ -217,7 +217,7 @@
 (defn- topic-bubble-view [statement input badges info-content is-topic?]
   [:div.p-2
    [:div.d-flex.mb-4
-    [user/user-info (:statement/author statement) 42 (:statement/created-at statement)]
+    [user/user-info (:statement/author statement) 42 (:statement/created-at statement) nil]
     [:div.ml-auto.my-auto
      [discussion-privacy-badge]]]
    [title-and-input-element statement input is-topic? badges info-content]])
