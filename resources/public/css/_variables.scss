@@ -1,7 +1,7 @@
-@use 'node_modules/@fontsource/poppins/scss/mixins' as poppins;
+@use '../node_modules/@fontsource/poppins/scss/mixins' as poppins;
 
 @include poppins.fontFace(
-  $fontDir: 'node_modules/@fontsource/#{poppins.$fontId}/files'
+  $fontDir: '../node_modules/@fontsource/#{poppins.$fontId}/files'
 );
 
 // Variables
