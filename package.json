@@ -37,6 +37,9 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
+    "karma": "^6.3.4",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-cljs-test": "^0.1.0",
     "stylelint": "^13.6.1",
     "stylelint-config-sass-guidelines": "^7.0.0"
   }

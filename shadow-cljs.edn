@@ -14,6 +14,9 @@
                 :devtools {:http-root "resources/public"
                            :http-port 8700
                            :preloads [devtools.preload day8.re-frame-10x.preload]}}
+          :test-headless {:target :karma
+                          :output-to "target/ci.js"
+                          :ns-regexp "-test$"}
           :test {:target :node-test
                  :output-dir "target/test/compiled/"
                  :output-to "target/test/compiled/test.js"
