@@ -13,7 +13,7 @@
   [statement-type label tooltip get-subscription set-event]
   (let [current-attitude @(rf/subscribe get-subscription)
         checked? (= statement-type current-attitude)]
-    [:label.btn.btn-outline-primary.shadow-sm
+    [:label.btn.btn-outline-dark.shadow-sm.py-2
      (when checked? {:class "active"})
      [:input {:type "radio" :name "options" :autoComplete "off"
               :defaultChecked checked?
@@ -50,8 +50,8 @@
                                        :statement.type/support "support"
                                        :statement.type/attack "attack"
                                        :statement.type/neutral "neutral"))]
-    [:div.discussion-input-content
-     [:div.d-flex.flex-row
+    [:<>
+     [:div.d-flex.flex-row.discussion-input-content.rounded-1.mb-3
       [:div {:class (str "highlight-card-" attitude)}]
       [:div.w-100
        [:div.d-flex.flex-row.justify-content-end.pr-lg-2
@@ -67,17 +67,17 @@
           ;; first reset input then set height +1px in order to prevent scrolling
           :required true
           :data-dynamic-height true
-          :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]
-        [:div.d-flex.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
-         (when-not (or starting-route? pro-con-disabled?)
-           [:div.input-group-prepend
-            [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
-         [:div.input-group-append
-          [:button.btn.btn-outline-primary.shadow-sm.ml-2
-           {:type "submit" :title (labels :discussion/create-argument-action)}
-           [:div.d-flex.flex-row
-            [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
-            [:i {:class (str "m-auto fas " (fa :plane))}]]]]]]]]]))
+          :placeholder (labels :discussion/add-argument-conclusion-placeholder)}]]]]
+     [:div.d-flex.flex-row.flex-wrap.justify-content-between.mt-1.justify-content-md-end.mt-md-0.w-100
+      (when-not (or starting-route? pro-con-disabled?)
+        [:div.input-group-prepend.mt-1
+         [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
+      [:div.input-group-append
+       [:button.btn.btn-dark.shadow-sm.ml-2.mt-1.py-2
+        {:type "submit" :title (labels :discussion/create-argument-action)}
+        [:div.d-flex.flex-row
+         [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
+         [:i {:class (str "m-auto fas " (fa :plane))}]]]]]]))
 
 (defn input-celebration-first
   "Show an celebration animation on each first post."
@@ -108,8 +108,7 @@
      {:on-submit #(event-to-send %)
       :on-key-down #(when (jq/ctrl-press % 13)
                       (event-to-send %))}
-     [:div.discussion-input-container
-      [textarea-for-statements textarea-name]]]))
+     [textarea-for-statements textarea-name]]))
 
 (rf/reg-event-db
   :form/statement-type!

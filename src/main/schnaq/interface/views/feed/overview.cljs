@@ -62,7 +62,7 @@
          [:div.mt-2 [badges/read-only-badge schnaq]]]
         [:div.mt-1 [badges/static-info-badges schnaq]]]
        [:div.col-8.col-md-6
-        [:div.meeting-entry-title
+        [:div.meeting-entry-title.font-weight-bold
          (toolbelt/truncate-to-n-chars title 40)]]]
       (when delete-from-hub?
         [:button.btn.btn-outline-dark.btn-small.my-auto.mr-3
@@ -85,7 +85,7 @@
      (if (empty? schnaqs)
        [no-schnaqs-found]
        [:div.panel-white.rounded-1.px-md-5
-        [:div.row.pl-5
+        [:div.row.pl-5.mb-3
          [:div.col-3.col-md-5 [:p.text-muted (labels :schnaqs/author)]]
          [:div.col-2.col-md-2 [:p.text-muted (labels :schnaqs/schnaq)]]
          [:div.col-7.col-md-5 [sort-options]]]

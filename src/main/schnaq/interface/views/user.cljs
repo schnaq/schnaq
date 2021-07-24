@@ -10,16 +10,16 @@
 
 (defn user-info
   "User info box displaying user's nickname, timestamp and the avatar."
-  [user avatar-size time]
+  [user avatar-size time additional-classes]
   (let [locale @(rf/subscribe [:current-locale])
         authenticated? (:user.registered/keycloak-id user)
         display-name (user-utils/display-name user)
         name-class (if authenticated? "text-primary" "text-muted")]
-    [:div.d-flex.flex-row.text-muted
+    [:div.d-flex.flex-row.text-muted {:class additional-classes}
      [common/avatar user avatar-size]
      [:small.mx-2.my-auto {:class name-class} display-name]
      (when time
-       [:small.font-weight-light.d-inline.my-auto
+       [:small.font-weight-light.d-inline.my-auto.ml-auto
         [time/timestamp-with-tooltip time locale]])]))
 
 (defn user-info-only

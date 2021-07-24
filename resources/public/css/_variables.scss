@@ -1,8 +1,13 @@
+@use 'node_modules/@fontsource/poppins/scss/mixins' as poppins;
+
+@include poppins.fontFace(
+  $fontDir: 'node_modules/@fontsource/#{poppins.$fontId}/files'
+);
+
 // Variables
 $img-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
 // Restated Bootstrap Variables
-
 $white: #fff !default;
 $white-shade: #f8fbfe !default;
 $gray-100: #f8f9fa !default;
@@ -51,6 +56,8 @@ $text-dark: $gray-700 !default;
 $text-light: $white !default;
 
 $input-background: $gray-200 !default;
+
+$font-family-sans-serif: 'Poppins', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 
 // Shadows
 $regular-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
