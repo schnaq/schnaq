@@ -76,8 +76,7 @@
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info (:statement/author statement) 42 (:statement/created-at statement) "w-100"]]
        [:div.my-4]
-       [:div.font-weight-bold
-        [md/as-markdown (:statement/content statement)]]
+       [md/as-markdown (:statement/content statement)]
        [:div.d-flex
         [:a.badge.badge-pill.rounded-2.mr-2
          {:href "#" :on-click (dcommon/navigate-to-statement-on-click statement path-params)}

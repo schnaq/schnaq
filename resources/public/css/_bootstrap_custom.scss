@@ -10,7 +10,7 @@ $theme-colors: (
   'dark-blue': vars.$blue-dark
 );
 
-@import '../../../node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap/scss/bootstrap';
 
 // -----------------------------------------------------------------------------
 
