@@ -46,7 +46,8 @@ test-cljs:
     - apk add yarn
     - yarn install
   script:
-    - yarn shadow-cljs compile test
+    - yarn shadow-cljs compile test-headless
+    - yarn karma start --single-run
 
 lint:
   extends: .with-datomic-pro
