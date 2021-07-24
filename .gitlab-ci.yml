@@ -56,7 +56,7 @@ lint:
   allow_failure: true
   when: always
 
-css-lint:
+css-compile-and-lint:
   image: node:14.8-alpine
   before_script:
     - yarn install --dev
