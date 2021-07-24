@@ -14,6 +14,7 @@ cache:
   paths:
     - ./.m2/repository
     - ./node_modules
+    - ./resources/public/node_modules
 
 variables:
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
