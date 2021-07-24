@@ -59,11 +59,11 @@ lint:
 css-lint:
   image: node:14.8-alpine
   before_script:
-    - yarn install
+    - yarn install --dev
+    - yarn global add sass
   script:
     - yarn stylelint "resources/public/css/*.scss"
     - sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
-  allow_failure: true
   when: always
 
 up-to-date?:
