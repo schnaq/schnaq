@@ -62,6 +62,7 @@ css-lint:
     - yarn install --dev
   script:
     - yarn stylelint "resources/public/css/*.scss"
+    - sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
   allow_failure: true
   when: always
 
