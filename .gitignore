@@ -57,8 +57,8 @@ projectFilesBackup/
 .idea/**/libraries
 
 ## node / shadow-cljs
-node_modules/
-!node_modules/.gitkeep
+resources/public/node_modules/
+!resources/public/node_modules/.gitkeep
 .shadow-cljs/
 resources/public/js/compiled/
 
