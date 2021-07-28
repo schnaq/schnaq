@@ -1,14 +1,28 @@
 (ns schnaq.api.summaries
-  (:require [clojure.spec.alpha :as s]
+  (:require [clj-http.client :as client]
+            [clojure.spec.alpha :as s]
+            [muuntaja.core :as m]
             [ring.util.http-response :refer [ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
+            [schnaq.export :as export]
             [schnaq.links :as links]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
+
+(defn- request-bart-summary [share-hash]
+  (client/post
+    "http://localhost:8000/summary/bart"
+    {:body (m/encode "application/json" {:share_hash share-hash
+                                         :content (export/generate-text-export share-hash)})
+     :as :json
+     :content-type :json}))
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- request-summary
   "Request a summary of a discussion. Works only if person is in a beta group."
@@ -17,9 +31,10 @@
     (log/info "Requesting new summary for schnaq" share-hash)
     (if (validator/valid-discussion? share-hash)
       (do
+        (request-bart-summary share-hash)
         (emails/send-mail
           "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
-          (format "Bitte im Chat absprechen und Zusammenfassung zu folgendem schnaq anlegen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
+          (format "Die Summary wird gerade generiert. Bitte überprüfen und ggf. anpassen. Bitte im Chat absprechen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
           "info@schnaq.com")
         (ok {:summary (discussion-db/summary-request share-hash (:id identity))}))
       (validator/deny-access "You are not allowed to use this feature"))))
@@ -59,6 +74,17 @@ Dein schnaq Team"
   [_]
   (ok {:summaries (discussion-db/all-summaries-with-discussions)}))
 
+
+(defn- summary-from-ml
+  ""
+  [{:keys [parameters]}]
+  (let [share-hash (get-in parameters [:body :share-hash])
+        summary-text (get-in parameters [:body :summary])]
+    (log/info (format "Received new summary for %s, length: %d" share-hash (count summary-text)))
+    (new-summary {:parameters {:body {:share-hash share-hash
+                                      :new-summary-text summary-text}}})
+    (ok {:status :ok})))
+
 ;; -----------------------------------------------------------------------------
 
 (def summary-routes
@@ -74,6 +100,15 @@ Dein schnaq Team"
                  :description (at/get-doc #'request-summary)
                  :parameters {:body {:share-hash :discussion/share-hash}}
                  :responses {200 {:body {:summary ::specs/summary}}}}]]
+   ["/schnaq/summary/from-ml"
+    {:swagger {:tags ["summaries"]}
+     :post summary-from-ml
+     :middleware [:app/valid-code?]
+     :description (at/get-doc #'summary-from-ml)
+     :parameters {:body {:share-hash :discussion/share-hash
+                         :summary :summary/text
+                         :app-code :app/code}}
+     :responses {200 {:body {:status keyword?}}}}]
    ["/admin" {:swagger {:tags ["summaries" "admin" "beta"]}
               :middleware [:user/authenticated? :user/admin?]
               :responses {401 at/response-error-body}}
@@ -86,3 +121,7 @@ Dein schnaq Team"
                    :description (at/get-doc #'all-summaries)
                    :responses {200 {:body {:summaries (s/or :collection (s/coll-of ::dto/summary)
                                                             :empty nil?)}}}}]]])
+
+
+
+(load-file "src/main/schnaq/api.clj")
