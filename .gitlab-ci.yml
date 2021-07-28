@@ -47,7 +47,7 @@ test-cljs:
     - apk add yarn
     - yarn install
   script:
-    - clojure -M -m shadow.cljs.devtools.cli compile test-headless
+    - yarn shadow-cljs compile test-headless
     - yarn karma start --single-run
 
 lint:
