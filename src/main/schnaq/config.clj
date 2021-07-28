@@ -1,8 +1,8 @@
 (ns schnaq.config
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
-  (:require [schnaq.config.shared :as shared-config]
-            [ghostwheel.core :refer [>defn]]
+  (:require [ghostwheel.core :refer [>defn ?]]
+            [schnaq.config.shared :as shared-config]
             [schnaq.toolbelt :as toolbelt]))
 
 (def frontend-url
@@ -15,7 +15,7 @@
 (>defn summy-urls
   "Return the url to externally call machine learning functions."
   [key]
-  [keyword? :ret string?]
+  [keyword? :ret (? string?)]
   (let [urls {:summary/bart "summary/bart"
               :summary/t5 "summary/t5"}
         url (get urls key)]
