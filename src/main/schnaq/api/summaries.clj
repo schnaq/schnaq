@@ -5,6 +5,7 @@
             [ring.util.http-response :refer [ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
+            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
@@ -15,9 +16,10 @@
 
 (defn- request-bart-summary [share-hash]
   (client/post
-    "http://localhost:8000/summary/bart"
-    {:body (m/encode "application/json" {:share_hash share-hash
-                                         :content (export/generate-text-export share-hash)})
+    (config/summy-urls :summary/bart)
+    {:body (m/encode "application/json"
+                     {:share_hash share-hash
+                      :content (export/generate-text-export share-hash)})
      :as :json
      :content-type :json}))
 

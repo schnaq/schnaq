@@ -2,10 +2,25 @@
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
   (:require [schnaq.config.shared :as shared-config]
+            [ghostwheel.core :refer [>defn]]
             [schnaq.toolbelt :as toolbelt]))
 
 (def frontend-url
   (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
+
+(def summy-url
+  "URL to our machine-learning service."
+  (or (System/getenv "SUMMY_URL") "http://localhost:8000"))
+
+(>defn summy-urls
+  "Return the url to externally call machine learning functions."
+  [key]
+  [keyword? :ret string?]
+  (let [urls {:summary/bart "summary/bart"
+              :summary/t5 "summary/t5"}
+        url (get urls key)]
+    (when url
+      (format "%s/%s" summy-url url))))
 
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
