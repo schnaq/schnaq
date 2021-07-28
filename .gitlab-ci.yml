@@ -42,12 +42,23 @@ test:
 
 test-cljs:
   extends: .with-datomic-pro
-  image: clojure:openjdk-14-tools-deps-alpine
+  image: clojure:openjdk-17-tools-deps-slim-buster
   before_script:
-    - apk add yarn
+    - apt-get -y update
+    - apt-get -y upgrade
+    - apt-get -y install curl gnupg2 software-properties-common
+    - curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+    - echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+    - apt-get -y update
+    - apt-get -y upgrade
+    - apt-get -y install google-chrome-stable
+    - curl -sL https://deb.nodesource.com/setup_14.x | bash -
+    - apt-get -y install nodejs
+    - npm install -g yarn
     - yarn install
   script:
-    - yarn shadow-cljs compile test
+    - yarn shadow-cljs compile test-headless
+    - yarn karma start --single-run
 
 lint:
   extends: .with-datomic-pro
