@@ -76,9 +76,8 @@ Dein schnaq Team"
   [_]
   (ok {:summaries (discussion-db/all-summaries-with-discussions)}))
 
-
-(defn- summary-from-ml
-  ""
+(defn- summary-from-summy
+  "Route for summy to return summarization results."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:body :share-hash])
         summary-text (get-in parameters [:body :summary])]
@@ -86,6 +85,7 @@ Dein schnaq Team"
     (new-summary {:parameters {:body {:share-hash share-hash
                                       :new-summary-text summary-text}}})
     (ok {:status :ok})))
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -102,11 +102,11 @@ Dein schnaq Team"
                  :description (at/get-doc #'request-summary)
                  :parameters {:body {:share-hash :discussion/share-hash}}
                  :responses {200 {:body {:summary ::specs/summary}}}}]]
-   ["/schnaq/summary/from-ml"
+   ["/schnaq/summary/from-summy"
     {:swagger {:tags ["summaries"]}
-     :post summary-from-ml
+     :post summary-from-summy
      :middleware [:app/valid-code?]
-     :description (at/get-doc #'summary-from-ml)
+     :description (at/get-doc #'summary-from-summy)
      :parameters {:body {:share-hash :discussion/share-hash
                          :summary :summary/text
                          :app-code :app/code}}
