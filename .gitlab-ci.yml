@@ -44,6 +44,7 @@ test-cljs:
   extends: .with-datomic-pro
   image: clojure:openjdk-17-tools-deps-slim-buster
   before_script:
+    - apt-get -y install curl
     - curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
     - echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
