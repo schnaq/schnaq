@@ -126,7 +126,8 @@
                            auth/wrap-jwt-authentication]}
        ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
                               :user/admin? auth/admin?-middleware
-                              :user/beta-tester? auth/beta-tester?-middleware}})
+                              :user/beta-tester? auth/beta-tester?-middleware
+                              :app/valid-code? auth/valid-app-code?-middleware}})
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
         {:path "/"

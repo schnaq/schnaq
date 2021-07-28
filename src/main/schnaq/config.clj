@@ -7,6 +7,10 @@
 (def frontend-url
   (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
 
+(def app-codes
+  "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
+  #{"***REMOVED***"})
+
 (def datomic
   "When we are production ready, put here the original production config and use
   dev-locals `divert-system` to use dev-local instead of a datomic cluster."
