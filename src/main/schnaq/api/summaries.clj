@@ -2,10 +2,12 @@
   (:require [clj-http.client :as client]
             [clojure.spec.alpha :as s]
             [muuntaja.core :as m]
+            [reitit.core :as r]
             [ring.util.http-response :refer [ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
@@ -14,11 +16,21 @@
             [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
+(declare summary-routes)
+
+(def respond-to-route
+  "Look up route to receive results from summy."
+  (str
+    shared-config/api-url
+    (:path
+      (r/match-by-name (r/router summary-routes) :summary/from-summy))))
+
 (defn- request-bart-summary [share-hash]
   (client/post
     (config/summy-urls :summary/bart)
     {:body (m/encode "application/json"
-                     {:share_hash share-hash
+                     {:respond_url respond-to-route
+                      :share_hash share-hash
                       :content (export/generate-text-export share-hash)})
      :as :json
      :content-type :json}))
@@ -105,6 +117,7 @@ Dein schnaq Team"
    ["/schnaq/summary/from-summy"
     {:swagger {:tags ["summaries"]}
      :post summary-from-summy
+     :name :summary/from-summy
      :middleware [:app/valid-code?]
      :description (at/get-doc #'summary-from-summy)
      :parameters {:body {:share-hash :discussion/share-hash
