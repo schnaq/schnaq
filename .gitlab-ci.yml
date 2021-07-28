@@ -46,12 +46,14 @@ test-cljs:
   before_script:
     - apt-get -y update
     - apt-get -y upgrade
-    - apt-get -y install curl gnupg2
+    - apt-get -y install curl gnupg2 software-properties-common
     - curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
     - echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y upgrade
-    - apt-get -y install nodejs npm google-chrome-stable
+    - apt-get -y install google-chrome-stable
+    - curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+    - apt-get install nodejs
     - npm install -g yarn
     - yarn install
   script:
