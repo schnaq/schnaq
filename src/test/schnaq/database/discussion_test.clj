@@ -234,3 +234,15 @@
         (is (= 1
                (compare (:summary/requested-at updated-summary)
                         (:summary/requested-at new-summary))))))))
+
+(deftest history-for-statement-test
+  (testing "Whether history works linearly for any statement."
+    (let [historyless-content "Brainstorming ist total wichtig"
+          history-1 (db/history-for-statement (:db/id (first (db/statements-by-content historyless-content))))
+          content-with-history "Denken sorgt nur für Kopfschmerzen. Lieber den Donaldo machen!"
+          history-3 (db/history-for-statement (:db/id (first (db/statements-by-content content-with-history))))]
+      (is (= 1 (count history-1)))
+      (is (= historyless-content (:statement/content (first history-1))))
+      (is (= 3 (count history-3)))
+      (is (= content-with-history (:statement/content (last history-3))))
+      (is (= historyless-content (:statement/content (first history-3)))))))

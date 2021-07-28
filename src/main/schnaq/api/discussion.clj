@@ -93,7 +93,7 @@
       at/not-found-hash-invalid)))
 
 (defn- get-statement-info
-  "Return premises and conclusion for a given statement id."
+  "Return premises, conclusion and the history for a given statement id."
   [{:keys [parameters]}]
   (let [{:keys [share-hash statement-id]} (:query parameters)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)

@@ -476,3 +476,13 @@
                                  :summary/text new-text
                                  :summary/created-at (Date.)}])]
       (fast-pull summary summary-with-discussion-pattern (:db-after tx-result)))))
+
+(defn history-for-statement
+  "Takes a statement entity and returns the statement-history."
+  [statement-id]
+  (loop [current statement-id
+         history (list)]
+    (let [full-statement (fast-pull current statement-pattern)]
+      (if (:statement/parent full-statement)
+        (recur (-> full-statement :statement/parent :db/id) (conj history full-statement))
+        (conj history full-statement)))))
