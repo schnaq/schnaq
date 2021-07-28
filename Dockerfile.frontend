@@ -24,7 +24,7 @@ RUN yarn global add sass
 # Cache and install JavaScript dependencies
 COPY package.json .
 COPY yarn.lock .
-COPY node_modules/ .
+COPY resources/public/node_modules/ resources/public/node_modules/
 RUN yarn install
 
 COPY . .

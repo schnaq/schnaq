@@ -1,5 +1,6 @@
 {:deps true
  :nrepl {:port 8777}
+ :js-options {:js-package-dirs ["resources/public/node_modules"]}
  :builds {:app {:target :browser
                 :modules {:base {:init-fn schnaq.interface.core/init}}
                 :output-dir "resources/public/js/compiled"

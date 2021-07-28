@@ -14,6 +14,7 @@ cache:
   paths:
     - ./.m2/repository
     - ./node_modules
+    - ./resources/public/node_modules
 
 variables:
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
@@ -57,13 +58,14 @@ lint:
   allow_failure: true
   when: always
 
-css-lint:
+css-compile-and-lint:
   image: node:14.8-alpine
   before_script:
     - yarn install --dev
+    - yarn global add sass
   script:
     - yarn stylelint "resources/public/css/*.scss"
-  allow_failure: true
+    - sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
   when: always
 
 up-to-date?:
