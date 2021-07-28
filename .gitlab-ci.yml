@@ -53,7 +53,7 @@ test-cljs:
     - apt-get -y upgrade
     - apt-get -y install google-chrome-stable
     - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-    - apt-get install nodejs
+    - apt-get -y install nodejs
     - npm install -g yarn
     - yarn install
   script:
