@@ -1,30 +1,16 @@
 (ns schnaq.config
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
-  (:require [ghostwheel.core :refer [>defn ?]]
-            [schnaq.config.shared :as shared-config]
+  (:require [schnaq.config.shared :as shared-config]
+            [schnaq.config.summy :as summy-config]
             [schnaq.toolbelt :as toolbelt]))
 
 (def frontend-url
   (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
 
-(def summy-url
-  "URL to our machine-learning service."
-  (or (System/getenv "SUMMY_URL") "http://localhost:8000"))
-
-(>defn summy-urls
-  "Return the url to externally call machine learning functions."
-  [key]
-  [keyword? :ret (? string?)]
-  (let [urls {:summary/bart "summary/bart"
-              :summary/t5 "summary/t5"}
-        url (get urls key)]
-    (when url
-      (format "%s/%s" summy-url url))))
-
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
-  #{"***REMOVED***"})
+  #{summy-config/summy-app-code})
 
 (def datomic
   "When we are production ready, put here the original production config and use

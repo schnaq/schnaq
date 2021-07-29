@@ -7,8 +7,8 @@
             [ring.util.http-response :refer [ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
-            [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
+            [schnaq.config.summy :as summy-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
@@ -30,7 +30,7 @@
 
 (defn- request-bart-summary [share-hash]
   (client/post
-    (config/summy-urls :summary/bart)
+    (summy-config/urls :summary/bart)
     {:body (m/encode "application/json"
                      {:respond_url (respond-to-route :summary/from-summy)
                       :share_hash share-hash
