@@ -93,7 +93,7 @@
       at/not-found-hash-invalid)))
 
 (defn- get-statement-info
-  "Return premises and conclusion for a given statement id."
+  "Return premises, conclusion and the history for a given statement id."
   [{:keys [parameters]}]
   (let [{:keys [share-hash statement-id]} (:query parameters)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
@@ -101,7 +101,8 @@
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
                                     with-sub-discussion-info
                                     (toolbelt/pull-key-up :db/ident)))
-             :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))}))
+             :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))
+             :history (discussion-db/history-for-statement statement-id)}))
       at/not-found-hash-invalid)))
 
 (defn- check-statement-author-and-state
@@ -358,7 +359,8 @@
               :parameters {:query {:statement-id :db/id
                                    :share-hash :discussion/share-hash}}
               :responses {200 {:body {:conclusion ::dto/statement
-                                      :premises (s/coll-of ::dto/statement)}}
+                                      :premises (s/coll-of ::dto/statement)
+                                      :history (s/coll-of ::dto/statement)}}
                           404 at/response-error-body}}]
     ["" {:parameters {:body {:statement-id :db/id
                              :share-hash :discussion/share-hash}}}
