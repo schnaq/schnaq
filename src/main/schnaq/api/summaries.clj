@@ -1,6 +1,7 @@
 (ns schnaq.api.summaries
   (:require [clj-http.client :as client]
             [clojure.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn-]]
             [muuntaja.core :as m]
             [reitit.core :as r]
             [ring.util.http-response :refer [ok]]
@@ -18,18 +19,20 @@
 
 (declare summary-routes)
 
-(def respond-to-route
+(>defn- respond-to-route
   "Look up route to receive results from summy."
+  [route-name]
+  [keyword? :ret string?]
   (str
     shared-config/api-url
     (:path
-      (r/match-by-name (r/router summary-routes) :summary/from-summy))))
+      (r/match-by-name (r/router summary-routes) route-name))))
 
 (defn- request-bart-summary [share-hash]
   (client/post
     (config/summy-urls :summary/bart)
     {:body (m/encode "application/json"
-                     {:respond_url respond-to-route
+                     {:respond_url (respond-to-route :summary/from-summy)
                       :share_hash share-hash
                       :content (export/generate-text-export share-hash)})
      :as :json
@@ -136,7 +139,3 @@ Dein schnaq Team"
                    :description (at/get-doc #'all-summaries)
                    :responses {200 {:body {:summaries (s/or :collection (s/coll-of ::dto/summary)
                                                             :empty nil?)}}}}]]])
-
-
-
-(load-file "src/main/schnaq/api.clj")
