@@ -95,9 +95,10 @@
 
 (rf/reg-event-fx
   :discussion.query.statement/by-id-success
-  (fn [{:keys [db]} [_ {:keys [conclusion premises]}]]
+  (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
     {:db (-> db
              (assoc-in [:discussion :conclusions :selected] conclusion)
-             (assoc-in [:discussion :premises :current] premises))
+             (assoc-in [:discussion :premises :current] premises)
+             (assoc-in [:history :full-context] (vec history)))
      :fx [[:dispatch [:discussion.history/push conclusion]]
           [:dispatch [:visited/set-visited-statements conclusion]]]}))
