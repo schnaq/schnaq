@@ -15,5 +15,5 @@
     (when url
       (format "%s/%s" base-url url))))
 
-(def summy-app-code
+(def app-code
   "***REMOVED***")

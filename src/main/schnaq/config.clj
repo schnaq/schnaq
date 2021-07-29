@@ -10,7 +10,7 @@
 
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
-  #{summy-config/summy-app-code})
+  #{summy-config/app-code})
 
 (def datomic
   "When we are production ready, put here the original production config and use
