@@ -12,7 +12,7 @@
   "Takes a share hash and returns a link to the schnaq."
   [share-hash]
   [string? :ret string?]
-  #?(:clj  (format "%s/schnaq/%s/" config/frontend-url share-hash)
+  #?(:clj  (format "%s/schnaq/%s" config/frontend-url share-hash)
      :cljs (let [path (reitfe/href :routes.schnaq/start {:share-hash share-hash})
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
