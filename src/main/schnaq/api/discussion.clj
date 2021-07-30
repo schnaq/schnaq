@@ -58,7 +58,6 @@
   ([share-hash]
    (-> share-hash
        discussion-db/starting-statements
-       valid-statements-with-votes
        with-sub-discussion-info))
   ([share-hash secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash) secret-statement-id)))
@@ -77,7 +76,6 @@
   (let [{:keys [share-hash conclusion-id]} (:query parameters)
         prepared-statements (-> conclusion-id
                                 discussion-db/children-for-statement
-                                valid-statements-with-votes
                                 with-sub-discussion-info)]
     (if (validator/valid-discussion? share-hash)
       (ok {:premises prepared-statements})

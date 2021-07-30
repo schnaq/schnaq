@@ -170,7 +170,8 @@
   [:db/id :ret (s/coll-of ::specs/statement)]
   (-> (query '[:find [(pull ?children statement-pattern) ...]
                :in $ ?parent statement-pattern
-               :where [?children :statement/parent ?parent]]
+               :where [?children :statement/parent ?parent]
+               (not [?children :statement/deleted? true])]
              parent-id statement-pattern)
       (toolbelt/pull-key-up :db/ident)))
 
