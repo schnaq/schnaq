@@ -35,7 +35,7 @@
                      {:respond_url (respond-to-route :summary/from-summy)
                       :share_hash share-hash
                       :app_code summy-config/app-code
-                      :content (export/generate-argdown-export share-hash)})
+                      :content (export/generate-fulltext share-hash)})
      :as :json
      :content-type :json}))
 

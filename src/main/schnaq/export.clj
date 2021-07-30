@@ -57,8 +57,8 @@
     (map #(vector (:type %) (get indexed-nodes (:from %)))
          (filter #(= source-node (:to %)) links))))
 
-(>defn generate-argdown-export
-  "Generates a textual representation of the discussion-data."
+(>defn generate-argdown
+  "Generates a textual representation of the discussion in an argdown-format."
   [share-hash]
   [:discussion/share-hash :ret string?]
   (let [statements (db/all-statements share-hash)]
@@ -80,7 +80,7 @@
               (recur (rest queue) updated-text level)
               (recur (concat statements-to-add [:level-down-marker] (rest queue)) updated-text (inc level)))))))))
 
-(>defn generate-fulltext-export
+(>defn generate-fulltext
   "Export a discussion as a fulltext."
   [share-hash]
   [:discussion/share-hash :ret string?]
@@ -95,7 +95,7 @@
         (string/trim text)
         ;; Otherwise either toss the :break-marker, or do the recursive algo
         (if (= :break-marker (first queue))
-          (recur (rest queue) (str text "\n\n") true)
+          (recur (rest queue) (str text "\n") true)
           (let [current-statement (first queue)
                 content (:statement/content current-statement)
                 updated-text (format (if new-line? "%s%s" "%s %s")
