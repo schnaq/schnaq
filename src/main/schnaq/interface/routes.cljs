@@ -151,11 +151,15 @@
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
-     ["/"                                                   ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
+     [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers schnaq-start-controllers
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
+     ["/"                                                   ;; Redirect trailing slash schnaq access to non-trailing slash
+      {:controllers [{:parameters {:path [:share-hash]}
+                      :start (fn [{:keys [path]}]
+                               (rf/dispatch [:navigation/navigate :routes.schnaq/start path]))}]}]
      ["/value"
       {:name :routes.schnaq/value
        :view value/schnaq-value-view
@@ -249,7 +253,10 @@
 
 (def router
   (reitit-front/router
-    routes))
+    routes
+    ;; This disables automatic conflict checking. So: Please check your own
+    ;; routes that there are no conflicts.
+    {:conflicts nil}))
 
 (defn- on-navigate [new-match]
   (let [window-hash (.. js/window -location -hash)]

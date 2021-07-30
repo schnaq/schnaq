@@ -132,6 +132,7 @@
         {:path "/"
          :config {:validatorUrl nil
                   :operationsSorter "alpha"}})
+      (ring/redirect-trailing-slash-handler {:method :strip})
       (ring/create-default-handler))))
 
 (defn -main
