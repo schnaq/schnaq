@@ -1,19 +1,57 @@
 (ns schnaq.interface.views.hub.settings
-  (:require [ghostwheel.core :refer [>defn-]]
+  (:require [clojure.string :as string]
+            [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.config.shared :as shared-config]
+            [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
             [schnaq.interface.views.hub.overview :as hubs]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.user.image-upload :as image]))
+
+(defn- logo-input [input-id]
+  (let [hub @(rf/subscribe [:hub/current])
+        name (:hub/name hub)
+        hub-logo (get-in hub [:profile-picture :display])
+        temporary-logo (get-in hub [:logo :temporary :content])
+        preview-image (or temporary-logo hub-logo)]
+    (print "Name: " name)
+    [:div.d-flex.mr-4
+     [:div.d-flex.avatar-image
+      [common/avatar #:user.registered{:profile-picture preview-image
+                                       :display-name (get-in hub [:names :display])} 80]]
+     [:div.mt-auto
+      (if temporary-logo
+        ;; delete temporary button
+        [:button.btn.btn-primary.change-profile-pic-button
+         {:on-click (fn [e] (js-wrap/prevent-default e)
+                      (rf/dispatch [:hub.logo/reset hub]))}
+         [:i.fas {:class (fa :cross)}]]
+        ;; upload temporary button
+        [:label.btn.btn-light.change-profile-pic-button
+         [:i.fas {:class (fa :camera)}]
+         [:input {:id input-id
+                  :accept (string/join "," shared-config/allowed-mime-types)
+                  :type "file"
+                  :on-change (fn [event] (image/store-temporary-profile-picture
+                                           event [:hubs name :logo :temporary]))
+                  :hidden true}]])]]))
+
+(rf/reg-event-db
+  :hub.logo/reset
+  (fn [db [_ {:hub/keys [name]}]]
+    (update-in db [:hubs name :logo] dissoc :temporary)))
+
 
 (defn- settings-body []
   (let [{:hub/keys [name]} @(rf/subscribe [:hub/current])
-        input-id :change-hub-name-input]
+        input-id :change-hub-name-input
+        logo-input-id :hub-logo-pic]
     [:<>
      [pages/settings-panel
       (labels :hub.settings/change-name)
@@ -23,7 +61,7 @@
                        (js-wrap/prevent-default e)
                        (rf/dispatch [:hub.name/update new-hub-name])))}
        [:div.d-flex.flex-row
-        [:div.mr-4 [common/identicon name 50]]
+        [logo-input logo-input-id]
         [common/form-input {:id input-id
                             :default-value name
                             :css "font-150"}]]
