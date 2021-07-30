@@ -491,3 +491,5 @@
           (recur (-> full-statement :statement/parent :db/id) (conj history full-statement))
           (conj history full-statement))))
     :db/ident))
+
+;; TODO We need to mark the children of deleted statements as deleted as well, or we run into problems.
