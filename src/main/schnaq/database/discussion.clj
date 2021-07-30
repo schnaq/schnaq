@@ -60,8 +60,7 @@
     '[:find [(pull ?statements statement-pattern) ...]
       :in $ ?share-hash statement-pattern
       :where [?discussion :discussion/share-hash ?share-hash]
-      [?discussion :discussion/starting-statements ?statements]
-      (not [?statements :statement/deleted? true])]
+      [?discussion :discussion/starting-statements ?statements]]
     share-hash statement-pattern))
 
 (defn transitive-child-rules
@@ -170,8 +169,7 @@
   [:db/id :ret (s/coll-of ::specs/statement)]
   (-> (query '[:find [(pull ?children statement-pattern) ...]
                :in $ ?parent statement-pattern
-               :where [?children :statement/parent ?parent]
-               (not [?children :statement/deleted? true])]
+               :where [?children :statement/parent ?parent]]
              parent-id statement-pattern)
       (toolbelt/pull-key-up :db/ident)))
 
@@ -408,7 +406,6 @@
              :in $ statement-pattern ?share-hash ?search-string
              :where [?discussion :discussion/share-hash ?share-hash]
              [?statements :statement/discussions ?discussion]
-             (not [?statements :statement/deleted? true])
              [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
            statement-pattern share-hash search-string)
     (toolbelt/pull-key-up :db/ident)))
@@ -491,5 +488,3 @@
           (recur (-> full-statement :statement/parent :db/id) (conj history full-statement))
           (conj history full-statement))))
     :db/ident))
-
-;; TODO We need to mark the children of deleted statements as deleted as well, or we run into problems.
