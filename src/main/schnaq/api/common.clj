@@ -34,7 +34,7 @@
   (let [{:keys [share-hash]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
       (do (log/info "User is generating a txt export for discussion" share-hash)
-          (ok {:string-representation (export/generate-text-export share-hash)}))
+          (ok {:string-representation (export/generate-argdown-export share-hash)}))
       at/not-found-hash-invalid)))
 
 (defn- subscribe-lead-magnet!
