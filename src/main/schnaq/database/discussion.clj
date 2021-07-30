@@ -408,6 +408,7 @@
              :in $ statement-pattern ?share-hash ?search-string
              :where [?discussion :discussion/share-hash ?share-hash]
              [?statements :statement/discussions ?discussion]
+             (not [?statements :statement/deleted? true])
              [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
            statement-pattern share-hash search-string)
     (toolbelt/pull-key-up :db/ident)))

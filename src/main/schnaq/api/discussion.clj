@@ -86,9 +86,8 @@
   [{:keys [parameters]}]
   (let [{:keys [share-hash search-string]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
-      (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
-                                    with-sub-discussion-info
-                                    valid-statements-with-votes)})
+      (ok {:matching-statements (with-sub-discussion-info
+                                  (discussion-db/search-statements share-hash search-string))})
       at/not-found-hash-invalid)))
 
 (defn- get-statement-info
