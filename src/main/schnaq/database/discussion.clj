@@ -60,7 +60,8 @@
     '[:find [(pull ?statements statement-pattern) ...]
       :in $ ?share-hash statement-pattern
       :where [?discussion :discussion/share-hash ?share-hash]
-      [?discussion :discussion/starting-statements ?statements]]
+      [?discussion :discussion/starting-statements ?statements]
+      (not [?statements :statement/deleted? true])]
     share-hash statement-pattern))
 
 (defn transitive-child-rules

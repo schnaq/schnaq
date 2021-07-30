@@ -36,6 +36,7 @@
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [statements]
   (-> statements
+      ;; TODO this is not needed, the database should by default NOT return the deleted posts
       processors/hide-deleted-statement-content
       processors/with-votes))
 
