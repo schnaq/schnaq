@@ -2,7 +2,19 @@
   (:require [clojure.string :as string]
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as db]
-            [schnaq.discussion :as discussion]))
+            [schnaq.database.specs :as specs]))
+
+(def ^:private punctuations
+  "Check for these punctuations in a string."
+  #{\. \? \! \: \;})
+
+(>defn- add-punctuation-to-statement
+  "Check if statement is punctuated. If not, add a full stop."
+  [{:keys [statement/content] :as statement}]
+  [::specs/statement :ret ::specs/statement]
+  (if (punctuations (last content))
+    statement
+    (assoc statement :statement/content (str content "."))))
 
 (>defn- indent-multi-paragraph-statement
   "Removes empty lines at the end of a statement and indents them correctly in
@@ -67,3 +79,30 @@
             (if (empty? statements-to-add)
               (recur (rest queue) updated-text level)
               (recur (concat statements-to-add [:level-down-marker] (rest queue)) updated-text (inc level)))))))))
+
+(>defn generate-fulltext-export
+  "Export a discussion as a fulltext."
+  [share-hash]
+  [:discussion/share-hash :ret string?]
+  (let [statements (db/all-statements share-hash)
+        punctuated-statements (map add-punctuation-to-statement statements)]
+    (loop [queue (interleave (remove :statement/parent punctuated-statements)
+                             (repeat :break-marker))
+           text ""
+           new-line? true]
+      (if (empty? queue)
+        ;; We're done here, give the finished text back
+        (string/trim text)
+        ;; Otherwise either toss the :break-marker, or do the recursive algo
+        (if (= :break-marker (first queue))
+          (recur (rest queue) (str text "\n\n") true)
+          (let [current-statement (first queue)
+                content (:statement/content current-statement)
+                updated-text (format (if new-line? "%s%s" "%s %s")
+                                     text content)
+                statements-to-add (filter #(= (get-in % [:statement/parent :db/id])
+                                              (:db/id current-statement))
+                                          punctuated-statements)]
+            (if (empty? statements-to-add)
+              (recur (rest queue) updated-text false)
+              (recur (concat statements-to-add (rest queue)) updated-text false))))))))
