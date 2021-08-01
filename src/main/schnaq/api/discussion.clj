@@ -284,14 +284,12 @@
                              :description (at/get-doc #'get-starting-conclusions)
                              :middleware [:discussion/valid-share-hash?]
                              :parameters {:query {:share-hash :discussion/share-hash}}
-                             :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
-                                         404 at/response-error-body}}]
+                             :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}}}]
    ["/graph" {:get graph-data-for-agenda
               :description (at/get-doc #'graph-data-for-agenda)
               :middleware [:discussion/valid-share-hash?]
               :parameters {:query {:share-hash :discussion/share-hash}}
-              :responses {200 {:body {:graph ::specs/graph}}
-                          404 at/response-error-body}}]
+              :responses {200 {:body {:graph ::specs/graph}}}}]
    ["/manage" {:parameters {:body {:share-hash :discussion/share-hash
                                    :edit-hash :discussion/edit-hash}}
                :responses {403 at/response-error-body}}

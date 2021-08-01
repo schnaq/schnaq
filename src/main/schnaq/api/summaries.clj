@@ -7,7 +7,6 @@
             [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
             [schnaq.links :as links]
-            [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
 (defn- request-summary
