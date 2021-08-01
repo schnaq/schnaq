@@ -24,6 +24,7 @@
             [schnaq.api.emails :refer [email-routes]]
             [schnaq.api.feedback :refer [feedback-routes]]
             [schnaq.api.hub :refer [hub-routes]]
+            [schnaq.api.middlewares :as middlewares]
             [schnaq.api.schnaq :refer [schnaq-routes]]
             [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.user :refer [user-routes]]
@@ -126,7 +127,8 @@
                            auth/wrap-jwt-authentication]}
        ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
                               :user/admin? auth/admin?-middleware
-                              :user/beta-tester? auth/beta-tester?-middleware}})
+                              :user/beta-tester? auth/beta-tester?-middleware
+                              :discussion/valid-share-hash? middlewares/valid-discussion?-middleware}})
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
         {:path "/"
