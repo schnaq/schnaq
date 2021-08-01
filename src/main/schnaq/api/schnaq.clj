@@ -19,12 +19,10 @@
   [{:keys [parameters identity]}]
   (let [hash (get-in parameters [:query :share-hash])
         keycloak-id (:sub identity)]
-    (if (validator/valid-discussion? hash)
-      (ok {:schnaq (processors/add-meta-info-to-schnaq
-                     (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
-                       (discussion-db/discussion-by-share-hash-private hash)
-                       (discussion-db/discussion-by-share-hash hash)))})
-      (validator/deny-access))))
+    (ok {:schnaq (processors/add-meta-info-to-schnaq
+                   (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
+                     (discussion-db/discussion-by-share-hash-private hash)
+                     (discussion-db/discussion-by-share-hash hash)))})))
 
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
@@ -102,6 +100,7 @@
     ["/schnaq"
      ["/by-hash" {:get schnaq-by-hash
                   :description (at/get-doc #'schnaq-by-hash)
+                  :middleware [:discussion/valid-share-hash?]
                   :parameters {:query {:share-hash :discussion/share-hash}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]

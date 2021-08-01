@@ -66,31 +66,25 @@
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:query parameters)]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
-      at/not-found-hash-invalid)))
+    (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash conclusion-id]} (:query parameters)
+  (let [{:keys [conclusion-id]} (:query parameters)
         prepared-statements (-> conclusion-id
                                 discussion-db/children-for-statement
                                 valid-statements-with-votes
                                 with-sub-discussion-info)]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:premises prepared-statements})
-      at/not-found-hash-invalid)))
+    (ok {:premises prepared-statements})))
 
 (defn- search-statements
   "Search through any valid discussion."
   [{:keys [parameters]}]
   (let [{:keys [share-hash search-string]} (:query parameters)]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
-                                    with-sub-discussion-info
-                                    valid-statements-with-votes)})
-      at/not-found-hash-invalid)))
+    (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
+                                  with-sub-discussion-info
+                                  valid-statements-with-votes)})))
 
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
@@ -197,16 +191,14 @@
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [parameters]}]
-  (let [share-hash (get-in parameters [:query :share-hash])]
-    (if (validator/valid-discussion? share-hash)
-      (let [statements (discussion-db/all-statements-for-graph share-hash)
-            starting-statements (discussion-db/starting-statements share-hash)
-            edges (discussion/links-for-starting starting-statements share-hash)
-            controversy-vals (discussion/calculate-controversy edges)]
-        (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
-                     :edges edges
-                     :controversy-values controversy-vals}}))
-      at/not-found-hash-invalid)))
+  (let [share-hash (get-in parameters [:query :share-hash])
+        statements (discussion-db/all-statements-for-graph share-hash)
+        starting-statements (discussion-db/starting-statements share-hash)
+        edges (discussion/links-for-starting starting-statements share-hash)
+        controversy-vals (discussion/calculate-controversy edges)]
+    (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
+                 :edges edges
+                 :controversy-values controversy-vals}})))
 
 
 ;; -----------------------------------------------------------------------------
@@ -290,11 +282,13 @@
   ["/discussion" {:swagger {:tags ["discussions"]}}
    ["/conclusions/starting" {:get get-starting-conclusions
                              :description (at/get-doc #'get-starting-conclusions)
+                             :middleware [:discussion/valid-share-hash?]
                              :parameters {:query {:share-hash :discussion/share-hash}}
                              :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                          404 at/response-error-body}}]
    ["/graph" {:get graph-data-for-agenda
               :description (at/get-doc #'graph-data-for-agenda)
+              :middleware [:discussion/valid-share-hash?]
               :parameters {:query {:share-hash :discussion/share-hash}}
               :responses {200 {:body {:graph ::specs/graph}}
                           404 at/response-error-body}}]
@@ -336,12 +330,14 @@
                             403 at/response-error-body}}]
     ["/search" {:get search-statements
                 :description (at/get-doc #'search-statements)
+                :middleware [:discussion/valid-share-hash?]
                 :parameters {:query {:share-hash :discussion/share-hash
                                      :search-string string?}}
                 :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
                             404 at/response-error-body}}]
     ["/for-conclusion" {:get get-statements-for-conclusion
                         :description (at/get-doc #'get-statements-for-conclusion)
+                        :middleware [:discussion/valid-share-hash?]
                         :parameters {:query {:share-hash :discussion/share-hash
                                              :conclusion-id :db/id}}
                         :responses {200 {:body {:premises (s/coll-of ::dto/statement)}}

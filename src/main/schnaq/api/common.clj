@@ -32,10 +32,8 @@
   "Exports the discussion data as a string."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:query parameters)]
-    (if (validator/valid-discussion? share-hash)
-      (do (log/info "User is generating a txt export for discussion" share-hash)
-          (ok {:string-representation (export/generate-text-export share-hash)}))
-      at/not-found-hash-invalid)))
+    (log/info "User is generating a txt export for discussion" share-hash)
+    (ok {:string-representation (export/generate-text-export share-hash)})))
 
 (defn- subscribe-lead-magnet!
   "Subscribes to the mailing list and sends the lead magnet to the email-address."
@@ -63,6 +61,7 @@
               :responses {200 {:body {:text string?}}}}]
     ["/export/txt" {:get export-txt-data
                     :description (at/get-doc #'export-txt-data)
+                    :middleware [:discussion/valid-share-hash?]
                     :parameters {:query {:share-hash :discussion/share-hash}}
                     :responses {200 {:body {:string-representation string?}}
                                 404 at/response-error-body}}]

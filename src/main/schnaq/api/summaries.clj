@@ -58,8 +58,8 @@ Dein schnaq Team"
 
 (def summary-routes
   [["/schnaq/summary" {:swagger {:tags ["summaries" "beta"]}
-                       :middleware [:user/authenticated? :user/beta-tester?
-                                    :discussion/valid-share-hash?]
+                       :middleware [:discussion/valid-share-hash?
+                                    :user/authenticated? :user/beta-tester?]
                        :responses {401 at/response-error-body}}
     ["" {:get get-summary
          :description (at/get-doc #'get-summary)
