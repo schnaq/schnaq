@@ -24,7 +24,7 @@
 (def not-found-hash-invalid
   "Return 403 with invalid-share-hash message."
   (not-found
-    (build-error-body :invalid-share-hash invalid-share-hash-message)))
+    (build-error-body :share-hash/invalid invalid-share-hash-message)))
 
 (defn get-doc
   "Look the docstring up in the meta-description of a function.

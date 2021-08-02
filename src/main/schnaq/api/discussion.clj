@@ -66,31 +66,25 @@
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:query parameters)]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})
-      at/not-found-hash-invalid)))
+    (ok {:starting-conclusions (starting-conclusions-with-processors share-hash)})))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash conclusion-id]} (:query parameters)
+  (let [{:keys [conclusion-id]} (:query parameters)
         prepared-statements (-> conclusion-id
                                 discussion-db/children-for-statement
                                 valid-statements-with-votes
                                 with-sub-discussion-info)]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:premises prepared-statements})
-      at/not-found-hash-invalid)))
+    (ok {:premises prepared-statements})))
 
 (defn- search-statements
   "Search through any valid discussion."
   [{:keys [parameters]}]
   (let [{:keys [share-hash search-string]} (:query parameters)]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
-                                    with-sub-discussion-info
-                                    valid-statements-with-votes)})
-      at/not-found-hash-invalid)))
+    (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
+                                  with-sub-discussion-info
+                                  valid-statements-with-votes)})))
 
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
@@ -152,14 +146,12 @@
   Important: Needs to check whether the statement-id really belongs to the discussion with
   the passed edit-hash."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash statement-ids]} (:body parameters)
+  (let [{:keys [share-hash statement-ids]} (:body parameters)
         deny-access (validator/deny-access "You do not have the rights to access this action.")]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      ;; could optimize with a collection query here
-      (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
-        (do (discussion-db/delete-statements! statement-ids)
-            (ok {:deleted-statements statement-ids}))
-        deny-access)
+    ;; could optimize with a collection query here
+    (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
+      (do (discussion-db/delete-statements! statement-ids)
+          (ok {:deleted-statements statement-ids}))
       deny-access)))
 
 (defn- add-starting-statement!
@@ -197,16 +189,14 @@
 (defn- graph-data-for-agenda
   "Delivers the graph-data needed to draw the graph in the frontend."
   [{:keys [parameters]}]
-  (let [share-hash (get-in parameters [:query :share-hash])]
-    (if (validator/valid-discussion? share-hash)
-      (let [statements (discussion-db/all-statements-for-graph share-hash)
-            starting-statements (discussion-db/starting-statements share-hash)
-            edges (discussion/links-for-starting starting-statements share-hash)
-            controversy-vals (discussion/calculate-controversy edges)]
-        (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
-                     :edges edges
-                     :controversy-values controversy-vals}}))
-      at/not-found-hash-invalid)))
+  (let [share-hash (get-in parameters [:query :share-hash])
+        statements (discussion-db/all-statements-for-graph share-hash)
+        starting-statements (discussion-db/starting-statements share-hash)
+        edges (discussion/links-for-starting starting-statements share-hash)
+        controversy-vals (discussion/calculate-controversy edges)]
+    (ok {:graph {:nodes (discussion/nodes-for-agenda statements share-hash)
+                 :edges edges
+                 :controversy-values controversy-vals}})))
 
 
 ;; -----------------------------------------------------------------------------
@@ -215,32 +205,26 @@
 (defn- make-discussion-read-only!
   "Makes a discussion read-only if share- and edit-hash are correct and present."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Setting discussion to read-only: " share-hash)
-          (discussion-db/set-discussion-read-only share-hash)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
+  (let [{:keys [share-hash]} (:body parameters)]
+    (log/info "Setting discussion to read-only: " share-hash)
+    (discussion-db/set-discussion-read-only share-hash)
+    (ok {:share-hash share-hash})))
 
 (defn- make-discussion-writeable!
   "Makes a discussion writeable if discussion-admin credentials are there."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Removing read-only from discussion: " share-hash)
-          (discussion-db/remove-read-only share-hash)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
+  (let [{:keys [share-hash]} (:body parameters)]
+    (log/info "Removing read-only from discussion: " share-hash)
+    (discussion-db/remove-read-only share-hash)
+    (ok {:share-hash share-hash})))
 
 (defn- disable-pro-con!
   "Disable pro-con option for a schnaq."
   [{:keys [parameters]}]
-  (let [{:keys [disable-pro-con? share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
-          (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
+  (let [{:keys [disable-pro-con? share-hash]} (:body parameters)]
+    (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
+    (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
+    (ok {:share-hash share-hash})))
 
 
 ;; -----------------------------------------------------------------------------
@@ -290,27 +274,35 @@
   ["/discussion" {:swagger {:tags ["discussions"]}}
    ["/conclusions/starting" {:get get-starting-conclusions
                              :description (at/get-doc #'get-starting-conclusions)
+                             :name :api.discussion.conclusions/starting
+                             :middleware [:discussion/valid-share-hash?]
                              :parameters {:query {:share-hash :discussion/share-hash}}
-                             :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
-                                         404 at/response-error-body}}]
+                             :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}}}]
    ["/graph" {:get graph-data-for-agenda
               :description (at/get-doc #'graph-data-for-agenda)
+              :name :api.discussion/graph
+              :middleware [:discussion/valid-share-hash?]
               :parameters {:query {:share-hash :discussion/share-hash}}
-              :responses {200 {:body {:graph ::specs/graph}}
-                          404 at/response-error-body}}]
+              :responses {200 {:body {:graph ::specs/graph}}}}]
    ["/manage" {:parameters {:body {:share-hash :discussion/share-hash
                                    :edit-hash :discussion/edit-hash}}
                :responses {403 at/response-error-body}}
-    ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}}
+    ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}
+         :middleware [:discussion/valid-credentials?]}
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
+                          :name :api.discussion.manage/disable-pro-con
                           :parameters {:body {:disable-pro-con? boolean?}}}]
      ["/make-read-only" {:put make-discussion-read-only!
-                         :description (at/get-doc #'make-discussion-read-only!)}]
+                         :description (at/get-doc #'make-discussion-read-only!)
+                         :name :api.discussion.manage/make-read-only}]
      ["/make-writeable" {:put make-discussion-writeable!
-                         :description (at/get-doc #'make-discussion-writeable!)}]]]
+                         :description (at/get-doc #'make-discussion-writeable!)
+                         :name :api.discussion.manage/make-writeable}]]]
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
+                     :name :api.discussion/header-image
+                     :middleware [:discussion/valid-credentials?]
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :edit-hash :discussion/edit-hash
                                          :image-url :discussion/header-image-url}}
@@ -318,6 +310,7 @@
                                  403 at/response-error-body}}]
    ["/react-to/statement" {:post react-to-any-statement!
                            :description (at/get-doc #'react-to-any-statement!)
+                           :name :api.discussion.react-to/statement
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :nickname ::dto/maybe-nickname
@@ -328,6 +321,8 @@
    ["/statements"
     ["/delete" {:delete delete-statements!
                 :description (at/get-doc #'delete-statements!)
+                :name :api.discussion.statements/delete
+                :middleware [:discussion/valid-credentials?]
                 :parameters {:body {:share-hash :discussion/share-hash
                                     :edit-hash :discussion/edit-hash
                                     :statement-ids (s/coll-of :db/id)}}
@@ -336,18 +331,23 @@
                             403 at/response-error-body}}]
     ["/search" {:get search-statements
                 :description (at/get-doc #'search-statements)
+                :name :api.discussion.statements/search
+                :middleware [:discussion/valid-share-hash?]
                 :parameters {:query {:share-hash :discussion/share-hash
                                      :search-string string?}}
                 :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
                             404 at/response-error-body}}]
     ["/for-conclusion" {:get get-statements-for-conclusion
                         :description (at/get-doc #'get-statements-for-conclusion)
+                        :name :api.discussion.statements/for-conclusion
+                        :middleware [:discussion/valid-share-hash?]
                         :parameters {:query {:share-hash :discussion/share-hash
                                              :conclusion-id :db/id}}
                         :responses {200 {:body {:premises (s/coll-of ::dto/statement)}}
                                     404 at/response-error-body}}]
     ["/starting/add" {:post add-starting-statement!
                       :description (at/get-doc #'add-starting-statement!)
+                      :name :api.discussion.statements.starting/add
                       :parameters {:body {:share-hash :discussion/share-hash
                                           :statement :statement/content
                                           :nickname ::dto/maybe-nickname}}
@@ -356,6 +356,7 @@
    ["/statement"
     ["/info" {:get get-statement-info
               :description (at/get-doc #'get-statement-info)
+              :name :api.discussion.statement/info
               :parameters {:query {:statement-id :db/id
                                    :share-hash :discussion/share-hash}}
               :responses {200 {:body {:conclusion ::dto/statement
@@ -366,6 +367,7 @@
                              :share-hash :discussion/share-hash}}}
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
+               :name :api.discussion.statement/edit
                :middleware [:user/authenticated?]
                :parameters {:body {:statement-type (s/or :nil nil?
                                                          :type :statement/type)
@@ -375,6 +377,7 @@
                            403 at/response-error-body}}]
      ["/delete" {:delete delete-statement!
                  :description (at/get-doc #'delete-statement!)
+                 :name :api.discussion.statement/delete
                  :middleware [:user/authenticated?]
                  :responses {200 {:body {:deleted-statement :db/id}}
                              400 at/response-error-body
@@ -382,9 +385,11 @@
      ["/vote" {:parameters {:body {:nickname ::dto/maybe-nickname}}}
       ["/down" {:post toggle-downvote-statement
                 :description (at/get-doc #'toggle-downvote-statement)
+                :name :api.discussion.statement.vote/down
                 :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                             400 at/response-error-body}}]
       ["/up" {:post toggle-upvote-statement
               :description (at/get-doc #'toggle-upvote-statement)
+              :name :api.discussion.statement.vote/up
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                           400 at/response-error-body}}]]]]])

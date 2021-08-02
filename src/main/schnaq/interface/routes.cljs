@@ -239,7 +239,7 @@
      :view error-views/not-found-view-stub
      :link-text (labels :router/not-found-label)
      :controllers [{:identity #(random-uuid)
-                    :start #(js-wrap/replace-url "/404/")}]}]
+                    :start #(js-wrap/replace-url "/404")}]}]
    ["403"
     {:name :routes/forbidden-page
      :view error-views/forbidden-page}]

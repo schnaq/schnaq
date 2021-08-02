@@ -14,7 +14,6 @@
             [schnaq.emails :as emails]
             [schnaq.export :as export]
             [schnaq.links :as links]
-            [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
 (declare summary-routes)
@@ -47,23 +46,18 @@
   [{:keys [parameters identity]}]
   (let [share-hash (get-in parameters [:body :share-hash])]
     (log/info "Requesting new summary for schnaq" share-hash)
-    (if (validator/valid-discussion? share-hash)
-      (do
-        (request-bart-summary share-hash)
-        (emails/send-mail
-          "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
-          (format "Die Summary wird gerade generiert. Bitte überprüfen und ggf. anpassen. Bitte im Chat absprechen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
-          "info@schnaq.com")
-        (ok {:summary (discussion-db/summary-request share-hash (:id identity))}))
-      (validator/deny-access "You are not allowed to use this feature"))))
+    (request-bart-summary share-hash)
+    (emails/send-mail
+      "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
+      (format "Die Summary wird gerade generiert. Bitte überprüfen und ggf. anpassen. Bitte im Chat absprechen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
+      "info@schnaq.com")
+    (ok {:summary (discussion-db/summary-request share-hash (:id identity))})))
 
 (defn- get-summary
   "Return a summary for the specified share-hash."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:summary (discussion-db/summary share-hash)})
-      (validator/deny-access "You are not allowed to use this feature"))))
+    (ok {:summary (discussion-db/summary share-hash)})))
 
 (defn new-summary
   "Update a summary. If a text exists, it is overwritten. Admin access is already checked by middleware."
@@ -107,7 +101,8 @@ Dein schnaq Team"
 
 (def summary-routes
   [["/schnaq/summary" {:swagger {:tags ["summaries" "beta"]}
-                       :middleware [:user/authenticated? :user/beta-tester?]
+                       :middleware [:discussion/valid-share-hash?
+                                    :user/authenticated? :user/beta-tester?]
                        :responses {401 at/response-error-body}}
     ["" {:get get-summary
          :description (at/get-doc #'get-summary)
