@@ -296,6 +296,7 @@
                          :description (at/get-doc #'make-discussion-writeable!)}]]]
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
+                     :middleware [:discussion/valid-credentials?]
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :edit-hash :discussion/edit-hash
                                          :image-url :discussion/header-image-url}}

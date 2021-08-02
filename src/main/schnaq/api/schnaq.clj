@@ -79,10 +79,8 @@
   "If user is authenticated, a meeting with an edit-hash is returned for further
   processing in the frontend."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})
-      (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
+  (let [{:keys [share-hash]} (:body parameters)]
+    (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})))
 
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
@@ -116,6 +114,8 @@
                     :parameters {:body {:hub-exclusive? boolean?
                                         :hub :hub/keycloak-name}}}]]
      ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
+                           :description (at/get-doc #'schnaq-by-hash-as-admin)
+                           :middleware [:discussion/valid-credentials?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :edit-hash :discussion/edit-hash}}
                            :responses {200 {:body {:schnaq ::dto/discussion}}}}]]
