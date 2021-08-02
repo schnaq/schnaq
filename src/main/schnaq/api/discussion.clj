@@ -274,11 +274,13 @@
   ["/discussion" {:swagger {:tags ["discussions"]}}
    ["/conclusions/starting" {:get get-starting-conclusions
                              :description (at/get-doc #'get-starting-conclusions)
+                             :name :api.discussion.conclusions/starting
                              :middleware [:discussion/valid-share-hash?]
                              :parameters {:query {:share-hash :discussion/share-hash}}
                              :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}}}]
    ["/graph" {:get graph-data-for-agenda
               :description (at/get-doc #'graph-data-for-agenda)
+              :name :api.discussion/graph
               :middleware [:discussion/valid-share-hash?]
               :parameters {:query {:share-hash :discussion/share-hash}}
               :responses {200 {:body {:graph ::specs/graph}}}}]
@@ -289,13 +291,17 @@
          :middleware [:discussion/valid-credentials?]}
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
+                          :name :api.discussion.manage/disable-pro-con
                           :parameters {:body {:disable-pro-con? boolean?}}}]
      ["/make-read-only" {:put make-discussion-read-only!
-                         :description (at/get-doc #'make-discussion-read-only!)}]
+                         :description (at/get-doc #'make-discussion-read-only!)
+                         :name :api.discussion.manage/make-read-only}]
      ["/make-writeable" {:put make-discussion-writeable!
-                         :description (at/get-doc #'make-discussion-writeable!)}]]]
+                         :description (at/get-doc #'make-discussion-writeable!)
+                         :name :api.discussion.manage/make-writeable}]]]
    ["/header-image" {:post media/set-preview-image
                      :description (at/get-doc #'media/set-preview-image)
+                     :name :api.discussion/header-image
                      :middleware [:discussion/valid-credentials?]
                      :parameters {:body {:share-hash :discussion/share-hash
                                          :edit-hash :discussion/edit-hash
@@ -304,6 +310,7 @@
                                  403 at/response-error-body}}]
    ["/react-to/statement" {:post react-to-any-statement!
                            :description (at/get-doc #'react-to-any-statement!)
+                           :name :api.discussion.react-to/statement
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :nickname ::dto/maybe-nickname
@@ -314,6 +321,7 @@
    ["/statements"
     ["/delete" {:delete delete-statements!
                 :description (at/get-doc #'delete-statements!)
+                :name :api.discussion.statements/delete
                 :middleware [:discussion/valid-credentials?]
                 :parameters {:body {:share-hash :discussion/share-hash
                                     :edit-hash :discussion/edit-hash
@@ -323,6 +331,7 @@
                             403 at/response-error-body}}]
     ["/search" {:get search-statements
                 :description (at/get-doc #'search-statements)
+                :name :api.discussion.statements/search
                 :middleware [:discussion/valid-share-hash?]
                 :parameters {:query {:share-hash :discussion/share-hash
                                      :search-string string?}}
@@ -330,6 +339,7 @@
                             404 at/response-error-body}}]
     ["/for-conclusion" {:get get-statements-for-conclusion
                         :description (at/get-doc #'get-statements-for-conclusion)
+                        :name :api.discussion.statements/for-conclusion
                         :middleware [:discussion/valid-share-hash?]
                         :parameters {:query {:share-hash :discussion/share-hash
                                              :conclusion-id :db/id}}
@@ -337,6 +347,7 @@
                                     404 at/response-error-body}}]
     ["/starting/add" {:post add-starting-statement!
                       :description (at/get-doc #'add-starting-statement!)
+                      :name :api.discussion.statements.starting/add
                       :parameters {:body {:share-hash :discussion/share-hash
                                           :statement :statement/content
                                           :nickname ::dto/maybe-nickname}}
@@ -345,6 +356,7 @@
    ["/statement"
     ["/info" {:get get-statement-info
               :description (at/get-doc #'get-statement-info)
+              :name :api.discussion.statement/info
               :parameters {:query {:statement-id :db/id
                                    :share-hash :discussion/share-hash}}
               :responses {200 {:body {:conclusion ::dto/statement
@@ -355,6 +367,7 @@
                              :share-hash :discussion/share-hash}}}
      ["/edit" {:put edit-statement!
                :description (at/get-doc #'edit-statement!)
+               :name :api.discussion.statement/edit
                :middleware [:user/authenticated?]
                :parameters {:body {:statement-type (s/or :nil nil?
                                                          :type :statement/type)
@@ -364,6 +377,7 @@
                            403 at/response-error-body}}]
      ["/delete" {:delete delete-statement!
                  :description (at/get-doc #'delete-statement!)
+                 :name :api.discussion.statement/delete
                  :middleware [:user/authenticated?]
                  :responses {200 {:body {:deleted-statement :db/id}}
                              400 at/response-error-body
@@ -371,9 +385,11 @@
      ["/vote" {:parameters {:body {:nickname ::dto/maybe-nickname}}}
       ["/down" {:post toggle-downvote-statement
                 :description (at/get-doc #'toggle-downvote-statement)
+                :name :api.discussion.statement.vote/down
                 :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                             400 at/response-error-body}}]
       ["/up" {:post toggle-upvote-statement
               :description (at/get-doc #'toggle-upvote-statement)
+              :name :api.discussion.statement.vote/up
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                           400 at/response-error-body}}]]]]])
