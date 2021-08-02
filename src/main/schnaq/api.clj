@@ -128,7 +128,8 @@
        ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
                               :user/admin? auth/admin?-middleware
                               :user/beta-tester? auth/beta-tester?-middleware
-                              :discussion/valid-share-hash? middlewares/valid-discussion?-middleware}})
+                              :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
+                              :discussion/valid-credentials? middlewares/valid-credentials?-middleware}})
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
         {:path "/"
