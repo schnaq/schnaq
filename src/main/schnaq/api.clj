@@ -3,6 +3,7 @@
             [muuntaja.core :as m]
             [org.httpkit.server :as server]
             [reitit.coercion.spec]
+            [reitit.core :as r]
             [reitit.dev.pretty :as pretty]
             [reitit.middleware :as middleware]
             [reitit.ring :as ring]
@@ -77,52 +78,60 @@
   You can choose the format of your response by specifying the corresponding header. `json`, `edn`, `transit+json` and `transit+msgpack` are currently supported. For example:
   `curl https://api.staging.schnaq.com/ping -H \"Accept: application/edn\"`")
 
+(def router
+  (ring/router
+    [analytics-routes
+     debug-routes
+     discussion-routes
+     email-routes
+     feedback-routes
+     hub-routes
+     other-routes
+     schnaq-routes
+     summary-routes
+     user-routes
+
+     ["/swagger.json"
+      {:get {:no-doc true
+             :swagger {:info {:title "schnaq API"
+                              :basePath "/"
+                              :version "1.0.0"
+                              :description description}
+                       :securityDefinitions {:keycloak {:type "oauth2"
+                                                        :flow "implicit"
+                                                        :name "Authorization"
+                                                        :description "Use `swagger` as the client-id."
+                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}}
+                       :security [{:keycloak []}]}
+             :handler (swagger/create-swagger-handler)}}]]
+    {:exception pretty/exception
+     :validate rrs/validate
+     ::rs/explain expound/expound-str
+     :data {:coercion reitit.coercion.spec/coercion
+            :muuntaja m/instance
+            :middleware [swagger/swagger-feature
+                         parameters/parameters-middleware   ;; query-params & form-params
+                         muuntaja/format-middleware
+                         exception/exception-middleware     ;; exception handling
+                         coercion/coerce-response-middleware ;; coercing response bodys
+                         coercion/coerce-request-middleware ;; coercing request parameters
+                         multipart/multipart-middleware
+                         auth/replace-bearer-with-token
+                         auth/wrap-jwt-authentication]}
+     ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
+                            :user/admin? auth/admin?-middleware
+                            :user/beta-tester? auth/beta-tester?-middleware
+                            :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
+                            :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))
+
+(defn route-by-name
+  "Return a route by its name."
+  [route-name]
+  (r/match-by-name router route-name))
+
 (def app
   (ring/ring-handler
-    (ring/router
-      [analytics-routes
-       debug-routes
-       discussion-routes
-       email-routes
-       feedback-routes
-       hub-routes
-       other-routes
-       schnaq-routes
-       summary-routes
-       user-routes
-
-       ["/swagger.json"
-        {:get {:no-doc true
-               :swagger {:info {:title "schnaq API"
-                                :basePath "/"
-                                :version "1.0.0"
-                                :description description}
-                         :securityDefinitions {:keycloak {:type "oauth2"
-                                                          :flow "implicit"
-                                                          :name "Authorization"
-                                                          :description "Use `swagger` as the client-id."
-                                                          :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}}
-                         :security [{:keycloak []}]}
-               :handler (swagger/create-swagger-handler)}}]]
-      {:exception pretty/exception
-       :validate rrs/validate
-       ::rs/explain expound/expound-str
-       :data {:coercion reitit.coercion.spec/coercion
-              :muuntaja m/instance
-              :middleware [swagger/swagger-feature
-                           parameters/parameters-middleware ;; query-params & form-params
-                           muuntaja/format-middleware
-                           exception/exception-middleware   ;; exception handling
-                           coercion/coerce-response-middleware ;; coercing response bodys
-                           coercion/coerce-request-middleware ;; coercing request parameters
-                           multipart/multipart-middleware
-                           auth/replace-bearer-with-token
-                           auth/wrap-jwt-authentication]}
-       ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
-                              :user/admin? auth/admin?-middleware
-                              :user/beta-tester? auth/beta-tester?-middleware
-                              :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
-                              :discussion/valid-credentials? middlewares/valid-credentials?-middleware}})
+    router
     (ring/routes
       (swagger-ui/create-swagger-ui-handler
         {:path "/"
