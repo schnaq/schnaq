@@ -90,13 +90,14 @@
 (defn txt-export
   "Request a txt-export of the discussion."
   [share-hash title]
-  (let [request-fn #(ajax/ajax-request {:method :get
-                                        :uri (str shared-config/api-url "/export/txt")
-                                        :format (ajax/transit-request-format)
-                                        :params {:share-hash share-hash}
-                                        :response-format (ajax/transit-response-format)
-                                        :handler (partial create-txt-download-handler title)
-                                        :error-handler show-error})]
+  (let [request-fn #(ajax/ajax-request
+                      {:method :get
+                       :uri (str shared-config/api-url "/export/argdown")
+                       :format (ajax/transit-request-format)
+                       :params {:share-hash share-hash}
+                       :response-format (ajax/transit-response-format)
+                       :handler (partial create-txt-download-handler title)
+                       :error-handler show-error})]
     (when share-hash
       [tooltip/tooltip-button "bottom" (labels :schnaq.export/as-text)
        [:i {:class (str "m-auto fas " (fa :file-download))}]
