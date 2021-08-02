@@ -32,6 +32,7 @@
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
+            [schnaq.config.summy :as summy-config]
             [schnaq.core :as schnaq-core]
             [taoensso.timbre :as log])
   (:gen-class))
@@ -57,6 +58,7 @@
   (log/info (format "Environment: %s" shared-config/environment))
   (log/info (format "Database Name: %s" config/db-name))
   (log/info (format "Database URI (truncated): %s" (subs config/datomic-uri 0 30)))
+  (log/info (format "Summy URL: %s" summy-config/base-url))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
 (def allowed-origin
