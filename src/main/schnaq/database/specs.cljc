@@ -181,3 +181,6 @@
                    :statistics/average-statements-num :statistics/statements-num
                    :statistics/active-users-num :statistics/statement-length-stats
                    :statistics/statement-type-stats :statistics/registered-users-num]))
+
+;; App-Codes
+(s/def :app/code ::non-blank-string)

@@ -28,13 +28,22 @@
       (ok {:valid-credentials? valid-credentials?})
       (forbidden {:valid-credentials? valid-credentials?}))))
 
-(defn- export-txt-data
-  "Exports the discussion data as a string."
+(defn- export-as-argdown
+  "Exports the complete discussion in an argdown-formatted file."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:query parameters)]
     (if (validator/valid-discussion? share-hash)
-      (do (log/info "User is generating a txt export for discussion" share-hash)
-          (ok {:string-representation (export/generate-text-export share-hash)}))
+      (do (log/info "User is generating an argdown export for discussion" share-hash)
+          (ok {:string-representation (export/generate-argdown share-hash)}))
+      at/not-found-hash-invalid)))
+
+(defn- export-as-fulltext
+  "Exports the complete discussion as an fulltext file."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash]} (:query parameters)]
+    (if (validator/valid-discussion? share-hash)
+      (do (log/info "User is generating a fulltext export for discussion" share-hash)
+          (ok {:string-representation (export/generate-fulltext share-hash)}))
       at/not-found-hash-invalid)))
 
 (defn- subscribe-lead-magnet!
@@ -61,11 +70,13 @@
     ["/ping" {:get ping
               :description (at/get-doc #'ping)
               :responses {200 {:body {:text string?}}}}]
-    ["/export/txt" {:get export-txt-data
-                    :description (at/get-doc #'export-txt-data)
-                    :parameters {:query {:share-hash :discussion/share-hash}}
-                    :responses {200 {:body {:string-representation string?}}
-                                404 at/response-error-body}}]
+    ["/export" {:parameters {:query {:share-hash :discussion/share-hash}}
+                :responses {200 {:body {:string-representation string?}}
+                            404 at/response-error-body}}
+     ["/argdown" {:get export-as-argdown
+                  :description (at/get-doc #'export-as-argdown)}]
+     ["/fulltext" {:get export-as-fulltext
+                   :description (at/get-doc #'export-as-fulltext)}]]
     ["/credentials/validate" {:post check-credentials!
                               :description (at/get-doc #'check-credentials!)
                               :responses {200 {:body {:valid-credentials? boolean?}}
