@@ -27,16 +27,20 @@
     (:path
       (r/match-by-name (r/router summary-routes) route-name))))
 
-(defn- request-bart-summary [share-hash]
-  (client/post
-    (summy-config/urls :summary/bart)
-    {:body (m/encode "application/json"
-                     {:respond_url (respond-to-route :summary/from-summy)
-                      :share_hash share-hash
-                      :app_code summy-config/app-code
-                      :content (export/generate-fulltext share-hash)})
-     :as :json
-     :content-type :json}))
+(defn- request-bart-summary
+  "Request a bart summary at summy."
+  [share-hash]
+  (let [url (summy-config/urls :summary/bart)
+        respond-url (respond-to-route :summary/from-summy)]
+    (log/info (format "Requesting bart-summary, endpoint: %s, share-hash: %s, respond_url: %s" url share-hash respond-url))
+    (client/post url
+                 {:body (m/encode "application/json"
+                                  {:respond_url (respond-to-route :summary/from-summy)
+                                   :share_hash share-hash
+                                   :app_code summy-config/app-code
+                                   :content (export/generate-fulltext share-hash)})
+                  :as :json
+                  :content-type :json})))
 
 
 ;; -----------------------------------------------------------------------------

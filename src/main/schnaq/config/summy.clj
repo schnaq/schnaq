@@ -1,7 +1,7 @@
 (ns schnaq.config.summy
   (:require [ghostwheel.core :refer [>defn ?]]))
 
-(def ^:private base-url
+(def base-url
   "URL to our machine-learning service."
   (or (System/getenv "SUMMY_URL") "http://localhost:8000"))
 
@@ -15,5 +15,4 @@
     (when url
       (format "%s/%s" base-url url))))
 
-(def app-code
-  "***REMOVED***")
+(def app-code "***REMOVED***")
