@@ -98,6 +98,7 @@
     ["/schnaq"
      ["/by-hash" {:get schnaq-by-hash
                   :description (at/get-doc #'schnaq-by-hash)
+                  :name :api.schnaq/by-hash
                   :middleware [:discussion/valid-share-hash?]
                   :parameters {:query {:share-hash :discussion/share-hash}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
@@ -107,14 +108,18 @@
                                   :public-discussion? boolean?}}
               :responses {201 {:body {:new-schnaq ::dto/discussion}}
                           400 at/response-error-body}}
-      ["" {:post add-schnaq}]
+      ["" {:post add-schnaq
+           :name :api.schnaq/add}]
       ["/anonymous" {:post add-schnaq
+                     :name :api.schnaq.add/anonymous
                      :parameters {:body {:nickname :user/nickname}}}]
       ["/with-hub" {:post add-schnaq
+                    :name :api.schnaq.add/with-hub
                     :parameters {:body {:hub-exclusive? boolean?
                                         :hub :hub/keycloak-name}}}]]
      ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
                            :description (at/get-doc #'schnaq-by-hash-as-admin)
+                           :name :api.schnaq/by-hash-as-admin
                            :middleware [:discussion/valid-credentials?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :edit-hash :discussion/edit-hash}}
@@ -122,6 +127,7 @@
 
     ["/schnaqs"
      ["/by-hashes" {:get schnaqs-by-hashes
+                    :name :api.schnaqs/by-hashes
                     :description (at/get-doc #'schnaqs-by-hashes)
                     :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
                                                                                      :swagger/collectionFormat "multi"})
@@ -129,12 +135,14 @@
                     :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
                                 404 at/response-error-body}}]
      ["/public" {:get public-schnaqs
+                 :name :api.schnaqs/public
                  :description (at/get-doc #'public-schnaqs)
                  :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
     ["/admin" {:swagger {:tags ["admin"]}
                :responses {401 at/response-error-body}
                :middleware [:user/authenticated? :user/admin?]}
      ["/schnaq/delete" {:delete delete-schnaq!
+                        :name :api.schnaq.admin/delete
                         :description (at/get-doc #'delete-schnaq!)
                         :parameters {:body {:share-hash :discussion/share-hash}}
                         :responses {200 {:share-hash :discussion/share-hash}
