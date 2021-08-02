@@ -2,10 +2,15 @@
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
   (:require [schnaq.config.shared :as shared-config]
+            [schnaq.config.summy :as summy-config]
             [schnaq.toolbelt :as toolbelt]))
 
 (def frontend-url
   (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
+
+(def app-codes
+  "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
+  #{summy-config/app-code})
 
 (def datomic
   "When we are production ready, put here the original production config and use

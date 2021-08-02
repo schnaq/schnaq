@@ -121,6 +121,7 @@
      ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
                             :user/admin? auth/admin?-middleware
                             :user/beta-tester? auth/beta-tester?-middleware
+                            :app/valid-code? auth/valid-app-code?-middleware
                             :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                             :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))
 

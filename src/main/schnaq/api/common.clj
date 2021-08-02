@@ -24,12 +24,21 @@
       (discussion-db/add-admin-to-discussion share-hash keycloak-id))
     (ok {:valid-credentials? true})))
 
-(defn- export-txt-data
-  "Exports the discussion data as a string."
+(defn- export-as-argdown
+  "Exports the complete discussion in an argdown-formatted file."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:query parameters)]
-    (log/info "User is generating a txt export for discussion" share-hash)
-    (ok {:string-representation (export/generate-text-export share-hash)})))
+    (if (validator/valid-discussion? share-hash)
+      (do (log/info "User is generating an argdown export for discussion" share-hash)
+          (ok {:string-representation (export/generate-argdown share-hash)}))
+      at/not-found-hash-invalid)))
+
+(defn- export-as-fulltext
+  "Exports the complete discussion as an fulltext file."
+  [{:keys [parameters]}]
+  (let [{:keys [share-hash]} (:query parameters)]
+    (log/info "User is generating a fulltext export for discussion" share-hash)
+    (ok {:string-representation (export/generate-fulltext share-hash)})))
 
 (defn- subscribe-lead-magnet!
   "Subscribes to the mailing list and sends the lead magnet to the email-address."
@@ -55,12 +64,14 @@
     ["/ping" {:get ping
               :description (at/get-doc #'ping)
               :responses {200 {:body {:text string?}}}}]
-    ["/export/txt" {:get export-txt-data
-                    :description (at/get-doc #'export-txt-data)
-                    :middleware [:discussion/valid-share-hash?]
+    ["/export" {:middleware [:discussion/valid-share-hash?]
                     :parameters {:query {:share-hash :discussion/share-hash}}
-                    :responses {200 {:body {:string-representation string?}}
-                                404 at/response-error-body}}]
+                :responses {200 {:body {:string-representation string?}}
+                            404 at/response-error-body}}
+     ["/argdown" {:get export-as-argdown
+                  :description (at/get-doc #'export-as-argdown)}]
+     ["/fulltext" {:get export-as-fulltext
+                   :description (at/get-doc #'export-as-fulltext)}]]
     ["/credentials/validate" {:post check-credentials!
                               :description (at/get-doc #'check-credentials!)
                               :middleware [:discussion/valid-credentials?]

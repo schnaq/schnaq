@@ -182,6 +182,9 @@
                    :statistics/active-users-num :statistics/statement-length-stats
                    :statistics/statement-type-stats :statistics/registered-users-num]))
 
+;; App-Codes
+(s/def :app/code ::non-blank-string)
+
 ;; HTTP Related
 
 (s/def :http/status nat-int?)
