@@ -1,6 +1,5 @@
 (ns schnaq.api
-  (:require [clojure.spec.alpha :as s]
-            [expound.alpha :as expound]
+  (:require [expound.alpha :as expound]
             [muuntaja.core :as m]
             [org.httpkit.server :as server]
             [reitit.coercion.spec]
@@ -36,12 +35,6 @@
             [taoensso.timbre :as log])
   (:gen-class))
 
-(s/def :http/status nat-int?)
-(s/def :http/headers map?)
-(s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
-(s/def :ring/body-params map?)
-(s/def :ring/route-params map?)
-(s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
 
 ;; -----------------------------------------------------------------------------
 ;; General

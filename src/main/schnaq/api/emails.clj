@@ -4,6 +4,7 @@
             [ring.util.http-response :refer [ok]]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as discussion-db]
+            [schnaq.database.specs]
             [schnaq.emails :as emails]
             [schnaq.links :as links]
             [schnaq.translations :refer [email-templates]]
