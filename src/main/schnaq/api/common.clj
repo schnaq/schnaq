@@ -1,13 +1,12 @@
 (ns schnaq.api.common
   (:require [clojure.data.json :as json]
             [org.httpkit.client :as http-client]
-            [ring.util.http-response :refer [ok bad-request forbidden]]
+            [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config.mailchimp :as mailchimp-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.emails :as emails]
             [schnaq.export :as export]
-            [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
 
 (defn- ping
@@ -19,14 +18,11 @@
   "Checks whether share-hash and edit-hash match.
   If the user is logged in and the credentials are valid, they are added as an admin."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)
-        valid-credentials? (validator/valid-credentials? share-hash edit-hash)
+  (let [{:keys [share-hash]} (:body parameters)
         keycloak-id (:sub identity)]
-    (when (and valid-credentials? keycloak-id)
+    (when keycloak-id
       (discussion-db/add-admin-to-discussion share-hash keycloak-id))
-    (if valid-credentials?
-      (ok {:valid-credentials? valid-credentials?})
-      (forbidden {:valid-credentials? valid-credentials?}))))
+    (ok {:valid-credentials? true})))
 
 (defn- export-txt-data
   "Exports the discussion data as a string."
@@ -67,8 +63,9 @@
                                 404 at/response-error-body}}]
     ["/credentials/validate" {:post check-credentials!
                               :description (at/get-doc #'check-credentials!)
+                              :middleware [:discussion/valid-credentials?]
                               :responses {200 {:body {:valid-credentials? boolean?}}
-                                          403 {:body {:valid-credentials? boolean?}}}
+                                          403 at/response-error-body}
                               :parameters {:body {:share-hash :discussion/share-hash
                                                   :edit-hash :discussion/edit-hash}}}]
     ["/lead-magnet/subscribe" {:post subscribe-lead-magnet!
