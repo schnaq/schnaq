@@ -28,10 +28,8 @@
   "Exports the complete discussion in an argdown-formatted file."
   [{:keys [parameters]}]
   (let [{:keys [share-hash]} (:query parameters)]
-    (if (validator/valid-discussion? share-hash)
-      (do (log/info "User is generating an argdown export for discussion" share-hash)
-          (ok {:string-representation (export/generate-argdown share-hash)}))
-      at/not-found-hash-invalid)))
+    (log/info "User is generating an argdown export for discussion" share-hash)
+    (ok {:string-representation (export/generate-argdown share-hash)})))
 
 (defn- export-as-fulltext
   "Exports the complete discussion as an fulltext file."
@@ -65,7 +63,7 @@
               :description (at/get-doc #'ping)
               :responses {200 {:body {:text string?}}}}]
     ["/export" {:middleware [:discussion/valid-share-hash?]
-                    :parameters {:query {:share-hash :discussion/share-hash}}
+                :parameters {:query {:share-hash :discussion/share-hash}}
                 :responses {200 {:body {:string-representation string?}}
                             404 at/response-error-body}}
      ["/argdown" {:get export-as-argdown
