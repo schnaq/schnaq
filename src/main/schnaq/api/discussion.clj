@@ -146,14 +146,12 @@
   Important: Needs to check whether the statement-id really belongs to the discussion with
   the passed edit-hash."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash statement-ids]} (:body parameters)
+  (let [{:keys [share-hash statement-ids]} (:body parameters)
         deny-access (validator/deny-access "You do not have the rights to access this action.")]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      ;; could optimize with a collection query here
-      (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
-        (do (discussion-db/delete-statements! statement-ids)
-            (ok {:deleted-statements statement-ids}))
-        deny-access)
+    ;; could optimize with a collection query here
+    (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
+      (do (discussion-db/delete-statements! statement-ids)
+          (ok {:deleted-statements statement-ids}))
       deny-access)))
 
 (defn- add-starting-statement!
@@ -207,32 +205,26 @@
 (defn- make-discussion-read-only!
   "Makes a discussion read-only if share- and edit-hash are correct and present."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Setting discussion to read-only: " share-hash)
-          (discussion-db/set-discussion-read-only share-hash)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
+  (let [{:keys [share-hash]} (:body parameters)]
+    (log/info "Setting discussion to read-only: " share-hash)
+    (discussion-db/set-discussion-read-only share-hash)
+    (ok {:share-hash share-hash})))
 
 (defn- make-discussion-writeable!
   "Makes a discussion writeable if discussion-admin credentials are there."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Removing read-only from discussion: " share-hash)
-          (discussion-db/remove-read-only share-hash)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
+  (let [{:keys [share-hash]} (:body parameters)]
+    (log/info "Removing read-only from discussion: " share-hash)
+    (discussion-db/remove-read-only share-hash)
+    (ok {:share-hash share-hash})))
 
 (defn- disable-pro-con!
   "Disable pro-con option for a schnaq."
   [{:keys [parameters]}]
-  (let [{:keys [disable-pro-con? share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (do (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
-          (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
-          (ok {:share-hash share-hash}))
-      (validator/deny-access))))
+  (let [{:keys [disable-pro-con? share-hash]} (:body parameters)]
+    (log/info "Setting \"disable-pro-con option\" to" disable-pro-con? "for schnaq:" share-hash)
+    (discussion-db/set-disable-pro-con share-hash disable-pro-con?)
+    (ok {:share-hash share-hash})))
 
 
 ;; -----------------------------------------------------------------------------
@@ -293,7 +285,8 @@
    ["/manage" {:parameters {:body {:share-hash :discussion/share-hash
                                    :edit-hash :discussion/edit-hash}}
                :responses {403 at/response-error-body}}
-    ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}}
+    ["" {:responses {200 {:body {:share-hash :discussion/share-hash}}}
+         :middleware [:discussion/valid-credentials?]}
      ["/disable-pro-con" {:put disable-pro-con!
                           :description (at/get-doc #'disable-pro-con!)
                           :parameters {:body {:disable-pro-con? boolean?}}}]
@@ -320,6 +313,7 @@
    ["/statements"
     ["/delete" {:delete delete-statements!
                 :description (at/get-doc #'delete-statements!)
+                :middleware [:discussion/valid-credentials?]
                 :parameters {:body {:share-hash :discussion/share-hash
                                     :edit-hash :discussion/edit-hash
                                     :statement-ids (s/coll-of :db/id)}}
