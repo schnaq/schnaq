@@ -150,8 +150,8 @@
         deny-access (validator/deny-access "You do not have the rights to access this action.")]
     ;; could optimize with a collection query here
     (if (every? #(discussion-db/check-valid-statement-id-for-discussion % share-hash) statement-ids)
-      (do (discussion-db/delete-statements! statement-ids)
-          (ok {:deleted-statements statement-ids}))
+      (ok {:deleted-statements statement-ids
+           :methods (discussion-db/delete-statements! statement-ids)})
       deny-access)))
 
 (defn- add-starting-statement!
