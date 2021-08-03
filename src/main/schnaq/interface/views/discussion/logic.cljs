@@ -91,7 +91,13 @@
               [:discussion.query.statement/by-id-success]
               {:statement-id statement-id
                :share-hash share-hash}
-              [:ajax.error/as-notification])]})))
+              [:discussion.redirect/to-root share-hash])]})))
+
+(rf/reg-event-fx
+  :discussion.redirect/to-root
+  (fn [_ [_ share-hash]]
+    {:fx [[:dispatch [:navigation/navigate :routes.schnaq/start
+                      {:share-hash share-hash}]]]}))
 
 (rf/reg-event-fx
   :discussion.query.statement/by-id-success

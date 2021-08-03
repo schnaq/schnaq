@@ -187,7 +187,6 @@
                                      :context :success}]]
           [:dispatch [:discussion.delete/purge-stores statement-id return]]]}))
 
-;; TODO when there is no statement answer, go to root instead of erroring out
 (rf/reg-event-db
   ;; Delete a statement-id from conclusions-list, history and carousels
   :discussion.delete/purge-stores

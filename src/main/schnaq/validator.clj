@@ -31,12 +31,10 @@
 (defn valid-discussion-and-statement?
   "Checks whether a discussion is valid and also whether the statement belongs to the discussion."
   [statement-id share-hash]
-  ;; TODO check whether deleted statements are shown as non-valid
   (and (valid-discussion? share-hash)
        (db/check-valid-statement-id-for-discussion statement-id share-hash)))
 
 (defn valid-writeable-discussion-and-statement?
-  ;; TODO check wheter the statement is not deleted as well
   "Checks whether a discussion is valid, writeable and also whether the statement belongs to the discussion."
   [statement-id share-hash]
   (and (valid-writeable-discussion? share-hash)
