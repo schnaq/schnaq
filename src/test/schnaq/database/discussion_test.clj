@@ -246,3 +246,16 @@
       (is (= 3 (count history-3)))
       (is (= content-with-history (:statement/content (last history-3))))
       (is (= historyless-content (:statement/content (first history-3)))))))
+
+(deftest delete-statement!-test
+  (testing "The correct behaviour of statement deletion"
+    (let [root (:db/id (first (db/statements-by-content "Brainstorming ist total wichtig")))
+          child (:db/id (first (db/statements-by-content "Man denkt viel nach dabei")))
+          grandchild (:db/id (first (db/statements-by-content "Denken sorgt nur für Kopfschmerzen. Lieber den Donaldo machen!")))]
+      (db/delete-statement! root)
+      (is (:statement/deleted? (fast-pull root [:statement/deleted?])))
+      (db/delete-statement! grandchild)
+      (is (nil? (fast-pull grandchild [:statement/content])))
+      (db/delete-statement! child)
+      (is (nil? (fast-pull child [:statement/content])))
+      (is (nil? (fast-pull root [:statement/content]))))))

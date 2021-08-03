@@ -136,8 +136,8 @@
                                               :statement/deleted?])]
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
-      #(do (discussion-db/delete-statements! [statement-id])
-           (ok {:deleted-statement statement-id}))
+      #(ok {:deleted-statement statement-id
+            :method (discussion-db/delete-statement! statement-id)})
       #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not delete a closed / deleted discussion or statement."))
       #(validator/deny-access at/invalid-rights-message))))
 
@@ -326,7 +326,8 @@
                 :parameters {:body {:share-hash :discussion/share-hash
                                     :edit-hash :discussion/edit-hash
                                     :statement-ids (s/coll-of :db/id)}}
-                :responses {200 {:body {:deleted-statements (s/coll-of :db/id)}}
+                :responses {200 {:body {:deleted-statements (s/coll-of :db/id)
+                                        :methods (s/coll-of keyword?)}}
                             401 at/response-error-body
                             403 at/response-error-body}}]
     ["/search" {:get search-statements
@@ -379,7 +380,8 @@
                  :description (at/get-doc #'delete-statement!)
                  :name :api.discussion.statement/delete
                  :middleware [:user/authenticated?]
-                 :responses {200 {:body {:deleted-statement :db/id}}
+                 :responses {200 {:body {:deleted-statement :db/id
+                                         :method keyword?}}
                              400 at/response-error-body
                              403 at/response-error-body}}]
      ["/vote" {:parameters {:body {:nickname ::dto/maybe-nickname}}}
