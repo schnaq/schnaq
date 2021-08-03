@@ -9,7 +9,7 @@
 (use-fixtures :once toolbelt/clean-database-fixture)
 
 (defn- add-feedback-request [payload]
-  (-> {:request-method :post :uri "/feedback/add"
+  (-> {:request-method :post :uri (:path (api/route-by-name :api.feedback/add))
        :headers {"accept" "application/edn"}
        :body-params {:feedback payload}}
       api/app))

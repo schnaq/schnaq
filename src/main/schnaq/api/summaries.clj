@@ -1,36 +1,67 @@
 (ns schnaq.api.summaries
-  (:require [clojure.spec.alpha :as s]
+  (:require [clj-http.client :as client]
+            [clojure.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn-]]
+            [muuntaja.core :as m]
+            [reitit.core :as r]
             [ring.util.http-response :refer [ok]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
+            [schnaq.config.shared :as shared-config]
+            [schnaq.config.summy :as summy-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.emails :as emails]
+            [schnaq.export :as export]
             [schnaq.links :as links]
-            [schnaq.validator :as validator]
             [taoensso.timbre :as log]))
+
+(declare summary-routes)
+
+(>defn- respond-to-route
+  "Look up route to receive results from summy."
+  [route-name]
+  [keyword? :ret string?]
+  (str
+    shared-config/api-url
+    (:path
+      (r/match-by-name (r/router summary-routes) route-name))))
+
+(defn- request-bart-summary
+  "Request a bart summary at summy."
+  [share-hash]
+  (let [url (summy-config/urls :summary/bart)
+        respond-url (respond-to-route :summary/from-summy)]
+    (log/info (format "Requesting bart-summary, endpoint: %s, share-hash: %s, respond_url: %s" url share-hash respond-url))
+    (client/post url
+                 {:body (m/encode "application/json"
+                                  {:respond_url (respond-to-route :summary/from-summy)
+                                   :share_hash share-hash
+                                   :app_code summy-config/app-code
+                                   :content (export/generate-fulltext share-hash)})
+                  :as :json
+                  :content-type :json})))
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- request-summary
   "Request a summary of a discussion. Works only if person is in a beta group."
   [{:keys [parameters identity]}]
   (let [share-hash (get-in parameters [:body :share-hash])]
     (log/info "Requesting new summary for schnaq" share-hash)
-    (if (validator/valid-discussion? share-hash)
-      (do
-        (emails/send-mail
-          "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
-          (format "Bitte im Chat absprechen und Zusammenfassung zu folgendem schnaq anlegen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
-          "info@schnaq.com")
-        (ok {:summary (discussion-db/summary-request share-hash (:id identity))}))
-      (validator/deny-access "You are not allowed to use this feature"))))
+    (request-bart-summary share-hash)
+    (emails/send-mail
+      "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
+      (format "Die Summary wird gerade generiert. Bitte überprüfen und ggf. anpassen. Bitte im Chat absprechen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
+      "info@schnaq.com")
+    (ok {:summary (discussion-db/summary-request share-hash (:id identity))})))
 
 (defn- get-summary
   "Return a summary for the specified share-hash."
   [{:keys [parameters]}]
   (let [share-hash (get-in parameters [:query :share-hash])]
-    (if (validator/valid-discussion? share-hash)
-      (ok {:summary (discussion-db/summary share-hash)})
-      (validator/deny-access "You are not allowed to use this feature"))))
+    (ok {:summary (discussion-db/summary share-hash)})))
 
 (defn new-summary
   "Update a summary. If a text exists, it is overwritten. Admin access is already checked by middleware."
@@ -59,11 +90,23 @@ Dein schnaq Team"
   [_]
   (ok {:summaries (discussion-db/all-summaries-with-discussions)}))
 
+(defn- summary-from-summy
+  "Route for summy to return summarization results."
+  [{:keys [parameters]}]
+  (let [share-hash (get-in parameters [:body :share-hash])
+        summary-text (get-in parameters [:body :summary])]
+    (log/info (format "Received new summary for %s, length: %d" share-hash (count summary-text)))
+    (new-summary {:parameters {:body {:share-hash share-hash
+                                      :new-summary-text summary-text}}})
+    (ok {:status :ok})))
+
+
 ;; -----------------------------------------------------------------------------
 
 (def summary-routes
   [["/schnaq/summary" {:swagger {:tags ["summaries" "beta"]}
-                       :middleware [:user/authenticated? :user/beta-tester?]
+                       :middleware [:discussion/valid-share-hash?
+                                    :user/authenticated? :user/beta-tester?]
                        :responses {401 at/response-error-body}}
     ["" {:get get-summary
          :description (at/get-doc #'get-summary)
@@ -74,6 +117,16 @@ Dein schnaq Team"
                  :description (at/get-doc #'request-summary)
                  :parameters {:body {:share-hash :discussion/share-hash}}
                  :responses {200 {:body {:summary ::specs/summary}}}}]]
+   ["/schnaq/summary/from-summy"
+    {:swagger {:tags ["summaries"]}
+     :post summary-from-summy
+     :name :summary/from-summy
+     :middleware [:app/valid-code?]
+     :description (at/get-doc #'summary-from-summy)
+     :parameters {:body {:share-hash :discussion/share-hash
+                         :summary :summary/text
+                         :app-code :app/code}}
+     :responses {200 {:body {:status keyword?}}}}]
    ["/admin" {:swagger {:tags ["summaries" "admin" "beta"]}
               :middleware [:user/authenticated? :user/admin?]
               :responses {401 at/response-error-body}}

@@ -452,11 +452,11 @@
 
 (>defn- request-summary
   "Updates an existing summary request and returns the updated version."
-  [summary requester]
-  [::specs/summary :summary/requester :ret ::specs/summary]
-  (let [tx-result @(transact [[:db/add summary :summary/requested-at (Date.)]
-                              [:db/add summary :summary/requester requester]])]
-    (fast-pull summary summary-pattern (:db-after tx-result))))
+  [summary-id requester]
+  [:db/id :summary/requester :ret ::specs/summary]
+  (let [tx-result @(transact [[:db/add summary-id :summary/requested-at (Date.)]
+                              [:db/add summary-id :summary/requester requester]])]
+    (fast-pull summary-id summary-pattern (:db-after tx-result))))
 
 (>defn summary
   "Return a summary if it exists for a discussion's share-hash."

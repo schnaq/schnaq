@@ -19,12 +19,10 @@
   [{:keys [parameters identity]}]
   (let [hash (get-in parameters [:query :share-hash])
         keycloak-id (:sub identity)]
-    (if (validator/valid-discussion? hash)
-      (ok {:schnaq (processors/add-meta-info-to-schnaq
-                     (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
-                       (discussion-db/discussion-by-share-hash-private hash)
-                       (discussion-db/discussion-by-share-hash hash)))})
-      (validator/deny-access))))
+    (ok {:schnaq (processors/add-meta-info-to-schnaq
+                   (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
+                     (discussion-db/discussion-by-share-hash-private hash)
+                     (discussion-db/discussion-by-share-hash hash)))})))
 
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
@@ -81,10 +79,8 @@
   "If user is authenticated, a meeting with an edit-hash is returned for further
   processing in the frontend."
   [{:keys [parameters]}]
-  (let [{:keys [share-hash edit-hash]} (:body parameters)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})
-      (validator/deny-access "You provided the wrong hashes to access this schnaq."))))
+  (let [{:keys [share-hash]} (:body parameters)]
+    (ok {:schnaq (discussion-db/discussion-by-share-hash-private share-hash)})))
 
 (defn- delete-schnaq!
   "Sets the state of a schnaq to delete. Should be only available to superusers (admins)."
@@ -102,6 +98,8 @@
     ["/schnaq"
      ["/by-hash" {:get schnaq-by-hash
                   :description (at/get-doc #'schnaq-by-hash)
+                  :name :api.schnaq/by-hash
+                  :middleware [:discussion/valid-share-hash?]
                   :parameters {:query {:share-hash :discussion/share-hash}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
@@ -110,19 +108,26 @@
                                   :public-discussion? boolean?}}
               :responses {201 {:body {:new-schnaq ::dto/discussion}}
                           400 at/response-error-body}}
-      ["" {:post add-schnaq}]
+      ["" {:post add-schnaq
+           :name :api.schnaq/add}]
       ["/anonymous" {:post add-schnaq
+                     :name :api.schnaq.add/anonymous
                      :parameters {:body {:nickname :user/nickname}}}]
       ["/with-hub" {:post add-schnaq
+                    :name :api.schnaq.add/with-hub
                     :parameters {:body {:hub-exclusive? boolean?
                                         :hub :hub/keycloak-name}}}]]
      ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
+                           :description (at/get-doc #'schnaq-by-hash-as-admin)
+                           :name :api.schnaq/by-hash-as-admin
+                           :middleware [:discussion/valid-credentials?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :edit-hash :discussion/edit-hash}}
                            :responses {200 {:body {:schnaq ::dto/discussion}}}}]]
 
     ["/schnaqs"
      ["/by-hashes" {:get schnaqs-by-hashes
+                    :name :api.schnaqs/by-hashes
                     :description (at/get-doc #'schnaqs-by-hashes)
                     :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
                                                                                      :swagger/collectionFormat "multi"})
@@ -130,12 +135,14 @@
                     :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
                                 404 at/response-error-body}}]
      ["/public" {:get public-schnaqs
+                 :name :api.schnaqs/public
                  :description (at/get-doc #'public-schnaqs)
                  :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
     ["/admin" {:swagger {:tags ["admin"]}
                :responses {401 at/response-error-body}
                :middleware [:user/authenticated? :user/admin?]}
      ["/schnaq/delete" {:delete delete-schnaq!
+                        :name :api.schnaq.admin/delete
                         :description (at/get-doc #'delete-schnaq!)
                         :parameters {:body {:share-hash :discussion/share-hash}}
                         :responses {200 {:share-hash :discussion/share-hash}

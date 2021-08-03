@@ -181,3 +181,15 @@
                    :statistics/average-statements-num :statistics/statements-num
                    :statistics/active-users-num :statistics/statement-length-stats
                    :statistics/statement-type-stats :statistics/registered-users-num]))
+
+;; App-Codes
+(s/def :app/code ::non-blank-string)
+
+;; HTTP Related
+
+(s/def :http/status nat-int?)
+(s/def :http/headers map?)
+(s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
+(s/def :ring/body-params map?)
+(s/def :ring/route-params map?)
+(s/def :ring/request (s/keys :opt [:ring/body-params :ring/route-params]))
