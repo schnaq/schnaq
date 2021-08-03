@@ -142,7 +142,7 @@
                                               :statement/deleted?])]
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
-      #(do (discussion-db/delete-statements! [statement-id])
+      #(do (discussion-db/delete-statement! statement-id)
            (ok {:deleted-statement statement-id}))
       #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not delete a closed / deleted discussion or statement."))
       #(validator/deny-access at/invalid-rights-message))))

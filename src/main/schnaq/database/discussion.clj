@@ -130,12 +130,37 @@
         share-hashes discussion-pattern-minimal)
       (toolbelt/pull-key-up :db/ident)))
 
+(>defn children-for-statement
+  "Returns all children for a statement. (Statements that have the input set as a parent)."
+  [parent-id]
+  [:db/id :ret (s/coll-of ::specs/statement)]
+  (-> (query '[:find [(pull ?children statement-pattern) ...]
+               :in $ ?parent statement-pattern
+               :where [?children :statement/parent ?parent]]
+             parent-id statement-pattern)
+      (toolbelt/pull-key-up :db/ident)))
+
+(defn delete-statement!
+  "Deletes a statement. Hard delete if there are no children, delete flag if there are.
+  Check the same for the parent and continue recursively until the root."
+  [statement-id]
+  (let [statement-to-delete (fast-pull statement-id statement-pattern)
+        parent (:statement/parent statement-to-delete)
+        children (children-for-statement statement-id)]
+    (log/info "Statement id scheduled for deletion:" statement-id)
+    (if (seq children)
+      (transact [[:db/add statement-id :statement/deleted? true]])
+      (do
+        @(transact [[:db/retractEntity statement-id]])
+        (when (:statement/deleted? parent)
+          (delete-statement! (:db/id parent)))))))
+
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
   [statement-ids]
   [(s/coll-of :db/id) :ret associative?]
   (log/info "Statement ids scheduled for deletion:" statement-ids)
-  (transact (mapv #(vector :db/add % :statement/deleted? true) statement-ids)))
+  (doseq [statement-id statement-ids] (delete-statement! statement-id)))
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
@@ -162,16 +187,6 @@
     (get-in @(transact [new-statement
                         [:db/add discussion-id :discussion/starting-statements temporary-id]])
             [:tempids temporary-id])))
-
-(>defn children-for-statement
-  "Returns all children for a statement. (Statements that have the input set as a parent)."
-  [parent-id]
-  [:db/id :ret (s/coll-of ::specs/statement)]
-  (-> (query '[:find [(pull ?children statement-pattern) ...]
-               :in $ ?parent statement-pattern
-               :where [?children :statement/parent ?parent]]
-             parent-id statement-pattern)
-      (toolbelt/pull-key-up :db/ident)))
 
 (>defn all-discussions-by-title
   "Query all discussions based on the title. Could possible be multiple
