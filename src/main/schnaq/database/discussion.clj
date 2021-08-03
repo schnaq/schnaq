@@ -145,26 +145,28 @@
   Check the same for the parent and continue recursively until the root."
   [statement-id]
   (let [statement-to-delete (fast-pull statement-id statement-pattern)
-        parent (fast-pull (get-in statement-to-delete [:statement/parent :db/id] )
+        parent (fast-pull (get-in statement-to-delete [:statement/parent :db/id])
                           [:db/id
                            :statement/deleted?])
         children (children-for-statement statement-id)]
     (if (seq children)
       (do
         (log/info "Statement will set deletion marker:" statement-id)
-        (transact [[:db/add statement-id :statement/deleted? true]]))
+        (transact [[:db/add statement-id :statement/deleted? true]])
+        :set-marker)
       (do
         (log/info "Statement id scheduled for deletion:" statement-id)
         @(transact [[:db/retractEntity statement-id]])
         (when (:statement/deleted? parent)
-          (delete-statement! (:db/id parent)))))))
+          (delete-statement! (:db/id parent)))
+        :deleted))))
 
 (>defn delete-statements!
   "Deletes all statements, without explicitly checking anything."
   [statement-ids]
   [(s/coll-of :db/id) :ret associative?]
   (log/info "Statement ids scheduled for deletion:" statement-ids)
-  (doseq [statement-id statement-ids] (delete-statement! statement-id)))
+  (map delete-statement! statement-ids))
 
 (defn- build-new-statement
   "Builds a new statement for transaction."
