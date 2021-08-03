@@ -51,10 +51,6 @@
   (let [share-hash (get-in parameters [:body :share-hash])]
     (log/info "Requesting new summary for schnaq" share-hash)
     (request-bart-summary share-hash)
-    (emails/send-mail
-      "[SUMMARY] Es wurde eine neue Summary angefragt 🐳"
-      (format "Die Summary wird gerade generiert. Bitte überprüfen und ggf. anpassen. Bitte im Chat absprechen: %s%n%nLink zu den Summaries: %s" (links/get-share-link share-hash) "https://schnaq.com/admin/summaries")
-      "info@schnaq.com")
     (ok {:summary (discussion-db/summary-request share-hash (:id identity))})))
 
 (defn- get-summary

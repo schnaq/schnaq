@@ -152,13 +152,13 @@
 
 (rf/reg-event-db
   :analytics/discussions-num-loaded
-  (fn [db [_ {:keys [discussions-num]}]]
-    (assoc-in db [:analytics :discussions-num :overall] discussions-num)))
+  (fn [db [_ {:keys [discussions-sum]}]]
+    (assoc-in db [:analytics :discussions-sum :overall] discussions-sum)))
 
 (rf/reg-event-db
   :analytics/usernames-num-loaded
-  (fn [db [_ {:keys [usernames-num]}]]
-    (assoc-in db [:analytics :users-num :anonymous] usernames-num)))
+  (fn [db [_ {:keys [usernames-sum]}]]
+    (assoc-in db [:analytics :users-num :anonymous] usernames-sum)))
 
 (rf/reg-event-db
   :analytics/registered-users-num-loaded
@@ -193,12 +193,12 @@
 (rf/reg-event-db
   :analytics/all-stats-loaded
   (fn [db [_ {:keys [statistics]}]]
-    (assoc db :analytics {:discussions-num {:overall (:discussions-num statistics)}
-                          :users-num {:anonymous (:usernames-num statistics)
+    (assoc db :analytics {:discussions-sum {:overall (:discussions-sum statistics)}
+                          :users-num {:anonymous (:usernames-sum statistics)
                                       :registered (:registered-users-num statistics)}
                           :statements {:number {:overall (:statements-num statistics)}
                                        :lengths (:statement-length-stats statistics)
-                                       :average-per-discussion (:average-statements statistics)
+                                       :average-per-discussion (:average-statements-num statistics)
                                        :types (:statement-type-stats statistics)}
                           :active-users-num {:overall (:active-users-num statistics)}})))
 
@@ -207,7 +207,7 @@
 (rf/reg-sub
   :analytics/number-of-discussions-overall
   (fn [db _]
-    (get-in db [:analytics :discussions-num :overall])))
+    (get-in db [:analytics :discussions-sum :overall])))
 
 (rf/reg-sub
   :analytics/number-of-usernames-anonymous
