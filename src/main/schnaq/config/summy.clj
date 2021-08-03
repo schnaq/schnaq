@@ -3,7 +3,7 @@
 
 (def base-url
   "URL to our machine-learning service."
-  (or (System/getenv "SUMMY_URL") "http://localhost:8000"))
+  (or (System/getenv "SUMMY_URL") "https://summy.schnaq.com"))
 
 (>defn urls
   "Return the url to externally call machine learning functions."
