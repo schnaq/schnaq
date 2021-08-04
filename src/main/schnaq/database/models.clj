@@ -180,6 +180,10 @@
     :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
     :db/doc "The time at which this entity has been created."}
+   {:db/ident :discussion/end-time
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db/doc "An optional time, when the discussion is finished and follow-up processes are started."}
 
    {:db/ident :hub/name
     :db/valueType :db.type/string

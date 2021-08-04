@@ -62,6 +62,7 @@
 (s/def :discussion/author ::user-or-reference)
 (s/def :discussion/header-image-url string?)
 (s/def :discussion/created-at inst?)
+(s/def :discussion/end-time inst?)
 (s/def :discussion/hub-origin (s/or :reference :db/id
                                     :hub ::hub))
 (s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
@@ -77,7 +78,8 @@
                             :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin :discussion/states
-                                  :discussion/created-at :discussion/share-link :discussion/admin-link]))
+                                  :discussion/created-at :discussion/share-link :discussion/admin-link
+                                  :discussion/end-time]))
 
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
