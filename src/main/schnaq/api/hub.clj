@@ -1,20 +1,16 @@
 (ns schnaq.api.hub
   (:require [clojure.spec.alpha :as s]
-            [clojure.string :as string]
             [keycloak.admin :as kc-admin]
-            [ring.util.http-response :refer [ok bad-request forbidden not-found internal-server-error]]
+            [ring.util.http-response :refer [ok forbidden not-found internal-server-error]]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
-            [schnaq.config :as config]
             [schnaq.config.keycloak :as kc-config :refer [kc-client]]
-            [schnaq.config.shared :as shared-config]
             [schnaq.database.hub :as hub-db]
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.media :as media]
             [schnaq.processors :as processors]
-            [schnaq.s3 :as s3]
             [schnaq.validator :as validators]
             [taoensso.timbre :as log]))
 
@@ -115,23 +111,12 @@
         image-content (get-in parameters [:body :image :content])]
     (log/info (format "User %s is trying to set logo of Hub %s to: %s" (:id identity) keycloak-name image-name))
     (if (auth/member-of-group? identity keycloak-name)
-      (if (shared-config/allowed-mime-types image-type)
-        (if-let [{:keys [input-stream image-type content-type]}
-                 (media/scale-image-to-height image-content config/profile-picture-height)]
-          (let [image-name (media/create-UUID-file-name (:id identity) image-type)
-                absolute-url (s3/upload-stream :hub/logo
-                                               input-stream
-                                               image-name
-                                               {:content-type content-type})]
-            (log/info "Hub" keycloak-name "logo updated to" absolute-url)
-            (ok {:hub (hub-db/update-hub-logo-url keycloak-name absolute-url)}))
-          (do
-            (log/warn "Conversion of image failed for hub" keycloak-name)
-            (bad-request (at/build-error-body :scaling "Could not scale image"))))
-        (bad-request (at/build-error-body
-                       :hub.logo/invalid-file-type
-                       (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))
+      (let [{:keys [image-url] :as response} (media/upload-image! image-type image-content :hub/logo)]
+        (if image-url
+          (ok {:hub (hub-db/update-hub-logo-url keycloak-name image-url)})
+          response))
       forbidden-missing-permission)))
+
 
 ;; -----------------------------------------------------------------------------
 
