@@ -18,7 +18,7 @@
 (defn- logo-input [input-id]
   (let [hub @(rf/subscribe [:hub/current])
         name (:hub/keycloak-name hub)
-        hub-logo (get-in hub [:logo])
+        hub-logo (:hub/logo hub)
         temporary-logo (get-in hub [:logo-temporary :content])
         preview-image (or temporary-logo hub-logo)]
     [:div.d-flex.mr-4
@@ -166,8 +166,7 @@
   :hub.logo/update-success
   (fn [{:keys [db]} [_ {:keys [hub]}]]
     (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
-      {:db (assoc-in db [:hubs keycloak-name :logo]
-                     (:hub/logo hub))
+      {:db (assoc-in db [:hubs keycloak-name :hub/logo] (:hub/logo hub))
        :fx [[:dispatch [:notification/add
                         #:notification{:title (labels :hub.settings.update-logo-title/success)
                                        :body (labels :hub.settings.update-logo-body/success)

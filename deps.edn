@@ -6,7 +6,7 @@
         clj-http/clj-http {:mvn/version "3.12.3"}
         com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.cognitect.aws/api {:mvn/version "0.8.515"}
-        com.cognitect.aws/endpoints {:mvn/version "1.1.12.13"}
+        com.cognitect.aws/endpoints {:mvn/version "1.1.12.37"}
         com.cognitect.aws/s3 {:mvn/version "811.2.934.0"}
         com.datomic/datomic-pro {:mvn/version "1.0.6269"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -21,8 +21,8 @@
         gnl/ghostwheel {:mvn/version "0.3.9"}
         http-kit/http-kit {:mvn/version "2.5.3"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.17.0"}
-        metosin/reitit {:mvn/version "0.5.13"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.17.2"}
+        metosin/reitit {:mvn/version "0.5.14"}
         metosin/ring-http-response {:mvn/version "0.9.2"}
         org.clojure/clojure {:mvn/version "1.10.3"}
         org.clojure/clojurescript {:mvn/version "1.10.879"}
@@ -64,7 +64,7 @@
                         "watch" ":app"]}
 
            :uberjar
-           {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.267"}}
+           {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.278"}}
             :exec-fn hf.depstar/uberjar
             :exec-args {:main-class schnaq.api
                         :verbose true
