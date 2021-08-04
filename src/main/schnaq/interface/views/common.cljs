@@ -160,16 +160,13 @@
 
 (defn form-input
   "The input form for the display name."
-  [{:keys [id placeholder default-value css]}]
+  [{:keys [id placeholder default-value] :as properties}]
   [:input.form-control.form-border-bottom.mb-2
-   {:id id
-    :key (str id placeholder default-value)
-    :class css
-    :type "text"
-    :autoComplete "off"
-    :defaultValue default-value
-    :placeholder placeholder
-    :required true}])
+   (merge {:key (str id placeholder default-value)
+           :type "text"
+           :autoComplete "off"
+           :required true}
+          properties)])
 
 
 ;; -----------------------------------------------------------------------------

@@ -19,7 +19,7 @@
       (let [user-groups @(rf/subscribe [:user/groups])
             no-hub-exclusive-fn #(when (seq user-groups)
                                    (jq/prop (jq/$ "#hub-exclusive") "checked" false))]
-        [:div {:class (if (empty? user-groups) "col-12" "col-6")}
+        [:div {:class "col-6"}
          [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
          [:input#input-public-schnaq {:type :hidden :value @public?}]
          [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
@@ -63,12 +63,46 @@
                      :key group-id}
             (get-in hubs [group-id :hub/name])])]]])))
 
+(defn- end-time-schnaq-options
+  "Options to give a schnaq an end-time."
+  ;; TODO labelize and make pretty
+  []
+  (let [end-time (reagent/atom false)]
+    (fn []
+      [:div.col-6.border-left.pl-5
+       [:h4.mb-5 "Begrenze die Laufzeit deiner Diskussion"]
+       (when @end-time
+         [:div
+          [:label {:for :input-num-days-to-end} "Ende in Tagen"]
+          [common/form-input {:type "number"
+                              :min 1
+                              :id :input-num-days-to-end
+                              :placeholder 7
+                              :defaultValue 7
+                              :required true
+                              :onChange #(reset! end-time (oget % [:currentTarget :value]))}]])
+       [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
+        {:class (when @end-time "active")
+         :type "button"
+         :on-click (fn [_e]
+                     (swap! end-time #(or @end-time 7)))}
+        [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
+        (if @end-time (str @end-time " " "Tage") "7 Tage")]
+       [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
+        {:class (when-not @end-time "active")
+         :type "button"
+         :on-click (fn [_e]
+                     (reset! end-time false))}
+        [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
+        "Unbegrenzt"]])))
+
 (defn- create-schnaq-options
   "Options that can be chosen when creating a schnaq."
   []
   [:div.row.my-5
    [public-private-discussion]
-   [add-schnaq-to-hub]])
+   [add-schnaq-to-hub]
+   [end-time-schnaq-options]])
 
 (defn- create-schnaq-page []
   [pages/with-nav-and-header
