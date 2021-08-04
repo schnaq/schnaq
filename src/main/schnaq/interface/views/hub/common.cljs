@@ -29,3 +29,13 @@
     [:section
      [:p.h5.text-muted.pb-2 (labels :hubs/heading)]
      [hub-list]]))
+
+(defn logo
+  "Get a hub's logo."
+  [logo display-name size]
+  [:div.avatar-image.p-0
+   (if logo
+     [:div.profile-pic-fill
+      {:style {:height (str size "px") :width (str size "px")}}
+      [:img.profile-pic-image {:src logo}]]
+     [common/identicon display-name size])])

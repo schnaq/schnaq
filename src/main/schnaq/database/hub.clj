@@ -19,6 +19,7 @@
    :hub/name
    :hub/keycloak-name
    :hub/created-at
+   :hub/logo
    {:hub/schnaqs discussion-db/discussion-pattern}])
 
 (>defn- all-schnaqs-for-hub
@@ -110,6 +111,17 @@
   (let [new-db (:db-after
                  @(transact [[:db/add [:hub/keycloak-name keycloak-name]
                               :hub/name new-name]]))]
+    (toolbelt/pull-key-up
+      (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db)
+      :db/ident)))
+
+(>defn update-hub-logo-url
+  "Update the hub logo url."
+  [keycloak-name hub-logo-url]
+  [string? :hub/logo :ret ::specs/hub]
+  (let [new-db (:db-after
+                 @(transact [[:db/add [:hub/keycloak-name keycloak-name]
+                              :hub/logo hub-logo-url]]))]
     (toolbelt/pull-key-up
       (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db)
       :db/ident)))

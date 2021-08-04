@@ -10,7 +10,8 @@
             [schnaq.s3 :as s3]
             [schnaq.validator :as validator]
             [taoensso.timbre :as log])
-  (:import (java.util Base64)))
+  (:import (java.util Base64))
+  (:import (java.util UUID)))
 
 (def ^:private trusted-cdn-url-regex
   (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.disqtec\\.com/(.+)"))
@@ -74,3 +75,8 @@
        :content-type content-type})
     (catch Exception e
       (log/warn "Converting image failed with exception:" e))))
+
+(defn create-UUID-file-name
+  "Generates a UUID based on a unique id with a file type suffix."
+  [id file-type]
+  (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type))

@@ -10,21 +10,20 @@
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed]
+            [schnaq.interface.views.hub.common :as hub-common]
             [schnaq.interface.views.hub.overview :as hubs]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.image-upload :as image]))
 
 (defn- logo-input [input-id]
   (let [hub @(rf/subscribe [:hub/current])
-        name (:hub/name hub)
-        hub-logo (get-in hub [:profile-picture :display])
-        temporary-logo (get-in hub [:logo :temporary :content])
+        name (:hub/keycloak-name hub)
+        hub-logo (get-in hub [:logo])
+        temporary-logo (get-in hub [:logo-temporary :content])
         preview-image (or temporary-logo hub-logo)]
-    (print "Name: " name)
     [:div.d-flex.mr-4
      [:div.d-flex.avatar-image
-      [common/avatar #:user.registered{:profile-picture preview-image
-                                       :display-name (get-in hub [:names :display])} 80]]
+      [hub-common/logo preview-image name 80]]
      [:div.mt-auto
       (if temporary-logo
         ;; delete temporary button
@@ -39,13 +38,13 @@
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
                   :on-change (fn [event] (image/store-temporary-profile-picture
-                                           event [:hubs name :logo :temporary]))
+                                           event [:hubs name :logo-temporary]))
                   :hidden true}]])]]))
 
 (rf/reg-event-db
   :hub.logo/reset
   (fn [db [_ {:hub/keys [name]}]]
-    (update-in db [:hubs name :logo] dissoc :temporary)))
+    (update-in db [:hubs name] dissoc :logo-temporary)))
 
 
 (defn- settings-body []
@@ -59,6 +58,7 @@
        {:on-submit (fn [e]
                      (let [new-hub-name (oget+ e [:target :elements input-id :value])]
                        (js-wrap/prevent-default e)
+                       (rf/dispatch [:hub.logo/update])
                        (rf/dispatch [:hub.name/update new-hub-name])))}
        [:div.d-flex.flex-row
         [logo-input logo-input-id]
@@ -151,3 +151,38 @@
             #:notification{:title (labels :hub.settings.name/updated-title)
                            :body (labels :hub.settings.name/updated-body)
                            :context :success}]]]}))
+
+(rf/reg-event-fx
+  :hub.logo/update
+  (fn [{:keys [db]}]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      (when-let [temporary-hub-logo-url (get-in db [:hubs keycloak-name :logo-temporary])]
+        {:fx [(http/xhrio-request db :put (gstring/format "/hub/%s/logo" keycloak-name)
+                                  [:hub.logo/update-success]
+                                  {:image temporary-hub-logo-url}
+                                  [:hub.logo/update-error])]}))))
+
+(rf/reg-event-fx
+  :hub.logo/update-success
+  (fn [{:keys [db]} [_ {:keys [hub]}]]
+    (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
+      {:db (assoc-in db [:hubs keycloak-name :logo]
+                     (:hub/logo hub))
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :hub.settings.update-logo-title/success)
+                                       :body (labels :hub.settings.update-logo-body/success)
+                                       :context :success}]]]})))
+
+(rf/reg-event-fx
+  :hub.logo/update-error
+  (fn [{:keys [db]} [_ {:keys [response]}]]
+    (let [mime-types (string/join ", " shared-config/allowed-mime-types)
+          error-message (case (:error response)
+                          :scaling (labels :user.settings.profile-picture.errors/scaling)
+                          :invalid-file-type (gstring/format (labels :user.settings.profile-picture.errors/invalid-file-type) mime-types)
+                          (labels :user.settings.profile-picture.errors/default))]
+      {:db (assoc-in db [:user :profile-picture :temporary] nil)
+       :fx [[:dispatch [:notification/add
+                        #:notification{:title (labels :user.settings.profile-picture-title/error)
+                                       :body error-message
+                                       :context :danger}]]]})))

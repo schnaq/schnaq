@@ -11,8 +11,7 @@
             [schnaq.emails :as mail]
             [schnaq.media :as media]
             [schnaq.s3 :as s3]
-            [taoensso.timbre :as log])
-  (:import (java.util UUID)))
+            [taoensso.timbre :as log]))
 
 (defn- register-user-if-they-not-exist
   "Register a new user if they do not exist. In all cases return the user. New
@@ -33,17 +32,6 @@
           (created "" response))
       (ok response))))
 
-(defn- create-UUID-file-name
-  "Generates a UUID based on a unique id with a file type suffix."
-  [id file-type]
-  (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type))
-
-(s/def :image/type string?)
-(s/def :image/name string?)
-(s/def :image/content string?)
-(s/def ::image
-  (s/keys :req-un [:image/type :image/name :image/content]))
-
 (defn- change-profile-picture
   "Change the profile picture of a user.
   This includes uploading an image to s3 and updating the associated url in the database."
@@ -55,7 +43,7 @@
     (if (shared-config/allowed-mime-types image-type)
       (if-let [{:keys [input-stream image-type content-type]}
                (media/scale-image-to-height image-content config/profile-picture-height)]
-        (let [image-name (create-UUID-file-name (:id identity) image-type)
+        (let [image-name (media/create-UUID-file-name (:id identity) image-type)
               absolute-url (s3/upload-stream :user/profile-pictures
                                              input-stream
                                              image-name
@@ -107,7 +95,7 @@
                                           :updated-statements? boolean?}}}}]
     ["/picture" {:put change-profile-picture
                  :description (at/get-doc #'change-profile-picture)
-                 :parameters {:body {:image ::image}}
+                 :parameters {:body {:image ::specs/registered-user}}
                  :responses {200 {:body {:updated-user ::specs/registered-user}}
                              400 at/response-error-body}}]
     ["/name" {:put change-display-name

@@ -1,16 +1,22 @@
 (ns schnaq.api.hub
   (:require [clojure.spec.alpha :as s]
+            [clojure.string :as string]
             [keycloak.admin :as kc-admin]
-            [ring.util.http-response :refer [ok forbidden not-found internal-server-error]]
+            [ring.util.http-response :refer [ok bad-request forbidden not-found internal-server-error]]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
+            [schnaq.config :as config]
             [schnaq.config.keycloak :as kc-config :refer [kc-client]]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.hub :as hub-db]
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
+            [schnaq.media :as media]
             [schnaq.processors :as processors]
-            [schnaq.validator :as validators]))
+            [schnaq.s3 :as s3]
+            [schnaq.validator :as validators]
+            [taoensso.timbre :as log]))
 
 (def ^:private forbidden-missing-permission
   (forbidden (at/build-error-body :hub/not-a-member "You are not a member of the hub.")))
@@ -99,6 +105,33 @@
         (ok {:status :user-not-registered}))
       forbidden-missing-permission)))
 
+(defn- change-hub-logo
+  "Change the hub's logo.
+  This includes uploading an image to s3 and updating the associated url in the database."
+  [{:keys [identity parameters]}]
+  (let [keycloak-name (get-in parameters [:path :keycloak-name])
+        image-type (get-in parameters [:body :image :type])
+        image-name (get-in parameters [:body :image :name])
+        image-content (get-in parameters [:body :image :content])]
+    (log/info "User" (:id identity) "trying to set logo of Hub" keycloak-name "to:" image-name)
+    (if (auth/member-of-group? identity keycloak-name)
+      (if (shared-config/allowed-mime-types image-type)
+        (if-let [{:keys [input-stream image-type content-type]}
+                 (media/scale-image-to-height image-content config/profile-picture-height)]
+          (let [image-name (media/create-UUID-file-name (:id identity) image-type)
+                absolute-url (s3/upload-stream :hub/logo
+                                               input-stream
+                                               image-name
+                                               {:content-type content-type})]
+            (log/info "Hub" keycloak-name "logo updated to" absolute-url)
+            (ok {:hub (hub-db/update-hub-logo-url keycloak-name absolute-url)}))
+          (do
+            (log/warn "Conversion of image failed for user" (:id identity))
+            (bad-request (at/build-error-body :scaling "Could not scale image"))))
+        (bad-request (at/build-error-body
+                       :invalid-file-type
+                       (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))
+      forbidden-missing-permission)))
 
 ;; -----------------------------------------------------------------------------
 
@@ -128,6 +161,11 @@
                :description (at/get-doc #'change-hub-name)
                :parameters {:body {:new-hub-name :hub/name}}
                :responses {200 {:body {:hub ::specs/hub}}}}]
+     ["/logo" {:put change-hub-logo
+               :description (at/get-doc #'change-hub-logo)
+               :parameters {:body {:image ::specs/image}}
+               :responses {200 {:body {:hub ::specs/hub}}
+                           400 at/response-error-body}}]
      ["/remove" {:delete remove-schnaq-from-hub
                  :description (at/get-doc #'remove-schnaq-from-hub)
                  :parameters {:body {:share-hash :discussion/share-hash}}
