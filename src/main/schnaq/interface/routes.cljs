@@ -239,14 +239,14 @@
      :view error-views/not-found-view-stub
      :link-text (labels :router/not-found-label)
      :controllers [{:identity #(random-uuid)
-                    :start #(js-wrap/replace-url "/404/")}]}]
-   ["403/"
+                    :start #(js-wrap/replace-url "/404")}]}]
+   ["403"
     {:name :routes/forbidden-page
      :view error-views/forbidden-page}]
-   ["beta-tester-only/"
+   ["beta-tester-only"
     {:name :routes/beta-only
      :view error-views/only-beta-tester}]
-   ["404/"
+   ["404"
     {:name :routes/true-404-view
      :view error-views/true-404-entrypoint
      :link-text (labels :router/true-404-view)}]])

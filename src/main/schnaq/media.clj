@@ -8,7 +8,6 @@
             [ring.util.http-response :refer [created bad-request forbidden]]
             [schnaq.database.main :as d]
             [schnaq.s3 :as s3]
-            [schnaq.validator :as validator]
             [taoensso.timbre :as log])
   (:import (java.util Base64))
   (:import (java.util UUID)))
@@ -50,14 +49,12 @@
   and set a datomic entry to the corresponding schnaq."
   [{:keys [parameters]}]
   [:ring/request :ret :ring/response]
-  (let [{:keys [share-hash edit-hash image-url]} (:body parameters)
+  (let [{:keys [share-hash image-url]} (:body parameters)
         file-name (str "header-" share-hash)]
-    (if (validator/valid-credentials? share-hash edit-hash)
-      (case (check-and-upload-image image-url file-name share-hash)
-        :error-img (bad-request {:error error-img})
-        :error-forbidden-cdn (forbidden {:error error-cdn})
-        (created "" {:message success-img}))
-      (validator/deny-access))))
+    (case (check-and-upload-image image-url file-name share-hash)
+      :error-img (bad-request {:error error-img})
+      :error-forbidden-cdn (forbidden {:error error-cdn})
+      (created "" {:message success-img}))))
 
 (>defn scale-image-to-height
   "Scale image data url to a specified height and return a map containing input-stream, image-type and content-type"

@@ -8,12 +8,12 @@
 (defn- number-of-discussions
   "Returns the number of all discussions."
   [_]
-  (ok {:discussions-num (analytics-db/number-of-discussions)}))
+  (ok {:discussions-sum (analytics-db/number-of-discussions)}))
 
 (defn- number-of-usernames
   "Returns the number of all anonymous usernames created."
   [_]
-  (ok {:usernames-num (analytics-db/number-of-usernames)}))
+  (ok {:usernames-sum (analytics-db/number-of-usernames)}))
 
 (defn- number-of-registered-users
   "Returns the number of registered users on the plattform."

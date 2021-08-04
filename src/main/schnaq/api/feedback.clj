@@ -9,6 +9,7 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
+            [schnaq.emails :as emails]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
   (:import (java.util Base64)))
@@ -35,6 +36,10 @@
         screenshot (get-in parameters [:body :screenshot])]
     (when screenshot
       (upload-screenshot! screenshot feedback-id))
+    (emails/send-mail
+      "[FEEDBACK] Es wurde eine neues Feedback hinterlegt 🐳"
+      (format "Feedback kann hier angeschaut werden: https://schnaq.com/admin/feedbacks")
+      "info@schnaq.com")
     (log/info "Feedback created")
     (created "" {:feedback feedback})))
 
@@ -50,11 +55,13 @@
   [["" {:swagger {:tags ["feedbacks"]}}
     ["/feedback/add" {:post add-feedback
                       :description (at/get-doc #'add-feedback)
+                      :name :api.feedback/add
                       :parameters {:body (s/keys :req-un [::dto/feedback] :opt-un [:feedback/screenshot])}
                       :responses {201 {:body {:feedback ::dto/feedback}}}}]
     ["/admin" {:swagger {:tags ["admin"]}
                :responses {401 at/response-error-body}
                :middleware [:user/authenticated? :user/admin?]}
      ["/feedbacks" {:get all-feedbacks
+                    :name :api.feedback/admin
                     :description (at/get-doc #'all-feedbacks)
                     :responses {200 {:body {:feedbacks (s/coll-of ::specs/feedback)}}}}]]]])

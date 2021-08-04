@@ -27,8 +27,7 @@
     (let [graph-data-for-agenda @#'discussion-api/graph-data-for-agenda
           graph-request (fn [share-hash] (graph-data-for-agenda {:parameters {:query {:share-hash share-hash}}}))
           share-hash "cat-dog-hash"
-          valid-response (graph-request "cat-dog-hash")
-          bad-response (graph-request "qweoiuqwe")]
+          valid-response (graph-request "cat-dog-hash")]
       (testing "valid request"
         (is (= 200 (:status valid-response)))
         (is (contains? (-> valid-response :body) :graph))
@@ -36,8 +35,6 @@
         (is (contains? (-> valid-response :body :graph) :edges))
         (is (not (nil? (-> valid-response :body :graph :nodes))))
         (is (not (nil? (-> valid-response :body :graph :edges)))))
-      (testing "Discussion not found"
-        (is (= 404 (:status bad-response))))
       (testing "Check with complete app"
         (is (= 200 (:status (api/app {:request-method :get :uri "/discussion/graph"
                                       :query-params {:share-hash share-hash}}))))

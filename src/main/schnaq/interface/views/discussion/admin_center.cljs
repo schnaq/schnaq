@@ -180,26 +180,32 @@
 (rf/reg-event-fx
   ;; Success event of deletion live in discussion - not from admin panel
   :discussion.admin/delete-statement-success
-  (fn [_ [_ statement-id _return]]
+  (fn [_ [_ statement-id return]]
     {:fx [[:dispatch [:notification/add
                       #:notification{:title (labels :schnaq.admin.notifications/statements-deleted-title)
                                      :body (labels :schnaq.admin.notifications/statements-deleted-lead)
                                      :context :success}]]
-          [:dispatch [:discussion.delete/purge-stores statement-id]]]}))
+          [:dispatch [:discussion.delete/purge-stores statement-id return]]]}))
 
 (rf/reg-event-db
   ;; Delete a statement-id from conclusions-list, history and carousels
   :discussion.delete/purge-stores
-  (fn [db [_ statement-id]]
-    (let [delete-fn (fn [coll]
-                      (mapv #(if (= statement-id (:db/id %))
-                               (assoc % :statement/content config/deleted-statement-text)
-                               %)
-                            coll))]
-      (-> db
-          (update-in [:discussion :conclusions :starting] delete-fn)
-          (update-in [:discussion :premises :current] delete-fn)
-          (update-in [:history :full-context] delete-fn)))))
+  (fn [db [_ statement-id return-value]]
+    (let [mark-fn (fn [coll]
+                    (mapv #(if (= statement-id (:db/id %))
+                             (assoc % :statement/content config/deleted-statement-text)
+                             %)
+                          coll))
+          delete-fn (fn [coll] (remove #(= statement-id (:db/id %)) coll))
+          method (or (:method return-value) (first (:methods return-value)))]
+      (if (= :deleted method)
+        (-> db
+            (update-in [:discussion :conclusions :starting] delete-fn)
+            (update-in [:discussion :premises :current] delete-fn))
+        (-> db
+            (update-in [:discussion :conclusions :starting] mark-fn)
+            (update-in [:discussion :premises :current] mark-fn)
+            (update-in [:history :full-context] mark-fn))))))
 
 (rf/reg-event-fx
   :discussion.admin/send-email-invites

@@ -7,8 +7,6 @@
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]))
 
-(s/def :ring/response (s/keys :req-un [:http/status :http/headers]))
-
 (defn valid-discussion?
   "Check if a schnaq-hash is valid. Returns false, when the discussion is deleted."
   [share-hash]
