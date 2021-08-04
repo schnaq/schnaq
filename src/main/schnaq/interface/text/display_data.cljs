@@ -267,6 +267,10 @@
         :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
         :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
 
+        ;; Discussion Dashboard
+        :dashboard/posts "Posts"
+        :dashboard/members "Members"
+
         :discussion.navbar/title "Title"
         :discussion.navbar/posts "Posts"
         :discussion.navbar/members "Members"
@@ -873,6 +877,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/continue-discussion "Continue Discussion"
         :router/create-schnaq "Create schnaq"
         :router/value "Value of schnaq"
+        :router/dashboard "schnaq dashboard"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
         :router/invalid-link "Error page"
@@ -1249,6 +1254,10 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.create.public-checkbox/private "geschlossen"
         :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
         :discussion.create.hub-exclusive-checkbox/label "Dem Hub hinzufügen"
+
+        ;; Discussion Dashboard
+        :dashboard/posts "Beiträge"
+        :dashboard/members "Mitglieder"
 
         :discussion.navbar/title "Titel"
         :discussion.navbar/posts "Beiträge"
@@ -1985,6 +1994,8 @@ Now we write down questions and discuss them and can still understand what we ha
      :icon-reports "https://s3.disqtec.com/schnaq-common/icons/reports.svg"
      :icon-robot "https://s3.disqtec.com/schnaq-common/icons/robot.svg"
      :icon-summary "https://s3.disqtec.com/schnaq-common/icons/layers.svg"
+     :icon-users "https://s3.disqtec.com/schnaq-common/icons/dashboard/users.svg"
+     :icon-posts "https://s3.disqtec.com/schnaq-common/icons/dashboard/posts.svg"
      :logo "https://s3.disqtec.com/schnaq-common/logos/schnaq.svg"
      :logo-white "https://s3.disqtec.com/schnaq-common/logos/schnaq_white.png"
      :logos/bialon "https://s3.disqtec.com/schnaq-common/testimonials/bialon_logo.png"

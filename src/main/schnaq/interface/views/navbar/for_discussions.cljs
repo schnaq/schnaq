@@ -3,7 +3,6 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
@@ -51,32 +50,16 @@
      :alt "graph icon"}]
    [:div (labels :graph.button/text)]])
 
-(defn- beta-only-modal
-  "Basic modal which is presented to users trying to access beta features."
-  []
-  [modal/modal-template
-   (labels :beta.modal/title)
-   [:<>
-    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels :beta.modal/explain)]
-    [:p (labels :beta.modal/persuade)]
-    [:a.btn.btn-primary.mx-auto.d-block
-     {:href "mailto:hello@schnaq.com"}
-     (labels :beta.modal/cta)]]])
-
 (defn summary-button
   "Button to navigate to the summary view."
   [share-hash]
-  (let [beta-user? @(rf/subscribe [:user/beta-tester?])]
-    [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
-     (if beta-user?
-       {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}
-       {:on-click #(rf/dispatch [:modal {:show? true
-                                         :child [beta-only-modal]}])})
-     [:img.img-fluid
-      {:src (img-path :icon-summary)
-       :width "25"
-       :alt "summary icon"}]
-     [:p.m-0 (labels :summary.link.button/text)]]))
+  [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
+   {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/dashboard {:share-hash share-hash}])}
+   [:img.img-fluid
+    {:src (img-path :icon-summary)
+     :width "25"
+     :alt "summary icon"}]
+   [:p.m-0 (labels :summary.link.button/text)]])
 
 (defn navbar-statements []
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
