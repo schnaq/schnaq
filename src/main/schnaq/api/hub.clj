@@ -9,8 +9,10 @@
             [schnaq.database.main :refer [fast-pull transact]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
+            [schnaq.media :as media]
             [schnaq.processors :as processors]
-            [schnaq.validator :as validators]))
+            [schnaq.validator :as validators]
+            [taoensso.timbre :as log]))
 
 (def ^:private forbidden-missing-permission
   (forbidden (at/build-error-body :hub/not-a-member "You are not a member of the hub.")))
@@ -99,6 +101,22 @@
         (ok {:status :user-not-registered}))
       forbidden-missing-permission)))
 
+(defn- change-hub-logo
+  "Change the hub's logo.
+  This includes uploading an image to s3 and updating the associated url in the database."
+  [{:keys [identity parameters]}]
+  (let [keycloak-name (get-in parameters [:path :keycloak-name])
+        image-type (get-in parameters [:body :image :type])
+        image-name (get-in parameters [:body :image :name])
+        image-content (get-in parameters [:body :image :content])]
+    (log/info (format "User %s is trying to set logo of Hub %s to: %s" (:id identity) keycloak-name image-name))
+    (if (auth/member-of-group? identity keycloak-name)
+      (let [{:keys [image-url] :as response} (media/upload-image! image-type image-content :hub/logo)]
+        (if image-url
+          (ok {:hub (hub-db/update-hub-logo-url keycloak-name image-url)})
+          response))
+      forbidden-missing-permission)))
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -109,26 +127,38 @@
                     403 at/response-error-body}}
     ["/hubs/personal" {:get all-hubs-for-user
                        :description (at/get-doc #'all-hubs-for-user)
+                       :name :hubs/personal
                        :responses {200 {:body {:hubs (s/coll-of ::specs/hub)}}}}]
     ["/hub/:keycloak-name" {:parameters {:path {:keycloak-name :hub/keycloak-name}}}
      ["" {:get hub-by-keycloak-name
           :description (at/get-doc #'hub-by-keycloak-name)
+          :name :hub/by-name
           :responses {200 {:body {:hub ::specs/hub
                                   :hub-members (s/coll-of ::specs/any-user)}}}}]
      ["/add" {:post add-schnaq-to-hub
               :description (at/get-doc #'add-schnaq-to-hub)
+              :name :hub/add-schnaq
               :parameters {:body {:share-hash :discussion/share-hash}}
               :responses {200 {:body {:hub ::specs/hub}}
                           404 at/response-error-body}}]
-     ["/add-member" {:post add-member-to-hub
-                     :description (at/get-doc #'add-member-to-hub)
-                     :parameters {:body {:new-member-mail :user.registered/email}}
-                     :responses {200 {:body {:ok keyword?}}}}]
      ["/name" {:put change-hub-name
                :description (at/get-doc #'change-hub-name)
+               :name :hub/change-name
                :parameters {:body {:new-hub-name :hub/name}}
                :responses {200 {:body {:hub ::specs/hub}}}}]
+     ["/logo" {:put change-hub-logo
+               :description (at/get-doc #'change-hub-logo)
+               :name :hub/change-logo
+               :parameters {:body {:image ::specs/image}}
+               :responses {200 {:body {:hub ::specs/hub}}
+                           400 at/response-error-body}}]
      ["/remove" {:delete remove-schnaq-from-hub
                  :description (at/get-doc #'remove-schnaq-from-hub)
+                 :name :hub/remove-schnaq
                  :parameters {:body {:share-hash :discussion/share-hash}}
-                 :responses {200 {:body {:hub ::specs/hub}}}}]]]])
+                 :responses {200 {:body {:hub ::specs/hub}}}}]
+     ["/member/add" {:post add-member-to-hub
+                     :description (at/get-doc #'add-member-to-hub)
+                     :name :hub/add-member
+                     :parameters {:body {:new-member-mail :user.registered/email}}
+                     :responses {200 {:body {:status keyword?}}}}]]]])

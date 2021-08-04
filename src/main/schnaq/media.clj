@@ -6,10 +6,13 @@
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [created bad-request forbidden]]
+            [schnaq.api.toolbelt :as at]
+            [schnaq.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.main :as d]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
-  (:import (java.util Base64)))
+  (:import (java.util Base64 UUID)))
 
 (def ^:private trusted-cdn-url-regex
   (re-pattern "https://cdn\\.pixabay\\.com/photo(.+)|https://s3\\.disqtec\\.com/(.+)"))
@@ -71,3 +74,29 @@
        :content-type content-type})
     (catch Exception e
       (log/warn "Converting image failed with exception:" e))))
+
+(defn create-UUID-file-name
+  "Generates a UUID based on a unique id with a file type suffix."
+  [id file-type]
+  (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type))
+
+(defn upload-image!
+  "Scale and upload an image to s3"
+  [image-type image-content bucket-key]
+  (if (shared-config/allowed-mime-types image-type)
+    (if-let [{:keys [input-stream image-type content-type]}
+             (scale-image-to-height image-content config/profile-picture-height)]
+      (let [image-name (create-UUID-file-name (:id identity) image-type)
+            absolute-url (s3/upload-stream bucket-key
+                                           input-stream
+                                           image-name
+                                           {:content-type content-type})]
+        {:image-url absolute-url})
+      (do
+        (log/warn "Conversion of image failed.")
+        (bad-request (at/build-error-body :scaling "Could not scale image"))))
+    (do
+      (log/warn "Invalid file type received.")
+      (bad-request (at/build-error-body
+                     :invalid-file-type
+                     (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))))

@@ -20,7 +20,8 @@
   "Returns bucket names"
   [bucket-name]
   (get
-    {:schnaq/header-images "schnaq-header-images"
+    {:hub/logo "schnaq-hub-logo"
+     :schnaq/header-images "schnaq-header-images"
      :user/profile-pictures "schnaq-profile-pictures"
      :feedbacks/screenshots "schnaq-feedback-screenshots"}
     bucket-name))
