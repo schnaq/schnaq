@@ -113,7 +113,7 @@
         image-type (get-in parameters [:body :image :type])
         image-name (get-in parameters [:body :image :name])
         image-content (get-in parameters [:body :image :content])]
-    (log/info "User" (:id identity) "trying to set logo of Hub" keycloak-name "to:" image-name)
+    (log/info (format "User %s is trying to set logo of Hub %s to: %s" (:id identity) keycloak-name image-name))
     (if (auth/member-of-group? identity keycloak-name)
       (if (shared-config/allowed-mime-types image-type)
         (if-let [{:keys [input-stream image-type content-type]}
@@ -126,10 +126,10 @@
             (log/info "Hub" keycloak-name "logo updated to" absolute-url)
             (ok {:hub (hub-db/update-hub-logo-url keycloak-name absolute-url)}))
           (do
-            (log/warn "Conversion of image failed for user" (:id identity))
+            (log/warn "Conversion of image failed for hub" keycloak-name)
             (bad-request (at/build-error-body :scaling "Could not scale image"))))
         (bad-request (at/build-error-body
-                       :invalid-file-type
+                       :hub.logo/invalid-file-type
                        (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))
       forbidden-missing-permission)))
 
@@ -142,31 +142,38 @@
                     403 at/response-error-body}}
     ["/hubs/personal" {:get all-hubs-for-user
                        :description (at/get-doc #'all-hubs-for-user)
+                       :name :hubs/personal
                        :responses {200 {:body {:hubs (s/coll-of ::specs/hub)}}}}]
     ["/hub/:keycloak-name" {:parameters {:path {:keycloak-name :hub/keycloak-name}}}
      ["" {:get hub-by-keycloak-name
           :description (at/get-doc #'hub-by-keycloak-name)
+          :name :hub/by-name
           :responses {200 {:body {:hub ::specs/hub
                                   :hub-members (s/coll-of ::specs/any-user)}}}}]
      ["/add" {:post add-schnaq-to-hub
               :description (at/get-doc #'add-schnaq-to-hub)
+              :name :hub/add-schnaq
               :parameters {:body {:share-hash :discussion/share-hash}}
               :responses {200 {:body {:hub ::specs/hub}}
                           404 at/response-error-body}}]
      ["/add-member" {:post add-member-to-hub
                      :description (at/get-doc #'add-member-to-hub)
+                     :name :hub/add-member
                      :parameters {:body {:new-member-mail :user.registered/email}}
                      :responses {200 {:body {:ok keyword?}}}}]
      ["/name" {:put change-hub-name
                :description (at/get-doc #'change-hub-name)
+               :name :hub/change-name
                :parameters {:body {:new-hub-name :hub/name}}
                :responses {200 {:body {:hub ::specs/hub}}}}]
      ["/logo" {:put change-hub-logo
                :description (at/get-doc #'change-hub-logo)
+               :name :hub/change-logo
                :parameters {:body {:image ::specs/image}}
                :responses {200 {:body {:hub ::specs/hub}}
                            400 at/response-error-body}}]
      ["/remove" {:delete remove-schnaq-from-hub
                  :description (at/get-doc #'remove-schnaq-from-hub)
+                 :name :hub/remove-schnaq
                  :parameters {:body {:share-hash :discussion/share-hash}}
                  :responses {200 {:body {:hub ::specs/hub}}}}]]]])
