@@ -141,11 +141,6 @@
               :parameters {:body {:share-hash :discussion/share-hash}}
               :responses {200 {:body {:hub ::specs/hub}}
                           404 at/response-error-body}}]
-     ["/add-member" {:post add-member-to-hub
-                     :description (at/get-doc #'add-member-to-hub)
-                     :name :hub/add-member
-                     :parameters {:body {:new-member-mail :user.registered/email}}
-                     :responses {200 {:body {:ok keyword?}}}}]
      ["/name" {:put change-hub-name
                :description (at/get-doc #'change-hub-name)
                :name :hub/change-name
@@ -161,4 +156,9 @@
                  :description (at/get-doc #'remove-schnaq-from-hub)
                  :name :hub/remove-schnaq
                  :parameters {:body {:share-hash :discussion/share-hash}}
-                 :responses {200 {:body {:hub ::specs/hub}}}}]]]])
+                 :responses {200 {:body {:hub ::specs/hub}}}}]
+     ["/member/add" {:post add-member-to-hub
+                     :description (at/get-doc #'add-member-to-hub)
+                     :name :hub/add-member
+                     :parameters {:body {:new-member-mail :user.registered/email}}
+                     :responses {200 {:body {:status keyword?}}}}]]]])

@@ -108,7 +108,7 @@
     (let [keycloak-name (get-in db [:current-route :path-params :keycloak-name])]
       {:fx [(http/xhrio-request
               db :post
-              (gstring/format "/hub/%s/add-member" keycloak-name)
+              (gstring/format "/hub/%s/member/add" keycloak-name)
               [:hub.members.add/success]
               {:new-member-mail new-member-mail})]})))
 
