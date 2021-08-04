@@ -37,6 +37,7 @@
    :discussion/share-hash
    :discussion/header-image-url
    :discussion/created-at
+   :discussion/end-time
    {:discussion/author user-db/public-user-pattern}])
 
 (def discussion-pattern-private

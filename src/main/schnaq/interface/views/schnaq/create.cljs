@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.schnaq.create
-  (:require [goog.string :as gstring]
-            [oops.core :refer [oget]]
+  (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
@@ -74,7 +73,7 @@
        (when @end-time
          [:div
           [:label {:for :input-num-days-to-end} "Ende in Tagen"]
-          [common/form-input {:type "number"
+          [common/form-input {:type :number
                               :min 1
                               :id :input-num-days-to-end
                               :placeholder 7
@@ -149,15 +148,14 @@
           public? (= "true" (oget form-elements [:input-public-schnaq :value]))
           exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
           origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))
+          end-from-now (oget form-elements [:?input-num-days-to-end :value])
           payload (cond-> {:discussion-title discussion-title
                            :public-discussion? public?}
                           origin-hub (assoc :hub-exclusive? exclusive?
                                             :hub origin-hub)
-                          (not authenticated?) (assoc :nickname nickname))
-          route (cond origin-hub "/with-hub"
-                      authenticated? ""
-                      :else "/anonymous")]
-      {:fx [(http/xhrio-request db :post (gstring/format "/schnaq/add%s" route)
+                          end-from-now (assoc :ends-in-days (js/parseInt end-from-now))
+                          (not authenticated?) (assoc :nickname nickname))]
+      {:fx [(http/xhrio-request db :post "/schnaq/add"
                                 [:schnaq/created]
                                 payload
                                 [:ajax.error/as-notification])]})))
