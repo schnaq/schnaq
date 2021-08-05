@@ -1,5 +1,9 @@
 (ns schnaq.interface.views.navbar.for-discussions
-  (:require [re-frame.core :as rf]
+  (:require [cljs.spec.alpha :as s]
+            [clojure.string :as str]
+            [ghostwheel.core :refer [>defn-]]
+            [goog.string :as gstring]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -78,12 +82,43 @@
        :alt "summary icon"}]
      [:p.m-0 (labels :summary.link.button/text)]]))
 
+(>defn- schnaq-progress-information
+  "Take the time the schnaq was created and the end-time and returns the percentage for the progress bar as well
+  as whole days left."
+  [created-at end-time]
+  [inst? inst? :ret (s/tuple float? int?)]
+  (let [distance (- end-time created-at)
+        elapsed-ms (min distance (- (.now js/Date) created-at))
+        elapsed-percent (* 100 (/ elapsed-ms distance))
+        days-left (Math/trunc (/ (max 0 (- distance elapsed-ms)) 86400000))]
+    [elapsed-percent days-left]))
+
+(defn- schnaq-progress-bar
+  "A progress bar indicating how far along a schnaq is."
+  []
+  (let [{:discussion/keys [end-time created-at]} @(rf/subscribe [:schnaq/selected])
+        [current-bar days-left] (schnaq-progress-information created-at end-time)
+        progress-text (cond
+                        (nil? end-time) (labels :discussion.progress/unlimited)
+                        (< end-time (.now js/Date)) (labels :discussion.progress/end)
+                        (inst? end-time) (gstring/format (labels :discussion.progress/days-left) days-left))
+        [first-word & rest] (str/split progress-text #" ")]
+    [:section
+     [:p.small.m-0 [:span.font-color-primary first-word " "] (str/join " " rest)]
+     [:div.progress.progress-schnaq.mr-3
+      [:div.progress-bar.progress-bar-schnaq
+       (cond->
+         {:role "progressbar" :aria-valuenow (str current-bar) :aria-valuemin "0" :aria-valuemax "100"
+          :style {:width (str current-bar "%")}}
+         (nil? end-time) (assoc :class "progress-bar-striped"))]]]))
+
 (defn navbar-statements []
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.ml-auto.flex-wrap
      [:div.d-flex.align-items-center.schnaq-navbar.px-4.ml-auto
+      [schnaq-progress-bar]
       [:div.mx-2
        [admin/share-link]]
       [admin/txt-export share-hash title]

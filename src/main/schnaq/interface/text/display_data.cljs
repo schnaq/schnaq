@@ -275,6 +275,15 @@
         :discussion.state/read-only-label "read-only"
         :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
+        ;; schnaq progress bar related stuff
+        :discussion.progress/days-left "%s days left"
+        :discussion.progress/unlimited "Open unlimited"
+        :discussion.progress/end "End of discussion"
+        :discussion.progress.creation/heading "Limit the duration of your discussion"
+        :discussion.progress.creation/label "End in days"
+        :discussion.progress.creation/button-limit "%s days"
+        :discussion.progress.creation/button-unlimited "Unlimited"
+
         ;; Conversion-Edit-Funnel
         :discussion.anonymous-edit.modal/title "Please sign in to edit"
         :discussion.anonymous-edit.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit a statement."]]
@@ -1260,6 +1269,15 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.state/read-only-label "schreibgeschützt"
         :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
 
+        ;; schnaq progress bar related stuff
+        :discussion.progress/days-left "Noch %s Tage"
+        :discussion.progress/unlimited "Unbeschränkt offen"
+        :discussion.progress/end "Ende der Diskussion"
+        :discussion.progress.creation/heading "Begrenze die Laufzeit deiner Diskussion"
+        :discussion.progress.creation/label "Ende in Tagen"
+        :discussion.progress.creation/button-limit "%s Tage"
+        :discussion.progress.creation/button-unlimited "Unbegrenzt"
+
         ;; Conversion-Edit-Funnel
         :discussion.anonymous-edit.modal/title "Bitte melde dich an zum Editieren"
         :discussion.anonymous-edit.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren anmelden."]]
@@ -2085,7 +2103,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :arrow-right "fa-arrow-right"
      :arrow-up "fa-arrow-up"
      :book "fa-book"
-     :calendar "fa-calendar-plus"
+     :calendar "fa-calendar"
      :camera "fa-camera"
      :carry "fa-people-carry"
      :check/double "fa-check-double"
@@ -2095,6 +2113,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :clipboard "fa-clipboard-list"
      :clock "fa-clock"
      :circle "fa-circle"
+     :circle-notch "fa-circle-notch"
      :cog "fa-cog"
      :cogs "fa-cogs"
      :comment "fa-comments"

@@ -1,6 +1,7 @@
 (ns schnaq.database.main
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as string]
+            [clojure.walk :as walk]
             [datomic.api :as d]
             [ghostwheel.core :refer [>defn]]
             [schnaq.api.dto-specs :as dto]
@@ -9,7 +10,8 @@
             [schnaq.database.specs :as specs]
             [schnaq.test-data :as test-data]
             [schnaq.toolbelt :as toolbelt])
-  (:import (java.util Date UUID)))
+  (:import (java.time Instant)
+           (java.util Date UUID)))
 
 (def ^:private current-datomic-uri (atom config/datomic-uri))
 
@@ -18,10 +20,21 @@
   []
   (d/connect @current-datomic-uri))
 
+(defn- convert-java-time-Instant-to-Date-walker
+  "Converts all java.time.Instant instances from a data structure to a Date Instant"
+  [data]
+  (walk/postwalk
+    #(if (instance? Instant %)
+       (Date/from %)
+       %)
+    data))
+
 (defn transact
   "Shorthand for transaction. Deref the result, if you need to further use it."
   [data]
-  (d/transact (new-connection) data))
+  (->> data
+       convert-java-time-Instant-to-Date-walker
+       (d/transact (new-connection))))
 
 (defn query
   "Shorthand to not type out the same first param every time"
