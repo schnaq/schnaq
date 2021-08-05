@@ -103,7 +103,7 @@
                         (< end-time (.now js/Date)) (labels :discussion.progress/end)
                         (inst? end-time) (gstring/format (labels :discussion.progress/days-left) days-left))
         [first-word & rest] (str/split progress-text #" ")]
-    [:div
+    [:section
      [:p.small.m-0 [:span.font-color-primary first-word " "] (str/join " " rest)]
      [:div.progress.progress-schnaq.mr-3
       [:div.progress-bar.progress-bar-schnaq
