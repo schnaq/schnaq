@@ -190,9 +190,8 @@
         public? (contains? (set states) :discussion.state/public)
         [label class] (if public? [:discussion.privacy/public (str "primary-light-color m-auto fas fa-lg " (fa :lock-open))]
                                   [:discussion.privacy/private (str "secondary-color m-auto fas fa-lg " (fa :lock-closed))])]
-    [:span.badge {:key (str "discussion-privacy-badge-" share-hash)}
-     [:i {:class class}] " "
-     (labels label)]))
+    [:span.badge.my-auto.ml-auto {:key (str "discussion-privacy-badge-" share-hash)}
+     [:i {:class class}] " " (labels label)]))
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
@@ -216,10 +215,9 @@
 
 (defn- topic-bubble-view [statement input badges info-content is-topic?]
   [:div.p-2
-   [:div.d-flex.mb-4
+   [:div.d-flex.flex-wrap.mb-4
     [user/user-info (:statement/author statement) 42 (:statement/created-at statement) nil]
-    [:div.ml-auto.my-auto
-     [discussion-privacy-badge]]]
+    [discussion-privacy-badge]]
    [title-and-input-element statement input is-topic? badges info-content]])
 
 (defn- topic-bubble [content]

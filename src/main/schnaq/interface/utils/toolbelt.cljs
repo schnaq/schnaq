@@ -54,6 +54,7 @@
       text)))
 
 (>defn truncate-to-n-chars
+  ;; TODO pack hier einen tooltip ein
   "Truncate a string to the first x chars."
   [text char-count]
   [string? nat-int? :ret string?]

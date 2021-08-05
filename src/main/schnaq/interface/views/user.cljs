@@ -5,6 +5,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as time]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]
             [schnaq.user :as user-utils]))
 
@@ -13,9 +14,9 @@
   [user avatar-size time additional-classes]
   (let [locale @(rf/subscribe [:current-locale])
         authenticated? (:user.registered/keycloak-id user)
-        display-name (user-utils/display-name user)
+        display-name (toolbelt/truncate-to-n-chars (user-utils/display-name user) 15)
         name-class (if authenticated? "text-primary" "text-muted")]
-    [:div.d-flex.flex-row.text-muted {:class additional-classes}
+    [:div.d-flex.flex-row.flex-wrap.text-muted.w-100 {:class additional-classes}
      [common/avatar user avatar-size]
      [:small.mx-2.my-auto {:class name-class} display-name]
      (when time
