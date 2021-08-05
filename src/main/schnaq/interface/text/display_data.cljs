@@ -278,6 +278,7 @@
         ;; schnaq progress bar related stuff
         :discussion.progress/days-left "%s days left"
         :discussion.progress/unlimited "Open unlimited"
+        :discussion.progress/end "End of discussion"
         :discussion.progress.creation/heading "Limit the duration of your discussion"
         :discussion.progress.creation/label "End in days"
         :discussion.progress.creation/button-limit "%s days"
@@ -1269,6 +1270,7 @@ Now we write down questions and discuss them and can still understand what we ha
         ;; schnaq progress bar related stuff
         :discussion.progress/days-left "Noch %s Tage"
         :discussion.progress/unlimited "Unbeschränkt offen"
+        :discussion.progress/end "Ende der Diskussion"
         :discussion.progress.creation/heading "Begrenze die Laufzeit deiner Diskussion"
         :discussion.progress.creation/label "Ende in Tagen"
         :discussion.progress.creation/button-limit "%s Tage"

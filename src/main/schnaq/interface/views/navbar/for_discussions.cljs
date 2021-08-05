@@ -98,9 +98,10 @@
   []
   (let [{:discussion/keys [end-time created-at]} @(rf/subscribe [:schnaq/selected])
         [current-bar days-left] (schnaq-progress-information created-at end-time)
-        progress-text (if end-time
-                        (gstring/format (labels :discussion.progress/days-left) days-left)
-                        (labels :discussion.progress/unlimited))
+        progress-text (cond
+                        (nil? end-time) (labels :discussion.progress/unlimited)
+                        (< end-time (.now js/Date)) (labels :discussion.progress/end)
+                        (inst? end-time) (gstring/format (labels :discussion.progress/days-left) days-left))
         [first-word & rest] (str/split progress-text #" ")]
     [:div
      [:p.small.m-0 [:span.font-color-primary first-word " "] (str/join " " rest)]
