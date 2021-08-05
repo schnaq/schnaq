@@ -270,6 +270,7 @@
         ;; Discussion Dashboard
         :dashboard/posts "Posts"
         :dashboard/members "Members"
+        :dashboard/summary "Summary"
 
         :discussion.navbar/title "Title"
         :discussion.navbar/posts "Posts"
@@ -966,7 +967,7 @@ Now we write down questions and discuss them and can still understand what we ha
         several major concerns. Orange signals a few minor problems, but an overall okay result.
         Besides the color ranking we've included a few keywords which can be used for further research."
 
-        :summary.link.button/text "Summary"
+        :summary.link.button/text "Dashboard"
         :summary.user.request-succeeded/label "Summary requested, please wait."
         :summary.user.requested/label "Requesting summary …"
         :summary.user.not-requested/label "Request summary"
@@ -1258,6 +1259,7 @@ Now we write down questions and discuss them and can still understand what we ha
         ;; Discussion Dashboard
         :dashboard/posts "Beiträge"
         :dashboard/members "Mitglieder"
+        :dashboard/summary "Kurzzusammenfassung"
 
         :discussion.navbar/title "Titel"
         :discussion.navbar/posts "Beiträge"
@@ -1954,7 +1956,7 @@ Now we write down questions and discuss them and can still understand what we ha
         möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
         Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
 
-        :summary.link.button/text "Kurzfassung"
+        :summary.link.button/text "Analyse"
         :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
         :summary.user.requested/label "Zusammenfassung wird angefordert …"
         :summary.user.not-requested/label "Zusammenfassung anfordern"
