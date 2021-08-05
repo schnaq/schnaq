@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.navbar.for-discussions
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
@@ -48,7 +48,7 @@
     {:src (img-path :icon-graph)
      :width "25"
      :alt "graph icon"}]
-   [:div (labels :graph.button/text)]])
+   [:p.small.m-0 (labels :graph.button/text)]])
 
 (defn summary-button
   "Button to navigate to the summary view."
@@ -59,7 +59,7 @@
     {:src (img-path :icon-summary)
      :width "25"
      :alt "summary icon"}]
-   [:p.m-0 (labels :summary.link.button/text)]])
+   [:p.small.m-0 (labels :summary.link.button/text)]])
 
 (defn navbar-statements []
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
