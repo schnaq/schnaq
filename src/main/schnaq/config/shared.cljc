@@ -1,4 +1,5 @@
-(ns schnaq.config.shared)
+(ns schnaq.config.shared
+  (:require [clojure.set :as cset]))
 
 #?(:clj  (def api-port
            (Integer/parseInt (or (System/getenv "API_PORT") "3000")))
@@ -40,8 +41,8 @@
   "Define a list of allowed mime-types."
   #{"image/jpeg" "image/png"})
 
-(def beta-tester-roles
-  #{"schnaqqifantenparty" "beta-tester"})
-
 (def admin-roles
   #{"admin"})
+
+(def beta-tester-roles
+  (cset/union admin-roles #{"beta-tester"}))
