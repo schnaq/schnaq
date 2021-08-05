@@ -6,6 +6,7 @@
             [ghostwheel.core :refer [>defn]]
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
+            [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.interface.text.display-data :refer [img-path]]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
@@ -23,15 +24,22 @@
 
 (>defn avatar
   "Get a user's avatar."
-  [{:user.registered/keys [profile-picture display-name] :as user} size]
-  [map? number? :ret vector?]
-  (let [display-name (or display-name (:user/nickname user))]
-    [:div.avatar-image.p-0
-     (if profile-picture
-       [:div.profile-pic-fill
-        {:style {:height (str size "px") :width (str size "px")}}
-        [:img.profile-pic-image {:src profile-picture}]]
-       [identicon display-name size])]))
+  ([size]
+   [nat-int? :ret vector?]
+   (let [user @(rf/subscribe [:user/current])
+         user-registered #:user.registered{:profile-picture (get-in user [:profile-picture :display])
+                                           :display-name (get-in user [:names :display])}]
+     [avatar user-registered size]))
+  ([{:user.registered/keys [profile-picture display-name] :as user} size]
+   [map? nat-int? :ret vector?]
+   (let [display-name (or display-name (:user/nickname user))]
+     [:div.avatar-image.p-0
+      (if profile-picture
+        [:div.profile-pic-fill
+         {:style {:height (str size "px") :width (str size "px")}}
+         [:img.profile-pic-image {:src profile-picture
+                                  :alt (str "Profile Picture of " display-name)}]]
+        [identicon display-name size])])))
 
 (>defn avatar-with-nickname
   "Create an image based on the nickname and also print the nickname."
