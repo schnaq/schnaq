@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.discussion.dashboard
   (:require [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.schnaq.summary :as summary]))
 
 (defn- beta-only-modal
   "Basic modal which is presented to users trying to access beta features."
@@ -23,7 +24,7 @@
      [:h3.mb-3 (labels :dashboard/summary)]
      [:h5.my-3.text-primary title]
      (if beta-user?
-       [:div "summary"]
+       [summary/summary-body]
        [beta-only-modal])]))
 
 (defn- schnaq-statistics []
