@@ -113,7 +113,7 @@
                             :on-click #(rf/dispatch [:keycloak/logout])}
           (labels :user/logout)]]
         [:<>
+         [user-submenu]
          [:a.btn.dropdown-item {:href "#"
                                 :on-click #(rf/dispatch [:keycloak/login])}
-          (labels :user/login)]
-         [user-submenu]])]]))
+          (labels :user/register)]])]]))
