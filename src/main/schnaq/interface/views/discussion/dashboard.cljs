@@ -1,8 +1,33 @@
 (ns schnaq.interface.views.discussion.dashboard
   (:require [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.utils.markdown :as md]
+            [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.schnaq.summary :as summary]))
+            [schnaq.interface.views.schnaq.summary :as summary]
+            [schnaq.interface.views.user :as user]))
+
+
+(defn- dashboard-statement [statement]
+  (let [votes @(rf/subscribe [:local-votes])]
+    [:div.meeting-entry.my-3.p-3
+     {:on-click (fn [])}
+     [:div.row
+      [:div.col-4
+       [user/user-info (:statement/author statement) 24]]
+      [:div.col-5
+       [:div [md/as-markdown (:statement/content statement)]]]
+      [:div.col-3
+       (logic/calculate-votes statement votes)]]]))
+
+(defn- schnaq-statistics []
+  (let [current-discussion @(rf/subscribe [:schnaq/selected])
+        starting-conclusions (:discussion/starting-statements current-discussion)]
+    [:div.panel-white
+     [:h3.mb-3 (labels :dashboard/top-posts)]
+     (for [statement starting-conclusions]
+       [:div {:key (:db/id statement)}
+        [dashboard-statement statement]])]))
 
 (defn- beta-only-modal
   "Basic modal which is presented to users trying to access beta features."
@@ -26,9 +51,6 @@
      (if beta-user?
        [summary/summary-body]
        [beta-only-modal])]))
-
-(defn- schnaq-statistics []
-  [:div.panel-white])
 
 (defn- schnaq-summaries []
   [summary-view])

@@ -271,6 +271,7 @@
         :dashboard/posts "Posts"
         :dashboard/members "Members"
         :dashboard/summary "Summary"
+        :dashboard/top-posts "Top Posts"
 
         :discussion.navbar/title "Title"
         :discussion.navbar/posts "Posts"
@@ -1260,6 +1261,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :dashboard/posts "Beiträge"
         :dashboard/members "Mitglieder"
         :dashboard/summary "Kurzzusammenfassung"
+        :dashboard/top-posts "Top Beiträge"
 
         :discussion.navbar/title "Titel"
         :discussion.navbar/posts "Beiträge"
