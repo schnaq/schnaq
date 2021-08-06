@@ -72,16 +72,7 @@
   "Build key value pair for inserting into local storage hashmap.
   Does not override the key if it is present"
   [local-storage-key]
-  ;; PARTIALLY DEPRECATED: Remove the meeting part after 2021-08-05
-  (let [local-hashes (get-item local-storage-key)
-        combined-hashes (if (= :schnaqs/admin-access local-storage-key)
-                          (if-let [old-admin-access (get-item :meetings/admin-access)]
-                            (str local-hashes "," old-admin-access)
-                            local-hashes)
-                          local-hashes)]
-    (when (= :schnaqs/admin-access local-storage-key)
-      (remove-item! :meetings/admin-access))
-    (parse-hash-map-string combined-hashes)))
+  (parse-hash-map-string (get-item local-storage-key)))
 
 ;; ### Set Storage Helper ###
 (defn parse-string-as-set

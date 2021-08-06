@@ -138,9 +138,7 @@
      {:name :routes.schnaqs/personal
       :view feed/personal-discussions-view
       :link-text (labels :router/visited-schnaqs)
-      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
-    ["/my"                                                  ;; Deprecated old route. Remove sometime.
-     {:controllers [{:start #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}]}]]
+      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]]
    ["schnaq"
     {:controllers [{:start #(rf/dispatch [:username/open-dialog])}]}
     ["/create"

@@ -15,17 +15,12 @@
   "Read previously visited meetings from localstorage."
   []
   [:ret (s/coll-of (s/or :filled string? :empty nil?))]
-  ;; PARTIALLY DEPRECATED: Remove the meeting part after 2021-08-05
-  ;; Every important user should have the new format then
   ;; PARTIALLY DEPRECATED, deleted after 2021-09-22: Remove old ls/get-item part and only use native local-storage
   (let [old-schnaq-string (set (remove empty?
                                        (string/split (ls/get-item :schnaqs/visited)
                                                      (re-pattern hash-separator))))
-        schnaqs-visited (set (remove empty? (:schnaqs/visited local-storage)))
-        meeting-string (set (remove empty?
-                                    (string/split (ls/get-item :meetings/visited)
-                                                  (re-pattern hash-separator))))]
-    (cset/union old-schnaq-string schnaqs-visited meeting-string)))
+        schnaqs-visited (set (remove empty? (:schnaqs/visited local-storage)))]
+    (cset/union old-schnaq-string schnaqs-visited)))
 
 (rf/reg-event-db
   :schnaqs.visited/store-hashes-from-localstorage
