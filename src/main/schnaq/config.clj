@@ -39,8 +39,14 @@
   "Profile Picture height in pixels."
   200)
 
-(def s3-credentials {:access-key "minio"
-                     :secret-key "***REMOVED***"
+(def ^:private s3-access-key
+  (or (System/getenv "S3_ACCESS_KEY") "minio"))
+
+(def ^:private s3-secret-key
+  (or (System/getenv "S3_SECRET_KEY") "***REMOVED***"))
+
+(def s3-credentials {:access-key s3-access-key
+                     :secret-key s3-secret-key
                      :endpoint shared-config/s3-host
                      :client-config {:path-style-access-enabled true}})
 
