@@ -9,6 +9,7 @@
             [schnaq.config.shared :as config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
+            [schnaq.interface.integrations.wetog.views :as wetog-views]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.lead-magnet :as lead-magnet]
             [schnaq.interface.pages.legal-note :as legal-note]
@@ -244,9 +245,20 @@
      :view error-views/true-404-entrypoint
      :link-text (labels :router/true-404-view)}]])
 
+(def wetog-routes
+  ["/"
+   {:coercion reitit.coercion.spec/coercion}
+   ;;TODO take share-hash from data attribute and set the schnaq as the corresponding selected schnaq, then go to discussion view
+   [""
+    {:name :routes.wetog/discussion-start
+     :view wetog-views/discussion-start
+     :link-text (labels :router/startpage)}]])
+
 (def router
   (reitit-front/router
-    routes
+    (if config/embedded?
+      wetog-routes
+      routes)
     ;; This disables automatic conflict checking. So: Please check your own
     ;; routes that there are no conflicts.
     {:conflicts nil}))
