@@ -116,8 +116,8 @@
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
-    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.ml-auto.flex-wrap
-     [:div.d-flex.align-items-center.schnaq-navbar.px-4.ml-auto
+    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xxl-auto
+     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-lg-0
       [schnaq-progress-bar]
       [:div.mx-2
        [admin/share-link]]
@@ -125,8 +125,8 @@
       (when edit-hash
         [admin/admin-center share-hash edit-hash])]
      [:div.d-flex.align-items-center
-      [:div.h-100.mx-2 [graph-button share-hash]]
-      [:div.h-100.mx-2 [summary-button share-hash]]
+      [:div.h-100.mr-2.mx-lg-2 [graph-button share-hash]]
+      [:div.h-100.mr-2 [summary-button share-hash]]
       [:div.d-flex.align-items-center.schnaq-navbar
        [um/user-handling-menu "btn-link"]]]]))
 
