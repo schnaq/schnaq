@@ -9,7 +9,6 @@
             [schnaq.config.shared :as config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
-            [schnaq.interface.integrations.wetog.views :as wetog-views]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.lead-magnet :as lead-magnet]
             [schnaq.interface.pages.legal-note :as legal-note]
@@ -251,7 +250,7 @@
     :controllers [{:start (fn [] (rf/dispatch [:wetog/initialize-from-data]))}]}
    [""
     {:name :routes.schnaq/start
-     :view wetog-views/discussion-start
+     :view discussion-card-view/view
      :link-text (labels :router/startpage)
      :controllers schnaq-start-controllers}]])
 
