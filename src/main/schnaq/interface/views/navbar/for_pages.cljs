@@ -104,4 +104,4 @@
           [:button.dropdown-item
            {:on-click #(language/set-language :de)} "Deutsch"]]]]
        [um/admin-dropdown "btn-outline-secondary"]
-       [um/user-handling-menu "btn-outline-light"]]]]))
+       [um/user-handling-menu "btn-outline-light btn-transparent"]]]]))

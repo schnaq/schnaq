@@ -135,16 +135,15 @@
 (defn graph-agenda-header
   "Header when displaying the graph."
   [title share-hash]
-  (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                        {:share-hash share-hash}]))]
+  (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]))]
     (common/set-website-title! title)
     [:section.container-fluid.bg-white.p-4.shadow-sm
      [:div.row
-      [:div.col-1.back-arrow
+      [:div.col-2.col-md-1
        [:span {:on-click go-back-fn}                        ;; the icon itself is not clickable
         [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]]
-      [:div.col-7 [:h2 title]]
-      [:div.col-4.pull-right
+      [:div.col-10.col-md-7 [:h2 title]]
+      [:div.col-12.col-md-4.text-md-right
        [graph-settings/open-settings]
        [admin/graph-download-as-png (gstring/format "#%s" graph-id)]
        [admin/txt-export share-hash title]]]]))

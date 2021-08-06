@@ -2,7 +2,8 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
-            [oops.core :refer [oset! oget]]))
+            [oops.core :refer [oset! oget]]
+            [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn height-to-scrollheight!
   "Get current scroll height and set the height of the element accordingly.
@@ -54,12 +55,15 @@
       text)))
 
 (>defn truncate-to-n-chars
-  "Truncate a string to the first x chars."
+  "Truncate a string to the first x chars and return it in a tooltiped span."
   [text char-count]
   [string? nat-int? :ret string?]
-  (if (< char-count (count text))
-    (apply str (concat (take char-count text) "…"))
-    text))
+  [tooltip/inline-element
+   :bottom
+   text
+   (if (< char-count (count text))
+     (apply str (concat (take char-count text) "…"))
+     text)])
 
 (defn obfuscate-mail
   "Hide real mail address."
