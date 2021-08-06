@@ -112,7 +112,7 @@
   whether the user is newly created and the user entity itself."
   [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs]
   [associative? (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
-  (let [existing-user (fast-pull [:user.registered/keycloak-id id] registered-user-public-pattern)
+  (let [existing-user (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
