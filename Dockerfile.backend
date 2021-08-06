@@ -1,4 +1,4 @@
-FROM clojure:openjdk-16-tools-deps-alpine
+FROM clojure:openjdk-17-tools-deps-alpine
 
 RUN apk add --no-cache tzdata
 

@@ -152,6 +152,33 @@ build-backend-image:
   only:
     - deploy
 
+build-wetog-frontend-image:
+  extends: .with-datomic-pro
+  image: docker
+  tags:
+    - ht
+  services:
+    - docker:stable-dind
+  stage: build-docker-images
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - >
+      docker build -f Dockerfile.frontend
+      --build-arg REST_API_URL=$WETOG_SCHNAQ_API_URL
+      --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
+      --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
+      --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
+      --build-arg DATOMIC_REPO_USERNAME
+      --build-arg DATOMIC_REPO_PASSWORD
+      -t $CI_REGISTRY_IMAGE/frontend/wetog .
+    - docker tag $CI_REGISTRY_IMAGE/frontend/wetog $CI_REGISTRY_IMAGE/frontend/wetog:$CI_PIPELINE_IID
+    - docker push $CI_REGISTRY_IMAGE/frontend/wetog
+    - docker push $CI_REGISTRY_IMAGE/frontend/wetog:$CI_PIPELINE_IID
+  only:
+    - deploy
+
+# ------------------------------------------------------------------------------
+
 build-frontend-staging-image:
   extends: .with-datomic-pro
   image: docker
