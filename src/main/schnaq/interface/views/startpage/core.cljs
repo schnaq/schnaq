@@ -61,7 +61,7 @@
    [base/wavy-curve "scale(1.5,-1)"]
    [:div.early-adopter
     [:div.container.text-center.early-adopter-schnaqqifant-wrapper
-     [:img.early-adopter-schnaqqifant.pull-right.d-none.d-md-inline
+     [:img.early-adopter-schnaqqifant.d-none.d-md-inline
       {:src (img-path :schnaqqifant/white)}]
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
