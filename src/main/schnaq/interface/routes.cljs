@@ -249,11 +249,11 @@
   ["/"
    {:coercion reitit.coercion.spec/coercion
     :controllers [{:start (fn [] (rf/dispatch [:wetog/initialize-from-data]))}]}
-   ;;TODO take share-hash from data attribute and set the schnaq as the corresponding selected schnaq, then go to discussion view
    [""
-    {:name :routes.wetog/discussion-start
+    {:name :routes.schnaq/start
      :view wetog-views/discussion-start
-     :link-text (labels :router/startpage)}]])
+     :link-text (labels :router/startpage)
+     :controllers schnaq-start-controllers}]])
 
 (def router
   (reitit-front/router

@@ -61,15 +61,15 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- derive-view []
+(defn derive-view [start-view conclusion-view]
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
         current-route-name @(rf/subscribe [:navigation/current-route-name])
         wrapping-view (if shared-config/embedded? pages/embeddable-view pages/with-discussion-header)]
     [wrapping-view
      {:page/heading (:discussion/title current-discussion)}
      (if (= :routes.schnaq/start current-route-name)
-       [discussion-start-view]
-       [selected-conclusion-view])]))
+       [start-view]
+       [conclusion-view])]))
 
 (defn view []
-  [derive-view])
+  [derive-view discussion-start-view selected-conclusion-view])
