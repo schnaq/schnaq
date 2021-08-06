@@ -17,6 +17,9 @@
            (or (System/getenv "S3_HOST") "https://s3.disqtec.com"))
    :cljs (goog-define s3-host "https://s3.disqtec.com"))
 
+;; TODO change default to false
+#?(:cljs (goog-define embedded? true))
+
 (defn s3-buckets
   "Returns bucket names"
   [bucket-name]
