@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.navbar.user-management :as um]
@@ -27,7 +28,7 @@
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)
         user-count (count (:authors meta-info))]
-    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-0.mb-md-4
+    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4
      ;; schnaq logo
      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
       [:img.d-inline-block.align-middle.mr-2
@@ -90,7 +91,7 @@
   (let [distance (- end-time created-at)
         elapsed-ms (min distance (- (.now js/Date) created-at))
         elapsed-percent (* 100 (/ elapsed-ms distance))
-        days-left (Math/trunc (/ (max 0 (- distance elapsed-ms)) 86400000))]
+        days-left (jsw/number-trunc (/ (max 0 (- distance elapsed-ms)) 86400000))]
     [elapsed-percent days-left]))
 
 (defn- schnaq-progress-bar
@@ -119,8 +120,7 @@
     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xxl-auto
      [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-lg-0
       [schnaq-progress-bar]
-      [:div.mx-2
-       [admin/share-link]]
+      [admin/share-link]
       [admin/txt-export share-hash title]
       (when edit-hash
         [admin/admin-center share-hash edit-hash])]

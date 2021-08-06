@@ -97,3 +97,8 @@
 (def get-date-year
   "Get the current year"
   (.getFullYear (js/Date.)))
+
+(defn number-trunc
+  "Truncate a number"
+  [number]
+  (Math/trunc number))
