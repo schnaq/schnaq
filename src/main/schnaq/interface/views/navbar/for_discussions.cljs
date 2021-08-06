@@ -128,7 +128,7 @@
       [:div.h-100.mx-2 [graph-button share-hash]]
       [:div.h-100.mx-2 [summary-button share-hash]]
       [:div.d-flex.align-items-center.schnaq-navbar
-       [um/user-handling-menu "btn-outline-primary"]]]]))
+       [um/user-handling-menu "btn-link"]]]]))
 
 (defn header
   "Overview header for a discussion."
