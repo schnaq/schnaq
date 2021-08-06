@@ -116,7 +116,7 @@ build-frontend-image:
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
-      docker build -f Dockerfile.frontend
+      docker build -f Dockerfile.frontend --pull
       --build-arg REST_API_URL=https://api.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
@@ -141,7 +141,7 @@ build-backend-image:
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
-      docker build -f Dockerfile.backend
+      docker build -f Dockerfile.backend --pull
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg DATOMIC_REPO_USERNAME
       --build-arg DATOMIC_REPO_PASSWORD
@@ -163,7 +163,7 @@ build-wetog-frontend-image:
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
-      docker build -f Dockerfile.frontend
+      docker build -f Dockerfile.frontend --pull
       --build-arg REST_API_URL=$WETOG_SCHNAQ_API_URL
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM
@@ -190,7 +190,7 @@ build-frontend-staging-image:
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
-      docker build -f Dockerfile.frontend
+      docker build -f Dockerfile.frontend --pull
       --build-arg REST_API_URL=https://api.staging.schnaq.com
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM_STAGING
@@ -216,7 +216,7 @@ build-backend-staging-image:
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - >
-      docker build -f Dockerfile.backend
+      docker build -f Dockerfile.backend --pull
       --build-arg BUILD_HASH=$CI_COMMIT_SHORT_SHA
       --build-arg DATOMIC_REPO_USERNAME
       --build-arg DATOMIC_REPO_PASSWORD
