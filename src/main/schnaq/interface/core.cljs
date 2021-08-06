@@ -74,8 +74,7 @@
 (defn render
   []
   (reagent.dom/render [views/root]
-                      ;; with the test wetog we can use 'elementContainer'. In production 'app'.
-                      (gdom/getElement (if shared-config/embedded? "elementContainer" "app"))))
+                      (gdom/getElement (if shared-config/embedded? "schnaq-integration" "app"))))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []

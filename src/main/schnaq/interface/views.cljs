@@ -25,6 +25,7 @@
     [:div#root {:key language}
      [base-page language]
      (when-not shared-config/embedded?
-       [footer]
-       [feedback/button])
+       [:<>
+        [footer]
+        [feedback/button]])
      [notifications/view]]))

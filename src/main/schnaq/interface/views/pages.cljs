@@ -137,3 +137,14 @@
     [:<>
      [discussion-navbar/header]
      body]]])
+
+(>defn embeddable-view
+  "A more dense view without footer and other shit "
+  [options body]
+  [::page-options (s/+ vector?) :ret vector?]
+  [scheduler/middleware
+   [validate-conditions-middleware
+    options
+    [:<>
+     [discussion-navbar/embeddable-header]
+     body]]])

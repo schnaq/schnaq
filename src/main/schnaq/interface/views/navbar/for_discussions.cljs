@@ -134,3 +134,26 @@
   [:div.d-flex.flex-row.flex-wrap.p-md-3
    [navbar]
    [navbar-statements]])
+
+(defn navbar-embeddable []
+  ;; The view breaks earlier, because the breakpoints heed the screen size, not the div size
+  (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
+        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
+        edit-hash (get admin-access-map share-hash)]
+    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-hd-auto
+     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
+      [schnaq-progress-bar]
+      [admin/share-link]
+      [admin/txt-export share-hash title]
+      (when edit-hash
+        [admin/admin-center share-hash edit-hash])]
+     [:div.d-flex.align-items-center.mt-4.mt-md-0
+      [:div.h-100.mx-2 [graph-button share-hash]]
+      [:div.h-100.mr-2 [summary-button share-hash]]]]))
+
+(defn embeddable-header
+  "A more dense header for the embeddable view."
+  []
+  [:div.d-flex.flex-row.flex-wrap.p-md-3
+   [navbar]
+   [navbar-embeddable]])
