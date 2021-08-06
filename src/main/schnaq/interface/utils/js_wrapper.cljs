@@ -1,6 +1,8 @@
 (ns schnaq.interface.utils.js-wrapper
   (:require ["jquery" :as jquery]
-            [ghostwheel.core :refer [>defn]]))
+            [ghostwheel.core :refer [>defn]]
+            [goog.dom :as gdom]
+            [goog.dom.dataset :as dataset]))
 
 
 (>defn $
@@ -102,3 +104,10 @@
   "Truncate a number"
   [number]
   (Math/trunc number))
+
+(defn data-attribute
+  "Reads a dataset attribute from some element by id."
+  [element-id data-key]
+  (-> element-id
+      gdom/getElement
+      (dataset/get data-key)))

@@ -247,7 +247,8 @@
 
 (def wetog-routes
   ["/"
-   {:coercion reitit.coercion.spec/coercion}
+   {:coercion reitit.coercion.spec/coercion
+    :controllers [{:start (fn [] (rf/dispatch [:wetog/initialize-from-data]))}]}
    ;;TODO take share-hash from data attribute and set the schnaq as the corresponding selected schnaq, then go to discussion view
    [""
     {:name :routes.wetog/discussion-start
