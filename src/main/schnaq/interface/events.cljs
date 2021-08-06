@@ -109,7 +109,9 @@
 (rf/reg-event-fx
   :schnaq/select-current-from-backend
   (fn [_ [_ {:keys [schnaq]}]]
-    {:fx [[:dispatch [:schnaq/select-current schnaq]]]}))
+    {:fx [[:dispatch [:schnaq/select-current schnaq]]
+          [:dispatch [:discussion.query.conclusions/set-starting
+                      {:starting-conclusions (:discussion/starting-statements schnaq)}]]]}))
 
 (rf/reg-event-fx
   :schnaq/select-current

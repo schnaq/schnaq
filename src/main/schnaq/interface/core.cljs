@@ -15,6 +15,8 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.effects]
             [schnaq.interface.events]
+            [schnaq.interface.integrations.wetog.events]
+            [schnaq.interface.integrations.wetog.views]
             [schnaq.interface.navigation]
             [schnaq.interface.pages.about-us]
             [schnaq.interface.pages.lead-magnet]

@@ -7,5 +7,7 @@
   (fn [{:keys [db]} _]
     (let [share-hash (jsw/data-attribute "schnaq-integration" "shareHash")
           display-name (jsw/data-attribute "schnaq-integration" "displayName")]
-      {:db (assoc-in db [:user :names :display] display-name)
+      {:db (-> db
+               (assoc-in [:user :names :display] display-name)
+               (assoc-in [:schnaq :selected :discussion/share-hash] share-hash))
        :fx [[:dispatch [:schnaq/load-by-share-hash share-hash]]]})))
