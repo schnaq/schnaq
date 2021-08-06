@@ -5,9 +5,8 @@
   min-height: 4.25rem;
 }
 
-.schnaq-navbar {
+.schnaq-navbar-skeleton {
   @include rounded.rounded-1;
-  background: vars.$white;
   height: 4.25rem;
 
   @include media-breakpoint-down(sm) {
@@ -15,6 +14,11 @@
     max-height: 8rem;
     width: 100%;
   }
+}
+
+.schnaq-navbar {
+  @extend .schnaq-navbar-skeleton;
+  background: vars.$white;
 }
 
 .schnaq-logo-container {

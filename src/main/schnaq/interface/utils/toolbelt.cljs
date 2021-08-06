@@ -58,12 +58,12 @@
   "Truncate a string to the first x chars and return it in a tooltiped span."
   [text char-count]
   [string? nat-int? :ret string?]
-  [tooltip/inline-element
-   :bottom
-   text
-   (if (< char-count (count text))
-     (apply str (concat (take char-count text) "…"))
-     text)])
+  (if (< char-count (count text))
+    [tooltip/inline-element
+     :bottom
+     text
+     (apply str (concat (take char-count text) "…"))]
+    text))
 
 (defn obfuscate-mail
   "Hide real mail address."

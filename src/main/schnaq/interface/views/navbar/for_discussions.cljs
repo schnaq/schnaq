@@ -46,13 +46,12 @@
 (defn graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
+  [:button.btn.btn-sm.btn-dark.shadow-sm.rounded-1.h-100
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
-   [:img.img-fluid
+   [:img.header-standalone-icon
     {:src (img-path :icon-graph)
-     :width "25"
      :alt "graph icon"}]
    [:div (labels :graph.button/text)]])
 
@@ -72,14 +71,13 @@
   "Button to navigate to the summary view."
   [share-hash]
   (let [beta-user? @(rf/subscribe [:user/beta-tester?])]
-    [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
+    [:button.btn.btn-sm.btn-dark.shadow-sm.rounded-1.h-100
      (if beta-user?
        {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}
        {:on-click #(rf/dispatch [:modal {:show? true
                                          :child [beta-only-modal]}])})
-     [:img.img-fluid
+     [:img.header-standalone-icon
       {:src (img-path :icon-summary)
-       :width "25"
        :alt "summary icon"}]
      [:p.m-0 (labels :summary.link.button/text)]]))
 
@@ -136,3 +134,35 @@
   [:div.d-flex.flex-row.flex-wrap.p-md-3
    [navbar]
    [navbar-statements]])
+
+(defn embeddable-header []
+  ;; The view breaks earlier, because the breakpoints heed the screen size, not the div size
+  (let [{:discussion/keys [title share-hash] :as discussion} @(rf/subscribe [:schnaq/selected])
+        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
+        edit-hash (get admin-access-map share-hash)
+        meta-info (:meta-info discussion)
+        statement-count (:all-statements meta-info)
+        user-count (count (:authors meta-info))]
+    [:div.d-flex.flex-row.flex-wrap.p-md-3
+     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4.mr-3
+      ;; schnaq logo
+      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
+       [:img.d-inline-block.align-middle.mr-2
+        {:src (img-path :logo-white) :alt "schnaq logo"
+         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
+      [:div.mx-4.ml-auto.d-none.d-md-block
+       [:small.text-primary (labels :discussion.navbar/posts)]
+       [:h5.text-center statement-count]]
+      [:div.mx-4.d-none.d-md-block
+       [:small.text-primary (labels :discussion.navbar/members)]
+       [:h5.text-center user-count]]]
+     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-hd-auto
+      [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
+       [schnaq-progress-bar]
+       [admin/share-link]
+       [admin/txt-export share-hash title]
+       (when edit-hash
+         [admin/admin-center share-hash edit-hash])]
+      [:div.d-flex.align-items-center.mt-4.mt-md-0
+       [:div.h-100.mx-2 [graph-button share-hash]]
+       [:div.h-100.mr-2 [summary-button share-hash]]]]]))
