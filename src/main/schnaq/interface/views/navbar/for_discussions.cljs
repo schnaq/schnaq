@@ -46,13 +46,12 @@
 (defn graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
+  [:button.btn.btn-sm.btn-dark.shadow-sm.rounded-1.h-100
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
-   [:img.img-fluid
+   [:img.header-standalone-icon
     {:src (img-path :icon-graph)
-     :width "25"
      :alt "graph icon"}]
    [:div (labels :graph.button/text)]])
 
@@ -72,14 +71,13 @@
   "Button to navigate to the summary view."
   [share-hash]
   (let [beta-user? @(rf/subscribe [:user/beta-tester?])]
-    [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
+    [:button.btn.btn-sm.btn-dark.shadow-sm.rounded-1.h-100
      (if beta-user?
        {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}
        {:on-click #(rf/dispatch [:modal {:show? true
                                          :child [beta-only-modal]}])})
-     [:img.img-fluid
+     [:img.header-standalone-icon
       {:src (img-path :icon-summary)
-       :width "25"
        :alt "summary icon"}]
      [:p.m-0 (labels :summary.link.button/text)]]))
 
