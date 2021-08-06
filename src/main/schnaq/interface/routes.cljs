@@ -220,12 +220,6 @@
     ["/extended"
      {:name :routes/privacy-extended
       :view privacy-extended/view}]]
-   ["meetings/:share-hash/:edit-hash/manage"
-    ;; DEPRECATED: Don't use at all. We do not support meetings anymore.
-    {:parameters {:path {:edit-hash string? :share-hash string?}}
-     :controllers [{:parameters {:path [:share-hash :edit-hash]}
-                    :start (fn [{:keys [path]}]
-                             (rf/dispatch [:navigation/navigate :routes.schnaq/admin-center path]))}]}]
    ["about"
     {:name :routes/about-us
      :view about-us/page}]
