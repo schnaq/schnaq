@@ -42,5 +42,8 @@
 (def s3-credentials {:access-key "minio"
                      :secret-key "***REMOVED***"
                      :endpoint shared-config/s3-host
-                     :client-config
-                     {:path-style-access-enabled true}})
+                     :client-config {:path-style-access-enabled true}})
+
+(def cors-allowed-additional-domain
+  "Allow an additional domain to be allowed to send requests to the backend."
+  (or (System/getenv "CORS_ALLOWED_HOST") ""))

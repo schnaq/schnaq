@@ -34,6 +34,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.config.summy :as summy-config]
             [schnaq.core :as schnaq-core]
+            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:gen-class))
 
@@ -61,9 +62,10 @@
   (log/info (format "Summy URL: %s" summy-config/base-url))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
 
-(def allowed-origin
-  "Regular expression, which defines the allowed origins for API requests."
-  #"^((https?:\/\/)?(.*\.)?(schnaq\.(com|de)))($|\/.*$)")
+(def allowed-origins
+  (->> ["schnaq.com" "schnaq.de" config/cors-allowed-additional-domain]
+       (remove empty?)
+       (map toolbelt/build-allowed-origin)))
 
 (def ^:private description
   "This is the main Backend for schnaq.
@@ -146,9 +148,7 @@
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
-  (let [allowed-origins [allowed-origin]
-        allowed-origins' (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
-    ; Run the server with Ring.defaults middle-ware
+  (let [allowed-origins' (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
     (say-hello)
     (schnaq-core/-main)
     (reset! current-server

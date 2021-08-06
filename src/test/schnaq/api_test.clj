@@ -42,9 +42,11 @@
                                       :query-params {:share-hash "bad-hash"}}))))))))
 
 (deftest cors-origin-tests
-  (let [test-regex (partial re-matches api/allowed-origin)]
+  (testing "CORS Settings"
     (testing "Valid origins for production mode."
-      (are [origin] (not (nil? (test-regex origin)))
+      (are [origin] (some string?
+                          (flatten
+                            (map #(re-matches % origin) api/allowed-origins)))
                     "api.schnaq.com"
                     "schnaq.com"
                     "schnaq.de"
@@ -59,7 +61,9 @@
                     "https://staging.schnaq.com"
                     "https://staging.schnaq.com/meetings/create"))
     (testing "Invalid origins."
-      (are [origin] (nil? (test-regex origin))
+      (are [origin] (not (some string?
+                               (flatten
+                                 (map #(re-matches % origin) api/allowed-origins))))
                     "localhost"
                     "penguin.books"
                     "christian.rocks"
