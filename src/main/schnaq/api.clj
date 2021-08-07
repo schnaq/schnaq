@@ -60,12 +60,9 @@
   (log/info (format "Database Name: %s" config/db-name))
   (log/info (format "Database URI (truncated): %s" (subs config/datomic-uri 0 30)))
   (log/info (format "Summy URL: %s" summy-config/base-url))
+  (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
+  (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
   (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
-
-(def allowed-origins
-  (->> ["schnaq.com" "schnaq.de" config/cors-allowed-additional-domain]
-       (remove empty?)
-       (map toolbelt/build-allowed-origin)))
 
 (def ^:private description
   "This is the main Backend for schnaq.
@@ -145,6 +142,15 @@
       (ring/redirect-trailing-slash-handler {:method :strip})
       (ring/create-default-handler))))
 
+(def allowed-origins
+  (->> ["schnaq.com" "schnaq.de" config/frontend-host]
+       (remove empty?)
+       (mapv toolbelt/build-allowed-origin)
+       doall))
+
+(def allowed-http-verbs
+  #{:get :put :post :delete})
+
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
@@ -155,7 +161,7 @@
             (server/run-server
               (-> #'app
                   (wrap-cors :access-control-allow-origin allowed-origins'
-                             :access-control-allow-methods [:get :put :post :delete]))
+                             :access-control-allow-methods allowed-http-verbs))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
