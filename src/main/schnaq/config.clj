@@ -1,23 +1,25 @@
 (ns schnaq.config
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
-  (:require [schnaq.config.shared :as shared-config]
-            [schnaq.config.summy :as summy-config]
-            [schnaq.toolbelt :as toolbelt]))
+  (:require [clojure.java.io :as io]
+            [schnaq.config.shared :as shared-config]
+            [schnaq.config.summy :as summy-config]))
 
 (def frontend-url
   (or (System/getenv "FRONTEND_URL") "http://localhost:8700"))
 
+(def frontend-host
+  "Parse the host (and port) from the url to allow it in CORS."
+  (let [url (io/as-url frontend-url)
+        host (.getHost url)
+        port (.getPort url)]
+    (if (or (= 80 port) (= 443 port) (= -1 port))           ;; .getPort returns -1 if no port is explicitly configured, e.g. at https://schnaq.com
+      host
+      (format "%s:%d" host port))))
+
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
   #{summy-config/app-code})
-
-(def datomic
-  "When we are production ready, put here the original production config and use
-  dev-locals `divert-system` to use dev-local instead of a datomic cluster."
-  {:system "development"
-   :server-type :dev-local
-   :storage-dir (toolbelt/create-directory! ".datomic/dev-local/data")})
 
 (def db-name (or (System/getenv "DATOMIC_DISCUSSION_DB_NAME") "dev-db"))
 
@@ -49,7 +51,3 @@
                      :secret-key s3-secret-key
                      :endpoint shared-config/s3-host
                      :client-config {:path-style-access-enabled true}})
-
-(def cors-allowed-additional-domain
-  "Allow an additional domain to be allowed to send requests to the backend."
-  (or (System/getenv "CORS_ALLOWED_HOST") ""))
