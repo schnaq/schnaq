@@ -62,5 +62,5 @@
 (defn build-allowed-origin
   "Build regular expressions, which define the allowed origins for API requests."
   [domain]
-  (let [[domain-name tld] (string/split domain #"\.")]
+  (when-let [[domain-name tld] (string/split domain #"\.")]
     (re-pattern (format "^((https?://)?(.*\\.)?(%s\\.%s))($|/.*$)" domain-name tld))))

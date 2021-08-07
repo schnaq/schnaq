@@ -1,11 +1,13 @@
 (ns schnaq.api-test
   (:require [clojure.test :refer [deftest testing is are use-fixtures]]
+            [ring.middleware.cors :as cors]
             [ring.mock.request :as mock]
             [schnaq.api :as api]
             [schnaq.api.discussion :as discussion-api]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]))
+            [schnaq.test.toolbelt :as schnaq-toolbelt]
+            [schnaq.toolbelt :as toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
@@ -41,35 +43,43 @@
         (is (= 404 (:status (api/app {:request-method :get :uri "/discussion/graph"
                                       :query-params {:share-hash "bad-hash"}}))))))))
 
-(deftest cors-origin-tests
-  (testing "CORS Settings"
-    (testing "Valid origins for production mode."
-      (are [origin] (some string?
-                          (flatten
-                            (map #(re-matches % origin) api/allowed-origins)))
-                    "api.schnaq.com"
-                    "schnaq.com"
-                    "schnaq.de"
-                    "www.schnaq.de"
-                    "www.schnaq.com"
-                    "https://api.schnaq.com"
-                    "https://schnaq.com"
-                    "https://schnaq.com/?kangaroo=rocks"
-                    "api.staging.schnaq.com"
-                    "staging.schnaq.com"
-                    "https://api.staging.schnaq.com"
-                    "https://staging.schnaq.com"
-                    "https://staging.schnaq.com/meetings/create"))
-    (testing "Invalid origins."
-      (are [origin] (not (some string?
-                               (flatten
-                                 (map #(re-matches % origin) api/allowed-origins))))
-                    "localhost"
-                    "penguin.books"
-                    "christian.rocks"
-                    "schnaqqi.com"
-                    "schnaq.dev"
-                    "fakeschnaq.com"))))
+(deftest api-cors-test
+  (testing "CORS settings for main API."
+    (are [origin expected]
+      (= expected (cors/allow-request?
+                    {:headers {"origin" origin}
+                     :request-method :get}
+                    {:access-control-allow-origin (conj api/allowed-origins (toolbelt/build-allowed-origin "schnaq.localhost"))
+                     :access-control-allow-methods api/allowed-http-verbs}))
+      nil false
+      "" false
+      "http://schnaq.com" true
+      "https://schnaq.com" true
+      "api.schnaq.com" true
+      "schnaq.com" true
+      "schnaq.de" true
+      "www.schnaq.de" true
+      "www.schnaq.com" true
+      "https://api.schnaq.com" true
+      "https://schnaq.com" true
+      "https://schnaq.com/?kangaroo=rocks" true
+      "api.staging.schnaq.com" true
+      "staging.schnaq.com" true
+      "https://api.staging.schnaq.com" true
+      "https://staging.schnaq.com" true
+      "https://staging.schnaq.com/schnaq/create" true
+      "http://schnaq.localhost" true
+      "https://schnaq.localhost" true
+      "https://schnaq.localhost/schnaqs" true
+      "https://schnaq.localhost/schnaqs/public" true
+      "localhost" false
+      "penguin.books" false
+      "christian.rocks" false
+      "schnaqqi.com" false
+      "schnaq.dev" false
+      "fakeschnaq.com" false
+      "http://schnaqqifantenparty.com" false
+      "https://schnaqqifantenparty.com" false)))
 
 (deftest edit-statement!-test
   (let [edit-statement! #'discussion-api/edit-statement!
