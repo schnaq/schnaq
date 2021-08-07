@@ -54,7 +54,7 @@
         backends (if custom-jwt-signed-backend
                    [signed-jwt-backend custom-jwt-signed-backend] [signed-jwt-backend])]
     (if shared-config/production?
-      (apply wrap-authentication handler signed-jwt-backend custom-jwt-signed-backend)
+      (apply wrap-authentication handler backends)
       (apply wrap-authentication handler (conj backends signed-jwt-backend-for-testing)))))
 
 (defn replace-bearer-with-token
