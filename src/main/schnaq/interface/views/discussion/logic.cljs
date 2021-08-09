@@ -20,7 +20,8 @@
 (rf/reg-event-fx
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ statement-type new-premise]]
-    (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])
+    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
+          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
           nickname (get-in db [:user :names :display] default-anonymous-display-name)]
       {:fx [(http/xhrio-request
               db :post "/discussion/react-to/statement"

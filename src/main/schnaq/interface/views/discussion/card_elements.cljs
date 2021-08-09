@@ -87,7 +87,7 @@
 (rf/reg-event-fx
   :discussion.add.statement/starting
   (fn [{:keys [db]} [_ form]]
-    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
           nickname (get-in db [:user :names :display] default-anonymous-display-name)
           statement-text (oget form [:statement-text :value])]
       {:fx [(http/xhrio-request db :post "/discussion/statements/starting/add"

@@ -21,10 +21,11 @@
   [{:keys [parameters identity]}]
   (let [hash (get-in parameters [:query :share-hash])
         keycloak-id (:sub identity)]
-    (ok {:schnaq (processors/add-meta-info-to-schnaq
-                   (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
-                     (discussion-db/discussion-by-share-hash-private hash)
-                     (discussion-db/discussion-by-share-hash hash)))})))
+    (ok {:schnaq (-> (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
+                       (discussion-db/discussion-by-share-hash-private hash)
+                       (discussion-db/discussion-by-share-hash hash))
+                     processors/add-meta-info-to-schnaq
+                     processors/with-votes)})))
 
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
@@ -40,7 +41,7 @@
   (if-let [share-hashes (get-in request [:parameters :query :share-hashes])]
     (let [share-hashes-list (if (string? share-hashes) [share-hashes] share-hashes)]
       (ok {:schnaqs
-           (map processors/add-meta-info-to-schnaq
+           (map #(-> % processors/add-meta-info-to-schnaq processors/with-votes)
                 (discussion-db/valid-discussions-by-hashes share-hashes-list))}))
     at/not-found-hash-invalid))
 
