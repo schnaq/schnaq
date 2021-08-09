@@ -10,7 +10,7 @@
 (rf/reg-event-fx
   :discussion.statements/search
   (fn [{:keys [db]} [_ search-string]]
-    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:db (assoc-in db [:search :schnaq :current :search-string] search-string)
        :fx [(http/xhrio-request db :get "/discussion/statements/search" [:discussion.statements.search/success]
                                 {:share-hash share-hash

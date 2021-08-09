@@ -262,7 +262,10 @@
                              (rf/dispatch [:discussion.query.statement/by-id]))
                     :stop (fn []
                             (rf/dispatch [:visited.statement-nums/to-localstorage])
-                            (rf/dispatch [:statement.edit/reset-edits]))}]}]])
+                            (rf/dispatch [:statement.edit/reset-edits]))}]}]
+   ["search"
+    {:name :routes.search/schnaq
+     :view discussion-search/view}]])
 
 (def router
   (reitit-front/router

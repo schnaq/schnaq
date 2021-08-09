@@ -145,7 +145,8 @@
 (rf/reg-event-fx
   :schnaq/load-by-share-hash
   (fn [{:keys [db]} [_ share-hash]]
-    {:fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
+    {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
+     :fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
                               {:share-hash share-hash})]}))
 
 (rf/reg-event-fx
