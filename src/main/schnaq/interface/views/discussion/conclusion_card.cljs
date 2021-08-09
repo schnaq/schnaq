@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.conclusion-card
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [fa labels img-path]]
             [schnaq.interface.utils.http :as http]
@@ -97,14 +98,16 @@
   "Displays a list of conclusions."
   [conclusions share-hash]
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        edit-hash (get admin-access-map share-hash)]
+        edit-hash (get admin-access-map share-hash)
+        card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion ")]
     (if (seq conclusions)
       (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
             keyfn (case sort-method
                     :newest :statement/created-at
                     :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
             sorted-conclusions (sort-by keyfn > conclusions)]
-        [:div.card-columns.card-columns-discussion.pb-3
+        [:div.card-columns.pb-3
+         {:class card-column-class}
          (for [statement sorted-conclusions]
            (with-meta
              [statement-or-edit-wrapper statement edit-hash]
@@ -114,7 +117,7 @@
 (rf/reg-event-fx
   :discussion.select/conclusion
   (fn [{:keys [db]} [_ conclusion]]
-    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
        :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]

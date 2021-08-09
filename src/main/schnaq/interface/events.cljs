@@ -109,7 +109,9 @@
 (rf/reg-event-fx
   :schnaq/select-current-from-backend
   (fn [_ [_ {:keys [schnaq]}]]
-    {:fx [[:dispatch [:schnaq/select-current schnaq]]]}))
+    {:fx [[:dispatch [:schnaq/select-current schnaq]]
+          [:dispatch [:discussion.query.conclusions/set-starting
+                      {:starting-conclusions (:discussion/starting-statements schnaq)}]]]}))
 
 (rf/reg-event-fx
   :schnaq/select-current
@@ -143,7 +145,8 @@
 (rf/reg-event-fx
   :schnaq/load-by-share-hash
   (fn [{:keys [db]} [_ share-hash]]
-    {:fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
+    {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
+     :fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
                               {:share-hash share-hash})]}))
 
 (rf/reg-event-fx

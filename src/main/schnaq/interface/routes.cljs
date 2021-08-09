@@ -138,9 +138,7 @@
      {:name :routes.schnaqs/personal
       :view feed/personal-discussions-view
       :link-text (labels :router/visited-schnaqs)
-      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
-    ["/my"                                                  ;; Deprecated old route. Remove sometime.
-     {:controllers [{:start #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}]}]]
+      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]]
    ["schnaq"
     {:controllers [{:start #(rf/dispatch [:username/open-dialog])}]}
     ["/create"
@@ -220,12 +218,6 @@
     ["/extended"
      {:name :routes/privacy-extended
       :view privacy-extended/view}]]
-   ["meetings/:share-hash/:edit-hash/manage"
-    ;; DEPRECATED: Don't use at all. We do not support meetings anymore.
-    {:parameters {:path {:edit-hash string? :share-hash string?}}
-     :controllers [{:parameters {:path [:share-hash :edit-hash]}
-                    :start (fn [{:keys [path]}]
-                             (rf/dispatch [:navigation/navigate :routes.schnaq/admin-center path]))}]}]
    ["about"
     {:name :routes/about-us
      :view about-us/page}]
@@ -252,16 +244,41 @@
      :view error-views/true-404-entrypoint
      :link-text (labels :router/true-404-view)}]])
 
+(def wetog-routes
+  ["/"
+   {:coercion reitit.coercion.spec/coercion
+    :controllers [{:start (fn [] (rf/dispatch [:wetog/initialize-from-data]))}]}
+   [""
+    {:name :routes.schnaq/start
+     :view discussion-card-view/view
+     :link-text (labels :router/startpage)
+     :controllers schnaq-start-controllers}]
+   ["statement/:statement-id"
+    {:name :routes.schnaq.select/statement
+     :parameters {:path {:statement-id int?}}
+     :view discussion-card-view/view
+     :controllers [{:parameters {:path [:statement-id]}
+                    :start (fn []
+                             (rf/dispatch [:discussion.query.statement/by-id]))
+                    :stop (fn []
+                            (rf/dispatch [:visited.statement-nums/to-localstorage])
+                            (rf/dispatch [:statement.edit/reset-edits]))}]}]
+   ["search"
+    {:name :routes.search/schnaq
+     :view discussion-search/view}]])
+
 (def router
   (reitit-front/router
-    routes
+    (if config/embedded?
+      wetog-routes
+      routes)
     ;; This disables automatic conflict checking. So: Please check your own
     ;; routes that there are no conflicts.
     {:conflicts nil}))
 
 (defn- on-navigate [new-match]
   (let [window-hash (.. js/window -location -hash)]
-    (if (empty? window-hash)
+    (if (and (empty? window-hash) (not config/embedded?))
       (.scrollTo js/window 0 0)
       (oset! js/document "onreadystatechange"
              #(js-wrap/scroll-to-id window-hash))))

@@ -15,6 +15,7 @@
             [schnaq.interface.config :as config]
             [schnaq.interface.effects]
             [schnaq.interface.events]
+            [schnaq.interface.integrations.wetog.events]
             [schnaq.interface.navigation]
             [schnaq.interface.pages.about-us]
             [schnaq.interface.pages.lead-magnet]
@@ -96,9 +97,10 @@
 (defn init
   "Entrypoint into the application."
   []
-  (routes/init-routes!)
-  (rf/dispatch-sync [:initialize/schnaq])                   ;; put a value into application state
-  (language/init-language)
-  (render)                                                  ;; mount the application's ui into '<div id="app" />'
-  (say-hello)
-  (updates/init-periodic-updates))
+  (let [init-routine (if shared-config/embedded? :initialize/wetog-integration :initialize/schnaq)]
+    (routes/init-routes!)
+    (rf/dispatch-sync [init-routine])                       ;; put a value into application state
+    (language/init-language)
+    (render)                                                ;; mount the application's ui into '<div id="app" />'
+    (say-hello)
+    (updates/init-periodic-updates)))

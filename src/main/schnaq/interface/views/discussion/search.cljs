@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.search
   (:require [goog.string :as gstring]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.conclusion-card :as card]
             [schnaq.interface.views.pages :as pages]))
@@ -18,8 +19,9 @@
 (defn- search-view
   []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
-        results @(rf/subscribe [:schnaq.search.current/result])]
-    [pages/with-discussion-header
+        results @(rf/subscribe [:schnaq.search.current/result])
+        page-wrapper (if shared-config/embedded? pages/embeddable-view pages/with-discussion-header)]
+    [page-wrapper
      {:page/heading (labels :schnaq.search/title)}
      [:div.container.mt-4
       (if (= "" search-string)

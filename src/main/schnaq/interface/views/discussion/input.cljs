@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.input
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [fa labels video]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -54,14 +55,15 @@
      [:div.d-flex.flex-row.discussion-input-content.rounded-1.mb-3
       [:div {:class (str "highlight-card-" attitude)}]
       [:div.w-100
-       [:div.d-flex.flex-row.justify-content-end.pr-lg-2
-        ;; hide 'new post from you' text on mobile
-        [:small.d-none.d-md-block.text-muted.mr-2 (labels :discussion.add.statement/new)]
-        [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
-                                         :display-name (get-in user [:names :display])} 32]]
+       (when-not shared-config/embedded?
+         [:div.d-flex.flex-row.justify-content-end.pr-lg-2
+          ;; hide 'new post from you' text on mobile
+          [:small.d-none.d-md-block.text-muted.mr-2 (labels :discussion.add.statement/new)]
+          [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
+                                           :display-name (get-in user [:names :display])} 32]])
        [:div.input-group
         [:textarea.form-control.discussion-text-input-area
-         {:name textarea-name :wrap "soft" :rows 1
+         {:name textarea-name :wrap "soft" :rows 2
           :auto-complete "off"
           :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
           ;; first reset input then set height +1px in order to prevent scrolling
