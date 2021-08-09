@@ -117,7 +117,7 @@
 (rf/reg-event-fx
   :discussion.select/conclusion
   (fn [{:keys [db]} [_ conclusion]]
-    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
        :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]

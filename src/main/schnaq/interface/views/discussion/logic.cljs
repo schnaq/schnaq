@@ -82,10 +82,12 @@
     (rf/dispatch [:discussion.reaction.statement/send statement-type new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
+;; TODO test function with normal mode
 (rf/reg-event-fx
   :discussion.query.statement/by-id
   (fn [{:keys [db]} _]
-    (let [{:keys [share-hash statement-id]} (get-in db [:current-route :parameters :path])]
+    (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
+          share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:fx [(http/xhrio-request
               db :get "/discussion/statement/info"
               [:discussion.query.statement/by-id-success]

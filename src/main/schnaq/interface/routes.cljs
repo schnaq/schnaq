@@ -252,7 +252,17 @@
     {:name :routes.schnaq/start
      :view discussion-card-view/view
      :link-text (labels :router/startpage)
-     :controllers schnaq-start-controllers}]])
+     :controllers schnaq-start-controllers}]
+   ["statement/:statement-id"
+    {:name :routes.schnaq.select/statement
+     :parameters {:path {:statement-id int?}}
+     :view discussion-card-view/view
+     :controllers [{:parameters {:path [:statement-id]}
+                    :start (fn []
+                             (rf/dispatch [:discussion.query.statement/by-id]))
+                    :stop (fn []
+                            (rf/dispatch [:visited.statement-nums/to-localstorage])
+                            (rf/dispatch [:statement.edit/reset-edits]))}]}]])
 
 (def router
   (reitit-front/router
