@@ -25,7 +25,7 @@
         {:disabled true}
         {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
       button-text]
-     [:p.small.text-muted.mt-2.text-left
+     [:small.text-muted.mt-2.text-left
       [:div.d-flex.flex-row [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}] [:span (labels :summary.user/privacy-warning)]]]]))
 
 (defn summary-body
