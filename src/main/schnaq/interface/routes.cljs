@@ -6,6 +6,7 @@
             [reitit.frontend :as reitit-front]
             [reitit.frontend.easy :as reitit-front-easy]
             [reitit.frontend.history :as rfh]
+            [schnaq.config.shared :as config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
             [schnaq.interface.pages.about-us :as about-us]
@@ -277,7 +278,7 @@
   (reitit-front-easy/start!
     router
     on-navigate
-    {:use-fragment false
+    {:use-fragment config/embedded?
      :ignore-anchor-click? (fn [router e el uri]
                              (and (rfh/ignore-anchor-click? router e el uri)
                                   (not= "false" (gobj/get (.-dataset el) "reititHandleClick"))

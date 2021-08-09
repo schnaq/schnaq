@@ -74,7 +74,7 @@
 (defn render
   []
   (reagent.dom/render [views/root]
-                      (gdom/getElement "app")))
+                      (gdom/getElement (if shared-config/embedded? "schnaq-integration" "app"))))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []

@@ -77,12 +77,12 @@
         [user/user-info (:statement/author statement) 42 (:statement/created-at statement) "w-100"]]
        [:div.my-4]
        [md/as-markdown (:statement/content statement)]
-       [:div.d-flex
-        [:a.badge.badge-pill.rounded-2.mr-2
+       [:div.d-flex.flex-wrap
+        [:a.badge.badge-pill.rounded-2.mr-1
          {:href "#" :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
          [:i {:class (str "m-auto far " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
         [up-down-vote statement]
-        [:div.ml-auto
+        [:div.ml-sm-0.ml-lg-auto
          [badges/extra-discussion-info-badges statement edit-hash]]]]]]))
 
 (defn- statement-or-edit-wrapper

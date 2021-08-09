@@ -1,5 +1,6 @@
 (ns schnaq.api.schnaq
   (:require [clojure.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn-]]
             [ring.util.http-response :refer [ok created bad-request]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
@@ -12,7 +13,8 @@
             [schnaq.validator :as validator]
             [spec-tools.core :as st]
             [taoensso.timbre :as log])
-  (:import (java.util UUID)))
+  (:import (java.util UUID)
+           (java.time LocalDateTime ZoneOffset)))
 
 (defn- schnaq-by-hash
   "Returns a schnaq, identified by its share-hash."
@@ -47,10 +49,16 @@
   [_req]
   (ok {:schnaqs (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
 
+(>defn- now-plus-days-instant
+  "Adds a number of days to the current datetime and then converts that to an instant."
+  [days]
+  [integer? :ret inst?]
+  (.toInstant (.plusDays (LocalDateTime/now) days) ZoneOffset/UTC))
+
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
   [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title public-discussion? hub-exclusive? hub]} (:body parameters)
+  (let [{:keys [nickname discussion-title public-discussion? hub-exclusive? hub ends-in-days]} (:body parameters)
         keycloak-id (:sub identity)
         authorized-for-hub? (some #(= % hub) (:groups identity))
         author (if keycloak-id
@@ -61,7 +69,8 @@
                                  :discussion/edit-hash (.toString (UUID/randomUUID))
                                  :discussion/author author}
                                 (and hub-exclusive? authorized-for-hub?)
-                                (assoc :discussion/hub-origin [:hub/keycloak-name hub]))
+                                (assoc :discussion/hub-origin [:hub/keycloak-name hub])
+                                ends-in-days (assoc :discussion/end-time (now-plus-days-instant ends-in-days)))
         new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
     (if new-discussion-id
       (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
@@ -92,6 +101,14 @@
 
 
 ;; -----------------------------------------------------------------------------
+(s/def ::discussion-title :discussion/title)
+(s/def ::public-discussion? boolean?)
+(s/def ::ends-in-days pos-int?)
+(s/def ::hub-exclusive? boolean?)
+(s/def ::hub :hub/keycloak-name)
+(s/def ::schnaq-add-body
+  (s/keys :req-un [::discussion-title ::public-discussion?]
+          :opt-un [::ends-in-days :user/nickname ::hub-exclusive? ::hub]))
 
 (def schnaq-routes
   [["" {:swagger {:tags ["schnaqs"]}}
@@ -103,20 +120,12 @@
                   :parameters {:query {:share-hash :discussion/share-hash}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
-     ["/add" {:description (at/get-doc #'add-schnaq)
-              :parameters {:body {:discussion-title :discussion/title
-                                  :public-discussion? boolean?}}
+     ["/add" {:post add-schnaq
+              :description (at/get-doc #'add-schnaq)
+              :name :api.schnaq/add
+              :parameters {:body ::schnaq-add-body}
               :responses {201 {:body {:new-schnaq ::dto/discussion}}
-                          400 at/response-error-body}}
-      ["" {:post add-schnaq
-           :name :api.schnaq/add}]
-      ["/anonymous" {:post add-schnaq
-                     :name :api.schnaq.add/anonymous
-                     :parameters {:body {:nickname :user/nickname}}}]
-      ["/with-hub" {:post add-schnaq
-                    :name :api.schnaq.add/with-hub
-                    :parameters {:body {:hub-exclusive? boolean?
-                                        :hub :hub/keycloak-name}}}]]
+                          400 at/response-error-body}}]
      ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
                            :description (at/get-doc #'schnaq-by-hash-as-admin)
                            :name :api.schnaq/by-hash-as-admin

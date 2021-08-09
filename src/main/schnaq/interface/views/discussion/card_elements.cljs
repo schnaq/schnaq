@@ -17,41 +17,6 @@
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
 
-(defn- home-button-mobile
-  "Home button for history view"
-  [history-length]
-  [:div.d-inline-block.d-md-block.pr-2.pr-md-0.mt-md-4.pt-2.pt-md-0
-   [:div.clickable.card-history-home.text-center
-    {:on-click
-     #(rf/dispatch [:discussion.history/time-travel history-length])}
-    [tooltip/block-element
-     :right
-     (labels :history.home/tooltip)
-     [:div [:small (labels :history.home/text)]]]]])
-
-(defn history-view-mobile
-  "History view displayed in the left column in the desktop view."
-  [history]
-  (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)]
-    [:<>
-     ;; home button
-     [home-button-mobile (count indexed-history)]
-     ;; history
-     (for [[index statement] indexed-history]
-       (let [user (:statement/author statement)
-             nickname (user-utils/statement-author statement)]
-         [:div.d-inline-block.d-md-block.pr-2.pr-md-0.text-dark.pt-2.pt-md-0
-          {:key (str "history-" (:db/id statement))}
-          (let [attitude (name (or (:statement/type statement) :neutral))]
-            [:div.card-history.clickable.mt-md-4
-             {:class (str "statement-card-" attitude " mobile-attitude-" attitude)
-              :on-click #(rf/dispatch [:discussion.history/time-travel index])}
-             [:div.history-card-content.text-center
-              [tooltip/block-element
-               :right
-               (str (labels :tooltip/history-statement) nickname)
-               [common/avatar user 42]]]])]))]))
-
 (defn- back-button
   "Return to your schnaqs Button"
   [has-history?]
@@ -102,7 +67,7 @@
                 tooltip (str (labels :tooltip/history-statement) nickname)
                 history-content [:<>
                                  [:div.d-flex.flex-row
-                                  [:h6 (str (labels :history.statement/user) nickname)]
+                                  [:h6 (labels :history.statement/user) (toolbelt/truncate-to-n-chars nickname 20)]
                                   [:div.ml-auto [common/avatar user 22]]]
                                  (toolbelt/truncate-to-n-words statement-content max-word-count)]]
             [:article {:key (str "history-container-" (:db/id statement))}
@@ -190,9 +155,8 @@
         public? (contains? (set states) :discussion.state/public)
         [label class] (if public? [:discussion.privacy/public (str "primary-light-color m-auto fas fa-lg " (fa :lock-open))]
                                   [:discussion.privacy/private (str "secondary-color m-auto fas fa-lg " (fa :lock-closed))])]
-    [:span.badge {:key (str "discussion-privacy-badge-" share-hash)}
-     [:i {:class class}] " "
-     (labels label)]))
+    [:span.badge.my-auto.ml-auto {:key (str "discussion-privacy-badge-" share-hash)}
+     [:i {:class class}] " " (labels label)]))
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"
@@ -216,10 +180,9 @@
 
 (defn- topic-bubble-view [statement input badges info-content is-topic?]
   [:div.p-2
-   [:div.d-flex.mb-4
+   [:div.d-flex.flex-wrap.mb-4
     [user/user-info (:statement/author statement) 42 (:statement/created-at statement) nil]
-    [:div.ml-auto.my-auto
-     [discussion-privacy-badge]]]
+    [discussion-privacy-badge]]
    [title-and-input-element statement input is-topic? badges info-content]])
 
 (defn- topic-bubble [content]

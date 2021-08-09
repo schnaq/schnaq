@@ -180,7 +180,12 @@
     :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
     :db/doc "The time at which this entity has been created."}
+   {:db/ident :discussion/end-time
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db/doc "An optional time, when the discussion is finished and follow-up processes are started."}
 
+   ;; hub
    {:db/ident :hub/name
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
@@ -198,6 +203,10 @@
     :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
     :db/doc "The time at which this entity has been created."}
+   {:db/ident :hub/logo
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "URL to where the hub logo was uploaded to."}
 
    ;; Extractive summaries
    {:db/ident :summary/discussion

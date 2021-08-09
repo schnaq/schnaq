@@ -26,7 +26,7 @@
       :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
    [:div.mx-md-5
     [:div.d-flex.flex-row.d-md-none.align-items-center
-     [um/user-handling-menu "btn-outline-primary"]]
+     [um/user-handling-menu "btn-link"]]
     [:h1.h2.font-weight-bold.my-auto.d-none.d-md-block (labels :schnaqs/header)]]])
 
 (defn navbar-user []
@@ -52,7 +52,7 @@
       [um/admin-dropdown "btn-outline-secondary"]]
      [:div.mx-1.d-none.d-md-block
       [:div.d-flex.flex-row.align-items-center
-       [um/user-handling-menu "btn-outline-primary"]]]]))
+       [um/user-handling-menu "btn-link"]]]]))
 
 (defn navbar
   "Overview header for a discussion."
@@ -104,4 +104,4 @@
           [:button.dropdown-item
            {:on-click #(language/set-language :de)} "Deutsch"]]]]
        [um/admin-dropdown "btn-outline-secondary"]
-       [um/user-handling-menu "btn-outline-light"]]]]))
+       [um/user-handling-menu "btn-outline-light btn-transparent"]]]]))

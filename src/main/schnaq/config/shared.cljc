@@ -1,4 +1,5 @@
-(ns schnaq.config.shared)
+(ns schnaq.config.shared
+  (:require [clojure.set :as cset]))
 
 #?(:clj  (def api-port
            (Integer/parseInt (or (System/getenv "API_PORT") "3000")))
@@ -16,11 +17,16 @@
            (or (System/getenv "S3_HOST") "https://s3.disqtec.com"))
    :cljs (goog-define s3-host "https://s3.disqtec.com"))
 
+#?(:clj  (def embedded?
+           (or (System/getenv "EMBEDDED") false))
+   :cljs (goog-define embedded? false))
+
 (defn s3-buckets
   "Returns bucket names"
   [bucket-name]
   (get
-    {:schnaq/header-images "schnaq-header-images"
+    {:hub/logo "schnaq-hub-logo"
+     :schnaq/header-images "schnaq-header-images"
      :user/profile-pictures "schnaq-profile-pictures"
      :feedbacks/screenshots "schnaq-feedback-screenshots"}
     bucket-name))
@@ -39,8 +45,8 @@
   "Define a list of allowed mime-types."
   #{"image/jpeg" "image/png"})
 
-(def beta-tester-roles
-  #{"schnaqqifantenparty" "beta-tester"})
-
 (def admin-roles
   #{"admin"})
+
+(def beta-tester-roles
+  (cset/union admin-roles #{"beta-tester"}))

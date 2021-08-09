@@ -1,22 +1,11 @@
 (ns schnaq.toolbelt
   "Utility functions supporting the backend."
-  (:require [clojure.walk :as walk]
+  (:require [clojure.string :as string]
+            [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn ?]])
   (:import (clojure.lang PersistentArrayMap)
-           (java.io File)
            (java.time Instant)
            (java.time.temporal ChronoUnit TemporalUnit)))
-
-(>defn create-directory!
-  "Creates a directory in the project's path. Returns the absolut path of the
-  directory."
-  [^String path]
-  [string? :ret string?]
-  (when-not (or (.startsWith path "/")
-                (.startsWith path ".."))
-    (let [dir (File. path)]
-      (.mkdirs dir)
-      (.getAbsolutePath dir))))
 
 (>defn now-minus-days
   "Returns an instant that represents the current date minus some days. Assumes systemDefault timezone."
@@ -57,3 +46,9 @@
   [a b]
   [any? any? :ret number?]
   (compare b a))
+
+(defn build-allowed-origin
+  "Build regular expressions, which define the allowed origins for API requests."
+  [domain]
+  (when-let [[domain-name tld] (string/split domain #"\.")]
+    (re-pattern (format "^((https?://)?(.*\\.)?(%s\\.%s))($|/.*$)" domain-name tld))))

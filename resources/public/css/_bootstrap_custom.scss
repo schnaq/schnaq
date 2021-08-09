@@ -10,6 +10,17 @@ $theme-colors: (
   'dark-blue': vars.$blue-dark
 );
 
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1440px,
+  xxxl: 1600px,
+  hd: 1900px
+);
+
 @import '../node_modules/bootstrap/scss/bootstrap';
 
 // -----------------------------------------------------------------------------

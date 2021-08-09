@@ -1,18 +1,13 @@
 (ns schnaq.api.user
   (:require [clojure.spec.alpha :as s]
-            [clojure.string :as string]
-            [ring.util.http-response :refer [ok bad-request created]]
+            [ring.util.http-response :refer [ok created]]
             [schnaq.api.toolbelt :as at]
-            [schnaq.config :as config]
-            [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.emails :as mail]
             [schnaq.media :as media]
-            [schnaq.s3 :as s3]
-            [taoensso.timbre :as log])
-  (:import (java.util UUID)))
+            [taoensso.timbre :as log]))
 
 (defn- register-user-if-they-not-exist
   "Register a new user if they do not exist. In all cases return the user. New
@@ -33,17 +28,6 @@
           (created "" response))
       (ok response))))
 
-(defn- create-UUID-file-name
-  "Generates a UUID based on a unique id with a file type suffix."
-  [id file-type]
-  (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type))
-
-(s/def :image/type string?)
-(s/def :image/name string?)
-(s/def :image/content string?)
-(s/def ::image
-  (s/keys :req-un [:image/type :image/name :image/content]))
-
 (defn- change-profile-picture
   "Change the profile picture of a user.
   This includes uploading an image to s3 and updating the associated url in the database."
@@ -52,22 +36,10 @@
         image-name (get-in parameters [:body :image :name])
         image-content (get-in parameters [:body :image :content])]
     (log/info "User" (:id identity) "trying to set profile picture to:" image-name)
-    (if (shared-config/allowed-mime-types image-type)
-      (if-let [{:keys [input-stream image-type content-type]}
-               (media/scale-image-to-height image-content config/profile-picture-height)]
-        (let [image-name (create-UUID-file-name (:id identity) image-type)
-              absolute-url (s3/upload-stream :user/profile-pictures
-                                             input-stream
-                                             image-name
-                                             {:content-type content-type})]
-          (log/info "User" (:id identity) "updated their profile picture to" absolute-url)
-          (ok {:updated-user (user-db/update-profile-picture-url (:id identity) absolute-url)}))
-        (do
-          (log/warn "Conversion of image failed for user" (:id identity))
-          (bad-request (at/build-error-body :scaling "Could not scale image"))))
-      (bad-request (at/build-error-body
-                     :invalid-file-type
-                     (format "Invalid image uploaded. Received %s, expected one of: %s" image-type (string/join ", " shared-config/allowed-mime-types)))))))
+    (let [{:keys [image-url] :as response} (media/upload-image! image-type image-content :user/profile-pictures)]
+      (if image-url
+        (ok {:updated-user (user-db/update-profile-picture-url (:id identity) image-url)})
+        response))))
 
 (defn- change-display-name
   "Change the display name of a registered user."
@@ -107,7 +79,7 @@
                                           :updated-statements? boolean?}}}}]
     ["/picture" {:put change-profile-picture
                  :description (at/get-doc #'change-profile-picture)
-                 :parameters {:body {:image ::image}}
+                 :parameters {:body {:image ::specs/image}}
                  :responses {200 {:body {:updated-user ::specs/registered-user}}
                              400 at/response-error-body}}]
     ["/name" {:put change-display-name

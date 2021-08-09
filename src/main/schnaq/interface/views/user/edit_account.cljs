@@ -36,7 +36,8 @@
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
-                  :on-change (fn [event] (image/store-temporary-profile-picture event))
+                  :on-change (fn [event] (image/store-temporary-profile-picture
+                                           event [:user :profile-picture :temporary]))
                   :hidden true}]])]]))
 
 (defn- change-user-info []
