@@ -83,7 +83,6 @@
     (rf/dispatch [:discussion.reaction.statement/send statement-type new-text])
     (rf/dispatch [:form/should-clear [new-text-element]])))
 
-;; TODO test function with normal mode
 (rf/reg-event-fx
   :discussion.query.statement/by-id
   (fn [{:keys [db]} _]
