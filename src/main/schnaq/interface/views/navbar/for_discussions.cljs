@@ -5,7 +5,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.navbar.user-management :as um]
@@ -57,16 +57,14 @@
 (defn summary-button
   "Button to navigate to the summary view."
   [share-hash]
-  (let [beta-user? @(rf/subscribe [:user/beta-tester?])]
-    [:button.btn.btn-sm.btn-dark.shadow-sm.rounded-1.h-100
-     (if beta-user?
-       {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/summary {:share-hash share-hash}])}
-       {:on-click #(rf/dispatch [:modal {:show? true
-                                         :child [beta-only-modal]}])})
-     [:img.header-standalone-icon
-      {:src (img-path :icon-summary)
-       :alt "summary icon"}]
-     [:p.m-0 (labels :summary.link.button/text)]]))
+  [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
+   {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/dashboard {:share-hash share-hash}])}
+   [:img.img-fluid
+    {:src (img-path :icon-summary)
+     :width "25"
+     :alt "summary icon"}]
+   [:p.small.m-0 (labels :summary.link.button/text)]])
+
 
 (>defn- schnaq-progress-information
   "Take the time the schnaq was created and the end-time and returns the percentage for the progress bar as well
