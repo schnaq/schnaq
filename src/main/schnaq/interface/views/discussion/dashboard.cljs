@@ -54,7 +54,7 @@
      [:h3.mb-3 (labels :dashboard/summary)]
      [:h5.my-3.text-primary title]
      (if beta-user?
-       [summary/summary-body]
+       [summary/summary-body current-schnaq]
        [beta-only-modal])]))
 
 (defn- schnaq-summaries []
