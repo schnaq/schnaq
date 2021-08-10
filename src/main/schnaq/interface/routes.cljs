@@ -170,7 +170,10 @@
      ["/dashboard"
       {:name :routes.schnaq/dashboard
        :view dashboard/view
-       :link-text (labels :router/dashboard)}]
+       :link-text (labels :router/dashboard)
+       :controllers [{:parameters {:path [:share-hash]}
+                      :start (fn [{:keys [path]}]
+                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}]
      ["/summary"
       {:name :routes.schnaq/summary
        :view summary/public-user-view

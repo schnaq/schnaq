@@ -23,10 +23,16 @@
 
 (defn pie-chart-component
   [_data]
-  (reagent/create-class
-    {:component-did-mount
-     (fn [comp]
-       (let [[_ chart-data] (reagent/argv comp)]
-         (js/Chart. (rdom/dom-node comp) (clj->js chart-data))))
-     :display-name "chart-js-component"
-     :reagent-render (fn [_data] [:canvas {:style {:margin-top -10}}])}))
+  (let [pie-chart (reagent/atom nil)]
+    (reagent/create-class
+      {:display-name "chart-js-component"
+       :component-did-mount
+       (fn [comp]
+         (let [[_ chart-data] (reagent/argv comp)]
+           (reset! pie-chart (js/Chart. (rdom/dom-node comp) (clj->js chart-data)))))
+       :component-did-update
+       (fn [comp]
+         (let [[_ chart-data] (reagent/argv comp)]
+           (.destroy @pie-chart)
+           (reset! pie-chart (js/Chart. (rdom/dom-node comp) (clj->js chart-data)))))
+       :reagent-render (fn [_data] [:canvas {:style {:margin-top -10}}])})))
