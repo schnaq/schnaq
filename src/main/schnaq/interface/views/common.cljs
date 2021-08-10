@@ -36,7 +36,7 @@
      [:div.avatar-image.p-0
       (if profile-picture
         [:div.profile-pic-fill
-         {:style {:height (str size "px") :width (str size "px")}}
+         {:style {:max-height (str size "px") :max-width (str size "px")}}
          [:img.profile-pic-image {:src profile-picture
                                   :alt (str "Profile Picture of " display-name)}]]
         [identicon display-name size])])))
