@@ -57,13 +57,13 @@
 (defn summary-button
   "Button to navigate to the summary view."
   [share-hash]
-  [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
-   {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/dashboard {:share-hash share-hash}])}
-   [:img.img-fluid
-    {:src (img-path :icon-summary)
-     :width "25"
-     :alt "summary icon"}]
-   [:p.small.m-0 (labels :summary.link.button/text)]])
+  [:a {:href (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})}
+   [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
+    [:img.img-fluid
+     {:src (img-path :icon-summary)
+      :width "25"
+      :alt "summary icon"}]
+    [:p.small.m-0 (labels :summary.link.button/text)]]])
 
 
 (>defn- schnaq-progress-information

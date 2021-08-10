@@ -1,45 +1,16 @@
 (ns schnaq.interface.views.discussion.dashboard
-  (:require ["chart.js"]
-            [re-frame.core :as rf]
-            [reagent.core :as reagent]
-            [reagent.dom :as rdom]
-            [schnaq.interface.config :as config]
+  (:require [re-frame.core :as rf]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.discussion.common :as dcommon]
+            [schnaq.interface.views.discussion.pie-chart :as pie-chart]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.user :as user]))
 
-(defn- create-vote-chart-data
-  "Creates a list of voting data for an react-vis pie chart."
-  [statement]
-  (let [up-votes (or (:meta/upvotes statement) 0)
-        down-votes (or (:meta/downvotes statement) 0)
-        neutral-votes (if (and (= up-votes 0) (= down-votes 0)) 1 0)]
-    {:type "doughnut"
-     :options {:events []
-               :responsive true}
-     :data {:datasets [{:label "Pie Chart Data",
-                        :data [neutral-votes, up-votes, down-votes]
-                        :backgroundColor [config/neutral-color
-                                          config/upvote-color
-                                          config/downvote-color]
-                        :hoverOffset 4
-                        :cutout "70%"}]}}))
-
-(defn- voting-chart-component
-  [_data]
-  (reagent/create-class
-    {:component-did-mount
-     (fn [comp]
-       (let [[_ chart-data] (reagent/argv comp)]
-         (js/Chart. (rdom/dom-node comp) (clj->js chart-data))))
-     :display-name "chart-js-component"
-     :reagent-render (fn [_data] [:canvas {:style {:margin-top -10}}])}))
 
 (defn- dashboard-statement [statement]
-  (let [chart-data (create-vote-chart-data statement)
+  (let [chart-data (pie-chart/create-vote-chart-data statement)
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div.meeting-entry.my-3.p-3
      {:href "#"
@@ -51,7 +22,7 @@
        [:div [md/as-markdown (:statement/content statement)]]]
       [:div.col-3
        [:div.dashboard-pie-chart
-        [voting-chart-component chart-data]]]]]))
+        [pie-chart/pie-chart-component chart-data]]]]]))
 
 (defn- schnaq-statistics []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
@@ -77,7 +48,8 @@
 
 (defn- summary-view []
   (let [beta-user? @(rf/subscribe [:user/beta-tester?])
-        {:discussion/keys [title]} @(rf/subscribe [:schnaq/selected])]
+        current-schnaq @(rf/subscribe [:schnaq/selected])
+        title (:discussion/title current-schnaq)]
     [:div.panel-white.p-3
      [:h3.mb-3 (labels :dashboard/summary)]
      [:h5.my-3.text-primary title]
