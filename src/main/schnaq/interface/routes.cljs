@@ -21,6 +21,7 @@
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
+            [schnaq.interface.views.discussion.dashboard :as dashboard]
             [schnaq.interface.views.discussion.search :as discussion-search]
             [schnaq.interface.views.errors :as error-views]
             [schnaq.interface.views.feed.overview :as feed]
@@ -166,6 +167,10 @@
      ["/search"
       {:name :routes.search/schnaq
        :view discussion-search/view}]
+     ["/dashboard"
+      {:name :routes.schnaq/dashboard
+       :view dashboard/view
+       :link-text (labels :router/dashboard)}]
      ["/summary"
       {:name :routes.schnaq/summary
        :view summary/public-user-view

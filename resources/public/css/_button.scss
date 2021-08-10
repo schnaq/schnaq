@@ -126,4 +126,8 @@
 
 .btn-transparent {
   border: 0;
+
+  &:hover {
+    background: transparent;
+  }
 }

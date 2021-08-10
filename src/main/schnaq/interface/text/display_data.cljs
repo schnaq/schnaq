@@ -267,6 +267,12 @@
         :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
         :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
 
+        ;; Discussion Dashboard
+        :dashboard/posts "Posts"
+        :dashboard/members "Members"
+        :dashboard/summary "Summary"
+        :dashboard/top-posts "Top Posts"
+
         :discussion.navbar/title "Title"
         :discussion.navbar/posts "Posts"
         :discussion.navbar/members "Members"
@@ -883,6 +889,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/continue-discussion "Continue Discussion"
         :router/create-schnaq "Create schnaq"
         :router/value "Value of schnaq"
+        :router/dashboard "schnaq dashboard"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
         :router/invalid-link "Error page"
@@ -973,11 +980,11 @@ Now we write down questions and discuss them and can still understand what we ha
         several major concerns. Orange signals a few minor problems, but an overall okay result.
         Besides the color ranking we've included a few keywords which can be used for further research."
 
-        :summary.link.button/text "Summary"
+        :summary.link.button/text "Dashboard"
         :summary.user.request-succeeded/label "Summary requested, please wait."
         :summary.user.requested/label "Requesting summary …"
         :summary.user.not-requested/label "Request summary"
-        :summary.user/privacy-warning "This function is currently in a beta phase. For the purpose of improving the quality of the function, schnaq employees will be able to discretely view the summaries contents."
+        :summary.user/privacy-warning "For improvement, schnaq employees will be able to view and review summary content confidentially."
         :summary.user.status/label "A summary is currently being generated. Last requested: "
         :summary.user/cta "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done."
         :summary.user/label "Summary: "
@@ -1261,6 +1268,12 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.create.public-checkbox/private "geschlossen"
         :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
         :discussion.create.hub-exclusive-checkbox/label "Dem Hub hinzufügen"
+
+        ;; Discussion Dashboard
+        :dashboard/posts "Beiträge"
+        :dashboard/members "Mitglieder"
+        :dashboard/summary "Kurzzusammenfassung"
+        :dashboard/top-posts "Top Beiträge"
 
         :discussion.navbar/title "Titel"
         :discussion.navbar/posts "Beiträge"
@@ -1969,11 +1982,11 @@ Now we write down questions and discuss them and can still understand what we ha
         möglichen Problemen warnt. Orange hat schließlich oft kleinere Probleme, ist aber grundsätzlich in Ordnung.
         Neben den Ampelfarben finden sich auch noch erklärende Stichpunkte zur weiteren Recherche."
 
-        :summary.link.button/text "Kurzfassung"
+        :summary.link.button/text "Analyse"
         :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
         :summary.user.requested/label "Zusammenfassung wird angefordert …"
         :summary.user.not-requested/label "Zusammenfassung anfordern"
-        :summary.user/privacy-warning "Diese Funktion befindet sich noch im Beta-Stadium. Zu Zwecken der Verbesserung der Funktion, werden menschliche Mitarbeiter:innen des schnaq-Teams Inhalte der Zusammenfassung vertraulich einsehen und überprüfen können, wenn diese erstellt wird."
+        :summary.user/privacy-warning "Zur Verbesserung werden Mitarbeiter:innen des schnaq-Teams Inhalte der Zusammenfassung vertraulich einsehen und überprüfen können."
         :summary.user.status/label "Eine Zusammenfassung wird gerade erstellt. Letzte Anfrage: "
         :summary.user/cta "Drücke den Knopf um eine Zusammenfassung anzufragen. Der Prozess dauert unter Umständen einige Stunden. Die Zusammenfassung wird hier auftauchen, wenn sie fertig ist."
         :summary.user/label "Zusammenfassung: "
@@ -2009,6 +2022,8 @@ Now we write down questions and discuss them and can still understand what we ha
      :icon-reports "https://s3.disqtec.com/schnaq-common/icons/reports.svg"
      :icon-robot "https://s3.disqtec.com/schnaq-common/icons/robot.svg"
      :icon-summary "https://s3.disqtec.com/schnaq-common/icons/layers.svg"
+     :icon-users "https://s3.disqtec.com/schnaq-common/icons/dashboard/users.svg"
+     :icon-posts "https://s3.disqtec.com/schnaq-common/icons/dashboard/posts.svg"
      :logo "https://s3.disqtec.com/schnaq-common/logos/schnaq.svg"
      :logo-white "https://s3.disqtec.com/schnaq-common/logos/schnaq_white.png"
      :logos/bialon "https://s3.disqtec.com/schnaq-common/testimonials/bialon_logo.png"

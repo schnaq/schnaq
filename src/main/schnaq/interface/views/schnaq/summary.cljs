@@ -4,7 +4,7 @@
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.time :as time]
@@ -15,26 +15,20 @@
   "Requests a summary or a refresh."
   [share-hash]
   (let [request-status @(rf/subscribe [:schnaq.summary/status share-hash])
-        summary @(rf/subscribe [:schnaq/summary share-hash])
-        locale @(rf/subscribe [:current-locale])
         button-text (case request-status
                       :request-succeeded (labels :summary.user.request-succeeded/label)
                       :requested (labels :summary.user.requested/label)
                       (labels :summary.user.not-requested/label))]
     [:section.d-block.text-center
-     [:button.btn.btn-secondary
+     [:button.btn.btn-dark
       (if request-status
         {:disabled true}
         {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
       button-text]
-     [:p.small.text-muted.mt-2
-      [:span (labels :summary.user/privacy-warning)]
-      [:br]
-      (if summary
-        [:span (labels :summary.user.status/label) (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
-        (labels :summary.user/cta))]]))
+     [:small.text-muted.mt-2.text-left
+      [:div.d-flex.flex-row [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}] [:span (labels :summary.user/privacy-warning)]]]]))
 
-(defn- summary-body
+(defn summary-body
   "Contains the summary an possibly some meta information."
   [schnaq]
   (let [{:summary/keys [created-at text]} @(rf/subscribe [:schnaq/summary (:discussion/share-hash schnaq)])
@@ -43,7 +37,6 @@
                             [(time/timestamp-with-tooltip created-at locale) text]
                             ["-" "-"])]
     [:<>
-     [:h2.text-center (labels :summary.user/label) (:discussion/title schnaq)]
      [:small.text-muted (labels :summary.user/last-updated) updated-at]
      [:p.p-3
       (if-let [summary (str text)] summary "-")]
@@ -58,6 +51,7 @@
       :page/subheading (labels :summary.user/subheading)
       :condition/needs-beta-tester? true}
      [:div.container.panel-white.mt-3
+      [:h2.text-center (labels :summary.user/label) (:discussion/title current-schnaq)]
       [summary-body current-schnaq]]]))
 
 (defn public-user-view []
