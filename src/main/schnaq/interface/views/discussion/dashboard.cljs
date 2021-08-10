@@ -30,8 +30,8 @@
     [:div.panel-white
      [:h3.mb-3 (labels :dashboard/top-posts)]
      (for [statement starting-conclusions]
-       [:div {:key (:db/id statement)}
-        [dashboard-statement statement]])]))
+       (with-meta [dashboard-statement statement]
+                  {:key (str "dashboard-statement-" (:db/id statement))}))]))
 
 (defn- beta-only-modal
   "Basic modal which is presented to users trying to access beta features."
