@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.dashboard
   (:require [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.discussion.common :as dcommon]
@@ -53,7 +54,7 @@
     [:div.panel-white.p-3
      [:h3.mb-3 (labels :dashboard/summary)]
      [:h5.my-3.text-primary title]
-     (if beta-user?
+     (if (or beta-user? shared-config/embedded?)
        [summary/summary-body current-schnaq]
        [beta-only-modal])]))
 
