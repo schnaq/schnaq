@@ -212,3 +212,18 @@
    [delayed-fade-in component 500])
   ([component delay]
    [delay-render [fade-in-and-out component] delay]))
+
+(defn move-in
+  "Add animation to component, which fades the component in and out."
+  [from-direction component]
+  (let [direction (case from-direction
+                    :top {:y "-200%"}
+                    :bottom {:y "-200%"}
+                    :left {:x "-200%"}
+                    {:x "200%"})]
+    [:> (.-div motion)
+     {:initial direction
+      :animate {:x 0 :y 0}
+      :exit direction
+      :transition {:ease "easeOut" :duration 0.5}}
+     component]))
