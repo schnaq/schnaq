@@ -4,9 +4,9 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.discussion.dashboard :as dashboard]
-            [schnaq.interface.views.howto.how-to :as how-to]
             [schnaq.interface.views.discussion.search :as discussion-search]
-            [schnaq.interface.views.graph.view :as graph-view]))
+            [schnaq.interface.views.graph.view :as graph-view]
+            [schnaq.interface.views.howto.how-to :as how-to]))
 
 (def routes
   ["/"
