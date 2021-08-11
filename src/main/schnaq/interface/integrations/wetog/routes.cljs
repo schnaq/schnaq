@@ -3,6 +3,7 @@
             [reitit.coercion.spec]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
+            [schnaq.interface.views.discussion.dashboard :as dashboard]
             [schnaq.interface.views.discussion.search :as discussion-search]
             [schnaq.interface.views.graph.view :as graph-view]))
 
@@ -22,6 +23,13 @@
                     :stop (fn []
                             (rf/dispatch [:updates.periodic/starting-conclusions false])
                             (rf/dispatch [:statement.edit/reset-edits]))}]}]
+   ["dashboard"
+    {:name :routes.schnaq/dashboard
+     :view dashboard/view
+     :link-text (labels :router/dashboard)
+     :controllers [{:start (fn []
+                             (rf/dispatch [:schnaq/refresh-selected]))}]}]
+   ;;TODO allow requesting summary in the backend when running in embedded mode
    ["statement/:statement-id"
     {:name :routes.schnaq.select/statement
      :parameters {:path {:statement-id int?}}
