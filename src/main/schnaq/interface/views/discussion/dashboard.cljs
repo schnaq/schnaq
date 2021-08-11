@@ -64,10 +64,10 @@
 (defn- count-information [icon number-of unit]
   [:div.panel-white.px-5.mb-3
    [:div.row
-    [:div.col-3 [:img.dashboard-info-icon.ml-auto.w-100 {:src (img-path icon)}]]
+    [:div.col-5.col-xl-3.align-self-center [:img.dashboard-info-icon.ml-auto.w-100 {:src (img-path icon)}]]
     [:div.col [:div.display-5 number-of]]]
    [:div.row
-    [:div.col.offset-3
+    [:div.col.offset-xl-3.offset-5
      [:text-sm.text-muted (labels unit)]]]])
 
 (defn- schnaq-infos []
@@ -90,7 +90,8 @@
        [schnaq-summaries]]
       [:div.col-lg-4.col-12.mb-3.p-0.p-md-3
        [schnaq-statistics]]]]))
-;; TODO dumme buttons auf ipad größe
+
+;; TODO weißer Rand auf mobile
 (defn view []
   [dashboard-view])
 
