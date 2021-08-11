@@ -3,7 +3,6 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.discussion.card-elements :as elements]
-            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
@@ -25,25 +24,17 @@
   "The first step after starting a discussion."
   []
   (let [schnaq @(rf/subscribe [:schnaq/selected])
-        {:discussion/keys [title author created-at]} schnaq
-        current-starting @(rf/subscribe [:discussion.conclusions/starting])
-        input-form [input/input-form "statement-text"]
-        content {:statement/content title :statement/author author :statement/created-at created-at}]
+        current-starting @(rf/subscribe [:discussion.conclusions/starting])]
     [elements/discussion-view
-     schnaq content input-form nil current-starting]))
+     schnaq current-starting]))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
   []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        current-premises @(rf/subscribe [:discussion.premises/current])
-        history @(rf/subscribe [:discussion-history])
-        current-conclusion (last history)
-        info-content [elements/info-content-conclusion
-                      current-conclusion (:discussion/edit-hash current-discussion)]
-        input-form [input/input-form "premise-text"]]
+        current-premises @(rf/subscribe [:discussion.premises/current])]
     [elements/discussion-view
-     current-discussion current-conclusion input-form info-content current-premises]))
+     current-discussion current-premises]))
 
 (rf/reg-sub
   :discussion.premises/current
