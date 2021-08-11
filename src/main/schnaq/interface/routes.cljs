@@ -264,10 +264,11 @@
 
 (defn- on-navigate [new-match]
   (let [window-hash (.. js/window -location -hash)]
-    (if (and (empty? window-hash) (not config/embedded?))
-      (.scrollTo js/window 0 0)
-      (oset! js/document "onreadystatechange"
-             #(js-wrap/scroll-to-id window-hash))))
+    (when (not config/embedded?)
+      (if (empty? window-hash)
+        (.scrollTo js/window 0 0)
+        (oset! js/document "onreadystatechange"
+               #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))
