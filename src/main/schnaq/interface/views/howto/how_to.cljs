@@ -70,3 +70,31 @@
 
 (defn view []
   [content])
+
+(defn- back-to-schnaq-row
+  "Call to action row with button."
+  []
+  [:div.row.align-items-center.feature-row
+   [:div.col-12.col-lg-6.text-center
+    [:button.button-secondary.font-200
+     {:on-click #(rf/dispatch [:discussion.history/time-travel 1])}
+     (labels :how-to/back-to-start)]]
+   [:div.col-12.col-lg-6
+    [elements/text-box
+     :how-to.call-to-action/title
+     :how-to.call-to-action/body]]])
+
+(defn- embedded-content []
+  [pages/with-discussion-header
+   {:page/heading (labels :how-to/title)
+    :page/vertical-header? true}
+   [:div.container.chat-background.py-5
+    ;; how to videos
+    [:div.pb-5.bubble-background [why]]
+    [:div.how-to-video-row [schnaq]]
+    [:div.how-to-video-row [pro-con]]
+    ;; start schnaq
+    [back-to-schnaq-row]]])
+
+(defn embedded-view []
+  [embedded-content])

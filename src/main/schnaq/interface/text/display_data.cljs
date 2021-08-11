@@ -58,6 +58,7 @@
         :how-to/answer-question "Let us show you how!"
         :how-to/question-dont-show-again "Got it? "         ;; whitespace intended
         :how-to/answer-dont-show-again "Don't show this tip anymore!"
+        :how-to/back-to-start "Back to schnaq"
 
         ;; Startpage
         :startpage/heading "The Elephant-Brain for your Company"
@@ -1052,7 +1053,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :how-to/answer-question "Schau hier nach!"
         :how-to/question-dont-show-again "Verstanden? "     ;; whitespace intended
         :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
-
+        :how-to/back-to-start "Zurück zu schnaq"
 
         ;; Startpage
         :startpage/heading "Das Elefantenhirn für dein Unternehmen"
