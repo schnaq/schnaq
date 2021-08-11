@@ -52,7 +52,7 @@
         current-schnaq @(rf/subscribe [:schnaq/selected])
         title (:discussion/title current-schnaq)]
     [:div.panel-white.p-3
-     [:h3.mb-3 (labels :dashboard/summary)]
+     [:h3.mb-3.text-break (labels :dashboard/summary)]
      [:h5.my-3.text-primary title]
      (if (or beta-user? shared-config/embedded?)
        [summary/summary-body current-schnaq]
@@ -91,9 +91,32 @@
       [:div.col-lg-4.col-12.mb-3.p-0.p-md-3
        [schnaq-statistics]]]]))
 
-;; TODO weißer Rand auf mobile
 (defn view []
   [dashboard-view])
+
+(defn- embedded-dashboard-statement [statement]
+  (let [chart-data (pie-chart/create-vote-chart-data statement)
+        path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
+    [:div.meeting-entry.my-3.p-3
+     {:href "#"
+      :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
+     [:div.row.h-100
+      [:div.col-12
+       [user/user-info (:statement/author statement) 24]]
+      [:div.col-7
+       [md/as-markdown (:statement/content statement)]]
+      [:div.col-5
+       [:div.dashboard-pie-chart
+        [pie-chart/pie-chart-component chart-data]]]]]))
+
+(defn- embedded-statistics []
+  (let [current-discussion @(rf/subscribe [:schnaq/selected])
+        starting-conclusions (:discussion/starting-statements current-discussion)]
+    [:div.panel-white
+     [:h3.mb-3 (labels :dashboard/top-posts)]
+     (for [statement starting-conclusions]
+       (with-meta [embedded-dashboard-statement statement]
+                  {:key (str "dashboard-statement-" (:db/id statement))}))]))
 
 (defn- embedded-dashboard-view []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
@@ -105,7 +128,7 @@
       [:div.col-xxl-5.col-12.mb-3.p-0.p-md-3
        [schnaq-summaries]]
       [:div.col-xxl-4.col-12.mb-3.p-0.p-md-3
-       [schnaq-statistics]]]]))
+       [embedded-statistics]]]]))
 
 (defn embedded-view []
   [embedded-dashboard-view])

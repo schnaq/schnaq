@@ -25,7 +25,7 @@
                             (rf/dispatch [:statement.edit/reset-edits]))}]}]
    ["dashboard"
     {:name :routes.schnaq/dashboard
-     :view dashboard/view
+     :view dashboard/embedded-view
      :link-text (labels :router/dashboard)
      :controllers [{:start (fn []
                              (rf/dispatch [:schnaq/refresh-selected]))}]}]
