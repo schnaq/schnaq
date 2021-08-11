@@ -84,13 +84,11 @@
         edges-vis (DataSet.)
         nodes-store (reagent/atom nodes)
         edges-store (reagent/atom edges)
-        width (.-innerWidth js/window)
         height (* 0.75 (.-innerHeight js/window))
         route-params (get-in @(rf/subscribe [:navigation/current-route]) [:parameters :path])
         share-hash (:discussion/share-hash @(rf/subscribe [:schnaq/selected]))
         gravity @(rf/subscribe [:graph.settings/gravity])
-        options {:width (str width)
-                 :height (str height)
+        options {:height (str height)
                  :layout {:randomSeed :constant}
                  :physics {:barnesHut {:avoidOverlap gravity}}}]
     (reagent/create-class
@@ -167,7 +165,7 @@
 (rf/reg-event-fx
   :graph/load-data-for-discussion
   (fn [{:keys [db]} _]
-    (let [share-hash (get-in db [:current-route :parameters :path :share-hash])]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:fx [(http/xhrio-request db :get "/discussion/graph" [:graph/set-current] {:share-hash share-hash})]})))
 
 (rf/reg-event-fx

@@ -3,7 +3,8 @@
             [reitit.coercion.spec]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
-            [schnaq.interface.views.discussion.search :as discussion-search]))
+            [schnaq.interface.views.discussion.search :as discussion-search]
+            [schnaq.interface.views.graph.view :as graph-view]))
 
 (def routes
   ["/"
@@ -33,4 +34,16 @@
                             (rf/dispatch [:statement.edit/reset-edits]))}]}]
    ["search"
     {:name :routes.search/schnaq
-     :view discussion-search/view}]])
+     :view discussion-search/view}]
+   ["graph"
+    {:name :routes/graph-view
+     :view graph-view/graph-view-entrypoint
+     :link-text (labels :router/graph-view)
+     :controllers [{:identity (fn [] (random-uuid))
+                    :start (fn []
+                             (rf/dispatch [:spinner/active! true])
+                             (rf/dispatch [:updates.periodic/graph true])
+                             (rf/dispatch [:graph/load-data-for-discussion]))
+                    :stop (fn []
+                            (rf/dispatch [:updates.periodic/graph false])
+                            (rf/dispatch [:notifications/reset]))}]}]])
