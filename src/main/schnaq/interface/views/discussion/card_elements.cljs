@@ -19,10 +19,15 @@
 
 (defn- back-button
   "Return to your schnaqs Button"
-  [has-history?]
-  (let [back-feed [:navigation/navigate :routes.schnaqs/personal]
-        back-history [:discussion.history/time-travel 1]
-        navigation (if has-history? back-history back-feed)
+  []
+  (let [history @(rf/subscribe [:discussion-history])
+        has-history? (seq history)
+        back-feed [:navigation/navigate :routes.schnaqs/personal]
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        is-search-view? (= current-route :routes.search/schnaq)
+        steps-back (if is-search-view? 0 1)
+        back-history [:discussion.history/time-travel steps-back]
+        navigation (if (or is-search-view? has-history?) back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     [:button.btn.btn-dark.w-100.h-100.p-3
      {:on-click #(rf/dispatch navigation)}
@@ -228,11 +233,11 @@
       {:type "submit"}
       [:i {:class (str "m-auto fas " (fa :search))}]]]]])
 
-(defn action-view [has-history?]
+(defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3
    [:div.d-flex.flex-row.flex-wrap
     [:div.mr-1.my-1
-     [back-button has-history?]]
+     [back-button]]
     [:div.m-1
      [search-bar]]
     [:div.m-1
@@ -243,8 +248,7 @@
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
   [{:keys [discussion/share-hash] :as current-discussion} statement input badges info-content conclusions history]
-  (let [is-topic? (nil? history)
-        has-history? (seq history)]
+  (let [is-topic? (nil? history)]
     [:div.container-fluid
      [:div.row
       [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
@@ -252,7 +256,7 @@
         [topic-bubble-view statement input badges info-content is-topic?]]
        [:div.d-none.d-md-block [history-view history]]]
       [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
-       [action-view has-history?]
+       [action-view]
        [cards/conclusion-cards-list conclusions share-hash]
        [:div.d-md-none [history-view history]]
        [input/input-celebration-first]
