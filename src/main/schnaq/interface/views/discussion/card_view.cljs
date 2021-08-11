@@ -2,7 +2,6 @@
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.pages :as pages]))
@@ -29,10 +28,9 @@
         {:discussion/keys [title author created-at]} schnaq
         current-starting @(rf/subscribe [:discussion.conclusions/starting])
         input-form [input/input-form "statement-text"]
-        content {:statement/content title :statement/author author :statement/created-at created-at}
-        badges [badges/static-info-badges schnaq]]
+        content {:statement/content title :statement/author author :statement/created-at created-at}]
     [elements/discussion-view
-     schnaq content input-form badges nil current-starting nil]))
+     schnaq content input-form nil current-starting]))
 
 (defn- selected-conclusion-view
   "The first step after starting a discussion."
@@ -43,11 +41,9 @@
         current-conclusion (last history)
         info-content [elements/info-content-conclusion
                       current-conclusion (:discussion/edit-hash current-discussion)]
-        badges [badges/extra-discussion-info-badges
-                current-conclusion (:discussion/edit-hash current-discussion)]
         input-form [input/input-form "premise-text"]]
     [elements/discussion-view
-     current-discussion current-conclusion input-form badges info-content current-premises history]))
+     current-discussion current-conclusion input-form info-content current-premises]))
 
 (rf/reg-sub
   :discussion.premises/current
