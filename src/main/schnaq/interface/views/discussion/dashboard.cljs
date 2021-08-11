@@ -17,11 +17,11 @@
      {:href "#"
       :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
      [:div.row.h-100
-      [:div.col-4
+      [:div.col-xl-4.col-12
        [user/user-info (:statement/author statement) 24]]
-      [:div.col-5
-       [:div [md/as-markdown (:statement/content statement)]]]
-      [:div.col-3
+      [:div.col-xl-5.col-7
+       [md/as-markdown (:statement/content statement)]]
+      [:div.col-xl-3.col-5
        [:div.dashboard-pie-chart
         [pie-chart/pie-chart-component chart-data]]]]]))
 
@@ -80,19 +80,31 @@
      [count-information :icon-users user-count :dashboard/members]]))
 
 (defn- dashboard-view []
-  [:div.row.m-0
-   [:div.col-md-3.p-0.p-md-3
-    [schnaq-infos]]
-   [:div.col-md-5.col-12.mb-3.p-0.p-md-3
-    [schnaq-summaries]]
-   [:div.col-md-4.col-12.mb-3.p-0.p-md-3
-    [schnaq-statistics]]])
-
-(defn- page-view []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
-     [dashboard-view]]))
-
+     [:div.row.m-0
+      [:div.col-lg-3.p-0.p-md-3
+       [schnaq-infos]]
+      [:div.col-lg-5.col-12.mb-3.p-0.p-md-3
+       [schnaq-summaries]]
+      [:div.col-lg-4.col-12.mb-3.p-0.p-md-3
+       [schnaq-statistics]]]]))
+;; TODO dumme buttons auf ipad größe
 (defn view []
-  [page-view])
+  [dashboard-view])
+
+(defn- embedded-dashboard-view []
+  (let [current-discussion @(rf/subscribe [:schnaq/selected])]
+    [pages/with-discussion-header
+     {:page/heading (:discussion/title current-discussion)}
+     [:div.row.m-0
+      [:div.col-xxl-3.p-0.p-md-3
+       [schnaq-infos]]
+      [:div.col-xxl-5.col-12.mb-3.p-0.p-md-3
+       [schnaq-summaries]]
+      [:div.col-xxl-4.col-12.mb-3.p-0.p-md-3
+       [schnaq-statistics]]]]))
+
+(defn embedded-view []
+  [embedded-dashboard-view])
