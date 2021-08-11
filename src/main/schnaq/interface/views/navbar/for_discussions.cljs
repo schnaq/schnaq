@@ -101,7 +101,7 @@
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xxl-auto
-     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-lg-0
+     [:div.d-flex.align-items-center.schnaq-navbar.px-md-4.mb-4.mb-lg-0
       [schnaq-progress-bar]
       [admin/share-link]
       [admin/txt-export share-hash title]
