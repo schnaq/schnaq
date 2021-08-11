@@ -1,4 +1,4 @@
-{:paths ["src/main" "src/test"]
+{:paths ["src/main" "src/test" "extra-configs"]
  :deps {binaryage/devtools {:mvn/version "1.0.3"}
         binaryage/oops {:mvn/version "0.7.1"}
         buddy/buddy {:mvn/version "2.0.0"}
