@@ -3,6 +3,7 @@
   (:require [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.scheduler :as scheduler]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -135,7 +136,7 @@
    [validate-conditions-middleware
     options
     [:<>
-     [discussion-navbar/header]
+     (if shared-config/embedded? [discussion-navbar/embeddable-header] [discussion-navbar/header])
      body]]])
 
 (>defn embeddable-view
