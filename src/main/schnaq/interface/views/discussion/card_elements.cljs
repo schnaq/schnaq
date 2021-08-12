@@ -216,7 +216,7 @@
       [discussion-privacy-badge]]
      [title-and-input-element statement]]))
 
-(defn- topic-bubble [content]
+(defn- topic-view [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
     (common/set-website-title! title)
     [:div.panel-white.mb-4
@@ -231,12 +231,6 @@
   :discussion.statements/sort-method
   (fn [db _]
     (get-in db [:discussion :statements :sort-method] :newest)))
-
-(defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
-  [:<>
-   [topic-bubble topic-content]
-   (when conclusions
-     [cards/conclusion-cards-list conclusions share-hash])])
 
 (defn- show-how-to []
   (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
@@ -274,12 +268,11 @@
 (defn discussion-view
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [{:keys [discussion/share-hash] :as current-discussion}]
+  [{:keys [discussion/share-hash]}]
   [:div.container-fluid
    [:div.row
     [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
-     [topic-view current-discussion nil
-      [topic-bubble-view]]
+     [topic-view [topic-bubble-view]]
      [:div.d-none.d-md-block [history-view]]]
     [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
      [action-view]
