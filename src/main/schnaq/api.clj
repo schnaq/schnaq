@@ -113,8 +113,6 @@
      :data {:coercion reitit.coercion.spec/coercion
             :muuntaja m/instance
             :middleware [swagger/swagger-feature
-                         wrap-session
-                         wrap-anti-forgery
                          parameters/parameters-middleware   ;; query-params & form-params
                          muuntaja/format-middleware
                          exception/exception-middleware     ;; exception handling
@@ -165,7 +163,9 @@
             (server/run-server
               (-> #'app
                   (wrap-cors :access-control-allow-origin allowed-origins'
-                             :access-control-allow-methods allowed-http-verbs))
+                             :access-control-allow-methods allowed-http-verbs)
+                  (wrap-anti-forgery)
+                  (wrap-session {:max-age 3600}))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))

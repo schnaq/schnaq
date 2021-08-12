@@ -34,9 +34,20 @@
         {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx
+  :get-csrf-token
+  (fn [{:keys [db]} _]
+    {:fx [(http/xhrio-request db :get "/init" [:store-csrf])]}))
+
+(rf/reg-event-db
+  :store-csrf
+  (fn [db [_ answer]]
+    (assoc-in db [:internals :csrf-token] (:csrf-token answer))))
+
+(rf/reg-event-fx
   :initialize/schnaq
   (fn [_ _]
-    {:fx [[:dispatch [:username/from-localstorage]]
+    {:fx [[:dispatch [:get-csrf-token]]
+          [:dispatch [:username/from-localstorage]]
           [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
           [:dispatch [:keycloak/init]]
           [:dispatch [:load/last-added-schnaq]]
