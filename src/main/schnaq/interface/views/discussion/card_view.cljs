@@ -20,21 +20,11 @@
   (fn [db [_ {:keys [matching-statements]}]]
     (assoc-in db [:search :schnaq :current :result] matching-statements)))
 
-(defn- discussion-start-view
+(defn- discussion-view
   "The first step after starting a discussion."
   []
-  (let [schnaq @(rf/subscribe [:schnaq/selected])
-        current-starting @(rf/subscribe [:discussion.conclusions/starting])]
-    [elements/discussion-view
-     schnaq current-starting]))
-
-(defn- selected-conclusion-view
-  "The first step after starting a discussion."
-  []
-  (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        current-premises @(rf/subscribe [:discussion.premises/current])]
-    [elements/discussion-view
-     current-discussion current-premises]))
+  (let [schnaq @(rf/subscribe [:schnaq/selected])]
+    [elements/discussion-view schnaq]))
 
 (rf/reg-sub
   :discussion.premises/current
@@ -50,13 +40,10 @@
 
 (defn derive-view []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        current-route-name @(rf/subscribe [:navigation/current-route-name])
         wrapping-view (if shared-config/embedded? pages/embeddable-view pages/with-discussion-header)]
     [wrapping-view
      {:page/heading (:discussion/title current-discussion)}
-     (if (= :routes.schnaq/start current-route-name)
-       [discussion-start-view]
-       [selected-conclusion-view])]))
+     [discussion-view]]))
 
 (defn view []
   [derive-view])

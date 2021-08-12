@@ -274,7 +274,7 @@
 (defn discussion-view
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [{:keys [discussion/share-hash] :as current-discussion} conclusions]
+  [{:keys [discussion/share-hash] :as current-discussion}]
   [:div.container-fluid
    [:div.row
     [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
@@ -283,7 +283,7 @@
      [:div.d-none.d-md-block [history-view]]]
     [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
      [action-view]
-     [cards/conclusion-cards-list conclusions share-hash]
+     [cards/conclusion-cards-list share-hash]
      [:div.d-md-none [history-view]]
      [input/input-celebration-first]
      [:div.w-75.mx-auto [show-how-to]]]]])
