@@ -58,7 +58,6 @@
     <orderEntry type="library" name="Deps: mvxcvi/puget:1.1.2" level="project" />
     <orderEntry type="library" name="Deps: compojure:1.6.2" level="project" />
     <orderEntry type="library" name="Deps: commons-fileupload:1.4" level="project" />
-    <orderEntry type="library" name="Deps: ring/ring-ssl:0.3.0" level="project" />
     <orderEntry type="library" name="Deps: tick:0.4.14-alpha" level="project" />
     <orderEntry type="library" name="Deps: javax.activation/activation:1.1.1" level="project" />
     <orderEntry type="library" name="Deps: clojure-future-spec:1.9.0" level="project" />
@@ -81,7 +80,6 @@
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-admin-client:11.0.2" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha-cloverage:1.0.75" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-codec:4.1.48.Final" level="project" />
-    <orderEntry type="library" name="Deps: com.taoensso/tufte:2.2.0" level="project" />
     <orderEntry type="library" name="Deps: org.jboss.resteasy/resteasy-jaxb-provider:3.9.3.Final" level="project" />
     <orderEntry type="library" name="Deps: org.codehaus.jettison/jettison:1.4.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.macro:0.1.5" level="project" />
@@ -93,7 +91,6 @@
     <orderEntry type="library" name="Deps: com.datomic/datomic-pro:1.0.6269" level="project" />
     <orderEntry type="library" name="Deps: com.googlecode.json-simple/json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Deps: gnl/ghostwheel:0.3.9" level="project" />
-    <orderEntry type="library" name="Deps: ring/ring-defaults:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.269" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-common:11.0.2" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library:0.0-20201211-3e6c510d" level="project" />
@@ -126,7 +123,6 @@
     <orderEntry type="library" name="Deps: spec-coerce:1.0.0-alpha6" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.10.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.2.23" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
     <orderEntry type="library" name="Deps: superstructor/re-highlight:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />
@@ -169,9 +165,7 @@
     <orderEntry type="library" name="Deps: funcool/cuerdas:2.0.3" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-adapter-core:11.0.2" level="project" />
     <orderEntry type="library" name="Deps: com.github.fge/json-patch:1.9" level="project" />
-    <orderEntry type="library" name="Deps: ring/ring-headers:0.3.0" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/google-closure-library-third-party:0.0-20201211-3e6c510d" level="project" />
-    <orderEntry type="library" name="Deps: ring-middleware-format:0.7.4" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-annotations:2.12.4" level="project" />
     <orderEntry type="library" name="Deps: talltale:0.5.3" level="project" />
     <orderEntry type="library" name="Deps: hiccup:1.0.5" level="project" />
@@ -243,7 +237,6 @@
     <orderEntry type="library" name="Deps: tigris:0.1.2" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-client:9.4.36.v20210114" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-sieppari:0.5.15" level="project" />
-    <orderEntry type="library" name="Deps: com.andrewmcveigh/cljs-time:0.5.2" level="project" />
     <orderEntry type="library" name="Deps: org.eclipse.jetty/jetty-io:9.4.42.v20210604" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.reader:1.3.6" level="project" />
     <orderEntry type="library" name="Deps: org.tcrawley/dynapath:1.1.0" level="project" />
@@ -313,7 +306,6 @@
     <orderEntry type="library" name="Deps: jakarta.activation/jakarta.activation-api:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: medley:1.3.0" level="project" />
     <orderEntry type="library" name="Deps: day8.re-frame/re-frame-10x:1.1.13" level="project" />
-    <orderEntry type="library" name="Deps: clojure-msgpack:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.async:1.3.618" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.dataformat/jackson-dataformat-smile:2.10.2" level="project" />
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.datatype/jackson-datatype-jsr310:2.12.3" level="project" />
