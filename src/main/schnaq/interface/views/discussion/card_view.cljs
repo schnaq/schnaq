@@ -1,9 +1,7 @@
 (ns schnaq.interface.views.discussion.card-view
   (:require [re-frame.core :as rf]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.card-elements :as elements]
-            [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-event-fx
@@ -21,32 +19,11 @@
   (fn [db [_ {:keys [matching-statements]}]]
     (assoc-in db [:search :schnaq :current :result] matching-statements)))
 
-(defn- discussion-start-view
+(defn- discussion-view
   "The first step after starting a discussion."
   []
-  (let [schnaq @(rf/subscribe [:schnaq/selected])
-        {:discussion/keys [title author created-at]} schnaq
-        current-starting @(rf/subscribe [:discussion.conclusions/starting])
-        input-form [input/input-form "statement-text"]
-        content {:statement/content title :statement/author author :statement/created-at created-at}
-        badges [badges/static-info-badges schnaq]]
-    [elements/discussion-view
-     schnaq content input-form badges nil current-starting nil]))
-
-(defn- selected-conclusion-view
-  "The first step after starting a discussion."
-  []
-  (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        current-premises @(rf/subscribe [:discussion.premises/current])
-        history @(rf/subscribe [:discussion-history])
-        current-conclusion (last history)
-        info-content [elements/info-content-conclusion
-                      current-conclusion (:discussion/edit-hash current-discussion)]
-        badges [badges/extra-discussion-info-badges
-                current-conclusion (:discussion/edit-hash current-discussion)]
-        input-form [input/input-form "premise-text"]]
-    [elements/discussion-view
-     current-discussion current-conclusion input-form badges info-content current-premises history]))
+  (let [schnaq @(rf/subscribe [:schnaq/selected])]
+    [elements/discussion-view (:discussion/share-hash schnaq)]))
 
 (rf/reg-sub
   :discussion.premises/current
@@ -61,13 +38,10 @@
 ;; -----------------------------------------------------------------------------
 
 (defn derive-view []
-  (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        current-route-name @(rf/subscribe [:navigation/current-route-name])]
+  (let [current-discussion @(rf/subscribe [:schnaq/selected])]
     [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
-     (if (= :routes.schnaq/start current-route-name)
-       [discussion-start-view]
-       [selected-conclusion-view])]))
+     [discussion-view]]))
 
 (defn view []
   [derive-view])

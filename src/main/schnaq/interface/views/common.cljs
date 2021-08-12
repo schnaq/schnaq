@@ -36,7 +36,7 @@
      [:div.avatar-image.p-0
       (if profile-picture
         [:div.profile-pic-fill
-         {:style {:height (str size "px") :width (str size "px")}}
+         {:style {:max-height (str size "px") :max-width (str size "px")}}
          [:img.profile-pic-image {:src profile-picture
                                   :alt (str "Profile Picture of " display-name)}]]
         [identicon display-name size])])))
@@ -212,3 +212,18 @@
    [delayed-fade-in component 500])
   ([component delay]
    [delay-render [fade-in-and-out component] delay]))
+
+(defn move-in
+  "Add animation to component, which fades the component in and out."
+  [from-direction component]
+  (let [direction (case from-direction
+                    :top {:y "-200%"}
+                    :bottom {:y "-200%"}
+                    :left {:x "-200%"}
+                    {:x "200%"})]
+    [:> (.-div motion)
+     {:initial direction
+      :animate {:x 0 :y 0}
+      :exit direction
+      :transition {:ease "easeOut" :duration 0.5}}
+     component]))

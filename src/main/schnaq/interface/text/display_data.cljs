@@ -957,10 +957,12 @@ Now we write down questions and discuss them and can still understand what we ha
         :hub.members.add.form/title "Add Members"
         :hub.members.add.form/button "Add user now!"
 
-        :schnaq.search/heading "Search results for: \"%s\""
+        :schnaq.search/heading "Search results"
+        :schnaq.search/results "results"
+        :schnaq.search/no-input "No input"
         :schnaq.search/title "Search"
         :schnaq.search/input "Search for…"
-        :schnaq.search/new-search-title "There are no results. Start a new search."
+        :schnaq.search/new-search-title "No results"
 
         :lead-magnet.privacy/consent "I want to receive a checklist of tools which comply with german privacy laws as .pdf file in German via mail and register for the newsletter as well. The newsletter is currently available in German only."
         :lead-magnet.form/button "Send me a copy!"
@@ -1959,10 +1961,12 @@ Now we write down questions and discuss them and can still understand what we ha
         :hub.members.add.form/title "Mitglieder hinzufügen"
         :hub.members.add.form/button "Nutzer:in hinzufügen!"
 
-        :schnaq.search/heading "Suchergebnisse für: \"%s\""
+        :schnaq.search/heading "Suchergebnisse"
+        :schnaq.search/results "Ergebnisse"
+        :schnaq.search/no-input "Keine Eingabe"
         :schnaq.search/title "Suche"
         :schnaq.search/input "Suche nach…"
-        :schnaq.search/new-search-title "Es gibt keine Ergebnisse. Starte eine neue Suche."
+        :schnaq.search/new-search-title "Keine Ergebnisse"
 
         :lead-magnet.privacy/consent "Ich möchte die Checkliste für datenschutzkonformes Arbeiten als .pdf Datei per E-Mail erhalten und mich hiermit zum schnaq Newsletter anmelden, um in Zukunft regelmäßig Informationen von schnaq.com erhalten."
         :lead-magnet.form/button "Schicke mir die Checkliste zu!"
@@ -2025,6 +2029,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :icon-summary "https://s3.disqtec.com/schnaq-common/icons/layers.svg"
      :icon-users "https://s3.disqtec.com/schnaq-common/icons/dashboard/users.svg"
      :icon-posts "https://s3.disqtec.com/schnaq-common/icons/dashboard/posts.svg"
+     :icon-search "https://s3.disqtec.com/schnaq-common/icons/dashboard/search.svg"
      :logo "https://s3.disqtec.com/schnaq-common/logos/schnaq.svg"
      :logo-white "https://s3.disqtec.com/schnaq-common/logos/schnaq_white.png"
      :logos/bialon "https://s3.disqtec.com/schnaq-common/testimonials/bialon_logo.png"

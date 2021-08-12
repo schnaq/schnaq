@@ -17,12 +17,22 @@
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
 
+(defn info-content-conclusion
+  "Badges and up/down-votes to be displayed in the topic bubble."
+  [statement]
+  [cards/up-down-vote statement])
+
 (defn- back-button
   "Return to your schnaqs Button"
-  [has-history?]
-  (let [back-feed [:navigation/navigate :routes.schnaqs/personal]
-        back-history [:discussion.history/time-travel 1]
-        navigation (if has-history? back-history back-feed)
+  []
+  (let [history @(rf/subscribe [:discussion-history])
+        has-history? (seq history)
+        back-feed [:navigation/navigate :routes.schnaqs/personal]
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        is-search-view? (= current-route :routes.search/schnaq)
+        steps-back (if is-search-view? 0 1)
+        back-history [:discussion.history/time-travel steps-back]
+        navigation (if (or is-search-view? has-history?) back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     [:button.btn.btn-dark.w-100.h-100.p-3
      {:on-click #(rf/dispatch navigation)}
@@ -49,8 +59,9 @@
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
-  [history]
-  (let [indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)
+  []
+  (let [history @(rf/subscribe [:discussion-history])
+        indexed-history (map-indexed #(vector (- (count history) %1 1) %2) history)
         has-history? (seq indexed-history)]
     [:<>
      ;; discussion start button
@@ -158,34 +169,54 @@
     [:span.badge.my-auto.ml-auto {:key (str "discussion-privacy-badge-" share-hash)}
      [:i {:class class}] " " (labels label)]))
 
+(defn- current-topic-badges [schnaq statement is-topic?]
+  (let [badges-start [badges/static-info-badges schnaq]
+        badges-conclusion [badges/extra-discussion-info-badges statement (:discussion/edit-hash schnaq)]
+        badges (if is-topic? badges-start badges-conclusion)]
+    [:div.ml-auto badges]))
+
+(defn- title-view [statement is-topic?]
+  (let [title [md/as-markdown (:statement/content statement)]
+        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
+    (if is-topic?
+      [:h2.h6-md-down title]
+      (if edit-active?
+        [edit/edit-card statement]
+        [:h2.h6.font-weight-bold title]))))
+
 (defn- title-and-input-element
   "Element containing Title and textarea input"
-  [statement input is-topic? badges info-content]
-  (let [title [md/as-markdown (:statement/content statement)]
-        edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])
-        read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
+  [statement]
+  (let [schnaq @(rf/subscribe [:schnaq/selected])
+        is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+        read-only? @(rf/subscribe [:schnaq.selected/read-only?])
+        info-content [info-content-conclusion statement (:discussion/edit-hash statement)]
+        input-style (if is-topic? "statement-text" "premise-text")]
     [:<>
-     (if is-topic?
-       [:h2.h6-md-down title]
-       (if edit-active?
-         [edit/edit-card statement]
-         [:h2.h6.font-weight-bold title]))
+     [title-view statement is-topic?]
      [:div.d-flex.flex-row.my-4
-      [:div.mr-auto info-content]
-      [:div.ml-auto badges]]
+      (when-not is-topic?
+        [:div.mr-auto info-content])
+      [current-topic-badges schnaq statement is-topic?]]
      [:div.line-divider.my-4]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
-       input)]))
+       [input/input-form input-style])]))
 
-(defn- topic-bubble-view [statement input badges info-content is-topic?]
-  [:div.p-2
-   [:div.d-flex.flex-wrap.mb-4
-    [user/user-info (:statement/author statement) 42 (:statement/created-at statement) nil]
-    [discussion-privacy-badge]]
-   [title-and-input-element statement input is-topic? badges info-content]])
+(defn- topic-bubble-view []
+  (let [{:discussion/keys [title author created-at]} @(rf/subscribe [:schnaq/selected])
+        history @(rf/subscribe [:discussion-history])
+        current-conclusion (last history)
+        content {:statement/content title :statement/author author :statement/created-at created-at}
+        is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+        statement (if is-topic? content current-conclusion)]
+    [:div.p-2
+     [:div.d-flex.flex-wrap.mb-4
+      [user/user-info (:statement/author statement) 42 (:statement/created-at statement) nil]
+      [discussion-privacy-badge]]
+     [title-and-input-element statement]]))
 
-(defn- topic-bubble [content]
+(defn- topic-view [content]
   (let [title (:discussion/title @(rf/subscribe [:schnaq/selected]))]
     (common/set-website-title! title)
     [:div.panel-white.mb-4
@@ -201,16 +232,11 @@
   (fn [db _]
     (get-in db [:discussion :statements :sort-method] :newest)))
 
-(defn- topic-view [{:keys [discussion/share-hash]} conclusions topic-content]
-  [:<>
-   [topic-bubble topic-content]
-   (when conclusions
-     [cards/conclusion-cards-list conclusions share-hash])])
-
-(defn- show-how-to [is-topic?]
-  (if is-topic?
-    [how-to-elements/quick-how-to-schnaq]
-    [how-to-elements/quick-how-to-pro-con]))
+(defn- show-how-to []
+  (let [is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))]
+    (if is-topic?
+      [how-to-elements/quick-how-to-schnaq]
+      [how-to-elements/quick-how-to-pro-con])))
 
 (defn search-bar
   "A search-bar to search inside a schnaq."
@@ -228,11 +254,11 @@
       {:type "submit"}
       [:i {:class (str "m-auto fas " (fa :search))}]]]]])
 
-(defn action-view [has-history?]
+(defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3
    [:div.d-flex.flex-row.flex-wrap
     [:div.mr-1.my-1
-     [back-button has-history?]]
+     [back-button]]
     [:div.m-1
      [search-bar]]
     [:div.m-1
@@ -242,23 +268,15 @@
 (defn discussion-view
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [{:keys [discussion/share-hash] :as current-discussion} statement input badges info-content conclusions history]
-  (let [is-topic? (nil? history)
-        has-history? (seq history)]
-    [:div.container-fluid
-     [:div.row
-      [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
-       [topic-view current-discussion nil
-        [topic-bubble-view statement input badges info-content is-topic?]]
-       [:div.d-none.d-md-block [history-view history]]]
-      [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
-       [action-view has-history?]
-       [cards/conclusion-cards-list conclusions share-hash]
-       [:div.d-md-none [history-view history]]
-       [input/input-celebration-first]
-       [:div.w-75.mx-auto [show-how-to is-topic?]]]]]))
-
-(defn info-content-conclusion
-  "Badges and up/down-votes to be displayed in the topic bubble."
-  [statement]
-  [cards/up-down-vote statement])
+  [share-hash]
+  [:div.container-fluid
+   [:div.row
+    [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3
+     [topic-view [topic-bubble-view]]
+     [:div.d-none.d-md-block [history-view]]]
+    [:div.col-md-6.col-lg-8.py-4.px-0.px-md-3
+     [action-view]
+     [cards/conclusion-cards-list share-hash]
+     [:div.d-md-none [history-view]]
+     [input/input-celebration-first]
+     [:div.w-75.mx-auto [show-how-to]]]]])
