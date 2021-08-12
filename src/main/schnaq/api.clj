@@ -16,7 +16,9 @@
             [reitit.spec :as rs]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
+            [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.cors :refer [wrap-cors]]
+            [ring.middleware.session :refer [wrap-session]]
             [schnaq.api.analytics :refer [analytics-routes]]
             [schnaq.api.common :refer [other-routes]]
             [schnaq.api.debug :refer [debug-routes]]
@@ -111,6 +113,8 @@
      :data {:coercion reitit.coercion.spec/coercion
             :muuntaja m/instance
             :middleware [swagger/swagger-feature
+                         wrap-session
+                         wrap-anti-forgery
                          parameters/parameters-middleware   ;; query-params & form-params
                          muuntaja/format-middleware
                          exception/exception-middleware     ;; exception handling
