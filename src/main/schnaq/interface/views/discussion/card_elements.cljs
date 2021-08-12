@@ -268,7 +268,7 @@
 (defn discussion-view
   "Discussion View for desktop devices.
   Displays a history on the left and a topic with conclusion in its center"
-  [{:keys [discussion/share-hash]}]
+  [share-hash]
   [:div.container-fluid
    [:div.row
     [:div.col-md-6.col-lg-4.py-4.px-0.px-md-3

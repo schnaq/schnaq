@@ -24,7 +24,7 @@
   "The first step after starting a discussion."
   []
   (let [schnaq @(rf/subscribe [:schnaq/selected])]
-    [elements/discussion-view schnaq]))
+    [elements/discussion-view (:discussion/share-hash schnaq)]))
 
 (rf/reg-sub
   :discussion.premises/current
