@@ -29,8 +29,9 @@
 (rf/reg-event-fx
   :discussion.history/time-travel
   (fn [{:keys [db]} [_ times]]
-    ;; Only continue when default value (nil - go back one step) is set or we go back more than 0 steps
-    (when (or (nil? times) (< 0 times))
+    ;; default value (nil - go back one step)
+    ;; 0 steps is used in the search view to go back to the last statement
+    (when (or (nil? times) (<= 0 times))
       (let [steps-back (or times 1)
             before-time-travel (get-in db [:history :full-context])
             keep-n (- (count before-time-travel) steps-back)

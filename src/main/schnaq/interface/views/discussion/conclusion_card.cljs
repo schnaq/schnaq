@@ -96,10 +96,14 @@
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
-  [conclusions share-hash]
+  [share-hash]
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
-        card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion ")]
+        card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion ")
+        current-starting @(rf/subscribe [:discussion.conclusions/starting])
+        current-premises @(rf/subscribe [:discussion.premises/current])
+        is-starting? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
+        conclusions (if is-starting? current-starting current-premises)]
     (if (seq conclusions)
       (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
             keyfn (case sort-method
