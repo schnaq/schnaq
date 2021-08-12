@@ -162,10 +162,13 @@
     (reset! current-server
             (server/run-server
               (-> #'app
-                  (wrap-cors :access-control-allow-origin allowed-origins'
-                             :access-control-allow-methods allowed-http-verbs)
                   (wrap-anti-forgery)
-                  (wrap-session {:max-age 3600}))
+                  (wrap-session {:cookie-attrs {:max-age 3600
+                                                :same-site :lax
+                                                :secure (if shared-config/production? true false)}})
+                  (wrap-cors :access-control-allow-origin allowed-origins'
+                             :access-control-allow-methods allowed-http-verbs
+                             :access-control-allow-credentials "true"))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
