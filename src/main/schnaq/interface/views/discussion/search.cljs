@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.search
   (:require [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.card-elements :as elements]
@@ -38,8 +37,8 @@
 (defn search-results [results]
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
         key-fn (case sort-method
-                :newest :statement/created-at
-                :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
+                 :newest :statement/created-at
+                 :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
         sorted-results (sort-by key-fn > results)]
     [common/move-in :right
      (for [statement sorted-results]
@@ -50,9 +49,8 @@
 (defn- search-view []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])
         results @(rf/subscribe [:schnaq.search.current/result])
-        page-wrapper (if shared-config/embedded? pages/embeddable-view pages/with-discussion-header)
         empty-search? (= "" search-string)]
-    [page-wrapper
+    [pages/with-discussion-header
      {:page/heading (labels :schnaq.search/title)}
      [:div.container-fluid
       [:div.row

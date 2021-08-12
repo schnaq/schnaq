@@ -9,6 +9,7 @@
             [schnaq.config.shared :as config]
             [schnaq.interface.analytics.core :as analytics]
             [schnaq.interface.code-of-conduct :as coc]
+            [schnaq.interface.integrations.wetog.routes :as wetog-routes]
             [schnaq.interface.pages.about-us :as about-us]
             [schnaq.interface.pages.lead-magnet :as lead-magnet]
             [schnaq.interface.pages.legal-note :as legal-note]
@@ -252,33 +253,10 @@
      :view error-views/true-404-entrypoint
      :link-text (labels :router/true-404-view)}]])
 
-(def wetog-routes
-  ["/"
-   {:coercion reitit.coercion.spec/coercion
-    :controllers [{:start (fn [] (rf/dispatch [:wetog/initialize-from-data]))}]}
-   [""
-    {:name :routes.schnaq/start
-     :view discussion-card-view/view
-     :link-text (labels :router/startpage)
-     :controllers schnaq-start-controllers}]
-   ["statement/:statement-id"
-    {:name :routes.schnaq.select/statement
-     :parameters {:path {:statement-id int?}}
-     :view discussion-card-view/view
-     :controllers [{:parameters {:path [:statement-id]}
-                    :start (fn []
-                             (rf/dispatch [:discussion.query.statement/by-id]))
-                    :stop (fn []
-                            (rf/dispatch [:visited.statement-nums/to-localstorage])
-                            (rf/dispatch [:statement.edit/reset-edits]))}]}]
-   ["search"
-    {:name :routes.search/schnaq
-     :view discussion-search/view}]])
-
 (def router
   (reitit-front/router
     (if config/embedded?
-      wetog-routes
+      wetog-routes/routes
       routes)
     ;; This disables automatic conflict checking. So: Please check your own
     ;; routes that there are no conflicts.
@@ -286,10 +264,11 @@
 
 (defn- on-navigate [new-match]
   (let [window-hash (.. js/window -location -hash)]
-    (if (and (empty? window-hash) (not config/embedded?))
-      (.scrollTo js/window 0 0)
-      (oset! js/document "onreadystatechange"
-             #(js-wrap/scroll-to-id window-hash))))
+    (when (not config/embedded?)
+      (if (empty? window-hash)
+        (.scrollTo js/window 0 0)
+        (oset! js/document "onreadystatechange"
+               #(js-wrap/scroll-to-id window-hash)))))
   (if new-match
     (rf/dispatch [:navigation/navigated new-match])
     (rf/dispatch [:navigation/navigate :routes/cause-not-found])))

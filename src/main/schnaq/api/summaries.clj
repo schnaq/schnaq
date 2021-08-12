@@ -101,8 +101,9 @@ Dein schnaq Team"
 
 (def summary-routes
   [["/schnaq/summary" {:swagger {:tags ["summaries" "beta"]}
-                       :middleware [:discussion/valid-share-hash?
-                                    :user/authenticated? :user/beta-tester?]
+                       :middleware (cond->
+                                     [:discussion/valid-share-hash? :user/authenticated?]
+                                     (not shared-config/embedded?) (conj :user/beta-tester?))
                        :responses {401 at/response-error-body}}
     ["" {:get get-summary
          :description (at/get-doc #'get-summary)

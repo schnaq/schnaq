@@ -16,6 +16,7 @@
             [schnaq.interface.effects]
             [schnaq.interface.events]
             [schnaq.interface.integrations.wetog.events]
+            [schnaq.interface.integrations.wetog.routes]
             [schnaq.interface.navigation]
             [schnaq.interface.pages.about-us]
             [schnaq.interface.pages.lead-magnet]

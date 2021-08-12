@@ -150,6 +150,13 @@
                               {:share-hash share-hash})]}))
 
 (rf/reg-event-fx
+  :schnaq/refresh-selected
+  ;;Refreshes the selected schnaq by reloading it from the backend
+  (fn [{:keys [db]} _]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+      {:fx [[:dispatch [:schnaq/load-by-share-hash share-hash]]]})))
+
+(rf/reg-event-fx
   :schnaq/check-admin-credentials
   (fn [{:keys [db]} [_ share-hash edit-hash]]
     {:fx [(http/xhrio-request db :post "/credentials/validate" [:schnaq/check-admin-credentials-success]

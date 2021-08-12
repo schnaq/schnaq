@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.card-view
   (:require [re-frame.core :as rf]
-            [schnaq.config.shared :as shared-config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.pages :as pages]))
@@ -39,9 +38,8 @@
 ;; -----------------------------------------------------------------------------
 
 (defn derive-view []
-  (let [current-discussion @(rf/subscribe [:schnaq/selected])
-        wrapping-view (if shared-config/embedded? pages/embeddable-view pages/with-discussion-header)]
-    [wrapping-view
+  (let [current-discussion @(rf/subscribe [:schnaq/selected])]
+    [pages/with-discussion-header
      {:page/heading (:discussion/title current-discussion)}
      [discussion-view]]))
 

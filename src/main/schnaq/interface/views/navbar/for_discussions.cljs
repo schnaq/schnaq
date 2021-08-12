@@ -101,7 +101,7 @@
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xxl-auto
-     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-lg-0
+     [:div.d-flex.align-items-center.schnaq-navbar.px-md-4.mb-4.mb-lg-0
       [schnaq-progress-bar]
       [admin/share-link]
       [admin/txt-export share-hash title]
@@ -131,7 +131,7 @@
     [:div.d-flex.flex-row.flex-wrap.p-md-3
      [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4.mr-3
       ;; schnaq logo
-      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
+      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaq/start)}
        [:img.d-inline-block.align-middle.mr-2
         {:src (img-path :logo-white) :alt "schnaq logo"
          :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
