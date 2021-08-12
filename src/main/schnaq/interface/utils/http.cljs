@@ -20,7 +20,8 @@
    (let [path (if (.startsWith path "/") path (str "/" path))
          csrf-token (get-in db [:internals :csrf-token])
          headers (cond-> (auth/authentication-header db)
-                         csrf-token (assoc "X-CSRF-Token" csrf-token))]
+                         csrf-token (assoc "X-CSRF-Token" csrf-token)
+                         (#{:post :put :delete} method) (assoc "X-Schnaq-CSRF" "Only elephants should own ivory."))]
      [:http-xhrio {:method method
                    :uri (str shared-config/api-url path)
                    :format (ajax/transit-request-format)
