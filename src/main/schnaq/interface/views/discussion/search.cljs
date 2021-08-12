@@ -37,8 +37,8 @@
 (defn search-results [results]
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
         key-fn (case sort-method
-                :newest :statement/created-at
-                :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
+                 :newest :statement/created-at
+                 :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
         sorted-results (sort-by key-fn > results)]
     [common/move-in :right
      (for [statement sorted-results]
