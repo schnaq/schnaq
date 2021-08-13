@@ -180,7 +180,9 @@
                   (wrap-anti-forgery)
                   (wrap-session {:cookie-attrs {:max-age 3600
                                                 :same-site :lax
-                                                :secure (if shared-config/production? true false)}})
+                                                ;; The following line is deactivated, since the production env breaks with those active
+                                                ;; :secure (if shared-config/production? true false)
+                                                }})
                   (wrap-custom-schnaq-csrf-header)
                   (wrap-cors :access-control-allow-origin allowed-origins'
                              :access-control-allow-methods allowed-http-verbs
