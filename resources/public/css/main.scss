@@ -2,40 +2,48 @@
 @import 'variables';
 
 // Global
+@import 'embedded';
 @import 'bootstrap_custom';
-@import 'global';
 
-// Components
-@import 'after-create';
-@import 'avatar';
-@import 'badges';
-@import 'button';
-@import 'call-to-action';
-@import 'card_columns_discussion';
-@import 'card_view';
-@import 'dashboard';
-@import 'discussion';
-@import 'feed';
-@import 'feedback';
-@import 'footer';
-@import 'history';
-@import 'how-to';
-@import 'icon-bullets';
-@import 'icons';
-@import 'meeting';
-@import 'modals';
-@import 'navbar';
-@import 'notifications';
-@import 'pricing';
-@import 'radio-button';
-@import 'rounded';
-@import 'speech_bubble';
-@import 'spinner';
-@import 'startpage';
-@import 'testimonials';
-@import 'text-input';
-@import 'video';
-@import 'up-down-vote';
+/* stylelint-disable */
+#schnaq-integration,
+#app {
+  /* stylelint-enable */
 
-// 3rd Party
-@import '../js/klaro/src/scss/klaro';
+  @import 'global';
+
+  // Components
+  @import 'after-create';
+  @import 'avatar';
+  @import 'badges';
+  @import 'button';
+  @import 'call-to-action';
+  @import 'card_columns_discussion';
+  @import 'card_view';
+  @import 'dashboard';
+  @import 'discussion';
+  @import 'feed';
+  @import 'feedback';
+  @import 'footer';
+  @import 'history';
+  @import 'how-to';
+  @import 'icon-bullets';
+  @import 'icons';
+  @import 'meeting';
+  @import 'modals';
+  @import 'navbar';
+  @import 'notifications';
+  @import 'pricing';
+  @import 'radio-button';
+  @import 'rounded';
+  @import 'speech_bubble';
+  @import 'spinner';
+  @import 'startpage';
+  @import 'testimonials';
+  @import 'text-input';
+  @import 'video';
+  @import 'up-down-vote';
+
+  // 3rd Party
+  @import '../js/klaro/src/scss/klaro';
+}
