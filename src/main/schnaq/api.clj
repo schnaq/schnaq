@@ -16,7 +16,10 @@
             [reitit.spec :as rs]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
+            [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.cors :refer [wrap-cors]]
+            [ring.middleware.session :refer [wrap-session]]
+            [ring.util.http-response :refer [forbidden]]
             [schnaq.api.analytics :refer [analytics-routes]]
             [schnaq.api.common :refer [other-routes]]
             [schnaq.api.debug :refer [debug-routes]]
@@ -149,7 +152,21 @@
        doall))
 
 (def allowed-http-verbs
-  #{:get :put :post :delete})
+  #{:get :put :post :delete :options})
+
+(defn- wrap-custom-schnaq-csrf-header
+  "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin
+  via XMLHttpRequest."
+  [handler]
+  (fn [request]
+    ;; Only relevant for those three methods
+    (if (#{:post :put :delete} (:request-method request))
+      ;; X-schnaq-csrf header must be present, otherwise raise error
+      (if (-> request :headers (get "x-schnaq-csrf"))
+        (handler request)
+        (forbidden {:error-type :missing-header
+                    :message "You are trying to acces the route without the proper headers."}))
+      (handler request))))
 
 (defn -main
   "This is our main entry point for the REST API Server."
@@ -160,8 +177,14 @@
     (reset! current-server
             (server/run-server
               (-> #'app
+                  (wrap-anti-forgery)
+                  (wrap-session {:cookie-attrs {:max-age 3600
+                                                :same-site :lax
+                                                :secure (if shared-config/production? true false)}})
+                  (wrap-custom-schnaq-csrf-header)
                   (wrap-cors :access-control-allow-origin allowed-origins'
-                             :access-control-allow-methods allowed-http-verbs))
+                             :access-control-allow-methods allowed-http-verbs
+                             :access-control-allow-credentials "true"))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))

@@ -1,6 +1,7 @@
 (ns schnaq.api.common
   (:require [clojure.data.json :as json]
             [org.httpkit.client :as http-client]
+            [ring.middleware.anti-forgery :refer [*anti-forgery-token*]]
             [ring.util.http-response :refer [ok bad-request]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config.mailchimp :as mailchimp-config]
@@ -13,6 +14,11 @@
   "Route to ping the API. Used in our monitoring system."
   [_]
   (ok {:text "🧙‍♂️"}))
+
+(defn- init
+  "Initialization Information for the frontend like the sessions csrf-token."
+  [_]
+  (ok {:csrf-token *anti-forgery-token*}))
 
 (defn- check-credentials!
   "Checks whether share-hash and edit-hash match.
@@ -59,6 +65,9 @@
 
 (def other-routes
   [["" {:swagger {:tags ["other"]}}
+    ["/init" {:get init
+              :description (at/get-doc #'init)
+              :responses {200 {:body {:csrf-token string?}}}}]
     ["/ping" {:get ping
               :description (at/get-doc #'ping)
               :responses {200 {:body {:text string?}}}}]
