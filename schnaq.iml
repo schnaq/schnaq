@@ -123,6 +123,7 @@
     <orderEntry type="library" name="Deps: spec-coerce:1.0.0-alpha6" level="project" />
     <orderEntry type="library" name="Deps: commons-io:2.10.0" level="project" />
     <orderEntry type="library" name="Deps: com.google.guava/listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
+    <orderEntry type="library" name="Deps: org.postgresql/postgresql:42.2.23" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.namespace:0.3.1" level="project" />
     <orderEntry type="library" name="Deps: superstructor/re-highlight:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: com.taoensso/tempura:1.2.1" level="project" />
