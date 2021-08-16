@@ -4,7 +4,6 @@
         buddy/buddy {:mvn/version "2.0.0"}
         cljs-ajax/cljs-ajax {:mvn/version "0.8.3"}
         clj-http/clj-http {:mvn/version "3.12.3"}
-        com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
         com.cognitect.aws/api {:mvn/version "0.8.515"}
         com.cognitect.aws/endpoints {:mvn/version "1.1.12.42"}
         com.cognitect.aws/s3 {:mvn/version "811.2.934.0"}
@@ -12,7 +11,6 @@
         com.draines/postal {:mvn/version "2.0.4"}
         com.taoensso/tempura {:mvn/version "1.2.1"}
         com.taoensso/timbre {:mvn/version "5.1.2"}
-        com.taoensso/tufte {:mvn/version "2.2.0"}
         compojure/compojure {:mvn/version "1.6.2"}
         day8.re-frame/http-fx {:mvn/version "0.2.3"}
         day8.re-frame/re-frame-10x {:mvn/version "1.1.13"}
@@ -29,13 +27,12 @@
         org.clojure/core.async {:mvn/version "1.3.618"}
         org.clojure/data.json {:mvn/version "2.4.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}
-        org.postgresql/postgresql {:mvn/version "42.2.23"}
+        org.postgresql/postgresql {:mvn/version "42.2.23"}  ;; needed for prod transactor
         re-frame/re-frame {:mvn/version "1.2.0"}
         reagent/reagent {:mvn/version "1.1.0"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
-        ring-middleware-format/ring-middleware-format {:mvn/version "0.7.4"}
         ring/ring {:mvn/version "1.9.4"}
-        ring/ring-defaults {:mvn/version "0.3.3"}
+        ring/ring-anti-forgery {:mvn/version "1.3.0"}
         ring/ring-mock {:mvn/version "0.4.0"}
         thheller/shadow-cljs {:mvn/version "2.15.3"}}
 

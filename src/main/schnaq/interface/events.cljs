@@ -34,17 +34,29 @@
         {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
 (rf/reg-event-fx
+  :get-csrf-token
+  (fn [{:keys [db]} _]
+    {:fx [(http/xhrio-request db :get "/init" [:store-csrf])]}))
+
+(rf/reg-event-fx
+  :store-csrf
+  (fn [{:keys [db]} [_ answer]]
+    {:db (assoc-in db [:internals :csrf-token] (:csrf-token answer))
+     :fx [[:dispatch [:scheduler.execute/after-csrf]]]}))
+
+(rf/reg-event-fx
   :initialize/schnaq
   (fn [_ _]
-    {:fx [[:dispatch [:username/from-localstorage]]
+    {:fx [[:dispatch [:get-csrf-token]]
+          [:dispatch [:username/from-localstorage]]
           [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
           [:dispatch [:keycloak/init]]
-          [:dispatch [:load/last-added-schnaq]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
           [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]
           [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]
-          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]]}))
+          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
+          [:dispatch [:scheduler.after/csrf [:load/last-added-schnaq]]]]}))
 
 ; todo use #{schnaq #{s1 s2 s3 ...} ...}
 
