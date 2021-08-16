@@ -109,4 +109,7 @@
              (assoc-in [:discussion :premises :current] premises)
              (assoc-in [:history :full-context] (vec history)))
      :fx [[:dispatch [:discussion.history/push conclusion]]
-          [:dispatch [:visited/set-visited-statements conclusion]]]}))
+          [:dispatch [:visited/set-visited-statements conclusion]]
+          [:dispatch [:notification/set-visited-statements conclusion premises]]]}))
+
+; todo use #{schnaq #{s1 s2 s3 ...} ...}

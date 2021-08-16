@@ -202,7 +202,9 @@
                                (rf/dispatch [:discussion.query.statement/by-id]))
                       :stop (fn []
                               (rf/dispatch [:visited.statement-nums/to-localstorage])
+                              (rf/dispatch [:visited.statement-ids/to-localstorage])
                               (rf/dispatch [:statement.edit/reset-edits]))}]}]
+     ; todo maybe put (rf/dispatch [:visited.statement-ids/to-localstorage]) in log in
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint

@@ -43,6 +43,12 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The schnaqs that are known to the registered user, i.e. they can open and view."}
+   {:db/ident :user.registered/visited-statement-ids
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/many
+    :db/doc "The statements that are known to the registered user, i.e. visited statements."}
+
+   ;todo create own data model
 
    ;; Feedback
    {:db/ident :feedback/contact-name

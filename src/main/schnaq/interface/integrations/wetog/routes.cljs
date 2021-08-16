@@ -39,7 +39,10 @@
                              (rf/dispatch [:discussion.query.statement/by-id]))
                     :stop (fn []
                             (rf/dispatch [:visited.statement-nums/to-localstorage])
+                            (rf/dispatch [:visited.statement-ids/to-localstorage])
                             (rf/dispatch [:statement.edit/reset-edits]))}]}]
+   ; todo maybe put (rf/dispatch [:visited.statement-ids/to-localstorage]) in log in
+
    ["search"
     {:name :routes.search/schnaq
      :view discussion-search/view}]

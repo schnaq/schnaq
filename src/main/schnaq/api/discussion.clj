@@ -86,16 +86,61 @@
                                   with-sub-discussion-info
                                   valid-statements-with-votes)})))
 
+; todo use {:schnaq #{statemet-1 ...} ...}
+
+(defn- with-new-post-info
+  "Add sub-discussion-info whether or not a user has seen this post already or not."
+  [statements user-identity]
+  (if-let [known-statements (:user.registered/visited-statement-ids
+                              (db/fast-pull [:user.registered/keycloak-id user-identity]
+                                            user-db/registered-private-user-pattern))]
+    (map (fn [statement]
+           (assoc statement :meta/new (nil? (some #(= (:db/id statement) (:db/id %)) known-statements))))
+         statements)
+    statements))
+
+(comment
+
+  (assoc (db/fast-pull 17592186046862 discussion-db/statement-pattern) :meta/new 1)
+
+  (def statements (vector
+                    (db/fast-pull 17592186047304 discussion-db/statement-pattern)
+                    (db/fast-pull 17592186046862 discussion-db/statement-pattern)))
+
+  (def user-id-mike "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4")
+
+  (with-new-post-info statements user-id-mike)
+
+  (nil? (some #(= 1759218604686 (:db/id %)) [{:db/id 17592186046862}
+                                             {:db/id 17592186047304}
+                                             {:db/id 17592186047342}
+                                             {:db/id 17592186047344}
+                                             {:db/id 17592186047349}
+                                             {:db/id 17592186047416}]))
+
+  (some #(= (:db/id (db/fast-pull 17592186047304 discussion-db/statement-pattern)) (:db/id %))
+        [{:db/id 17592186046862}
+         {:db/id 17592186047304}
+         {:db/id 17592186047342}
+         {:db/id 17592186047344}
+         {:db/id 17592186047349}
+         {:db/id 17592186047416}])
+
+  (true? false))
+
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash statement-id]} (:query parameters)]
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash statement-id]} (:query parameters)
+        user-identity (:sub identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
                                     with-sub-discussion-info
                                     (toolbelt/pull-key-up :db/ident)))
-             :premises (with-sub-discussion-info (discussion-db/children-for-statement statement-id))
+             :premises (with-new-post-info
+                         (with-sub-discussion-info (discussion-db/children-for-statement statement-id))
+                         user-identity)
              :history (discussion-db/history-for-statement statement-id)}))
       at/not-found-hash-invalid)))
 

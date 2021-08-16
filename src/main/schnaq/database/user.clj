@@ -12,11 +12,12 @@
    :user.registered/display-name
    :user.registered/profile-picture])
 
-(def ^:private registered-private-user-pattern
+(def registered-private-user-pattern
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
-   {:user.registered/visited-schnaqs [:discussion/share-hash]}])
+   {:user.registered/visited-schnaqs [:discussion/share-hash]}
+   {:user.registered/visited-statement-ids [:db/id]}])
 
 (def ^:private minimal-user-pattern
   "Minimal user pull pattern."
@@ -88,6 +89,14 @@
                   visited-schnaqs)]
     (transact txs)))
 
+;Todo change to own data model
+(defn- update-visited-statements
+  "Updates the user's visited statements by adding the new ones."
+  [keycloak-id visited-statements]
+  (let [txs (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/visited-statement-ids %)
+                  visited-statements)]
+    (transact txs)))
+
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
   [{:keys [id given_name family_name email]} existing-user]
@@ -110,8 +119,8 @@
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist. Returns a tuple which contains
   whether the user is newly created and the user entity itself."
-  [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs]
-  [associative? (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
+  [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs visited-statements]
+  [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [existing-user (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
@@ -121,12 +130,14 @@
                   :user.registered/first-name given_name
                   :user.registered/last-name family_name
                   :user.registered/groups groups
-                  :user.registered/visited-schnaqs visited-schnaqs}]
+                  :user.registered/visited-schnaqs visited-schnaqs
+                  :user.registered/visited-statement-ids visited-statements}]
     (if (:db/id existing-user)
       (do
         (update-user-info identity existing-user)
         (update-groups id groups)
         (update-visited-schnaqs id visited-schnaqs)
+        (update-visited-statements id visited-statements)
         [false existing-user])
       [true (-> @(transact [(clean-db-vals new-user)])
                 (get-in [:tempids temp-id])
@@ -171,3 +182,11 @@
       :in $ ?email registered-user-public-pattern
       :where [?user :user.registered/email ?email]]
     user-email registered-user-public-pattern))
+
+(comment
+
+  (def user-id-mike "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4")
+  (:visited-schnaqs (fast-pull [:user.registered/keycloak-id user-id-mike]
+                               registered-private-user-pattern))
+
+  )
