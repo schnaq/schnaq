@@ -26,10 +26,13 @@
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
+(s/def :user.registered/visited-statement-ids (s/coll-of :db/id))
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
                                  :opt [:user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
-                                       :user.registered/email :user.registered/visited-schnaqs]))
+                                       :user.registered/email :user.registered/visited-schnaqs
+                                       :user.registered/visited-statement-ids1]))
+;todo create own data model
 
 ;; Could be anonymous or registered
 (s/def ::any-user (s/or :dto ::dto/registered-user
