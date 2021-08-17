@@ -46,8 +46,6 @@
           [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
           [:dispatch [:load/last-added-schnaq]]]}))
 
-; todo use #{schnaq #{s1 s2 s3 ...} ...}
-
 (rf/reg-event-db
   :init-from-backend
   (fn [db [_ all-discussions]]

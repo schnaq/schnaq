@@ -16,12 +16,8 @@
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
-   {:user.registered/visited-schnaqs [:discussion/share-hash]}])
-
-(def seen-statements-pattern
-  [:seen-statements/user
-   :seen-statements/visited-schnaq
-   {:seen-statements/visited-statements [:db/id]}])
+   {:user.registered/visited-schnaqs [:discussion/share-hash]}
+   {:user.registered/visited-statement-ids [:db/id]}])
 
 (def ^:private minimal-user-pattern
   "Minimal user pull pattern."
