@@ -18,16 +18,13 @@
   ([db method path on-success params on-failure]
    [map? ::http-methods string? vector? map? vector? :ret vector?]
    (let [path (if (.startsWith path "/") path (str "/" path))
-         csrf-token (get-in db [:internals :csrf-token])
          headers (cond-> (auth/authentication-header db)
-                         csrf-token (assoc "X-CSRF-Token" csrf-token)
-                         (#{:post :put :delete} method) (assoc "X-Schnaq-CSRF" "Only elephants should own ivory."))]
+                         (#{:post :put :delete} method) (assoc "X-Schnaq-CSRF" "T25seSBlbGVwaGFudHMgc2hvdWxkIG93biBpdm9yeS4="))]
      [:http-xhrio {:method method
                    :uri (str shared-config/api-url path)
                    :format (ajax/transit-request-format)
                    :params params
                    :headers headers
-                   :with-credentials true
                    :response-format (ajax/transit-response-format)
                    :on-success on-success
                    :on-failure on-failure}])))

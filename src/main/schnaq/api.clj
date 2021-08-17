@@ -16,9 +16,7 @@
             [reitit.spec :as rs]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
-            [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.middleware.session :refer [wrap-session]]
             [ring.util.http-response :refer [forbidden]]
             [schnaq.api.analytics :refer [analytics-routes]]
             [schnaq.api.common :refer [other-routes]]
@@ -178,14 +176,9 @@
     (reset! current-server
             (server/run-server
               (-> #'app
-                  (wrap-anti-forgery)
-                  (wrap-session {:cookie-attrs {:max-age 3600
-                                                :same-site :lax
-                                                :secure (if shared-config/production? true false)}})
                   (wrap-custom-schnaq-csrf-header)
                   (wrap-cors :access-control-allow-origin allowed-origins'
-                             :access-control-allow-methods allowed-http-verbs
-                             :access-control-allow-credentials "true"))
+                             :access-control-allow-methods allowed-http-verbs))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))
