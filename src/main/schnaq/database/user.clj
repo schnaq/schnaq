@@ -16,8 +16,12 @@
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
-   {:user.registered/visited-schnaqs [:discussion/share-hash]}
-   {:user.registered/visited-statement-ids [:db/id]}])
+   {:user.registered/visited-schnaqs [:discussion/share-hash]}])
+
+(def seen-statements-pattern
+  [:seen-statements/user
+   :seen-statements/visited-schnaq
+   {:seen-statements/visited-statements [:db/id]}])
 
 (def ^:private minimal-user-pattern
   "Minimal user pull pattern."
@@ -89,13 +93,63 @@
                   visited-schnaqs)]
     (transact txs)))
 
-;Todo change to own data model
+(defn seen-statements-id [keycloak-id discussion-hash]
+  (query '[:find ?seen-statement .
+           :in $ ?keycloak-id ?discussion-hash
+           :where [?user :user.registered/keycloak-id ?keycloak-id]
+           [?seen-statement :seen-statements/user ?user]
+           [?seen-statement :seen-statements/visited-schnaq ?discussion]
+           [?discussion :discussion/share-hash ?discussion-hash]]
+         keycloak-id discussion-hash))
+
+(defn create-visited-statements-for-discussion [keycloak-id discussion-hash visited-statements]
+  (let [queried-id (seen-statements-id keycloak-id discussion-hash)
+        temp-id (or queried-id (str "seen-statements-" keycloak-id "-" discussion-hash))
+        new-visited {:db/id temp-id
+                     :seen-statements/user [:user.registered/keycloak-id keycloak-id]
+                     :seen-statements/visited-schnaq [:discussion/share-hash discussion-hash]
+                     :seen-statements/visited-statements visited-statements}]
+    (transact [(clean-db-vals new-visited)])))
+
 (defn- update-visited-statements
   "Updates the user's visited statements by adding the new ones."
   [keycloak-id visited-statements]
-  (let [txs (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/visited-statement-ids %)
-                  visited-statements)]
-    (transact txs)))
+  (doseq [[discussion-hash statement-ids] visited-statements]
+    (create-visited-statements-for-discussion keycloak-id discussion-hash statement-ids)))
+
+(comment
+  ;todo delete comment
+  (def data-test {"schnaq-1" #{1 2} "schnaq-2" #{3}})
+
+
+  (update-visited-schnaqs "keycloak-test-id" ["schnaq-1" "schnaq-2"])
+
+  (def visiteds {"2477da4b-7865-403e-be89-a4031c478b3f" #{17592186047698 17592186047715 17592186046862 17592186047304 17592186047306},
+                 "e8bc1f04-3d72-48d1-99f8-08b451cd0372" #{17592186047399 17592186047381 17592186047379 17592186047385}})
+
+  (def user-id-mike-2 "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4")
+  (def user-id-mike "44916d91-acd4-4799-a481-2d5f036abefc")
+  (def schnaq-id "2477da4b-7865-403e-be89-a4031c478b3f")
+
+  (create-visited-statements-for-discussion user-id-mike schnaq-id
+                                            #{17592186047698 17592186047715 17592186046862 17592186047304 17592186047306},
+                                            )
+
+  (defn foo-1 [x y]
+    (* x y))
+
+  (seen-statements-id user-id-mike schnaq-id)
+  ;(create-visited-statements-for-discussion user-id-mike schnaq-id)
+
+  (fast-pull (seen-statements-id user-id-mike schnaq-id) seen-statements-pattern)
+
+
+  (:seen-statements/visited-statements
+    (fast-pull (seen-statements-id user-id-mike schnaq-id) seen-statements-pattern))
+
+  (fast-pull [:user.registered/keycloak-id user-id-mike] registered-private-user-pattern)
+
+  )
 
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
@@ -139,9 +193,11 @@
         (update-visited-schnaqs id visited-schnaqs)
         (update-visited-statements id visited-statements)
         [false existing-user])
-      [true (-> @(transact [(clean-db-vals new-user)])
-                (get-in [:tempids temp-id])
-                (fast-pull registered-user-public-pattern))])))
+      (let [new-user-from-db (-> @(transact [(clean-db-vals new-user)])
+                                 (get-in [:tempids temp-id])
+                                 (fast-pull registered-user-public-pattern))]
+        (update-visited-statements (:db/id new-user-from-db) visited-statements)
+        [true new-user-from-db]))))
 
 (>defn- update-user-field
   "Updates a user's field in the database and return updated user."
@@ -182,11 +238,3 @@
       :in $ ?email registered-user-public-pattern
       :where [?user :user.registered/email ?email]]
     user-email registered-user-public-pattern))
-
-(comment
-
-  (def user-id-mike "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4")
-  (:visited-schnaqs (fast-pull [:user.registered/keycloak-id user-id-mike]
-                               registered-private-user-pattern))
-
-  )

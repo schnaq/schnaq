@@ -38,8 +38,6 @@
                                            :visited-statement-ids visited-statements}
                                           creation-secrets (assoc :creation-secrets creation-secrets)))]}))))
 
-; todo use {:schnaq #{statemet-1 ...} ...}
-
 (rf/reg-event-fx
   :user.register/success
   (fn [{:keys [db]} [_ {:keys [registered-user updated-statements?]}]]

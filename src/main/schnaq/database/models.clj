@@ -43,12 +43,20 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The schnaqs that are known to the registered user, i.e. they can open and view."}
-   {:db/ident :user.registered/visited-statement-ids
+
+   ;; Seen statements
+   {:db/ident :seen-statements/user
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "The keycloak id of a registered user."}
+   {:db/ident :seen-statements/visited-schnaq
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "A visited schnaq to reference a set of visited statements to."}
+   {:db/ident :seen-statements/visited-statements
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The statements that are known to the registered user, i.e. visited statements."}
-
-   ;todo create own data model
 
    ;; Feedback
    {:db/ident :feedback/contact-name

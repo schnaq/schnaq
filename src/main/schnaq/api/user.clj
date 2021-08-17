@@ -60,11 +60,10 @@
 
 (s/def ::creation-secrets map?)
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
-(s/def ::visited-statement-ids (s/coll-of :db/id))          ; todo change to {:schnaq #{s1 s2 3 ...} ...}
+(s/def ::visited-statement-ids map?)
 (s/def ::user-register (s/keys :req-un [::visited-hashes]
                                :opt-un [::creation-secrets
                                         ::visited-statement-ids]))
-; todo change to own data model
 
 (def user-routes
   ["/user" {:swagger {:tags ["user"]}}
