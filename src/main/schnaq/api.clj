@@ -65,7 +65,8 @@
   (log/info (format "Summy URL: %s" summy-config/base-url))
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
-  (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
+  (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
+  (log/info "All systems ready to go"))
 
 (def ^:private description
   "This is the main Backend for schnaq.
