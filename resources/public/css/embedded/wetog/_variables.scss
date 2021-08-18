@@ -1,0 +1,73 @@
+@use '../../../node_modules/@fontsource/poppins/scss/mixins' as poppins;
+
+@include poppins.fontFace(
+  $fontDir: '../node_modules/@fontsource/#{poppins.$fontId}/files'
+);
+
+// Variables
+$img-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+// Restated Bootstrap Variables
+$white: #fff !default;
+$white-shade: #f8fbfe !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #868e96 !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black: #000 !default;
+
+$blue: #1292ee !default;
+$blue-selected: #0181dd !default;
+$blue-light: #4cacf4 !default;
+$blue-light-selected: #3b9be3 !default;
+$blue-dark: #052740 !default;
+$light-background: #eff6ff;
+$indigo: #6610f2 !default;
+$purple: #6f42c1 !default;
+$purple-light: #2a1861 !default;
+$purple-light-selected: #584afd !default;
+$dark-purple: #170051 !default;
+$dark-purple-selected: $purple-light !default;
+$pink: #e83e8c !default;
+$red: #dc3545 !default;
+$orange: #ff9e0d !default;
+$orange-selected: #ffc369 !default;
+$orange-pale: #ffc09e !default;
+$yellow: #ffc107 !default;
+$green: #28a745 !default;
+$wetog-green: #2cbaa0 !default;
+$teal: #20c997 !default;
+$cyan: #17a2b8 !default;
+
+$primary: $dark-purple !default;
+$primary-selected: $dark-purple-selected !default;
+$primary-light: $purple-light !default;
+$primary-light-selected: $purple-light-selected !default;
+$secondary: $wetog-green !default;
+$secondary-selected: $orange-selected !default;
+$secondary-pale: $orange-pale !default;
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-100 !default;
+$dark: $gray-800 !default;
+$text-dark: $gray-700 !default;
+$text-light: $white !default;
+
+$input-background: $gray-200 !default;
+
+$font-family-sans-serif: 'Poppins', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+
+// Shadows
+$regular-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+$light-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1);
+$hover-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.2);
+$left-shadow: -3px 1px 1px 0 rgba(255, 255, 255, 0.1);
+$wide-shadow: 0 2px 50px 2px rgba(0, 0, 0, 0.2);
+$inner-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.1);
