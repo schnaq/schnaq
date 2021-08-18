@@ -1,6 +1,7 @@
 (ns schnaq.interface.text.display-data
   "Texts used as labels in the whole application."
-  (:require [schnaq.interface.config :refer [user-language marketing-num-schnaqs marketing-num-statements]]
+  (:require [schnaq.config.shared :as shared-config]
+            [schnaq.interface.config :refer [user-language marketing-num-schnaqs marketing-num-statements]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [taoensso.tempura :refer [tr]]))
@@ -2188,16 +2189,24 @@ Now we write down questions and discuss them and can still understand what we ha
      :user/plus "fa-user-plus"
      :user/shield "fa-user-shield"}))
 
-(defn colors
-  "Color definitions according to our css styles."
-  [identifier]
-  (identifier
-    {:blue/dark "#052740"
-     :blue/default "#1292ee"
-     :blue/light "#4cacf4"
-     :blue/selected "#0181dd"
-     :orange/default "#ff772d"
-     :orange/selected "#fe661e"
-     :gray/dark "#adb5bd"
-     :gray/medium "#adb5bd"
-     :white "#ffffff"}))
+(def colors
+  (cond->
+    {:positive/dark "#052740"
+     :positive/default "#1292ee"
+     :positive/light "#4cacf4"
+     :positive/selected "#0181dd"
+     :negative/default "#ff772d"
+     :negative/selected "#fe661e"
+     :neutral/dark "#adb5bd"
+     :neutral/medium "#adb5bd"
+     :white "#ffffff"}
+    ;; Add wetog colors. Dispatch further, should we have more embeddings
+    shared-config/embedded?
+    (merge {:positive/dark "#239580"
+            :positive/default "#2cbaa0"
+            :positive/light "#56c8b3"
+            :positive/selected "#20c997"
+            :negative/default "#ff0101"
+            :negative/selected "#dc3545"
+            :neutral/dark "#170051"
+            :neutral/medium "#2a1861"})))
