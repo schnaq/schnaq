@@ -35,6 +35,7 @@ $dark-purple: #170051 !default;
 $dark-purple-selected: $purple-light !default;
 $pink: #e83e8c !default;
 $red: #dc3545 !default;
+$wetog-red: #ff0101 !default;
 $orange: #ff9e0d !default;
 $orange-selected: #ffc369 !default;
 $orange-pale: #ffc09e !default;
@@ -44,6 +45,9 @@ $wetog-green: #2cbaa0 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 
+$positive: $wetog-green !default;
+$negative: $wetog-red !default;
+$neutral: $dark-purple !default;
 $primary: $dark-purple !default;
 $primary-selected: $dark-purple-selected !default;
 $primary-light: $purple-light !default;
