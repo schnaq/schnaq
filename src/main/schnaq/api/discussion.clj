@@ -107,30 +107,6 @@
                                   with-sub-discussion-info
                                   valid-statements-with-votes)})))
 
-(comment
-  ;todo delete comment
-  (assoc (db/fast-pull 17592186046862 discussion-db/statement-pattern) :meta/new 1)
-
-  (def statements (vector
-                    (db/fast-pull 17592186047698 discussion-db/statement-pattern)
-                    (db/fast-pull 17592186047715 discussion-db/statement-pattern)))
-
-  (def user-id-mike "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4")
-  (def schnaq-id "2477da4b-7865-403e-be89-a4031c478b3f")
-
-
-  (def known-statements (:seen-statements/visited-statements
-                          (db/fast-pull (user-db/seen-statements-id user-id-mike schnaq-id) user-db/seen-statements-pattern)))
-
-  (def user-id-test "44916d91-acd4-4799-a481-2d5f036abefc")
-  (user-db/seen-statements-id user-id-mike schnaq-id)
-
-  (map (fn [statement]
-         (assoc statement :meta/new (nil? (some #(= (:db/id statement) (:db/id %)) known-statements))))
-       statements)
-
-  )
-
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
   [{:keys [parameters identity]}]

@@ -117,40 +117,6 @@
   (doseq [[discussion-hash statement-ids] visited-statements]
     (create-visited-statements-for-discussion keycloak-id discussion-hash statement-ids)))
 
-(comment
-  ;todo delete comment
-  (def data-test {"schnaq-1" #{1 2} "schnaq-2" #{3}})
-
-
-  (update-visited-schnaqs "keycloak-test-id" ["schnaq-1" "schnaq-2"])
-
-  (def visiteds {"2477da4b-7865-403e-be89-a4031c478b3f" #{17592186047698 17592186047715 17592186046862 17592186047304 17592186047306},
-                 "e8bc1f04-3d72-48d1-99f8-08b451cd0372" #{17592186047399 17592186047381 17592186047379 17592186047385}})
-
-  (def user-id-mike-2 "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4")
-  (def user-id-mike "44916d91-acd4-4799-a481-2d5f036abefc")
-  (def schnaq-id "2477da4b-7865-403e-be89-a4031c478b3f")
-
-  (create-visited-statements-for-discussion user-id-mike schnaq-id
-                                            #{17592186047698 17592186047715 17592186046862 17592186047304 17592186047306},
-                                            )
-
-  (defn foo-1 [x y]
-    (* x y))
-
-  (seen-statements-id user-id-mike schnaq-id)
-  ;(create-visited-statements-for-discussion user-id-mike schnaq-id)
-
-  (fast-pull (seen-statements-id user-id-mike schnaq-id) seen-statements-pattern)
-
-
-  (:seen-statements/visited-statements
-    (fast-pull (seen-statements-id user-id-mike schnaq-id) seen-statements-pattern))
-
-  (fast-pull [:user.registered/keycloak-id user-id-mike] registered-private-user-pattern)
-
-  )
-
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
   [{:keys [id given_name family_name email]} existing-user]

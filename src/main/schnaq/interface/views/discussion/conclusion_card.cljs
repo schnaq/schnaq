@@ -70,12 +70,13 @@
 (defn statement-card
   [edit-hash statement]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
-    [:article.card.statement-card
+    [:article.card.statement-card.my-2
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body.py-2
-       (when (:meta/new statement)                          ;todo remove
-         [:div.bg-primary.p-3 (:meta/new statement)])
+       (when (:meta/new statement)
+         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
+          (labels :discussion.badges/new)])
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info (:statement/author statement) 42 (:statement/created-at statement) "w-100"]]
        [:div.my-4]
