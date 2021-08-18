@@ -30,6 +30,10 @@ RUN yarn install
 
 COPY . .
 
+RUN if [[ -z "$EMBEDDED" ]] ; \
+  then sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed ; \
+  else sass ./resources/public/css/wetog_main.scss ./resources/public/css/wetog_main.min.css --no-source-map --style compressed ; \
+  fi
 RUN sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
 RUN yarn shadow-cljs release app
 
