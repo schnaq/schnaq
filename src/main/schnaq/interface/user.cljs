@@ -32,7 +32,7 @@
     (when result
       (let [creation-secrets (get-in db [:discussion :statements :creation-secrets])
             visited-hashes (get-in db [:schnaqs :visited-hashes])
-            visited-statements (get-in db [:visited :statement-ids])]
+            visited-statements (get-in db [:visited :statement-ids] {})]
         {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
                                   (cond-> {:visited-hashes visited-hashes
                                            :visited-statement-ids visited-statements}

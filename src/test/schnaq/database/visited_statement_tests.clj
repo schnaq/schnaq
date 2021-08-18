@@ -78,9 +78,6 @@
                                [statement-1 statement-2 statement-3 statement-new])
           ;; add seen statements
           _ (user-db/create-visited-statements-for-discussion keycloak-user-id share-hash seen-statements)
-          _ (:seen-statements/visited-statements
-              (fast-pull (user-db/seen-statements-id keycloak-user-id share-hash)
-                         user-db/seen-statements-pattern))
           updated-statements (#'discussion-api/update-new-posts! all-statements share-hash keycloak-user-id)
           updated-statement-1 (find-statement-in-list statement-1 updated-statements)
           updated-statement-2 (find-statement-in-list statement-2 updated-statements)
@@ -91,3 +88,43 @@
       (is (false? (:meta/new updated-statement-2)))
       (is (false? (:meta/new updated-statement-3)))
       (is (true? (:meta/new updated-statement-new))))))
+
+
+(deftest get-new-statements-tests
+  (testing "Test get new statements for user"
+    (let [;; add user
+          keycloak-user-id "user-2-id"
+          user-name "User Name 2"
+          user (add-test-user keycloak-user-id user-name)
+          user-id (:db/id user)
+          ;; add discussion
+          discussion-name "A customer enters a pet shop."
+          share-hash "share-hash-3"
+          edit-hash "secret-hash-3"
+          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user) true)
+          ;; add starting statements
+          content-1 "'Ello, I wish to register a complaint. 'Ello, Miss?"
+          content-2 "What do you mean miss?"
+          content-3 "I'm sorry, I have a cold. I wish to make a complaint!"
+          content-new-1 "We're closin' for lunch."
+          content-new-2 "Never mind that, my lad. I wish to complain about this parrot what I purchased not half an hour ago from this very boutique."
+          statement-1 (discussion-db/add-starting-statement! share-hash user-id content-1 true)
+          statement-2 (discussion-db/add-starting-statement! share-hash user-id content-2 true)
+          statement-3 (discussion-db/add-starting-statement! share-hash user-id content-3 true)
+          statement-new-1 (discussion-db/add-starting-statement! share-hash user-id content-new-1 true)
+          statement-new-2 (discussion-db/add-starting-statement! share-hash user-id content-new-2 true)
+          ;; pull all statements
+          all-statements (mapv #(fast-pull % discussion-db/statement-pattern)
+                               [statement-1 statement-2 statement-3 statement-new-1 statement-new-2])
+          ;; add seen statements
+          seen-statements #{statement-1 statement-2 statement-3}
+          _ (user-db/create-visited-statements-for-discussion
+              keycloak-user-id share-hash seen-statements)
+          new-statements (discussion-db/new-statements-for-user keycloak-user-id share-hash)
+          expected-new-statement-count (- (count all-statements) (count seen-statements))]
+      (is (= expected-new-statement-count (count new-statements)))
+      (is (find-statement-in-list statement-new-1 new-statements))
+      (is (find-statement-in-list statement-new-2 new-statements))
+      (is (nil? (find-statement-in-list statement-1 new-statements)))
+      (is (nil? (find-statement-in-list statement-2 new-statements)))
+      (is (nil? (find-statement-in-list statement-3 new-statements))))))

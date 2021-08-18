@@ -5,7 +5,7 @@
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
-(def ^:private registered-user-public-pattern
+(def registered-user-public-pattern
   "Small version of a user to show only necessary information."
   [:db/id
    :user.registered/keycloak-id
@@ -156,12 +156,14 @@
         (update-user-info identity existing-user)
         (update-groups id groups)
         (update-visited-schnaqs id visited-schnaqs)
-        (update-visited-statements id visited-statements)
+        (when-not (nil? visited-statements)
+          (update-visited-statements id visited-statements))
         [false existing-user])
       (let [new-user-from-db (-> @(transact [(clean-db-vals new-user)])
                                  (get-in [:tempids temp-id])
                                  (fast-pull registered-user-public-pattern))]
-        (update-visited-statements (:db/id new-user-from-db) visited-statements)
+        (when-not (nil? visited-statements)
+          (update-visited-statements (:db/id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
 
 (>defn- update-user-field
