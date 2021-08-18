@@ -1,9 +1,8 @@
 @use 'rounded' as rounded;
-@use 'variables' as vars;
 
 .panel-white {
   @include rounded.rounded-1;
-  background: vars.$white;
+  background: $white;
   overflow: hidden;
   padding: 1rem;
 
@@ -14,12 +13,12 @@
 
 .panel-grey {
   @extend .panel-white;
-  background: vars.$input-background;
+  background: $input-background;
 }
 
 .animation-background {
   @include rounded.rounded-3;
-  box-shadow: vars.$wide-shadow;
+  box-shadow: $wide-shadow;
   overflow: hidden;
 
   @include media-breakpoint-down(sm) {
@@ -28,7 +27,7 @@
 }
 
 .card-view-type {
-  color: vars.$gray-100;
+  color: $gray-100;
   margin-left: 0.1rem;
   margin-right: 0.1rem;
   padding-left: 0.1rem;
@@ -40,33 +39,33 @@
 }
 
 .card-history {
-  background: vars.$white;
+  background: $white;
   border: 0;
   border-radius: 1rem;
   overflow: hidden;
   padding: 0;
 
   &:hover {
-    background: vars.$white-shade;
+    background: $white-shade;
   }
 }
 
 .card-history-home {
-  background: vars.$white;
+  background: $white;
   border: 0;
   border-radius: 1rem;
-  color: vars.$gray-700;
+  color: $gray-700;
   min-height: 4.5rem;
   overflow: hidden;
   padding: 1.5rem 1rem;
 
   &:hover {
-    background: vars.$white-shade;
+    background: $white-shade;
   }
 }
 
 .line-divider {
-  background: vars.$gray-200;
+  background: $gray-200;
   margin-left: auto;
   margin-right: auto;
   min-height: 0.01rem;
@@ -74,13 +73,13 @@
 }
 
 .discussion-light-background {
-  background: vars.$white;
-  color: vars.$gray-900;
+  background: $white;
+  color: $gray-900;
   white-space: pre-line;
 }
 
 .discussion-input-content {
-  background: vars.$gray-100;
+  background: $gray-100;
   border: 0;
   min-height: 8rem;
   padding: 1rem 1rem 1rem 0;
@@ -89,11 +88,11 @@
 .primary-icon-button {
   background: transparent;
   border: 0;
-  color: vars.$primary;
+  color: $primary;
   outline: none;
 
   &:hover {
-    color: vars.$primary-selected;
+    color: $primary-selected;
   }
 
   &:focus {
@@ -110,30 +109,30 @@
   &:focus {
     background: transparent;
     box-shadow: none;
-    color: vars.$gray-900;
+    color: $gray-900;
   }
 
   &::placeholder {
     background: transparent;
-    color: vars.$gray-600;
+    color: $gray-600;
   }
 }
 
 .mobile-attitude-support {
   @include media-breakpoint-down(sm) {
-    background: vars.$primary;
+    background: $primary;
   }
 }
 
 .mobile-attitude-attack {
   @include media-breakpoint-down(sm) {
-    background: vars.$secondary;
+    background: $secondary;
   }
 }
 
 .mobile-attitude-neutral {
   @include media-breakpoint-down(sm) {
-    background: vars.$gray-300;
+    background: $gray-300;
   }
 }
 
@@ -161,22 +160,22 @@
 
 .highlight-card-neutral {
   @extend .highlight-card;
-  background: vars.$gray-300;
+  background: $neutral;
 }
 
 .highlight-card-support {
   @extend .highlight-card;
-  background: vars.$primary;
+  background: $positive;
 }
 
 .highlight-card-attack {
   @extend .highlight-card;
-  background: vars.$secondary;
+  background: $negative;
 }
 
 .search-bar {
   @include rounded.rounded-1;
-  background: vars.$white;
+  background: $white;
   min-width: 200px;
 }
 
