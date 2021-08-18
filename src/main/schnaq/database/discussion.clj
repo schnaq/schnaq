@@ -10,8 +10,7 @@
             [schnaq.database.user :as user-db]
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
-            [taoensso.timbre :as log]
-            [schnaq.database.main :as db])
+            [taoensso.timbre :as log])
   (:import (java.util UUID Date)))
 
 (def statement-pattern
@@ -345,7 +344,7 @@
   [keycloak-id discussion-hash]
   (let [all-statements (all-statements discussion-hash)
         seen-statements (-> (user-db/seen-statements-id keycloak-id discussion-hash)
-                            (db/fast-pull user-db/seen-statements-pattern)
+                            (main-db/fast-pull user-db/seen-statements-pattern)
                             :seen-statements/visited-statements)]
     (remove (fn [statement] (true? (some #(= (:db/id %) (:db/id statement))
                                          seen-statements))) all-statements)))
