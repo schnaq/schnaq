@@ -184,8 +184,7 @@
                   :user.registered/first-name given_name
                   :user.registered/last-name family_name
                   :user.registered/groups groups
-                  :user.registered/visited-schnaqs visited-schnaqs
-                  :user.registered/visited-statement-ids visited-statements}]
+                  :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       (do
         (update-user-info identity existing-user)
