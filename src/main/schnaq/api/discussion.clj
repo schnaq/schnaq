@@ -52,7 +52,7 @@
          statements)))
 
 (defn- with-new-post-info
-  "Add sub-discussion-info whether or not a user has seen this post already or not."
+  "Add sub-discussion-info whether or not a user has seen this post already."
   [statements share-hash user-identity]
   (let [seen-id (user-db/seen-statements-id user-identity share-hash)
         known-statements (:seen-statements/visited-statements (db/fast-pull seen-id user-db/seen-statements-pattern))]
