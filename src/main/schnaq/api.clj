@@ -77,6 +77,10 @@
 
   The header should look like this: `Authorization: Token <your token>`. Configure your JWT token in by using the \"Authorize\"-Button.
 
+  ## CSRF
+
+  A special header needs to be set for POST, PUT and DELETE to work. Use the Authorize button and give it any value.
+
   ## Content Negotiation
   You can choose the format of your response by specifying the corresponding header. `json`, `edn`, `transit+json` and `transit+msgpack` are currently supported. For example:
   `curl https://api.staging.schnaq.com/ping -H \"Accept: application/edn\"`")
