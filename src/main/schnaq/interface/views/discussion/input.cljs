@@ -75,7 +75,7 @@
         [:div.input-group-prepend.mt-1
          [statement-type-choose-button [:form/statement-type] [:form/statement-type!]]])
       [:div.input-group-append
-       [:button.btn.btn-dark.shadow-sm.ml-2.mt-1.py-2
+       [:button.btn.btn-dark-highlight.shadow-sm.ml-2.mt-1.py-2
         {:type "submit" :title (labels :discussion/create-argument-action)}
         [:div.d-flex.flex-row
          [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]

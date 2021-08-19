@@ -124,7 +124,7 @@
        [:span (labels :schnaq.create/info)]]
       [create-schnaq-options]
       [:div.row.px-1.py-3
-       [:button.btn.btn-dark.p-3.rounded-1.ml-auto
+       [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
         (labels :schnaq.create.button/save)
         [:i.ml-2 {:class (str "fa " (fa :arrow-right))}]]]]
      [how-to-elements/quick-how-to-create]]]])

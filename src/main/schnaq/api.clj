@@ -16,9 +16,7 @@
             [reitit.spec :as rs]
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
-            [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.middleware.session :refer [wrap-session]]
             [ring.util.http-response :refer [forbidden]]
             [schnaq.api.analytics :refer [analytics-routes]]
             [schnaq.api.common :refer [other-routes]]
@@ -65,7 +63,8 @@
   (log/info (format "Summy URL: %s" summy-config/base-url))
   (log/info (format "Frontend URL: %s, host: %s" config/frontend-url config/frontend-host))
   (log/info (if (:sender-password config/email) "E-Mail configured" "E-Mail not configured"))
-  (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm)))
+  (log/info (format "[Keycloak] Server: %s, Realm: %s" keycloak-config/server keycloak-config/realm))
+  (log/info "All systems ready to go"))
 
 (def ^:private description
   "This is the main Backend for schnaq.
@@ -77,6 +76,10 @@
   Many routes require authentication. To authenticate you against the backend, grab a JWT token from the authorized Keycloak instance and put in in your header. Or use the `Authorize`-Button on the right side. Use `swagger` as your client_id.
 
   The header should look like this: `Authorization: Token <your token>`. Configure your JWT token in by using the \"Authorize\"-Button.
+
+  ## CSRF
+
+  A special header needs to be set for POST, PUT and DELETE to work. Use the Authorize button and give it any value.
 
   ## Content Negotiation
   You can choose the format of your response by specifying the corresponding header. `json`, `edn`, `transit+json` and `transit+msgpack` are currently supported. For example:
@@ -105,8 +108,15 @@
                                                         :flow "implicit"
                                                         :name "Authorization"
                                                         :description "Use `swagger` as the client-id."
-                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}}
-                       :security [{:keycloak []}]}
+                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}
+                                             :schnaq-csrf-header {:type "apiKey"
+                                                                  :in "header"
+                                                                  :name "X-Schnaq-CSRF"
+                                                                  :description "Use any value, the header needs to be set, thats it."
+                                                                  :example "Elephants like security"
+                                                                  :default "Phanty"}}
+                       :security [{:keycloak []
+                                   :schnaq-csrf-header []}]}
              :handler (swagger/create-swagger-handler)}}]]
     {:exception pretty/exception
      :validate rrs/validate
@@ -177,15 +187,9 @@
     (reset! current-server
             (server/run-server
               (-> #'app
-                  (wrap-anti-forgery)
-                  (wrap-session {:cookie-attrs {:max-age 3600
-                                                :same-site :lax
-                                                :secure (if shared-config/production? true false)
-                                                }})
                   (wrap-custom-schnaq-csrf-header)
                   (wrap-cors :access-control-allow-origin allowed-origins'
-                             :access-control-allow-methods allowed-http-verbs
-                             :access-control-allow-credentials "true"))
+                             :access-control-allow-methods allowed-http-verbs))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
     (log/info (format "Allowed Origin: %s" allowed-origins'))))

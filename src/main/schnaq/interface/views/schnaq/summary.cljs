@@ -20,7 +20,7 @@
                       :requested (labels :summary.user.requested/label)
                       (labels :summary.user.not-requested/label))]
     [:section.d-block.text-center
-     [:button.btn.btn-dark
+     [:button.btn.btn-dark-highlight
       (if request-status
         {:disabled true}
         {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
