@@ -2,7 +2,6 @@
   "Discussion related functions interacting with the database."
   (:require [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
-            [datomic.api :as d]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.database.main :refer [transact query fast-pull] :as main-db]
@@ -11,7 +10,8 @@
             [schnaq.toolbelt :as toolbelt]
             [schnaq.user :as user]
             [taoensso.timbre :as log])
-  (:import (java.util UUID Date)))
+  (:import (com.datomic.lucene.queryParser QueryParser)
+           (java.util UUID Date)))
 
 (def statement-pattern
   "Representation of a statement. Oftentimes used in a Datalog pull pattern."
@@ -270,7 +270,7 @@
         db-after (:db-after result)
         new-child-id (get-in result [:tempids (str "new-child-" reacting-string)])]
     (toolbelt/pull-key-up
-      (d/pull db-after statement-pattern-with-secret new-child-id)
+      (fast-pull new-child-id statement-pattern-with-secret db-after)
       :db/ident)))
 
 (>defn new-discussion
@@ -423,14 +423,15 @@
   "Searches the content of statements in a discussion and returns the corresponding statements."
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-  (->
-    (query '[:find [(pull ?statements statement-pattern) ...]
-             :in $ statement-pattern ?share-hash ?search-string
-             :where [?discussion :discussion/share-hash ?share-hash]
-             [?statements :statement/discussions ?discussion]
-             [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
-           statement-pattern share-hash search-string)
-    (toolbelt/pull-key-up :db/ident)))
+  (let [safe-search-string (QueryParser/escape search-string)]
+    (->
+      (query '[:find [(pull ?statements statement-pattern) ...]
+               :in $ statement-pattern ?share-hash ?search-string
+               :where [?discussion :discussion/share-hash ?share-hash]
+               [?statements :statement/discussions ?discussion]
+               [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
+             statement-pattern share-hash safe-search-string)
+      (toolbelt/pull-key-up :db/ident))))
 
 (def ^:private summary-pattern
   [:db/id
