@@ -7,7 +7,7 @@
             [schnaq.database.user :as user-db]
             [schnaq.emails :as emails]
             [taoensso.timbre :as log])
-  (:import (java.time LocalTime ZonedDateTime ZoneId Period Instant Duration)))
+  (:import (java.time LocalTime ZonedDateTime ZoneId Period)))
 
 (defonce mail-update-schedule (atom nil))
 
@@ -95,49 +95,3 @@
     (log/info "Closing mail schedule")
     (.close @mail-update-schedule)
     (reset! mail-update-schedule nil)))
-
-
-(comment
-  (def user-id-mike "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4")
-  (def user-mike (fast-pull [:user.registered/keycloak-id user-id-mike]
-                            user-db/registered-private-user-pattern))
-  (send-schnaq-diffs user-id-mike)
-
-  (-> (chime-core/periodic-seq (Instant/now) (Duration/ofMinutes 1))
-      rest)
-
-  (chime-core/periodic-seq (-> (LocalTime/of 17 26 0)
-                               (.adjustInto (ZonedDateTime/now (ZoneId/of "Europe/Paris")))
-                               .toInstant)
-                           (Period/ofDays 1))
-
-
-  (defn start-mail-update []
-
-    (chime-core/chime-at (chime-core/periodic-seq (Instant/now) (Duration/ofSeconds 5))
-                         (fn [_time]
-                           (println "Hello")
-                           #_(send-schnaq-diffs user-id-mike)))
-    )
-
-  (def update-mail-schedule (atom (start-mail-update)))
-
-  (.close @update-mail-schedule)
-
-
-  (let [_now (Instant/now)]
-    (chime-core/chime-at (chime-core/periodic-seq
-                           (-> (LocalTime/of 17 34 0)
-                               (.adjustInto (ZonedDateTime/now
-                                              (ZoneId/of "Europe/Paris")))
-                               .toInstant)
-                           (Period/ofDays 1))
-                         (fn [_time]
-                           (send-schnaq-diffs user-id-mike))))
-
-  (reduce + (map (fn [[_ news]] (count news))
-                 {"13e5ce43-d163-476c-9061-086074cbb829" '(1 2),
-                  "fda15139-8e33-4830-b77b-22f221937dc3" '(),
-                  "2c5ace70-8bcf-439b-9287-fffed93786ef" '()}))
-
-  )
