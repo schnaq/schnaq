@@ -93,7 +93,9 @@
                   visited-schnaqs)]
     (transact txs)))
 
-(defn seen-statements-entity [keycloak-id discussion-hash]
+(defn seen-statements-entity
+  "Returns the entity-id that a certain user / discusson combination has for seen statements."
+  [keycloak-id discussion-hash]
   (query '[:find ?seen-statement .
            :in $ ?keycloak-id ?discussion-hash
            :where [?user :user.registered/keycloak-id ?keycloak-id]
@@ -101,6 +103,20 @@
            [?seen-statement :seen-statements/visited-schnaq ?discussion]
            [?discussion :discussion/share-hash ?discussion-hash]]
          keycloak-id discussion-hash))
+
+(>defn known-statement-ids
+  "Returns known-statement ids for a user and a certain share-hash as a set."
+  [keycloak-id share-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of :db/id)]
+  (set
+    (query '[:find ?visited-statements ...
+             :in $ ?keycloak-id ?discussion-hash
+             :where [?user :user.registered/keycloak-id ?keycloak-id]
+             [?seen-statement :seen-statements/user ?user]
+             [?seen-statement :seen-statements/visited-schnaq ?discussion]
+             [?discussion :discussion/share-hash ?discussion-hash]
+             [?seen-statement :seen-statements/visited-statements ?visited-statements]]
+           keycloak-id share-hash)))
 
 (defn create-visited-statements-for-discussion [keycloak-id discussion-hash visited-statements]
   (let [queried-id (seen-statements-entity keycloak-id discussion-hash)
