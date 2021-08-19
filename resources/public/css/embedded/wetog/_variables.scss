@@ -1,7 +1,7 @@
-@use '../node_modules/@fontsource/poppins/scss/mixins' as poppins;
+@use '../../../node_modules/@fontsource/poppins/scss/mixins' as poppins;
 
 @include poppins.fontFace(
-  $fontDir: '../node_modules/@fontsource/#{poppins.$fontId}/files'
+  $fontDir: '../../../node_modules/@fontsource/#{poppins.$fontId}/files'
 );
 
 // Variables
@@ -29,27 +29,33 @@ $blue-dark: #052740 !default;
 $light-background: #eff6ff;
 $indigo: #6610f2 !default;
 $purple: #6f42c1 !default;
+$purple-light: #2a1861 !default;
+$purple-light-selected: #584afd !default;
+$dark-purple: #170051 !default;
+$dark-purple-selected: $purple-light !default;
 $pink: #e83e8c !default;
 $red: #dc3545 !default;
+$wetog-red: #ff0101 !default;
 $orange: #ff9e0d !default;
 $orange-selected: #ffc369 !default;
 $orange-pale: #ffc09e !default;
 $yellow: #ffc107 !default;
 $green: #28a745 !default;
+$wetog-green: #2cbaa0 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 
-$positive: $blue !default;
-$positive-selected: $blue-selected !default;
-$negative: $orange !default;
-$negative-selected: $orange-selected !default;
-$neutral: $gray-300 !default;
-$primary: $blue !default;
-$primary-selected: $blue-selected !default;
-$primary-light: $blue-light !default;
-$primary-light-selected: $blue-light-selected !default;
-$dark-highlight: $gray-800 !default;
-$secondary: $orange !default;
+$positive: $wetog-green !default;
+$positive-selected: $teal !default;
+$negative: $wetog-red !default;
+$negative-selected: $red !default;
+$neutral: $dark-purple !default;
+$primary: $dark-purple !default;
+$primary-selected: $dark-purple-selected !default;
+$primary-light: $purple-light !default;
+$primary-light-selected: $purple-light-selected !default;
+$dark-highlight: $primary !default;
+$secondary: $wetog-green !default;
 $secondary-selected: $orange-selected !default;
 $secondary-pale: $orange-pale !default;
 $success: $green !default;

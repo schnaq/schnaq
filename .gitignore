@@ -66,6 +66,8 @@ resources/public/js/compiled/
 ## Generated css
 resources/public/css/main.css*
 resources/public/css/main.min.css*
+resources/public/css/wetog_main.css*
+resources/public/css/wetog_main.min.css*
 resources/public/css/.sass-cache
 
 yarn-error.log

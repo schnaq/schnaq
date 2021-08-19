@@ -45,7 +45,7 @@
 (defn graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-dark.shadow-sm.rounded-1.h-100
+  [:button.btn.btn-sm.btn-dark-highlight.shadow-sm.rounded-1.h-100
    {:on-click #(rf/dispatch
                  [:navigation/navigate :routes/graph-view
                   {:share-hash share-hash}])}
@@ -58,7 +58,7 @@
   "Button to navigate to the summary view."
   [share-hash]
   [:a {:href (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})}
-   [:button.btn.btn-sm.btn-dark.shadow-sm.mx-auto.rounded-1.h-100
+   [:button.btn.btn-sm.btn-dark-highlight.shadow-sm.mx-auto.rounded-1.h-100
     [:img.img-fluid
      {:src (img-path :icon-summary)
       :width "25"

@@ -170,6 +170,7 @@ build-wetog-frontend-image:
       --build-arg KEYCLOAK_CLIENT=$KEYCLOAK_CLIENT
       --build-arg DATOMIC_REPO_USERNAME
       --build-arg DATOMIC_REPO_PASSWORD
+      --build-arg EMBEDDED=true
       -t $CI_REGISTRY_IMAGE/frontend/wetog .
     - docker tag $CI_REGISTRY_IMAGE/frontend/wetog $CI_REGISTRY_IMAGE/frontend/wetog:$CI_PIPELINE_IID
     - docker push $CI_REGISTRY_IMAGE/frontend/wetog

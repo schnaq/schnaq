@@ -17,6 +17,7 @@ ARG REST_API_URL
 ARG BUILD_HASH
 ARG KEYCLOAK_CLIENT
 ARG KEYCLOAK_REALM
+ARG EMBEDDED
 
 RUN apk add yarn
 RUN yarn global add sass
@@ -29,6 +30,10 @@ RUN yarn install
 
 COPY . .
 
+RUN if [[ -z "$EMBEDDED" ]] ; \
+  then sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed ; \
+  else sass ./resources/public/css/wetog_main.scss ./resources/public/css/wetog_main.min.css --no-source-map --style compressed ; \
+  fi
 RUN sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
 RUN yarn shadow-cljs release app
 

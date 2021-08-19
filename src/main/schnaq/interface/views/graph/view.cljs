@@ -22,14 +22,14 @@
   [:graph/nodes :ret :graph/nodes]
   (map
     #(let [color (case (:type %)
-                   :statement.type/starting (colors :blue/light)
-                   :statement.type/support (colors :blue/default)
-                   :statement.type/attack (colors :orange/default)
-                   :statement.type/neutral (colors :gray/medium)
+                   :statement.type/starting (colors :neutral/dark)
+                   :statement.type/support (colors :positive/default)
+                   :statement.type/attack (colors :negative/default)
+                   :statement.type/neutral (colors :neutral/medium)
                    :agenda (colors :white)
-                   (colors :blue/default))
+                   (colors :positive/default))
            border-color (case (:type %)
-                          :agenda (colors :gray/medium)
+                          :agenda (colors :neutral/medium)
                           color)]
        (assoc % :color {:background color
                         :highlight {:background color}
@@ -58,7 +58,7 @@
   [:graph/nodes :ret :graph/nodes]
   (map
     #(let [text-color (case (:type %)
-                        :agenda (colors :gray/dark)
+                        :agenda (colors :neutral/dark)
                         (colors :white))]
        (merge % {:shape "box"
                  :shapeProperties {:borderRadius 12}

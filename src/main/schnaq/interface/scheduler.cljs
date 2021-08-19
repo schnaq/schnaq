@@ -11,18 +11,6 @@
     (assoc-in db [:scheduler :after/login]
               (conj (get-in db [:scheduler :after/login] []) event))))
 
-(rf/reg-event-db
-  ;; Add events which shall be loaded after the csrf token has been fetched.
-  ;; Add events as vectors: [:feedbacks/fetch] or [:event/name parameter]
-  :scheduler.after/csrf
-  (fn [db [_ event]]
-    (update-in db [:scheduler :after/csrf] (comp vec conj) event)))
-
-(rf/reg-event-fx
-  :scheduler.execute/after-csrf
-  (fn [{:keys [db]} _]
-    {:fx (mapv #(vector :dispatch %) (get-in db [:scheduler :after/csrf] []))}))
-
 (rf/reg-event-fx
   :scheduler.execute/after-login
   (fn [{:keys [db]} [_ _]]
