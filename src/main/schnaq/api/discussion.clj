@@ -55,10 +55,12 @@
   "Add sub-discussion-info whether or not a user has seen this post already."
   [statements share-hash user-identity]
   (let [seen-id (user-db/seen-statements-id user-identity share-hash)
-        known-statements (:seen-statements/visited-statements (db/fast-pull seen-id user-db/seen-statements-pattern))]
-    (map (fn [statement]
-           (assoc statement :meta/new (nil? (some #(= (:db/id statement) (:db/id %)) known-statements))))
-         statements)))
+        known-statements (-> seen-id
+                             (db/fast-pull user-db/seen-statements-pattern)
+                             (toolbelt/pull-key-up :db/id)
+                             :seen-statements/visited-statements
+                             set)]
+    (map #(assoc % :meta/new (contains? known-statements (:db/id %))) statements)))
 
 (defn- update-new-posts!
   "Adds a seen flag to the statements data and updates the :seen-statements afterwards."
