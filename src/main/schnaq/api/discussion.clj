@@ -54,8 +54,7 @@
 (defn- with-new-post-info
   "Add sub-discussion-info whether or not a user has seen this post already."
   [statements share-hash user-identity]
-  (let [seen-id (user-db/seen-statements-id user-identity share-hash)
-        known-statements (-> seen-id
+  (let [known-statements (-> (user-db/seen-statements-entity user-identity share-hash)
                              (db/fast-pull user-db/seen-statements-pattern)
                              (toolbelt/pull-key-up :db/id)
                              :seen-statements/visited-statements

@@ -39,10 +39,10 @@
       (testing (str "Add visited statements to user [" user-name "] and discussion [" discussion-name "]")
         (user-db/create-visited-statements-for-discussion keycloak-user-id share-hash statements)
         ;; check if seen statements can be retrieved
-        (is (user-db/seen-statements-id keycloak-user-id share-hash))
+        (is (user-db/seen-statements-entity keycloak-user-id share-hash))
         ;; check if content is correct
         (let [queried-visited (:seen-statements/visited-statements
-                                (fast-pull (user-db/seen-statements-id keycloak-user-id share-hash)
+                                (fast-pull (user-db/seen-statements-entity keycloak-user-id share-hash)
                                            user-db/seen-statements-pattern))]
           (is (= (count statements) (count queried-visited)))
           (is (some #(= statement-1 (:db/id %)) queried-visited))

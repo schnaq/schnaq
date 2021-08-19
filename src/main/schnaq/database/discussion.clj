@@ -343,7 +343,7 @@
   "Retrieve new statements of a discussion for a user"
   [keycloak-id discussion-hash]
   (let [all-statements (all-statements discussion-hash)
-        seen-statements (-> (user-db/seen-statements-id keycloak-id discussion-hash)
+        seen-statements (-> (user-db/seen-statements-entity keycloak-id discussion-hash)
                             (main-db/fast-pull user-db/seen-statements-pattern)
                             :seen-statements/visited-statements)]
     (remove (fn [statement] (true? (some #(= (:db/id %) (:db/id statement))

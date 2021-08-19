@@ -93,7 +93,7 @@
                   visited-schnaqs)]
     (transact txs)))
 
-(defn seen-statements-id [keycloak-id discussion-hash]
+(defn seen-statements-entity [keycloak-id discussion-hash]
   (query '[:find ?seen-statement .
            :in $ ?keycloak-id ?discussion-hash
            :where [?user :user.registered/keycloak-id ?keycloak-id]
@@ -103,7 +103,7 @@
          keycloak-id discussion-hash))
 
 (defn create-visited-statements-for-discussion [keycloak-id discussion-hash visited-statements]
-  (let [queried-id (seen-statements-id keycloak-id discussion-hash)
+  (let [queried-id (seen-statements-entity keycloak-id discussion-hash)
         temp-id (or queried-id (str "seen-statements-" keycloak-id "-" discussion-hash))
         new-visited {:db/id temp-id
                      :seen-statements/user [:user.registered/keycloak-id keycloak-id]
