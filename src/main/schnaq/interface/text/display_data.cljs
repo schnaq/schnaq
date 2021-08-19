@@ -509,9 +509,11 @@
         [:<>
          [:p
           "schnaq (not founded)" [:br]
-          "represented by Christian Meter" [:br]
-          "Am Hagen 6" [:br]
-          "42855 Remscheid" [:br]
+          "represented by Christian Meter, Alexander Schneider and Michael Birkhoff" [:br]
+          "Speditionsstraße 15A" [:br]
+          "STARTPLATZ" [:br]
+          "40221 Düsseldorf" [:br]
+          "Germany" [:br]
           (toolbelt/obfuscate-mail "info@schnaq.com")]
          [:p "Legally binding is the German version of this page."]]
 
@@ -1509,9 +1511,10 @@ Now we write down questions and discuss them and can still understand what we ha
         [:<>
          [:p
           "schnaq (nicht gegründet)" [:br]
-          "vertreten durch Christian Meter" [:br]
-          "Am Hagen 6" [:br]
-          "42855 Remscheid" [:br]
+          "vertreten durch Christian Meter, Alexander Schneider und Michael Birkhoff" [:br]
+          "Speditionsstraße 15A" [:br]
+          "STARTPLATZ" [:br]
+          "40221 Düsseldorf" [:br]
           (toolbelt/obfuscate-mail "info@schnaq.com")]
          [:p "Rechtlich bindend ist die deutsche Fassung dieser Seite."]]
 
