@@ -77,6 +77,10 @@
 
   The header should look like this: `Authorization: Token <your token>`. Configure your JWT token in by using the \"Authorize\"-Button.
 
+  ## CSRF
+
+  A special header needs to be set for POST, PUT and DELETE to work. Use the Authorize button and give it any value.
+
   ## Content Negotiation
   You can choose the format of your response by specifying the corresponding header. `json`, `edn`, `transit+json` and `transit+msgpack` are currently supported. For example:
   `curl https://api.staging.schnaq.com/ping -H \"Accept: application/edn\"`")
@@ -104,8 +108,15 @@
                                                         :flow "implicit"
                                                         :name "Authorization"
                                                         :description "Use `swagger` as the client-id."
-                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}}
-                       :security [{:keycloak []}]}
+                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}
+                                             :schnaq-csrf-header {:type "apiKey"
+                                                                  :in "header"
+                                                                  :name "X-Schnaq-CSRF"
+                                                                  :description "Use any value, the header needs to be set, thats it."
+                                                                  :example "Elephants like security"
+                                                                  :default "Phanty"}}
+                       :security [{:keycloak []
+                                   :schnaq-csrf-header []}]}
              :handler (swagger/create-swagger-handler)}}]]
     {:exception pretty/exception
      :validate rrs/validate
