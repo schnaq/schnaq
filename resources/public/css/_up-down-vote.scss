@@ -40,17 +40,17 @@
 }
 
 .up-vote {
-  color: $primary;
+  color: $positive;
 }
 
 .up-vote:hover {
-  color: $primary-selected;
+  color: $positive-selected;
 }
 
 .down-vote {
-  color: $secondary;
+  color: $negative;
 }
 
 .down-vote:hover {
-  color: $secondary-selected;
+  color: $negative-selected;
 }

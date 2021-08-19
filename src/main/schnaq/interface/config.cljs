@@ -54,10 +54,3 @@
 
 (def marketing-num-schnaqs 430)
 (def marketing-num-statements 2850)
-
-;; -----------------------------------------------------------------------------
-;; Donut chart settings
-
-(def upvote-color "#1292ee")
-(def downvote-color "#ff772d")
-(def neutral-color "#dee2e6")

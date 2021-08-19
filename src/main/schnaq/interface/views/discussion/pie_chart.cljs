@@ -2,7 +2,7 @@
   (:require ["chart.js"]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [schnaq.interface.config :as config]))
+            [schnaq.interface.text.display-data :refer [colors]]))
 
 
 (defn create-vote-chart-data
@@ -15,9 +15,9 @@
      :options {:events [] :responsive true}
      :data {:datasets [{:label "Pie Chart Data",
                         :data [neutral-votes, up-votes, down-votes]
-                        :backgroundColor [config/neutral-color
-                                          config/upvote-color
-                                          config/downvote-color]
+                        :backgroundColor [(:neutral/medium colors)
+                                          (:positive/default colors)
+                                          (:negative/default colors)]
                         :hoverOffset 4
                         :cutout "70%"}]}}))
 

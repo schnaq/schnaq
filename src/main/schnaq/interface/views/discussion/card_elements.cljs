@@ -34,7 +34,7 @@
         back-history [:discussion.history/time-travel steps-back]
         navigation (if (or is-search-view? has-history?) back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
-    [:button.btn.btn-dark.w-100.h-100.p-3
+    [:button.btn.btn-dark-highlight.w-100.h-100.p-3
      {:on-click #(rf/dispatch navigation)}
      [tooltip/block-element
       :bottom

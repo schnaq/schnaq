@@ -1,4 +1,4 @@
-@use 'variables' as vars;
+@import 'variables';
 
 // Additional colors. Defaults are primary, secondary, ... and here you can add
 // your own color styles.
@@ -6,8 +6,9 @@
 // I.e.: If you add the key "indigo" to this map, there will also be btn-indigo
 // etc. available for use.
 $theme-colors: (
-  'white': vars.$white,
-  'dark-blue': vars.$blue-dark
+  'white': $white,
+  'dark-blue': $blue-dark,
+  'dark-highlight': $dark-highlight
 );
 
 $grid-breakpoints: (
@@ -27,38 +28,38 @@ $grid-breakpoints: (
 
 .btn-outline-white {
   a {
-    color: vars.$white;
+    color: $white;
   }
 
   &:hover a {
-    color: vars.$black;
+    color: $black;
   }
 }
 
 .btn-white {
   a {
-    color: vars.$black;
+    color: $black;
   }
 
   &:hover a {
-    color: vars.$black;
+    color: $black;
   }
 }
 
 .navbar-primary {
-  background: vars.$primary;
-  color: vars.$text-light;
+  background: $primary;
+  color: $text-light;
 }
 
 .navbar-transparent {
   @extend .navbar-dark;
 
   .nav-link {
-    color: vars.$gray-200 !important;
+    color: $gray-200 !important;
   }
 
   .nav-link:hover {
-    color: vars.$white !important;
+    color: $white !important;
   }
 }
 
