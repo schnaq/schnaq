@@ -545,7 +545,6 @@
         :about-us.team/alexander "Co-Founder - Operational Management"
         :about-us.team/christian "Co-Founder - Technical Management"
         :about-us.team/mike "Co-Founder - Product Design Management"
-        :about-us.team/philip "Co-Founder - Chief of Customer Success"
 
         :about-us.page/heading "About Us"
         :about-us.page/subheading "Information about us"
@@ -1546,7 +1545,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :about-us.team/alexander "Co-Gründer - Operative Führung"
         :about-us.team/christian "Co-Gründer - Technische Führung"
         :about-us.team/mike "Co-Gründer - Führung Produktdesign"
-        :about-us.team/philip "Co-Gründer - Chief of Customer Success"
 
         :about-us.page/heading "Über uns"
         :about-us.page/subheading "Informationen zu uns"
@@ -2087,7 +2085,6 @@ Now we write down questions and discuss them and can still understand what we ha
      :team/vision-mindmap-team "https://s3.disqtec.com/team/vision_mindmap_team.jpg"
      :team/christian "https://s3.disqtec.com/team/christianmeter.jpg"
      :team/mike "https://s3.disqtec.com/team/michaelbirkhoff.jpg"
-     :team/philip "https://s3.disqtec.com/team/philipbernardy.jpg"
      :value/book "https://s3.disqtec.com/schnaq-common/icons/value/book.svg"
      :value/bubble "https://s3.disqtec.com/schnaq-common/icons/value/bubble.svg"
      :value/cards "https://s3.disqtec.com/schnaq-common/icons/value/cards.svg"
