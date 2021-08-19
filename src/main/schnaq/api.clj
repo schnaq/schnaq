@@ -37,6 +37,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.config.summy :as summy-config]
             [schnaq.core :as schnaq-core]
+            [schnaq.mail-updates-to-user :as mail-updates-to-user]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:gen-class))
@@ -48,6 +49,7 @@
 (defonce current-server (atom nil))
 
 (defn- stop-server []
+  (mail-updates-to-user/stop-mail-update-schedule)
   (when-not (nil? @current-server)
     ;; graceful shutdown: wait 100ms for existing requests to be finished
     ;; :timeout is optional, when no timeout, stop immediately
@@ -188,7 +190,8 @@
                              :access-control-allow-credentials "true"))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
-    (log/info (format "Allowed Origin: %s" allowed-origins'))))
+    (log/info (format "Allowed Origin: %s" allowed-origins'))
+    (mail-updates-to-user/start-mail-update-schedule)))
 
 (comment
   "Start the server from here"

@@ -75,6 +75,7 @@
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-handler-proxy:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Deps: keycloak-clojure:1.17.2" level="project" />
+    <orderEntry type="library" name="Deps: jarohen/chime:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.common/wildfly-common:1.5.2.Final" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-admin-client:11.0.2" level="project" />

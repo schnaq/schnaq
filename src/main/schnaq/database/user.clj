@@ -205,3 +205,10 @@
       :in $ ?email registered-user-public-pattern
       :where [?user :user.registered/email ?email]]
     user-email registered-user-public-pattern))
+
+(defn all-registered-users
+  "Returns all registered users' keycloak ids"
+  []
+  (query
+    '[:find ?keycloak-id
+      :where [_ :user.registered/keycloak-id ?keycloak-id]]))
