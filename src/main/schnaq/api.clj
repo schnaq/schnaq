@@ -104,8 +104,15 @@
                                                         :flow "implicit"
                                                         :name "Authorization"
                                                         :description "Use `swagger` as the client-id."
-                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}}
-                       :security [{:keycloak []}]}
+                                                        :authorizationUrl (format "%s" keycloak-config/openid-endpoint)}
+                                             :schnaq-csrf-header {:type "apiKey"
+                                                                  :in "header"
+                                                                  :name "X-Schnaq-CSRF"
+                                                                  :description "Use any value, the header needs to be set, thats it."
+                                                                  :example "Elephants like security"
+                                                                  :default "Phanty"}}
+                       :security [{:keycloak []
+                                   :schnaq-csrf-header []}]}
              :handler (swagger/create-swagger-handler)}}]]
     {:exception pretty/exception
      :validate rrs/validate
