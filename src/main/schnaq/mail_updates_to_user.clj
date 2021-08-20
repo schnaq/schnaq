@@ -1,6 +1,7 @@
 (ns schnaq.mail-updates-to-user
   (:require [chime.core :as chime-core]
             [hiccup.core :refer [html]]
+            [hiccup.util :as hiccup-util]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
@@ -26,7 +27,7 @@
   (let [title (:discussion/title discussion)
         share-hash (:discussion/share-hash discussion)
         link (str config/frontend-url "/schnaq/" share-hash)]
-    (html [:a {:href link} title])))
+    (html [:a {:href link} (hiccup-util/escape-html title)])))
 
 (defn- build-new-statements-content [new-statements-per-schnaq]
   (reduce
@@ -46,7 +47,7 @@
   (let [user (fast-pull [:user.registered/keycloak-id user-keycloak-id]
                         user-db/registered-user-public-pattern)]
     (html [:div [:h1 "Neuigkeiten aus deinen schnaqs"]
-           [:h4 "Hallo " (:user.registered/display-name user) ", "
+           [:h4 "Hallo " (hiccup-util/escape-html (:user.registered/display-name user)) ", "
             "es gibt neue Beiträge in deinen besuchten schnaqs!"]])))
 
 (defn- send-schnaq-diffs [user-keycloak-id]
