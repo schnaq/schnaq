@@ -109,7 +109,7 @@
   [keycloak-id share-hash]
   [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of :db/id)]
   (set
-    (query '[:find ?visited-statements ...
+    (query '[:find [?visited-statements ...]
              :in $ ?keycloak-id ?discussion-hash
              :where [?user :user.registered/keycloak-id ?keycloak-id]
              [?seen-statement :seen-statements/user ?user]
