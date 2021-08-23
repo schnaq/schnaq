@@ -116,7 +116,7 @@
     [:div
      [:div.flex-fill
       [:img.img-fluid.mb-2.shadow {:src (img-path :founders-note)}]]
-     [:p [:strong "– Alexander, Christian, Michael und Philip"]]]
+     [:p [:strong "– Alexander, Christian und Michael"]]]
     [:div.flex-fill
      [:img.img-fluid.shadow.w-75 {:src (img-path :team/sitting-on-couches)}]]]])
 

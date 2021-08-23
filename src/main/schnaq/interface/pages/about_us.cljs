@@ -70,9 +70,7 @@
     [:div.col
      [person-card :team/christian "Dr. Christian Meter" (labels :about-us.team/christian)]]
     [:div.col
-     [person-card :team/mike "Michael Birkhoff" (labels :about-us.team/mike)]]
-    [:div.col
-     [person-card :team/philip "Philip Bernardy" (labels :about-us.team/philip)]]]])
+     [person-card :team/mike "Michael Birkhoff" (labels :about-us.team/mike)]]]])
 
 
 ;; ----------------------------------------------------------------------------
