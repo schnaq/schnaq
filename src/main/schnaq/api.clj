@@ -157,6 +157,7 @@
 
 (def allowed-origins
   (->> ["schnaq.com" "schnaq.de" config/frontend-host]
+       (concat config/additional-cors)
        (remove empty?)
        (mapv toolbelt/build-allowed-origin)
        doall))

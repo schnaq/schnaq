@@ -2,6 +2,7 @@
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
   (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [schnaq.config.shared :as shared-config]
             [schnaq.config.summy :as summy-config]))
 
@@ -16,6 +17,12 @@
     (if (or (= 80 port) (= 443 port) (= -1 port))           ;; .getPort returns -1 if no port is explicitly configured, e.g. at https://schnaq.com
       host
       (format "%s:%d" host port))))
+
+(def additional-cors
+  "Define additional allowed origins for CORS. (ONLY USE ONES THAT ARE TRUSTED)"
+  (str/split
+    (or (System/getenv "ADDITIONAL_CORS_ORIGINS") "")
+    #","))
 
 (def app-codes
   "Set of registered app-codes. Currently hard-coded, maybe dynamic in the future."
