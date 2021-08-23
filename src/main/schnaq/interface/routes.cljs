@@ -174,13 +174,14 @@
        :link-text (labels :router/dashboard)
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}]
+                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
+                               (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
      ["/summary"
       {:name :routes.schnaq/summary
        :view summary/public-user-view
        :controllers [{:parameters {:path [:share-hash]}
                       :start (fn [{:keys [path]}]
-                               (rf/dispatch [:scheduler.after/login [:schnaq.summary/load (:share-hash path)]]))}]}]
+                               (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
      ["/manage/:edit-hash"
       {:name :routes.schnaq/admin-center
        :view discussion-admin/admin-center-view
