@@ -180,7 +180,7 @@
       {:name :routes.schnaq/summary
        :view summary/public-user-view
        :controllers [{:parameters {:path [:share-hash]}
-                      :start (fn [{:keys [path]}]
+                      :start (fn []
                                (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
      ["/manage/:edit-hash"
       {:name :routes.schnaq/admin-center
