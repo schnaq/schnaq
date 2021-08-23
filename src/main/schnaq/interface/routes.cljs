@@ -200,10 +200,12 @@
        :controllers [{:parameters {:path [:share-hash :statement-id]}
                       :start (fn []
                                (rf/dispatch [:discussion.query.statement/by-id]))
-                      :stop (fn []
-                              (rf/dispatch [:visited.statement-nums/to-localstorage])
-                              (rf/dispatch [:visited.statement-ids/to-localstorage])
-                              (rf/dispatch [:statement.edit/reset-edits]))}]}]
+                      :stop (fn [{:keys [path]}]
+                              (let [{:keys [share-hash]} path]
+                                (rf/dispatch [:visited.statement-nums/to-localstorage])
+                                (rf/dispatch [:visited.statement-ids/to-localstorage])
+                                (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend share-hash])
+                                (rf/dispatch [:statement.edit/reset-edits])))}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint

@@ -54,17 +54,9 @@
 (defn- with-new-post-info
   "Add sub-discussion-info whether or not a user has seen this post already."
   [statements share-hash user-identity]
-  (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
-    (map #(assoc % :meta/new (contains? known-statements (:db/id %))) statements)))
-
-(defn- update-new-posts!
-  "Adds a seen flag to the statements data and updates the :seen-statements afterwards."
-  [statements discussion-hash user-identity]
   (if user-identity
-    (let [statements-with-new-info (with-new-post-info statements discussion-hash user-identity)
-          statement-ids (set (map :db/id statements))]
-      (user-db/create-visited-statements-for-discussion user-identity discussion-hash statement-ids)
-      statements-with-new-info)
+    (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
+      (map #(assoc % :meta/new (not (contains? known-statements (:db/id %)))) statements))
     statements))
 
 (defn- starting-conclusions-with-processors
@@ -84,7 +76,7 @@
   (let [{:keys [share-hash]} (:query parameters)
         user-identity (:sub identity)]
     (ok {:starting-conclusions (-> (starting-conclusions-with-processors share-hash)
-                                   (update-new-posts! share-hash user-identity))})))
+                                   (with-new-post-info share-hash user-identity))})))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
@@ -113,13 +105,29 @@
       (ok (valid-statements-with-votes
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
                                     with-sub-discussion-info
-                                    (update-new-posts! share-hash user-identity)
+                                    (with-new-post-info share-hash user-identity)
                                     (toolbelt/pull-key-up :db/ident)))
              :premises (-> (discussion-db/children-for-statement statement-id)
                            with-sub-discussion-info
-                           (update-new-posts! share-hash user-identity))
+                           (with-new-post-info share-hash user-identity))
              :history (discussion-db/history-for-statement statement-id)}))
       at/not-found-hash-invalid)))
+
+(defn- update-seen-statements!
+  "Adds a seen flag to the statements data and update"
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash seen-statement-ids]} (:body parameters)
+        user-identity (:sub identity)
+        statement-ids seen-statement-ids]
+    (println "User-Id: " user-identity "\nShare-Hash: " share-hash "\nIds: " statement-ids)
+    (user-db/create-visited-statements-for-discussion
+      user-identity share-hash statement-ids)
+    (ok {:share-hash share-hash
+         :seen-statement-ids seen-statement-ids})))
+
+(user-db/create-visited-statements-for-discussion "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4"
+                                                  "fa2058db-48f4-44ed-a59c-51c7db8ab320"
+                                                  #{17592186054778})
 
 (defn- check-statement-author-and-state
   "Checks if a statement is authored by this user-identity and is valid, i.e. not deleted.
@@ -375,7 +383,16 @@
                                           :statement :statement/content
                                           :nickname ::dto/maybe-nickname}}
                       :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
-                                  403 at/response-error-body}}]]
+                                  403 at/response-error-body}}]
+    ["/update-seen" {:put update-seen-statements!
+                     :description (at/get-doc #'update-seen-statements!)
+                     :name :api.discussion.statements/update-seen
+                     :middleware [:user/authenticated?]
+                     :parameters {:body {:share-hash :discussion/share-hash
+                                         :seen-statement-ids (s/coll-of :db/id)}}
+                     :responses {200 {:body {:share-hash :discussion/share-hash
+                                             :seen-statement-ids (s/coll-of :db/id)}}
+                                 400 at/response-error-body}}]]
    ["/statement"
     ["/info" {:get get-statement-info
               :description (at/get-doc #'get-statement-info)
