@@ -39,7 +39,7 @@
     [:<>
      [:small.text-muted (labels :summary.user/last-updated) updated-at]
      [:p.p-3
-      (if-let [summary (str text)] summary "-")]
+      (or text "-")]
      [:hr.py-2]
      [summary-request-button (:discussion/share-hash schnaq)]]))
 
@@ -184,9 +184,10 @@
 
 (rf/reg-event-fx
   :schnaq.summary/load
-  (fn [{:keys [db]} [_ share-hash]]
-    {:fx [(http/xhrio-request db :get "/schnaq/summary" [:schnaq.summary.load/success share-hash]
-                              {:share-hash share-hash})]}))
+  (fn [{:keys [db]} _]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+      {:fx [(http/xhrio-request db :get "/schnaq/summary" [:schnaq.summary.load/success share-hash]
+                                {:share-hash share-hash})]})))
 
 (rf/reg-event-db
   :schnaq.summary.load/success
