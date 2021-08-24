@@ -15,11 +15,10 @@
   (reduce conj
           (map
             (fn [discussion-hash]
-              (when-not (nil? discussion-hash)
-                {discussion-hash (map #(:db/id %)
-                                      (discussion-db/new-statements-for-user
-                                        user-keycloak-id
-                                        discussion-hash))}))
+              (when discussion-hash
+                {discussion-hash (map :db/id (discussion-db/new-statements-for-user
+                                               user-keycloak-id
+                                               discussion-hash))}))
             discussion-hashes)))
 
 (defn- create-hyperlink-to-discussion [discussion]
