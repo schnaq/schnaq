@@ -1,4 +1,4 @@
-(ns schnaq.mail-updates-to-user
+(ns schnaq.notification.mail-to-user
   (:require [chime.core :as chime-core]
             [hiccup.core :refer [html]]
             [hiccup.util :as hiccup-util]
@@ -57,7 +57,7 @@
         total-new-statements (reduce + (map (fn [[_ news]] (count news)) new-statements-per-schnaq))
         new-statements-content (build-new-statements-content new-statements-per-schnaq)
         personal-greeting (build-personal-greetings user)]
-    (println total-new-statements)
+    (log/info "User" user-keycloak-id "has" total-new-statements "unread statements")
     (when-not (zero? total-new-statements)
       (emails/send-mail "Neuigkeiten aus deinen schnaqs"
                         (html [:div
