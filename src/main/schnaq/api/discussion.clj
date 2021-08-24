@@ -119,7 +119,6 @@
   (let [{:keys [share-hash seen-statement-ids]} (:body parameters)
         user-identity (:sub identity)
         statement-ids seen-statement-ids]
-    (println "User-Id: " user-identity "\nShare-Hash: " share-hash "\nIds: " statement-ids)
     (user-db/create-visited-statements-for-discussion
       user-identity share-hash statement-ids)
     (ok {:share-hash share-hash
