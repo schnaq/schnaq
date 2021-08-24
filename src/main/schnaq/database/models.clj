@@ -112,6 +112,10 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "In which discussions is this statement used?"}
+   {:db/ident :statement/labels
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/many
+    :db/doc "A label that is assigned to the statement."}
 
    ;; Statement Types
    {:db/ident :statement.type/support}

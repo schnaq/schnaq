@@ -105,6 +105,7 @@
 (s/def :statement/downvotes (s/coll-of ::user-or-reference))
 (s/def :statement/creation-secret ::non-blank-string)
 (s/def :statement/created-at inst?)
+(s/def :statement/labels (s/coll-of #{"✅" "❓" "❌" "👻" "📆" "➡️" "💬"}))
 (s/def :statement/discussions (s/or :ids (s/coll-of :db/id)
                                     :dto (s/coll-of ::dto/discussion)
                                     :discussions (s/coll-of ::discussion)))
