@@ -94,7 +94,7 @@
     (transact txs)))
 
 (defn seen-statements-entity
-  "Returns the entity-id that a certain user / discusson combination has for seen statements."
+  "Returns the entity-id that a certain user / discussion combination has for seen statements."
   [keycloak-id discussion-hash]
   (query '[:find ?seen-statement .
            :in $ ?keycloak-id ?discussion-hash
