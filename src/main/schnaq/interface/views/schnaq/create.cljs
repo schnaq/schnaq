@@ -68,30 +68,34 @@
   []
   (let [end-time (reagent/atom false)]
     (fn []
-      [:div.col-6.border-left.pl-5
-       [:h4.mb-5 (labels :discussion.progress.creation/heading)]
-       (when @end-time
-         [:div
-          [:label {:for :input-num-days-to-end} (labels :discussion.progress.creation/label)]
-          [common/form-input {:type :number
-                              :min 1
-                              :id :input-num-days-to-end
-                              :placeholder 7
-                              :defaultValue 7
-                              :required true
-                              :onChange #(reset! end-time (oget % [:currentTarget :value]))}]])
-       [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
-        {:class (when @end-time "active")
-         :type "button"
-         :on-click (fn [_e] (swap! end-time #(or @end-time 7)))}
-        [:i.mr-3 {:class (str "far " (fa :calendar))}]
-        (gstring/format (labels :discussion.progress.creation/button-limit) (or @end-time 7))]
-       [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
-        {:class (when-not @end-time "active")
-         :type "button"
-         :on-click #(reset! end-time false)}
-        [:i.mr-3 {:class (str "fas " (fa :circle-notch))}]
-        (labels :discussion.progress.creation/button-unlimited)]])))
+      (let [user-groups @(rf/subscribe [:user/groups])]
+        [:div.col-6
+         (if (empty? user-groups)
+           {:class "border-left pl-5"}
+           {:class "pt-4"})
+         [:h4.mb-5 (labels :discussion.progress.creation/heading)]
+         (when @end-time
+           [:div
+            [:label {:for :input-num-days-to-end} (labels :discussion.progress.creation/label)]
+            [common/form-input {:type :number
+                                :min 1
+                                :id :input-num-days-to-end
+                                :placeholder 7
+                                :defaultValue 7
+                                :required true
+                                :onChange #(reset! end-time (oget % [:currentTarget :value]))}]])
+         [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
+          {:class (when @end-time "active")
+           :type "button"
+           :on-click (fn [_e] (swap! end-time #(or @end-time 7)))}
+          [:i.mr-3 {:class (str "far " (fa :calendar))}]
+          (gstring/format (labels :discussion.progress.creation/button-limit) (or @end-time 7))]
+         [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
+          {:class (when-not @end-time "active")
+           :type "button"
+           :on-click #(reset! end-time false)}
+          [:i.mr-3 {:class (str "fas " (fa :circle-notch))}]
+          (labels :discussion.progress.creation/button-unlimited)]]))))
 
 (defn- create-schnaq-options
   "Options that can be chosen when creating a schnaq."

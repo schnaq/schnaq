@@ -19,7 +19,7 @@
         gnl/ghostwheel {:mvn/version "0.3.9"}
         http-kit/http-kit {:mvn/version "2.5.3"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.17.8"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.17.10"}
         metosin/reitit {:mvn/version "0.5.15"}
         metosin/ring-http-response {:mvn/version "0.9.2"}
         org.clojure/clojure {:mvn/version "1.10.3"}
