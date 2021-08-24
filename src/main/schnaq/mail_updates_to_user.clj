@@ -4,7 +4,6 @@
             [hiccup.util :as hiccup-util]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.user :as user-db]
             [schnaq.emails :as emails]
             [taoensso.timbre :as log])
@@ -43,16 +42,13 @@
                         (create-hyperlink-to-discussion discussion)])))))
          new-statements-per-schnaq)))
 
-(defn- build-personal-greetings [user-keycloak-id]
-  (let [user (fast-pull [:user.registered/keycloak-id user-keycloak-id]
-                        user-db/registered-user-public-pattern)]
-    (html [:div [:h1 "Neuigkeiten aus deinen schnaqs"]
-           [:h4 "Hallo " (hiccup-util/escape-html (:user.registered/display-name user)) ", "
-            "es gibt neue Beiträge in deinen besuchten schnaqs!"]])))
+(defn- build-personal-greetings [user]
+  (html [:div [:h1 "Neuigkeiten aus deinen schnaqs"]
+         [:h4 "Hallo " (hiccup-util/escape-html (:user.registered/display-name user)) ", "
+          "es gibt neue Beiträge in deinen besuchten schnaqs!"]]))
 
-(defn- send-schnaq-diffs [user-keycloak-id]
-  (let [user (fast-pull [:user.registered/keycloak-id user-keycloak-id]
-                        user-db/registered-private-user-pattern)
+(defn- send-schnaq-diffs [user]
+  (let [user-keycloak-id (:user.registered/keycloak-id user)
         email (:user.registered/email user)
         discussion-hashes (map #(:discussion/share-hash %)
                                (:user.registered/visited-schnaqs user))
@@ -60,7 +56,7 @@
                                                               discussion-hashes)
         total-new-statements (reduce + (map (fn [[_ news]] (count news)) new-statements-per-schnaq))
         new-statements-content (build-new-statements-content new-statements-per-schnaq)
-        personal-greeting (build-personal-greetings user-keycloak-id)]
+        personal-greeting (build-personal-greetings user)]
     (println total-new-statements)
     (when-not (zero? total-new-statements)
       (emails/send-mail "Neuigkeiten aus deinen schnaqs"
@@ -71,9 +67,9 @@
 
 (defn- send-all-users-schnaq-updates []
   (let [all-users (user-db/all-registered-users)]
-    (doseq [[keycloak-id] all-users]
+    (doseq [user all-users]
       (Thread/sleep 1000)                                   ; Delay each mail by one second to avoid spam
-      (send-schnaq-diffs keycloak-id))))
+      (send-schnaq-diffs user))))
 
 (defn start-mail-update-schedule
   "Start a schedule to send a mail to each user at ca. 7:00 AM with updates of their schnaqs."
@@ -86,7 +82,6 @@
                                            (.adjustInto (ZonedDateTime/now (ZoneId/of "Europe/Paris"))) .toInstant)
                                        (Period/ofDays 1))
               (fn [_time]
-                (println "Hello")
                 (send-all-users-schnaq-updates))))))
 
 (defn stop-mail-update-schedule

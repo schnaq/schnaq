@@ -226,5 +226,7 @@
   "Returns all registered users' keycloak ids"
   []
   (query
-    '[:find ?keycloak-id
-      :where [_ :user.registered/keycloak-id ?keycloak-id]]))
+    '[:find [(pull ?registered-user user-pattern) ...]
+      :in $ user-pattern
+      :where [?registered-user :user.registered/keycloak-id _]]
+    private-user-pattern))
