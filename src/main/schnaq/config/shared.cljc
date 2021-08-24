@@ -50,3 +50,7 @@
 
 (def beta-tester-roles
   (cset/union admin-roles #{"beta-tester"}))
+
+(def allowed-labels
+  "A set of allowed labels for statements."
+  #{"✅" "❓" "❌" "👻" "📆" "➡️" "💬"})

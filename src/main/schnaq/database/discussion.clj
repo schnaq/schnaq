@@ -21,6 +21,7 @@
    :statement/deleted?
    :statement/created-at
    :statement/parent
+   :statement/labels
    {:statement/type [:db/ident]}
    {:statement/author user-db/public-user-pattern}])
 
@@ -511,3 +512,10 @@
           (recur (-> full-statement :statement/parent :db/id) (conj history full-statement))
           (conj history full-statement))))
     :db/ident))
+
+(>defn add-label
+  "Adds a label to a statement. If label is already applied, nothing changes."
+  [statement-id label]
+  [:db/id :statement/label :ret ::specs/statement]
+  (let [db-after (:db-after @(transact [[:db/add statement-id :statement/labels label]]))]
+    (fast-pull statement-id statement-pattern db-after)))

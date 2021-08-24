@@ -259,3 +259,10 @@
       (db/delete-statement! child)
       (is (nil? (fast-pull child [:statement/content])))
       (is (nil? (fast-pull root [:statement/content]))))))
+
+(deftest add-label-test
+  (testing "Tests whether labels are added correctly."
+    (let [statement-id (:db/id (first (db/statements-by-content "Brainstorming ist total wichtig")))]
+      (is (= ["💬"] (:statement/labels (db/add-label statement-id "💬"))))
+      ;; test for fobidden label
+      )))
