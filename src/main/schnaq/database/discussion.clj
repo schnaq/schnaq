@@ -345,7 +345,7 @@
   (let [all-statements (all-statements discussion-hash)
         seen-statements (user-db/known-statement-ids keycloak-id discussion-hash)]
     (remove (fn [statement]
-              (true? (some #(= % (:db/id statement)) seen-statements)))
+              (some #(= % (:db/id statement)) seen-statements))
             all-statements)))
 
 
