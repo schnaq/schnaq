@@ -47,7 +47,6 @@
 (defonce current-server (atom nil))
 
 (defn- stop-server []
-  (mail-updates-to-user/stop-mail-update-schedule)
   (when-not (nil? @current-server)
     ;; graceful shutdown: wait 100ms for existing requests to be finished
     ;; :timeout is optional, when no timeout, stop immediately
@@ -195,8 +194,7 @@
                              :access-control-allow-methods allowed-http-verbs))
               {:port shared-config/api-port}))
     (log/info (format "Running web-server at %s" shared-config/api-url))
-    (log/info (format "Allowed Origin: %s" allowed-origins'))
-    (mail-updates-to-user/start-mail-update-schedule)))
+    (log/info (format "Allowed Origin: %s" allowed-origins'))))
 
 (comment
   "Start the server from here"
