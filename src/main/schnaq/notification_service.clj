@@ -1,4 +1,4 @@
-(ns schnaq.notification.mail-to-user
+(ns schnaq.notification-service
   (:require [chime.core :as chime-core]
             [hiccup.core :refer [html]]
             [hiccup.util :as hiccup-util]
@@ -11,13 +11,14 @@
 
 (defonce mail-update-schedule (atom nil))
 
-(defn- build-discussion-diff-list [user-keycloak-id discussion-hashes]
+(defn- build-discussion-diff-list
+  "Build a map of discussion hashes with new statements as values"
+  [user-keycloak-id discussion-hashes]
   (reduce conj
-          (map
-            (fn [discussion-hash]
-              (when discussion-hash
-                {discussion-hash (discussion-db/new-statement-ids-for-user user-keycloak-id discussion-hash)}))
-            discussion-hashes)))
+          (map (fn [discussion-hash]
+                 {discussion-hash (discussion-db/new-statement-ids-for-user
+                                    user-keycloak-id discussion-hash)})
+               discussion-hashes)))
 
 (defn- create-hyperlink-to-discussion [discussion]
   (let [title (:discussion/title discussion)
@@ -44,11 +45,12 @@
          [:h4 "Hallo " (hiccup-util/escape-html (:user.registered/display-name user)) ", "
           "es gibt neue Beiträge in deinen besuchten schnaqs!"]]))
 
-(defn- send-schnaq-diffs [user]
+(defn- send-schnaq-diffs
+  "Build and send a mail containing links to each schnaq with new statements."
+  [user]
   (let [user-keycloak-id (:user.registered/keycloak-id user)
         email (:user.registered/email user)
-        discussion-hashes (map #(:discussion/share-hash %)
-                               (:user.registered/visited-schnaqs user))
+        discussion-hashes (map :discussion/share-hash (:user.registered/visited-schnaqs user))
         new-statements-per-schnaq (build-discussion-diff-list user-keycloak-id
                                                               discussion-hashes)
         total-new-statements (reduce + (map (fn [[_ news]] (count news)) new-statements-per-schnaq))
@@ -65,7 +67,6 @@
 (defn- send-all-users-schnaq-updates []
   (let [all-users (user-db/all-registered-users)]
     (doseq [user all-users]
-      (Thread/sleep 1000)                                   ; Delay each mail by one second to avoid spam
       (send-schnaq-diffs user))))
 
 (defn- chime-schedule
@@ -92,3 +93,7 @@
     (log/info "Closing mail schedule")
     (.close @mail-update-schedule)
     (reset! mail-update-schedule nil)))
+
+(defn -main
+  [& _args]
+  (start-mail-update-schedule))

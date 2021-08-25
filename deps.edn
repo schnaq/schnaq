@@ -67,4 +67,5 @@
                         :verbose true
                         :jar "target/schnaq-standalone.jar"}}
 
-           :run-server {:main-opts ["-m" "schnaq.api"]}}}
+           :run-server {:main-opts ["-m" "schnaq.api"]}
+           :notification-service {:main-opts "-m" "schnaq.notification-service"}}}
