@@ -17,7 +17,6 @@
             [reitit.swagger :as swagger]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.util.http-response :refer [forbidden]]
             [schnaq.api.analytics :refer [analytics-routes]]
             [schnaq.api.common :refer [other-routes]]
             [schnaq.api.debug :refer [debug-routes]]
@@ -112,7 +111,7 @@
                                              :schnaq-csrf-header {:type "apiKey"
                                                                   :in "header"
                                                                   :name "X-Schnaq-CSRF"
-                                                                  :description "Use any value, the header needs to be set, thats it."
+                                                                  :description "Use any value, the header needs to be set, that's it."
                                                                   :example "Elephants like security"
                                                                   :default "Phanty"}}
                        :security [{:keycloak []
@@ -131,7 +130,8 @@
                          coercion/coerce-request-middleware ;; coercing request parameters
                          multipart/multipart-middleware
                          auth/replace-bearer-with-token
-                         auth/wrap-jwt-authentication]}
+                         auth/wrap-jwt-authentication
+                         middlewares/wrap-custom-schnaq-csrf-header]}
      ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
                             :user/admin? auth/admin?-middleware
                             :user/beta-tester? auth/beta-tester?-middleware
@@ -156,44 +156,33 @@
       (ring/create-default-handler))))
 
 (def allowed-origins
-  (->> ["schnaq.com" "schnaq.de" config/frontend-host]
-       (concat config/additional-cors)
-       (remove empty?)
-       (mapv toolbelt/build-allowed-origin)
-       doall))
+  "Calculate valid origins based on the environment configuration and the
+  allowed frontend host."
+  (let [allowed-origins (->> ["schnaq.com" "schnaq.de" config/frontend-host]
+                             (concat config/additional-cors)
+                             (remove empty?)
+                             (mapv toolbelt/build-allowed-origin)
+                             doall)]
+    (if shared-config/production?
+      allowed-origins
+      (conj allowed-origins #".*"))))
 
 (def allowed-http-verbs
   #{:get :put :post :delete :options})
 
-(defn- wrap-custom-schnaq-csrf-header
-  "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin
-  via XMLHttpRequest."
-  [handler]
-  (fn [request]
-    ;; Only relevant for those three methods
-    (if (#{:post :put :delete} (:request-method request))
-      ;; X-schnaq-csrf header must be present, otherwise raise error
-      (if (-> request :headers (get "x-schnaq-csrf"))
-        (handler request)
-        (forbidden {:error-type :missing-header
-                    :message "You are trying to acces the route without the proper headers."}))
-      (handler request))))
-
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
-  (let [allowed-origins' (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
-    (say-hello)
-    (schnaq-core/-main)
-    (reset! current-server
-            (server/run-server
-              (-> #'app
-                  (wrap-custom-schnaq-csrf-header)
-                  (wrap-cors :access-control-allow-origin allowed-origins'
-                             :access-control-allow-methods allowed-http-verbs))
-              {:port shared-config/api-port}))
-    (log/info (format "Running web-server at %s" shared-config/api-url))
-    (log/info (format "Allowed Origin: %s" allowed-origins'))))
+  (say-hello)
+  (schnaq-core/-main)
+  (reset! current-server
+          (server/run-server
+            (wrap-cors #'app
+                       :access-control-allow-origin allowed-origins
+                       :access-control-allow-methods allowed-http-verbs)
+            {:port shared-config/api-port}))
+  (log/info (format "Running web-server at %s" shared-config/api-url))
+  (log/info (format "Allowed Origin: %s" allowed-origins)))
 
 (comment
   "Start the server from here"
