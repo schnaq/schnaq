@@ -204,7 +204,7 @@
                       :stop (fn [{:keys [path]}]
                               (let [{:keys [share-hash]} path]
                                 (rf/dispatch [:visited.statement-nums/to-localstorage])
-                                (rf/dispatch [:visited.statement-ids/to-localstorage])
+                                (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
                                 (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend share-hash])
                                 (rf/dispatch [:statement.edit/reset-edits])))}]}]
      ["/graph"

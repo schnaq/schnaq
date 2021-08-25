@@ -21,7 +21,7 @@
     (assoc-in db [:visited :statement-ids] (:discussion/visited-statement-ids local-storage))))
 
 (rf/reg-event-fx
-  :visited.statement-ids/to-localstorage
+  :visited.statement-ids/to-localstorage-and-merge-with-app-db
   (fn [{:keys [db]} [_]]
     (let [statement-ids (get-in db [:visited :statement-ids])
           visited-statement-ds (merge-with union (:discussion/statement-ids local-storage) statement-ids)]

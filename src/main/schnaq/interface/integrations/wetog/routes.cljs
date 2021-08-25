@@ -40,7 +40,7 @@
                              (rf/dispatch [:discussion.query.statement/by-id]))
                     :stop (fn []
                             (rf/dispatch [:visited.statement-nums/to-localstorage])
-                            (rf/dispatch [:visited.statement-ids/to-localstorage])
+                            (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
                             (rf/dispatch [:statement.edit/reset-edits]))}]}]
    ["search"
     {:name :routes.search/schnaq
