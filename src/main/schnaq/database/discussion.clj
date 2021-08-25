@@ -523,3 +523,11 @@
          :db-after
          (fast-pull statement-id statement-pattern))
     (fast-pull statement-id statement-pattern)))
+
+(>defn remove-label
+  "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
+  [statement-id label]
+  [:db/id :statement/label :ret ::specs/statement]
+  (->> @(transact [[:db/retract statement-id :statement/labels label]])
+       :db-after
+       (fast-pull statement-id statement-pattern)))

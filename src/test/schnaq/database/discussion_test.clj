@@ -266,3 +266,11 @@
       (is (= [":comment"] (:statement/labels (db/add-label statement-id ":comment"))))
       ;; test for fobidden label
       (is (= [":comment"] (:statement/labels (db/add-label statement-id "anything goes here")))))))
+
+(deftest remove-label-test
+  (testing "Correctly remove labels from a statement."
+    (let [statement-id (:db/id (first (db/statements-by-content "Brainstorming ist total wichtig")))]
+      (db/add-label statement-id ":comment")
+      (db/add-label statement-id ":check")
+      (is (= [":check"] (:statement/labels (db/remove-label statement-id ":comment"))))
+      (is (= [":check"] (:statement/labels (db/remove-label statement-id "anything-else")))))))
