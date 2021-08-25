@@ -79,6 +79,12 @@
   [map? string? :ret map?]
   (mock/header request "Authorization" (format "Token %s" token)))
 
+(>defn add-csrf-header
+  "Adds the authorization header to a request map"
+  [request]
+  [map? :ret map?]
+  (mock/header request "x-schnaq-csrf" "this content does not matter"))
+
 (>defn mock-query-params
   "Add query parameters to a mock request."
   [request parameter value]
