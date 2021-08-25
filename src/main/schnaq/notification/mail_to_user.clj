@@ -68,18 +68,22 @@
       (Thread/sleep 1000)                                   ; Delay each mail by one second to avoid spam
       (send-schnaq-diffs user))))
 
+(defn- chime-schedule
+  "Chime periodic sequence to call a function once a day."
+  [time-at timed-function]
+  (chime-core/chime-at
+    (chime-core/periodic-seq
+      (-> time-at (.adjustInto (ZonedDateTime/now (ZoneId/of "Europe/Paris"))) .toInstant)
+      (Period/ofDays 1))
+    (fn [_time] (future timed-function))))
+
 (defn start-mail-update-schedule
   "Start a schedule to send a mail to each user at ca. 7:00 AM with updates of their schnaqs."
   []
   (when (nil? @mail-update-schedule)
     (log/info "Starting mail schedule")
     (reset! mail-update-schedule
-            (chime-core/chime-at
-              (chime-core/periodic-seq (-> (LocalTime/of 7 0 0)
-                                           (.adjustInto (ZonedDateTime/now (ZoneId/of "Europe/Paris"))) .toInstant)
-                                       (Period/ofDays 1))
-              (fn [_time]
-                (send-all-users-schnaq-updates))))))
+            (chime-schedule (LocalTime/of 7 0 0) (send-all-users-schnaq-updates)))))
 
 (defn stop-mail-update-schedule
   "Close the mail schedule."
