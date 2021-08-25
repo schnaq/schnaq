@@ -137,6 +137,7 @@
                             :user/beta-tester? auth/beta-tester?-middleware
                             :app/valid-code? auth/valid-app-code?-middleware
                             :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
+                            :discussion/valid-statement? middlewares/valid-statement?-middleware
                             :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))
 
 (defn route-by-name
