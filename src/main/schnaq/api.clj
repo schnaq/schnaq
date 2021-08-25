@@ -158,14 +158,11 @@
 (def allowed-origins
   "Calculate valid origins based on the environment configuration and the
   allowed frontend host."
-  (let [allowed-origins (->> ["schnaq.com" "schnaq.de" config/frontend-host]
-                             (concat config/additional-cors)
-                             (remove empty?)
-                             (mapv toolbelt/build-allowed-origin)
-                             doall)]
-    (if shared-config/production?
-      allowed-origins
-      (conj allowed-origins #".*"))))
+  (->> ["schnaq.com" "schnaq.de" config/frontend-host]
+       (concat config/additional-cors)
+       (remove empty?)
+       (mapv toolbelt/build-allowed-origin)
+       doall))
 
 (def allowed-http-verbs
   #{:get :put :post :delete :options})
@@ -173,16 +170,17 @@
 (defn -main
   "This is our main entry point for the REST API Server."
   [& _args]
-  (say-hello)
-  (schnaq-core/-main)
-  (reset! current-server
-          (server/run-server
-            (wrap-cors #'app
-                       :access-control-allow-origin allowed-origins
-                       :access-control-allow-methods allowed-http-verbs)
-            {:port shared-config/api-port}))
-  (log/info (format "Running web-server at %s" shared-config/api-url))
-  (log/info (format "Allowed Origin: %s" allowed-origins)))
+  (let [origins (if shared-config/production? allowed-origins (conj allowed-origins #".*"))]
+    (say-hello)
+    (schnaq-core/-main)
+    (reset! current-server
+            (server/run-server
+              (wrap-cors #'app
+                         :access-control-allow-origin origins
+                         :access-control-allow-methods allowed-http-verbs)
+              {:port shared-config/api-port}))
+    (log/info (format "Running web-server at %s" shared-config/api-url))
+    (log/info (format "Allowed Origin: %s" origins))))
 
 (comment
   "Start the server from here"
