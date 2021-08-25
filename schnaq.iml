@@ -43,7 +43,7 @@
     <orderEntry type="library" name="Deps: org.bouncycastle/bcpkix-jdk15on:1.65" level="project" />
     <orderEntry type="library" name="Deps: metosin/muuntaja:0.6.8" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-common:4.1.48.Final" level="project" />
-    <orderEntry type="library" name="Deps: com.fasterxml.jackson.module/jackson-module-jaxb-annotations:2.10.1" level="project" />
+    <orderEntry type="library" name="Deps: com.fasterxml.jackson.module/jackson-module-jaxb-annotations:2.10.4" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/kaocha:1.0.861" level="project" />
     <orderEntry type="library" name="Deps: edn-query-language/eql:0.0.9" level="project" />
     <orderEntry type="library" name="Deps: io.undertow/undertow-core:2.2.4.Final" level="project" />
@@ -217,7 +217,7 @@
     <orderEntry type="library" name="Deps: org.fressian/fressian:0.6.5" level="project" />
     <orderEntry type="library" name="Deps: crypto-random:1.2.1" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-transport-native-unix-common:4.1.48.Final" level="project" />
-    <orderEntry type="library" name="Deps: com.fasterxml.jackson.jaxrs/jackson-jaxrs-base:2.10.1" level="project" />
+    <orderEntry type="library" name="Deps: com.fasterxml.jackson.jaxrs/jackson-jaxrs-base:2.10.4" level="project" />
     <orderEntry type="library" name="Deps: clj-commons/clj-yaml:0.7.0" level="project" />
     <orderEntry type="library" name="Deps: com.github.fge/jackson-coreutils:1.6" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-codec-http:4.1.48.Final" level="project" />

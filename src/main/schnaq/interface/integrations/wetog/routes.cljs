@@ -29,7 +29,8 @@
      :view dashboard/embedded-view
      :link-text (labels :router/dashboard)
      :controllers [{:start (fn []
-                             (rf/dispatch [:schnaq/refresh-selected]))}]}]
+                             (rf/dispatch [:schnaq/refresh-selected])
+                             (rf/dispatch [:scheduler.after/login [:schnaq.summary/load]]))}]}]
    ["statement/:statement-id"
     {:name :routes.schnaq.select/statement
      :parameters {:path {:statement-id int?}}
