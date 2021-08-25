@@ -4,6 +4,7 @@
             [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.main :refer [transact query fast-pull] :as main-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -517,5 +518,8 @@
   "Adds a label to a statement. If label is already applied, nothing changes."
   [statement-id label]
   [:db/id :statement/label :ret ::specs/statement]
-  (let [db-after (:db-after @(transact [[:db/add statement-id :statement/labels label]]))]
-    (fast-pull statement-id statement-pattern db-after)))
+  (if (shared-config/allowed-labels label)
+    (->> @(transact [[:db/add statement-id :statement/labels label]])
+         :db-after
+         (fast-pull statement-id statement-pattern))
+    (fast-pull statement-id statement-pattern)))

@@ -263,6 +263,6 @@
 (deftest add-label-test
   (testing "Tests whether labels are added correctly."
     (let [statement-id (:db/id (first (db/statements-by-content "Brainstorming ist total wichtig")))]
-      (is (= ["💬"] (:statement/labels (db/add-label statement-id "💬"))))
+      (is (= [":comment"] (:statement/labels (db/add-label statement-id ":comment"))))
       ;; test for fobidden label
-      )))
+      (is (= [":comment"] (:statement/labels (db/add-label statement-id "anything goes here")))))))
