@@ -120,7 +120,7 @@
           seen-statements #{statement-1 statement-2 statement-3}
           _ (user-db/create-visited-statements-for-discussion
               keycloak-user-id share-hash seen-statements)
-          new-statements (discussion-db/new-statements-for-user keycloak-user-id share-hash)
+          new-statements (#'discussion-db/new-statements-for-user keycloak-user-id share-hash)
           expected-new-statement-count (- (count all-statements) (count seen-statements))]
       (is (= expected-new-statement-count (count new-statements)))
       (is (find-statement-in-list statement-new-1 new-statements))

@@ -2,10 +2,10 @@
   (:require [chime.core :as chime-core]
             [hiccup.core :refer [html]]
             [hiccup.util :as hiccup-util]
-            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
             [schnaq.emails :as emails]
+            [schnaq.links :as schnaq-links]
             [taoensso.timbre :as log])
   (:import (java.time LocalTime ZonedDateTime ZoneId Period)))
 
@@ -16,15 +16,13 @@
           (map
             (fn [discussion-hash]
               (when discussion-hash
-                {discussion-hash (map :db/id (discussion-db/new-statements-for-user
-                                               user-keycloak-id
-                                               discussion-hash))}))
+                {discussion-hash (discussion-db/new-statement-ids-for-user user-keycloak-id discussion-hash)}))
             discussion-hashes)))
 
 (defn- create-hyperlink-to-discussion [discussion]
   (let [title (:discussion/title discussion)
         share-hash (:discussion/share-hash discussion)
-        link (str config/frontend-url "/schnaq/" share-hash)]
+        link (schnaq-links/get-share-link share-hash)]
     (html [:a {:href link} (hiccup-util/escape-html title)])))
 
 (defn- build-new-statements-content [new-statements-per-schnaq]
