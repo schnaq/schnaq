@@ -35,7 +35,6 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.config.summy :as summy-config]
             [schnaq.core :as schnaq-core]
-            [schnaq.notification.mail-to-user :as mail-updates-to-user]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
   (:gen-class))
