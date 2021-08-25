@@ -84,7 +84,7 @@
 (defn stop-mail-update-schedule
   "Close the mail schedule."
   []
-  (when-not (nil? @mail-update-schedule)
+  (when @mail-update-schedule
     (log/info "Closing mail schedule")
     (.close @mail-update-schedule)
     (reset! mail-update-schedule nil)))
