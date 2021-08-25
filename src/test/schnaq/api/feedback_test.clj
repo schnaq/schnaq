@@ -10,8 +10,8 @@
 
 (defn- add-feedback-request [payload]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.feedback/add))
-       :headers {"accept" "application/edn"}
        :body-params {:feedback payload}}
+      toolbelt/add-csrf-header
       api/app))
 
 (deftest add-feedback
