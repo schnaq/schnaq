@@ -267,6 +267,12 @@
     (:body parameters) identity reaction-db/downvote-statement! reaction-db/remove-downvote!
     reaction-db/did-user-downvote-statement reaction-db/did-user-upvote-statement))
 
+(defn- add-label
+  "Add a label to a statement. Only pre-approved labels can be set. Custom labels have no effect.
+  The user needs to be authenticated. The statement concerned is always returned."
+  [{:keys [parameters]}]
+  (let [{:keys [statement-id label]} (:body parameters)]
+    (ok {:statement (discussion-db/add-label statement-id label)})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -394,4 +400,13 @@
               :description (at/get-doc #'toggle-upvote-statement)
               :name :api.discussion.statement.vote/up
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
-                          400 at/response-error-body}}]]]]])
+                          400 at/response-error-body}}]]
+     ["/label" {:middleware [:user/authenticated?
+                             :discussion/valid-statement?]}
+      ["/add" {:put add-label
+               :description (at/get-doc #'add-label)
+               :name :api.discussion.statement.label/add
+               :parameters {:body {:label :statement/label}}
+               :responses {200 {:body {:statement ::dto/statement}}
+                           400 at/response-error-body
+                           403 at/response-error-body}}]]]]])

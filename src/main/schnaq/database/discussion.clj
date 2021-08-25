@@ -518,16 +518,20 @@
   "Adds a label to a statement. If label is already applied, nothing changes."
   [statement-id label]
   [:db/id :statement/label :ret ::specs/statement]
-  (if (shared-config/allowed-labels label)
-    (->> @(transact [[:db/add statement-id :statement/labels label]])
-         :db-after
-         (fast-pull statement-id statement-pattern))
-    (fast-pull statement-id statement-pattern)))
+  (toolbelt/pull-key-up
+    (if (shared-config/allowed-labels label)
+      (->> @(transact [[:db/add statement-id :statement/labels label]])
+           :db-after
+           (fast-pull statement-id statement-pattern))
+      (fast-pull statement-id statement-pattern))
+    :db/ident))
 
 (>defn remove-label
   "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
   [statement-id label]
   [:db/id :statement/label :ret ::specs/statement]
-  (->> @(transact [[:db/retract statement-id :statement/labels label]])
-       :db-after
-       (fast-pull statement-id statement-pattern)))
+  (toolbelt/pull-key-up
+    (->> @(transact [[:db/retract statement-id :statement/labels label]])
+         :db-after
+         (fast-pull statement-id statement-pattern))
+    :db/ident))
