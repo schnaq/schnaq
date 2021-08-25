@@ -34,7 +34,8 @@
             visited-hashes (get-in db [:schnaqs :visited-hashes])
             visited-statements (get-in db [:visited :statement-ids] {})]
         {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
-                                  (cond-> {:visited-hashes visited-hashes}
+                                  (cond-> {:visited-hashes visited-hashes
+                                           :visited-statement-ids visited-statements}
                                           creation-secrets (assoc :creation-secrets creation-secrets)))]}))))
 
 (rf/reg-event-fx

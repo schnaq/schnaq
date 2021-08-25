@@ -16,9 +16,9 @@
   [{:keys [identity parameters]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [{:keys [creation-secrets visited-hashes]} (:body parameters)
+  (let [{:keys [creation-secrets visited-hashes visited-statement-ids]} (:body parameters)
         visited-schnaqs (map :db/id (discussion-db/valid-discussions-by-hashes visited-hashes))
-        [new-user? queried-user] (user-db/register-new-user identity visited-schnaqs)
+        [new-user? queried-user] (user-db/register-new-user identity visited-schnaqs visited-statement-ids)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
                                             creation-secrets (:db/id queried-user)))
         response {:registered-user queried-user
