@@ -124,10 +124,6 @@
     (ok {:share-hash share-hash
          :seen-statement-ids seen-statement-ids})))
 
-(user-db/create-visited-statements-for-discussion "d10b4cac-cc43-45f7-87f0-993b4dd4b4b4"
-                                                  "fa2058db-48f4-44ed-a59c-51c7db8ab320"
-                                                  #{17592186054778})
-
 (defn- check-statement-author-and-state
   "Checks if a statement is authored by this user-identity and is valid, i.e. not deleted.
   If the statement is valid and authored by this user, `success-fn` is called. if the statement is not valid, `bad-request-fn`
