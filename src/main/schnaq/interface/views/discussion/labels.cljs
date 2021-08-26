@@ -45,7 +45,6 @@
 
 (defn edit-labels-button
   "Give the registered user the ability to add or remove labels to a statement."
-  ;; TODO labelize
   [statement]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     (if authenticated?
@@ -61,11 +60,8 @@
         :trigger "click"}
        [:div.pr-2.clickable
         [:i {:class (fa :tag)}]]]
-      [:button.dropdown-item
+      [:div.pr-2.clickable
        {:tabIndex 30
-        :on-click (fn [e]
-                    (js-wrap/stop-propagation e)
-                    #(rf/dispatch [:modal {:show? true
-                                           :child [anonymous-labels-modal]}]))
-        :title "Labels"}
-       [:i {:class (str "m-auto " (fa :tag))}] " Labels"])))
+        :on-click #(rf/dispatch [:modal {:show? true
+                                         :child [anonymous-labels-modal]}])}
+       [:i {:class (fa :tag)}]])))
