@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.badges
   (:require ["react-tippy" :refer [Tooltip]]
-            [ghostwheel.core :refer [>defn-]]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reagent.core :as r]
