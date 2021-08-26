@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [labels fa]]
+  (:require [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.rows :as rows]))
 
 (defn- what-is-schnaq
@@ -22,34 +21,26 @@
 
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
-  [title icon body]
+  [title body]
   [:div.col-12.col-md-4
-   [:h4.text-center (labels title)]
-   [:p.text-center.text-primary.mt-0.py-0
-    [:i {:class (str " m-auto fas fa-3x " (fa icon))}]]
-   [:p.text-justify (labels body)]])
+   [:div.panel-white.mx-1.shadow.py-5
+    [:div.display-6.text-purple.mb-5 (labels title)]
+    [:p.text-justify (labels body)]]])
 
 (defn- feature-columns
   "Arguments for getting schnaq in three columns."
   []
   [:<>
-   [:div.row.pt-5
+   [:div.row.py-5
     [feature-box
      :startpage.feature-box.know-how/title
-     :book
      :startpage.feature-box.know-how/body]
     [feature-box
      :startpage.feature-box.discussion/title
-     :comment
      :startpage.feature-box.discussion/body]
     [feature-box
      :startpage.feature-box.learnings/title
-     :lightbulb
-     :startpage.feature-box.learnings/body]]
-   [:p.text-center.pb-5
-    [:a.btn.btn-primary.text-center
-     {:href (rfe/href :routes.schnaq/create)}
-     (labels :startpage.feature-box/explore-schnaq)]]])
+     :startpage.feature-box.learnings/body]]])
 
 ;; -----------------------------------------------------------------------------
 
