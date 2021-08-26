@@ -341,6 +341,21 @@
            share-hash statement-pattern)
     (toolbelt/pull-key-up :db/ident)))
 
+(defn- new-statements-for-user
+  "Retrieve new statements of a discussion for a user"
+  [keycloak-id discussion-hash]
+  (let [all-statements (all-statements discussion-hash)
+        seen-statements (user-db/known-statement-ids keycloak-id discussion-hash)]
+    (remove (fn [statement]
+              (some #(= % (:db/id statement)) seen-statements))
+            all-statements)))
+
+(defn new-statement-ids-for-user
+  "Retrieve ids of new statements of a discussion for a user"
+  [keycloak-id discussion-hash]
+  (map :db/id (new-statements-for-user keycloak-id discussion-hash)))
+
+
 (>defn all-statements-for-graph
   "Returns all statements for a discussion. Specially prepared for node and edge generation."
   [share-hash]

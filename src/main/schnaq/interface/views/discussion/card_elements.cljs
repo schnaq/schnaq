@@ -210,8 +210,7 @@
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at]} @(rf/subscribe [:schnaq/selected])
-        history @(rf/subscribe [:discussion-history])
-        current-conclusion (last history)
+        current-conclusion @(rf/subscribe [:discussion.conclusions/selected])
         content {:statement/content title :statement/author author :statement/created-at created-at}
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         statement (if is-topic? content current-conclusion)]

@@ -17,4 +17,7 @@
   (fn [_ _]
     {:fx [[:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
           ;; TODO Use the JWT from wetog here instead of keycoak
+          [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
+          [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
+          [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]
           [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]]}))

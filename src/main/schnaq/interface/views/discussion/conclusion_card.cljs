@@ -32,6 +32,25 @@
 
 ;; -----------------------------------------------------------------------------
 
+(defn up-down-vote-breaking
+  "Add panel for up and down votes."
+  [statement]
+  (let [votes @(rf/subscribe [:local-votes])]
+    [:div.float-right
+     [:div.d-flex
+      [:div.px-2
+       {:on-click (fn [e]
+                    (js-wrap/stop-propagation e)
+                    (rf/dispatch [:discussion/toggle-upvote statement]))}
+       [:i.vote-arrow.up-vote {:class (str "m-auto fas " (fa :arrow-up))}]]]
+     [:h6.d-flex.p-2.m-0 (logic/calculate-votes statement votes)]
+     [:div.d-flex
+      [:div.px-2
+       {:on-click (fn [e]
+                    (js-wrap/stop-propagation e)
+                    (rf/dispatch [:discussion/toggle-downvote statement]))}
+       [:i.vote-arrow.down-vote.align-bottom {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
+
 (defn up-down-vote
   "Add inline panel for up and down votes."
   [statement]
@@ -53,10 +72,13 @@
   [edit-hash statement]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         statement-labels (set (:statement/labels statement))]
-    [:article.card.statement-card
+    [:article.card.statement-card.my-2
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body.py-2
+       (when (:meta/new statement)
+         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
+          (labels :discussion.badges/new)])
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info statement 42 "w-100"]]
        [:div.my-4]

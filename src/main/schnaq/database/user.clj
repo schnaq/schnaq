@@ -5,18 +5,23 @@
             [schnaq.database.specs :as specs]
             [taoensso.timbre :as log]))
 
-(def ^:private registered-user-public-pattern
+(def registered-user-public-pattern
   "Small version of a user to show only necessary information."
   [:db/id
    :user.registered/keycloak-id
    :user.registered/display-name
    :user.registered/profile-picture])
 
-(def ^:private registered-private-user-pattern
+(def registered-private-user-pattern
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
    {:user.registered/visited-schnaqs [:discussion/share-hash]}])
+
+(def seen-statements-pattern
+  [:seen-statements/user
+   :seen-statements/visited-schnaq
+   {:seen-statements/visited-statements [:db/id]}])
 
 (def ^:private minimal-user-pattern
   "Minimal user pull pattern."
@@ -88,6 +93,46 @@
                   visited-schnaqs)]
     (transact txs)))
 
+(defn seen-statements-entity
+  "Returns the entity-id that a certain user / discussion combination has for seen statements."
+  [keycloak-id discussion-hash]
+  (query '[:find ?seen-statement .
+           :in $ ?keycloak-id ?discussion-hash
+           :where [?user :user.registered/keycloak-id ?keycloak-id]
+           [?seen-statement :seen-statements/user ?user]
+           [?seen-statement :seen-statements/visited-schnaq ?discussion]
+           [?discussion :discussion/share-hash ?discussion-hash]]
+         keycloak-id discussion-hash))
+
+(>defn known-statement-ids
+  "Returns known-statement ids for a user and a certain share-hash as a set."
+  [keycloak-id share-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of :db/id)]
+  (set
+    (query '[:find [?visited-statements ...]
+             :in $ ?keycloak-id ?discussion-hash
+             :where [?user :user.registered/keycloak-id ?keycloak-id]
+             [?seen-statement :seen-statements/user ?user]
+             [?seen-statement :seen-statements/visited-schnaq ?discussion]
+             [?discussion :discussion/share-hash ?discussion-hash]
+             [?seen-statement :seen-statements/visited-statements ?visited-statements]]
+           keycloak-id share-hash)))
+
+(defn create-visited-statements-for-discussion [keycloak-id discussion-hash visited-statements]
+  (let [queried-id (seen-statements-entity keycloak-id discussion-hash)
+        temp-id (or queried-id (str "seen-statements-" keycloak-id "-" discussion-hash))
+        new-visited {:db/id temp-id
+                     :seen-statements/user [:user.registered/keycloak-id keycloak-id]
+                     :seen-statements/visited-schnaq [:discussion/share-hash discussion-hash]
+                     :seen-statements/visited-statements visited-statements}]
+    (transact [(clean-db-vals new-visited)])))
+
+(defn- update-visited-statements
+  "Updates the user's visited statements by adding the new ones."
+  [keycloak-id visited-statements]
+  (doseq [[discussion-hash statement-ids] visited-statements]
+    (create-visited-statements-for-discussion keycloak-id discussion-hash statement-ids)))
+
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
   [{:keys [id given_name family_name email]} existing-user]
@@ -110,8 +155,8 @@
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist. Returns a tuple which contains
   whether the user is newly created and the user entity itself."
-  [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs]
-  [associative? (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
+  [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs visited-statements]
+  [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [existing-user (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
@@ -127,10 +172,15 @@
         (update-user-info identity existing-user)
         (update-groups id groups)
         (update-visited-schnaqs id visited-schnaqs)
+        (when-not (nil? visited-statements)
+          (update-visited-statements id visited-statements))
         [false existing-user])
-      [true (-> @(transact [(clean-db-vals new-user)])
-                (get-in [:tempids temp-id])
-                (fast-pull registered-user-public-pattern))])))
+      (let [new-user-from-db (-> @(transact [(clean-db-vals new-user)])
+                                 (get-in [:tempids temp-id])
+                                 (fast-pull registered-user-public-pattern))]
+        (when-not (nil? visited-statements)
+          (update-visited-statements (:db/id new-user-from-db) visited-statements))
+        [true new-user-from-db]))))
 
 (>defn- update-user-field
   "Updates a user's field in the database and return updated user."
@@ -171,3 +221,12 @@
       :in $ ?email registered-user-public-pattern
       :where [?user :user.registered/email ?email]]
     user-email registered-user-public-pattern))
+
+(defn all-registered-users
+  "Returns all registered users' keycloak ids"
+  []
+  (query
+    '[:find [(pull ?registered-user user-pattern) ...]
+      :in $ user-pattern
+      :where [?registered-user :user.registered/keycloak-id _]]
+    private-user-pattern))
