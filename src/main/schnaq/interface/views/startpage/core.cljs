@@ -127,8 +127,9 @@
     :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
    [:<>
     [:section.container
-     [startpage-features/feature-rows]
-     [testimonials/view]
+     [startpage-features/feature-rows]]
+    [testimonials/view]
+    [:section.container
      [mailchimp-form]
      [faq]]
     [early-adopters]

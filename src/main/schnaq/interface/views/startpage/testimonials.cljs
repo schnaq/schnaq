@@ -4,42 +4,35 @@
 
 (defn- testimonial-card
   "A single testimonial of a user."
-  [img company-name company-body reference-name avatar]
-  [:div.card.p-4.testimonial.shadow
-   (when img
-     [:img.testimonial-logo.card-img-top.p-4
-      {:src (img-path img)
-       :alt (gstring/format "A company logo of %s" (labels company-name))}])
-   [:div.card-body
-    [:h5.card-title.text-center (labels company-name)]
-    [:p.card-text (gstring/format "\"%s\"" (labels company-body))]
-    [:div.row
-     (when avatar
-       [:div.col-5
-        [:img.w-100.rounded-50
-         {:src (img-path avatar)
-          :alt (gstring/format "A picture of %s" (labels avatar))}]])
-     [:div.col
-      [:p.card-text [:small.text-muted (labels reference-name)]]]]]])
+  [company-name company-body reference-name avatar]
+  [:div.p-4.testimonial
+   (when avatar
+     [:img.w-50.rounded-50
+      {:src (img-path avatar)
+       :alt (gstring/format "A picture of %s" (labels avatar))}])
+   [:p.card-text.text-purple.mt-3
+    [:div.small (labels reference-name)]
+    [:div.small.mt-3 (labels company-name)]]
+   [:div.card-body.p-0
+    [:div.d-flex.flex-row
+     [:div.display-5.text-primary.mr-1.mt-n2 "\""]
+     [:p.card-text.text-primary (labels company-body)]]]])
 
 (defn- testimonial-column-1
   "Columns displaying the testimonials of our users."
   []
   [:div.card-deck
    [testimonial-card
-    :logos/doctronic
     :testimonials.doctronic/company
     :testimonials.doctronic/quote
     :testimonials.doctronic/author
     :testimonial-picture/ingo-kupers]
    [testimonial-card
-    :logos/leetdesk
     :testimonials.leetdesk/company
     :testimonials.leetdesk/quote
     :testimonials.leetdesk/author
     :testimonial-picture/meiko-tse]
    [testimonial-card
-    :logos/hhu
     :testimonials.hhu/company
     :testimonials.bialon/quote
     :testimonials.bialon/author
@@ -50,19 +43,16 @@
   []
   [:div.card-deck
    [testimonial-card
-    :logos/lokay
     :testimonials.lokay/company
     :testimonials.lokay/quote
     :testimonials.lokay/author
     :testimonial-picture/lokay]
    [testimonial-card
-    :logos/hck
     :testimonials.hck/company
     :testimonials.hck/quote
     :testimonials.hck/author
     :testimonial-picture/hck]
    [testimonial-card
-    :logos/franky
     :testimonials.franky/company
     :testimonials.franky/quote
     :testimonials.franky/author
@@ -73,19 +63,16 @@
   []
   [:div.card-deck
    [testimonial-card
-    :logos/metro
     :testimonials.metro/company
     :testimonials.metro/quote
     :testimonials.metro/author
     :testimonial-picture/tobias-schroeder]
    [testimonial-card
-    :logos/hhu
     :testimonials.hhu/company
     :testimonials.bjorn/quote
     :testimonials.bjorn/author
     :testimonial-picture/bjorn]
    [testimonial-card
-    :logos/frauke
     :testimonials.bib/company
     :testimonials.bib/quote
     :testimonials.bib/author
@@ -96,13 +83,11 @@
   []
   [:div.card-deck
    [testimonial-card
-    :logos/bialon
     :testimonials.eugenbialon/company
     :testimonials.eugenbialon/quote
     :testimonials.eugenbialon/author
     :testimonial-picture/eugen-bialon]
    [testimonial-card
-    :logos/sensor
     :testimonials.sensor/company
     :testimonials.sensor/quote
     :testimonials.sensor/author
@@ -131,6 +116,19 @@
     [:span.carousel-control-next-icon.carousel-control-color {:aria-hidden "true"}]
     [:span.sr-only "Next"]]])
 
+(defn- company-logo [logo company-name]
+  [:div.d-flex.flex-row
+   [:img.testimonial-logo.card-img-top.p-4
+    {:src (img-path logo)
+     :alt (gstring/format "A company logo of %s" (labels company-name))}]])
+
+(defn- testimonial-companies []
+  [:div.d-flex.flex-row.mb-5
+   [company-logo :logos/doctronic :testimonials.doctronic/company]
+   [company-logo :logos/franky :testimonials.franky/company]
+   [company-logo :logos/metro :testimonials.metro/company]
+   [company-logo :logos/hhu :testimonials.hhu/company]
+   [company-logo :logos/leetdesk :testimonials.leetdesk/company]])
 
 ;; -----------------------------------------------------------------------------
 
@@ -138,6 +136,11 @@
   "Show all testimonials."
   []
   [:section.pb-5.pt-3
-   [:p.h4.text-center.pb-4
-    (labels :testimonials/heading)]
-   [testimonial-carousel]])
+   [:div.wave-bottom-white]
+   [:div.bg-white
+    [:div.container
+     [:h3.h1.pb-4.text-purple
+      (labels :testimonials/heading)]
+     [testimonial-companies]
+     [testimonial-carousel]]]
+   [:div.wave-bottom-white-inverted]])

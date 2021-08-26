@@ -1698,7 +1698,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :supporters/heading "Unterstützt vom Wirtschaftsministerium des Landes Nordrhein-Westfalen"
 
         ;; Testimonials
-        :testimonials/heading "Was andere über uns denken:"
+        :testimonials/heading "Die haben schon mit uns geschnaqt"
         :testimonials.doctronic/company "doctronic GmbH & Co. KG"
         :testimonials.doctronic/quote "Wir beobachten die Entwicklung von schnaq mit großem Interesse für den eigenen Einsatz und für den Einsatz bei unseren Kunden."
         :testimonials.doctronic/author "Ingo Küper, Geschäftsführer"

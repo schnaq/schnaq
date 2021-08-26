@@ -55,6 +55,11 @@ $gradient-target: vars.$primary;
   width: 100%;
 }
 
+.wave-bottom-white-inverted {
+  @extend .wave-bottom-white;
+  transform: scale(-1);
+}
+
 .wave-bottom-light {
   @extend .wave-bottom-white;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-light.svg');
