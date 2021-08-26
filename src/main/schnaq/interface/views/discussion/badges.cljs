@@ -1,25 +1,18 @@
 (ns schnaq.interface.views.discussion.badges
-  (:require [ghostwheel.core :refer [>defn-]]
+  (:require ["react-tippy" :refer [Tooltip]]
+            [ghostwheel.core :refer [>defn-]]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.views.discussion.common :as dcommon]
-            [schnaq.interface.views.discussion.labels :as labels]
+            [schnaq.interface.views.discussion.labels :as statement-labels]
             [schnaq.interface.views.modal :as modal]
             [schnaq.user :as user]))
-
-(>defn- build-author-list
-  "Build a nicely formatted string of a html list containing the authors from a sequence."
-  [users]
-  [sequential? :ret string?]
-  (str
-    "<ul class=\"authors-list\">"
-    (apply str (map #(str "<li>" % "</li>") users))
-    "</ul>"))
 
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
@@ -114,11 +107,35 @@
           [:dropdown-item
            [delete-dropdown-button statement edit-hash]])]])))
 
+(defn- author-list
+  "A list of author-names participating in a subdiscussion."
+  [authors]
+  [:<>
+   [:h5 (labels :discussion.badges/user-overview)]
+   [:hr]
+   [:ul.list-unstyled.text-left
+    (for [author (sort > authors)]
+      [:li {:key author} author])]])
+
+(defn- authors-badge
+  "A badge listing the people participating in the discussion."
+  [authors]
+  [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
+   [:> Tooltip
+    {:animation "scale"
+     :arrow true
+     :html (r/as-element [author-list authors])
+     :offset 5
+     :position "bottom"
+     :theme "light"
+     :trigger "click"}
+    [:i {:class (str "m-auto fas " (fa :user/group))}] " "
+    (count authors)]])
+
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
   [statement edit-hash]
-  (let [popover-id (str "debater-popover-" (:db/id statement))
-        old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
+  (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
         path-parameters (:path-params @(rf/subscribe [:navigation/current-route]))
         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
@@ -134,19 +151,8 @@
         [:i pill-class])
       " " statement-num
       " " (labels :discussion.badges/posts)]
-     [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
-      {:id popover-id
-       :data-toggle "popover"
-       :data-trigger "focus"
-       :tabIndex 20
-       :on-click (fn [e] (js-wrap/stop-propagation e)
-                   (js-wrap/popover (str "#" popover-id) "show"))
-       :title (labels :discussion.badges/user-overview)
-       :data-html true
-       :data-content (build-author-list authors)}
-      [:i {:class (str "m-auto fas " (fa :user/group))}] " "
-      (count authors)]
-     [labels/edit-labels-button statement]
+     [authors-badge authors]
+     [statement-labels/edit-labels-button statement]
      [edit-statement-dropdown-menu statement edit-hash]]))
 
 (defn static-info-badges
