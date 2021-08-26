@@ -60,7 +60,7 @@
   [:section.overflow-hidden.py-3
    [base/wavy-curve "scale(1.5,-1)"]
    [:div.early-adopter
-    [:div.container.text-center.early-adopter-schnaqqifant-wrapper
+    [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
      [:img.early-adopter-schnaqqifant.d-none.d-md-inline
       {:src (img-path :schnaqqifant/white)}]
      [:p.h4 (labels :startpage.early-adopter/title)]
@@ -124,8 +124,7 @@
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
   [pages/with-nav-and-header
-   {:page/heading (labels :startpage/heading)
-    :page/subheading (labels :startpage/subheading)
+   {:page/title (labels :startpage/heading)
     :page/vertical-header? true
     :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
    [:<>

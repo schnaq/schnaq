@@ -1,4 +1,5 @@
 @use 'variables' as vars;
+@use 'rounded' as rounded;
 
 $header-color: vars.$primary-selected;
 $header-opacity: 1;
@@ -120,3 +121,13 @@ $gradient-target: vars.$primary;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/blue_dot.svg');
   background-size: 20px 20px;
 }
+
+.above-the-fold-screenshot {
+  @include rounded.rounded-3;
+  background: vars.$light-background;
+  border: solid 0.3rem vars.$blue-dark;
+  box-shadow: vars.$wide-shadow;
+  overflow: hidden;
+}
+
+

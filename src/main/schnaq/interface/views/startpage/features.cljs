@@ -6,34 +6,21 @@
 (defn- what-is-schnaq
   "Box describing schnaq and its advantages"
   []
-  [rows/video-right
+  [rows/video-left
    :start-page.questions/webm
    :start-page.questions/mp4
-   :startpage.objections
+   :startpage.information.know-how
    true "video-background-primary-with-shadow"])
 
 (defn- schnaq-promise
   "Box describing schnaq and its advantages"
   []
   [:div.dot-background
-   [rows/video-left
+   [rows/video-right
     :start-page.work-together/webm
     :start-page.work-together/mp4
-    :startpage.promise
+    :startpage.information.positioning
     true "video-background-primary-with-shadow"]])
-
-(defn- elephant-in-the-room
-  "Feature box showcasing the elephant in the room."
-  []
-  [rows/video-right
-   :start-page.address-elephant/webm
-   :start-page.address-elephant/mp4
-   :startpage.elephant-in-the-room
-   true "video-background-primary-with-shadow"
-   [:p.text-center.mb-0 {:key "button-elephant-room"}
-    [:a.btn.btn-primary
-     {:href (rfe/href :routes/about-us)}
-     (labels :startpage.elephant-in-the-room/button)]]])
 
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
@@ -74,5 +61,4 @@
   [:<>
    [what-is-schnaq]
    [schnaq-promise]
-   [elephant-in-the-room]
    [feature-columns]])
