@@ -130,7 +130,6 @@ $gradient-target: vars.$primary;
 .above-the-fold-screenshot {
   @include rounded.rounded-3;
   background: vars.$light-background;
-  border: solid 0.3rem vars.$blue-dark;
   box-shadow: vars.$wide-shadow;
   overflow: hidden;
 }
