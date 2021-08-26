@@ -35,13 +35,13 @@
         back-history [:discussion.history/time-travel steps-back]
         navigation (if (or is-search-view? has-history?) back-history back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
-    [:button.btn.btn-dark-highlight.w-100.h-100.p-3
-     {:on-click #(rf/dispatch navigation)}
-     [tooltip/block-element
-      :bottom
-      (labels tooltip)
+    [tooltip/text
+     (labels tooltip)
+     [:button.btn.btn-dark-highlight.w-100.h-100.p-3
+      {:on-click #(rf/dispatch navigation)}
       [:div.d-flex
        [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]]))
+
 
 (defn- discussion-start-button
   "Discussion start button for history view"
@@ -50,13 +50,13 @@
         title (:discussion/title schnaq)]
     [:div.clickable.card-history-home.text-dark
      {:on-click #(rf/dispatch [:discussion.history/time-travel history-length])}
-     [tooltip/block-element
-      :right
+     [tooltip/text
       (labels :history.home/tooltip)
       [:div.text-center
        [:h6 title]
        [:p.text-muted.mb-0 (labels :history.home/text)]
-       [badges/static-info-badges schnaq]]]]))
+       [badges/static-info-badges schnaq]]
+      {:position :top}]]))
 
 (defn history-view
   "History view displayed in the left column in the desktop view."

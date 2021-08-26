@@ -9,6 +9,7 @@
 (s/def :tooltip/placement #{:top :right :bottom :left})
 
 (defn html
+  "Wraps some content in a tooltip with the provided html inside."
   [component content options]
   [:> Tooltip
    (merge
@@ -24,15 +25,17 @@
    content])
 
 (defn text
+  "Wraps some content in a tooltip with the provided text."
   [title content options]
   [:> Tooltip
    (merge
-     {:animation "scale"
+     {:animation "shift"
       :arrow true
       :offset 5
       :position "bottom"
       :theme "light"
-      :title title}
+      :title title
+      :tag :span}
      options)
    content])
 
