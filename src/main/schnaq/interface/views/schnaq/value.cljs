@@ -27,7 +27,7 @@
      [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto.mb-5
       {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}
       (labels :schnaqs/continue-to-schnaq-button)
-      [:i.ml-2 {:class (str "fa " (fa :arrow-right))}]]]))
+      [:i.ml-2 {:class (fa :arrow-right)}]]]))
 
 (defn- value-content []
   [:<>

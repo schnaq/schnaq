@@ -130,7 +130,7 @@
       [:div.row.px-1.py-3
        [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
         (labels :schnaq.create.button/save)
-        [:i.ml-2 {:class (str "fa " (fa :arrow-right))}]]]]
+        [:i.ml-2 {:class (fa :arrow-right)}]]]]
      [how-to-elements/quick-how-to-create]]]])
 
 (defn create-schnaq-view []

@@ -55,7 +55,7 @@
      :startpage.feature-box.know-how/body]
     [feature-box
      :startpage.feature-box.discussion/title
-     :comment
+     :comments
      :startpage.feature-box.discussion/body]
     [feature-box
      :startpage.feature-box.learnings/title

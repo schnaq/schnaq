@@ -1,18 +1,16 @@
 (ns schnaq.interface.views.discussion.badges
-  (:require ["react-tippy" :refer [Tooltip]]
-            [ghostwheel.core :refer [>defn-]]
+  (:require [ghostwheel.core :refer [>defn-]]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [reagent.core :as r]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.views.discussion.common :as dcommon]
+            [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.modal :as modal]
-            [schnaq.user :as user]
-            [schnaq.config.shared :as shared-config]))
+            [schnaq.user :as user]))
 
 (>defn- build-author-list
   "Build a nicely formatted string of a html list containing the authors from a sequence."
@@ -23,40 +21,20 @@
     (apply str (map #(str "<li>" % "</li>") users))
     "</ul>"))
 
-(defn- anonymous-modal
-  "Basic modal which is presented to anonymous users trying to alter statements."
-  [header-label shield-label info-label]
-  [modal/modal-template
-   (labels header-label)
-   [:<>
-    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels shield-label)]
-    [:p (labels :discussion.anonymous-edit.modal/persuade)]
-    [:button.btn.btn-primary.mx-auto.d-block
-     {:on-click #(rf/dispatch [:keycloak/login])}
-     (labels info-label)]]])
-
-(defn- anonymous-labels-modal
-  "Explain to anonymous users that they need to log in to set and remove labels."
-  []
-  ;; TODO set the right labels
-  (anonymous-modal :discussion.anonymous-labels.modal/title
-                   :discussion.anonymous-labels.modal/explain
-                   :discussion.anonymous-labels.modal/cta))
-
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
   []
-  (anonymous-modal :discussion.anonymous-edit.modal/title
-                   :discussion.anonymous-edit.modal/explain
-                   :discussion.anonymous-edit.modal/cta))
+  (modal/anonymous-modal :discussion.anonymous-edit.modal/title
+                         :discussion.anonymous-edit.modal/explain
+                         :discussion.anonymous-edit.modal/cta))
 
 
 (defn- anonymous-delete-modal
   "Show this modal to anonymous users trying to delete statements."
   []
-  (anonymous-modal :discussion.anonymous-delete.modal/title
-                   :discussion.anonymous-delete.modal/explain
-                   :discussion.anonymous-delete.modal/cta))
+  (modal/anonymous-modal :discussion.anonymous-delete.modal/title
+                         :discussion.anonymous-delete.modal/explain
+                         :discussion.anonymous-delete.modal/cta))
 
 (defn- delete-dropdown-button
   "Give admin and author the ability to delete a statement."
@@ -96,37 +74,6 @@
                   (on-click-fn))
       :title (labels :discussion.badges/edit-statement)}
      [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)]))
-
-(defn test-component
-  [statement]
-  [:div [:p "bla"]
-   [:p "bla"]
-   [:p (:statement/content statement)]])
-
-(defn- edit-labels-button
-  "Give the registered user the ability to add or remove labels to a statement."
-  ;; TODO labelize
-  [statement]
-  (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    (if authenticated?
-      [:> Tooltip
-       {:title "Clickedy"
-        :trigger "click"
-        :interactive true
-        :arrow true
-        :offset 5
-        :position "bottom"
-        :html (r/as-element [test-component statement])}
-       [:div.pr-2
-        [:i {:class (fa :tag)}]]]
-      [:button.dropdown-item
-       {:tabIndex 30
-        :on-click (fn [e]
-                    (js-wrap/stop-propagation e)
-                    #(rf/dispatch [:modal {:show? true
-                                           :child [anonymous-labels-modal]}]))
-        :title "Labels"}
-       [:i {:class (str "m-auto " (fa :tag))}] " Labels"])))
 
 (defn- is-deletable?
   "Checks if a statement can be deleted"
@@ -178,7 +125,7 @@
         new? (not (= old-statement-num statement-num))
         authors (conj (-> statement :meta/sub-discussion-info :authors)
                       (user/statement-author statement))
-        pill-class {:class (str "m-auto fas " (fa :comment))}]
+        pill-class {:class (str "m-auto fas " (fa :comments))}]
     [:div.d-flex.flex-row
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       {:on-click (dcommon/navigate-to-statement-on-click statement path-parameters)}
@@ -199,7 +146,7 @@
        :data-content (build-author-list authors)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (count authors)]
-     [edit-labels-button statement]
+     [labels/edit-labels-button statement]
      [edit-statement-dropdown-menu statement edit-hash]]))
 
 (defn static-info-badges
@@ -211,7 +158,7 @@
         locale @(rf/subscribe [:current-locale])]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
-      [:i {:class (str "m-auto fas " (fa :comment))}]
+      [:i {:class (str "m-auto fas " (fa :comments))}]
       " " statement-count]
      [:span.badge.badge-pill.badge-transparent.mr-2
       {:tabIndex 20

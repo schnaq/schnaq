@@ -43,7 +43,7 @@
   []
   [:<>
    [bullet-point :clipboard :feature/organization]
-   [bullet-point :comment :feature/inputs]
+   [bullet-point :comments :feature/inputs]
    [bullet-point :puzzle :feature/integration]
    [bullet-point :user/group :feature/equality]
    [bullet-point :shield :feature/datenschutz]])
