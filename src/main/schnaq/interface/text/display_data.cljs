@@ -1081,7 +1081,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :startpage.information.know-how/body "Wir arbeiten tagtäglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört wird."
 
         :startpage.information.positioning/title "Schnaq ist der perfekte Partner für deine digitale Transformation"
-        :startpage.information.positioning/body "Wir versprechen dir nachhaltiges Wissensmanagement das Zeit und Ressourcen spart."
+        :startpage.information.positioning/body "Wir garantieren dir mit schnaq nachhaltiges Wissensmanagement das Zeit und Ressourcen spart."
 
 
         ;; falls wir subpages mit features einrichten, dann kann man sich hier bedienen
