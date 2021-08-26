@@ -4,8 +4,6 @@
             [ghostwheel.core :refer [>defn-]]
             [reagent.core :as reagent]))
 
-(s/def :tooltip/placement #{:top :right :bottom :left})
-
 (defn html
   "Wraps some content in a tooltip with the provided html inside."
   [component content options]
@@ -37,18 +35,11 @@
      options)
    content])
 
-(>defn- tooltip-builder
-  [wrapping-html tooltip-placement tooltip-text content on-click-fn]
-  [keyword? :tooltip/placement string? any? fn? :ret fn?]
-  [text
-   tooltip-text
-   [wrapping-html
-    {:on-click on-click-fn}
-    content]
-   {:position tooltip-placement}])
-
 (defn tooltip-button
   [tooltip-location tooltip content on-click-fn]
-  [tooltip-builder
-   :button.btn.btn-outline-muted.btn-lg
-   tooltip-location tooltip content on-click-fn])
+  [text
+   tooltip
+   [:button.btn.btn-outline-muted.btn-lg
+    {:on-click on-click-fn}
+    content]
+   {:position tooltip-location}])
