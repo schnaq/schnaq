@@ -75,7 +75,7 @@
         :startpage.information.know-how/body "We work every day to do our part for a business world where everyone is heard."
 
         :startpage.information.positioning/title "Schnaq is the perfect partner for digital transformation."
-        :startpage.information.positioning/body "We promise sustainable knowledge management that saves time and resources."
+        :startpage.information.positioning/body "We guarantee sustainable knowledge management that saves time and resources."
 
 
 
