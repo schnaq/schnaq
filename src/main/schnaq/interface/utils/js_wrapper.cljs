@@ -1,8 +1,10 @@
 (ns schnaq.interface.utils.js-wrapper
   (:require ["jquery" :as jquery]
+            ["react-tippy" :refer [Tooltip]]
             [ghostwheel.core :refer [>defn]]
             [goog.dom :as gdom]
-            [goog.dom.dataset :as dataset]))
+            [goog.dom.dataset :as dataset]
+            [reagent.core :as r]))
 
 
 (>defn $
@@ -55,11 +57,33 @@
   ([selector option]
    (.tooltip (jquery selector) option)))
 
-(defn popover
-  ([selector]
-   (popover selector "enable"))
-  ([selector option]
-   (.popover (jquery selector) option)))
+(defn TippyHtml
+  [component content options]
+  [:> Tooltip
+   (merge
+     {:animation "scale"
+      :arrow true
+      :html (r/as-element component)
+      :interactive true
+      :offset 5
+      :position "bottom"
+      :theme "light"
+      :trigger "click"}
+     options)
+   content])
+
+(defn TippyText
+  [title content options]
+  [:> Tooltip
+   (merge
+     {:animation "scale"
+      :arrow true
+      :offset 5
+      :position "bottom"
+      :theme "light"
+      :title title}
+     options)
+   content])
 
 (>defn replace-url
   "Replaces the current URL in the users window and acts as a redirect."
