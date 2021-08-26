@@ -74,4 +74,4 @@
 (defn update-statement-in-list
   "Updates the content of a statement in a collection."
   [coll new-statement]
-  (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))
+  (map #(if (= (:db/id new-statement) (:db/id %)) new-statement %) coll))
