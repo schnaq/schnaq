@@ -11,6 +11,7 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.notifications :refer [notify!]]
@@ -24,7 +25,7 @@
                                             :path-params :share-hash))
         meeting-link-id (str "meeting-link" id-extra)]
     [:div.pb-4
-     [js-wrap/TippyText
+     [tooltip/text
       (labels :schnaq/copy-link-tooltip)
       [:form.form.create-meeting-form.d-flex
        {:id (str "meeting-link-form-" id-extra)
