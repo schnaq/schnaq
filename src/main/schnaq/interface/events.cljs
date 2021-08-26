@@ -40,6 +40,7 @@
           [:dispatch [:how-to-visibility/from-localstorage-to-app-db]]
           [:dispatch [:keycloak/init]]
           [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]
+          [:dispatch [:visited.save-statement-ids/store-hashes-from-localstorage]]
           [:dispatch [:schnaqs.save-admin-access/store-hashes-from-localstorage]]
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]
           [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
