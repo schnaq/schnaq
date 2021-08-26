@@ -33,8 +33,8 @@
 
 ;; Feedbacks
 (s/def ::feedback
-  (s/keys :req-un [:feedback/description :feedback/has-image?]
-          :opt-un [:feedback/contact-name :feedback/contact-mail]))
+  (s/keys :req [:feedback/description :feedback/has-image?]
+          :opt [:feedback/contact-name :feedback/contact-mail]))
 
 ;; Summaries
 (s/def ::summary

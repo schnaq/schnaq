@@ -16,8 +16,8 @@
 
 (deftest add-feedback
   (testing "Minimum feedback has no image and description."
-    (let [feedback {:description "Some feedback"
-                    :has-image? false}]
+    (let [feedback {:feedback/description "Some feedback"
+                    :feedback/has-image? false}]
       (is (= 201 (:status (add-feedback-request feedback))))
 
       (is (->> (add-feedback-request feedback)
