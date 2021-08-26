@@ -1,13 +1,12 @@
 (ns schnaq.interface.views.discussion.badges
-  (:require ["react-tippy" :refer [Tooltip]]
-            [hodgepodge.core :refer [local-storage]]
+  (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [reagent.core :as r]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.labels :as statement-labels]
             [schnaq.interface.views.modal :as modal]
@@ -120,16 +119,12 @@
   "A badge listing the people participating in the discussion."
   [authors]
   [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
-   [:> Tooltip
+   [tooltip/html
+    [author-list authors]
+    [:<> [:i {:class (str "m-auto fas " (fa :user/group))}] " " (count authors)]
     {:animation "scale"
-     :arrow true
-     :html (r/as-element [author-list authors])
      :offset 5
-     :position "bottom"
-     :theme "light"
-     :trigger "click"}
-    [:i {:class (str "m-auto fas " (fa :user/group))}] " "
-    (count authors)]])
+     :trigger "click"}]])
 
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
