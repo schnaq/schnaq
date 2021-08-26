@@ -1,7 +1,5 @@
 (ns schnaq.interface.utils.tooltip
   (:require ["react-tippy" :refer [Tooltip]]
-            [cljs.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn-]]
             [reagent.core :as reagent]))
 
 (defn html
