@@ -37,7 +37,7 @@
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.logging:1.1.0" level="project" />
-    <orderEntry type="library" name="Deps: metosin/ring-http-response:0.9.2" level="project" />
+    <orderEntry type="library" name="Deps: metosin/ring-http-response:0.9.3" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/core.specs.alpha:0.2.56" level="project" />
     <orderEntry type="library" name="Deps: org.tukaani/xz:1.5" level="project" />
     <orderEntry type="library" name="Deps: org.bouncycastle/bcpkix-jdk15on:1.65" level="project" />
@@ -52,6 +52,7 @@
     <orderEntry type="library" name="Deps: com.fasterxml.jackson.core/jackson-databind:2.12.4" level="project" />
     <orderEntry type="library" name="Deps: expound:0.8.9" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/spec.alpha:0.2.194" level="project" />
+    <orderEntry type="library" name="Deps: cli-matic:0.4.3" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.cli:1.0.206" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-transport-native-kqueue$osx-x86_64:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-core:11.0.2" level="project" />
@@ -74,7 +75,8 @@
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpasyncclient:4.1.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-handler-proxy:4.1.48.Final" level="project" />
-    <orderEntry type="library" name="Deps: keycloak-clojure:1.17.10" level="project" />
+    <orderEntry type="library" name="Deps: keycloak-clojure:1.17.12" level="project" />
+    <orderEntry type="library" name="Deps: jarohen/chime:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.common/wildfly-common:1.5.2.Final" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-admin-client:11.0.2" level="project" />

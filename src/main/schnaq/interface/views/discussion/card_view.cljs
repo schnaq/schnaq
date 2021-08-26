@@ -35,6 +35,11 @@
   (fn [db _]
     (get-in db [:discussion :conclusions :starting] [])))
 
+(rf/reg-sub
+  :discussion.conclusions/selected
+  (fn [db _]
+    (get-in db [:discussion :conclusions :selected] [])))
+
 ;; -----------------------------------------------------------------------------
 
 (defn derive-view []

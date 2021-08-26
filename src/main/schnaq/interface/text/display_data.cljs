@@ -626,6 +626,7 @@
         :discussion.notification/new-content-body "Your statement was added successfully!"
         :discussion.badges/edit-statement "edit"
         :discussion.badges/statement-by " by "              ; spaces intended
+        :discussion.badges/new "New"
 
         ;; meetings overview
         :schnaqs/header "Overview of your schnaqs"
@@ -1633,6 +1634,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.notification/new-content-body "Dein Beitrag wurde erfolgreich gespeichert."
         :discussion.badges/edit-statement "editieren"
         :discussion.badges/statement-by " von "             ; spaces intended
+        :discussion.badges/new "Neu"
 
         :schnaqs/header "Übersicht deiner schnaqs"
         :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
