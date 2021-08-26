@@ -11,15 +11,22 @@
 (defn build-label
   "Takes a label and builds the neccesary html."
   [label]
-  label
+  ;; TODO add hover animation and pointer
   (case label
-    ":comment" [:i {:class "m-auto fas fa-comment"}]
-    ":arrow-right" [:i {:class "m-auto fas fa-arrow-right"}]
-    ":calendar-alt" [:i {:class "m-auto fas fa-calendar-alt"}]
-    ":check" [:i {:class "m-auto fas fa-check"}]
-    ":ghost" [:i {:class "m-auto fas fa-ghost"}]
-    ":question" [:i {:class "m-auto fas fa-question"}]
-    ":times" [:i {:class "m-auto fas fa-times"}]))
+    ":comment"
+    [:span.badge.badge-pill.badge-primary.px-4 [:i {:class "m-auto fas fa-comment"}]]
+    ":arrow-right"
+    [:span.badge.badge-pill.badge-purple.px-4 [:i {:class "m-auto fas fa-arrow-right"}]]
+    ":calendar-alt"
+    [:span.badge.badge-pill.badge-info.px-4 [:i {:class "m-auto fas fa-calendar-alt"}]]
+    ":check"
+    [:span.badge.badge-pill.badge-success.px-4 [:i {:class "m-auto fas fa-check"}]]
+    ":ghost"
+    [:span.badge.badge-pill.badge-dark.px-4 [:i {:class "m-auto fas fa-ghost"}]]
+    ":question"
+    [:span.badge.badge-pill.badge-warning.px-4 [:i {:class "m-auto fas fa-question"}]]
+    ":times"
+    [:span.badge.badge-pill.badge-danger.px-4 [:i {:class "m-auto fas fa-times"}]]))
 
 (defn- anonymous-labels-modal
   "Explain to anonymous users that they need to log in to set and remove labels."
@@ -44,14 +51,15 @@
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     (if authenticated?
       [:> Tooltip
-       {:trigger "click"
-        :interactive true
+       {:animation "scale"
         :arrow true
+        :html (r/as-element [test-component statement])
+        :interactive true
         :offset 5
-        :theme "light"
-        :size "big"
         :position "bottom"
-        :html (r/as-element [test-component statement])}
+        :size "big"
+        :theme "light"
+        :trigger "click"}
        [:div.pr-2.clickable
         [:i {:class (fa :tag)}]]]
       [:button.dropdown-item
