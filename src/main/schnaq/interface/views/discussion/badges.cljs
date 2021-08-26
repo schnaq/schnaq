@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.badges
   (:require ["react-tippy" :refer [Tooltip]]
-            [ghostwheel.core :refer [>defn-]]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reagent.core :as r]
@@ -20,7 +19,6 @@
   (modal/anonymous-modal :discussion.anonymous-edit.modal/title
                          :discussion.anonymous-edit.modal/explain
                          :discussion.anonymous-edit.modal/cta))
-
 
 (defn- anonymous-delete-modal
   "Show this modal to anonymous users trying to delete statements."
