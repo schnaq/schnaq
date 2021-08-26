@@ -70,3 +70,8 @@
   [mail]
   [:span.obfuscate
    (apply str (reverse mail))])
+
+(defn update-statement-in-list
+  "Updates the content of a statement in a collection."
+  [coll new-statement]
+  (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))

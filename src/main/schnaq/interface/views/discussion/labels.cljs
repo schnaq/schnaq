@@ -4,7 +4,8 @@
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [fa]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.modal :as modal]))
 
 (defn build-label
@@ -65,3 +66,32 @@
         :on-click #(rf/dispatch [:modal {:show? true
                                          :child [anonymous-labels-modal]}])}
        [:i {:class (fa :tag)}]])))
+
+(rf/reg-event-fx
+  :statement.labels/remove
+  (fn [{:keys [db]} [_ statement-id label]]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+      {:fx [(http/xhrio-request db :put "/discussion/statement/label/remove"
+                                [:statements.labels.update/success]
+                                {:share-hash share-hash
+                                 :statement-id statement-id
+                                 :label label})]})))
+
+(rf/reg-event-db
+  :statements.labels.update/success
+  (fn [db [_ response]]
+    (println response)
+    (let [updated-statement (:statement response)]
+      (-> db
+          (update-in [:discussion :conclusions :starting] #(tools/update-statement-in-list % updated-statement))
+          (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))))))
+
+(rf/reg-event-fx
+  :statement.labels/add
+  (fn [{:keys [db]} [_ statement-id label]]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
+      {:fx [(http/xhrio-request db :put "/discussion/statement/label/add"
+                                [:statements.labels.update/success]
+                                {:share-hash share-hash
+                                 :statement-id statement-id
+                                 :label label})]})))
