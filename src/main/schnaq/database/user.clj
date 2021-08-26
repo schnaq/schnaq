@@ -16,8 +16,7 @@
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
-   {:user.registered/visited-schnaqs [:discussion/share-hash]}
-   {:user.registered/visited-statement-ids [:db/id]}])
+   {:user.registered/visited-schnaqs [:discussion/share-hash]}])
 
 (def seen-statements-pattern
   [:seen-statements/user
