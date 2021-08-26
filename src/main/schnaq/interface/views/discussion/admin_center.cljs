@@ -186,7 +186,7 @@
                                      :body (labels :schnaq.admin.notifications/statements-deleted-lead)
                                      :context :success}]]
           [:dispatch [:discussion.delete/purge-stores statement-id return]]]}))
-;; TODO edit und labels ändern löscht meta infos
+
 (rf/reg-event-db
   ;; Delete a statement-id from conclusions-list, history and carousels
   :discussion.delete/purge-stores

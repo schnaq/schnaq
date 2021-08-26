@@ -147,7 +147,11 @@
                                               :statement/deleted?])]
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
-      #(ok {:updated-statement (discussion-db/change-statement-text-and-type statement statement-type new-content)})
+      #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
+                                   processors/with-votes
+                                   with-sub-discussion-info
+                                   (with-new-post-info share-hash (:sub identity))
+                                   first)})
       #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not edit a closed / deleted discussion or statement."))
       #(validator/deny-access at/invalid-rights-message))))
 
@@ -295,16 +299,24 @@
 (defn- add-label
   "Add a label to a statement. Only pre-approved labels can be set. Custom labels have no effect.
   The user needs to be authenticated. The statement concerned is always returned."
-  [{:keys [parameters]}]
-  (let [{:keys [statement-id label]} (:body parameters)]
-    (ok {:statement (discussion-db/add-label statement-id label)})))
+  [{:keys [parameters identity]}]
+  (let [{:keys [statement-id label share-hash]} (:body parameters)]
+    (ok {:statement (-> [(discussion-db/add-label statement-id label)]
+                        valid-statements-with-votes
+                        with-sub-discussion-info
+                        (with-new-post-info share-hash (:sub identity))
+                        first)})))
 
 (defn- remove-label
   "Remove a label from a statement. Removing a label not present has no effect.
   The user needs to be authenticated. The statement concerned is always returned."
-  [{:keys [parameters]}]
-  (let [{:keys [statement-id label]} (:body parameters)]
-    (ok {:statement (discussion-db/remove-label statement-id label)})))
+  [{:keys [parameters identity]}]
+  (let [{:keys [statement-id label share-hash]} (:body parameters)]
+    (ok {:statement (-> [(discussion-db/remove-label statement-id label)]
+                        valid-statements-with-votes
+                        with-sub-discussion-info
+                        (with-new-post-info share-hash (:sub identity))
+                        first)})))
 
 ;; -----------------------------------------------------------------------------
 
@@ -452,9 +464,9 @@
                            400 at/response-error-body
                            403 at/response-error-body}}]
       ["/remove" {:put remove-label
-               :description (at/get-doc #'remove-label)
-               :name :api.discussion.statement.label/remove
-               :parameters {:body {:label :statement/label}}
-               :responses {200 {:body {:statement ::dto/statement}}
-                           400 at/response-error-body
-                           403 at/response-error-body}}]]]]])
+                  :description (at/get-doc #'remove-label)
+                  :name :api.discussion.statement.label/remove
+                  :parameters {:body {:label :statement/label}}
+                  :responses {200 {:body {:statement ::dto/statement}}
+                              400 at/response-error-body
+                              403 at/response-error-body}}]]]]])
