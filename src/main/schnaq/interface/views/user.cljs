@@ -11,8 +11,10 @@
 
 (defn user-info
   "User info box displaying user's nickname, timestamp and the avatar."
-  [user avatar-size time additional-classes]
+  [statement avatar-size additional-classes]
   (let [locale @(rf/subscribe [:current-locale])
+        user (:statement/author statement)
+        time (:statement/created-at statement)
         authenticated? (:user.registered/keycloak-id user)
         display-name (toolbelt/truncate-to-n-chars (user-utils/display-name user) 15)
         name-class (if authenticated? "text-primary" "text-muted")]

@@ -212,7 +212,7 @@
         statement (if is-topic? content current-conclusion)]
     [:div.p-2
      [:div.d-flex.flex-wrap.mb-4
-      [user/user-info (:statement/author statement) 42 (:statement/created-at statement) nil]
+      [user/user-info statement 42 nil]
       [discussion-privacy-badge]]
      [title-and-input-element statement]]))
 
