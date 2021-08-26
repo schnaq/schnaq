@@ -11,6 +11,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.edit :as edit]
+            [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
 
@@ -50,7 +51,8 @@
 
 (defn statement-card
   [edit-hash statement]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
+        statement-labels (set (:statement/labels statement))]
     [:article.card.statement-card
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
@@ -65,7 +67,12 @@
          [:i {:class (str "m-auto far " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-sm-0.ml-lg-auto
-         [badges/extra-discussion-info-badges statement edit-hash]]]]]]))
+         [badges/extra-discussion-info-badges statement edit-hash]]]
+       (when (seq statement-labels)
+         [:div.mx-1
+          (for [label statement-labels]
+            [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+             [labels/build-label label]])])]]]))
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."

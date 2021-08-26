@@ -15,7 +15,8 @@
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
-            [schnaq.user :as user-utils]))
+            [schnaq.user :as user-utils]
+            [schnaq.interface.views.discussion.labels :as labels]))
 
 (defn info-content-conclusion
   "Badges and up/down-votes to be displayed in the topic bubble."
@@ -191,13 +192,17 @@
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         info-content [info-content-conclusion statement (:discussion/edit-hash statement)]
-        input-style (if is-topic? "statement-text" "premise-text")]
+        input-style (if is-topic? "statement-text" "premise-text")
+        statement-labels (set (:statement/labels statement))]
     [:<>
      [title-view statement is-topic?]
-     [:div.d-flex.flex-row.my-4
+     [:div.d-flex.flex-row.mt-4.mb-2
       (when-not is-topic?
         [:div.mr-auto info-content])
       [current-topic-badges schnaq statement is-topic?]]
+     (for [label statement-labels]
+       [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+        [labels/build-label label]])
      [:div.line-divider.my-4]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]

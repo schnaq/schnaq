@@ -9,7 +9,7 @@
 
 (defn build-label
   "Takes a label and builds the neccesary html."
-  [label set?]
+  [label set? hover?]
   (let [[badge-color icon-class]
         (case label
           ":comment" ["badge-primary" "fa-comment"]
@@ -20,8 +20,8 @@
           ":question" ["badge-warning" "fa-question"]
           ":times" ["badge-danger" "fa-times"])
         extra-class (if set? (str badge-color " label-set") badge-color)]
-    [:span.badge.badge-pill.px-4.label
-     {:class extra-class}
+    [:span.badge.badge-pill.px-4
+     {:class (if hover? (str extra-class " label") extra-class)}
      [:i {:class (str "m-auto fas " icon-class)}]]))
 
 (defn- anonymous-labels-modal
@@ -39,7 +39,7 @@
      [:span.mr-3
       {:key (str "label-" (:db/id statement) "-" label)
        :on-click #(js/alert (str "Clicked on" label))}
-      [build-label label ((set (:statement/labels statement)) label)]])])
+      [build-label label ((set (:statement/labels statement)) label) :hover]])])
 
 (defn edit-labels-button
   "Give the registered user the ability to add or remove labels to a statement."
