@@ -3,7 +3,7 @@
             [schnaq.interface.utils.rows :as rows]))
 
 (defn- what-is-schnaq
-  "Box describing schnaq and its advantages"
+  "Box describing what schnaq does and why"
   []
   [rows/image-left
    :startpage.example/statements
@@ -11,7 +11,7 @@
    true "video-background-primary-with-shadow"])
 
 (defn- schnaq-promise
-  "Box describing schnaq and its advantages"
+  "Box describing schnaq's promise to the user"
   []
   [:div.dot-background
    [rows/image-right
