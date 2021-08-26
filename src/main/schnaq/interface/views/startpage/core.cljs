@@ -2,7 +2,6 @@
   "Defining the startpage of schnaq."
   (:require [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path]]
-            [schnaq.interface.views.base :as base]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.call-to-actions :as cta]
             [schnaq.interface.views.startpage.features :as startpage-features]
@@ -57,9 +56,9 @@
 (defn- early-adopters
   "Present early-adopters section to catch up interest."
   []
-  [:section.overflow-hidden.py-3
-   [base/wavy-curve "scale(1.5,-1)"]
-   [:div.early-adopter
+  [:section.overflow-hidden.py-3.my-5
+   [:div.wave-bottom-white]
+   [:div.bg-white
     [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
      [:p.h4 (labels :startpage.early-adopter/title)]
      [:p.lead.pb-3 (labels :startpage.early-adopter/body)]
@@ -71,7 +70,7 @@
       {:role "button"
        :href (reitfe/href :routes.schnaq/create)}
       (labels :schnaq.create.button/save)]]]
-   [base/wavy-curve "scale(1.5,1)"]])
+   [:div.wave-bottom-white-inverted]])
 
 (defn- supporters []
   [:section.pb-5.pt-3
