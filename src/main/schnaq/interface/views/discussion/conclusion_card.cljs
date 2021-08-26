@@ -110,16 +110,13 @@
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
         card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion ")
-        current-starting @(rf/subscribe [:discussion.conclusions/starting])
-        current-premises @(rf/subscribe [:discussion.premises/current])
-        is-starting? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        conclusions (if is-starting? current-starting current-premises)]
-    (if (seq conclusions)
+        current-premises @(rf/subscribe [:discussion.premises/current])]
+    (if (seq current-premises)
       (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
             keyfn (case sort-method
                     :newest :statement/created-at
                     :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
-            sorted-conclusions (sort-by keyfn > conclusions)]
+            sorted-conclusions (sort-by keyfn > current-premises)]
         [:div.card-columns.pb-3
          {:class card-column-class}
          (for [statement sorted-conclusions]
@@ -132,7 +129,7 @@
   :discussion.select/conclusion
   (fn [{:keys [db]} [_ conclusion]]
     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
+      {:db (assoc-in db [:discussion :conclusion :selected] conclusion)
        :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]
                                 {:conclusion-id (:db/id conclusion)

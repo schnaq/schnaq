@@ -186,7 +186,7 @@
                                      :body (labels :schnaq.admin.notifications/statements-deleted-lead)
                                      :context :success}]]
           [:dispatch [:discussion.delete/purge-stores statement-id return]]]}))
-
+;; TODO edit und labels ändern löscht meta infos
 (rf/reg-event-db
   ;; Delete a statement-id from conclusions-list, history and carousels
   :discussion.delete/purge-stores
@@ -197,13 +197,16 @@
                              %)
                           coll))
           delete-fn (fn [coll] (remove #(= statement-id (:db/id %)) coll))
+          mark-starting-fn #(if (= (:db/id %) statement-id)
+                              (assoc % :statement/content config/deleted-statement-text)
+                              %)
           method (or (:method return-value) (first (:methods return-value)))]
       (if (= :deleted method)
         (-> db
-            (update-in [:discussion :conclusions :starting] delete-fn)
+            (update-in [:discussion :conclusion :selected] mark-starting-fn)
             (update-in [:discussion :premises :current] delete-fn))
         (-> db
-            (update-in [:discussion :conclusions :starting] mark-fn)
+            (update-in [:discussion :conclusion :selected] mark-starting-fn)
             (update-in [:discussion :premises :current] mark-fn)
             (update-in [:history :full-context] mark-fn))))))
 

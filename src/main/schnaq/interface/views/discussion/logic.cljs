@@ -106,7 +106,7 @@
   (fn [{:keys [db]} [_ {:keys [conclusion premises history]}]]
     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:db (-> db
-               (assoc-in [:discussion :conclusions :selected] conclusion)
+               (assoc-in [:discussion :conclusion :selected] conclusion)
                (assoc-in [:discussion :premises :current] premises)
                (assoc-in [:history :full-context] (vec history)))
        :fx [[:dispatch [:discussion.history/push conclusion]]

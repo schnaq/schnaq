@@ -137,7 +137,7 @@
 (rf/reg-event-fx
   :discussion.query.conclusions/set-starting
   (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
-    {:db (assoc-in db [:discussion :conclusions :starting] starting-conclusions)
+    {:db (assoc-in db [:discussion :premises :current] starting-conclusions)
      :fx [[:dispatch [:votes.local/reset]]]}))
 
 (rf/reg-event-db
@@ -210,7 +210,7 @@
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at]} @(rf/subscribe [:schnaq/selected])
-        current-conclusion @(rf/subscribe [:discussion.conclusions/selected])
+        current-conclusion @(rf/subscribe [:discussion.conclusion/selected])
         content {:statement/content title :statement/author author :statement/created-at created-at}
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         statement (if is-topic? content current-conclusion)]

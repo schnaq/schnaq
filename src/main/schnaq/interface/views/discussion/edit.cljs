@@ -58,9 +58,11 @@
   (fn [{:keys [db]} [_ form response]]
     (let [updated-statement (:updated-statement response)]
       {:db (-> db
-               (update-in [:discussion :conclusions :starting] #(tools/update-statement-in-list % updated-statement))
                (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))
-               (update-in [:history :full-context] #(vec (tools/update-statement-in-list % updated-statement))))
+               (update-in [:history :full-context] #(vec (tools/update-statement-in-list % updated-statement)))
+               (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
+                                                                 updated-statement
+                                                                 %)))
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
 

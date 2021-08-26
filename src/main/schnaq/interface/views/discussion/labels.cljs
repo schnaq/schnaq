@@ -80,11 +80,12 @@
 (rf/reg-event-db
   :statements.labels.update/success
   (fn [db [_ response]]
-    (println response)
     (let [updated-statement (:statement response)]
       (-> db
-          (update-in [:discussion :conclusions :starting] #(tools/update-statement-in-list % updated-statement))
-          (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))))))
+          (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))
+          (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
+                                                            updated-statement
+                                                            %))))))
 
 (rf/reg-event-fx
   :statement.labels/add
