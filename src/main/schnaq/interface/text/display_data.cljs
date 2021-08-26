@@ -2095,6 +2095,8 @@ Now we write down questions and discuss them and can still understand what we ha
      :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
      :startpage.example/discussion "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_discussion.jpg"
+     :startpage.example/dashboard "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_dashboard.jpg"
+     :startpage.example/statements "https://s3.disqtec.com/schnaq-common/startpage/screenshots/all_statements.png"
      :team/alexander "https://s3.disqtec.com/team/alexanderschneider.jpg"
      :team/at-table-with-laptop "https://s3.disqtec.com/team/team_hinter_laptop_am_tisch.jpg"
      :team/sitting-on-couches "https://s3.disqtec.com/team/team_auf_couches.jpg"

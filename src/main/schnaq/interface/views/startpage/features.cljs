@@ -6,9 +6,8 @@
 (defn- what-is-schnaq
   "Box describing schnaq and its advantages"
   []
-  [rows/video-left
-   :start-page.questions/webm
-   :start-page.questions/mp4
+  [rows/image-left
+   :startpage.example/statements
    :startpage.information.know-how
    true "video-background-primary-with-shadow"])
 
@@ -16,9 +15,8 @@
   "Box describing schnaq and its advantages"
   []
   [:div.dot-background
-   [rows/video-right
-    :start-page.work-together/webm
-    :start-page.work-together/mp4
+   [rows/image-right
+    :startpage.example/dashboard
     :startpage.information.positioning
     true "video-background-primary-with-shadow"]])
 
