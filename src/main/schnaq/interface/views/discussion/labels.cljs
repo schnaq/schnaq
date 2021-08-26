@@ -1,11 +1,10 @@
 (ns schnaq.interface.views.discussion.labels
-  (:require ["react-tippy" :refer [Tooltip]]
-            [re-frame.core :as rf]
-            [reagent.core :as r]
+  (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.modal :as modal]))
 
 (defn build-label
@@ -49,18 +48,14 @@
   [statement]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     (if authenticated?
-      [:> Tooltip
-       {:animation "scale"
-        :arrow true
-        :html (r/as-element [build-labels statement])
-        :interactive true
-        :offset 5
-        :position "bottom"
-        :size "big"
-        :theme "light"
-        :trigger "click"}
+      [tooltip/html
+       [build-labels statement]
        [:div.pr-2.clickable
-        [:i {:class (fa :tag)}]]]
+        [:i {:class (fa :tag)}]]
+       {:animation "scale"
+        :offset 5
+        :size "big"
+        :trigger "click"}]
       [:div.pr-2.clickable
        {:tabIndex 30
         :on-click #(rf/dispatch [:modal {:show? true
