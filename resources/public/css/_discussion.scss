@@ -89,9 +89,11 @@
 
 .label {
   cursor: pointer;
-  transition: font-size 0.15s ease;
+  transition: font-size 0.15s ease, padding 0.15s ease;
 }
 
 .label:hover {
   font-size: 1.1rem;
+  padding-bottom: 0.2rem;
+  padding-top: 0.2rem;
 }
