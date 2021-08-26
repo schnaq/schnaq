@@ -36,5 +36,6 @@
   "Print prettified string containing the timestamp with a tooltip."
   [timestamp locale]
   [inst? keyword? :ret vector?]
-  [tooltip/inline-element :bottom (formatted-with-timezone timestamp)
+  [tooltip/text
+   (formatted-with-timezone timestamp)
    (format-distance timestamp locale)])

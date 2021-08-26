@@ -47,11 +47,6 @@
     content]
    {:position tooltip-placement}])
 
-(defn inline-element
-  "Wrap the `content` with in an inline-element and add a tooltip."
-  [tooltip-location tooltip content]
-  [tooltip-builder :span tooltip-location tooltip content])
-
 (defn tooltip-button
   [tooltip-location tooltip content on-click-fn]
   [tooltip-builder
