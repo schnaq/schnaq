@@ -23,7 +23,7 @@
   "A Single feature box that can be put in a row. All inputs are keys."
   [title body]
   [:div.col-12.col-md-4
-   [:div.panel-white.mx-1.shadow.py-5
+   [:div.panel-white.mx-1.shadow.py-5.text-center
     [:div.display-6.text-purple.mb-5 (labels title)]
     [:p.text-justify (labels body)]]])
 
