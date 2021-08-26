@@ -33,13 +33,15 @@
 
 (defn build-labels
   [statement]
-  ;; TODO add on-click method
   [:<>
-   (for [label shared-config/allowed-labels]
-     [:span.mr-3
-      {:key (str "label-" (:db/id statement) "-" label)
-       :on-click #(js/alert (str "Clicked on" label))}
-      [build-label label ((set (:statement/labels statement)) label) :hover]])])
+   (let [set-labels (set (:statement/labels statement))]
+     (for [label shared-config/allowed-labels]
+       [:span.mr-3
+        {:key (str "label-" (:db/id statement) "-" label)
+         :on-click #(if (set-labels label)
+                      (rf/dispatch [:statement.labels/remove (:db/id statement) label])
+                      (rf/dispatch [:statement.labels/add (:db/id statement) label]))}
+        [build-label label (set-labels label) :hover]]))])
 
 (defn edit-labels-button
   "Give the registered user the ability to add or remove labels to a statement."
