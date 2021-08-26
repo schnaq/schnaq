@@ -48,12 +48,6 @@
   [string? :ret int?]
   (.index (jquery selector)))
 
-(defn tooltip
-  ([selector]
-   (tooltip selector "enable"))
-  ([selector option]
-   (.tooltip (jquery selector) option)))
-
 (>defn replace-url
   "Replaces the current URL in the users window and acts as a redirect."
   [new-url]
