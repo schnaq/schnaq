@@ -10,7 +10,6 @@
 (defn build-label
   "Takes a label and builds the neccesary html."
   [label set?]
-  ;; TODO add hover animation and pointer
   (let [[badge-color icon-class]
         (case label
           ":comment" ["badge-primary" "fa-comment"]
@@ -21,7 +20,7 @@
           ":question" ["badge-warning" "fa-question"]
           ":times" ["badge-danger" "fa-times"])
         extra-class (if set? (str badge-color " label-set") badge-color)]
-    [:span.badge.badge-pill.px-4
+    [:span.badge.badge-pill.px-4.label
      {:class extra-class}
      [:i {:class (str "m-auto fas " icon-class)}]]))
 

@@ -86,3 +86,12 @@
 .label-set {
   border: 2px solid $gray-600;
 }
+
+.label {
+  cursor: pointer;
+  transition: font-size 0.15s ease;
+}
+
+.label:hover {
+  font-size: 1.1rem;
+}
