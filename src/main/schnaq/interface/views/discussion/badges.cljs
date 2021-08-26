@@ -1,7 +1,9 @@
 (ns schnaq.interface.views.discussion.badges
-  (:require [ghostwheel.core :refer [>defn-]]
+  (:require ["react-tippy" :refer [Tooltip]]
+            [ghostwheel.core :refer [>defn-]]
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -95,62 +97,36 @@
       :title (labels :discussion.badges/edit-statement)}
      [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)]))
 
+(defn test-component
+  [statement]
+  [:div [:p "bla"]
+   [:p "bla"]
+   [:p (:statement/content statement)]])
+
 (defn- edit-labels-button
   "Give the registered user the ability to add or remove labels to a statement."
   ;; TODO labelize
   [statement]
-  (let [authenticated? @(rf/subscribe [:user/authenticated?])
-        on-click-fn (if authenticated?
-                      #(rf/dispatch [:modal {:show? true
-                                             :child [anonymous-labels-modal]}])
-                      (fn []
-                        ;; TODO add label function here
-                        ))]
-    (if true
-      (let [dropdown-id (str "label-" (:db/id statement))]
-        #_[:div.btn-group
-           [:button.btn.btn-danger.dropdown-toggle {:type "button" :data-toggle "dropdown" :aria-haspopup "true" :aria-expanded "false"} "Action"]
-           [:div.dropdown-menu.dropdown-menu-right
-            [:a.dropdown-item {:href "#"} "Action"]
-            [:a.dropdown-item {:href "#"} "Another action"]
-            [:a.dropdown-item {:href "#"} "Something else here"]
-            [:div.dropdown-divider]
-            [:a.dropdown-item {:href "#"} "Separated link"]
-            [:a.dropdown-item {:href "#"} "Separated link"]
-            [:a.dropdown-item {:href "#"} "Separated link"]
-            [:a.dropdown-item {:href "#"} "Separated link"]]]
-        [:div.dropdown.pr-2
-         [:a.dropdown-toggle.m-0.p-0
-          {:id dropdown-id
-           :href "#" :role "button" :data-toggle "dropdown"
-           :aria-haspopup "true" :aria-expanded "false"}
-          [:i {:class (fa :tag)}]]
-         [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
-          (for [label (conj shared-config/allowed-labels "A" "b" "c" "d")]
-            [:button.dropdown-item
-             {:key (str "label-" (:db/id statement) "-" label)}
-             label])
-          #_[:dropdown-item
-             [edit-dropdown-button statement]]]]
-        #_[:div.dropdown
-           [:a.dropdown-toggle.m-0.p-0
-            {:id label-dropdown-id
-             :href "#" :role "button" :data-toggle "dropdown"
-             :aria-haspopup "true" :aria-expanded "true"}
-            [:i {:class (str "fas " (fa :tag))}]]
-           [:div.dropdown-menu {:aria-labelledby label-dropdown-id}
-            (for [label shared-config/allowed-labels]
-              [:dropdown-item
-               {:key (str "label-" (:db/id statement) "-" label)}
-               [:button.dropdown-item
-                label]])]])
-      #_[:button.dropdown-item
-         {:tabIndex 30
-          :on-click (fn [e]
-                      (js-wrap/stop-propagation e)
-                      (on-click-fn))
-          :title "Labels"}
-         [:i {:class (str "m-auto " (fa :tag))}] " Labels"])))
+  (let [authenticated? @(rf/subscribe [:user/authenticated?])]
+    (if authenticated?
+      [:> Tooltip
+       {:title "Clickedy"
+        :trigger "click"
+        :interactive true
+        :arrow true
+        :offset 5
+        :position "bottom"
+        :html (r/as-element [test-component statement])}
+       [:div.pr-2
+        [:i {:class (fa :tag)}]]]
+      [:button.dropdown-item
+       {:tabIndex 30
+        :on-click (fn [e]
+                    (js-wrap/stop-propagation e)
+                    #(rf/dispatch [:modal {:show? true
+                                           :child [anonymous-labels-modal]}]))
+        :title "Labels"}
+       [:i {:class (str "m-auto " (fa :tag))}] " Labels"])))
 
 (defn- is-deletable?
   "Checks if a statement can be deleted"
