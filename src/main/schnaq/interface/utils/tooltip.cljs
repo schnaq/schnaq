@@ -2,9 +2,7 @@
   (:require ["react-tippy" :refer [Tooltip]]
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn-]]
-            [reagent.core :as reagent]
-            [reagent.dom :as rdom]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]))
+            [reagent.core :as reagent]))
 
 (s/def :tooltip/placement #{:top :right :bottom :left})
 
@@ -48,11 +46,6 @@
     {:on-click on-click-fn}
     content]
    {:position tooltip-placement}])
-
-(defn block-element
-  "Wrap the `content` with in an block-element and add a tooltip."
-  [tooltip-location tooltip content]
-  [tooltip-builder :div tooltip-location tooltip content])
 
 (defn inline-element
   "Wrap the `content` with in an inline-element and add a tooltip."

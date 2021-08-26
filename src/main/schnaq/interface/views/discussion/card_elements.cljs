@@ -76,7 +76,7 @@
                 nickname (user-utils/statement-author statement)
                 user (:statement/author statement)
                 statement-content (-> statement :statement/content)
-                tooltip (str (labels :tooltip/history-statement) nickname)
+                tooltip-text (str (labels :tooltip/history-statement) nickname)
                 history-content [:<>
                                  [:div.d-flex.flex-row
                                   [:h6 (labels :history.statement/user) (toolbelt/truncate-to-n-chars nickname 20)]
@@ -94,7 +94,7 @@
                   [:div.history-card-content
                    (if (zero? index)
                      history-content
-                     [tooltip/block-element :right tooltip history-content])]]])]]))])]))
+                     [tooltip/text tooltip-text history-content {:position :top}])]]])]]))])]))
 
 (rf/reg-event-fx
   :discussion.add.statement/starting

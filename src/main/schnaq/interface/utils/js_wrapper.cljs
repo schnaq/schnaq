@@ -4,7 +4,6 @@
             [goog.dom :as gdom]
             [goog.dom.dataset :as dataset]))
 
-
 (>defn $
   "The jquery-lookup syntax."
   [lookup]
