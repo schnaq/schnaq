@@ -182,7 +182,7 @@
       [:h2.h6-md-down title]
       (if edit-active?
         [edit/edit-card statement]
-        [:h2.h6.font-weight-bold title]))))
+        [:h2.h6 title]))))
 
 (defn- title-and-input-element
   "Element containing Title and textarea input"

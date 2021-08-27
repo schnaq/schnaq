@@ -63,13 +63,21 @@
 
         ;; Startpage
         :startpage/heading "The Elephant-Brain for your Company"
-        :startpage/subheading "Software to manage your knowledge safely and sustainably"
+        :startpage/subheading "Manage your knowledge safely and sustainably."
         :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
                                          " discussions which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
 
         :startpage.usage/lead "What do I use schnaq for?"
 
         :startpage.features/more-information "More information"
+
+        :startpage.information.know-how/title "Know-how management and team communication from a single source."
+        :startpage.information.know-how/body "We work every day to do our part for a business world where everyone is heard."
+
+        :startpage.information.positioning/title "Schnaq is the perfect partner for digital transformation."
+        :startpage.information.positioning/body "We guarantee sustainable knowledge management that saves time and resources."
+
+
 
         :startpage.features.meeting-organisation/lead "Well informed at any time"
         :startpage.features.meeting-organisation/title "Make the Optimal Decisions"
@@ -1062,12 +1070,19 @@ Now we write down questions and discuss them and can still understand what we ha
 
         ;; Startpage
         :startpage/heading "Das Elefantenhirn für dein Unternehmen"
-        :startpage/subheading "Wissen sammeln und sicher managen"
+        :startpage/subheading "Wissen nachhaltig sammeln und sicher managen."
         :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
                                          " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
         :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
         :startpage.features/more-information "Mehr Informationen"
+
+        :startpage.information.know-how/title "Know-how Management und Teamkommunikation aus einer Hand."
+        :startpage.information.know-how/body "Wir arbeiten tagtäglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört wird."
+
+        :startpage.information.positioning/title "Schnaq ist der perfekte Partner für deine digitale Transformation"
+        :startpage.information.positioning/body "Wir garantieren dir mit schnaq nachhaltiges Wissensmanagement das Zeit und Ressourcen spart."
+
 
         ;; falls wir subpages mit features einrichten, dann kann man sich hier bedienen
         :startpage.features.meeting-organisation/lead "Gut informiert an jedem Punkt"
@@ -1685,7 +1700,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :supporters/heading "Unterstützt vom Wirtschaftsministerium des Landes Nordrhein-Westfalen"
 
         ;; Testimonials
-        :testimonials/heading "Was andere über uns denken:"
+        :testimonials/heading "Die haben schon mit uns geschnaqt"
         :testimonials.doctronic/company "doctronic GmbH & Co. KG"
         :testimonials.doctronic/quote "Wir beobachten die Entwicklung von schnaq mit großem Interesse für den eigenen Einsatz und für den Einsatz bei unseren Kunden."
         :testimonials.doctronic/author "Ingo Küper, Geschäftsführer"
@@ -2081,6 +2096,9 @@ Now we write down questions and discuss them and can still understand what we ha
      :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
      :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
+     :startpage.example/discussion "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_discussion.jpg"
+     :startpage.example/dashboard "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_dashboard.jpg"
+     :startpage.example/statements "https://s3.disqtec.com/schnaq-common/startpage/screenshots/all_statements.png"
      :team/alexander "https://s3.disqtec.com/team/alexanderschneider.jpg"
      :team/at-table-with-laptop "https://s3.disqtec.com/team/team_hinter_laptop_am_tisch.jpg"
      :team/sitting-on-couches "https://s3.disqtec.com/team/team_auf_couches.jpg"

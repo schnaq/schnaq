@@ -10,7 +10,7 @@
   ([text-namespace more]
    (let [prepend-namespace (partial common/add-namespace-to-keyword text-namespace)]
      [:article.feature-text-box
-      [:h3 (labels (prepend-namespace :title))]
+      [:h3.h1.text-purple.mb-5 (labels (prepend-namespace :title))]
       [:section (labels (prepend-namespace :body))
        (when more
          more)]])))

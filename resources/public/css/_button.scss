@@ -77,17 +77,16 @@
 .button-call-to-action {
   background-color: $secondary;
   border: 0;
-  border-radius: 2rem;
-  box-shadow: $regular-shadow;
+  border-radius: 50%;
   color: $white;
   font-size: 150%;
-  font-weight: bold;
-  padding: 1rem 3rem;
+  min-height: 3rem;
+  min-width: 3rem;
+  padding: 0.25rem;
 }
 
 .button-call-to-action:hover {
   background-color: $secondary-selected;
-  box-shadow: $hover-shadow;
   color: $white;
 }
 
