@@ -19,7 +19,6 @@
                          :discussion.anonymous-edit.modal/explain
                          :discussion.anonymous-edit.modal/cta))
 
-
 (defn- anonymous-delete-modal
   "Show this modal to anonymous users trying to delete statements."
   []
