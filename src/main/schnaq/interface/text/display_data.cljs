@@ -306,6 +306,10 @@
         :discussion.anonymous-edit.modal/persuade "Recent statements from you in this browser will automatically be converted to your logged in account."
         :discussion.anonymous-edit.modal/cta "Sign in / Sign up"
 
+        :discussion.anonymous-labels.modal/title "Please sign in to edit labels"
+        :discussion.anonymous-labels.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to edit labels."]]
+        :discussion.anonymous-labels.modal/cta "Sign in / Sign up"
+
         ;; Conversion-Delete-Funnel
         :discussion.anonymous-delete.modal/title "Please sign in to delete"
         :discussion.anonymous-delete.modal/explain [:<> "To prevent fraudulent behaviour with anonymous statements, you must " [:strong "sign in to delete a statement."]]
@@ -1319,6 +1323,10 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei automatisch umgewandelt."
         :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
 
+        :discussion.anonymous-labels.modal/title "Bitte melde dich an um labels zu editieren"
+        :discussion.anonymous-labels.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren von labels anmelden."]]
+        :discussion.anonymous-labels.modal/cta "Anmelden / Registrieren"
+
         ;; Conversion-Delete-Funnel
         :discussion.anonymous-delete.modal/title "Bitte melde dich an, um deinen Beitrag zu löschen"
         :discussion.anonymous-delete.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Löschen anmelden."]]
@@ -2144,7 +2152,7 @@ Now we write down questions and discuss them and can still understand what we ha
     {:add "fa-plus-circle"
      :arrow-down "fa-arrow-down"
      :arrow-left "fa-arrow-left"
-     :arrow-right "fa-arrow-right"
+     :arrow-right "fas fa-arrow-right"
      :arrow-up "fa-arrow-up"
      :book "fa-book"
      :calendar "fa-calendar"
@@ -2160,8 +2168,8 @@ Now we write down questions and discuss them and can still understand what we ha
      :circle-notch "fa-circle-notch"
      :cog "fa-cog"
      :cogs "fa-cogs"
-     :comment "fa-comments"
      :comment-alt "fa-comment-alt"
+     :comments "fa-comments"
      :cookie/bite "fa-cookie-bite"
      :cookie/complete "fa-cookie"
      :copy "fa-copy"
@@ -2199,6 +2207,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :site-map "fa-sitemap"
      :spinner "fa-spinner"
      :star "fas fa-star"
+     :tag "fas fa-tag"
      :terminal "fa-terminal"
      :trash "fa-trash-alt"
      :user/edit "fa-user-edit"

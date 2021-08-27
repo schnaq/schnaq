@@ -18,7 +18,7 @@
       :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
      [:div.row.h-100
       [:div.col-xl-4.col-12
-       [user/user-info (:statement/author statement) 24]]
+       [user/user-info statement 24]]
       [:div.col-xl-5.col-7
        [md/as-markdown (:statement/content statement)]]
       [:div.col-xl-3.col-5
@@ -102,7 +102,7 @@
       :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
      [:div.row.h-100
       [:div.col-12
-       [user/user-info (:statement/author statement) 24]]
+       [user/user-info statement 24]]
       [:div.col-7
        [md/as-markdown (:statement/content statement)]]
       [:div.col-5

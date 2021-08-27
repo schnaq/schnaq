@@ -11,6 +11,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.edit :as edit]
+            [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
 
@@ -69,7 +70,8 @@
 
 (defn statement-card
   [edit-hash statement]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
+        statement-labels (set (:statement/labels statement))]
     [:article.card.statement-card.my-2
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
@@ -78,7 +80,7 @@
          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
           (labels :discussion.badges/new)])
        [:div.d-flex.justify-content-start.pt-2
-        [user/user-info (:statement/author statement) 42 (:statement/created-at statement) "w-100"]]
+        [user/user-info statement 42 "w-100"]]
        [:div.my-4]
        [md/as-markdown (:statement/content statement)]
        [:div.d-flex.flex-wrap
@@ -87,7 +89,12 @@
          [:i {:class (str "m-auto far " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-sm-0.ml-lg-auto
-         [badges/extra-discussion-info-badges statement edit-hash]]]]]]))
+         [badges/extra-discussion-info-badges statement edit-hash]]]
+       (when (seq statement-labels)
+         [:div.mx-1
+          (for [label statement-labels]
+            [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+             [labels/build-label label]])])]]]))
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."
@@ -103,16 +110,13 @@
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
         card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion ")
-        current-starting @(rf/subscribe [:discussion.conclusions/starting])
-        current-premises @(rf/subscribe [:discussion.premises/current])
-        is-starting? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
-        conclusions (if is-starting? current-starting current-premises)]
-    (if (seq conclusions)
+        current-premises @(rf/subscribe [:discussion.premises/current])]
+    (if (seq current-premises)
       (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
             keyfn (case sort-method
                     :newest :statement/created-at
                     :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
-            sorted-conclusions (sort-by keyfn > conclusions)]
+            sorted-conclusions (sort-by keyfn > current-premises)]
         [:div.card-columns.pb-3
          {:class card-column-class}
          (for [statement sorted-conclusions]
@@ -125,7 +129,7 @@
   :discussion.select/conclusion
   (fn [{:keys [db]} [_ conclusion]]
     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:db (assoc-in db [:discussion :conclusions :selected] conclusion)
+      {:db (assoc-in db [:discussion :conclusion :selected] conclusion)
        :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]
                                 {:conclusion-id (:db/id conclusion)

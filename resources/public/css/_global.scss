@@ -1,4 +1,6 @@
 @use 'variables' as vars;
+@import '../node_modules/react-tippy/dist/tippy.css';
+
 
 html {
   scroll-behavior: smooth;

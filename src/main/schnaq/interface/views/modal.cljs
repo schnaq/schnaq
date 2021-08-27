@@ -2,7 +2,7 @@
   (:require [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn modal-panel
@@ -71,6 +71,17 @@
     [:p (labels :user.set-name.modal/primer)]
     [modal-name-input (labels :user.button/set-name-placeholder)]]])
 
+(defn anonymous-modal
+  "Basic modal which is presented to anonymous users trying to alter statements."
+  [header-label shield-label info-label]
+  [modal-template
+   (labels header-label)
+   [:<>
+    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels shield-label)]
+    [:p (labels :discussion.anonymous-edit.modal/persuade)]
+    [:button.btn.btn-primary.mx-auto.d-block
+     {:on-click #(rf/dispatch [:keycloak/login])}
+     (labels info-label)]]])
 
 ;; -----------------------------------------------------------------------------
 

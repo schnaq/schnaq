@@ -31,14 +31,9 @@
     (get-in db [:discussion :premises :current] [])))
 
 (rf/reg-sub
-  :discussion.conclusions/starting
+  :discussion.conclusion/selected
   (fn [db _]
-    (get-in db [:discussion :conclusions :starting] [])))
-
-(rf/reg-sub
-  :discussion.conclusions/selected
-  (fn [db _]
-    (get-in db [:discussion :conclusions :selected] [])))
+    (get-in db [:discussion :conclusion :selected])))
 
 ;; -----------------------------------------------------------------------------
 

@@ -8,6 +8,7 @@
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.views.discussion.common :as dcommon]
+            [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.modal :as modal]
             [schnaq.user :as user]))
 
@@ -20,32 +21,20 @@
     (apply str (map #(str "<li>" % "</li>") users))
     "</ul>"))
 
-(defn- anonymous-modal
-  "Basic modal which is presented to anonymous users trying to alter statements."
-  [header-label shield-label info-label]
-  [modal/modal-template
-   (labels header-label)
-   [:<>
-    [:p [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels shield-label)]
-    [:p (labels :discussion.anonymous-edit.modal/persuade)]
-    [:button.btn.btn-primary.mx-auto.d-block
-     {:on-click #(rf/dispatch [:keycloak/login])}
-     (labels info-label)]]])
-
 (defn- anonymous-edit-modal
   "Show this modal to anonymous users trying to edit statements."
   []
-  (anonymous-modal :discussion.anonymous-edit.modal/title
-                   :discussion.anonymous-edit.modal/explain
-                   :discussion.anonymous-edit.modal/cta))
+  (modal/anonymous-modal :discussion.anonymous-edit.modal/title
+                         :discussion.anonymous-edit.modal/explain
+                         :discussion.anonymous-edit.modal/cta))
 
 
 (defn- anonymous-delete-modal
   "Show this modal to anonymous users trying to delete statements."
   []
-  (anonymous-modal :discussion.anonymous-delete.modal/title
-                   :discussion.anonymous-delete.modal/explain
-                   :discussion.anonymous-delete.modal/cta))
+  (modal/anonymous-modal :discussion.anonymous-delete.modal/title
+                         :discussion.anonymous-delete.modal/explain
+                         :discussion.anonymous-delete.modal/cta))
 
 (defn- delete-dropdown-button
   "Give admin and author the ability to delete a statement."
@@ -106,8 +95,8 @@
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
 
-(defn- edit-statement-dropdown-menu [{:keys [statement-id] :as statement} edit-hash]
-  (let [dropdown-id (str "drop-down-conclusion-card-" statement-id)
+(defn- edit-statement-dropdown-menu [{:keys [db/id] :as statement} edit-hash]
+  (let [dropdown-id (str "drop-down-conclusion-card-" id)
         deletable? (is-deletable? statement edit-hash)
         editable? (is-editable? statement)]
     (when (or deletable? editable?)
@@ -136,7 +125,7 @@
         new? (not (= old-statement-num statement-num))
         authors (conj (-> statement :meta/sub-discussion-info :authors)
                       (user/statement-author statement))
-        pill-class {:class (str "m-auto fas " (fa :comment))}]
+        pill-class {:class (str "m-auto fas " (fa :comments))}]
     [:div.d-flex.flex-row
      [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       {:on-click (dcommon/navigate-to-statement-on-click statement path-parameters)}
@@ -157,6 +146,7 @@
        :data-content (build-author-list authors)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " "
       (count authors)]
+     [labels/edit-labels-button statement]
      [edit-statement-dropdown-menu statement edit-hash]]))
 
 (defn static-info-badges
@@ -168,7 +158,7 @@
         locale @(rf/subscribe [:current-locale])]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
-      [:i {:class (str "m-auto fas " (fa :comment))}]
+      [:i {:class (str "m-auto fas " (fa :comments))}]
       " " statement-count]
      [:span.badge.badge-pill.badge-transparent.mr-2
       {:tabIndex 20

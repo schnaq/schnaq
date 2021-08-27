@@ -13,6 +13,7 @@
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.input :as input]
+            [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.user :as user]
             [schnaq.user :as user-utils]))
@@ -136,7 +137,7 @@
 (rf/reg-event-fx
   :discussion.query.conclusions/set-starting
   (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
-    {:db (assoc-in db [:discussion :conclusions :starting] starting-conclusions)
+    {:db (assoc-in db [:discussion :premises :current] starting-conclusions)
      :fx [[:dispatch [:votes.local/reset]]]}))
 
 (rf/reg-event-db
@@ -191,13 +192,17 @@
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         read-only? @(rf/subscribe [:schnaq.selected/read-only?])
         info-content [info-content-conclusion statement (:discussion/edit-hash statement)]
-        input-style (if is-topic? "statement-text" "premise-text")]
+        input-style (if is-topic? "statement-text" "premise-text")
+        statement-labels (set (:statement/labels statement))]
     [:<>
      [title-view statement is-topic?]
-     [:div.d-flex.flex-row.my-4
+     [:div.d-flex.flex-row.mt-4.mb-2
       (when-not is-topic?
         [:div.mr-auto info-content])
       [current-topic-badges schnaq statement is-topic?]]
+     (for [label statement-labels]
+       [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+        [labels/build-label label]])
      [:div.line-divider.my-4]
      (if read-only?
        [:div.alert.alert-warning (labels :discussion.state/read-only-warning)]
@@ -205,13 +210,13 @@
 
 (defn- topic-bubble-view []
   (let [{:discussion/keys [title author created-at]} @(rf/subscribe [:schnaq/selected])
-        current-conclusion @(rf/subscribe [:discussion.conclusions/selected])
+        current-conclusion @(rf/subscribe [:discussion.conclusion/selected])
         content {:statement/content title :statement/author author :statement/created-at created-at}
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         statement (if is-topic? content current-conclusion)]
     [:div.p-2
      [:div.d-flex.flex-wrap.mb-4
-      [user/user-info (:statement/author statement) 42 (:statement/created-at statement) nil]
+      [user/user-info statement 42 nil]
       [discussion-privacy-badge]]
      [title-and-input-element statement]]))
 

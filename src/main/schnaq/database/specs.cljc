@@ -2,7 +2,8 @@
   (:require #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]
-            [schnaq.api.dto-specs :as dto]))
+            [schnaq.api.dto-specs :as dto]
+            [schnaq.config.shared :as shared-config]))
 
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
 
@@ -105,13 +106,16 @@
 (s/def :statement/downvotes (s/coll-of ::user-or-reference))
 (s/def :statement/creation-secret ::non-blank-string)
 (s/def :statement/created-at inst?)
+(s/def :statement/label shared-config/allowed-labels)
+(s/def :statement/labels (s/coll-of :statement/label))
 (s/def :statement/discussions (s/or :ids (s/coll-of :db/id)
                                     :dto (s/coll-of ::dto/discussion)
                                     :discussions (s/coll-of ::discussion)))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]
           :opt [:statement/creation-secret :statement/created-at
-                :statement/type :statement/parent :statement/discussions]))
+                :statement/type :statement/parent :statement/discussions
+                :statement/labels]))
 
 (s/def :statement.vote/operation #{:removed :switched :added})
 

@@ -4,6 +4,7 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.input :as input]))
 
 (defn edit-card
@@ -52,19 +53,16 @@
                                  :new-content (oget+ form [html-selector :value])}
                                 [:statement.edit.send/failure])]})))
 
-(defn- update-statement-in-list
-  "Updates the content of a statement in a collection."
-  [coll new-statement]
-  (map #(if (= (:db/id new-statement) (:db/id %)) (merge % new-statement) %) coll))
-
 (rf/reg-event-fx
   :statement.edit.send/success
   (fn [{:keys [db]} [_ form response]]
     (let [updated-statement (:updated-statement response)]
       {:db (-> db
-               (update-in [:discussion :conclusions :starting] #(update-statement-in-list % updated-statement))
-               (update-in [:discussion :premises :current] #(update-statement-in-list % updated-statement))
-               (update-in [:history :full-context] #(vec (update-statement-in-list % updated-statement))))
+               (update-in [:discussion :premises :current] #(tools/update-statement-in-list % updated-statement))
+               (update-in [:history :full-context] #(vec (tools/update-statement-in-list % updated-statement)))
+               (update-in [:discussion :conclusion :selected] #(if (= (:db/id %) (:db/id updated-statement))
+                                                                 updated-statement
+                                                                 %)))
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-statement)]]]})))
 

@@ -4,6 +4,7 @@
             [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
+            [schnaq.config.shared :as shared-config]
             [schnaq.database.main :refer [transact query fast-pull] :as main-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -21,6 +22,7 @@
    :statement/deleted?
    :statement/created-at
    :statement/parent
+   :statement/labels
    {:statement/type [:db/ident]}
    {:statement/author user-db/public-user-pattern}])
 
@@ -525,4 +527,26 @@
         (if (:statement/parent full-statement)
           (recur (-> full-statement :statement/parent :db/id) (conj history full-statement))
           (conj history full-statement))))
+    :db/ident))
+
+(>defn add-label
+  "Adds a label to a statement. If label is already applied, nothing changes."
+  [statement-id label]
+  [:db/id :statement/label :ret ::specs/statement]
+  (toolbelt/pull-key-up
+    (if (shared-config/allowed-labels label)
+      (->> @(transact [[:db/add statement-id :statement/labels label]])
+           :db-after
+           (fast-pull statement-id statement-pattern))
+      (fast-pull statement-id statement-pattern))
+    :db/ident))
+
+(>defn remove-label
+  "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
+  [statement-id label]
+  [:db/id :statement/label :ret ::specs/statement]
+  (toolbelt/pull-key-up
+    (->> @(transact [[:db/retract statement-id :statement/labels label]])
+         :db-after
+         (fast-pull statement-id statement-pattern))
     :db/ident))

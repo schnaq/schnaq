@@ -17,7 +17,7 @@
 (s/def ::statement
   (s/keys :req [:db/id :statement/content :statement/version :statement/created-at
                 :statement/author]
-          :opt [:meta/sub-discussion-info :meta/upvotes :meta/downvotes]))
+          :opt [:meta/sub-discussion-info :meta/upvotes :meta/downvotes :statement/labels]))
 
 (s/def :statement/unqualified-types #{:attack :support :neutral})
 
