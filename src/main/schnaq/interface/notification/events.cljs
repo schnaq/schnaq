@@ -18,7 +18,9 @@
 (rf/reg-event-db
   :visited.save-statement-ids/store-hashes-from-localstorage
   (fn [db _]
-    (assoc-in db [:visited :statement-ids] (:discussion/visited-statement-ids local-storage))))
+    ;; Without the or a nil can be written for fresh users, which breaks the default getter later on
+    (assoc-in db [:visited :statement-ids] (or (:discussion/visited-statement-ids local-storage)
+                                               {}))))
 
 (rf/reg-event-fx
   :visited.statement-ids/to-localstorage-and-merge-with-app-db
