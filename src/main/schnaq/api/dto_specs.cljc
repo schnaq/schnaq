@@ -2,12 +2,19 @@
   "Objects via API are different / reduced compared to our database specs.
   Therefore, we need to specify them here. Avoids name-clashes with this new
   namespace."
-  (:require #?(:clj  [clojure.spec.alpha :as s]
+  (:require [schnaq.database.specs :as specs]
+            [spec-tools.core :as st]
+            #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])))
 
+;; Users
 (s/def ::registered-user
   (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
           :opt [:user.registered/profile-picture]))
+
+(s/def ::any-user (s/or :dto ::registered-user
+                        :user ::specs/user
+                        :registered-user ::specs/registered-user))
 
 (s/def ::maybe-nickname
   (s/or :nil nil?
@@ -17,8 +24,10 @@
 (s/def ::statement
   (s/keys :req [:db/id :statement/content :statement/version :statement/created-at
                 :statement/author]
-          :opt [:meta/sub-discussion-info :meta/upvotes :meta/downvotes :statement/labels]))
+          :opt [:meta/sub-discussion-info :meta/upvotes :meta/downvotes :statement/labels
+                :statement/type]))
 
+(def statement-type (st/spec :statement/type {:type :keyword}))
 (s/def :statement/unqualified-types #{:attack :support :neutral})
 
 ;; Discussions
