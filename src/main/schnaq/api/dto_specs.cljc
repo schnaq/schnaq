@@ -2,7 +2,8 @@
   "Objects via API are different / reduced compared to our database specs.
   Therefore, we need to specify them here. Avoids name-clashes with this new
   namespace."
-  (:require #?(:clj  [clojure.spec.alpha :as s]
+  (:require [spec-tools.core :as st]
+            #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])))
 
 (s/def ::registered-user
@@ -14,6 +15,7 @@
         :nickname :user/nickname))
 
 ;; Statements
+(def statement-type (st/spec :statement/type {:type :keyword}))
 (s/def ::statement
   (s/keys :req [:db/id :statement/content :statement/version :statement/created-at
                 :statement/author]

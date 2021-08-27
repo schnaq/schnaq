@@ -365,7 +365,7 @@
                                                :conclusion-id :db/id
                                                :nickname ::dto/maybe-nickname
                                                :premise :statement/content
-                                               :statement-type :statement/type}}
+                                               :statement-type dto/statement-type}}
                            :responses {201 {:body {:new-statement ::dto/statement}}
                                        403 at/response-error-body}}]
    ["/statements"
@@ -430,7 +430,7 @@
                :name :api.discussion.statement/edit
                :middleware [:user/authenticated?]
                :parameters {:body {:statement-type (s/or :nil nil?
-                                                         :type :statement/type)
+                                                         :type dto/statement-type)
                                    :new-content :statement/content}}
                :responses {200 {:body {:updated-statement ::dto/statement}}
                            400 at/response-error-body
