@@ -2,7 +2,6 @@
   (:require #?(:clj  [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
             [clojure.string :as string]
-            [schnaq.api.dto-specs :as dto]
             [schnaq.config.shared :as shared-config]))
 
 (s/def ::non-blank-string (s/and string? (complement string/blank?)))
@@ -33,13 +32,11 @@
                                        :user.registered/email :user.registered/visited-schnaqs]))
 
 ;; Could be anonymous or registered
-(s/def ::any-user (s/or :dto ::dto/registered-user
-                        :user ::user
+(s/def ::any-user (s/or :user ::user
                         :registered-user ::registered-user))
 ;; Any user or reference
 (s/def ::user-or-reference
-  (s/or :dto ::dto/registered-user
-        :user ::user
+  (s/or :user ::user
         :reference :db/id
         :registered-user ::registered-user))
 
@@ -109,7 +106,6 @@
 (s/def :statement/label shared-config/allowed-labels)
 (s/def :statement/labels (s/coll-of :statement/label))
 (s/def :statement/discussions (s/or :ids (s/coll-of :db/id)
-                                    :dto (s/coll-of ::dto/discussion)
                                     :discussions (s/coll-of ::discussion)))
 (s/def ::statement
   (s/keys :req [:statement/content :statement/version :statement/author]

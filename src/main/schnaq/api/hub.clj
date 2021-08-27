@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [keycloak.admin :as kc-admin]
             [ring.util.http-response :refer [ok forbidden not-found internal-server-error]]
+            [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.auth :as auth]
             [schnaq.config.keycloak :as kc-config :refer [kc-client]]
@@ -134,7 +135,7 @@
           :description (at/get-doc #'hub-by-keycloak-name)
           :name :hub/by-name
           :responses {200 {:body {:hub ::specs/hub
-                                  :hub-members (s/coll-of ::specs/any-user)}}}}]
+                                  :hub-members (s/coll-of ::dto/any-user)}}}}]
      ["/add" {:post add-schnaq-to-hub
               :description (at/get-doc #'add-schnaq-to-hub)
               :name :hub/add-schnaq
