@@ -4,7 +4,6 @@
             [goog.dom :as gdom]
             [goog.dom.dataset :as dataset]))
 
-
 (>defn $
   "The jquery-lookup syntax."
   [lookup]
@@ -48,18 +47,6 @@
   [selector]
   [string? :ret int?]
   (.index (jquery selector)))
-
-(defn tooltip
-  ([selector]
-   (tooltip selector "enable"))
-  ([selector option]
-   (.tooltip (jquery selector) option)))
-
-(defn popover
-  ([selector]
-   (popover selector "enable"))
-  ([selector option]
-   (.popover (jquery selector) option)))
 
 (>defn replace-url
   "Replaces the current URL in the users window and acts as a redirect."

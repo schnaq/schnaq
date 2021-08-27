@@ -59,8 +59,7 @@
   [text char-count]
   [string? nat-int? :ret string?]
   (if (< char-count (count text))
-    [tooltip/inline-element
-     :bottom
+    [tooltip/text
      text
      (apply str (concat (take char-count text) "…"))]
     text))

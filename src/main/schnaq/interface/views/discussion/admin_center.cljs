@@ -5,13 +5,13 @@
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reagent.core :as reagent]
             [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.notifications :refer [notify!]]
@@ -21,39 +21,29 @@
 (defn- copy-link-form
   "A form that displays the link the user can copy. Form is read-only."
   [create-link-fn id-extra]
-  (reagent/create-class
-    {:component-did-mount
-     (fn [_]
-       (js-wrap/tooltip (str "#meeting-link-form-" id-extra)))
-     :component-will-unmount
-     (fn [_]
-       (js-wrap/tooltip (str "#meeting-link-form-" id-extra) "disable")
-       (js-wrap/tooltip (str "#meeting-link-form-" id-extra) "dispose"))
-     :reagent-render
-     (fn []
-       (let [display-content (create-link-fn (-> @(rf/subscribe [:navigation/current-route])
-                                                 :path-params :share-hash))
-             meeting-link-id (str "meeting-link" id-extra)]
-         [:div.pb-4
-          [:form.form.create-meeting-form.d-flex
-           {:id (str "meeting-link-form-" id-extra)
-            :on-click (fn [e]
-                        (js-wrap/prevent-default e)
-                        (clipboard/copy-to-clipboard! display-content)
-                        (notify! (labels :schnaq/link-copied-heading)
-                                 (labels :schnaq/link-copied-success)
-                                 :info
-                                 false))
-            :data-toggle "tooltip"
-            :data-placement "bottom"
-            :title (labels :schnaq/copy-link-tooltip)}
-           [:input.form-control.form-round.copy-link-form.clickable-no-hover
-            {:id meeting-link-id
-             :type "text"
-             :value display-content
-             :readOnly true}]
-           [:label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
-            [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]]))}))
+  (let [display-content (create-link-fn (-> @(rf/subscribe [:navigation/current-route])
+                                            :path-params :share-hash))
+        meeting-link-id (str "meeting-link" id-extra)]
+    [:div.pb-4
+     [tooltip/text
+      (labels :schnaq/copy-link-tooltip)
+      [:form.form.create-meeting-form.d-flex
+       {:id (str "meeting-link-form-" id-extra)
+        :on-click (fn [e]
+                    (js-wrap/prevent-default e)
+                    (clipboard/copy-to-clipboard! display-content)
+                    (notify! (labels :schnaq/link-copied-heading)
+                             (labels :schnaq/link-copied-success)
+                             :info
+                             false))}
+       [:input.form-control.form-round.copy-link-form.clickable-no-hover
+        {:id meeting-link-id
+         :type "text"
+         :value display-content
+         :readOnly true}]
+       [:label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
+        [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]
+      {:follow-cursor "true"}]]))
 
 (defn- img-text
   "Create one icon in a grid"
