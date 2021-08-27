@@ -1,4 +1,5 @@
 @use 'variables' as vars;
+@use 'rounded' as rounded;
 
 $header-color: vars.$primary-selected;
 $header-opacity: 1;
@@ -54,6 +55,11 @@ $gradient-target: vars.$primary;
   width: 100%;
 }
 
+.wave-bottom-white-inverted {
+  @extend .wave-bottom-white;
+  transform: scale(-1);
+}
+
 .wave-bottom-light {
   @extend .wave-bottom-white;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave-bottom-light.svg');
@@ -95,12 +101,6 @@ $gradient-target: vars.$primary;
   }
 }
 
-.early-adopter {
-  background-color: vars.$primary-selected;
-  color: vars.$white;
-  padding: 2rem 0;
-}
-
 .early-adopter-schnaqqifant-wrapper {
   position: relative;
 }
@@ -120,3 +120,12 @@ $gradient-target: vars.$primary;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/blue_dot.svg');
   background-size: 20px 20px;
 }
+
+.above-the-fold-screenshot {
+  @include rounded.rounded-3;
+  background: vars.$light-background;
+  box-shadow: vars.$wide-shadow;
+  overflow: hidden;
+}
+
+
