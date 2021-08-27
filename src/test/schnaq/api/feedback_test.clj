@@ -12,6 +12,7 @@
   (-> {:request-method :post :uri (:path (api/route-by-name :api.feedback/add))
        :body-params {:feedback payload}}
       toolbelt/add-csrf-header
+      toolbelt/accept-edn-response-header
       api/app))
 
 (deftest add-feedback
@@ -19,7 +20,6 @@
     (let [feedback {:feedback/description "Some feedback"
                     :feedback/has-image? false}]
       (is (= 201 (:status (add-feedback-request feedback))))
-
       (is (->> (add-feedback-request feedback)
                :body slurp read-string :feedback
                (s/valid? ::dto/feedback)))))

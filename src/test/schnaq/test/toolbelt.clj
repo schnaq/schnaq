@@ -80,10 +80,16 @@
   (mock/header request "Authorization" (format "Token %s" token)))
 
 (>defn add-csrf-header
-  "Adds the authorization header to a request map"
+  "Adds the authorization header to a request map."
   [request]
   [map? :ret map?]
   (mock/header request "x-schnaq-csrf" "this content does not matter"))
+
+(>defn accept-edn-response-header
+  "Add header to accept edn as our valid response type."
+  [request]
+  [map? :ret map?]
+  (mock/header request "Accept" "application/edn"))
 
 (>defn mock-query-params
   "Add query parameters to a mock request."
