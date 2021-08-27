@@ -2,9 +2,10 @@
 @import 'variables';
 
 // Global
+@import 'bootstrap-custom';
 @import 'embedded';
-@import 'bootstrap_custom';
 @import 'global';
+@import 'third-party-imports';
 
 // Components
 @import 'after-create';
@@ -37,7 +38,4 @@
 @import 'text-input';
 @import 'video';
 @import 'up-down-vote';
-
-// 3rd Party
-@import '../js/klaro/src/scss/klaro';
 
