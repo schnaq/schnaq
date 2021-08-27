@@ -2,16 +2,16 @@
   (:require [clojure.test :refer [deftest is testing use-fixtures]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
-            [schnaq.test.toolbelt :as schnaq-toolbelt]))
+            [schnaq.test.toolbelt :as toolbelt]))
 
-(use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
-(use-fixtures :once schnaq-toolbelt/clean-database-fixture)
+(use-fixtures :each toolbelt/init-test-delete-db-fixture)
+(use-fixtures :once toolbelt/clean-database-fixture)
 
 (defn- schnaq-by-hash-as-admin-request [share-hash edit-hash]
   (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/by-hash-as-admin))
-       :headers {"accept" "application/edn"}
        :body-params {:share-hash share-hash
                      :edit-hash edit-hash}}
+      toolbelt/add-csrf-header
       api/app))
 
 (deftest schnaq-by-hash-as-admin-test

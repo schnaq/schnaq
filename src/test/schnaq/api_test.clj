@@ -15,8 +15,9 @@
 (deftest check-credentials-test
   (testing "Check if credentials are verified correctly."
     (let [credential-request (fn [share-hash edit-hash]
-                               {:request-method :post :uri "/credentials/validate"
-                                :body-params {:share-hash share-hash :edit-hash edit-hash}})
+                               (schnaq-toolbelt/add-csrf-header
+                                 {:request-method :post :uri "/credentials/validate"
+                                  :body-params {:share-hash share-hash :edit-hash edit-hash}}))
           share-hash "simple-hash"
           edit-hash "simple-hash-secret"]
       (is (= 200 (-> (credential-request share-hash edit-hash) api/app :status)))

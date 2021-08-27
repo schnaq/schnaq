@@ -40,4 +40,17 @@
         (handler request)
         (forbidden (at/build-error-body :credentials/invalid "Your share-hash and edit-hash do fit together."))))))
 
-
+(defn wrap-custom-schnaq-csrf-header
+  "A handler, that checks for a custom schnaq-csrf header. This can only be present when sent from an allowed origin
+  via XMLHttpRequest."
+  [handler]
+  (fn [request]
+    ;; Only relevant for those three methods
+    (if (#{:post :put :delete} (:request-method request))
+      ;; X-schnaq-csrf header must be present, otherwise raise error
+      (if (get-in request [:headers "x-schnaq-csrf"])
+        (handler request)
+        (forbidden (at/build-error-body
+                     :csrf/missing-header
+                     "You are trying to access the route without the proper headers: \"x-schnaq-csrf\"")))
+      (handler request))))

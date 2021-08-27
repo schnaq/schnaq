@@ -11,5 +11,6 @@
 
 (def debug-routes
   [(when-not shared-config/production?
-     ["" {:swagger {:tags ["debug"]}}
-      ["/debug" {:get reveal-information}]])])
+     ["/debug" {:swagger {:tags ["debug"]}}
+      ["" {:get reveal-information
+           :post reveal-information}]])])
