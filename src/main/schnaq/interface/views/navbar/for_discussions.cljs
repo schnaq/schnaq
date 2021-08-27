@@ -20,7 +20,7 @@
                                  (rf/dispatch [:navigation/navigate :routes.schnaq/start
                                                {:share-hash share-hash}])
                                  (rf/dispatch [:schnaq/select-current schnaq]))}
-      [:h1.h5.font-weight-bold (toolbelt/truncate-to-n-chars title 30)]]]))
+      [:h1.h5 (toolbelt/truncate-to-n-chars title 30)]]]))
 
 (defn navbar []
   (let [discussion @(rf/subscribe [:schnaq/selected])
