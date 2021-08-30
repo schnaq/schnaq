@@ -131,16 +131,18 @@
     [:div.d-flex.flex-row.flex-wrap.p-md-3
      [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4.mr-3
       ;; schnaq logo
-      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaq/start)}
-       [:img.d-inline-block.align-middle.mr-2
-        {:src (img-path :logo-white) :alt "schnaq logo"
-         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
-      [:div.mx-4.ml-auto.d-none.d-md-block
+      [:div.mx-4.d-none.d-md-block
        [:small.text-primary (labels :discussion.navbar/posts)]
        [:h5.text-center statement-count]]
       [:div.mx-4.d-none.d-md-block
        [:small.text-primary (labels :discussion.navbar/members)]
-       [:h5.text-center user-count]]]
+       [:h5.text-center user-count]]
+      [:a.schnaq-logo-container.d-flex.h-100.text-decoration-none
+       {:href (reitfe/href :routes.schnaq/start)}
+       [:small.text-white "powered by"]
+       [:img.d-inline-block.align-middle.mr-2
+        {:src (img-path :logo-white) :alt "schnaq logo"
+         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]]
      [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-hd-auto
       [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
        [schnaq-progress-bar]
