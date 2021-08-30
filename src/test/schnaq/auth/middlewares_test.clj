@@ -1,9 +1,10 @@
-(ns schnaq.auth-test
-  (:require [clojure.test :refer [deftest testing is]]
+(ns schnaq.auth.middlewares-test
+  (:require [clojure.test :refer [deftest is testing]]
             [compojure.core :refer [routes GET wrap-routes]]
             [ring.mock.request :as mock]
             [ring.util.http-response :refer [ok]]
             [schnaq.auth :as auth]
+            [schnaq.auth.middlewares :as auth-middlewares]
             [schnaq.test.toolbelt :refer [token-schnaqqifant-user token-n2o-admin token-wrong-signature token-timed-out mock-authorization-header]]))
 
 (def ^:private test-routes
@@ -11,12 +12,12 @@
   (routes
     (-> (GET "/test/admin/authentication" []
           (fn [request] (ok (get-in request [:identity :preferred_username]))))
-        (wrap-routes auth/admin?-middleware)
-        (wrap-routes auth/authenticated?-middleware)
+        (wrap-routes auth-middlewares/admin?-middleware)
+        (wrap-routes auth-middlewares/authenticated?-middleware)
         (wrap-routes auth/wrap-jwt-authentication))
     (-> (GET "/test/user/authentication" []
           (fn [request] (ok (get-in request [:identity :preferred_username]))))
-        (wrap-routes auth/authenticated?-middleware)
+        (wrap-routes auth-middlewares/authenticated?-middleware)
         (wrap-routes auth/wrap-jwt-authentication))))
 
 (deftest valid-jwt-in-header-test
@@ -50,6 +51,6 @@
   (testing "Verify that user is member of called group."
     (let [identity (:identity (assoc-in (mock/request :get "/testing/stuff")
                                         [:identity :groups] ["these-are-my-groups" "schnaqqifantenparty"]))]
-      (is (auth/member-of-group? identity "schnaqqifantenparty"))
-      (is (not (auth/member-of-group? identity "")))
-      (is (not (auth/member-of-group? identity "not-member-of"))))))
+      (is (auth-middlewares/member-of-group? identity "schnaqqifantenparty"))
+      (is (not (auth-middlewares/member-of-group? identity "")))
+      (is (not (auth-middlewares/member-of-group? identity "not-member-of"))))))
