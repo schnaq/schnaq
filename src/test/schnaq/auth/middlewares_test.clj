@@ -47,10 +47,3 @@
       (is (= 401 (:status (response token-wrong-signature))))
       (is (= 401 (:status (test-routes (mock/request :get path))))))))
 
-(deftest member-of-group?-test
-  (testing "Verify that user is member of called group."
-    (let [identity (:identity (assoc-in (mock/request :get "/testing/stuff")
-                                        [:identity :groups] ["these-are-my-groups" "schnaqqifantenparty"]))]
-      (is (auth-middlewares/member-of-group? identity "schnaqqifantenparty"))
-      (is (not (auth-middlewares/member-of-group? identity "")))
-      (is (not (auth-middlewares/member-of-group? identity "not-member-of"))))))
