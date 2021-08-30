@@ -113,3 +113,18 @@
     (rf/subscribe [:filters/active]))
   (fn [active-filters _]
     (seq active-filters)))
+
+(defn- filter-to-fn
+  "Returns the corresponding filter-fn for a data-representation of a filter."
+  [{:keys [type criteria label]}]
+  (cond
+    (= type :labels)
+    (let [coll-fn (if (= criteria :includes) filter remove)]
+      (fn [statements] (coll-fn #(contains? (set (:statement/labels %)) label) statements)))))
+
+(defn filter-statements
+  "Accepts a collection of statements and filters and applies them to the collection."
+  [statements filters]
+  (let [filter-fns (map filter-to-fn filters)]
+    ;; Apply every filter-function to the statements before returning them
+    (reduce (fn [statements filter-fn] (filter-fn statements)) statements filter-fns)))
