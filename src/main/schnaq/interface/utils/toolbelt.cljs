@@ -2,7 +2,7 @@
   (:require [cljs.spec.alpha :as s]
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
-            [oops.core :refer [oset! oget]]
+            [oops.core :refer [oset! oget oget+]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn height-to-scrollheight!
@@ -74,3 +74,17 @@
   "Updates the content of a statement in a collection."
   [coll new-statement]
   (map #(if (= (:db/id new-statement) (:db/id %)) new-statement %) coll))
+
+(defn get-selection-from-event
+  "Helper for retrieving selected attribute after an event."
+  [event]
+  (let [options (oget event :target :options)
+        selection-index (str (oget event :target :selectedIndex))]
+    (oget+ options selection-index :value)))
+
+(defn get-current-selection
+  "Helper for retrieving current selection from any select element."
+  [selection]
+  (let [options (oget selection :options)
+        selection-index (str (oget selection :selectedIndex))]
+    (oget+ options selection-index :value)))

@@ -8,20 +8,20 @@
   ```
 
    This filter filters for statements that include the label :check."
-  (:require [oops.core :refer [oget oget+]]
+  (:require [clojure.set :as cset]
+            [goog.dom :as gdom]
+            [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels fa]]
-            [schnaq.interface.utils.js-wrapper :as jsw]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.labels :as statement-labels]))
 
 (defn- set-selected-option
   "Helper function to set the correct temp atom value for a selection."
   [event store]
-  (let [options (oget event :target :options)
-        selection-index (str (oget event :target :selectedIndex))]
-    (reset! store (oget+ options selection-index :value))))
+  (reset! store (tools/get-selection-from-event event)))
 
 (defn- label-selector
   "A component which helps selecting the labels for a filter."
@@ -50,30 +50,32 @@
   (let [current-selection (r/atom "labels")
         selected-label (r/atom nil)]
     (fn []
-      [:section.border-bottom.pb-2
-       [:form.text-left
-        {:on-submit #(jsw/prevent-default %)}
-        [:div.form-group
-         [:label {:for :add-filter-menu}
-          (labels :filters.label/filter-for)]
-         [:select#add-filter-menu.mr-1.form-control
-          {:on-change #(set-selected-option % current-selection)}
-          [:option {:value :labels} (labels :filters.option.labels/text)]
-          [:option {:value :type} (labels :filters.option.type/text)]
-          [:option {:value :votes} (labels :filters.option.votes/text)]]]
-        (case @current-selection
-          "labels"
-          [:<>
-           [:div.form-row.pb-3
-            [:div.col-auto
-             [:select#filter-labels-selection.mr-1.form-control
-              [:option {:value :includes} (labels :filters.option.labels/includes)]
-              [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
-            [:div.col-auto
-             [label-selector selected-label]]]]
-          "")
-        [:button.btn.btn-outline-dark.mr-2
-         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]]])))
+      [:section.border-bottom.pb-2.text-left
+       [:div.form-group
+        [:label {:for :add-filter-menu}
+         (labels :filters.label/filter-for)]
+        [:select#add-filter-menu.mr-1.form-control
+         {:on-change #(set-selected-option % current-selection)}
+         [:option {:value :labels} (labels :filters.option.labels/text)]
+         [:option {:value :type} (labels :filters.option.type/text)]
+         [:option {:value :votes} (labels :filters.option.votes/text)]]]
+       (case @current-selection
+         "labels"
+         [:<>
+          [:div.form-row.pb-3
+           [:div.col-auto
+            [:select#filter-labels-selection.mr-1.form-control
+             [:option {:value :includes} (labels :filters.option.labels/includes)]
+             [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
+           [:div.col-auto
+            [label-selector selected-label]]]]
+         "")
+       [:button.btn.btn-outline-dark.mr-2
+        {:on-click #(when @selected-label
+                      (rf/dispatch [:filters.activate/labels
+                                    (tools/get-current-selection (gdom/getElement "filter-labels-selection"))
+                                    @selected-label]))}
+        [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
 
 (defn- default-menu
   "The default filter menu that is shown to the user."
@@ -84,11 +86,30 @@
 (defn filter-button
   "A button opening the default filters on click."
   []
-  (let [active-filters? false]
-    ;; TODO add flag for when filters are active.
+  (let [active-filters? @(rf/subscribe [:filters/active?])]
     [tooltip/html
      [default-menu]
      [:button.btn.btn-outline-primary.mr-2.h-100
-      {:class (when active-filters? "active")}
+      {:class (when active-filters? "btn-outline-secondary active")}
       (labels :badges.filters/button)]
      {:hideOnClick :toggle}]))
+
+(rf/reg-event-db
+  :filters.activate/labels
+  (fn [db [_ criteria label]]
+    (let [new-filter {:type :labels
+                      :criteria (keyword criteria)
+                      :label label}]
+      (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
+
+(rf/reg-sub
+  :filters/active
+  (fn [db _]
+    (get-in db [:discussion :filters] #{})))
+
+(rf/reg-sub
+  :filters/active?
+  (fn [_]
+    (rf/subscribe [:filters/active]))
+  (fn [active-filters _]
+    (seq active-filters)))
