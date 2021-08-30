@@ -30,7 +30,6 @@
     "react-markdown": "^6.0.2",
     "react-tippy": "^1.4.0",
     "remark-gfm": "^1.0.0",
-    "shadow-cljs": "2.15.2",
     "timsort": "^0.3.0",
     "uuid": "^8.3.2",
     "vis-data": "^7.1.2",
@@ -42,6 +41,7 @@
     "karma": "^6.3.4",
     "karma-chrome-launcher": "^3.1.0",
     "karma-cljs-test": "^0.1.0",
+    "shadow-cljs": "2.15.6",
     "stylelint": "^13.6.1",
     "stylelint-config-sass-guidelines": "8.0.0"
   }
