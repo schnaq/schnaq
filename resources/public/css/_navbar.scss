@@ -20,6 +20,7 @@
   @extend .panel-white;
   @extend .schnaq-navbar-skeleton;
   background: vars.$white;
+  overflow: visible;
   padding: 0;
 }
 
