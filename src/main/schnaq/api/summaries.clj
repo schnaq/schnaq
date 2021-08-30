@@ -14,6 +14,7 @@
             [schnaq.export :as export]
             [schnaq.links :as links]
             [schnaq.mail.emails :as emails]
+            [schnaq.mail.template :as template]
             [taoensso.timbre :as log]))
 
 (declare summary-routes)
@@ -69,16 +70,18 @@
     (when (:summary/requester summary)
       (let [title (-> summary :summary/discussion :discussion/title)
             share-hash (-> summary :summary/discussion :discussion/share-hash)]
-        (emails/send-mail
+        (emails/send-mail-with-body
           (format "Deine schnaq-Zusammenfassung ist bereit 🥳 \"%s\"" (-> summary :summary/discussion :discussion/title))
-          (format "Hallo,%n
-eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s
+          (-> summary :summary/requester :user.registered/email)
+          (template/mail
+            "Deine schnaq-Zusammenfassung ist bereit"
+            (str "Hallo " (-> summary :summary/requester :user.registered/display-name) ",")
+            (format "eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s
 
 Viele Grüße
 
 Dein schnaq Team"
-                  title (links/get-summary-link share-hash))
-          (-> summary :summary/requester :user.registered/email))))
+                    title (links/get-summary-link share-hash))))))
     (ok {:new-summary summary})))
 
 (defn- all-summaries

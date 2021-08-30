@@ -35,7 +35,7 @@
                                        (str number-statements " neue Beiträge"))
                  button-text "Zum schnaq"]
              (when-not (zero? number-statements)
-               (template/mail-content-left-button-right-template
+               (template/mail-content-left-button-right
                  discussion-title
                  new-statements-text
                  button-text
@@ -69,11 +69,11 @@
       (emails/send-mail-with-body
         "Neuigkeiten aus deinen schnaqs"
         email
-        (template/mail-template "Neuigkeiten aus deinen schnaqs"
-                                personal-greeting
-                                new-statements-greeting
-                                ""
-                                new-statements-content)))))
+        (template/mail "Neuigkeiten aus deinen schnaqs"
+                       personal-greeting
+                       new-statements-greeting
+                       ""
+                       new-statements-content)))))
 
 (defn- send-all-users-schnaq-updates []
   (let [all-users (user-db/all-registered-users)]
