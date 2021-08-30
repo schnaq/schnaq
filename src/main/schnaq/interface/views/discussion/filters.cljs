@@ -1,4 +1,13 @@
 (ns schnaq.interface.views.discussion.filters
+  "Filters are saved and read as maps internaly. e.g.
+
+  ```
+  {:type :labels
+   :label :check
+   :criteria :includes}
+  ```
+
+   This filter filters for statements that include the label :check."
   (:require [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
