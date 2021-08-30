@@ -12,7 +12,9 @@
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels fa]]
-            [schnaq.interface.utils.tooltip :as tooltip]))
+            [schnaq.interface.utils.js-wrapper :as jsw]
+            [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.views.discussion.labels :as statement-labels]))
 
 (defn- set-selected-option
   "Helper function to set the correct temp atom value for a selection."
@@ -21,13 +23,36 @@
         selection-index (str (oget event :target :selectedIndex))]
     (reset! store (oget+ options selection-index :value))))
 
+(defn- label-selector
+  "A component which helps selecting the labels for a filter."
+  [selected-label]
+  [:div.btn-group
+   {:role "group"}
+   [tooltip/html
+    (for [label shared-config/allowed-labels]
+      [:span.mr-3
+       {:key (str "label-option-" label)
+        :on-click #(reset! selected-label label)}
+       [statement-labels/build-label label]])
+    [:button#filter-labels-label.form-control
+     (if (shared-config/allowed-labels @selected-label)
+       (with-meta
+         [statement-labels/build-label @selected-label]
+         {:key (str "label-option-" @selected-label)})
+       [:span.badge.badge-pill.badge-transparent "–––"])]]
+   [:button.btn.btn-dark
+    {:on-click #(reset! selected-label nil)}
+    [:span.m-auto "x"]]])
+
 (defn- add-filter-selection
   "A small compontent for adding new filters."
   []
-  (let [current-selection (r/atom "labels")]
+  (let [current-selection (r/atom "labels")
+        selected-label (r/atom nil)]
     (fn []
       [:section.border-bottom.pb-2
        [:form.text-left
+        {:on-submit #(jsw/prevent-default %)}
         [:div.form-group
          [:label {:for :add-filter-menu}
           (labels :filters.label/filter-for)]
@@ -45,13 +70,7 @@
               [:option {:value :includes} (labels :filters.option.labels/includes)]
               [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
             [:div.col-auto
-             [:select#filter-labels-label.mr-1.form-control
-              (for [label shared-config/allowed-labels]
-                [:option
-                 {:value label
-                  :key (str "filter-label-" label)}
-                 label])]]]]
-          ;; TODO pretty labels in selection
+             [label-selector selected-label]]]]
           "")
         [:button.btn.btn-outline-dark.mr-2
          [:i {:class (fa :plus)}] " " (labels :filters.add/button)]]])))
@@ -72,4 +91,4 @@
      [:button.btn.btn-outline-primary.mr-2.h-100
       {:class (when active-filters? "active")}
       (labels :badges.filters/button)]
-     {:offset 50}]))
+     {:hideOnClick :toggle}]))
