@@ -144,7 +144,6 @@
      [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-hd-auto
       [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
        [schnaq-progress-bar]
-       [admin/share-link]
        [admin/txt-export share-hash title]
        (when edit-hash
          [admin/admin-center share-hash edit-hash])]
