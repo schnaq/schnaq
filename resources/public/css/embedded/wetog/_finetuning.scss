@@ -1,0 +1,5 @@
+@use 'variables' as wetogvars;
+
+.base-wrapper {
+  background: wetogvars.$gray-100;
+}

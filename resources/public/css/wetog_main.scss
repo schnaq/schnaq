@@ -2,8 +2,9 @@
 @import 'embedded/wetog/variables';
 
 // Global
-@import 'bootstrap-custom';
 @import 'embedded';
+
+@import 'bootstrap-custom';
 @import 'third-party-imports';
 
 
@@ -44,6 +45,9 @@
   @import 'text-input';
   @import 'video';
   @import 'up-down-vote';
+
+  // Override some defaults
+  @import 'embedded/wetog/finetuning';
 
   // 3rd Party
   @import '../js/klaro/src/scss/klaro';
