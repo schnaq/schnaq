@@ -32,7 +32,7 @@
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.8" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.9.4" level="project" />
     <orderEntry type="library" name="Deps: javax.validation/validation-api:2.0.1.Final" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.56" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.57" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.4" level="project" />
@@ -257,7 +257,7 @@
     <orderEntry type="library" name="Deps: buddy/buddy-auth:2.1.0" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-resolver:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Deps: binaryage/oops:0.7.1" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/s3:813.2.972.0" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/s3:814.2.978.0" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/js-joda-timezone:2.0.1-0" level="project" />
     <orderEntry type="library" name="Deps: clj-stacktrace:0.2.8" level="project" />
     <orderEntry type="library" name="Deps: org.slf4j/slf4j-api:2.0.0-alpha1" level="project" />
