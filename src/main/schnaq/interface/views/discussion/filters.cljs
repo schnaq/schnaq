@@ -10,11 +10,12 @@
    This filter filters for statements that include the label :check."
   (:require [oops.core :refer [oget oget+]]
             [reagent.core :as r]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
-(defn- set-selected-filter
-  "Helper function to set the correct temp atom value."
+(defn- set-selected-option
+  "Helper function to set the correct temp atom value for a selection."
   [event store]
   (let [options (oget event :target :options)
         selection-index (str (oget event :target :selectedIndex))]
@@ -26,13 +27,34 @@
   (let [current-selection (r/atom "labels")]
     (fn []
       [:section.border-bottom.pb-2
-       [:button.btn.btn-outline-dark.mr-2
-        [:i {:class (fa :plus)}]]
-       [:select#add-filter-menu
-        {:on-change #(set-selected-filter % current-selection)}
-        [:option {:value :labels} (labels :filters.option.labels/text)]
-        [:option {:value :type} (labels :filters.option.type/text)]
-        [:option {:value :votes} (labels :filters.option.votes/text)]]])))
+       [:form.text-left
+        [:div.form-group
+         [:label {:for :add-filter-menu}
+          (labels :filters.label/filter-for)]
+         [:select#add-filter-menu.mr-1.form-control
+          {:on-change #(set-selected-option % current-selection)}
+          [:option {:value :labels} (labels :filters.option.labels/text)]
+          [:option {:value :type} (labels :filters.option.type/text)]
+          [:option {:value :votes} (labels :filters.option.votes/text)]]]
+        (case @current-selection
+          "labels"
+          [:<>
+           [:div.form-row.pb-3
+            [:div.col-auto
+             [:select#filter-labels-selection.mr-1.form-control
+              [:option {:value :includes} (labels :filters.option.labels/includes)]
+              [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
+            [:div.col-auto
+             [:select#filter-labels-label.mr-1.form-control
+              (for [label shared-config/allowed-labels]
+                [:option
+                 {:value label
+                  :key (str "filter-label-" label)}
+                 label])]]]]
+          ;; TODO pretty labels in selection
+          "")
+        [:button.btn.btn-outline-dark.mr-2
+         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]]])))
 
 (defn- default-menu
   "The default filter menu that is shown to the user."
@@ -49,4 +71,5 @@
      [default-menu]
      [:button.btn.btn-outline-primary.mr-2.h-100
       {:class (when active-filters? "active")}
-      (labels :badges.filters/button)]]))
+      (labels :badges.filters/button)]
+     {:offset 50}]))
