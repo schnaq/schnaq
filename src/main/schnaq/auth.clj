@@ -3,6 +3,7 @@
             [buddy.auth.middleware :refer [wrap-authentication]]
             [buddy.core.keys :as keys]
             [clojure.string :as string]
+            [ghostwheel.core :refer [>defn]]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
             [taoensso.timbre :as log]))
@@ -62,6 +63,12 @@
       (let [[_bearer token] (string/split bearer-token #" ")]
         (handler (assoc-in request [:headers "authorization"] (format "Token %s" token))))
       (handler request))))
+
+(>defn member-of-group?
+  "Check if group is available in the JWT token."
+  [identity group]
+  [map? string? :ret boolean?]
+  (some #(= group %) (:groups identity)))
 
 
 ;; -----------------------------------------------------------------------------

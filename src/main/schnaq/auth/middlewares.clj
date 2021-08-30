@@ -56,9 +56,3 @@
     (if (valid-app-code? request)
       (handler request)
       (forbidden (at/build-error-body :app/invalid-code "Your application has no permission to access this API. Please provide a valid app-code in your request.")))))
-
-(>defn member-of-group?
-  "Check if group is available in the JWT token."
-  [identity group]
-  [map? string? :ret boolean?]
-  (some #(= group %) (:groups identity)))
