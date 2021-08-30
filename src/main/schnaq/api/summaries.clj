@@ -76,11 +76,7 @@
           (template/mail
             "Deine schnaq-Zusammenfassung ist bereit"
             (str "Hallo " (-> summary :summary/requester :user.registered/display-name) ",")
-            (format "eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s
-
-Viele Grüße
-
-Dein schnaq Team"
+            (format "eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s"
                     title (links/get-summary-link share-hash))))))
     (ok {:new-summary summary})))
 

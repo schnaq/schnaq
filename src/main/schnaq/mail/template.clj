@@ -18,7 +18,7 @@
                      "$$$ADDITIONAL-CONTENT$$$" additional-html-content}]
      [:alternative
       {:type "text/plain; charset=utf-8" :content
-       (str header "\n" title "\n" subtitle "\n" content)}
+       (str header "\n" title "\n" subtitle "\n" content "\n\nViele Grüße\n\nDein schnaq Team")}
       {:type "text/html; charset=utf-8" :content
        (reduce replace-fn (slurp config/mail-template) format-map)}])))
 
