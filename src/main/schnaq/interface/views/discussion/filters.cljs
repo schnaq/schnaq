@@ -53,6 +53,21 @@
        {:on-click #(reset! selected-label nil)}
        [:span.m-auto "x"]]]]]])
 
+(defn- type-selections
+  "Selection-options for type filters."
+  []
+  [:div.form-row.pb-3
+   [:div.col-auto
+    [:select#filter-type-selection.mr-1.form-control
+     [:option {:value :includes} (labels :filters.option.type/is)]
+     [:option {:value :excludes} (labels :filters.option.type/is-not)]]]
+   [:div.col-auto
+    [:select#filter-type-type.mr-1.form-control
+     ;; Needs to be string, otherwise ns will be stripped
+     [:option {:value "statement.type/neutral"} (labels :discussion.add.button/neutral)]
+     [:option {:value "statement.type/attack"} (labels :discussion.add.button/attack)]
+     [:option {:value "statement.type/support"} (labels :discussion.add.button/support)]]]])
+
 (defn- add-filter-selection
   "A small compontent for adding new filters."
   []
@@ -70,12 +85,19 @@
          [:option {:value :votes} (labels :filters.option.votes/text)]]]
        (case @current-selection
          "labels" [label-selections selected-label]
+         "type" [type-selections]
          "")
        [:button.btn.btn-outline-dark.mr-2
-        {:on-click #(when @selected-label
-                      (rf/dispatch [:filters.activate/labels
-                                    (tools/get-current-selection (gdom/getElement "filter-labels-selection"))
-                                    @selected-label]))}
+        {:on-click #(case @current-selection
+                      "labels"
+                      (when @selected-label
+                        (rf/dispatch [:filters.activate/labels
+                                      (tools/get-current-selection (gdom/getElement "filter-labels-selection"))
+                                      @selected-label]))
+                      "type"
+                      (rf/dispatch [:filters.activate/type
+                                    (tools/get-current-selection (gdom/getElement "filter-type-selection"))
+                                    (tools/get-current-selection (gdom/getElement "filter-type-type"))]))}
         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
 
 (defn- default-menu
@@ -103,6 +125,14 @@
                       :label label}]
       (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
 
+(rf/reg-event-db
+  :filters.activate/type
+  (fn [db [_ criteria stype]]
+    (let [new-filter {:type :type
+                      :criteria (keyword criteria)
+                      :statement-type (keyword stype)}]
+      (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
+
 (rf/reg-sub
   :filters/active
   (fn [db _]
@@ -117,11 +147,14 @@
 
 (defn- filter-to-fn
   "Returns the corresponding filter-fn for a data-representation of a filter."
-  [{:keys [type criteria label]}]
+  [{:keys [type criteria label statement-type]}]
   (cond
     (= type :labels)
     (let [coll-fn (if (= criteria :includes) filter remove)]
-      (fn [statements] (coll-fn #(contains? (set (:statement/labels %)) label) statements)))))
+      (fn [statements] (coll-fn #(contains? (set (:statement/labels %)) label) statements)))
+    (= type :type)
+    (let [coll-fn (if (= criteria :includes) filter remove)]
+      (fn [statements] (coll-fn #(= (:statement/type %) statement-type) statements)))))
 
 (defn filter-statements
   "Accepts a collection of statements and filters and applies them to the collection."

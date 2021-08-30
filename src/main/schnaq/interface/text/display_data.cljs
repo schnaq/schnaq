@@ -945,6 +945,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.labels/includes "includes"
         :filters.option.labels/excludes "excludes"
         :filters.option.type/text "statement type"
+        :filters.option.type/is "is"
+        :filters.option.type/is-not "is not"
         :filters.option.votes/text "votes"
 
         :loading.placeholder/lead "Loading..."
@@ -1969,6 +1971,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.labels/includes "beinhaltet"
         :filters.option.labels/excludes "beinhaltet kein"
         :filters.option.type/text "Beitragstyp"
+        :filters.option.type/is "ist"
+        :filters.option.type/is-not "ist nicht"
         :filters.option.votes/text "Votes"
 
         :loading.placeholder/lead "Daten werden geladen..."
