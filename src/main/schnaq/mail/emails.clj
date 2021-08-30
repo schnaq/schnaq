@@ -1,4 +1,4 @@
-(ns schnaq.emails
+(ns schnaq.mail.emails
   (:require [clojure.spec.alpha :as s]
             [clojure.string :as cstring]
             [ghostwheel.core :refer [>defn >defn- ?]]
@@ -26,29 +26,33 @@
 
 (def ^:private failed-sendings (atom '()))
 
+(>defn send-mail-with-body
+  "Sends a single mail to a recipient with a passed body."
+  [title recipient body]
+  [string? string? coll? :ret (? coll?)]
+  (if mail-configured?
+    (if (valid-mail recipient)
+      (try
+        (send-message conn {:from (:sender-address config/email)
+                            :to recipient
+                            :subject title
+                            :body body})
+        (log/info "Sent mail to" recipient)
+        (Thread/sleep 100)
+        (catch Exception exception
+          (log/error "Failed to send mail to" recipient)
+          (log/error exception)
+          (swap! failed-sendings conj recipient)))
+      (swap! failed-sendings conj recipient))
+    (log/info "Should send an email now, but email is not configured.")))
+
 (>defn send-mail
   "Sends a single mail to the recipient. Title and content are used as passed."
-  ([title content recipient]
-   [string? string? string? :ret (? coll?)]
-   (send-mail title content recipient "text/plain"))
-  ([title content recipient type]
-   [string? string? string? string? :ret (? coll?)]
-   (if mail-configured?
-     (if (valid-mail recipient)
-       (try
-         (send-message conn {:from (:sender-address config/email)
-                             :to recipient
-                             :subject title
-                             :body [{:type (str type "; charset=utf-8")
-                                     :content content}]})
-         (log/info "Sent mail to" recipient)
-         (Thread/sleep 100)
-         (catch Exception exception
-           (log/error "Failed to send mail to" recipient)
-           (log/error exception)
-           (swap! failed-sendings conj recipient)))
-       (swap! failed-sendings conj recipient))
-     (log/info "Should send an email now, but email is not configured."))))
+  [title content recipient]
+  [string? string? string? :ret (? coll?)]
+  (send-mail-with-body title recipient
+                       [{:type (str "text/plain" "; charset=utf-8")
+                         :content content}]))
 
 (>defn send-mails
   "Sends an email with a `title` and `content` to all valid recipients.

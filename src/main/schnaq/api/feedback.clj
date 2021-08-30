@@ -9,7 +9,7 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
-            [schnaq.emails :as emails]
+            [schnaq.mail.emails :as emails]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
   (:import (java.util Base64)))

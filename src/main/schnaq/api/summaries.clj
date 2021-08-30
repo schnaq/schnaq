@@ -11,9 +11,9 @@
             [schnaq.config.summy :as summy-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
-            [schnaq.emails :as emails]
             [schnaq.export :as export]
             [schnaq.links :as links]
+            [schnaq.mail.emails :as emails]
             [taoensso.timbre :as log]))
 
 (declare summary-routes)
