@@ -39,6 +39,7 @@
             [schnaq.interface.views.discussion.card-elements]
             [schnaq.interface.views.discussion.card-view]
             [schnaq.interface.views.discussion.conclusion-card]
+            [schnaq.interface.views.discussion.filters]
             [schnaq.interface.views.discussion.history]
             [schnaq.interface.views.discussion.labels]
             [schnaq.interface.views.discussion.logic]
