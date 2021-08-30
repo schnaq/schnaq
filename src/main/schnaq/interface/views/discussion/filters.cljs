@@ -18,31 +18,40 @@
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.labels :as statement-labels]))
 
+;; TODO add button to clear filters
+
 (defn- set-selected-option
   "Helper function to set the correct temp atom value for a selection."
   [event store]
   (reset! store (tools/get-selection-from-event event)))
 
-(defn- label-selector
-  "A component which helps selecting the labels for a filter."
+(defn- label-selections
+  "Selection-options for label-type filters."
   [selected-label]
-  [:div.btn-group
-   {:role "group"}
-   [tooltip/html
-    (for [label shared-config/allowed-labels]
-      [:span.mr-3
-       {:key (str "label-option-" label)
-        :on-click #(reset! selected-label label)}
-       [statement-labels/build-label label]])
-    [:button#filter-labels-label.form-control
-     (if (shared-config/allowed-labels @selected-label)
-       (with-meta
-         [statement-labels/build-label @selected-label]
-         {:key (str "label-option-" @selected-label)})
-       [:span.badge.badge-pill.badge-transparent "–––"])]]
-   [:button.btn.btn-dark
-    {:on-click #(reset! selected-label nil)}
-    [:span.m-auto "x"]]])
+  [:<>
+   [:div.form-row.pb-3
+    [:div.col-auto
+     [:select#filter-labels-selection.mr-1.form-control
+      [:option {:value :includes} (labels :filters.option.labels/includes)]
+      [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
+    [:div.col-auto
+     [:div.btn-group
+      {:role "group"}
+      [tooltip/html
+       (for [label shared-config/allowed-labels]
+         [:span.mr-3
+          {:key (str "label-option-" label)
+           :on-click #(reset! selected-label label)}
+          [statement-labels/build-label label]])
+       [:button#filter-labels-label.form-control
+        (if (shared-config/allowed-labels @selected-label)
+          (with-meta
+            [statement-labels/build-label @selected-label]
+            {:key (str "label-option-" @selected-label)})
+          [:span.badge.badge-pill.badge-transparent "–––"])]]
+      [:button.btn.btn-dark
+       {:on-click #(reset! selected-label nil)}
+       [:span.m-auto "x"]]]]]])
 
 (defn- add-filter-selection
   "A small compontent for adding new filters."
@@ -60,15 +69,7 @@
          [:option {:value :type} (labels :filters.option.type/text)]
          [:option {:value :votes} (labels :filters.option.votes/text)]]]
        (case @current-selection
-         "labels"
-         [:<>
-          [:div.form-row.pb-3
-           [:div.col-auto
-            [:select#filter-labels-selection.mr-1.form-control
-             [:option {:value :includes} (labels :filters.option.labels/includes)]
-             [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
-           [:div.col-auto
-            [label-selector selected-label]]]]
+         "labels" [label-selections selected-label]
          "")
        [:button.btn.btn-outline-dark.mr-2
         {:on-click #(when @selected-label
