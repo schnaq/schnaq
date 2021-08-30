@@ -8,13 +8,37 @@
   ```
 
    This filter filters for statements that include the label :check."
-  (:require [schnaq.interface.text.display-data :refer [labels]]
+  (:require [oops.core :refer [oget oget+]]
+            [reagent.core :as r]
+            [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
-(defn default-menu
+(defn- set-selected-filter
+  "Helper function to set the correct temp atom value."
+  [event store]
+  (let [options (oget event :target :options)
+        selection-index (str (oget event :target :selectedIndex))]
+    (reset! store (oget+ options selection-index :value))))
+
+(defn- add-filter-selection
+  "A small compontent for adding new filters."
+  []
+  (let [current-selection (r/atom "labels")]
+    (fn []
+      [:section.border-bottom.pb-2
+       [:button.btn.btn-outline-dark.mr-2
+        [:i {:class (fa :plus)}]]
+       [:select#add-filter-menu
+        {:on-change #(set-selected-filter % current-selection)}
+        [:option {:value :labels} (labels :filters.option.labels/text)]
+        [:option {:value :type} (labels :filters.option.type/text)]
+        [:option {:value :votes} (labels :filters.option.votes/text)]]])))
+
+(defn- default-menu
   "The default filter menu that is shown to the user."
   []
-  [:div "Here be filters"])
+  [:div
+   [add-filter-selection]])
 
 (defn filter-button
   "A button opening the default filters on click."

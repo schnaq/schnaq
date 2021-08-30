@@ -939,6 +939,10 @@ Now we write down questions and discuss them and can still understand what we ha
         :badges.sort/alphabetical "Alphabetical"
         :badges.filters/button "Filters"
 
+        :filters.option.labels/text "Filter for labels"
+        :filters.option.type/text "Filter for statement type"
+        :filters.option.votes/text "Filter for votes"
+
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
@@ -1955,6 +1959,10 @@ Now we write down questions and discuss them and can still understand what we ha
         :badges.sort/alphabetical "Alphabetisch"
         :badges.filters/button "Filter"
 
+        :filters.option.labels/text "Filter nach Label"
+        :filters.option.type/text "Filter nach Beitragstyp"
+        :filters.option.votes/text "Filter nach Votes"
+
         :loading.placeholder/lead "Daten werden geladen..."
         :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
 
@@ -2197,7 +2205,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :newspaper "fa-newspaper"
      :paragraph "fa-paragraph"
      :plane "fa-paper-plane"
-     :plus "fa-plus"
+     :plus "fas fa-plus"
      :project/diagram "fa-project-diagram"
      :puzzle "fa-puzzle-piece"
      :reply "fa-comment-alt"
