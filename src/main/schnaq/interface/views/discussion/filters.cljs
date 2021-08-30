@@ -16,7 +16,8 @@
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.discussion.labels :as statement-labels]))
+            [schnaq.interface.views.discussion.labels :as statement-labels]
+            [schnaq.interface.views.discussion.logic :as discussion-logic]))
 
 ;; TODO add button to clear filters
 
@@ -175,7 +176,7 @@
 
 (defn- filter-to-fn
   "Returns the corresponding filter-fn for a data-representation of a filter."
-  [{:keys [type criteria label statement-type votes-number]}]
+  [{:keys [type criteria label statement-type votes-number]} local-votes]
   (cond
     (= type :labels)
     (let [coll-fn (if (= criteria :includes) filter remove)]
@@ -184,13 +185,17 @@
     (let [coll-fn (if (= criteria :includes) filter remove)]
       (fn [statements] (coll-fn #(= (:statement/type %) statement-type) statements)))
     (= type :votes)
-    (let [comp-fn (case criteria ">" > "=" = "<" <)]        ;; Calling symbol on the string does not help. Other solutions are hacky
-      (fn [statements] (filter #(comp-fn (- (:meta/upvotes %) (:meta/downvotes %)) votes-number) statements)))
+    ;; Calling symbol on the string does not help. Other solutions are hacky.
+    (let [comp-fn (case criteria ">" > "=" = "<" <)
+          ;; The deref needs to happen here, because it cant happen in a lazy seq.
+          ;; Derefing in the component does not update the filters, when votes change.
+          votes @local-votes]
+      (fn [statements] (filter #(comp-fn (discussion-logic/calculate-votes % votes) votes-number) statements)))
     :else identity))
 
 (defn filter-statements
   "Accepts a collection of statements and filters and applies them to the collection."
-  [statements filters]
-  (let [filter-fns (map filter-to-fn filters)]
+  [statements filters votes]
+  (let [filter-fns (map #(filter-to-fn % votes) filters)]
     ;; Apply every filter-function to the statements before returning them
     (reduce (fn [statements filter-fn] (filter-fn statements)) statements filter-fns)))

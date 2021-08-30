@@ -119,7 +119,7 @@
                     :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
             sorted-conclusions (sort-by keyfn > current-premises)
             active-filters @(rf/subscribe [:filters/active])
-            filtered-conclusions (filters/filter-statements sorted-conclusions active-filters)]
+            filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
         [:div.card-columns.pb-3
          {:class card-column-class}
          (for [statement filtered-conclusions]
