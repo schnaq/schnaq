@@ -948,6 +948,9 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.type/is "is"
         :filters.option.type/is-not "is not"
         :filters.option.votes/text "votes"
+        :filters.option.vote/bigger "more than"
+        :filters.option.vote/equal "equal"
+        :filters.option.vote/less "less than"
 
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
@@ -1974,6 +1977,9 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.type/is "ist"
         :filters.option.type/is-not "ist nicht"
         :filters.option.votes/text "Votes"
+        :filters.option.vote/bigger "mehr als"
+        :filters.option.vote/equal "gleich"
+        :filters.option.vote/less "weniger als"
 
         :loading.placeholder/lead "Daten werden geladen..."
         :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"

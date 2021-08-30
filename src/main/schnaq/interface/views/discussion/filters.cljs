@@ -68,6 +68,21 @@
      [:option {:value "statement.type/attack"} (labels :discussion.add.button/attack)]
      [:option {:value "statement.type/support"} (labels :discussion.add.button/support)]]]])
 
+(defn- vote-selections
+  "Selection-options for vote filters."
+  []
+  [:div.form-row.pb-3
+   [:div.col-auto
+    [:select#filter-votes-selection.mr-1.form-control
+     [:option {:value ">"} (labels :filters.option.vote/bigger)]
+     [:option {:value "="} (labels :filters.option.vote/equal)]
+     [:option {:value "<"} (labels :filters.option.vote/less)]]]
+   [:div.col-auto
+    [:input#filter-votes-number.mr-1.form-control
+     {:type :number
+      :placeholder 0
+      :defaultValue 0}]]])
+
 (defn- add-filter-selection
   "A small compontent for adding new filters."
   []
@@ -86,6 +101,7 @@
        (case @current-selection
          "labels" [label-selections selected-label]
          "type" [type-selections]
+         "votes" [vote-selections]
          "")
        [:button.btn.btn-outline-dark.mr-2
         {:on-click #(case @current-selection
@@ -97,7 +113,11 @@
                       "type"
                       (rf/dispatch [:filters.activate/type
                                     (tools/get-current-selection (gdom/getElement "filter-type-selection"))
-                                    (tools/get-current-selection (gdom/getElement "filter-type-type"))]))}
+                                    (tools/get-current-selection (gdom/getElement "filter-type-type"))])
+                      "votes"
+                      (rf/dispatch [:filters.activate/votes
+                                    (tools/get-current-selection (gdom/getElement "filter-votes-selection"))
+                                    (.-value (gdom/getElement "filter-votes-number"))]))}
         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
 
 (defn- default-menu
@@ -133,6 +153,14 @@
                       :statement-type (keyword stype)}]
       (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
 
+(rf/reg-event-db
+  :filters.activate/votes
+  (fn [db [_ criteria votes-number]]
+    (let [new-filter {:type :votes
+                      :criteria criteria
+                      :votes-number (js/parseInt votes-number)}]
+      (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
+
 (rf/reg-sub
   :filters/active
   (fn [db _]
@@ -147,14 +175,18 @@
 
 (defn- filter-to-fn
   "Returns the corresponding filter-fn for a data-representation of a filter."
-  [{:keys [type criteria label statement-type]}]
+  [{:keys [type criteria label statement-type votes-number]}]
   (cond
     (= type :labels)
     (let [coll-fn (if (= criteria :includes) filter remove)]
       (fn [statements] (coll-fn #(contains? (set (:statement/labels %)) label) statements)))
     (= type :type)
     (let [coll-fn (if (= criteria :includes) filter remove)]
-      (fn [statements] (coll-fn #(= (:statement/type %) statement-type) statements)))))
+      (fn [statements] (coll-fn #(= (:statement/type %) statement-type) statements)))
+    (= type :votes)
+    (let [comp-fn (case criteria ">" > "=" = "<" <)]        ;; Calling symbol on the string does not help. Other solutions are hacky
+      (fn [statements] (filter #(comp-fn (- (:meta/upvotes %) (:meta/downvotes %)) votes-number) statements)))
+    :else identity))
 
 (defn filter-statements
   "Accepts a collection of statements and filters and applies them to the collection."
