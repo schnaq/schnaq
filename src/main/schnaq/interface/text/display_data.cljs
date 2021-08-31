@@ -20,6 +20,50 @@
         :nav/blog "Blog"
         :nav/admin "Admin"
 
+        ;; Alphazulu Page
+        :alphazulu.introduction/title "New Work out of Germany"
+        :alphazulu.introduction/body
+        [:<>
+         [:p "Secure, custom, fast: This is the power of ALPHAZULU."]
+         [:p "Use the modules from "
+          [:a {:href "/"} "schnaq"] ", " [:a {:href "https://wetog.de/"} "wetog"] ", "
+          [:a {:href "https://xignsys.com/"} "XignSys"] ", " [:a {:href "https://www.cobago.de/"} "Cobago"] ", "
+          [:a {:href "https://www.trustcerts.de/"} "TrustCerts"] " und " [:a {:href "https://ec3l.com/"} "EC3L"]
+          " to find the peferct custom solution for your company."]]
+        :alphazulu.schnaq/title "Structured Knowledge"
+        :alphazulu.schnaq/body
+        [:<>
+         [:p "Manage the digital transformation of your company. We help you with internal communication and knowledge transfer."]
+         [:p "Use schnaq standalone or with e.g. Xign.Me to log-in without passwords. Or upgrade your Wetog subscription to include schnaq."]]
+        :alphazulu.wetog/title "Secure Collaboration"
+        :alphazulu.wetog/body
+        [:<>
+         [:p "Wetog uses the quantum-computer safe encryption LIQRYPT to secure all data, chats and video-conferences."]
+         [:p "Already got a Wetog subscription? Upgrade it to include schnaq with one click. Or add another Alphazulu-partner module."]]
+        :alphazulu.xignsys/title "Passwordless Log-Ins from Anywhere"
+        :alphazulu.xignsys/body
+        [:<>
+         [:p "With the unique solution Xign.Me, you will be able to authenticate with your biometrics anywhere without a password."]
+         [:p "Try Xign.Me while logging into schnaq. You can also log in with other Alphazulu partners without an insecure password."]]
+        :alphazulu.cobago/title "Digital Assistant"
+        :alphazulu.cobago/body
+        [:<>
+         [:p "Cobago helps your company automate forms and processes. You do not need to have any technical knowledge."]
+         [:p "Want to use schnaq discussions inside the Cobago platform? Write us for access!"]]
+        :alphazulu.trustcerts/title "Digital Blockchain Signatures"
+        :alphazulu.trustcerts/body
+        [:<>
+         [:p "With the TrustCerts Solutions you can sign and verify important documents through a tamperproof blockchain."]
+         [:p "You can sign important results from schnaq discussions, documents out of wetog or forms build with Cobago Sixpad."]]
+        :alphazulu.ec3l/title "Reliable Employee Training"
+        :alphazulu.ec3l/body
+        [:<>
+         [:p "Modern, target-oriented training that works and elevates your company to another level."]
+         [:p "Find schnaq modules inside EC3L trainings soon. Continue using what you already know."]]
+        :alphazulu.activate/title "Personal Conversation"
+        :alphazulu.activate/body [:p "If you want to know more about schnaq and Alphazulu, you can book a slot through our "
+                                  [:a {:href "https://calendly.com/schnaq/30min"} "Calendly."] " We are looking forward to a talk with you."]
+
         ;; Call to contribute
         :call-to-contribute/lead "There are currently no contributions"
         :call-to-contribute/body "Start with your first post"
