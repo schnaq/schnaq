@@ -952,6 +952,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.vote/equal "equal"
         :filters.option.vote/less "less than"
         :filters.buttons/clear "Clear all filters"
+        :filters.heading/active "Active Filters"
 
         ;; Labels for programattically created text in label overview
         :filters.labels.type/labels "Labels"
@@ -1997,6 +1998,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.vote/equal "gleich"
         :filters.option.vote/less "weniger als"
         :filters.buttons/clear "Alle filter löschen"
+        :filters.heading/active "Aktive Filter"
 
         ;; Labels for programattically created text in label overview
         :filters.labels.type/labels "Labels"

@@ -139,7 +139,7 @@
   []
   (let [active @(rf/subscribe [:filters/active])]
     [:section.pt-2.text-left
-     [:p "Active Filters"]
+     [:p (labels :filters.heading/active)]
      (when (seq active)
        (for [filter-data active]
          ;; The key needs to be set because its a list.
