@@ -1031,6 +1031,27 @@ Now we write down questions and discuss them and can still understand what we ha
         :nav/blog "Blog"
         :nav/admin "Admin"
 
+        ;; Alphazulu Page
+        :alphazulu.introduction/title "New Work aus NRW"
+        :alphazulu.introduction/body
+        [:<>
+         [:p "Sicher, individuell, lokal: Das ist die Power von ALPHAZULU."]
+         [:p "Finde mit den Modulen von "
+          [:a {:href "/"} "schnaq"] ", " [:a {:href "https://wetog.de/"} "wetog"] ", "
+          [:a {:href "https://xignsys.com/"} "XignSys"] ", " [:a {:href "https://www.cobago.de/"} "Cobago"] ", "
+          [:a {:href "https://www.trustcerts.de/"} "TrustCerts"] " und " [:a {:href "https://ec3l.com/"} "EC3L"]
+          " die maßgeschneiderte Lösung für dein Unternehmen."]]
+        :alphazulu.schnaq/title "Strukturierter Wissensaustausch"
+        :alphazulu.schnaq/body
+        [:<>
+         [:p "Manage die digitale Transformation deines Unternehmens. Wir helfen dir bei interner Kommunikation und Wissensaustausch."]
+         [:p "Nutze schnaq standalone und logge dich zum Beispiel per Xign.Me ein, oder buche schnaq direkt bei deinem Wetog-Abo dazu."]]
+        :alphazulu.wetog/title "Sichere Kollaboration"
+        :alphazulu.wetog/body
+        [:<>
+         [:p "Wetog nutzt die quantencomputer-sichere Verschlüsselung LIQRYPT um sämtliche Daten, Chats und Videokonferenzen sicher zu verschlüsseln."]
+         [:p "Du hast schon einen Wetog Zugang? Buche direkt schnaq in Wetog dazu. Oder einen der anderen Alphazulu-Partner."]]
+
         ;; Call to contribute
         :call-to-contribute/lead "Bisher gibt es hier noch keine Beiträge"
         :call-to-contribute/body "Starte mit deinem ersten Beitrag"
@@ -2045,7 +2066,9 @@ Now we write down questions and discuss them and can still understand what we ha
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-    {:founders-note "https://s3.disqtec.com/startpage/founders_letter.png"
+    {:alphazulu/logo "https://s3.disqtec.com/alphazulu/alphazulu_logo.png"
+     :alphazulu.wetog/logo "https://s3.disqtec.com/alphazulu/wetog_logo.png"
+     :founders-note "https://s3.disqtec.com/startpage/founders_letter.png"
      :how-to/taskbar "https://s3.disqtec.com/schnaq-common/howto/taskbar.svg"
      :icon-add "https://s3.disqtec.com/schnaq-common/buttons/add-button.svg"
      :icon-community "https://s3.disqtec.com/schnaq-common/community.svg"
