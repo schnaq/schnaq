@@ -1051,6 +1051,29 @@ Now we write down questions and discuss them and can still understand what we ha
         [:<>
          [:p "Wetog nutzt die quantencomputer-sichere Verschlüsselung LIQRYPT um sämtliche Daten, Chats und Videokonferenzen sicher zu verschlüsseln."]
          [:p "Du hast schon einen Wetog Zugang? Buche direkt schnaq in Wetog dazu. Oder einen der anderen Alphazulu-Partner."]]
+        :alphazulu.xignsys/title "Passwordlose Logins von überall"
+        :alphazulu.xignsys/body
+        [:<>
+         [:p "Mit der einzigartigen Lösung Xign.Me kann man sich überall durch seine Biometrie einfach ohne passwort authentifizieren."]
+         [:p "Probiere Xign.Me einfach beim Login bei schnaq aus. Logge dich bei Alphazulu-Partnern ein ohne anfällige Passwörter zu brauchen."]]
+        :alphazulu.cobago/title "Digitale Assistenz"
+        :alphazulu.cobago/body
+        [:<>
+         [:p "Cobago hilft deinem Unternehmen dabei einfach Formulare und Prozesse zu automatisieren. Ganz ohne technische Vorkentnisse."]
+         [:p "Du möchtest schnaq Diskussionen innerhalb der Cobago Plattform nutzen? Gib uns Bescheid für einen Zugang!"]]
+        :alphazulu.trustcerts/title "Digitale Signaturen – powered by Blockchains"
+        :alphazulu.trustcerts/body
+        [:<>
+         [:p "Mit den Lösungen von TrustCerts kannst du wichtige Dokumente einfach und unverfälschlich durch die Blockchain signieren und überprüfen."]
+         [:p "Egal ob eine Entscheidung aus einem schnaq verbindlich festgehalten werden muss oder ob ein Dokument aus Wetog oder Cobago Sixpad signiert werden muss. Alphazulu liefert die Lösung."]]
+        :alphazulu.ec3l/title "Weiterbildung mit Konzept"
+        :alphazulu.ec3l/body
+        [:<>
+         [:p "Moderne, zielgerichtete Weiterbildung die nachweislich funktioniert dein Unternehmenswissen auf eine neue Stufe hebt."]
+         [:p "Finde bald auch schnaq Module innerhalb deiner EC3L Weiterbildung. Nutze einfach weiter was du schon kennst."]]
+        :alphazulu.activate/title "Persönliches Gespräch"
+        :alphazulu.activate/body [:p "Wenn du mehr über schnaq und Alphazulu erfahren möchtest, dann buche gerne einen Termin mit uns "
+                                  [:a {:href "https://calendly.com/schnaq/30min"} "über Calendly."] " Wir freuen uns auf ein persönliches Gespräch."]
 
         ;; Call to contribute
         :call-to-contribute/lead "Bisher gibt es hier noch keine Beiträge"
@@ -2067,7 +2090,11 @@ Now we write down questions and discuss them and can still understand what we ha
   [identifier]
   (identifier
     {:alphazulu/logo "https://s3.disqtec.com/alphazulu/alphazulu_logo.png"
+     :alphazulu.cobago/logo "https://s3.disqtec.com/alphazulu/cobago_logo.png"
+     :alphazulu.ec3l/logo "https://s3.disqtec.com/alphazulu/ec3l_logo.png"
+     :alphazulu.trustcerts/logo "https://s3.disqtec.com/alphazulu/trustcerts_logo.png"
      :alphazulu.wetog/logo "https://s3.disqtec.com/alphazulu/wetog_logo.png"
+     :alphazulu.xignsys/logo "https://s3.disqtec.com/alphazulu/xignsys_logo.png"
      :founders-note "https://s3.disqtec.com/startpage/founders_letter.png"
      :how-to/taskbar "https://s3.disqtec.com/schnaq-common/howto/taskbar.svg"
      :icon-add "https://s3.disqtec.com/schnaq-common/buttons/add-button.svg"
