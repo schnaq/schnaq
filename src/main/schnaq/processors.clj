@@ -2,6 +2,7 @@
   (:require [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.reaction :as reaction-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -45,3 +46,22 @@
     (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
       (map #(assoc % :meta/new (not (contains? known-statements (:db/id %)))) statements))
     statements))
+
+(defn with-sub-discussion-info
+  "Add sub-discussion-info, if necessary. Sub-Discussion-infos are number of
+  sub-statements, authors, ..."
+  [statements]
+  (let [statement-ids (map :db/id statements)
+        info-map (discussion-db/child-node-info statement-ids)]
+    (map (fn [statement]
+           (if-let [sub-discussions (get info-map (:db/id statement))]
+             (assoc statement :meta/sub-discussion-info sub-discussions)
+             statement))
+         statements)))
+
+(defn with-sub-discussion-info-on-schnaq
+  "Same as `with-sub-discussion-info`, but enriches the starting statements in a
+  schnaq."
+  [schnaq]
+  (assoc schnaq :discussion/starting-statements
+                (with-sub-discussion-info (:discussion/starting-statements schnaq))))
