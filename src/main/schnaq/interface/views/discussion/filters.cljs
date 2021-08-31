@@ -20,6 +20,7 @@
             [schnaq.interface.views.discussion.logic :as discussion-logic]))
 
 ;; TODO add button to clear filters
+;; TODO add button to remove single filters
 
 (defn- set-selected-option
   "Helper function to set the correct temp atom value for a selection."
@@ -60,8 +61,8 @@
   [:div.form-row.pb-3
    [:div.col-auto
     [:select#filter-type-selection.mr-1.form-control
-     [:option {:value :includes} (labels :filters.option.type/is)]
-     [:option {:value :excludes} (labels :filters.option.type/is-not)]]]
+     [:option {:value :is} (labels :filters.option.type/is)]
+     [:option {:value :is-not} (labels :filters.option.type/is-not)]]]
    [:div.col-auto
     [:select#filter-type-type.mr-1.form-control
      ;; Needs to be string, otherwise ns will be stripped
@@ -121,11 +122,38 @@
                                     (.-value (gdom/getElement "filter-votes-number"))]))}
         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
 
+(defn- prettify-filter
+  "A helper returning a single filter prettified."
+  [{:keys [type criteria label statement-type votes-number] :as filter-data}]
+  (let [type-label (labels (keyword :filters.labels.type type))
+        criteria-label (labels (keyword :filters.labels.criteria criteria))
+        statement-type-label (when statement-type (labels (keyword :filters.stype statement-type)))
+        pretty-label (when label [statement-labels/build-label label])]
+    [:p {:key (str filter-data)}
+     [:strong type-label] " "
+     criteria-label " "
+     (or pretty-label statement-type-label votes-number)]))
+
+(defn- active-filters
+  "A menu showing the currently active filters."
+  []
+  (let [active @(rf/subscribe [:filters/active])]
+    [:section.pt-2.text-left
+     [:p "Active Filters"]
+     (when (seq active)
+       (for [filter-data active]
+         ;; The key needs to be set because its a list.
+         ;; And the key is needed again in prettify-filter or else react does not render.
+         (with-meta
+           [prettify-filter filter-data]
+           {:key (str filter-data)})))]))
+
 (defn- default-menu
   "The default filter menu that is shown to the user."
   []
   [:div
-   [add-filter-selection]])
+   [add-filter-selection]
+   [active-filters]])
 
 (defn filter-button
   "A button opening the default filters on click."
@@ -182,7 +210,7 @@
     (let [coll-fn (if (= criteria :includes) filter remove)]
       (fn [statements] (coll-fn #(contains? (set (:statement/labels %)) label) statements)))
     (= type :type)
-    (let [coll-fn (if (= criteria :includes) filter remove)]
+    (let [coll-fn (if (= criteria :is) filter remove)]
       (fn [statements] (coll-fn #(= (:statement/type %) statement-type) statements)))
     (= type :votes)
     ;; Calling symbol on the string does not help. Other solutions are hacky.

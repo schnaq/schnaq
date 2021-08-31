@@ -952,6 +952,21 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.vote/equal "equal"
         :filters.option.vote/less "less than"
 
+        ;; Labels for programattically created text in label overview
+        :filters.labels.type/labels "Labels"
+        :filters.labels.type/type "Statement type"
+        :filters.labels.type/votes "Votes"
+        :filters.labels.criteria/includes "include"
+        :filters.labels.criteria/excludes "exclude"
+        :filters.labels.criteria/is "is"
+        :filters.labels.criteria/is-not "is not"
+        :filters.labels.criteria/> "are more than"
+        :filters.labels.criteria/= "equal"
+        :filters.labels.criteria/< "are less than"
+        :filters.stype/neutral "neutral"
+        :filters.stype/attack "attack"
+        :filters.stype/support "support"
+
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
@@ -1980,6 +1995,21 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.vote/bigger "mehr als"
         :filters.option.vote/equal "gleich"
         :filters.option.vote/less "weniger als"
+
+        ;; Labels for programattically created text in label overview
+        :filters.labels.type/labels "Labels"
+        :filters.labels.type/type "Beitragstyp"
+        :filters.labels.type/votes "Votes"
+        :filters.labels.criteria/includes "beinhalten"
+        :filters.labels.criteria/excludes "beinhalten kein"
+        :filters.labels.criteria/is "ist"
+        :filters.labels.criteria/is-not "ist nicht"
+        :filters.labels.criteria/> "sind größer als"
+        :filters.labels.criteria/= "gleich"
+        :filters.labels.criteria/< "sind kleiner als"
+        :filters.stype/neutral "neutral"
+        :filters.stype/attack "dagegen"
+        :filters.stype/support "dafür"
 
         :loading.placeholder/lead "Daten werden geladen..."
         :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"
