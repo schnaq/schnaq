@@ -1,6 +1,6 @@
 (ns schnaq.auth.middlewares
   (:require [buddy.auth :refer [authenticated?]]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [ghostwheel.core :refer [>defn-]]
             [ring.util.http-response :refer [unauthorized forbidden]]
             [schnaq.api.toolbelt :as at]
             [schnaq.config :as config]
