@@ -225,7 +225,10 @@
       (fn [statements] (coll-fn #(contains? (set (:statement/labels %)) label) statements)))
     :type
     (let [coll-fn (if (= criteria :is) filter remove)]
-      (fn [statements] (coll-fn #(= (:statement/type %) statement-type) statements)))
+      (fn [statements] (coll-fn #(or (= (:statement/type %) statement-type)
+                                     ;; Account for starting statements as neutral
+                                     (and (= statement-type :statement.type/neutral) (nil? (:statement/type %))))
+                                statements)))
     :votes
     ;; Calling symbol on the string does not help. Other solutions are hacky.
     (let [comp-fn (case criteria ">" > "=" = "<" <)
