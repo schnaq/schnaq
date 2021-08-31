@@ -20,7 +20,6 @@
             [schnaq.interface.views.discussion.logic :as discussion-logic]))
 
 ;; TODO add button to clear filters
-;; TODO add button to remove single filters
 
 (defn- set-selected-option
   "Helper function to set the correct temp atom value for a selection."
@@ -129,10 +128,13 @@
         criteria-label (labels (keyword :filters.labels.criteria criteria))
         statement-type-label (when statement-type (labels (keyword :filters.stype statement-type)))
         pretty-label (when label [statement-labels/build-label label])]
-    [:p {:key (str filter-data)}
-     [:strong type-label] " "
-     criteria-label " "
-     (or pretty-label statement-type-label votes-number)]))
+    [:div.d-flex.justify-content-between
+     [:p.d-inline-block.pr-2.my-auto {:key (str filter-data)}
+      [:strong type-label] " "
+      criteria-label " "
+      (or pretty-label statement-type-label votes-number)]
+     [:button.btn.btn-outline-primary-small.my-1
+      {:on-click #(rf/dispatch [:filters/deactivate filter-data])} "x"]]))
 
 (defn- active-filters
   "A menu showing the currently active filters."
@@ -189,6 +191,11 @@
                       :criteria criteria
                       :votes-number (js/parseInt votes-number)}]
       (update-in db [:discussion :filters] #(cset/union #{new-filter} %)))))
+
+(rf/reg-event-db
+  :filters/deactivate
+  (fn [db [_ filter-data]]
+    (update-in db [:discussion :filters] disj filter-data)))
 
 (rf/reg-sub
   :filters/active
