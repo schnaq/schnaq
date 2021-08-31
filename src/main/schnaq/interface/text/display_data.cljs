@@ -20,6 +20,53 @@
         :nav/blog "Blog"
         :nav/admin "Admin"
 
+        ;; Alphazulu Page
+        :alphazulu.page/heading "Alphazulu"
+        :alphazulu.page/subheading "Modern Work for Modern Companies"
+        :alphazulu.introduction/title "New Work out of Germany"
+        :alphazulu.introduction/body
+        [:<>
+         [:p "Secure, custom, fast: This is the power of ALPHAZULU."]
+         [:p "Use the modules from "
+          [:a {:href "/"} "schnaq"] ", " [:a {:href "https://wetog.de/"} "wetog"] ", "
+          [:a {:href "https://xignsys.com/"} "XignSys"] ", " [:a {:href "https://www.cobago.de/"} "Cobago"] ", "
+          [:a {:href "https://www.trustcerts.de/"} "TrustCerts"] " und " [:a {:href "https://ec3l.com/"} "EC3L"]
+          " to find the perfect custom solution for your company."]
+         [:p "All Alphazulu products can be combined and integrated with each other."]]
+        :alphazulu.schnaq/title "Structured Knowledge"
+        :alphazulu.schnaq/body
+        [:<>
+         [:p "Manage the digital transformation of your company. We help you with internal communication and knowledge transfer."]
+         [:p "Use schnaq standalone or with e.g. Xign.Me to log-in without passwords. Or upgrade your Wetog subscription to include schnaq."]]
+        :alphazulu.wetog/title "Secure Collaboration"
+        :alphazulu.wetog/body
+        [:<>
+         [:p "Wetog uses the quantum-computer safe encryption LIQRYPT to secure all data, chats and video-conferences."]
+         [:p "Already got a Wetog subscription? Upgrade it to include schnaq with one click. Or add another Alphazulu-partner module."]]
+        :alphazulu.xignsys/title "Passwordless Log-Ins from Anywhere"
+        :alphazulu.xignsys/body
+        [:<>
+         [:p "With the unique solution Xign.Me, you will be able to authenticate with your biometrics anywhere without a password."]
+         [:p "Try Xign.Me while logging into schnaq. You can also log in with other Alphazulu partners without an insecure password."]]
+        :alphazulu.cobago/title "Digital Assistant"
+        :alphazulu.cobago/body
+        [:<>
+         [:p "Cobago helps your company automate forms and processes. You do not need to have any technical knowledge."]
+         [:p "Want to use schnaq discussions inside the Cobago platform? Write us for access!"]]
+        :alphazulu.trustcerts/title "Digital Blockchain Signatures"
+        :alphazulu.trustcerts/body
+        [:<>
+         [:p "With the TrustCerts Solutions you can sign and verify important documents through a tamperproof blockchain."]
+         [:p "You can sign important results from schnaq discussions, documents out of Wetog or forms build with Cobago Sixpad."]]
+        :alphazulu.ec3l/title "Reliable Employee Training"
+        :alphazulu.ec3l/body
+        [:<>
+         [:p "Modern, target-oriented training that works and elevates your company to another level."]
+         [:p "Find schnaq modules inside EC3L trainings soon. Continue using what you already know."]]
+        :alphazulu.activate/title "Personal Conversation"
+        :alphazulu.activate/body [:p "If you want to know more about schnaq and Alphazulu, you can book a slot through our "
+                                  [:a {:href "https://calendly.com/schnaq/30min"} "Calendly."] " We are looking forward to a talk with you."]
+
         ;; Call to contribute
         :call-to-contribute/lead "There are currently no contributions"
         :call-to-contribute/body "Start with your first post"
@@ -1061,6 +1108,53 @@ Now we write down questions and discuss them and can still understand what we ha
         :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
         :nav/blog "Blog"
         :nav/admin "Admin"
+
+        ;; Alphazulu Page
+        :alphazulu.page/heading "Alphazulu"
+        :alphazulu.page/subheading "Modern Work for Modern Companies"
+        :alphazulu.introduction/title "New Work aus NRW"
+        :alphazulu.introduction/body
+        [:<>
+         [:p "Sicher, individuell, lokal: Das ist die Power von ALPHAZULU."]
+         [:p "Finde mit den Modulen von "
+          [:a {:href "/"} "schnaq"] ", " [:a {:href "https://wetog.de/"} "wetog"] ", "
+          [:a {:href "https://xignsys.com/"} "XignSys"] ", " [:a {:href "https://www.cobago.de/"} "Cobago"] ", "
+          [:a {:href "https://www.trustcerts.de/"} "TrustCerts"] " und " [:a {:href "https://ec3l.com/"} "EC3L"]
+          " die maßgeschneiderte Lösung für dein Unternehmen."]
+         [:p "Alle Alphazulu-Produkte sind miteinander kombinier- und integrierbar."]]
+        :alphazulu.schnaq/title "Strukturierter Wissensaustausch"
+        :alphazulu.schnaq/body
+        [:<>
+         [:p "Manage die digitale Transformation deines Unternehmens. Wir helfen dir bei interner Kommunikation und Wissensaustausch."]
+         [:p "Nutze schnaq standalone und logge dich zum Beispiel per Xign.Me ein, oder buche schnaq direkt bei deinem Wetog-Abo dazu."]]
+        :alphazulu.wetog/title "Sichere Kollaboration"
+        :alphazulu.wetog/body
+        [:<>
+         [:p "Wetog nutzt die quantencomputer-sichere Verschlüsselung LIQRYPT um sämtliche Daten, Chats und Videokonferenzen sicher zu verschlüsseln."]
+         [:p "Du hast schon einen Wetog Zugang? Buche direkt schnaq in Wetog dazu. Oder einen der anderen Alphazulu-Partner."]]
+        :alphazulu.xignsys/title "Passwortlose Logins von überall"
+        :alphazulu.xignsys/body
+        [:<>
+         [:p "Mit der einzigartigen Lösung Xign.Me kann man sich überall durch seine Biometrie einfach ohne passwort authentifizieren."]
+         [:p "Probiere Xign.Me einfach beim Login bei schnaq aus. Logge dich bei Alphazulu-Partnern ein ohne anfällige Passwörter zu brauchen."]]
+        :alphazulu.cobago/title "Digitale Assistenz"
+        :alphazulu.cobago/body
+        [:<>
+         [:p "Cobago hilft deinem Unternehmen dabei einfach Formulare und Prozesse zu automatisieren. Ganz ohne technische Vorkenntnisse."]
+         [:p "Du möchtest schnaq-Diskussionen innerhalb der Cobago Plattform nutzen? Gib uns Bescheid für einen Zugang!"]]
+        :alphazulu.trustcerts/title "Digitale Signaturen – powered by Blockchains"
+        :alphazulu.trustcerts/body
+        [:<>
+         [:p "Mit den Lösungen von TrustCerts kannst du wichtige Dokumente einfach und unverfälschlich durch die Blockchain signieren und überprüfen."]
+         [:p "Egal ob eine Entscheidung aus einem schnaq verbindlich festgehalten werden muss oder ob ein Dokument aus Wetog oder Cobago Sixpad signiert werden muss. Alphazulu liefert die Lösung."]]
+        :alphazulu.ec3l/title "Weiterbildung mit Konzept"
+        :alphazulu.ec3l/body
+        [:<>
+         [:p "Moderne, zielgerichtete Weiterbildung die nachweislich funktioniert dein Unternehmenswissen auf eine neue Stufe hebt."]
+         [:p "Finde bald auch schnaq Module innerhalb deiner EC3L Weiterbildung. Nutze einfach weiter was du schon kennst."]]
+        :alphazulu.activate/title "Persönliches Gespräch"
+        :alphazulu.activate/body [:p "Wenn du mehr über schnaq und Alphazulu erfahren möchtest, dann buche gerne einen Termin mit uns "
+                                  [:a {:href "https://calendly.com/schnaq/30min"} "über Calendly."] " Wir freuen uns auf ein persönliches Gespräch."]
 
         ;; Call to contribute
         :call-to-contribute/lead "Bisher gibt es hier noch keine Beiträge"
@@ -2107,7 +2201,13 @@ Now we write down questions and discuss them and can still understand what we ha
   "Returns an image path as String for a given identifier"
   [identifier]
   (identifier
-    {:founders-note "https://s3.disqtec.com/startpage/founders_letter.png"
+    {:alphazulu/logo "https://s3.disqtec.com/alphazulu/alphazulu_logo.png"
+     :alphazulu.cobago/logo "https://s3.disqtec.com/alphazulu/cobago_logo.png"
+     :alphazulu.ec3l/logo "https://s3.disqtec.com/alphazulu/ec3l_logo.png"
+     :alphazulu.trustcerts/logo "https://s3.disqtec.com/alphazulu/trustcerts_logo.png"
+     :alphazulu.wetog/logo "https://s3.disqtec.com/alphazulu/wetog_logo.png"
+     :alphazulu.xignsys/logo "https://s3.disqtec.com/alphazulu/xignsys_logo.png"
+     :founders-note "https://s3.disqtec.com/startpage/founders_letter.png"
      :how-to/taskbar "https://s3.disqtec.com/schnaq-common/howto/taskbar.svg"
      :icon-add "https://s3.disqtec.com/schnaq-common/buttons/add-button.svg"
      :icon-community "https://s3.disqtec.com/schnaq-common/community.svg"
