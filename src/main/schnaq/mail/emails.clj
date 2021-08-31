@@ -51,7 +51,7 @@
   [title content recipient]
   [string? string? string? :ret (? coll?)]
   (send-mail-with-body title recipient
-                       [{:type (str "text/plain" "; charset=utf-8")
+                       [{:type "text/plain; charset=utf-8"
                          :content content}]))
 
 (>defn send-mails
