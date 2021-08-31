@@ -5,7 +5,6 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.utils.time :as time]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.labels :as statement-labels]
