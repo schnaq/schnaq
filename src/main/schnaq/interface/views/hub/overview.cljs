@@ -27,7 +27,7 @@
                           :placeholder (labels :hub.add.schnaq.input/placeholder)}]
     [:div.input-group-append
      [:button.btn.btn-primary {:type "submit"}
-      [:i {:class (str "m-auto fas " (fa :plus))}]]]]])
+      [:i {:class (str "m-auto " (fa :plus))}]]]]])
 
 (defn hub-panel
   "Small overview for the hub."

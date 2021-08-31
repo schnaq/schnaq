@@ -13,6 +13,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.conclusion-card :as cards]
             [schnaq.interface.views.discussion.edit :as edit]
+            [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.discussion.input :as input]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.howto.elements :as how-to-elements]
@@ -270,8 +271,10 @@
      [back-button]]
     [:div.m-1
      [search-bar]]
-    [:div.m-1
+    [:div.m-1.pr-2.border-right
      [sort-options]]
+    [:div.m-1
+     [filters/filter-button]]
     [:div.d-flex.flex-row.ml-auto]]])
 
 (defn discussion-view

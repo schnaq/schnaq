@@ -4,6 +4,7 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.conclusion-card :as card]
+            [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.pages :as pages]))
 
@@ -36,12 +37,15 @@
 
 (defn search-results [results]
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
+        local-votes (rf/subscribe [:local-votes])
         key-fn (case sort-method
                  :newest :statement/created-at
-                 :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
-        sorted-results (sort-by key-fn > results)]
+                 :popular #(logic/calculate-votes % @local-votes))
+        sorted-results (sort-by key-fn > results)
+        active-filters @(rf/subscribe [:filters/active])
+        filtered-conclusions (filters/filter-statements sorted-results active-filters local-votes)]
     [common/move-in :right
-     (for [statement sorted-results]
+     (for [statement filtered-conclusions]
        [:div.p-2.w-lg-50.d-inline-block
         {:key (:db/id statement)}
         [card/statement-card nil statement]])]))

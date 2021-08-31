@@ -11,6 +11,7 @@
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.edit :as edit]
+            [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.discussion.labels :as labels]
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
@@ -116,10 +117,12 @@
             keyfn (case sort-method
                     :newest :statement/created-at
                     :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
-            sorted-conclusions (sort-by keyfn > current-premises)]
+            sorted-conclusions (sort-by keyfn > current-premises)
+            active-filters @(rf/subscribe [:filters/active])
+            filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
         [:div.card-columns.pb-3
          {:class card-column-class}
-         (for [statement sorted-conclusions]
+         (for [statement filtered-conclusions]
            (with-meta
              [statement-or-edit-wrapper statement edit-hash]
              {:key (:db/id statement)}))])
