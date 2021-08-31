@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.discussion.filters
-  "Filters are saved and read as maps internaly. e.g.
+  "Filters are saved and read as maps internally. e.g.
 
   ```
   {:type :labels
@@ -27,30 +27,29 @@
 (defn- label-selections
   "Selection-options for label-type filters."
   [selected-label]
-  [:<>
-   [:div.form-row.pb-3
-    [:div.col-auto
-     [:select#filter-labels-selection.mr-1.form-control
-      [:option {:value :includes} (labels :filters.option.labels/includes)]
-      [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
-    [:div.col-auto
-     [:div.btn-group
-      {:role "group"}
-      [tooltip/html
-       (for [label shared-config/allowed-labels]
-         [:span.mr-3
-          {:key (str "label-option-" label)
-           :on-click #(reset! selected-label label)}
-          [statement-labels/build-label label]])
-       [:button#filter-labels-label.form-control
-        (if (shared-config/allowed-labels @selected-label)
-          (with-meta
-            [statement-labels/build-label @selected-label]
-            {:key (str "label-option-" @selected-label)})
-          [:span.badge.badge-pill.badge-transparent "–––"])]]
-      [:button.btn.btn-dark
-       {:on-click #(reset! selected-label nil)}
-       [:span.m-auto "x"]]]]]])
+  [:div.form-row.pb-3
+   [:div.col-auto
+    [:select#filter-labels-selection.mr-1.form-control
+     [:option {:value :includes} (labels :filters.option.labels/includes)]
+     [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
+   [:div.col-auto
+    [:div.btn-group
+     {:role "group"}
+     [tooltip/html
+      (for [label shared-config/allowed-labels]
+        [:span.mr-3
+         {:key (str "label-option-" label)
+          :on-click #(reset! selected-label label)}
+         [statement-labels/build-label label]])
+      [:button#filter-labels-label.form-control
+       (if (shared-config/allowed-labels @selected-label)
+         (with-meta
+           [statement-labels/build-label @selected-label]
+           {:key (str "label-option-" @selected-label)})
+         [:span.badge.badge-pill.badge-transparent "–––"])]]
+     [:button.btn.btn-dark
+      {:on-click #(reset! selected-label nil)}
+      [:span.m-auto "x"]]]]])
 
 (defn- type-selections
   "Selection-options for type filters."
@@ -83,7 +82,7 @@
       :defaultValue 0}]]])
 
 (defn- add-filter-selection
-  "A small compontent for adding new filters."
+  "A small component for adding new filters."
   []
   (let [current-selection (r/atom "labels")
         selected-label (r/atom nil)]
@@ -142,7 +141,7 @@
      [:p (labels :filters.heading/active)]
      (when (seq active)
        (for [filter-data active]
-         ;; The key needs to be set because its a list.
+         ;; The key needs to be set because it's a list.
          ;; And the key is needed again in prettify-filter or else react does not render.
          (with-meta
            [prettify-filter filter-data]
