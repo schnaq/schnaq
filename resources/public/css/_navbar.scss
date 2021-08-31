@@ -17,8 +17,11 @@
 }
 
 .schnaq-navbar {
+  @extend .panel-white;
   @extend .schnaq-navbar-skeleton;
   background: vars.$white;
+  overflow: visible;
+  padding: 0;
 }
 
 .schnaq-logo-container {

@@ -181,12 +181,18 @@
                                    :keywordize-keys true))]
         (assoc-in db [:user :roles] roles)))))
 
+(defn- authorization-header [token]
+  {:Authorization (gstring/format "Token %s" token)})
+
 (>defn authentication-header
   "Adds a map containing the token used for authenticating the user in the
   backend."
   [db]
   [map? :ret map?]
-  (let [^js keycloak (get-in db [:user :keycloak])]
-    (if (and keycloak (user-authenticated? db))
-      {:Authorization (gstring/format "Token %s" (.-token keycloak))}
-      {})))
+  (let [^js keycloak (get-in db [:user :keycloak])
+        external-jwt (get-in db [:user :jwt])]
+    (cond
+      (not (user-authenticated? db)) {}
+      keycloak (authorization-header (.-token keycloak))
+      external-jwt (authorization-header external-jwt)
+      :else {})))

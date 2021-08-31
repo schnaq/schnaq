@@ -5,7 +5,6 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
-            [schnaq.interface.utils.time :as time]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.labels :as statement-labels]
@@ -153,8 +152,7 @@
   [schnaq]
   (let [meta-info (:meta-info schnaq)
         statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))
-        locale @(rf/subscribe [:current-locale])]
+        user-count (count (:authors meta-info))]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
       [:i {:class (str "m-auto fas " (fa :comments))}]
@@ -162,8 +160,7 @@
      [:span.badge.badge-pill.badge-transparent.mr-2
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
-      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]
-     [:small.text-muted [time/timestamp-with-tooltip (:discussion/created-at schnaq) locale]]]))
+      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
 
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"
