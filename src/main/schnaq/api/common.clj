@@ -5,8 +5,8 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.config.mailchimp :as mailchimp-config]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.emails :as emails]
             [schnaq.export :as export]
+            [schnaq.mail.emails :as emails]
             [taoensso.timbre :as log]))
 
 (defn- ping

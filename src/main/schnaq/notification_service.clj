@@ -1,11 +1,11 @@
 (ns schnaq.notification-service
   (:require [chime.core :as chime-core]
-            [hiccup.core :refer [html]]
             [hiccup.util :as hiccup-util]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
-            [schnaq.emails :as emails]
             [schnaq.links :as schnaq-links]
+            [schnaq.mail.emails :as emails]
+            [schnaq.mail.template :as template]
             [taoensso.timbre :as log])
   (:import (java.time LocalTime ZonedDateTime ZoneId Period)))
 
@@ -20,30 +20,49 @@
                                     user-keycloak-id discussion-hash)})
                discussion-hashes)))
 
-(defn- create-hyperlink-to-discussion [discussion]
-  (let [title (:discussion/title discussion)
-        share-hash (:discussion/share-hash discussion)
-        link (schnaq-links/get-share-link share-hash)]
-    (html [:a {:href link} (hiccup-util/escape-html title)])))
-
-(defn- build-new-statements-content [new-statements-per-schnaq]
+(defn- build-new-statements-content
+  "Additional content to display the number of new statements and a navigation button
+  to the corresponding schnaq. This functions maps over all schnaqs."
+  [new-statements-per-schnaq content-fn]
   (reduce
     str
     (map (fn [[discussion-hash statements]]
            (let [number-statements (count statements)
-                 discussion (discussion-db/discussion-by-share-hash discussion-hash)]
+                 discussion (discussion-db/discussion-by-share-hash discussion-hash)
+                 discussion-title (hiccup-util/escape-html (:discussion/title discussion))
+                 new-statements-text (if (= 1 number-statements)
+                                       (str number-statements " neuer Beitrag")
+                                       (str number-statements " neue Beiträge"))]
              (when-not (zero? number-statements)
-               (if (= 1 number-statements)
-                 (html [:div number-statements " neuer Beitrag in: "
-                        (create-hyperlink-to-discussion discussion)])
-                 (html [:div number-statements " neue Beiträge in: "
-                        (create-hyperlink-to-discussion discussion)])))))
+               (content-fn discussion-title new-statements-text discussion-hash))))
          new-statements-per-schnaq)))
 
+(defn- build-new-statements-html
+  "New statements info as html"
+  [new-statements-per-schnaq]
+  (build-new-statements-content
+    new-statements-per-schnaq
+    (fn [title text discussion-hash]
+      (template/mail-content-left-button-right
+        title text "Zum schnaq" (schnaq-links/get-share-link discussion-hash)))))
+
+(defn- build-new-statements-plain
+  "New statements info as plain text"
+  [new-statements-per-schnaq]
+  (build-new-statements-content
+    new-statements-per-schnaq
+    (fn [title text discussion-hash]
+      (str text " in " title ": " (schnaq-links/get-share-link discussion-hash) "\n"))))
+
 (defn- build-personal-greetings [user]
-  (html [:div [:h1 "Neuigkeiten aus deinen schnaqs"]
-         [:h4 "Hallo " (hiccup-util/escape-html (:user.registered/display-name user)) ", "
-          "es gibt neue Beiträge in deinen besuchten schnaqs!"]]))
+  (str "Hallo " (hiccup-util/escape-html (:user.registered/display-name user)) ","))
+
+(defn- build-number-unseen-statements [total-new-statements]
+  (let [statements-text (if (= 1 total-new-statements)
+                          "einen neuen Beitrag"
+                          (str total-new-statements " neue Beiträge"))]
+
+    (str "es gibt " statements-text " in deinen besuchten schnaqs!")))
 
 (defn- send-schnaq-diffs
   "Build and send a mail containing links to each schnaq with new statements."
@@ -54,15 +73,20 @@
         new-statements-per-schnaq (build-discussion-diff-list user-keycloak-id
                                                               discussion-hashes)
         total-new-statements (reduce + (map (fn [[_ news]] (count news)) new-statements-per-schnaq))
-        new-statements-content (build-new-statements-content new-statements-per-schnaq)
-        personal-greeting (build-personal-greetings user)]
+        new-statements-content-html (build-new-statements-html new-statements-per-schnaq)
+        new-statements-content-plain (build-new-statements-plain new-statements-per-schnaq)
+        personal-greeting (build-personal-greetings user)
+        new-statements-greeting (build-number-unseen-statements total-new-statements)]
     (log/info "User" user-keycloak-id "has" total-new-statements "unread statements")
     (when-not (zero? total-new-statements)
       (emails/send-mail "Neuigkeiten aus deinen schnaqs"
-                        (html [:div
-                               personal-greeting
-                               new-statements-content])
-                        email "text/html"))))
+                        "Neuigkeiten aus deinen schnaqs"
+                        personal-greeting
+                        new-statements-greeting
+                        ""
+                        new-statements-content-html
+                        new-statements-content-plain
+                        email))))
 
 (defn- send-all-users-schnaq-updates []
   (let [all-users (user-db/all-registered-users)]

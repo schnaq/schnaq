@@ -9,13 +9,13 @@
     {:invitation/title "Einladung zum schnaq: %s"
      :invitation/body
      (str "Hallo,\n
-Sie wurden eingeladen um an einem schnaq teilzunehmen: %s
+Du wurdest eingeladen um an einem schnaq teilzunehmen: %s
 Der Zugangslink lautet: \n\n%s\n\n" email-footer)
-     :admin-center/title "Admin-Center zu Ihrem schnaq: %s"
+     :admin-center/title "Admin-Center zu deinem schnaq: %s"
      :admin-center/body
      (str "Hallo,\n
-Sie erhalten mit dieser Mail Ihren URL zum Admin-Center Ihres schnaqs: %s
-Rufen Sie folgende Adresse auf, um Ihren schnaq zu administrieren:\n\n%s\n\n" email-footer)
+Du erhälst mit dieser Mail die URL zum Admin-Center des schnaqs: %s
+Rufe die folgende Adresse auf, um deinen schnaq zu administrieren:\n\n%s\n\n" email-footer)
      :demo-request/title "Demo Anfrage!"
      :demo-request/body
      (str "Hallo,\n
@@ -34,9 +34,7 @@ Telefon (optional): %s")
        "In einem schnaq sammelst du Wissen über ein Thema und es wird automatisch visualisiert. "
        "Probiere es direkt aus! Erstelle einen schnaq und diskutiere mit deinen Kolleg:innen!"
        "\n"
-       "Du kannst vorher natürlich auch erst dein Profil individualisieren."
-       "\n\n"
-       "Liebe Grüße\nDein Team von schnaq")
+       "Du kannst vorher natürlich auch erst dein Profil individualisieren.")
      :lead-magnet/title "schnaq.com – Datenschutzkonform verteilt arbeiten Checkliste"
      :lead-magnet/body
      (str

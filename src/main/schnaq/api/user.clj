@@ -5,7 +5,7 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
-            [schnaq.emails :as mail]
+            [schnaq.mail.emails :as mail]
             [schnaq.media :as media]
             [taoensso.timbre :as log]))
 

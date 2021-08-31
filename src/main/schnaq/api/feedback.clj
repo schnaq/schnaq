@@ -9,7 +9,7 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.database.main :as db]
             [schnaq.database.specs :as specs]
-            [schnaq.emails :as emails]
+            [schnaq.mail.emails :as emails]
             [schnaq.s3 :as s3]
             [taoensso.timbre :as log])
   (:import (java.util Base64)))
@@ -37,7 +37,9 @@
     (when screenshot
       (upload-screenshot! screenshot feedback-id))
     (emails/send-mail
-      "[FEEDBACK] Es wurde eine neues Feedback hinterlegt 🐳"
+      "[FEEDBACK] Es wurde ein neues Feedback hinterlegt 🐳"
+      "[FEEDBACK]"
+      "Es wurde ein neues Feedback hinterlegt 🐳"
       (format "Feedback kann hier angeschaut werden: https://schnaq.com/admin/feedbacks")
       "info@schnaq.com")
     (log/info "Feedback created")

@@ -11,9 +11,9 @@
             [schnaq.config.summy :as summy-config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
-            [schnaq.emails :as emails]
             [schnaq.export :as export]
             [schnaq.links :as links]
+            [schnaq.mail.emails :as emails]
             [taoensso.timbre :as log]))
 
 (declare summary-routes)
@@ -71,12 +71,9 @@
             share-hash (-> summary :summary/discussion :discussion/share-hash)]
         (emails/send-mail
           (format "Deine schnaq-Zusammenfassung ist bereit 🥳 \"%s\"" (-> summary :summary/discussion :discussion/title))
-          (format "Hallo,%n
-eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s
-
-Viele Grüße
-
-Dein schnaq Team"
+          "Deine Zusammenfassung ist bereit"
+          (str "Hallo " (-> summary :summary/requester :user.registered/display-name) ",")
+          (format "eine neue Zusammenfassung wurde für deinen schnaq \"%s\" erstellt und kann und kann unter folgendem Link abgerufen werden: %s"
                   title (links/get-summary-link share-hash))
           (-> summary :summary/requester :user.registered/email))))
     (ok {:new-summary summary})))
