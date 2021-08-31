@@ -26,9 +26,8 @@
                        (discussion-db/discussion-by-share-hash share-hash))
                      ;; TODO
                      processors/add-meta-info-to-schnaq
-                     processors/with-sub-discussion-info-on-schnaq
+                     processors/with-sub-discussion-info
                      processors/hide-deleted-statement-content
-                     (processors/with-new-post-info share-hash keycloak-id)
                      processors/with-votes)})))
 
 (defn- schnaqs-by-hashes

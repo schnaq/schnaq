@@ -9,6 +9,23 @@
             [schnaq.meta-info :as meta-info])
   (:import (clojure.lang IEditableCollection)))
 
+
+;; -----------------------------------------------------------------------------
+;; Processing schnaqs
+
+(>defn add-meta-info-to-schnaq
+  "Enrich a schnaq with its meta-infos."
+  [schnaq]
+  [::specs/discussion :ret ::specs/discussion]
+  (let [share-hash (:discussion/share-hash schnaq)
+        author (:discussion/author schnaq)
+        meta-info (meta-info/discussion-meta-info share-hash author)]
+    (assoc schnaq :meta-info meta-info)))
+
+
+;; -----------------------------------------------------------------------------
+;; Processing statements
+
 (>defn with-votes
   "Enrich every statement map with its vote-counts."
   [data]
@@ -30,38 +47,24 @@
        %)
     data))
 
-(>defn add-meta-info-to-schnaq
-  "Enrich a schnaq with its meta-infos."
-  [schnaq]
-  [::specs/discussion :ret ::specs/discussion]
-  (let [share-hash (:discussion/share-hash schnaq)
-        author (:discussion/author schnaq)
-        meta-info (meta-info/discussion-meta-info share-hash author)]
-    (assoc schnaq :meta-info meta-info)))
-
 (defn with-new-post-info
   "Add sub-discussion-info whether or not a user has seen this post already."
   [statements share-hash user-identity]
   (if user-identity
+    (if)
     (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
       (map #(assoc % :meta/new (not (contains? known-statements (:db/id %)))) statements))
     statements))
 
 (defn with-sub-discussion-info
-  "Add sub-discussion-info, if necessary. Sub-Discussion-infos are number of
-  sub-statements, authors, ..."
-  [statements]
-  (let [statement-ids (map :db/id statements)
-        info-map (discussion-db/child-node-info statement-ids)]
-    (map (fn [statement]
-           (if-let [sub-discussions (get info-map (:db/id statement))]
-             (assoc statement :meta/sub-discussion-info sub-discussions)
-             statement))
-         statements)))
-
-(defn with-sub-discussion-info-on-schnaq
-  "Same as `with-sub-discussion-info`, but enriches the starting statements in a
-  schnaq."
-  [schnaq]
-  (assoc schnaq :discussion/starting-statements
-                (with-sub-discussion-info (:discussion/starting-statements schnaq))))
+  "Add sub-discussion-info to valid statements, if necessary.
+   Sub-Discussion-infos are number of sub-statements, authors, ..."
+  [data]
+  (walk/postwalk
+    (fn [statement]
+      (if (and (instance? IEditableCollection statement) (contains? statement :statement/content))
+        (if-let [sub-discussions (get (discussion-db/child-node-info [(:db/id statement)]) (:db/id statement))]
+          (assoc statement :meta/sub-discussion-info sub-discussions)
+          statement)
+        statement))
+    data))
