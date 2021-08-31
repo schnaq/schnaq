@@ -68,11 +68,11 @@
 (>defn send-mails
   "Sends an email with a `title` and `content` to all valid recipients.
   Returns a list of invalid addresses and failed sends."
-  ([title content recipients]
-   [string? string? (s/coll-of string?) :ret any?]
-   (reset! failed-sendings '())
-   (run! (partial send-mail title content) recipients)
-   {:failed-sendings @failed-sendings}))
+  [title content recipients]
+  [string? string? (s/coll-of string?) :ret any?]
+  (reset! failed-sendings '())
+  (run! (partial send-mail title content) recipients)
+  {:failed-sendings @failed-sendings})
 
 (>defn send-html-mail
   "Sends a html mail and an alternative text version to any contact. The html-template should be a url or file-path
