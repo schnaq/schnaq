@@ -35,7 +35,6 @@
 (defn- valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [statements]
-  ;; TODO
   (-> statements
       processors/hide-deleted-statement-content
       processors/with-votes))
@@ -56,7 +55,6 @@
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash]} (:query parameters)
         user-identity (:sub identity)]
-    ;; TODO
     (ok {:starting-conclusions (-> (starting-conclusions-with-processors share-hash)
                                    (processors/with-new-post-info share-hash user-identity))})))
 

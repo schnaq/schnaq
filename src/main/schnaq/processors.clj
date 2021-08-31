@@ -1,5 +1,6 @@
 (ns schnaq.processors
-  (:require [clojure.walk :as walk]
+  (:require [clojure.spec.alpha :as s]
+            [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
@@ -49,12 +50,16 @@
 
 (defn with-new-post-info
   "Add sub-discussion-info whether or not a user has seen this post already."
-  [statements share-hash user-identity]
+  [data share-hash user-identity]
   (if user-identity
-    (if)
     (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
-      (map #(assoc % :meta/new (not (contains? known-statements (:db/id %)))) statements))
-    statements))
+      (walk/postwalk
+        (fn [statement]
+          (if (s/valid? ::specs/statement statement)
+            (assoc statement :meta/new? (not (contains? known-statements (:db/id statement))))
+            statement))
+        data))
+    data))
 
 (defn with-sub-discussion-info
   "Add sub-discussion-info to valid statements, if necessary.
@@ -62,7 +67,7 @@
   [data]
   (walk/postwalk
     (fn [statement]
-      (if (and (instance? IEditableCollection statement) (contains? statement :statement/content))
+      (if (s/valid? ::specs/statement statement)
         (if-let [sub-discussions (get (discussion-db/child-node-info [(:db/id statement)]) (:db/id statement))]
           (assoc statement :meta/sub-discussion-info sub-discussions)
           statement)

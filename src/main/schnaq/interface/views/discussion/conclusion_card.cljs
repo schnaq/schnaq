@@ -76,7 +76,7 @@
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body.py-2
-       (when (:meta/new statement)
+       (when (:meta/new? statement)
          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
           (labels :discussion.badges/new)])
        [:div.d-flex.justify-content-start.pt-2

@@ -84,10 +84,10 @@
           updated-statement-3 (find-statement-in-list statement-3 updated-statements)
           updated-statement-new (find-statement-in-list statement-new updated-statements)]
       (is (= (count seen-statements) (count seen-statements)))
-      (is (false? (:meta/new updated-statement-1)))
-      (is (false? (:meta/new updated-statement-2)))
-      (is (false? (:meta/new updated-statement-3)))
-      (is (true? (:meta/new updated-statement-new))))))
+      (is (false? (:meta/new? updated-statement-1)))
+      (is (false? (:meta/new? updated-statement-2)))
+      (is (false? (:meta/new? updated-statement-3)))
+      (is (true? (:meta/new? updated-statement-new))))))
 
 
 (deftest get-new-statements-tests

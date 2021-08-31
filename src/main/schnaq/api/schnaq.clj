@@ -24,9 +24,9 @@
     (ok {:schnaq (-> (if (and keycloak-id (validator/user-schnaq-admin? share-hash keycloak-id))
                        (discussion-db/discussion-by-share-hash-private share-hash)
                        (discussion-db/discussion-by-share-hash share-hash))
-                     ;; TODO
                      processors/add-meta-info-to-schnaq
                      processors/with-sub-discussion-info
+                     (processors/with-new-post-info share-hash keycloak-id)
                      processors/hide-deleted-statement-content
                      processors/with-votes)})))
 
