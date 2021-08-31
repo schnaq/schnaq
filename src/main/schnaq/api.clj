@@ -29,6 +29,7 @@
             [schnaq.api.summaries :refer [summary-routes]]
             [schnaq.api.user :refer [user-routes]]
             [schnaq.auth :as auth]
+            [schnaq.auth.middlewares :as auth-middlewares]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
             [schnaq.config.shared :as shared-config]
@@ -132,10 +133,10 @@
                          auth/replace-bearer-with-token
                          auth/wrap-jwt-authentication
                          middlewares/wrap-custom-schnaq-csrf-header]}
-     ::middleware/registry {:user/authenticated? auth/authenticated?-middleware
-                            :user/admin? auth/admin?-middleware
-                            :user/beta-tester? auth/beta-tester?-middleware
-                            :app/valid-code? auth/valid-app-code?-middleware
+     ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
+                            :user/admin? auth-middlewares/admin?-middleware
+                            :user/beta-tester? auth-middlewares/beta-tester?-middleware
+                            :app/valid-code? auth-middlewares/valid-app-code?-middleware
                             :discussion/valid-share-hash? middlewares/valid-discussion?-middleware
                             :discussion/valid-statement? middlewares/valid-statement?-middleware
                             :discussion/valid-credentials? middlewares/valid-credentials?-middleware}}))

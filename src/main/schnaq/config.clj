@@ -1,7 +1,8 @@
 (ns schnaq.config
   "General configuration of the schnaq API. Find more configuration settings in
   the schnaq.config.* namespaces."
-  (:require [clojure.java.io :as io]
+  (:require [buddy.core.keys :as keys]
+            [clojure.java.io :as io]
             [clojure.string :as str]
             [schnaq.config.shared :as shared-config]
             [schnaq.config.summy :as summy-config]))
@@ -48,6 +49,10 @@
   "Profile Picture height in pixels."
   200)
 
+
+;; -----------------------------------------------------------------------------
+;; S3 Configuration
+
 (def ^:private s3-access-key
   (or (System/getenv "S3_ACCESS_KEY") "minio"))
 
@@ -58,3 +63,14 @@
                      :secret-key s3-secret-key
                      :endpoint shared-config/s3-host
                      :client-config {:path-style-access-enabled true}})
+
+
+;; -----------------------------------------------------------------------------
+;; JWT
+
+(def testing-private-key
+  (keys/str->private-key
+    (slurp "https://s3.disqtec.com/on-premise/testing/jwt.key")))
+(def testing-public-key
+  (keys/str->public-key
+    (slurp "https://s3.disqtec.com/on-premise/testing/jwt.key.pub")))
