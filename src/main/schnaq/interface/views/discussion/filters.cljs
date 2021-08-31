@@ -19,8 +19,6 @@
             [schnaq.interface.views.discussion.labels :as statement-labels]
             [schnaq.interface.views.discussion.logic :as discussion-logic]))
 
-;; TODO add button to clear filters
-
 (defn- set-selected-option
   "Helper function to set the correct temp atom value for a selection."
   [event store]
@@ -153,9 +151,13 @@
 (defn- default-menu
   "The default filter menu that is shown to the user."
   []
-  [:div
+  [:<>
    [add-filter-selection]
-   [active-filters]])
+   [active-filters]
+   (when (< 1 (count @(rf/subscribe [:filters/active])))
+     [:button.btn.btn-outline-secondary.text-center
+      {:on-click #(rf/dispatch [:filters/clear])}
+      (labels :filters.buttons/clear)])])
 
 (defn filter-button
   "A button opening the default filters on click."
@@ -196,6 +198,11 @@
   :filters/deactivate
   (fn [db [_ filter-data]]
     (update-in db [:discussion :filters] disj filter-data)))
+
+(rf/reg-event-db
+  :filters/clear
+  (fn [db _]
+    (assoc-in db [:discussion :filters] #{})))
 
 (rf/reg-sub
   :filters/active
