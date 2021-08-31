@@ -219,21 +219,21 @@
 (defn- filter-to-fn
   "Returns the corresponding filter-fn for a data-representation of a filter."
   [{:keys [type criteria label statement-type votes-number]} local-votes]
-  (cond
-    (= type :labels)
+  (case type
+    :labels
     (let [coll-fn (if (= criteria :includes) filter remove)]
       (fn [statements] (coll-fn #(contains? (set (:statement/labels %)) label) statements)))
-    (= type :type)
+    :type
     (let [coll-fn (if (= criteria :is) filter remove)]
       (fn [statements] (coll-fn #(= (:statement/type %) statement-type) statements)))
-    (= type :votes)
+    :votes
     ;; Calling symbol on the string does not help. Other solutions are hacky.
     (let [comp-fn (case criteria ">" > "=" = "<" <)
           ;; The deref needs to happen here, because it cant happen in a lazy seq.
           ;; Derefing in the component does not update the filters, when votes change.
           votes @local-votes]
       (fn [statements] (filter #(comp-fn (discussion-logic/calculate-votes % votes) votes-number) statements)))
-    :else identity))
+    identity))
 
 (defn filter-statements
   "Accepts a collection of statements and filters and applies them to the collection."
