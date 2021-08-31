@@ -21,9 +21,9 @@
                discussion-hashes)))
 
 (defn- build-new-statements-content
-  "Additional html content to display the number of new statements and a navigation button
+  "Additional content to display the number of new statements and a navigation button
   to the corresponding schnaq. This functions maps over all schnaqs."
-  [new-statements-per-schnaq]
+  [new-statements-per-schnaq content-fn]
   (reduce
     str
     (map (fn [[discussion-hash statements]]
@@ -32,15 +32,27 @@
                  discussion-title (hiccup-util/escape-html (:discussion/title discussion))
                  new-statements-text (if (= 1 number-statements)
                                        (str number-statements " neuer Beitrag")
-                                       (str number-statements " neue Beiträge"))
-                 button-text "Zum schnaq"]
+                                       (str number-statements " neue Beiträge"))]
              (when-not (zero? number-statements)
-               (template/mail-content-left-button-right
-                 discussion-title
-                 new-statements-text
-                 button-text
-                 (schnaq-links/get-share-link discussion-hash)))))
+               (content-fn discussion-title new-statements-text discussion-hash))))
          new-statements-per-schnaq)))
+
+(defn- build-new-statements-html
+  "New statements info as html"
+  [new-statements-per-schnaq]
+  (build-new-statements-content
+    new-statements-per-schnaq
+    (fn [title text discussion-hash]
+      (template/mail-content-left-button-right
+        title text "Zum schnaq" (schnaq-links/get-share-link discussion-hash)))))
+
+(defn- build-new-statements-plain
+  "New statements info as plain text"
+  [new-statements-per-schnaq]
+  (build-new-statements-content
+    new-statements-per-schnaq
+    (fn [title text discussion-hash]
+      (str text " in " title ": " (schnaq-links/get-share-link discussion-hash) "\n"))))
 
 (defn- build-personal-greetings [user]
   (str "Hallo " (hiccup-util/escape-html (:user.registered/display-name user)) ","))
@@ -61,19 +73,20 @@
         new-statements-per-schnaq (build-discussion-diff-list user-keycloak-id
                                                               discussion-hashes)
         total-new-statements (reduce + (map (fn [[_ news]] (count news)) new-statements-per-schnaq))
-        new-statements-content (build-new-statements-content new-statements-per-schnaq)
+        new-statements-content-html (build-new-statements-html new-statements-per-schnaq)
+        new-statements-content-plain (build-new-statements-plain new-statements-per-schnaq)
         personal-greeting (build-personal-greetings user)
         new-statements-greeting (build-number-unseen-statements total-new-statements)]
     (log/info "User" user-keycloak-id "has" total-new-statements "unread statements")
     (when-not (zero? total-new-statements)
-      (emails/send-mail-with-body
-        "Neuigkeiten aus deinen schnaqs"
-        email
-        (template/mail "Neuigkeiten aus deinen schnaqs"
-                       personal-greeting
-                       new-statements-greeting
-                       ""
-                       new-statements-content)))))
+      (emails/send-mail "Neuigkeiten aus deinen schnaqs"
+                        "Neuigkeiten aus deinen schnaqs"
+                        personal-greeting
+                        new-statements-greeting
+                        ""
+                        new-statements-content-html
+                        new-statements-content-plain
+                        email))))
 
 (defn- send-all-users-schnaq-updates []
   (let [all-users (user-db/all-registered-users)]

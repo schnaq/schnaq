@@ -37,7 +37,9 @@
     (when screenshot
       (upload-screenshot! screenshot feedback-id))
     (emails/send-mail
-      "[FEEDBACK] Es wurde eine neues Feedback hinterlegt 🐳"
+      "[FEEDBACK] Es wurde ein neues Feedback hinterlegt 🐳"
+      "[FEEDBACK]"
+      "Es wurde ein neues Feedback hinterlegt 🐳"
       (format "Feedback kann hier angeschaut werden: https://schnaq.com/admin/feedbacks")
       "info@schnaq.com")
     (log/info "Feedback created")

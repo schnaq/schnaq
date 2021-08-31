@@ -4,6 +4,7 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [postal.core :refer [send-message]]
             [schnaq.config :as config]
+            [schnaq.mail.template :as template]
             [schnaq.translations :refer [email-templates]]
             [taoensso.timbre :as log])
   (:import (java.util UUID)))
@@ -26,7 +27,7 @@
 
 (def ^:private failed-sendings (atom '()))
 
-(>defn send-mail-with-body
+(>defn- send-mail-with-custom-body
   "Sends a single mail to a recipient with a passed body."
   [title recipient body]
   [string? string? coll? :ret (? coll?)]
@@ -48,20 +49,30 @@
 
 (>defn send-mail
   "Sends a single mail to the recipient. Title and content are used as passed."
-  [title content recipient]
-  [string? string? string? :ret (? coll?)]
-  (send-mail-with-body title recipient
-                       [{:type "text/plain; charset=utf-8"
-                         :content content}]))
+  ([title content recipient]
+   [string? string? string? :ret (? coll?)]
+   (send-mail-with-custom-body title recipient (template/mail "" title "" content "" "")))
+  ([mail-title header title content recipient]
+   [string? string? string? string? string? :ret (? coll?)]
+   (send-mail-with-custom-body mail-title recipient (template/mail header title "" content "" "")))
+  ([mail-title header title sub-title content additional-html-content additional-plain-content recipient]
+   [string? string? string? string? string? string? string? string? :ret (? coll?)]
+   (send-mail-with-custom-body mail-title recipient
+                               (template/mail header
+                                              title
+                                              sub-title
+                                              content
+                                              additional-html-content
+                                              additional-plain-content))))
 
 (>defn send-mails
   "Sends an email with a `title` and `content` to all valid recipients.
   Returns a list of invalid addresses and failed sends."
-  [title content recipients]
-  [string? string? (s/coll-of string?) :ret any?]
-  (reset! failed-sendings '())
-  (run! (partial send-mail title content) recipients)
-  {:failed-sendings @failed-sendings})
+  ([title content recipients]
+   [string? string? (s/coll-of string?) :ret any?]
+   (reset! failed-sendings '())
+   (run! (partial send-mail title content) recipients)
+   {:failed-sendings @failed-sendings}))
 
 (>defn send-html-mail
   "Sends a html mail and an alternative text version to any contact. The html-template should be a url or file-path
