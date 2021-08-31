@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.card-elements
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
@@ -33,14 +34,18 @@
         is-search-view? (= current-route :routes.search/schnaq)
         steps-back (if is-search-view? 0 1)
         back-history [:discussion.history/time-travel steps-back]
-        navigation (if (or is-search-view? has-history?) back-history back-feed)
+        navigation-target (cond
+                            (or is-search-view? has-history?) back-history
+                            shared-config/embedded? nil
+                            :else back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
-    [tooltip/text
-     (labels tooltip)
-     [:button.btn.btn-dark-highlight.w-100.h-100.p-3
-      {:on-click #(rf/dispatch navigation)}
-      [:div.d-flex
-       [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]]))
+    (when navigation-target
+      [tooltip/text
+       (labels tooltip)
+       [:button.btn.btn-dark-highlight.w-100.h-100.p-3
+        {:on-click #(rf/dispatch navigation-target)}
+        [:div.d-flex
+         [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]])))
 
 
 (defn- discussion-start-button
@@ -249,7 +254,7 @@
    {:on-submit (fn [e]
                  (jq/prevent-default e)
                  (rf/dispatch [:discussion.statements/search (oget e [:target :elements "search-input" :value])]))}
-   [:div.input-group.search-bar.h-100
+   [:div.input-group.search-bar.h-100.panel-white.p-0
     [:input.form-control.my-auto.search-bar-input.h-100
      {:type "text" :aria-label "Search" :placeholder
       (labels :schnaq.search/input) :name "search-input"}]

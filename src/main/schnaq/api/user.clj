@@ -61,8 +61,8 @@
 (s/def ::creation-secrets map?)
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
 (s/def ::visited-statement-ids map?)
-(s/def ::user-register (s/keys :req-un [::visited-hashes]
-                               :opt-un [::creation-secrets
+(s/def ::user-register (s/keys :opt-un [::visited-hashes
+                                        ::creation-secrets
                                         ::visited-statement-ids]))
 
 (def user-routes
