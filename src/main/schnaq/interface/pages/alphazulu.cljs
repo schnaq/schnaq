@@ -1,12 +1,14 @@
 (ns schnaq.interface.pages.alphazulu
-  (:require [schnaq.interface.utils.rows :as rows]
+  (:require [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]))
 
-(defn container
+(defn- page
   []
   [pages/with-nav-and-header
-   {:page/title "Alphazulu – Modern Work for Modern Companies"
-    :page/heading "Alphazulu"
+   {:page/title (str (labels :alphazulu.page/heading) "-" (labels :alphazulu.page/subheading))
+    :page/heading (labels :alphazulu.page/heading)
+    :page/subheading (labels :alphazulu.page/subheading)
     :page/vertical-header? true}
    [:section.container
     [rows/image-right
@@ -37,6 +39,6 @@
 (defn view
   "The alphazulu page showing off the cooperation."
   []
-  [container])
+  [page])
 
 

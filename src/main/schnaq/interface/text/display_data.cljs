@@ -21,6 +21,8 @@
         :nav/admin "Admin"
 
         ;; Alphazulu Page
+        :alphazulu.page/heading "Alphazulu"
+        :alphazulu.page/subheading "Modern Work for Modern Companies"
         :alphazulu.introduction/title "New Work out of Germany"
         :alphazulu.introduction/body
         [:<>
@@ -29,7 +31,8 @@
           [:a {:href "/"} "schnaq"] ", " [:a {:href "https://wetog.de/"} "wetog"] ", "
           [:a {:href "https://xignsys.com/"} "XignSys"] ", " [:a {:href "https://www.cobago.de/"} "Cobago"] ", "
           [:a {:href "https://www.trustcerts.de/"} "TrustCerts"] " und " [:a {:href "https://ec3l.com/"} "EC3L"]
-          " to find the peferct custom solution for your company."]]
+          " to find the perfect custom solution for your company."]
+         [:p "All Alphazulu products can be combined and integrated with each other."]]
         :alphazulu.schnaq/title "Structured Knowledge"
         :alphazulu.schnaq/body
         [:<>
@@ -54,7 +57,7 @@
         :alphazulu.trustcerts/body
         [:<>
          [:p "With the TrustCerts Solutions you can sign and verify important documents through a tamperproof blockchain."]
-         [:p "You can sign important results from schnaq discussions, documents out of wetog or forms build with Cobago Sixpad."]]
+         [:p "You can sign important results from schnaq discussions, documents out of Wetog or forms build with Cobago Sixpad."]]
         :alphazulu.ec3l/title "Reliable Employee Training"
         :alphazulu.ec3l/body
         [:<>
@@ -1076,6 +1079,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :nav/admin "Admin"
 
         ;; Alphazulu Page
+        :alphazulu.page/heading "Alphazulu"
+        :alphazulu.page/subheading "Modern Work for Modern Companies"
         :alphazulu.introduction/title "New Work aus NRW"
         :alphazulu.introduction/body
         [:<>
@@ -1084,7 +1089,8 @@ Now we write down questions and discuss them and can still understand what we ha
           [:a {:href "/"} "schnaq"] ", " [:a {:href "https://wetog.de/"} "wetog"] ", "
           [:a {:href "https://xignsys.com/"} "XignSys"] ", " [:a {:href "https://www.cobago.de/"} "Cobago"] ", "
           [:a {:href "https://www.trustcerts.de/"} "TrustCerts"] " und " [:a {:href "https://ec3l.com/"} "EC3L"]
-          " die maßgeschneiderte Lösung für dein Unternehmen."]]
+          " die maßgeschneiderte Lösung für dein Unternehmen."]
+         [:p "Alle Alphazulu-Produkte sind miteinander kombinier- und integrierbar."]]
         :alphazulu.schnaq/title "Strukturierter Wissensaustausch"
         :alphazulu.schnaq/body
         [:<>
@@ -1095,7 +1101,7 @@ Now we write down questions and discuss them and can still understand what we ha
         [:<>
          [:p "Wetog nutzt die quantencomputer-sichere Verschlüsselung LIQRYPT um sämtliche Daten, Chats und Videokonferenzen sicher zu verschlüsseln."]
          [:p "Du hast schon einen Wetog Zugang? Buche direkt schnaq in Wetog dazu. Oder einen der anderen Alphazulu-Partner."]]
-        :alphazulu.xignsys/title "Passwordlose Logins von überall"
+        :alphazulu.xignsys/title "Passwortlose Logins von überall"
         :alphazulu.xignsys/body
         [:<>
          [:p "Mit der einzigartigen Lösung Xign.Me kann man sich überall durch seine Biometrie einfach ohne passwort authentifizieren."]
@@ -1103,8 +1109,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :alphazulu.cobago/title "Digitale Assistenz"
         :alphazulu.cobago/body
         [:<>
-         [:p "Cobago hilft deinem Unternehmen dabei einfach Formulare und Prozesse zu automatisieren. Ganz ohne technische Vorkentnisse."]
-         [:p "Du möchtest schnaq Diskussionen innerhalb der Cobago Plattform nutzen? Gib uns Bescheid für einen Zugang!"]]
+         [:p "Cobago hilft deinem Unternehmen dabei einfach Formulare und Prozesse zu automatisieren. Ganz ohne technische Vorkenntnisse."]
+         [:p "Du möchtest schnaq-Diskussionen innerhalb der Cobago Plattform nutzen? Gib uns Bescheid für einen Zugang!"]]
         :alphazulu.trustcerts/title "Digitale Signaturen – powered by Blockchains"
         :alphazulu.trustcerts/body
         [:<>
