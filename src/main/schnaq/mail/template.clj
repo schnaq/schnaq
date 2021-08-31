@@ -19,11 +19,11 @@
      {:type "text/plain; charset=utf-8" :content
       (str header
            "\n" title
-           (when-not (empty? subtitle)
+           (when (seq subtitle)
              (str "\n" subtitle))
-           (when-not (empty? content)
+           (when (seq content)
              (str "\n" content))
-           (when-not (empty? additional-plain-content)
+           (when (seq additional-plain-content)
              (str "\n\n" additional-plain-content))
            "\n\n\nViele Grüße\n\nDein schnaq Team")}
      {:type "text/html; charset=utf-8" :content
@@ -40,7 +40,7 @@
     (reduce replace-fn (slurp config/mail-content-button-right-template) format-map)))
 
 (defn welcome
-  "Welcome Mail Template"
+  "Welcome Mail Template."
   []
   [:alternative
    {:type "text/plain; charset=utf-8" :content
@@ -49,7 +49,7 @@
     (slurp "https://s3.disqtec.com/welcome-mail/welcome_template.html")}])
 
 (defn remote-work-lead-magnet
-  "Template for remote work lead magnet"
+  "Template for remote work lead magnet."
   []
   (let [replace-fn #(cstring/replace %1 (first %2) (second %2))
         format-map {"$DOWNLOAD_LINK"
