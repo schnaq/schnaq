@@ -4,6 +4,7 @@
             [schnaq.config :as config]
             [schnaq.database.reaction :as reaction-db]
             [schnaq.database.specs :as specs]
+            [schnaq.database.user :as user-db]
             [schnaq.meta-info :as meta-info])
   (:import (clojure.lang IEditableCollection)))
 
@@ -36,3 +37,11 @@
         author (:discussion/author schnaq)
         meta-info (meta-info/discussion-meta-info share-hash author)]
     (assoc schnaq :meta-info meta-info)))
+
+(defn with-new-post-info
+  "Add sub-discussion-info whether or not a user has seen this post already."
+  [statements share-hash user-identity]
+  (if user-identity
+    (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
+      (map #(assoc % :meta/new (not (contains? known-statements (:db/id %)))) statements))
+    statements))

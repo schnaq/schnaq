@@ -19,12 +19,15 @@
 (defn- schnaq-by-hash
   "Returns a schnaq, identified by its share-hash."
   [{:keys [parameters identity]}]
-  (let [hash (get-in parameters [:query :share-hash])
+  (let [share-hash (get-in parameters [:query :share-hash])
         keycloak-id (:sub identity)]
-    (ok {:schnaq (-> (if (and keycloak-id (validator/user-schnaq-admin? hash keycloak-id))
-                       (discussion-db/discussion-by-share-hash-private hash)
-                       (discussion-db/discussion-by-share-hash hash))
+    (ok {:schnaq (-> (if (and keycloak-id (validator/user-schnaq-admin? share-hash keycloak-id))
+                       (discussion-db/discussion-by-share-hash-private share-hash)
+                       (discussion-db/discussion-by-share-hash share-hash))
+                     ;; TODO
                      processors/add-meta-info-to-schnaq
+                     processors/hide-deleted-statement-content
+                     (processors/with-new-post-info share-hash keycloak-id)
                      processors/with-votes)})))
 
 (defn- schnaqs-by-hashes

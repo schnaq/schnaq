@@ -35,6 +35,7 @@
 (defn- valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [statements]
+  ;; TODO
   (-> statements
       processors/hide-deleted-statement-content
       processors/with-votes))
@@ -50,14 +51,6 @@
              (assoc statement :meta/sub-discussion-info sub-discussions)
              statement))
          statements)))
-
-(defn- with-new-post-info
-  "Add sub-discussion-info whether or not a user has seen this post already."
-  [statements share-hash user-identity]
-  (if user-identity
-    (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
-      (map #(assoc % :meta/new (not (contains? known-statements (:db/id %)))) statements))
-    statements))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
@@ -75,8 +68,9 @@
   [{:keys [parameters identity]}]
   (let [{:keys [share-hash]} (:query parameters)
         user-identity (:sub identity)]
+    ;; TODO
     (ok {:starting-conclusions (-> (starting-conclusions-with-processors share-hash)
-                                   (with-new-post-info share-hash user-identity))})))
+                                   (processors/with-new-post-info share-hash user-identity))})))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
@@ -105,11 +99,11 @@
       (ok (valid-statements-with-votes
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
                                     with-sub-discussion-info
-                                    (with-new-post-info share-hash user-identity)
+                                    (processors/with-new-post-info share-hash user-identity)
                                     (toolbelt/pull-key-up :db/ident)))
              :premises (-> (discussion-db/children-for-statement statement-id)
                            with-sub-discussion-info
-                           (with-new-post-info share-hash user-identity))
+                           (processors/with-new-post-info share-hash user-identity))
              :history (discussion-db/history-for-statement statement-id)}))
       at/not-found-hash-invalid)))
 
@@ -150,7 +144,7 @@
       #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
                                    processors/with-votes
                                    with-sub-discussion-info
-                                   (with-new-post-info share-hash (:sub identity))
+                                   (processors/with-new-post-info share-hash (:sub identity))
                                    first)})
       #(bad-request (at/build-error-body :discussion-closed-or-deleted "You can not edit a closed / deleted discussion or statement."))
       #(validator/deny-access at/invalid-rights-message))))
@@ -304,7 +298,7 @@
     (ok {:statement (-> [(discussion-db/add-label statement-id label)]
                         valid-statements-with-votes
                         with-sub-discussion-info
-                        (with-new-post-info share-hash (:sub identity))
+                        (processors/with-new-post-info share-hash (:sub identity))
                         first)})))
 
 (defn- remove-label
@@ -315,7 +309,7 @@
     (ok {:statement (-> [(discussion-db/remove-label statement-id label)]
                         valid-statements-with-votes
                         with-sub-discussion-info
-                        (with-new-post-info share-hash (:sub identity))
+                        (processors/with-new-post-info share-hash (:sub identity))
                         first)})))
 
 ;; -----------------------------------------------------------------------------

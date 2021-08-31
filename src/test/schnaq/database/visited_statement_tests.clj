@@ -1,9 +1,9 @@
 (ns schnaq.database.visited-statement-tests
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
-            [schnaq.api.discussion :as discussion-api]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.user :as user-db]
+            [schnaq.processors :as processors]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -78,7 +78,7 @@
                                [statement-1 statement-2 statement-3 statement-new])
           ;; add seen statements
           _ (user-db/create-visited-statements-for-discussion keycloak-user-id share-hash seen-statements)
-          updated-statements (#'discussion-api/with-new-post-info all-statements share-hash keycloak-user-id)
+          updated-statements (processors/with-new-post-info all-statements share-hash keycloak-user-id)
           updated-statement-1 (find-statement-in-list statement-1 updated-statements)
           updated-statement-2 (find-statement-in-list statement-2 updated-statements)
           updated-statement-3 (find-statement-in-list statement-3 updated-statements)
