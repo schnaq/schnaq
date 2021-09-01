@@ -48,7 +48,6 @@
             [schnaq.interface.views.errors]
             [schnaq.interface.views.feedback.admin]
             [schnaq.interface.views.feedback.collect]
-            [schnaq.interface.views.feedback.survey]
             [schnaq.interface.views.graph.settings]
             [schnaq.interface.views.graph.view]
             [schnaq.interface.views.howto.how-to]

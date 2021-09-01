@@ -2,7 +2,8 @@
   (:require [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.utils.js-wrapper :as jw]))
+            [schnaq.interface.utils.js-wrapper :as jw]
+            [schnaq.interface.views.feedback.collect :as feedback]))
 
 (defn wavy-curve
   "Define a wavy curve."
@@ -81,6 +82,9 @@
       {:href (reitfe/href :routes/publications)}
       (labels :footer.buttons/publications)]]]
    [:ul.list-inline
+    [:li.list-inline-item
+     [:button.btn.btn-sm.btn-outline-white {:on-click feedback/show-feedback-modal}
+      (labels :feedbacks/button)]]
     [:li.list-inline-item
      [:a.btn.btn-sm.btn-outline-white
       {:role "button" :href (reitfe/href :routes/privacy)}
