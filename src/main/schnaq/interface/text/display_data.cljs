@@ -968,6 +968,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/public-discussions "Public schnaqs"
         :router/code-of-conduct "Code of Conduct"
         :router/summaries "Summaries"
+        :router/alphazulu "ALPHAZULU"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -2061,6 +2062,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/public-discussions "Öffentliche schnaqs"
         :router/code-of-conduct "Verhaltensregeln"
         :router/summaries "Zusammenfassungen"
+        :router/alphazulu "ALPHAZULU"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
