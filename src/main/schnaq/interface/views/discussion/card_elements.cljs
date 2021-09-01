@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.card-elements
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.text.display-data :refer [labels fa]]
@@ -51,18 +52,19 @@
 
 (defn- discussion-start-button
   "Discussion start button for history view"
-  [history-length]
+  []
   (let [schnaq @(rf/subscribe [:schnaq/selected])
         title (:discussion/title schnaq)]
-    [:div.clickable.card-history-home.text-dark
-     {:on-click #(rf/dispatch [:discussion.history/time-travel history-length])}
-     [tooltip/text
-      (labels :history.home/tooltip)
-      [:div.text-center
-       [:h6 title]
-       [:p.text-muted.mb-0 (labels :history.home/text)]
-       [badges/static-info-badges schnaq]]
-      {:position :top}]]))
+    [:a.text-decoration-none
+     {:href (rfe/href :routes.schnaq/start {:share-hash (:discussion/share-hash schnaq)})}
+     [:div.clickable.card-history-home.text-dark
+      [tooltip/text
+       (labels :history.home/tooltip)
+       [:div.text-center
+        [:h6 title]
+        [:p.text-muted.mb-0 (labels :history.home/text)]
+        [badges/static-info-badges schnaq]]
+       {:position :top}]]]))
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
@@ -75,7 +77,7 @@
      (when has-history?
        [:section.history-wrapper
         [:h5.p-2.text-center (labels :history/title)]
-        [discussion-start-button (count indexed-history)]
+        [discussion-start-button]
         ;; history
         (for [[index statement] indexed-history]
           (let [max-word-count 20
