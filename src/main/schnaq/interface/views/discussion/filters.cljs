@@ -26,30 +26,36 @@
 
 (defn- label-selections
   "Selection-options for label-type filters."
-  [selected-label]
-  [:div.form-row.pb-3
-   [:div.col-auto
-    [:select#filter-labels-selection.mr-1.form-control
-     [:option {:value :includes} (labels :filters.option.labels/includes)]
-     [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
-   [:div.col-auto
-    [:div.btn-group
-     {:role "group"}
-     [tooltip/html
-      (for [label shared-config/allowed-labels]
-        [:span.mr-3
-         {:key (str "label-option-" label)
-          :on-click #(reset! selected-label label)}
-         [statement-labels/build-label label]])
-      [:button#filter-labels-label.form-control
-       (if (shared-config/allowed-labels @selected-label)
-         (with-meta
-           [statement-labels/build-label @selected-label]
-           {:key (str "label-option-" @selected-label)})
-         [:span.badge.badge-pill.badge-transparent "–––"])]]
-     [:button.btn.btn-dark
-      {:on-click #(reset! selected-label nil)}
-      [:span.m-auto "x"]]]]])
+  [_selected-label]
+  (let [label-selection-open? (r/atom false)]
+    (fn [selected-label]
+      [:div.form-row.pb-3
+       [:div.col-auto
+        [:select#filter-labels-selection.mr-1.form-control
+         [:option {:value :includes} (labels :filters.option.labels/includes)]
+         [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
+       [:div.col-auto
+        [:div.btn-group
+         {:role "group"}
+         [tooltip/html
+          (for [label shared-config/allowed-labels]
+            [:span.mr-3
+             {:key (str "label-option-" label)
+              :on-click #(do (reset! label-selection-open? false)
+                             (reset! selected-label label))}
+             [statement-labels/build-label label]])
+          [:button#filter-labels-label.form-control
+           {:on-click #(reset! label-selection-open? true)}
+           (if (shared-config/allowed-labels @selected-label)
+             (with-meta
+               [statement-labels/build-label @selected-label]
+               {:key (str "label-option-" @selected-label)})
+             [:span.badge.badge-pill.badge-transparent "–––"])]
+          {:open @label-selection-open?
+           :onRequestClose #(reset! label-selection-open? false)}]
+         [:button.btn.btn-dark
+          {:on-click #(reset! selected-label nil)}
+          [:span.m-auto "x"]]]]])))
 
 (defn- type-selections
   "Selection-options for type filters."
