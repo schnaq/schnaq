@@ -135,19 +135,22 @@
 
 (defn- update-user-info
   "Updates given-name, last-name, email-address when they are not nil."
-  [{:keys [id given_name family_name email]} existing-user]
+  [{:keys [id given_name family_name email avatar]} existing-user]
   (let [user-ref [:user.registered/keycloak-id id]
-        transaction (cond->
-                      []
-                      (and given_name
-                           (not= given_name (:user.registered/first-name existing-user)))
-                      (conj [:db/add user-ref :user.registered/first-name given_name])
-                      (and family_name
-                           (not= family_name (:user.registered/last-name existing-user)))
-                      (conj [:db/add user-ref :user.registered/last-name family_name])
-                      (and email
-                           (not= email (:user.registered/email existing-user)))
-                      (conj [:db/add user-ref :user.registered/email email]))]
+        transaction
+        (cond-> []
+                (and given_name
+                     (not= given_name (:user.registered/first-name existing-user)))
+                (conj [:db/add user-ref :user.registered/first-name given_name])
+                (and family_name
+                     (not= family_name (:user.registered/last-name existing-user)))
+                (conj [:db/add user-ref :user.registered/last-name family_name])
+                (and email
+                     (not= email (:user.registered/email existing-user)))
+                (conj [:db/add user-ref :user.registered/email email])
+                (and avatar
+                     (not= avatar (:user.registered/profile-picture existing-user)))
+                (conj [:db/add user-ref :user.registered/profile-picture avatar]))]
     (when (seq transaction)
       (transact transaction))))
 
@@ -155,9 +158,10 @@
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist. Returns a tuple which contains
   whether the user is newly created and the user entity itself."
-  [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs visited-statements]
+  [{:keys [sub email preferred_username given_name family_name groups avatar] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
-  (let [existing-user (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
+  (let [id (str sub)
+        existing-user (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -166,6 +170,7 @@
                   :user.registered/first-name given_name
                   :user.registered/last-name family_name
                   :user.registered/groups groups
+                  :user.registered/profile-picture avatar
                   :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       (do

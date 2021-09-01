@@ -2,7 +2,6 @@
   (:require [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication]]
             [buddy.core.keys :as keys]
-            [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
@@ -48,17 +47,6 @@
     (if shared-config/production?
       (apply wrap-authentication handler backends)
       (apply wrap-authentication handler (conj backends signed-jwt-backend-for-testing)))))
-
-(defn replace-bearer-with-token
-  "Most tools send the an authorization header as \"Bearer <token>\", but buddy
-  wants it as \"Token <token>\". This middleware transforms the request, if a
-  JWT is sent in the header."
-  [handler]
-  (fn [request]
-    (if-let [bearer-token (get-in request [:headers "authorization"])]
-      (let [[_bearer token] (string/split bearer-token #" ")]
-        (handler (assoc-in request [:headers "authorization"] (format "Token %s" token))))
-      (handler request))))
 
 (>defn member-of-group?
   "Check if group is available in the JWT token."
