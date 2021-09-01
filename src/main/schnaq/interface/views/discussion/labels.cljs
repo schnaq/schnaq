@@ -1,5 +1,7 @@
 (ns schnaq.interface.views.discussion.labels
-  (:require [re-frame.core :as rf]
+  (:require ["@tippyjs/react" :default Tippy]
+            [re-frame.core :as rf]
+            [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [fa]]
             [schnaq.interface.utils.http :as http]
@@ -47,20 +49,23 @@
   "Give the registered user the ability to add or remove labels to a statement."
   [statement]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    (if authenticated?
-      [tooltip/html
-       [build-labels statement]
+    ;; This outer div helps accessibility when popup is open – https://atomiks.github.io/tippyjs/v6/accessibility/#interactivity
+    [:div
+     (if authenticated?
+       [:> Tippy
+        {:content (r/as-element [build-labels statement])
+         :interactive true}
+        [:div.pr-2.clickable
+         [:i {:class (fa :tag)}]]]
+       #_{:animation "scale"
+          :offset 5
+          :size "big"
+          :trigger "click"}
        [:div.pr-2.clickable
-        [:i {:class (fa :tag)}]]
-       {:animation "scale"
-        :offset 5
-        :size "big"
-        :trigger "click"}]
-      [:div.pr-2.clickable
-       {:tabIndex 30
-        :on-click #(rf/dispatch [:modal {:show? true
-                                         :child [anonymous-labels-modal]}])}
-       [:i {:class (fa :tag)}]])))
+        {:tabIndex 30
+         :on-click #(rf/dispatch [:modal {:show? true
+                                          :child [anonymous-labels-modal]}])}
+        [:i {:class (fa :tag)}]])]))
 
 (rf/reg-event-fx
   :statement.labels/remove

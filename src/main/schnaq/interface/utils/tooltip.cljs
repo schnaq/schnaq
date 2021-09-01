@@ -1,5 +1,6 @@
 (ns schnaq.interface.utils.tooltip
-  (:require ["react-tippy" :refer [Tooltip]]
+  (:require ["@tippyjs/react" :default Tippy]
+            ["react-tippy" :refer [Tooltip]]
             [reagent.core :as reagent]))
 
 (defn html
@@ -21,14 +22,14 @@
 (defn text
   "Wraps some content in a tooltip with the provided text."
   [title content options]
-  [:> Tooltip
+  [:> Tippy
    (merge
      {:animation "shift"
       :arrow true
       :offset 5
       :position "bottom"
       :theme "light"
-      :title title
+      :content (str title)
       :tag :span}
      options)
    content])

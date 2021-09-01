@@ -38,4 +38,4 @@
   [inst? keyword? :ret vector?]
   [tooltip/text
    (formatted-with-timezone timestamp)
-   (format-distance timestamp locale)])
+   [:span (format-distance timestamp locale)]])

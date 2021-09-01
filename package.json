@@ -7,6 +7,7 @@
     "@egjs/hammerjs": "^2.0.17",
     "@fontsource/poppins": "^4.5.0",
     "@fortawesome/fontawesome-free": "^5.14.0",
+    "@tippyjs/react": "^4.2.5",
     "bootstrap": "^4.6.0",
     "caniuse-lite": "^1.0.30001228",
     "chart.js": "^3.5.0",
