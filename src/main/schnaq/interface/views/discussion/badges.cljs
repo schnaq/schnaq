@@ -1,12 +1,12 @@
 (ns schnaq.interface.views.discussion.badges
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.labels :as statement-labels]
             [schnaq.interface.views.modal :as modal]
             [schnaq.user :as user]))
@@ -136,8 +136,9 @@
                       (user/statement-author statement))
         pill-class {:class (str "m-auto fas " (fa :comments))}]
     [:div.d-flex.flex-row
-     [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
-      {:on-click (dcommon/navigate-to-statement-on-click statement path-parameters)}
+     [:a.badge.badge-pill.badge-transparent.badge-clickable.mr-2
+      {:href (rfe/href :routes.schnaq.select/statement (assoc path-parameters :statement-id (:db/id statement)))
+       :role :button}
       (if new?
         [:i.secondary-color pill-class]
         [:i pill-class])

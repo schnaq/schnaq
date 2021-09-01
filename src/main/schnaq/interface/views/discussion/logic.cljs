@@ -87,13 +87,18 @@
   :discussion.query.statement/by-id
   (fn [{:keys [db]} _]
     (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
-          share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-      {:fx [(http/xhrio-request
-              db :get "/discussion/statement/info"
-              [:discussion.query.statement/by-id-success]
-              {:statement-id statement-id
-               :share-hash share-hash}
-              [:discussion.redirect/to-root share-hash])]})))
+          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+          new-conclusion (first (filter #(= (:db/id %) statement-id) (get-in db [:discussion :premises :current])))]
+      ;; set new conclusion emediately if it's in db already, so loading times are reduced
+      (cond->
+        {:fx [(http/xhrio-request
+                db :get "/discussion/statement/info"
+                [:discussion.query.statement/by-id-success]
+                {:statement-id statement-id
+                 :share-hash share-hash}
+                [:discussion.redirect/to-root share-hash])]}
+        new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] new-conclusion)
+                               :fx conj [:discussion.history/push new-conclusion])))))
 
 (rf/reg-event-fx
   :discussion.redirect/to-root
