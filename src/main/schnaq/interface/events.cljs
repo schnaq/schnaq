@@ -7,7 +7,8 @@
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
-            [schnaq.interface.utils.localstorage :as ls]))
+            [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 ;; Note: this lives in the common namespace to prevent circles through the routes import
 (rf/reg-event-fx
@@ -46,15 +47,15 @@
           [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
           [:dispatch [:load/last-added-schnaq]]]}))
 
-(rf/reg-event-db
-  :init-from-backend
-  (fn [db [_ all-discussions]]
-    (assoc-in db [:schnaqs :all] all-discussions)))
-
 (rf/reg-event-fx
   :form/should-clear
   (fn [_ [_ form-elements]]
     {:fx [[:form/clear form-elements]]}))
+
+(rf/reg-fx
+  :form/clear
+  (fn [form-elements]
+    (toolbelt/reset-form-fields! form-elements)))
 
 (rf/reg-sub
   :current-locale
