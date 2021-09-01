@@ -175,7 +175,7 @@
 (rf/reg-event-fx
   :statement/delete
   (fn [{:keys [db]} [_ statement-id]]
-    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:fx [(http/xhrio-request db :delete "/discussion/statement/delete"
                                 [:discussion.admin/delete-statement-success statement-id]
                                 {:statement-id statement-id

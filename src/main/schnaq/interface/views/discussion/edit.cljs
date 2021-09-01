@@ -43,7 +43,7 @@
 (rf/reg-event-fx
   :statement.edit/send
   (fn [{:keys [db]} [_ statement-id html-selector form]]
-    (let [share-hash (get-in db [:current-route :path-params :share-hash])
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
           new-type (get-in db [:statements :edit-type statement-id] :statement.type/neutral)]
       {:fx [(http/xhrio-request db :put "/discussion/statement/edit"
                                 [:statement.edit.send/success form]
