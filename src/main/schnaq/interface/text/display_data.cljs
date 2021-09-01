@@ -818,6 +818,16 @@ Now we write down questions and discuss them and can still understand what we ha
         :user.settings.profile-picture.errors/invalid-file-type "The image you provided has the wrong file type. Allowed file types: %s"
         :user.settings.profile-picture.errors/default "Something went wrong with the picture you're uploaded. Please try again."
 
+        ;; notification settings
+        :user.notifications/header "Manage Notifications"
+        :user.notifications/mails "E-Mail Notifications"
+        :user.notifications.interval/never "Never"
+        :user.notifications.interval/daily "Daily"
+        :user.notifications.interval/weekly "Weekly"
+        :user.notifications/info "You will only receive notifications when there are new posts in your visited schnaqs."
+        :user.notifications.set-all-to-read/button "Mark everything as read"
+        :user.notifications.set-all-to-read/info "You still receive notifications from old discussions? No problem, just mark everything as read and only receive notifications from new discussions."
+
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
         :errors/generic "An error occurred"
@@ -1912,6 +1922,16 @@ Now we write down questions and discuss them and can still understand what we ha
         :user.settings.profile-picture.errors/scaling "Dein Profilbild konnte nicht konvertiert werden. Vielleicht ist das Bild kaputt. Bitte probiere ein anderes Bild oder kontaktiere uns."
         :user.settings.profile-picture.errors/invalid-file-type "Dein Profilbild hat den falschen Dateitypen. Erlaubt sind: %s"
         :user.settings.profile-picture.errors/default "Etwas ist beim Hochladen des Bildes schief gelaufen. Bitte versuche es erneut."
+
+        ;; notification settings
+        :user.notifications/header "Benachrichtigungen verwalten"
+        :user.notifications/mails "E-Mail Benachrichtigungen"
+        :user.notifications.interval/never "Niemals"
+        :user.notifications.interval/daily "Täglich"
+        :user.notifications.interval/weekly "Wöchentlich"
+        :user.notifications/info "Du erhälst nur Benachrichtigungen, wenn es neue Beiträge in deinen besuchten schnaqs gibt."
+        :user.notifications.set-all-to-read/button "Alles als gelesen markieren"
+        :user.notifications.set-all-to-read/info "Du erhälst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
