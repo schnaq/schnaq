@@ -111,7 +111,7 @@ build-frontend-image:
   tags:
     - ht
   services:
-    - docker:stable-dind
+    - docker:dind
   stage: build-docker-images
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
@@ -136,7 +136,7 @@ build-backend-image:
   tags:
     - ht
   services:
-    - docker:stable-dind
+    - docker:dind
   stage: build-docker-images
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
@@ -158,7 +158,7 @@ build-wetog-frontend-image:
   tags:
     - ht
   services:
-    - docker:stable-dind
+    - docker:dind
   stage: build-docker-images
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
@@ -186,7 +186,7 @@ build-frontend-staging-image:
   tags:
     - ht
   services:
-    - docker:stable-dind
+    - docker:dind
   stage: build-docker-images
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
@@ -212,7 +212,7 @@ build-backend-staging-image:
   tags:
     - ht
   services:
-    - docker:stable-dind
+    - docker:dind
   stage: build-docker-images
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
