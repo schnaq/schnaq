@@ -110,7 +110,7 @@
    [:h5 (labels :discussion.badges/user-overview)]
    [:hr]
    [:ul.list-unstyled.text-left
-    (for [author (sort > authors)]
+    (for [author (sort > (remove nil? authors))]
       [:li {:key author} author])]])
 
 (defn- authors-badge

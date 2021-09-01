@@ -35,15 +35,15 @@
          [:option {:value :includes} (labels :filters.option.labels/includes)]
          [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
        [:div.col-auto
-        [:div.btn-group
-         {:role "group"}
-         [tooltip/html
-          (for [label shared-config/allowed-labels]
-            [:span.mr-3
-             {:key (str "label-option-" label)
-              :on-click #(do (reset! label-selection-open? false)
-                             (reset! selected-label label))}
-             [statement-labels/build-label label]])
+        [tooltip/html
+         (for [label shared-config/allowed-labels]
+           [:span.mr-3
+            {:key (str "label-option-" label)
+             :on-click #(do (reset! label-selection-open? false)
+                            (reset! selected-label label))}
+            [statement-labels/build-label label]])
+         [:div.btn-group
+          {:role "group"}
           [:button#filter-labels-label.form-control
            {:on-click #(swap! label-selection-open? not)}
            (if (shared-config/allowed-labels @selected-label)
@@ -51,12 +51,12 @@
                [statement-labels/build-label @selected-label]
                {:key (str "label-option-" @selected-label)})
              [:span.badge.badge-pill.badge-transparent "–––"])]
-          {:visible @label-selection-open?
-           :onClickOutside #(reset! label-selection-open? false)}
-          '(:trigger)]
-         [:button.btn.btn-dark
-          {:on-click #(reset! selected-label nil)}
-          [:span.m-auto "x"]]]]])))
+          [:button.btn.btn-dark
+           {:on-click #(reset! selected-label nil)}
+           [:span.m-auto "x"]]]
+         {:visible @label-selection-open?
+          :onClickOutside #(reset! label-selection-open? false)}
+         [:trigger]]]])))
 
 (defn- type-selections
   "Selection-options for type filters."
