@@ -1744,7 +1744,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.admin/tooltip "Schnaq verwalten"
         :share-link/copy "Zugangslink kopieren"
 
-        :sharing/tooltip "schnaq Teilen"
+        :sharing/tooltip "schnaq teilen"
         :sharing.modal/title "Teile deinen schnaq"
         :sharing.modal/lead "Lade dein ganzes Team mit ein, um diesen schnaq mit Wissen zu befüllen"
         :sharing.modal/schnaqqi-help "Befülle den schnaq schonmal mit deinen Ideen. Deine Kolleg:innen finden so einen leichteren Einstieg."
