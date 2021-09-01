@@ -52,15 +52,11 @@
     ;; This outer div helps accessibility when popup is open – https://atomiks.github.io/tippyjs/v6/accessibility/#interactivity
     [:div
      (if authenticated?
-       [:> Tippy
-        {:content (r/as-element [build-labels statement])
-         :interactive true}
+       [tooltip/html
+        [build-labels statement]
         [:div.pr-2.clickable
-         [:i {:class (fa :tag)}]]]
-       #_{:animation "scale"
-          :offset 5
-          :size "big"
-          :trigger "click"}
+         [:i {:class (fa :tag)}]]
+        {:animation "scale"}]
        [:div.pr-2.clickable
         {:tabIndex 30
          :on-click #(rf/dispatch [:modal {:show? true

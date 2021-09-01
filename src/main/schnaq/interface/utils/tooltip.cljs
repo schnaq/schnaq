@@ -1,19 +1,18 @@
 (ns schnaq.interface.utils.tooltip
   (:require ["@tippyjs/react" :default Tippy]
-            ["react-tippy" :refer [Tooltip]]
             [reagent.core :as reagent]))
 
 (defn html
   "Wraps some content in a tooltip with the provided html inside."
   [tooltip-content wrapped-element options]
-  [:> Tooltip
+  [:> Tippy
    (merge
-     {:animation "scale"
+     {:animation "shift-away"
       :arrow true
-      :html (reagent/as-element tooltip-content)
+      :content (reagent/as-element tooltip-content)
       :interactive true
-      :offset 5
-      :position "bottom"
+      :offset [0 10]
+      :placement "bottom"
       :theme "light"
       :trigger "click"}
      options)
@@ -24,13 +23,12 @@
   [title content options]
   [:> Tippy
    (merge
-     {:animation "shift"
+     {:animation "shift-away"
       :arrow true
-      :offset 5
-      :position "bottom"
+      :offset [0 10]
+      :placement "bottom"
       :theme "light"
-      :content (str title)
-      :tag :span}
+      :content title}
      options)
    content])
 
