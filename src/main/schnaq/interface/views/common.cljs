@@ -8,8 +8,7 @@
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [schnaq.interface.text.display-data :refer [img-path]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.text.display-data :refer [img-path]]))
 
 (def ^:private default-identicon-background-color
   "#fafafa")
