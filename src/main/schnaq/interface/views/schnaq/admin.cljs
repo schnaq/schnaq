@@ -3,6 +3,7 @@
             [goog.string :as gstring]
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
@@ -16,12 +17,12 @@
 (defn admin-center
   "Button to access admin menu."
   [share-hash edit-hash]
-  [tooltip/tooltip-button "bottom"
+  [tooltip/text
    (labels :schnaq.admin/tooltip)
-   [:i {:class (str "m-auto fas " (fa :cog))}]
-   #(rf/dispatch [:navigation/navigate
-                  :routes.schnaq/admin-center
-                  {:share-hash share-hash :edit-hash edit-hash}])])
+   [:a.btn.btn-outline-muted.btn-lg
+    {:href (rfe/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
+     :role :button}
+    [:i {:class (str "m-auto fas " (fa :cog))}]]])
 
 (defn- share-modal
   "Modal showing sharing options."

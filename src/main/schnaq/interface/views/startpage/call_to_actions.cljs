@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.startpage.call-to-actions
-  (:require [re-frame.core :as rf]
+  (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [fa labels img-path]]))
 
 (defn- header-screenshot
@@ -15,10 +15,10 @@
   [:section.mt-5
    [:div.d-flex.flex-row
     [:div.display-6.text-white.my-auto.mr-3 (labels :schnaq.startpage.cta/button)]
-    [:button.button-call-to-action
-     {:type "button"
-      :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
-     [:i.m-auto {:class (str "fa " (fa :arrow-right))}]]]])
+    [:a.link-unstyled
+     {:href (rfe/href :routes.schnaq/create)}
+     [:button.button-call-to-action
+      [:i.m-auto {:class (str "fa " (fa :arrow-right))}]]]]])
 
 (defn- social-proof
   "A small section showing the user, that the risk was already taken by others."

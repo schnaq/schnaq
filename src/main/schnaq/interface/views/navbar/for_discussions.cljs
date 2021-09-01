@@ -12,15 +12,13 @@
             [schnaq.interface.views.schnaq.admin :as admin]))
 
 (defn clickable-title []
-  (let [{:discussion/keys [title share-hash] :as schnaq} @(rf/subscribe [:schnaq/selected])]
+  (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])]
     [:<>
      [:small.text-primary (labels :discussion.navbar/title)]
-     [:div.clickable-no-hover {:on-click
-                               (fn []
-                                 (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                               {:share-hash share-hash}])
-                                 (rf/dispatch [:schnaq/select-current schnaq]))}
-      [:h1.h5 (toolbelt/truncate-to-n-chars title 30)]]]))
+     [:div.clickable-no-hover
+      [:a.link-unstyled
+       {:href (reitfe/href :routes.schnaq/start {:share-hash share-hash})}
+       [:h1.h5 (toolbelt/truncate-to-n-chars title 30)]]]]))
 
 (defn navbar []
   (let [discussion @(rf/subscribe [:schnaq/selected])
@@ -45,14 +43,12 @@
 (defn graph-button
   "Rounded square button to navigate to the graph view"
   [share-hash]
-  [:button.btn.btn-sm.btn-white.rounded-1.h-100
-   {:on-click #(rf/dispatch
-                 [:navigation/navigate :routes/graph-view
-                  {:share-hash share-hash}])}
-   [:img.header-standalone-icon
-    {:src (img-path :icon-graph-dark)
-     :alt "graph icon"}]
-   [:p.small.m-0 (labels :graph.button/text)]])
+  [:a {:href (reitfe/href :routes/graph-view {:share-hash share-hash})}
+   [:button.btn.btn-sm.btn-dark-highlight.shadow-sm.rounded-1.h-100
+    [:img.header-standalone-icon
+     {:src (img-path :icon-graph)
+      :alt "graph icon"}]
+    [:p.small.m-0 (labels :graph.button/text)]]])
 
 (defn summary-button
   "Button to navigate to the summary view."

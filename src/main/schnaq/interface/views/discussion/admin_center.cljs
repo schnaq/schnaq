@@ -5,6 +5,7 @@
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.config :as config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.clipboard :as clipboard]
@@ -380,9 +381,9 @@
       ;; stop image and hint to copy the link
       [:div.single-image [:img {:src (img-path :schnaqqifant/stop)}]]
       [:h4.mb-4 (labels :schnaqs/continue-with-schnaq-after-creation)]
-      [:button.btn.button-primary.btn-lg.center-block.mb-5
+      [:a.btn.button-primary.btn-lg.center-block.mb-5
        {:role "button"
-        :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}
+        :href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
        (labels :schnaqs/continue-to-schnaq-button)]]]))
 
 (defn admin-center-view []

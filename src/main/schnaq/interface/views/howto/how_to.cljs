@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.howto.how-to
   (:require [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.howto.elements :as elements]
             [schnaq.interface.views.pages :as pages]))
@@ -9,9 +10,8 @@
   []
   [:div.row.align-items-center.feature-row
    [:div.col-12.col-lg-6.text-center
-    [:button.button-secondary.font-200
-     {:type "button"
-      :on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+    [:a.link-unstyled.button-secondary.font-200
+     {:href (rfe/href :routes.schnaq/create)}
      (labels :schnaq.create.button/save)]]
    [:div.col-12.col-lg-6
     [elements/text-box

@@ -22,8 +22,8 @@
     [:div.col-10.py-md-5
      [:h2 (labels :schnaqs.not-found/alert-lead)]
      [:p (labels :schnaqs.not-found/alert-body)]
-     [:button.btn.btn-outline-light.mt-1
-      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+     [:a.btn.btn-outline-light.mt-1
+      {:href (reitfe/href :routes.schnaq/create)}
       (labels :nav.schnaqs/create-schnaq)]]]])
 
 (defn sort-options
