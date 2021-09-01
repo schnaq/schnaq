@@ -34,10 +34,10 @@
 
 (defn build-labels
   [statement]
-  [:<>
+  [:div.text-center
    (let [set-labels (set (:statement/labels statement))]
      (for [label shared-config/allowed-labels]
-       [:span.mr-3
+       [:span.mx-2
         {:key (str "label-" (:db/id statement) "-" label)
          :on-click #(if (set-labels label)
                       (rf/dispatch [:statement.labels/remove statement label])

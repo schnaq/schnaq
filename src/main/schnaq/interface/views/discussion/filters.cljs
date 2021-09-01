@@ -36,12 +36,13 @@
          [:option {:value :excludes} (labels :filters.option.labels/excludes)]]]
        [:div.col-auto
         [tooltip/html
-         (for [label shared-config/allowed-labels]
-           [:span.mr-3
-            {:key (str "label-option-" label)
-             :on-click #(do (reset! label-selection-open? false)
-                            (reset! selected-label label))}
-            [statement-labels/build-label label]])
+         [:div.d-flex.flex-column
+          (for [label shared-config/allowed-labels]
+            [:span.mx-auto
+             {:key (str "label-option-" label)
+              :on-click #(do (reset! label-selection-open? false)
+                             (reset! selected-label label))}
+             [statement-labels/build-label label]])]
          [:div.btn-group
           {:role "group"}
           [:button#filter-labels-label.form-control
