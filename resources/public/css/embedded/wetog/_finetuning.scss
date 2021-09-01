@@ -1,8 +1,11 @@
+@use '../../rounded' as rounded;
+
 .base-wrapper {
   background: none;
 }
 
 .schnaq-logo-container {
+  @include rounded.rounded-1;
   background-image: url('https://s3.disqtec.com/schnaq-common/background/wave_background_reverse.svg');
   padding: 1rem 1rem 1rem 4rem;
 }
@@ -15,4 +18,9 @@
 
 .history-wrapper {
   @extend .panel-grey;
+}
+
+.embedded-nav-button {
+  @extend .shadow;
+  @include rounded.rounded-1;
 }
