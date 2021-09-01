@@ -119,10 +119,10 @@
   [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
    [tooltip/html
     [author-list authors]
-    [:<> [:i {:class (str "m-auto fas " (fa :user/group))}] " " (count authors)]
+    [:div [:i {:class (str "m-auto fas " (fa :user/group))}] " " (count authors)]
     {:animation "scale"
-     :offset 5
-     :trigger "click"}]])
+     :trigger "click"
+     :appendTo js-wrap/document-body}]])
 
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."

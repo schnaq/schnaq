@@ -1,10 +1,9 @@
 (ns schnaq.interface.views.discussion.labels
-  (:require ["@tippyjs/react" :default Tippy]
-            [re-frame.core :as rf]
-            [reagent.core :as r]
+  (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [fa]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.modal :as modal]))
@@ -56,7 +55,8 @@
         [build-labels statement]
         [:div.pr-2.clickable
          [:i {:class (fa :tag)}]]
-        {:animation "scale"}]
+        {:animation "scale"
+         :appendTo jsw/document-body}]
        [:div.pr-2.clickable
         {:tabIndex 30
          :on-click #(rf/dispatch [:modal {:show? true

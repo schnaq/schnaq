@@ -45,14 +45,15 @@
                              (reset! selected-label label))}
              [statement-labels/build-label label]])
           [:button#filter-labels-label.form-control
-           {:on-click #(reset! label-selection-open? true)}
+           {:on-click #(swap! label-selection-open? not)}
            (if (shared-config/allowed-labels @selected-label)
              (with-meta
                [statement-labels/build-label @selected-label]
                {:key (str "label-option-" @selected-label)})
              [:span.badge.badge-pill.badge-transparent "–––"])]
-          {:open @label-selection-open?
-           :onRequestClose #(reset! label-selection-open? false)}]
+          {:visible @label-selection-open?
+           :onClickOutside #(reset! label-selection-open? false)}
+          '(:trigger)]
          [:button.btn.btn-dark
           {:on-click #(reset! selected-label nil)}
           [:span.m-auto "x"]]]]])))
