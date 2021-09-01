@@ -9,7 +9,6 @@
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
-            [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
             [schnaq.interface.views.discussion.labels :as labels]
@@ -33,30 +32,11 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn up-down-vote-breaking
-  "Add panel for up and down votes."
-  [statement]
-  (let [votes @(rf/subscribe [:local-votes])]
-    [:div.float-right
-     [:div.d-flex
-      [:div.px-2
-       {:on-click (fn [e]
-                    (js-wrap/stop-propagation e)
-                    (rf/dispatch [:discussion/toggle-upvote statement]))}
-       [:i.vote-arrow.up-vote {:class (str "m-auto fas " (fa :arrow-up))}]]]
-     [:h6.d-flex.p-2.m-0 (logic/calculate-votes statement votes)]
-     [:div.d-flex
-      [:div.px-2
-       {:on-click (fn [e]
-                    (js-wrap/stop-propagation e)
-                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-       [:i.vote-arrow.down-vote.align-bottom {:class (str "m-auto fas " (fa :arrow-down))}]]]]))
-
 (defn up-down-vote
   "Add inline panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
-    [:div.d-flex {:on-click (fn [e] (js-wrap/stop-propagation e))}
+    [:div.d-flex
      [:div.px-2
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
@@ -86,7 +66,7 @@
        [md/as-markdown (:statement/content statement)]
        [:div.d-flex.flex-wrap
         [:a.badge.badge-pill.rounded-2.mr-1
-         {:href "#" :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
+         {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
          [:i {:class (str "m-auto far " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-sm-0.ml-lg-auto

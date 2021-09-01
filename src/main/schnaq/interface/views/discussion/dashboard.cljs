@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.discussion.dashboard
   (:require [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.markdown :as md]
-            [schnaq.interface.views.discussion.common :as dcommon]
             [schnaq.interface.views.discussion.pie-chart :as pie-chart]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.summary :as summary]
@@ -14,16 +14,16 @@
   (let [chart-data (pie-chart/create-vote-chart-data statement)
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div.meeting-entry.my-3.p-3
-     {:href "#"
-      :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
-     [:div.row.h-100
-      [:div.col-xl-4.col-12
-       [user/user-info statement 24]]
-      [:div.col-xl-5.col-7
-       [md/as-markdown (:statement/content statement)]]
-      [:div.col-xl-3.col-5
-       [:div.dashboard-pie-chart
-        [pie-chart/pie-chart-component chart-data]]]]]))
+     [:a.link-unstyled
+      {:href (rfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+      [:div.row.h-100
+       [:div.col-xl-4.col-12
+        [user/user-info statement 24]]
+       [:div.col-xl-5.col-7
+        [md/as-markdown (:statement/content statement)]]
+       [:div.col-xl-3.col-5
+        [:div.dashboard-pie-chart
+         [pie-chart/pie-chart-component chart-data]]]]]]))
 
 (defn- schnaq-statistics []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
@@ -98,16 +98,16 @@
   (let [chart-data (pie-chart/create-vote-chart-data statement)
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
     [:div.meeting-entry.my-3.p-3
-     {:href "#"
-      :on-click (dcommon/navigate-to-statement-on-click statement path-params)}
-     [:div.row.h-100
-      [:div.col-12
-       [user/user-info statement 24]]
-      [:div.col-7
-       [md/as-markdown (:statement/content statement)]]
-      [:div.col-5
-       [:div.dashboard-pie-chart
-        [pie-chart/pie-chart-component chart-data]]]]]))
+     [:a.link-unstyled
+      {:href (rfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+      [:div.row.h-100
+       [:div.col-12
+        [user/user-info statement 24]]
+       [:div.col-7
+        [md/as-markdown (:statement/content statement)]]
+       [:div.col-5
+        [:div.dashboard-pie-chart
+         [pie-chart/pie-chart-component chart-data]]]]]]))
 
 (defn- embedded-statistics []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])
