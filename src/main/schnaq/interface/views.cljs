@@ -2,7 +2,6 @@
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.views.base :as base]
-            [schnaq.interface.views.feedback.collect :as feedback]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :as notifications]))
 
@@ -25,7 +24,5 @@
     [:div#root {:key language}
      [base-page language]
      (when-not shared-config/embedded?
-       [:<>
-        [footer]
-        [feedback/button]])
+       [footer])
      [notifications/view]]))
