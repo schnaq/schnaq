@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.admin-center
-  (:require [clojure.string :as string]
+  (:require ["tippy.js" :refer [followCursor]]
+            [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
@@ -44,7 +45,8 @@
          :readOnly true}]
        [:label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
         [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]
-      {:follow-cursor "true"}]]))
+      {:plugins followCursor
+       :followCursor true}]]))
 
 (defn- img-text
   "Create one icon in a grid"

@@ -39,4 +39,4 @@
    [:button.btn.btn-outline-muted.btn-lg
     {:on-click on-click-fn}
     content]
-   {:position tooltip-location}])
+   {:placement tooltip-location}])
