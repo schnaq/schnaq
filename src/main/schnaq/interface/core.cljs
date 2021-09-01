@@ -14,7 +14,6 @@
             [schnaq.interface.auth]
             [schnaq.interface.celebrations]
             [schnaq.interface.config :as config]
-            [schnaq.interface.effects]
             [schnaq.interface.events]
             [schnaq.interface.integrations.wetog.events]
             [schnaq.interface.integrations.wetog.routes]
