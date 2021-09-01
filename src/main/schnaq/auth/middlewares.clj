@@ -26,6 +26,8 @@
     (if (authenticated? request)
       (-> request
           (assoc-in [:identity :id] (get-in request [:identity :sub]))
+          (assoc-in [:identity :preferred_username] (or (get-in request [:identity :preferred_username])
+                                                        (get-in request [:identity :name])))
           (assoc-in [:identity :roles] (get-in request [:identity :realm_access :roles]))
           (assoc-in [:identity :admin?] (has-role? request shared-config/admin-roles))
           handler)
