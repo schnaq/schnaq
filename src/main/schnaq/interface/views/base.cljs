@@ -2,7 +2,8 @@
   (:require [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
-            [schnaq.interface.utils.js-wrapper :as jw]))
+            [schnaq.interface.utils.js-wrapper :as jw]
+            [schnaq.interface.views.feedback.collect :as feedback]))
 
 (defn wavy-curve
   "Define a wavy curve."
@@ -61,34 +62,27 @@
    [:div.lead.font-italic.pb-1
     (labels :startpage/heading)]])
 
+(defn- footer-button
+  [route-name content-label]
+  [:li.list-inline-item
+   [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href route-name)}
+    (labels content-label)]])
+
 (defn- footer-nav []
   [:<>
    [:ul.list-inline
-    [:li.list-inline-item
-     [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href :routes/how-to)}
-      (labels :router/how-to)]]
-    [:li.list-inline-item
-     [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href :routes/code-of-conduct)}
-      (labels :coc/heading)]]
-    [:li.list-inline-item
-     [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href :routes/about-us)}
-      (labels :footer.buttons/about-us)]]
-    [:li.list-inline-item
-     [:a.btn.btn-sm.btn-outline-white {:href (reitfe/href :routes/press)}
-      (labels :footer.buttons/press-kit)]]
-    [:li.list-inline-item
-     [:a.btn.btn-sm.btn-outline-white
-      {:href (reitfe/href :routes/publications)}
-      (labels :footer.buttons/publications)]]]
+    [footer-button :routes/how-to :router/how-to]
+    [footer-button :routes/code-of-conduct :coc/heading]
+    [footer-button :routes/about-us :footer.buttons/about-us]
+    [footer-button :routes/press :footer.buttons/press-kit]
+    [footer-button :routes/publications :footer.buttons/publications]]
    [:ul.list-inline
     [:li.list-inline-item
-     [:a.btn.btn-sm.btn-outline-white
-      {:role "button" :href (reitfe/href :routes/privacy)}
-      (labels :router/privacy)]]
-    [:li.list-inline-item
-     [:a.btn.btn-sm.btn-outline-white
-      {:href (reitfe/href :routes/legal-note)}
-      (labels :footer.buttons/legal-note)]]]])
+     [:button.btn.btn-sm.btn-outline-white {:on-click feedback/show-feedback-modal}
+      (labels :feedbacks/button)]]
+    [footer-button :routes/privacy :router/privacy]
+    [footer-button :routes/legal-note :footer.buttons/legal-note]
+    [footer-button :routes/alphazulu :router/alphazulu]]])
 
 (defn- developed-in-nrw []
   [:section.pt-3

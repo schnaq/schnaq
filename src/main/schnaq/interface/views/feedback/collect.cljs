@@ -10,8 +10,6 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.feedback.survey :as survey]
             [schnaq.interface.views.modal :as modal]))
 
 (defonce screenshot-url (reagent/atom nil))
@@ -90,25 +88,16 @@
   []
   [modal/modal-template
    (labels :feedbacks.overview/header)
-   (common/tab-builder
-     "feedback-tabs"
-     {:link (labels :feedbacks/button)
-      :view [:<>
-             [:p (labels :feedbacks.modal/primer)]
-             [form-input]]}
-     {:link (labels :feedbacks.survey/tab)
-      :view [survey/view]})])
+   [:div.tab-pane.fade.show.active
+    [:p (labels :feedbacks.modal/primer)]
+    [form-input]]])
 
-(defn button
-  "Presenting the feedback button."
-  []
-  [:div#feedback-wrapper.feedback-wrapper
-   {:on-click (fn [_e]
-                (screenshot!)
-                (rf/dispatch [:modal {:show? true :large? true
-                                      :child [feedback-modal]}]))}
-   [:button.btn.btn-secondary.text-white.feedback (labels :feedbacks/button)]])
-
+(defn show-feedback-modal
+  "The on-click function to show the feedback modal."
+  [_event]
+  (screenshot!)
+  (rf/dispatch [:modal {:show? true :large? true
+                        :child [feedback-modal]}]))
 
 ;; -----------------------------------------------------------------------------
 
