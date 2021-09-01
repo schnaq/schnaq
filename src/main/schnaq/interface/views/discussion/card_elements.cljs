@@ -128,7 +128,7 @@
                                        :body (labels :discussion.notification/new-content-body)
                                        :context :success}]]
             [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
-            (when (= 1 (count starting-conclusions))
+            (when (and (= 1 (count starting-conclusions)) (not shared-config/embedded?))
               [:dispatch [:celebrate/schnaq-filled]])
             (when statement-with-creation-secret
               [:dispatch [:discussion.statements/add-creation-secret statement-with-creation-secret]])
