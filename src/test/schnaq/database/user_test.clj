@@ -37,7 +37,7 @@
     (let [id "test-id-abcdefg"
           user-name "Tester"
           name-new "New Tester"
-          [new-user? user] (db/register-new-user {:id id :preferred_username user-name} [] [])
+          [new-user? user] (db/register-new-user {:sub id :preferred_username "Tester"} [] [])
           updated-user (db/update-display-name id name-new)
           current-name (:user.registered/display-name user)
           updated-name (:user.registered/display-name updated-user)]
