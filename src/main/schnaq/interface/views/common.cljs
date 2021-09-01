@@ -8,6 +8,7 @@
             [oops.core :refer [oset!]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [img-path]]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
@@ -133,8 +134,9 @@
   "Set a document's website title."
   [title]
   [string? :ret nil?]
-  (let [new-title (gstring/format "schnaq - %s" title)]
-    (oset! js/document [:title] new-title)))
+  (when-not shared-config/embedded?
+    (let [new-title (gstring/format "schnaq - %s" title)]
+      (oset! js/document [:title] new-title))))
 
 
 ;; -----------------------------------------------------------------------------
