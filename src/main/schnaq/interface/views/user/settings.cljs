@@ -17,19 +17,27 @@
      [common/avatar-with-nickname-right #:user.registered{:profile-picture (get-in user [:profile-picture :display])
                                                           :display-name (get-in user [:names :display])} 40]]))
 
-(defn- edit-user-navigation-button []
-  [:article
-   [:a.btn.feed-button-focused
-    {:href (rfe/href :routes.user.manage/account)}
-    [:div.d-flex.flex-row.text-left
-     [:i.mr-4.my-auto {:class (str "fas " (fa :user/edit))}]
-     [:span (labels :user.settings/info)]]]])
+(defn- settings-button
+  "Create a button for the feed list."
+  [icon label route]
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        button-class (if (= current-route route) "feed-button-focused" "feed-button")]
+    [:article
+     [:a.btn.btn-link.text-left {:class button-class
+                                 :role "button"
+                                 :href (rfe/href route)}
+      [:div.row.text-left
+       [:div.col-1
+        [:i.mr-4.my-auto {:class (str "fas " (fa icon))}]]
+       [:div.col
+        [:span (labels label)]]]]]))
 
 (defn- edit-user-panel []
   [:section
-   [:h6.text-muted.mb-4 (labels :user.settings)]
+   [:h6.text-muted.mb-4 (labels :user.notification)]
    [:hr.my-4]
-   [edit-user-navigation-button]])
+   [settings-button :user/edit :user.settings/info :routes.user.manage/account]
+   [settings-button :bell :user.settings/notifications :routes.user.manage/notifications]])
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout

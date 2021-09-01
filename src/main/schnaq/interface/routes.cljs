@@ -38,7 +38,8 @@
             [schnaq.interface.views.schnaq.value :as value]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
-            [schnaq.interface.views.user.edit-account :as edit-account]))
+            [schnaq.interface.views.user.edit-account :as edit-account]
+            [schnaq.interface.views.user.edit-notifications :as edit-notifications]))
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
@@ -99,6 +100,11 @@
      {:name :routes.user.manage/account
       :view edit-account/view
       :link-text (labels :user/edit-account)
+      :controllers [{:stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]
+    ["/notifications"
+     {:name :routes.user.manage/notifications
+      :view edit-notifications/view
+      :link-text (labels :user/edit-notifications)
       :controllers [{:stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]]
    ["admin"
     ["/center"
