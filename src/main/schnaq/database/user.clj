@@ -155,13 +155,13 @@
   "Registers a new user, when they do not exist already. Depends on the keycloak ID.
   Returns the user, after updating their groups, when they exist. Returns a tuple which contains
   whether the user is newly created and the user entity itself."
-  [{:keys [id email preferred_username given_name family_name groups] :as identity} visited-schnaqs visited-statements]
+  [{:keys [sub email preferred_username given_name family_name groups] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
-  (let [id-string (str id)
-        existing-user (fast-pull [:user.registered/keycloak-id id-string] private-user-pattern)
-        temp-id (str "new-registered-user-" id-string)
+  (let [id (str sub)
+        existing-user (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
+        temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
-                  :user.registered/keycloak-id (str id-string)
+                  :user.registered/keycloak-id (str id)
                   :user.registered/email email
                   :user.registered/display-name preferred_username
                   :user.registered/first-name given_name
