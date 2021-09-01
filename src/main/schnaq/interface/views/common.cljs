@@ -9,8 +9,7 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.text.display-data :refer [img-path]]
-            [schnaq.interface.utils.toolbelt :as toolbelt]))
+            [schnaq.interface.text.display-data :refer [img-path]]))
 
 (def ^:private default-identicon-background-color
   "#fafafa")
@@ -29,7 +28,6 @@
     (oset! image [:target :src]
            (str "data:image/svg+xml;base64,"
                 (js/btoa (generate-identicon display-name size))))))
->>>>>>> src/main/schnaq/interface/views/common.cljs
 
 (>defn identicon
   "Generate unique identicon component."
