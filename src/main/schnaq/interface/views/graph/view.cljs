@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.config :as conf]
             [schnaq.interface.text.display-data :refer [colors fa]]
             [schnaq.interface.utils.http :as http]
@@ -133,18 +134,17 @@
 (defn graph-agenda-header
   "Header when displaying the graph."
   [title share-hash]
-  (let [go-back-fn (fn [] (rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]))]
-    (common/set-website-title! title)
-    [:section.container-fluid.bg-white.p-4.shadow-sm
-     [:div.row
-      [:div.col-2.col-md-1
-       [:span {:on-click go-back-fn}                        ;; the icon itself is not clickable
-        [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]]
-      [:div.col-10.col-md-7 [:h2 title]]
-      [:div.col-12.col-md-4.text-md-right
-       [graph-settings/open-settings]
-       [admin/graph-download-as-png (gstring/format "#%s" graph-id)]
-       [admin/txt-export share-hash title]]]]))
+  (common/set-website-title! title)
+  [:section.container-fluid.bg-white.p-4.shadow-sm
+   [:div.row
+    [:div.col-2.col-md-1
+     [:a.link-unstyled {:href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
+      [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]]
+    [:div.col-10.col-md-7 [:h2 title]]
+    [:div.col-12.col-md-4.text-md-right
+     [graph-settings/open-settings]
+     [admin/graph-download-as-png (gstring/format "#%s" graph-id)]
+     [admin/txt-export share-hash title]]]])
 
 (defn- graph-view
   "The core Graph visualization wrapper."
