@@ -55,7 +55,7 @@
   [share-hash]
   [:a {:href (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})}
    [:button.btn.btn-sm.btn-white.mx-auto.rounded-1.h-100
-    [:img.img-fluid
+    [:img.header-standalone-icon
      {:src (img-path :icon-summary-dark)
       :width "25"
       :alt "summary icon"}]
@@ -146,5 +146,5 @@
        (when edit-hash
          [admin/admin-center share-hash edit-hash])]
       [:div.d-flex.align-items-center.mt-4.mt-md-0
-       [:div.h-100.mx-2 [graph-button share-hash]]
-       [:div.h-100.mr-2 [summary-button share-hash]]]]]))
+       [:div.h-100.mx-2.embedded-nav-button [graph-button share-hash]]
+       [:div.h-100.mr-2.embedded-nav-button [summary-button share-hash]]]]]))

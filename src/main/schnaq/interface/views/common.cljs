@@ -12,16 +12,35 @@
             [schnaq.interface.text.display-data :refer [img-path]]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
+(def ^:private default-identicon-background-color
+  "#fafafa")
+
+(defn- generate-identicon
+  "Generate an identicon. Returns xml-styled SVG."
+  ([display-name size]
+   (generate-identicon display-name size default-identicon-background-color))
+  ([display-name size background-color]
+   (jdenticon/toSvg display-name size (clj->js {:backColor background-color}))))
+
+(defn- set-fallback-identicon
+  "If image loading fails, set an identicon."
+  [display-name size]
+  (fn [image]
+    (oset! image [:target :src]
+           (str "data:image/svg+xml;base64,"
+                (js/btoa (generate-identicon display-name size))))))
+>>>>>>> src/main/schnaq/interface/views/common.cljs
+
 (>defn identicon
-  "Generate unique identicon."
+  "Generate unique identicon component."
   ([display-name]
    [string? :ret vector?]
-   (identicon display-name))
+   [identicon display-name])
   ([display-name size]
    [string? number? :ret vector?]
    [:span.shadow-sm {:title display-name
                      :dangerouslySetInnerHTML
-                     {:__html (jdenticon/toSvg display-name size (clj->js {:backColor "#fafafa"}))}}]))
+                     {:__html (generate-identicon display-name size)}}]))
 
 (>defn avatar
   "Get a user's avatar."
@@ -39,18 +58,9 @@
         [:div.profile-pic-fill
          {:style {:max-height (str size "px") :max-width (str size "px")}}
          [:img.profile-pic-image {:src profile-picture
-                                  :alt (str "Profile Picture of " display-name)}]]
+                                  :alt (str "Profile Picture of " display-name)
+                                  :on-error (set-fallback-identicon display-name 50)}]]
         [identicon display-name size])])))
-
-(>defn avatar-with-nickname
-  "Create an image based on the nickname and also print the nickname."
-  [{:user.registered/keys [display-name] :as user} size]
-  [map? number? :ret vector?]
-  [:div.text-center.min-content
-   [avatar user size]
-   [:p.small.mt-1.avatar-username
-    {:title display-name}
-    (toolbelt/truncate-to-n-chars display-name 20)]])
 
 (>defn avatar-with-nickname-right
   "Create an image based on the nickname and also print the nickname."
