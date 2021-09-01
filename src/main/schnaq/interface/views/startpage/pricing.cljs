@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.startpage.pricing
-  (:require [re-frame.core :as rf]
-            [reitit.frontend.easy :as reititfe]
+  (:require [reitit.frontend.easy :as reititfe]
             [schnaq.interface.text.display-data :refer [img-path fa labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -13,8 +12,8 @@
     [:p.card-text.text-center.display-2 "0 €"]
     [:p.text-muted.text-center (labels :pricing.free-tier/beta-notice)]
     [:div.text-center.mt-auto
-     [:button.btn.button-primary
-      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+     [:a.btn.button-primary
+      {:href (reititfe/href :routes.schnaq/create)}
       [:p.card-text (labels :pricing.free-tier/call-to-action)]]]]])
 
 (defn- business-tier-card
