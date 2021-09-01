@@ -1,7 +1,6 @@
 (ns schnaq.interface.views.feed.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -24,7 +23,7 @@
      [:h2 (labels :schnaqs.not-found/alert-lead)]
      [:p (labels :schnaqs.not-found/alert-body)]
      [:a.btn.btn-outline-light.mt-1
-      {:href (rfe/href :routes.schnaq/create)}
+      {:href (reitfe/href :routes.schnaq/create)}
       (labels :nav.schnaqs/create-schnaq)]]]])
 
 (defn sort-options
