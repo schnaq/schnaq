@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed-overview]
@@ -16,27 +17,19 @@
      [common/avatar-with-nickname-right #:user.registered{:profile-picture (get-in user [:profile-picture :display])
                                                           :display-name (get-in user [:names :display])} 40]]))
 
-(defn- edit-user-navigation-button [label icon route]
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        button-class (if (= route current-route) "feed-button-focused"
-                                                 "feed-button")]
-    [:article
-     [:button
-      {:class button-class :type "button"
-       :on-click #(rf/dispatch [:navigation/navigate route])}
-      [:div.d-flex.flex-row.text-left
-       [:i.mr-4.my-auto {:class (str "fas " (fa icon))}]
-       [:span (labels label)]]]]))
-
-(defn- user-navigation []
-  [:<>
-   [edit-user-navigation-button :user.settings/info :user/edit :routes.user.manage/account]])
+(defn- edit-user-navigation-button []
+  [:article
+   [:a.btn.feed-button-focused
+    {:href (rfe/href :routes.user.manage/account)}
+    [:div.d-flex.flex-row.text-left
+     [:i.mr-4.my-auto {:class (str "fas " (fa :user/edit))}]
+     [:span (labels :user.settings/info)]]]])
 
 (defn- edit-user-panel []
   [:section
    [:h6.text-muted.mb-4 (labels :user.settings)]
    [:hr.my-4]
-   [user-navigation]])
+   [edit-user-navigation-button]])
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout

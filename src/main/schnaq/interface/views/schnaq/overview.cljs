@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.schnaq.overview
   (:require [ghostwheel.core :refer [>defn-]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.pages :as pages]))
@@ -13,8 +14,8 @@
     "🙈 "
     (labels :schnaqs.not-found/alert-lead)]
    [:p (labels :schnaqs.not-found/alert-body)]
-   [:div.btn.btn-outline-primary
-    {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/create])}
+   [:a.btn.btn-outline-primary
+    {:href (rfe/href :routes.schnaq/create)}
     (labels :nav.schnaqs/create-schnaq)]])
 
 (defn- schnaq-entry

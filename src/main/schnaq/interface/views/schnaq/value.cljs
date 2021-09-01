@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.schnaq.value
   (:require [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [fa img-path labels]]
             [schnaq.interface.views.pages :as pages]))
 
@@ -24,8 +25,8 @@
 (defn- next-button []
   (let [{:discussion/keys [share-hash]} @(rf/subscribe [:schnaq/selected])]
     [:div.row.px-1.pb-5
-     [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto.mb-5
-      {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}
+     [:a.btn.btn-dark-highlight.p-3.rounded-1.ml-auto.mb-5
+      {:href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
       (labels :schnaqs/continue-to-schnaq-button)
       [:i.ml-2 {:class (fa :arrow-right)}]]]))
 
