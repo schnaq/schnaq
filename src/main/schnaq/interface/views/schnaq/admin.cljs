@@ -60,10 +60,9 @@
 (defn share-link
   "Button to copy access link and notify the user."
   []
-  [:button.btn.btn-primary.btn-sm.rounded-1.px-2.mx-2
-   {:on-click open-share-modal}
+  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
    [:i {:class (str "m-auto fas " (fa :share))}]
-   [:text-sm.mx-2 (labels :sharing/tooltip)]])
+   open-share-modal])
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."

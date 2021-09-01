@@ -44,9 +44,9 @@
   "Rounded square button to navigate to the graph view"
   [share-hash]
   [:a {:href (reitfe/href :routes/graph-view {:share-hash share-hash})}
-   [:button.btn.btn-sm.btn-dark-highlight.shadow-sm.rounded-1.h-100
+   [:button.btn.btn-sm.btn-white.mx-auto.rounded-1.h-100
     [:img.header-standalone-icon
-     {:src (img-path :icon-graph)
+     {:src (img-path :icon-graph-dark)
       :alt "graph icon"}]
     [:p.small.m-0 (labels :graph.button/text)]]])
 
@@ -54,9 +54,9 @@
   "Button to navigate to the summary view."
   [share-hash]
   [:a {:href (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})}
-   [:button.btn.btn-sm.btn-dark-highlight.shadow-sm.mx-auto.rounded-1.h-100
+   [:button.btn.btn-sm.btn-white.mx-auto.rounded-1.h-100
     [:img.img-fluid
-     {:src (img-path :icon-summary)
+     {:src (img-path :icon-summary-dark)
       :width "25"
       :alt "summary icon"}]
     [:p.small.m-0 (labels :summary.link.button/text)]]])
