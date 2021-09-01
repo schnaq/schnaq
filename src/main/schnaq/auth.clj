@@ -2,7 +2,6 @@
   (:require [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication]]
             [buddy.core.keys :as keys]
-            [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.config.keycloak :as keycloak-config]
