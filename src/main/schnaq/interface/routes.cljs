@@ -136,18 +136,10 @@
     {:name :routes/publications
      :view publications/view}]
    ["schnaqs"
-    ;; TODO kick public schnaqs
-    ["/public"
-     {:name :routes.schnaqs/public
-      :view feed/public-discussions-view
-      :link-text (labels :router/public-discussions)
-      :controllers [{:start #(rf/dispatch [:schnaqs.public/load])}]}]
-    [""
-     {:name :routes.schnaqs/personal
-      :view feed/personal-discussions-view
-      :link-text (labels :router/visited-schnaqs)
-      :controllers [{:identity (fn [] (random-uuid))
-                     :start #(rf/dispatch [:schnaqs.visited/load])}]}]]
+    {:name :routes.schnaqs/personal
+     :view feed/page
+     :link-text (labels :router/visited-schnaqs)
+     :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
    ["schnaq"
     {:controllers [{:start #(rf/dispatch [:username/open-dialog])}]}
     ["/create"

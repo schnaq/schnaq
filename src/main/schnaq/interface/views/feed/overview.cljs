@@ -138,30 +138,20 @@
      [:div.d-none.d-md-block
       [sidebar-info-links]]]))
 
-(>defn- schnaq-overview
+(defn- personal-discussions-view
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
   schnaqs."
-  ;; TODO vereinfache das, nur noch ein caller
-  [subscription-vector page-header]
-  [keyword? keyword? :ret vector?]
+  []
   [pages/three-column-layout
-   {:page/heading (labels page-header)
+   {:page/heading (labels :schnaqs/header)
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
-   [schnaq-list-view subscription-vector]
+   [schnaq-list-view [:schnaqs.visited/all]]
    [:div.d-md-none [sidebar-info-links]]])
 
-(defn public-discussions-view
-  ;; TODO kill
-  "Render all public discussions."
-  []
-  [schnaq-overview [:schnaqs/public] :schnaqs.all/header])
-
-(defn personal-discussions-view
-  "Render all discussions in which the user participated."
-  []
-  [schnaq-overview [:schnaqs.visited/all] :schnaqs/header])
+(defn page []
+  [personal-discussions-view])
 
 (rf/reg-event-db
   :feed.sort/set
