@@ -43,6 +43,15 @@
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc "The schnaqs that are known to the registered user, i.e. they can open and view."}
+   {:db/ident :user.registered/notification-mail-interval
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Interval in which the user will receive updates via mail"}
+
+   ;; Notification Mail Intervals
+   {:db/ident :notification-mail-interval/daily}
+   {:db/ident :notification-mail-interval/weekly}
+   {:db/ident :notification-mail-interval/never}
 
    ;; Seen statements
    {:db/ident :seen-statements/user

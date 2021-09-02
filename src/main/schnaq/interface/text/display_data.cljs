@@ -828,6 +828,11 @@ Now we write down questions and discuss them and can still understand what we ha
         :user.notifications.set-all-to-read/button "Mark everything as read"
         :user.notifications.set-all-to-read/info "You still receive notifications from old discussions? No problem, just mark everything as read and only receive notifications from new discussions."
 
+        ; mail interval
+        :notification-mail-interval/daily "Daily"
+        :notification-mail-interval/weekly "Weekly"
+        :notification-mail-interval/never "Never"
+
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
         :errors/generic "An error occurred"
@@ -1932,6 +1937,11 @@ Now we write down questions and discuss them and can still understand what we ha
         :user.notifications/info "Du erhälst nur Benachrichtigungen, wenn es neue Beiträge in deinen besuchten schnaqs gibt."
         :user.notifications.set-all-to-read/button "Alles als gelesen markieren"
         :user.notifications.set-all-to-read/info "Du erhälst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
+
+        ; mail interval
+        :notification-mail-interval/daily "Täglich"
+        :notification-mail-interval/weekly "Wöchentlich"
+        :notification-mail-interval/never "Niemals"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"

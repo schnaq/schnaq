@@ -47,6 +47,19 @@
   (let [display-name (get-in parameters [:body :display-name])]
     (ok {:updated-user (user-db/update-display-name (:id identity) display-name)})))
 
+(defn- change-notification-mail-interval
+  "Change the interval a user receives notification mails"
+  [{:keys [parameters identity]}]
+  (let [interval (get-in parameters [:body :notification-mail-interval])
+        user (user-db/update-notification-mail-interval (:id identity) interval)]
+    (ok {:updated-user user})))
+
+(defn- mark-all-statements-as-read
+  "Mark all statements of a user's visited schnaqs as read"
+  [{:keys [identity]}]
+  (println (:id identity) "mark all as read")
+  (ok {:new-statements nil}))
+
 (defn- add-anonymous-user
   "Generate a user based on the nickname. This is an *anonymous* user, and we
   can only refer to the user by the nickname. So this function is idempotent and
@@ -87,4 +100,13 @@
     ["/name" {:put change-display-name
               :description (at/get-doc #'change-display-name)
               :parameters {:body {:display-name :user/nickname}}
-              :responses {200 {:body {:updated-user ::specs/registered-user}}}}]]])
+              :responses {200 {:body {:updated-user ::specs/registered-user}}}}]
+    ["/notification-mail-interval" {:put change-notification-mail-interval
+                                    :description (at/get-doc #'change-notification-mail-interval)
+                                    :parameters {:body {:notification-mail-interval keyword?}}
+                                    :responses {200 {:body {:updated-user ::specs/registered-user}}
+                                                400 at/response-error-body}}]
+    ["/mark-all-as-read" {:put mark-all-statements-as-read
+                          :description (at/get-doc #'mark-all-statements-as-read)
+                          :responses {200 {:body {:new-statements coll?}}
+                                      400 at/response-error-body}}]]])

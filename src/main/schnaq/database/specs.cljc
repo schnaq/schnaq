@@ -23,13 +23,17 @@
 (s/def :user.registered/first-name ::non-blank-string)
 (s/def :user.registered/last-name ::non-blank-string)
 (s/def :user.registered/profile-picture ::non-blank-string)
+(s/def :user.registered/notification-mail-interval #{:notification-mail-interval/daily
+                                                     :notification-mail-interval/weekly
+                                                     :notification-mail-interval/never})
 (s/def :user.registered/groups (s/coll-of ::non-blank-string))
 (s/def :user.registered/visited-schnaqs (s/or :ids (s/coll-of :db/id)
                                               :schnaqs (s/coll-of ::discussion)))
 (s/def ::registered-user (s/keys :req [:user.registered/keycloak-id :user.registered/display-name]
                                  :opt [:user.registered/last-name :user.registered/first-name
                                        :user.registered/groups :user.registered/profile-picture
-                                       :user.registered/email :user.registered/visited-schnaqs]))
+                                       :user.registered/email :user.registered/notification-mail-interval
+                                       :user.registered/visited-schnaqs]))
 
 ;; Could be anonymous or registered
 (s/def ::any-user (s/or :user ::user
