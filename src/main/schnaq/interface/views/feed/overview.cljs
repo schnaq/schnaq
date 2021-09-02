@@ -142,6 +142,7 @@
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
   must be a keyword referring to a subscription, which returns a collection of
   schnaqs."
+  ;; TODO vereinfache das, nur noch ein caller
   [subscription-vector page-header]
   [keyword? keyword? :ret vector?]
   [pages/three-column-layout
@@ -152,6 +153,7 @@
    [:div.d-md-none [sidebar-info-links]]])
 
 (defn public-discussions-view
+  ;; TODO kill
   "Render all public discussions."
   []
   [schnaq-overview [:schnaqs/public] :schnaqs.all/header])

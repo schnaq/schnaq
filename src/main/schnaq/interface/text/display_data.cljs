@@ -682,7 +682,6 @@
         ;; meetings overview
         :schnaqs/header "Overview of your schnaqs"
         :schnaqs/subheader "These are the schnaqs that you are part of"
-        :schnaqs.all/header "Public schnaqs"
         :schnaqs/author "Author"
         :schnaqs/schnaq "schnaq"
 
@@ -965,7 +964,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/start-discussion "Start discussion"
         :router/startpage "Startpage"
         :router/true-404-view "404 error page"
-        :router/public-discussions "Public schnaqs"
         :router/code-of-conduct "Code of Conduct"
         :router/summaries "Summaries"
         :router/alphazulu "ALPHAZULU"
@@ -1772,7 +1770,6 @@ Now we write down questions and discuss them and can still understand what we ha
 
         :schnaqs/header "Übersicht deiner schnaqs"
         :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
-        :schnaqs.all/header "Öffentliche schnaqs"
         :schnaqs/author "Autor"
         :schnaqs/schnaq "schnaq"
 
@@ -2059,7 +2056,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/start-discussion "Starte Besprechung"
         :router/startpage "Startseite"
         :router/true-404-view "404 Fehlerseite"
-        :router/public-discussions "Öffentliche schnaqs"
         :router/code-of-conduct "Verhaltensregeln"
         :router/summaries "Zusammenfassungen"
         :router/alphazulu "ALPHAZULU"

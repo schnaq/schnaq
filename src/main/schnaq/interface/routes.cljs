@@ -105,6 +105,7 @@
      {:name :routes/admin-center
       :view admin-center/center-overview-route
       :link-text (labels :router/admin-center)
+      ;; TODO delete this and public schnaqs from the admin center
       :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:schnaqs.public/load]]))}]}]
     ["/feedbacks"
      {:name :routes/feedbacks
