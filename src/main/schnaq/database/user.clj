@@ -163,7 +163,9 @@
   [{:keys [sub email preferred_username given_name family_name groups avatar] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
-        existing-user (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
+        existing-user (toolbelt/pull-key-up
+                        (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
+                        :db/ident)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -173,6 +175,7 @@
                   :user.registered/last-name family_name
                   :user.registered/groups groups
                   :user.registered/profile-picture avatar
+                  :user.notification/mail-interval :notification-mail-interval/daily
                   :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       (do

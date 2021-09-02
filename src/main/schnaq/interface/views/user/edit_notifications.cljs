@@ -32,7 +32,7 @@
                            :notification-mail-interval/never (labels never)
                            (labels :notification-mail-interval/daily))
         _ (println interval-display)]
-    [:div.dropdown
+    [:div.dropdown.mx-3
      [:button.btn.btn-outline-dark.dropdown-toggle
       {:id dropdown-id :type "button" :data-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
