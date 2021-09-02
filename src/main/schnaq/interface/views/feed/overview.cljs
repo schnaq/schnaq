@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.feed.overview
-  (:require [ghostwheel.core :refer [>defn-]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
