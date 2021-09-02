@@ -22,7 +22,6 @@
 (defn change-interval-drop-down []
   (let [dropdown-id "dropdownMailInterval"
         current-interval @(rf/subscribe [:user.notification/mail-interval])
-        _ (println "Interval: " current-interval)
         daily :notification-mail-interval/daily
         weekly :notification-mail-interval/weekly
         never :notification-mail-interval/never
@@ -30,8 +29,7 @@
                            :notification-mail-interval/daily (labels daily)
                            :notification-mail-interval/weekly (labels weekly)
                            :notification-mail-interval/never (labels never)
-                           (labels :notification-mail-interval/daily))
-        _ (println interval-display)]
+                           (labels :notification-mail-interval/daily))]
     [:div.dropdown.mx-3
      [:button.btn.btn-outline-dark.dropdown-toggle
       {:id dropdown-id :type "button" :data-toggle "dropdown"
