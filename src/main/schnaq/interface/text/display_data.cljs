@@ -2093,10 +2093,10 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.vote/bigger "mehr als"
         :filters.option.vote/equal "gleich"
         :filters.option.vote/less "weniger als"
-        :filters.buttons/clear "Alle filter löschen"
+        :filters.buttons/clear "Alle Filter löschen"
         :filters.heading/active "Aktive Filter"
 
-        ;; Labels for programattically created text in label overview
+        ;; Labels for programmatically created text in label overview
         :filters.labels.type/labels "Labels"
         :filters.labels.type/type "Beitragstyp"
         :filters.labels.type/votes "Votes"
