@@ -48,6 +48,8 @@
 (def mail-template "https://s3.disqtec.com/email/template/mail-template.html")
 (def mail-content-button-right-template "https://s3.disqtec.com/email/template/content-left-button-right-template.html")
 
+(def time-zone "Europe/Paris")
+
 (def profile-picture-height
   "Profile Picture height in pixels."
   200)

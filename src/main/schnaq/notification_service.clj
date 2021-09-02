@@ -1,13 +1,14 @@
 (ns schnaq.notification-service
   (:require [chime.core :as chime-core]
             [hiccup.util :as hiccup-util]
+            [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.user :as user-db]
             [schnaq.links :as schnaq-links]
             [schnaq.mail.emails :as emails]
             [schnaq.mail.template :as template]
             [taoensso.timbre :as log])
-  (:import (java.time LocalTime ZonedDateTime ZoneId Period)))
+  (:import (java.time LocalTime ZonedDateTime ZoneId Period DayOfWeek Instant)))
 
 (defonce mail-update-schedule (atom nil))
 
@@ -88,10 +89,23 @@
                         new-statements-content-plain
                         email))))
 
-(defn- send-all-users-schnaq-updates []
+(defn check-notification-interval?
+  "Checks if the user specified notification time interval has passed.
+  True if it's Monday for /weekly, false for /never and true as default."
+  [user time]
+  (let [interval (:user.registered/notification-mail-interval user)]
+    (case interval
+      :notification-mail-interval/never
+      false
+      :notification-mail-interval/weekly
+      (= DayOfWeek/MONDAY (-> time (.atZone (ZoneId/of config/time-zone)) (.getDayOfWeek)))
+      true)))
+
+(defn- send-all-users-schnaq-updates [time]
   (let [all-users (user-db/all-registered-users)]
     (doseq [user all-users]
-      (send-schnaq-diffs user))))
+      (when (check-notification-interval? user time)
+        (send-schnaq-diffs user)))))
 
 (defn- chime-schedule
   "Chime periodic sequence to call a function once a day."
@@ -108,7 +122,7 @@
   (when (nil? @mail-update-schedule)
     (log/info "Starting mail schedule")
     (reset! mail-update-schedule
-            (chime-schedule (LocalTime/of 7 0 0) (send-all-users-schnaq-updates)))))
+            (chime-schedule (LocalTime/of 7 0 0) #(send-all-users-schnaq-updates %)))))
 
 (defn stop-mail-update-schedule
   "Close the mail schedule."
@@ -121,3 +135,9 @@
 (defn -main
   [& _args]
   (start-mail-update-schedule))
+
+(comment
+  "Send a notifiaction mail to all users"
+  (send-all-users-schnaq-updates (Instant/now))
+  :end)
+

@@ -246,8 +246,10 @@
 (defn all-registered-users
   "Returns all registered users' keycloak ids"
   []
-  (query
-    '[:find [(pull ?registered-user user-pattern) ...]
-      :in $ user-pattern
-      :where [?registered-user :user.registered/keycloak-id _]]
-    private-user-pattern))
+  (toolbelt/pull-key-up
+    (query
+      '[:find [(pull ?registered-user user-pattern) ...]
+        :in $ user-pattern
+        :where [?registered-user :user.registered/keycloak-id _]]
+      private-user-pattern)
+    :db/ident))
