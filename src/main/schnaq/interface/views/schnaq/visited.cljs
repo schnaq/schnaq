@@ -81,6 +81,10 @@
   ;; This event should only be called, after the app is fully initialized (i.e. ls-schnaqs are already inside the db)
   (fn [{:keys [db]} [_ registered-visited-hashes]]
     (let [db-schnaqs (get-in db [:schnaqs :visited-hashes])
-          merged-schnaqs (set (concat registered-visited-hashes db-schnaqs))]
+          merged-schnaqs (set (concat registered-visited-hashes db-schnaqs))
+          route-name (get-in db [:current-route :data :name])]
       {:db (assoc-in db [:schnaqs :visited-hashes] merged-schnaqs)
-       :fx [[:localstorage/assoc [:schnaqs/visited merged-schnaqs]]]})))
+       :fx [[:localstorage/assoc [:schnaqs/visited merged-schnaqs]]
+            ;; reload public schnaqs when we are inside the visited-schnaqs view, otherwise this happens with the controller
+            (when (= :routes.schnaqs/personal route-name)
+              [:dispatch [:schnaqs.visited/load]])]})))
