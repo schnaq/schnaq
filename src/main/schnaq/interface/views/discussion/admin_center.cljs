@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.admin-center
-  (:require [clojure.string :as string]
+  (:require ["tippy.js" :refer [followCursor]]
+            [clojure.string :as string]
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage]]
@@ -44,7 +45,8 @@
          :readOnly true}]
        [:label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
         [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]
-      {:follow-cursor "true"}]]))
+      {:plugins followCursor
+       :followCursor true}]]))
 
 (defn- img-text
   "Create one icon in a grid"
@@ -92,8 +94,7 @@
 (rf/reg-event-fx
   :discussion.admin/send-admin-center-link
   (fn [{:keys [db]} [_ form]]
-    (let [current-route (:current-route db)
-          {:keys [share-hash edit-hash]} (:path-params current-route)]
+    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
       {:fx [(http/xhrio-request db :post "/emails/send-admin-center-link" [:discussion.admin/send-email-success form]
                                 {:recipient (oget form ["admin-center-recipient" :value])
                                  :share-hash share-hash
@@ -106,8 +107,7 @@
   (fn [{:keys [db]} [_ form]]
     (let [raw-statements (oget form ["statement-ids" :value])
           statement-ids (map #(js/parseInt %) (string/split raw-statements #"\s+"))
-          current-route (:current-route db)
-          {:keys [share-hash edit-hash]} (:path-params current-route)]
+          {:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
       {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
                                 [:discussion.admin/delete-statements-success form]
                                 {:statement-ids statement-ids
@@ -118,8 +118,7 @@
 (rf/reg-event-fx
   :discussion.admin/make-read-only
   (fn [{:keys [db]} _]
-    (let [current-route (:current-route db)
-          {:keys [share-hash edit-hash]} (:path-params current-route)]
+    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
       {:fx [(http/xhrio-request db :put "/discussion/manage/make-read-only" [:discussion.admin/make-read-only-success]
                                 {:share-hash share-hash
                                  :edit-hash edit-hash}
@@ -134,8 +133,7 @@
 (rf/reg-event-fx
   :discussion.admin/make-writeable
   (fn [{:keys [db]} _]
-    (let [current-route (:current-route db)
-          {:keys [share-hash edit-hash]} (:path-params current-route)]
+    (let [{:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
       {:fx [(http/xhrio-request db :put "/discussion/manage/make-writeable" [:discussion.admin/make-writeable-success]
                                 {:share-hash share-hash
                                  :edit-hash edit-hash}
@@ -160,7 +158,7 @@
 (rf/reg-event-fx
   :discussion.delete/statement
   (fn [{:keys [db]} [_ statement-id edit-hash]]
-    (let [share-hash (get-in db [:current-route :path-params :share-hash])]
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:fx [(http/xhrio-request db :delete "/discussion/statements/delete"
                                 [:discussion.admin/delete-statement-success statement-id]
                                 {:statement-ids [statement-id]
@@ -206,8 +204,7 @@
   (fn [{:keys [db]} [_ form]]
     (let [raw-emails (oget form ["participant-addresses" :value])
           recipients (string/split raw-emails #"\s+")
-          current-route (:current-route db)
-          {:keys [share-hash edit-hash]} (:path-params current-route)]
+          {:discussion/keys [share-hash edit-hash]} (get-in db [:schnaq :selected])]
       {:fx [(http/xhrio-request db :post "/emails/send-invites" [:discussion.admin/send-email-success form]
                                 {:recipients recipients
                                  :share-hash share-hash

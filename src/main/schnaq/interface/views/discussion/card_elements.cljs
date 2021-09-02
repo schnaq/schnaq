@@ -64,7 +64,7 @@
         [:h6 title]
         [:p.text-muted.mb-0 (labels :history.home/text)]
         [badges/static-info-badges schnaq]]
-       {:position :top}]]]))
+       {:placement :right}]]]))
 
 (defn history-view
   "History view displayed in the left column in the desktop view."
@@ -85,7 +85,7 @@
                 user (:statement/author statement)
                 statement-content (-> statement :statement/content)
                 tooltip-text (str (labels :tooltip/history-statement) nickname)
-                history-content [:<>
+                history-content [:div
                                  [:div.d-flex.flex-row
                                   [:h6 (labels :history.statement/user) (toolbelt/truncate-to-n-chars nickname 20)]
                                   [:div.ml-auto [common/avatar user 22]]]
@@ -102,7 +102,7 @@
                   [:div.history-card-content
                    (if (zero? index)
                      history-content
-                     [tooltip/text tooltip-text history-content {:position :top}])]]])]]))])]))
+                     [tooltip/text tooltip-text history-content {:placement :right}])]]])]]))])]))
 
 (rf/reg-event-fx
   :discussion.add.statement/starting
@@ -128,7 +128,7 @@
                                        :body (labels :discussion.notification/new-content-body)
                                        :context :success}]]
             [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
-            (when (= 1 (count starting-conclusions))
+            (when (and (= 1 (count starting-conclusions)) (not shared-config/embedded?))
               [:dispatch [:celebrate/schnaq-filled]])
             (when statement-with-creation-secret
               [:dispatch [:discussion.statements/add-creation-secret statement-with-creation-secret]])

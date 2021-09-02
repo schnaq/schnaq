@@ -3,6 +3,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [fa]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.modal :as modal]))
@@ -33,10 +34,10 @@
 
 (defn build-labels
   [statement]
-  [:<>
+  [:div.text-center
    (let [set-labels (set (:statement/labels statement))]
      (for [label shared-config/allowed-labels]
-       [:span.mr-3
+       [:span.mx-2
         {:key (str "label-" (:db/id statement) "-" label)
          :on-click #(if (set-labels label)
                       (rf/dispatch [:statement.labels/remove statement label])
@@ -47,20 +48,20 @@
   "Give the registered user the ability to add or remove labels to a statement."
   [statement]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
-    (if authenticated?
-      [tooltip/html
-       [build-labels statement]
+    ;; This outer div helps accessibility when popup is open – https://atomiks.github.io/tippyjs/v6/accessibility/#interactivity
+    [:div
+     (if authenticated?
+       [tooltip/html
+        [build-labels statement]
+        [:div.pr-2.clickable
+         [:i {:class (fa :tag)}]]
+        {:animation "scale"
+         :appendTo jsw/document-body}]
        [:div.pr-2.clickable
-        [:i {:class (fa :tag)}]]
-       {:animation "scale"
-        :offset 5
-        :size "big"
-        :trigger "click"}]
-      [:div.pr-2.clickable
-       {:tabIndex 30
-        :on-click #(rf/dispatch [:modal {:show? true
-                                         :child [anonymous-labels-modal]}])}
-       [:i {:class (fa :tag)}]])))
+        {:tabIndex 30
+         :on-click #(rf/dispatch [:modal {:show? true
+                                          :child [anonymous-labels-modal]}])}
+        [:i {:class (fa :tag)}]])]))
 
 (rf/reg-event-fx
   :statement.labels/remove

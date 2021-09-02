@@ -34,14 +34,14 @@
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring {:mvn/version "1.9.4"}
         ring/ring-mock {:mvn/version "0.4.0"}
-        thheller/shadow-cljs {:mvn/version "2.15.7"}}
+        thheller/shadow-cljs {:mvn/version "2.15.8"}}
 
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}
              "my.datomic.com" {:url "https://my.datomic.com/repo"}}
 
  :aliases {:test {:extra-paths ["src/test"]
-                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.861"}
+                  :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.887"}
                                lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                                day8.re-frame/test {:mvn/version "0.1.5"}}
                   :jvm-opts ["-Dghostwheel.enabled=true"]

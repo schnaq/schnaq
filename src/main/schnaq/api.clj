@@ -130,8 +130,9 @@
                          coercion/coerce-response-middleware ;; coercing response bodys
                          coercion/coerce-request-middleware ;; coercing request parameters
                          multipart/multipart-middleware
-                         auth/replace-bearer-with-token
+                         auth-middlewares/replace-bearer-with-token
                          auth/wrap-jwt-authentication
+                         auth-middlewares/update-jwt-middleware
                          middlewares/wrap-custom-schnaq-csrf-header]}
      ::middleware/registry {:user/authenticated? auth-middlewares/authenticated?-middleware
                             :user/admin? auth-middlewares/admin?-middleware

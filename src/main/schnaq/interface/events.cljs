@@ -7,7 +7,8 @@
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
-            [schnaq.interface.utils.localstorage :as ls]))
+            [schnaq.interface.utils.localstorage :as ls]
+            [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 ;; Note: this lives in the common namespace to prevent circles through the routes import
 (rf/reg-event-fx
@@ -46,15 +47,15 @@
           [:dispatch [:schnaq.discussion-secrets/load-from-localstorage]]
           [:dispatch [:load/last-added-schnaq]]]}))
 
-(rf/reg-event-db
-  :init-from-backend
-  (fn [db [_ all-discussions]]
-    (assoc-in db [:schnaqs :all] all-discussions)))
-
 (rf/reg-event-fx
   :form/should-clear
   (fn [_ [_ form-elements]]
     {:fx [[:form/clear form-elements]]}))
+
+(rf/reg-fx
+  :form/clear
+  (fn [form-elements]
+    (toolbelt/reset-form-fields! form-elements)))
 
 (rf/reg-sub
   :current-locale
@@ -117,12 +118,15 @@
 (rf/reg-event-fx
   :schnaq/select-current
   (fn [{:keys [db]} [_ {:discussion/keys [share-hash edit-hash] :as schnaq}]]
-    {:db (cond->
-           db
-           true (assoc-in [:schnaq :selected] schnaq)
-           edit-hash (update-in [:schnaqs :admin-access]
-                                assoc share-hash edit-hash))
-     :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]]}))
+    (let [admin-access-map (get-in db [:schnaqs :admin-access])
+          edit-hash-localstorage (or edit-hash (get admin-access-map share-hash))]
+      {:db (cond->
+             db
+             true (assoc-in [:schnaq :selected] schnaq)
+             edit-hash (update-in [:schnaqs :admin-access]
+                                  assoc share-hash edit-hash)
+             edit-hash-localstorage (assoc-in [:schnaq :selected :discussion/edit-hash] edit-hash-localstorage))
+       :fx [[:dispatch [:schnaq.visited/to-localstorage share-hash]]]})))
 
 (rf/reg-sub
   :schnaq/selected

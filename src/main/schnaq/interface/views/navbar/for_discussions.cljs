@@ -44,9 +44,9 @@
   "Rounded square button to navigate to the graph view"
   [share-hash]
   [:a {:href (reitfe/href :routes/graph-view {:share-hash share-hash})}
-   [:button.btn.btn-sm.btn-dark-highlight.shadow-sm.rounded-1.h-100
+   [:button.btn.btn-sm.btn-white.mx-auto.rounded-1.h-100
     [:img.header-standalone-icon
-     {:src (img-path :icon-graph)
+     {:src (img-path :icon-graph-dark)
       :alt "graph icon"}]
     [:p.small.m-0 (labels :graph.button/text)]]])
 
@@ -54,9 +54,9 @@
   "Button to navigate to the summary view."
   [share-hash]
   [:a {:href (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})}
-   [:button.btn.btn-sm.btn-dark-highlight.shadow-sm.mx-auto.rounded-1.h-100
-    [:img.img-fluid
-     {:src (img-path :icon-summary)
+   [:button.btn.btn-sm.btn-white.mx-auto.rounded-1.h-100
+    [:img.header-standalone-icon
+     {:src (img-path :icon-summary-dark)
       :width "25"
       :alt "summary icon"}]
     [:p.small.m-0 (labels :summary.link.button/text)]]])
@@ -146,5 +146,5 @@
        (when edit-hash
          [admin/admin-center share-hash edit-hash])]
       [:div.d-flex.align-items-center.mt-4.mt-md-0
-       [:div.h-100.mx-2 [graph-button share-hash]]
-       [:div.h-100.mr-2 [summary-button share-hash]]]]]))
+       [:div.h-100.mx-2.embedded-nav-button [graph-button share-hash]]
+       [:div.h-100.mr-2.embedded-nav-button [summary-button share-hash]]]]]))

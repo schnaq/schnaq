@@ -654,7 +654,7 @@
         :schnaq.admin/tooltip "Administrate schnaq"
         :share-link/copy "Copy share-link"
 
-        :sharing/tooltip "Share"
+        :sharing/tooltip "Share your schnaq"
         :sharing.modal/title "Share your schnaq"
         :sharing.modal/lead "Invite your whole team to fill this schnaq with knowledge."
         :sharing.modal/schnaqqi-help "Fill the schnaq with your ideas. Your colleagues will find it easier to get started."
@@ -985,6 +985,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/public-discussions "Public schnaqs"
         :router/code-of-conduct "Code of Conduct"
         :router/summaries "Summaries"
+        :router/alphazulu "ALPHAZULU"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -1761,7 +1762,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.admin/tooltip "Schnaq verwalten"
         :share-link/copy "Zugangslink kopieren"
 
-        :sharing/tooltip "Teilen"
+        :sharing/tooltip "schnaq teilen"
         :sharing.modal/title "Teile deinen schnaq"
         :sharing.modal/lead "Lade dein ganzes Team mit ein, um diesen schnaq mit Wissen zu befüllen"
         :sharing.modal/schnaqqi-help "Befülle den schnaq schonmal mit deinen Ideen. Deine Kolleg:innen finden so einen leichteren Einstieg."
@@ -2095,6 +2096,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/public-discussions "Öffentliche schnaqs"
         :router/code-of-conduct "Verhaltensregeln"
         :router/summaries "Zusammenfassungen"
+        :router/alphazulu "ALPHAZULU"
 
         :admin.center.start/title "Admin Center"
         :admin.center.start/heading "Admin Center"
@@ -2125,10 +2127,10 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.option.vote/bigger "mehr als"
         :filters.option.vote/equal "gleich"
         :filters.option.vote/less "weniger als"
-        :filters.buttons/clear "Alle filter löschen"
+        :filters.buttons/clear "Alle Filter löschen"
         :filters.heading/active "Aktive Filter"
 
-        ;; Labels for programattically created text in label overview
+        ;; Labels for programmatically created text in label overview
         :filters.labels.type/labels "Labels"
         :filters.labels.type/type "Beitragstyp"
         :filters.labels.type/votes "Votes"
@@ -2247,9 +2249,11 @@ Now we write down questions and discuss them and can still understand what we ha
      :icon-community "https://s3.disqtec.com/schnaq-common/community.svg"
      :icon-crane "https://s3.disqtec.com/schnaq-common/icons/crane.svg"
      :icon-graph "https://s3.disqtec.com/schnaq-common/icons/mind_map_circle.svg"
+     :icon-graph-dark "https://s3.disqtec.com/schnaq-common/icons/mind_map_circle_dark.svg"
      :icon-reports "https://s3.disqtec.com/schnaq-common/icons/reports.svg"
      :icon-robot "https://s3.disqtec.com/schnaq-common/icons/robot.svg"
      :icon-summary "https://s3.disqtec.com/schnaq-common/icons/layers.svg"
+     :icon-summary-dark "https://s3.disqtec.com/schnaq-common/icons/layers_dark.svg"
      :icon-users "https://s3.disqtec.com/schnaq-common/icons/dashboard/users.svg"
      :icon-posts "https://s3.disqtec.com/schnaq-common/icons/dashboard/posts.svg"
      :icon-search "https://s3.disqtec.com/schnaq-common/icons/dashboard/search.svg"
