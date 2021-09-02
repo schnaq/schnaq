@@ -98,3 +98,5 @@
   (-> element-id
       gdom/getElement
       (dataset/get data-key)))
+
+(def document-body js/document.body)

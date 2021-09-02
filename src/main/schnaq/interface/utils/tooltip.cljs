@@ -1,35 +1,38 @@
 (ns schnaq.interface.utils.tooltip
-  (:require ["react-tippy" :refer [Tooltip]]
+  (:require ["@tippyjs/react" :default Tippy]
             [reagent.core :as reagent]))
 
 (defn html
   "Wraps some content in a tooltip with the provided html inside."
-  [tooltip-content wrapped-element options]
-  [:> Tooltip
-   (merge
-     {:animation "scale"
-      :arrow true
-      :html (reagent/as-element tooltip-content)
-      :interactive true
-      :offset 5
-      :position "bottom"
-      :theme "light"
-      :trigger "click"}
-     options)
-   wrapped-element])
+  ([tooltip-content wrapped-element options]
+   [html tooltip-content wrapped-element options nil])
+  ([tooltip-content wrapped-element options deactivated-options]
+   [:> Tippy
+    (apply dissoc
+           (merge
+             {:animation "shift-away"
+              :arrow true
+              :content (reagent/as-element tooltip-content)
+              :interactive true
+              :offset [0 10]
+              :placement "bottom"
+              :theme "light"
+              :trigger "click"}
+             options)
+           deactivated-options)
+    wrapped-element]))
 
 (defn text
   "Wraps some content in a tooltip with the provided text."
   [title content options]
-  [:> Tooltip
+  [:> Tippy
    (merge
-     {:animation "shift"
+     {:animation "shift-away"
       :arrow true
-      :offset 5
-      :position "bottom"
+      :offset [0 10]
+      :placement "bottom"
       :theme "light"
-      :title title
-      :tag :span}
+      :content title}
      options)
    content])
 
@@ -40,4 +43,4 @@
    [:button.btn.btn-outline-muted.btn-lg
     {:on-click on-click-fn}
     content]
-   {:position tooltip-location}])
+   {:placement tooltip-location}])

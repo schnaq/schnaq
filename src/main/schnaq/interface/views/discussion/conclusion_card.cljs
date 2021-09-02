@@ -90,7 +90,7 @@
   [share-hash]
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)
-        card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion ")
+        card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         current-premises @(rf/subscribe [:discussion.premises/current])]
     (if (seq current-premises)
       (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])

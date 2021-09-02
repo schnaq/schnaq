@@ -61,7 +61,7 @@
   (if (< char-count (count text))
     [tooltip/text
      text
-     (apply str (concat (take char-count text) "…"))]
+     [:span (apply str (concat (take char-count text) "…"))]]
     text))
 
 (defn obfuscate-mail
