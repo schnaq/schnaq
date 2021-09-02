@@ -17,10 +17,9 @@
 
 (defn- logo-input [input-id]
   (let [hub @(rf/subscribe [:hub/current])
-        name (:hub/keycloak-name hub)
-        hub-logo (:hub/logo hub)
+        {:hub/keys [keycloak-name name logo]} hub
         temporary-logo (get-in hub [:logo-temporary :content])
-        preview-image (or temporary-logo hub-logo)]
+        preview-image (or temporary-logo logo)]
     [:div.d-flex.mr-4
      [:div.d-flex.avatar-image
       [hub-common/logo preview-image name 80]]
@@ -38,7 +37,7 @@
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"
                   :on-change (fn [event] (image/store-temporary-profile-picture
-                                           event [:hubs name :logo-temporary]))
+                                           event [:hubs keycloak-name :logo-temporary]))
                   :hidden true}]])]]))
 
 (rf/reg-event-db
