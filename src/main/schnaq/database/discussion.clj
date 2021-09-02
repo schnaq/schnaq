@@ -550,3 +550,28 @@
          :db-after
          (fast-pull statement-id statement-pattern))
     :db/ident))
+
+(defn build-discussion-diff-list
+  "Build a map of discussion hashes with new statements as values"
+  [user-keycloak-id discussion-hashes]
+  (reduce conj
+          (map (fn [discussion-hash]
+                 {discussion-hash (new-statement-ids-for-user
+                                    user-keycloak-id discussion-hash)})
+               discussion-hashes)))
+
+(defn- new-statements-by-discussion-hash
+  [user-keycloak-id discussion-hashes]
+  (into {}
+        (filter
+          (fn [[_ statements]] (seq statements))
+          (build-discussion-diff-list user-keycloak-id discussion-hashes))))
+
+(defn mark-all-statements-as-read!
+  [keycloak-id]
+  (let [user (fast-pull [:user.registered/keycloak-id keycloak-id] user-db/private-user-pattern)
+        discussion-hashes (map :discussion/share-hash (:user.registered/visited-schnaqs user))
+        unread (new-statements-by-discussion-hash keycloak-id discussion-hashes)]
+    (user-db/update-visited-statements keycloak-id unread)
+    unread))
+

@@ -57,8 +57,7 @@
 (defn- mark-all-statements-as-read
   "Mark all statements of a user's visited schnaqs as read"
   [{:keys [identity]}]
-  (println (:id identity) "mark all as read")
-  (ok {:new-statements nil}))
+  (ok {:new-statements (discussion-db/mark-all-statements-as-read! (:id identity))}))
 
 (defn- add-anonymous-user
   "Generate a user based on the nickname. This is an *anonymous* user, and we
@@ -108,5 +107,6 @@
                                                 400 at/response-error-body}}]
     ["/mark-all-as-read" {:put mark-all-statements-as-read
                           :description (at/get-doc #'mark-all-statements-as-read)
+                          :parameters {}
                           :responses {200 {:body {:new-statements coll?}}
                                       400 at/response-error-body}}]]])

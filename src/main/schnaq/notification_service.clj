@@ -12,15 +12,6 @@
 
 (defonce mail-update-schedule (atom nil))
 
-(defn- build-discussion-diff-list
-  "Build a map of discussion hashes with new statements as values"
-  [user-keycloak-id discussion-hashes]
-  (reduce conj
-          (map (fn [discussion-hash]
-                 {discussion-hash (discussion-db/new-statement-ids-for-user
-                                    user-keycloak-id discussion-hash)})
-               discussion-hashes)))
-
 (defn- build-new-statements-content
   "Additional content to display the number of new statements and a navigation button
   to the corresponding schnaq. This functions maps over all schnaqs."
@@ -71,8 +62,9 @@
   (let [user-keycloak-id (:user.registered/keycloak-id user)
         email (:user.registered/email user)
         discussion-hashes (map :discussion/share-hash (:user.registered/visited-schnaqs user))
-        new-statements-per-schnaq (build-discussion-diff-list user-keycloak-id
-                                                              discussion-hashes)
+        new-statements-per-schnaq (discussion-db/build-discussion-diff-list
+                                    user-keycloak-id
+                                    discussion-hashes)
         total-new-statements (reduce + (map (fn [[_ news]] (count news)) new-statements-per-schnaq))
         new-statements-content-html (build-new-statements-html new-statements-per-schnaq)
         new-statements-content-plain (build-new-statements-plain new-statements-per-schnaq)

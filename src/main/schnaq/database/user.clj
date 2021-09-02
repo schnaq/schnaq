@@ -129,7 +129,7 @@
                      :seen-statements/visited-statements visited-statements}]
     (transact [(clean-db-vals new-visited)])))
 
-(defn- update-visited-statements
+(defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."
   [keycloak-id visited-statements]
   (doseq [[discussion-hash statement-ids] visited-statements]
