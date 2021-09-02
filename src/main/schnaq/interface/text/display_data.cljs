@@ -972,10 +972,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :admin.center.start/heading "Admin Center"
         :admin.center.start/subheading "Administrate schnaqs as a superuser"
         :admin.center.delete/confirmation "Do you really want to delete this schnaq?"
-        :admin.center.delete.public/label "Public schnaqs"
         :admin.center.delete.public/button "Delete schnaq"
         :admin.center.delete/heading "Deletion"
-        :admin.center.delete.public/heading "Public schnaqs"
         :admin.center.delete.private/label "Share-hash"
         :admin.center.delete.private/heading "Private schnaqs"
 
@@ -2064,10 +2062,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :admin.center.start/heading "Admin Center"
         :admin.center.start/subheading "Administration von schnaqs als Superuser"
         :admin.center.delete/confirmation "Soll dieses schnaq wirklich gelöscht werden?"
-        :admin.center.delete.public/label "Öffentliche schnaqs"
         :admin.center.delete.public/button "Schnaq löschen"
         :admin.center.delete/heading "Löschen"
-        :admin.center.delete.public/heading "Öffentliche schnaqs"
         :admin.center.delete.private/label "Share-hash"
         :admin.center.delete.private/heading "Private schnaqs"
 

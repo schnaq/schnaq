@@ -60,22 +60,6 @@
                 {:share-hashes visited-hashes})]}))))
 
 (rf/reg-event-fx
-  :schnaqs.public/load
-  (fn [{:keys [db]} _]
-    {:fx [(http/xhrio-request db :get "/schnaqs/public"
-                              [:schnaqs.public/store-from-backend])]}))
-
-(rf/reg-event-db
-  :schnaqs.public/store-from-backend
-  (fn [db [_ {:keys [schnaqs]}]]
-    (assoc-in db [:schnaqs :public] schnaqs)))
-
-(rf/reg-sub
-  :schnaqs/public
-  (fn [db _]
-    (get-in db [:schnaqs :public])))
-
-(rf/reg-event-fx
   :schnaqs.visited/merge-registered-users-visits
   ;; Takes the schnaqs the registered user has and merges them with the local ones.
   ;; This event should only be called, after the app is fully initialized (i.e. ls-schnaqs are already inside the db)
