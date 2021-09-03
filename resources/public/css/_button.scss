@@ -5,7 +5,6 @@
 @mixin button-template($padding-top-bottom, $padding-left-right) {
   @extend .shadow-sm;
   border: 0;
-  border-radius: 1.5rem;
   color: $white;
   font-weight: bold;
   padding: $padding-top-bottom $padding-left-right;
@@ -16,6 +15,10 @@
 .btn-secondary {
   @include button-template(0.5rem, 1rem);
   color: $white;
+
+  &:hover {
+    background-color: $secondary-selected;
+  }
 }
 
 .btn-primary {

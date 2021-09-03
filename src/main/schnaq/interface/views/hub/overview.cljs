@@ -71,6 +71,7 @@
                               [:path-params :keycloak-name])]
     [pages/three-column-layout
      {:page/heading (gstring/format (labels :hub/heading) keycloak-name)
+      :page/title (str keycloak-name)
       :condition/needs-authentication? true}
      [feed/feed-navigation]
      [feed/schnaq-list-view [:hubs/schnaqs keycloak-name] true]

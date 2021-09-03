@@ -228,7 +228,7 @@
   [from-direction component]
   (let [direction (case from-direction
                     :top {:y "-200%"}
-                    :bottom {:y "-200%"}
+                    :bottom {:y "200%"}
                     :left {:x "-200%"}
                     {:x "200%"})]
     [:> (.-div motion)

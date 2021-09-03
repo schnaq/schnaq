@@ -3,6 +3,7 @@
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.database.main :refer [transact fast-pull clean-db-vals query]]
             [schnaq.database.specs :as specs]
+            [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
 
 (def registered-user-public-pattern
@@ -16,6 +17,7 @@
   [:user.registered/email
    :user.registered/last-name
    :user.registered/first-name
+   {:user.registered/notification-mail-interval [:db/ident]}
    {:user.registered/visited-schnaqs [:discussion/share-hash]}])
 
 (def seen-statements-pattern
@@ -127,7 +129,7 @@
                      :seen-statements/visited-statements visited-statements}]
     (transact [(clean-db-vals new-visited)])))
 
-(defn- update-visited-statements
+(defn update-visited-statements
   "Updates the user's visited statements by adding the new ones."
   [keycloak-id visited-statements]
   (doseq [[discussion-hash statement-ids] visited-statements]
@@ -161,7 +163,9 @@
   [{:keys [sub email preferred_username given_name family_name groups avatar] :as identity} visited-schnaqs visited-statements]
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
-        existing-user (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
+        existing-user (toolbelt/pull-key-up
+                        (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
+                        :db/ident)
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -171,6 +175,7 @@
                   :user.registered/last-name family_name
                   :user.registered/groups groups
                   :user.registered/profile-picture avatar
+                  :user.registered/notification-mail-interval :notification-mail-interval/daily
                   :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       (do
@@ -189,12 +194,17 @@
 
 (>defn- update-user-field
   "Updates a user's field in the database and return updated user."
-  [keycloak-id field value]
-  [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
-  (let [new-db (:db-after
-                 @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
-                              field value]]))]
-    (fast-pull [:user.registered/keycloak-id keycloak-id] registered-user-public-pattern new-db)))
+  ([keycloak-id field value]
+   [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
+   (update-user-field keycloak-id field value registered-user-public-pattern))
+  ([keycloak-id field value pattern]
+   [:user.registered/keycloak-id keyword? any? any? :ret ::specs/registered-user]
+   (let [new-db (:db-after
+                  @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
+                               field value]]))]
+     (toolbelt/pull-key-up
+       (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db)
+       :db/ident))))
 
 (>defn update-display-name
   "Update the name of an existing user."
@@ -207,6 +217,12 @@
   [keycloak-id profile-picture-url]
   [:user.registered/keycloak-id :user.registered/profile-picture :ret ::specs/registered-user]
   (update-user-field keycloak-id :user.registered/profile-picture profile-picture-url))
+
+(>defn update-notification-mail-interval
+  "Update the name of an existing user."
+  [keycloak-id interval]
+  [:user.registered/keycloak-id :user.registered/notification-mail-interval :ret ::specs/registered-user]
+  (update-user-field keycloak-id :user.registered/notification-mail-interval interval private-user-pattern))
 
 (>defn members-of-group
   "Returns all members of a certain group."
@@ -230,8 +246,10 @@
 (defn all-registered-users
   "Returns all registered users' keycloak ids"
   []
-  (query
-    '[:find [(pull ?registered-user user-pattern) ...]
-      :in $ user-pattern
-      :where [?registered-user :user.registered/keycloak-id _]]
-    private-user-pattern))
+  (toolbelt/pull-key-up
+    (query
+      '[:find [(pull ?registered-user user-pattern) ...]
+        :in $ user-pattern
+        :where [?registered-user :user.registered/keycloak-id _]]
+      private-user-pattern)
+    :db/ident))

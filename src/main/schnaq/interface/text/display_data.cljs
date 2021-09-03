@@ -798,11 +798,13 @@ Now we write down questions and discuss them and can still understand what we ha
         :user.action/link-copied "Link copied!"
         :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
         :user/edit-account "Manage Account Information"
+        :user/edit-notifications "Manage Notifications"
         :user/edit-hubs "Manage Hubs"
         :user.settings "Settings"
         :user.keycloak-settings "Advanced Settings"
         :user.settings/header "Manage User Data"
         :user.settings/info "User infos"
+        :user.settings/notifications "Notifications"
         :user.settings/hubs "Hubs"
         :user.settings/change-name "Change name and profile picture"
         :user.settings.button/change-account-information "Save changes"
@@ -813,6 +815,21 @@ Now we write down questions and discuss them and can still understand what we ha
         :user.settings.profile-picture.errors/scaling "Your profile picture could not be converted. Maybe the image is corrupt. Please try a different image or contact us."
         :user.settings.profile-picture.errors/invalid-file-type "The image you provided has the wrong file type. Allowed file types: %s"
         :user.settings.profile-picture.errors/default "Something went wrong with the picture you're uploaded. Please try again."
+
+        ;; notification settings
+        :user.notifications/header "Manage Notifications"
+        :user.notifications/mails "E-Mail Notifications"
+        :user.notifications.interval/never "Never"
+        :user.notifications.interval/daily "Daily"
+        :user.notifications.interval/weekly "Weekly"
+        :user.notifications/info "You will only receive notifications when there are new posts in your visited schnaqs."
+        :user.notifications.set-all-to-read/button "Mark everything as read"
+        :user.notifications.set-all-to-read/info "You still receive notifications from old discussions? No problem, just mark everything as read and only receive notifications from new discussions."
+
+        ; mail interval
+        :notification-mail-interval/daily "Daily"
+        :notification-mail-interval/weekly "Weekly"
+        :notification-mail-interval/never "Never"
 
         ;; Errors
         :errors/navigate-to-startpage "Back to the home page"
@@ -1887,11 +1904,13 @@ Now we write down questions and discuss them and can still understand what we ha
         :user.action/link-copied "Link kopiert!"
         :user.action/link-copied-body "Teile den Link mit anderen, um ihnen Zugriff zu geben."
         :user/edit-account "Benutzerkonto verwalten"
+        :user/edit-notifications "Benachrichtigungen verwalten"
         :user/edit-hubs "Hubs verwalten"
         :user.settings "Einstellungen"
         :user.keycloak-settings "Erweiterte Einstellungen"
         :user.settings/header "Nutzer:innendaten verwalten"
         :user.settings/info "Persönliche Informationen"
+        :user.settings/notifications "Benachrichtungen"
         :user.settings/hubs "Hubs"
         :user.settings/change-name "Namen ändern"
         :user.settings.button/change-account-information "Änderungen speichern"
@@ -1902,6 +1921,21 @@ Now we write down questions and discuss them and can still understand what we ha
         :user.settings.profile-picture.errors/scaling "Dein Profilbild konnte nicht konvertiert werden. Vielleicht ist das Bild kaputt. Bitte probiere ein anderes Bild oder kontaktiere uns."
         :user.settings.profile-picture.errors/invalid-file-type "Dein Profilbild hat den falschen Dateitypen. Erlaubt sind: %s"
         :user.settings.profile-picture.errors/default "Etwas ist beim Hochladen des Bildes schief gelaufen. Bitte versuche es erneut."
+
+        ;; notification settings
+        :user.notifications/header "Benachrichtigungen verwalten"
+        :user.notifications/mails "E-Mail Benachrichtigungen"
+        :user.notifications.interval/never "Niemals"
+        :user.notifications.interval/daily "Täglich"
+        :user.notifications.interval/weekly "Wöchentlich"
+        :user.notifications/info "Du erhälst nur Benachrichtigungen, wenn es neue Beiträge in deinen besuchten schnaqs gibt."
+        :user.notifications.set-all-to-read/button "Alles als gelesen markieren"
+        :user.notifications.set-all-to-read/info "Du erhälst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
+
+        ; mail interval
+        :notification-mail-interval/daily "Täglich"
+        :notification-mail-interval/weekly "Wöchentlich"
+        :notification-mail-interval/never "Niemals"
 
         ;; Errors
         :errors/navigate-to-startpage "Zurück zur Startseite"
@@ -2311,6 +2345,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :arrow-left "fa-arrow-left"
      :arrow-right "fas fa-arrow-right"
      :arrow-up "fa-arrow-up"
+     :bell "fa-bell"
      :book "fa-book"
      :calendar "fa-calendar"
      :camera "fa-camera"

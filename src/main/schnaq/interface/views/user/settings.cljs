@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed-overview]
             [schnaq.interface.views.pages :as pages]))
@@ -17,19 +18,35 @@
      [common/avatar-with-nickname-right #:user.registered{:profile-picture (get-in user [:profile-picture :display])
                                                           :display-name (get-in user [:names :display])} 40]]))
 
-(defn- edit-user-navigation-button []
-  [:article
-   [:a.btn.feed-button-focused
-    {:href (rfe/href :routes.user.manage/account)}
-    [:div.d-flex.flex-row.text-left
-     [:i.mr-4.my-auto {:class (str "fas " (fa :user/edit))}]
-     [:span (labels :user.settings/info)]]]])
+(defn- settings-button
+  "Create a button for the feed list."
+  [icon label route]
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        button-class (if (= current-route route) "feed-button-focused" "feed-button")]
+    [:article
+     [:a.btn.btn-link.text-left {:class button-class
+                                 :role "button"
+                                 :href (rfe/href route)}
+      [:div.row.text-left
+       [:div.col-1
+        [:i.mr-4.my-auto {:class (str "fas " (fa icon))}]]
+       [:div.col
+        [:span (labels label)]]]]]))
+
+(defn- back-button []
+  [tooltip/text
+   (labels :history.all-schnaqs/tooltip)
+   [:a.button.btn.btn-dark-highlight.p-3
+    {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}
+    [:div.d-flex
+     [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]])
 
 (defn- edit-user-panel []
   [:section
-   [:h6.text-muted.mb-4 (labels :user.settings)]
+   [back-button]
    [:hr.my-4]
-   [edit-user-navigation-button]])
+   [settings-button :user/edit :user.settings/info :routes.user.manage/account]
+   [settings-button :bell :user.settings/notifications :routes.user.manage/notifications]])
 
 (defn user-view [page-heading-label content]
   [pages/three-column-layout
@@ -41,3 +58,7 @@
     [current-user]
     [:hr.my-4]
     [feed-overview/sidebar-info-links]]])
+
+(rf/reg-event-db
+  :user.settings.temporary/reset
+  (fn [db _] (assoc-in db [:user :settings :temporary] nil)))

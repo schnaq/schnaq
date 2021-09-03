@@ -59,10 +59,10 @@
                            :css "font-150"}]]
       [:div.row.pt-5
        [:div.col.text-left.my-3
-        [:a.btn.btn-lg.btn-outline-secondary.rounded-2 {:href config/keycloak-profile-page}
+        [:a.btn.btn-lg.btn-outline-secondary {:href config/keycloak-profile-page}
          (labels :user.keycloak-settings)]]
        [:div.col.text-right.my-3
-        [:button.btn.btn-lg.btn-outline-primary.rounded-2 {:type :submit}
+        [:button.btn.btn-lg.btn-outline-primary {:type :submit}
          (labels :user.settings.button/change-account-information)]]]]]))
 
 (defn- content []

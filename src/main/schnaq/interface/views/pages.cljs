@@ -112,7 +112,7 @@
    [validate-conditions-middleware
     options
     [:<>
-     [navbar-pages/navbar]
+     [navbar-pages/navbar (or title heading)]
      body]]])
 
 (>defn three-column-layout

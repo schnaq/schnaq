@@ -17,7 +17,7 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn navbar-title []
+(defn navbar-title [title]
   [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-0.mb-md-4
    ;; schnaq logo
    [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
@@ -27,7 +27,7 @@
    [:div.mx-md-5
     [:div.d-flex.flex-row.d-md-none.align-items-center
      [um/user-handling-menu "btn-link"]]
-    [:h1.h2.font-weight-bold.my-auto.d-none.d-md-block (labels :schnaqs/header)]]])
+    [:h1.h3.font-weight-bold.my-auto.d-none.d-md-block.text-dark-highlight title]]])
 
 (defn navbar-user []
   (let [current-language @(rf/subscribe [:current-language])]
@@ -56,9 +56,9 @@
 
 (defn navbar
   "Overview header for a discussion."
-  []
+  [title]
   [:div.d-flex.flex-row.flex-wrap.p-md-3
-   [navbar-title]
+   [navbar-title title]
    [navbar-user]])
 
 (defn navbar-transparent
