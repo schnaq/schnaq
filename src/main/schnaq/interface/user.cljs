@@ -19,8 +19,10 @@
   :username/open-dialog
   (fn [{:keys [db]} _]
     (let [username (get-in db [:user :names :display])]
-      (when (or (= default-anonymous-display-name username)
-                (nil? username))
+      (when (and
+              (not (get-in db [:user :authenticated?]))
+              (or (= default-anonymous-display-name username)
+                  (nil? username)))
         {:fx [[:dispatch [:user/set-display-name default-anonymous-display-name]]
               [:dispatch [:modal {:show? true
                                   :child [modal/enter-name-modal]}]]]}))))
