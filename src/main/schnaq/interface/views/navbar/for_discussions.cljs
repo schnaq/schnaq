@@ -86,7 +86,9 @@
                         (inst? end-time) (gstring/format (labels :discussion.progress/days-left) days-left))
         [first-word & rest] (str/split progress-text #" ")]
     [tooltip/text
-     (gstring/format (labels :discussion.progress/ends) (time/formatted-with-timezone end-time))
+     (if end-time
+       (gstring/format (labels :discussion.progress/ends) (time/formatted-with-timezone end-time))
+       (labels :discussion.progress/ends-not))
      [:section
       [:p.small.m-0 [:span.font-color-primary first-word " "] (str/join " " rest)]
       [:div.progress.progress-schnaq.mr-3
