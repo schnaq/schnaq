@@ -318,9 +318,6 @@
         :schnaq.value.results/text "View summaries and analysis of your discussion (beta feature)."
 
         ;; Discussion Creation
-        :discussion.create.public-checkbox/label "Make this schnaq public"
-        :discussion.create.public-checkbox/public "public"
-        :discussion.create.public-checkbox/private "private"
         :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
         :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
 
@@ -1415,9 +1412,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.value.results/text "Schau dir Zusammenfassungen und Analysen zu deiner Diskussion an (Beta Feature)."
 
         ;; Discussion Creation
-        :discussion.create.public-checkbox/label "Diesen schnaq öffentlich machen"
-        :discussion.create.public-checkbox/public "öffentlich"
-        :discussion.create.public-checkbox/private "geschlossen"
         :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
         :discussion.create.hub-exclusive-checkbox/label "Dem Hub hinzufügen"
 

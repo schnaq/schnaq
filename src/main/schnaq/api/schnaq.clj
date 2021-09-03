@@ -106,12 +106,11 @@
 
 ;; -----------------------------------------------------------------------------
 (s/def ::discussion-title :discussion/title)
-(s/def ::public-discussion? boolean?)
 (s/def ::ends-in-days pos-int?)
 (s/def ::hub-exclusive? boolean?)
 (s/def ::hub :hub/keycloak-name)
 (s/def ::schnaq-add-body
-  (s/keys :req-un [::discussion-title ::public-discussion?]
+  (s/keys :req-un [::discussion-title]
           :opt-un [::ends-in-days :user/nickname ::hub-exclusive? ::hub]))
 
 (def schnaq-routes
@@ -124,6 +123,7 @@
                   :parameters {:query {:share-hash :discussion/share-hash}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
+     ;; TODO remove public option here
      ["/add" {:post add-schnaq
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add
@@ -147,6 +147,7 @@
                                                              :share-hash :discussion/share-hash)}}
                     :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
                                 404 at/response-error-body}}]
+     ;; TODO do not return those
      ["/public" {:get public-schnaqs
                  :name :api.schnaqs/public
                  :description (at/get-doc #'public-schnaqs)
