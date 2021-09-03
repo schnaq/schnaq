@@ -278,7 +278,7 @@
 (>defn new-discussion
   "Adds a new discussion to the database."
   [discussion-data]
-  [map? (? boolean?) :ret :db/id]
+  [map? :ret :db/id]
   (main-db/clean-and-add-to-db! (assoc discussion-data
                                   :discussion/states [:discussion.state/open]
                                   :discussion/created-at (Date.))
