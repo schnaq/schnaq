@@ -1,17 +1,32 @@
 (ns schnaq.interface.views.user.edit-notifications
   (:require [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.text.display-data :refer [labels fa]]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.settings :as settings]))
 
-(defn set-all-to-read []
+(defn- check-all-read []
+  (when @(rf/subscribe [:user.notification/mark-all-as-read-finished?])
+    [:div.flex.mx-3.my-auto
+     [common/delayed-fade-in
+      [common/move-in :bottom
+       [:i.text-secondary {:class (str "m-auto fas " (fa :check/normal))}]]]]))
+
+(defn- button-or-spinner []
+  [:<>
+   (if @(rf/subscribe [:user.notification/mark-all-as-read-in-progress?])
+     [:div.spinner-border.text-secondary {:role "status"}]
+     [:button.btn.btn-outline-secondary
+      {:on-click (fn [_] (rf/dispatch [:user.notification/mark-all-as-read!]))}
+      (labels :user.notifications.set-all-to-read/button)])])
+
+(defn- set-all-to-read []
   [:div.py-5
-   [:div.text-center.mt-5.mb-3
-    [:button.btn.btn-secondary
-     {:on-click (fn [_]
-                  (rf/dispatch [:user.notification/mark-all-as-read]))}
-     (labels :user.notifications.set-all-to-read/button)]]
+   [:div.mt-5.mb-3
+    [:div.d-flex.flex-row.justify-content-center
+     [button-or-spinner]
+     [check-all-read]]]
    [:small.text-muted (labels :user.notifications.set-all-to-read/info)]])
 
 (defn- interval-dropdown-item [interval]
@@ -19,7 +34,7 @@
    {:on-click (fn [_] (rf/dispatch [:user.notification/mail-interval! interval]))}
    (labels interval)])
 
-(defn change-interval-drop-down []
+(defn- change-interval-drop-down []
   (let [dropdown-id "dropdownMailInterval"
         current-interval @(rf/subscribe [:user.notification/mail-interval])
         daily :notification-mail-interval/daily
@@ -41,9 +56,9 @@
       [:div.dropdown-divider]
       [interval-dropdown-item never]]]))
 
-(defn change-update-mail-interval []
+(defn- change-update-mail-interval []
   [:<>
-   [:div.row.mt-5.mb-3
+   [:div.row.mt-5.mb-3.pt-5
     [:div.col
      [:h5.text-muted (labels :user.notifications/mails)]]
     [:div.col.text-right
@@ -61,6 +76,8 @@
   [settings/user-view
    :user/edit-account
    [content]])
+
+;; subs
 
 (rf/reg-sub
   :user.notification/mail-interval
@@ -82,9 +99,28 @@
       {:db (assoc-in db [:user :notification-mail-interval] interval)})))
 
 (rf/reg-event-fx
-  :user.notification/mark-all-as-read
+  :user.notification/mark-all-as-read!
   (fn [{:keys [db]} [_]]
-    {:fx [(http/xhrio-request db :put "/user/mark-all-as-read"
-                              [:no-op]
+    {:db (assoc-in db [:user :settings :temporary :mark-all-as-read-in-progress?] true)
+     :fx [(http/xhrio-request db :put "/user/mark-all-as-read"
+                              [:user.notification/mark-all-as-read-success]
                               {}
                               [:ajax.error/as-notification])]}))
+
+(rf/reg-sub
+  :user.notification/mark-all-as-read-in-progress?
+  (fn [db _]
+    (get-in db [:user :settings :temporary :mark-all-as-read-in-progress?] false)))
+
+(rf/reg-sub
+  :user.notification/mark-all-as-read-finished?
+  (fn [db _]
+    (get-in db [:user :settings :temporary :mark-all-as-finished?] false)))
+
+
+(rf/reg-event-db
+  :user.notification/mark-all-as-read-success
+  (fn [db _]
+    (-> db
+        (assoc-in [:user :settings :temporary :mark-all-as-finished?] true)
+        (assoc-in [:user :settings :temporary :mark-all-as-read-in-progress?] false))))

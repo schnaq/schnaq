@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed-overview]
             [schnaq.interface.views.pages :as pages]))
@@ -32,9 +33,17 @@
        [:div.col
         [:span (labels label)]]]]]))
 
+(defn- back-button []
+  [tooltip/text
+   (labels :history.all-schnaqs/tooltip)
+   [:a.button.btn.btn-dark-highlight.p-3
+    {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}
+    [:div.d-flex
+     [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]])
+
 (defn- edit-user-panel []
   [:section
-   [:h6.text-muted.mb-4 (labels :user.notification)]
+   [back-button]
    [:hr.my-4]
    [settings-button :user/edit :user.settings/info :routes.user.manage/account]
    [settings-button :bell :user.settings/notifications :routes.user.manage/notifications]])
@@ -49,3 +58,7 @@
     [current-user]
     [:hr.my-4]
     [feed-overview/sidebar-info-links]]])
+
+(rf/reg-event-db
+  :user.settings.temporary/reset
+  (fn [db _] (assoc-in db [:user :settings :temporary] nil)))

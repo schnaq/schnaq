@@ -105,7 +105,7 @@
      {:name :routes.user.manage/notifications
       :view edit-notifications/view
       :link-text (labels :user/edit-notifications)
-      :controllers [{:stop (fn [] (rf/dispatch [:user.picture/reset]))}]}]]
+      :controllers [{:stop (fn [] (rf/dispatch [:user.settings.temporary/reset]))}]}]]
    ["admin"
     ["/center"
      {:name :routes/admin-center

@@ -89,7 +89,8 @@
   (let [keycloak-name (get-in @(rf/subscribe [:navigation/current-route])
                               [:path-params :keycloak-name])]
     [pages/three-column-layout
-     {:page/heading (gstring/format (labels :hub/heading) keycloak-name)}
+     {:page/heading (gstring/format (labels :hub/heading) keycloak-name)
+      :page/title (str keycloak-name)}
      [feed/feed-navigation]
      [settings-body]
      [:<>
