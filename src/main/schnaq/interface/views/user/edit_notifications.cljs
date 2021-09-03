@@ -6,14 +6,18 @@
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.settings :as settings]))
 
-(defn- check-all-read []
+(defn- check-all-read
+  "Displays a check icon when the server responded to mark-all-as-read request"
+  []
   (when @(rf/subscribe [:user.notification/mark-all-as-read-finished?])
     [:div.flex.mx-3.my-auto
      [common/delayed-fade-in
       [common/move-in :bottom
        [:i.text-secondary {:class (str "m-auto fas " (fa :check/normal))}]]]]))
 
-(defn- button-or-spinner []
+(defn- button-or-spinner
+  "Show button per default or spinner while waiting or a server response"
+  []
   [:<>
    (if @(rf/subscribe [:user.notification/mark-all-as-read-in-progress?])
      [:div.spinner-border.text-secondary {:role "status"}]
@@ -21,7 +25,9 @@
       {:on-click (fn [_] (rf/dispatch [:user.notification/mark-all-as-read!]))}
       (labels :user.notifications.set-all-to-read/button)])])
 
-(defn- set-all-to-read []
+(defn- set-all-to-read
+  "Display button and text for mark-all-as-read related content"
+  []
   [:div.py-5
    [:div.mt-5.mb-3
     [:div.d-flex.flex-row.justify-content-center
@@ -29,12 +35,16 @@
      [check-all-read]]]
    [:small.text-muted (labels :user.notifications.set-all-to-read/info)]])
 
-(defn- interval-dropdown-item [interval]
+(defn- interval-dropdown-item
+  "Dropdown item for interval options"
+  [interval]
   [:div.dropdown-item
    {:on-click (fn [_] (rf/dispatch [:user.notification/mail-interval! interval]))}
    (labels interval)])
 
-(defn- change-interval-drop-down []
+(defn- change-interval-drop-down
+  "Dropdown to configure mail interval"
+  []
   (let [dropdown-id "dropdownMailInterval"
         current-interval @(rf/subscribe [:user.notification/mail-interval])
         daily :notification-mail-interval/daily
@@ -56,7 +66,9 @@
       [:div.dropdown-divider]
       [interval-dropdown-item never]]]))
 
-(defn- change-update-mail-interval []
+(defn- change-update-mail-interval
+  "Display change-mail-interval related content"
+  []
   [:<>
    [:div.row.mt-5.mb-3.pt-5
     [:div.col
@@ -65,7 +77,9 @@
      [change-interval-drop-down]]]
    [:small.text-muted (labels :user.notifications/info)]])
 
-(defn- content []
+(defn- content
+  "Display mail interval and mark as read content"
+  []
   [pages/settings-panel
    (labels :user.notifications/header)
    [:<>
