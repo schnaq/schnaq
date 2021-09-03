@@ -62,7 +62,7 @@
   (let [user-keycloak-id (:user.registered/keycloak-id user)
         email (:user.registered/email user)
         discussion-hashes (map :discussion/share-hash (:user.registered/visited-schnaqs user))
-        new-statements-per-schnaq (discussion-db/build-discussion-diff-list
+        new-statements-per-schnaq (discussion-db/new-statements-by-discussion-hash
                                     user-keycloak-id
                                     discussion-hashes)
         total-new-statements (reduce + (map (fn [[_ news]] (count news)) new-statements-per-schnaq))

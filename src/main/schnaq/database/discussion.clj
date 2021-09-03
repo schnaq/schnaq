@@ -551,7 +551,7 @@
          (fast-pull statement-id statement-pattern))
     :db/ident))
 
-(defn build-discussion-diff-list
+(defn- build-discussion-diff-list
   "Build a map of discussion hashes with new statements as values"
   [user-keycloak-id discussion-hashes]
   (reduce conj
@@ -560,7 +560,8 @@
                                     user-keycloak-id discussion-hash)})
                discussion-hashes)))
 
-(defn- new-statements-by-discussion-hash
+(defn new-statements-by-discussion-hash
+  "Get a list of all new statements for the discussions of the corresponding hashes"
   [user-keycloak-id discussion-hashes]
   (into {}
         (filter
