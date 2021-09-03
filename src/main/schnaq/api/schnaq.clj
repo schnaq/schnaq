@@ -62,7 +62,7 @@
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
   [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title public-discussion? hub-exclusive? hub ends-in-days]} (:body parameters)
+  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days]} (:body parameters)
         keycloak-id (:sub identity)
         authorized-for-hub? (some #(= % hub) (:groups identity))
         author (if keycloak-id
@@ -75,13 +75,13 @@
                                 (and hub-exclusive? authorized-for-hub?)
                                 (assoc :discussion/hub-origin [:hub/keycloak-name hub])
                                 ends-in-days (assoc :discussion/end-time (now-plus-days-instant ends-in-days)))
-        new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
+        new-discussion-id (discussion-db/new-discussion discussion-data)]
     (if new-discussion-id
       (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
         (when (and hub-exclusive? hub authorized-for-hub?)
           (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
         (log/info "Discussion created: " new-discussion-id " - "
-                  (:discussion/title created-discussion) " – Public? " public-discussion?
+                  (:discussion/title created-discussion) " – "
                   "Exclusive?" hub-exclusive? "for" hub)
         (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
       (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
@@ -123,7 +123,6 @@
                   :parameters {:query {:share-hash :discussion/share-hash}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
-     ;; TODO remove public option here
      ["/add" {:post add-schnaq
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add

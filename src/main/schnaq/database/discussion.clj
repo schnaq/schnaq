@@ -277,15 +277,12 @@
 
 (>defn new-discussion
   "Adds a new discussion to the database."
-  [discussion-data public?]
+  [discussion-data]
   [map? (? boolean?) :ret :db/id]
-  (let [default-states [:discussion.state/open]
-        states (cond-> default-states
-                       public? (conj :discussion.state/public))]
-    (main-db/clean-and-add-to-db! (assoc discussion-data
-                                    :discussion/states states
-                                    :discussion/created-at (Date.))
-                                  ::specs/discussion)))
+  (main-db/clean-and-add-to-db! (assoc discussion-data
+                                  :discussion/states [:discussion.state/open]
+                                  :discussion/created-at (Date.))
+                                ::specs/discussion))
 
 (>defn private-discussion-data
   "Return non public meeting data by id."

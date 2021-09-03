@@ -15,7 +15,7 @@
 
 (deftest delete-discussion-test
   (let [sample-discussion "simple-hash"
-        discussion-count (count (db/public-discussions))
+        discussion-count (count (db/all-discussions))
         new-discussion-hash "ajskdhajksdh"
         author (user-db/add-user-if-not-exists "Wegi")
         new-public-discussion {:discussion/title "Bla"
@@ -26,10 +26,10 @@
       (is (nil? (db/delete-discussion "nonsense-8u89jh89z79h88##")))
       (is (string? (db/delete-discussion sample-discussion))))
     (testing "Deleting a public discussion, should decrease the count."
-      (db/new-discussion new-public-discussion true)
-      (is (= (inc discussion-count) (count (db/public-discussions))))
+      (db/new-discussion new-public-discussion)
+      (is (= (inc discussion-count) (count (db/all-discussions))))
       (db/delete-discussion new-discussion-hash)
-      (is (= discussion-count (count (db/public-discussions)))))))
+      (is (= discussion-count (count (db/all-discussions)))))))
 
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
@@ -89,29 +89,12 @@
                             :discussion/edit-hash "secret-never-guessed"
                             :discussion/author (user-db/add-user-if-not-exists "Wegi")}]
     (testing "Whether a correct id is returned when valid discussions are transacted."
-      (is (number? (db/new-discussion minimal-discussion true)))
+      (is (number? (db/new-discussion minimal-discussion)))
       (is (number? (db/new-discussion (assoc minimal-discussion
                                         :discussion/description nil
-                                        :discussion/header-image-url "")
-                                      false))))
+                                        :discussion/header-image-url "")))))
     (testing "Transacting something non-essential should return nil"
-      (is (nil? (db/new-discussion (dissoc minimal-discussion :discussion/title) false))))))
-
-(deftest public-discussions-test
-  (testing "Should return all discussions that are marked as public."
-    (is (= 1 (count (db/public-discussions))))
-    (db/new-discussion {:discussion/title "tester"
-                        :discussion/share-hash "newwwwasd"
-                        :discussion/edit-hash "secret-yeah"
-                        :discussion/author (user-db/add-user-if-not-exists "Wegi")}
-                       true)
-    (is (= 2 (count (db/public-discussions))))
-    (db/new-discussion {:discussion/title "tester private"
-                        :discussion/share-hash "newaaaasdasdwwwasd"
-                        :discussion/edit-hash "secret-yeah"
-                        :discussion/author (user-db/add-user-if-not-exists "Wegi")}
-                       false)
-    (is (= 2 (count (db/public-discussions))))))
+      (is (nil? (db/new-discussion (dissoc minimal-discussion :discussion/title)))))))
 
 (deftest all-statements-for-graph-test
   (testing "Returns all statements belonging to a agenda, specially prepared for graph-building."
@@ -131,8 +114,7 @@
           _ (db/new-discussion {:discussion/title "test-meet"
                                 :discussion/share-hash share-hash
                                 :discussion/edit-hash (str "secret-" share-hash)
-                                :discussion/author (user-db/add-user-if-not-exists "Wegi")}
-                               true)
+                                :discussion/author (user-db/add-user-if-not-exists "Wegi")})
           christian-id (user-db/user-by-nickname "Christian")
           first-id (db/add-starting-statement! share-hash christian-id "this is sparta" false)
           second-id (db/add-starting-statement! share-hash christian-id "this is kreta" false)]
@@ -154,7 +136,7 @@
                                :discussion/share-hash new-discussion-hash
                                :discussion/edit-hash ":shrug:"
                                :discussion/author author}
-        _ (db/new-discussion new-public-discussion true)]
+        _ (db/new-discussion new-public-discussion)]
     (testing "Valid discussions should be returned."
       (are [valid share-hashes]
         (= valid (count (db/valid-discussions-by-hashes share-hashes)))
@@ -174,7 +156,7 @@
                                :discussion/share-hash share-hash
                                :discussion/edit-hash "secret-whatever"
                                :discussion/author author}
-        _ (db/new-discussion new-public-discussion true)
+        _ (db/new-discussion new-public-discussion)
         schnaq-before (db/discussion-by-share-hash share-hash)
         _ (db/set-disable-pro-con share-hash true)
         schnaq-after (db/discussion-by-share-hash share-hash)

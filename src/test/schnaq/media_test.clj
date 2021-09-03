@@ -14,8 +14,7 @@
   (discussion-db/new-discussion {:discussion/title "Test-Schnaq"
                                  :discussion/share-hash share-hash
                                  :discussion/edit-hash "secret"
-                                 :discussion/author (user-db/add-user-if-not-exists "Mike")}
-                                true))
+                                 :discussion/author (user-db/add-user-if-not-exists "Mike")}))
 
 (deftest test-cdn-restriction
   (testing "Test image upload to s3"

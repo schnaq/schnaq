@@ -29,7 +29,7 @@
           discussion-name "Have you seen this discussion?"
           share-hash "share-hash-1"
           edit-hash "secret-hash-1"
-          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user) true)
+          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user))
           ;; add starting statements
           content-1 "Startargument 1"
           content-2 "Startargument 2"
@@ -62,7 +62,7 @@
           discussion-name "Have you seen this discussion, as well?"
           share-hash "share-hash-2"
           edit-hash "secret-hash-2"
-          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user) true)
+          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user))
           ;; add starting statements
           content-1 "Gesehen"
           content-2 "Auch gesehen"
@@ -101,7 +101,7 @@
           discussion-name "A customer enters a pet shop."
           share-hash "share-hash-3"
           edit-hash "secret-hash-3"
-          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user) true)
+          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user))
           ;; add starting statements
           content-1 "'Ello, I wish to register a complaint. 'Ello, Miss?"
           content-2 "What do you mean miss?"
