@@ -15,21 +15,23 @@
 
 (deftest delete-discussion-test
   (let [sample-discussion "simple-hash"
-        discussion-count (count (db/all-discussions))
         new-discussion-hash "ajskdhajksdh"
         author (user-db/add-user-if-not-exists "Wegi")
-        new-public-discussion {:discussion/title "Bla"
-                               :discussion/share-hash new-discussion-hash
-                               :discussion/edit-hash "secret-whatever"
-                               :discussion/author author}]
+        new-discussion {:discussion/title "Bla"
+                        :discussion/share-hash new-discussion-hash
+                        :discussion/edit-hash "secret-whatever"
+                        :discussion/author author}
+        filter-deleted (fn [discussions]
+                         (filter #(not (some #{:discussion.state/deleted} (:discussion/states %))) discussions))
+        discussion-count (count (filter-deleted (db/all-discussions)))]
     (testing "When deleting wrong discussion, throw error."
       (is (nil? (db/delete-discussion "nonsense-8u89jh89z79h88##")))
       (is (string? (db/delete-discussion sample-discussion))))
-    (testing "Deleting a public discussion, should decrease the count."
-      (db/new-discussion new-public-discussion)
-      (is (= (inc discussion-count) (count (db/all-discussions))))
+    (testing "Deleting a discussion, should decrease the count."
+      (db/new-discussion new-discussion)
+      (is (= discussion-count (count (filter-deleted (db/all-discussions)))))
       (db/delete-discussion new-discussion-hash)
-      (is (= discussion-count (count (db/all-discussions)))))))
+      (is (= (dec discussion-count) (count (filter-deleted (db/all-discussions))))))))
 
 (deftest support-statement!-test
   (testing "Add a new supporting statement to a discussion"
