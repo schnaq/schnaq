@@ -104,8 +104,7 @@
     ["/center"
      {:name :routes/admin-center
       :view admin-center/center-overview-route
-      :link-text (labels :router/admin-center)
-      :controllers [{:start (fn [] (rf/dispatch [:scheduler.after/login [:schnaqs.public/load]]))}]}]
+      :link-text (labels :router/admin-center)}]
     ["/feedbacks"
      {:name :routes/feedbacks
       :view feedback-admin/feedbacks-view
@@ -135,16 +134,10 @@
     {:name :routes/publications
      :view publications/view}]
    ["schnaqs"
-    ["/public"
-     {:name :routes.schnaqs/public
-      :view feed/public-discussions-view
-      :link-text (labels :router/public-discussions)
-      :controllers [{:start #(rf/dispatch [:schnaqs.public/load])}]}]
-    [""
-     {:name :routes.schnaqs/personal
-      :view feed/personal-discussions-view
-      :link-text (labels :router/visited-schnaqs)
-      :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]]
+    {:name :routes.schnaqs/personal
+     :view feed/page
+     :link-text (labels :router/visited-schnaqs)
+     :controllers [{:start #(rf/dispatch [:schnaqs.visited/load])}]}]
    ["schnaq"
     {:controllers [{:start #(rf/dispatch [:username/open-dialog])}]}
     ["/create"

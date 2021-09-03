@@ -40,6 +40,7 @@
                    :checkLoginIframe false
                    :silentCheckSsoRedirectUri (str (-> js/window .-location .-origin) "/silent-check-sso.html")})
         (.then (fn [result]
+                 (rf/dispatch [:auth/after-successfull-login])
                  (rf/dispatch [:user/authenticated! result])
                  (rf/dispatch [:keycloak/load-user-profile])
                  (rf/dispatch [:keycloak.roles/extract])
@@ -76,10 +77,15 @@
 
 (rf/reg-event-fx
   :keycloak/load-user-profile
-  (fn [{:keys [db]} [_ _]]
+  (fn [{:keys [db]} _]
     (let [^js keycloak (get-in db [:user :keycloak])]
       (when (and keycloak (user-authenticated? db))
         {:fx [[:keycloak/load-user-profile-request keycloak]]}))))
+
+(rf/reg-event-fx
+  :auth/after-successfull-login
+  (fn [_ _]
+    {:fx [[:dispatch [:modal {:show? false :child nil}]]]}))
 
 (rf/reg-fx
   :keycloak/load-user-profile-request

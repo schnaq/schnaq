@@ -680,7 +680,6 @@
         ;; meetings overview
         :schnaqs/header "Overview of your schnaqs"
         :schnaqs/subheader "These are the schnaqs that you are part of"
-        :schnaqs.all/header "Public schnaqs"
         :schnaqs/author "Author"
         :schnaqs/schnaq "schnaq"
 
@@ -963,7 +962,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/start-discussion "Start discussion"
         :router/startpage "Startpage"
         :router/true-404-view "404 error page"
-        :router/public-discussions "Public schnaqs"
         :router/code-of-conduct "Code of Conduct"
         :router/summaries "Summaries"
         :router/alphazulu "ALPHAZULU"
@@ -972,10 +970,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :admin.center.start/heading "Admin Center"
         :admin.center.start/subheading "Administrate schnaqs as a superuser"
         :admin.center.delete/confirmation "Do you really want to delete this schnaq?"
-        :admin.center.delete.public/label "Public schnaqs"
         :admin.center.delete.public/button "Delete schnaq"
         :admin.center.delete/heading "Deletion"
-        :admin.center.delete.public/heading "Public schnaqs"
         :admin.center.delete.private/label "Share-hash"
         :admin.center.delete.private/heading "Private schnaqs"
 
@@ -1768,7 +1764,6 @@ Now we write down questions and discuss them and can still understand what we ha
 
         :schnaqs/header "Übersicht deiner schnaqs"
         :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
-        :schnaqs.all/header "Öffentliche schnaqs"
         :schnaqs/author "Autor"
         :schnaqs/schnaq "schnaq"
 
@@ -2055,7 +2050,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :router/start-discussion "Starte Besprechung"
         :router/startpage "Startseite"
         :router/true-404-view "404 Fehlerseite"
-        :router/public-discussions "Öffentliche schnaqs"
         :router/code-of-conduct "Verhaltensregeln"
         :router/summaries "Zusammenfassungen"
         :router/alphazulu "ALPHAZULU"
@@ -2064,10 +2058,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :admin.center.start/heading "Admin Center"
         :admin.center.start/subheading "Administration von schnaqs als Superuser"
         :admin.center.delete/confirmation "Soll dieses schnaq wirklich gelöscht werden?"
-        :admin.center.delete.public/label "Öffentliche schnaqs"
         :admin.center.delete.public/button "Schnaq löschen"
         :admin.center.delete/heading "Löschen"
-        :admin.center.delete.public/heading "Öffentliche schnaqs"
         :admin.center.delete.private/label "Share-hash"
         :admin.center.delete.private/heading "Private schnaqs"
 
