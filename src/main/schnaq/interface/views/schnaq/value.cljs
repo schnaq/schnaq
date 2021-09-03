@@ -7,7 +7,7 @@
 (defn- value [icon title text]
   [:<>
    [:div.bg-white.rounded-2.p-3.d-inline-block
-    [:img.img-fluid
+    [:img.img-fluid.value-icon
      {:src (img-path icon)}]]
    [:h5.mt-3 (labels title)]
    [:h6 (labels text)]])

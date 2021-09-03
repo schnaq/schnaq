@@ -2272,7 +2272,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :value/cards "https://s3.disqtec.com/schnaq-common/icons/value/cards.svg"
      :value/share "https://s3.disqtec.com/schnaq-common/icons/value/share.svg"
      :value/shield "https://s3.disqtec.com/schnaq-common/icons/value/shield.svg"
-     :value/private ""                                      ;;TODO
+     :value/private "https://s3.disqtec.com/schnaq-common/icons/value/eye.svg"
      :lead-magnet/cover "https://s3.disqtec.com/downloads/checkliste_cover.png"}))
 
 (defn video
