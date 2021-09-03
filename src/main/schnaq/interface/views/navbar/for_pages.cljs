@@ -64,8 +64,7 @@
 (defn navbar-transparent
   "Navbar definition for the default pages."
   []
-  (let [visited-hashes @(rf/subscribe [:schnaqs.visited/all-hashes])
-        current-language @(rf/subscribe [:current-language])]
+  (let [current-language @(rf/subscribe [:current-language])]
     ;; collapsable navbar
     [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
      ;; logo
@@ -85,10 +84,7 @@
         [:li.nav-item
          [:a.nav-link
           {:role "button"
-           :href (reitfe/href
-                   (if (zero? (count visited-hashes))
-                     :routes.schnaqs/public
-                     :routes.schnaqs/personal))}
+           :href (reitfe/href :routes.schnaqs/personal)}
           (labels :nav/schnaqs)]]
         [blog-link]
         [:li.nav-item
