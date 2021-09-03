@@ -312,6 +312,8 @@
         :schnaq.value.respect/text "Respectful interaction is important in order to be able to live with one another and is the basis for objective discussions."
         :schnaq.value.share/title "Share your discussion"
         :schnaq.value.share/text "Simply invite participants via link or email. No registration necessary!"
+        :schnaq.value.private/title "Private by default"
+        :schnaq.value.private/text "Your schnaqs can only be accessed by you and people you share them with."
         :schnaq.value.cards/title "Mindmap"
         :schnaq.value.cards/text "Our mind map is generated automatically and provides a quick overview."
         :schnaq.value.results/title "Results view"
@@ -1404,6 +1406,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.value.respect/text "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen."
         :schnaq.value.share/title "Teile deine Diskussion"
         :schnaq.value.share/text "Lade Teilnehmer:innen einfach per Link oder Mail ein. Keine Anmeldung notwendig!"
+        :schnaq.value.private/title "Immer privat"
+        :schnaq.value.private/text "Deine schnaqs sind standardmäßig nur von dir und den Leuten mit denen du teilst einsehbar."
         :schnaq.value.cards/title "Mindmap"
         :schnaq.value.cards/text "Für mehr Überblick sorgt unsere Mindmap, die automatisch generiert wird."
         :schnaq.value.results/title "Ergebnisansicht"
@@ -2276,6 +2280,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :value/cards "https://s3.disqtec.com/schnaq-common/icons/value/cards.svg"
      :value/share "https://s3.disqtec.com/schnaq-common/icons/value/share.svg"
      :value/shield "https://s3.disqtec.com/schnaq-common/icons/value/shield.svg"
+     :value/private ""                                      ;;TODO
      :lead-magnet/cover "https://s3.disqtec.com/downloads/checkliste_cover.png"}))
 
 (defn video
