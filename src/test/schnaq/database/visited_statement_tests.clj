@@ -128,3 +128,54 @@
       (is (nil? (find-statement-in-list statement-1 new-statements)))
       (is (nil? (find-statement-in-list statement-2 new-statements)))
       (is (nil? (find-statement-in-list statement-3 new-statements))))))
+
+(defn add-dead-parrot-sketch
+  [name]
+  (let [;; add user
+        keycloak-user-id (str " keycloak-id-" name)
+        user-name name
+        user (add-test-user keycloak-user-id user-name)
+        user-id (:db/id user)
+        ;; add discussion
+        discussion-name "A customer enters a pet shop."
+        share-hash "share-hash-3"
+        edit-hash "secret-hash-3"
+        _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user) true)
+        ;; add starting statements
+        content-1 "'Ello, I wish to register a complaint. 'Ello, Miss?"
+        content-2 "What do you mean miss?"
+        content-3 "I'm sorry, I have a cold. I wish to make a complaint!"
+        content-new-1 "We're closin' for lunch."
+        content-new-2 "Never mind that, my lad. I wish to complain about this parrot what I purchased not half an hour ago from this very boutique."
+        statement-1 (discussion-db/add-starting-statement! share-hash user-id content-1 true)
+        statement-2 (discussion-db/add-starting-statement! share-hash user-id content-2 true)
+        statement-3 (discussion-db/add-starting-statement! share-hash user-id content-3 true)
+        statement-new-1 (discussion-db/add-starting-statement! share-hash user-id content-new-1 true)
+        statement-new-2 (discussion-db/add-starting-statement! share-hash user-id content-new-2 true)
+        ;; pull all statements
+        all-statements (mapv #(fast-pull % discussion-db/statement-pattern)
+                             [statement-1 statement-2 statement-3 statement-new-1 statement-new-2])
+        ;; add seen statements
+        seen-statements #{statement-1 statement-2 statement-3}
+        _ (user-db/create-visited-statements-for-discussion
+            keycloak-user-id share-hash seen-statements)
+        new-statements (#'discussion-db/new-statements-for-user keycloak-user-id share-hash)]
+    {:user user
+     :user/keycloak-id keycloak-user-id
+     :discussion-hash share-hash
+     :new-statements new-statements
+     :seen-statements seen-statements
+     :all-statements all-statements}))
+
+(deftest test-mark-all-as-read
+  (testing "Test if mark-all-as-read causes an empty new-statement-ids-for-user result"
+    (let [{:keys [_user keycloak-user-id discussion-hash
+                  new-statements _seen-statements _all-statements]}
+          (add-dead-parrot-sketch "John Cleese")
+          unread (discussion-db/mark-all-statements-as-read! keycloak-user-id)
+          new-statements-after-mark-as-read (discussion-db/new-statement-ids-for-user
+                                              keycloak-user-id
+                                              discussion-hash)]
+      (is (not-empty new-statements))
+      (is (= (count new-statements) (count unread)))
+      (is (zero? (count new-statements-after-mark-as-read))))))

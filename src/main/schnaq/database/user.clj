@@ -175,7 +175,7 @@
                   :user.registered/last-name family_name
                   :user.registered/groups groups
                   :user.registered/profile-picture avatar
-                  :user.notification/mail-interval :notification-mail-interval/daily
+                  :user.registered/notification-mail-interval :notification-mail-interval/daily
                   :user.registered/visited-schnaqs visited-schnaqs}]
     (if (:db/id existing-user)
       (do
