@@ -19,7 +19,7 @@
   "If no contributions are available, add a call to action to engage the users."
   []
   [common/delayed-fade-in
-   [:article.m-3
+   [:article.call-to-contribute.m-3
     [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5
      [:div.col-2.py-md-5.d-flex
       [:img.w-75.align-self-center {:src (img-path :schnaqqifant/flat)}]]
