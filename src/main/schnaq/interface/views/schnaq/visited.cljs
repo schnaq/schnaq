@@ -69,6 +69,6 @@
           route-name (get-in db [:current-route :data :name])]
       {:db (assoc-in db [:schnaqs :visited-hashes] merged-schnaqs)
        :fx [[:localstorage/assoc [:schnaqs/visited merged-schnaqs]]
-            ;; reload public schnaqs when we are inside the visited-schnaqs view, otherwise this happens with the controller
+            ;; reload visited schnaqs when we are inside the visited-schnaqs view, otherwise this happens with the controller
             (when (= :routes.schnaqs/personal route-name)
               [:dispatch [:schnaqs.visited/load]])]})))
