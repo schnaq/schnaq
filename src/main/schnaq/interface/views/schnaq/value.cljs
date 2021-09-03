@@ -11,7 +11,7 @@
      {:src (img-path icon)}]]
    [:h5.mt-3 (labels title)]
    [:h6 (labels text)]])
-
+;; TODO add value for private by default discussions
 (defn- values []
   [:<>
    [:div.row.my-5.pt-5

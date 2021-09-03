@@ -330,8 +330,6 @@
         :discussion.navbar/title "Title"
         :discussion.navbar/posts "Posts"
         :discussion.navbar/members "Members"
-        :discussion.privacy/public "Public Discussion"
-        :discussion.privacy/private "Private Discussion"
         :discussion.state/read-only-label "read-only"
         :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
@@ -1424,8 +1422,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.navbar/title "Titel"
         :discussion.navbar/posts "Beiträge"
         :discussion.navbar/members "Mitglieder"
-        :discussion.privacy/public "Öffentliche Diskussion"
-        :discussion.privacy/private "Private Diskussion"
         :discussion.state/read-only-label "schreibgeschützt"
         :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
 
