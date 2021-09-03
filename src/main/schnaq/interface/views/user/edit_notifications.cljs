@@ -18,12 +18,11 @@
 (defn- button-or-spinner
   "Show button per default or spinner while waiting or a server response"
   []
-  [:<>
-   (if @(rf/subscribe [:user.notification/mark-all-as-read-in-progress?])
-     [:div.spinner-border.text-secondary {:role "status"}]
-     [:button.btn.btn-outline-secondary
-      {:on-click (fn [_] (rf/dispatch [:user.notification/mark-all-as-read!]))}
-      (labels :user.notifications.set-all-to-read/button)])])
+  (if @(rf/subscribe [:user.notification/mark-all-as-read-in-progress?])
+    [:div.spinner-border.text-secondary {:role "status"}]
+    [:button.btn.btn-outline-secondary
+     {:on-click (fn [_] (rf/dispatch [:user.notification/mark-all-as-read!]))}
+     (labels :user.notifications.set-all-to-read/button)]))
 
 (defn- set-all-to-read
   "Display button and text for mark-all-as-read related content"
