@@ -7,7 +7,9 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path]]
             [schnaq.interface.utils.js-wrapper :as jsw]
+            [schnaq.interface.utils.time :as time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
@@ -83,14 +85,16 @@
                         (< end-time (.now js/Date)) (labels :discussion.progress/end)
                         (inst? end-time) (gstring/format (labels :discussion.progress/days-left) days-left))
         [first-word & rest] (str/split progress-text #" ")]
-    [:section
-     [:p.small.m-0 [:span.font-color-primary first-word " "] (str/join " " rest)]
-     [:div.progress.progress-schnaq.mr-3
-      [:div.progress-bar.progress-bar-schnaq
-       (cond->
-         {:role "progressbar" :aria-valuenow (str current-bar) :aria-valuemin "0" :aria-valuemax "100"
-          :style {:width (str current-bar "%")}}
-         (nil? end-time) (assoc :class "progress-bar-striped"))]]]))
+    [tooltip/text
+     (gstring/format (labels :discussion.progress/ends) (time/formatted-with-timezone end-time))
+     [:section
+      [:p.small.m-0 [:span.font-color-primary first-word " "] (str/join " " rest)]
+      [:div.progress.progress-schnaq.mr-3
+       [:div.progress-bar.progress-bar-schnaq
+        (cond->
+          {:role "progressbar" :aria-valuenow (str current-bar) :aria-valuemin "0" :aria-valuemax "100"
+           :style {:width (str current-bar "%")}}
+          (nil? end-time) (assoc :class "progress-bar-striped"))]]]]))
 
 (defn navbar-statements []
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
