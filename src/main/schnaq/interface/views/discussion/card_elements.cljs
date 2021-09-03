@@ -168,16 +168,6 @@
        :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
       (labels :badges.sort/popular)]]))
 
-(defn- discussion-privacy-badge
-  "A small badge displaying who can see the discussion."
-  []
-  (let [{:discussion/keys [states share-hash]} @(rf/subscribe [:schnaq/selected])
-        public? (contains? (set states) :discussion.state/public)
-        [label class] (if public? [:discussion.privacy/public (str "primary-light-color m-auto fas fa-lg " (fa :lock-open))]
-                                  [:discussion.privacy/private (str "secondary-color m-auto fas fa-lg " (fa :lock-closed))])]
-    [:span.badge.my-auto.ml-auto {:key (str "discussion-privacy-badge-" share-hash)}
-     [:i {:class class}] " " (labels label)]))
-
 (defn- current-topic-badges [schnaq statement is-topic?]
   (let [badges-start [badges/static-info-badges schnaq]
         badges-conclusion [badges/extra-discussion-info-badges statement (:discussion/edit-hash schnaq)]
@@ -224,8 +214,7 @@
         statement (if is-topic? content current-conclusion)]
     [:div.p-2
      [:div.d-flex.flex-wrap.mb-4
-      [user/user-info statement 42 nil]
-      [discussion-privacy-badge]]
+      [user/user-info statement 42 nil]]
      [title-and-input-element statement]]))
 
 (defn- topic-view [content]

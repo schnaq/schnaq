@@ -11,31 +11,6 @@
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]))
 
-(defn- public-private-discussion
-  "Show buttons to toggle between public and private discussion."
-  []
-  (let [public? (reagent/atom false)]
-    (fn []
-      (let [user-groups @(rf/subscribe [:user/groups])
-            no-hub-exclusive-fn #(when (seq user-groups)
-                                   (jq/prop (jq/$ "#hub-exclusive") "checked" false))]
-        [:div {:class "col-6"}
-         [:h4.mb-5 (labels :discussion.create.public-checkbox/label)]
-         [:input#input-public-schnaq {:type :hidden :value @public?}]
-         [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
-          {:class (when @public? "active")
-           :type "button"
-           :on-click (fn [_e] (reset! public? true)
-                       (no-hub-exclusive-fn))}
-          [:i.mr-3 {:class (str "fa " (fa :lock-open))}]
-          (labels :discussion.create.public-checkbox/public)]
-         [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
-          {:class (when-not @public? "active")
-           :type "button"
-           :on-click #(reset! public? false)}
-          [:i.mr-3 {:class (str "fa " (fa :lock-closed))}]
-          (labels :discussion.create.public-checkbox/private)]]))))
-
 (defn- add-schnaq-to-hub
   "Selection if schnaq should be added to a hub."
   []
@@ -68,42 +43,37 @@
   []
   (let [end-time (reagent/atom false)]
     (fn []
-      (let [user-groups @(rf/subscribe [:user/groups])]
-        [:div.col-6
-         (if (empty? user-groups)
-           {:class "border-left pl-5"}
-           {:class "pt-4"})
-         [:h4.mb-5 (labels :discussion.progress.creation/heading)]
-         (when @end-time
-           [:div
-            [:label {:for :input-num-days-to-end} (labels :discussion.progress.creation/label)]
-            [common/form-input {:type :number
-                                :min 1
-                                :id :input-num-days-to-end
-                                :placeholder 7
-                                :defaultValue 7
-                                :required true
-                                :onChange #(reset! end-time (oget % [:currentTarget :value]))}]])
-         [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
-          {:class (when @end-time "active")
-           :type "button"
-           :on-click (fn [_e] (swap! end-time #(or @end-time 7)))}
-          [:i.mr-3 {:class (str "far " (fa :calendar))}]
-          (gstring/format (labels :discussion.progress.creation/button-limit) (or @end-time 7))]
-         [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
-          {:class (when-not @end-time "active")
-           :type "button"
-           :on-click #(reset! end-time false)}
-          [:i.mr-3 {:class (str "fas " (fa :circle-notch))}]
-          (labels :discussion.progress.creation/button-unlimited)]]))))
+      [:div.col-6.pt-4
+       [:h4.mb-5 (labels :discussion.progress.creation/heading)]
+       (when @end-time
+         [:div
+          [:label {:for :input-num-days-to-end} (labels :discussion.progress.creation/label)]
+          [common/form-input {:type :number
+                              :min 1
+                              :id :input-num-days-to-end
+                              :placeholder 7
+                              :defaultValue 7
+                              :required true
+                              :onChange #(reset! end-time (oget % [:currentTarget :value]))}]])
+       [:button.btn.btn-outline-primary.btn-lg.rounded-1.p-3
+        {:class (when @end-time "active")
+         :type "button"
+         :on-click (fn [_e] (swap! end-time #(or @end-time 7)))}
+        [:i.mr-3 {:class (str "far " (fa :calendar))}]
+        (gstring/format (labels :discussion.progress.creation/button-limit) (or @end-time 7))]
+       [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
+        {:class (when-not @end-time "active")
+         :type "button"
+         :on-click #(reset! end-time false)}
+        [:i.mr-3 {:class (str "fas " (fa :circle-notch))}]
+        (labels :discussion.progress.creation/button-unlimited)]])))
 
 (defn- create-schnaq-options
   "Options that can be chosen when creating a schnaq."
   []
   [:div.row.my-5
-   [public-private-discussion]
-   [add-schnaq-to-hub]
-   [end-time-schnaq-options]])
+   [end-time-schnaq-options]
+   [add-schnaq-to-hub]])
 
 (defn- create-schnaq-page []
   [pages/with-nav-and-header
@@ -147,12 +117,10 @@
                            (seq (get-in db [:user :groups] [])))
           nickname (get-in db [:user :names :display] default-anonymous-display-name)
           discussion-title (oget form-elements [:schnaq-title :value])
-          public? (= "true" (oget form-elements [:input-public-schnaq :value]))
           exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
           origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))
           end-from-now (oget form-elements [:?input-num-days-to-end :value])
-          payload (cond-> {:discussion-title discussion-title
-                           :public-discussion? public?}
+          payload (cond-> {:discussion-title discussion-title}
                           origin-hub (assoc :hub-exclusive? exclusive?
                                             :hub origin-hub)
                           end-from-now (assoc :ends-in-days (js/parseInt end-from-now))

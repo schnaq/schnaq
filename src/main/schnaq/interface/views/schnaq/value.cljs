@@ -7,7 +7,7 @@
 (defn- value [icon title text]
   [:<>
    [:div.bg-white.rounded-2.p-3.d-inline-block
-    [:img.img-fluid
+    [:img.img-fluid.value-icon
      {:src (img-path icon)}]]
    [:h5.mt-3 (labels title)]
    [:h6 (labels text)]])
@@ -16,10 +16,11 @@
   [:<>
    [:div.row.my-5.pt-5
     [:div.col-4 [value :value/shield :schnaq.value.security/title :schnaq.value.security/text]]
-    [:div.col-4 [value :value/cards :schnaq.value.cards/title :schnaq.value.cards/text]]
-    [:div.col-4 [value :value/share :schnaq.value.share/title :schnaq.value.share/text]]]
+    [:div.col-4 [value :value/share :schnaq.value.share/title :schnaq.value.share/text]]
+    [:div.col-4 [value :value/private :schnaq.value.private/title :schnaq.value.private/text]]]
    [:div.row.my-5.pt-5
     [:div.col-4 [value :value/bubble :schnaq.value.respect/title :schnaq.value.respect/text]]
+    [:div.col-4 [value :value/cards :schnaq.value.cards/title :schnaq.value.cards/text]]
     [:div.col-4 [value :value/book :schnaq.value.results/title :schnaq.value.results/text]]]])
 
 (defn- next-button []

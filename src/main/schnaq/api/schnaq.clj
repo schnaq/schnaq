@@ -48,11 +48,6 @@
                 (discussion-db/valid-discussions-by-hashes share-hashes-list))}))
     at/not-found-hash-invalid))
 
-(defn- public-schnaqs
-  "Return all public schnaqs."
-  [_req]
-  (ok {:schnaqs (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
-
 (>defn- now-plus-days-instant
   "Adds a number of days to the current datetime and then converts that to an instant."
   [days]
@@ -62,7 +57,7 @@
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
   [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title public-discussion? hub-exclusive? hub ends-in-days]} (:body parameters)
+  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days]} (:body parameters)
         keycloak-id (:sub identity)
         authorized-for-hub? (some #(= % hub) (:groups identity))
         author (if keycloak-id
@@ -75,13 +70,13 @@
                                 (and hub-exclusive? authorized-for-hub?)
                                 (assoc :discussion/hub-origin [:hub/keycloak-name hub])
                                 ends-in-days (assoc :discussion/end-time (now-plus-days-instant ends-in-days)))
-        new-discussion-id (discussion-db/new-discussion discussion-data public-discussion?)]
+        new-discussion-id (discussion-db/new-discussion discussion-data)]
     (if new-discussion-id
       (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
         (when (and hub-exclusive? hub authorized-for-hub?)
           (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
         (log/info "Discussion created: " new-discussion-id " - "
-                  (:discussion/title created-discussion) " – Public? " public-discussion?
+                  (:discussion/title created-discussion) " – "
                   "Exclusive?" hub-exclusive? "for" hub)
         (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
       (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
@@ -106,12 +101,11 @@
 
 ;; -----------------------------------------------------------------------------
 (s/def ::discussion-title :discussion/title)
-(s/def ::public-discussion? boolean?)
 (s/def ::ends-in-days pos-int?)
 (s/def ::hub-exclusive? boolean?)
 (s/def ::hub :hub/keycloak-name)
 (s/def ::schnaq-add-body
-  (s/keys :req-un [::discussion-title ::public-discussion?]
+  (s/keys :req-un [::discussion-title]
           :opt-un [::ends-in-days :user/nickname ::hub-exclusive? ::hub]))
 
 (def schnaq-routes
@@ -138,19 +132,15 @@
                                                :edit-hash :discussion/edit-hash}}
                            :responses {200 {:body {:schnaq ::dto/discussion}}}}]]
 
-    ["/schnaqs"
-     ["/by-hashes" {:get schnaqs-by-hashes
-                    :name :api.schnaqs/by-hashes
-                    :description (at/get-doc #'schnaqs-by-hashes)
-                    :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
-                                                                                     :swagger/collectionFormat "multi"})
-                                                             :share-hash :discussion/share-hash)}}
-                    :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
-                                404 at/response-error-body}}]
-     ["/public" {:get public-schnaqs
-                 :name :api.schnaqs/public
-                 :description (at/get-doc #'public-schnaqs)
-                 :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
+    ["/schnaqs/by-hashes"
+     {:get schnaqs-by-hashes
+      :name :api.schnaqs/by-hashes
+      :description (at/get-doc #'schnaqs-by-hashes)
+      :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
+                                                                       :swagger/collectionFormat "multi"})
+                                               :share-hash :discussion/share-hash)}}
+      :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
+                  404 at/response-error-body}}]
     ["/admin" {:swagger {:tags ["admin"]}
                :responses {401 at/response-error-body}
                :middleware [:user/authenticated? :user/admin?]}

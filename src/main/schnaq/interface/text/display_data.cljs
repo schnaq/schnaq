@@ -312,15 +312,14 @@
         :schnaq.value.respect/text "Respectful interaction is important in order to be able to live with one another and is the basis for objective discussions."
         :schnaq.value.share/title "Share your discussion"
         :schnaq.value.share/text "Simply invite participants via link or email. No registration necessary!"
+        :schnaq.value.private/title "Private by default"
+        :schnaq.value.private/text "Your schnaqs can only be accessed by you and people you share them with."
         :schnaq.value.cards/title "Mindmap"
         :schnaq.value.cards/text "Our mind map is generated automatically and provides a quick overview."
         :schnaq.value.results/title "Results view"
         :schnaq.value.results/text "View summaries and analysis of your discussion (beta feature)."
 
         ;; Discussion Creation
-        :discussion.create.public-checkbox/label "Make this schnaq public"
-        :discussion.create.public-checkbox/public "public"
-        :discussion.create.public-checkbox/private "private"
         :discussion.create.hub-exclusive-checkbox/title "Add schnaq to a Hub"
         :discussion.create.hub-exclusive-checkbox/label "Add to Hub"
 
@@ -333,8 +332,6 @@
         :discussion.navbar/title "Title"
         :discussion.navbar/posts "Posts"
         :discussion.navbar/members "Members"
-        :discussion.privacy/public "Public Discussion"
-        :discussion.privacy/private "Private Discussion"
         :discussion.state/read-only-label "read-only"
         :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
@@ -342,6 +339,8 @@
         :discussion.progress/days-left "%s days left"
         :discussion.progress/unlimited "Open unlimited"
         :discussion.progress/end "End of discussion"
+        :discussion.progress/ends "Ends %s"
+        :discussion.progress/ends-not "Does not end"
         :discussion.progress.creation/heading "Limit the duration of your discussion"
         :discussion.progress.creation/label "End in days"
         :discussion.progress.creation/button-limit "%s days"
@@ -1404,15 +1403,14 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.value.respect/text "Ein respektvoller Umgang ist wichtig, um miteinander leben zu können und bietet die Grundlage für sachliche Diskussionen."
         :schnaq.value.share/title "Teile deine Diskussion"
         :schnaq.value.share/text "Lade Teilnehmer:innen einfach per Link oder Mail ein. Keine Anmeldung notwendig!"
+        :schnaq.value.private/title "Immer privat"
+        :schnaq.value.private/text "Deine schnaqs sind standardmäßig nur von dir und den Leuten mit denen du teilst einsehbar."
         :schnaq.value.cards/title "Mindmap"
         :schnaq.value.cards/text "Für mehr Überblick sorgt unsere Mindmap, die automatisch generiert wird."
         :schnaq.value.results/title "Ergebnisansicht"
         :schnaq.value.results/text "Schau dir Zusammenfassungen und Analysen zu deiner Diskussion an (Beta Feature)."
 
         ;; Discussion Creation
-        :discussion.create.public-checkbox/label "Diesen schnaq öffentlich machen"
-        :discussion.create.public-checkbox/public "öffentlich"
-        :discussion.create.public-checkbox/private "geschlossen"
         :discussion.create.hub-exclusive-checkbox/title "Schnaq zu einem Hub hinzufügen"
         :discussion.create.hub-exclusive-checkbox/label "Dem Hub hinzufügen"
 
@@ -1425,8 +1423,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.navbar/title "Titel"
         :discussion.navbar/posts "Beiträge"
         :discussion.navbar/members "Mitglieder"
-        :discussion.privacy/public "Öffentliche Diskussion"
-        :discussion.privacy/private "Private Diskussion"
         :discussion.state/read-only-label "schreibgeschützt"
         :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
 
@@ -1434,6 +1430,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.progress/days-left "Noch %s Tage"
         :discussion.progress/unlimited "Unbeschränkt offen"
         :discussion.progress/end "Ende der Diskussion"
+        :discussion.progress/ends "Endet %s"
+        :discussion.progress/ends-not "Endet nicht"
         :discussion.progress.creation/heading "Begrenze die Laufzeit deiner Diskussion"
         :discussion.progress.creation/label "Ende in Tagen"
         :discussion.progress.creation/button-limit "%s Tage"
@@ -2276,6 +2274,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :value/cards "https://s3.disqtec.com/schnaq-common/icons/value/cards.svg"
      :value/share "https://s3.disqtec.com/schnaq-common/icons/value/share.svg"
      :value/shield "https://s3.disqtec.com/schnaq-common/icons/value/shield.svg"
+     :value/private "https://s3.disqtec.com/schnaq-common/icons/value/eye.svg"
      :lead-magnet/cover "https://s3.disqtec.com/downloads/checkliste_cover.png"}))
 
 (defn video

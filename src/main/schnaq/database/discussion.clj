@@ -277,15 +277,12 @@
 
 (>defn new-discussion
   "Adds a new discussion to the database."
-  [discussion-data public?]
-  [map? (? boolean?) :ret :db/id]
-  (let [default-states [:discussion.state/open]
-        states (cond-> default-states
-                       public? (conj :discussion.state/public))]
-    (main-db/clean-and-add-to-db! (assoc discussion-data
-                                    :discussion/states states
-                                    :discussion/created-at (Date.))
-                                  ::specs/discussion)))
+  [discussion-data]
+  [map? :ret :db/id]
+  (main-db/clean-and-add-to-db! (assoc discussion-data
+                                  :discussion/states [:discussion.state/open]
+                                  :discussion/created-at (Date.))
+                                ::specs/discussion))
 
 (>defn private-discussion-data
   "Return non public meeting data by id."
@@ -315,18 +312,6 @@
         db-transaction (if disable? disable-transaction
                                     enable-transaction)]
     (main-db/transact db-transaction)))
-
-(defn public-discussions
-  "Returns all public discussions."
-  []
-  (-> (query
-        '[:find [(pull ?public-discussions discussion-pattern) ...]
-          :in $ discussion-pattern
-          :where [?public-discussions :discussion/states :discussion.state/public]
-          (not-join [?public-discussions]
-                    [?public-discussions :discussion/states :discussion.state/deleted])]
-        discussion-pattern)
-      (toolbelt/pull-key-up :db/ident)))
 
 (>defn all-statements
   "Returns all statements belonging to a discussion."
