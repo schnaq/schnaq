@@ -96,6 +96,10 @@
   color: $white;
 }
 
+.button-discussion-options {
+  @extend .h-100;
+}
+
 .font-150 {
   font-size: 150%;
 }

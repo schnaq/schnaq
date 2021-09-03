@@ -42,12 +42,13 @@
                             :else back-feed)
         tooltip (if has-history? :history.back/tooltip :history.all-schnaqs/tooltip)]
     (when navigation-target
-      [tooltip/text
-       (labels tooltip)
-       [:button.btn.btn-dark-highlight.w-100.h-100.p-3
-        {:on-click #(rf/dispatch navigation-target)}
-        [:div.d-flex
-         [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]])))
+      [:div.mr-1
+       [tooltip/text
+        (labels tooltip)
+        [:button.btn.btn-dark-highlight.button-discussion-options.w-100.p-3
+         {:on-click #(rf/dispatch navigation-target)}
+         [:div.d-flex
+          [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]]])))
 
 
 (defn- discussion-start-button
@@ -159,11 +160,11 @@
   []
   (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])]
     [:section.h-100
-     [:button.btn.btn-outline-primary.mr-2.h-100
+     [:button.btn.btn-outline-primary.mr-2.button-discussion-options
       {:class (when (= sort-method :newest) "active")
        :on-click #(rf/dispatch [:discussion.statements.sort/set :newest])}
       (labels :badges.sort/newest)]
-     [:button.btn.btn-outline-primary.h-100
+     [:button.btn.btn-outline-primary.button-discussion-options
       {:class (when (= sort-method :popular) "active")
        :on-click #(rf/dispatch [:discussion.statements.sort/set :popular])}
       (labels :badges.sort/popular)]]))
@@ -253,7 +254,7 @@
 (defn search-bar
   "A search-bar to search inside a schnaq."
   []
-  [:form.mx-3.h-100
+  [:form.mr-3.h-100
    {:on-submit (fn [e]
                  (jq/prevent-default e)
                  (rf/dispatch [:discussion.statements/search (oget e [:target :elements "search-input" :value])]))}
