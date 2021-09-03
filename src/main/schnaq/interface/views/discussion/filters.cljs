@@ -172,7 +172,7 @@
   (let [active-filters? @(rf/subscribe [:filters/active?])]
     [tooltip/html
      [default-menu]
-     [:button.btn.btn-outline-primary.mr-2.h-100
+     [:button.btn.btn-outline-primary.button-discussion-options
       {:class (when active-filters? "btn-outline-secondary active")}
       (labels :badges.filters/button)]
      {:hideOnClick :toggle}]))

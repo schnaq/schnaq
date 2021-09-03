@@ -145,7 +145,7 @@
        [:img.d-inline-block.align-middle.mr-2
         {:src (img-path :logo-white) :alt "schnaq logo"
          :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]]
-     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-hd-auto
+     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
       [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
        [schnaq-progress-bar]
        [admin/txt-export share-hash title]

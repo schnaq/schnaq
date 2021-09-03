@@ -72,6 +72,11 @@ $input-background: $gray-200 !default;
 $font-family-sans-serif: 'Poppins', 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 
 // Shadows
+// This overrides Bootstrap's default shadow-classes, e.g. .shadow
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075) !default;
+$box-shadow: 0 0.2rem 0.25rem rgba($black, 0.15) !default;
+$box-shadow-lg: 0 1rem 3rem rgba($black, 0.175) !default;
+
 $regular-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
 $light-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.1);
 $hover-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.2);
