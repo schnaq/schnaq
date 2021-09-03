@@ -137,7 +137,8 @@
    {:db/ident :statement.type/neutral}
 
    ;; Discussion States
-   {:db/ident :discussion.state/open}
+   {:db/ident :discussion.state/open
+    :db/doc "Discontinued. Not in use anymore. In db for legacy reasons."}
    {:db/ident :discussion.state/closed}
    {:db/ident :discussion.state/private
     :db/doc "DEPRECATED: Use :discussion.state/public"}

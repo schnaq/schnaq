@@ -313,18 +313,6 @@
                                     enable-transaction)]
     (main-db/transact db-transaction)))
 
-(defn public-discussions
-  "Returns all public discussions."
-  []
-  (-> (query
-        '[:find [(pull ?public-discussions discussion-pattern) ...]
-          :in $ discussion-pattern
-          :where [?public-discussions :discussion/states :discussion.state/public]
-          (not-join [?public-discussions]
-                    [?public-discussions :discussion/states :discussion.state/deleted])]
-        discussion-pattern)
-      (toolbelt/pull-key-up :db/ident)))
-
 (>defn all-statements
   "Returns all statements belonging to a discussion."
   [share-hash]

@@ -48,11 +48,6 @@
                 (discussion-db/valid-discussions-by-hashes share-hashes-list))}))
     at/not-found-hash-invalid))
 
-(defn- public-schnaqs
-  "Return all public schnaqs."
-  [_req]
-  (ok {:schnaqs (map processors/add-meta-info-to-schnaq (discussion-db/public-discussions))}))
-
 (>defn- now-plus-days-instant
   "Adds a number of days to the current datetime and then converts that to an instant."
   [days]
@@ -137,20 +132,15 @@
                                                :edit-hash :discussion/edit-hash}}
                            :responses {200 {:body {:schnaq ::dto/discussion}}}}]]
 
-    ["/schnaqs"
-     ["/by-hashes" {:get schnaqs-by-hashes
-                    :name :api.schnaqs/by-hashes
-                    :description (at/get-doc #'schnaqs-by-hashes)
-                    :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
-                                                                                     :swagger/collectionFormat "multi"})
-                                                             :share-hash :discussion/share-hash)}}
-                    :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
-                                404 at/response-error-body}}]
-     ;; TODO do not return those
-     ["/public" {:get public-schnaqs
-                 :name :api.schnaqs/public
-                 :description (at/get-doc #'public-schnaqs)
-                 :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}}}]]
+    ["/schnaqs/by-hashes"
+     {:get schnaqs-by-hashes
+      :name :api.schnaqs/by-hashes
+      :description (at/get-doc #'schnaqs-by-hashes)
+      :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
+                                                                       :swagger/collectionFormat "multi"})
+                                               :share-hash :discussion/share-hash)}}
+      :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
+                  404 at/response-error-body}}]
     ["/admin" {:swagger {:tags ["admin"]}
                :responses {401 at/response-error-body}
                :middleware [:user/authenticated? :user/admin?]}
