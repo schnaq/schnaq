@@ -100,7 +100,7 @@
          {:href (rfe/href :routes.schnaq/create)}
          "Upgrade deine Lehrveranstaltung mit nur einem Schritt"]]]]
      [:div.wave-bottom-white-inverted]]
-    [:section.container.pt-5
+    [:section.container.pt-3
      [startpage/supporters]]]])
 
 (defn e-learning-view []
