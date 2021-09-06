@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.startpage.alternatives.e-learning
   (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.text.display-data :refer [img-path fa]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))
@@ -24,17 +24,23 @@
     :page/wrapper-classes "container container-85 mx-auto"
     :page/more-for-heading
     [:div.row.pb-5
-     [:div.col-6
+     [:div.col-6.align-self-center
       moving-heading
       [:p.display-6.pb-5 "Die App, die deinen Lernenden hilft online strukturiert Lehrinhalte zu diskutieren."]
-      [:div.d-flex
-       [:img]]
-      [:div.text-center
+      [:div.text-center.pt-3.pb-5
        [:a.btn.btn-lg.btn-secondary.d-inline-block
         {:href (rfe/href :routes.schnaq/create)}
         "Gestalte einen Raum für deine Lernenden"]
-       [:p.small.pt-1 "100 % anonym und kostenfrei"]]]
-     [:div.col-6
+       [:p.small.pt-1 "100 % anonym und kostenfrei"]]
+      [:div.d-flex
+       [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/bjorn)}]
+       [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/raphael-bialon)}]
+       [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/florian-clever)}]
+       [:div.border-right.mr-2
+        [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
+        [:i {:class (str "mr-2 my-auto " (fa :plus))}]]
+       [:p.small.my-auto "Mit hunderten Lernenden getestet!"]]]
+     [:div.col-6.align-self-center
       [:img.img-fluid.above-the-fold-screenshot
        {:src (img-path :startpage.alternatives.e-learning/header)
         :alt "Eine Studentin nutzt schnaq auf ihrem Notebook"}]]]}

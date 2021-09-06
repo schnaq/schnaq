@@ -2357,7 +2357,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :check/circle "fa-check-circle"
      :clipboard "fa-clipboard-list"
      :clock "fa-clock"
-     :circle "fa-circle"
+     :circle "fas fa-circle"
      :circle-notch "fa-circle-notch"
      :cog "fa-cog"
      :cogs "fa-cogs"
