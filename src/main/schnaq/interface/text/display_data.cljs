@@ -367,6 +367,8 @@
         :beta.modal/explain [:<> "This feature is in a test-state and you need to " [:strong "be a beta-tester to use it."]]
         :beta.modal/persuade "You can write us an email if you would like to become a beta-tester."
         :beta.modal/cta "Request Access"
+        :beta.modal.login/intro "Already beta tester"
+        :beta.modal.login/button "Then login"
         :page.beta.modal/cta "If you are interested in joining our beta-tester programm, please write us an email at "
 
         ;; Press Kit
@@ -1477,6 +1479,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können, musst du " [:strong "Beta-Tester:in sein."]]
         :beta.modal/persuade "Schreib uns eine E-Mail, wenn du auch zu den Beta-Tester:innen gehören möchtest."
         :beta.modal/cta "Anfrage senden"
+        :beta.modal.login/intro "Bereits Beta-Tester:in?"
+        :beta.modal.login/button "Dann melde dich an"
         :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter "
 
         ;; Press Kit
