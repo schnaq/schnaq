@@ -15,7 +15,7 @@
        (when more
          more)]])))
 
-(defn- row-builder-text-right
+(defn row-builder-text-right
   "Generic builder to align text and asset. Here, text is on the right
   and the remainder is on the left."
   [left right]
@@ -23,7 +23,7 @@
    [:div.col-12.col-lg-5.my-auto left]
    [:div.col-12.col-lg-6.offset-lg-1.my-auto right]])
 
-(defn- row-builder-text-left
+(defn row-builder-text-left
   "Build a row, like the feature rows. Here, the text is on the left side."
   [left right]
   [:div.row.feature-row
