@@ -6,6 +6,7 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
+            [schnaq.interface.views.feed.filters :as filters]
             [schnaq.interface.views.header-image :as header-image]
             [schnaq.interface.views.hub.common :as hub]
             [schnaq.interface.views.pages :as pages]
@@ -29,16 +30,15 @@
   "Displays the different sort options for feed elements."
   []
   (let [sort-method @(rf/subscribe [:feed/sort])]
-    [:section.pl-2.text-right
-     [:span.small
-      [:button.btn.btn-outline-primary.btn-sm.mx-1
-       {:class (when (= sort-method :time) "active")
-        :on-click #(rf/dispatch [:feed.sort/set :time])}
-       (labels :badges.sort/newest)]
-      [:button.btn.btn-outline-primary.btn-sm
-       {:class (when (= sort-method :alphabetical) "active")
-        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
-       (labels :badges.sort/alphabetical)]]]))
+    [:span.pl-2.text-right
+     [:button.btn.btn-outline-primary.btn-sm.mx-1
+      {:class (when (= sort-method :time) "active")
+       :on-click #(rf/dispatch [:feed.sort/set :time])}
+      (labels :badges.sort/newest)]
+     [:button.btn.btn-outline-primary.btn-sm
+      {:class (when (= sort-method :alphabetical) "active")
+       :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
+      (labels :badges.sort/alphabetical)]]))
 
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
@@ -84,10 +84,13 @@
      (if (empty? schnaqs)
        [no-schnaqs-found]
        [:div.panel-white.rounded-1.px-md-5
-        [:div.row.pl-5.mb-3
-         [:div.col-3.col-md-5 [:p.text-muted (labels :schnaqs/author)]]
-         [:div.col-2.col-md-2 [:p.text-muted (labels :schnaqs/schnaq)]]
-         [:div.col-7.col-md-5 [sort-options]]]
+        [:div.row.pl-5
+         [:div.col-7 [:p.text-muted (labels :schnaqs/author)]]
+         [:div.col-5 [:p.text-muted (labels :schnaqs/schnaq)]]]
+        [:div.row.mb-3
+         [:div.col
+          [sort-options]
+          [filters/filter-button]]]
         (for [schnaq sorted-schnaqs]
           [:div.pb-4 {:key (:db/id schnaq)}
            [schnaq-entry schnaq show-delete-from-hub-button?]])]))))
