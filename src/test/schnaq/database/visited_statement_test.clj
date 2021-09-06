@@ -1,4 +1,4 @@
-(ns schnaq.database.visited-statement-tests
+(ns schnaq.database.visited-statement-test
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
@@ -9,14 +9,17 @@
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
-(defn add-test-user [id name]
+(defn- add-test-user [id name]
   (second (user-db/register-new-user {:id id :preferred_username name} [] [])))
 
-(defn create-discussion [name share-hash edit-hash user]
+(defn- create-discussion [name share-hash edit-hash user]
   {:discussion/title name
    :discussion/share-hash share-hash
    :discussion/edit-hash edit-hash
    :discussion/author user})
+
+(defn- find-statement-in-list [statement-id statement-list]
+  (some #(when (= statement-id (:db/id %)) %) statement-list))
 
 (deftest add-visited-statements-test
   (testing "Test if visited statements are correctly added"
@@ -47,9 +50,6 @@
           (is (= (count statements) (count queried-visited)))
           (is (some #(= statement-1 (:db/id %)) queried-visited))
           (is (some #(= statement-2 (:db/id %)) queried-visited)))))))
-
-(defn find-statement-in-list [statement-id statement-list]
-  (some #(when (= statement-id (:db/id %)) %) statement-list))
 
 (deftest update-new-posts-test
   (testing "Test updating posts with seen info"
