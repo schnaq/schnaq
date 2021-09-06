@@ -15,7 +15,7 @@
   vertical-align: middle;
 
   &__words {
-    animation-duration: 7s;
+    animation-duration: 12s;
     animation-iteration-count: infinite;
     animation-name: wordSlider;
     animation-timing-function: ease-out;
@@ -24,6 +24,8 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    text-decoration: underline;
+    text-decoration-style: dotted;
   }
 
   &__word {

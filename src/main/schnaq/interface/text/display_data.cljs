@@ -2293,6 +2293,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :schnaqqifant/white "https://s3.disqtec.com/schnaq-common/logos/schnaqqifant_white.svg"
      :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
      :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
+     :startpage.alternatives.e-learning/header "https://s3.disqtec.com/schnaq-header-images/students-header.jpeg"
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
      :startpage.example/discussion "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_discussion.jpg"
      :startpage.example/dashboard "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_dashboard.jpg"
