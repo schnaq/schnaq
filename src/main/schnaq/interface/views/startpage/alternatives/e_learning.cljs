@@ -26,7 +26,7 @@
     [:div.row.pb-5
      [:div.col-6.align-self-center
       moving-heading
-      [:p.display-6.pb-5 "Die App, die deinen Lernenden hilft online strukturiert Lehrinhalte zu diskutieren."]
+      [:p.display-6.pb-5 "Die App, die deinen Lernenden hilft, online strukturiert Lehrinhalte zu diskutieren."]
       [:div.text-center.pt-3.pb-5
        [:a.btn.btn-lg.btn-secondary.d-inline-block
         {:href (rfe/href :routes.schnaq/create)}
@@ -49,8 +49,8 @@
      [rows/row-builder-text-left
       [:article.feature-text-box
        [:h3.h1.text-purple.mb-3 "Minimaler Aufwand, maximale Aktivierung"]
-       [:p "Schnaqs starten ist so einfach wie: Titel wählen und link verteilen.
-       Schnell, sicher und datenschutzkonform nach europäischem Recht."]]
+       [:p "Schnaqs starten ist so einfach wie: Titel wählen und Link verteilen.
+       Schnell, sicher und datenschutzkonform nach deutschem Recht."]]
       [:img.align-self-center {:src (img-path :startpage.example/discussion)
                                :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
     [:section.container.mb-5
@@ -58,12 +58,12 @@
       [:img {:src (img-path :startpage.alternatives.e-learning/student-smartphone)}]
       [:article.feature-text-box
        [:h3.h1.text-purple.mb-3 "Kein Notebook? Kein Problem!"]
-       [:p "Um schnaq zu benutzen braucht es keine Installation. Alles läuft über das web.
+       [:p "Um schnaq zu benutzen, braucht es keine Installation. Alles läuft über das Web.
        Kompatibel mit allen Smartphones, Tablets und Computern."]]]]
     [:section.container.mb-5
      [rows/row-builder-text-left
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "Verstehen wo es harkt"]
+       [:h3.h1.text-purple.mb-3 "Verstehen wo es hakt"]
        [:p "Verschaffe dir einen schnellen Überblick über das Diskutierte. Vollziehe einfach nach worüber deine Lernenden reden. Oder schaue dir die verschiedenen K.I. Auswertungen der Diskussion an."]]
       [:img.align-self-center {:src (img-path :startpage.example/dashboard)
                                :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
@@ -72,7 +72,7 @@
       [:img {:src (img-path :startpage.alternatives.e-learning/oma)}]
       [:article.feature-text-box
        [:h3.h1.text-purple.mb-3 "So einfach, selbst ein Seniorenkurs nutzt es!"]
-       [:p "Schnaq kann von jedem bedient werden. Egal ob du Erfahrung mit Software hast, oder dich gerade erst damit enfreundest. Kommen mal fragen auf? Kontaktiere den Support jederzeit."]]]]
+       [:p "Schnaq kann von allen bedient werden. Egal ob du Erfahrung mit Software hast, oder dich gerade erst damit anfreundest. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
     [:section.overflow-hidden.py-3.my-5
      [:div.wave-bottom-white]
      [:div.bg-white

@@ -1,10 +1,10 @@
 (ns schnaq.interface.views.base
-  (:require [goog.string :as gstring]
+  (:require [clojure.string :as str]
+            [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as jw]
-            [schnaq.interface.views.feedback.collect :as feedback]
-            [clojure.string :as str]))
+            [schnaq.interface.views.feedback.collect :as feedback]))
 
 (defn wavy-curve
   "Define a wavy curve."
