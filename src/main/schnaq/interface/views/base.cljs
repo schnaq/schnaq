@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.base
-  (:require [goog.string :as gstring]
+  (:require [clojure.string :as str]
+            [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.js-wrapper :as jw]
@@ -27,9 +28,10 @@
 
 (defn header
   "Build a header with a curly bottom for a page. Heading, subheading and more will be included in the header."
-  [{:page/keys [heading subheading classes more-for-heading vertical-header?]}]
+  [{:page/keys [heading subheading classes more-for-heading vertical-header? wrapper-classes]}]
   [:<>
-   [:div.container
+   [:div
+    {:class (if (str/blank? wrapper-classes) "container" wrapper-classes)}
     (if vertical-header?
       [:<> [:h1 heading] [:h4.display-6 subheading]]
       [:div.row.mt-5.mb-2
