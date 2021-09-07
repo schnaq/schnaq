@@ -2294,7 +2294,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
      :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
      :startpage.alternatives.e-learning/header "https://s3.disqtec.com/startpage/schuelerin_laptop_in_hand.png"
-     :startpage.alternatives.e-learning/oma "https://s3.disqtec.com/startpage/oma2.jpg"
+     :startpage.alternatives.e-learning/oma "https://s3.disqtec.com/startpage/old_woman_smartphone_with_schnaq.jpg"
      :startpage.alternatives.e-learning/alex "https://s3.disqtec.com/startpage/alex.jpeg"
      :startpage.alternatives.e-learning/christian "https://s3.disqtec.com/startpage/christian.jpg"
      :startpage.alternatives.e-learning/mike "https://s3.disqtec.com/startpage/mike.jpg"
