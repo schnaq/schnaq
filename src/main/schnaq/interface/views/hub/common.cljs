@@ -4,13 +4,28 @@
             [schnaq.interface.text.display-data :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
+(defn hub-logo
+  "Get a hub's logo. Refactor this function to reduce redundant code with `avatar`."
+  [logo display-name size]
+  (if logo
+    [:span.profile-pic-fill
+     {:style {:height (str size "px") :width (str size "px")}}
+     [:img.profile-pic-image {:src logo}]]
+    [common/identicon display-name size]))
+
+(defn hub-logo-with-name
+  "Hub logo with the name on the right side."
+  [logo display-name size]
+  [:div.d-flex.flex-row
+   [hub-logo logo display-name size]
+   [:div.pt-1.pl-2 display-name]])
+
 (defn single-hub
   "Display a single hub."
-  [{:hub/keys [keycloak-name name]}]
+  [{:hub/keys [keycloak-name name logo]}]
   [:article
    [:a.btn.btn-link {:href (reitfe/href :routes/hub {:keycloak-name keycloak-name})}
-    [common/identicon name 32]
-    [:span.pl-2 name]]])
+    [hub-logo-with-name logo name 32]]])
 
 (defn hub-list
   "Displays a list of hubs."
@@ -29,13 +44,3 @@
     [:section
      [:p.h5.text-muted.pb-2 (labels :hubs/heading)]
      [hub-list]]))
-
-(defn logo
-  "Get a hub's logo."
-  [logo display-name size]
-  [:div.avatar-image.p-0
-   (if logo
-     [:div.profile-pic-fill
-      {:style {:height (str size "px") :width (str size "px")}}
-      [:img.profile-pic-image {:src logo}]]
-     [common/identicon display-name size])])

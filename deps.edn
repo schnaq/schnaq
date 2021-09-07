@@ -61,7 +61,7 @@
                         "watch" ":app"]}
 
            :uberjar
-           {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.279"}}
+           {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.297"}}
             :exec-fn hf.depstar/uberjar
             :exec-args {:main-class schnaq.api
                         :verbose true

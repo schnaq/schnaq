@@ -367,6 +367,8 @@
         :beta.modal/explain [:<> "This feature is in a test-state and you need to " [:strong "be a beta-tester to use it."]]
         :beta.modal/persuade "You can write us an email if you would like to become a beta-tester."
         :beta.modal/cta "Request Access"
+        :beta.modal.login/intro "Already beta tester"
+        :beta.modal.login/button "Then login"
         :page.beta.modal/cta "If you are interested in joining our beta-tester programm, please write us an email at "
 
         ;; Press Kit
@@ -1106,11 +1108,13 @@ Now we write down questions and discuss them and can still understand what we ha
 
         :summary.link.button/text "Dashboard"
         :summary.user.request-succeeded/label "Summary requested, please wait."
+        :summary.user/computation-time "The creation of the summary can take a few minutes."
         :summary.user.requested/label "Requesting summary …"
         :summary.user.not-requested/label "Request summary"
+        :summary.user.abort/confirm "The calculation can take several minutes. Do you really want to cancel?"
+        :summary.user.abort/label "Problems with the calculation?"
+        :summary.user.abort/button "Cancel"
         :summary.user/privacy-warning "For improvement, schnaq employees will be able to view and review summary content confidentially."
-        :summary.user.status/label "A summary is currently being generated. Last requested: "
-        :summary.user/cta "Press the button to request a summary. It will take a few hours. The summary will appear here as soon as its done."
         :summary.user/label "Summary: "
         :summary.user/last-updated "Last updated: "
         :summary.user/heading "Summaries"
@@ -1490,6 +1494,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :beta.modal/explain [:<> "Das ist eine Testfunktion. Um sie benutzen zu können, musst du " [:strong "Beta-Tester:in sein."]]
         :beta.modal/persuade "Schreib uns eine E-Mail, wenn du auch zu den Beta-Tester:innen gehören möchtest."
         :beta.modal/cta "Anfrage senden"
+        :beta.modal.login/intro "Bereits Beta-Tester:in?"
+        :beta.modal.login/button "Dann melde dich an"
         :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter "
 
         ;; Press Kit
@@ -2228,11 +2234,13 @@ Now we write down questions and discuss them and can still understand what we ha
 
         :summary.link.button/text "Analyse"
         :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
+        :summary.user/computation-time "Die Erstellung der Zusammenfassung kann einige Minuten dauern."
         :summary.user.requested/label "Zusammenfassung wird angefordert …"
         :summary.user.not-requested/label "Zusammenfassung anfordern"
+        :summary.user.abort/confirm "Die Berechnung kann mehrere Minuten dauern. Möchtest du wirklich abbrechen?"
+        :summary.user.abort/label "Probleme bei der Berechnung?"
+        :summary.user.abort/button "Abbrechen"
         :summary.user/privacy-warning "Zur Verbesserung werden Mitarbeiter:innen des schnaq-Teams Inhalte der Zusammenfassung vertraulich einsehen und überprüfen können."
-        :summary.user.status/label "Eine Zusammenfassung wird gerade erstellt. Letzte Anfrage: "
-        :summary.user/cta "Drücke den Knopf um eine Zusammenfassung anzufragen. Der Prozess dauert unter Umständen einige Stunden. Die Zusammenfassung wird hier auftauchen, wenn sie fertig ist."
         :summary.user/label "Zusammenfassung: "
         :summary.user/last-updated "Zuletzt aktualisiert: "
         :summary.user/heading "Zusammenfassungen"
@@ -2323,6 +2331,13 @@ Now we write down questions and discuss them and can still understand what we ha
      :schnaqqifant/white "https://s3.disqtec.com/schnaq-common/logos/schnaqqifant_white.svg"
      :schnaqqifant/mail "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_newsletter.png"
      :stock/team "https://s3.disqtec.com/startpage/team.jpeg"
+     :startpage.alternatives.e-learning/header "https://s3.disqtec.com/startpage/schuelerin_laptop_in_hand.png"
+     :startpage.alternatives.e-learning/oma "https://s3.disqtec.com/startpage/old_woman_smartphone_with_schnaq.jpg"
+     :startpage.alternatives.e-learning/alex "https://s3.disqtec.com/startpage/alex.jpeg"
+     :startpage.alternatives.e-learning/christian "https://s3.disqtec.com/startpage/christian.jpg"
+     :startpage.alternatives.e-learning/mike "https://s3.disqtec.com/startpage/mike.jpg"
+     :startpage.alternatives.e-learning/david "https://s3.disqtec.com/startpage/david.jpeg"
+     :startpage.alternatives.e-learning/student-smartphone "https://s3.disqtec.com/startpage/student_smartphone.jpg"
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
      :startpage.example/discussion "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_discussion.jpg"
      :startpage.example/dashboard "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_dashboard.jpg"
@@ -2386,7 +2401,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :check/circle "fa-check-circle"
      :clipboard "fa-clipboard-list"
      :clock "fa-clock"
-     :circle "fa-circle"
+     :circle "fas fa-circle"
      :circle-notch "fa-circle-notch"
      :cog "fa-cog"
      :cogs "fa-cogs"
