@@ -1029,9 +1029,10 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.stype/attack "attack"
         :filters.stype/support "support"
 
-        :filters.discussion.option.state/label "schnaq state"
+        :filters.discussion.option.state/label "Schnaq state"
         :filters.discussion.option.state/closed "closed"
         :filters.discussion.option.state/read-only "read only"
+        :filters.discussion.option.numbers/label "Number of statements"
 
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"

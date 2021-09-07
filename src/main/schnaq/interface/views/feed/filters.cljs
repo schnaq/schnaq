@@ -21,6 +21,21 @@
      [:option {:value "discussion.state/closed"} (labels :filters.discussion.option.state/closed)]
      [:option {:value "statement.type/read-only"} (labels :filters.discussion.option.state/read-only)]]]])
 
+(defn- statement-number-selections
+  "Selection-options for vote filters."
+  []
+  [:div.form-row.pb-3
+   [:div.col-auto
+    [:select#filter-numbers-selection.mr-1.form-control
+     [:option {:value ">"} (labels :filters.option.vote/bigger)]
+     [:option {:value "="} (labels :filters.option.vote/equal)]
+     [:option {:value "<"} (labels :filters.option.vote/less)]]]
+   [:div.col-auto
+    [:input#filter-numbers.mr-1.form-control
+     {:type :number
+      :placeholder 0
+      :defaultValue 0}]]])
+
 (defn- add-filters
   "A small component for adding new filters."
   []
@@ -32,43 +47,22 @@
          (labels :filters.label/filter-for)]
         [:select#add-filter-menu.mr-1.form-control
          {:on-change #(reset! current-selection (tools/get-selection-from-event %))}
-         [:option {:value :state} (labels :filters.discussion.option.state/label)]]]
+         [:option {:value :state} (labels :filters.discussion.option.state/label)]
+         [:option {:value :numbers} (labels :filters.discussion.option.numbers/label)]]]
        (case @current-selection
-         "state" [state-selections])
+         "state" [state-selections]
+         "numbers" [statement-number-selections])
        [:button.btn.btn-outline-dark.mr-2
         {:on-click #(case @current-selection
                       "state"
-                      (rf/dispatch [:filters.discussion.activate/state
+                      (rf/dispatch [:filters.discussion/activate :state
                                     (tools/get-current-selection (gdom/getElement "filter-state-selection"))
-                                    (tools/get-current-selection (gdom/getElement "filter-state"))]))}
+                                    (keyword (tools/get-current-selection (gdom/getElement "filter-state")))])
+                      "numbers"
+                      (rf/dispatch [:filters.discussion/activate :numbers
+                                    (tools/get-current-selection (gdom/getElement "filter-numbers-selection"))
+                                    (.-value (gdom/getElement "filter-numbers"))]))}
         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
-
-(rf/reg-event-db
-  :filters.discussion.activate/state
-  (fn [db [_ criteria extra]]
-    (let [new-filter {:type :state
-                      :criteria (keyword criteria)
-                      :extra extra}]
-      (update-in db [:feed :filters] #(cset/union #{new-filter} %)))))
-
-(rf/reg-sub
-  ;; TODO use this
-  :filters.discussion/active
-  (fn [db _]
-    (get-in db [:feed :filters] #{})))
-
-(rf/reg-sub
-  ;; TODO use this
-  :filters.discussion/active?
-  (fn [_]
-    (rf/subscribe [:filters.discussion/active]))
-  (fn [active-filters _]
-    (seq active-filters)))
-
-(rf/reg-event-db
-  :filters.discussion/clear
-  (fn [db _]
-    (assoc-in db [:feed :filters] #{})))
 
 (defn- default-menu
   "The default filter menu that is shown to the user."
@@ -92,3 +86,30 @@
        {:class (when active-filters? "btn-outline-secondary active")}
        (labels :badges.filters/button)]]
      {:hideOnClick :toggle}]))
+
+(rf/reg-event-db
+  :filters.discussion/activate
+  (fn [db [_ filter-type criteria extra]]
+    (let [new-filter {:type filter-type
+                      :criteria (keyword criteria)
+                      :extra extra}]
+      (update-in db [:feed :filters] #(cset/union #{new-filter} %)))))
+
+(rf/reg-sub
+  ;; TODO use this
+  :filters.discussion/active
+  (fn [db _]
+    (get-in db [:feed :filters] #{})))
+
+(rf/reg-sub
+  ;; TODO use this
+  :filters.discussion/active?
+  (fn [_]
+    (rf/subscribe [:filters.discussion/active]))
+  (fn [active-filters _]
+    (seq active-filters)))
+
+(rf/reg-event-db
+  :filters.discussion/clear
+  (fn [db _]
+    (assoc-in db [:feed :filters] #{})))
