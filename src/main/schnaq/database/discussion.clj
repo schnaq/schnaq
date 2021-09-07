@@ -280,7 +280,6 @@
   [discussion-data]
   [map? :ret :db/id]
   (main-db/clean-and-add-to-db! (assoc discussion-data
-                                  :discussion/states [:discussion.state/open]
                                   :discussion/created-at (Date.))
                                 ::specs/discussion))
 

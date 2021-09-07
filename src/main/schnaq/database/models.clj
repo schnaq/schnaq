@@ -147,7 +147,7 @@
 
    ;; Discussion States
    {:db/ident :discussion.state/open
-    :db/doc "Discontinued. Not in use anymore. In db for legacy reasons."}
+    :db/doc "DEPRECATED. Not in use anymore. In db for legacy reasons. Discussions are open unless the have the closed state."}
    {:db/ident :discussion.state/closed}
    {:db/ident :discussion.state/private
     :db/doc "DEPRECATED: Use :discussion.state/public"}
