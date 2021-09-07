@@ -6,10 +6,25 @@
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
+(defn- state-selections
+  "Selection-options for type filters."
+  []
+  [:div.form-row.pb-3
+   [:div.col-auto
+    [:select#filter-state-selection.mr-1.form-control
+     [:option {:value :is} (labels :filters.option.type/is)]
+     [:option {:value :is-not} (labels :filters.option.type/is-not)]]]
+   [:div.col-auto
+    [:select#filter-state.mr-1.form-control
+     ;; Needs to be string, otherwise ns will be stripped
+     [:option {:value "discussion.state/open"} (labels :discussion.add.button/neutral)]
+     [:option {:value "statement.type/attack"} (labels :discussion.add.button/attack)]
+     [:option {:value "statement.type/support"} (labels :discussion.add.button/support)]]]])
+
 (defn- add-filters
   "A small component for adding new filters."
   []
-  (let [current-selection (r/atom "labels")
+  (let [current-selection (r/atom "state")
         selected-label (r/atom nil)]
     (fn []
       [:section.border-bottom.pb-2.text-left
@@ -17,30 +32,14 @@
         [:label {:for :add-filter-menu}
          (labels :filters.label/filter-for)]
         [:select#add-filter-menu.mr-1.form-control
-         {:on-change #(set-selected-option % current-selection)}
-         [:option {:value :labels} (labels :filters.option.labels/text)]
-         [:option {:value :type} (labels :filters.option.type/text)]
-         [:option {:value :votes} (labels :filters.option.votes/text)]]]
+         {:on-change #(reset! current-selection (tools/get-selection-from-event %))}
+         [:option {:value :state} (labels :filters.discussion.option.state/label)]]]
        (case @current-selection
-         "labels" [label-selections selected-label]
-         "type" [type-selections]
-         "votes" [vote-selections]
-         "")
+         "state" [state-selections])
        [:button.btn.btn-outline-dark.mr-2
         {:on-click #(case @current-selection
-                      "labels"
-                      (when @selected-label
-                        (rf/dispatch [:filters.activate/labels
-                                      (tools/get-current-selection (gdom/getElement "filter-labels-selection"))
-                                      @selected-label]))
-                      "type"
-                      (rf/dispatch [:filters.activate/type
-                                    (tools/get-current-selection (gdom/getElement "filter-type-selection"))
-                                    (tools/get-current-selection (gdom/getElement "filter-type-type"))])
-                      "votes"
-                      (rf/dispatch [:filters.activate/votes
-                                    (tools/get-current-selection (gdom/getElement "filter-votes-selection"))
-                                    (.-value (gdom/getElement "filter-votes-number"))]))}
+                      "state"
+                      (println "placeholder"))}
         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
 
 (defn- default-menu

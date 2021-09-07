@@ -45,6 +45,8 @@
             [schnaq.interface.views.discussion.logic]
             [schnaq.interface.views.discussion.search]
             [schnaq.interface.views.errors]
+            [schnaq.interface.views.feed.filters]
+            [schnaq.interface.views.feed.overview]
             [schnaq.interface.views.feedback.admin]
             [schnaq.interface.views.feedback.collect]
             [schnaq.interface.views.graph.settings]
