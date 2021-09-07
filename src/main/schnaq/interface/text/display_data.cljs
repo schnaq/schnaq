@@ -1031,6 +1031,21 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.stype/attack "attack"
         :filters.stype/support "support"
 
+        :filters.discussion.option.state/label "Schnaq state"
+        :filters.discussion.option.state/closed "closed"
+        :filters.discussion.option.state/read-only "read only"
+        :filters.discussion.option.numbers/label "Number of statements"
+        :filters.discussion.option.author/label "Own participation"
+        :filters.discussion.option.author/prelude "I am"
+        :filters.discussion.option.author/included "participating"
+        :filters.discussion.option.author/excluded "not participating"
+        ;; Auto-generation of pretty-labels
+        :filters.labels.criteria/included "participating"
+        :filters.labels.criteria/excluded "not participating"
+        :filters.labels.type/state "Schnaq state"
+        :filters.labels.type/numbers "Statement-number"
+        :filters.labels.type/author "You are"
+
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
@@ -2140,6 +2155,21 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.stype/neutral "neutral"
         :filters.stype/attack "dagegen"
         :filters.stype/support "dafür"
+
+        :filters.discussion.option.state/label "Schnaq Status"
+        :filters.discussion.option.state/closed "geschlossen"
+        :filters.discussion.option.state/read-only "nur lesezugriff"
+        :filters.discussion.option.numbers/label "Anzahl Beiträge"
+        :filters.discussion.option.author/label "Eigene Teilahme"
+        :filters.discussion.option.author/prelude "Ich"
+        :filters.discussion.option.author/included "nehme teil"
+        :filters.discussion.option.author/excluded "nehme nicht teil"
+        ;; Auto-generation of pretty-labels
+        :filters.labels.criteria/included "nimmst teil"
+        :filters.labels.criteria/excluded "nimmst nicht teil"
+        :filters.labels.type/state "Schnaq Status"
+        :filters.labels.type/numbers "Anzahl Beiträge"
+        :filters.labels.type/author "Du"
 
         :loading.placeholder/lead "Daten werden geladen..."
         :loading.placeholder/takes-too-long "Das dauert länger als gedacht. Vielleicht ist etwas schiefgelaufen. Versuche die Seite neu zu laden oder den Prozess noch einmal zu wiederholen. Sollte es weiterhin zu Problemen kommen, dann melde dich bei uns!"

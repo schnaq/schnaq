@@ -156,7 +156,7 @@
   [{:db/id "discussion/cat-or-dog"
     :discussion/title "Cat or Dog?"
     :discussion/description "Should a person looking for a pet rather buy a dog or a cat?"
-    :discussion/states [:discussion.state/open]
+    :discussion/states []
     :discussion/share-hash "cat-dog-hash"
     :discussion/author "user/wegi"
     :discussion/created-at #inst "2019-01-01"
@@ -167,7 +167,7 @@
     :discussion/share-hash "ameisenbär-hash"
     :discussion/description "What do what do"
     :discussion/author "user/wegi"
-    :discussion/states [:discussion.state/open]
+    :discussion/states []
     :discussion/starting-statements ["statement/get-dog"]}])
 
 (def ^:private graph-discussion
@@ -178,7 +178,7 @@
     :discussion/edit-hash "graph-edit-hash"
     :discussion/author "user/wegi"
     :discussion/description "Der Graph muss korrekt sein"
-    :discussion/states [:discussion.state/open]
+    :discussion/states []
     :discussion/starting-statements ["statement/warm" "statement/foo"]}
    {:db/id "statement/GrossFoo"
     :statement/author "user/rambo"
@@ -241,7 +241,7 @@
     :discussion/author "user/wegi"
     :discussion/edit-hash "simple-hash-secret"
     :discussion/description "A very simple discussion"
-    :discussion/states [:discussion.state/open]
+    :discussion/states []
     :discussion/starting-statements ["statement/brainstorm"]}
    {:db/id "statement/denken"
     :statement/author "user/rambo"
