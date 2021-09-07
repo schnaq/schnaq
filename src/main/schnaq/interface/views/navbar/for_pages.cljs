@@ -1,10 +1,10 @@
 (ns schnaq.interface.views.navbar.for-pages
-  (:require [re-frame.core :as rf]
+  (:require [clojure.string :as str]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.language :as language]
-            [schnaq.interface.views.navbar.user-management :as um]
-            [clojure.string :as str]))
+            [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
