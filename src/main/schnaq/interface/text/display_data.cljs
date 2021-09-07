@@ -1029,10 +1029,15 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.stype/attack "attack"
         :filters.stype/support "support"
 
+        ;; TODO translate this block
         :filters.discussion.option.state/label "Schnaq state"
         :filters.discussion.option.state/closed "closed"
         :filters.discussion.option.state/read-only "read only"
         :filters.discussion.option.numbers/label "Number of statements"
+        :filters.discussion.option.author/label "Own participation"
+        :filters.discussion.option.author/prelude "I am"
+        :filters.discussion.option.author/included "participating"
+        :filters.discussion.option.author/excluded "not participating"
 
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"

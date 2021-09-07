@@ -8,7 +8,7 @@
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn- state-selections
-  "Selection-options for type filters."
+  "Selection-options for discussion state filters."
   []
   [:div.form-row.pb-3
    [:div.col-auto
@@ -21,8 +21,19 @@
      [:option {:value "discussion.state/closed"} (labels :filters.discussion.option.state/closed)]
      [:option {:value "statement.type/read-only"} (labels :filters.discussion.option.state/read-only)]]]])
 
+(defn- author-selections
+  "Selection-options for discussion author filters."
+  []
+  [:div.form-row.pb-3
+   [:div.col-auto.align-self-center
+    [:p.my-auto (labels :filters.discussion.option.author/prelude)]]
+   [:div.col-auto
+    [:select#filter-author-selection.mr-1.form-control
+     [:option {:value :included} (labels :filters.discussion.option.author/included)]
+     [:option {:value :excluded} (labels :filters.discussion.option.author/excluded)]]]])
+
 (defn- statement-number-selections
-  "Selection-options for vote filters."
+  "Selection-options for number of statements filters."
   []
   [:div.form-row.pb-3
    [:div.col-auto
@@ -48,10 +59,12 @@
         [:select#add-filter-menu.mr-1.form-control
          {:on-change #(reset! current-selection (tools/get-selection-from-event %))}
          [:option {:value :state} (labels :filters.discussion.option.state/label)]
-         [:option {:value :numbers} (labels :filters.discussion.option.numbers/label)]]]
+         [:option {:value :numbers} (labels :filters.discussion.option.numbers/label)]
+         [:option {:value :author} (labels :filters.discussion.option.author/label)]]]
        (case @current-selection
          "state" [state-selections]
-         "numbers" [statement-number-selections])
+         "numbers" [statement-number-selections]
+         "author" [author-selections])
        [:button.btn.btn-outline-dark.mr-2
         {:on-click #(case @current-selection
                       "state"
@@ -61,7 +74,10 @@
                       "numbers"
                       (rf/dispatch [:filters.discussion/activate :numbers
                                     (tools/get-current-selection (gdom/getElement "filter-numbers-selection"))
-                                    (.-value (gdom/getElement "filter-numbers"))]))}
+                                    (.-value (gdom/getElement "filter-numbers"))])
+                      "author"
+                      (rf/dispatch [:filters.discussion/activate :author
+                                    (tools/get-current-selection (gdom/getElement "filter-author-selection"))]))}
         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
 
 (defn- default-menu
@@ -69,6 +85,7 @@
   []
   [:<>
    [add-filters]
+   ;; TODO continue here
    #_[active-filters]
    (when (< 1 (count @(rf/subscribe [:filters.discussion/active])))
      [:button.btn.btn-outline-secondary.text-center
@@ -96,13 +113,11 @@
       (update-in db [:feed :filters] #(cset/union #{new-filter} %)))))
 
 (rf/reg-sub
-  ;; TODO use this
   :filters.discussion/active
   (fn [db _]
     (get-in db [:feed :filters] #{})))
 
 (rf/reg-sub
-  ;; TODO use this
   :filters.discussion/active?
   (fn [_]
     (rf/subscribe [:filters.discussion/active]))
