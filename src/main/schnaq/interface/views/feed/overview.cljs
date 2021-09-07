@@ -78,9 +78,11 @@
   ([subscription-vector show-delete-from-hub-button?]
    (let [schnaqs @(rf/subscribe subscription-vector)
          sort-method @(rf/subscribe [:feed/sort])
+         active-filters @(rf/subscribe [:filters.discussion/active])
+         filtered-schnaqs (filters/filter-discussions schnaqs active-filters)
          sorted-schnaqs (if (= :alphabetical sort-method)
-                          (sort-by :discussion/title schnaqs)
-                          (sort-by :discussion/created-at > schnaqs))]
+                          (sort-by :discussion/title filtered-schnaqs)
+                          (sort-by :discussion/created-at > filtered-schnaqs))]
      (if (empty? schnaqs)
        [no-schnaqs-found]
        [:div.panel-white.rounded-1.px-md-5

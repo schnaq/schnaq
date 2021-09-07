@@ -4,6 +4,7 @@
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
@@ -52,33 +53,35 @@
   []
   (let [current-selection (r/atom "state")]
     (fn []
-      [:section.border-bottom.pb-2.text-left
-       [:div.form-group
-        [:label {:for :add-filter-menu}
-         (labels :filters.label/filter-for)]
-        [:select#add-filter-menu.mr-1.form-control
-         {:on-change #(reset! current-selection (tools/get-selection-from-event %))}
-         [:option {:value :state} (labels :filters.discussion.option.state/label)]
-         [:option {:value :numbers} (labels :filters.discussion.option.numbers/label)]
-         [:option {:value :author} (labels :filters.discussion.option.author/label)]]]
-       (case @current-selection
-         "state" [state-selections]
-         "numbers" [statement-number-selections]
-         "author" [author-selections])
-       [:button.btn.btn-outline-dark.mr-2
-        {:on-click #(case @current-selection
-                      "state"
-                      (rf/dispatch [:filters.discussion/activate :state
-                                    (tools/get-current-selection (gdom/getElement "filter-state-selection"))
-                                    (keyword (tools/get-current-selection (gdom/getElement "filter-state")))])
-                      "numbers"
-                      (rf/dispatch [:filters.discussion/activate :numbers
-                                    (tools/get-current-selection (gdom/getElement "filter-numbers-selection"))
-                                    (.-value (gdom/getElement "filter-numbers"))])
-                      "author"
-                      (rf/dispatch [:filters.discussion/activate :author
-                                    (tools/get-current-selection (gdom/getElement "filter-author-selection"))]))}
-        [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
+      (let [display-name @(rf/subscribe [:user/display-name])]
+        [:section.border-bottom.pb-2.text-left
+         [:div.form-group
+          [:label {:for :add-filter-menu}
+           (labels :filters.label/filter-for)]
+          [:select#add-filter-menu.mr-1.form-control
+           {:on-change #(reset! current-selection (tools/get-selection-from-event %))}
+           [:option {:value :state} (labels :filters.discussion.option.state/label)]
+           [:option {:value :numbers} (labels :filters.discussion.option.numbers/label)]
+           [:option {:value :author} (labels :filters.discussion.option.author/label)]]]
+         (case @current-selection
+           "state" [state-selections]
+           "numbers" [statement-number-selections]
+           "author" [author-selections])
+         [:button.btn.btn-outline-dark.mr-2
+          {:on-click #(case @current-selection
+                        "state"
+                        (rf/dispatch [:filters.discussion/activate :state
+                                      (tools/get-current-selection (gdom/getElement "filter-state-selection"))
+                                      (keyword (tools/get-current-selection (gdom/getElement "filter-state")))])
+                        "numbers"
+                        (rf/dispatch [:filters.discussion/activate :numbers
+                                      (tools/get-current-selection (gdom/getElement "filter-numbers-selection"))
+                                      (.-value (gdom/getElement "filter-numbers"))])
+                        "author"
+                        (rf/dispatch [:filters.discussion/activate :author
+                                      (tools/get-current-selection (gdom/getElement "filter-author-selection"))
+                                      display-name]))}
+          [:i {:class (fa :plus)}] " " (labels :filters.add/button)]]))))
 
 (defn- prettify-filter
   "A helper returning a single filter prettified."
@@ -132,7 +135,8 @@
       [:button.btn.btn-outline-primary.btn-sm.mx-1
        {:class (when active-filters? "btn-outline-secondary active")}
        (labels :badges.filters/button)]]
-     {:hideOnClick :toggle}]))
+     {:hideOnClick :toggle
+      :appendTo js-wrap/document-body}]))
 
 (rf/reg-event-db
   :filters.discussion/activate
@@ -163,3 +167,28 @@
   :filters.discussion/deactivate
   (fn [db [_ filter-data]]
     (update-in db [:feed :filters] disj filter-data)))
+
+;; Helpers to call from other ns'
+
+(defn- filter-to-fn
+  "Returns the corresponding filter-fn for a data-representation of a filter."
+  [{:keys [type criteria extra]}]
+  (case type
+    :state
+    (let [coll-fn (if (= criteria :is) filter remove)]
+      (fn [discussions] (coll-fn #(contains? (set (:discussion/states %)) extra) discussions)))
+    :author
+    (let [coll-fn (if (= criteria :included) filter remove)]
+      (fn [discussions] (coll-fn #(contains? (set (-> % :meta-info :authors)) extra) discussions)))
+    :numbers
+    ;; Calling symbol on the string does not help. Other solutions are hacky.
+    (let [comp-fn (case criteria :> > := = :< <)]
+      (fn [discussions] (filter #(comp-fn (-> % :meta-info :all-statements) extra) discussions)))
+    identity))
+
+(defn filter-discussions
+  "Accepts a collection of discusisons and filters and applies them to the collection."
+  [discussions filters]
+  (let [filter-fns (map filter-to-fn filters)]
+    ;; Apply every filter-function to the statements before returning them
+    (reduce (fn [discussions filter-fn] (filter-fn discussions)) discussions filter-fns)))
