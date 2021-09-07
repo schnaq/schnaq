@@ -2299,7 +2299,7 @@ Now we write down questions and discuss them and can still understand what we ha
      :startpage.alternatives.e-learning/christian "https://s3.disqtec.com/startpage/christian.jpg"
      :startpage.alternatives.e-learning/mike "https://s3.disqtec.com/startpage/mike.jpg"
      :startpage.alternatives.e-learning/david "https://s3.disqtec.com/startpage/david.jpeg"
-     :startpage.alternatives.e-learning/student-smartphone "https://s3.disqtec.com/startpage/student-smartphone.jpeg"
+     :startpage.alternatives.e-learning/student-smartphone "https://s3.disqtec.com/startpage/student_smartphone.jpg"
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
      :startpage.example/discussion "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_discussion.jpg"
      :startpage.example/dashboard "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_dashboard.jpg"

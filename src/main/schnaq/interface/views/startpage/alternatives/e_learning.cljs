@@ -78,22 +78,38 @@
      [:div.bg-white
       [:div.container-lg.text-center.early-adopter-schnaqqifant-wrapper
        [:section.container.text-center
-        [:div.mx-auto {:style {:max-width "900px"}}
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/bjorn)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/raphael-bialon)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/eugen-bialon)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/frauke-kling)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :startpage.alternatives.e-learning/mike)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/florian-clever)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :startpage.alternatives.e-learning/david)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/frank-stampa)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/hck)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/ingo-kupers)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :startpage.alternatives.e-learning/alex)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/lokay)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/meiko-tse)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :startpage.alternatives.e-learning/christian)}]
-         [:img.rounded-circle.social-proof-img-bigger.mr-5.mt-3 {:src (img-path :testimonial-picture/tobias-schroeder)}]]
+        (let [img-classes "rounded-circle social-proof-img-lg mr-5 mt-3"]
+          [:div.mx-auto {:style {:max-width "900px"}}
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/bjorn)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/raphael-bialon)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/eugen-bialon)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/frauke-kling)}]
+           [:img {:class img-classes
+                  :src (img-path :startpage.alternatives.e-learning/mike)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/florian-clever)}]
+           [:img {:class img-classes
+                  :src (img-path :startpage.alternatives.e-learning/david)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/frank-stampa)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/hck)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/ingo-kupers)}]
+           [:img {:class img-classes
+                  :src (img-path :startpage.alternatives.e-learning/alex)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/lokay)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/meiko-tse)}]
+           [:img {:class img-classes
+                  :src (img-path :startpage.alternatives.e-learning/christian)}]
+           [:img {:class img-classes
+                  :src (img-path :testimonial-picture/tobias-schroeder)}]])
         [:h2.mt-5 "Steigere den Lernerfolg deiner hybriden Lehrveranstaltung"]
         [:p.small.text-muted "\"Ich hätte niemals gedacht, dass Diskussionen als Hausarbeit klappen.\" – David Hanio"]
         [:a.btn.btn-lg.btn-secondary.mt-4
