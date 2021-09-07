@@ -12,7 +12,8 @@
   [:db/id
    :hub/name
    :hub/keycloak-name
-   :hub/created-at])
+   :hub/created-at
+   :hub/logo])
 
 (def ^:private hub-pattern
   [:db/id

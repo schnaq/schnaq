@@ -2,7 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
             [clojure.string :as string]
-            [ghostwheel.core :refer [>defn]]
+            [ghostwheel.core :refer [>defn >defn-]]
             [image-resizer.core :as resizer-core]
             [image-resizer.format :as resizer-format]
             [ring.util.http-response :refer [created bad-request forbidden]]
@@ -75,23 +75,27 @@
     (catch Exception e
       (log/warn "Converting image failed with exception:" e))))
 
-(defn create-UUID-file-name
+(>defn- create-UUID-file-name
   "Generates a UUID based on a unique id with a file type suffix."
   [id file-type]
-  (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type))
+  [string? string? :ret string?]
+  (when (and id file-type)
+    (str (UUID/nameUUIDFromBytes (.getBytes (str id))) "." file-type)))
 
 (defn upload-image!
-  "Scale and upload an image to s3"
-  [image-type image-content bucket-key]
+  "Scale and upload an image to s3."
+  [file-name image-type image-content bucket-key]
   (if (shared-config/allowed-mime-types image-type)
     (if-let [{:keys [input-stream image-type content-type]}
              (scale-image-to-height image-content config/profile-picture-height)]
-      (let [image-name (create-UUID-file-name (:id identity) image-type)
-            absolute-url (s3/upload-stream bucket-key
-                                           input-stream
-                                           image-name
-                                           {:content-type content-type})]
-        {:image-url absolute-url})
+      (if-let [image-name (create-UUID-file-name file-name image-type)]
+        (let [absolute-url (s3/upload-stream bucket-key
+                                             input-stream
+                                             image-name
+                                             {:content-type content-type})]
+          {:image-url absolute-url})
+        (bad-request (at/build-error-body :error/could-not-create-file-name
+                                          "Could not create file-name. Maybe you are not authenticated or you did not provide a file-type.")))
       (do
         (log/warn "Conversion of image failed.")
         (bad-request (at/build-error-body :scaling "Could not scale image"))))
