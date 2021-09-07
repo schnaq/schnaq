@@ -80,13 +80,43 @@
                                     (tools/get-current-selection (gdom/getElement "filter-author-selection"))]))}
         [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
 
+(defn- prettify-filter
+  "A helper returning a single filter prettified."
+  [{:keys [type criteria extra] :as filter-data}]
+  (let [type-label (labels (keyword :filters.labels.type type))
+        criteria-label (labels (keyword :filters.labels.criteria criteria))
+        extra-label (case type
+                      :state (labels (keyword :filters.discussion.option.state extra))
+                      :numbers extra
+                      :author "")]
+    [:div.d-flex.justify-content-between
+     [:p.d-inline-block.pr-2.my-auto {:key (str filter-data)}
+      [:strong type-label] " "
+      criteria-label " "
+      extra-label]
+     [:button.btn.btn-outline-primary-small.my-1
+      {:on-click #(rf/dispatch [:filters.discussion/deactivate filter-data])} "x"]]))
+
+(defn- active-filters
+  "A menu showing the currently active filters."
+  []
+  (let [active @(rf/subscribe [:filters.discussion/active])]
+    [:section.pt-2.text-left
+     [:p (labels :filters.heading/active)]
+     (when (seq active)
+       (for [filter-data active]
+         ;; The key needs to be set because it's a list.
+         ;; And the key is needed again in prettify-filter or else react does not render.
+         (with-meta
+           [prettify-filter filter-data]
+           {:key (str filter-data)})))]))
+
 (defn- default-menu
   "The default filter menu that is shown to the user."
   []
   [:<>
    [add-filters]
-   ;; TODO continue here
-   #_[active-filters]
+   [active-filters]
    (when (< 1 (count @(rf/subscribe [:filters.discussion/active])))
      [:button.btn.btn-outline-secondary.text-center
       {:on-click #(rf/dispatch [:filters.discussion/clear])}
@@ -128,3 +158,8 @@
   :filters.discussion/clear
   (fn [db _]
     (assoc-in db [:feed :filters] #{})))
+
+(rf/reg-event-db
+  :filters.discussion/deactivate
+  (fn [db [_ filter-data]]
+    (update-in db [:feed :filters] disj filter-data)))

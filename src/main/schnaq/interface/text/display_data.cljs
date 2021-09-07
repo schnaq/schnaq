@@ -1038,6 +1038,12 @@ Now we write down questions and discuss them and can still understand what we ha
         :filters.discussion.option.author/prelude "I am"
         :filters.discussion.option.author/included "participating"
         :filters.discussion.option.author/excluded "not participating"
+        ;; Auto-generation of pretty-labels
+        :filters.labels.criteria/included "participating"
+        :filters.labels.criteria/excluded "not participating"
+        :filters.labels.type/state "Schnaq state"
+        :filters.labels.type/numbers "Statement-number"
+        :filters.labels.type/author "You are"
 
         :loading.placeholder/lead "Loading..."
         :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
