@@ -326,10 +326,25 @@
            share-hash statement-pattern)
     (toolbelt/pull-key-up :db/ident)))
 
+(>defn all-statements-from-others
+  "Returns all statements belonging to a discussion which are not from a user."
+  [keycloak-id share-hash]
+  [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of ::specs/statement)]
+  (->
+    (query '[:find [(pull ?statements statement-pattern) ...]
+             :in $ ?keycloak-id ?share-hash statement-pattern
+             :where [?discussion :discussion/share-hash ?share-hash]
+             [?statements :statement/discussions ?discussion]
+             (not [?statements :statement/deleted? true])
+             [?statements :statement/author ?author]
+             (not [?author :user.registered/keycloak-id ?keycloak-id])]
+           keycloak-id share-hash statement-pattern)
+    (toolbelt/pull-key-up :db/ident)))
+
 (defn- new-statements-for-user
   "Retrieve new statements of a discussion for a user"
   [keycloak-id discussion-hash]
-  (let [all-statements (all-statements discussion-hash)
+  (let [all-statements (all-statements-from-others keycloak-id discussion-hash)
         seen-statements (user-db/known-statement-ids keycloak-id discussion-hash)]
     (remove (fn [statement]
               (some #(= % (:db/id statement)) seen-statements))

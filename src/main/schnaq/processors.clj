@@ -55,7 +55,9 @@
     (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
       (walk/postwalk
         (fn [statement]
-          (if (s/valid? ::specs/statement statement)
+          (if (and (s/valid? ::specs/statement statement)
+                   (not= user-identity
+                         (:user.registered/keycloak-id (:statement/author statement))))
             (assoc statement :meta/new? (not (contains? known-statements (:db/id statement))))
             statement))
         data))

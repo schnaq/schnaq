@@ -150,38 +150,33 @@
         statement-1 (discussion-db/add-starting-statement! share-hash user-id content-1 true)
         statement-2 (discussion-db/add-starting-statement! share-hash user-id content-2 true)
         statement-3 (discussion-db/add-starting-statement! share-hash user-id content-3 true)
-        statement-new-1 (discussion-db/add-starting-statement! share-hash user-id content-new-1 true)
-        statement-new-2 (discussion-db/add-starting-statement! share-hash user-id content-new-2 true)
+        statement-4 (discussion-db/add-starting-statement! share-hash user-id content-new-1 true)
+        statement-5 (discussion-db/add-starting-statement! share-hash user-id content-new-2 true)
         ;; pull all statements
         all-statements (mapv #(fast-pull % discussion-db/statement-pattern)
-                             [statement-1 statement-2 statement-3 statement-new-1 statement-new-2])
-        ;; add seen statements
-        seen-statements #{statement-1 statement-2 statement-3}
-        _ (user-db/create-visited-statements-for-discussion
-            keycloak-user-id share-hash seen-statements)
-        new-statements (#'discussion-db/new-statements-for-user keycloak-user-id share-hash)
+                             [statement-1 statement-2 statement-3 statement-4 statement-5])
         ;; add visited schnaqs
         _ (user-db/update-visited-schnaqs keycloak-user-id [discussion-id])]
     {:user user
      :keycloak-id keycloak-user-id
      :discussion-hash share-hash
-     :new-statements new-statements
-     :seen-statements seen-statements
+     :discussion-id discussion-id
      :all-statements all-statements}))
 
 (deftest test-mark-all-as-read
   (testing "Test if mark-all-as-read causes an empty new-statement-ids-for-user result"
-    (let [{:keys [_user keycloak-id discussion-hash
-                  new-statements seen-statements _all-statements]}
+    (let [{:keys [_user _keycloak-id discussion-hash discussion-id all-statements]}
           (add-dead-parrot-sketch "John-Cleese")
-          read (user-db/known-statement-ids keycloak-id discussion-hash)
+          keycloak-id "new-user-keycloak-id"
+          _new-user (add-test-user keycloak-id "Neuer Nutzer")
+          _ (user-db/update-visited-schnaqs keycloak-id [discussion-id])
+          known-before (user-db/known-statement-ids keycloak-id discussion-hash)
           marked-as-read (discussion-db/mark-all-statements-as-read! keycloak-id)
           new-statements-after-mark-as-read (discussion-db/new-statement-ids-for-user
                                               keycloak-id
                                               discussion-hash)]
-      (is (not-empty new-statements))
-      (is (= seen-statements read))
-      (is (= (count new-statements) (count (get marked-as-read discussion-hash)))
+      (is (empty? known-before))
+      (is (= (count all-statements) (count (get marked-as-read discussion-hash)))
           "Number of known statements should be the same as seen-statements from discussion")
       (is (zero? (count new-statements-after-mark-as-read))))))
 
