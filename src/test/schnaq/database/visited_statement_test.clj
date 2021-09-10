@@ -161,7 +161,7 @@
             keycloak-user-id share-hash seen-statements)
         new-statements (#'discussion-db/new-statements-for-user keycloak-user-id share-hash)
         ;; add visited schnaqs
-        _ (#'user-db/update-visited-schnaqs keycloak-user-id [discussion-id])]
+        _ (user-db/update-visited-schnaqs keycloak-user-id [discussion-id])]
     {:user user
      :keycloak-id keycloak-user-id
      :discussion-hash share-hash
@@ -185,35 +185,3 @@
           "Number of known statements should be the same as seen-statements from discussion")
       (is (zero? (count new-statements-after-mark-as-read))))))
 
-
-(comment
-
-  (def k-id (str "Testi"))
-  (def share-hash "share-hash-3")
-
-  (def user-1 (add-test-user k-id "Mike"))
-
-  (add-dead-parrot-sketch "Testi")
-
-  {share-hash (discussion-db/new-statement-ids-for-user k-id share-hash)}
-
-  (discussion-db/new-statement-ids-for-user k-id "fooo2")
-
-  (into {}
-        (filter (fn [[_ statements]] (seq statements))
-                (reduce conj
-                        (map (fn [discussion-hash]
-                               {discussion-hash (discussion-db/new-statement-ids-for-user
-                                                  k-id discussion-hash)})
-                             #{share-hash "fooo1" "fooo2"}))))
-
-
-  (user-db/register-new-user {:sub k-id :preferred_username "Mike"} [17592186056137] [])
-
-  (:db/id (discussion-db/discussion-by-share-hash "share-hash-3"))
-
-  (fast-pull [:user.registered/keycloak-id k-id] user-db/private-user-pattern)
-
-  ;todo update visited schnaqs in controller
-  ; visited schnaqs sind ids
-  )
