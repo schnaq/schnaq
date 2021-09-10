@@ -10,7 +10,7 @@
 (use-fixtures :once schnaq-toolbelt/clean-database-fixture)
 
 (defn- add-test-user [id name]
-  (second (user-db/register-new-user {:id id :preferred_username name} [] [])))
+  (second (user-db/register-new-user {:sub id :preferred_username name} [] [])))
 
 (defn- create-discussion [name share-hash edit-hash user]
   {:discussion/title name
@@ -132,7 +132,7 @@
 (defn add-dead-parrot-sketch
   [name]
   (let [;; add user
-        keycloak-user-id (str " keycloak-id-" name)
+        keycloak-user-id (str "keycloak-id-" name)
         user-name name
         user (add-test-user keycloak-user-id user-name)
         user-id (:db/id user)
@@ -140,7 +140,7 @@
         discussion-name "A customer enters a pet shop."
         share-hash "share-hash-3"
         edit-hash "secret-hash-3"
-        _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user) true)
+        discussion-id (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user))
         ;; add starting statements
         content-1 "'Ello, I wish to register a complaint. 'Ello, Miss?"
         content-2 "What do you mean miss?"
@@ -159,9 +159,11 @@
         seen-statements #{statement-1 statement-2 statement-3}
         _ (user-db/create-visited-statements-for-discussion
             keycloak-user-id share-hash seen-statements)
-        new-statements (#'discussion-db/new-statements-for-user keycloak-user-id share-hash)]
+        new-statements (#'discussion-db/new-statements-for-user keycloak-user-id share-hash)
+        ;; add visited schnaqs
+        _ (#'user-db/update-visited-schnaqs keycloak-user-id [discussion-id])]
     {:user user
-     :user/keycloak-id keycloak-user-id
+     :keycloak-id keycloak-user-id
      :discussion-hash share-hash
      :new-statements new-statements
      :seen-statements seen-statements
@@ -169,13 +171,49 @@
 
 (deftest test-mark-all-as-read
   (testing "Test if mark-all-as-read causes an empty new-statement-ids-for-user result"
-    (let [{:keys [_user keycloak-user-id discussion-hash
-                  new-statements _seen-statements _all-statements]}
-          (add-dead-parrot-sketch "John Cleese")
-          unread (discussion-db/mark-all-statements-as-read! keycloak-user-id)
+    (let [{:keys [_user keycloak-id discussion-hash
+                  new-statements seen-statements _all-statements]}
+          (add-dead-parrot-sketch "John-Cleese")
+          read (user-db/known-statement-ids keycloak-id discussion-hash)
+          marked-as-read (discussion-db/mark-all-statements-as-read! keycloak-id)
           new-statements-after-mark-as-read (discussion-db/new-statement-ids-for-user
-                                              keycloak-user-id
+                                              keycloak-id
                                               discussion-hash)]
       (is (not-empty new-statements))
-      (is (= (count new-statements) (count unread)))
+      (is (= seen-statements read))
+      (is (= (count new-statements) (count (get marked-as-read discussion-hash)))
+          "Number of known statements should be the same as seen-statements from discussion")
       (is (zero? (count new-statements-after-mark-as-read))))))
+
+
+(comment
+
+  (def k-id (str "Testi"))
+  (def share-hash "share-hash-3")
+
+  (def user-1 (add-test-user k-id "Mike"))
+
+  (add-dead-parrot-sketch "Testi")
+
+  {share-hash (discussion-db/new-statement-ids-for-user k-id share-hash)}
+
+  (discussion-db/new-statement-ids-for-user k-id "fooo2")
+
+  (into {}
+        (filter (fn [[_ statements]] (seq statements))
+                (reduce conj
+                        (map (fn [discussion-hash]
+                               {discussion-hash (discussion-db/new-statement-ids-for-user
+                                                  k-id discussion-hash)})
+                             #{share-hash "fooo1" "fooo2"}))))
+
+
+  (user-db/register-new-user {:sub k-id :preferred_username "Mike"} [17592186056137] [])
+
+  (:db/id (discussion-db/discussion-by-share-hash "share-hash-3"))
+
+  (fast-pull [:user.registered/keycloak-id k-id] user-db/private-user-pattern)
+
+  ;todo update visited schnaqs in controller
+  ; visited schnaqs sind ids
+  )
