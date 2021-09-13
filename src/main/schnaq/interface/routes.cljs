@@ -148,7 +148,8 @@
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
                      :start (fn [{:keys [path]}]
-                              (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
+                              (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
+                              (rf/dispatch [:schnaq/add-visited! (:share-hash path)]))}]}
      [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
       {:controllers [{:parameters {:path [:share-hash]}
                       :start (fn []

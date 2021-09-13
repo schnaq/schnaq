@@ -88,7 +88,7 @@
     (transact add-new-groups)
     groups))
 
-(defn- update-visited-schnaqs
+(defn update-visited-schnaqs
   "Updates the user's visited schnaqs by adding the new ones. Input is a user-id and a collection of valid ids."
   [keycloak-id visited-schnaqs]
   (let [txs (mapv #(vector :db/add [:user.registered/keycloak-id keycloak-id] :user.registered/visited-schnaqs %)

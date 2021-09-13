@@ -4,6 +4,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
+            [schnaq.interface.auth :as auth]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
@@ -151,6 +152,14 @@
     {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
      :fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
                               {:share-hash share-hash})]}))
+
+(rf/reg-event-fx
+  :schnaq/add-visited!
+  (fn [{:keys [db]} [_ share-hash]]
+    (when (auth/user-authenticated? db)
+      {:fx [(http/xhrio-request db :put "/schnaq/add-visited"
+                                [:no-op]
+                                {:share-hash share-hash})]})))
 
 (rf/reg-event-fx
   :schnaq/refresh-selected

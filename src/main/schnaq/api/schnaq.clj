@@ -98,6 +98,14 @@
       (ok {:share-hash share-hash})
       (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
 
+(defn- add-visited-schnaq
+  "Add schnaq id to visited schnaqs by share-hash"
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash]} (:body parameters)
+        user-identity (:sub identity)
+        discussion-id (:db/id (discussion-db/discussion-by-share-hash share-hash))]
+    (user-db/update-visited-schnaqs user-identity [discussion-id])
+    (ok {:share-hash share-hash})))
 
 ;; -----------------------------------------------------------------------------
 (s/def ::discussion-title :discussion/title)
@@ -118,6 +126,14 @@
                   :parameters {:query {:share-hash :discussion/share-hash}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
+     ["/add-visited" {:put add-visited-schnaq
+                      :description (at/get-doc #'add-visited-schnaq)
+                      :name :api.schnaq/add-visited
+                      :middleware [:user/authenticated?
+                                   :discussion/valid-share-hash?]
+                      :parameters {:body {:share-hash :discussion/share-hash}}
+                      :responses {200 {:body {:share-hash :discussion/share-hash}}
+                                  400 at/response-error-body}}]
      ["/add" {:post add-schnaq
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add

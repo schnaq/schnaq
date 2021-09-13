@@ -49,13 +49,15 @@
     data))
 
 (defn with-new-post-info
-  "Add sub-discussion-info whether or not a user has seen this post already."
+  "Add sub-discussion-info whether a user has seen this post already."
   [data share-hash user-identity]
   (if user-identity
     (let [known-statements (user-db/known-statement-ids user-identity share-hash)]
       (walk/postwalk
         (fn [statement]
-          (if (s/valid? ::specs/statement statement)
+          (if (and (s/valid? ::specs/statement statement)
+                   (not= user-identity
+                         (get-in statement [:statement/author :user.registered/keycloak-id])))
             (assoc statement :meta/new? (not (contains? known-statements (:db/id statement))))
             statement))
         data))
