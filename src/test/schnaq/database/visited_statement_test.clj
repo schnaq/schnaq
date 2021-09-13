@@ -54,31 +54,35 @@
 (deftest update-new-posts-test
   (testing "Test updating posts with seen info"
     (let [;; add user
-          keycloak-user-id "user-2-id"
-          user-name "User Name 2"
-          user (add-test-user keycloak-user-id user-name)
-          user-id (:db/id user)
+          keycloak-user-id-1 "user-A-id"
+          user-name-1 "User Name A"
+          user-1 (add-test-user keycloak-user-id-1 user-name-1)
+          user-id-1 (:db/id user-1)
+          ;; add second user
+          keycloak-user-id-2 "user-B-id"
+          user-name-2 "User Name B"
+          _user-2 (add-test-user keycloak-user-id-2 user-name-2)
           ;; add discussion
           discussion-name "Have you seen this discussion, as well?"
           share-hash "share-hash-2"
           edit-hash "secret-hash-2"
-          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user))
+          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user-1))
           ;; add starting statements
           content-1 "Gesehen"
           content-2 "Auch gesehen"
-          content-3 "Ich bin anders!"
+          content-3 "Ich bin auch gesehen worden!"
           content-new "Noch nicht gesehen"
-          statement-1 (discussion-db/add-starting-statement! share-hash user-id content-1 true)
-          statement-2 (discussion-db/add-starting-statement! share-hash user-id content-2 true)
-          statement-3 (discussion-db/add-starting-statement! share-hash user-id content-3 true)
-          statement-new (discussion-db/add-starting-statement! share-hash user-id content-new true)
+          statement-1 (discussion-db/add-starting-statement! share-hash user-id-1 content-1 true)
+          statement-2 (discussion-db/add-starting-statement! share-hash user-id-1 content-2 true)
+          statement-3 (discussion-db/add-starting-statement! share-hash user-id-1 content-3 true)
+          statement-new (discussion-db/add-starting-statement! share-hash user-id-1 content-new true)
           seen-statements #{statement-1 statement-2 statement-3}
           ;; pull all statements
           all-statements (mapv #(fast-pull % discussion-db/statement-pattern)
                                [statement-1 statement-2 statement-3 statement-new])
-          ;; add seen statements
-          _ (user-db/create-visited-statements-for-discussion keycloak-user-id share-hash seen-statements)
-          updated-statements (processors/with-new-post-info all-statements share-hash keycloak-user-id)
+          ;; add seen statements for user-2
+          _ (user-db/create-visited-statements-for-discussion keycloak-user-id-2 share-hash seen-statements)
+          updated-statements (processors/with-new-post-info all-statements share-hash keycloak-user-id-2)
           updated-statement-1 (find-statement-in-list statement-1 updated-statements)
           updated-statement-2 (find-statement-in-list statement-2 updated-statements)
           updated-statement-3 (find-statement-in-list statement-3 updated-statements)
@@ -88,46 +92,6 @@
       (is (false? (:meta/new? updated-statement-2)))
       (is (false? (:meta/new? updated-statement-3)))
       (is (true? (:meta/new? updated-statement-new))))))
-
-
-(deftest get-new-statements-tests
-  (testing "Test get new statements for user"
-    (let [;; add user
-          keycloak-user-id "user-2-id"
-          user-name "User Name 2"
-          user (add-test-user keycloak-user-id user-name)
-          user-id (:db/id user)
-          ;; add discussion
-          discussion-name "A customer enters a pet shop."
-          share-hash "share-hash-3"
-          edit-hash "secret-hash-3"
-          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user))
-          ;; add starting statements
-          content-1 "'Ello, I wish to register a complaint. 'Ello, Miss?"
-          content-2 "What do you mean miss?"
-          content-3 "I'm sorry, I have a cold. I wish to make a complaint!"
-          content-new-1 "We're closin' for lunch."
-          content-new-2 "Never mind that, my lad. I wish to complain about this parrot what I purchased not half an hour ago from this very boutique."
-          statement-1 (discussion-db/add-starting-statement! share-hash user-id content-1 true)
-          statement-2 (discussion-db/add-starting-statement! share-hash user-id content-2 true)
-          statement-3 (discussion-db/add-starting-statement! share-hash user-id content-3 true)
-          statement-new-1 (discussion-db/add-starting-statement! share-hash user-id content-new-1 true)
-          statement-new-2 (discussion-db/add-starting-statement! share-hash user-id content-new-2 true)
-          ;; pull all statements
-          all-statements (mapv #(fast-pull % discussion-db/statement-pattern)
-                               [statement-1 statement-2 statement-3 statement-new-1 statement-new-2])
-          ;; add seen statements
-          seen-statements #{statement-1 statement-2 statement-3}
-          _ (user-db/create-visited-statements-for-discussion
-              keycloak-user-id share-hash seen-statements)
-          new-statements (#'discussion-db/new-statements-for-user keycloak-user-id share-hash)
-          expected-new-statement-count (- (count all-statements) (count seen-statements))]
-      (is (= expected-new-statement-count (count new-statements)))
-      (is (find-statement-in-list statement-new-1 new-statements))
-      (is (find-statement-in-list statement-new-2 new-statements))
-      (is (nil? (find-statement-in-list statement-1 new-statements)))
-      (is (nil? (find-statement-in-list statement-2 new-statements)))
-      (is (nil? (find-statement-in-list statement-3 new-statements))))))
 
 (defn add-dead-parrot-sketch
   [name]
@@ -161,7 +125,33 @@
      :keycloak-id keycloak-user-id
      :discussion-hash share-hash
      :discussion-id discussion-id
-     :all-statements all-statements}))
+     :all-statements all-statements
+     :statement-1 statement-1
+     :statement-2 statement-2
+     :statement-3 statement-3
+     :statement-4 statement-4
+     :statement-5 statement-5}))
+
+
+(deftest get-new-statements-tests
+  (testing "Test get new statements for user"
+    (let [{:keys [discussion-hash all-statements statement-1 statement-2 statement-3 statement-4 statement-5]}
+          (add-dead-parrot-sketch "Michael Palin")
+          ;; add user
+          keycloak-id "user-2-id"
+          _user (add-test-user keycloak-id "User Name 2")
+          ;; add seen statements
+          seen-statements #{statement-1 statement-2 statement-3}
+          _ (user-db/create-visited-statements-for-discussion keycloak-id discussion-hash seen-statements)
+          new-statements (#'discussion-db/new-statements-for-user keycloak-id discussion-hash)
+          expected-new-statement-count (- (count all-statements) (count seen-statements))]
+      (is (= expected-new-statement-count (count new-statements)))
+      (is (find-statement-in-list statement-4 new-statements))
+      (is (find-statement-in-list statement-5 new-statements))
+      (is (nil? (find-statement-in-list statement-1 new-statements)))
+      (is (nil? (find-statement-in-list statement-2 new-statements)))
+      (is (nil? (find-statement-in-list statement-3 new-statements))))))
+
 
 (deftest test-mark-all-as-read
   (testing "Test if mark-all-as-read causes an empty new-statement-ids-for-user result"
