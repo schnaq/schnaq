@@ -45,16 +45,6 @@
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
 
-(def ^:private schnaq-start-controllers
-  [{:parameters {:path [:share-hash]}
-    :start (fn []
-             (rf/dispatch [:discussion.history/clear])
-             (rf/dispatch [:updates.periodic/starting-conclusions true])
-             (rf/dispatch [:discussion.query.conclusions/starting]))
-    :stop (fn []
-            (rf/dispatch [:updates.periodic/starting-conclusions false])
-            (rf/dispatch [:statement.edit/reset-edits]))}])
-
 (defn language-controllers
   "Returns controllers for the desired locale switch and redirect."
   [locale]
@@ -160,7 +150,14 @@
                      :start (fn [{:keys [path]}]
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)]))}]}
      [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
-      {:controllers schnaq-start-controllers
+      {:controllers [{:parameters {:path [:share-hash]}
+                      :start (fn []
+                               (rf/dispatch [:discussion.history/clear])
+                               (rf/dispatch [:updates.periodic/starting-conclusions true])
+                               (rf/dispatch [:discussion.query.conclusions/starting]))
+                      :stop (fn []
+                              (rf/dispatch [:updates.periodic/starting-conclusions false])
+                              (rf/dispatch [:statement.edit/reset-edits]))}]
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]

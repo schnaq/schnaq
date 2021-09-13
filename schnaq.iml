@@ -32,7 +32,7 @@
     <orderEntry type="library" name="Deps: org.apache.commons/commons-compress:1.8" level="project" />
     <orderEntry type="library" name="Deps: ring/ring-devel:1.9.4" level="project" />
     <orderEntry type="library" name="Deps: javax.validation/validation-api:2.0.1.Final" level="project" />
-    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.57" level="project" />
+    <orderEntry type="library" name="Deps: com.cognitect.aws/endpoints:1.1.12.65" level="project" />
     <orderEntry type="library" name="Deps: com.google.errorprone/error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" name="Deps: org.apache.commons/commons-lang3:3.8.1" level="project" />
     <orderEntry type="library" name="Deps: com.draines/postal:2.0.4" level="project" />
@@ -75,7 +75,7 @@
     <orderEntry type="library" name="Deps: org.apache.httpcomponents/httpasyncclient:4.1.4" level="project" />
     <orderEntry type="library" name="Deps: org.clojure/tools.analyzer.jvm:1.1.0" level="project" />
     <orderEntry type="library" name="Deps: io.netty/netty-handler-proxy:4.1.48.Final" level="project" />
-    <orderEntry type="library" name="Deps: keycloak-clojure:1.17.16" level="project" />
+    <orderEntry type="library" name="Deps: keycloak-clojure:1.18.0" level="project" />
     <orderEntry type="library" name="Deps: jarohen/chime:0.3.3" level="project" />
     <orderEntry type="library" name="Deps: net.incongru.watchservice/barbary-watchservice:1.0" level="project" />
     <orderEntry type="library" name="Deps: org.wildfly.common/wildfly-common:1.5.2.Final" level="project" />

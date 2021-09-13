@@ -5,7 +5,7 @@
         cljs-ajax/cljs-ajax {:mvn/version "0.8.4"}
         clj-http/clj-http {:mvn/version "3.12.3"}
         com.cognitect.aws/api {:mvn/version "0.8.515"}
-        com.cognitect.aws/endpoints {:mvn/version "1.1.12.57"}
+        com.cognitect.aws/endpoints {:mvn/version "1.1.12.65"}
         com.cognitect.aws/s3 {:mvn/version "814.2.978.0"}
         com.datomic/datomic-pro {:mvn/version "1.0.6316"}
         com.draines/postal {:mvn/version "2.0.4"}
@@ -20,7 +20,7 @@
         http-kit/http-kit {:mvn/version "2.5.3"}
         image-resizer/image-resizer {:mvn/version "0.1.10"}
         jarohen/chime {:mvn/version "0.3.3"}
-        keycloak-clojure/keycloak-clojure {:mvn/version "1.17.16"}
+        keycloak-clojure/keycloak-clojure {:mvn/version "1.18.0"}
         metosin/reitit {:mvn/version "0.5.15"}
         metosin/ring-http-response {:mvn/version "0.9.3"}
         org.clojure/clojure {:mvn/version "1.10.3"}

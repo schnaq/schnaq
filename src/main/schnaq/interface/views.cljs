@@ -21,7 +21,7 @@
 
 (defn root []
   (let [language @(rf/subscribe [:current-locale])]
-    [:div#root {:key language}
+    [:div#root.text-break {:key language}
      [base-page language]
      (when-not shared-config/embedded?
        [footer])
