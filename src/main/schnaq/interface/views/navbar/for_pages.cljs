@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.navbar.for-pages
-  (:require [re-frame.core :as rf]
+  (:require [clojure.string :as str]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.text.display-data :refer [labels img-path fa]]
             [schnaq.interface.utils.language :as language]
@@ -63,12 +64,13 @@
 
 (defn navbar-transparent
   "Navbar definition for the default pages."
-  []
+  [wrapper-classes]
   (let [current-language @(rf/subscribe [:current-language])]
     ;; collapsable navbar
     [:nav.navbar.navbar-expand-lg.py-3.navbar-transparent.bg-transparent.mb-4
      ;; logo
-     [:div.container
+     [:div
+      {:class (if (str/blank? wrapper-classes) "container" wrapper-classes)}
       [:a.navbar-brand {:href (reitfe/href :routes/startpage)}
        [:img.d-inline-block.align-middle.mr-2
         {:src (img-path :logo-white) :width "150" :alt "schnaq logo"}]]

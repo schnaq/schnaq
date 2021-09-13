@@ -5,12 +5,12 @@
     :discussion/share-hash "public-share-hash"
     :discussion/edit-hash "secret-public-hash"
     :discussion/author "user/testomensch"
-    :discussion/states [:discussion.state/public :discussion.state/open]}
+    :discussion/states [:discussion.state/public]}
    {:discussion/title "Public Test - Deleted"
     :discussion/share-hash "public-share-hash-deleted"
     :discussion/edit-hash "secret-public-hash-deleted"
     :discussion/author "user/testomensch"
-    :discussion/states [:discussion.state/public :discussion.state/open :discussion.state/deleted]}
+    :discussion/states [:discussion.state/public :discussion.state/deleted]}
 
    {:db/id "user/testomensch"
     :user/nickname "Testomensch"}])

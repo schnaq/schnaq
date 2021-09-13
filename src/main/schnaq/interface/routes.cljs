@@ -36,6 +36,7 @@
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.schnaq.value :as value]
+            [schnaq.interface.views.startpage.alternatives.e-learning :as e-learning]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.user.edit-account :as edit-account]
@@ -43,16 +44,6 @@
 
 ;; The controllers can be used to execute things at the start and the end of applying
 ;; the new route.
-
-(def ^:private schnaq-start-controllers
-  [{:parameters {:path [:share-hash]}
-    :start (fn []
-             (rf/dispatch [:discussion.history/clear])
-             (rf/dispatch [:updates.periodic/starting-conclusions true])
-             (rf/dispatch [:discussion.query.conclusions/starting]))
-    :stop (fn []
-            (rf/dispatch [:updates.periodic/starting-conclusions false])
-            (rf/dispatch [:statement.edit/reset-edits]))}])
 
 (defn language-controllers
   "Returns controllers for the desired locale switch and redirect."
@@ -80,6 +71,9 @@
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
+   ["e-learning"
+    {:name :routes/e-learning
+     :view e-learning/e-learning-view}]
    ["login"
     {:name :routes/login
      :view pages/login-page
@@ -157,7 +151,14 @@
                               (rf/dispatch [:schnaq/load-by-share-hash (:share-hash path)])
                               (rf/dispatch [:schnaq/add-visited! (:share-hash path)]))}]}
      [""                                                    ;; When this route changes, reflect the changes in `schnaq.links.get-share-link`.
-      {:controllers schnaq-start-controllers
+      {:controllers [{:parameters {:path [:share-hash]}
+                      :start (fn []
+                               (rf/dispatch [:discussion.history/clear])
+                               (rf/dispatch [:updates.periodic/starting-conclusions true])
+                               (rf/dispatch [:discussion.query.conclusions/starting]))
+                      :stop (fn []
+                              (rf/dispatch [:updates.periodic/starting-conclusions false])
+                              (rf/dispatch [:statement.edit/reset-edits]))}]
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]

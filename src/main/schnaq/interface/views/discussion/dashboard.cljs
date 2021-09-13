@@ -37,23 +37,28 @@
 (defn- beta-only-modal
   "Basic modal which is presented to users trying to access beta features."
   []
-  [:div.panel-grey.p-0
+  [:div.panel-white.p-0.shadow-sm
    [:div.bg-primary.p-3
     [:div.display-6.text-white (labels :beta.modal/title)]]
    [:div.p-3
-    [:text-sm [:i {:class (str "m-auto fas fa-lg " (fa :shield))}] " " (labels :beta.modal/explain)]
-    [:text-sm (labels :beta.modal/persuade)]
+    [:p
+     [:i {:class (str "m-auto fas fa-lg " (fa :shield))}]
+     " " (labels :beta.modal/explain)
+     " " (labels :beta.modal/persuade)]
+    [:p
+     (labels :beta.modal.login/intro) " "
+     [:a.btn.btn-link {:href "#"
+                       :on-click #(rf/dispatch [:keycloak/login])}
+      (labels :beta.modal.login/button)]]
     [:a.btn.btn-primary.mx-auto.d-block
      {:href "mailto:hello@schnaq.com"}
      (labels :beta.modal/cta)]]])
 
 (defn- summary-view []
   (let [beta-user? @(rf/subscribe [:user/beta-tester?])
-        current-schnaq @(rf/subscribe [:schnaq/selected])
-        title (:discussion/title current-schnaq)]
+        current-schnaq @(rf/subscribe [:schnaq/selected])]
     [:div.panel-white.p-3
      [:h3.mb-3.text-break (labels :dashboard/summary)]
-     [:h5.my-3.text-primary title]
      (if (or beta-user? shared-config/embedded?)
        [summary/summary-body current-schnaq]
        [beta-only-modal])]))

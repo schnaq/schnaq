@@ -31,8 +31,8 @@
   "Takes a share-hash and returns the link to the summary view."
   [share-hash]
   [:discussion/share-hash :ret string?]
-  #?(:clj  (format "%s/schnaq/%s/summary" config/frontend-url share-hash)
-     :cljs (let [path (reitfe/href :routes.schnaq/summary {:share-hash share-hash})
+  #?(:clj  (format "%s/schnaq/%s/dashboard" config/frontend-url share-hash)
+     :cljs (let [path (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
 

@@ -4,12 +4,44 @@
             [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.text.display-data :refer [fa labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.time :as time]
+            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
+
+(def ^:private calculation-states
+  #{:request-succeeded :requested})
+
+(defn- hint-text
+  "Info box to inform the user that summary is on its way."
+  []
+  [:small.text-muted.text-left
+   [:div.d-flex.flex-row [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}]
+    (labels :summary.user/computation-time)
+    (when-not shared-config/embedded?
+      (str " " (labels :summary.user/privacy-warning)))]])
+
+(defn- abort-summary
+  "Something went wrong. Add link to abort the summary request
+  _in the frontend_. Does actually not abort processes in summy or in the
+  backend."
+  [share-hash]
+  (let [request-status @(rf/subscribe [:schnaq.summary/status share-hash])
+        time-to-show-info 5000]
+    (when (some #{request-status} calculation-states)
+      [common/delayed-fade-in
+       [:small
+        (labels :summary.user.abort/label)
+        " "
+        [:a.btn.btn-sm.btn-link
+         {:on-click #(when (js/confirm (labels :summary.user.abort/confirm))
+                       (rf/dispatch [:schnaq.summary/abort share-hash]))}
+         (labels :summary.user.abort/button)]]
+       time-to-show-info])))
 
 (defn- summary-request-button
   "Requests a summary or a refresh."
@@ -20,16 +52,16 @@
                       :requested (labels :summary.user.requested/label)
                       (labels :summary.user.not-requested/label))]
     [:section.d-block.text-center
-     [:button.btn.btn-dark-highlight
-      (if request-status
+     [:button.btn.btn-dark-highlight.mb-2
+      (if (some #{request-status} calculation-states)
         {:disabled true}
         {:on-click #(rf/dispatch [:schnaq.summary/request share-hash])})
       button-text]
-     [:small.text-muted.mt-2.text-left
-      [:div.d-flex.flex-row [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}] [:span (labels :summary.user/privacy-warning)]]]]))
+     [abort-summary share-hash]
+     [hint-text]]))
 
 (defn summary-body
-  "Contains the summary an possibly some meta information."
+  "Contains the summary and possibly some meta information."
   [schnaq]
   (let [{:summary/keys [created-at text]} @(rf/subscribe [:schnaq/summary (:discussion/share-hash schnaq)])
         locale @(rf/subscribe [:current-locale])
@@ -38,8 +70,7 @@
                             ["-" "-"])]
     [:<>
      [:small.text-muted (labels :summary.user/last-updated) updated-at]
-     [:p.p-3
-      (or text "-")]
+     [:p.p-3 (or text "-")]
      [:hr.py-2]
      [summary-request-button (:discussion/share-hash schnaq)]]))
 
@@ -171,6 +202,11 @@
     (-> db
         (assoc-in [:schnaq :summary :status share-hash] :request-succeeded)
         (assoc-in [:schnaq :summary :result share-hash] (:summary result)))))
+
+(rf/reg-event-db
+  :schnaq.summary/abort
+  (fn [db [_ share-hash]]
+    (assoc-in db [:schnaq :summary :status share-hash] :abort)))
 
 (rf/reg-sub
   :schnaq.summary/status

@@ -34,11 +34,12 @@
   [{:keys [identity parameters]}]
   (let [image-type (get-in parameters [:body :image :type])
         image-name (get-in parameters [:body :image :name])
-        image-content (get-in parameters [:body :image :content])]
-    (log/info "User" (:id identity) "trying to set profile picture to:" image-name)
-    (let [{:keys [image-url] :as response} (media/upload-image! image-type image-content :user/profile-pictures)]
+        image-content (get-in parameters [:body :image :content])
+        user-id (:id identity)]
+    (log/info "User" user-id "trying to set profile picture to:" image-name)
+    (let [{:keys [image-url] :as response} (media/upload-image! user-id image-type image-content :user/profile-pictures)]
       (if image-url
-        (ok {:updated-user (user-db/update-profile-picture-url (:id identity) image-url)})
+        (ok {:updated-user (user-db/update-profile-picture-url user-id image-url)})
         response))))
 
 (defn- change-display-name
