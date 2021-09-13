@@ -55,6 +55,14 @@
    :discussion/created-at
    {:discussion/author user-db/public-user-pattern}])
 
+(def ^:private rules
+  "Discussion rules for common use in db queries."
+  '[;; all statements for a discussion by share-hash
+    [(all-statements ?share-hash ?statements)
+     [?discussion :discussion/share-hash ?share-hash]
+     [?statements :statement/discussions ?discussion]
+     (not [?statements :statement/deleted? true])]])
+
 (>defn starting-statements
   "Returns all starting-statements belonging to a discussion."
   [share-hash]
@@ -319,11 +327,9 @@
   [:discussion/share-hash :ret (s/coll-of ::specs/statement)]
   (->
     (query '[:find [(pull ?statements statement-pattern) ...]
-             :in $ ?share-hash statement-pattern
-             :where [?discussion :discussion/share-hash ?share-hash]
-             [?statements :statement/discussions ?discussion]
-             (not [?statements :statement/deleted? true])]
-           share-hash statement-pattern)
+             :in $ % ?share-hash statement-pattern
+             :where (all-statements ?share-hash ?statements)]
+           rules share-hash statement-pattern)
     (toolbelt/pull-key-up :db/ident)))
 
 (>defn all-statements-from-others
@@ -332,13 +338,11 @@
   [:user.registered/keycloak-id :discussion/share-hash :ret (s/coll-of ::specs/statement)]
   (->
     (query '[:find [(pull ?statements statement-pattern) ...]
-             :in $ ?keycloak-id ?share-hash statement-pattern
-             :where [?discussion :discussion/share-hash ?share-hash]
-             [?statements :statement/discussions ?discussion]
-             (not [?statements :statement/deleted? true])
+             :in $ % ?keycloak-id ?share-hash statement-pattern
+             :where (all-statements ?share-hash ?statements)
              [?statements :statement/author ?author]
              (not [?author :user.registered/keycloak-id ?keycloak-id])]
-           keycloak-id share-hash statement-pattern)
+           rules keycloak-id share-hash statement-pattern)
     (toolbelt/pull-key-up :db/ident)))
 
 (defn- new-statements-for-user
