@@ -26,7 +26,9 @@
     [:div.row.pb-5
      [:div.col-md-6.col-12.align-self-center
       moving-heading
-      [:p.display-6.pb-5 "Die App, die deinen Lernenden hilft, online strukturiert Lehrinhalte zu diskutieren."]
+      [:p.display-6.pb-5
+       "Die App, die deinen Lernenden hilft, online strukturiert Lehrinhalte zu diskutieren.
+        Direkt integrierbar in dein Lernmanagementsystem (ILIAS, Moodle, ...)!"]
       [:div.text-center.pt-3.pb-5
        [:a.btn.btn-lg.btn-secondary.d-inline-block
         {:href (rfe/href :routes.schnaq/create)}
@@ -39,7 +41,7 @@
        [:div.border-right.mr-2
         [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
         [:i {:class (str "mr-2 my-auto " (fa :plus))}]]
-       [:p.small.my-auto "Mit hunderten Lernenden getestet!"]]]
+       [:p.small.my-auto "Mit tausenden Lernenden getestet!"]]]
      [:div.col-md-6.col-12.col-lg-5.offset-lg-1.pt-sm-5.text-center
       [:img.img-fluid.w-75
        {:src (img-path :startpage.alternatives.e-learning/header)
