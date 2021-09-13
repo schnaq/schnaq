@@ -280,7 +280,6 @@
   [discussion-data]
   [map? :ret :db/id]
   (main-db/clean-and-add-to-db! (assoc discussion-data
-                                  :discussion/states [:discussion.state/open]
                                   :discussion/created-at (Date.))
                                 ::specs/discussion))
 
@@ -473,7 +472,7 @@
          share-hash summary-pattern))
 
 (>defn summary-request
-  "Creates a new summary-request if there is none for the discussion. Otherwise updates the request-time."
+  "Creates a new summary-request if there is none for the discussion. Otherwise, updates the request-time."
   [share-hash keycloak-id]
   [:discussion/share-hash :user.registered/keycloak-id :ret ::specs/summary]
   (if-let [summary (:db/id (summary share-hash))]

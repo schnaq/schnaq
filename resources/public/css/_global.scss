@@ -101,3 +101,9 @@ html {
   color: inherit;
   text-decoration: inherit;
 }
+
+.container-85 {
+  @include media-breakpoint-up(xl) {
+    max-width: 85% !important;
+  }
+}

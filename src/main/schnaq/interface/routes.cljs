@@ -36,6 +36,7 @@
             [schnaq.interface.views.schnaq.create :as create]
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.schnaq.value :as value]
+            [schnaq.interface.views.startpage.alternatives.e-learning :as e-learning]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.user.edit-account :as edit-account]
@@ -70,6 +71,9 @@
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
+   ["e-learning"
+    {:name :routes/e-learning
+     :view e-learning/e-learning-view}]
    ["login"
     {:name :routes/login
      :view pages/login-page

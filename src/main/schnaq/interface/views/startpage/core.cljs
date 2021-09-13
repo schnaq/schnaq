@@ -72,7 +72,7 @@
       (labels :schnaq.create.button/save)]]]
    [:div.wave-bottom-white-inverted]])
 
-(defn- supporters []
+(defn supporters []
   [:section.pb-5.pt-3
    [:p.display-6.text-center
     (labels :supporters/heading)]

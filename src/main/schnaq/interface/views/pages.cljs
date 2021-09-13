@@ -99,7 +99,7 @@
     options
     [:div {:class classes}
      [:div.masthead-layered
-      [navbar-pages/navbar-transparent]
+      [navbar-pages/navbar-transparent (:page/wrapper-classes options)]
       [base/header options]]
      body]]])
 

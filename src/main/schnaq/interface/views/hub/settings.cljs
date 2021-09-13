@@ -22,7 +22,7 @@
         preview-image (or temporary-logo logo)]
     [:div.d-flex.mr-4
      [:div.d-flex.avatar-image
-      [hub-common/logo preview-image name 80]]
+      [hub-common/hub-logo preview-image name 80]]
      [:div.mt-auto
       (if temporary-logo
         ;; delete temporary button
