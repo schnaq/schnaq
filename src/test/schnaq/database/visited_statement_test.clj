@@ -12,8 +12,8 @@
 (defn- add-test-user [id name]
   (second (user-db/register-new-user {:sub id :preferred_username name} [] [])))
 
-(defn- create-discussion [name share-hash edit-hash user]
-  {:discussion/title name
+(defn- create-discussion [title share-hash edit-hash user]
+  {:discussion/title title
    :discussion/share-hash share-hash
    :discussion/edit-hash edit-hash
    :discussion/author user})
@@ -29,17 +29,17 @@
           user (add-test-user keycloak-user-id user-name)
           user-id (:db/id user)
           ;; add discussion
-          discussion-name "Have you seen this discussion?"
+          discussion-title "Have you seen this discussion?"
           share-hash "share-hash-1"
           edit-hash "secret-hash-1"
-          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user))
+          _ (discussion-db/new-discussion (create-discussion discussion-title share-hash edit-hash user))
           ;; add starting statements
           content-1 "Startargument 1"
           content-2 "Startargument 2"
           statement-1 (discussion-db/add-starting-statement! share-hash user-id content-1 true)
           statement-2 (discussion-db/add-starting-statement! share-hash user-id content-2 true)
           statements #{statement-1 statement-2}]
-      (testing (str "Add visited statements to user [" user-name "] and discussion [" discussion-name "]")
+      (testing (str "Add visited statements to user [" user-name "] and discussion [" discussion-title "]")
         (user-db/create-visited-statements-for-discussion keycloak-user-id share-hash statements)
         ;; check if seen statements can be retrieved
         (is (user-db/seen-statements-entity keycloak-user-id share-hash))
@@ -63,10 +63,10 @@
           user-name-2 "User Name B"
           _user-2 (add-test-user keycloak-user-id-2 user-name-2)
           ;; add discussion
-          discussion-name "Have you seen this discussion, as well?"
+          discussion-title "Have you seen this discussion, as well?"
           share-hash "share-hash-2"
           edit-hash "secret-hash-2"
-          _ (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user-1))
+          _ (discussion-db/new-discussion (create-discussion discussion-title share-hash edit-hash user-1))
           ;; add starting statements
           content-1 "Gesehen"
           content-2 "Auch gesehen"
@@ -93,18 +93,17 @@
       (is (false? (:meta/new? updated-statement-3)))
       (is (true? (:meta/new? updated-statement-new))))))
 
-(defn add-dead-parrot-sketch
-  [name]
+(defn- add-dead-parrot-sketch
+  [user-name]
   (let [;; add user
-        keycloak-user-id (str "keycloak-id-" name)
-        user-name name
+        keycloak-user-id (str "keycloak-id-" user-name)
         user (add-test-user keycloak-user-id user-name)
         user-id (:db/id user)
         ;; add discussion
-        discussion-name "A customer enters a pet shop."
+        discussion-title "A customer enters a pet shop."
         share-hash "share-hash-3"
         edit-hash "secret-hash-3"
-        discussion-id (discussion-db/new-discussion (create-discussion discussion-name share-hash edit-hash user))
+        discussion-id (discussion-db/new-discussion (create-discussion discussion-title share-hash edit-hash user))
         ;; add starting statements
         content-1 "'Ello, I wish to register a complaint. 'Ello, Miss?"
         content-2 "What do you mean miss?"
@@ -132,7 +131,6 @@
      :statement-4 statement-4
      :statement-5 statement-5}))
 
-
 (deftest get-new-statements-tests
   (testing "Test get new statements for user"
     (let [{:keys [discussion-hash all-statements statement-1 statement-2 statement-3 statement-4 statement-5]}
@@ -151,7 +149,6 @@
       (is (nil? (find-statement-in-list statement-1 new-statements)))
       (is (nil? (find-statement-in-list statement-2 new-statements)))
       (is (nil? (find-statement-in-list statement-3 new-statements))))))
-
 
 (deftest test-mark-all-as-read
   (testing "Test if mark-all-as-read causes an empty new-statement-ids-for-user result"
