@@ -27,7 +27,7 @@
      [:div.col-md-6.col-12.align-self-center
       moving-heading
       [:p.display-6.pb-5
-       "Lastenheft war gestern. Digitalisiere deine Kundenkommunikation mit schnaq"]
+       "Lastenheft war gestern. Digitalisiere deine Kundenkommunikation mit schnaq."]
       [:div.text-center.pt-3.pb-5
        [:a.btn.btn-lg.btn-secondary.d-inline-block
         {:href (rfe/href :routes.schnaq/create)}
