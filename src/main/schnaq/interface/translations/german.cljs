@@ -5,7 +5,6 @@
 (def labels
   {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
 
-   :nav/startpage "Home"
    :nav/schnaqs "schnaqs"
    :nav.schnaqs/show-all "Alle schnaqs"
    :nav.schnaqs/show-all-public "Alle öffentlichen schnaqs"
@@ -17,7 +16,7 @@
    ;; Alphazulu Page
    :alphazulu.page/heading "Alphazulu"
    :alphazulu.page/subheading "Modern Work for Modern Companies"
-   :alphazulu.introduction/title "New Work aus NRW"
+   :alphazulu.introduction/title "New Work aus Deutschland"
    :alphazulu.introduction/body
    [:<>
     [:p "Sicher, individuell, lokal: Das ist die Power von ALPHAZULU."]
@@ -117,59 +116,6 @@
    :startpage.information.positioning/title "Schnaq ist der perfekte Partner für deine digitale Transformation"
    :startpage.information.positioning/body "Wir garantieren dir mit schnaq nachhaltiges Wissensmanagement das Zeit und Ressourcen spart."
 
-
-   ;; falls wir subpages mit features einrichten, dann kann man sich hier bedienen
-   :startpage.features.meeting-organisation/lead "Gut informiert an jedem Punkt"
-   :startpage.features.meeting-organisation/title "Optimale Entscheidungen treffen"
-   :startpage.features.meeting-organisation/body
-   [:<>
-    [:p "Mit Chat-Tools oder E-Mails ist es schwierig Entscheidungen so zu treffen, dass jede:r Wissen einbringen kann. Die Nachvollziehbarkeit leidet sehr."]
-    [:p "Mit schnaq Diskussionen können alle gleichberechtigt und verteilt an verschiedenen Zeitpunkten an einer Diskussion teilnehmen. So können alle im Team dazu beitragen eine gut informierte Entscheidung zu treffen. Dabei ist es unwichtig, wo die einzelnen Teammitglieder sitzen."]]
-
-   :startpage.features.discussion/lead "Onboarding war nie einfacher"
-   :startpage.features.discussion/title "Einfache Team Q&A Funktion"
-   :startpage.features.discussion/body
-   [:<>
-    [:p "Allzu oft hängt wichtiges Wissen an einzelnen Personen. Niemand hat die Zeit alles immer in das Firmenwiki zu übertragen."]
-    [:p "schnaq zielt darauf ab das Wissen dort zu erfassen wo es entsteht. Wenn jemand eine Frage hat, können die Kolleg:innen diese einfach beantworten."]
-    [:p "Anschließend können alle aus dem Team einfach darauf zugreifen und informiert arbeiten. Kollaboration als wäre es Magie."]]
-
-   :startpage.features.graph/lead "Einfache Integration"
-   :startpage.features.graph/title "Persönliche Bereiche für jedes Team"
-   :startpage.features.graph/body
-   [:<>
-    [:p "Jedes Team kann einen eigenen Hub bekommen. Auf diesen Bereich haben nur die Teammitglieder, die ihr hinzufügt, Zugriff."]
-    [:p "Schnaq bietet auch die Möglichkeit bereits bestehende Logins, die ihr im Unternehmen nutzt, einzubinden. So braucht ihr keinen extra Account. Braucht ihr weitere Anbindungen? " [:a {:href "mailto:info@schnaq.com"} "Kontaktiert uns!"]]
-    [:p.text-center.mb-0
-     [:a.btn.btn-primary {:role "button"
-                          :href "mailto:info@schnaq.com"}
-      "Schreib uns wenn du das neue Hub Feature testen möchtest"]]]
-
-   :startpage.objections/title "Kannst du mir das bitte nochmal per Mail zusammenfassen?"
-   :startpage.objections/body
-   [:<>
-    [:p "Wer schreibt das Protokoll? Warum hast du das nicht ins Team-Wiki geschrieben?"]
-    [:p "Kommen dir diese Fragen bekannt vor? Dann bist du hier genau richtig. Know-how im Unternehmen nachhaltig zu bündeln und zugänglich zu machen, kann schwierig sein, muss es aber nicht."]
-    [:p "Mach es dir einfach und nutze schnaq für deine Teamkommunikation. Was sagst du? Bitte nicht noch ein Tool? Keine Angst: Wir haben mit schnaq die perfekte Ergänzung zu deiner bestehenden Infrastruktur entwickelt – einfach, strukturiert und vor allem datensicher."]]
-
-   :startpage.promise/title "Wo ist mein Know-how?"
-   :startpage.promise/body
-   [:<>
-    [:p "Mit schnaq geht wertvolles Know-how in E-Mails, Chats, Meetings und Videokonferenzen oder beim Onboarding nicht mehr verloren. Das spart Zeit und Geld. Zudem lässt sich das gesammelte Wissen ideal für die Entwicklung neuer Zukunftsthemen nutzen."]
-    [:p "Wir versprechen dir nachhaltiges Wissensmanagement das Zeit und Ressourcen spart. Neugierig geworden? Dann lass uns doch mal schnaqqen."]
-    [:p.text-center.mb-0
-     [:a.btn.btn-primary {:role "button"
-                          :href "mailto:hallo@schnaq.com"}
-      "Lass dich unverbindlich beraten"]]]
-
-   :startpage.elephant-in-the-room/title "Reden wir über den Elefanten im Raum"
-   :startpage.elephant-in-the-room/body
-   [:<>
-    [:p "Was hat ein Elefant mit nachhaltiger Kommunikation zu tun? Zum einen sind die Herdentiere auf ständigen Austausch angewiesen, zum anderen vergisst der Elefant nichts. "
-     "Eine Eigenschaft, die jedes Wissensmanagement im Unternehmen haben sollte."]
-    [:p "Wir arbeiten täglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört und das gesamte Unternehmenswissen automatisiert strukturiert wird, um es allen zugänglich zu machen."]]
-   :startpage.elephant-in-the-room/button "Lerne das Team hinter dem Elefanten kennen"
-
    :startpage.feature-box.know-how/title "Know-how sichern"
    :startpage.feature-box.know-how/body
    "Digitalisierung und Mobile Office haben die Art, wie wir kommunizieren, verändert.
@@ -211,7 +157,7 @@
    :startpage.faq.data/link-name "Datenschutzerklärung"
    :startpage.faq.data/answer-2 " zusammengefasst."
    :startpage.faq.integration/question "Kann ich schnaq mit meiner bestehenden Software integrieren?"
-   :startpage.faq.integration/answer "Wir arbeiten mit Hochdruck an einer Integration für Slack, MS Team und andere gängige Kommunikationssoftware.
+   :startpage.faq.integration/answer "Aktuell ist schnaq per Mausklick in WETOG integrierbar. Wir arbeiten mit Hochdruck an einer Integration für Slack, MS Team und andere gängige Kommunikationssoftware.
         Wenn du sofort informiert werden willst, wenn die Integration live geht, melde dich für den"
    :startpage.faq.integration/link-name "Newsletter an."
    :startpage.faq.costs/question "Gibt es versteckte Kosten?"
@@ -258,7 +204,6 @@
    ;; Create schnaq
    :schnaq.create.input/title "Worüber möchtest du diskutieren?"
    :schnaq.create.input/placeholder "Thema festlegen"
-   :schnaq.create.public/help-text "Damit wird dein schnaq öffentlich gelistet und zugänglich sein."
    :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
    :schnaq/copy-link-tooltip "Hier klicken, um Link zu kopieren"
    :schnaq/link-copied-heading "Link kopiert"
@@ -297,7 +242,6 @@
    :schnaq.create/heading "Starte mit deinem schnaq."
    :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
    :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
-   :schnaq.create/schnaqqi-speech "Erstelle deinen schnaq und lade im nächsten Schritt dein ganzes Team ein!"
    :schnaq.create.button/save "Schnaq starten"
 
    ;; schnaq value
@@ -349,7 +293,7 @@
    :discussion.anonymous-edit.modal/persuade "Beiträge, die in letzter Zeit von dir in diesem Browser erstellt wurden, werden dabei automatisch umgewandelt."
    :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
 
-   :discussion.anonymous-labels.modal/title "Bitte melde dich an um labels zu editieren"
+   :discussion.anonymous-labels.modal/title "Bitte melde dich an, um Labels zu editieren"
    :discussion.anonymous-labels.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren von Labels anmelden."]]
    :discussion.anonymous-labels.modal/cta "Anmelden / Registrieren"
 
@@ -566,6 +510,7 @@
      "Speditionsstraße 15A" [:br]
      "STARTPLATZ" [:br]
      "40221 Düsseldorf" [:br]
+     "Deutschland" [:br]
      (toolbelt/obfuscate-mail "info@schnaq.com")]
     [:p "Rechtlich bindend ist die deutsche Fassung dieser Seite."]]
 
@@ -629,8 +574,6 @@
    ;; Admin Center
    :schnaq/educate-on-link-text "Teile den untenstehenden Link mit deinen Kolleg:innen und Freund:innen."
    :schnaq/educate-on-link-text-subtitle "Teilnahme ist für alle, die den Link kennen, möglich!"
-   :schnaq/educate-on-edit "Titel ändern oder Agendapunkte editieren?"
-   :schnaq/educate-on-admin "Später jederzeit zum Admin-Center zurückkehren!"
    :schnaq.admin/heading "Admin-Center"
    :schnaq.admin/subheading "schnaq: \"%s\""
    :schnaq.admin.edit.link/header "Zugang zum Admin-Center"
@@ -707,7 +650,7 @@
    :analytics/overall-discussions "Schnaqs erstellt"
    :analytics/user-numbers "Usernamen angelegt"
    :analytics/registered-users-numbers "Registrierte Nutzer:innen"
-   :analytics/average-statements-title "Durchschnittliche Zahl an Beiträgen pro Schnaq"
+   :analytics/average-statements-title "Durchschnittliche Zahl an Beiträgen pro schnaq"
    :analytics/statements-num-title "Anzahl Statements"
    :analytics/active-users-num-title "Aktive User (min. 1 Beitrag)"
    :analytics/statement-lengths-title "Beitragslängen"
@@ -784,7 +727,7 @@
    :user.keycloak-settings "Erweiterte Einstellungen"
    :user.settings/header "Nutzer:innendaten verwalten"
    :user.settings/info "Persönliche Informationen"
-   :user.settings/notifications "Benachrichtungen"
+   :user.settings/notifications "Benachrichtigungen"
    :user.settings/hubs "Hubs"
    :user.settings/change-name "Namen ändern"
    :user.settings.button/change-account-information "Änderungen speichern"
@@ -799,12 +742,9 @@
    ;; notification settings
    :user.notifications/header "Benachrichtigungen verwalten"
    :user.notifications/mails "E-Mail Benachrichtigungen"
-   :user.notifications.interval/never "Niemals"
-   :user.notifications.interval/daily "Täglich"
-   :user.notifications.interval/weekly "Wöchentlich"
-   :user.notifications/info "Du erhälst nur Benachrichtigungen, wenn es neue Beiträge in deinen besuchten schnaqs gibt."
+   :user.notifications/info "Du erhältst nur Benachrichtigungen, wenn es neue Beiträge in deinen besuchten schnaqs gibt."
    :user.notifications.set-all-to-read/button "Alles als gelesen markieren"
-   :user.notifications.set-all-to-read/info "Du erhälst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
+   :user.notifications.set-all-to-read/info "Du erhältst noch Benachrichtigungen von alten Diskussionen? Kein Problem, setze einfach alles auf gelesen und erhalte nur noch Benachrichtigungen für neue Diskussionen."
 
    ; mail interval
    :notification-mail-interval/daily "Täglich"
@@ -908,7 +848,7 @@
     [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com."]]
    :pricing.faq.privacy/heading "Wer hat Zugriff auf meine Daten?"
    :pricing.faq.privacy/body-1
-   [:<> "Jede Person, die du deinem Unternehmen hinzufügst, kann potentiell auf die hinterlegten Daten zugreifen."
+   [:<> "Jede Person, die du deinem Unternehmen hinzufügst, kann potenziell auf die hinterlegten Daten zugreifen."
     "Technisch werden deine Daten vollständig sicher auf"
     [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
    :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
@@ -950,10 +890,10 @@
    :router/summaries "Zusammenfassungen"
    :router/alphazulu "ALPHAZULU"
 
-   :admin.center.start/title "Admin Center"
-   :admin.center.start/heading "Admin Center"
+   :admin.center.start/title "Admin-Center"
+   :admin.center.start/heading "Admin-Center"
    :admin.center.start/subheading "Administration von schnaqs als Superuser"
-   :admin.center.delete/confirmation "Soll dieses schnaq wirklich gelöscht werden?"
+   :admin.center.delete/confirmation "Soll dieser schnaq wirklich gelöscht werden?"
    :admin.center.delete.public/button "Schnaq löschen"
    :admin.center.delete/heading "Löschen"
    :admin.center.delete.private/label "Share-hash"
@@ -996,9 +936,9 @@
 
    :filters.discussion.option.state/label "Schnaq Status"
    :filters.discussion.option.state/closed "geschlossen"
-   :filters.discussion.option.state/read-only "nur lesezugriff"
+   :filters.discussion.option.state/read-only "nur Lesezugriff"
    :filters.discussion.option.numbers/label "Anzahl Beiträge"
-   :filters.discussion.option.author/label "Eigene Teilahme"
+   :filters.discussion.option.author/label "Eigene Teilnahme"
    :filters.discussion.option.author/prelude "Ich"
    :filters.discussion.option.author/included "nehme teil"
    :filters.discussion.option.author/excluded "nehme nicht teil"

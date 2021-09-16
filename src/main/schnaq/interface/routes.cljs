@@ -64,6 +64,9 @@
    ["de/{*rest-url}"
     {:name :routes/force-german
      :controllers (language-controllers :de)}]
+   ["pl/{*rest-url}"
+    {:name :routes/force-polish
+     :controllers (language-controllers :pl)}]
    [""
     {:name :routes/startpage
      :view startpage-views/startpage-view

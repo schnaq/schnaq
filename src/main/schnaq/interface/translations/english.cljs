@@ -5,7 +5,6 @@
 (def labels
   {:error/export-failed "Export failed. Please try again later."
 
-   :nav/startpage "Home"
    :nav/schnaqs "schnaqs"
    :nav.schnaqs/show-all "All schnaqs"
    :nav.schnaqs/show-all-public "All public schnaqs"
@@ -118,59 +117,6 @@
    :startpage.information.positioning/title "Schnaq is the perfect partner for digital transformation."
    :startpage.information.positioning/body "We guarantee sustainable knowledge management that saves time and resources."
 
-
-
-   :startpage.features.meeting-organisation/lead "Well informed at any time"
-   :startpage.features.meeting-organisation/title "Make the Optimal Decisions"
-   :startpage.features.meeting-organisation/body
-   [:<>
-    [:p "It's hard to make a decision where anybody can contribute their knowledge by using chat-tools and E-Mail. Clarity suffers in turn."]
-    [:p "With schnaq discussions, anybody can participate and be heard equally, no matter the time and place they're in. This way all relevant insights and viewpoints can be incorporated in the decisions you take."]]
-
-   :startpage.features.discussion/lead "Onboarding was never easier"
-   :startpage.features.discussion/title "Easy Team Q&A Function"
-   :startpage.features.discussion/body
-   [:<>
-    [:p "Any person on your team has some special knowledge only they posses. And nobody got time to create all those long wiki pages."]
-    [:p "schnaq collects the knowledge where it is shared naturally. When somebody asks a question through schnaq, any colleague can pitch in and answer."]
-    [:p "Once a question is answered, it is available to be viewed and improved upon by others in the team. Collaboration that feels effortless."]]
-
-   :startpage.features.graph/lead "Easy integration"
-   :startpage.features.graph/title "Personal Spaces for Your Teams"
-   :startpage.features.graph/body
-   [:<>
-    [:p "Any team can work in their own private hub. Only the people you add to your hub, can collaborate with you."]
-    [:p "Schnaq also lets you use logins, that you may already have in your company. This way you do not need to create any extra accounts. Do you need any logins, we do not support yet? " [:a {:href "mailto:info@schnaq.com"} "Contact us!"]]
-    [:p.text-center.mb-0
-     [:a.btn.btn-primary {:role "button"
-                          :href "mailto:info@schnaq.com"}
-      "Contact us if you want to test the Hub feature"]]]
-
-   :startpage.objections/title "Can you please summarise this for me again by email?"
-   :startpage.objections/body
-   [:<>
-    [:p "Who writes the minutes? Why didn't you write it in the team wiki?"]
-    [:p "Do these questions sound familiar? Then you've come to the right place. It can be difficult to sustainably bundle know-how within a company and make it accessible, but it doesn't have to be."]
-    [:p "Make it easy on yourself and use schnaq for your team communication. What do you say? Please not another tool? Don't worry: With schnaq, we have developed the perfect complement to your existing infrastructure - simple, structured and, above all, data secure."]]
-
-
-   :startpage.promise/title "Where's my know-how?"
-   :startpage.promise/body
-   [:<>
-    [:p "With schnaq, valuable know-how is no longer lost in emails, chats, meetings and video conferences or during onboarding. This saves time and money. In addition, the collected knowledge can be ideally used for the development of new future topics."]
-    [:p "We promise you sustainable knowledge management that saves time and resources. Curious now? Then let's have a chat."]
-    [:p.text-center.mb-0
-     [:a.btn.btn-primary {:role "button"
-                          :href "mailto:hello@schnaq.com"}
-      "Get advice without obligation"]]]
-
-   :startpage.elephant-in-the-room/title "Let's talk about the elephant in the room"
-   :startpage.elephant-in-the-room/body
-   [:<>
-    [:p "What does an elephant have to do with sustainable communication? On the one hand, herd animals depend on constant exchange, and on the other hand, the elephant doesn't forget anything. A characteristic that every knowledge management system in a company should have."]
-    [:p "We work every day to contribute to a business world where everyone is heard and all corporate knowledge is structured in an automated way to make it accessible to all."]]
-   :startpage.elephant-in-the-room/button "Meet the team behind the elephant"
-
    :startpage.feature-box.know-how/title "Secure Know-How"
    :startpage.feature-box.know-how/body
    "Digitalisation and mobile offices have changed the way we communicate. But even in modern processes, the challenge of bundling knowledge within the company remains. With our product, we offer you the solution to communicate in a contemporary way and to bring together the know-how of all experts."
@@ -204,7 +150,7 @@
    :startpage.faq.data/link-name "privacy policy"
    :startpage.faq.data/answer-2 "."
    :startpage.faq.integration/question "Can I integrate schnaq with the software I'm already using?"
-   :startpage.faq.integration/answer "We currently work on integrations for Slack, MS Teams and other popular communication software.
+   :startpage.faq.integration/answer "Currently, schnaq can be integrated into WETOG at the click of a mouse. We currently work on integrations for Slack, MS Teams and other popular communication software.
         If you want to be the first to know, when we launch the feature, subscribe to our"
    :startpage.faq.integration/link-name "newsletter."
    :startpage.faq.costs/question "Are there any hidden costs?"
@@ -251,7 +197,6 @@
    ;; Create schnaq
    :schnaq.create.input/title "What would you like to discuss?"
    :schnaq.create.input/placeholder "Specify Subject"
-   :schnaq.create.public/help-text "Publicly lists your schnaq."
    :schnaq.create.hub/help-text "Directly assign your schnaq to a hub."
    :schnaq/copy-link-tooltip "Click here to copy your link"
    :schnaq/link-copied-heading "Link copied"
@@ -291,7 +236,6 @@
    :schnaq.create/heading "Start your schnaq."
    :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
-   :schnaq.create/schnaqqi-speech "Create your schnaq and invite your whole team in the next step!"
    :schnaq.create.button/save "Start a new schnaq"
 
    ;; schnaq value
@@ -628,8 +572,6 @@
    ;; Admin Center
    :schnaq/educate-on-link-text "Share the link below with your coworkers."
    :schnaq/educate-on-link-text-subtitle "Everybody with possession of the link can participate."
-   :schnaq/educate-on-edit "Want to change the name or description?"
-   :schnaq/educate-on-admin "Go back to the admin center at any time!"
    :schnaq.admin/heading "Admin-Center"
    :schnaq.admin/subheading "schnaq: \"%s\""
    :schnaq.admin.edit.link/header "Entry to the admin-center"
@@ -796,9 +738,6 @@ Now we write down questions and discuss them and can still understand what we ha
    ;; notification settings
    :user.notifications/header "Manage Notifications"
    :user.notifications/mails "E-Mail Notifications"
-   :user.notifications.interval/never "Never"
-   :user.notifications.interval/daily "Daily"
-   :user.notifications.interval/weekly "Weekly"
    :user.notifications/info "You will only receive notifications when there are new posts in your visited schnaqs."
    :user.notifications.set-all-to-read/button "Mark everything as read"
    :user.notifications.set-all-to-read/info "You still receive notifications from old discussions? No problem, just mark everything as read and only receive notifications from new discussions."
