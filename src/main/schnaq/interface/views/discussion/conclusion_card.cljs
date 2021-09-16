@@ -26,7 +26,7 @@
      [:div.col-10.py-md-5
       [:h2 (labels :call-to-contribute/body)]
       [:p.mt-5 (labels :how-to/ask-question)
-       [:a.text-dark {:href (reitfe/href :routes/how-to)}
+       [:a.text-dark.btn.btn-link {:href (reitfe/href :routes/how-to)}
         (labels :how-to/answer-question)]]]]]])
 
 

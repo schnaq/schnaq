@@ -101,10 +101,10 @@
         :how-to.pro-con/body "Share your basic attitude towards the current post. With a click on our agree/disagree-button you change your post's attitude. Pro statements are highlighted blue and contra statements are highlighted orange. You can add multiple pro statements as well as contra statements in response to the same statement."
         :how-to.call-to-action/title "Now you know!"
         :how-to.call-to-action/body "That's actually all there is to know about schnaq. Now use it!"
-        :how-to/ask-question "Not sure how to schnaq? "     ;; whitespace intended
-        :how-to/ask-question-2 "Still not sure how to use schnaq? " ;; whitespace intended
+        :how-to/ask-question "Not sure how to schnaq?"
+        :how-to/ask-question-2 "Still not sure how to use schnaq?"
         :how-to/answer-question "Let us show you how!"
-        :how-to/question-dont-show-again "Got it? "         ;; whitespace intended
+        :how-to/question-dont-show-again "Got it?"
         :how-to/answer-dont-show-again "Don't show this tip anymore!"
         :how-to/back-to-start "Back to schnaq"
 
@@ -1222,10 +1222,10 @@ Now we write down questions and discuss them and can still understand what we ha
         :how-to.pro-con/body "Teile den Anderen deine Grundhaltung zum aktuellen Beitrag mit. Mit einem Klick auf unseren Dafür/Dagegen Knopf beim Eingabefeld änderst du deine Haltung. Du kannst auch mehrere Argumente dafür oder dagegen nennen. Pro-Argumente werden Blau eingefärbt, Kontra-Argumente Orange."
         :how-to.call-to-action/title "Jetzt weißt du Bescheid!"
         :how-to.call-to-action/body "Hiermit ist alles erklärt was über schnaq zu erklären gibt, also lege direkt los!"
-        :how-to/ask-question "Nicht sicher wie du schnaq benutzen sollst? " ;; whitespace intended
-        :how-to/ask-question-2 "Noch Fragen? "              ;; whitespace intended
+        :how-to/ask-question "Nicht sicher wie du schnaq benutzen sollst?"
+        :how-to/ask-question-2 "Noch Fragen?"
         :how-to/answer-question "Schau hier nach!"
-        :how-to/question-dont-show-again "Verstanden? "     ;; whitespace intended
+        :how-to/question-dont-show-again "Verstanden?"
         :how-to/answer-dont-show-again "In Zukunft nicht mehr anzeigen!"
         :how-to/back-to-start "Zurück zu schnaq"
 
