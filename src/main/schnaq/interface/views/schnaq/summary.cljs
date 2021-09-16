@@ -50,7 +50,7 @@
   (let [request-status @(rf/subscribe [:schnaq.summary/status share-hash])
         button-text (case request-status
                       :request-succeeded (labels :summary.user.request-succeeded/label)
-                      :requested (labels :summary.user.requested/label)
+                      :requested (str (labels :summary.user.requested/label) "…")
                       (labels :summary.user.not-requested/label))]
     [:section.d-block.text-center
      [:button.btn.btn-dark-highlight.mb-2

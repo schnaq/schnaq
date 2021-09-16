@@ -1069,7 +1069,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :summary.link.button/text "Dashboard"
    :summary.user.request-succeeded/label "Summary requested, please wait."
    :summary.user/computation-time "The creation of the summary can take a few minutes."
-   :summary.user.requested/label "Requesting summary …"
+   :summary.user.requested/label "Requesting summary"
    :summary.user.not-requested/label "Request summary"
    :summary.user.abort/confirm "The calculation can take several minutes. Do you really want to cancel?"
    :summary.user.abort/label "Problems with the calculation?"

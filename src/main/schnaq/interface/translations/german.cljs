@@ -3,7 +3,7 @@
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 (def labels
-  {:error/export-failed "Export hat nicht geklappt, versuchen Sie es später erneut."
+  {:error/export-failed "Export hat nicht geklappt, versuche es später erneut."
 
    :nav/startpage "Home"
    :nav/schnaqs "schnaqs"
@@ -199,10 +199,10 @@
    :startpage.newsletter/consent "Ich möchte mich hiermit zum schnaq Newsletter anmelden, und in Zukunft regelmäßig Informationen von schnaq.com erhalten."
    :startpage.newsletter/more-info-clicker "Datenverarbeitung"
    :startpage.newsletter/policy-disclaimer "schnaq erhebt, verarbeitet und nutzt Ihre oben angegebenen personenbezogenen Daten zur
-        Bearbeitung Ihres Anliegens. Jederzeit können Sie sich von dem Newsletter abmelden, indem Sie auf
-        den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ können Sie uns auch eine E-Mail
+        Bearbeitung Ihres Anliegens. Jederzeit kannst du dich von dem Newsletter abmelden, indem du auf
+        den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ kannst du uns auch eine E-Mail
         schreiben und wir kümmern uns dann um Ihr Anliegen."
-   :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer"
+   :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, findest du in unserer"
 
    :startpage.faq/title "Häufig gestellte Fragen"
    :startpage.faq.data/question "Was passiert mit meinen Daten?"
@@ -249,7 +249,7 @@
    :schnaq.header-image.url/placeholder "Bild URL eingeben"
    :schnaq.header-image.url/button "Vorschaubild hinzufügen"
    :schnaq.header-image.url/note "Erlaubt werden nur Inhalte von pixabay.com"
-   :schnaq.header-image.url/label "Fügen Sie Ihrem schnaq ein Vorschaubild hinzu"
+   :schnaq.header-image.url/label "Füge deinem schnaq ein Vorschaubild hinzu"
    :schnaq.header-image.url/successful-set "Vorschaubild erfolgreich gesetzt"
    :schnaq.header-image.url/successful-set-body "Das Bild wird nun in der Übersicht dargestellt."
    :schnaq.header-image.url/failed-setting-title "Fehler beim Hinzufügen des Bildes"
@@ -612,7 +612,7 @@
    :legal-note.copyright/title "Urheberrecht"
    :legal-note.copyright/body "Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen."
    :legal-note.privacy/title "Datenschutzerklärung"
-   :legal-note.privacy/body "Unsere Datenschutzerklärung finden Sie hier."
+   :legal-note.privacy/body "Unsere Datenschutzerklärung findest du hier."
 
    ;; Celebrations
    :celebrations.schnaq-filled/title "🎉 Glückwunsch 🎉"
@@ -1073,7 +1073,7 @@
    :summary.link.button/text "Analyse"
    :summary.user.request-succeeded/label "Zusammenfassung angefordert. Bitte warte kurz."
    :summary.user/computation-time "Die Erstellung der Zusammenfassung kann einige Minuten dauern."
-   :summary.user.requested/label "Zusammenfassung wird angefordert …"
+   :summary.user.requested/label "Zusammenfassung wird angefordert"
    :summary.user.not-requested/label "Zusammenfassung anfordern"
    :summary.user.abort/confirm "Die Berechnung kann mehrere Minuten dauern. Möchtest du wirklich abbrechen?"
    :summary.user.abort/label "Probleme bei der Berechnung?"
