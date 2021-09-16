@@ -69,7 +69,7 @@
   [:section.text-center.pb-5
    [:p.lead
     (gstring/format "%s " (labels :privacy.link-to-privacy/lead))
-    [:a {:href (reitfe/href :routes/privacy-extended)}
+    [:a.btn.btn-lg.btn-link {:href (reitfe/href :routes/privacy-extended)}
      (labels :privacy/note)]
     "."]])
 

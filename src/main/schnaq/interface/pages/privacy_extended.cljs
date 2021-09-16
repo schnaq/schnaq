@@ -49,7 +49,8 @@
 (defn- page []
   [pages/with-nav-and-header
    {:page/heading (labels :privacy.extended/heading)
-    :page/subheading (labels :privacy.extended/subheading)}
+    :page/subheading (labels :privacy.extended/subheading)
+    :page/vertical-header? true}
    [:section.container
     [responsible]
     [intro]

@@ -48,7 +48,7 @@
        (labels :startpage.newsletter/more-info-clicker)]]
      [:div.collapse {:id "collapse-more-newsletter"}
       [:p.small (labels :startpage.newsletter/policy-disclaimer)
-       [:br] (labels :startpage.newsletter/privacy-policy-lead)
+       [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
        [:a {:href (reitfe/href :routes/privacy-extended)}
         (labels :privacy/note)] "."]]]]
 

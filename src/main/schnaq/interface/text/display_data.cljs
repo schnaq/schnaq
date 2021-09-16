@@ -201,24 +201,24 @@
         :startpage.newsletter/policy-disclaimer "Schnaq saves, processes and saves the personal information you enter above to
         subscribe you to the newsletter. You can unsubscribe at any time, by clicking the appropriate link in the emails you will receive.
         Alternatively you can write us an email, and we will unsubscribe you personally."
-        :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our "
+        :startpage.newsletter/privacy-policy-lead "More information about the handling of your personal data can be found in our"
 
         :startpage.faq/title "Frequently Asked Questions"
         :startpage.faq.data/question "What happens with my data?"
         :startpage.faq.data/answer-1 "We only store data on german servers, to provide the best possible data protection. All details are explained
-        in an understandable manner in our "
+        in an understandable manner in our"
         :startpage.faq.data/link-name "privacy policy"
         :startpage.faq.data/answer-2 "."
         :startpage.faq.integration/question "Can I integrate schnaq with the software I'm already using?"
         :startpage.faq.integration/answer "We currently work on integrations for Slack, MS Teams and other popular communication software.
-        If you want to be the first to know, when we launch the feature, subscribe to our "
+        If you want to be the first to know, when we launch the feature, subscribe to our"
         :startpage.faq.integration/link-name "newsletter."
         :startpage.faq.costs/question "Are there any hidden costs?"
         :startpage.faq.costs/answer "schnaq is currently in a test-phase and completely free. No hidden payments.
         Although we are always happy about your honest feedback as a form of payment."
         :startpage.faq.start/question "How can I start using schnaq?"
         :startpage.faq.start/answer "You can either use schnaq anonymously, or register to have the possibility to see and administrate your schnaqs
-        and statements from anywhere. Give it a try and "
+        and statements from anywhere. Give it a try and"
         :startpage.faq.start/link-name "create a schnaq."
         :startpage.faq.why/question "Why should I use schnaq?"
         :startpage.faq.why/answer "schnaq is for you, if you support a modern, open and equal work-culture.
@@ -239,7 +239,7 @@
         :footer.buttons/privacy "Privacy Notice"
         :footer.buttons/press-kit "Press Kit"
         :footer.buttons/publications "Publications"
-        :footer.tagline/developed-with " Developed with "
+        :footer.tagline/developed-with "Developed with"
         :footer.sponsors/heading "Our servers are hosted by"
         :footer.registered/rights-reserved "All rights reserved"
         :footer.registered/is-registered "is a registered trademark"
@@ -276,7 +276,7 @@
         :schnaq.admin.notifications/emails-successfully-sent-title "Mails sent!"
         :schnaq.admin.notifications/emails-successfully-sent-body-text "Your invitations were sent successfully."
         :schnaq.admin.notifications/sending-failed-title "Error during mail delivery!"
-        :schnaq.admin.notifications/sending-failed-lead "The following invitations could not be delivered: "
+        :schnaq.admin.notifications/sending-failed-lead "The following invitations could not be delivered:"
         :schnaq.admin.notifications/statements-deleted-title "Statements deleted!"
         :schnaq.admin.notifications/statements-deleted-lead "The statements you entered have been deleted."
         :schnaq.admin.notifications/heading "Configuration"
@@ -366,7 +366,7 @@
         :beta.modal/cta "Request Access"
         :beta.modal.login/intro "Already beta tester"
         :beta.modal.login/button "Then login"
-        :page.beta.modal/cta "If you are interested in joining our beta-tester programm, please write us an email at "
+        :page.beta.modal/cta "If you are interested in joining our beta-tester programm, please write us an email at"
 
         ;; Press Kit
         :press-kit/heading "Press & Media"
@@ -456,7 +456,7 @@
          [:p "Now it is also possible to use advanced features, like edit posts, since you now have an identity on our platform 👍"]
          [:p "At any time you can contact us and request to view or delete your data."]]
 
-        :privacy.link-to-privacy/lead "More information can be found in the comprehensive "
+        :privacy.link-to-privacy/lead "More information can be found in the comprehensive"
         :privacy/note "Privacy notice"
 
         :privacy.extended/heading "Privacy"
@@ -704,18 +704,6 @@
         :feedbacks.notification/title "Thank you for your feedback!"
         :feedbacks.notification/body "Your feedback reached us safely 🎉"
 
-        :feedbacks.survey/primer
-        [:<> "We would be extremely happy if you could participate in a small survey.
-        The survey is hosted through Google Forms. Find their  "
-         [:a {:href "https://policies.google.com/privacy"} "privacy policy here."]
-         " By participating, you accept their privacy policy."]
-        :feedbacks.survey/checkbox "Yes, I want to participate in the survey."
-        :feedbacks.survey/loading "The form is being loaded…"
-        :feedbacks.survey/tab "Survey"
-
-        :feedbacks.missing/heading "Feedbacks were not yet loaded from our backend."
-        :feedbacks.missing/button-text "Load feedbacks"
-
         ;; analytics
         :analytics/heading "Analytics"
         :analytics/overall-discussions "schnaqs created"
@@ -927,14 +915,14 @@ Now we write down questions and discuss them and can still understand what we ha
         :pricing.faq.privacy/body-2 "Privacy notice page"
         :pricing.faq.privacy/body-3 " for more information."
         :pricing/headline "Schnaq subscription"
-        :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live: "
+        :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
         :pricing.newsletter/name "schnaq newsletter."
 
         ;; feature list
         :schnaq.startpage.cta/button "Discuss with your coworkers"
 
         ;; tooltips
-        :tooltip/history-statement "Back to statement made by "
+        :tooltip/history-statement "Back to statement made by"
         :tooltip/history-statement-current "Current statement"
 
         ;; History
@@ -1308,24 +1296,24 @@ Now we write down questions and discuss them and can still understand what we ha
         Bearbeitung Ihres Anliegens. Jederzeit können Sie sich von dem Newsletter abmelden, indem Sie auf
         den in der E-Mail zur Verfügung gestellten Link klicken. Alternativ können Sie uns auch eine E-Mail
         schreiben und wir kümmern uns dann um Ihr Anliegen."
-        :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer "
+        :startpage.newsletter/privacy-policy-lead "Mehr Informationen zur Verarbeitung von personenbezogenen Daten, finden Sie in unserer"
 
         :startpage.faq/title "Häufig gestellte Fragen"
         :startpage.faq.data/question "Was passiert mit meinen Daten?"
         :startpage.faq.data/answer-1 "Um einen möglichst sicheren Datenschutz zu gewährleisten, speichern
-        wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer "
+        wir alle Daten nur auf deutschen Servern. Wir haben alle Details einzeln und verständlich in unserer"
         :startpage.faq.data/link-name "Datenschutzerklärung"
         :startpage.faq.data/answer-2 " zusammengefasst."
         :startpage.faq.integration/question "Kann ich schnaq mit meiner bestehenden Software integrieren?"
         :startpage.faq.integration/answer "Wir arbeiten mit Hochdruck an einer Integration für Slack, MS Team und andere gängige Kommunikationssoftware.
-        Wenn du sofort informiert werden willst, wenn die Integration live geht, melde dich für den "
+        Wenn du sofort informiert werden willst, wenn die Integration live geht, melde dich für den"
         :startpage.faq.integration/link-name "Newsletter an."
         :startpage.faq.costs/question "Gibt es versteckte Kosten?"
         :startpage.faq.costs/answer "schnaq ist derzeit in einer Testphase und kostenlos benutzbar. Es gibt keinerlei Kosten. Wir freuen uns
         aber über ehrliches Feedback als Gegenleistung."
         :startpage.faq.start/question "Wie kann ich mit schnaq starten?"
         :startpage.faq.start/answer "Du kannst schnaq entweder anonym nutzen, oder dich registrieren und anmelden, um deine schnaqs und Beiträge von
-        überall aus einsehen und verwalten zu können. Probier es einfach aus und "
+        überall aus einsehen und verwalten zu können. Probier es einfach aus und"
         :startpage.faq.start/link-name "starte einen schnaq."
         :startpage.faq.why/question "Warum sollte ich schnaq nutzen?"
         :startpage.faq.why/answer "schnaq ist für dich, wenn du eine moderne, offene und gleichberechtigte Arbeitskultur unterstützt.
@@ -1346,7 +1334,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :footer.buttons/privacy "Datenschutz"
         :footer.buttons/press-kit "Presse"
         :footer.buttons/publications "Publikationen"
-        :footer.tagline/developed-with " Entwickelt mit "
+        :footer.tagline/developed-with "Entwickelt mit"
         :footer.sponsors/heading "Unsere Server werden gehostet bei"
         :footer.registered/rights-reserved "Alle Rechte vorbehalten"
         :footer.registered/is-registered "ist eine eingetragene Marke"
@@ -1382,7 +1370,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :schnaq.admin.notifications/emails-successfully-sent-title "Mail(s) verschickt!"
         :schnaq.admin.notifications/emails-successfully-sent-body-text "Deine Mail(s) wurden erfolgreich versendet."
         :schnaq.admin.notifications/sending-failed-title "Fehler bei Zustellung!"
-        :schnaq.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden: "
+        :schnaq.admin.notifications/sending-failed-lead "Die Einladung konnte an folgende Adressen nicht zugestellt werden:"
         :schnaq.admin.notifications/statements-deleted-title "Nachrichten gelöscht!"
         :schnaq.admin.notifications/statements-deleted-lead "Deine gewählten Nachrichten wurden erfolgreich gelöscht."
         :schnaq.admin.notifications/heading "Einstellungen"
@@ -1472,7 +1460,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :beta.modal/cta "Anfrage senden"
         :beta.modal.login/intro "Bereits Beta-Tester:in?"
         :beta.modal.login/button "Dann melde dich an"
-        :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter "
+        :page.beta.modal/cta "Wenn du daran interessiert bist ein:e Beta-Tester:in zu werden, schreibe uns eine E-Mail unter"
 
         ;; Press Kit
         :press-kit/heading "Presse & Medien"
@@ -1558,7 +1546,7 @@ Now we write down questions and discuss them and can still understand what we ha
          [:p "Nun ist es auch möglich erweiterte Funktionen, wie Beiträge editieren, zu verwenden, da du nun eine Identität auf unserer Plattform hast 👍"]
          [:p "Jederzeit kannst du uns kontaktieren und die Einsicht oder Löschung deiner Daten beantragen."]]
 
-        :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen "
+        :privacy.link-to-privacy/lead "Mehr Informationen findest du in unserer ausführlichen"
         :privacy/note "Datenschutzerklärung"
 
         :privacy.extended/heading "Datenschutzerklärung"
@@ -1808,19 +1796,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :feedbacks.notification/body "Dein Feedback wurde erfolgreich an uns
      gesendet 🎉"
 
-        :feedbacks.survey/primer
-        [:<> "Wir würden uns freuen, wenn du bei einer
-     kleinen Umfrage teilnehmen würdest. Diese wird bei Google Forms gehostet
-     und unterliegt den "
-         [:a {:href "https://policies.google.com/privacy"} "Datenschutzbestimmungen von Google"]
-         ". Mit der Teilnahme an der Umfrage akzeptierst du diesen Datenschutzbestimmungen."]
-        :feedbacks.survey/checkbox "Ja, ich möchte an der Umfrage teilnehmen"
-        :feedbacks.survey/loading "Formular wird geladen..."
-        :feedbacks.survey/tab "Umfrage"
-
-        :feedbacks.missing/heading "Feedbacks wurden noch nicht geladen 😱"
-        :feedbacks.missing/button-text "Nachladen"
-
         ;; analytics
         :analytics/heading "Analytics"
         :analytics/overall-discussions "Schnaqs erstellt"
@@ -2033,14 +2008,14 @@ Now we write down questions and discuss them and can still understand what we ha
         :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
         :pricing.faq.privacy/body-3 " findest du mehr Informationen"
         :pricing/headline "Schnaq Abonnement"
-        :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht: "
+        :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
         :pricing.newsletter/name "schnaq Newsletter."
 
         ;; feature list
         :schnaq.startpage.cta/button "Mit Kolleg:innen schnaqqen"
 
         ;; Tooltips
-        :tooltip/history-statement "Zurück zum Beitrag von "
+        :tooltip/history-statement "Zurück zum Beitrag von"
         :tooltip/history-statement-current "Aktueller Beitrag"
 
         ;; History

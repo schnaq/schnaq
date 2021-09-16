@@ -89,7 +89,7 @@
 (defn- developed-in-nrw []
   [:section.pt-3
    [:i {:class (str "fas " (fa :terminal))}]
-   (labels :footer.tagline/developed-with)
+   " " (labels :footer.tagline/developed-with) " "
    [:i {:class (str "m-auto fas " (fa :flask))}]
    (gstring/format " in NRW, Germany © schnaq %d" jw/get-date-year)])
 

@@ -41,7 +41,7 @@
         (labels :startpage.newsletter/more-info-clicker)]
        [:div.collapse {:id "collapse-more-newsletter"}
         [:p.small (labels :startpage.newsletter/policy-disclaimer)
-         [:br] (labels :startpage.newsletter/privacy-policy-lead)
+         [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
          [:a {:href (reitfe/href :routes/privacy-extended)}
           (labels :privacy/note)] "."]]]]
 
@@ -94,13 +94,13 @@
   [:section.pt-5
    [:h4.text-center (labels :startpage.faq/title)]
    [:p [:strong (labels :startpage.faq.data/question)] " "
-    (labels :startpage.faq.data/answer-1)
+    (labels :startpage.faq.data/answer-1) " "
     [:a {:href (reitfe/href :routes/privacy)} (labels :startpage.faq.data/link-name)]
     (labels :startpage.faq.data/answer-2)]
-   [:p [:strong (labels :startpage.faq.integration/question)] " " (labels :startpage.faq.integration/answer)
+   [:p [:strong (labels :startpage.faq.integration/question)] " " (labels :startpage.faq.integration/answer) " "
     [:a {:href "#newsletter"} (labels :startpage.faq.integration/link-name)]]
    [:p [:strong (labels :startpage.faq.costs/question)] " " (labels :startpage.faq.costs/answer)]
-   [:p [:strong (labels :startpage.faq.start/question)] " " (labels :startpage.faq.start/answer)
+   [:p [:strong (labels :startpage.faq.start/question)] " " (labels :startpage.faq.start/answer) " "
     [:a {:href (reitfe/href :routes.schnaq/create)} (labels :startpage.faq.start/link-name)]]
    [:p [:strong (labels :startpage.faq.why/question)] " " (labels :startpage.faq.why/answer)]])
 
