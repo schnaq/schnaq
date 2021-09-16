@@ -70,7 +70,8 @@
   (fn [locale _]
     (case locale
       :de "Deutsch"
-      :en "English")))
+      :en "English"
+      :pl "Polski")))
 
 (rf/reg-fx
   ;; Changes the HTML lang attribute accordingly.
@@ -79,6 +80,7 @@
     (let [locale-string (case lang-short
                           :de "de-DE"
                           :en "en-US"
+                          :pl "pl-PL"
                           "de-DE")]
       (.setAttribute (.-documentElement js/document) "lang" locale-string))))
 
