@@ -244,9 +244,6 @@
         :footer.registered/rights-reserved "All rights reserved"
         :footer.registered/is-registered "is a registered trademark"
 
-        ;; Create schnaqs
-        :schnaqs/create "Create schnaq"
-
         ;; Header image
         :schnaq.header-image.url/placeholder "Image url"
         :schnaq.header-image.url/button "Add as preview image"
@@ -719,10 +716,6 @@
         :feedbacks.missing/heading "Feedbacks were not yet loaded from our backend."
         :feedbacks.missing/button-text "Load feedbacks"
 
-        ;; Log-in
-        :login/as "Hello, "
-        :login/set-name "Enter your name"
-
         ;; analytics
         :analytics/heading "Analytics"
         :analytics/overall-discussions "schnaqs created"
@@ -834,7 +827,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :notification-mail-interval/never "Never"
 
         ;; Errors
-        :errors/navigate-to-startpage "Back to the home page"
         :errors/generic "An error occurred"
 
         :error.generic/contact-us
@@ -850,7 +842,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :error.beta/body "Only schnaq beta-testers can access this page. If you are one, please log in. If you would like to be a beta-tester, write us an email at hello@schnaq.com."
 
         ;; Graph Texts
-        :graph/heading "Discussion Overview"
         :graph.button/text "Mindmap"
         :graph.download/as-png "Download mindmap as image"
         :graph.settings/title "Settings for your Mindmap"
@@ -941,11 +932,6 @@ Now we write down questions and discuss them and can still understand what we ha
 
         ;; feature list
         :schnaq.startpage.cta/button "Discuss with your coworkers"
-        :feature/integration "A few clicks to integrate into your existing software and infrastructure"
-        :feature/organization "Easy extraction and organisation of Knowledge"
-        :feature/datenschutz "Privacy focused and GDPR-compliant work"
-        :feature/inputs "Never again lose know-how from emails, chats, meetings or video-conferences"
-        :feature/equality "Everybody is able to contribute knowledge equally"
 
         ;; tooltips
         :tooltip/history-statement "Back to statement made by "
@@ -955,30 +941,24 @@ Now we write down questions and discuss them and can still understand what we ha
         :history/title "History"
         :history.home/text "Start"
         :history.home/tooltip "Back to the discussion's beginning"
-        :history.statement/user "Post from "
-        :history.all-schnaqs/text "Overview"
+        :history.statement/user "Post from"
         :history.all-schnaqs/tooltip "Back to all schnaqs"
-        :history.back/text "Back"
         :history.back/tooltip "Back to previous post"
 
         ;; Route Link Texts
-        :router.features/discussion "Discussion features"
         :router/admin-center "Admin-Center"
         :router/all-feedbacks "All feedbacks"
         :router/analytics "Analytics dashboard"
-        :router/continue-discussion "Continue Discussion"
         :router/create-schnaq "Create schnaq"
         :router/value "Value of schnaq"
         :router/dashboard "schnaq dashboard"
         :router/graph-view "Graph view"
         :router/how-to "How do I use schnaq?"
-        :router/invalid-link "Error page"
         :router/last-added-schnaq "Last created schnaq"
         :router/visited-schnaqs "Visited schnaqs"
         :router/not-found-label "Not found route redirect"
         :router/pricing "Prices"
         :router/privacy "Privacy Policy"
-        :router/show-schnaq "Show schnaq"
         :router/start-discussion "Start discussion"
         :router/startpage "Startpage"
         :router/true-404-view "404 error page"
@@ -995,7 +975,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :admin.center.delete.private/label "Share-hash"
         :admin.center.delete.private/heading "Private schnaqs"
 
-        :badges.sort/sort "Sort"
         :badges.sort/newest "Newest"
         :badges.sort/popular "Popular"
         :badges.sort/alphabetical "Alphabetical"
@@ -1115,8 +1094,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :summary.user.abort/label "Problems with the calculation?"
         :summary.user.abort/button "Cancel"
         :summary.user/privacy-warning "For improvement, schnaq employees will be able to view and review summary content confidentially."
-        :summary.user/label "Summary: "
-        :summary.user/last-updated "Last updated: "
+        :summary.user/label "Summary:"
+        :summary.user/last-updated "Last updated:"
         :summary.user/heading "Summaries"
         :summary.user/subheading "See the discussion in a few sentences"
         :summary.admin/open-summaries "Open Summaries: %s"
@@ -1372,9 +1351,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :footer.registered/rights-reserved "Alle Rechte vorbehalten"
         :footer.registered/is-registered "ist eine eingetragene Marke"
 
-        ;; Create schnaqs
-        :schnaqs/create "schnaq anlegen"
-
         ;; Header image
         :schnaq.header-image.url/placeholder "Bild URL eingeben"
         :schnaq.header-image.url/button "Vorschaubild hinzufügen"
@@ -1480,7 +1456,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :discussion.anonymous-edit.modal/cta "Anmelden / Registrieren"
 
         :discussion.anonymous-labels.modal/title "Bitte melde dich an um labels zu editieren"
-        :discussion.anonymous-labels.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren von labels anmelden."]]
+        :discussion.anonymous-labels.modal/explain [:<> "Um Missbrauch von anonymen Beiträgen zu vermeiden, musst du dich " [:strong "zum Editieren von Labels anmelden."]]
         :discussion.anonymous-labels.modal/cta "Anmelden / Registrieren"
 
         ;; Conversion-Delete-Funnel
@@ -1845,10 +1821,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :feedbacks.missing/heading "Feedbacks wurden noch nicht geladen 😱"
         :feedbacks.missing/button-text "Nachladen"
 
-        ;; Log-in
-        :login/as "Hallo, "
-        :login/set-name "Gib deinen Namen ein"
-
         ;; analytics
         :analytics/heading "Analytics"
         :analytics/overall-discussions "Schnaqs erstellt"
@@ -1865,7 +1837,7 @@ Now we write down questions and discuss them and can still understand what we ha
         :supporters/heading "Unterstützt vom Wirtschaftsministerium des Landes Nordrhein-Westfalen"
 
         ;; Testimonials
-        :testimonials/heading "Die haben schon mit uns geschnaqt"
+        :testimonials/heading "Die haben schon mit uns geschnaqqt"
         :testimonials.doctronic/company "doctronic GmbH & Co. KG"
         :testimonials.doctronic/quote "Wir beobachten die Entwicklung von schnaq mit großem Interesse für den eigenen Einsatz und für den Einsatz bei unseren Kunden."
         :testimonials.doctronic/author "Ingo Küper, Geschäftsführer"
@@ -1959,7 +1931,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :notification-mail-interval/never "Niemals"
 
         ;; Errors
-        :errors/navigate-to-startpage "Zurück zur Startseite"
         :errors/generic "Es ist ein Fehler aufgetreten"
 
         :error.generic/contact-us [:span "Solltest du hier landen nachdem du etwas auf schnaq.com angeklickt hast, gib uns gerne Bescheid unter " [:a {:href "mailto:info@schnaq.com"} "info@schnaq.com"]]
@@ -1975,7 +1946,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :error.beta/body "Dieses Feature ist nur für Beta-Tester:innen verfügbar. Wenn du zu den Tester:innen gehörst, melde dich bitte an. Wenn du Beta-Tester:in werden möchtest, dann schreibe uns eine E-Mail an hello@schnaq.com."
 
         ;; Graph Texts
-        :graph/heading "Diskussionsübersicht"
         :graph.button/text "Mindmap"
         :graph.download/as-png "Mindmap als Bild herunterladen"
         :graph.settings/title "Einstellungen für die Mindmap"
@@ -2068,11 +2038,6 @@ Now we write down questions and discuss them and can still understand what we ha
 
         ;; feature list
         :schnaq.startpage.cta/button "Mit Kolleg:innen schnaqqen"
-        :feature/integration "Per Mausklick in bestehende Software und Infrastruktur integrieren"
-        :feature/organization "Einfach und strukturiert Wissen einfangen und organisieren"
-        :feature/datenschutz "Datenschutzkonform und sicher arbeiten"
-        :feature/inputs "Nie wieder Know-How aus Emails, Chats, Meetings oder Videokonferenzen verlieren"
-        :feature/equality "Alle Mitarbeiter:innen können gleichberechtigt Wissen beitragen"
 
         ;; Tooltips
         :tooltip/history-statement "Zurück zum Beitrag von "
@@ -2082,29 +2047,23 @@ Now we write down questions and discuss them and can still understand what we ha
         :history/title "Verlauf"
         :history.home/text "Start"
         :history.home/tooltip "Zurück zum Diskussionsanfang"
-        :history.statement/user "Beitrag von "
-        :history.all-schnaqs/text "Übersicht"
+        :history.statement/user "Beitrag von"
         :history.all-schnaqs/tooltip "Zurück zur Übersicht der schnaqs"
-        :history.back/text "Zurück"
         :history.back/tooltip "Zurück zum vorherigen Beitrag"
 
         ;; Route Link Texts
-        :router.features/discussion "Diskussionsfeatures"
         :router/admin-center "Admin-Center"
         :router/all-feedbacks "Alle Feedbacks"
         :router/analytics "Analyse-Dashboard"
-        :router/continue-discussion "Führe Besprechung fort"
         :router/create-schnaq "Schnaq anlegen"
         :router/graph-view "Graph View"
         :router/how-to "Wie benutze ich schnaq?"
-        :router/invalid-link "Fehlerseite"
         :router/last-added-schnaq "Zuletzt angelegter schnaq"
         :router/visited-schnaqs "Besuchte schnaqs"
         :router/not-found-label "Not Found route redirect"
         :router/pricing "Preise"
         :router/privacy "Datenschutz"
-        :router/show-schnaq "Schnaq anzeigen"
-        :router/start-discussion "Starte Besprechung"
+        :router/start-discussion "Starte Diskussion"
         :router/startpage "Startseite"
         :router/true-404-view "404 Fehlerseite"
         :router/code-of-conduct "Verhaltensregeln"
@@ -2120,7 +2079,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :admin.center.delete.private/label "Share-hash"
         :admin.center.delete.private/heading "Private schnaqs"
 
-        :badges.sort/sort "Sortierung"
         :badges.sort/newest "Neueste"
         :badges.sort/popular "Beliebt"
         :badges.sort/alphabetical "Alphabetisch"
@@ -2241,8 +2199,8 @@ Now we write down questions and discuss them and can still understand what we ha
         :summary.user.abort/label "Probleme bei der Berechnung?"
         :summary.user.abort/button "Abbrechen"
         :summary.user/privacy-warning "Zur Verbesserung werden Mitarbeiter:innen des schnaq-Teams Inhalte der Zusammenfassung vertraulich einsehen und überprüfen können."
-        :summary.user/label "Zusammenfassung: "
-        :summary.user/last-updated "Zuletzt aktualisiert: "
+        :summary.user/label "Zusammenfassung:"
+        :summary.user/last-updated "Zuletzt aktualisiert:"
         :summary.user/heading "Zusammenfassungen"
         :summary.user/subheading "Schau dir die Diskussion in wenigen Sätzen an."
         :summary.admin/open-summaries "Offene Zusammenfassungen: %s"

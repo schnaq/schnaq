@@ -88,7 +88,7 @@
                 tooltip-text (str (labels :tooltip/history-statement) nickname)
                 history-content [:div
                                  [:div.d-flex.flex-row
-                                  [:h6 (labels :history.statement/user) (toolbelt/truncate-to-n-chars nickname 20)]
+                                  [:h6 (labels :history.statement/user) " " (toolbelt/truncate-to-n-chars nickname 20)]
                                   [:div.ml-auto [common/avatar user 22]]]
                                  (toolbelt/truncate-to-n-words statement-content max-word-count)]]
             [:article {:key (str "history-container-" (:db/id statement))}

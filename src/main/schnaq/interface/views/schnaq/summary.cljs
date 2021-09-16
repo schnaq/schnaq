@@ -69,7 +69,7 @@
                             [(time/timestamp-with-tooltip created-at locale) text]
                             ["-" "-"])]
     [:<>
-     [:small.text-muted (labels :summary.user/last-updated) updated-at]
+     [:small.text-muted (labels :summary.user/last-updated) " " updated-at]
      [:p.p-3 (or text "-")]
      [:hr.py-2]
      [summary-request-button (:discussion/share-hash schnaq)]]))
@@ -82,7 +82,7 @@
       :page/subheading (labels :summary.user/subheading)
       :condition/needs-beta-tester? true}
      [:div.container.panel-white.mt-3
-      [:h2.text-center (labels :summary.user/label) (:discussion/title current-schnaq)]
+      [:h2.text-center (labels :summary.user/label) " " (:discussion/title current-schnaq)]
       [summary-body current-schnaq]]]))
 
 (defn public-user-view []
