@@ -83,22 +83,6 @@
   }
 }
 
-.button-call-to-action {
-  background-color: $secondary;
-  border: 0;
-  border-radius: 50%;
-  color: $white;
-  font-size: 150%;
-  min-height: 3rem;
-  min-width: 3rem;
-  padding: 0.25rem;
-}
-
-.button-call-to-action:hover {
-  background-color: $secondary-selected;
-  color: $white;
-}
-
 .button-discussion-options {
   @extend .h-100;
 }
