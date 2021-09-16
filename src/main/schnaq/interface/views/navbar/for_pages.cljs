@@ -30,7 +30,9 @@
      [um/user-handling-menu "btn-link"]]
     [:h1.h3.font-weight-bold.my-auto.d-none.d-md-block.text-dark-highlight title]]])
 
-(defn language-dropdown []
+(defn language-dropdown
+  "Dropdown for bootstrap navbar to display the allowed languages."
+  []
   (let [current-language @(rf/subscribe [:current-language])]
     [:<>
      [:a#schnaq-language-dropdown.nav-link.dropdown-toggle

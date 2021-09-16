@@ -918,7 +918,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
         :pricing.newsletter/name "schnaq newsletter."
 
-        ;; feature list
         :schnaq.startpage.cta/button "Discuss with your coworkers"
 
         ;; tooltips
@@ -2011,7 +2010,6 @@ Now we write down questions and discuss them and can still understand what we ha
         :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
         :pricing.newsletter/name "schnaq Newsletter."
 
-        ;; feature list
         :schnaq.startpage.cta/button "Mit Kolleg:innen schnaqqen"
 
         ;; Tooltips
