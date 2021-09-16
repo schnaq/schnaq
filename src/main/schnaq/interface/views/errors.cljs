@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.errors
   (:require [cljs.pprint :refer [pprint]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]
             [taoensso.timbre :as log]))
 

@@ -3,7 +3,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.views.loading :as loading]

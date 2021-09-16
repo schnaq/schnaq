@@ -1,5 +1,5 @@
 (ns schnaq.interface.pages.alphazulu
-  (:require [schnaq.interface.text.display-data :refer [labels]]
+  (:require [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]))
 

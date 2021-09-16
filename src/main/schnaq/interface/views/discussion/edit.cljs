@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.edit
   (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as tools]

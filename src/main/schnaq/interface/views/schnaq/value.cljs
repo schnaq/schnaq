@@ -1,7 +1,9 @@
 (ns schnaq.interface.views.schnaq.value
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [fa img-path labels]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- value [icon title text]

@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.search
   (:require [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.conclusion-card :as card]

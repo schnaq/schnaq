@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.startpage.alternatives.e-learning
   (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [img-path fa]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))

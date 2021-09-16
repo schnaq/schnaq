@@ -9,7 +9,7 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.text.display-data :refer [img-path]]))
+            [schnaq.interface.components.images :refer [img-path]]))
 
 (def ^:private default-identicon-background-color
   "#fafafa")

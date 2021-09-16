@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.howto.how-to
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.howto.elements :as elements]
             [schnaq.interface.views.pages :as pages]))
 

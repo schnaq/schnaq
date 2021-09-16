@@ -1,6 +1,8 @@
 (ns schnaq.interface.views.startpage.call-to-actions
   (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [fa labels img-path]]))
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]))
 
 (defn- header-screenshot
   "Display header screenshot of an example discussion."

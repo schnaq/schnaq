@@ -5,7 +5,7 @@
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.scheduler :as scheduler]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]

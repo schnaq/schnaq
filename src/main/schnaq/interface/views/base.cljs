@@ -2,7 +2,9 @@
   (:require [clojure.string :as str]
             [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels img-path fa]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jw]
             [schnaq.interface.views.feedback.collect :as feedback]))
 

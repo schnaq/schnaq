@@ -2,7 +2,7 @@
   (:require ["chart.js"]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [schnaq.interface.text.display-data :refer [colors]]))
+            [schnaq.interface.components.colors :refer [colors]]))
 
 
 (defn create-vote-chart-data

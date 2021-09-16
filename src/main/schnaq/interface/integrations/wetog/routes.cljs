@@ -1,7 +1,7 @@
 (ns schnaq.interface.integrations.wetog.routes
   (:require [re-frame.core :as rf]
             [reitit.coercion.spec]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.discussion.card-view :as discussion-card-view]
             [schnaq.interface.views.discussion.dashboard :as dashboard]
             [schnaq.interface.views.discussion.search :as discussion-search]

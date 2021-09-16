@@ -1,7 +1,7 @@
 (ns schnaq.interface.pages.privacy-extended
   "Page explaining our privacy and how we are storing data."
   (:require [schnaq.interface.pages.privacy :as privacy]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]))
 

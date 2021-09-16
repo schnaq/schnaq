@@ -1,6 +1,8 @@
 (ns schnaq.interface.views.startpage.pricing
   (:require [reitit.frontend.easy :as reititfe]
-            [schnaq.interface.text.display-data :refer [img-path fa labels]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- free-tier-card
