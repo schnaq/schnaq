@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.startpage.alternatives.consulting
   (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [img-path fa]]
+            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))
@@ -118,7 +119,8 @@
          "Upgrade dein Requirements-Engineering mit nur einem Schritt"]]]]
      [:div.wave-bottom-white-inverted]]
     [:section.container.pt-3
-     [startpage/supporters]]]])
+     [startpage/supporters]
+     [jsw/facebook-pixel]]]])
 
 (defn consulting-view []
   [startpage-content])

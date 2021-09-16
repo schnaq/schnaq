@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.startpage.alternatives.e-learning
   (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.text.display-data :refer [img-path fa]]
+            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))
@@ -119,7 +120,8 @@
          "Upgrade deine Lehrveranstaltung mit nur einem Schritt"]]]]
      [:div.wave-bottom-white-inverted]]
     [:section.container.pt-3
-     [startpage/supporters]]]])
+     [startpage/supporters]
+     [jsw/facebook-pixel]]]])
 
 (defn e-learning-view []
   [startpage-content])
