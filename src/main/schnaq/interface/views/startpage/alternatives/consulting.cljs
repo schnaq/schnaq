@@ -72,7 +72,7 @@
      [rows/row-builder-text-right
       [:img {:src (img-path :startpage.alternatives.e-learning/oma)}]
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "So einfach, selbst ein Seniorenkurs nutzt es!"]
+       [:h3.h1.text-purple.mb-3 "So einfach, selbst dein ältester Kunde schafft das!"]
        [:p "Jira zu kompliziert? Dokumente in der Cloud ablegen zu umständlich? Schnaq kann von allen bedient werden! Egal ob du Erfahrung mit Software hast, oder dich gerade erst damit anfreundest. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
     [:section.overflow-hidden.py-3.my-5
      [:div.wave-bottom-white]
