@@ -2,8 +2,10 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-config]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [fa labels img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown :as md]
@@ -26,7 +28,7 @@
      [:div.col-10.py-md-5
       [:h2 (labels :call-to-contribute/body)]
       [:p.mt-5 (labels :how-to/ask-question)
-       [:a.text-dark {:href (reitfe/href :routes/how-to)}
+       [:a.text-dark.btn.btn-link {:href (reitfe/href :routes/how-to)}
         (labels :how-to/answer-question)]]]]]])
 
 

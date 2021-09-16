@@ -1,6 +1,6 @@
 (ns schnaq.interface.celebrations
   (:require [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
 (defn- schnaq-filled-body

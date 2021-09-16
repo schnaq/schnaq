@@ -1,5 +1,7 @@
 (ns schnaq.interface.utils.rows
-  (:require [schnaq.interface.text.display-data :refer [labels img-path video]]
+  (:require [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.videos :refer [video]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
 (defn- build-text-box

@@ -2,7 +2,7 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn- stabilize-graph

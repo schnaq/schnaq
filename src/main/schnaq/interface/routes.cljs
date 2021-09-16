@@ -18,7 +18,7 @@
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.pages.publications :as publications]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.admin.control-center :as admin-center]
             [schnaq.interface.views.discussion.admin-center :as discussion-admin]
@@ -65,6 +65,9 @@
    ["de/{*rest-url}"
     {:name :routes/force-german
      :controllers (language-controllers :de)}]
+   ["pl/{*rest-url}"
+    {:name :routes/force-polish
+     :controllers (language-controllers :pl)}]
    [""
     {:name :routes/startpage
      :view startpage-views/startpage-view

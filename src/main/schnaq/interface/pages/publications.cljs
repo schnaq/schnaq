@@ -1,5 +1,6 @@
 (ns schnaq.interface.pages.publications
-  (:require [schnaq.interface.text.display-data :refer [img-path labels]]
+  (:require [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- publication-card

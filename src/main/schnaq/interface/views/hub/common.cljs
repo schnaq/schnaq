@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.hub.common
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
 (defn hub-logo

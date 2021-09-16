@@ -3,7 +3,10 @@
             [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [fa labels img-path video]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.videos :refer [video]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.views.common :as common]))
 

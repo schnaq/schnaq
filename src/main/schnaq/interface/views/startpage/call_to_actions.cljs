@@ -1,6 +1,8 @@
 (ns schnaq.interface.views.startpage.call-to-actions
   (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [fa labels img-path]]))
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]))
 
 (defn- header-screenshot
   "Display header screenshot of an example discussion."
@@ -12,13 +14,12 @@
 (defn- start-schnaq-button
   "Tell user to create a schnaq now."
   []
-  [:section.mt-5
-   [:div.d-flex.flex-row
-    [:div.display-6.text-white.my-auto.mr-3 (labels :schnaq.startpage.cta/button)]
-    [:a.link-unstyled
-     {:href (rfe/href :routes.schnaq/create)}
-     [:button.button-call-to-action
-      [:i.m-auto {:class (str "fa " (fa :arrow-right))}]]]]])
+  [:section.mt-5.text-center
+   [:a.btn.btn-lg.btn-secondary.d-inline-block
+    {:href (rfe/href :routes.schnaq/create)}
+    (labels :schnaq.startpage.cta/button)
+    " "
+    [:i.m-auto {:class (str "fa " (fa :arrow-right))}]]])
 
 (defn- social-proof
   "A small section showing the user, that the risk was already taken by others."

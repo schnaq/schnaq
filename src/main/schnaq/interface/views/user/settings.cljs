@@ -1,7 +1,8 @@
 (ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.feed.overview :as feed-overview]

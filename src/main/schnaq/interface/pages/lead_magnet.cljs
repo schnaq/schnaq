@@ -2,7 +2,8 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [labels img-path]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.views.pages :as pages]))
@@ -48,7 +49,7 @@
        (labels :startpage.newsletter/more-info-clicker)]]
      [:div.collapse {:id "collapse-more-newsletter"}
       [:p.small (labels :startpage.newsletter/policy-disclaimer)
-       [:br] (labels :startpage.newsletter/privacy-policy-lead)
+       [:br] (labels :startpage.newsletter/privacy-policy-lead) " "
        [:a {:href (reitfe/href :routes/privacy-extended)}
         (labels :privacy/note)] "."]]]]
 

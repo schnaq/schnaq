@@ -2,7 +2,8 @@
   (:require [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]))
 
 (defn modal-panel

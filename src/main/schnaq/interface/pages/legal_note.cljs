@@ -1,7 +1,7 @@
 (ns schnaq.interface.pages.legal-note
   (:require [reitit.frontend.easy :as reitfe]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- entry [title body]

@@ -18,7 +18,7 @@
       (str/split "-")
       first
       keyword
-      #{:en :de}
+      #{:en :de :pl}
       (or :en)))
 
 (defn init-language

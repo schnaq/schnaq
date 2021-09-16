@@ -3,7 +3,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]
-            [schnaq.interface.text.display-data :refer [labels]]))
+            [schnaq.interface.translations :refer [labels]]))
 
 (defn store-temporary-profile-picture
   "Store image file from event to database in the specified path.

@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.labels
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.text.display-data :refer [fa]]
+            [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as tools]

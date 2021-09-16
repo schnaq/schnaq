@@ -5,7 +5,7 @@
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.scheduler :as scheduler]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.base :as base]
             [schnaq.interface.views.common :as common]
@@ -57,7 +57,7 @@
    {:page/heading (labels :page.beta/heading)
     :page/subheading (labels :page.beta/subheading)}
    [:div.container.text-center.pt-5
-    [:p (labels :page.beta.modal/cta) [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-mail "info@schnaq.com")] "."]]])
+    [:p (labels :page.beta.modal/cta) " " [:a {:href "mailto:info@schnaq.com"} (tools/obfuscate-mail "info@schnaq.com")] "."]]])
 
 (>defn- validate-conditions-middleware
   "Takes the conditions and returns either the page or redirects to other views."

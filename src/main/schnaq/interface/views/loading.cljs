@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.loading
   (:require [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
 (defn- spinner-icon

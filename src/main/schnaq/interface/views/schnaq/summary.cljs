@@ -5,7 +5,8 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.text.display-data :refer [fa labels]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.time :as time]
@@ -49,7 +50,7 @@
   (let [request-status @(rf/subscribe [:schnaq.summary/status share-hash])
         button-text (case request-status
                       :request-succeeded (labels :summary.user.request-succeeded/label)
-                      :requested (labels :summary.user.requested/label)
+                      :requested (str (labels :summary.user.requested/label) "…")
                       (labels :summary.user.not-requested/label))]
     [:section.d-block.text-center
      [:button.btn.btn-dark-highlight.mb-2
@@ -69,7 +70,7 @@
                             [(time/timestamp-with-tooltip created-at locale) text]
                             ["-" "-"])]
     [:<>
-     [:small.text-muted (labels :summary.user/last-updated) updated-at]
+     [:small.text-muted (labels :summary.user/last-updated) " " updated-at]
      [:p.p-3 (or text "-")]
      [:hr.py-2]
      [summary-request-button (:discussion/share-hash schnaq)]]))
@@ -82,7 +83,7 @@
       :page/subheading (labels :summary.user/subheading)
       :condition/needs-beta-tester? true}
      [:div.container.panel-white.mt-3
-      [:h2.text-center (labels :summary.user/label) (:discussion/title current-schnaq)]
+      [:h2.text-center (labels :summary.user/label) " " (:discussion/title current-schnaq)]
       [summary-body current-schnaq]]]))
 
 (defn public-user-view []

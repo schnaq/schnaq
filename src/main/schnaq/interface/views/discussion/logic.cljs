@@ -4,7 +4,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]))
 
 (>defn calculate-votes

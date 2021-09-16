@@ -22,7 +22,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.dom]
-            [schnaq.interface.text.display-data :refer [fa]]
+            [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.views.common :as common]))
 
 (def ^:private display-time

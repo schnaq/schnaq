@@ -1,6 +1,8 @@
 (ns schnaq.interface.views.startpage.pricing
   (:require [reitit.frontend.easy :as reititfe]
-            [schnaq.interface.text.display-data :refer [img-path fa labels]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- free-tier-card
@@ -46,7 +48,9 @@
     [business-tier-card]]
    [:p.text-dark-blue.display-6.text-center.pt-2
     (labels :pricing.newsletter/lead)
-    [:a {:href "https://disqtec.com/newsletter"} (labels :pricing.newsletter/name)]]])
+    [:a.btn.btn-lg.btn-link
+     {:href "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
+     (labels :pricing.newsletter/name)]]])
 
 (defn- feature-card
   [title description]

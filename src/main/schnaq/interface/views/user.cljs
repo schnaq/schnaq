@@ -2,7 +2,7 @@
   (:require [clojure.string :as clj-string]
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -49,7 +49,7 @@
      (when time
        [:small.font-weight-light.d-inline.my-auto.ml-2
         [time/timestamp-with-tooltip time locale]])
-     [:small.mx-1.my-auto (labels :discussion.badges/statement-by)]
+     [:small.mx-1.my-auto " " (labels :discussion.badges/statement-by) " "]
      [:small.mr-2.my-auto {:class name-class} display-name]
      [common/avatar user avatar-size]]))
 

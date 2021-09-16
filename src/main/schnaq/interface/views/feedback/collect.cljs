@@ -7,7 +7,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [schnaq.interface.text.display-data :refer [labels]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.modal :as modal]))

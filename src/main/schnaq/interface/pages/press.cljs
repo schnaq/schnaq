@@ -1,6 +1,7 @@
 (ns schnaq.interface.pages.press
   (:require [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.text.display-data :refer [img-path labels]]
+            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- card [title photo-keyword link-url]

@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.user.edit-notifications
   (:require [re-frame.core :as rf]
-            [schnaq.interface.text.display-data :refer [labels fa]]
+            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]
