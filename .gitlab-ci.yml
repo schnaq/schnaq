@@ -63,7 +63,7 @@ css-compile-and-lint:
     - yarn install --dev
     - yarn global add sass
   script:
-    - yarn stylelint "resources/public/css/*.scss"
+    - yarn stylelint "resources/public/css/*.scss" --config-basedir "resources/public/node_modules/"
     - sass ./resources/public/css/main.scss ./resources/public/css/main.min.css --no-source-map --style compressed
   when: always
 

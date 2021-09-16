@@ -43,6 +43,6 @@
     "karma-cljs-test": "^0.1.0",
     "shadow-cljs": "2.15.9",
     "stylelint": "^13.6.1",
-    "stylelint-config-sass-guidelines": "8.0.0"
+    "stylelint-config-sass-guidelines": "^8.0.0"
   }
 }
