@@ -63,10 +63,11 @@
           [:small.d-none.d-md-block.text-muted.mr-2 (labels :discussion.add.statement/new)]
           [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
                                            :display-name (get-in user [:names :display])} 32]])
-       [:div.input-group
+       [:div.form-group
         [:textarea.form-control.discussion-text-input-area
          {:name textarea-name :wrap "soft" :rows 2
           :auto-complete "off"
+          :autofocus "true"
           :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
           ;; first reset input then set height +1px in order to prevent scrolling
           :required true
