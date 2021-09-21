@@ -1,0 +1,32 @@
+@use 'rounded' as rounded;
+@use 'variables' as vars;
+
+
+$var-blue1: vars.$gray-500;
+$var-green1: vars.$primary;
+$var-red1: vars.$red;
+
+@import '../node_modules/klaro/src/scss/klaro';
+
+.cm-btn-accept-all {
+  font-size: 1.05rem !important;
+}
+
+.cm-btn-accept {
+  @extend .disabled;
+  @extend .mt-2;
+}
+
+.cm-footer-buttons {
+  @extend .d-flex;
+  @extend .flex-column-reverse;
+}
+
+.cm-btn-success {
+  @extend .mx-auto;
+  @extend .w-75;
+}
+
+.cm-btn {
+  @extend .shadow-sm;
+}
