@@ -579,3 +579,28 @@
         unread (new-statements-by-discussion-hash keycloak-id discussion-hashes)]
     (user-db/update-visited-statements keycloak-id unread)
     unread))
+
+(>defn- build-schnaq-secrets-map
+  "Creates a secrets map for a collection of statements.
+  When there is no secret, the statement is skipped."
+  [share-hashes]
+  [(? (s/coll-of :db/id)) :ret (? map?)]
+  (when share-hashes
+    (into {}
+          (query
+            '[:find ?share-hash ?secret
+              :in $ [?share-hash ...]
+              :where [?schnaq :discussion/share-hash ?share-hash]
+              [?schnaq :discussion/creation-secret ?secret]]
+            share-hashes))))
+
+(>defn update-schnaq-authors
+  "Takes a dictionary of share-hashes mapped to creation secrets and sets the passed author
+  as their author, if the secrets are correct."
+  [secrets-map author-id]
+  [(? map?) :db/id :ret any?]
+  (let [validated-secrets-map (build-schnaq-secrets-map (keys secrets-map))
+        [_ _ valid-secrets] (cdata/diff secrets-map validated-secrets-map)]
+    (when valid-secrets
+      @(transact
+         (mapv #(vector :db/add [:discussion/share-hash %] :discussion/author author-id) (keys valid-secrets))))))

@@ -37,7 +37,7 @@
   (s/keys :req [:discussion/title :discussion/share-hash :discussion/author
                 :discussion/created-at]
           :opt [:discussion/share-link :discussion/admin-link :discussion/edit-hash
-                :discussion/states :db/id]
+                :discussion/states :db/id :discussion/creation-secret]
           :opt-un [:discussion/meta-info]))
 
 ;; Feedbacks

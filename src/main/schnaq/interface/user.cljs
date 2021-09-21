@@ -33,14 +33,18 @@
   (fn [{:keys [db]} [_ result]]
     (when result
       (let [creation-secrets (get-in db [:discussion :statements :creation-secrets])
+            schnaq-creation-secrets (get-in db [:discussion :schnaqs :creation-secrets])
             visited-hashes (get-in db [:schnaqs :visited-hashes])
             visited-statements (get-in db [:visited :statement-ids] {})]
         {:fx [(http/xhrio-request db :put "/user/register" [:user.register/success]
                                   (cond-> {}
                                           visited-hashes (assoc :visited-hashes visited-hashes)
                                           visited-statements (assoc :visited-statement-ids visited-statements)
-                                          creation-secrets (assoc :creation-secrets creation-secrets)))]}))))
-
+                                          creation-secrets (assoc :creation-secrets creation-secrets)
+                                          schnaq-creation-secrets (assoc :schnaq-creation-secrets schnaq-creation-secrets)))]}))))
+;; TODO delete secrets map after login
+;; TODO make several tests, one new schnaq, two new schnaqs,
+;; TODO  update in-place after login
 (rf/reg-event-fx
   :user.register/success
   (fn [{:keys [db]} [_ {:keys [registered-user updated-statements?]}]]
