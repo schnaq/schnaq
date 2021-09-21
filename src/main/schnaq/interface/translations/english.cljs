@@ -459,6 +459,20 @@
     [:h4 "Purpose of data processing"]
     [:p "The processing of anonymized user data enables us to analyze the use of our website. By evaluating the data obtained, we are able to compile information about the use of the individual components of our website. This helps us to continuously improve our services and their user-friendliness. By anonymizing the IP address, the interest of the user in the protection of his personal data is sufficiently taken into account."]
     [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]]
+   :privacy.extended.facebook-pixel/title "Facebook Pixel"
+   :privacy.extended.facebook-pixel/body
+   [:<>
+    [:p "We use Facebook’s Facebook pixel on our website. For that, we have implemented a code on our website. The Facebook pixel is a segment of a JavaScript code, which, in case you came to our website via Facebook ads, loads an array or functions that enable Facebook to track your user actions. For example, if you buy a product on our website, the Facebook pixel is triggered and stores your actions on our website in one or more cookies. These cookies enable Facebook to match your user data (customer data such as IP address, user ID) with the data of your Facebook account. After that, Facebook deletes your data again. The collected data is anonymous as well as inaccessible and can only be used for ad placement purposes. If you are a Facebook user and you are logged in, your visit to our website is automatically assigned to your Facebook user account."]
+    [:p "We exclusively want to show our products or services to persons, who are interested in them. With the aid of the Facebook pixel, our advertising measures can get better adjusted to your wishes and interests. Therefore, Facebook users get to see suitable advertisement (if they allowed personalised advertisement). Moreover, Facebook uses the collected data for analytical purposes and for its own advertisements."]
+    [:p "If you are registered on Facebook, you can change the settings for advertisements yourself at https://www.facebook.com/ads/preferences/?entry_product=ad_settings_screen."]
+    [:p "We would like to note, that according to the European Court of Justice, there is currently no adequate level of protection for data transfer to the USA. Data processing is done mainly through Facebook Pixel. This may lead to data not being anonymously processed and stored. Furthermore, US government authorities may get access to individual data. The data may also get linked to data from other Facebook services you have a user account with."]
+    [:p "If you want to learn more about Facebook’s data protection, we recommend you the view the company’s in-house data policies at https://www.facebook.com/policy.php"]
+    [:p [:small "Source: Created with the privacy generator from AdSimple"]]]
+   :privacy.extended.facebook-pixel-addition/title "Facebook‘s Automatic Advanced Matching"
+   :privacy.extended.facebook-pixel-addition/body
+   [:<>
+    [:p "Along with Facebook’s pixel function, we have also activated Automatic Advanced Matching. This function allows us to send hashed emails, names, genders, cities, states, postcodes and dates of birth or telephone numbers as additional information to Facebook, provided you have made them available to us. This activation gives us the opportunity to customise advertising campaigns even better to persons who are interested in our services or products."]
+    [:small "Source: Created with the privacy generator from AdSimple"]]
    :privacy.extended.rights-of-the-affected/title "Rights of the data subjects"
    :privacy.extended.rights-of-the-affected/body
    [:<>
