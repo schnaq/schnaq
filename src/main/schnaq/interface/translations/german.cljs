@@ -12,6 +12,7 @@
    :nav.schnaqs/last-added "Zuletzt angelegter schnaq"
    :nav/blog "Blog"
    :nav/admin "Admin"
+   :nav.buttons/language-toggle "Sprache ändern"
 
    ;; Alphazulu Page
    :alphazulu.page/heading "Alphazulu"
