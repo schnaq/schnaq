@@ -23,7 +23,8 @@
     wrapped-element]))
 
 (defn text
-  "Wraps some content in a tooltip with the provided text."
+  "Wraps content in a tooltip with the provided text. If you pass a react-
+  component as `content`, wrap it in a `span` to enable forward referencing."
   [title content options]
   [:> Tippy
    (merge

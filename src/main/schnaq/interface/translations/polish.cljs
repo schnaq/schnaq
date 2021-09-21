@@ -12,6 +12,7 @@
    :nav.schnaqs/last-added "Ostatnio utworzony schnaq"
    :nav/blog "Blog"
    :nav/admin "Admin"
+   :nav.buttons/language-toggle "Zmiana języka"
 
    ;; Alphazulu Page
    :alphazulu.page/heading "Alphazulu"
@@ -409,21 +410,21 @@
    :privacy.extended.intro/body
    [:<>
     [:p "Zasadniczo przetwarzamy dane osobowe tylko w takim zakresie, w jakim jest to konieczne do zapewnienia funkcjonowania strony internetowej i naszych treści. Dane osobowe są regularnie przetwarzane tylko za zgodą użytkownika."]
-    [:p "O ile do przetwarzania danych osobowych wymagana jest zgoda, jako podstawa prawna służy art. 6 ust. 1 lit. a) ogólnego rozporządzenia UE o ochronie danych (GDPR).\nJeśli przetwarzanie danych jest konieczne do ochrony uzasadnionego interesu z naszej strony lub ze strony osoby trzeciej, a Państwa interesy, prawa podstawowe i wolności nie przeważają nad pierwszym wymienionym interesem, art. 6 (1) lit. f DSGVO służy jako podstawa prawna przetwarzania danych."]
+    [:p "O ile do przetwarzania danych osobowych wymagana jest zgoda, jako podstawa prawna służy art. 6 ust. 1 lit. a) ogólnego rozporządzenia UE o ochronie danych (GDPR).\nJeśli przetwarzanie danych jest konieczne do ochrony uzasadnionego interesu z naszej strony lub ze strony osoby trzeciej, a Państwa interesy, prawa podstawowe i wolności nie przeważają nad pierwszym wymienionym interesem, art. 6 (1) lit. f GDPR służy jako podstawa prawna przetwarzania danych."]
     [:p "Dane osobowe są usuwane, gdy tylko przestaje obowiązywać cel ich przechowywania. Przechowywanie danych może mieć miejsce również wtedy, gdy zostało to przewidziane przez europejskiego lub krajowego ustawodawcę w rozporządzeniach unijnych, ustawach lub innych przepisach, którym podlegamy. Dane zostaną również usunięte, jeśli upłynie okres przechowywania przewidziany przez wyżej wymienione normy."]]
    :privacy.extended.logfiles/title "Udostępnianie strony internetowej i tworzenie plików dziennika systemowego"
    :privacy.extended.logfiles/body
    [:<>
-    [:p "Przy każdym wejściu na naszą stronę internetową nasz system automatycznie pobiera dane i informacje (typ / wersja używanej przeglądarki, system operacyjny, adres IP, data i godzina dostępu, strony internetowe, z których uzyskano dostęp do naszej strony internetowej, strony internetowe, do których uzyskano dostęp za pośrednictwem naszej strony internetowej) z systemu komputerowego komputera uzyskującego dostęp. Dane te są zapisywane w plikach logów naszego systemu. Dane te nie są przechowywane razem z innymi danymi osobowymi użytkownika. Podstawą prawną dla tymczasowego przechowywania danych i plików dziennika jest art. 6 ust. 1 lit. f DSGVO."]
-    [:p "Tymczasowe zapisanie adresu IP przez system jest konieczne, aby umożliwić dostarczenie strony internetowej do komputera użytkownika. W tym celu adres IP musi pozostać zapisany na czas trwania sesji. Zapisywanie w plikach dziennika odbywa się w celu zapewnienia funkcjonalności strony internetowej. Ponadto wykorzystujemy te dane do optymalizacji strony internetowej oraz do zapewnienia bezpieczeństwa naszych systemów informatycznych. Cele te stanowią również nasz uzasadniony interes w przetwarzaniu danych zgodnie z art. 6 ust. 1 lit. f DSGVO."]
+    [:p "Przy każdym wejściu na naszą stronę internetową nasz system automatycznie pobiera dane i informacje (typ / wersja używanej przeglądarki, system operacyjny, adres IP, data i godzina dostępu, strony internetowe, z których uzyskano dostęp do naszej strony internetowej, strony internetowe, do których uzyskano dostęp za pośrednictwem naszej strony internetowej) z systemu komputerowego komputera uzyskującego dostęp. Dane te są zapisywane w plikach logów naszego systemu. Dane te nie są przechowywane razem z innymi danymi osobowymi użytkownika. Podstawą prawną dla tymczasowego przechowywania danych i plików dziennika jest art. 6 ust. 1 lit. f GDPR."]
+    [:p "Tymczasowe zapisanie adresu IP przez system jest konieczne, aby umożliwić dostarczenie strony internetowej do komputera użytkownika. W tym celu adres IP musi pozostać zapisany na czas trwania sesji. Zapisywanie w plikach dziennika odbywa się w celu zapewnienia funkcjonalności strony internetowej. Ponadto wykorzystujemy te dane do optymalizacji strony internetowej oraz do zapewnienia bezpieczeństwa naszych systemów informatycznych. Cele te stanowią również nasz uzasadniony interes w przetwarzaniu danych zgodnie z art. 6 ust. 1 lit. f GDPR."]
     [:p "Dane są usuwane, gdy tylko nie są już potrzebne do osiągnięcia celu, dla którego zostały zebrane. W przypadku zbierania danych w celu udostępnienia strony internetowej, ma to miejsce po zakończeniu danej sesji. W przypadku przechowywania danych w plikach dziennika następuje to najpóźniej po siedmiu dniach. Możliwe jest przechowywanie po upływie tego okresu. W takim przypadku adresy IP użytkowników są usuwane lub anonimizowane."]
     [:p "Gromadzenie danych w celu udostępnienia strony internetowej i zapisywanie danych w plikach dziennika jest absolutnie konieczne do funkcjonowania strony internetowej. W związku z tym nie ma możliwości wniesienia sprzeciwu."]]
    :privacy.extended.cookies/title "Cookies"
    :privacy.extended.cookies/body
    [:<>
     [:p "Na naszej stronie internetowej używamy tzw. cookies. Cookies to pakiety danych, które Państwa przeglądarka przechowuje w Państwa urządzeniu końcowym na nasze polecenie. Rozróżnia się dwa rodzaje plików cookies: tymczasowe, tzw. sesyjne (session cookies) oraz stałe (persistent cookies)."]
-    [:p "Pliki cookie sesji są automatycznie usuwane po zamknięciu przeglądarki. Przechowują one tak zwany identyfikator sesji, dzięki któremu różne żądania z przeglądarki mogą być przypisane do wspólnej sesji. Pozwala to na rozpoznanie Państwa komputera, gdy powracają Państwo na naszą stronę internetową. Użycie plików cookie sesji jest konieczne, abyśmy mogli udostępnić Państwu stronę internetową. Podstawą prawną do przetwarzania Państwa danych osobowych za pomocą cookies sesyjnych jest art. 6 ust. 1 lit. f DSGVO."]
-    [:p "Trwałe pliki cookie są automatycznie usuwane po upływie określonego czasu, który może być różny w zależności od pliku cookie. Te pliki cookie pozostają na Państwa urządzeniu końcowym przez określony czas i są zazwyczaj wykorzystywane do rozpoznania Państwa przy ponownej wizycie na naszej stronie internetowej. Stosowanie trwałych plików cookie na naszej stronie internetowej opiera się na podstawie prawnej art. 6 ust. 1 lit. f DSGVO."]
+    [:p "Pliki cookie sesji są automatycznie usuwane po zamknięciu przeglądarki. Przechowują one tak zwany identyfikator sesji, dzięki któremu różne żądania z przeglądarki mogą być przypisane do wspólnej sesji. Pozwala to na rozpoznanie Państwa komputera, gdy powracają Państwo na naszą stronę internetową. Użycie plików cookie sesji jest konieczne, abyśmy mogli udostępnić Państwu stronę internetową. Podstawą prawną do przetwarzania Państwa danych osobowych za pomocą cookies sesyjnych jest art. 6 ust. 1 lit. f GDPR."]
+    [:p "Trwałe pliki cookie są automatycznie usuwane po upływie określonego czasu, który może być różny w zależności od pliku cookie. Te pliki cookie pozostają na Państwa urządzeniu końcowym przez określony czas i są zazwyczaj wykorzystywane do rozpoznania Państwa przy ponownej wizycie na naszej stronie internetowej. Stosowanie trwałych plików cookie na naszej stronie internetowej opiera się na podstawie prawnej art. 6 ust. 1 lit. f GDPR."]
     [:p "Mogą Państwo ustawić swoją przeglądarkę internetową tak, aby nasze pliki cookie nie mogły być zapisywane na Państwa urządzeniu końcowym lub aby pliki cookie, które zostały już zapisane, były usuwane. Jeśli nie akceptują Państwo plików cookie, może to prowadzić do ograniczeń w funkcjonowaniu stron internetowych."]
     [:p "W szczególności, mamy następujące rodzaje plików cookie:"]
     [:ul
@@ -442,7 +443,7 @@
     [:p "Jeśli używasz schnaq bez rejestracji, jesteś tak zwanym \"Anonimowym Użytkownikiem\". Oprócz danych wymaganych do działania serwera, zapisywane są tylko Twoje wypowiedzi i opcjonalnie wybrane przez Ciebie imię. Kiedy wkład jest zapisywany, ten ciąg znaków jest luźno zapisywany razem z wkładem. Nie ma przypisania do tożsamości. Jeśli ktoś o tym samym imieniu uczestniczy w jakimś schnaq'u, wkłady wyglądają dla świata zewnętrznego tak, jakby pochodziły od tej samej osoby."]
     [:p "Przesyłając swój wkład, wyrażasz zgodę na jego przechowywanie. Ponieważ nie jesteśmy w stanie ustalić autora tego wkładu, nie masz prawa go usunąć, ponieważ nie ma dowodu na jego autorstwo."]
     [:h4 "Używanie schnaq jako zarejestrowany użytkownik"]
-    [:p "Podczas rejestracji zapisywany jest Twój adres e-mail oraz imię i nazwisko. Są one niezbędne do działania schnaq, zbieranie danych odbywa się zgodnie z art. 6 ust. 1 lit. f DSGVO. Rejestracja jest opcjonalna dla normalnego działania schnaq. Adres e-mail umożliwia automatyczne powiadamianie o nowych wpłatach. Wraz z nazwiskami, Twój wkład jest wyświetlany razem na interfejsie schnaq. Inne przynależności, na przykład do hubów lub innych schnaqs, są również wizualnie wyświetlane."]
+    [:p "Podczas rejestracji zapisywany jest Twój adres e-mail oraz imię i nazwisko. Są one niezbędne do działania schnaq, zbieranie danych odbywa się zgodnie z art. 6 ust. 1 lit. f GDPR. Rejestracja jest opcjonalna dla normalnego działania schnaq. Adres e-mail umożliwia automatyczne powiadamianie o nowych wpłatach. Wraz z nazwiskami, Twój wkład jest wyświetlany razem na interfejsie schnaq. Inne przynależności, na przykład do hubów lub innych schnaqs, są również wizualnie wyświetlane."]
     [:p "Dane te są przechowywane na naszych własnych serwerach i nie są przekazywane osobom trzecim."]
     [:p "Istnieją sposoby na rozbudowę własnego profilu użytkownika. Obejmują one na przykład możliwość załadowania własnego, opcjonalnego zdjęcia profilowego. To zdjęcie profilowe jest następnie wyświetlane jako Twój awatar i jest prezentowane zawsze, gdy pojawia się Twoje konto użytkownika, na przykład gdy ludzie patrzą na Twoje posty."]
     [:h4 "Wkład tekstowy"]
@@ -467,7 +468,7 @@
    :privacy.extended.rights-of-the-affected/title "Prawa osób, których dane dotyczą"
    :privacy.extended.rights-of-the-affected/body
    [:<>
-    [:p "Jeśli Państwa dane osobowe są przetwarzane, jesteście Państwo podmiotem danych w rozumieniu rozporządzenia o ochronie danych osobowych. DSGVO i przysługują Państwu prawa opisane poniżej. Prosimy o przesłanie prośby, najlepiej pocztą elektroniczną, do wyżej wymienionego administratora danych."]
+    [:p "Jeśli Państwa dane osobowe są przetwarzane, jesteście Państwo podmiotem danych w rozumieniu rozporządzenia o ochronie danych osobowych. GDPR i przysługują Państwu prawa opisane poniżej. Prosimy o przesłanie prośby, najlepiej pocztą elektroniczną, do wyżej wymienionego administratora danych."]
     [:p [:strong "Informacje:"]
      " W każdej chwili mają Państwo prawo do bezpłatnego otrzymania od nas informacji i potwierdzenia o przechowywanych danych osobowych oraz kopii tych informacji."]
     [:p [:strong "Korekta:"]
@@ -478,7 +479,7 @@
      [:li "Użytkownik kwestionuje prawidłowość danych osobowych przez okres czasu, który umożliwia nam sprawdzenie prawidłowości danych osobowych."]
      [:li "Przetwarzanie jest niezgodne z prawem, odmawiają Państwo usunięcia danych osobowych, a zamiast tego żądają ograniczenia ich wykorzystywania."]
      [:li "Nie potrzebujemy już tych danych osobowych do celów przetwarzania, ale są one potrzebne do dochodzenia, wykonywania lub obrony roszczeń prawnych."]
-     [:li "Zgłosili Państwo sprzeciw wobec przetwarzania danych zgodnie z art. 21 ust. 1 DSGVO i nie jest jeszcze jasne, czy nasze uzasadnione powody przeważają nad Państwa. "]]
+     [:li "Zgłosili Państwo sprzeciw wobec przetwarzania danych zgodnie z art. 21 ust. 1 GDPR i nie jest jeszcze jasne, czy nasze uzasadnione powody przeważają nad Państwa. "]]
     [:p [:strong "Usunięcie:"]
      " Mają Państwo prawo do bezzwłocznego usunięcia dotyczących Państwa danych osobowych, jeżeli zachodzi jedna z poniższych przyczyn i o ile przetwarzanie nie jest konieczne:"]
     [:ul
@@ -487,11 +488,11 @@
      [:li "Użytkownik sprzeciwia się przetwarzaniu danych zgodnie z art. 21 ust. 1 GDPR i nie istnieją żadne nadrzędne uzasadnione podstawy do przetwarzania danych lub użytkownik sprzeciwia się przetwarzaniu danych zgodnie z art. 21 ust. 2 GDPR. "]
      [:li "Dane osobowe były przetwarzane niezgodnie z prawem."]
      [:li "Usunięcie danych osobowych jest niezbędne do wypełnienia obowiązku prawnego wynikającego z prawa Unii lub państwa członkowskiego, któremu podlegamy."]
-     [:li "Dane osobowe zostały zebrane w związku z usługami społeczeństwa informacyjnego oferowanymi zgodnie z art. 8 ust. 1 DSGVO."]]
+     [:li "Dane osobowe zostały zebrane w związku z usługami społeczeństwa informacyjnego oferowanymi zgodnie z art. 8 ust. 1 GDPR."]]
     [:p [:strong "Możliwość przenoszenia danych:"]
      " Mają Państwo prawo do otrzymania dotyczących Państwa danych osobowych, które dostarczyli Państwo administratorowi w ustrukturyzowanym, powszechnie używanym i nadającym się do odczytu maszynowego formacie. Mają Państwo również prawo do przekazania tych danych innemu administratorowi bez przeszkód ze strony administratora, któremu dane osobowe zostały przekazane. Korzystając z tego prawa, mają Państwo również prawo do tego, aby odnoszące się do Państwa dane osobowe zostały przekazane bezpośrednio przez nas innemu administratorowi, o ile jest to technicznie wykonalne. Nie może to naruszać swobód i praw innych osób."]
     [:p [:strong "Opozycja:"]
-     " W każdej chwili mają Państwo prawo sprzeciwić się przetwarzaniu Państwa danych osobowych na podstawie art. 6 (1) lit. f DSGVO. W przypadku wniesienia sprzeciwu nie będziemy już przetwarzać danych osobowych, chyba że będziemy w stanie wykazać ważne prawnie uzasadnione podstawy do przetwarzania, które są nadrzędne wobec Państwa interesów, praw i wolności, lub przetwarzanie służy dochodzeniu, wykonywaniu lub obronie roszczeń prawnych."]
+     " W każdej chwili mają Państwo prawo sprzeciwić się przetwarzaniu Państwa danych osobowych na podstawie art. 6 (1) lit. f GDPR. W przypadku wniesienia sprzeciwu nie będziemy już przetwarzać danych osobowych, chyba że będziemy w stanie wykazać ważne prawnie uzasadnione podstawy do przetwarzania, które są nadrzędne wobec Państwa interesów, praw i wolności, lub przetwarzanie służy dochodzeniu, wykonywaniu lub obronie roszczeń prawnych."]
     [:p [:strong "Cofnięcie zgody:"]
      " Zgodnie z prawem o ochronie danych osobowych mają Państwo prawo w każdej chwili odwołać swoją deklarację zgody. Cofnięcie zgody nie wpływa na zgodność z prawem przetwarzania, którego dokonano na podstawie zgody do momentu jej cofnięcia."]]
    :privacy.extended.right-to-complain/title "Prawo do złożenia skargi do organu nadzorczego"
@@ -849,7 +850,7 @@
    :pricing.faq.privacy/body-1
    [:<> "Każda osoba, którą dodasz do swojej firmy, może potencjalnie uzyskać dostęp do przechowywanych danych.
     Z technicznego punktu widzenia, dane są przechowywane całkowicie bezpiecznie na"
-    [:span.text-primary " Niemieckie serwery i zgodność z DSGVO"] " zapisane. Na naszej "]
+    [:span.text-primary " Niemieckie serwery i zgodność z GDPR"] " zapisane. Na naszej "]
    :pricing.faq.privacy/body-2 "Strona poświęcona bezpieczeństwu danych"
    :pricing.faq.privacy/body-3 " znajdziesz więcej informacji"
    :pricing/headline "schnaq Abonament"
@@ -1000,7 +1001,7 @@
    :lead-magnet.requested/part-2 "W ciągu kilku minut powinieneś otrzymać link do pobrania. Sprawdź również folder spamu."
    :lead-magnet.cta/button "Bezpośrednio do listy kontrolnej"
    :lead-magnet.explain.what/heading "Jak wygląda lista kontrolna dotycząca pracy zdalnej zgodnej z zasadami ochrony danych?"
-   :lead-magnet.explain.what/text "Sprawdziliśmy aktualne oprogramowanie do pracy zdalnej pod kątem zgodności z ochroną danych (w szczególności DSGVO).
+   :lead-magnet.explain.what/text "Sprawdziliśmy aktualne oprogramowanie do pracy zdalnej pod kątem zgodności z ochroną danych (w szczególności GDPR).
    Wyniki zostały podsumowane w formie listy kontrolnej. Zawiera wszystkie ważne kategorie, które są potrzebne do elastycznej pracy.
    W ten sposób można zwracać uwagę na ochronę danych, niezależnie od tego, czy pracuje się w domu, w podróży czy w hybrydowym miejscu pracy."
    :lead-magnet.explain.how/heading "Jak działa lista kontrolna?"

@@ -6,6 +6,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.time :as time]
@@ -109,7 +110,8 @@
       [admin/share-link]
       [admin/txt-export share-hash title]
       (when edit-hash
-        [admin/admin-center share-hash edit-hash])]
+        [admin/admin-center share-hash edit-hash])
+      [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]
      [:div.d-flex.align-items-center
       [:div.h-100.mr-2.mx-lg-2 [graph-button share-hash]]
       [:div.h-100.mr-2 [summary-button share-hash]]
@@ -151,7 +153,8 @@
        [schnaq-progress-bar]
        [admin/txt-export share-hash title]
        (when edit-hash
-         [admin/admin-center share-hash edit-hash])]
+         [admin/admin-center share-hash edit-hash])
+       [navbar-components/language-toggle-with-tooltip false {:class "btn-lg"}]]
       [:div.d-flex.align-items-center.mt-4.mt-md-0
        [:div.h-100.mx-2.embedded-nav-button [graph-button share-hash]]
        [:div.h-100.mr-2.embedded-nav-button [summary-button share-hash]]]]]))
