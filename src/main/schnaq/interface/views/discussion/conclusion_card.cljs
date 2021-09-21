@@ -66,7 +66,8 @@
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info statement 42 "w-100"]]
        [:div.my-4]
-       [md/as-markdown (:statement/content statement)]
+       [:div.text-purple-dark
+        [md/as-markdown (:statement/content statement)]]
        [:div.d-flex.flex-wrap.align-items-center
         [:a.badge.mr-3
          {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
