@@ -578,4 +578,3 @@
         unread (new-statements-by-discussion-hash keycloak-id discussion-hashes)]
     (user-db/update-visited-statements keycloak-id unread)
     unread))
-
