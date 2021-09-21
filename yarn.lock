@@ -1804,6 +1804,11 @@ kind-of@^6.0.2, kind-of@^6.0.3:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
+klaro@^0.7.18:
+  version "0.7.18"
+  resolved "https://registry.yarnpkg.com/klaro/-/klaro-0.7.18.tgz#fef3a05fcd656451b941e11459f37d6c336e84c0"
+  integrity sha512-Q5nehkGeZuFerisW4oeeB1ax6dHDszWckR70EcxKvhFiJQ61CM0WBSo20yLbdvz8N9MFsOFu4RNCO9JsbkCxgQ==
+
 known-css-properties@^0.21.0:
   version "0.21.0"
   resolved "https://registry.yarnpkg.com/known-css-properties/-/known-css-properties-0.21.0.tgz#15fbd0bbb83447f3ce09d8af247ed47c68ede80d"
@@ -2600,11 +2605,6 @@ react-dom@^17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
-
-react-facebook-pixel@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-facebook-pixel/-/react-facebook-pixel-1.0.4.tgz#4760b60dc0451e345649d9710152b4b5419cf989"
-  integrity sha512-givZY8MS0v/mdbRzvcvouBo/j0TtDiu/93f4gIjJXwDDgwlf6bYUiQvb2qcqjluOOD/hIKUQHNYLNsSOnoEklg==
 
 react-flip-move@^3.0.4:
   version "3.0.4"
