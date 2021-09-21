@@ -288,15 +288,16 @@
   [discussion-data]
   [map? :ret :db/id]
   (main-db/clean-and-add-to-db! (assoc discussion-data
-                                  :discussion/created-at (Date.))
+                                  :discussion/created-at (Date.)
+                                  :discussion/creation-secret (.toString (UUID/randomUUID)))
                                 ::specs/discussion))
 
-(>defn private-discussion-data
+(>defn secret-discussion-data
   "Return non public meeting data by id."
   [id]
   [int? :ret ::specs/discussion]
   (toolbelt/pull-key-up
-    (fast-pull id discussion-pattern-private)
+    (fast-pull id (conj discussion-pattern-private :discussion/creation-secret))
     :db/ident))
 
 (defn set-discussion-read-only

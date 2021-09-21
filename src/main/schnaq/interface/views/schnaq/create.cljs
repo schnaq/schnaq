@@ -134,9 +134,10 @@
 (rf/reg-event-fx
   :schnaq/created
   (fn [{:keys [db]} [_ {:keys [new-schnaq]}]]
-    (let [{:discussion/keys [share-hash edit-hash]} new-schnaq]
+    (let [{:discussion/keys [share-hash edit-hash creation-secret]} new-schnaq]
       {:db (-> db
                (assoc-in [:schnaq :last-added] new-schnaq)
+               (update-in [:schnaqs :secrets share-hash] creation-secret)
                (update-in [:schnaqs :all] conj new-schnaq))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/value {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-schnaq]]
