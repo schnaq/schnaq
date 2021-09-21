@@ -67,6 +67,7 @@
                                  :discussion/share-hash (.toString (UUID/randomUUID))
                                  :discussion/edit-hash (.toString (UUID/randomUUID))
                                  :discussion/author author}
+                                keycloak-id (assoc :discussion/admins [author])
                                 (and hub-exclusive? authorized-for-hub?)
                                 (assoc :discussion/hub-origin [:hub/keycloak-name hub])
                                 ends-in-days (assoc :discussion/end-time (now-plus-days-instant ends-in-days)))
