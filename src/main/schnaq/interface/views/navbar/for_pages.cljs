@@ -1,11 +1,9 @@
 (ns schnaq.interface.views.navbar.for-pages
   (:require [clojure.string :as str]
-            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.language :as language]
             [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
@@ -32,23 +30,6 @@
      [um/user-handling-menu "btn-link"]]
     [:h1.h3.font-weight-bold.my-auto.d-none.d-md-block.text-dark-highlight title]]])
 
-(defn language-dropdown
-  "Dropdown for bootstrap navbar to display the allowed languages."
-  []
-  (let [current-language @(rf/subscribe [:current-language])]
-    [:<>
-     [:a#schnaq-language-dropdown.nav-link.dropdown-toggle
-      {:href "#" :role "button" :data-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
-      [:i {:class (str "fas " (fa :language))}] " " current-language]
-     [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}
-      [:button.dropdown-item
-       {:on-click #(language/set-language :de)} "Deutsch"]
-      [:button.dropdown-item
-       {:on-click #(language/set-language :en)} "English"]
-      [:button.dropdown-item
-       {:on-click #(language/set-language :pl)} "Polski"]]]))
-
 (defn navbar-user []
   [:div.d-flex.flex-row.schnaq-navbar-space.mb-0.mb-md-4.ml-auto.schnaq-navbar.align-items-center.flex-wrap.px-md-3
    [:div.mx-1
@@ -58,7 +39,7 @@
     [blog-link]]
    [:div.mx-1
     [:div.dropdown.ml-auto
-     [language-dropdown]]]
+     [navbar-components/language-dropdown]]]
    [:div.mx-1
     [um/admin-dropdown "btn-outline-secondary"]]
    [:div.mx-1.d-none.d-md-block
@@ -101,6 +82,6 @@
        [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
         (labels :router/privacy)]]
       [:li.nav-item.dropdown
-       [language-dropdown]]]
+       [navbar-components/language-dropdown]]]
      [um/admin-dropdown "btn-outline-secondary"]
      [um/user-handling-menu "btn-outline-light btn-transparent"]]]])
