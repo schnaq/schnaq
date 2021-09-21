@@ -153,7 +153,8 @@
        [schnaq-progress-bar]
        [admin/txt-export share-hash title]
        (when edit-hash
-         [admin/admin-center share-hash edit-hash])]
+         [admin/admin-center share-hash edit-hash])
+       [navbar-components/language-toggle-with-tooltip false {:class "btn-lg"}]]
       [:div.d-flex.align-items-center.mt-4.mt-md-0
        [:div.h-100.mx-2.embedded-nav-button [graph-button share-hash]]
        [:div.h-100.mr-2.embedded-nav-button [summary-button share-hash]]]]]))
