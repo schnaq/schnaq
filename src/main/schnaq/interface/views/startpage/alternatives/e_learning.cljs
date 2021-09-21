@@ -121,8 +121,7 @@
          "Upgrade deine Lehrveranstaltung mit nur einem Schritt"]]]]
      [:div.wave-bottom-white-inverted]]
     [:section.container.pt-3
-     [startpage/supporters]
-     [jsw/facebook-pixel]]]])
+     [startpage/supporters]]]])
 
 (defn e-learning-view []
   [startpage-content])

@@ -136,8 +136,7 @@
     [early-adopters]
     [:section.container
      [founders-note]
-     [supporters]]
-    [jsw/facebook-pixel]]])
+     [supporters]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."
