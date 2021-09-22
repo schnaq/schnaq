@@ -42,7 +42,7 @@
                                           visited-statements (assoc :visited-statement-ids visited-statements)
                                           creation-secrets (assoc :creation-secrets creation-secrets)
                                           schnaq-creation-secrets (assoc :schnaq-creation-secrets schnaq-creation-secrets)))]}))))
-;; TODO delete secrets map after login
+
 ;; TODO make several tests, one new schnaq, two new schnaqs,
 ;; TODO  update in-place after login
 (rf/reg-event-fx
@@ -60,8 +60,10 @@
                (cond-> first-name (assoc-in [:user :names :first] first-name))
                (cond-> last-name (assoc-in [:user :names :last] last-name))
                ;; Clear secrets, they have been persisted.
-               (assoc-in [:discussion :statements :creation-secrets] {}))
+               (assoc-in [:discussion :statements :creation-secrets] {})
+               (assoc-in [:discussion :schnaqs :creation-secrets] {}))
        :fx [[:localstorage/dissoc :discussion/creation-secrets]
+            [:localstorage/dissoc :discussion.schnaqs/creation-secrets]
             [:dispatch [:schnaqs.visited/merge-registered-users-visits visited-hashes]]
             (when (and updated-statements? (= current-route :routes.schnaq.select/statement))
               ;; The starting-statement view is updated automatically anyway
