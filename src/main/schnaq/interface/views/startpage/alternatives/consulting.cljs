@@ -2,7 +2,6 @@
   (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))
@@ -120,8 +119,7 @@
          "Upgrade dein Requirements-Engineering mit nur einem Schritt"]]]]
      [:div.wave-bottom-white-inverted]]
     [:section.container.pt-3
-     [startpage/supporters]
-     [jsw/facebook-pixel]]]])
+     [startpage/supporters]]]])
 
 (defn consulting-view []
   [startpage-content])

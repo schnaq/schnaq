@@ -3,7 +3,6 @@
   (:require [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.call-to-actions :as cta]
             [schnaq.interface.views.startpage.features :as startpage-features]
@@ -136,8 +135,7 @@
     [early-adopters]
     [:section.container
      [founders-note]
-     [supporters]]
-    [jsw/facebook-pixel]]])
+     [supporters]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

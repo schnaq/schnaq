@@ -1,11 +1,8 @@
 (ns schnaq.interface.utils.js-wrapper
   (:require ["jquery" :as jquery]
-            ["react-facebook-pixel" :default ReactPixel]
             [ghostwheel.core :refer [>defn]]
             [goog.dom :as gdom]
-            [goog.dom.dataset :as dataset]
-            [re-frame.core :as rf]
-            [schnaq.interface.config :as config]))
+            [goog.dom.dataset :as dataset]))
 
 (>defn $
   "The jquery-lookup syntax."
@@ -103,24 +100,3 @@
       (dataset/get data-key)))
 
 (def document-body js/document.body)
-
-(defn facebook-pixel
-  "A small component executing the facebook-pixel tracks and initialitzing if neccessary."
-  []
-  (let [initialized? @(rf/subscribe [:facebook-pixel/initalized?])]
-    [:span                                                  ;; Need to return a component for reagent
-     (if initialized?
-       (.pageView ReactPixel)
-       (do
-         (.init ReactPixel config/facebook-pixel-id nil {:autoConfig true :debug false})
-         (rf/dispatch [:facebook-pixel/initialize!])))]))
-
-(rf/reg-event-db
-  :facebook-pixel/initialize!
-  (fn [db _]
-    (assoc-in db [:tracking :facebook-pixel] true)))
-
-(rf/reg-sub
-  :facebook-pixel/initalized?
-  (fn [db _]
-    (get-in db [:tracking :facebook-pixel] false)))
