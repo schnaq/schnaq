@@ -43,7 +43,6 @@
                                           creation-secrets (assoc :creation-secrets creation-secrets)
                                           schnaq-creation-secrets (assoc :schnaq-creation-secrets schnaq-creation-secrets)))]}))))
 
-;; TODO admin-access does not come always after login
 (rf/reg-event-fx
   :user.register/success
   (fn [{:keys [db]} [_ {:keys [registered-user updated-statements? updated-schnaqs?]}]]

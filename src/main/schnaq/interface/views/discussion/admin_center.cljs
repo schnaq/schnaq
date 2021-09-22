@@ -411,5 +411,6 @@
   ;; PARTIALLY DEPRECATED FROM 2021-09-22: Remove the second or clause
   :schnaqs.save-admin-access/store-hashes-from-localstorage
   (fn [db _]
-    (assoc-in db [:schnaqs :admin-access] (or (:schnaqs/admin-access local-storage)
-                                              (ls/parse-hash-map-string (ls/get-item :schnaqs/admin-access))))))
+    (update-in db [:schnaqs :admin-access] merge
+               (or (:schnaqs/admin-access local-storage)
+                   (ls/parse-hash-map-string (ls/get-item :schnaqs/admin-access))))))
