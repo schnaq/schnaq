@@ -138,7 +138,7 @@
           updated-secrets (assoc (get-in db [:discussion :schnaqs :creation-secrets]) share-hash creation-secret)]
       {:db (-> db
                (assoc-in [:schnaq :last-added] new-schnaq)
-               (update-in [:discussion :schnaqs :creation-secrets] updated-secrets)
+               (assoc-in [:discussion :schnaqs :creation-secrets] updated-secrets)
                (update-in [:schnaqs :all] conj new-schnaq))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/value {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-schnaq]]
