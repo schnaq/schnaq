@@ -135,3 +135,35 @@ $gradient-target: vars.$primary;
 .social-proof-img-lg {
   width: 60px;
 }
+
+.example-statement-1 {
+  @include media-breakpoint-up(md) {
+    position: relative;
+    right: -1rem;
+  }
+}
+
+.example-statement-2 {
+  @include media-breakpoint-up(md) {
+    margin: 1rem 0;
+    position: relative;
+    right: 2rem;
+  }
+
+  @include media-breakpoint-up(lg) {
+    position: relative;
+    right: 6rem;
+  }
+}
+
+.example-statement-3 {
+  @include media-breakpoint-up(md) {
+    margin: 1rem 0;
+    position: relative;
+    right: -2rem;
+  }
+  @include media-breakpoint-up(lg) {
+    position: relative;
+    right: -6rem;
+  }
+}

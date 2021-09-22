@@ -1,14 +1,14 @@
 (ns schnaq.interface.views.startpage.features
   (:require [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.rows :as rows]))
+            [schnaq.interface.utils.rows :as rows]
+            [schnaq.interface.views.startpage.preview-statements :as examples]))
 
 (defn- what-is-schnaq
   "Box describing what schnaq does and why"
   []
-  [rows/image-left
-   :startpage.example/statements
-   :startpage.information.know-how
-   true "video-background-primary-with-shadow"])
+  [rows/row-builder-text-right
+   [examples/display-example-statements]
+   [rows/build-text-box :startpage.information.know-how]])
 
 (defn- schnaq-promise
   "Box describing schnaq's promise to the user"
