@@ -107,3 +107,8 @@ html {
     max-width: 85% !important;
   }
 }
+
+.scrollable-toast {
+  max-height: 90vh;
+  overflow: scroll;
+}
