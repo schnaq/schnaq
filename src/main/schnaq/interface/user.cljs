@@ -3,15 +3,12 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.views.modal :as modal]))
 
 (rf/reg-event-fx
   :username/from-localstorage
   (fn [{:keys [db]} _]
-    ;; DEPRECATED, deleted after 2021-09-22: Remove old-name and only use name from first or clause
-    (let [old-name (ls/get-item :username)
-          username (or (:username local-storage) old-name)]
+    (let [username (:username local-storage)]
       (when username
         {:db (assoc-in db [:user :names :display] username)}))))
 

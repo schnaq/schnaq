@@ -1,13 +1,11 @@
 (ns schnaq.interface.views.howto.elements
-  (:require [clojure.set :as cset]
-            [hodgepodge.core :refer [local-storage]]
+  (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.videos :refer [video]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.views.common :as common]))
 
 (defn text-box
@@ -76,22 +74,14 @@
 (rf/reg-event-fx
   :how-to-visibility/to-localstorage
   (fn [{:keys [db]} [_ how-to-id]]
-    ;; PARTIALLY DEPRECATED FROM 2021-09-22: Remove old add-to-and-build-… stuff and use normal set
-    (let [deprecated-set (->> (ls/get-item :how-to/disabled)
-                              ls/parse-string-as-set
-                              (map #(keyword (if (= ":" (first %))
-                                               (subs % 1) %)))
-                              (into #{}))
-          disabled-opts (conj (set (:how-to/disabled local-storage)) how-to-id)
-          merged-opts (cset/union deprecated-set disabled-opts)]
-      {:db (assoc-in db [:how-to :disabled] merged-opts)
-       :fx [[:localstorage/assoc [:how-to/disabled merged-opts]]]})))
+    (let [disabled-opts (conj (set (:how-to/disabled local-storage)) how-to-id)]
+      {:db (assoc-in db [:how-to :disabled] disabled-opts)
+       :fx [[:localstorage/assoc [:how-to/disabled disabled-opts]]]})))
 
 (rf/reg-event-db
   :how-to-visibility/from-localstorage-to-app-db
   (fn [db _]
-    (assoc-in db [:how-to :disabled] (or (:how-to/disabled local-storage)
-                                         (ls/parse-string-as-set (ls/get-item :how-to/disabled))))))
+    (assoc-in db [:how-to :disabled] (:how-to/disabled local-storage))))
 
 (rf/reg-sub
   :how-to-visibility/hidden-tags

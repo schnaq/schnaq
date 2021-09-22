@@ -4,8 +4,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.config :as config]
-            [schnaq.interface.utils.js-wrapper :as jq]
-            [schnaq.interface.utils.localstorage :as localstorage]))
+            [schnaq.interface.utils.js-wrapper :as jq]))
 
 (defn locale []
   (oget js/navigator :language))
@@ -35,6 +34,6 @@
   e.g. `:en` for english or `:de` for german.
   Saves the keyword in the localstorage and sets the key to the config."
   [language]
-  (localstorage/assoc-item! :schnaq/language language)
+  (assoc! local-storage :schnaq/language language)
   (reset! config/user-language language)
   (rf/dispatch [:set-locale language]))
