@@ -146,6 +146,8 @@ $gradient-target: vars.$primary;
   @include media-breakpoint-up(md) {
     position: relative;
     right: -1rem;
+  }
+  @include media-breakpoint-up(lg) {
     top: -3rem;
   }
 }
