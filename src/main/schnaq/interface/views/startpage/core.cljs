@@ -122,22 +122,25 @@
 
 ;; -----------------------------------------------------------------------------
 (defn- startpage-content []
-  [pages/with-nav-and-header
-   {:page/title (labels :startpage/heading)
-    :page/vertical-header? true
-    :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
-   [:<>
-    [:section.container
-     [startpage-features/feature-rows]]
-    [testimonials/view]
-    [:section.container
-     [mailchimp-form]
-     [faq]]
-    [early-adopters]
-    [:section.container
-     [founders-note]
-     [supporters]]
-    [jsw/facebook-pixel]]])
+  [:div.overflow-hidden
+   [pages/with-nav-and-header
+    {:page/title (labels :startpage/heading)
+     :page/wrapper-classes "container container-85"
+     :page/vertical-header? true
+     :page/more-for-heading (with-meta [cta/features-call-to-action] {:key "unique-cta-key"})}
+    [:<>
+     [:div.dot-background
+      [:section.container
+       [startpage-features/feature-rows]]]
+     [testimonials/view]
+     [:section.container
+      [mailchimp-form]
+      [faq]]
+     [early-adopters]
+     [:section.container
+      [founders-note]
+      [supporters]]
+     [jsw/facebook-pixel]]]])
 
 (defn startpage-view
   "A view that represents the first page of schnaq participation or creation."

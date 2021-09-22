@@ -11,6 +11,20 @@ $gradient-target: vars.$primary;
   padding-top: 1rem;
   position: relative;
 
+  @include media-breakpoint-up(md) {
+    padding-top: 2rem;
+
+    h1 {
+      font-size: 2.5rem;
+    }
+  }
+
+  @include media-breakpoint-up(xl) {
+    h1 {
+      font-size: 4rem;
+    }
+  }
+
   .overlay {
     background-color: vars.$gray-900;
     height: 100%;
@@ -23,14 +37,6 @@ $gradient-target: vars.$primary;
 
   h1 {
     font-size: 2rem;
-  }
-
-  @media (min-width: 768px) {
-    padding-top: 2rem;
-
-    h1 {
-      font-size: 2.5rem;
-    }
   }
 }
 
@@ -126,6 +132,10 @@ $gradient-target: vars.$primary;
   background: vars.$light-background;
   box-shadow: vars.$wide-shadow;
   overflow: hidden;
+
+  @include media-breakpoint-up(lg) {
+    margin-right: -15rem;
+  }
 }
 
 .social-proof-img {
@@ -140,6 +150,7 @@ $gradient-target: vars.$primary;
   @include media-breakpoint-up(md) {
     position: relative;
     right: -1rem;
+    top: -3rem;
   }
 }
 
@@ -163,7 +174,19 @@ $gradient-target: vars.$primary;
     right: -2rem;
   }
   @include media-breakpoint-up(lg) {
+    bottom: -3rem;
     position: relative;
     right: -6rem;
+  }
+}
+
+.example-dashboard-image {
+  margin-top: 1rem;
+  @include media-breakpoint-up(lg) {
+    //width: 60rem;
+    margin-bottom: -15rem;
+    margin-right: -30rem;
+    margin-top: -15rem;
+    object-fit: contain;
   }
 }

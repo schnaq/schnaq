@@ -1,23 +1,25 @@
 (ns schnaq.interface.views.startpage.features
-  (:require [schnaq.interface.translations :refer [labels]]
+  (:require [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.startpage.preview-statements :as examples]))
 
 (defn- what-is-schnaq
   "Box describing what schnaq does and why"
   []
-  [rows/row-builder-text-right
-   [examples/display-example-statements]
-   [rows/build-text-box :startpage.information.know-how]])
+  [:div.my-5
+   [rows/row-builder-text-right
+    [examples/display-example-statements]
+    [rows/build-text-box :startpage.information.know-how]]])
 
 (defn- schnaq-promise
   "Box describing schnaq's promise to the user"
   []
-  [:div.dot-background
-   [rows/image-right
-    :startpage.example/dashboard
-    :startpage.information.positioning
-    true "video-background-primary-with-shadow"]])
+  [:div.my-5.py-5
+   [rows/row-builder-text-left
+    [rows/build-text-box :startpage.information.positioning]
+    [:div.example-dashboard-image
+     [:img.img-fluid.shadow-lg.rounded-2 {:src (img-path :startpage.example/dashboard)}]]]])
 
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
@@ -30,7 +32,7 @@
 (defn- feature-columns
   "Arguments for getting schnaq in three columns."
   []
-  [:<>
+  [:div.mt-lg-5
    [:div.row.py-5
     [feature-box
      :startpage.feature-box.know-how/title

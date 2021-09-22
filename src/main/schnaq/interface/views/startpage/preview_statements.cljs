@@ -16,7 +16,7 @@
         [conclusion-card/statement-card nil statement-1]]
        [:div..example-statement-2.shadow-lg
         [conclusion-card/statement-card nil statement-2]]
-       [:div..example-statement-3.shadow-lg
+       [:div.example-statement-3.shadow-lg
         [conclusion-card/statement-card nil statement-3]]])))
 
 (defn display-example-statements
