@@ -1,4 +1,4 @@
-@use 'variables' as vars;
+@import 'variables';
 
 .up-down-vote {
   max-width: 4.5rem;
@@ -19,7 +19,7 @@
 
 .vote {
   border-radius: 0 2rem 2rem 0;
-  box-shadow: vars.$regular-shadow;
+  box-shadow: $regular-shadow;
   cursor: pointer;
   min-height: 3.5rem;
   padding: 1rem 0 0;
@@ -39,17 +39,17 @@
 }
 
 .up-vote {
-  color: vars.$positive;
+  color: $positive;
 }
 
 .up-vote:hover {
-  color: vars.$positive-selected;
+  color: $positive-selected;
 }
 
 .down-vote {
-  color: vars.$negative;
+  color: $negative;
 }
 
 .down-vote:hover {
-  color: vars.$negative-selected;
+  color: $negative-selected;
 }
