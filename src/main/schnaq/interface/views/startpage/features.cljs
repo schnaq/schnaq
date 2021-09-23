@@ -8,14 +8,14 @@
   "Box describing what schnaq does and why"
   []
   [:div.my-5
-   [rows/row-builder-text-right
+   [rows/row-builder-text-right-mobile-above
     [examples/display-example-statements]
     [rows/build-text-box :startpage.information.know-how]]])
 
 (defn- schnaq-promise
   "Box describing schnaq's promise to the user"
   []
-  [:div.my-5.py-5
+  [:div.my-5.py-lg-5
    [rows/row-builder-text-left
     [rows/build-text-box :startpage.information.positioning]
     [:div.example-dashboard-image

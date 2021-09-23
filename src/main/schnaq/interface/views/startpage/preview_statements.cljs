@@ -12,11 +12,11 @@
         statement-3 @(rf/subscribe [:example-statement/by-id config/example-statement-3])]
     (when (and statement-1 statement-2 statement-3)
       [:div
-       [:div.example-statement-1.shadow-lg
+       [:div.example-statement-1.rounded-1.shadow-lg
         [conclusion-card/statement-card nil statement-1]]
-       [:div..example-statement-2.shadow-lg
+       [:div..example-statement-2.rounded-1.shadow-lg
         [conclusion-card/statement-card nil statement-2]]
-       [:div.example-statement-3.shadow-lg
+       [:div.example-statement-3.rounded-1.shadow-lg
         [conclusion-card/statement-card nil statement-3]]])))
 
 (defn display-example-statements

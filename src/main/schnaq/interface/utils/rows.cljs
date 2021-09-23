@@ -25,6 +25,18 @@
    [:div.col-12.col-lg-5.my-auto left]
    [:div.col-12.col-lg-6.offset-lg-1.my-auto right]])
 
+(defn row-builder-text-right-mobile-above
+  "Generic builder to align text and asset. Display right content above the left content on smaller screens."
+  [left-below right-above]
+  [:<>
+   ;; lg screens and above
+   [:div.d-none.d-lg-block
+    [:div.row.feature-row
+     [:div.col-12.col-lg-5.my-auto left-below]
+     [:div.col-12.col-lg-6.offset-lg-1.my-auto right-above]]]
+   ;; md screens and below
+   [:div.feature-row.d-lg-none right-above left-below]])
+
 (defn row-builder-text-left
   "Build a row, like the feature rows. Here, the text is on the left side."
   [left right]
