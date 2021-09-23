@@ -17,7 +17,7 @@
         time (:statement/created-at statement)
         authenticated? (:user.registered/keycloak-id user)
         display-name (toolbelt/truncate-to-n-chars (user-utils/display-name user) 15)
-        name-class (if authenticated? "text-primary" "text-muted")]
+        name-class (if authenticated? "text-purple-dark" "text-muted")]
     [:div.d-flex.flex-row.flex-wrap.text-muted.w-100 {:class additional-classes}
      [common/avatar user avatar-size]
      [:small.mx-2.my-auto {:class name-class} display-name]
@@ -30,7 +30,7 @@
   [user avatar-size]
   (let [authenticated? (:user.registered/keycloak-id user)
         display-name (user-utils/display-name user)
-        name-class (if authenticated? "text-primary" "text-muted")]
+        name-class (if authenticated? "text-purple-dark" "text-muted")]
     [:div.d-flex.flex-row.text-muted
      [:div.d-md-none
       [common/avatar user (* avatar-size 0.75)]]
@@ -44,7 +44,7 @@
   (let [locale @(rf/subscribe [:current-locale])
         authenticated? (:user.registered/keycloak-id user)
         display-name (user-utils/display-name user)
-        name-class (if authenticated? "text-primary" "text-muted")]
+        name-class (if authenticated? "text-purple-dark" "text-muted")]
     [:div.d-flex.flex-row.text-muted
      (when time
        [:small.font-weight-light.d-inline.my-auto.ml-2

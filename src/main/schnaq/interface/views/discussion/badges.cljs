@@ -90,8 +90,8 @@
         deletable? (is-deletable? statement edit-hash)
         editable? (is-editable? statement)]
     (when (or deletable? editable?)
-      [:div.dropdown
-       [:a.dropdown-toggle.m-0.p-0
+      [:div.dropdown.ml-2
+       [:div.dropdown-toggle.m-0.p-0
         {:id dropdown-id
          :href "#" :role "button" :data-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
@@ -136,15 +136,14 @@
         authors (conj (-> statement :meta/sub-discussion-info :authors)
                       (user/statement-author statement))
         pill-class {:class (str "m-auto fas " (fa :comments))}]
-    [:div.d-flex.flex-row
+    [:div.d-flex.flex-row.align-items-center
      [:a.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       {:href (rfe/href :routes.schnaq.select/statement (assoc path-parameters :statement-id (:db/id statement)))
        :role :button}
       (if new?
         [:i.secondary-color pill-class]
         [:i pill-class])
-      " " statement-num
-      " " (labels :discussion.badges/posts)]
+      " " statement-num]
      [authors-badge authors]
      [statement-labels/edit-labels-button statement]
      [edit-statement-dropdown-menu statement edit-hash]]))

@@ -38,18 +38,19 @@
   "Add inline panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])]
-    [:div.d-flex
+    [:div.d-flex.flex-row.align-items-center
      [:div.px-2
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
       [:i.vote-arrow.up-vote {:class (str "m-auto fas " (fa :arrow-up))}]]
-     [:h6.m-0 (logic/calculate-votes statement votes)]
-     [:div.pl-2
+     [:span.mr-3 (logic/get-up-votes statement votes)]
+     [:div.px-2
       {:on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:i.vote-arrow.down-vote {:class (str "m-auto fas " (fa :arrow-down))}]]]))
+      [:i.vote-arrow.down-vote {:class (str "m-auto fas " (fa :arrow-down))}]]
+     [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card
   [edit-hash statement]
@@ -65,11 +66,14 @@
        [:div.d-flex.justify-content-start.pt-2
         [user/user-info statement 42 "w-100"]]
        [:div.my-4]
-       [md/as-markdown (:statement/content statement)]
-       [:div.d-flex.flex-wrap
-        [:a.badge.badge-pill.rounded-2.mr-1
+       [:div.text-purple-dark
+        [md/as-markdown (:statement/content statement)]]
+       [:div.d-flex.flex-wrap.align-items-center
+        [:a.badge.mr-3
          {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
-         [:i {:class (str "m-auto far " (fa :reply))}] [:span.ml-1 (labels :statement/reply)]]
+         [:button.btn.btn-sm.btn-dark
+          [:i.text-white {:class (str "m-auto far fa-xs " (fa :plus))}]]
+         [:span.ml-2.text-dark (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-sm-0.ml-lg-auto
          [badges/extra-discussion-info-badges statement edit-hash]]]
