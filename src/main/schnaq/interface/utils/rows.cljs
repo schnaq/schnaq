@@ -4,7 +4,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.common :as common]))
 
-(defn- build-text-box
+(defn build-text-box
   "Composing the text-part of a feature-row. Takes a `text-namespace` which
   looks up the corresponding text entries, which are then rendered."
   ([text-namespace]
