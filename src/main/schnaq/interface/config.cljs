@@ -64,19 +64,19 @@
 (def example-share-hash
   (if shared-config/production?
     "b91e73b8-d800-4827-8d1b-c11a92840bd0"
-    "fb1cebab-e0a8-48b0-9037-ba76e51b39b7"))
+    "103f2147-d4dd-491b-8fd0-64aefd950413"))
 
 (def example-statement-1
   (if shared-config/production?
     17592186058260
-    17592186056695))
+    17592186048171))
 
 (def example-statement-2
   (if shared-config/production?
     17592186058271
-    17592186056745))
+    17592186048169))
 
 (def example-statement-3
   (if shared-config/production?
     17592186058241
-    17592186056747))
+    17592186048173))
