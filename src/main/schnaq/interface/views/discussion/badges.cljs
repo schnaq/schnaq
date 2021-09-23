@@ -6,7 +6,6 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.labels :as statement-labels]
             [schnaq.interface.views.modal :as modal]
@@ -197,13 +196,8 @@
   :visited.statement-nums/to-localstorage
   (fn [{:keys [db]} [_]]
     (let [statements-nums-map (get-in db [:visited :statement-nums])
-          ;; DEPRECATED, deleted after 2021-09-22: Remove deprecated-map and use the map directly after merging
-          deprecated-map (->> (ls/get-item :discussion/statement-nums)
-                              ls/parse-hash-map-string
-                              (map #(vector (js/parseInt (first %)) (js/parseInt (second %))))
-                              (into {}))
           current-visited-nums (:discussion/statement-nums local-storage)
-          merged-visited-nums (merge deprecated-map current-visited-nums statements-nums-map)]
+          merged-visited-nums (merge current-visited-nums statements-nums-map)]
       {:fx [[:localstorage/assoc [:discussion/statement-nums merged-visited-nums]]
             [:dispatch [:visited.save-statement-nums/store-hashes-from-localstorage]]]})))
 

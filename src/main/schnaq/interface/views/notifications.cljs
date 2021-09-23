@@ -55,7 +55,7 @@
                                  (rf/dispatch [:notification/remove id]))}
       [:span {:aria-hidden "true"}
        [:i {:class (str " m-auto fas fa-xs " (fa :delete-icon))}]]]]
-    [:div.toast-body body]]])
+    [:div.toast-body.scrollable-toast body]]])
 
 (>defn notify!
   "Directly dispatch a notification event, which shall immediately show up to

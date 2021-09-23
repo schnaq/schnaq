@@ -8,7 +8,6 @@
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
-            [schnaq.interface.utils.localstorage :as ls]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
 ;; Note: this lives in the common namespace to prevent circles through the routes import
@@ -27,11 +26,8 @@
 (rf/reg-event-fx
   :load/last-added-schnaq
   (fn [_ _]
-    ;; PARTIALLY DEPRECATED, deleted after 2021-09-22: Remove old ls/get-item and only use new.
-    (let [share-hash (or (:schnaq.last-added/share-hash local-storage)
-                         (ls/get-item :schnaq.last-added/share-hash))
-          edit-hash (or (:schnaq.last-added/edit-hash local-storage)
-                        (ls/get-item :schnaq.last-added/edit-hash))]
+    (let [share-hash (:schnaq.last-added/share-hash local-storage)
+          edit-hash (:schnaq.last-added/edit-hash local-storage)]
       (when-not (and (nil? edit-hash) (nil? share-hash))
         {:fx [[:dispatch [:schnaq/load-by-hash-as-admin share-hash edit-hash]]]}))))
 
