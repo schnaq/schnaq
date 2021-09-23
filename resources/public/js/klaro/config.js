@@ -2,12 +2,40 @@
 // You can change this by specifying the "data-config" attribute on your
 // script take, e.g. like this:
 // <script src="klaro.js" data-config="myConfigVariableName" />
-// You can also disable auto-loading of the consent notice by adding
-// data-no-auto-load=true to the script tag.
 var klaroConfig = {
+  // With the 0.7.0 release we introduce a 'version' paramter that will make
+  // if easier for us to keep configuration files backwards-compatible in the future.
+  version: 1,
+
   // You can customize the ID of the DIV element that Klaro will create
   // when starting up. If undefined, Klaro will use 'klaro'.
   elementID: 'klaro',
+
+  // You can override CSS style variables here. For IE11, Klaro will
+  // dynamically inject the variables into the CSS. If you still consider
+  // supporting IE9-10 (which you probably shouldn't) you need to use Klaro
+  // with an external stylesheet as the dynamic replacement won't work there.
+  styling: {
+    theme: ['light', 'top', 'wide'],
+  },
+
+  // Setting this to true will keep Klaro from automatically loading itself
+  // when the page is being loaded.
+  noAutoLoad: false,
+
+  // Setting this to true will render the descriptions of the consent
+  // modal and consent notice are HTML. Use with care.
+  htmlTexts: true,
+
+  // Setting 'embedded' to true will render the Klaro modal and notice without
+  // the modal background, allowing you to e.g. embed them into a specific element
+  // of your website, such as your privacy notice.
+  embedded: false,
+
+  // You can group services by their purpose in the modal. This is advisable
+  // if you have a large number of services. Users can then enable or disable
+  // entire groups of services instead of having to enable or disable every service.
+  groupByPurpose: true,
 
   // How Klaro should store the user's preferences. It can be either 'cookie'
   // (the default) or 'localStorage'.
@@ -26,23 +54,34 @@ var klaroConfig = {
   // If undefined, Klaro will use the current domain.
   //cookieDomain: '.github.com',
 
-  // Put a link to your privacy policy here (relative or absolute).
-  privacyPolicy: 'https://schnaq.com/privacy',
+  // You can change to cookie path for the consent manager itself.
+  // Use this to restrict the cookie visibility to a specific path.
+  // If undefined, Klaro will use '/' as cookie path.
+  //cookiePath: '/',
 
-  // Defines the default state for applications (true=enabled by default).
+  // Defines the default state for services (true=enabled by default).
   default: false,
 
   // If "mustConsent" is set to true, Klaro will directly display the consent
   // manager modal and not allow the user to close it before having actively
-  // consented or declines the use of third-party apps.
-  mustConsent: false,
+  // consented or declines the use of third-party services.
+  mustConsent: true,
 
-  // Show "accept all" to accept all apps instead of "ok" that only accepts
-  // required and "default: true" apps
-  acceptAll: false,
+  // Show "accept all" to accept all services instead of "ok" that only accepts
+  // required and "default: true" services
+  acceptAll: true,
 
   // replace "decline" with cookie manager modal
-  hideDeclineAll: false,
+  hideDeclineAll: true,
+
+  // hide "learnMore" link
+  hideLearnMore: false,
+
+  // show cookie notice as modal
+  noticeAsModal: false,
+
+  // you can specify an additional class (or classes) that will be added to the Klaro `div`
+  //additionalClass: 'my-klaro',
 
   // You can define the UI language directly here. If undefined, Klaro will
   // use the value given in the global "lang" variable. If that does
@@ -51,107 +90,142 @@ var klaroConfig = {
   //lang: 'en',
 
   // You can overwrite existing translations and add translations for your
-  // app descriptions and purposes. See `src/translations/` for a full
+  // service descriptions and purposes. See `src/translations/` for a full
   // list of translations that can be overwritten:
   // https://github.com/KIProtect/klaro/tree/master/src/translations
 
   // Example config that shows how to overwrite translations:
   // https://github.com/KIProtect/klaro/blob/master/src/configs/i18n.js
   translations: {
+    // translations defined under the 'zz' language code act as default
+    // translations.
+    zz: {
+      privacyPolicyUrl: '/privacy/extended',
+    },
     // If you erase the "consentModal" translations, Klaro will use the
     // bundled translations.
     de: {
+      privacyPolicyUrl: '/de/privacy/extended',
+      acceptSelected: 'Speichern',
       consentModal: {
-        title: 'Persönliche Einstellungen zu Cookies auf unserer Webseite',
-        description:
-          'Wir nutzen Cookies, um Ihnen die bestmögliche Nutzung unserer Webseite zu ermöglichen und unsere Kommunikation mit Ihnen zu verbessern. Wir berücksichtigen hierbei Ihre Präferenzen und verarbeiten Daten für Marketing und Analytics nur, wenn Sie explizit Ihr Einverständnis geben. Lehnen Sie die Nutzung ab, wird ein notwendiger Cookie erstellt, der Ihre Ablehnung festhält und Ihnen dieses Popup nicht wieder präsentiert. Sie können Ihre Entscheidungen jederzeit mit Wirkung für die Zukunft widerrufen.',
+        title: "<img src='https://s3.disqtec.com/schnaq-common/logos/schnaqqifant.svg' width='75px'> Cookies",
+        description: 'Wir verwenden Cookies :-) Einige sind für Statistiken, andere für essenzielle Funktionen der Anwendung.',
       },
-      consentNotice: {
-        description: 'Helfen Sie uns bei der Weiterentwicklung dieses Produkts! Indem Sie anonymisierte Nutzungsanalysen erlauben, können wir die Verwendung unserer Webanwendung besser nachvollziehen. Ihre Daten werden stets vertraulich behandelt. Die Daten werden zu folgenden Zwecken erfasst: {purposes}',
-        learnMore: "Lassen Sie mich wählen",
+      privacyPolicy: {
+        text: 'Mehr Informationen: {privacyPolicy}'
       },
-      acceptSelected: 'Ausgewählten zustimmen',
-      ok: "Zustimmen",
       matomo: {
-        description: 'Sammeln von Besucherstatistiken zur Verbesserung der Webseite',
+        description: 'Erfassen von Besucherstatistiken',
       },
       purposes: {
+        advertising: 'Anzeigen von Werbung',
         analytics: 'Statistiken',
+        essential: 'Essenziell',
+        livechat: 'Live Chat',
+        security: 'Sicherheit',
+        styling: 'Styling',
       },
-
     },
     en: {
       consentModal: {
+        title: "<img src='https://s3.disqtec.com/schnaq-common/logos/schnaqqifant.svg' alt='schnaqqifant' width='75px'> Cookies",
         description:
-          'We use cookies to enable you the best possible use of our website and to improve our communication with you. We take your preferences into account and process data for marketing and analytics only if you explicitly give your consent. Your denial results in a necessary cookie remembering your decision not showing you this message anymore. You can withdraw your consent at any time with effect for the future.',
+          'We use cookies :-) Some are for statistics, others for essential functions of the application.',
       },
-      consentNotice: {
-        description: 'Please support the development of this product by accepting usage statistics. They enable us to verify the way you are using this software. All data is stored on our own servers. We are collecting the data for the following purposes: {purposes}',
-        learnMore: 'Let me choose',
+      privacyPolicy: {
+        text: 'More information: {privacyPolicy}'
       },
       matomo: {
-        description: 'Collecting of visitor statistics for enhancing the website',
+        description: 'Collecting of visitor statistics',
       },
       purposes: {
+        advertising: 'Advertising',
         analytics: 'Analytics',
+        essential: 'Essential',
+        livechat: 'Livechat',
+        security: 'Security',
+        styling: 'Styling',
       },
     },
   },
 
-  // This is a list of third-party apps that Klaro will manage for you.
-  apps: [
+  // This is a list of third-party services that Klaro will manage for you.
+  services: [
     {
-      // Each app should have a unique (and short) name.
+      // Each service should have a unique (and short) name.
       name: 'matomo',
 
-      // If "default" is set to true, the app will be enabled by default
+      // If "default" is set to true, the service will be enabled by default
       // Overwrites global "default" setting.
-      // We recommend leaving this to "false" for apps that collect
+      // We recommend leaving this to "false" for services that collect
       // personal information.
-      default: true,
+      default: false,
 
-      // The title of you app as listed in the consent modal.
+      // The title of you service as listed in the consent modal.
       title: 'Matomo (analytics.schnaq.com, self-hosted)',
 
-      // The purpose(s) of this app. Will be listed on the consent notice.
+      // The purpose(s) of this service. Will be listed on the consent notice.
       // Do not forget to add translations for all purposes you list here.
       purposes: ['analytics'],
 
       // A list of regex expressions or strings giving the names of
-      // cookies set by this app. If the user withdraws consent for a
-      // given app, Klaro will then automatically delete all matching
+      // cookies set by this service. If the user withdraws consent for a
+      // given service, Klaro will then automatically delete all matching
       // cookies.
       cookies: [
         // you can also explicitly provide a path and a domain for
-        // a given cookie. This is necessary if you have apps that
+        // a given cookie. This is necessary if you have services that
         // set cookies for a path that is not "/" or a domain that
         // is not the current domain. If you do not set these values
         // properly, the cookie can't be deleted by Klaro
         // (there is no way to access the path or domain of a cookie in JS)
+        // Notice that it is not possible to delete cookies that were set
+        // on a third-party domain! See the note at mdn:
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#new-cookie_domain
         [/^_pk_.*$/, '/', 'schnaq.com'], //for the production version
         [/^_pk_.*$/, '/', 'localhost'], //for the local version
         'piwik_ignore',
       ],
 
       // An optional callback function that will be called each time
-      // the consent state for the app changes (true=consented). Passes
-      // the `app` config as the second parameter as well.
-      callback: function (consent, app) {
+      // the consent state for the service changes (true=consented). Passes
+      // the `service` config as the second parameter as well.
+      callback: function (consent, service) {
         // This is an example callback function.
+        // To be used in conjunction with Matomo 'requireCookieConsent' Feature, Matomo 3.14.0 or newer
+        // For further Information see https://matomo.org/faq/new-to-piwik/how-can-i-still-track-a-visitor-without-cookies-even-if-they-decline-the-cookie-consent/
+        // if (consent === true) {
+        //   _paq.push(['rememberCookieConsentGiven']);
+        // } else {
+        //   _paq.push(['forgetCookieConsentGiven']);
+        // }
       },
 
-      // If "required" is set to true, Klaro will not allow this app to
+      // If "required" is set to true, Klaro will not allow this service to
       // be disabled by the user.
       required: false,
 
-      // If "optOut" is set to true, Klaro will load this app even before
+      // If "optOut" is set to true, Klaro will load this service even before
       // the user gave explicit consent.
       // We recommend always leaving this "false".
       optOut: false,
 
-      // If "onlyOnce" is set to true, the app will only be executed
+      // If "onlyOnce" is set to true, the service will only be executed
       // once regardless how often the user toggles it on and off.
       onlyOnce: true,
     },
+    {
+      name: 'schnaq',
+      title: 'schnaq Funktionen',
+      description: 'Für den Betrieb notwendige Einstellungen, wenn man sich bspw. einen Benutzer:innenaccount erstellt.',
+      purposes: ['essential'],
+      required: true,
+    },
+    {
+      name: 'facebook-pixel',
+      title: 'Facebook Pixel',
+      description: 'Zielgruppenvertestung',
+      purposes: ['analytics'],
+    },
   ],
-}; 
+};
