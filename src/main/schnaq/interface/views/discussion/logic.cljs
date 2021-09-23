@@ -69,7 +69,9 @@
 (rf/reg-event-db
   :schnaq.discussion-secrets/load-from-localstorage
   (fn [db _]
-    (assoc-in db [:discussion :statements :creation-secrets] (:discussion/creation-secrets local-storage))))
+    (-> db
+        (assoc-in [:discussion :statements :creation-secrets] (:discussion/creation-secrets local-storage))
+        (assoc-in [:discussion :schnaqs :creation-secrets] (:discussion.schnaqs/creation-secrets local-storage)))))
 
 (rf/reg-sub
   :schnaq.discussion.statements/creation-secrets

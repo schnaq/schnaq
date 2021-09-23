@@ -69,6 +69,7 @@
                                     :hub ::hub))
 (s/def :discussion/admins (s/coll-of (s/or :registered-user ::registered-user
                                            :reference :db/id)))
+(s/def :discussion/creation-secret ::non-blank-string)
 (s/def :discussion/states
   (s/coll-of #{:discussion.state/open :discussion.state/closed
                :discussion.state/private :discussion.state/deleted
@@ -81,7 +82,7 @@
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
-                                  :discussion/end-time]))
+                                  :discussion/end-time :discussion/creation-secret]))
 
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)

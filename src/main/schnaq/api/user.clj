@@ -12,17 +12,19 @@
 (defn- register-user-if-they-not-exist
   "Register a new user if they do not exist. In all cases return the user. New
   users will receive a welcome mail. `creation-secrets` can optionally be provided
-  to associate previous created entities with the registered user."
+  to associate previous created entities with the registered user. Same goes for `schnaq-creation-secrets`"
   [{:keys [identity parameters]}]
   (log/info "User-Registration queried for" (:id identity)
             ", username:" (:preferred_username identity))
-  (let [{:keys [creation-secrets visited-hashes visited-statement-ids]} (:body parameters)
+  (let [{:keys [creation-secrets visited-hashes visited-statement-ids schnaq-creation-secrets]} (:body parameters)
         visited-schnaqs (if visited-hashes (map :db/id (discussion-db/valid-discussions-by-hashes visited-hashes)) [])
         [new-user? queried-user] (user-db/register-new-user identity visited-schnaqs visited-statement-ids)
         updated-statements? (associative? (discussion-db/update-authors-from-secrets
                                             creation-secrets (:db/id queried-user)))
+        updated-schnaqs? (associative? (discussion-db/update-schnaq-authors schnaq-creation-secrets (:db/id queried-user)))
         response {:registered-user queried-user
-                  :updated-statements? updated-statements?}]
+                  :updated-statements? updated-statements?
+                  :updated-schnaqs? updated-schnaqs?}]
     (if new-user?
       (do (mail/send-welcome-mail (:email identity))
           (created "" response))
@@ -74,9 +76,11 @@
 (s/def ::creation-secrets map?)
 (s/def ::visited-hashes (s/coll-of :discussion/share-hash))
 (s/def ::visited-statement-ids map?)
+(s/def ::schnaq-creation-secrets map?)
 (s/def ::user-register (s/keys :opt-un [::visited-hashes
                                         ::creation-secrets
-                                        ::visited-statement-ids]))
+                                        ::visited-statement-ids
+                                        ::schnaq-creation-secrets]))
 
 (def user-routes
   ["/user" {:swagger {:tags ["user"]}}
@@ -89,9 +93,11 @@
                   :description (at/get-doc #'register-user-if-they-not-exist)
                   :parameters {:body ::user-register}
                   :responses {201 {:body {:registered-user ::specs/registered-user
-                                          :updated-statements? boolean?}}
+                                          :updated-statements? boolean?
+                                          :updated-schnaqs? boolean?}}
                               200 {:body {:registered-user ::specs/registered-user
-                                          :updated-statements? boolean?}}}}]
+                                          :updated-statements? boolean?
+                                          :updated-schnaqs? boolean?}}}}]
     ["/picture" {:put change-profile-picture
                  :description (at/get-doc #'change-profile-picture)
                  :parameters {:body {:image ::specs/image}}

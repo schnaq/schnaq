@@ -134,9 +134,11 @@
 (rf/reg-event-fx
   :schnaq/created
   (fn [{:keys [db]} [_ {:keys [new-schnaq]}]]
-    (let [{:discussion/keys [share-hash edit-hash]} new-schnaq]
+    (let [{:discussion/keys [share-hash edit-hash creation-secret]} new-schnaq
+          updated-secrets (assoc (get-in db [:discussion :schnaqs :creation-secrets]) share-hash creation-secret)]
       {:db (-> db
                (assoc-in [:schnaq :last-added] new-schnaq)
+               (assoc-in [:discussion :schnaqs :creation-secrets] updated-secrets)
                (update-in [:schnaqs :all] conj new-schnaq))
        :fx [[:dispatch [:navigation/navigate :routes.schnaq/value {:share-hash share-hash}]]
             [:dispatch [:schnaq/select-current new-schnaq]]
@@ -146,4 +148,5 @@
                                        :context :success}]]
             [:localstorage/assoc [:schnaq.last-added/share-hash share-hash]]
             [:localstorage/assoc [:schnaq.last-added/edit-hash edit-hash]]
+            [:localstorage/assoc [:discussion.schnaqs/creation-secrets updated-secrets]]
             [:dispatch [:schnaqs.save-admin-access/to-localstorage-and-db share-hash edit-hash]]]})))

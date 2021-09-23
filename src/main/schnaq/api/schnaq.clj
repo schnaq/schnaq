@@ -73,7 +73,7 @@
                                 ends-in-days (assoc :discussion/end-time (now-plus-days-instant ends-in-days)))
         new-discussion-id (discussion-db/new-discussion discussion-data)]
     (if new-discussion-id
-      (let [created-discussion (discussion-db/private-discussion-data new-discussion-id)]
+      (let [created-discussion (discussion-db/secret-discussion-data new-discussion-id)]
         (when (and hub-exclusive? hub authorized-for-hub?)
           (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
         (log/info "Discussion created: " new-discussion-id " - "

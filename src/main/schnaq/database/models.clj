@@ -212,6 +212,10 @@
     :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
     :db/doc "An optional time, when the discussion is finished and follow-up processes are started."}
+   {:db/ident :discussion/creation-secret
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/doc "A secret to claim ownership of a discussion as an anonymous user."}
 
    ;; hub
    {:db/ident :hub/name
