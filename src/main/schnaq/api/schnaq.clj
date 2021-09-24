@@ -130,7 +130,8 @@
                   :description (at/get-doc #'schnaq-by-hash)
                   :name :api.schnaq/by-hash
                   :middleware [:discussion/valid-share-hash?]
-                  :parameters {:query {:share-hash :discussion/share-hash}}
+                  :parameters {:query {:share-hash :discussion/share-hash
+                                       :display-name string?}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
      ["/add-visited" {:put add-visited-schnaq
@@ -161,7 +162,8 @@
       :description (at/get-doc #'schnaqs-by-hashes)
       :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
                                                                        :swagger/collectionFormat "multi"})
-                                               :share-hash :discussion/share-hash)}}
+                                               :share-hash :discussion/share-hash)
+                           :display-name string?}}
       :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
                   404 at/response-error-body}}]
     ["/admin" {:swagger {:tags ["admin"]}

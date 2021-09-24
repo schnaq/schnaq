@@ -313,7 +313,8 @@
                              :description (at/get-doc #'get-starting-conclusions)
                              :name :api.discussion.conclusions/starting
                              :middleware [:discussion/valid-share-hash?]
-                             :parameters {:query {:share-hash :discussion/share-hash}}
+                             :parameters {:query {:share-hash :discussion/share-hash
+                                                  :display-name string?}}
                              :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}}}]
    ["/graph" {:get graph-data-for-agenda
               :description (at/get-doc #'graph-data-for-agenda)

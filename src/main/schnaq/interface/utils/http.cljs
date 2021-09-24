@@ -3,8 +3,7 @@
             [cljs.spec.alpha :as s]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.auth :as auth]
-            [schnaq.interface.config :as config]))
+            [schnaq.interface.auth :as auth]))
 
 (s/def ::http-methods #{:get :post :put :delete :patch})
 
@@ -24,8 +23,7 @@
      [:http-xhrio {:method method
                    :uri (str shared-config/api-url path)
                    :format (ajax/transit-request-format)
-                   :params (assoc params
-                             :display-name (get-in db [:user :names :display] config/default-anonymous-display-name))
+                   :params params
                    :headers headers
                    :response-format (ajax/transit-response-format)
                    :on-success on-success
