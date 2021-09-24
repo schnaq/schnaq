@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.edit
   (:require [oops.core :refer [oget oget+]]
             [re-frame.core :as rf]
+            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -50,6 +51,7 @@
                                 {:statement-id statement-id
                                  :statement-type new-type
                                  :share-hash share-hash
+                                 :display-name (get-in db [:user :names :display] config/default-anonymous-display-name)
                                  :new-content (oget+ form [html-selector :value])}
                                 [:statement.edit.send/failure])]})))
 

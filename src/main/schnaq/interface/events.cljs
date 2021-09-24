@@ -5,6 +5,7 @@
             [re-frame.core :as rf]
             [reitit.frontend :as reitit-frontend]
             [schnaq.interface.auth :as auth]
+            [schnaq.interface.config :as config]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.language :as lang]
@@ -150,7 +151,8 @@
   (fn [{:keys [db]} [_ share-hash]]
     {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
      :fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
-                              {:share-hash share-hash})]}))
+                              {:share-hash share-hash
+                               :display-name (get-in db [:user :names :display] config/default-anonymous-display-name)})]}))
 
 (rf/reg-event-fx
   :schnaq/add-visited!

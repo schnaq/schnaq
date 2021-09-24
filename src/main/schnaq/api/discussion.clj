@@ -33,6 +33,7 @@
        statements))
 
 (defn- valid-statements-with-votes
+  ;; TODO continue here
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [statements user-id]
   (-> statements
@@ -418,7 +419,8 @@
                :middleware [:user/authenticated?]
                :parameters {:body {:statement-type (s/or :nil nil?
                                                          :type dto/statement-type)
-                                   :new-content :statement/content}}
+                                   :new-content :statement/content
+                                   :display-name ::specs/non-blank-string}}
                :responses {200 {:body {:updated-statement ::dto/statement}}
                            400 at/response-error-body
                            403 at/response-error-body}}]
