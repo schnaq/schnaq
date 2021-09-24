@@ -23,7 +23,7 @@
      [:http-xhrio {:method method
                    :uri (str shared-config/api-url path)
                    :format (ajax/transit-request-format)
-                   :params params
+                   :params (assoc params :display-name (get-in db [:user :names :display]))
                    :headers headers
                    :response-format (ajax/transit-response-format)
                    :on-success on-success
