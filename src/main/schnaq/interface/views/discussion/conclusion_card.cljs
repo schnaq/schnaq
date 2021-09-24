@@ -38,9 +38,11 @@
   "Add inline panel for up and down votes."
   [statement]
   (let [votes @(rf/subscribe [:local-votes])
-        ;; todo add local meta infos
-        upvoted? (:meta/upvoted? statement)
-        downvoted? (:meta/downvoted? statement)]
+        [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
+        ;; Do not use or shortcut, since the value can be false and should be prefferably selected over backend value
+        ;; TODO Wenn der backend-wert gesetzt ist verschwindet der marker nicht bis zum update
+        upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
+        downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)]
     [:div.d-flex.flex-row.align-items-center
      [:div.mr-2
       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
@@ -162,19 +164,31 @@
 (rf/reg-event-db
   :upvote-success
   (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (case operation
-      :added (update-in db [:votes :up id] inc)
-      :removed (update-in db [:votes :up id] dec)
-      :switched (update-in
-                  (update-in db [:votes :up id] inc)
-                  [:votes :down id] dec))))
+    (let [updated-db (-> db
+                         (update-in [:votes :own :up id] not)
+                         (assoc-in [:votes :own :down id] false))]
+      (case operation
+        :added (update-in updated-db [:votes :up id] inc)
+        :removed (update-in updated-db [:votes :up id] dec)
+        :switched (-> updated-db
+                      (update-in [:votes :up id] inc)
+                      (update-in [:votes :down id] dec))))))
 
 (rf/reg-event-db
   :downvote-success
   (fn [db [_ {:keys [db/id]} {:keys [operation]}]]
-    (case operation
-      :added (update-in db [:votes :down id] inc)
-      :removed (update-in db [:votes :down id] dec)
-      :switched (update-in
-                  (update-in db [:votes :down id] inc)
-                  [:votes :up id] dec))))
+    (let [updated-db (-> db
+                         (assoc-in [:votes :own :up id] false)
+                         (update-in [:votes :own :down id] not))]
+      (case operation
+        :added (update-in updated-db [:votes :down id] inc)
+        :removed (update-in updated-db [:votes :down id] dec)
+        :switched (-> updated-db
+                      (update-in [:votes :down id] inc)
+                      (update-in [:votes :up id] dec))))))
+
+(rf/reg-sub
+  :votes/upvoted-or-downvoted
+  (fn [db [_ statement-id]]
+    [(get-in db [:votes :own :up statement-id])
+     (get-in db [:votes :own :down statement-id])]))

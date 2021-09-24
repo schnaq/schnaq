@@ -408,11 +408,11 @@
               :description (at/get-doc #'get-statement-info)
               :name :api.discussion.statement/info
               :parameters {:query {:statement-id :db/id
-                                   :share-hash :discussion/share-hash}}
+                                   :share-hash :discussion/share-hash
+                                   :display-name ::specs/non-blank-string}}
               :responses {200 {:body {:conclusion ::dto/statement
                                       :premises (s/coll-of ::dto/statement)
-                                      :history (s/coll-of ::dto/statement)
-                                      :display-name ::specs/non-blank-string}}
+                                      :history (s/coll-of ::dto/statement)}}
                           404 at/response-error-body}}]
     ["" {:parameters {:body {:statement-id :db/id
                              :share-hash :discussion/share-hash}}}

@@ -190,4 +190,5 @@
   (-main)
   (stop-server)
   ;; TODO reload nach einloggen nötig um aktuelle votes zu holen
+  ;; TODO die downvoted und upvoted werte stimmen nicht in der selected card: http://localhost:8700/schnaq/f13138bf-c232-4749-bf8a-30b6f3a72b6a/statement/17592186049927
   :end)
