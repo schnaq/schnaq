@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.discussion.card-view
   (:require [re-frame.core :as rf]
+            [schnaq.interface.config :as config]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.pages :as pages]))
@@ -11,7 +12,8 @@
       {:db (assoc-in db [:search :schnaq :current :search-string] search-string)
        :fx [(http/xhrio-request db :get "/discussion/statements/search" [:discussion.statements.search/success]
                                 {:share-hash share-hash
-                                 :search-string search-string})
+                                 :search-string search-string
+                                 :display-name (get-in db [:user :names :display] config/default-anonymous-display-name)})
             [:dispatch [:navigation/navigate :routes.search/schnaq {:share-hash share-hash}]]]})))
 
 (rf/reg-event-db

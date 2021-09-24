@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -73,7 +74,8 @@
                                 [:statement.labels.update/success]
                                 {:share-hash share-hash
                                  :statement-id (:db/id statement)
-                                 :label label})]})))
+                                 :label label
+                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)})]})))
 
 (rf/reg-event-db
   :statement.labels.update/success
@@ -95,4 +97,5 @@
                                 [:statement.labels.update/success]
                                 {:share-hash share-hash
                                  :statement-id (:db/id statement)
-                                 :label label})]})))
+                                 :label label
+                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)})]})))

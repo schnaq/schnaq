@@ -33,7 +33,6 @@
        statements))
 
 (defn- valid-statements-with-votes
-  ;; TODO continue here
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [statements user-id]
   (-> statements
@@ -44,6 +43,7 @@
   "Returns starting conclusions for a discussion, with processors applied.
   Optionally a statement-id can be passed to enrich the statement with its creation-secret."
   ([share-hash user-id]
+   ;; TODO continue here with route changes
    (-> share-hash
        discussion-db/starting-statements
        (valid-statements-with-votes user-id)
@@ -353,7 +353,8 @@
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
                                                :premise :statement/content
-                                               :statement-type dto/statement-type}}
+                                               :statement-type dto/statement-type
+                                               :display-name ::specs/non-blank-string}}
                            :responses {201 {:body {:new-statement ::dto/statement}}
                                        403 at/response-error-body}}]
    ["/statements"
@@ -373,7 +374,8 @@
                 :name :api.discussion.statements/search
                 :middleware [:discussion/valid-share-hash?]
                 :parameters {:query {:share-hash :discussion/share-hash
-                                     :search-string string?}}
+                                     :search-string string?
+                                     :display-name ::specs/non-blank-string}}
                 :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
                             404 at/response-error-body}}]
     ["/for-conclusion" {:get get-statements-for-conclusion
@@ -381,7 +383,8 @@
                         :name :api.discussion.statements/for-conclusion
                         :middleware [:discussion/valid-share-hash?]
                         :parameters {:query {:share-hash :discussion/share-hash
-                                             :conclusion-id :db/id}}
+                                             :conclusion-id :db/id
+                                             :display-name ::specs/non-blank-string}}
                         :responses {200 {:body {:premises (s/coll-of ::dto/statement)}}
                                     404 at/response-error-body}}]
     ["/starting/add" {:post add-starting-statement!
@@ -409,7 +412,8 @@
                                    :share-hash :discussion/share-hash}}
               :responses {200 {:body {:conclusion ::dto/statement
                                       :premises (s/coll-of ::dto/statement)
-                                      :history (s/coll-of ::dto/statement)}}
+                                      :history (s/coll-of ::dto/statement)
+                                      :display-name ::specs/non-blank-string}}
                           404 at/response-error-body}}]
     ["" {:parameters {:body {:statement-id :db/id
                              :share-hash :discussion/share-hash}}}
@@ -448,14 +452,16 @@
       ["/add" {:put add-label
                :description (at/get-doc #'add-label)
                :name :api.discussion.statement.label/add
-               :parameters {:body {:label :statement/label}}
+               :parameters {:body {:label :statement/label
+                                   :display-name ::specs/non-blank-string}}
                :responses {200 {:body {:statement ::dto/statement}}
                            400 at/response-error-body
                            403 at/response-error-body}}]
       ["/remove" {:put remove-label
                   :description (at/get-doc #'remove-label)
                   :name :api.discussion.statement.label/remove
-                  :parameters {:body {:label :statement/label}}
+                  :parameters {:body {:label :statement/label
+                                      :display-name ::specs/non-blank-string}}
                   :responses {200 {:body {:statement ::dto/statement}}
                               400 at/response-error-body
                               403 at/response-error-body}}]]]]])

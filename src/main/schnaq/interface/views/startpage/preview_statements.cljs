@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.startpage.preview-statements
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.config :as config]
+            [schnaq.interface.config :as config :refer [default-anonymous-display-name]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.discussion.conclusion-card :as conclusion-card]))
 
@@ -45,7 +45,8 @@
             db :get "/discussion/statement/info"
             [:preview-statements/by-id-success]
             {:statement-id statement-id
-             :share-hash share-hash}
+             :share-hash share-hash
+             :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
             [:preview-statements/default])]}))
 
 (rf/reg-event-fx

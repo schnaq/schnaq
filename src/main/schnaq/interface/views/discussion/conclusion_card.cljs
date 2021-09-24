@@ -122,7 +122,8 @@
        :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]
                                 {:conclusion-id (:db/id conclusion)
-                                 :share-hash share-hash}
+                                 :share-hash share-hash
+                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-db

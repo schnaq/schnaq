@@ -42,7 +42,8 @@
               {:share-hash share-hash
                :conclusion-id statement-id
                :premise new-premise
-               :statement-type statement-type}
+               :statement-type statement-type
+               :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -109,7 +110,8 @@
                 db :get "/discussion/statement/info"
                 [:discussion.query.statement/by-id-success]
                 {:statement-id statement-id
-                 :share-hash share-hash}
+                 :share-hash share-hash
+                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
                 [:discussion.redirect/to-root share-hash])]}
         new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] new-conclusion)
                                :fx conj [:discussion.history/push new-conclusion])))))
