@@ -14,22 +14,22 @@
   (let [up-vote-change (get-in local-votes [:up (:db/id statement)] 0)
         down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
     (-
-      (+ (:meta/upvotes statement) up-vote-change)
-      (+ (:meta/downvotes statement) down-vote-change))))
+      (+ (:statement/upvotes statement) up-vote-change)
+      (+ (:statement/downvotes statement) down-vote-change))))
 
 (>defn get-up-votes
   "Calculates the up-votes without needing to reload."
   [statement local-votes]
   [map? map? :ret number?]
   (let [up-vote-change (get-in local-votes [:up (:db/id statement)] 0)]
-    (+ (:meta/upvotes statement) up-vote-change)))
+    (+ (:statement/upvotes statement) up-vote-change)))
 
 (>defn get-down-votes
   "Calculates the down-votes without needing to reload."
   [statement local-votes]
   [map? map? :ret number?]
   (let [down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
-    (+ (:meta/downvotes statement) down-vote-change)))
+    (+ (:statement/downvotes statement) down-vote-change)))
 
 (rf/reg-event-fx
   :discussion.reaction.statement/send

@@ -28,7 +28,7 @@
                      processors/with-sub-discussion-info
                      (processors/with-new-post-info share-hash keycloak-id)
                      processors/hide-deleted-statement-content
-                     processors/with-votes)})))
+                     processors/with-aggregated-votes)})))
 
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
@@ -44,7 +44,7 @@
   (if-let [share-hashes (get-in request [:parameters :query :share-hashes])]
     (let [share-hashes-list (if (string? share-hashes) [share-hashes] share-hashes)]
       (ok {:schnaqs
-           (map #(-> % processors/add-meta-info-to-schnaq processors/with-votes)
+           (map #(-> % processors/add-meta-info-to-schnaq processors/with-aggregated-votes)
                 (discussion-db/valid-discussions-by-hashes share-hashes-list))}))
     at/not-found-hash-invalid))
 

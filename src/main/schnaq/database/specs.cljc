@@ -46,8 +46,6 @@
 
 ;; Meta Information
 (s/def :meta/all-statements nat-int?)
-(s/def :meta/upvotes number?)
-(s/def :meta/downvotes number?)
 (s/def :meta/sub-statements number?)
 (s/def :meta/authors (s/coll-of :user/nickname))
 (s/def :meta/sub-discussion-info
@@ -104,8 +102,8 @@
 (s/def :statement/content ::non-blank-string)
 (s/def :statement/version number?)
 (s/def :statement/author ::any-user)
-(s/def :statement/upvotes (s/coll-of ::user-or-reference))
-(s/def :statement/downvotes (s/coll-of ::user-or-reference))
+(s/def :statement/upvotes (s/or :count number? :upvote-users (s/coll-of ::user-or-reference)))
+(s/def :statement/downvotes (s/or :count number? :downvote-users (s/coll-of ::user-or-reference)))
 (s/def :statement/creation-secret ::non-blank-string)
 (s/def :statement/created-at inst?)
 (s/def :statement/label shared-config/allowed-labels)

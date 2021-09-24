@@ -8,8 +8,8 @@
 (defn create-vote-chart-data
   "Creates a list of voting data for an react-vis pie chart."
   [statement]
-  (let [up-votes (get statement :meta/upvotes 0)
-        down-votes (get statement :meta/downvotes 0)
+  (let [up-votes (get statement :statement/upvotes 0)
+        down-votes (get statement :statement/downvotes 0)
         neutral-votes (if (and (zero? up-votes) (zero? down-votes)) 1 0)]
     {:type "doughnut"
      :options {:events [] :responsive true}

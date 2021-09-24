@@ -37,7 +37,7 @@
   [statements]
   (-> statements
       processors/hide-deleted-statement-content
-      processors/with-votes))
+      processors/with-aggregated-votes))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
@@ -128,7 +128,7 @@
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
       #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
-                                   processors/with-votes
+                                   processors/with-aggregated-votes
                                    processors/with-sub-discussion-info
                                    (processors/with-new-post-info share-hash (:sub identity))
                                    first)})
