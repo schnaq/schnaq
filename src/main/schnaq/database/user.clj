@@ -61,12 +61,13 @@
       [(= ?lower-name ?user-name)]]
     (.toLowerCase ^String nickname)))
 
-(>defn canonical-username
-  "Return the canonical username (regarding case) that is saved."
-  [nickname]
-  [:user/nickname :ret :user/nickname]
-  (:user/nickname
-    (fast-pull (user-by-nickname nickname) [:user/nickname])))
+(defn user-id
+  "Returns the user-id of the passed user. Takes a username and an keycloak-id that may be nil.
+  Returns the keycloak-user if logged-in, otherwise the anon user-id."
+  [display-name keycloak-id]
+  (if keycloak-id
+    (:db/id (fast-pull [:user.registered/keycloak-id keycloak-id] [:db/id]))
+    (user-by-nickname display-name)))
 
 (>defn add-user-if-not-exists
   "Adds a user if they do not exist yet. Returns the (new) user-id."
