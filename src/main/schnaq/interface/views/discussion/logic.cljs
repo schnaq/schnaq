@@ -35,14 +35,12 @@
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ statement-type new-premise]]
     (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
-          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-          nickname (get-in db [:user :names :display] default-anonymous-display-name)]
+          share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:fx [(http/xhrio-request
               db :post "/discussion/react-to/statement"
               [:discussion.reaction.statement/added]
               {:share-hash share-hash
                :conclusion-id statement-id
-               :nickname nickname
                :premise new-premise
                :statement-type statement-type}
               [:ajax.error/as-notification])]})))

@@ -34,11 +34,10 @@
 
 (defn- valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
-  [statements]
+  [statements user-id]
   (-> statements
       processors/hide-deleted-statement-content
-      ;; TODO add author data
-      (processors/with-aggregated-votes 123)))
+      (processors/with-aggregated-votes user-id)))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
@@ -46,6 +45,7 @@
   ([share-hash]
    (-> share-hash
        discussion-db/starting-statements
+       ;; TODO add user-id
        valid-statements-with-votes
        processors/with-sub-discussion-info))
   ([share-hash secret-statement-id]
@@ -61,27 +61,30 @@
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
-  [{:keys [parameters]}]
-  (let [{:keys [conclusion-id]} (:query parameters)
+  [{:keys [parameters identity]}]
+  (let [{:keys [conclusion-id display-name]} (:query parameters)
+        user-id (user-db/user-id display-name (:sub identity))
         prepared-statements (-> conclusion-id
                                 discussion-db/children-for-statement
-                                valid-statements-with-votes
+                                (valid-statements-with-votes user-id)
                                 processors/with-sub-discussion-info)]
     (ok {:premises prepared-statements})))
 
 (defn- search-statements
   "Search through any valid discussion."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash search-string]} (:query parameters)]
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash search-string display-name]} (:query parameters)
+        user-id (user-db/user-id display-name (:sub identity))]
     (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
                                   processors/with-sub-discussion-info
-                                  valid-statements-with-votes)})))
+                                  (valid-statements-with-votes user-id))})))
 
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash statement-id]} (:query parameters)
-        user-identity (:sub identity)]
+  (let [{:keys [share-hash statement-id display-name]} (:query parameters)
+        user-identity (:sub identity)
+        author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
@@ -91,7 +94,8 @@
              :premises (-> (discussion-db/children-for-statement statement-id)
                            processors/with-sub-discussion-info
                            (processors/with-new-post-info share-hash user-identity))
-             :history (discussion-db/history-for-statement statement-id)}))
+             :history (discussion-db/history-for-statement statement-id)}
+            author-id))
       at/not-found-hash-invalid)))
 
 (defn- update-seen-statements!
@@ -184,17 +188,16 @@
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
   `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash conclusion-id nickname premise statement-type]} (:body parameters)
+  (let [{:keys [share-hash conclusion-id premise statement-type display-name]} (:body parameters)
         keycloak-id (:sub identity)
-        user-id (if keycloak-id
-                  [:user.registered/keycloak-id keycloak-id]
-                  (user-db/user-by-nickname nickname))]
+        user-id (user-db/user-id display-name keycloak-id)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created ""
                    {:new-statement
                     (valid-statements-with-votes
-                      (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id))}))
+                      (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)
+                      user-id)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn- graph-data-for-agenda
@@ -282,22 +285,26 @@
   "Add a label to a statement. Only pre-approved labels can be set. Custom labels have no effect.
   The user needs to be authenticated. The statement concerned is always returned."
   [{:keys [parameters identity]}]
-  (let [{:keys [statement-id label share-hash]} (:body parameters)]
+  (let [{:keys [statement-id label share-hash display-name]} (:body parameters)
+        keycloak-id (:sub identity)
+        user-id (user-db/user-id display-name keycloak-id)]
     (ok {:statement (-> [(discussion-db/add-label statement-id label)]
-                        valid-statements-with-votes
+                        (valid-statements-with-votes user-id)
                         processors/with-sub-discussion-info
-                        (processors/with-new-post-info share-hash (:sub identity))
+                        (processors/with-new-post-info share-hash keycloak-id)
                         first)})))
 
 (defn- remove-label
   "Remove a label from a statement. Removing a label not present has no effect.
   The user needs to be authenticated. The statement concerned is always returned."
   [{:keys [parameters identity]}]
-  (let [{:keys [statement-id label share-hash]} (:body parameters)]
+  (let [{:keys [statement-id label share-hash display-name]} (:body parameters)
+        keycloak-id (:sub identity)
+        user-id (user-db/user-id display-name keycloak-id)]
     (ok {:statement (-> [(discussion-db/remove-label statement-id label)]
-                        valid-statements-with-votes
+                        (valid-statements-with-votes user-id)
                         processors/with-sub-discussion-info
-                        (processors/with-new-post-info share-hash (:sub identity))
+                        (processors/with-new-post-info share-hash keycloak-id)
                         first)})))
 
 ;; -----------------------------------------------------------------------------
@@ -345,7 +352,6 @@
                            :name :api.discussion.react-to/statement
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
-                                               :nickname ::dto/maybe-nickname
                                                :premise :statement/content
                                                :statement-type dto/statement-type}}
                            :responses {201 {:body {:new-statement ::dto/statement}}
