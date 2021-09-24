@@ -37,19 +37,24 @@
 (defn up-down-vote
   "Add inline panel for up and down votes."
   [statement]
-  (let [votes @(rf/subscribe [:local-votes])]
+  (let [votes @(rf/subscribe [:local-votes])
+        ;; todo add local meta infos
+        upvoted? (:meta/upvoted? statement)
+        downvoted? (:meta/downvoted? statement)]
     [:div.d-flex.flex-row.align-items-center
-     [:div.px-2
-      {:on-click (fn [e]
+     [:div.mr-2
+      {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
+       :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
-      [:i.vote-arrow.up-vote {:class (str "m-auto fas " (fa :arrow-up))}]]
+      [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]
      [:span.mr-3 (logic/get-up-votes statement votes)]
-     [:div.px-2
-      {:on-click (fn [e]
+     [:div.mr-2
+      {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
+       :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:i.vote-arrow.down-vote {:class (str "m-auto fas " (fa :arrow-down))}]]
+      [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card
