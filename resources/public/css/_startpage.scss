@@ -135,10 +135,12 @@ $gradient-target: vars.$primary;
 }
 
 .social-proof-img {
+  max-height: 40px;
   width: 40px;
 }
 
 .social-proof-img-lg {
+  max-height: 60px;
   width: 60px;
 }
 
