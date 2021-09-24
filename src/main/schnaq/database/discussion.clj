@@ -23,6 +23,8 @@
    :statement/created-at
    :statement/parent
    :statement/labels
+   :statement/upvotes
+   :statement/downvotes
    {:statement/type [:db/ident]}
    {:statement/author user-db/public-user-pattern}])
 

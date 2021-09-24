@@ -30,28 +30,6 @@
   [number? :db/id :ret any?]
   (vote-on-statement! statement-id user-id :downvote))
 
-(>defn upvotes-for-statement
-  "Returns the number of upvotes for a statement."
-  [statement-id]
-  [number? :ret number?]
-  (count
-    (query
-      '[:find ?user
-        :in $ ?statement
-        :where [?statement :statement/upvotes ?user]]
-      statement-id)))
-
-(>defn downvotes-for-statement
-  "Returns the number of downvotes for a statement."
-  [statement-id]
-  [number? :ret number?]
-  (count
-    (query
-      '[:find ?user
-        :in $ ?statement
-        :where [?statement :statement/downvotes ?user]]
-      statement-id)))
-
 (>defn remove-upvote!
   "Removes an upvote of a user."
   [statement-id user-id]

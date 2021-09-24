@@ -4,7 +4,6 @@
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.reaction :as reaction-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.meta-info :as meta-info])
@@ -27,14 +26,15 @@
 ;; -----------------------------------------------------------------------------
 ;; Processing statements
 
-(>defn with-votes
-  "Enrich every statement map with its vote-counts."
+(>defn with-aggregated-votes
+  "Anonymize the votes by just counting the numer of votes."
   [data]
   [any? :ret any?]
   (walk/postwalk
-    #(if (and (instance? IEditableCollection %) (contains? % :statement/content))
-       (assoc % :meta/upvotes (reaction-db/upvotes-for-statement (:db/id %))
-                :meta/downvotes (reaction-db/downvotes-for-statement (:db/id %)))
+    #(if (and (instance? IEditableCollection %)
+              (or (contains? % :statement/downvotes) (contains? % :statement/upvotes)))
+       (assoc % :statement/upvotes (count (:statement/upvotes %))
+                :statement/downvotes (count (:statement/downvotes %)))
        %)
     data))
 
