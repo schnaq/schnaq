@@ -37,7 +37,8 @@
   [statements]
   (-> statements
       processors/hide-deleted-statement-content
-      processors/with-aggregated-votes))
+      ;; TODO add author data
+      (processors/with-aggregated-votes 123)))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
@@ -120,15 +121,16 @@
   "Edits the content (and possibly type) of a statement, when the user is the registered author.
   `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`."
   [{:keys [parameters identity]}]
-  (let [{:keys [statement-id statement-type new-content share-hash]} (:body parameters)
+  (let [{:keys [statement-id statement-type new-content share-hash display-name]} (:body parameters)
         user-identity (:sub identity)
         statement (db/fast-pull statement-id [:db/id :statement/parent
                                               {:statement/author [:user.registered/keycloak-id]}
-                                              :statement/deleted?])]
+                                              :statement/deleted?])
+        author-id (user-db/user-id display-name user-identity)]
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
       #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
-                                   processors/with-aggregated-votes
+                                   (processors/with-aggregated-votes author-id)
                                    processors/with-sub-discussion-info
                                    (processors/with-new-post-info share-hash (:sub identity))
                                    first)})

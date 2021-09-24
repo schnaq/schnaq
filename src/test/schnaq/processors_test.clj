@@ -11,7 +11,7 @@
 (deftest with-votes-processor-test
   (testing "Result should have all statements enriched with votes-metadata"
     (let [share-hash "cat-dog-hash"
-          enriched-data (processors/with-aggregated-votes (discussion-db/all-statements share-hash))
+          enriched-data (processors/with-aggregated-votes (discussion-db/all-statements share-hash) 123)
           upvotes-only (map :statement/upvotes enriched-data)
           downvotes-only (map :statement/downvotes enriched-data)]
       (is (= (count enriched-data) (count upvotes-only) (count downvotes-only))))))

@@ -47,6 +47,9 @@
 ;; Meta Information
 (s/def :meta/all-statements nat-int?)
 (s/def :meta/sub-statements number?)
+;; Marks whether the user has up / downvoted a statement themselves.
+(s/def :meta/upvoted? boolean?)
+(s/def :meta/downvoted? boolean?)
 (s/def :meta/authors (s/coll-of :user/nickname))
 (s/def :meta/sub-discussion-info
   (s/keys :req-un [:meta/sub-statements :meta/authors]))
