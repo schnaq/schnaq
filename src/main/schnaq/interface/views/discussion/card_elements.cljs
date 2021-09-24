@@ -113,7 +113,8 @@
       {:fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                 [:discussion.add.statement/starting-success form]
                                 {:statement statement-text
-                                 :share-hash share-hash}
+                                 :share-hash share-hash
+                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -139,7 +140,8 @@
     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:fx [(http/xhrio-request db :get "/discussion/conclusions/starting"
                                 [:discussion.query.conclusions/set-starting]
-                                {:share-hash share-hash})]})))
+                                {:share-hash share-hash
+                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)})]})))
 
 (rf/reg-event-fx
   :discussion.query.conclusions/set-starting

@@ -43,7 +43,6 @@
   "Returns starting conclusions for a discussion, with processors applied.
   Optionally a statement-id can be passed to enrich the statement with its creation-secret."
   ([share-hash user-id]
-   ;; TODO continue here with route changes
    (-> share-hash
        discussion-db/starting-statements
        (valid-statements-with-votes user-id)
@@ -315,7 +314,7 @@
                              :name :api.discussion.conclusions/starting
                              :middleware [:discussion/valid-share-hash?]
                              :parameters {:query {:share-hash :discussion/share-hash
-                                                  :display-name string?}}
+                                                  :display-name ::specs/non-blank-string}}
                              :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}}}]
    ["/graph" {:get graph-data-for-agenda
               :description (at/get-doc #'graph-data-for-agenda)
@@ -392,7 +391,7 @@
                       :name :api.discussion.statements.starting/add
                       :parameters {:body {:share-hash :discussion/share-hash
                                           :statement :statement/content
-                                          :nickname ::dto/maybe-nickname}}
+                                          :display-name ::specs/non-blank-string}}
                       :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                   403 at/response-error-body}}]
     ["/update-seen" {:put update-seen-statements!
