@@ -109,12 +109,10 @@
   :discussion.add.statement/starting
   (fn [{:keys [db]} [_ form]]
     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-          nickname (get-in db [:user :names :display] default-anonymous-display-name)
           statement-text (oget form [:statement-text :value])]
       {:fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                 [:discussion.add.statement/starting-success form]
                                 {:statement statement-text
-                                 :nickname nickname
                                  :share-hash share-hash}
                                 [:ajax.error/as-notification])]})))
 

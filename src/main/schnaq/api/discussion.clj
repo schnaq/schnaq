@@ -42,21 +42,21 @@
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
   Optionally a statement-id can be passed to enrich the statement with its creation-secret."
-  ([share-hash]
+  ([share-hash user-id]
    (-> share-hash
        discussion-db/starting-statements
-       ;; TODO add user-id
-       valid-statements-with-votes
+       (valid-statements-with-votes user-id)
        processors/with-sub-discussion-info))
-  ([share-hash secret-statement-id]
-   (add-creation-secret (starting-conclusions-with-processors share-hash) secret-statement-id)))
+  ([share-hash user-id secret-statement-id]
+   (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash]} (:query parameters)
-        user-identity (:sub identity)]
-    (ok {:starting-conclusions (-> (starting-conclusions-with-processors share-hash)
+  (let [{:keys [share-hash display-name]} (:query parameters)
+        user-identity (:sub identity)
+        author-id (user-db/user-id display-name user-identity)]
+    (ok {:starting-conclusions (-> (starting-conclusions-with-processors share-hash author-id)
                                    (processors/with-new-post-info share-hash user-identity))})))
 
 (defn- get-statements-for-conclusion
@@ -172,15 +172,13 @@
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash statement nickname]} (:body parameters)
+  (let [{:keys [share-hash statement display-name]} (:body parameters)
         keycloak-id (:sub identity)
-        user-id (if keycloak-id
-                  [:user.registered/keycloak-id keycloak-id]
-                  (user-db/add-user-if-not-exists nickname))]
+        user-id (user-db/user-id display-name keycloak-id)]
     (if (validator/valid-writeable-discussion? share-hash)
       (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)]
         (log/info "Starting statement added for discussion" share-hash)
-        (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash new-starting-id)}))
+        (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash user-id new-starting-id)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn- react-to-any-statement!
