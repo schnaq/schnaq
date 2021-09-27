@@ -72,7 +72,8 @@
     {:name :routes/startpage
      :view startpage-views/startpage-view
      :link-text (labels :router/startpage)
-     :controllers [{:start #(rf/dispatch [:load-example-statements])}]}]
+     :controllers [{:identity #(random-uuid)
+                    :start #(rf/dispatch [:load-example-statements])}]}]
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
