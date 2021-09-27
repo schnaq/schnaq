@@ -283,5 +283,5 @@
      [cards/conclusion-cards-list share-hash]
      [:div.d-md-none [history-view]]
      [:div.mx-auto
-      {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-8")}
+      {:class (when-not shared-config/embedded? "col-11 col-md-12 col-lg-12 col-xl-10")}
       [show-how-to]]]]])
