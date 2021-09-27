@@ -115,11 +115,11 @@ var klaroConfig = {
         text: 'Mehr Informationen: {privacyPolicy}'
       },
       matomo: {
-        description: 'Erfassen von Besucherstatistiken',
+        description: 'Erfassen von anonymen Besucher:innenstatistiken',
       },
       purposes: {
         advertising: 'Anzeigen von Werbung',
-        analytics: 'Statistiken',
+        analytics: 'Analysen',
         essential: 'Essenziell',
         livechat: 'Live Chat',
         security: 'Sicherheit',
@@ -136,7 +136,7 @@ var klaroConfig = {
         text: 'More information: {privacyPolicy}'
       },
       matomo: {
-        description: 'Collecting of visitor statistics',
+        description: 'Collecting of anonymous visitor statistics',
       },
       purposes: {
         advertising: 'Advertising',
@@ -159,14 +159,14 @@ var klaroConfig = {
       // Overwrites global "default" setting.
       // We recommend leaving this to "false" for services that collect
       // personal information.
-      default: false,
+      default: true,
 
       // The title of you service as listed in the consent modal.
       title: 'Matomo (analytics.schnaq.com, self-hosted)',
 
       // The purpose(s) of this service. Will be listed on the consent notice.
       // Do not forget to add translations for all purposes you list here.
-      purposes: ['analytics'],
+      purposes: ['essential'],
 
       // A list of regex expressions or strings giving the names of
       // cookies set by this service. If the user withdraws consent for a
@@ -203,7 +203,7 @@ var klaroConfig = {
 
       // If "required" is set to true, Klaro will not allow this service to
       // be disabled by the user.
-      required: false,
+      required: true,
 
       // If "optOut" is set to true, Klaro will load this service even before
       // the user gave explicit consent.
@@ -224,7 +224,7 @@ var klaroConfig = {
     {
       name: 'facebook-pixel',
       title: 'Facebook Pixel',
-      description: 'Zielgruppenvertestung',
+      description: 'Für Marketing',
       purposes: ['analytics'],
     },
   ],
