@@ -190,3 +190,8 @@ $gradient-target: vars.$primary;
     object-fit: contain;
   }
 }
+
+.vertical-fullsize {
+  display: flex;
+  min-height: 100vh;
+}
