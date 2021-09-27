@@ -38,11 +38,11 @@
 <script async src="/js/compiled/base.js"></script>
 
 <script data-name="matomo" data-type="text/javascript" type="text/plain">
-  var _paq = window._paq || [];
-  /* tracker methods like 'setCustomDimension' should be called before 'trackPageView' */
+  var _paq = window._paq = window._paq || [];
   _paq.push(['setCookieDomain', '*.schnaq.com']);
   _paq.push(['setDoNotTrack', true]);
   // _paq.push(['requireConsent']);  // Require user to opt in - currently resolved via Klaro!
+  _paq.push(['requireCookieConsent']); // Cookieless-Mode
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function () {
@@ -56,8 +56,8 @@
     g.src = u + 'matomo.js';
     s.parentNode.insertBefore(g, s);
   })();
-
 </script>
+<noscript><p><img alt="" src="//analytics.schnaq.com/matomo.php?idsite=2&amp;rec=1" style="border:0;"/></p></noscript>
 
 <!-- Matomo Tag Manager -->
 <script>
@@ -92,7 +92,6 @@
     'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '601900294299309');
   fbq('track', 'PageView');
-
 </script>
 <noscript>
   <img height="1" src="https://www.facebook.com/tr?id=463419234718543&ev=PageView&noscript=1"
