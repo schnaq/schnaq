@@ -374,8 +374,8 @@
    :privacy.personal-data/title "Dane osobowe"
    :privacy.personal-data/body
    [:<>
-    [:p "Domyślnie gromadzone są tylko dane niezbędne z technicznego punktu widzenia. Nie dochodzi do oceny danych osobowych, a Państwa zachowanie na naszej stronie internetowej jest analizowane anonimowo tylko wtedy, gdy wyrażą Państwo na to zgodę."]
-    [:p "Jeśli chcesz nas wesprzeć i zgadzasz się na anonimową analizę, dane te są zbierane za pomocą Matomo i przechowywane na naszych serwerach w Niemczech. Matomo jest darmową i samodzielnie utrzymywaną alternatywą dla komercyjnych dostawców. Nie przekazujemy za jego pomocą żadnych danych osobom trzecim."]]
+    [:p "Domyślnie gromadzone są tylko dane niezbędne z technicznego punktu widzenia. Nie dochodzi do przetwarzania danych osobowych, a Państwa zachowanie na naszej stronie internetowej jest analizowane wyłącznie w sposób anonimowy."]
+    [:p "Twoje zachowanie użytkownika jest rejestrowane przez Matomo i przechowywane na naszych serwerach w Niemczech. Matomo jest darmową i samodzielnie utrzymywaną alternatywą dla komercyjnych dostawców. Nie przekazujemy za jego pomocą żadnych danych osobom trzecim."]]
    :privacy.localstorage/lead "Jakie dane wysyłam do serwerów?"
    :privacy.localstorage/title "Wymiana danych"
    :privacy.localstorage/body
@@ -432,8 +432,7 @@
       [:a {:href "https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery"}
        "tutaj"]
       " należy prowadzić dalsze badania."]
-     [:li "Plik cookie logowania (persistent cookie), który rozpoznaje Cię jako użytkownika, z którym się zalogowałeś. Po 14 dniach plik cookie wygasa i jest usuwany. Jeśli usuniesz ten plik cookie, będziesz musiał zalogować się ponownie przy następnej wizycie na stronie."]
-     [:li "Analizujący plik cookie (trwały plik cookie), który może być opcjonalnie ustawiony, abyśmy mogli anonimowo zrozumieć Twoje zachowanie i zainteresowania. Więcej informacji na ten temat znajduje się w rozdziale dotyczącym korzystania z Matomo."]]
+     [:li "Plik cookie logowania (persistent cookie), który rozpoznaje Cię jako użytkownika, z którym się zalogowałeś. Po 14 dniach plik cookie wygasa i jest usuwany. Jeśli usuniesz ten plik cookie, będziesz musiał zalogować się ponownie przy następnej wizycie na stronie. Możesz znaleźć nasz serwer uwierzytelniający tutaj: https://auth.schnaq.com"]]
     [:p "Wszystkie używane przez nas pliki cookie generują losowe ciągi znaków, które są używane do dopasowania odpowiadających im ciągów znaków na naszym serwerze."]]
 
    :privacy.extended.personal-data/title "Dane osobowe"
@@ -452,7 +451,7 @@
    :privacy.extended.matomo/body
    [:<>
     [:h4 "Opis i zakres przetwarzania danych"]
-    [:p "Na naszej stronie internetowej używamy oprogramowania Matomo (dawniej PIWIK), aby analizować wykorzystanie naszej obecności w Internecie. Interesuje nas na przykład, jakie strony są często odwiedzane i czy używane są smartfony, tablety lub komputery z dużymi ekranami. Oprogramowanie umieszcza plik cookie na komputerze użytkownika (informacje o plikach cookie, patrz wyżej). W przypadku wejścia na poszczególne strony naszej witryny internetowej zapisywane są następujące dane:"]
+    [:p "Na naszej stronie internetowej używamy oprogramowania Matomo (dawniej PIWIK), aby analizować wykorzystanie naszej obecności w Internecie. Interesuje nas na przykład, jakie strony są często odwiedzane i czy używane są smartfony, tablety lub komputery z dużymi ekranami. Oprogramowanie nie ustawia plików cookie i nie tworzy profilu odwiedzających. W przypadku wejścia na poszczególne strony naszej witryny internetowej zapisywane są następujące dane:"]
     [:ol
      [:li "Dwa bajty adresu IP systemu wywołującego"]
      [:li "Dostępna strona internetowa"]
@@ -464,7 +463,8 @@
     [:p "Matomo jest używane wyłącznie na serwerach schnaq. Dane osobowe użytkowników są przechowywane tylko tam. Dane te nie są przekazywane osobom trzecim."]
     [:h4 "Cel przetwarzania danych"]
     [:p "Przetwarzanie zanonimizowanych danych użytkowników umożliwia nam analizę korzystania z naszej strony internetowej. Poprzez analizę uzyskanych danych jesteśmy w stanie opracować informacje na temat korzystania z poszczególnych elementów naszej strony internetowej. Pomaga nam to w ciągłym ulepszaniu naszych usług i ich przyjazności dla użytkownika. Dzięki anonimizacji adresu IP interes użytkownika w zakresie ochrony jego danych osobowych zostaje odpowiednio uwzględniony."]
-    [:p "Nie są tworzone żadne profile, które dawałyby nam głębszy wgląd w zachowania użytkowników. Ocena jest wyłącznie anonimowa i zagregowana, tak aby nie można było wyciągać żadnych wniosków na temat poszczególnych osób."]]
+    [:p "Nie są tworzone żadne profile, które dawałyby nam głębszy wgląd w zachowania użytkowników. Ocena jest wyłącznie anonimowa i zagregowana, tak aby nie można było wyciągać żadnych wniosków na temat poszczególnych osób."]
+    [:p "Korzystanie z Matomo na naszej stronie internetowej opiera się na podstawie prawnej Art. 6 ust. 1 lit. f GDPR."]]
    :privacy.extended.facebook-pixel/title "Facebook Pixel"
    :privacy.extended.facebook-pixel/body
    [:<>

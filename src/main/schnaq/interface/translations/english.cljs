@@ -368,12 +368,14 @@
    :privacy.personal-data/lead "Which data is saved?"
    :privacy.personal-data/title "Personal Data"
    :privacy.personal-data/body
-   [:<> [:p "Per default we only save data that is needed to operate the service. There is no analysis of personal data, and anonymous data of your behavior on our website is only collected, when you explicitly allow us to do so. "]
-    [:p "If you want to support us and allow the analysis, we collect the data with Matomo and save it on our german servers. Matomo is a free and self-hosted alternative to commercial options for website analytics . We do not exchange this data with third parties."]]
+   [:<>
+    [:p "By default, only technically necessary data is collected. No evaluation of personal data takes place and your behaviour on our website is also only analysed anonymously."]
+    [:p "Your user behaviour is recorded with Matomo and stored on our servers in Germany. Matomo is a free and self-hosted alternative to commercial providers. We do not pass on any data to third parties with it."]]
    :privacy.localstorage/lead "What data do I send to the server?"
    :privacy.localstorage/title "Data Exchange"
    :privacy.localstorage/body
-   [:<> [:p "schnaq has no need for accounts. This way no personal data about you is saved on the server. Most of the interactions work through links. When you click on a link a part of it (the so called hash) is stored in your browser (in the localStorage). As soon as you go to schnaq.com again, your browser sends this hash back and you gain access to your created schnaqs. Alternatively you can send the links to yourself via email. This way you have all the data in your own hands."]
+   [:<>
+    [:p "schnaq has no need for accounts. This way no personal data about you is saved on the server. Most of the interactions work through links. When you click on a link a part of it (the so called hash) is stored in your browser (in the localStorage). As soon as you go to schnaq.com again, your browser sends this hash back and you gain access to your created schnaqs. Alternatively you can send the links to yourself via email. This way you have all the data in your own hands."]
     [:p "In difference to website-cookies we use the localStorage, which only saves data that is needed for the application to function for you.
          You can see the data in your localStorage by clicking the following button."]]
    :privacy.localstorage/show-data "Show my data"
@@ -426,8 +428,7 @@
       [:a {:href "https://en.wikipedia.org/wiki/Cross-site_request_forgery"}
        "here"]
       " be researched further."]
-     [:li "Login cookie (persistent cookie), which recognizes you as the user you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site."]
-     [:li "Analysis cookie (persistent cookie), which can optionally be set so that we can understand your behavior and interests anonymously. For more information, see the section on the use of Matomo."]]
+     [:li "Login cookie (persistent cookie), which recognises you as the user you logged in with. After 14 days, your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site. You can find our authentication server here: https://auth.schnaq.com"]]
     [:p "All cookies we use generate random strings that are used to match corresponding strings on our server."]]
 
    :privacy.extended.personal-data/title "Personal data"
@@ -446,7 +447,7 @@
    :privacy.extended.matomo/body
    [:<>
     [:h4 "Description and scope of data processing"]
-    [:p "We use the open source software tool Matomo (formerly PIWIK) on our website to analyze the use of our internet presence. For example, we are interested in which pages are accessed how often and whether smartphones, tablets or computers with large screens are used. The software sets a cookie on the user's computer (for cookies, see above). If individual pages of our website are called up, the following data is stored:"]
+    [:p "We use the open source software tool Matomo (formerly PIWIK) on our website to analyse the use of our internet presence. For example, we are interested in which pages are accessed how often and whether smartphones, tablets or computers with large screens are used. The software does not set a cookie and does not create a profile of visitors. If individual pages of our website are accessed, the following data is stored:"]
     [:ol
      [:li "Two bytes of the IP address of the calling system"]
      [:li "The accessed web page"]
@@ -458,7 +459,8 @@
     [:p "Matomo is used exclusively on schnaq servers. Personal data of the users is only stored there. The data is not passed on to third parties."]
     [:h4 "Purpose of data processing"]
     [:p "The processing of anonymized user data enables us to analyze the use of our website. By evaluating the data obtained, we are able to compile information about the use of the individual components of our website. This helps us to continuously improve our services and their user-friendliness. By anonymizing the IP address, the interest of the user in the protection of his personal data is sufficiently taken into account."]
-    [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]]
+    [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]
+    [:p "The use of Matomo on our homepage is based on the legal basis of Art. 6 para. 1 lit. f GDPR."]]
    :privacy.extended.facebook-pixel/title "Facebook Pixel"
    :privacy.extended.facebook-pixel/body
    [:<>

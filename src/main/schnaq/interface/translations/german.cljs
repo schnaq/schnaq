@@ -373,11 +373,16 @@
     [:p "Sollten noch Unklarheiten bei unserem Vorgehen mit deinen Daten bestehen, so kontaktiere uns gerne! Uns liegt Transparenz und Klarheit mit persönlichen Daten wirklich am Herzen und wir erklären dir bis zum letzten Bit was mit den Daten geschieht."]]
    :privacy.personal-data/lead "Welche Daten werden erhoben?"
    :privacy.personal-data/title "Persönliche Daten"
-   :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."]]
+   :privacy.personal-data/body
+   [:<>
+    [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur anonymisiert analysiert."]
+    [:p "Dein Nutzer:innenverhalten wird mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."]]
    :privacy.localstorage/lead "Welche Daten schicke ich an die Server?"
    :privacy.localstorage/title "Datenaustausch"
-   :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten von dir auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicke auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in deinem Browser (im LocalStorage) abgespeichert. Besuchst du dann schnaq erneut, schickt dein Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ kannst du dir die Zugangslinks per E-Mail schicken lassen und hältst so alle für den Betrieb notwendigen Daten selbst in der Hand."]
-                               [:p "Im Unterschied zu herkömmlichen Cookies, verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von dir an uns zurückschickt. Schaue selbst nach, welche Daten das genau sind, indem du auf den Button klickst."]]
+   :privacy.localstorage/body
+   [:<>
+    [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten von dir auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicke auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in deinem Browser (im LocalStorage) abgespeichert. Besuchst du dann schnaq erneut, schickt dein Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ kannst du dir die Zugangslinks per E-Mail schicken lassen und hältst so alle für den Betrieb notwendigen Daten selbst in der Hand."]
+    [:p "Im Unterschied zu herkömmlichen Cookies, verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von dir an uns zurückschickt. Schaue selbst nach, welche Daten das genau sind, indem du auf den Button klickst."]]
    :privacy.localstorage/show-data "Deine Daten anzeigen"
    :privacy.localstorage.notification/title "Diese Daten hat dein Browser gespeichert"
    :privacy.localstorage.notification/body "Hinweis: \"Kryptische\" Zeichenketten sind die Zugangscodes zu den schnaqs."
@@ -428,8 +433,7 @@
       [:a {:href "https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery"}
        "hier"]
       " weiter recherchiert werden."]
-     [:li "Login-Cookie (persistenter Cookie), welcher Sie als den:die Benutzer:in wiedererkennt, mit dem Sie sich eingeloggt haben. Nach 14 Tagen läuft Ihr Cookie ab und wird gelöscht. Wenn Sie diesen Cookie löschen, müssen Sie sich beim nächsten Besuch der Seite erneut einloggen."]
-     [:li "Analyse-Cookie (persistenter Cookie), welcher optional gesetzt werden kann, damit wir Ihr Verhalten und Ihre Interessen anonymisiert verstehen können. Weiteres dazu finden Sie in dem Abschnitt zur Verwendung von Matomo."]]
+     [:li "Login-Cookie (persistenter Cookie), welcher Sie als den:die Benutzer:in wiedererkennt, mit dem Sie sich eingeloggt haben. Nach 14 Tagen läuft Ihr Cookie ab und wird gelöscht. Wenn Sie diesen Cookie löschen, müssen Sie sich beim nächsten Besuch der Seite erneut einloggen. Unseren Authentifizierungsserver finden Sie hier: https://auth.schnaq.com"]]
     [:p "Alle von uns eingesetzten Cookies generieren zufällige Zeichenketten, die zum Abgleich mit korrespondierenden Zeichenketten auf unserem Server verwendet werden."]]
 
    :privacy.extended.personal-data/title "Persönliche Daten"
@@ -448,7 +452,7 @@
    :privacy.extended.matomo/body
    [:<>
     [:h4 "Beschreibung und Umfang der Datenverarbeitung"]
-    [:p "Wir nutzen auf unserer Website das Open-Source-Software-Tool Matomo (ehemals PIWIK) zur Analyse der Nutzung unseres Internet-Auftritts. Uns interessiert zum Beispiel, welche Seiten wie häufig aufgerufen werden und ob dabei Smartphones, Tablets oder Rechner mit großen Bildschirmen eingesetzt werden. Die Software setzt einen Cookie auf dem Rechner der Nutzer:innen (zu Cookies siehe bereits oben). Werden Einzelseiten unserer Website aufgerufen, so werden folgende Daten gespeichert:"]
+    [:p "Wir nutzen auf unserer Website das Open-Source-Software-Tool Matomo (ehemals PIWIK) zur Analyse der Nutzung unseres Internet-Auftritts. Uns interessiert zum Beispiel, welche Seiten wie häufig aufgerufen werden und ob dabei Smartphones, Tablets oder Rechner mit großen Bildschirmen eingesetzt werden. Die Software setzt keinen Cookie und erstellt kein Profil der Besucher:innen. Werden Einzelseiten unserer Website aufgerufen, so werden folgende Daten gespeichert:"]
     [:ol
      [:li "Zwei Bytes der IP-Adresse des aufrufenden Systems"]
      [:li "Die aufgerufene Webseite"]
@@ -460,7 +464,8 @@
     [:p "Matomo kommt ausschließlich auf Servern von schnaq zum Einsatz. Eine Speicherung der personenbezogenen Daten der Nutzer:innen findet nur dort statt. Eine Weitergabe der Daten an Dritte erfolgt nicht."]
     [:h4 "Zweck der Datenverarbeitung"]
     [:p "Die Verarbeitung der anonymisierten Daten der Nutzer:innen ermöglicht uns eine Analyse der Nutzung unserer Webseite. Wir sind in durch die Auswertung der gewonnen Daten in der Lage, Informationen über die Nutzung der einzelnen Komponenten unserer Webseite zusammenzustellen. Dies hilft uns dabei unsere Dienste und deren Nutzer:innenfreundlichkeit stetig zu verbessern. Durch die Anonymisierung der IP-Adresse wird dem Interesse der:die Nutzer:in an deren Schutz personenbezogener Daten hinreichend Rechnung getragen."]
-    [:p "Es werden keine Profile erstellt, die uns einen tieferen Einblick in das Nutzungsverhalten der einzelnen Nutzer:innen geben würden. Die Auswertung erfolgt ausschließlich anonymisiert und aggregiert, dass kein Schluss auf einzelne Personen zu ziehen ist."]]
+    [:p "Es werden keine Profile erstellt, die uns einen tieferen Einblick in das Nutzungsverhalten der einzelnen Nutzer:innen geben würden. Die Auswertung erfolgt ausschließlich anonymisiert und aggregiert, dass kein Schluss auf einzelne Personen zu ziehen ist."]
+    [:p "Der Einsatz von Matomo auf unserer Homepage erfolgt auf Rechtsgrundlage des Art. 6 Abs. 1 lit. f DSGVO."]]
    :privacy.extended.facebook-pixel/title "Facebook Pixel"
    :privacy.extended.facebook-pixel/body
    [:<>
