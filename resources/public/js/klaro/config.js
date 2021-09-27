@@ -224,7 +224,7 @@ var klaroConfig = {
     {
       name: 'facebook-pixel',
       title: 'Facebook Pixel',
-      description: 'Für Marketing',
+      description: 'Cookie von Facebook, verwendet für zielgruppenorientierte Werbung und Anzeigenmessungen.',
       purposes: ['analytics'],
     },
   ],
