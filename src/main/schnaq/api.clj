@@ -190,5 +190,6 @@
   (-main)
   (stop-server)
   ;; TODO reload nach einloggen nötig um aktuelle votes zu holen
+  ;; TODO man sieht die votes von dem anonymen user bevor erst nach refresh die des eingeloggten angezeigt werden.
   ;; TODO die downvoted und upvoted werte stimmen nicht in der selected card: http://localhost:8700/schnaq/f13138bf-c232-4749-bf8a-30b6f3a72b6a/statement/17592186049927
   :end)
