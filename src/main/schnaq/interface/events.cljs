@@ -147,10 +147,14 @@
 
 (rf/reg-event-fx
   :schnaq/load-by-share-hash
-  (fn [{:keys [db]} [_ share-hash]]
-    {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
-     :fx [(http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
-                              {:share-hash share-hash})]}))
+  ;; Explicit api-url is optional
+  (fn [{:keys [db]} [_ share-hash api-url]]
+    (let [request (partial http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
+                           {:share-hash share-hash})]
+      {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
+       :fx [(if api-url
+              (request [:ajax.error/to-console] api-url)
+              (request))]})))
 
 (rf/reg-event-fx
   :schnaq/add-visited!

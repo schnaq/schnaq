@@ -21,6 +21,10 @@
            (or (System/getenv "EMBEDDED") false))
    :cljs (goog-define embedded? false))
 
+(def default-staging-api-url
+  "Default route to the staging API."
+  "https://api.staging.schnaq.com")
+
 (defn s3-buckets
   "Returns bucket names"
   [bucket-name]

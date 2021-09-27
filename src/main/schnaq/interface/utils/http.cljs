@@ -17,11 +17,14 @@
    (xhrio-request db method path on-success params [:ajax.error/to-console]))
   ([db method path on-success params on-failure]
    [map? ::http-methods string? vector? map? vector? :ret vector?]
+   (xhrio-request db method path on-success params on-failure shared-config/api-url))
+  ([db method path on-success params on-failure api-url]
+   [map? ::http-methods string? vector? map? vector? string? :ret vector?]
    (let [path (if (.startsWith path "/") path (str "/" path))
          headers (cond-> (auth/authentication-header db)
                          (#{:post :put :delete} method) (assoc "X-Schnaq-CSRF" "T25seSBlbGVwaGFudHMgc2hvdWxkIG93biBpdm9yeS4="))]
      [:http-xhrio {:method method
-                   :uri (str shared-config/api-url path)
+                   :uri (str api-url path)
                    :format (ajax/transit-request-format)
                    :params params
                    :headers headers
