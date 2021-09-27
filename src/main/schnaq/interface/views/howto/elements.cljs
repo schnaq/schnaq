@@ -46,7 +46,7 @@
         hide? (contains? hidden-tags hide-tag)]
     (when-not hide?
       [common/delayed-fade-in
-       [:div.quick-how-to
+       [:article.quick-how-to
         [:div.row.align-items-center
          [:div.col-12.col-lg-7
           [:div.mb-2 [:i {:class (str "m-auto fas " (fa :info-question))}]]
