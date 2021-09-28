@@ -1,34 +1,24 @@
 (ns schnaq.interface.views.startpage.pricing
-  (:require [ghostwheel.core :refer [>defn-]]
+  (:require [cljs.spec.alpha :as s]
+            [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [reitit.frontend.easy :as reititfe]
             [schnaq.interface.components.icons :refer [fa]]
-            [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.pages :as pages]
-            [cljs.spec.alpha :as s]))
+            [schnaq.interface.views.pages :as pages]))
 
 (def ^:private coming-soon
-  ["K.I. Stimmungsanalyse"
-   "Sprache-zu-Text"])
+  (rest (labels :pricing.features/upcoming)))
 
 (def ^:private starter-features
-  ["In Deutschland gehostet"
-   "Diskussionen erstellen"
-   "Automatische Mindmap"
-   "Teilbar per Link"
-   "Text- und Bild-Export"])
+  (rest (labels :pricing.features/starter)))
 
-(def ^:private paid-features
-  ["Analyse-Dashboard"
-   "K.I. Zusammenfassungen"
-   "Persönlicher Bereich"])
+(def ^:private business-features
+  (rest (labels :pricing.features/business)))
 
 (def ^:private enterprise-features
-  ["Einbettung in bestehende Systeme"
-   "SSO Login (OpenID, LDAP, ...)"
-   "Whitelabeling"
-   "On-Premise"])
+  (rest (labels :pricing.features/enterprise)))
 
 (>defn- add-class-to-feature
   [feature-list class]
@@ -45,27 +35,14 @@
 
 ;; -----------------------------------------------------------------------------
 
-(defn- card [title subtitle price description features upcoming-features options]
-  [:article.card.shadow-sm.mb-2 options
-   [:div.card-body
-    [:div {:style {:height "17rem"}}
-     [:h3.card-title.text-center title]
-     [:h6.card-subtitle.mb-3.text-muted.text-center subtitle]
-     [:p.text-center price]
-     [:p.card-text.text-justify description]]
-    [:ul.pricing-feature-list
-     (for [feature features]
-       [build-feature-list-items title feature])
-     (for [feature (add-class-to-feature upcoming-features "text-muted")]
-       [build-feature-list-items title feature])]
-    [:a.card-link {:href "#"} "Card link"]]])
-
-(defn- price-tag [price per-account?]
+(defn- price-tag
+  "Unify the price-tag design."
+  [price per-account?]
   [:<>
    [:span.display-4 price " €"]
    [:span (labels :pricing.units/per-month)]
    (when per-account?
-     [:p "pro aktivem Account"])])
+     [:p (gstring/format "%s. %s" (labels :pricing.units/per-active-account) (labels :pricing.notes/with-vat))])])
 
 (defn- intro
   "Welcome new users to the pricing page."
@@ -74,47 +51,82 @@
    [:h2 (labels :pricing.intro/heading)]
    [:p.lead (labels :pricing.intro/lead)]])
 
-(defn- mark-explanation []
+(defn- mark-explanation
+  "Explain the check marks."
+  []
   [:section.pl-4.pt-2
-   [:p.h6 [:i.fa-lg.text-primary.pr-2 {:class (fa :check/normal)}] "Bereits implementiert"]
-   [:p.h6 [:i.fa-lg.text-muted.pr-2 {:class (fa :check/normal)}] "Bald verfügbar"]])
+   [:p.h6 [:i.fa-lg.text-primary.pr-2 {:class (fa :check/normal)}]
+    (labels :pricing.features/implemented)]
+   [:p.h6 [:i.fa-lg.text-muted.pr-2 {:class (fa :check/normal)}]
+    (labels :pricing.features/to-be-implemented)]])
 
-(defn- pricings []
+(defn- cta-button
+  "Component to build the call-to-action button in a tier card."
+  [label class fn]
+  [:p.text-center.pt-4
+   [:a.btn {:class class :href fn} label]])
+
+(defn- card
+  "Build a single tier card."
+  [title subtitle price description features upcoming-features cta-button options]
+  (let [title-label (labels title)]
+    [:article.card.shadow-sm.mb-2 options
+     [:div.card-body
+      [:div {:style {:height "17rem"}}
+       [:h3.card-title.text-center title-label]
+       [:h6.card-subtitle.mb-3.text-muted.text-center (labels subtitle)]
+       [:p.text-center price]
+       [:p.card-text.text-justify (labels description)]]
+      [:ul.pricing-feature-list
+       (for [feature features]
+         [build-feature-list-items title-label feature])
+       (for [feature (add-class-to-feature upcoming-features "text-muted")]
+         [build-feature-list-items title-label feature])]
+      cta-button]]))
+
+(defn- free-tier-card
+  "Display the free tier card."
+  []
+  [card
+   :pricing.free-tier/title :pricing.free-tier/subtitle
+   [price-tag 0]
+   :pricing.free-tier/description
+   (add-class-to-feature (concat starter-features ["Dauerhaft kostenfrei"]) "text-primary")
+   nil
+   [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (reititfe/href :routes.schnaq/create)]])
+
+(defn- business-tier-card
+  "Display the business tier card."
+  []
+  [card
+   :pricing.business-tier/title :pricing.business-tier/subtitle
+   [price-tag config/pricing-business-tier true]
+   :pricing.business-tier/description
+   (add-class-to-feature (concat starter-features business-features) "text-primary")
+   coming-soon
+   [cta-button (labels :pricing.business-tier/call-to-action) "btn-secondary" "mailto:info@schnaq.com"]
+   {:class "border-primary shadow-lg"}])
+
+(defn- enterprise-tier-card
+  "Show the enterprise tier card."
+  []
+  [card
+   :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle
+   [:span.display-5 "Auf Anfrage"]
+   :pricing.enterprise-tier/description
+   (add-class-to-feature (concat starter-features business-features enterprise-features) "text-primary")
+   coming-soon
+   [cta-button (labels :pricing.enterprise-tier/call-to-action) "btn-primary" "mailto:info@schnaq.com"]])
+
+(defn- tier-cards []
   (let [classes "col-12 col-sm-6 col-lg-4"]
     [:section.row
      [:div {:class classes}
-      [card "Starter" "Individuell" [price-tag 0] "Starte direkt mit deinen eigenen Diskussionen!" (add-class-to-feature (conj starter-features "Dauerhaft kostenfrei") "text-primary") nil]
+      [free-tier-card]
+      [:p.p-2.text-muted (labels :pricing.free-tier/beta-notice)]
       [mark-explanation]]
-     [:div {:class classes}
-      [card "Business" "Bring dein Team zusammen" [price-tag 6 true] "Lasse dich von unserer K.I. unterstützen und erfahre mehr zu deinen Diskussionen!" (add-class-to-feature (concat starter-features paid-features) "text-primary") coming-soon {:class "border-primary shadow-lg"}]]
-     [:div {:class classes}
-      [card "Enterprise" "Für deine Institution" [:span.display-5 "Auf Anfrage"] "Möchtest du deine gesamte Firma / Institution / Universität anbinden? Dann bist du hier richtig!" (add-class-to-feature (concat starter-features paid-features enterprise-features) "text-primary") coming-soon]]]))
-
-(defn- free-tier-card
-  []
-  [:div.card.shadow-sm.tier-card
-   [:div.card-body.d-flex.flex-column
-    [:h3.card-title.text-center "Starter"]
-    [:p.card-text (labels :pricing.free-tier/description)]
-    [:p.card-text.text-center.display-2 "0 €"]
-    [:p.text-muted.text-center (labels :pricing.free-tier/beta-notice)]
-    [:div.text-center.mt-auto
-     [:a.btn.button-primary
-      {:href (reititfe/href :routes.schnaq/create)}
-      [:p.card-text (labels :pricing.free-tier/call-to-action)]]]]])
-
-(defn- business-tier-card
-  []
-  [:div.card.shadow-sm.tier-card
-   [:div.card-body.d-flex.flex-column
-    [:h3.card-title.text-center "Business"]
-    [:p.card-text (labels :pricing.business-tier/description)]
-    [:p.card-text.text-center [:span.display-2 "79 €"] [:span (labels :pricing.units/per-month)]]
-    [:p.text-muted.text-center (labels :pricing.notes/with-vat)]
-    [:p.text-muted.text-center (labels :pricing.notes/yearly-rebate)]
-    [:div.text-center.mt-auto
-     [:button.btn.button-primary {:disabled true}
-      [:p.card-text (labels :pricing.business-tier/call-to-action)]]]]])
+     [:div {:class classes} [business-tier-card]]
+     [:div {:class classes} [enterprise-tier-card]]]))
 
 (defn- trial-box
   []
@@ -196,11 +208,10 @@
     :page/vertical-header? true}
    [:div.container
     [intro]
-    [pricings]
+    [tier-cards]
     [newsletter]
     [trial-box]
     [schnaq-features]
-    #_[comparison]
     [faq]]])
 
 (defn pricing-view
