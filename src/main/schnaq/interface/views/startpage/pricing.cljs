@@ -1,9 +1,94 @@
 (ns schnaq.interface.views.startpage.pricing
-  (:require [reitit.frontend.easy :as reititfe]
+  (:require [ghostwheel.core :refer [>defn-]]
+            [goog.string :as gstring]
+            [reitit.frontend.easy :as reititfe]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [cljs.spec.alpha :as s]))
+
+(def ^:private coming-soon
+  ["K.I. Stimmungsanalyse"
+   "Sprache-zu-Text"])
+
+(def ^:private starter-features
+  ["In Deutschland gehostet"
+   "Diskussionen erstellen"
+   "Automatische Mindmap"
+   "Teilbar per Link"
+   "Text- und Bild-Export"])
+
+(def ^:private paid-features
+  ["Analyse-Dashboard"
+   "K.I. Zusammenfassungen"
+   "Persönlicher Bereich"])
+
+(def ^:private enterprise-features
+  ["Einbettung in bestehende Systeme"
+   "SSO Login (OpenID, LDAP, ...)"
+   "Whitelabeling"
+   "On-Premise"])
+
+(>defn- add-class-to-feature
+  [feature-list class]
+  [(s/coll-of string?) string? :ret (s/tuple string? string?)]
+  (for [feature feature-list]
+    [feature class]))
+
+(defn- build-feature-list-items [title [feature class]]
+  (with-meta
+    [:li.list-group-item
+     [:i.mr-2 {:class (str class " " (fa :check/normal))}] feature]
+    {:key (gstring/format "feature-list-%s-%s" title feature)}))
+
+
+;; -----------------------------------------------------------------------------
+
+(defn- card [title subtitle price description features upcoming-features options]
+  [:article.card.shadow-sm.mb-2 options
+   [:div.card-body
+    [:div {:style {:height "17rem"}}
+     [:h3.card-title.text-center title]
+     [:h6.card-subtitle.mb-3.text-muted.text-center subtitle]
+     [:p.text-center price]
+     [:p.card-text.text-justify description]]
+    [:ul.pricing-feature-list
+     (for [feature features]
+       [build-feature-list-items title feature])
+     (for [feature (add-class-to-feature upcoming-features "text-muted")]
+       [build-feature-list-items title feature])]
+    [:a.card-link {:href "#"} "Card link"]]])
+
+(defn- price-tag [price per-account?]
+  [:<>
+   [:span.display-4 price " €"]
+   [:span (labels :pricing.units/per-month)]
+   (when per-account?
+     [:p "pro aktivem Account"])])
+
+(defn- intro
+  "Welcome new users to the pricing page."
+  []
+  [:section.text-center.pb-5
+   [:h2 (labels :pricing.intro/heading)]
+   [:p.lead (labels :pricing.intro/lead)]])
+
+(defn- mark-explanation []
+  [:section.pl-4.pt-2
+   [:p.h6 [:i.fa-lg.text-primary.pr-2 {:class (fa :check/normal)}] "Bereits implementiert"]
+   [:p.h6 [:i.fa-lg.text-muted.pr-2 {:class (fa :check/normal)}] "Bald verfügbar"]])
+
+(defn- pricings []
+  (let [classes "col-12 col-sm-6 col-lg-4"]
+    [:section.row
+     [:div {:class classes}
+      [card "Starter" "Individuell" [price-tag 0] "Starte direkt mit deinen eigenen Diskussionen!" (add-class-to-feature (conj starter-features "Dauerhaft kostenfrei") "text-primary") nil]
+      [mark-explanation]]
+     [:div {:class classes}
+      [card "Business" "Bring dein Team zusammen" [price-tag 6 true] "Lasse dich von unserer K.I. unterstützen und erfahre mehr zu deinen Diskussionen!" (add-class-to-feature (concat starter-features paid-features) "text-primary") coming-soon {:class "border-primary shadow-lg"}]]
+     [:div {:class classes}
+      [card "Enterprise" "Für deine Institution" [:span.display-5 "Auf Anfrage"] "Möchtest du deine gesamte Firma / Institution / Universität anbinden? Dann bist du hier richtig!" (add-class-to-feature (concat starter-features paid-features enterprise-features) "text-primary") coming-soon]]]))
 
 (defn- free-tier-card
   []
@@ -39,18 +124,14 @@
     [:p (labels :pricing.trial/description)]
     [:p.text-sm.text-muted (labels :pricing.trial.temporary/deactivation)]]])
 
-(defn- pricing-box
+(defn- newsletter
   "A box displaying the different subscription tiers we offer."
   []
-  [:<>
-   [:div.card-deck.pt-3
-    [free-tier-card]
-    [business-tier-card]]
-   [:p.text-dark-blue.display-6.text-center.pt-2
-    (labels :pricing.newsletter/lead)
-    [:a.btn.btn-lg.btn-link
-     {:href "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
-     (labels :pricing.newsletter/name)]]])
+  [:p.text-dark-blue.display-6.text-center.pt-2
+   (labels :pricing.newsletter/lead)
+   [:a.btn.btn-lg.btn-link
+    {:href "https://schnaq.us8.list-manage.com/subscribe?u=adbf5722068bcbcc4c7c14a72&id=407d47335d"}
+    (labels :pricing.newsletter/name)]])
 
 (defn- feature-card
   [title description]
@@ -76,88 +157,33 @@
 (defn- check-item
   "List-item with checkmark bullet-point."
   [text]
-  [:li [:span.fa-li [:i {:class (str "fas " (fa :check/normal))}]] text])
-
-(defn- competitor-box
-  "Comparison box for a competitor."
-  [name img-key price description]
-  [:div.row.py-2.mb-3.comparison-box.shadow-sm
-   [:div.col-3.d-flex
-    [:img.img-fluid.pricing-logo.align-self-center {:src (img-path img-key) :alt (str name " logo")}]]
-   [:div.col-9
-    [:h3 name]
-    [:p [:span.display-6 (str price (labels :pricing.competitors/per-month-per-user))] [:br]
-     description]]])
-
-(defn- comparison
-  "Show that we are cheaper than user-based alternatives. Also drop important search keyword
-  'schnaq vergleich <some competitors>'"
-  []
-  [:div.py-5
-   [:h2.text-center.pb-1.display-4 (labels :pricing.comparison/heading)]
-   [:h3.text-center.display-6 (labels :pricing.comparison/subheading)]
-   [:div.row.pt-4.d-flex.mx-1.mx-lg-0
-    [:div.col-12.col-lg-5.p-0
-     [:div.row.comparison-box.shadow-sm.p-2
-      [:div.col-3.d-flex
-       [:img.img-fluid.pricing-logo.align-self-center {:src (img-path :schnaqqifant/original) :alt "schnaq logo"}]]
-      [:div.col-9
-       [:h3 "schnaq"]
-       [:p.display-6 (labels :pricing.comparison.schnaq/price-point)]]
-      [:div.col-12.mb-4
-       [:hr]
-       [:ul.fa-ul.display-6.pricing-checklist
-        [check-item (labels :pricing.comparison.schnaq/brainstorm)]
-        [check-item (labels :pricing.comparison.schnaq/decision-making)]
-        [check-item (labels :pricing.comparison.schnaq/knowledge-db)]
-        [check-item (labels :pricing.comparison.schnaq/async)]
-        [check-item (labels :pricing.comparison.schnaq/mindmap)]
-        [check-item (labels :pricing.comparison.schnaq/analysis)]]]]
-     [:div.row.comparison-box.shadow-sm.mt-3
-      [:div.col-12
-       [:p.text-center.py-2 [:span.display-6 [:span.display-5 "79 €"] (labels :pricing.comparison.schnaq/flatrate)] [:br]
-        (labels :pricing.comparison.schnaq/person-20) [:br]
-        (labels :pricing.comparison.schnaq/person-50) [:br]
-        (labels :pricing.comparison.schnaq/person-100)]]]]
-    [:div.col-12.col-lg-2.text-center.align-self-center
-     [:p.pricing-vs.font-weight-bold.mt-3 (labels :pricing.comparison/compared-to)]]
-    [:div.col-12.col-lg-5.p-0
-     [competitor-box "Miro" :pricing.others/miro "6,80" (labels :pricing.comparison.miro/description)]
-     [competitor-box "Loomio" :pricing.others/loomio "2,60" (labels :pricing.comparison.loomio/description)]
-     [competitor-box "Confluence" :pricing.others/confluence "4,30" (labels :pricing.comparison.confluence/description)]
-     [:div.row.comparison-box.shadow-sm.mt-3
-      [:div.col-12
-       [:p.text-center.py-2 [:span.display-6 [:span.display-5 "137 €"] (labels :pricing.comparison.competitor/person-10)]
-        [:br]
-        (labels :pricing.comparison.competitor/person-20) [:br]
-        (labels :pricing.comparison.competitor/person-50) [:br]
-        (labels :pricing.comparison.competitor/person-100)]]]]]])
+  [:li [:span.fa-li [:i {:class (fa :check/normal)}]] text])
 
 (defn- faq
   "Question, which are asked often and alleviate fears of subscribing."
   []
   [:div.py-5
-   [:h2.text-center.display-4.pb-5 (labels :pricing.faq/heading)]
+   [:h2.text-center.display-5.pb-5 (labels :pricing.faq/heading)]
    [:section
-    [:h3.text-center.display-5.font-weight-bold.text-dark-blue
+    [:h3.text-center.font-weight-bold.text-dark-blue
      (labels :pricing.faq.terminate/heading)]
-    [:p.display-6.text-center.pb-3 (labels :pricing.faq.terminate/body)]]
+    [:p.lead.text-center.pb-3 (labels :pricing.faq.terminate/body)]]
    [:section
-    [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
+    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
      (labels :pricing.faq.extra-price/heading)]
-    [:p.display-6.text-center.pb-3 (labels :pricing.faq.extra-price/body)]]
+    [:p.lead.text-center.pb-3 (labels :pricing.faq.extra-price/body)]]
    [:section
-    [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
+    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
      (labels :pricing.faq.trial-time/heading)]
-    [:p.display-6.text-center.pb-3 (labels :pricing.faq.trial-time/body)]]
+    [:p.lead.text-center.pb-3 (labels :pricing.faq.trial-time/body)]]
    [:section
-    [:h3.text-center.display-5.font-weight-bold.text-dark-blue
+    [:h3.text-center.font-weight-bold.text-dark-blue
      (labels :pricing.faq.longer-trial/heading)]
-    [:p.display-6.text-center.pb-3 (labels :pricing.faq.longer-trial/body)]]
+    [:p.lead.text-center.pb-3 (labels :pricing.faq.longer-trial/body)]]
    [:section
-    [:h3.text-center.display-5.pt-3.font-weight-bold.text-dark-blue
+    [:h3.text-center.pt-3.font-weight-bold.text-dark-blue
      (labels :pricing.faq.privacy/heading)]
-    [:p.display-6.text-center.pb-3
+    [:p.lead.text-center.pb-3
      (labels :pricing.faq.privacy/body-1)
      [:a {:href (reititfe/href :routes/privacy)} (labels :pricing.faq.privacy/body-2)]
      (labels :pricing.faq.privacy/body-3)]]])
@@ -166,13 +192,15 @@
   "A full page depicting our pricing and related items."
   []
   [pages/with-nav-and-header
-   {:page/title (labels :pricing/headline)
-    :page/heading [:span.d-block.text-center (labels :pricing/headline)]}
+   {:page/heading (labels :pricing/headline)
+    :page/vertical-header? true}
    [:div.container
-    [pricing-box]
+    [intro]
+    [pricings]
+    [newsletter]
     [trial-box]
     [schnaq-features]
-    [comparison]
+    #_[comparison]
     [faq]]])
 
 (defn pricing-view
