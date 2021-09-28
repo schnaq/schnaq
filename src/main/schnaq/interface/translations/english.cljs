@@ -795,6 +795,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.free-tier/description "For small teams and private use. The Starter Plan is the perfect introduction to structured discussions!"
    :pricing.free-tier/beta-notice "After the beta phase, the plan is still available for up to five users per team."
    :pricing.free-tier/call-to-action "Start Free of Charge"
+   :pricing.free-tier/for-free "Permanently free of charge"
    :pricing.business-tier/title "Business"
    :pricing.business-tier/subtitle "Bring your team together"
    :pricing.business-tier/description "Let our A.I. support you and learn more about your discussions!"
@@ -803,6 +804,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.enterprise-tier/subtitle "Big plans?"
    :pricing.enterprise-tier/description "Do you want to connect your entire company, a club, institution or even a whole university? Then you've come to the right place!"
    :pricing.enterprise-tier/call-to-action "Send Inquiry"
+   :pricing.enterprise-tier/on-request "On Request"
    :pricing.features/implemented "Already implemented"
    :pricing.features/to-be-implemented "Soon available"
    :pricing.features/starter ["Hosted in Germany" "Create Discussions" "Automatic Mindmap" "Shareable by Link" "Text and Image Export"]

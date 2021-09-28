@@ -802,6 +802,7 @@
    :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der perfekte Einstieg in strukturierte Diskussionen!"
    :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu five Nutzer:innen pro Team"
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
+   :pricing.free-tier/for-free "Dauerhaft kostenfrei"
    :pricing.business-tier/title "Business"
    :pricing.business-tier/subtitle "Bringe dein Team zusammen"
    :pricing.business-tier/description "Lasse dich von unserer K.I. unterstützen und erfahre mehr zu deinen Diskussionen!"
@@ -810,6 +811,7 @@
    :pricing.enterprise-tier/subtitle "Großes vor?"
    :pricing.enterprise-tier/description "Möchtest du dein gesamtes Unternehmen, einen Verein, Institution, ganze Universitäten anbinden? Dann bist du hier richtig!"
    :pricing.enterprise-tier/call-to-action "Anfrage senden"
+   :pricing.enterprise-tier/on-request "Auf Anfrage"
    :pricing.features/implemented "Bereits implementiert"
    :pricing.features/to-be-implemented "Bald verfügbar"
    :pricing.features/starter ["In Deutschland gehostet" "Diskussionen erstellen" "Automatische Mindmap" "Teilbar per Link" "Text- und Bild-Export"]

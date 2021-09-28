@@ -97,7 +97,7 @@
    :pricing.free-tier/title :pricing.free-tier/subtitle
    [price-tag 0]
    :pricing.free-tier/description
-   (add-class-to-feature (concat (starter-features) ["Dauerhaft kostenfrei"]) "text-primary")
+   (add-class-to-feature (concat (starter-features) [(labels :pricing.free-tier/for-free)]) "text-primary")
    nil
    [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (reititfe/href :routes.schnaq/create)]])
 
@@ -118,7 +118,7 @@
   []
   [tier-card
    :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle
-   [:span.display-5 "Auf Anfrage"]
+   [:span.display-5 (labels :pricing.enterprise-tier/on-request)]
    :pricing.enterprise-tier/description
    (add-class-to-feature (concat (starter-features) (business-features) (enterprise-features)) "text-primary")
    (coming-soon)
