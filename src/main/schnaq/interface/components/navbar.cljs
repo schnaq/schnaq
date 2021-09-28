@@ -1,5 +1,6 @@
 (ns schnaq.interface.components.navbar
-  (:require [re-frame.core :as rf]
+  (:require [ghostwheel.core :refer [>defn]]
+            [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.language :as language]
@@ -34,3 +35,11 @@
   [tooltip/text
    (labels :nav.buttons/language-toggle)
    [:span [language-dropdown show-label? options]]])
+
+(>defn navbar-button
+  "Build a button for the navbar. Takes a label as a keyword and anything, which
+  can be passed to an anchor's href."
+  [label href]
+  [keyword? any? :ret vector?]
+  [:a.nav-link {:href href :role "button"}
+   (labels label)])
