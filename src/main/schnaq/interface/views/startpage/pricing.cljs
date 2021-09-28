@@ -171,11 +171,6 @@
     [feature-card (labels :pricing.features.mindmap/heading) (labels :pricing.features.mindmap/content)]]
    [:p.text-sm.text-muted (labels :pricing.features/disclaimer)]])
 
-(defn- check-item
-  "List-item with checkmark bullet-point."
-  [text]
-  [:li [:span.fa-li [:i {:class (fa :check/normal)}]] text])
-
 (defn- faq
   "Question, which are asked often and alleviate fears of subscribing."
   []

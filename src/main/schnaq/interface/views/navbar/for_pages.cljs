@@ -3,7 +3,6 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
-            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
