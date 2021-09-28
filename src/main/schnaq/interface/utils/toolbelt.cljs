@@ -88,3 +88,11 @@
   (let [options (oget selection :options)
         selection-index (str (oget selection :selectedIndex))]
     (oget+ options selection-index :value)))
+
+(defn slugify
+  "Make a slug from a title with an option limit on the number of words.
+  For example: (slugify \"This is sparta\") => this-is-sparta"
+  [title & {:keys [limit]}]
+  (let [tokens (map #(string/lower-case %) (string/split title #"\s"))]
+    (string/join "-" (take (or limit (count tokens)) tokens))))
+

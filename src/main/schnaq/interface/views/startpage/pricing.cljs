@@ -6,6 +6,7 @@
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
+            [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]))
 
 (defn- label-builder
@@ -30,14 +31,6 @@
   (for [feature feature-list]
     [feature class]))
 
-(defn- build-feature-list-items
-  "Build items for the feature list."
-  [title [feature class]]
-  (with-meta
-    [:li.list-group-item
-     [:i.mr-2 {:class (str class " " (fa :check/normal))}] feature]
-    {:key (gstring/format "feature-list-%s-%s" title feature)}))
-
 
 ;; -----------------------------------------------------------------------------
 
@@ -48,7 +41,7 @@
    [:span.display-4 price " €"]
    [:span (labels :pricing.units/per-month)]
    (when per-account?
-     [:p (gstring/format "%s. %s" (labels :pricing.units/per-active-account) (labels :pricing.notes/with-vat))])])
+     [:<> [:br] [:span (gstring/format "%s. %s" (labels :pricing.units/per-active-account) (labels :pricing.notes/with-vat))]])])
 
 (defn- intro
   "Welcome new users to the pricing page."
@@ -69,7 +62,7 @@
 (defn- cta-button
   "Component to build the call-to-action button in a tier card."
   [label class fn]
-  [:p.text-center.pt-4
+  [:div.text-center.pt-4
    [:a.btn {:class class :href fn} label]])
 
 (defn- tier-card
@@ -84,10 +77,16 @@
        [:p.text-center price]
        [:p.card-text.text-justify (labels description)]]
       [:ul.pricing-feature-list
-       (for [feature features]
-         [build-feature-list-items title-label feature])
-       (for [feature (add-class-to-feature upcoming-features "text-muted")]
-         [build-feature-list-items title-label feature])]
+       (for [[feature class] features]
+         (with-meta
+           [:li.list-group-item
+            [:i.mr-2 {:class (str class " " (fa :check/normal))}] feature]
+           {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))
+       (for [[feature class] (add-class-to-feature upcoming-features "text-muted")]
+         (with-meta
+           [:li.list-group-item
+            [:i.mr-2 {:class (str class " " (fa :check/normal))}] feature]
+           {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]
       cta-button]]))
 
 (defn- free-tier-card
