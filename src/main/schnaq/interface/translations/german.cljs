@@ -795,17 +795,30 @@
    :graph.settings/stabilize "Stabilisiere Mindmap"
 
    ;; Pricing Page
-   :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der
-     perfekte Einstieg in strukturierte Wissensgenerierung."
-   :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu 5 Nutzer:innen pro Team"
+   :pricing.intro/heading "Bald geht es los!"
+   :pricing.intro/lead "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne!"
+   :pricing.free-tier/title "Starter"
+   :pricing.free-tier/subtitle "Individuell"
+   :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der perfekte Einstieg in strukturierte Diskussionen!"
+   :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu five Nutzer:innen pro Team"
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
-   :pricing.business-tier/description "Ob 10 oder 50 Nutzer:innen – der Preis ist der gleiche.
-      Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle,
-      die strukturiert Wissen sammeln möchten."
+   :pricing.business-tier/title "Business"
+   :pricing.business-tier/subtitle "Bringe dein Team zusammen"
+   :pricing.business-tier/description "Lasse dich von unserer K.I. unterstützen und erfahre mehr zu deinen Diskussionen!"
+   :pricing.business-tier/call-to-action "Beta-Anfrage stellen"
+   :pricing.enterprise-tier/title "Enterprise"
+   :pricing.enterprise-tier/subtitle "Großes vor?"
+   :pricing.enterprise-tier/description "Möchtest du dein gesamtes Unternehmen, einen Verein, Institution, ganze Universitäten anbinden? Dann bist du hier richtig!"
+   :pricing.enterprise-tier/call-to-action "Anfrage senden"
+   :pricing.features/implemented "Bereits implementiert"
+   :pricing.features/to-be-implemented "Bald verfügbar"
+   :pricing.features/starter ["In Deutschland gehostet" "Diskussionen erstellen" "Automatische Mindmap" "Teilbar per Link" "Text- und Bild-Export"]
+   :pricing.features/business ["Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich"]
+   :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise"]
+   :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Sprache-zu-Text"]
    :pricing.units/per-month "/ Monat"
+   :pricing.units/per-active-account "pro aktivem Account"
    :pricing.notes/with-vat "zzgl. MwSt."
-   :pricing.notes/yearly-rebate "Bei jährlicher Zahlweise im Voraus 15% Rabatt"
-   :pricing.business-tier/call-to-action "Verfügbar ab 01.01.2021"
    :pricing.trial/call-to-action "30 Tage Business testen"
    :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
    :pricing.trial.temporary/deactivation "Verfügbar ab 01.11.2021"

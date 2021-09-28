@@ -791,16 +791,30 @@
    :graph.settings/stabilize "Ustabilizuj mapę myśli"
 
    ;; Pricing Page
-   :pricing.free-tier/description "Dla małych zespołów i do użytku prywatnego. Plan Starter to doskonałe wprowadzenie do ustrukturyzowanego tworzenia wiedzy."
-   :pricing.free-tier/beta-notice "Po zakończeniu fazy beta, plan jest nadal dostępny dla maksymalnie 5 użytkowników na zespół."
+   :pricing.intro/heading "Wkrótce się zacznie!"
+   :pricing.intro/lead "Już wkrótce będziesz mógł zarezerwować swoją taryfę tutaj. Czy chcieliby Państwo wziąć udział w naszej wersji beta i przetestować taryfę biznesową na wyłączność i bezpłatnie? Proszę się z nami skontaktować!"
+   :pricing.free-tier/title "Starter"
+   :pricing.free-tier/subtitle "Indywidualnie"
+   :pricing.free-tier/description "Dla małych zespołów i do użytku prywatnego. Plan startowy jest doskonałym wprowadzeniem do dyskusji strukturalnych!"
+   :pricing.free-tier/beta-notice "Po zakończeniu fazy beta, plan jest nadal dostępny dla maksymalnie pięciu użytkowników na zespół."
    :pricing.free-tier/call-to-action "Rozpocznij bezpłatnie"
-   :pricing.business-tier/description "Czy 10 czy 50 użytkowników - cena jest taka sama.
-   Odpowiednie dla firm, stowarzyszeń, instytucji edukacyjnych i wszystkich innych,
-   którzy chcą gromadzić wiedzę w uporządkowany sposób."
+   :pricing.business-tier/title "Business"
+   :pricing.business-tier/subtitle "Zbierz swój zespół"
+   :pricing.business-tier/description "Pozwól, aby nasz A.I. wspierał Cię i dowiedział się więcej o Twoich dyskusjach!"
+   :pricing.business-tier/call-to-action "Zgłoś wniosek Beta"
+   :pricing.enterprise-tier/title "Enterprise"
+   :pricing.enterprise-tier/subtitle "Wielkie plany?"
+   :pricing.enterprise-tier/description "Chcesz połączyć całą firmę, klub, instytucję lub nawet całą uczelnię? W takim razie trafiłeś we właściwe miejsce!"
+   :pricing.enterprise-tier/call-to-action "Wyślij zapytanie"
+   :pricing.features/implemented "Już wdrożone"
+   :pricing.features/to-be-implemented "Wkrótce dostępne"
+   :pricing.features/starter ["Hosting w Niemczech" "Tworzenie dyskusji" "Automatyczna Mindmap" "Udostępnianie przez link" "Eksport tekstu i obrazu"]
+   :pricing.features/business ["Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista"]
+   :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
+   :pricing.features/upcoming ["Analiza nastrojów A.I." "Przekształcanie mowy na tekst"]
    :pricing.units/per-month "/ Miesiąc"
+   :pricing.units/per-active-account "dla rachunku aktywów"
    :pricing.notes/with-vat "plus VAT."
-   :pricing.notes/yearly-rebate "15% zniżki za roczną płatność z góry"
-   :pricing.business-tier/call-to-action "Dostępne od 01.01.2021 r."
    :pricing.trial/call-to-action "Test Business przez 30 dni"
    :pricing.trial/description "Karta kredytowa nie jest konieczna! Możliwość odwołania w dowolnym momencie."
    :pricing.trial.temporary/deactivation "Dostępne od 01.11.2021 r."

@@ -788,16 +788,30 @@ Now we write down questions and discuss them and can still understand what we ha
    :graph.settings/stabilize "Stabilize Mindmap"
 
    ;; Pricing Page
-   :pricing.free-tier/description "For small teams and private parties. The starter plan is the perfect entry
-         into structured idea generation."
-   :pricing.free-tier/beta-notice "This plan will be still available after the beta-phase for teams of up to 5 members."
-   :pricing.free-tier/call-to-action "Start free of charge"
-   :pricing.business-tier/description "Whether 10 or 50 members – the price stays the same.
-      Perfect for companies, clubs, educational institutions and everyone looking to structure their knowledge."
+   :pricing.intro/heading "Soon it will start!"
+   :pricing.intro/lead "You will soon be able to book your tariff here. Would you like to be part of our beta and test the business tariff exclusively and free of charge? Then please contact us!"
+   :pricing.free-tier/title "Starter"
+   :pricing.free-tier/subtitle "Individual"
+   :pricing.free-tier/description "For small teams and private use. The Starter Plan is the perfect introduction to structured discussions!"
+   :pricing.free-tier/beta-notice "After the beta phase, the plan is still available for up to five users per team."
+   :pricing.free-tier/call-to-action "Start Free of Charge"
+   :pricing.business-tier/title "Business"
+   :pricing.business-tier/subtitle "Bring your team together"
+   :pricing.business-tier/description "Let our A.I. support you and learn more about your discussions!"
+   :pricing.business-tier/call-to-action "Submit Beta Request"
+   :pricing.enterprise-tier/title "Enterprise"
+   :pricing.enterprise-tier/subtitle "Big plans?"
+   :pricing.enterprise-tier/description "Do you want to connect your entire company, a club, institution or even a whole university? Then you've come to the right place!"
+   :pricing.enterprise-tier/call-to-action "Send Inquiry"
+   :pricing.features/implemented "Already implemented"
+   :pricing.features/to-be-implemented "Soon available"
+   :pricing.features/starter ["Hosted in Germany" "Create Discussions" "Automatic Mindmap" "Shareable by Link" "Text and Image Export"]
+   :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Space"]
+   :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
+   :pricing.features/upcoming ["A.I. Sentiment Analysis" "Speech-to-Text"]
    :pricing.units/per-month "/ month"
+   :pricing.units/per-active-account "per active account"
    :pricing.notes/with-vat "incl. VAT"
-   :pricing.notes/yearly-rebate "15% discount when paid yearly in advance"
-   :pricing.business-tier/call-to-action "Available from 01.01.2021"
    :pricing.trial/call-to-action "Test business 30 days free of charge"
    :pricing.trial/description "No credit card needed! Cancel anytime."
    :pricing.trial.temporary/deactivation "Available from 01.11.2021"

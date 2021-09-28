@@ -8,25 +8,31 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
 
-(def ^:private coming-soon
-  (rest (labels :pricing.features/upcoming)))
+(defn- label-builder
+  "Extract vector from labels and drop the first element, which is always a
+  `span` element."
+  [label-keyword]
+  (rest (labels label-keyword)))
 
-(def ^:private starter-features
-  (rest (labels :pricing.features/starter)))
-
-(def ^:private business-features
-  (rest (labels :pricing.features/business)))
-
-(def ^:private enterprise-features
-  (rest (labels :pricing.features/enterprise)))
+(defn- coming-soon []
+  (label-builder :pricing.features/upcoming))
+(defn- starter-features []
+  (label-builder :pricing.features/starter))
+(defn- business-features []
+  (label-builder :pricing.features/business))
+(defn- enterprise-features []
+  (label-builder :pricing.features/enterprise))
 
 (>defn- add-class-to-feature
+  "Takes a list of features and appends a css-class to it for proper styling."
   [feature-list class]
   [(s/coll-of string?) string? :ret (s/tuple string? string?)]
   (for [feature feature-list]
     [feature class]))
 
-(defn- build-feature-list-items [title [feature class]]
+(defn- build-feature-list-items
+  "Build items for the feature list."
+  [title [feature class]]
   (with-meta
     [:li.list-group-item
      [:i.mr-2 {:class (str class " " (fa :check/normal))}] feature]
@@ -66,7 +72,7 @@
   [:p.text-center.pt-4
    [:a.btn {:class class :href fn} label]])
 
-(defn- card
+(defn- tier-card
   "Build a single tier card."
   [title subtitle price description features upcoming-features cta-button options]
   (let [title-label (labels title)]
@@ -87,35 +93,35 @@
 (defn- free-tier-card
   "Display the free tier card."
   []
-  [card
+  [tier-card
    :pricing.free-tier/title :pricing.free-tier/subtitle
    [price-tag 0]
    :pricing.free-tier/description
-   (add-class-to-feature (concat starter-features ["Dauerhaft kostenfrei"]) "text-primary")
+   (add-class-to-feature (concat (starter-features) ["Dauerhaft kostenfrei"]) "text-primary")
    nil
    [cta-button (labels :pricing.free-tier/call-to-action) "btn-primary" (reititfe/href :routes.schnaq/create)]])
 
 (defn- business-tier-card
   "Display the business tier card."
   []
-  [card
+  [tier-card
    :pricing.business-tier/title :pricing.business-tier/subtitle
    [price-tag config/pricing-business-tier true]
    :pricing.business-tier/description
-   (add-class-to-feature (concat starter-features business-features) "text-primary")
-   coming-soon
+   (add-class-to-feature (concat (starter-features) (business-features)) "text-primary")
+   (coming-soon)
    [cta-button (labels :pricing.business-tier/call-to-action) "btn-secondary" "mailto:info@schnaq.com"]
    {:class "border-primary shadow-lg"}])
 
 (defn- enterprise-tier-card
   "Show the enterprise tier card."
   []
-  [card
+  [tier-card
    :pricing.enterprise-tier/title :pricing.enterprise-tier/subtitle
    [:span.display-5 "Auf Anfrage"]
    :pricing.enterprise-tier/description
-   (add-class-to-feature (concat starter-features business-features enterprise-features) "text-primary")
-   coming-soon
+   (add-class-to-feature (concat (starter-features) (business-features) (enterprise-features)) "text-primary")
+   (coming-soon)
    [cta-button (labels :pricing.enterprise-tier/call-to-action) "btn-primary" "mailto:info@schnaq.com"]])
 
 (defn- tier-cards []
