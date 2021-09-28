@@ -866,7 +866,7 @@
     [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
    :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
    :pricing.faq.privacy/body-3 " findest du mehr Informationen"
-   :pricing/headline "Schnaq Abonnement"
+   :pricing/headline "Abonnements"
    :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
    :pricing.newsletter/name "schnaq Newsletter."
 

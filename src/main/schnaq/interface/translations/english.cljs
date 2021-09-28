@@ -813,7 +813,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.features/upcoming ["A.I. Sentiment Analysis" "Speech-to-Text"]
    :pricing.units/per-month "/ month"
    :pricing.units/per-active-account "per active account"
-   :pricing.notes/with-vat "incl. VAT"
+   :pricing.notes/with-vat "plus VAT"
    :pricing.trial/call-to-action "Test business 30 days free of charge"
    :pricing.trial/description "No credit card needed! Cancel anytime."
    :pricing.trial.temporary/deactivation "Available from 01.11.2021"
@@ -858,7 +858,7 @@ Now we write down questions and discuss them and can still understand what we ha
     [:span.text-primary " german Servers in a GDPR compliant"] " manner. See the "]
    :pricing.faq.privacy/body-2 "Privacy notice page"
    :pricing.faq.privacy/body-3 " for more information."
-   :pricing/headline "Schnaq subscription"
+   :pricing/headline "Subscriptions"
    :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
    :pricing.newsletter/name "schnaq newsletter."
 
@@ -888,7 +888,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/last-added-schnaq "Last created schnaq"
    :router/visited-schnaqs "Visited schnaqs"
    :router/not-found-label "Not found route redirect"
-   :router/pricing "Prices"
+   :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"

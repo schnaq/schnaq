@@ -862,7 +862,7 @@
     [:span.text-primary " Niemieckie serwery i zgodność z GDPR"] " zapisane. Na naszej "]
    :pricing.faq.privacy/body-2 "Strona poświęcona bezpieczeństwu danych"
    :pricing.faq.privacy/body-3 " znajdziesz więcej informacji"
-   :pricing/headline "schnaq Abonament"
+   :pricing/headline "Abonamenty"
    :pricing.newsletter/lead "Bądź informowany natychmiast, gdy subskrypcja wejdzie w życie:"
    :pricing.newsletter/name "newsletter schnaq."
 
@@ -890,7 +890,7 @@
    :router/last-added-schnaq "Ostatnio utworzony schnaq"
    :router/visited-schnaqs "Odwiedził schnaqs"
    :router/not-found-label "Nie znaleziono Przekierowanie trasy"
-   :router/pricing "Ceny"
+   :router/pricing "Wycena"
    :router/privacy "Ochrona danych"
    :router/start-discussion "Rozpocznij dyskusję"
    :router/startpage "Strona główna"
