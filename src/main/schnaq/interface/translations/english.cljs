@@ -788,7 +788,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :graph.settings/stabilize "Stabilize Mindmap"
 
    ;; Pricing Page
-   :pricing.intro/heading "Soon it will start!"
+   :pricing.intro/heading "Starting soon!"
    :pricing.intro/lead "You will soon be able to book your tariff here. Would you like to be part of our beta and test the business tariff exclusively and free of charge? Then please contact us!"
    :pricing.free-tier/title "Starter"
    :pricing.free-tier/subtitle "Individual"
