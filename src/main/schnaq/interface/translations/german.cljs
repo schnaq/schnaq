@@ -795,20 +795,35 @@
    :graph.settings/stabilize "Stabilisiere Mindmap"
 
    ;; Pricing Page
-   :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der
-     perfekte Einstieg in strukturierte Wissensgenerierung."
-   :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu 5 Nutzer:innen pro Team"
+   :pricing.intro/heading "Bald geht es los!"
+   :pricing.intro/lead "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne!"
+   :pricing.free-tier/title "Starter"
+   :pricing.free-tier/subtitle "Individuell"
+   :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der perfekte Einstieg in strukturierte Diskussionen!"
+   :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu five Nutzer:innen pro Team"
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
-   :pricing.business-tier/description "Ob 10 oder 50 Nutzer:innen – der Preis ist der gleiche.
-      Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle,
-      die strukturiert Wissen sammeln möchten."
+   :pricing.free-tier/for-free "Dauerhaft kostenfrei"
+   :pricing.business-tier/title "Business"
+   :pricing.business-tier/subtitle "Bringe dein Team zusammen"
+   :pricing.business-tier/description "Lasse dich von unserer K.I. unterstützen und erfahre mehr zu deinen Diskussionen!"
+   :pricing.business-tier/call-to-action "Beta-Anfrage stellen"
+   :pricing.enterprise-tier/title "Enterprise"
+   :pricing.enterprise-tier/subtitle "Großes vor?"
+   :pricing.enterprise-tier/description "Möchtest du dein gesamtes Unternehmen, einen Verein, Institution, ganze Universitäten anbinden? Dann bist du hier richtig!"
+   :pricing.enterprise-tier/call-to-action "Anfrage senden"
+   :pricing.enterprise-tier/on-request "Auf Anfrage"
+   :pricing.features/implemented "Bereits implementiert"
+   :pricing.features/to-be-implemented "Bald verfügbar"
+   :pricing.features/starter ["In Deutschland gehostet" "Diskussionen erstellen" "Automatische Mindmap" "Teilbar per Link" "Text- und Bild-Export"]
+   :pricing.features/business ["Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich"]
+   :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise"]
+   :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Sprache-zu-Text"]
    :pricing.units/per-month "/ Monat"
+   :pricing.units/per-active-account "pro aktivem Account"
    :pricing.notes/with-vat "zzgl. MwSt."
-   :pricing.notes/yearly-rebate "Bei jährlicher Zahlweise im Voraus 15% Rabatt"
-   :pricing.business-tier/call-to-action "Verfügbar ab 01.01.2021"
    :pricing.trial/call-to-action "30 Tage Business testen"
    :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
-   :pricing.trial.temporary/deactivation "Verfügbar ab 01.01.2021"
+   :pricing.trial.temporary/deactivation "Verfügbar ab 01.11.2021"
    :pricing.features/heading "Schnaq-Abonnement Vorteile"
    :pricing.features.user-numbers/heading "Unbegrenzte Teilnehmer:innen"
    :pricing.features.user-numbers/content "Lass so viele Mitarbeiter:innen, wie du möchtest, kooperieren. *"
@@ -824,28 +839,6 @@
    :pricing.features.mindmap/content "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."
    :pricing.features/disclaimer "* Gilt nur für Business-Abonnement"
    :pricing.competitors/per-month-per-user " € pro Monat pro Nutzer:in"
-   :pricing.comparison/heading "Ihr wachst weiter – ihr spart mehr!"
-   :pricing.comparison/subheading "Egal wie groß dein Team wird, der Preis bleibt der Gleiche.
-   So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."
-   :pricing.comparison.schnaq/price-point "79 € pro Monat für dein Unternehmen"
-   :pricing.comparison.schnaq/brainstorm "Brainstorming"
-   :pricing.comparison.schnaq/decision-making "Entscheidungsfindung"
-   :pricing.comparison.schnaq/knowledge-db "Wissensdatenbank"
-   :pricing.comparison.schnaq/async "Asynchrone Kommunikation"
-   :pricing.comparison.schnaq/mindmap "Mindmapping"
-   :pricing.comparison.schnaq/analysis "Ergebnisanalyse"
-   :pricing.comparison.schnaq/flatrate " Flatrate im Monat"
-   :pricing.comparison.schnaq/person-20 "79 € für 20 Personen"
-   :pricing.comparison.schnaq/person-50 "79 € für 50 Personen"
-   :pricing.comparison.schnaq/person-100 "79 € für 100 Personen …"
-   :pricing.comparison/compared-to [:span "Verglichen" [:br] "mit"]
-   :pricing.comparison.miro/description "Brainstorming Software"
-   :pricing.comparison.loomio/description "Kooperative Entscheidungsfindung"
-   :pricing.comparison.confluence/description "Wissensdatenbank"
-   :pricing.comparison.competitor/person-10 " im Monat für 10 Personen"
-   :pricing.comparison.competitor/person-20 "247 € für 20 Personen"
-   :pricing.comparison.competitor/person-50 "685 € für 50 Personen"
-   :pricing.comparison.competitor/person-100 "1370 € für 100 Personen …"
    :pricing.faq/heading "Häufig gestellte Fragen zu schnaq Abos"
    :pricing.faq.terminate/heading "Kann ich jederzeit kündigen?"
    :pricing.faq.terminate/body
@@ -873,7 +866,7 @@
     [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
    :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
    :pricing.faq.privacy/body-3 " findest du mehr Informationen"
-   :pricing/headline "Schnaq Abonnement"
+   :pricing/headline "Abonnements"
    :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
    :pricing.newsletter/name "schnaq Newsletter."
 
