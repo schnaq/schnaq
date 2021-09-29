@@ -1,13 +1,15 @@
 @use 'rounded' as rounded;
 @use 'variables' as vars;
 
+$height-of-components: 4.25rem;
+
 .schnaq-navbar-space {
-  min-height: 4.25rem;
+  min-height: $height-of-components;
 }
 
 .schnaq-navbar-skeleton {
   @include rounded.rounded-1;
-  height: 4.25rem;
+  height: $height-of-components;
 
   @include media-breakpoint-down(sm) {
     border-radius: 0;
@@ -38,4 +40,9 @@
   @include media-breakpoint-down(sm) {
     border-radius: 0;
   }
+}
+
+.discussion-navbar-button {
+  @include rounded.rounded-1;
+  height: $height-of-components;
 }
