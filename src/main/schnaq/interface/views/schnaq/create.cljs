@@ -19,7 +19,7 @@
         hubs @(rf/subscribe [:hubs/all])]
     (when (seq user-groups)
       [:section.text-center
-       [:h4.mb-5 (labels :discussion.create.hub-exclusive-checkbox/title)]
+       [:h4.mb-3 (labels :discussion.create.hub-exclusive-checkbox/title)]
        [:div.form-check
         [:input.form-check-input.big-checkbox
          {:type :checkbox
@@ -45,7 +45,7 @@
   (let [end-time (reagent/atom false)]
     (fn []
       [:section.text-center
-       [:h4.mb-5 (labels :discussion.progress.creation/heading)]
+       [:h4.mb-3 (labels :discussion.progress.creation/heading)]
        (when @end-time
          [:div
           [:label {:for :input-num-days-to-end} (labels :discussion.progress.creation/label)]
