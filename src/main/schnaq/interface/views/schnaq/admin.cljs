@@ -17,13 +17,14 @@
 
 (defn admin-center
   "Button to access admin menu."
-  [share-hash edit-hash]
-  [tooltip/text
-   (labels :schnaq.admin/tooltip)
-   [:a.btn.btn-outline-muted.btn-lg
-    {:href (rfe/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
-     :role :button}
-    [:i {:class (str "m-auto fas " (fa :cog))}]]])
+  []
+  (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/selected])]
+    [tooltip/text
+     (labels :schnaq.admin/tooltip)
+     [:a.btn.btn-outline-muted.btn-lg
+      {:href (rfe/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
+       :role :button}
+      [:i {:class (str "m-auto fas " (fa :cog))}]]]))
 
 (defn- share-modal
   "Modal showing sharing options."
