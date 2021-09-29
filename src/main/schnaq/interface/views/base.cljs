@@ -37,10 +37,10 @@
     (if vertical-header?
       [:<> [:h1 heading] [:h4.display-6 subheading]]
       [:div.row.mt-5.mb-2
-       [:div.col-4
-        [:h1 heading]]
-       [:div.col-4
-        [:h2.h4 subheading]]])
+       ;; If split header is configured, but the screen is too small, display
+       ;; the headings one below the other
+       [:div.col-12.col-md-6 [:h1 heading]]
+       [:div.col-12.col-md-6 [:h2.h4 subheading]]])
     more-for-heading]
    (cond
      (gstring/contains (str classes) "bg-white") [:div.wave-bottom-white]
