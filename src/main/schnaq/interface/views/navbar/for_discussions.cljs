@@ -115,8 +115,8 @@
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
-    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xxl-auto
-     [:div.d-flex.align-items-center.schnaq-navbar.px-md-4.mb-4.mb-md-0
+    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
+     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
       [schnaq-progress-bar]
       [admin/share-link]
       [admin/txt-export share-hash title]
@@ -160,12 +160,12 @@
         {:src (img-path :logo-white) :alt "schnaq logo"
          :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]]
      [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
-      [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
+      [:div.d-flex.align-items-center.schnaq-navbar.px-4
        [schnaq-progress-bar]
        [admin/txt-export share-hash title]
        (when edit-hash
          [admin/admin-center])
        [navbar-components/language-toggle-with-tooltip false {:class "btn-lg"}]]
       [:div.d-flex.align-items-center.mt-4.mt-md-0
-       [:div.h-100.mx-2.embedded-nav-button [graph-button]]
-       [:div.h-100.mr-2.embedded-nav-button [summary-button]]]]]))
+       [:div.mx-2.embedded-nav-button [graph-button]]
+       [:div.mr-2.embedded-nav-button [summary-button]]]]]))
