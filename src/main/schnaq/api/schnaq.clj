@@ -6,7 +6,6 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
-            [schnaq.database.main :refer [fast-pull]]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.links :as links]
