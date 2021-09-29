@@ -42,8 +42,6 @@
         ;; Do not use or shortcut, since the value can be false and should be prefferably selected over backend value
         upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
         downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)]
-    (println "upvotes: " local-upvote? " " (:meta/upvoted? statement) " = " upvoted?)
-    (println "downvotes: " local-downvote? " " (:meta/downvoted? statement) " = " downvoted?)
     [:div.d-flex.flex-row.align-items-center
      [:div.mr-2
       {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
@@ -133,6 +131,15 @@
                                  :share-hash share-hash
                                  :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
                                 [:ajax.error/as-notification])]})))
+
+(rf/reg-event-fx
+  :discussion.statements/reload
+  (fn [{:keys [db]} _]
+    (let [path (get-in db [:current-route :data :name])]
+      (case path
+        :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
+        :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
+        {}))))
 
 (rf/reg-event-db
   :discussion.premises/set-current
