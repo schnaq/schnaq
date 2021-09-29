@@ -5,7 +5,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.time :as time]
-            [schnaq.interface.utils.toolbelt :as toolbelt]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
             [schnaq.user :as user-utils]))
 
@@ -16,7 +16,7 @@
         user (:statement/author statement)
         time (:statement/created-at statement)
         authenticated? (:user.registered/keycloak-id user)
-        display-name (toolbelt/truncate-to-n-chars (user-utils/display-name user) 15)
+        display-name (tools/truncate-to-n-chars (user-utils/display-name user) 15)
         name-class (if authenticated? "text-purple-dark" "text-muted")]
     [:div.d-flex.flex-row.flex-wrap.text-muted.w-100 {:class additional-classes}
      [common/avatar user avatar-size]
@@ -68,7 +68,7 @@
 (rf/reg-sub
   :user/display-name
   (fn [db _]
-    (get-in db [:user :names :display] default-anonymous-display-name)))
+    (tools/current-display-name db)))
 
 (rf/reg-sub
   :user/groups

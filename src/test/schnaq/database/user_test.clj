@@ -20,12 +20,6 @@
              (db/user-by-nickname "wegi")
              (db/user-by-nickname "wegI"))))))
 
-(deftest canonical-username-test
-  (testing "Test whether the canonical username is returned."
-    (is (= "Wegi" (db/canonical-username "WEGI")
-           (db/canonical-username "WeGi")))
-    (is (= "Der Schredder" (db/canonical-username "DER schredder")))))
-
 (deftest add-user-if-not-exists-test
   (testing "Test the function to add a new user if they do not exist."
     (let [new-user (db/add-user-if-not-exists "For Sure a new User that does Not exist")]

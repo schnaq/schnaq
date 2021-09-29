@@ -4,6 +4,7 @@
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as conclusion-card]))
 
 (def ^:private api-url-for-examples
@@ -53,7 +54,8 @@
             db :get "/discussion/statement/info"
             [:preview-statements/by-id-success]
             {:statement-id statement-id
-             :share-hash share-hash}
+             :share-hash share-hash
+             :display-name (tools/current-display-name db)}
             [:preview-statements/default]
             api-url)]}))
 

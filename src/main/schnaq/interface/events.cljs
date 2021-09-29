@@ -7,6 +7,7 @@
             [schnaq.interface.auth :as auth]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.language :as lang]
             [schnaq.interface.utils.toolbelt :as toolbelt]))
 
@@ -150,7 +151,8 @@
   ;; Explicit api-url is optional
   (fn [{:keys [db]} [_ share-hash api-url]]
     (let [request (partial http/xhrio-request db :get "/schnaq/by-hash" [:schnaq/select-current-from-backend]
-                           {:share-hash share-hash})]
+                           {:share-hash share-hash
+                            :display-name (tools/current-display-name db)})]
       {:db (assoc-in db [:schnaq :selected :discussion/share-hash] share-hash)
        :fx [(if api-url
               (request [:ajax.error/to-console] api-url)

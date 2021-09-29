@@ -46,9 +46,10 @@
 
 ;; Meta Information
 (s/def :meta/all-statements nat-int?)
-(s/def :meta/upvotes number?)
-(s/def :meta/downvotes number?)
 (s/def :meta/sub-statements number?)
+;; Marks whether the user has up / downvoted a statement themselves.
+(s/def :meta/upvoted? boolean?)
+(s/def :meta/downvoted? boolean?)
 (s/def :meta/authors (s/coll-of :user/nickname))
 (s/def :meta/sub-discussion-info
   (s/keys :req-un [:meta/sub-statements :meta/authors]))
@@ -104,8 +105,8 @@
 (s/def :statement/content ::non-blank-string)
 (s/def :statement/version number?)
 (s/def :statement/author ::any-user)
-(s/def :statement/upvotes (s/coll-of ::user-or-reference))
-(s/def :statement/downvotes (s/coll-of ::user-or-reference))
+(s/def :statement/upvotes (s/or :count number? :upvote-users (s/coll-of ::user-or-reference)))
+(s/def :statement/downvotes (s/or :count number? :downvote-users (s/coll-of ::user-or-reference)))
 (s/def :statement/creation-secret ::non-blank-string)
 (s/def :statement/created-at inst?)
 (s/def :statement/label shared-config/allowed-labels)

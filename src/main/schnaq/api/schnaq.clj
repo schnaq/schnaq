@@ -19,8 +19,9 @@
 (defn- schnaq-by-hash
   "Returns a schnaq, identified by its share-hash."
   [{:keys [parameters identity]}]
-  (let [share-hash (get-in parameters [:query :share-hash])
-        keycloak-id (:sub identity)]
+  (let [{:keys [share-hash display-name]} (:query parameters)
+        keycloak-id (:sub identity)
+        user-id (user-db/user-id display-name keycloak-id)]
     (ok {:schnaq (-> (if (and keycloak-id (validator/user-schnaq-admin? share-hash keycloak-id))
                        (discussion-db/discussion-by-share-hash-private share-hash)
                        (discussion-db/discussion-by-share-hash share-hash))
@@ -28,7 +29,7 @@
                      processors/with-sub-discussion-info
                      (processors/with-new-post-info share-hash keycloak-id)
                      processors/hide-deleted-statement-content
-                     processors/with-votes)})))
+                     (processors/with-aggregated-votes user-id))})))
 
 (defn- schnaqs-by-hashes
   "Bulk loading of discussions. May be used when users asks for all the schnaqs
@@ -40,13 +41,17 @@
   collection:
   `{:parameters {:query {:share-hashes [\"57ce1947-e57f-4395-903e-e2866d2f305c\"
                                         \"b2645217-6d7f-4d00-85c1-b8928fad43f7\"]}}}"
-  [request]
-  (if-let [share-hashes (get-in request [:parameters :query :share-hashes])]
-    (let [share-hashes-list (if (string? share-hashes) [share-hashes] share-hashes)]
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hashes display-name]} (:query parameters)
+        share-hashes-list (if (string? share-hashes) [share-hashes] share-hashes)
+        user-id (user-db/user-id display-name (:sub identity))]
+    (if share-hashes
       (ok {:schnaqs
-           (map #(-> % processors/add-meta-info-to-schnaq processors/with-votes)
-                (discussion-db/valid-discussions-by-hashes share-hashes-list))}))
-    at/not-found-hash-invalid))
+           (map #(-> %
+                     processors/add-meta-info-to-schnaq
+                     (processors/with-aggregated-votes user-id))
+                (discussion-db/valid-discussions-by-hashes share-hashes-list))})
+      at/not-found-hash-invalid)))
 
 (>defn- now-plus-days-instant
   "Adds a number of days to the current datetime and then converts that to an instant."
@@ -124,7 +129,8 @@
                   :description (at/get-doc #'schnaq-by-hash)
                   :name :api.schnaq/by-hash
                   :middleware [:discussion/valid-share-hash?]
-                  :parameters {:query {:share-hash :discussion/share-hash}}
+                  :parameters {:query {:share-hash :discussion/share-hash
+                                       :display-name ::specs/non-blank-string}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
      ["/add-visited" {:put add-visited-schnaq
@@ -155,7 +161,8 @@
       :description (at/get-doc #'schnaqs-by-hashes)
       :parameters {:query {:share-hashes (s/or :share-hashes (st/spec {:spec (s/coll-of :discussion/share-hash)
                                                                        :swagger/collectionFormat "multi"})
-                                               :share-hash :discussion/share-hash)}}
+                                               :share-hash :discussion/share-hash)
+                           :display-name ::specs/non-blank-string}}
       :responses {200 {:body {:schnaqs (s/coll-of ::dto/discussion)}}
                   404 at/response-error-body}}]
     ["/admin" {:swagger {:tags ["admin"]}

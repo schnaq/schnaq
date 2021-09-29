@@ -9,6 +9,7 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown :as md]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
@@ -37,19 +38,25 @@
 (defn up-down-vote
   "Add inline panel for up and down votes."
   [statement]
-  (let [votes @(rf/subscribe [:local-votes])]
+  (let [votes @(rf/subscribe [:local-votes])
+        [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
+        ;; Do not use or shortcut, since the value can be false and should be prefferably selected over backend value
+        upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
+        downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)]
     [:div.d-flex.flex-row.align-items-center
-     [:div.px-2
-      {:on-click (fn [e]
+     [:div.mr-2
+      {:class (if upvoted? "badge badge-upvote-selected" "badge badge-upvote")
+       :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
-      [:i.vote-arrow.up-vote {:class (str "m-auto fas " (fa :arrow-up))}]]
+      [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]
      [:span.mr-3 (logic/get-up-votes statement votes)]
-     [:div.px-2
-      {:on-click (fn [e]
+     [:div.mr-2
+      {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
+       :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:i.vote-arrow.down-vote {:class (str "m-auto fas " (fa :arrow-down))}]]
+      [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card
@@ -122,8 +129,18 @@
        :fx [(http/xhrio-request db :get "/discussion/statements/for-conclusion"
                                 [:discussion.premises/set-current]
                                 {:conclusion-id (:db/id conclusion)
-                                 :share-hash share-hash}
+                                 :share-hash share-hash
+                                 :display-name (tools/current-display-name db)}
                                 [:ajax.error/as-notification])]})))
+
+(rf/reg-event-fx
+  :discussion.statements/reload
+  (fn [{:keys [db]} _]
+    (let [path (get-in db [:current-route :data :name])]
+      (case path
+        :routes.schnaq.select/statement {:fx [[:dispatch [:discussion.query.statement/by-id]]]}
+        :routes.schnaq/start {:fx [[:dispatch [:discussion.query.conclusions/starting]]]}
+        {}))))
 
 (rf/reg-event-db
   :discussion.premises/set-current
@@ -137,19 +154,25 @@
 
 (rf/reg-event-fx
   :discussion/toggle-upvote
-  (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
+  (fn [{:keys [db]} [_ {:keys [db/id meta/upvoted?] :as statement}]]
+    {:db (-> db
+             (update-in [:votes :own :up id] #(not (if (nil? %) upvoted? %)))
+             (assoc-in [:votes :own :down id] false))
+     :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
                               {:statement-id id
-                               :nickname (get-in db [:user :names :display] default-anonymous-display-name)
+                               :nickname (tools/current-display-name db)
                                :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                               [:ajax.error/as-notification])]}))
 
 (rf/reg-event-fx
   :discussion/toggle-downvote
-  (fn [{:keys [db]} [_ {:keys [db/id] :as statement}]]
-    {:fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
+  (fn [{:keys [db]} [_ {:keys [db/id meta/downvoted?] :as statement}]]
+    {:db (-> db
+             (assoc-in [:votes :own :up id] false)
+             (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
+     :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
                               {:statement-id id
-                               :nickname (get-in db [:user :names :display] default-anonymous-display-name)
+                               :nickname (tools/current-display-name db)
                                :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                               [:ajax.error/as-notification])]}))
 
@@ -159,9 +182,9 @@
     (case operation
       :added (update-in db [:votes :up id] inc)
       :removed (update-in db [:votes :up id] dec)
-      :switched (update-in
-                  (update-in db [:votes :up id] inc)
-                  [:votes :down id] dec))))
+      :switched (-> db
+                    (update-in [:votes :up id] inc)
+                    (update-in [:votes :down id] dec)))))
 
 (rf/reg-event-db
   :downvote-success
@@ -169,6 +192,12 @@
     (case operation
       :added (update-in db [:votes :down id] inc)
       :removed (update-in db [:votes :down id] dec)
-      :switched (update-in
-                  (update-in db [:votes :down id] inc)
-                  [:votes :up id] dec))))
+      :switched (-> db
+                    (update-in [:votes :down id] inc)
+                    (update-in [:votes :up id] dec)))))
+
+(rf/reg-sub
+  :votes/upvoted-or-downvoted
+  (fn [db [_ statement-id]]
+    [(get-in db [:votes :own :up statement-id])
+     (get-in db [:votes :own :down statement-id])]))

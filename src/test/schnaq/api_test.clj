@@ -92,6 +92,7 @@
                      (assoc-in [:parameters :body :share-hash] share-hash)
                      (assoc-in [:parameters :body :statement-type] :statement.type/neutral)
                      (assoc-in [:parameters :body :statement-id] (:db/id statement))
+                     (assoc-in [:parameters :body :display-name] "whatever")
                      (assoc-in [:parameters :body :new-content] "any-text"))]
     (testing "Only requests from valid author should be allowed."
       ;; The author is not the registered user, rest is fine

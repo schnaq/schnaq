@@ -34,53 +34,57 @@
 
 (defn- valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
-  [statements]
+  [statements user-id]
   (-> statements
       processors/hide-deleted-statement-content
-      processors/with-votes))
+      (processors/with-aggregated-votes user-id)))
 
 (defn- starting-conclusions-with-processors
   "Returns starting conclusions for a discussion, with processors applied.
   Optionally a statement-id can be passed to enrich the statement with its creation-secret."
-  ([share-hash]
+  ([share-hash user-id]
    (-> share-hash
        discussion-db/starting-statements
-       valid-statements-with-votes
+       (valid-statements-with-votes user-id)
        processors/with-sub-discussion-info))
-  ([share-hash secret-statement-id]
-   (add-creation-secret (starting-conclusions-with-processors share-hash) secret-statement-id)))
+  ([share-hash user-id secret-statement-id]
+   (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
 
 (defn- get-starting-conclusions
   "Return all starting-conclusions of a certain discussion if share-hash fits."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash]} (:query parameters)
-        user-identity (:sub identity)]
-    (ok {:starting-conclusions (-> (starting-conclusions-with-processors share-hash)
+  (let [{:keys [share-hash display-name]} (:query parameters)
+        user-identity (:sub identity)
+        author-id (user-db/user-id display-name user-identity)]
+    (ok {:starting-conclusions (-> (starting-conclusions-with-processors share-hash author-id)
                                    (processors/with-new-post-info share-hash user-identity))})))
 
 (defn- get-statements-for-conclusion
   "Return all premises and fitting undercut-premises for a given statement."
-  [{:keys [parameters]}]
-  (let [{:keys [conclusion-id]} (:query parameters)
+  [{:keys [parameters identity]}]
+  (let [{:keys [conclusion-id display-name]} (:query parameters)
+        user-id (user-db/user-id display-name (:sub identity))
         prepared-statements (-> conclusion-id
                                 discussion-db/children-for-statement
-                                valid-statements-with-votes
+                                (valid-statements-with-votes user-id)
                                 processors/with-sub-discussion-info)]
     (ok {:premises prepared-statements})))
 
 (defn- search-statements
   "Search through any valid discussion."
-  [{:keys [parameters]}]
-  (let [{:keys [share-hash search-string]} (:query parameters)]
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash search-string display-name]} (:query parameters)
+        user-id (user-db/user-id display-name (:sub identity))]
     (ok {:matching-statements (-> (discussion-db/search-statements share-hash search-string)
                                   processors/with-sub-discussion-info
-                                  valid-statements-with-votes)})))
+                                  (valid-statements-with-votes user-id))})))
 
 (defn- get-statement-info
   "Return premises, conclusion and the history for a given statement id."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash statement-id]} (:query parameters)
-        user-identity (:sub identity)]
+  (let [{:keys [share-hash statement-id display-name]} (:query parameters)
+        user-identity (:sub identity)
+        author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
@@ -90,7 +94,8 @@
              :premises (-> (discussion-db/children-for-statement statement-id)
                            processors/with-sub-discussion-info
                            (processors/with-new-post-info share-hash user-identity))
-             :history (discussion-db/history-for-statement statement-id)}))
+             :history (discussion-db/history-for-statement statement-id)}
+            author-id))
       at/not-found-hash-invalid)))
 
 (defn- update-seen-statements!
@@ -120,15 +125,16 @@
   "Edits the content (and possibly type) of a statement, when the user is the registered author.
   `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`."
   [{:keys [parameters identity]}]
-  (let [{:keys [statement-id statement-type new-content share-hash]} (:body parameters)
+  (let [{:keys [statement-id statement-type new-content share-hash display-name]} (:body parameters)
         user-identity (:sub identity)
         statement (db/fast-pull statement-id [:db/id :statement/parent
                                               {:statement/author [:user.registered/keycloak-id]}
-                                              :statement/deleted?])]
+                                              :statement/deleted?])
+        author-id (user-db/user-id display-name user-identity)]
     (check-statement-author-and-state
       user-identity statement-id share-hash statement
       #(ok {:updated-statement (-> [(discussion-db/change-statement-text-and-type statement statement-type new-content)]
-                                   processors/with-votes
+                                   (processors/with-aggregated-votes author-id)
                                    processors/with-sub-discussion-info
                                    (processors/with-new-post-info share-hash (:sub identity))
                                    first)})
@@ -166,15 +172,13 @@
 (defn- add-starting-statement!
   "Adds a new starting statement to a discussion. Returns the list of starting-conclusions."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash statement nickname]} (:body parameters)
+  (let [{:keys [share-hash statement display-name]} (:body parameters)
         keycloak-id (:sub identity)
-        user-id (if keycloak-id
-                  [:user.registered/keycloak-id keycloak-id]
-                  (user-db/add-user-if-not-exists nickname))]
+        user-id (user-db/user-id display-name keycloak-id)]
     (if (validator/valid-writeable-discussion? share-hash)
       (let [new-starting-id (discussion-db/add-starting-statement! share-hash user-id statement keycloak-id)]
         (log/info "Starting statement added for discussion" share-hash)
-        (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash new-starting-id)}))
+        (created "" {:starting-conclusions (starting-conclusions-with-processors share-hash user-id new-starting-id)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn- react-to-any-statement!
@@ -182,17 +186,16 @@
   statement you want to react to. `statement-type` is one of `statement.type/attack`, `statement.type/support` or `statement.type/neutral`.
   `nickname` is required if the user is not logged in."
   [{:keys [parameters identity]}]
-  (let [{:keys [share-hash conclusion-id nickname premise statement-type]} (:body parameters)
+  (let [{:keys [share-hash conclusion-id premise statement-type display-name]} (:body parameters)
         keycloak-id (:sub identity)
-        user-id (if keycloak-id
-                  [:user.registered/keycloak-id keycloak-id]
-                  (user-db/user-by-nickname nickname))]
+        user-id (user-db/user-id display-name keycloak-id)]
     (if (validator/valid-writeable-discussion-and-statement? conclusion-id share-hash)
       (do (log/info "Statement added as reaction to statement" conclusion-id)
           (created ""
                    {:new-statement
                     (valid-statements-with-votes
-                      (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id))}))
+                      (discussion-db/react-to-statement! share-hash user-id conclusion-id premise statement-type keycloak-id)
+                      user-id)}))
       (validator/deny-access at/invalid-rights-message))))
 
 (defn- graph-data-for-agenda
@@ -280,22 +283,26 @@
   "Add a label to a statement. Only pre-approved labels can be set. Custom labels have no effect.
   The user needs to be authenticated. The statement concerned is always returned."
   [{:keys [parameters identity]}]
-  (let [{:keys [statement-id label share-hash]} (:body parameters)]
+  (let [{:keys [statement-id label share-hash display-name]} (:body parameters)
+        keycloak-id (:sub identity)
+        user-id (user-db/user-id display-name keycloak-id)]
     (ok {:statement (-> [(discussion-db/add-label statement-id label)]
-                        valid-statements-with-votes
+                        (valid-statements-with-votes user-id)
                         processors/with-sub-discussion-info
-                        (processors/with-new-post-info share-hash (:sub identity))
+                        (processors/with-new-post-info share-hash keycloak-id)
                         first)})))
 
 (defn- remove-label
   "Remove a label from a statement. Removing a label not present has no effect.
   The user needs to be authenticated. The statement concerned is always returned."
   [{:keys [parameters identity]}]
-  (let [{:keys [statement-id label share-hash]} (:body parameters)]
+  (let [{:keys [statement-id label share-hash display-name]} (:body parameters)
+        keycloak-id (:sub identity)
+        user-id (user-db/user-id display-name keycloak-id)]
     (ok {:statement (-> [(discussion-db/remove-label statement-id label)]
-                        valid-statements-with-votes
+                        (valid-statements-with-votes user-id)
                         processors/with-sub-discussion-info
-                        (processors/with-new-post-info share-hash (:sub identity))
+                        (processors/with-new-post-info share-hash keycloak-id)
                         first)})))
 
 ;; -----------------------------------------------------------------------------
@@ -306,7 +313,8 @@
                              :description (at/get-doc #'get-starting-conclusions)
                              :name :api.discussion.conclusions/starting
                              :middleware [:discussion/valid-share-hash?]
-                             :parameters {:query {:share-hash :discussion/share-hash}}
+                             :parameters {:query {:share-hash :discussion/share-hash
+                                                  :display-name ::specs/non-blank-string}}
                              :responses {200 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}}}]
    ["/graph" {:get graph-data-for-agenda
               :description (at/get-doc #'graph-data-for-agenda)
@@ -343,9 +351,9 @@
                            :name :api.discussion.react-to/statement
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :conclusion-id :db/id
-                                               :nickname ::dto/maybe-nickname
                                                :premise :statement/content
-                                               :statement-type dto/statement-type}}
+                                               :statement-type dto/statement-type
+                                               :display-name ::specs/non-blank-string}}
                            :responses {201 {:body {:new-statement ::dto/statement}}
                                        403 at/response-error-body}}]
    ["/statements"
@@ -365,7 +373,8 @@
                 :name :api.discussion.statements/search
                 :middleware [:discussion/valid-share-hash?]
                 :parameters {:query {:share-hash :discussion/share-hash
-                                     :search-string string?}}
+                                     :search-string string?
+                                     :display-name ::specs/non-blank-string}}
                 :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
                             404 at/response-error-body}}]
     ["/for-conclusion" {:get get-statements-for-conclusion
@@ -373,7 +382,8 @@
                         :name :api.discussion.statements/for-conclusion
                         :middleware [:discussion/valid-share-hash?]
                         :parameters {:query {:share-hash :discussion/share-hash
-                                             :conclusion-id :db/id}}
+                                             :conclusion-id :db/id
+                                             :display-name ::specs/non-blank-string}}
                         :responses {200 {:body {:premises (s/coll-of ::dto/statement)}}
                                     404 at/response-error-body}}]
     ["/starting/add" {:post add-starting-statement!
@@ -381,7 +391,7 @@
                       :name :api.discussion.statements.starting/add
                       :parameters {:body {:share-hash :discussion/share-hash
                                           :statement :statement/content
-                                          :nickname ::dto/maybe-nickname}}
+                                          :display-name ::specs/non-blank-string}}
                       :responses {201 {:body {:starting-conclusions (s/coll-of ::dto/statement)}}
                                   403 at/response-error-body}}]
     ["/update-seen" {:put update-seen-statements!
@@ -398,7 +408,8 @@
               :description (at/get-doc #'get-statement-info)
               :name :api.discussion.statement/info
               :parameters {:query {:statement-id :db/id
-                                   :share-hash :discussion/share-hash}}
+                                   :share-hash :discussion/share-hash
+                                   :display-name ::specs/non-blank-string}}
               :responses {200 {:body {:conclusion ::dto/statement
                                       :premises (s/coll-of ::dto/statement)
                                       :history (s/coll-of ::dto/statement)}}
@@ -411,7 +422,8 @@
                :middleware [:user/authenticated?]
                :parameters {:body {:statement-type (s/or :nil nil?
                                                          :type dto/statement-type)
-                                   :new-content :statement/content}}
+                                   :new-content :statement/content
+                                   :display-name ::specs/non-blank-string}}
                :responses {200 {:body {:updated-statement ::dto/statement}}
                            400 at/response-error-body
                            403 at/response-error-body}}]
@@ -439,14 +451,16 @@
       ["/add" {:put add-label
                :description (at/get-doc #'add-label)
                :name :api.discussion.statement.label/add
-               :parameters {:body {:label :statement/label}}
+               :parameters {:body {:label :statement/label
+                                   :display-name ::specs/non-blank-string}}
                :responses {200 {:body {:statement ::dto/statement}}
                            400 at/response-error-body
                            403 at/response-error-body}}]
       ["/remove" {:put remove-label
                   :description (at/get-doc #'remove-label)
                   :name :api.discussion.statement.label/remove
-                  :parameters {:body {:label :statement/label}}
+                  :parameters {:body {:label :statement/label
+                                      :display-name ::specs/non-blank-string}}
                   :responses {200 {:body {:statement ::dto/statement}}
                               400 at/response-error-body
                               403 at/response-error-body}}]]]]])

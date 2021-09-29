@@ -5,7 +5,8 @@
             [re-frame.core :as rf]
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]))
 
 (>defn calculate-votes
   "Calculates the votes without needing to reload."
@@ -14,37 +15,36 @@
   (let [up-vote-change (get-in local-votes [:up (:db/id statement)] 0)
         down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
     (-
-      (+ (:meta/upvotes statement) up-vote-change)
-      (+ (:meta/downvotes statement) down-vote-change))))
+      (+ (:statement/upvotes statement) up-vote-change)
+      (+ (:statement/downvotes statement) down-vote-change))))
 
 (>defn get-up-votes
   "Calculates the up-votes without needing to reload."
   [statement local-votes]
   [map? map? :ret number?]
   (let [up-vote-change (get-in local-votes [:up (:db/id statement)] 0)]
-    (+ (:meta/upvotes statement) up-vote-change)))
+    (+ (:statement/upvotes statement) up-vote-change)))
 
 (>defn get-down-votes
   "Calculates the down-votes without needing to reload."
   [statement local-votes]
   [map? map? :ret number?]
   (let [down-vote-change (get-in local-votes [:down (:db/id statement)] 0)]
-    (+ (:meta/downvotes statement) down-vote-change)))
+    (+ (:statement/downvotes statement) down-vote-change)))
 
 (rf/reg-event-fx
   :discussion.reaction.statement/send
   (fn [{:keys [db]} [_ statement-type new-premise]]
     (let [statement-id (get-in db [:current-route :parameters :path :statement-id])
-          share-hash (get-in db [:schnaq :selected :discussion/share-hash])
-          nickname (get-in db [:user :names :display] default-anonymous-display-name)]
+          share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
       {:fx [(http/xhrio-request
               db :post "/discussion/react-to/statement"
               [:discussion.reaction.statement/added]
               {:share-hash share-hash
                :conclusion-id statement-id
-               :nickname nickname
                :premise new-premise
-               :statement-type statement-type}
+               :statement-type statement-type
+               :display-name (tools/current-display-name db)}
               [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -111,7 +111,8 @@
                 db :get "/discussion/statement/info"
                 [:discussion.query.statement/by-id-success]
                 {:statement-id statement-id
-                 :share-hash share-hash}
+                 :share-hash share-hash
+                 :display-name (tools/current-display-name db)}
                 [:discussion.redirect/to-root share-hash])]}
         new-conclusion (update :db #(assoc-in db [:discussion :conclusion :selected] new-conclusion)
                                :fx conj [:discussion.history/push new-conclusion])))))

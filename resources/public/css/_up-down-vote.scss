@@ -38,18 +38,38 @@
   max-width: 1.25rem;
 }
 
-.up-vote {
+.badge-upvote {
+  background: none;
   color: $positive;
+
+  :hover {
+    color: $positive-selected;
+  }
 }
 
-.up-vote:hover {
-  color: $positive-selected;
+.badge-upvote-selected {
+  background-color: $positive;
+  color: $white;
+
+  :hover {
+    color: $gray-200;
+  }
 }
 
-.down-vote {
+.badge-downvote {
+  background: none;
   color: $negative;
+
+  :hover {
+    color: $negative-selected;
+  }
 }
 
-.down-vote:hover {
-  color: $negative-selected;
+.badge-downvote-selected {
+  background-color: $negative;
+  color: $white;
+
+  :hover {
+    color: $gray-200;
+  }
 }
