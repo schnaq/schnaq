@@ -47,8 +47,12 @@
   [any? any? :ret number?]
   (compare b a))
 
-(defn build-allowed-origin
+(>defn build-allowed-origin
   "Build regular expressions, which define the allowed origins for API requests."
   [domain]
+  [string? :ret any?]
   (when-let [[domain-name tld] (string/split domain #"\.")]
-    (re-pattern (format "^((https?://)?(.*\\.)?(%s\\.%s))($|/.*$)" domain-name tld))))
+    (let [regex (if tld
+                  "^((https?://)?(.*\\.)?(%s\\.%s))($|/.*$)"
+                  "^((https?://)?(.*\\.)?(%s))($|/.*$)")]
+      (re-pattern (format regex domain-name tld)))))

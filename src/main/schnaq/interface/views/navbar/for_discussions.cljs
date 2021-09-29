@@ -44,27 +44,38 @@
       [:small.text-primary (labels :discussion.navbar/members)]
       [:h5.text-center user-count]]]))
 
-(defn graph-button
-  "Rounded square button to navigate to the graph view"
-  [share-hash]
-  [:a {:href (reitfe/href :routes/graph-view {:share-hash share-hash})}
-   [:button.btn.btn-sm.btn-white.mx-auto.rounded-1.h-100
+
+;; -----------------------------------------------------------------------------
+
+(>defn- discussion-button-builder
+  "Build buttons in the discussion navigation."
+  [label href]
+  [keyword? fn? :ret vector?]
+  [:a {:href href}
+   [:button.btn.btn-sm.btn-white.discussion-navbar-button
     [:img.header-standalone-icon
      {:src (img-path :icon-graph-dark)
       :alt "graph icon"}]
-    [:p.small.m-0 (labels :graph.button/text)]]])
+    [:p.small.m-0.text-nowrap (labels label)]]])
 
-(defn summary-button
+(defn- graph-button
+  "Rounded square button to navigate to the graph view"
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [discussion-button-builder
+     :graph.button/text
+     (reitfe/href :routes/graph-view {:share-hash share-hash})]))
+
+(defn- summary-button
   "Button to navigate to the summary view."
-  [share-hash]
-  [:a {:href (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})}
-   [:button.btn.btn-sm.btn-white.mx-auto.rounded-1.h-100
-    [:img.header-standalone-icon
-     {:src (img-path :icon-summary-dark)
-      :width "25"
-      :alt "summary icon"}]
-    [:p.small.m-0 (labels :summary.link.button/text)]]])
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [discussion-button-builder
+     :summary.link.button/text
+     (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})]))
 
+
+;; -----------------------------------------------------------------------------
 
 (>defn- schnaq-progress-information
   "Take the time the schnaq was created and the end-time and returns the percentage for the progress bar as well
@@ -104,17 +115,17 @@
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         edit-hash (get admin-access-map share-hash)]
-    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xxl-auto
-     [:div.d-flex.align-items-center.schnaq-navbar.px-md-4.mb-4.mb-lg-0
+    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
+     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
       [schnaq-progress-bar]
       [admin/share-link]
       [admin/txt-export share-hash title]
       (when edit-hash
-        [admin/admin-center share-hash edit-hash])
+        [admin/admin-center])
       [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]
      [:div.d-flex.align-items-center
-      [:div.h-100.mr-2.mx-lg-2 [graph-button share-hash]]
-      [:div.h-100.mr-2 [summary-button share-hash]]
+      [:div.mr-2.mx-md-2 [graph-button]]
+      [:div.mr-2 [summary-button]]
       [:div.d-flex.align-items-center.schnaq-navbar
        [um/user-handling-menu "btn-link"]]]]))
 
@@ -149,12 +160,12 @@
         {:src (img-path :logo-white) :alt "schnaq logo"
          :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]]
      [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
-      [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
+      [:div.d-flex.align-items-center.schnaq-navbar.px-4
        [schnaq-progress-bar]
        [admin/txt-export share-hash title]
        (when edit-hash
-         [admin/admin-center share-hash edit-hash])
+         [admin/admin-center])
        [navbar-components/language-toggle-with-tooltip false {:class "btn-lg"}]]
       [:div.d-flex.align-items-center.mt-4.mt-md-0
-       [:div.h-100.mx-2.embedded-nav-button [graph-button share-hash]]
-       [:div.h-100.mr-2.embedded-nav-button [summary-button share-hash]]]]]))
+       [:div.mx-2.embedded-nav-button [graph-button]]
+       [:div.mr-2.embedded-nav-button [summary-button]]]]]))

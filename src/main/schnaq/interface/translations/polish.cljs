@@ -374,8 +374,8 @@
    :privacy.personal-data/title "Dane osobowe"
    :privacy.personal-data/body
    [:<>
-    [:p "Domyślnie gromadzone są tylko dane niezbędne z technicznego punktu widzenia. Nie dochodzi do oceny danych osobowych, a Państwa zachowanie na naszej stronie internetowej jest analizowane anonimowo tylko wtedy, gdy wyrażą Państwo na to zgodę."]
-    [:p "Jeśli chcesz nas wesprzeć i zgadzasz się na anonimową analizę, dane te są zbierane za pomocą Matomo i przechowywane na naszych serwerach w Niemczech. Matomo jest darmową i samodzielnie utrzymywaną alternatywą dla komercyjnych dostawców. Nie przekazujemy za jego pomocą żadnych danych osobom trzecim."]]
+    [:p "Domyślnie gromadzone są tylko dane niezbędne z technicznego punktu widzenia. Nie dochodzi do przetwarzania danych osobowych, a Państwa zachowanie na naszej stronie internetowej jest analizowane wyłącznie w sposób anonimowy."]
+    [:p "Twoje zachowanie użytkownika jest rejestrowane przez Matomo i przechowywane na naszych serwerach w Niemczech. Matomo jest darmową i samodzielnie utrzymywaną alternatywą dla komercyjnych dostawców. Nie przekazujemy za jego pomocą żadnych danych osobom trzecim."]]
    :privacy.localstorage/lead "Jakie dane wysyłam do serwerów?"
    :privacy.localstorage/title "Wymiana danych"
    :privacy.localstorage/body
@@ -432,8 +432,7 @@
       [:a {:href "https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery"}
        "tutaj"]
       " należy prowadzić dalsze badania."]
-     [:li "Plik cookie logowania (persistent cookie), który rozpoznaje Cię jako użytkownika, z którym się zalogowałeś. Po 14 dniach plik cookie wygasa i jest usuwany. Jeśli usuniesz ten plik cookie, będziesz musiał zalogować się ponownie przy następnej wizycie na stronie."]
-     [:li "Analizujący plik cookie (trwały plik cookie), który może być opcjonalnie ustawiony, abyśmy mogli anonimowo zrozumieć Twoje zachowanie i zainteresowania. Więcej informacji na ten temat znajduje się w rozdziale dotyczącym korzystania z Matomo."]]
+     [:li "Plik cookie logowania (persistent cookie), który rozpoznaje Cię jako użytkownika, z którym się zalogowałeś. Po 14 dniach plik cookie wygasa i jest usuwany. Jeśli usuniesz ten plik cookie, będziesz musiał zalogować się ponownie przy następnej wizycie na stronie. Możesz znaleźć nasz serwer uwierzytelniający tutaj: https://auth.schnaq.com"]]
     [:p "Wszystkie używane przez nas pliki cookie generują losowe ciągi znaków, które są używane do dopasowania odpowiadających im ciągów znaków na naszym serwerze."]]
 
    :privacy.extended.personal-data/title "Dane osobowe"
@@ -452,7 +451,7 @@
    :privacy.extended.matomo/body
    [:<>
     [:h4 "Opis i zakres przetwarzania danych"]
-    [:p "Na naszej stronie internetowej używamy oprogramowania Matomo (dawniej PIWIK), aby analizować wykorzystanie naszej obecności w Internecie. Interesuje nas na przykład, jakie strony są często odwiedzane i czy używane są smartfony, tablety lub komputery z dużymi ekranami. Oprogramowanie umieszcza plik cookie na komputerze użytkownika (informacje o plikach cookie, patrz wyżej). W przypadku wejścia na poszczególne strony naszej witryny internetowej zapisywane są następujące dane:"]
+    [:p "Na naszej stronie internetowej używamy oprogramowania Matomo (dawniej PIWIK), aby analizować wykorzystanie naszej obecności w Internecie. Interesuje nas na przykład, jakie strony są często odwiedzane i czy używane są smartfony, tablety lub komputery z dużymi ekranami. Oprogramowanie nie ustawia plików cookie i nie tworzy profilu odwiedzających. W przypadku wejścia na poszczególne strony naszej witryny internetowej zapisywane są następujące dane:"]
     [:ol
      [:li "Dwa bajty adresu IP systemu wywołującego"]
      [:li "Dostępna strona internetowa"]
@@ -464,7 +463,8 @@
     [:p "Matomo jest używane wyłącznie na serwerach schnaq. Dane osobowe użytkowników są przechowywane tylko tam. Dane te nie są przekazywane osobom trzecim."]
     [:h4 "Cel przetwarzania danych"]
     [:p "Przetwarzanie zanonimizowanych danych użytkowników umożliwia nam analizę korzystania z naszej strony internetowej. Poprzez analizę uzyskanych danych jesteśmy w stanie opracować informacje na temat korzystania z poszczególnych elementów naszej strony internetowej. Pomaga nam to w ciągłym ulepszaniu naszych usług i ich przyjazności dla użytkownika. Dzięki anonimizacji adresu IP interes użytkownika w zakresie ochrony jego danych osobowych zostaje odpowiednio uwzględniony."]
-    [:p "Nie są tworzone żadne profile, które dawałyby nam głębszy wgląd w zachowania użytkowników. Ocena jest wyłącznie anonimowa i zagregowana, tak aby nie można było wyciągać żadnych wniosków na temat poszczególnych osób."]]
+    [:p "Nie są tworzone żadne profile, które dawałyby nam głębszy wgląd w zachowania użytkowników. Ocena jest wyłącznie anonimowa i zagregowana, tak aby nie można było wyciągać żadnych wniosków na temat poszczególnych osób."]
+    [:p "Korzystanie z Matomo na naszej stronie internetowej opiera się na podstawie prawnej Art. 6 ust. 1 lit. f GDPR."]]
    :privacy.extended.facebook-pixel/title "Facebook Pixel"
    :privacy.extended.facebook-pixel/body
    [:<>
@@ -791,19 +791,35 @@
    :graph.settings/stabilize "Ustabilizuj mapę myśli"
 
    ;; Pricing Page
-   :pricing.free-tier/description "Dla małych zespołów i do użytku prywatnego. Plan Starter to doskonałe wprowadzenie do ustrukturyzowanego tworzenia wiedzy."
-   :pricing.free-tier/beta-notice "Po zakończeniu fazy beta, plan jest nadal dostępny dla maksymalnie 5 użytkowników na zespół."
+   :pricing.intro/heading "Wkrótce się zacznie!"
+   :pricing.intro/lead "Już wkrótce będziesz mógł zarezerwować swoją taryfę tutaj. Czy chcieliby Państwo wziąć udział w naszej wersji beta i przetestować taryfę biznesową na wyłączność i bezpłatnie? Proszę się z nami skontaktować!"
+   :pricing.free-tier/title "Starter"
+   :pricing.free-tier/subtitle "Indywidualnie"
+   :pricing.free-tier/description "Dla małych zespołów i do użytku prywatnego. Plan startowy jest doskonałym wprowadzeniem do dyskusji strukturalnych!"
+   :pricing.free-tier/beta-notice "Po zakończeniu fazy beta, plan jest nadal dostępny dla maksymalnie pięciu użytkowników na zespół."
    :pricing.free-tier/call-to-action "Rozpocznij bezpłatnie"
-   :pricing.business-tier/description "Czy 10 czy 50 użytkowników - cena jest taka sama.
-   Odpowiednie dla firm, stowarzyszeń, instytucji edukacyjnych i wszystkich innych,
-   którzy chcą gromadzić wiedzę w uporządkowany sposób."
+   :pricing.free-tier/for-free "Stale bezpłatnie"
+   :pricing.business-tier/title "Business"
+   :pricing.business-tier/subtitle "Zbierz swój zespół"
+   :pricing.business-tier/description "Pozwól, aby nasz A.I. wspierał Cię i dowiedział się więcej o Twoich dyskusjach!"
+   :pricing.business-tier/call-to-action "Zgłoś wniosek Beta"
+   :pricing.enterprise-tier/title "Enterprise"
+   :pricing.enterprise-tier/subtitle "Wielkie plany?"
+   :pricing.enterprise-tier/description "Chcesz połączyć całą firmę, klub, instytucję lub nawet całą uczelnię? W takim razie trafiłeś we właściwe miejsce!"
+   :pricing.enterprise-tier/call-to-action "Wyślij zapytanie"
+   :pricing.enterprise-tier/on-request "Na żądanie"
+   :pricing.features/implemented "Już wdrożone"
+   :pricing.features/to-be-implemented "Wkrótce dostępne"
+   :pricing.features/starter ["Hosting w Niemczech" "Tworzenie dyskusji" "Automatyczna Mindmap" "Udostępnianie przez link" "Eksport tekstu i obrazu"]
+   :pricing.features/business ["Tablica rozdzielcza analizy" "Podsumowania A.I." "Przestrzeń osobista"]
+   :pricing.features/enterprise ["Osadzanie w istniejących systemach\" \"Logowanie SSO (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
+   :pricing.features/upcoming ["Analiza nastrojów A.I." "Przekształcanie mowy na tekst"]
    :pricing.units/per-month "/ Miesiąc"
+   :pricing.units/per-active-account "dla rachunku aktywów"
    :pricing.notes/with-vat "plus VAT."
-   :pricing.notes/yearly-rebate "15% zniżki za roczną płatność z góry"
-   :pricing.business-tier/call-to-action "Dostępne od 01.01.2021 r."
    :pricing.trial/call-to-action "Test Business przez 30 dni"
    :pricing.trial/description "Karta kredytowa nie jest konieczna! Możliwość odwołania w dowolnym momencie."
-   :pricing.trial.temporary/deactivation "Dostępne od 01.01.2021 r."
+   :pricing.trial.temporary/deactivation "Dostępne od 01.11.2021 r."
    :pricing.features/heading "Zalety subskrypcji Schnaq"
    :pricing.features.user-numbers/heading "Nieograniczona liczba uczestników"
    :pricing.features.user-numbers/content "Pozwól współpracować tylu pracownikom, ilu chcesz. *"
@@ -819,27 +835,6 @@
    :pricing.features.mindmap/content "Wszystkie wkłady są automatycznie wyświetlane graficznie i interaktywnie."
    :pricing.features/disclaimer "* Obowiązuje tylko dla subskrypcji Business"
    :pricing.competitors/per-month-per-user " € miesięcznie za użytkownika"
-   :pricing.comparison/heading "Stale się rozwijasz - oszczędzasz więcej!"
-   :pricing.comparison/subheading "Bez względu na to, jak duży jest Twój zespół, cena pozostaje taka sama. Oto jak cena schnaq porównuje się do Miro + Loomio + Confluence w pakiecie."
-   :pricing.comparison.schnaq/price-point "79 € miesięcznie dla Twojej firmy"
-   :pricing.comparison.schnaq/brainstorm "Burza mózgów"
-   :pricing.comparison.schnaq/decision-making "Podejmowanie decyzji"
-   :pricing.comparison.schnaq/knowledge-db "Baza danych wiedzy"
-   :pricing.comparison.schnaq/async "Komunikacja asynchroniczna"
-   :pricing.comparison.schnaq/mindmap "Mindmapping"
-   :pricing.comparison.schnaq/analysis "Analiza wyników"
-   :pricing.comparison.schnaq/flatrate " Ryczałt za miesiąc"
-   :pricing.comparison.schnaq/person-20 "79 € dla 20 osób"
-   :pricing.comparison.schnaq/person-50 "79 € dla 50 osób"
-   :pricing.comparison.schnaq/person-100 "79 € dla 100 osób …"
-   :pricing.comparison/compared-to "W porównaniu z"
-   :pricing.comparison.miro/description "Oprogramowanie do burzy mózgów"
-   :pricing.comparison.loomio/description "Wspólne podejmowanie decyzji"
-   :pricing.comparison.confluence/description "Baza danych wiedzy"
-   :pricing.comparison.competitor/person-10 " miesięcznie dla 10 osób"
-   :pricing.comparison.competitor/person-20 "247 € dla 20 osób"
-   :pricing.comparison.competitor/person-50 "685 € dla 50 osób"
-   :pricing.comparison.competitor/person-100 "1370 € dla 100 osób …"
    :pricing.faq/heading "Najczęściej zadawane pytania dotyczące subskrypcji schnaq"
    :pricing.faq.terminate/heading "Czy mogę zrezygnować w dowolnym momencie?"
    :pricing.faq.terminate/body
@@ -867,7 +862,7 @@
     [:span.text-primary " Niemieckie serwery i zgodność z GDPR"] " zapisane. Na naszej "]
    :pricing.faq.privacy/body-2 "Strona poświęcona bezpieczeństwu danych"
    :pricing.faq.privacy/body-3 " znajdziesz więcej informacji"
-   :pricing/headline "schnaq Abonament"
+   :pricing/headline "Abonamenty"
    :pricing.newsletter/lead "Bądź informowany natychmiast, gdy subskrypcja wejdzie w życie:"
    :pricing.newsletter/name "newsletter schnaq."
 
@@ -895,7 +890,7 @@
    :router/last-added-schnaq "Ostatnio utworzony schnaq"
    :router/visited-schnaqs "Odwiedził schnaqs"
    :router/not-found-label "Nie znaleziono Przekierowanie trasy"
-   :router/pricing "Ceny"
+   :router/pricing "Wycena"
    :router/privacy "Ochrona danych"
    :router/start-discussion "Rozpocznij dyskusję"
    :router/startpage "Strona główna"

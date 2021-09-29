@@ -3,17 +3,19 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
-            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.navbar.user-management :as um]))
 
 ;; -----------------------------------------------------------------------------
 ;; Navbar Elements
 
 (defn- blog-link []
-  [:ul.navbar-nav
-   [:li.nav-item
-    [:a.nav-link {:href "https://schnaq.com/blog/" :role "button"}
-     (labels :nav/blog)]]])
+  [navbar-components/navbar-button :nav/blog "https://schnaq.com/blog/"])
+
+(defn- pricing-button []
+  [navbar-components/navbar-button :router/pricing (reitfe/href :routes/pricing)])
+
+(defn- privacy-button []
+  [navbar-components/navbar-button :router/privacy (reitfe/href :routes/privacy)])
 
 
 ;; -----------------------------------------------------------------------------
@@ -32,11 +34,9 @@
 
 (defn navbar-user []
   [:div.d-flex.flex-row.schnaq-navbar-space.mb-0.mb-md-4.ml-auto.schnaq-navbar.align-items-center.flex-wrap.px-md-3
-   [:div.mx-1
-    [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
-     (labels :router/privacy)]]
-   [:div.mx-1
-    [blog-link]]
+   [:div.mx-1 [privacy-button]]
+   [:div.mx-1 [pricing-button]]
+   [:div.mx-1 [blog-link]]
    [:div.mx-1
     [:div.dropdown.ml-auto
      [navbar-components/language-dropdown]]]
@@ -72,15 +72,10 @@
     ;; menu items
     [:div#schnaq-navbar.collapse.navbar-collapse
      [:ul.navbar-nav.ml-auto
-      [:li.nav-item
-       [:a.nav-link
-        {:role "button"
-         :href (reitfe/href :routes.schnaqs/personal)}
-        (labels :nav/schnaqs)]]
-      [blog-link]
-      [:li.nav-item
-       [:a.nav-link {:role "button" :href (reitfe/href :routes/privacy)}
-        (labels :router/privacy)]]
+      [:li.nav-item [navbar-components/navbar-button :nav/schnaqs (reitfe/href :routes.schnaqs/personal)]]
+      [:li.nav-item [pricing-button]]
+      [:li.nav-item [privacy-button]]
+      [:li.nav-item [blog-link]]
       [:li.nav-item.dropdown
        [navbar-components/language-dropdown]]]
      [um/admin-dropdown "btn-outline-secondary"]

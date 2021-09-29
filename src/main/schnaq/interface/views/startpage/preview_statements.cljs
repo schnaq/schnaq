@@ -1,20 +1,27 @@
 (ns schnaq.interface.views.startpage.preview-statements
   (:require [re-frame.core :as rf]
+            [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config :refer [default-anonymous-display-name]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.views.discussion.conclusion-card :as conclusion-card]))
 
+(def ^:private api-url-for-examples
+  "Sets staging API as default API if environment is staging or when
+  developing on a local machine."
+  (if shared-config/production?
+    shared-config/api-url
+    shared-config/default-staging-api-url))
 
 (defn- interactive-example-statements []
   (let [statement-1 @(rf/subscribe [:example-statement/by-id config/example-statement-1])
         statement-2 @(rf/subscribe [:example-statement/by-id config/example-statement-2])
         statement-3 @(rf/subscribe [:example-statement/by-id config/example-statement-3])]
     (when (and statement-1 statement-2 statement-3)
-      [:div
+      [:<>
        [:div.example-statement-1.rounded-1.shadow-lg
         [conclusion-card/statement-card nil statement-1]]
-       [:div..example-statement-2.rounded-1.shadow-lg
+       [:div.example-statement-2.rounded-1.shadow-lg
         [conclusion-card/statement-card nil statement-2]]
        [:div.example-statement-3.rounded-1.shadow-lg
         [conclusion-card/statement-card nil statement-3]]])))
@@ -31,7 +38,8 @@
 (rf/reg-sub
   :example-statement/by-id
   (fn [db [_ id]]
-    (get-in db [:preview-statements id])))
+    (when (get-in db [:current-route :path-params :share-hash])
+      (get-in db [:preview-statements id]))))
 
 (rf/reg-sub
   :example-statement/static-image-fallback?
@@ -40,14 +48,15 @@
 
 (rf/reg-event-fx
   :discussion.query.example-statement/by-id
-  (fn [{:keys [db]} [_ share-hash statement-id]]
+  (fn [{:keys [db]} [_ share-hash statement-id api-url]]
     {:fx [(http/xhrio-request
             db :get "/discussion/statement/info"
             [:preview-statements/by-id-success]
             {:statement-id statement-id
              :share-hash share-hash
              :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
-            [:preview-statements/default])]}))
+            [:preview-statements/default]
+            api-url)]}))
 
 (rf/reg-event-fx
   :preview-statements/by-id-success
@@ -67,7 +76,7 @@
           id-2 config/example-statement-2
           id-3 config/example-statement-3]
       {:db (assoc-in db [:current-route :path-params :share-hash] share-hash)
-       :fx [[:dispatch [:schnaq/load-by-share-hash share-hash]]
-            [:dispatch [:discussion.query.example-statement/by-id share-hash id-1]]
-            [:dispatch [:discussion.query.example-statement/by-id share-hash id-2]]
-            [:dispatch [:discussion.query.example-statement/by-id share-hash id-3]]]})))
+       :fx [[:dispatch [:schnaq/load-by-share-hash share-hash api-url-for-examples]]
+            [:dispatch [:discussion.query.example-statement/by-id share-hash id-1 api-url-for-examples]]
+            [:dispatch [:discussion.query.example-statement/by-id share-hash id-2 api-url-for-examples]]
+            [:dispatch [:discussion.query.example-statement/by-id share-hash id-3 api-url-for-examples]]]})))

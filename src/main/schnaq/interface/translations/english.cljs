@@ -368,12 +368,14 @@
    :privacy.personal-data/lead "Which data is saved?"
    :privacy.personal-data/title "Personal Data"
    :privacy.personal-data/body
-   [:<> [:p "Per default we only save data that is needed to operate the service. There is no analysis of personal data, and anonymous data of your behavior on our website is only collected, when you explicitly allow us to do so. "]
-    [:p "If you want to support us and allow the analysis, we collect the data with Matomo and save it on our german servers. Matomo is a free and self-hosted alternative to commercial options for website analytics . We do not exchange this data with third parties."]]
+   [:<>
+    [:p "By default, only technically necessary data is collected. No evaluation of personal data takes place and your behaviour on our website is also only analysed anonymously."]
+    [:p "Your user behaviour is recorded with Matomo and stored on our servers in Germany. Matomo is a free and self-hosted alternative to commercial providers. We do not pass on any data to third parties with it."]]
    :privacy.localstorage/lead "What data do I send to the server?"
    :privacy.localstorage/title "Data Exchange"
    :privacy.localstorage/body
-   [:<> [:p "schnaq has no need for accounts. This way no personal data about you is saved on the server. Most of the interactions work through links. When you click on a link a part of it (the so called hash) is stored in your browser (in the localStorage). As soon as you go to schnaq.com again, your browser sends this hash back and you gain access to your created schnaqs. Alternatively you can send the links to yourself via email. This way you have all the data in your own hands."]
+   [:<>
+    [:p "schnaq has no need for accounts. This way no personal data about you is saved on the server. Most of the interactions work through links. When you click on a link a part of it (the so called hash) is stored in your browser (in the localStorage). As soon as you go to schnaq.com again, your browser sends this hash back and you gain access to your created schnaqs. Alternatively you can send the links to yourself via email. This way you have all the data in your own hands."]
     [:p "In difference to website-cookies we use the localStorage, which only saves data that is needed for the application to function for you.
          You can see the data in your localStorage by clicking the following button."]]
    :privacy.localstorage/show-data "Show my data"
@@ -426,8 +428,7 @@
       [:a {:href "https://en.wikipedia.org/wiki/Cross-site_request_forgery"}
        "here"]
       " be researched further."]
-     [:li "Login cookie (persistent cookie), which recognizes you as the user you logged in with. After 14 days your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site."]
-     [:li "Analysis cookie (persistent cookie), which can optionally be set so that we can understand your behavior and interests anonymously. For more information, see the section on the use of Matomo."]]
+     [:li "Login cookie (persistent cookie), which recognises you as the user you logged in with. After 14 days, your cookie expires and is deleted. If you delete this cookie, you will have to log in again the next time you visit the site. You can find our authentication server here: https://auth.schnaq.com"]]
     [:p "All cookies we use generate random strings that are used to match corresponding strings on our server."]]
 
    :privacy.extended.personal-data/title "Personal data"
@@ -446,7 +447,7 @@
    :privacy.extended.matomo/body
    [:<>
     [:h4 "Description and scope of data processing"]
-    [:p "We use the open source software tool Matomo (formerly PIWIK) on our website to analyze the use of our internet presence. For example, we are interested in which pages are accessed how often and whether smartphones, tablets or computers with large screens are used. The software sets a cookie on the user's computer (for cookies, see above). If individual pages of our website are called up, the following data is stored:"]
+    [:p "We use the open source software tool Matomo (formerly PIWIK) on our website to analyse the use of our internet presence. For example, we are interested in which pages are accessed how often and whether smartphones, tablets or computers with large screens are used. The software does not set a cookie and does not create a profile of visitors. If individual pages of our website are accessed, the following data is stored:"]
     [:ol
      [:li "Two bytes of the IP address of the calling system"]
      [:li "The accessed web page"]
@@ -458,7 +459,8 @@
     [:p "Matomo is used exclusively on schnaq servers. Personal data of the users is only stored there. The data is not passed on to third parties."]
     [:h4 "Purpose of data processing"]
     [:p "The processing of anonymized user data enables us to analyze the use of our website. By evaluating the data obtained, we are able to compile information about the use of the individual components of our website. This helps us to continuously improve our services and their user-friendliness. By anonymizing the IP address, the interest of the user in the protection of his personal data is sufficiently taken into account."]
-    [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]]
+    [:p "No profiles are created that would give us a deeper insight into the usage behavior of individual users. The evaluation is exclusively anonymized and aggregated so that no conclusion can be drawn about individual persons."]
+    [:p "The use of Matomo on our homepage is based on the legal basis of Art. 6 para. 1 lit. f GDPR."]]
    :privacy.extended.facebook-pixel/title "Facebook Pixel"
    :privacy.extended.facebook-pixel/body
    [:<>
@@ -786,19 +788,35 @@ Now we write down questions and discuss them and can still understand what we ha
    :graph.settings/stabilize "Stabilize Mindmap"
 
    ;; Pricing Page
-   :pricing.free-tier/description "For small teams and private parties. The starter plan is the perfect entry
-         into structured idea generation."
-   :pricing.free-tier/beta-notice "This plan will be still available after the beta-phase for teams of up to 5 members."
-   :pricing.free-tier/call-to-action "Start free of charge"
-   :pricing.business-tier/description "Whether 10 or 50 members – the price stays the same.
-      Perfect for companies, clubs, educational institutions and everyone looking to structure their knowledge."
+   :pricing.intro/heading "Starting soon!"
+   :pricing.intro/lead "You will soon be able to book your plan here. Would you like to be part of our beta and test the business plan exclusively and free of charge? Then please contact us!"
+   :pricing.free-tier/title "Starter"
+   :pricing.free-tier/subtitle "Individual"
+   :pricing.free-tier/description "For small teams and private use. The Starter Plan is the perfect introduction to structured discussions!"
+   :pricing.free-tier/beta-notice "After the beta phase, the plan is still available for up to five users per team."
+   :pricing.free-tier/call-to-action "Start Free of Charge"
+   :pricing.free-tier/for-free "Permanently free of charge"
+   :pricing.business-tier/title "Business"
+   :pricing.business-tier/subtitle "Bring your team together"
+   :pricing.business-tier/description "Let our A.I. support you and learn more about your discussions!"
+   :pricing.business-tier/call-to-action "Submit Beta Request"
+   :pricing.enterprise-tier/title "Enterprise"
+   :pricing.enterprise-tier/subtitle "Big plans?"
+   :pricing.enterprise-tier/description "Do you want to connect your entire company, a club, institution or even a whole university? Then you've come to the right place!"
+   :pricing.enterprise-tier/call-to-action "Send Inquiry"
+   :pricing.enterprise-tier/on-request "On Request"
+   :pricing.features/implemented "Already implemented"
+   :pricing.features/to-be-implemented "Soon available"
+   :pricing.features/starter ["Hosted in Germany" "Create Discussions" "Automatic Mindmap" "Shareable by Link" "Text and Image Export"]
+   :pricing.features/business ["Analysis Dashboard" "A.I. Summaries" "Personal Space"]
+   :pricing.features/enterprise ["Embedding in existing systems" "SSO Login (OpenID, LDAP, ...)" "Whitelabelling" "On-Premise"]
+   :pricing.features/upcoming ["A.I. Sentiment Analysis" "Speech-to-Text"]
    :pricing.units/per-month "/ month"
-   :pricing.notes/with-vat "incl. VAT"
-   :pricing.notes/yearly-rebate "15% discount when paid yearly in advance"
-   :pricing.business-tier/call-to-action "Available from 01.01.2021"
+   :pricing.units/per-active-account "per active account"
+   :pricing.notes/with-vat "plus VAT"
    :pricing.trial/call-to-action "Test business 30 days free of charge"
    :pricing.trial/description "No credit card needed! Cancel anytime."
-   :pricing.trial.temporary/deactivation "Available from 01.01.2021"
+   :pricing.trial.temporary/deactivation "Available from 01.11.2021"
    :pricing.features/heading "Schnaq subscription advantages"
    :pricing.features.user-numbers/heading "Unlimited member accounts"
    :pricing.features.user-numbers/content "Set no bounds for how many people can collaborate. *"
@@ -814,28 +832,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.features.mindmap/content "All statements are automatically structured and shown in an interactive mindmap."
    :pricing.features/disclaimer "* Applies only to business plan"
    :pricing.competitors/per-month-per-user " € per month per user"
-   :pricing.comparison/heading "You continue growing – you continue saving!"
-   :pricing.comparison/subheading "No matter how much your team grows, the price stays the same.
-   Take a look how the price of schnaq compares to Miro + Loomio + Confluence together."
-   :pricing.comparison.schnaq/price-point "79 € per month for your company"
-   :pricing.comparison.schnaq/brainstorm "Brainstorming"
-   :pricing.comparison.schnaq/decision-making "Decision making"
-   :pricing.comparison.schnaq/knowledge-db "Knowledge database"
-   :pricing.comparison.schnaq/async "Asynchronous communication"
-   :pricing.comparison.schnaq/mindmap "Mindmapping"
-   :pricing.comparison.schnaq/analysis "Result analysis"
-   :pricing.comparison.schnaq/flatrate " Flat per Month"
-   :pricing.comparison.schnaq/person-20 "79 € for 20 users"
-   :pricing.comparison.schnaq/person-50 "79 € for 50 users"
-   :pricing.comparison.schnaq/person-100 "79 € for 100 users …"
-   :pricing.comparison/compared-to [:<> "Compared" [:br] "to"]
-   :pricing.comparison.miro/description "Brainstorming software"
-   :pricing.comparison.loomio/description "Cooperative decision making"
-   :pricing.comparison.confluence/description "Knowledge database"
-   :pricing.comparison.competitor/person-10 " per month for 10 users"
-   :pricing.comparison.competitor/person-20 "247 € for 20 users"
-   :pricing.comparison.competitor/person-50 "685 € for 50 users"
-   :pricing.comparison.competitor/person-100 "1370 € for 100 users …"
    :pricing.faq/heading "Frequently asked questions regarding schnaq subscriptions"
    :pricing.faq.terminate/heading "Can I cancel anytime?"
    :pricing.faq.terminate/body
@@ -862,7 +858,7 @@ Now we write down questions and discuss them and can still understand what we ha
     [:span.text-primary " german Servers in a GDPR compliant"] " manner. See the "]
    :pricing.faq.privacy/body-2 "Privacy notice page"
    :pricing.faq.privacy/body-3 " for more information."
-   :pricing/headline "Schnaq subscription"
+   :pricing/headline "Subscriptions"
    :pricing.newsletter/lead "Subscribe to the newsletter and be informed as soon as the plans go live:"
    :pricing.newsletter/name "schnaq newsletter."
 
@@ -892,7 +888,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/last-added-schnaq "Last created schnaq"
    :router/visited-schnaqs "Visited schnaqs"
    :router/not-found-label "Not found route redirect"
-   :router/pricing "Prices"
+   :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"

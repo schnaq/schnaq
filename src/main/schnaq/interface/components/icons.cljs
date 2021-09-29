@@ -15,7 +15,7 @@
      :camera "fa-camera"
      :carry "fa-people-carry"
      :check/double "fa-check-double"
-     :check/normal "fa-check"
+     :check/normal "fas fa-check"
      :check/square "fa-check-square"
      :check/circle "fa-check-circle"
      :clipboard "fa-clipboard-list"

@@ -112,7 +112,7 @@
    :startpage.features/more-information "Mehr Informationen"
 
    :startpage.information.know-how/title "Know-how Management und Teamkommunikation aus einer Hand."
-   :startpage.information.know-how/body "Wir arbeiten tagtäglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jeder gehört wird."
+   :startpage.information.know-how/body "Wir arbeiten tagtäglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jede:r gehört wird."
 
    :startpage.information.positioning/title "Schnaq ist der perfekte Partner für deine digitale Transformation"
    :startpage.information.positioning/body "Wir garantieren dir mit schnaq nachhaltiges Wissensmanagement das Zeit und Ressourcen spart."
@@ -373,11 +373,16 @@
     [:p "Sollten noch Unklarheiten bei unserem Vorgehen mit deinen Daten bestehen, so kontaktiere uns gerne! Uns liegt Transparenz und Klarheit mit persönlichen Daten wirklich am Herzen und wir erklären dir bis zum letzten Bit was mit den Daten geschieht."]]
    :privacy.personal-data/lead "Welche Daten werden erhoben?"
    :privacy.personal-data/title "Persönliche Daten"
-   :privacy.personal-data/body [:<> [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur dann anonymisiert analysiert, wenn du dem zustimmst. "] [:p "Wenn du uns unterstützen möchtest und der anonymisierten Analyse zustimmst, werden diese Daten mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."]]
+   :privacy.personal-data/body
+   [:<>
+    [:p "Standardmäßig werden nur technisch notwendige Daten erhoben. Es findet keine Auswertung über persönliche Daten statt und dein Verhalten auf unserer Website wird auch nur anonymisiert analysiert."]
+    [:p "Dein Nutzer:innenverhalten wird mit Matomo erfasst und auf unseren Servern in Deutschland gespeichert. Matomo ist eine freie und selbstgehostete Alternative zu kommerziellen Anbietern. Wir geben keine Daten an Dritte damit weiter."]]
    :privacy.localstorage/lead "Welche Daten schicke ich an die Server?"
    :privacy.localstorage/title "Datenaustausch"
-   :privacy.localstorage/body [:<> [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten von dir auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicke auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in deinem Browser (im LocalStorage) abgespeichert. Besuchst du dann schnaq erneut, schickt dein Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ kannst du dir die Zugangslinks per E-Mail schicken lassen und hältst so alle für den Betrieb notwendigen Daten selbst in der Hand."]
-                               [:p "Im Unterschied zu herkömmlichen Cookies, verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von dir an uns zurückschickt. Schaue selbst nach, welche Daten das genau sind, indem du auf den Button klickst."]]
+   :privacy.localstorage/body
+   [:<>
+    [:p "schnaq kann ganz auf Accounts verzichten. Es werden so keine Daten von dir auf unseren Servern gespeichert. Die meiste Interaktion findet über geteilte Links statt. Klicke auf einen Link zu einem schnaq, wird ein Teil des Links (der Hash) in deinem Browser (im LocalStorage) abgespeichert. Besuchst du dann schnaq erneut, schickt dein Browser diesen Hash zurück an uns und erhält so erneut Zugang zum schnaq. Alternativ kannst du dir die Zugangslinks per E-Mail schicken lassen und hältst so alle für den Betrieb notwendigen Daten selbst in der Hand."]
+    [:p "Im Unterschied zu herkömmlichen Cookies, verwenden wir den LocalStorage, welcher naturgemäß nur die wirklich notwendigen Daten von dir an uns zurückschickt. Schaue selbst nach, welche Daten das genau sind, indem du auf den Button klickst."]]
    :privacy.localstorage/show-data "Deine Daten anzeigen"
    :privacy.localstorage.notification/title "Diese Daten hat dein Browser gespeichert"
    :privacy.localstorage.notification/body "Hinweis: \"Kryptische\" Zeichenketten sind die Zugangscodes zu den schnaqs."
@@ -428,8 +433,7 @@
       [:a {:href "https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery"}
        "hier"]
       " weiter recherchiert werden."]
-     [:li "Login-Cookie (persistenter Cookie), welcher Sie als den:die Benutzer:in wiedererkennt, mit dem Sie sich eingeloggt haben. Nach 14 Tagen läuft Ihr Cookie ab und wird gelöscht. Wenn Sie diesen Cookie löschen, müssen Sie sich beim nächsten Besuch der Seite erneut einloggen."]
-     [:li "Analyse-Cookie (persistenter Cookie), welcher optional gesetzt werden kann, damit wir Ihr Verhalten und Ihre Interessen anonymisiert verstehen können. Weiteres dazu finden Sie in dem Abschnitt zur Verwendung von Matomo."]]
+     [:li "Login-Cookie (persistenter Cookie), welcher Sie als den:die Benutzer:in wiedererkennt, mit dem Sie sich eingeloggt haben. Nach 14 Tagen läuft Ihr Cookie ab und wird gelöscht. Wenn Sie diesen Cookie löschen, müssen Sie sich beim nächsten Besuch der Seite erneut einloggen. Unseren Authentifizierungsserver finden Sie hier: https://auth.schnaq.com"]]
     [:p "Alle von uns eingesetzten Cookies generieren zufällige Zeichenketten, die zum Abgleich mit korrespondierenden Zeichenketten auf unserem Server verwendet werden."]]
 
    :privacy.extended.personal-data/title "Persönliche Daten"
@@ -448,7 +452,7 @@
    :privacy.extended.matomo/body
    [:<>
     [:h4 "Beschreibung und Umfang der Datenverarbeitung"]
-    [:p "Wir nutzen auf unserer Website das Open-Source-Software-Tool Matomo (ehemals PIWIK) zur Analyse der Nutzung unseres Internet-Auftritts. Uns interessiert zum Beispiel, welche Seiten wie häufig aufgerufen werden und ob dabei Smartphones, Tablets oder Rechner mit großen Bildschirmen eingesetzt werden. Die Software setzt einen Cookie auf dem Rechner der Nutzer:innen (zu Cookies siehe bereits oben). Werden Einzelseiten unserer Website aufgerufen, so werden folgende Daten gespeichert:"]
+    [:p "Wir nutzen auf unserer Website das Open-Source-Software-Tool Matomo (ehemals PIWIK) zur Analyse der Nutzung unseres Internet-Auftritts. Uns interessiert zum Beispiel, welche Seiten wie häufig aufgerufen werden und ob dabei Smartphones, Tablets oder Rechner mit großen Bildschirmen eingesetzt werden. Die Software setzt keinen Cookie und erstellt kein Profil der Besucher:innen. Werden Einzelseiten unserer Website aufgerufen, so werden folgende Daten gespeichert:"]
     [:ol
      [:li "Zwei Bytes der IP-Adresse des aufrufenden Systems"]
      [:li "Die aufgerufene Webseite"]
@@ -460,7 +464,8 @@
     [:p "Matomo kommt ausschließlich auf Servern von schnaq zum Einsatz. Eine Speicherung der personenbezogenen Daten der Nutzer:innen findet nur dort statt. Eine Weitergabe der Daten an Dritte erfolgt nicht."]
     [:h4 "Zweck der Datenverarbeitung"]
     [:p "Die Verarbeitung der anonymisierten Daten der Nutzer:innen ermöglicht uns eine Analyse der Nutzung unserer Webseite. Wir sind in durch die Auswertung der gewonnen Daten in der Lage, Informationen über die Nutzung der einzelnen Komponenten unserer Webseite zusammenzustellen. Dies hilft uns dabei unsere Dienste und deren Nutzer:innenfreundlichkeit stetig zu verbessern. Durch die Anonymisierung der IP-Adresse wird dem Interesse der:die Nutzer:in an deren Schutz personenbezogener Daten hinreichend Rechnung getragen."]
-    [:p "Es werden keine Profile erstellt, die uns einen tieferen Einblick in das Nutzungsverhalten der einzelnen Nutzer:innen geben würden. Die Auswertung erfolgt ausschließlich anonymisiert und aggregiert, dass kein Schluss auf einzelne Personen zu ziehen ist."]]
+    [:p "Es werden keine Profile erstellt, die uns einen tieferen Einblick in das Nutzungsverhalten der einzelnen Nutzer:innen geben würden. Die Auswertung erfolgt ausschließlich anonymisiert und aggregiert, dass kein Schluss auf einzelne Personen zu ziehen ist."]
+    [:p "Der Einsatz von Matomo auf unserer Homepage erfolgt auf Rechtsgrundlage des Art. 6 Abs. 1 lit. f DSGVO."]]
    :privacy.extended.facebook-pixel/title "Facebook Pixel"
    :privacy.extended.facebook-pixel/body
    [:<>
@@ -790,20 +795,35 @@
    :graph.settings/stabilize "Stabilisiere Mindmap"
 
    ;; Pricing Page
-   :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der
-     perfekte Einstieg in strukturierte Wissensgenerierung."
-   :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu 5 Nutzer:innen pro Team"
+   :pricing.intro/heading "Bald geht es los!"
+   :pricing.intro/lead "Schon bald kannst du hier deinen Tarif buchen. Möchtest du Teil unserer Beta sein und schon jetzt exklusiv und kostenfrei den Business-Tarif testen? Dann kontaktiere uns gerne!"
+   :pricing.free-tier/title "Starter"
+   :pricing.free-tier/subtitle "Individuell"
+   :pricing.free-tier/description "Für kleine Teams und private Zwecke. Der Starter Plan ist der perfekte Einstieg in strukturierte Diskussionen!"
+   :pricing.free-tier/beta-notice "Nach der Beta-Phase ist der Plan weiterhin verfügbar für bis zu five Nutzer:innen pro Team"
    :pricing.free-tier/call-to-action "Kostenfrei loslegen"
-   :pricing.business-tier/description "Ob 10 oder 50 Nutzer:innen – der Preis ist der gleiche.
-      Eignet sich für Unternehmen, Vereine, Bildungsinstitutionen und alle,
-      die strukturiert Wissen sammeln möchten."
+   :pricing.free-tier/for-free "Dauerhaft kostenfrei"
+   :pricing.business-tier/title "Business"
+   :pricing.business-tier/subtitle "Bringe dein Team zusammen"
+   :pricing.business-tier/description "Lasse dich von unserer K.I. unterstützen und erfahre mehr zu deinen Diskussionen!"
+   :pricing.business-tier/call-to-action "Beta-Anfrage stellen"
+   :pricing.enterprise-tier/title "Enterprise"
+   :pricing.enterprise-tier/subtitle "Großes vor?"
+   :pricing.enterprise-tier/description "Möchtest du dein gesamtes Unternehmen, einen Verein, Institution, ganze Universitäten anbinden? Dann bist du hier richtig!"
+   :pricing.enterprise-tier/call-to-action "Anfrage senden"
+   :pricing.enterprise-tier/on-request "Auf Anfrage"
+   :pricing.features/implemented "Bereits implementiert"
+   :pricing.features/to-be-implemented "Bald verfügbar"
+   :pricing.features/starter ["In Deutschland gehostet" "Diskussionen erstellen" "Automatische Mindmap" "Teilbar per Link" "Text- und Bild-Export"]
+   :pricing.features/business ["Analyse-Dashboard" "K.I. Zusammenfassungen" "Persönlicher Bereich"]
+   :pricing.features/enterprise ["Einbettung in bestehende Systeme" "SSO Login (OpenID, LDAP, ...)" "Whitelabeling" "On-Premise"]
+   :pricing.features/upcoming ["K.I. Stimmungsanalyse" "Sprache-zu-Text"]
    :pricing.units/per-month "/ Monat"
+   :pricing.units/per-active-account "pro aktivem Account"
    :pricing.notes/with-vat "zzgl. MwSt."
-   :pricing.notes/yearly-rebate "Bei jährlicher Zahlweise im Voraus 15% Rabatt"
-   :pricing.business-tier/call-to-action "Verfügbar ab 01.01.2021"
    :pricing.trial/call-to-action "30 Tage Business testen"
    :pricing.trial/description "Keine Kreditkarte nötig! Jederzeit kündbar."
-   :pricing.trial.temporary/deactivation "Verfügbar ab 01.01.2021"
+   :pricing.trial.temporary/deactivation "Verfügbar ab 01.11.2021"
    :pricing.features/heading "Schnaq-Abonnement Vorteile"
    :pricing.features.user-numbers/heading "Unbegrenzte Teilnehmer:innen"
    :pricing.features.user-numbers/content "Lass so viele Mitarbeiter:innen, wie du möchtest, kooperieren. *"
@@ -819,28 +839,6 @@
    :pricing.features.mindmap/content "Alle Beiträge werden automatisch graphisch und interaktiv dargestellt."
    :pricing.features/disclaimer "* Gilt nur für Business-Abonnement"
    :pricing.competitors/per-month-per-user " € pro Monat pro Nutzer:in"
-   :pricing.comparison/heading "Ihr wachst weiter – ihr spart mehr!"
-   :pricing.comparison/subheading "Egal wie groß dein Team wird, der Preis bleibt der Gleiche.
-   So schlägt sich der Preis von schnaq im Vergleich zu Miro + Loomio + Confluence im Paket."
-   :pricing.comparison.schnaq/price-point "79 € pro Monat für dein Unternehmen"
-   :pricing.comparison.schnaq/brainstorm "Brainstorming"
-   :pricing.comparison.schnaq/decision-making "Entscheidungsfindung"
-   :pricing.comparison.schnaq/knowledge-db "Wissensdatenbank"
-   :pricing.comparison.schnaq/async "Asynchrone Kommunikation"
-   :pricing.comparison.schnaq/mindmap "Mindmapping"
-   :pricing.comparison.schnaq/analysis "Ergebnisanalyse"
-   :pricing.comparison.schnaq/flatrate " Flatrate im Monat"
-   :pricing.comparison.schnaq/person-20 "79 € für 20 Personen"
-   :pricing.comparison.schnaq/person-50 "79 € für 50 Personen"
-   :pricing.comparison.schnaq/person-100 "79 € für 100 Personen …"
-   :pricing.comparison/compared-to [:span "Verglichen" [:br] "mit"]
-   :pricing.comparison.miro/description "Brainstorming Software"
-   :pricing.comparison.loomio/description "Kooperative Entscheidungsfindung"
-   :pricing.comparison.confluence/description "Wissensdatenbank"
-   :pricing.comparison.competitor/person-10 " im Monat für 10 Personen"
-   :pricing.comparison.competitor/person-20 "247 € für 20 Personen"
-   :pricing.comparison.competitor/person-50 "685 € für 50 Personen"
-   :pricing.comparison.competitor/person-100 "1370 € für 100 Personen …"
    :pricing.faq/heading "Häufig gestellte Fragen zu schnaq Abos"
    :pricing.faq.terminate/heading "Kann ich jederzeit kündigen?"
    :pricing.faq.terminate/body
@@ -868,7 +866,7 @@
     [:span.text-primary " deutschen Servern und DSGVO konform"] " abgespeichert. Auf unserer "]
    :pricing.faq.privacy/body-2 "Seite zur Datensicherheit"
    :pricing.faq.privacy/body-3 " findest du mehr Informationen"
-   :pricing/headline "Schnaq Abonnement"
+   :pricing/headline "Abonnements"
    :pricing.newsletter/lead "Werde sofort informiert, wenn das Abonnement live geht:"
    :pricing.newsletter/name "schnaq Newsletter."
 

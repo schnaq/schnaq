@@ -29,28 +29,12 @@
   }
 }
 
-.comparison-box {
-  background-color: $white;
-  border-radius: 0.5rem;
-}
+.pricing-feature-list {
+  @extend .list-group;
+  @extend .list-group-flush;
 
-.pricing-logo {
-  max-height: 100px;
-}
-
-.pricing-checklist {
-  padding-top: 1em;
-
-  li span {
-    color: $primary;
+  li {
+    padding: 0.5rem;
   }
-}
-
-.pricing-vs {
-  background: $blue-dark;
-  border-radius: 50%;
-  color: $white;
-  display: inline-block;
-  padding: 1em;
 }
 

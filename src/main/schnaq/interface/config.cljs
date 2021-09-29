@@ -20,8 +20,13 @@
 
 (def place-holder-header-img "https://s3.disqtec.com/schnaq-header-images/header-placeholder.jpg")
 
-(def facebook-pixel-id "374262374406278")
 
+;; -----------------------------------------------------------------------------
+;; Pricing
+
+(def pricing-business-tier
+  "Price in euros, exclusively VAT."
+  6)
 
 ;; -----------------------------------------------------------------------------
 ;; Keycloak
@@ -47,8 +52,8 @@
   {:pattern "HH:mm dd.MM.yyy"
    :timezone "Europe/Berlin"})
 
+
 ;; -----------------------------------------------------------------------------
-;; Time settings
 
 (def max-allowed-profile-picture-size
   "Maximal allowed image size of profile picture in bytes."
