@@ -5,7 +5,6 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [fa]]
-            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -114,7 +113,7 @@
                                 [:discussion.add.statement/starting-success form]
                                 {:statement statement-text
                                  :share-hash share-hash
-                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
+                                 :display-name (toolbelt/current-display-name db)}
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -141,7 +140,7 @@
       {:fx [(http/xhrio-request db :get "/discussion/conclusions/starting"
                                 [:discussion.query.conclusions/set-starting]
                                 {:share-hash share-hash
-                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)})]})))
+                                 :display-name (toolbelt/current-display-name db)})]})))
 
 (rf/reg-event-fx
   :discussion.query.conclusions/set-starting

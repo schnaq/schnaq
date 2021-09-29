@@ -2,8 +2,9 @@
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.config :as config :refer [default-anonymous-display-name]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as conclusion-card]))
 
 (def ^:private api-url-for-examples
@@ -54,7 +55,7 @@
             [:preview-statements/by-id-success]
             {:statement-id statement-id
              :share-hash share-hash
-             :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
+             :display-name (tools/current-display-name db)}
             [:preview-statements/default]
             api-url)]}))
 

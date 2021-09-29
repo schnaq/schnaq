@@ -75,7 +75,7 @@
                                 {:share-hash share-hash
                                  :statement-id (:db/id statement)
                                  :label label
-                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)})]})))
+                                 :display-name (tools/current-display-name db)})]})))
 
 (rf/reg-event-db
   :statement.labels.update/success
@@ -98,4 +98,4 @@
                                 {:share-hash share-hash
                                  :statement-id (:db/id statement)
                                  :label label
-                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)})]})))
+                                 :display-name (tools/current-display-name db)})]})))

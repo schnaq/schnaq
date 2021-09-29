@@ -3,6 +3,7 @@
             [clojure.string :as string]
             [ghostwheel.core :refer [>defn]]
             [oops.core :refer [oset! oget oget+]]
+            [schnaq.interface.config :as config]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn height-to-scrollheight!
@@ -96,3 +97,7 @@
   (let [tokens (map #(string/lower-case %) (string/split title #"\s"))]
     (string/join "-" (take (or limit (count tokens)) tokens))))
 
+(defn current-display-name
+  "Central fn for extracting current display-name from db."
+  [db]
+  (get-in db [:user :names :display] config/default-anonymous-display-name))

@@ -2,8 +2,8 @@
   "Handling visited schnaqs."
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :as config]
-            [schnaq.interface.utils.http :as http]))
+            [schnaq.interface.utils.http :as http]
+            [schnaq.interface.utils.toolbelt :as tools]))
 
 (rf/reg-event-db
   :schnaqs.visited/store-hashes-from-localstorage
@@ -41,7 +41,7 @@
                 db :get "/schnaqs/by-hashes"
                 [:schnaqs.visited/store-from-backend]
                 {:share-hashes visited-hashes
-                 :display-name (get-in db [:user :names :display] config/default-anonymous-display-name)})]}))))
+                 :display-name (tools/current-display-name db)})]}))))
 
 (rf/reg-event-fx
   :schnaqs.visited/merge-registered-users-visits

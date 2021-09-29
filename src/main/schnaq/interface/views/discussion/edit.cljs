@@ -51,7 +51,7 @@
                                 {:statement-id statement-id
                                  :statement-type new-type
                                  :share-hash share-hash
-                                 :display-name (get-in db [:user :names :display] config/default-anonymous-display-name)
+                                 :display-name (tools/current-display-name db)
                                  :new-content (oget+ form [html-selector :value])}
                                 [:statement.edit.send/failure])]})))
 

@@ -9,6 +9,7 @@
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown :as md]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
@@ -129,7 +130,7 @@
                                 [:discussion.premises/set-current]
                                 {:conclusion-id (:db/id conclusion)
                                  :share-hash share-hash
-                                 :display-name (get-in db [:user :names :display] default-anonymous-display-name)}
+                                 :display-name (tools/current-display-name db)}
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
@@ -159,7 +160,7 @@
              (assoc-in [:votes :own :down id] false))
      :fx [(http/xhrio-request db :post "/discussion/statement/vote/up" [:upvote-success statement]
                               {:statement-id id
-                               :nickname (get-in db [:user :names :display] default-anonymous-display-name)
+                               :nickname (tools/current-display-name db)
                                :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                               [:ajax.error/as-notification])]}))
 
@@ -171,7 +172,7 @@
              (update-in [:votes :own :down id] #(not (if (nil? %) downvoted? %))))
      :fx [(http/xhrio-request db :post "/discussion/statement/vote/down" [:downvote-success statement]
                               {:statement-id id
-                               :nickname (get-in db [:user :names :display] default-anonymous-display-name)
+                               :nickname (tools/current-display-name db)
                                :share-hash (-> db :schnaq :selected :discussion/share-hash)}
                               [:ajax.error/as-notification])]}))
 

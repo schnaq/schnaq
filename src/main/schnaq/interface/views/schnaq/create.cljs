@@ -4,10 +4,10 @@
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [schnaq.interface.components.icons :refer [fa]]
-            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
+            [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.howto.elements :as how-to-elements]
             [schnaq.interface.views.pages :as pages]))
@@ -118,7 +118,7 @@
     (let [authenticated? (get-in db [:user :authenticated?] false)
           use-origin? (and authenticated?
                            (seq (get-in db [:user :groups] [])))
-          nickname (get-in db [:user :names :display] default-anonymous-display-name)
+          nickname (tools/current-display-name db)
           discussion-title (oget form-elements [:schnaq-title :value])
           exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
           origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))
