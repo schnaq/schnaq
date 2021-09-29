@@ -18,9 +18,9 @@
   (let [user-groups @(rf/subscribe [:user/groups])
         hubs @(rf/subscribe [:hubs/all])]
     (when (seq user-groups)
-      [:div.col-6.border-left.pl-5
+      [:section.text-center
        [:h4.mb-5 (labels :discussion.create.hub-exclusive-checkbox/title)]
-       [:div.form-check.text-center
+       [:div.form-check
         [:input.form-check-input.big-checkbox
          {:type :checkbox
           :id :hub-exclusive
@@ -44,7 +44,7 @@
   []
   (let [end-time (reagent/atom false)]
     (fn []
-      [:div.col-6.pt-4
+      [:section.text-center
        [:h4.mb-5 (labels :discussion.progress.creation/heading)]
        (when @end-time
          [:div
@@ -73,8 +73,10 @@
   "Options that can be chosen when creating a schnaq."
   []
   [:div.row.my-5
-   [end-time-schnaq-options]
-   [add-schnaq-to-hub]])
+   [:div.col-12.col-xl-6.pb-5
+    [end-time-schnaq-options]]
+   [:div.col-12.col-xl-6.border-left
+    [add-schnaq-to-hub]]])
 
 (defn- create-schnaq-page []
   [pages/with-nav-and-header
