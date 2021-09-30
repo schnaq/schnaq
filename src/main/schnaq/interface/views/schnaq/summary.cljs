@@ -34,7 +34,7 @@
   (let [request-status @(rf/subscribe [:schnaq.summary/status share-hash])
         time-to-show-info 5000]
     (when (some #{request-status} calculation-states)
-      [motion/delayed-fade-in
+      [motion/fade-in-and-out
        [:small
         (labels :summary.user.abort/label)
         " "

@@ -20,7 +20,7 @@
 (defn- call-to-contribute
   "If no contributions are available, add a call to action to engage the users."
   []
-  [motion/delayed-fade-in
+  [motion/fade-in-and-out
    [:article.call-to-contribute.m-3
     [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5
      [:div.col-2.py-md-5.d-flex

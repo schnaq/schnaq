@@ -1,6 +1,5 @@
 (ns schnaq.interface.components.motion
   (:require ["framer-motion" :refer [motion AnimatePresence]]
-            [cljs.core.async :refer [go <! timeout]]
             [reagent.core :as reagent]))
 
 (defn zoom-image
@@ -26,38 +25,19 @@
            :transition transition}
           properties)]])))
 
-(defn- delay-render
-  "Wrap a component in this component to wait for a certain amount of
-  milliseconds, until the provided component is rendered."
-  [_component _delay]
-  (let [ready? (reagent/atom false)]
-    (reagent/create-class
-      {:component-did-mount
-       (fn [comp]
-         (let [[_ _component delay-in-milliseconds] (reagent/argv comp)]
-           (go (<! (timeout delay-in-milliseconds))
-               (reset! ready? true))))
-       :display-name "Delay Rendering of wrapped component"
-       :reagent-render
-       (fn [component _delay]
-         (when @ready? [:> AnimatePresence component]))})))
-
 (defn fade-in-and-out
-  "Add animation to component, which fades the component in and out."
-  [component]
-  [:> (.-div motion)
-   {:initial {:opacity 0}
-    :animate {:opacity 1}
-    :exit {:opacity 0}}
-   component])
-
-(defn delayed-fade-in
-  "Takes a component and applies a delay and a fade-in-and-out animation.
-  Optionally takes a `delay` in milliseconds."
+  "Add animation to component, which fades the component in and out. Takes
+  optional parameter `delay`, which adds a delay to the point when the component
+  should fade in."
   ([component]
-   [delayed-fade-in component 500])
+   [fade-in-and-out component 0.5])
   ([component delay]
-   [delay-render [fade-in-and-out component] delay]))
+   [:> (.-div motion)
+    {:initial {:opacity 0}
+     :animate {:opacity 1}
+     :transition {:delay delay}
+     :exit {:opacity 0}}
+    component]))
 
 (defn move-in
   "Add animation to component, which fades the component in and out."

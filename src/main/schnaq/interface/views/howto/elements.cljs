@@ -45,7 +45,7 @@
   (let [hidden-tags @(rf/subscribe [:how-to-visibility/hidden-tags])
         hide? (contains? hidden-tags hide-tag)]
     (when-not hide?
-      [motion/delayed-fade-in
+      [motion/fade-in-and-out
        [:article.quick-how-to
         [:div.row.align-items-center
          [:div.col-12.col-lg-7

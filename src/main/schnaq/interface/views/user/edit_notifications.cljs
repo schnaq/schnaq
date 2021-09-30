@@ -12,7 +12,7 @@
   []
   (when @(rf/subscribe [:user.notification/mark-all-as-read-finished?])
     [:div.flex.mx-3.my-auto
-     [motion/delayed-fade-in
+     [motion/fade-in-and-out
       [motion/move-in :bottom
        [:i.text-secondary.m-auto {:class (fa :check/normal)}]]]]))
 

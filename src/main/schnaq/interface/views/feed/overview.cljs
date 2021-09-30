@@ -16,7 +16,7 @@
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
   []
-  [motion/delayed-fade-in
+  [motion/fade-in-and-out
    [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5.text-center
     [:div.col-2.py-md-5.d-flex
      [:div.display-1.align-self-center "🙈"]]
