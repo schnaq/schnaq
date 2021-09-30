@@ -3,7 +3,6 @@
             [hodgepodge.core :refer [local-storage]]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]))

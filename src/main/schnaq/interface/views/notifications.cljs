@@ -23,7 +23,7 @@
             [re-frame.core :as rf]
             [reagent.dom]
             [schnaq.interface.components.icons :refer [fa]]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.components.motion :as motion]))
 
 (def ^:private display-time
   "Milliseconds, that a notification stays visible."
@@ -43,7 +43,7 @@
    secondary, ...)."
   [{:notification/keys [title body id context on-close-fn]}]
   [::notification :ret associative?]
-  [common/fade-in-and-out
+  [motion/fade-in-and-out
    [:article
     {:class-name (toast-classes context)
      :aria-atomic "true", :aria-live "assertive", :role "alert"}

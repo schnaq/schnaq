@@ -4,9 +4,9 @@
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.videos :refer [video]]
-            [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.common :as common]))
+            [schnaq.interface.translations :refer [labels]]))
 
 (defn text-box
   "Text box with title and a body."
@@ -45,7 +45,7 @@
   (let [hidden-tags @(rf/subscribe [:how-to-visibility/hidden-tags])
         hide? (contains? hidden-tags hide-tag)]
     (when-not hide?
-      [common/delayed-fade-in
+      [motion/delayed-fade-in
        [:article.quick-how-to
         [:div.row.align-items-center
          [:div.col-12.col-lg-7

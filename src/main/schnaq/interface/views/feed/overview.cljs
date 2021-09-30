@@ -2,10 +2,10 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.feed.filters :as filters]
             [schnaq.interface.views.header-image :as header-image]
@@ -16,7 +16,7 @@
 (defn- no-schnaqs-found
   "Show error message when no meetings were loaded."
   []
-  [common/delayed-fade-in
+  [motion/delayed-fade-in
    [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5.text-center
     [:div.col-2.py-md-5.d-flex
      [:div.display-1.align-self-center "🙈"]]

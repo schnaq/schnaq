@@ -1,8 +1,8 @@
 (ns schnaq.interface.views.discussion.search
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.card-elements :as elements]
             [schnaq.interface.views.discussion.conclusion-card :as card]
             [schnaq.interface.views.discussion.filters :as filters]
@@ -20,7 +20,7 @@
     (get-in db [:search :schnaq :current :result] [])))
 
 (defn- search-info [results search-string empty-search?]
-  [common/move-in :left
+  [motion/move-in :left
    [:div.panel-white.mb-4
     [:div.d-inline-block
      [:h2 (labels :schnaq.search/heading)]
@@ -45,7 +45,7 @@
         sorted-results (sort-by key-fn > results)
         active-filters @(rf/subscribe [:filters/active])
         filtered-conclusions (filters/filter-statements sorted-results active-filters local-votes)]
-    [common/move-in :right
+    [motion/move-in :right
      (for [statement filtered-conclusions]
        [:div.p-2.w-lg-50.d-inline-block
         {:key (:db/id statement)}

@@ -6,11 +6,11 @@
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.time :as time]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
 
@@ -34,7 +34,7 @@
   (let [request-status @(rf/subscribe [:schnaq.summary/status share-hash])
         time-to-show-info 5000]
     (when (some #{request-status} calculation-states)
-      [common/delayed-fade-in
+      [motion/delayed-fade-in
        [:small
         (labels :summary.user.abort/label)
         " "

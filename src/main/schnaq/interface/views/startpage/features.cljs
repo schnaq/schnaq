@@ -1,5 +1,6 @@
 (ns schnaq.interface.views.startpage.features
   (:require [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.startpage.preview-statements :as examples]))
@@ -19,7 +20,9 @@
    [rows/row-builder-text-left
     [rows/build-text-box :startpage.information.positioning]
     [:div.example-dashboard-image
-     [:img.img-fluid.shadow-lg.rounded-2 {:src (img-path :startpage.example/dashboard)}]]]])
+     [motion/zoom-image
+      {:class "img-fluid shadow-lg rounded-2"
+       :src (img-path :startpage.example/dashboard)}]]]])
 
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
