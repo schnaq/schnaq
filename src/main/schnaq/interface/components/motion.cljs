@@ -1,5 +1,5 @@
 (ns schnaq.interface.components.motion
-  (:require ["framer-motion" :refer [motion AnimatePresence]]
+  (:require ["framer-motion" :refer [motion]]
             [reagent.core :as reagent]))
 
 (defn zoom-image
