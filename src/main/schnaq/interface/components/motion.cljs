@@ -6,7 +6,7 @@
 (defn zoom-image
   "Create an image, which zooms in and out on click.
 
-  Usage: `[zoom-image {:src \"path-to-file\" :class \"additional-classes\"]"
+  Usage: `[zoom-image {:src \"path-to-file\" :class \"additional-classes\"}]`"
   [properties]
   (let [open? (reagent/atom false)
         transition {:type "spring"
