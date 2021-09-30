@@ -56,7 +56,6 @@
        [:p "Schnaqs starten ist so einfach wie: Titel wählen und Link verteilen.
        Schnell, sicher und datenschutzkonform nach deutschem Recht."]]
       [motion/zoom-image {:src (img-path :startpage.example/discussion)
-                          :class "align-self-center"
                           :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
     [:section.container.mb-5
      [rows/row-builder-text-right
@@ -71,7 +70,6 @@
        [:h3.h1.text-purple.mb-3 "Verstehen wo es hakt"]
        [:p "Verschaffe dir einen schnellen Überblick über das Diskutierte. Vollziehe einfach nach worüber deine Lernenden reden. Oder schaue dir die verschiedenen K.I. Auswertungen der Diskussion an."]]
       [motion/zoom-image {:src (img-path :startpage.example/dashboard)
-                          :class "align-self-center"
                           :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
     [:section.container.mb-5
      [rows/row-builder-text-right
