@@ -1,9 +1,9 @@
 (ns schnaq.interface.views.user.edit-notifications
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.user.settings :as settings]))
 
@@ -12,8 +12,8 @@
   []
   (when @(rf/subscribe [:user.notification/mark-all-as-read-finished?])
     [:div.flex.mx-3.my-auto
-     [common/delayed-fade-in
-      [common/move-in :bottom
+     [motion/fade-in-and-out
+      [motion/move-in :bottom
        [:i.text-secondary.m-auto {:class (fa :check/normal)}]]]]))
 
 (defn- button-or-spinner

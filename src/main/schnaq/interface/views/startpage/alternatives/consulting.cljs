@@ -2,6 +2,7 @@
   (:require [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))
@@ -53,8 +54,8 @@
        [:h3.h1.text-purple.mb-3 "Minimaler Aufwand, maximale Aktivierung"]
        [:p "Schnaqs starten ist so einfach wie: Titel wählen und Link verteilen.
        Schnell, sicher und datenschutzkonform nach deutschem Recht."]]
-      [:img.align-self-center {:src (img-path :startpage.example/discussion)
-                               :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
+      [motion/zoom-image {:src (img-path :startpage.example/discussion)
+                          :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
     [:section.container.mb-5
      [rows/row-builder-text-right
       [:img {:src (img-path :startpage.alternatives.e-learning/student-smartphone)}]
@@ -67,8 +68,8 @@
       [:article.feature-text-box
        [:h3.h1.text-purple.mb-3 "Verstehen wo es hakt"]
        [:p "Verschaffe dir einen schnellen Überblick über das Diskutierte. Vollziehe einfach nach worüber deine Stakeholder reden. Oder schaue dir die verschiedenen K.I. Auswertungen der Diskussion an."]]
-      [:img.align-self-center {:src (img-path :startpage.example/dashboard)
-                               :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
+      [motion/zoom-image {:src (img-path :startpage.example/dashboard)
+                          :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
     [:section.container.mb-5
      [rows/row-builder-text-right
       [:img {:src (img-path :startpage.alternatives.e-learning/oma)}]

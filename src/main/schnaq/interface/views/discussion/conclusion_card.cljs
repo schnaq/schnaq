@@ -4,13 +4,12 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.components.images :refer [img-path]]
-            [schnaq.interface.config :refer [default-anonymous-display-name]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.markdown :as md]
             [schnaq.interface.utils.toolbelt :as tools]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.discussion.edit :as edit]
             [schnaq.interface.views.discussion.filters :as filters]
@@ -21,7 +20,7 @@
 (defn- call-to-contribute
   "If no contributions are available, add a call to action to engage the users."
   []
-  [common/delayed-fade-in
+  [motion/fade-in-and-out
    [:article.call-to-contribute.m-3
     [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5
      [:div.col-2.py-md-5.d-flex

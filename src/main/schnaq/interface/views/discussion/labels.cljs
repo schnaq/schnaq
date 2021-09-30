@@ -2,7 +2,6 @@
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [fa]]
-            [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -10,7 +9,7 @@
             [schnaq.interface.views.modal :as modal]))
 
 (defn build-label
-  "Takes a label and builds the neccesary html."
+  "Takes a label and builds the necessary html."
   [label set? hover?]
   (let [[badge-color icon-class]
         (case label
