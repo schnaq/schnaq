@@ -802,7 +802,7 @@
    :pricing.business-tier/title "Business"
    :pricing.business-tier/subtitle "Zbierz swój zespół"
    :pricing.business-tier/description "Pozwól, aby nasz A.I. wspierał Cię i dowiedział się więcej o Twoich dyskusjach!"
-   :pricing.business-tier/call-to-action "Zgłoś wniosek Beta"
+   :pricing.business-tier/call-to-action "Przetestuj biznes teraz"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Wielkie plany?"
    :pricing.enterprise-tier/description "Chcesz połączyć całą firmę, klub, instytucję lub nawet całą uczelnię? W takim razie trafiłeś we właściwe miejsce!"

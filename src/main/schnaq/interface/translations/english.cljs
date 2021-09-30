@@ -799,7 +799,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :pricing.business-tier/title "Business"
    :pricing.business-tier/subtitle "Bring your team together"
    :pricing.business-tier/description "Let our A.I. support you and learn more about your discussions!"
-   :pricing.business-tier/call-to-action "Submit Beta Request"
+   :pricing.business-tier/call-to-action "Test Business now"
    :pricing.enterprise-tier/title "Enterprise"
    :pricing.enterprise-tier/subtitle "Big plans?"
    :pricing.enterprise-tier/description "Do you want to connect your entire company, a club, institution or even a whole university? Then you've come to the right place!"
