@@ -18,6 +18,7 @@
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.pages.publications :as publications]
+            [schnaq.interface.pages.umfrage-danke :as thanks]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.admin.control-center :as admin-center]
@@ -77,6 +78,9 @@
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
+   ["danke"
+    {:name :routes.umfrage/thanks
+     :view thanks/view}]
    ["consulting"
     [""
      {:name :routes/consulting

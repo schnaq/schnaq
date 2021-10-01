@@ -29,6 +29,7 @@
             [schnaq.interface.pages.lead-magnet]
             [schnaq.interface.pages.press]
             [schnaq.interface.pages.privacy]
+            [schnaq.interface.pages.umfrage-danke]
             [schnaq.interface.routes :as routes]
             [schnaq.interface.scheduler]
             [schnaq.interface.translations]
