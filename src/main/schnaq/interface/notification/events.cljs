@@ -32,9 +32,10 @@
 
 (rf/reg-event-fx
   :visited.statement-ids/send-seen-statements-to-backend
-  (fn [{:keys [db]} [_ share-hash]]
+  (fn [{:keys [db]} _]
     (when (get-in db [:user :authenticated?])
-      (let [statement-ids (get-in db [:visited :statement-ids share-hash] {})]
+      (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+            statement-ids (get-in db [:visited :statement-ids share-hash] #{})]
         {:fx [(http/xhrio-request
                 db :put "/discussion/statements/update-seen"
                 [:no-op]

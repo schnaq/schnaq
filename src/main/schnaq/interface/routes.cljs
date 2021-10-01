@@ -168,7 +168,8 @@
                                (rf/dispatch [:discussion.query.conclusions/starting]))
                       :stop (fn []
                               (rf/dispatch [:updates.periodic/starting-conclusions false])
-                              (rf/dispatch [:statement.edit/reset-edits]))}]
+                              (rf/dispatch [:statement.edit/reset-edits])
+                              (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend]))}]
        :name :routes.schnaq/start
        :view discussion-card-view/view
        :link-text (labels :router/start-discussion)}]
@@ -216,12 +217,11 @@
        :controllers [{:parameters {:path [:share-hash :statement-id]}
                       :start (fn []
                                (rf/dispatch [:discussion.query.statement/by-id]))
-                      :stop (fn [{:keys [path]}]
-                              (let [{:keys [share-hash]} path]
-                                (rf/dispatch [:visited.statement-nums/to-localstorage])
-                                (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
-                                (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend share-hash])
-                                (rf/dispatch [:statement.edit/reset-edits])))}]}]
+                      :stop (fn []
+                              (rf/dispatch [:visited.statement-nums/to-localstorage])
+                              (rf/dispatch [:visited.statement-ids/to-localstorage-and-merge-with-app-db])
+                              (rf/dispatch [:visited.statement-ids/send-seen-statements-to-backend])
+                              (rf/dispatch [:statement.edit/reset-edits]))}]}]
      ["/graph"
       {:name :routes/graph-view
        :view graph-view/graph-view-entrypoint
