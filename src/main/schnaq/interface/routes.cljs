@@ -81,8 +81,12 @@
     {:name :routes/consulting
      :view consulting/consulting-view}]
    ["e-learning"
-    {:name :routes/e-learning
-     :view e-learning/e-learning-view}]
+    [""
+     {:name :routes/e-learning
+      :view e-learning/e-learning-view}]
+    ["/umfrage"
+     {:name :routes.e-learning/umfrage
+      :view e-learning/e-learning-umfrage}]]
    ["login"
     {:name :routes/login
      :view pages/login-page
