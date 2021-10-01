@@ -99,6 +99,21 @@
       (ok {:share-hash share-hash})
       (bad-request (at/build-error-body :error-deleting-schnaq "An error occurred, while deleting the schnaq.")))))
 
+(defn- edit-schnaq-title!
+  "Edit title of a schnaq"
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash new-title]} (:body parameters)
+        user-identity (:sub identity)
+        discussion (discussion-db/discussion-by-share-hash share-hash)
+        author-identity (-> discussion :discussion/author :user.registered/keycloak-id)]
+    ;; check if author and editor match
+    (if (= user-identity author-identity)
+      (do (discussion-db/edit-title share-hash new-title)
+          (ok {:schnaq (discussion-db/discussion-by-share-hash share-hash)}))
+      (bad-request
+        (at/build-error-body :discussion-not-the-author
+                             "You can not edit the title of someone else's discussion.")))))
+
 (defn- add-visited-schnaq
   "Add schnaq id to visited schnaqs by share-hash"
   [{:keys [parameters identity]}]
@@ -141,6 +156,15 @@
               :parameters {:body ::schnaq-add-body}
               :responses {201 {:body {:new-schnaq ::dto/discussion}}
                           400 at/response-error-body}}]
+     ["/edit/title" {:put edit-schnaq-title!
+                     :description (at/get-doc #'edit-schnaq-title!)
+                     :name :api.schnaq/edit
+                     :middleware [:discussion/valid-credentials?]
+                     :parameters {:body {:share-hash :discussion/share-hash
+                                         :edit-hash :discussion/edit-hash
+                                         :new-title :discussion/title}}
+                     :responses {201 {:body {:schnaq ::dto/discussion}}
+                                 400 at/response-error-body}}]
      ["/by-hash-as-admin" {:post schnaq-by-hash-as-admin
                            :description (at/get-doc #'schnaq-by-hash-as-admin)
                            :name :api.schnaq/by-hash-as-admin

@@ -170,7 +170,7 @@
       (labels :badges.sort/popular)]]))
 
 (defn- current-topic-badges [schnaq statement is-topic?]
-  (let [badges-start [badges/static-info-badges schnaq]
+  (let [badges-start [badges/static-info-badges-discussion schnaq]
         badges-conclusion [badges/extra-discussion-info-badges statement (:discussion/edit-hash schnaq)]
         badges (if is-topic? badges-start badges-conclusion)]
     [:div.ml-auto badges]))
@@ -179,9 +179,11 @@
   (let [title [md/as-markdown (:statement/content statement)]
         edit-active? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if is-topic?
-      [:h2.h6-md-down title]
       (if edit-active?
-        [edit/edit-card statement]
+        [edit/edit-card-discussion statement]
+        [:h2.h6-md-down title])
+      (if edit-active?
+        [edit/edit-card-statement statement]
         [:h2.h6 title]))))
 
 (defn- title-and-input-element
@@ -208,9 +210,12 @@
        [input/input-form input-style])]))
 
 (defn- topic-bubble-view []
-  (let [{:discussion/keys [title author created-at]} @(rf/subscribe [:schnaq/selected])
+  (let [{:discussion/keys [title author created-at] :as schnaq} @(rf/subscribe [:schnaq/selected])
         current-conclusion @(rf/subscribe [:discussion.conclusion/selected])
-        content {:statement/content title :statement/author author :statement/created-at created-at}
+        content {:db/id (:db/id schnaq)
+                 :statement/content title
+                 :statement/author author
+                 :statement/created-at created-at}
         is-topic? (= :routes.schnaq/start @(rf/subscribe [:navigation/current-route-name]))
         statement (if is-topic? content current-conclusion)]
     [:div.p-2

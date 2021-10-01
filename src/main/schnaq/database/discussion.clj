@@ -321,6 +321,13 @@
                                     enable-transaction)]
     (main-db/transact db-transaction)))
 
+(defn edit-title
+  "Edits a schnaq title by share-hash"
+  [share-hash title]
+  (let [enable-transaction [[:db/add [:discussion/share-hash share-hash]
+                             :discussion/title title]]]
+    (main-db/transact enable-transaction)))
+
 (>defn all-statements
   "Returns all statements belonging to a discussion."
   [share-hash]
