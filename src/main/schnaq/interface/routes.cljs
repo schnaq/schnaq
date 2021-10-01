@@ -78,8 +78,12 @@
     {:name :routes/alphazulu
      :view az/view}]
    ["consulting"
-    {:name :routes/consulting
-     :view consulting/consulting-view}]
+    [""
+     {:name :routes/consulting
+      :view consulting/consulting-view}]
+    ["/umfrage"
+     {:name :routes.consulting/umfrage
+      :view consulting/consulting-umfrage}]]
    ["e-learning"
     [""
      {:name :routes/e-learning
