@@ -1,8 +1,8 @@
 (ns schnaq.interface.pages.umfrage-danke
-  (:require [reitit.frontend.easy :as reitfe]
+  (:require [re-frame.core :as rf]
+            [reitit.frontend.easy :as reitfe]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.pages :as pages]
-            [re-frame.core :as rf]))
+            [schnaq.interface.views.pages :as pages]))
 
 (rf/reg-sub
   :sub-params
