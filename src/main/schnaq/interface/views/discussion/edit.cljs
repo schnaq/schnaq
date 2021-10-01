@@ -9,7 +9,7 @@
 
 (defn- edit-card
   "The same as a statement-card, but currently being an editable input."
-  [html-id dispatch-fn edit-id pro-con-enabled? content statement-type change-statement-type]
+  [label html-id dispatch-fn edit-id pro-con-enabled? content statement-type change-statement-type]
   [:form.card.statement-card.py-2.px-3
    {:on-submit (fn [e]
                  (jq/prevent-default e)
@@ -17,7 +17,7 @@
     :on-key-down (fn [e]
                    (when (jq/ctrl-press e 13) (dispatch-fn e)))}
    [:div.form-group
-    [:label {:for html-id} (labels :statement.edit/label)]
+    [:label {:for html-id} (labels label)]
     [:textarea.form-control {:name html-id
                              :rows 3
                              :placeholder content
@@ -44,6 +44,7 @@
         dispatch-fn #(rf/dispatch
                        [:statement.edit/send (:db/id statement) statement-html-id (oget % [:currentTarget :elements])])]
     [edit-card
+     :statement.edit/label
      statement-html-id
      dispatch-fn
      (:db/id statement)
@@ -61,6 +62,7 @@
         dispatch-fn #(rf/dispatch
                        [:discussion.edit-title/send discussion-html-id (oget % [:currentTarget :elements])])]
     [edit-card
+     :schnaq.edit/label
      discussion-html-id
      dispatch-fn
      discussion-id
