@@ -32,7 +32,7 @@
       [:div.col-md-6.col-12.align-self-center
        moving-heading
        [:p.display-6.pb-5
-        "Lastenheft war gestern. Digitalisiere deine Kundenkommunikation mit schnaq."]
+        "Lastenheft war gestern. Digitalisiere deine Kund:innenkommunikation mit schnaq."]
        [:div.text-center.pt-3.pb-5
         [:a.btn.btn-lg.btn-secondary.d-inline-block
          {:href cta-link}
@@ -45,7 +45,7 @@
         [:div.border-right.mr-2
          [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
          [:i {:class (str "mr-2 my-auto " (fa :plus))}]]
-        [:p.small.my-auto "von Software-Designern für Software-Designer!"]]]
+        [:p.small.my-auto "von Software-Designer:innen für Software-Designer:innen!"]]]
       [:div.col-md-6.col-12.col-lg-6.pt-sm-5.text-center
        [:img.img-fluid
         {:src "https://s3.disqtec.com/startpage/consulting-small.png"
