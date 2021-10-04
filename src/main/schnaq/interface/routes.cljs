@@ -40,6 +40,7 @@
             [schnaq.interface.views.startpage.alternatives.consulting :as consulting]
             [schnaq.interface.views.startpage.alternatives.creators :as creators]
             [schnaq.interface.views.startpage.alternatives.e-learning :as e-learning]
+            [schnaq.interface.views.startpage.alternatives.wima :as wima]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
             [schnaq.interface.views.user.edit-account :as edit-account]
@@ -92,6 +93,9 @@
    ["creators"
     {:name :routes/creators
      :view creators/creator-view}]
+   ["wima"
+    {:name :routes/wima
+     :view wima/wima-view}]
    ["e-learning"
     [""
      {:name :routes/e-learning
