@@ -1,23 +1,10 @@
 (ns schnaq.interface.views.startpage.alternatives.creators
-  (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.icons :refer [fa]]
+  (:require [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.utils.rows :as rows]
             [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.startpage.core :as startpage]))
-
-(def moving-heading
-  [:header.ms-header.pb-2
-   [:h1.ms-header__title "Die Plattform für Projektgespräche mit deinen "
-    [:div.ms-slider
-     [:ul.ms-slider__words
-      [:li.ms-slider__word "Kund:innen"]
-      [:li.ms-slider__word "Stakeholdern"]
-      [:li.ms-slider__word "Kolleg:innen"]
-      [:li.ms-slider__word "Partnern"]
-      ;; The last one needs to duplicate the first for a smooth transition
-      [:li.ms-slider__word "Kund:innen"]]]]])
 
 (defn- startpage-content []
   [pages/with-nav-and-header
@@ -26,16 +13,18 @@
     :page/wrapper-classes "container container-85 mx-auto"
     :page/more-for-heading
     [:div.row.pb-5
-     [:div.col-md-6.col-12.align-self-center
-      moving-heading
+     [:div.col-md-6.col-12.col-lg-6.pt-sm-5.text-center
+      [:img.img-fluid.rounded
+       {:src "https://s3.disqtec.com/schnaq-common/startpage/screenshots/splashpage_creator.jpeg"
+        :alt "Ein Consultant nutzt schnaq auf einem Notebook"}]]
+     [:div.col-md-6.col-12.align-self-center.text-center
+      "Lasse deine Community miteinander und mit dir diskutieren"
       [:p.display-6.pb-5
-       "Lastenheft war gestern. Digitalisiere deine Kundenkommunikation mit schnaq."]
-      [:div.text-center.pt-3.pb-5
+       "Aktiviere deine Community"]
+      [:div.text-center.pb-5
        [:a.btn.btn-lg.btn-secondary.d-inline-block
-        {:href :todo                                        ;;TODO
-         }
-        "Digitalisiere jetzt deine Projektabstimmung"]
-       [:p.small.pt-1 "100 % anonym und kostenfrei"]]
+        {:href "https://schnaq.outgrow.us/creator"}
+        "Umfrage starten"]]
       [:div.d-flex
        [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/bjorn)}]
        [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/raphael-bialon)}]
@@ -43,40 +32,35 @@
        [:div.border-right.mr-2
         [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
         [:i {:class (str "mr-2 my-auto " (fa :plus))}]]
-       [:p.small.my-auto "von Software-Designern für Software-Designer!"]]]
-     [:div.col-md-6.col-12.col-lg-6.pt-sm-5.text-center
-      [:img.img-fluid
-       {:src "https://s3.disqtec.com/startpage/consulting-small.png"
-        :alt "Ein Consultant nutzt schnaq auf einem Notebook"}]]]}
+       [:p.small.my-auto "Lerne was deine Community bewegt!"]]]]}
    [:<>
     [:section.container.my-5
      [rows/row-builder-text-left
       [:article.feature-text-box
        [:h3.h1.text-purple.mb-3 "Minimaler Aufwand, maximale Aktivierung"]
-       [:p "Schnaqs starten ist so einfach wie: Titel wählen und Link verteilen.
-       Schnell, sicher und datenschutzkonform nach deutschem Recht."]]
-      [motion/zoom-image {:src (img-path :startpage.example/discussion)
+       [:p "Gib deiner Community mit wenigen Klicks ihren eigenen Space zum Diskutieren, oder frage sie direkt zu Dingen, die dich interessieren."]]
+      [motion/zoom-image {:src "https://s3.disqtec.com/schnaq-common/startpage/screenshots/podcast_discussion.png"
                           :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
     [:section.container.mb-5
      [rows/row-builder-text-right
       [:img {:src (img-path :startpage.alternatives.e-learning/student-smartphone)}]
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "Kein Notebook? Kein Problem!"]
-       [:p "Um schnaq zu benutzen, braucht es keine Installation. Alles läuft über das Web.
+       [:h3.h1.text-purple.mb-3 "Nimm deine Community auch unterwegs mit!"]
+       [:p "Um schnaq zu benutzen, braucht es nur Internet.
        Kompatibel mit allen Smartphones, Tablets und Computern."]]]]
     [:section.container.mb-5
      [rows/row-builder-text-left
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "Verstehen wo es hakt"]
-       [:p "Verschaffe dir einen schnellen Überblick über das Diskutierte. Vollziehe einfach nach worüber deine Stakeholder reden. Oder schaue dir die verschiedenen K.I. Auswertungen der Diskussion an."]]
+       [:h3.h1.text-purple.mb-3 "Was passiert in deiner Community?"]
+       [:p "Verschaffe dir einen schnellen Überblick über das Diskutierte. Vollziehe einfach nach worüber deine Community redet. Oder schaue dir die verschiedenen K.I. Auswertungen der Diskussion an."]]
       [motion/zoom-image {:src (img-path :startpage.example/dashboard)
                           :alt "Eine Beispieldiskussion innerhalb eines schnaqs"}]]]
     [:section.container.mb-5
      [rows/row-builder-text-right
       [:img {:src (img-path :startpage.alternatives.e-learning/oma)}]
       [:article.feature-text-box
-       [:h3.h1.text-purple.mb-3 "So einfach, selbst dein ältester Kunde schafft das!"]
-       [:p "Jira zu kompliziert? Dokumente in der Cloud ablegen zu umständlich? Schnaq kann von allen bedient werden! Egal ob du Erfahrung mit Software hast, oder dich gerade erst damit anfreundest. Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
+       [:h3.h1.text-purple.mb-3 "So easy, selbst der eine Rentner #1 Fan schafft das!"]
+       [:p "Jeder aus deiner Community schafft es schnaq zu nutzen. Garantiert! Kommen mal Fragen auf? Kontaktiere den Support jederzeit."]]]]
     [:section.overflow-hidden.py-3.my-5
      [:div.wave-bottom-white]
      [:div.bg-white
@@ -114,11 +98,11 @@
                   :src (img-path :startpage.alternatives.e-learning/christian)}]
            [:img {:class img-classes
                   :src (img-path :testimonial-picture/tobias-schroeder)}]])
-        [:h2.mt-5 "Steigere den Projekterfolg bereits vor dem Kickoff"]
-        [:p.small.text-muted "\"In agilen Projekten ändern sich die Anforderungen häufiger, als dass sie bestehen bleiben. Wichtig ist es, das auch transparent festzuhalten.\" – Mike Birkhoff"]
+        [:h2.mt-5 "Versteh sofort was in deiner Community abgeht!"]
+        [:p.small.text-muted "\"Ich hätte nicht gedacht, dass so viele Leute jeden Tag über meinen Podcast reden. Jetzt bekomme ich es auch mal mit.\" – Johann 'Quikz' Mollman"]
         [:a.btn.btn-lg.btn-secondary.mt-4
-         {:href (rfe/href :routes.schnaq/create)}
-         "Upgrade dein Requirements-Engineering mit nur einem Schritt"]]]]
+         {:href "https://schnaq.outgrow.us/creator"}
+         "Umfrage starten"]]]]
      [:div.wave-bottom-white-inverted]]
     [:section.container.pt-3
      [startpage/supporters]]]])
