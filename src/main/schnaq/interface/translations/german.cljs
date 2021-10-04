@@ -237,6 +237,7 @@
    :statement.edit/label "Beitrag bearbeiten"
    :statement.edit.button/submit "Absenden"
    :statement.edit.button/cancel "Abbrechen"
+   :schnaq.edit/label "Titel bearbeiten"
 
    ;; schnaq creation
    :schnaq.create/title "Schnaq starten"

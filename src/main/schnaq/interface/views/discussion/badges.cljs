@@ -45,6 +45,17 @@
      [:i {:class (str "m-auto fas " (fa :trash))}] " " (labels :discussion.badges/delete-statement)]))
 
 (defn- edit-dropdown-button
+  "Edit button to trigger custom functionality."
+  [on-click-fn]
+  [:button.dropdown-item
+   {:tabIndex 40
+    :on-click (fn [e]
+                (js-wrap/stop-propagation e)
+                (on-click-fn))
+    :title (labels :discussion.badges/edit-statement)}
+   [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])
+
+(defn- edit-dropdown-button-statement
   "Give the registered user the ability to edit their statement."
   [statement]
   (let [creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
@@ -56,13 +67,19 @@
                         (rf/dispatch [:statement.edit/activate-edit (:db/id statement)])
                         (rf/dispatch [:statement.edit/change-statement-type (:db/id statement)
                                       (:statement/type statement)])))]
-    [:button.dropdown-item
-     {:tabIndex 40
-      :on-click (fn [e]
-                  (js-wrap/stop-propagation e)
-                  (on-click-fn))
-      :title (labels :discussion.badges/edit-statement)}
-     [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)]))
+    [edit-dropdown-button on-click-fn]))
+
+(defn- edit-dropdown-button-discussion
+  "Give the registered user the ability to edit their discussion title."
+  [discussion-id share-hash]
+  (let [creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
+        anonymous-owner? (contains? creation-secrets share-hash)
+        on-click-fn (if anonymous-owner?
+                      #(rf/dispatch [:modal {:show? true
+                                             :child [anonymous-edit-modal]}])
+                      (fn []
+                        (rf/dispatch [:statement.edit/activate-edit discussion-id])))]
+    [edit-dropdown-button on-click-fn]))
 
 (defn- is-deletable?
   "Checks if a statement can be deleted"
@@ -84,6 +101,27 @@
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
 
+(defn- edit-discussion-dropdown-menu [{:keys [db/id
+                                              discussion/share-hash
+                                              discussion/author]}]
+  (let [dropdown-id (str "drop-down-conclusion-card-" id)
+        creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
+        user-id @(rf/subscribe [:user/id])
+        anonymous-owner? (contains? creation-secrets share-hash)
+        editable? (or anonymous-owner?
+                      (= user-id (:db/id author)))]
+    (when editable?
+      [:div.dropdown.ml-2
+       [:div.dropdown-toggle.m-0.p-0
+        {:id dropdown-id
+         :href "#" :role "button" :data-toggle "dropdown"
+         :aria-haspopup "true" :aria-expanded "false"}
+        [:i {:class (str "fas " (fa :dots))}]]
+       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+        (when editable?
+          [:dropdown-item
+           [edit-dropdown-button-discussion id share-hash]])]])))
+
 (defn- edit-statement-dropdown-menu [{:keys [db/id] :as statement} edit-hash]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         deletable? (is-deletable? statement edit-hash)
@@ -98,7 +136,7 @@
        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
         (when editable?
           [:dropdown-item
-           [edit-dropdown-button statement]])
+           [edit-dropdown-button-statement statement]])
         (when deletable?
           [:dropdown-item
            [delete-dropdown-button statement edit-hash]])]])))
@@ -161,6 +199,22 @@
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
       [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
+
+(defn static-info-badges-discussion
+  "Badges that display schnaq info."
+  [schnaq]
+  (let [meta-info (:meta-info schnaq)
+        statement-count (:all-statements meta-info)
+        user-count (count (:authors meta-info))]
+    [:div.d-flex.flex-row.mb-0
+     [:span.badge.badge-pill.badge-transparent.mr-2
+      [:i {:class (str "m-auto fas " (fa :comments))}]
+      " " statement-count]
+     [:span.badge.badge-pill.badge-transparent.mr-2
+      {:tabIndex 20
+       :title (labels :discussion.badges/user-overview)}
+      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]
+     [edit-discussion-dropdown-menu schnaq]]))
 
 (defn read-only-badge
   "Badge that appears only if the passed schnaq is set to read-only"

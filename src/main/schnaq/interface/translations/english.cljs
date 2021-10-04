@@ -231,6 +231,7 @@
    :statement.edit/label "Edit statement"
    :statement.edit.button/submit "Submit"
    :statement.edit.button/cancel "Cancel"
+   :schnaq.edit/label "Edit title"
 
    ;; schnaq creation
    :schnaq.create/title "Start schnaq"

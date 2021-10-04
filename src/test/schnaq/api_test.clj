@@ -4,6 +4,7 @@
             [ring.mock.request :as mock]
             [schnaq.api :as api]
             [schnaq.api.discussion :as discussion-api]
+            [schnaq.api.schnaq :as schnaq-api]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]
@@ -108,3 +109,29 @@
       (db/transact [[:db/add (:db/id statement) :statement/deleted? false]])
       (discussion-db/set-discussion-read-only share-hash)
       (is (= 400 (:status (edit-statement! (request keycloak-id))))))))
+
+(deftest edit-discussion-title!-test
+  (let [edit-schnaq-title! #'schnaq-api/edit-schnaq-title!
+        share-hash "simple-hash"
+        edit-hash "simple-hash-secret"
+        discussion (discussion-db/discussion-by-share-hash share-hash)
+        keycloak-id "59456d4a-6950-47e8-88d8-a1a6a8de9276"
+        new-title "Neuer Titel"
+        request #(-> (mock/request :put "/schnaq/edit/title")
+                     (assoc-in [:identity :sub] %)
+                     (assoc-in [:parameters :body :share-hash] share-hash)
+                     (assoc-in [:parameters :body :edit-hash] edit-hash)
+                     (assoc-in [:parameters :body :new-title] new-title))]
+    (testing "Test edit schnaq title."
+      (testing "Only author should be able to edit the title"
+        ;; The author is not the registered user, rest is fine
+        (is (= 403 (:status (edit-schnaq-title! (request keycloak-id)))))
+        ;; Make the author the user
+        (db/transact [[:db/add (:db/id discussion) :discussion/author
+                       [:user.registered/keycloak-id keycloak-id]]])
+        ;; Everything should be fine
+        (is (= 200 (:status (edit-schnaq-title! (request keycloak-id))))))
+      (testing "Deleted schnaqs shall not be editable"
+        ;; discussion is deleted
+        (discussion-db/delete-discussion share-hash)
+        (is (= 400 (:status (edit-schnaq-title! (request keycloak-id)))))))))

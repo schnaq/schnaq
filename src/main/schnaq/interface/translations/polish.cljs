@@ -236,6 +236,7 @@
    :statement.edit/label "Edytuj post"
    :statement.edit.button/submit "Prześlij"
    :statement.edit.button/cancel "Anuluj"
+   :schnaq.edit/label "Edytuj tytuł"
 
    ;; schnaq creation
    :schnaq.create/title "Uruchomienie schnaq"

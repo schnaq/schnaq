@@ -94,7 +94,7 @@
   [statement edit-hash]
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
-      [edit/edit-card statement]
+      [edit/edit-card-statement statement]
       [statement-card edit-hash statement])))
 
 (defn conclusion-cards-list

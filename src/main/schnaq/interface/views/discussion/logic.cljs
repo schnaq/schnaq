@@ -77,6 +77,11 @@
   (fn [db _]
     (get-in db [:discussion :statements :creation-secrets])))
 
+(rf/reg-sub
+  :schnaq.discussion/creation-secrets
+  (fn [db _]
+    (get-in db [:discussion :schnaqs :creation-secrets])))
+
 (rf/reg-event-fx
   :notification/new-content
   (fn [_ _]
