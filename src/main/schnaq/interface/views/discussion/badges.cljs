@@ -103,7 +103,7 @@
 
 (defn- edit-discussion-dropdown-menu [{:keys [db/id
                                               discussion/share-hash
-                                              discussion/author] :as _discussion}]
+                                              discussion/author]}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
         creation-secrets @(rf/subscribe [:schnaq.discussion/creation-secrets])
         user-id @(rf/subscribe [:user/id])

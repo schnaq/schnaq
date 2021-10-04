@@ -123,7 +123,7 @@
   (fn [{:keys [db]} [_ form response]]
     (let [updated-discussion (:schnaq response)
           new-title (:discussion/title updated-discussion)]
-      {:db (-> db (assoc-in [:schnaq :selected :discussion/title] new-title))
+      {:db (assoc-in db [:schnaq :selected :discussion/title] new-title)
        :fx [[:form/clear form]
             [:dispatch [:statement.edit/deactivate-edit (:db/id updated-discussion)]]]})))
 
