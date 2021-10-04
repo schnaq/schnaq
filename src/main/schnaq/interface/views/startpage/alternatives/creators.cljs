@@ -8,7 +8,7 @@
 
 (defn- startpage-content []
   [pages/with-nav-and-header
-   {:page/title "Vertiefender Austausch mit deinen Kunden"
+   {:page/title "Dein Community-Zuhause mit einem Klick"
     :page/vertical-header? true
     :page/wrapper-classes "container container-85 mx-auto"
     :page/more-for-heading
