@@ -10,7 +10,7 @@
 (defn- startpage-content []
   [:div.overflow-hidden
    [pages/with-nav-and-header
-    {:page/title "Vertiefender Austausch mit deinen Kunden"
+    {:page/title "Vertiefender Austausch mit deinen Kund:innen"
      :page/vertical-header? true
      :page/wrapper-classes "container container-85"
      :page/more-for-heading
