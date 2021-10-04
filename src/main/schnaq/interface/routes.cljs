@@ -38,6 +38,7 @@
             [schnaq.interface.views.schnaq.summary :as summary]
             [schnaq.interface.views.schnaq.value :as value]
             [schnaq.interface.views.startpage.alternatives.consulting :as consulting]
+            [schnaq.interface.views.startpage.alternatives.creators :as creators]
             [schnaq.interface.views.startpage.alternatives.e-learning :as e-learning]
             [schnaq.interface.views.startpage.core :as startpage-views]
             [schnaq.interface.views.startpage.pricing :as pricing-view]
@@ -88,6 +89,9 @@
     ["/umfrage"
      {:name :routes.consulting/umfrage
       :view consulting/consulting-umfrage}]]
+   ["creators"
+    {:name :routes/creators
+     :view creators/creator-view}]
    ["e-learning"
     [""
      {:name :routes/e-learning
