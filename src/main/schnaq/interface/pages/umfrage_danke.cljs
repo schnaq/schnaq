@@ -26,13 +26,13 @@
           :class "form-control"}]]
 
        [:ul {:area-hidden "true" :style {:display "none"}}
-        [:li [:input {:id "mce-group[295590]-295590-0" :checked (if (= "wima" sub-param) true false) :type "checkbox" :value "1" :name "group[295590][1]" :tabIndex "-1"}]
+        [:li [:input {:id "mce-group[295590]-295590-0" :checked (= "wima" sub-param) :type "checkbox" :value "1" :name "group[295590][1]" :tabIndex "-1"}]
          [:label {:for "mce-group[295590]-295590-0"} "Wissensmanagement"]]
-        [:li [:input {:id "mce-group[295590]-295590-1" :checked (if (= "consulting" sub-param) true false) :type "checkbox" :value "2" :name "group[295590][2]" :tabIndex "-1"}]
+        [:li [:input {:id "mce-group[295590]-295590-1" :checked (= "consulting" sub-param) :type "checkbox" :value "2" :name "group[295590][2]" :tabIndex "-1"}]
          [:label {:for "mce-group[295590]-295590-1"} "Consulting"]]
-        [:li [:input {:id "mce-group[295590]-295590-2" :checked (if (= "e-learning" sub-param) true false) :type "checkbox" :value "4" :name "group[295590][4]" :tabIndex "-1"}]
+        [:li [:input {:id "mce-group[295590]-295590-2" :checked (= "e-learning" sub-param) :type "checkbox" :value "4" :name "group[295590][4]" :tabIndex "-1"}]
          [:label {:for "mce-group[295590]-295590-2"} "E-Learning"]]
-        [:li [:input {:id "mce-group[295590]-295590-3" :checked (if (= "creator" sub-param) true false) :type "checkbox" :value "8" :name "group[295590][8]" :tabIndex "-1"}]
+        [:li [:input {:id "mce-group[295590]-295590-3" :checked (= "creator" sub-param) :type "checkbox" :value "8" :name "group[295590][8]" :tabIndex "-1"}]
          [:label {:for "mce-group[295590]-295590-3"} "Creator"]]]
 
        [:div.form-group
