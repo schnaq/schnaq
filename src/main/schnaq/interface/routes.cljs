@@ -18,6 +18,7 @@
             [schnaq.interface.pages.privacy :as privacy]
             [schnaq.interface.pages.privacy-extended :as privacy-extended]
             [schnaq.interface.pages.publications :as publications]
+            [schnaq.interface.pages.umfrage-danke :as thanks]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.views.admin.control-center :as admin-center]
@@ -77,12 +78,23 @@
    ["alphazulu"
     {:name :routes/alphazulu
      :view az/view}]
+   ["danke"
+    {:name :routes.umfrage/thanks
+     :view thanks/view}]
    ["consulting"
-    {:name :routes/consulting
-     :view consulting/consulting-view}]
+    [""
+     {:name :routes/consulting
+      :view consulting/consulting-view}]
+    ["/umfrage"
+     {:name :routes.consulting/umfrage
+      :view consulting/consulting-umfrage}]]
    ["e-learning"
-    {:name :routes/e-learning
-     :view e-learning/e-learning-view}]
+    [""
+     {:name :routes/e-learning
+      :view e-learning/e-learning-view}]
+    ["/umfrage"
+     {:name :routes.e-learning/umfrage
+      :view e-learning/e-learning-umfrage}]]
    ["login"
     {:name :routes/login
      :view pages/login-page
