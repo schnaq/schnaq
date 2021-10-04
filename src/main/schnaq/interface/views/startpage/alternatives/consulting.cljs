@@ -36,8 +36,8 @@
        [:div.text-center.pt-3.pb-5
         [:a.btn.btn-lg.btn-secondary.d-inline-block
          {:href cta-link}
-         "Digitalisiere jetzt deine Projektabstimmung"]
-        [:p.small.pt-1 "100 % anonym und kostenfrei"]]
+         (if cta-link "Umfrage starten" "Digitalisiere jetzt deine Projektabstimmung")]
+        (when-not cta-link [:p.small.pt-1 "100 % anonym und kostenfrei"])]
        [:div.d-flex
         [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/bjorn)}]
         [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/raphael-bialon)}]
@@ -119,8 +119,8 @@
          [:h2.mt-5 "Steigere den Projekterfolg bereits vor dem Kickoff"]
          [:p.small.text-muted "\"In agilen Projekten ändern sich die Anforderungen häufiger, als dass sie bestehen bleiben. Wichtig ist es, das auch transparent festzuhalten.\" – Mike Birkhoff"]
          [:a.btn.btn-lg.btn-secondary.mt-4
-          {:href (rfe/href :routes.schnaq/create)}
-          "Upgrade dein Requirements-Engineering mit nur einem Schritt"]]]]
+          {:href cta-link}
+          (if cta-link "Umfrage starten" "Upgrade dein Requirements-Engineering mit nur einem Schritt")]]]]
       [:div.wave-bottom-white-inverted]]
      [:section.container.pt-3
       [startpage/supporters]]]]))
