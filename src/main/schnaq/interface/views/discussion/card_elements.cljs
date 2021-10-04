@@ -145,8 +145,13 @@
 (rf/reg-event-fx
   :discussion.query.conclusions/set-starting
   (fn [{:keys [db]} [_ {:keys [starting-conclusions]}]]
-    {:db (assoc-in db [:discussion :premises :current] starting-conclusions)
-     :fx [[:dispatch [:votes.local/reset]]]}))
+    (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
+          visited (map :db/id starting-conclusions)]
+      {:db (-> db
+               (assoc-in [:discussion :premises :current] starting-conclusions)
+               (update-in [:visited :statement-ids share-hash] #(set (concat %1 %2)) visited))
+       ;; hier die seen setzen
+       :fx [[:dispatch [:votes.local/reset]]]})))
 
 (rf/reg-event-db
   :votes.local/reset
