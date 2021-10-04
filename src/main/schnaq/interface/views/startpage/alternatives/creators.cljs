@@ -32,7 +32,7 @@
        [:div.border-right.mr-2
         [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
         [:i {:class (str "mr-2 my-auto " (fa :plus))}]]
-       [:p.small.my-auto "Lerne was deine Community bewegt!"]]]]}
+       [:p.small.my-auto "Lerne, was deine Community bewegt!"]]]]}
    [:<>
     [:section.container.my-5
      [rows/row-builder-text-left
