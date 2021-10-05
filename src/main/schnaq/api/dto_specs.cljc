@@ -41,7 +41,7 @@
           :opt-un [:discussion/meta-info]))
 
 (s/def ::discussion-title :discussion/title)
-(s/def ::discussion-mode :discussion/mode)
+(s/def ::discussion-mode keyword?)
 (s/def ::ends-in-days pos-int?)
 (s/def ::hub-exclusive? boolean?)
 (s/def ::hub :hub/keycloak-name)

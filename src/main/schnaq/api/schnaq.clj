@@ -71,9 +71,9 @@
 
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion. Required fields are `discussion-title` and
-   (`nickname` or authenticated user)."
+   (`nickname` or an authenticated user)."
   [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days] :as parameters} (:body parameters)
+  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days discussion-mode] :as parameters} (:body parameters)
         keycloak-id (:sub identity)]
     (if-not (or keycloak-id nickname)
       (bad-request-schnaq-creation parameters)
@@ -88,15 +88,14 @@
                                     keycloak-id (assoc :discussion/admins [author])
                                     (and hub-exclusive? authorized-for-hub?)
                                     (assoc :discussion/hub-origin [:hub/keycloak-name hub])
-                                    ends-in-days (assoc :discussion/end-time (now-plus-days-instant ends-in-days)))
+                                    ends-in-days (assoc :discussion/end-time (now-plus-days-instant ends-in-days))
+                                    discussion-mode (assoc :discussion/mode discussion-mode))
             new-discussion-id (discussion-db/new-discussion discussion-data)]
         (if new-discussion-id
           (let [created-discussion (discussion-db/secret-discussion-data new-discussion-id)]
             (when (and hub-exclusive? hub authorized-for-hub?)
               (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
-            (log/info "Discussion created: " new-discussion-id " - "
-                      (:discussion/title created-discussion) " – "
-                      "Exclusive?" hub-exclusive? "for" hub)
+            (log/info "Discussion created: " discussion-data)
             (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
           (bad-request-schnaq-creation parameters))))))
 
