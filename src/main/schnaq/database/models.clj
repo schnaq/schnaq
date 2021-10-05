@@ -222,8 +222,6 @@
     :db/doc "Define the mode of your discussion."}
    {:db/ident :discussion.mode/qanda
     :db/doc "Q&A mode."}
-   {:db/ident :discussion.mode/discussion
-    :db/doc "Classic discussion. This is the default if nothing is set."}
 
    ;; hub
    {:db/ident :hub/name
