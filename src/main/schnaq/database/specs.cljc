@@ -86,8 +86,8 @@
                                   :discussion/end-time :discussion/creation-secret]))
 
 ;; Access Codes
-(s/def ::access-code (s/and (s/coll-of nat-int?)
-                            #(= shared-config/access-code-length (count %))))
+(s/def ::access-code (s/and nat-int?
+                            #(< % (Math/pow 10 shared-config/access-code-length))))
 
 ;; Hubs
 (s/def :hub/name ::non-blank-string)

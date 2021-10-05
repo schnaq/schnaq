@@ -8,4 +8,4 @@
    [0, 9]."
   []
   [:ret ::specs/access-code]
-  (map (fn [_] (rand-int 10)) (range shared-config/access-code-length)))
+  (rand-int (Math/pow 10 shared-config/access-code-length)))
