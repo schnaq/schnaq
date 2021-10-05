@@ -59,16 +59,24 @@
   [integer? :ret inst?]
   (.toInstant (.plusDays (LocalDateTime/now) days) ZoneOffset/UTC))
 
+
+;; -----------------------------------------------------------------------------
+
+(defn- bad-request-schnaq-creation
+  "Return bad request when something went wrong and show the parameters."
+  [parameters]
+  (let [error-msg (format "The input you provided could not be used to create a discussion: %s" parameters)]
+    (log/info error-msg)
+    (bad-request (at/build-error-body :schnaq-creation-failed error-msg))))
+
 (defn- add-schnaq
-  "Adds a discussion to the database. Returns the newly-created discussion."
+  "Adds a discussion to the database. Returns the newly-created discussion. Required fields are `discussion-title` and
+   (`nickname` or authenticated user)."
   [{:keys [parameters identity]}]
   (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days] :as parameters} (:body parameters)
-        keycloak-id (:sub identity)
-        bad-request-schnaq-creation (let [error-msg (format "The input you provided could not be used to create a discussion: %s" parameters)]
-                                      (log/info error-msg)
-                                      (bad-request (at/build-error-body :schnaq-creation-failed error-msg)))]
+        keycloak-id (:sub identity)]
     (if-not (or keycloak-id nickname)
-      bad-request-schnaq-creation
+      (bad-request-schnaq-creation parameters)
       (let [author (if keycloak-id
                      [:user.registered/keycloak-id keycloak-id]
                      (user-db/add-user-if-not-exists nickname))
@@ -90,7 +98,10 @@
                       (:discussion/title created-discussion) " – "
                       "Exclusive?" hub-exclusive? "for" hub)
             (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
-          bad-request-schnaq-creation)))))
+          (bad-request-schnaq-creation parameters))))))
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- schnaq-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
