@@ -37,8 +37,18 @@
   (s/keys :req [:discussion/title :discussion/share-hash :discussion/author
                 :discussion/created-at]
           :opt [:discussion/share-link :discussion/admin-link :discussion/edit-hash
-                :discussion/states :db/id :discussion/creation-secret]
+                :discussion/states :db/id :discussion/creation-secret :discussion/mode]
           :opt-un [:discussion/meta-info]))
+
+(s/def ::discussion-title :discussion/title)
+(s/def ::discussion-mode keyword?)
+(s/def ::ends-in-days pos-int?)
+(s/def ::hub-exclusive? boolean?)
+(s/def ::hub :hub/keycloak-name)
+(s/def ::discussion-add-body
+  (s/keys :req-un [::discussion-title]
+          :opt-un [::ends-in-days :user/nickname ::hub-exclusive? ::hub
+                   ::discussion-mode]))
 
 ;; Feedbacks
 (s/def ::feedback
