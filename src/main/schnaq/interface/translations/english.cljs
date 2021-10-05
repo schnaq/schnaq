@@ -631,6 +631,9 @@
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"
 
+   ;; Q & A
+   :qanda/add-question "Type in your question"
+
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"
    :schnaqs/subheader "These are the schnaqs that you are part of"
@@ -891,6 +894,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
+   :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"
    :router/true-404-view "404 error page"

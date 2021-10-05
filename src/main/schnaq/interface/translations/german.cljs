@@ -636,6 +636,9 @@
    :discussion.badges/statement-by "von"
    :discussion.badges/new "Neu"
 
+   ;; Q & A
+   :qanda/add-question "Gib deine Frage ein …"
+
    :schnaqs/header "Übersicht deiner schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
    :schnaqs/author "Autor"
@@ -897,6 +900,7 @@
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
+   :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/startpage "Startseite"
    :router/true-404-view "404 Fehlerseite"

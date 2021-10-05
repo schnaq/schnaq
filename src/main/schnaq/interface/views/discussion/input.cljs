@@ -59,7 +59,7 @@
        (when-not shared-config/embedded?
          [:div.d-flex.flex-row.justify-content-end.pr-lg-2
           ;; hide 'new post from you' text on mobile
-          [:small.d-none.d-md-block.text-muted.mr-2 (labels :discussion.add.statement/new)]
+          [:small.d-none.d-md-block.text-muted.mr-2.my-auto (labels :discussion.add.statement/new)]
           [common/avatar #:user.registered{:profile-picture (get-in user [:profile-picture :display])
                                            :display-name (get-in user [:names :display])} 32]])
        [:div.form-group

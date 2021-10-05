@@ -635,6 +635,9 @@
    :discussion.badges/statement-by "z"
    :discussion.badges/new "Nowy"
 
+   ;; Q & A
+   :qanda/add-question "Wpisz swoje pytanie"
+
    :schnaqs/header "Przegląd Twojego schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"
    :schnaqs/author "Autor"
@@ -893,6 +896,7 @@
    :router/not-found-label "Nie znaleziono Przekierowanie trasy"
    :router/pricing "Wycena"
    :router/privacy "Ochrona danych"
+   :router/qanda "PYTANIA I ODPOWIEDZI"
    :router/start-discussion "Rozpocznij dyskusję"
    :router/startpage "Strona główna"
    :router/true-404-view "Strona z błędem 404"
