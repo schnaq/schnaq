@@ -7,7 +7,7 @@
                 :asset-path "/js/compiled"
                 :dev {:compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}}
                 :release {:closure-defines {schnaq.config.shared/api-url #shadow/env "REST_API_URL"
-                                            schnaq.interface.config/environment "production"
+                                            schnaq.config.shared/environment "production"
                                             schnaq.interface.config/build-hash #shadow/env "BUILD_HASH"
                                             schnaq.interface.config/keycloak-realm #shadow/env "KEYCLOAK_REALM"
                                             schnaq.interface.config/keycloak-client #shadow/env "KEYCLOAK_CLIENT"
