@@ -274,6 +274,7 @@
    :discussion.navbar/title "Tytuł"
    :discussion.navbar/posts "Posty"
    :discussion.navbar/members "Członkowie"
+   :discussion.navbar/views "widok"
    :discussion.state/read-only-label "tylko do odczytu"
    :discussion.state/read-only-warning "Ta dyskusja jest tylko do odczytu, możesz tu tylko czytać, ale nie pisać."
 
@@ -634,9 +635,11 @@
    :discussion.badges/edit-statement "edit"
    :discussion.badges/statement-by "z"
    :discussion.badges/new "Nowy"
+   :discussion.button/text "Przegląd"
 
    ;; Q & A
    :qanda/add-question "Wpisz swoje pytanie"
+   :qanda.button/text "Q&A"
 
    :schnaqs/header "Przegląd Twojego schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"

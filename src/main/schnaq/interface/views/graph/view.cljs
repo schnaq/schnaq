@@ -14,6 +14,7 @@
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.loading :as loading]
+            [schnaq.interface.views.pages :as pages]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
 (def ^:private graph-id "graph")
@@ -150,12 +151,13 @@
 (defn- graph-view
   "The core Graph visualization wrapper."
   []
-  (let [{:discussion/keys [share-hash title]} @(rf/subscribe [:schnaq/selected])]
-    [:<>
-     [graph-agenda-header title share-hash]
-     (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
-       [graph-canvas graph])
-     [loading/spinner]]))
+  (let [current-discussion @(rf/subscribe [:schnaq/selected])]
+    [pages/with-discussion-header
+     {:page/heading (:discussion/title current-discussion)}
+     [:<>
+      (when-let [graph (:graph @(rf/subscribe [:graph/current]))]
+        [graph-canvas graph])
+      [loading/spinner]]]))
 
 (defn graph-view-entrypoint []
   [graph-view])

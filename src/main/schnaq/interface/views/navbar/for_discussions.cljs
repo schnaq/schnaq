@@ -49,12 +49,12 @@
 
 (>defn- discussion-button-builder
   "Build buttons in the discussion navigation."
-  [label href]
-  [keyword? fn? :ret vector?]
-  [:a {:href href}
-   [:button.btn.btn-sm.btn-white.discussion-navbar-button
+  [label icon href]
+  [keyword? keyword? fn? :ret vector?]
+  [:a.dropdown-item {:href href}
+   [:div.text-center
     [:img.header-standalone-icon
-     {:src (img-path :icon-graph-dark)
+     {:src (img-path icon)
       :alt "graph icon"}]
     [:p.small.m-0.text-nowrap (labels label)]]])
 
@@ -63,7 +63,7 @@
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [discussion-button-builder
-     :graph.button/text
+     :graph.button/text :icon-graph-dark
      (reitfe/href :routes/graph-view {:share-hash share-hash})]))
 
 (defn- summary-button
@@ -71,9 +71,39 @@
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [discussion-button-builder
-     :summary.link.button/text
+     :summary.link.button/text :icon-summary-dark
      (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})]))
 
+(defn- standard-view-button
+  "Button to navigate to the standard overview."
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [discussion-button-builder
+     :discussion.button/text :icon-cards-dark
+     (reitfe/href :routes.schnaq/start {:share-hash share-hash})]))
+
+(defn- qanda-view-button
+  "Button to navigate to the Q&A view."
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [discussion-button-builder
+     :qanda.button/text :icon-qanda-dark
+     (reitfe/href :routes.schnaq/qanda {:share-hash share-hash})]))
+
+(defn- dropdown-views []
+  (let [dropdown-id "schnaq-views-dropdown"]
+    [:div.dropdown
+     [:button.btn.btn-white.discussion-navbar-button
+      {:id dropdown-id :type "button" :data-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}
+      [:img.header-standalone-icon
+       {:src (img-path :icon-views-dark) :alt "graph icon"}]
+      [:p.small.m-0.text-nowrap.dropdown-toggle (labels :discussion.navbar/views)]]
+     [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+      [graph-button]
+      [summary-button]
+      [standard-view-button]
+      [qanda-view-button]]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -124,8 +154,7 @@
         [admin/admin-center])
       [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]
      [:div.d-flex.align-items-center
-      [:div.mr-2.mx-md-2 [graph-button]]
-      [:div.mr-2 [summary-button]]
+      [:div.mr-2.mx-md-2 [dropdown-views]]
       [:div.d-flex.align-items-center.schnaq-navbar
        [um/user-handling-menu "btn-link"]]]]))
 

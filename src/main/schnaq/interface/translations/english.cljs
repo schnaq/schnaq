@@ -269,6 +269,7 @@
    :discussion.navbar/title "Title"
    :discussion.navbar/posts "Posts"
    :discussion.navbar/members "Members"
+   :discussion.navbar/views "Views"
    :discussion.state/read-only-label "read-only"
    :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
@@ -630,9 +631,11 @@
    :discussion.badges/edit-statement "edit"
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"
+   :discussion.button/text "Overview"
 
    ;; Q & A
    :qanda/add-question "Type in your question"
+   :qanda.button/text "Q&A"
 
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"

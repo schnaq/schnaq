@@ -275,6 +275,7 @@
    :discussion.navbar/title "Titel"
    :discussion.navbar/posts "Beiträge"
    :discussion.navbar/members "Mitglieder"
+   :discussion.navbar/views "Ansichten"
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
 
@@ -635,9 +636,11 @@
    :discussion.badges/edit-statement "editieren"
    :discussion.badges/statement-by "von"
    :discussion.badges/new "Neu"
+   :discussion.button/text "Übersicht"
 
    ;; Q & A
    :qanda/add-question "Gib deine Frage ein …"
+   :qanda.button/text "Q&A"
 
    :schnaqs/header "Übersicht deiner schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
