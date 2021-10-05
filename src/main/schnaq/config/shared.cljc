@@ -58,3 +58,11 @@
 (def allowed-labels
   "A set of allowed labels for statements. They correspond to fa symbols"
   #{":check" ":question" ":times" ":ghost" ":calendar-alt" ":arrow-right" ":comment"})
+
+
+;; -----------------------------------------------------------------------------
+;; Access Codes
+
+(def access-code-length
+  "Defines how long the access code should be, e.g. eight numbers."
+  8)

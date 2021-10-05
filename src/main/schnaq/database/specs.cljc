@@ -85,6 +85,11 @@
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
                                   :discussion/end-time :discussion/creation-secret]))
 
+;; Access Codes
+(s/def ::access-code (s/and (s/coll-of nat-int?)
+                            #(= shared-config/access-code-length (count %))))
+
+;; Hubs
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
 (s/def :hub/logo ::non-blank-string)
