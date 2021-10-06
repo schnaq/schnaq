@@ -9,6 +9,7 @@
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.links :as links]
+            [schnaq.toolbelt :as toolbelt]
             [schnaq.processors :as processors]
             [schnaq.validator :as validator]
             [spec-tools.core :as st]
@@ -53,12 +54,6 @@
                 (discussion-db/valid-discussions-by-hashes share-hashes-list))})
       at/not-found-hash-invalid)))
 
-(>defn- now-plus-days-instant
-  "Adds a number of days to the current datetime and then converts that to an instant."
-  [days]
-  [integer? :ret inst?]
-  (.toInstant (.plusDays (LocalDateTime/now) days) ZoneOffset/UTC))
-
 (defn- add-schnaq
   "Adds a discussion to the database. Returns the newly-created discussion."
   [{:keys [parameters identity]}]
@@ -75,7 +70,7 @@
                                 keycloak-id (assoc :discussion/admins [author])
                                 (and hub-exclusive? authorized-for-hub?)
                                 (assoc :discussion/hub-origin [:hub/keycloak-name hub])
-                                ends-in-days (assoc :discussion/end-time (now-plus-days-instant ends-in-days)))
+                                ends-in-days (assoc :discussion/end-time (toolbelt/now-plus-days-instant ends-in-days)))
         new-discussion-id (discussion-db/new-discussion discussion-data)]
     (if new-discussion-id
       (let [created-discussion (discussion-db/secret-discussion-data new-discussion-id)]

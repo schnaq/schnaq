@@ -13,6 +13,12 @@
   [int? :ret inst?]
   (.minus (Instant/now) ^Long days ^TemporalUnit ChronoUnit/DAYS))
 
+(>defn now-plus-days-instant
+  "Adds a number of days to the current datetime and then converts that to an instant."
+  [days]
+  [integer? :ret inst?]
+  (.toInstant (.plusDays (LocalDateTime/now) days) ZoneOffset/UTC))
+
 (>defn pull-key-up
   "Finds any occurrence of a member of `key-name` in `coll`. Then replaced the corresponding
    value with the value of its key-name entry.
