@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.schnaq.value
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.views.pages :as pages]))
@@ -31,7 +31,7 @@
      [:a.btn.btn-dark-highlight.p-3.rounded-1.ml-auto.mb-5
       {:href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
       (labels :schnaqs/continue-to-schnaq-button)
-      [fa :arrow-right "ml-2"]]]))
+      [icon :arrow-right "ml-2"]]]))
 
 (defn- value-content []
   [:<>

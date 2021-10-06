@@ -751,8 +751,6 @@
    :user/logout "Wyloguj się"
    :user/register "Zaloguj się / Zarejestruj się"
    :user.profile/settings "Ustawienia"
-   :user.profile.role/admin-tooltip "Jesteś adminem!\n\"Z wielką władzą wiąże się wielka odpowiedzialność\"."
-   :user.profile.role/beta-tester-tooltip "Jesteś beta testerem! Dzięki temu masz ekskluzywny wgląd w funkcje, które są jeszcze w fazie eksperymentalnej.."
    :user.action/link-copied "Link skopiowany!"
    :user.action/link-copied-body "Udostępnij link innym, aby dać im dostęp."
    :user/edit-account "Zarządzaj kontem użytkownika"

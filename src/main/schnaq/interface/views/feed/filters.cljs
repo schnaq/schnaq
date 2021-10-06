@@ -3,7 +3,7 @@
             [goog.dom :as gdom]
             [re-frame.core :as rf]
             [reagent.core :as r]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -82,7 +82,7 @@
                         (rf/dispatch [:filters.discussion/activate :author
                                       (tools/get-current-selection (gdom/getElement "filter-author-selection"))
                                       display-name]))}
-          [:i {:class (fa :plus)}] " " (labels :filters.add/button)]]))))
+          [icon :plus] " " (labels :filters.add/button)]]))))
 
 (defn- prettify-filter
   "A helper returning a single filter prettified."

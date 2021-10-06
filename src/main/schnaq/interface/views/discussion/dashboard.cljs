@@ -2,7 +2,7 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon icon-lg]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
@@ -44,7 +44,7 @@
     [:div.display-6.text-white (labels :beta.modal/title)]]
    [:div.p-3
     [:p
-     [:i {:class (str "m-auto fas fa-lg " (fa :shield))}]
+     [icon-lg :shield "m-auto"]
      " " (labels :beta.modal/explain)
      " " (labels :beta.modal/persuade)]
     [:p

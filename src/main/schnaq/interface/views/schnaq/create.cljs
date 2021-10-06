@@ -5,7 +5,7 @@
             [reagent.core :as reagent]
             [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.buttons :as buttons]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -62,13 +62,13 @@
         {:class (when @end-time "active")
          :type "button"
          :on-click (fn [_e] (swap! end-time #(or @end-time 7)))}
-        [fa :calendar "mr-3"]
+        [icon :calendar "mr-3"]
         (gstring/format (labels :discussion.progress.creation/button-limit) (or @end-time 7))]
        [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
         {:class (when-not @end-time "active")
          :type "button"
          :on-click #(reset! end-time false)}
-        [:i.mr-3 {:class (str "fas " (fa :circle-notch))}]
+        [icon :circle-notch "mr-3"]
         (labels :discussion.progress.creation/button-unlimited)]])))
 
 (defn- create-schnaq-options
@@ -99,13 +99,13 @@
                             :placeholder (labels :schnaq.create.input/placeholder)
                             :css "font-150"}]]]
       [:div.row.text-primary.p-3
-       [:i.my-auto.mr-3 {:class (str "fa " (fa :info))}]
+       [icon :info "my-auto mr-3"]
        [:span (labels :schnaq.create/info)]]
       [create-schnaq-options]
       [:div.row.px-1.py-3
        [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
         (labels :schnaq.create.button/save)
-        [fa :arrow-right "ml-2"]]]]
+        [icon :arrow-right "ml-2"]]]]
      [how-to-elements/quick-how-to-create]]]])
 
 (defn- create-schnaq-type-selection-page
@@ -125,7 +125,7 @@
         :todo
         "btn-outline-white mb-3 miw-75 disabled"]
        [:p.small.text-left
-        [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
+        [icon :info "my-auto mr-1"]
         [:strong (labels :schnaq.create.dispatch.qanda/coming-soon)] [:br]
         (labels :schnaq.create.dispatch.qanda/explain)]
        [:p.small.text-left
@@ -136,7 +136,7 @@
         (rfe/href :routes.schnaq.create/discussion)
         "btn-outline-white mb-3 miw-75"]
        [:p.small.text-left
-        [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
+        [icon :info "my-auto mr-1"]
         (labels :schnaq.create.dispatch.discussion/explain)]
        [:p.small.text-left
         (labels :schnaq.create.dispatch.discussion/share)]]]]}])

@@ -1,7 +1,7 @@
 (ns schnaq.interface.components.navbar
   (:require [ghostwheel.core :refer [>defn]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.language :as language]
             [schnaq.interface.utils.tooltip :as tooltip]))
@@ -18,7 +18,7 @@
          {:href "#" :role "button" :data-toggle "dropdown"
           :aria-haspopup "true" :aria-expanded "false"}
          options)
-       [:i {:class (str "fas " (fa :language))}]
+       [icon :language]
        (when show-label?
          (str " " current-language))]
       [:div.dropdown-menu {:aria-labelledby "schnaq-language-dropdown"}

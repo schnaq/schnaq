@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.feed.overview
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -70,7 +70,7 @@
           :on-click (fn [e] (js-wrap/stop-propagation e)
                       (when (js/confirm (labels :hub.remove.schnaq/prompt))
                         (rf/dispatch [:hub.remove/schnaq share-hash])))}
-         [:i {:class (str "m-auto fas " (fa :cross))}]])]]))
+         [icon :cross "m-auto"]])]]))
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."

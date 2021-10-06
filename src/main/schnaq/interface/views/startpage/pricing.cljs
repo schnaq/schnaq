@@ -3,7 +3,7 @@
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [reitit.frontend.easy :as reititfe]
-            [schnaq.interface.components.icons :refer [fa icon-lg]]
+            [schnaq.interface.components.icons :refer [icon icon-lg]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -80,12 +80,12 @@
        (for [[feature class] features]
          (with-meta
            [:li.list-group-item
-            [fa :check/normal (str class " mr-2")] feature]
+            [icon :check/normal (str class " mr-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))
        (for [[feature class] (add-class-to-feature upcoming-features "text-muted")]
          (with-meta
            [:li.list-group-item
-            [fa :check/normal (str class " mr-2")] feature]
+            [icon :check/normal (str class " mr-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]
       cta-button]]))
 

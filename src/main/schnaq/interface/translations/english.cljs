@@ -747,8 +747,6 @@ Now we write down questions and discuss them and can still understand what we ha
    :user/logout "Logout"
    :user/register "Sign In / Sign Up"
    :user.profile/settings "Settings"
-   :user.profile.role/admin-tooltip "You're an admin!\n\"With great power comes great responsibility.\""
-   :user.profile.role/beta-tester-tooltip "You are a beta tester! This gives you an exclusive insight into features that are still experimental."
    :user.action/link-copied "Link copied!"
    :user.action/link-copied-body "Share the link with others, to give them access to the schnaq."
    :user/edit-account "Manage Account Information"

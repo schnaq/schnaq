@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.user.edit-notifications
   (:require [re-frame.core :as rf]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -14,7 +14,7 @@
     [:div.flex.mx-3.my-auto
      [motion/fade-in-and-out
       [motion/move-in :bottom
-       [fa :check/normal "text-secondary m-auto"]]]]))
+       [icon :check/normal "text-secondary m-auto"]]]]))
 
 (defn- button-or-spinner
   "Show button per default or spinner while waiting or a server response"

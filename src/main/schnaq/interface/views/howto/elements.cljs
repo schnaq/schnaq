@@ -2,7 +2,7 @@
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.videos :refer [video]]
@@ -49,7 +49,7 @@
        [:article.quick-how-to
         [:div.row.align-items-center
          [:div.col-12.col-lg-7
-          [:div.mb-2 [:i {:class (str "m-auto fas " (fa :info-question))}]]
+          [:div.mb-2 [icon :info-question "m-auto"]]
           [text-box title body]
           [:div.feature-text-box
            [:p (labels :how-to/ask-question-2)
@@ -63,7 +63,7 @@
           [:div.text-right
            [:button.btn.btn-outline-dark.mb-3
             {:on-click (fn [] (rf/dispatch [:how-to-visibility/to-localstorage hide-tag]))}
-            [:i {:class (str "m-auto fas " (fa :cross))}]]]
+            [icon :cross "m-auto"]]]
           [:img.taskbar-background {:src (img-path :how-to/taskbar)}]
           [:video.video-scalable-with-shadow-and-border {:auto-play true :loop true :muted true :plays-inline true}
            [:source {:src (video video-key-webm) :type "video/webm"}]

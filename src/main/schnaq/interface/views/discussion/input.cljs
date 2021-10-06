@@ -2,7 +2,7 @@
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -81,7 +81,7 @@
         {:type "submit" :title (labels :discussion/create-argument-action)}
         [:div.d-flex.flex-row
          [:div.d-none.d-md-block.mr-1 (labels :statement.edit.button/submit)]
-         [:i {:class (str "m-auto fas " (fa :plane))}]]]]]]))
+         [icon :plane "m-auto"]]]]]]))
 
 (defn input-form
   "Form to collect the user's statements."

@@ -2,7 +2,7 @@
   (:require [hodgepodge.core :refer [local-storage]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -42,7 +42,7 @@
                   (if edit-hash (admin-delete-fn)
                                 (user-delete-fn)))
       :title (labels :discussion.badges/delete-statement)}
-     [:i {:class (str "m-auto fas " (fa :trash))}] " " (labels :discussion.badges/delete-statement)]))
+     [icon :trash "m-auto"] " " (labels :discussion.badges/delete-statement)]))
 
 (defn- edit-dropdown-button
   "Edit button to trigger custom functionality."
@@ -53,7 +53,7 @@
                 (js-wrap/stop-propagation e)
                 (on-click-fn))
     :title (labels :discussion.badges/edit-statement)}
-   [:i {:class (str "m-auto fas " (fa :edit))}] " " (labels :discussion.badges/edit-statement)])
+   [icon :edit "m-auto"] " " (labels :discussion.badges/edit-statement)])
 
 (defn- edit-dropdown-button-statement
   "Give the registered user the ability to edit their statement."
@@ -116,7 +116,7 @@
         {:id dropdown-id
          :href "#" :role "button" :data-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
-        [:i {:class (str "fas " (fa :dots))}]]
+        [icon :dots]]
        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
         (when editable?
           [:dropdown-item
@@ -132,7 +132,7 @@
         {:id dropdown-id
          :href "#" :role "button" :data-toggle "dropdown"
          :aria-haspopup "true" :aria-expanded "false"}
-        [:i {:class (str "fas " (fa :dots))}]]
+        [icon :dots]]
        [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
         (when editable?
           [:dropdown-item
@@ -157,7 +157,7 @@
   [:span.badge.badge-pill.badge-transparent.badge-clickable.mr-2
    [tooltip/html
     [author-list authors]
-    [:div [:i {:class (str "m-auto fas " (fa :user/group))}] " " (count authors)]
+    [:div [icon :user/group "m-auto"] " " (count authors)]
     {:animation "scale"
      :trigger "click"
      :appendTo js-wrap/document-body}]])
@@ -171,15 +171,14 @@
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
         new? (not (= old-statement-num statement-num))
         authors (conj (-> statement :meta/sub-discussion-info :authors)
-                      (user/statement-author statement))
-        pill-class {:class (str "m-auto fas " (fa :comments))}]
+                      (user/statement-author statement))]
     [:div.d-flex.flex-row.align-items-center
      [:a.badge.badge-pill.badge-transparent.badge-clickable.mr-2
       {:href (rfe/href :routes.schnaq.select/statement (assoc path-parameters :statement-id (:db/id statement)))
        :role :button}
       (if new?
-        [:i.secondary-color pill-class]
-        [:i pill-class])
+        [icon :comments "m-auto secondary-color"]
+        [icon :comments "m-auto"])
       " " statement-num]
      [authors-badge authors]
      [statement-labels/edit-labels-button statement]
@@ -193,12 +192,12 @@
         user-count (count (:authors meta-info))]
     [:p.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
-      [:i {:class (str "m-auto fas " (fa :comments))}]
+      [icon :comments "m-auto"]
       " " statement-count]
      [:span.badge.badge-pill.badge-transparent.mr-2
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
-      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]]))
+      [icon :user/group "m-auto"] " " user-count]]))
 
 (defn static-info-badges-discussion
   "Badges that display schnaq info."
@@ -208,12 +207,12 @@
         user-count (count (:authors meta-info))]
     [:div.d-flex.flex-row.mb-0
      [:span.badge.badge-pill.badge-transparent.mr-2
-      [:i {:class (str "m-auto fas " (fa :comments))}]
+      [icon :comments "m-auto"]
       " " statement-count]
      [:span.badge.badge-pill.badge-transparent.mr-2
       {:tabIndex 20
        :title (labels :discussion.badges/user-overview)}
-      [:i {:class (str "m-auto fas " (fa :user/group))}] " " user-count]
+      [icon :user/group "m-auto"] " " user-count]
      [edit-discussion-dropdown-menu schnaq]]))
 
 (defn read-only-badge

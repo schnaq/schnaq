@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.labels
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -54,14 +54,14 @@
        [tooltip/html
         [build-labels statement]
         [:div.pr-2.clickable
-         [:i {:class (fa :tag)}]]
+         [icon :tag]]
         {:animation "scale"
          :appendTo jsw/document-body}]
        [:div.pr-2.clickable
         {:tabIndex 30
          :on-click #(rf/dispatch [:modal {:show? true
                                           :child [anonymous-labels-modal]}])}
-        [:i {:class (fa :tag)}]])]))
+        [icon :tag]])]))
 
 (rf/reg-event-fx
   :statement.labels/remove

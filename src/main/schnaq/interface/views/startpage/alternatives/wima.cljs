@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.startpage.alternatives.wima
-  (:require [schnaq.interface.components.icons :refer [fa]]
+  (:require [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
@@ -21,7 +21,7 @@
         [:a.btn.btn-lg.btn-secondary.d-inline-block
          {:href "https://schnaq.outgrow.us/WiMa"}
          "Umfrage starten "
-         [fa :right-arrow "m-auto"]]]
+         [icon :right-arrow "m-auto"]]]
        [:p.text-social-proof.text-center.pt-2
         [:img.social-proof-icon
          {:src (img-path :schnaqqifant/white)}]

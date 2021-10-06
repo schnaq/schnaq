@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.qanda
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -33,7 +33,7 @@
        [:div.d-inline-block
         [:div.d-flex.flex-row.justify-content-center
          [:div.mr-3 (labels :qanda.button/submit)]
-         [:i {:class (str "m-auto fas " (fa :plane))}]]]]]]))
+         [icon :plane "m-auto"]]]]]]))
 
 (defn- ask-question
   "Either display input or read-only warning."
