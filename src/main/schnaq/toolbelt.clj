@@ -4,7 +4,7 @@
             [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn ?]])
   (:import (clojure.lang PersistentArrayMap)
-           (java.time Instant)
+           (java.time Instant LocalDateTime ZoneOffset)
            (java.time.temporal ChronoUnit TemporalUnit)))
 
 (>defn now-minus-days
@@ -12,6 +12,12 @@
   [days]
   [int? :ret inst?]
   (.minus (Instant/now) ^Long days ^TemporalUnit ChronoUnit/DAYS))
+
+(>defn now-plus-days-instant
+  "Adds a number of days to the current datetime and then converts that to an instant."
+  [days]
+  [integer? :ret inst?]
+  (.toInstant (.plusDays (LocalDateTime/now) days) ZoneOffset/UTC))
 
 (>defn pull-key-up
   "Finds any occurrence of a member of `key-name` in `coll`. Then replaced the corresponding
@@ -24,13 +30,16 @@
    (ident-map->value {:foo {:db/ident :bar}} :not-found)
    => {:foo {:db/ident :bar}}
    ```"
-  [coll key-name]
-  [(? coll?) keyword? :ret (? coll?)]
-  (walk/postwalk
-    #(if (and (= PersistentArrayMap (type %)) (contains? % key-name))
-       (key-name %)
-       %)
-    coll))
+  ([coll]
+   [(? coll?) :ret (? coll?)]
+   (pull-key-up coll :db/ident))
+  ([coll key-name]
+   [(? coll?) keyword? :ret (? coll?)]
+   (walk/postwalk
+     #(if (and (= PersistentArrayMap (type %)) (contains? % key-name))
+        (key-name %)
+        %)
+     coll)))
 
 (>defn db-to-ref
   [coll]

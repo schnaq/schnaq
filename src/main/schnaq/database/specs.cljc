@@ -9,7 +9,8 @@
 ;; Frontend only
 #?(:cljs (s/def :re-frame/component vector?))
 
-;; Transaction
+;; Common
+(s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
 
 ;; User
@@ -55,6 +56,21 @@
   (s/keys :req-un [:meta/sub-statements :meta/authors]))
 
 
+;; Access Codes
+(s/def :discussion.access/code
+  (s/and nat-int?
+         #(< % (Math/pow 10 shared-config/access-code-length))))
+(s/def :discussion.access/discussion :db/id)
+(s/def :discussion.access/created-at inst?)
+(s/def :discussion.access/expires-at inst?)
+(s/def ::access-code-template
+  (s/keys :req [:discussion.access/code]
+          :opt [:discussion.access/discussion
+                :discussion.access/created-at :discussion.access/expires-at]))
+(s/def :discussion/access
+  (s/or :from-db (s/coll-of ::access-code-template)
+        :regular ::access-code-template))
+
 ;; Discussion
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
@@ -84,8 +100,10 @@
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
-                                  :discussion/end-time :discussion/creation-secret :discussion/mode]))
+                                  :discussion/end-time :discussion/creation-secret :discussion/mode
+                                  :discussion/access]))
 
+;; Hubs
 (s/def :hub/name ::non-blank-string)
 (s/def :hub/keycloak-name ::non-blank-string)
 (s/def :hub/logo ::non-blank-string)
@@ -121,9 +139,6 @@
                 :statement/labels]))
 
 (s/def :statement.vote/operation #{:removed :switched :added})
-
-;; Common
-(s/def :db/id (s/or :transacted integer? :temporary any?))
 
 ;; Feedback
 (s/def :feedback/contact-name string?)

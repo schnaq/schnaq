@@ -4,6 +4,7 @@
             [schnaq.database.discussion :as db]
             [schnaq.database.discussion-test-data :as test-data]
             [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -182,7 +183,7 @@
           new-user (user-db/add-user-if-not-exists "Wugiperson")
           new-statement-id (db/add-starting-statement! (:discussion/share-hash cat-dog-discussion)
                                                        new-user initial-content false)
-          statement (fast-pull new-statement-id db/statement-pattern)]
+          statement (fast-pull new-statement-id patterns/statement)]
       (is (= initial-content (:statement/content statement)))
       (let [modified-statement (db/change-statement-text-and-type statement modified-type modified-content)]
         (is (= modified-content (:statement/content modified-statement)))

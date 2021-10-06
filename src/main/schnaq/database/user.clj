@@ -2,41 +2,10 @@
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.database.main :refer [transact fast-pull clean-db-vals query]]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log]))
-
-(def registered-user-public-pattern
-  "Small version of a user to show only necessary information."
-  [:db/id
-   :user.registered/keycloak-id
-   :user.registered/display-name
-   :user.registered/profile-picture])
-
-(def registered-private-user-pattern
-  [:user.registered/email
-   :user.registered/last-name
-   :user.registered/first-name
-   {:user.registered/notification-mail-interval [:db/ident]}
-   {:user.registered/visited-schnaqs [:discussion/share-hash]}])
-
-(def seen-statements-pattern
-  [:seen-statements/user
-   :seen-statements/visited-schnaq
-   {:seen-statements/visited-statements [:db/id]}])
-
-(def ^:private minimal-user-pattern
-  "Minimal user pull pattern."
-  [:db/id
-   :user/nickname])
-
-(def public-user-pattern
-  "Use this pattern to query public user information."
-  (concat registered-user-public-pattern minimal-user-pattern))
-
-(def private-user-pattern
-  "When all data is necessary for a user, use this pattern."
-  (concat public-user-pattern registered-private-user-pattern))
 
 (>defn add-user
   "Add a new anonymous user / author to the database."
@@ -49,7 +18,7 @@
       [:tempids "temp-user"])))
 
 (>defn user-by-nickname
-  "Return the **schnaq** user-id by nickname. The nickname is not case sensitive.
+  "Return the **schnaq** user-id by nickname. The nickname is not case-sensitive.
   If there is no user with said nickname returns nil."
   [nickname]
   [:user/nickname :ret (? :db/id)]
@@ -62,7 +31,7 @@
     (.toLowerCase ^String nickname)))
 
 (defn user-id
-  "Returns the user-id of the passed user. Takes a username and an keycloak-id that may be nil.
+  "Returns the user-id of the passed user. Takes a username and a keycloak-id that may be nil.
   Returns the keycloak-user if logged-in, otherwise the anon user-id."
   [display-name keycloak-id]
   (if keycloak-id
@@ -165,8 +134,7 @@
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
         existing-user (toolbelt/pull-key-up
-                        (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
-                        :db/ident)
+                        (fast-pull [:user.registered/keycloak-id id] patterns/private-user))
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -188,7 +156,7 @@
         [false existing-user])
       (let [new-user-from-db (-> @(transact [(clean-db-vals new-user)])
                                  (get-in [:tempids temp-id])
-                                 (fast-pull registered-user-public-pattern))]
+                                 (fast-pull patterns/registered-user-public))]
         (when-not (nil? visited-statements)
           (update-visited-statements (:db/id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
@@ -197,15 +165,14 @@
   "Updates a user's field in the database and return updated user."
   ([keycloak-id field value]
    [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
-   (update-user-field keycloak-id field value registered-user-public-pattern))
+   (update-user-field keycloak-id field value patterns/registered-user-public))
   ([keycloak-id field value pattern]
    [:user.registered/keycloak-id keyword? any? any? :ret ::specs/registered-user]
    (let [new-db (:db-after
                   @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
                                field value]]))]
      (toolbelt/pull-key-up
-       (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db)
-       :db/ident))))
+       (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db)))))
 
 (>defn update-display-name
   "Update the name of an existing user."
@@ -223,7 +190,7 @@
   "Update the name of an existing user."
   [keycloak-id interval]
   [:user.registered/keycloak-id :user.registered/notification-mail-interval :ret ::specs/registered-user]
-  (update-user-field keycloak-id :user.registered/notification-mail-interval interval private-user-pattern))
+  (update-user-field keycloak-id :user.registered/notification-mail-interval interval patterns/private-user))
 
 (>defn members-of-group
   "Returns all members of a certain group."
@@ -233,7 +200,7 @@
     '[:find [(pull ?users public-user-pattern) ...]
       :in $ ?group public-user-pattern
       :where [?users :user.registered/groups ?group]]
-    group-name public-user-pattern))
+    group-name patterns/public-user))
 
 (defn user-by-email
   "Returns the registered user by email."
@@ -242,7 +209,7 @@
     '[:find (pull ?user registered-user-public-pattern) .
       :in $ ?email registered-user-public-pattern
       :where [?user :user.registered/email ?email]]
-    user-email registered-user-public-pattern))
+    user-email patterns/registered-user-public))
 
 (defn all-registered-users
   "Returns all registered users' keycloak ids"
@@ -252,5 +219,4 @@
       '[:find [(pull ?registered-user user-pattern) ...]
         :in $ user-pattern
         :where [?registered-user :user.registered/keycloak-id _]]
-      private-user-pattern)
-    :db/ident))
+      patterns/private-user)))

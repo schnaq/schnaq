@@ -27,7 +27,7 @@
 ;; Processing statements
 
 (>defn with-aggregated-votes
-  "Anonymize the votes by just counting the numer of votes and adding whether the user has upvoted or not."
+  "Anonymize the votes by just counting the number of votes and adding whether the user has upvoted or not."
   [data user-id]
   [any? :db/id :ret any?]
   (walk/postwalk
