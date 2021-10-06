@@ -1,9 +1,9 @@
 (ns schnaq.database.access-codes
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn >defn-]]
+            [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.main :as main-db]
+            [schnaq.database.main :refer [transact fast-pull clean-and-add-to-db! query]]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as toolbelt])
   (:import (java.util Date)))
@@ -32,7 +32,7 @@
   "Validate, if the provided `code` is not in use."
   [code]
   [:discussion.access/code :ret boolean?]
-  (let [access-code (main-db/fast-pull [:discussion.access/code code])]
+  (let [access-code (fast-pull [:discussion.access/code code])]
     (or (nil? (:db/id access-code))
         (not (valid? access-code)))))
 
@@ -45,6 +45,18 @@
       code
       (recur (generate-code)))))
 
+(>defn- revoke-existing-access-codes
+  "Looks up all discussions and revokes the existing access-codes for them."
+  [share-hash]
+  [:discussion/share-hash :ret vector?]
+  (transact
+    (for [access-code-ref (query '[:find [?access-code ...]
+                                   :in $ ?share-hash
+                                   :where [?discussion :discussion/share-hash ?share-hash]
+                                   [?access-code :discussion.access/discussion ?discussion]]
+                                 share-hash)]
+      [:db/retract access-code-ref :discussion.access/discussion])))
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -52,50 +64,25 @@
   "Generate an access code for a discussion."
   [share-hash days-valid]
   [:discussion/share-hash nat-int? :ret ::specs/access-code]
-  (let [access-code-ref (main-db/clean-and-add-to-db!
+  (let [_ (revoke-existing-access-codes share-hash)
+        access-code-ref (clean-and-add-to-db!
                           {:discussion.access/code (find-available-code)
                            :discussion.access/discussion [:discussion/share-hash share-hash]
                            :discussion.access/created-at (Date.)
                            :discussion.access/expires-at (toolbelt/now-plus-days-instant days-valid)}
                           ::specs/access-code)]
-    (main-db/fast-pull access-code-ref access-code-pattern)))
+    (fast-pull access-code-ref access-code-pattern)))
 
 (>defn discussion-by-access-code
   "Query a discussion by its access code."
   [code]
-  [:discussion.access/code :ret ::specs/access-code]
-  (toolbelt/pull-key-up
-    (main-db/fast-pull [:discussion.access/code code] access-code-pattern)))
+  [:discussion.access/code :ret (? ::specs/access-code)]
+  (let [access-code (toolbelt/pull-key-up
+                      (fast-pull [:discussion.access/code code] access-code-pattern))]
+    (when (:db/id access-code) access-code)))
 
 
 (comment
-  (code-available? 42)
 
-
-
-  (def sample {:db/id 17592186045451,
-               :discussion.access/code 42,
-               :discussion.access/discussion [:discussion/share-hash "1ea965de-bb39-4ae9-85b2-f3b3bad12af0"]
-               :discussion.access/created-at #inst"2021-10-06T10:56:36.257-00:00",
-               :discussion.access/expires-at #inst"2021-10-07T12:56:36.257-00:00"})
-
-
-
-  (main-db/transact [[:db/retract [:discussion.access/code 42] :discussion.access/discussion]])
-  (main-db/fast-pull [:discussion.access/code 42111])
-
-
-  (main-db/clean-and-add-to-db!
-    {:discussion.access/code 42
-     :discussion.access/discussion [:discussion/share-hash "1ea965de-bb39-4ae9-85b2-f3b3bad12af0"]
-     :discussion.access/created-at (Date.)
-     :discussion.access/expires-at (toolbelt/now-plus-days-instant 1)}
-    ::specs/access-code)
-  34
-
-
-  (discussion-db/discussion-by-share-hash "1ea965de-bb39-4ae9-85b2-f3b3bad12af0")
-
-  (add-access-code-to-discussion "1ea965de-bb39-4ae9-85b2-f3b3bad12af0" 1)
 
   nil)
