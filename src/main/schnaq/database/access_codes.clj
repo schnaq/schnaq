@@ -21,12 +21,39 @@
   [:ret :discussion.access/code]
   (rand-int (Math/pow 10 shared-config/access-code-length)))
 
+(>defn- valid?
+  "Check if the access-code is correctly configured and not expired."
+  [{:discussion.access/keys [created-at expires-at] :as access-code}]
+  [::specs/access-code :ret boolean?]
+  (and (s/valid? ::specs/access-code access-code)
+       (nat-int? (- (.getTime expires-at) (.getTime created-at)))))
+
+(>defn- code-available?
+  "Validate, if the provided `code` is not in use."
+  [code]
+  [:discussion.access/code :ret boolean?]
+  (let [access-code (main-db/fast-pull [:discussion.access/code code])]
+    (or (nil? (:db/id access-code))
+        (not (valid? access-code)))))
+
+(>defn- find-available-code
+  "Returns for an available code, which can be used to access a discussion."
+  []
+  [:ret :discussion.access/code]
+  (loop [code (generate-code)]
+    (if (code-available? code)
+      code
+      (recur (generate-code)))))
+
+
+;; -----------------------------------------------------------------------------
+
 (>defn add-access-code-to-discussion
   "Generate an access code for a discussion."
   [share-hash days-valid]
-  [:discussion/share-hash nat-int? :ret number?]
+  [:discussion/share-hash nat-int? :ret ::specs/access-code]
   (let [access-code-ref (main-db/clean-and-add-to-db!
-                          {:discussion.access/code (generate-code)
+                          {:discussion.access/code (find-available-code)
                            :discussion.access/discussion [:discussion/share-hash share-hash]
                            :discussion.access/created-at (Date.)
                            :discussion.access/expires-at (toolbelt/now-plus-days-instant days-valid)}
@@ -40,14 +67,10 @@
   (toolbelt/pull-key-up
     (main-db/fast-pull [:discussion.access/code code] access-code-pattern)))
 
-(defn valid?
-  "Check if the access-code is correctly configured and not expired."
-  [{:discussion.access/keys [created-at expires-at] :as access-code}]
-  [::specs/access-code :ret boolean?]
-  (and (s/valid? ::specs/access-code access-code)
-       (nat-int? (- (.getTime expires-at) (.getTime created-at)))))
 
 (comment
+  (code-available? 42)
+
 
 
   (def sample {:db/id 17592186045451,
@@ -56,13 +79,10 @@
                :discussion.access/created-at #inst"2021-10-06T10:56:36.257-00:00",
                :discussion.access/expires-at #inst"2021-10-07T12:56:36.257-00:00"})
 
-  (valid? sample)
 
-  (let [{:discussion.access/keys [created-at expires-at]} sample]
-    (- (.getTime expires-at) (.getTime created-at)))
 
   (main-db/transact [[:db/retract [:discussion.access/code 42] :discussion.access/discussion]])
-  (main-db/fast-pull [:discussion.access/code 42])
+  (main-db/fast-pull [:discussion.access/code 42111])
 
 
   (main-db/clean-and-add-to-db!
