@@ -63,10 +63,13 @@
 (s/def :discussion.access/discussion :db/id)
 (s/def :discussion.access/created-at inst?)
 (s/def :discussion.access/expires-at inst?)
-(s/def :discussion/access
+(s/def ::access-code-template
   (s/keys :req [:discussion.access/code]
           :opt [:discussion.access/discussion
                 :discussion.access/created-at :discussion.access/expires-at]))
+(s/def :discussion/access
+  (s/or :from-db (s/coll-of ::access-code-template)
+        :regular ::access-code-template))
 
 ;; Discussion
 (s/def :discussion/title string?)
