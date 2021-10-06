@@ -49,11 +49,11 @@
   []
   (let [admin? @(rf/subscribe [:user/administrator?])
         beta-tester? @(rf/subscribe [:user/beta-tester?])
-        icon (cond
-               admin? :star
-               beta-tester? :rocket)]
-    (when icon
-      [icon icon "pr-1"])))
+        icon-name (cond
+                    admin? :star
+                    beta-tester? :rocket)]
+    (when icon-name
+      [icon icon-name "pr-1"])))
 
 (defn admin-dropdown
   "Show Admin pages when user is authenticated and has admin role."

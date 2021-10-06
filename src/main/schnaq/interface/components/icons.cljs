@@ -11,10 +11,12 @@
       :arrow-up [:i.fas.fa-arrow-up {:class classes}]
       :bell [:i.fas.fa-bell {:class classes}]
       :calendar [:i.far.fa-calendar {:class classes}]
+      :calendar-alt [:i.fas.fa-calendar-alt {:class classes}]
       :camera [:i.fas.fa-camera {:class classes}]
       :check/normal [:i.fas.fa-check {:class classes}]
       :circle-notch [:i.fas.fa-circle-notch {:class classes}]
       :cog [:i.fas.fa-cog {:class classes}]
+      :comment [:i.fas.fa-comment {:class classes}]
       :comments [:i.fas.fa-comments {:class classes}]
       :cookie/complete [:i.fas.fa-cookie {:class classes}]
       :copy [:i.far.fa-copy {:class classes}]
@@ -24,12 +26,14 @@
       :edit [:i.fas.fa-edit {:class classes}]
       :file-download [:i.fas.fa-file-download {:class classes}]
       :flask [:i.fas.fa-flask {:class classes}]
+      :ghost [:i.fas.fa-ghost {:class classes}]
       :graph [:i.fas.fa-project-diagram {:class classes}]
       :info [:i.fas.fa-info-circle {:class classes}]
       :info-question [:i.fas.fa-question-circle {:class classes}]
       :language [:i.fas.fa-language {:class classes}]
       :plane [:i.fas.fa-paper-plane {:class classes}]
-      :plus [:i.far.fa-plus {:class classes}]
+      :plus [:i.fas.fa-plus {:class classes}]
+      :question [:i.fas.fa-question {:class classes}]
       :rocket [:i.fas.fa-rocket {:class classes}]
       :search [:i.fas.fa-search {:class classes}]
       :share [:i.fas.fa-share-alt {:class classes}]
@@ -50,6 +54,5 @@
   ([identifier classes]
    [icon identifier (if classes (str "fa-lg " classes) "fa-lg")]))
 
-;; TODO check out labels
 ;; TODO fa-xs
 ;; TODO lint
