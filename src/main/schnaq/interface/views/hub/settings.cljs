@@ -5,7 +5,7 @@
             [oops.core :refer [oget+]]
             [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -30,10 +30,10 @@
         [:button.btn.btn-primary.change-profile-pic-button
          {:on-click (fn [e] (js-wrap/prevent-default e)
                       (rf/dispatch [:hub.logo/reset hub]))}
-         [:i.fas {:class (fa :cross)}]]
+         [icon :cross]]
         ;; upload temporary button
         [:label.btn.btn-light.change-profile-pic-button
-         [:i.fas {:class (fa :camera)}]
+         [icon :camera]
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"

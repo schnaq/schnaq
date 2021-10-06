@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [goog.string :as gstring]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jw]
@@ -90,9 +90,9 @@
 
 (defn- developed-in-nrw []
   [:section.pt-3
-   [:i {:class (str "fas " (fa :terminal))}]
+   [icon :terminal]
    " " (labels :footer.tagline/developed-with) " "
-   [:i {:class (str "m-auto fas " (fa :flask))}]
+   [icon :flask "m-auto"]
    (gstring/format " in NRW, Germany © schnaq %d" jw/get-date-year)])
 
 (defn- social-media []

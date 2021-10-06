@@ -4,7 +4,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
@@ -49,7 +49,7 @@
         [:button.btn.btn-dark-highlight.button-discussion-options.w-100.p-3
          {:on-click #(rf/dispatch navigation-target)}
          [:div.d-flex
-          [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]]])))
+          [icon :arrow-left "m-auto"]]]]])))
 
 
 (defn- discussion-start-button
@@ -263,7 +263,7 @@
     [:div.input-group-append
      [:button.btn.button-muted.h-100
       {:type "submit"}
-      [:i {:class (str "m-auto fas " (fa :search))}]]]]])
+      [icon :search "m-auto"]]]]])
 
 (defn action-view []
   [:div.d-inline-block.text-dark.w-100.mb-3

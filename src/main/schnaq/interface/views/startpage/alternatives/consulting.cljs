@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.startpage.alternatives.consulting
   (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.utils.rows :as rows]
@@ -44,7 +44,7 @@
         [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/florian-clever)}]
         [:div.border-right.mr-2
          [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
-         [:i {:class (str "mr-2 my-auto " (fa :plus))}]]
+         [icon :plus "my-auto mr-2"]]
         [:p.small.my-auto "von Software-Designer:innen für Software-Designer:innen!"]]]
       [:div.col-md-6.col-12.col-lg-6.pt-sm-5.text-center
        [:img.img-fluid

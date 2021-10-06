@@ -5,7 +5,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.file-download :as file-download]
@@ -24,7 +24,7 @@
      [:a.btn.btn-outline-muted.btn-lg
       {:href (rfe/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
        :role :button}
-      [:i {:class (str "m-auto fas " (fa :cog))}]]]))
+      [icon :cog "m-auto"]]]))
 
 (defn- share-modal
   "Modal showing sharing options."
@@ -63,7 +63,7 @@
   "Button to copy access link and notify the user."
   []
   [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
-   [:i {:class (str "m-auto fas " (fa :share))}]
+   [icon :share "m-auto"]
    open-share-modal])
 
 (defn- create-txt-download-handler
@@ -81,7 +81,7 @@
   "Download the current graph as a png file."
   [surrounding-div]
   [tooltip/tooltip-button "bottom" (labels :graph.download/as-png)
-   [:i {:class (str "m-auto fas " (fa :graph))}]
+   [icon :grpah "ma-auto"]
    (fn []
      (let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
            anchor (.createElement js/document "a")]
@@ -102,5 +102,5 @@
                        :error-handler show-error})]
     (when share-hash
       [tooltip/tooltip-button "bottom" (labels :schnaq.export/as-text)
-       [:i {:class (str "m-auto fas " (fa :file-download))}]
+       [icon :file-download "m-auto"]
        #(request-fn)])))

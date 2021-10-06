@@ -1,6 +1,6 @@
 (ns schnaq.interface.views.startpage.call-to-actions
   (:require [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]))
 
@@ -19,7 +19,7 @@
     {:href (rfe/href :routes.schnaq/create)}
     (labels :schnaq.startpage.cta/button)
     " "
-    [:i.m-auto {:class (str "fa " (fa :arrow-right))}]]])
+    [icon :right-arrow "m-auto"]]])
 
 (defn- social-proof
   "A small section showing the user, that the risk was already taken by others."

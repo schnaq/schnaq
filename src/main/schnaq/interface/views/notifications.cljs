@@ -22,7 +22,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.dom]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]))
 
 (def ^:private display-time
@@ -54,7 +54,7 @@
                                  (when on-close-fn (on-close-fn))
                                  (rf/dispatch [:notification/remove id]))}
       [:span {:aria-hidden "true"}
-       [:i {:class (str " m-auto fas fa-xs " (fa :delete-icon))}]]]]
+       [icon :delete-icon "fa-xs m-auto"]]]]
     [:div.toast-body.scrollable-toast body]]])
 
 (>defn notify!

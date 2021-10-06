@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.discussion.labels
   (:require [re-frame.core :as rf]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jsw]
             [schnaq.interface.utils.toolbelt :as tools]
@@ -11,19 +11,19 @@
 (defn build-label
   "Takes a label and builds the necessary html."
   [label set? hover?]
-  (let [[badge-color icon-class]
+  (let [[badge-color icon-name]
         (case label
-          ":comment" ["badge-primary" "fa-comment"]
-          ":arrow-right" ["badge-purple" "fa-arrow-right"]
-          ":calendar-alt" ["badge-info" "fa-calendar-alt"]
-          ":check" ["badge-success" "fa-check"]
-          ":ghost" ["badge-dark" "fa-ghost"]
-          ":question" ["badge-warning" "fa-question"]
-          ":times" ["badge-danger" "fa-times"])
+          ":comment" ["badge-primary" :comment]
+          ":arrow-right" ["badge-purple" :arrow-right]
+          ":calendar-alt" ["badge-info" :calendar-alt]
+          ":check" ["badge-success" :check/normal]
+          ":ghost" ["badge-dark" :ghost]
+          ":question" ["badge-warning" :question]
+          ":times" ["badge-danger" :cross])
         extra-class (if set? (str badge-color " label-set") badge-color)]
     [:span.badge.badge-pill.px-4
      {:class (if hover? (str extra-class " label") extra-class)}
-     [:i {:class (str "m-auto fas " icon-class)}]]))
+     [icon icon-name (str "m-auto")]]))
 
 (defn- anonymous-labels-modal
   "Explain to anonymous users that they need to log in to set and remove labels."
@@ -54,14 +54,14 @@
        [tooltip/html
         [build-labels statement]
         [:div.pr-2.clickable
-         [:i {:class (fa :tag)}]]
+         [icon :tag]]
         {:animation "scale"
          :appendTo jsw/document-body}]
        [:div.pr-2.clickable
         {:tabIndex 30
          :on-click #(rf/dispatch [:modal {:show? true
                                           :child [anonymous-labels-modal]}])}
-        [:i {:class (fa :tag)}]])]))
+        [icon :tag]])]))
 
 (rf/reg-event-fx
   :statement.labels/remove

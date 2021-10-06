@@ -1,5 +1,5 @@
 (ns schnaq.interface.views.startpage.alternatives.creators
-  (:require [schnaq.interface.components.icons :refer [fa]]
+  (:require [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.utils.rows :as rows]
@@ -31,7 +31,7 @@
        [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/florian-clever)}]
        [:div.border-right.mr-2
         [:img.rounded-circle.social-proof-img.mr-2 {:src (img-path :testimonial-picture/frank-stampa)}]
-        [:i {:class (str "mr-2 my-auto " (fa :plus))}]]
+        [icon :plus "my-auto mr-2"]]
        [:p.small.my-auto "Lerne, was deine Community bewegt!"]]]]}
    [:<>
     [:section.container.my-5

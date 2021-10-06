@@ -2,7 +2,7 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
@@ -48,14 +48,14 @@
        :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
-      [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]
+      [icon :arrow-up "vote-arrow m-auto"]]
      [:span.mr-3 (logic/get-up-votes statement votes)]
      [:div.mr-2
       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
        :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]
+      [icon :arrow-down "vote-arrow m-auto"]]
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card
@@ -78,7 +78,7 @@
         [:a.badge.mr-3
          {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
          [:button.btn.btn-sm.btn-dark
-          [:i.text-white {:class (str "m-auto far fa-xs " (fa :plus))}]]
+          [icon :plus "text-white m-auto fa-xs"]]
          [:span.ml-2.text-dark (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-sm-0.ml-lg-auto

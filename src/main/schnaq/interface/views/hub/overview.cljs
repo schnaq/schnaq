@@ -5,7 +5,7 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.interface.auth :as auth]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -28,7 +28,7 @@
                           :placeholder (labels :hub.add.schnaq.input/placeholder)}]
     [:div.input-group-append
      [:button.btn.btn-primary {:type "submit"}
-      [:i {:class (str "m-auto " (fa :plus))}]]]]])
+      [icon :plus "m-auto"]]]]])
 
 (defn hub-panel
   "Small overview for the hub."
@@ -41,7 +41,7 @@
      [:div.text-center
       [:a.btn.btn-outline-dark.btn-rounded-2
        {:href (reitfe/href :routes.hub/edit {:keycloak-name (:hub/keycloak-name hub)})}
-       [:i.fas.mr-1 {:class (fa :cog)}]
+       [icon :cog "mr-1"]
        (labels :hub/settings)]]
      [:hr]
      [feed/sidebar-info-links]]))

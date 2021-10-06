@@ -13,7 +13,7 @@
             [re-frame.core :as rf]
             [reagent.core :as r]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -125,7 +125,7 @@
                       (rf/dispatch [:filters.activate/votes
                                     (tools/get-current-selection (gdom/getElement "filter-votes-selection"))
                                     (.-value (gdom/getElement "filter-votes-number"))]))}
-        [:i {:class (fa :plus)}] " " (labels :filters.add/button)]])))
+        [icon :plus] " " (labels :filters.add/button)]])))
 
 (defn- prettify-filter
   "A helper returning a single filter prettified."

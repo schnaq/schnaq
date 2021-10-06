@@ -1,7 +1,7 @@
 (ns schnaq.interface.views.user.settings
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
@@ -30,7 +30,7 @@
                                  :href (rfe/href route)}
       [:div.row.text-left
        [:div.col-1
-        [:i.mr-4.my-auto {:class (str "fas " (fa icon))}]]
+        [icon icon "mr-4 my-auto"]]
        [:div.col
         [:span (labels label)]]]]]))
 
@@ -40,7 +40,7 @@
    [:a.button.btn.btn-dark-highlight.p-3
     {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}
     [:div.d-flex
-     [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]])
+     [icon :arrow-left "m-auto"]]]])
 
 (defn- edit-user-panel []
   [:section

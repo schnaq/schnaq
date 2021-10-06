@@ -7,7 +7,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [icon-lg]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
@@ -45,7 +45,7 @@
          :value display-content
          :readOnly true}]
        [:label.clickable-no-hover.align-right.ml-4.d-flex.justify-content-center {:for meeting-link-id}
-        [:div {:class (str "m-auto far fa-lg " (fa :copy))}]]]
+        [icon-lg :copy "m-auto"]]]
       {:plugins followCursor
        :followCursor true}]]))
 
