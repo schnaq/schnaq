@@ -175,7 +175,7 @@
       {:name :routes.schnaq/create
        :view create/create-schnaq-view
        :link-text (labels :router/create-schnaq)}]
-     ["/discusison"
+     ["/discussion"
       {:name :routes.schnaq.create/discussion
        :view create/create-discussion-view}]]
     ["/:share-hash"
