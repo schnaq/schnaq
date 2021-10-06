@@ -5,9 +5,14 @@
   ([content]
    [big content "btn-primary"])
   ([content classes]
-   [big content classes "submit"])
-  ([content classes btn-type]
+   [big content classes nil])
+  ([content classes attrs]
+   [big content classes attrs nil])
+  ([content classes attrs on-click-fn]
    [:button.btn.btn-lg
-    {:type btn-type
-     :class classes}
+    (cond->
+      {:type "submit"
+       :class classes}
+      on-click-fn (assoc :on-click on-click-fn)
+      attrs (merge attrs))
     content]))
