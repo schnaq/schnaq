@@ -2,6 +2,7 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [reitit.frontend.easy :as rfe]
             [reagent.core :as reagent]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [fa]]
@@ -114,14 +115,15 @@
    {:page/title (labels :schnaq.create/title)
     :page/more-for-heading
     [:section
+     {:style {:min-height "600px"}}
      [:h1.text-center.pb-5 "Was möchtest du starten?"]
      [:div.row.mx-auto.pb-5
       {:style {:max-width "800px"}}
       [:div.col-md-6.col-12.text-center
-       [buttons/big
+       [buttons/a-big
         "Fragen und Antworten"
-        "btn-outline-white mb-3 miw-75"
-        {:disabled true}]
+        :todo
+        "btn-outline-white mb-3 miw-75 disabled"]
        [:p.small.text-left
         [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
         [:strong "Bald verfügbar!"] [:br]
@@ -129,8 +131,9 @@
        [:p.small.text-left
         "Lade Teilnehmer:innen per Link ein."]]
       [:div.col-md-6.col-12.text-center
-       [buttons/big
+       [buttons/a-big
         "Diskussion"
+        (rfe/href :routes.schnaq.create/discussion)
         "btn-outline-white mb-3 miw-75"]
        [:p.small.text-left
         [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
@@ -140,6 +143,9 @@
 
 (defn create-schnaq-view []
   [create-schnaq-type-selection-page])
+
+(defn create-discussion-view []
+  [create-schnaq-page])
 
 
 ;; -----------------------------------------------------------------------------
