@@ -3,6 +3,8 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
+            [reitit.frontend.easy :as rfe]
+            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -106,7 +108,43 @@
         [:i.ml-2 {:class (fa :arrow-right)}]]]]
      [how-to-elements/quick-how-to-create]]]])
 
+(defn- create-schnaq-type-selection-page
+  "Choose whether the type of schnaq you are starting is a Q&A or a discussion."
+  []
+  [pages/with-nav-and-header
+   {:page/title (labels :schnaq.create/title)
+    :page/more-for-heading
+    [:section
+     {:style {:min-height "600px"}}
+     [:h1.text-center.pb-5 (labels :schnaq.create.dispatch/heading)]
+     [:div.row.mx-auto.pb-5
+      {:style {:max-width "800px"}}
+      [:div.col-md-6.col-12.text-center
+       [buttons/a-big
+        (labels :schnaq.create.dispatch/qanda)
+        :todo
+        "btn-outline-white mb-3 miw-75 disabled"]
+       [:p.small.text-left
+        [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
+        [:strong (labels :schnaq.create.dispatch.qanda/coming-soon)] [:br]
+        (labels :schnaq.create.dispatch.qanda/explain)]
+       [:p.small.text-left
+        (labels :schnaq.create.dispatch.qanda/share)]]
+      [:div.col-md-6.col-12.text-center
+       [buttons/a-big
+        (labels :schnaq.create.dispatch/discussion)
+        (rfe/href :routes.schnaq.create/discussion)
+        "btn-outline-white mb-3 miw-75"]
+       [:p.small.text-left
+        [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
+        (labels :schnaq.create.dispatch.discussion/explain)]
+       [:p.small.text-left
+        (labels :schnaq.create.dispatch.discussion/share)]]]]}])
+
 (defn create-schnaq-view []
+  [create-schnaq-type-selection-page])
+
+(defn create-discussion-view []
   [create-schnaq-page])
 
 

@@ -203,6 +203,15 @@
    :schnaq.header-image.url/failed-setting-body "Das Bild wird nicht in der Vorschau genutzt."
 
    ;; Create schnaq
+   :schnaq.create.dispatch/heading "Was möchtest du starten?"
+   :schnaq.create.dispatch/qanda "Fragen und Antworten"
+   :schnaq.create.dispatch.qanda/coming-soon "Bald verfügbar!"
+   :schnaq.create.dispatch.qanda/explain "Sammel Fragen während einer Veranstaltung und beantworte sie wann immer du Zeit hast."
+   :schnaq.create.dispatch.qanda/share "Lade Teilnehmer:innen per Link oder Zahlencode ein."
+   :schnaq.create.dispatch/discussion "Diskussion"
+   :schnaq.create.dispatch.discussion/explain "Führe K.I. gestützte und nachhaltige Diskussionen mit anderen Teilnehmer:innen."
+   :schnaq.create.dispatch.discussion/share "Lade Teilnehmer:innen per Link ein."
+
    :schnaq.create.input/title "Worüber möchtest du diskutieren?"
    :schnaq.create.input/placeholder "Thema festlegen"
    :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."

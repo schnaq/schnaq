@@ -171,9 +171,13 @@
    ["schnaq"
     {:controllers [{:start #(rf/dispatch [:username/open-dialog])}]}
     ["/create"
-     {:name :routes.schnaq/create
-      :view create/create-schnaq-view
-      :link-text (labels :router/create-schnaq)}]
+     [""
+      {:name :routes.schnaq/create
+       :view create/create-schnaq-view
+       :link-text (labels :router/create-schnaq)}]
+     ["/discussion"
+      {:name :routes.schnaq.create/discussion
+       :view create/create-discussion-view}]]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
