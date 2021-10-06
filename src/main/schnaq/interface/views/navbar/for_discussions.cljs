@@ -12,6 +12,7 @@
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
@@ -28,7 +29,9 @@
   (let [discussion @(rf/subscribe [:schnaq/selected])
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))]
+        user-count (count (:authors meta-info))
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        qanda? (= current-route :routes.schnaq/qanda)]
     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4
      ;; schnaq logo
      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
@@ -37,24 +40,26 @@
         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
      [:div.mx-4
       [clickable-title]]
-     [:div.mx-4.ml-auto.d-none.d-md-block
-      [:small.text-primary (labels :discussion.navbar/posts)]
-      [:h5.text-center statement-count]]
-     [:div.mx-4.d-none.d-md-block
-      [:small.text-primary (labels :discussion.navbar/members)]
-      [:h5.text-center user-count]]]))
+     (when-not qanda?
+       [:<>
+        [:div.mx-4.ml-auto.d-none.d-md-block
+         [:small.text-primary (labels :discussion.navbar/posts)]
+         [:h5.text-center statement-count]]
+        [:div.mx-4.d-none.d-md-block
+         [:small.text-primary (labels :discussion.navbar/members)]
+         [:h5.text-center user-count]]])]))
 
 
 ;; -----------------------------------------------------------------------------
 
 (>defn- discussion-button-builder
   "Build buttons in the discussion navigation."
-  [label href]
-  [keyword? fn? :ret vector?]
-  [:a {:href href}
-   [:button.btn.btn-sm.btn-white.discussion-navbar-button
+  [label icon href]
+  [keyword? keyword? fn? :ret vector?]
+  [:a.dropdown-item {:href href}
+   [:div.text-center
     [:img.header-standalone-icon
-     {:src (img-path :icon-graph-dark)
+     {:src (img-path icon)
       :alt "graph icon"}]
     [:p.small.m-0.text-nowrap (labels label)]]])
 
@@ -63,7 +68,7 @@
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [discussion-button-builder
-     :graph.button/text
+     :graph.button/text :icon-graph-dark
      (reitfe/href :routes/graph-view {:share-hash share-hash})]))
 
 (defn- summary-button
@@ -71,9 +76,39 @@
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
     [discussion-button-builder
-     :summary.link.button/text
+     :summary.link.button/text :icon-summary-dark
      (reitfe/href :routes.schnaq/dashboard {:share-hash share-hash})]))
 
+(defn- standard-view-button
+  "Button to navigate to the standard overview."
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [discussion-button-builder
+     :discussion.button/text :icon-cards-dark
+     (reitfe/href :routes.schnaq/start {:share-hash share-hash})]))
+
+(defn- qanda-view-button
+  "Button to navigate to the Q&A view."
+  []
+  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
+    [discussion-button-builder
+     :qanda.button/text :icon-qanda-dark
+     (reitfe/href :routes.schnaq/qanda {:share-hash share-hash})]))
+
+(defn- dropdown-views []
+  (let [dropdown-id "schnaq-views-dropdown"]
+    [:div.dropdown
+     [:button.btn.btn-white.discussion-navbar-button
+      {:id dropdown-id :type "button" :data-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}
+      [:img.header-standalone-icon
+       {:src (img-path :icon-views-dark) :alt "graph icon"}]
+      [:p.small.m-0.text-nowrap.dropdown-toggle (labels :discussion.navbar/views)]]
+     [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+      [graph-button]
+      [summary-button]
+      [standard-view-button]
+      [qanda-view-button]]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -111,21 +146,33 @@
            :style {:width (str current-bar "%")}}
           (nil? end-time) (assoc :class "progress-bar-striped"))]]]]))
 
-(defn navbar-statements []
+(defn navbar-settings []
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        edit-hash (get admin-access-map share-hash)]
+        edit-hash (get admin-access-map share-hash)
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        graph? (= current-route :routes/graph-view)]
+    (if graph?
+      [:<>
+       [graph-settings/open-settings]
+       [admin/graph-download-as-png (gstring/format "#%s" graph-settings/graph-id)]]
+      [:<>
+       [admin/txt-export share-hash title]
+       (when edit-hash
+         [admin/admin-center])])))
+
+(defn navbar-statements []
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        qanda? (= current-route :routes.schnaq/qanda)]
     [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
-     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
-      [schnaq-progress-bar]
-      [admin/share-link]
-      [admin/txt-export share-hash title]
-      (when edit-hash
-        [admin/admin-center])
-      [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]
+     (when-not qanda?
+       [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
+        [schnaq-progress-bar]
+        [admin/share-link]
+        [navbar-settings]
+        [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]])
      [:div.d-flex.align-items-center
-      [:div.mr-2.mx-md-2 [graph-button]]
-      [:div.mr-2 [summary-button]]
+      [:div.mr-2.mx-md-2 [dropdown-views]]
       [:div.d-flex.align-items-center.schnaq-navbar
        [um/user-handling-menu "btn-link"]]]]))
 

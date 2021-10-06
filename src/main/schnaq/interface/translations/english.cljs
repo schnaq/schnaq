@@ -269,6 +269,7 @@
    :discussion.navbar/title "Title"
    :discussion.navbar/posts "Posts"
    :discussion.navbar/members "Members"
+   :discussion.navbar/views "Views"
    :discussion.state/read-only-label "read-only"
    :discussion.state/read-only-warning "This discussion is read-only. You can read the statements, but not write anything."
 
@@ -630,6 +631,13 @@
    :discussion.badges/edit-statement "edit"
    :discussion.badges/statement-by "by"
    :discussion.badges/new "New"
+   :discussion.button/text "Overview"
+
+   ;; Q & A
+   :qanda/add-question "Type in your question"
+   :qanda.button/text "Q&A"
+   :qanda.button/submit "Ask question"
+   :qanda.state/read-only-warning "This schnaq is read-only, you cannot ask any questions at the moment."
 
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"
@@ -891,6 +899,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :router/not-found-label "Not found route redirect"
    :router/pricing "Pricing"
    :router/privacy "Privacy Policy"
+   :router/qanda "Q&A"
    :router/start-discussion "Start discussion"
    :router/startpage "Startpage"
    :router/true-404-view "404 error page"

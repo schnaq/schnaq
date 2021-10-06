@@ -274,6 +274,7 @@
    :discussion.navbar/title "Tytuł"
    :discussion.navbar/posts "Posty"
    :discussion.navbar/members "Członkowie"
+   :discussion.navbar/views "widok"
    :discussion.state/read-only-label "tylko do odczytu"
    :discussion.state/read-only-warning "Ta dyskusja jest tylko do odczytu, możesz tu tylko czytać, ale nie pisać."
 
@@ -634,6 +635,13 @@
    :discussion.badges/edit-statement "edit"
    :discussion.badges/statement-by "z"
    :discussion.badges/new "Nowy"
+   :discussion.button/text "Przegląd"
+
+   ;; Q & A
+   :qanda/add-question "Wpisz swoje pytanie"
+   :qanda.button/text "Q&A"
+   :qanda.button/submit "Zadaj pytanie"
+   :qanda.state/read-only-warning "Ten schnaq jest tylko do odczytu, nie możesz zadawać żadnych pytań w tej chwili."
 
    :schnaqs/header "Przegląd Twojego schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"
@@ -893,6 +901,7 @@
    :router/not-found-label "Nie znaleziono Przekierowanie trasy"
    :router/pricing "Wycena"
    :router/privacy "Ochrona danych"
+   :router/qanda "PYTANIA I ODPOWIEDZI"
    :router/start-discussion "Rozpocznij dyskusję"
    :router/startpage "Strona główna"
    :router/true-404-view "Strona z błędem 404"

@@ -275,6 +275,7 @@
    :discussion.navbar/title "Titel"
    :discussion.navbar/posts "Beiträge"
    :discussion.navbar/members "Mitglieder"
+   :discussion.navbar/views "Ansichten"
    :discussion.state/read-only-label "schreibgeschützt"
    :discussion.state/read-only-warning "Diese Diskussion ist schreibgeschützt, Du kannst hier nur lesen, aber nicht schreiben."
 
@@ -635,6 +636,13 @@
    :discussion.badges/edit-statement "editieren"
    :discussion.badges/statement-by "von"
    :discussion.badges/new "Neu"
+   :discussion.button/text "Übersicht"
+
+   ;; Q & A
+   :qanda/add-question "Gib deine Frage ein …"
+   :qanda.button/text "Q&A"
+   :qanda.button/submit "Frage stellen"
+   :qanda.state/read-only-warning "Dieser schnaq ist schreibgeschützt, du kannst aktuell keine Fragen stellen."
 
    :schnaqs/header "Übersicht deiner schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
@@ -897,6 +905,7 @@
    :router/not-found-label "Not Found route redirect"
    :router/pricing "Preise"
    :router/privacy "Datenschutz"
+   :router/qanda "Fragen & Antworten"
    :router/start-discussion "Starte Diskussion"
    :router/startpage "Startseite"
    :router/true-404-view "404 Fehlerseite"

@@ -72,6 +72,7 @@
             [schnaq.interface.views.navbar.user-management]
             [schnaq.interface.views.notifications]
             [schnaq.interface.views.pages]
+            [schnaq.interface.views.qanda]
             [schnaq.interface.views.schnaq.admin]
             [schnaq.interface.views.schnaq.create]
             [schnaq.interface.views.schnaq.summary]
