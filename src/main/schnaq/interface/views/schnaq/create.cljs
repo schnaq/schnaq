@@ -2,8 +2,8 @@
   (:require [goog.string :as gstring]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
-            [reitit.frontend.easy :as rfe]
             [reagent.core :as reagent]
+            [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.translations :refer [labels]]
@@ -116,30 +116,30 @@
     :page/more-for-heading
     [:section
      {:style {:min-height "600px"}}
-     [:h1.text-center.pb-5 "Was möchtest du starten?"]
+     [:h1.text-center.pb-5 (labels :schnaq.create.dispatch/heading)]
      [:div.row.mx-auto.pb-5
       {:style {:max-width "800px"}}
       [:div.col-md-6.col-12.text-center
        [buttons/a-big
-        "Fragen und Antworten"
+        (labels :schnaq.create.dispatch/qanda)
         :todo
         "btn-outline-white mb-3 miw-75 disabled"]
        [:p.small.text-left
         [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
-        [:strong "Bald verfügbar!"] [:br]
-        "Führe K.I. gestützte und nachhaltige Diskussionen mit anderen Teilnehmer:innen."]
+        [:strong (labels :schnaq.create.dispatch.qanda/coming-soon)] [:br]
+        (labels :schnaq.create.dispatch.qanda/explain)]
        [:p.small.text-left
-        "Lade Teilnehmer:innen per Link ein."]]
+        (labels :schnaq.create.dispatch.qanda/share)]]
       [:div.col-md-6.col-12.text-center
        [buttons/a-big
-        "Diskussion"
+        (labels :schnaq.create.dispatch/discussion)
         (rfe/href :routes.schnaq.create/discussion)
         "btn-outline-white mb-3 miw-75"]
        [:p.small.text-left
         [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
-        "Sammel Fragen während einer Veranstaltung und beantworte sie wann immer du Zeit hast."]
+        (labels :schnaq.create.dispatch.discussion/explain)]
        [:p.small.text-left
-        "Lade Teilnehmer:innen per Link oder Zahlencode ein."]]]]}])
+        (labels :schnaq.create.dispatch.discussion/share)]]]]}])
 
 (defn create-schnaq-view []
   [create-schnaq-type-selection-page])

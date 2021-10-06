@@ -196,6 +196,15 @@
    :schnaq.header-image.url/failed-setting-body "The image will not be used as preview image."
 
    ;; Create schnaq
+   :schnaq.create.dispatch/heading "What do you want to start?"
+   :schnaq.create.dispatch/qanda "Questions and Answers"
+   :schnaq.create.dispatch.qanda/coming-soon "Coming soon!"
+   :schnaq.create.dispatch.qanda/explain "Collect questions during the course and answer them, when you have the time."
+   :schnaq.create.dispatch.qanda/share "Invite participants via link or a code."
+   :schnaq.create.dispatch/discussion "Discussion"
+   :schnaq.create.dispatch.discussion/explain "Conduct AI assisted and persistent discussions with others."
+   :schnaq.create.dispatch.discussion/share "Invite participants via link."
+
    :schnaq.create.input/title "What would you like to discuss?"
    :schnaq.create.input/placeholder "Specify Subject"
    :schnaq.create.hub/help-text "Directly assign your schnaq to a hub."

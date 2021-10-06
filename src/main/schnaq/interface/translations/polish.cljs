@@ -202,6 +202,15 @@
    :schnaq.header-image.url/failed-setting-body "Obraz nie jest używany w podglądzie."
 
    ;; Create schnaq
+   :schnaq.create.dispatch/heading "Co chcesz zacząć?"
+   :schnaq.create.dispatch/qanda "Pytania i odpowiedzi"
+   :schnaq.create.dispatch.qanda/coming-soon "Już wkrótce!"
+   :schnaq.create.dispatch.qanda/explain "Zbieraj pytania podczas kursu i odpowiadaj na nie, kiedy będziesz miał czas."
+   :schnaq.create.dispatch.qanda/share "Zaproś uczestników poprzez link lub kod."
+   :schnaq.create.dispatch/discussion "Dyskusja"
+   :schnaq.create.dispatch.discussion/explain "Prowadź wspomagane przez AI i uporczywe dyskusje z innymi."
+   :schnaq.create.dispatch.discussion/share "Zaproś uczestników poprzez link."
+
    :schnaq.create.input/title "O czym chcesz rozmawiać?"
    :schnaq.create.input/placeholder "Ustal temat"
    :schnaq.create.hub/help-text "Dodaj swój schnaq bezpośrednio do huba."
