@@ -22,7 +22,7 @@
        (nat-int? (- (.getTime expires-at) (.getTime created-at)))))
 
 (>defn- code-available?
-  "Validate, if the provided `code` is not in use. Invalidated codes
+  "Validate, if the provided `code` is not in use. Invalidated / expired codes
   or free codes can be used."
   [code]
   [:discussion.access/code :ret boolean?]

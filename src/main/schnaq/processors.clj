@@ -81,7 +81,7 @@
         statement))
     data))
 
-(defn remove-invalid-access-codes
+(defn remove-invalid-and-pull-up-access-codes
   "Remove invalid / expired discussion access codes. This function is obsolete
   when we implement a scheduler, which periodically checks the validity of the
   access tokens."
@@ -89,10 +89,11 @@
   (walk/postwalk
     (fn [discussion]
       (if (s/valid? ::specs/discussion discussion)
-        (if-let [access-code (:discussion/access discussion)]
-          (if (access-codes/valid? access-code)
-            discussion
-            (dissoc discussion :discussion/access))
+        (if-let [access-codes (:discussion/access discussion)]
+          (let [access-code (first access-codes)]
+            (if (access-codes/valid? access-code)
+              (assoc discussion :discussion/access access-code)
+              (dissoc discussion :discussion/access)))
           discussion)
         discussion))
     data))
