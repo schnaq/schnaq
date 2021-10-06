@@ -29,7 +29,9 @@
   (let [discussion @(rf/subscribe [:schnaq/selected])
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))]
+        user-count (count (:authors meta-info))
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        qanda? (= current-route :routes.schnaq/qanda)]
     [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4
      ;; schnaq logo
      [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
@@ -38,12 +40,14 @@
         :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
      [:div.mx-4
       [clickable-title]]
-     [:div.mx-4.ml-auto.d-none.d-md-block
-      [:small.text-primary (labels :discussion.navbar/posts)]
-      [:h5.text-center statement-count]]
-     [:div.mx-4.d-none.d-md-block
-      [:small.text-primary (labels :discussion.navbar/members)]
-      [:h5.text-center user-count]]]))
+     (when-not qanda?
+       [:<>
+        [:div.mx-4.ml-auto.d-none.d-md-block
+         [:small.text-primary (labels :discussion.navbar/posts)]
+         [:h5.text-center statement-count]]
+        [:div.mx-4.d-none.d-md-block
+         [:small.text-primary (labels :discussion.navbar/members)]
+         [:h5.text-center user-count]]])]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -158,16 +162,19 @@
          [admin/admin-center])])))
 
 (defn navbar-statements []
-  [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
-   [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
-    [schnaq-progress-bar]
-    [admin/share-link]
-    [navbar-settings]
-    [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]
-   [:div.d-flex.align-items-center
-    [:div.mr-2.mx-md-2 [dropdown-views]]
-    [:div.d-flex.align-items-center.schnaq-navbar
-     [um/user-handling-menu "btn-link"]]]])
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        qanda? (= current-route :routes.schnaq/qanda)]
+    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
+     (when-not qanda?
+       [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
+        [schnaq-progress-bar]
+        [admin/share-link]
+        [navbar-settings]
+        [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]])
+     [:div.d-flex.align-items-center
+      [:div.mr-2.mx-md-2 [dropdown-views]]
+      [:div.d-flex.align-items-center.schnaq-navbar
+       [um/user-handling-menu "btn-link"]]]]))
 
 (defn header
   "Overview header for a discussion."

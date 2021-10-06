@@ -640,6 +640,8 @@
    ;; Q & A
    :qanda/add-question "Wpisz swoje pytanie"
    :qanda.button/text "Q&A"
+   :qanda.button/submit "Zadaj pytanie"
+   :qanda.state/read-only-warning "Ten schnaq jest tylko do odczytu, nie możesz zadawać żadnych pytań w tej chwili."
 
    :schnaqs/header "Przegląd Twojego schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"

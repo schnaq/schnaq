@@ -636,6 +636,8 @@
    ;; Q & A
    :qanda/add-question "Type in your question"
    :qanda.button/text "Q&A"
+   :qanda.button/submit "Ask question"
+   :qanda.state/read-only-warning "This schnaq is read-only, you cannot ask any questions at the moment."
 
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"

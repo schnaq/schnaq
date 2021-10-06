@@ -641,6 +641,8 @@
    ;; Q & A
    :qanda/add-question "Gib deine Frage ein …"
    :qanda.button/text "Q&A"
+   :qanda.button/submit "Frage stellen"
+   :qanda.state/read-only-warning "Dieser schnaq ist schreibgeschützt, du kannst aktuell keine Fragen stellen."
 
    :schnaqs/header "Übersicht deiner schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
