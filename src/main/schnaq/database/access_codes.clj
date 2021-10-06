@@ -4,7 +4,8 @@
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as main-db]
             [schnaq.database.specs :as specs]
-            [schnaq.toolbelt :as toolbelt]))
+            [schnaq.toolbelt :as toolbelt])
+  (:import (java.util Date)))
 
 (def ^:private access-code-pattern
   [:db/id
@@ -30,18 +31,8 @@
     ::specs/access-code))
 
 (defn discussion-by-access-code
-  "TODO"
+  "Query a discussion by its access code."
   [access-code]
   (toolbelt/pull-key-up
     (main-db/fast-pull [:discussion.access/code access-code] access-code-pattern)
     :db/ident))
-
-(comment
-
-
-  (discussion-by-access-code 56709208)
-
-
-
-
-  nil)

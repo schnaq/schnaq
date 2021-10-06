@@ -223,6 +223,23 @@
    {:db/ident :discussion.mode/qanda
     :db/doc "Q&A mode."}
 
+   {:db/ident :discussion.access/code
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one
+    :db/doc "Generated access code for a discussion."}
+   {:db/ident :discussion.access/discussion
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Reference to a discussion."}
+   {:db/ident :discussion.access/created-at
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db/doc "Timestamp when access code was generated"}
+   {:db/ident :discussion.access/expires-at
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db/doc "Timestamp indicating when the access code becomes invalid."}
+
    ;; hub
    {:db/ident :hub/name
     :db/valueType :db.type/string
@@ -266,22 +283,5 @@
    {:db/ident :summary/requester
     :db/valueType :db.type/ref
     :db/cardinality :db.cardinality/one
-    :db/doc "The last requester (registered user) of a summary."}
-
-   {:db/ident :discussion.access/code
-    :db/valueType :db.type/long
-    :db/cardinality :db.cardinality/one
-    :db/doc "Generated access code for a discussion."}
-   {:db/ident :discussion.access/discussion
-    :db/valueType :db.type/ref
-    :db/cardinality :db.cardinality/one
-    :db/doc "Reference to a discussion."}
-   {:db/ident :discussion.access/created-at
-    :db/valueType :db.type/instant
-    :db/cardinality :db.cardinality/one
-    :db/doc "Timestamp when access code was generated"}
-   {:db/ident :discussion.access/expires-at
-    :db/valueType :db.type/instant
-    :db/cardinality :db.cardinality/one
-    :db/doc "Timestamp indicating when the access code becomes invalid."}])
+    :db/doc "The last requester (registered user) of a summary."}])
 
