@@ -7,7 +7,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
-            [schnaq.interface.components.icons :refer [icon icon-lg]]
+            [schnaq.interface.components.icons :refer [icon-lg]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]

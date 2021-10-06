@@ -4,7 +4,7 @@
             [goog.string :as gstring]
             [hodgepodge.core :refer [local-storage clear!]]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [icon icon-lg]]
+            [schnaq.interface.components.icons :refer [icon-lg]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.localstorage :as ls]

@@ -2,7 +2,7 @@
   (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as rfe]
             [schnaq.config.shared :as shared-config]
-            [schnaq.interface.components.icons :refer [icon icon-lg]]
+            [schnaq.interface.components.icons :refer [icon-lg]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.markdown :as md]
