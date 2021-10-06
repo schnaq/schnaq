@@ -53,6 +53,3 @@
    [icon-lg identifier nil])
   ([identifier classes]
    [icon identifier (if classes (str "fa-lg " classes) "fa-lg")]))
-
-;; TODO fa-xs
-;; TODO lint
