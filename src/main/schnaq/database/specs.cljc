@@ -86,8 +86,16 @@
                                   :discussion/end-time :discussion/creation-secret]))
 
 ;; Access Codes
-(s/def ::access-code (s/and nat-int?
-                            #(< % (Math/pow 10 shared-config/access-code-length))))
+(s/def :discussion.access/code
+  (s/and nat-int?
+         #(< % (Math/pow 10 shared-config/access-code-length))))
+(s/def :discussion.access/discussion :db/id)
+(s/def :discussion.access/created-at inst?)
+(s/def :discussion.access/expires-at inst?)
+(s/def ::access-code
+  (s/keys :req [:discussion.access/code :discussion.access/discussion]
+          :opt [:discussion.access/created-at :discussion.access/expires-at]))
+
 
 ;; Hubs
 (s/def :hub/name ::non-blank-string)
