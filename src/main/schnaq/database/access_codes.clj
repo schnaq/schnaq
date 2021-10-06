@@ -57,16 +57,19 @@
 
 (>defn add-access-code-to-discussion
   "Generate an access code for a discussion."
-  [share-hash days-valid]
-  [:discussion/share-hash nat-int? :ret :discussion/access]
-  (let [_ (revoke-existing-access-codes share-hash)
-        access-code-ref (clean-and-add-to-db!
-                          {:discussion.access/code (find-available-code)
-                           :discussion.access/discussion [:discussion/share-hash share-hash]
-                           :discussion.access/created-at (Date.)
-                           :discussion.access/expires-at (toolbelt/now-plus-days-instant days-valid)}
-                          :discussion/access)]
-    (fast-pull access-code-ref patterns/access-code-with-discussion)))
+  ([share-hash]
+   [:discussion/share-hash :ret :discussion/access]
+   (add-access-code-to-discussion share-hash shared-config/access-code-default-expiration))
+  ([share-hash days-valid]
+   [:discussion/share-hash nat-int? :ret :discussion/access]
+   (let [_ (revoke-existing-access-codes share-hash)
+         access-code-ref (clean-and-add-to-db!
+                           {:discussion.access/code (find-available-code)
+                            :discussion.access/discussion [:discussion/share-hash share-hash]
+                            :discussion.access/created-at (Date.)
+                            :discussion.access/expires-at (toolbelt/now-plus-days-instant days-valid)}
+                           :discussion/access)]
+     (fast-pull access-code-ref patterns/access-code-with-discussion))))
 
 (>defn discussion-by-access-code
   "Query a discussion by its access code."
