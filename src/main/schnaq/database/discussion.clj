@@ -5,6 +5,7 @@
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
+            [schnaq.database.access-codes :as access-codes]
             [schnaq.database.main :refer [transact query fast-pull] :as main-db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
@@ -74,17 +75,23 @@
                     [?authors :user.registered/display-name ?nickname])]
                 (transitive-child-rules 7) statement-ids))))
 
+(defn- pull-discussion
+  "Pull a discussion from a database."
+  [share-hash pattern]
+  [:discussion/share-hash vector? :ret ::specs/discussion]
+  (-> (fast-pull [:discussion/share-hash share-hash] pattern)
+      toolbelt/pull-key-up
+      access-codes/remove-invalid-and-pull-up-access-codes))
+
 (defn discussion-by-share-hash
   "Query discussion and apply public discussion pattern to it."
   [share-hash]
-  (toolbelt/pull-key-up
-    (fast-pull [:discussion/share-hash share-hash] patterns/discussion)))
+  (pull-discussion share-hash patterns/discussion))
 
 (defn discussion-by-share-hash-private
   "Query discussion and apply the private discussion pattern."
   [share-hash]
-  (toolbelt/pull-key-up
-    (fast-pull [:discussion/share-hash share-hash] patterns/discussion-private)))
+  (pull-discussion share-hash patterns/discussion-private))
 
 (>defn valid-discussions-by-hashes
   "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."

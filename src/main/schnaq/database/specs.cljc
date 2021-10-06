@@ -56,6 +56,18 @@
   (s/keys :req-un [:meta/sub-statements :meta/authors]))
 
 
+;; Access Codes
+(s/def :discussion.access/code
+  (s/and nat-int?
+         #(< % (Math/pow 10 shared-config/access-code-length))))
+(s/def :discussion.access/discussion :db/id)
+(s/def :discussion.access/created-at inst?)
+(s/def :discussion.access/expires-at inst?)
+(s/def :discussion/access
+  (s/keys :req [:discussion.access/code]
+          :opt [:discussion.access/discussion
+                :discussion.access/created-at :discussion.access/expires-at]))
+
 ;; Discussion
 (s/def :discussion/title string?)
 (s/def :discussion/description string?)
@@ -85,20 +97,8 @@
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
-                                  :discussion/end-time :discussion/creation-secret :discussion/mode]))
-
-;; Access Codes
-(s/def :discussion.access/code
-  (s/and nat-int?
-         #(< % (Math/pow 10 shared-config/access-code-length))))
-(s/def :discussion.access/discussion :db/id)
-(s/def :discussion.access/created-at inst?)
-(s/def :discussion.access/expires-at inst?)
-(s/def ::access-code
-  (s/keys :req [:discussion.access/code]
-          :opt [:discussion.access/discussion
-                :discussion.access/created-at :discussion.access/expires-at]))
-
+                                  :discussion/end-time :discussion/creation-secret :discussion/mode
+                                  :discussion/access]))
 
 ;; Hubs
 (s/def :hub/name ::non-blank-string)

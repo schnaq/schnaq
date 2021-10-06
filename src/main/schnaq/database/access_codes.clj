@@ -1,5 +1,6 @@
 (ns schnaq.database.access-codes
   (:require [clojure.spec.alpha :as s]
+            [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn >defn- ?]]
             [schnaq.config.shared :as shared-config]
             [schnaq.database.main :refer [transact fast-pull clean-and-add-to-db! query]]
@@ -17,8 +18,8 @@
 (>defn valid?
   "Check if the access-code is correctly configured and not expired."
   [{:discussion.access/keys [created-at expires-at] :as access-code}]
-  [::specs/access-code :ret boolean?]
-  (and (s/valid? ::specs/access-code access-code)
+  [:discussion/access :ret boolean?]
+  (and (s/valid? :discussion/access access-code)
        (nat-int? (- (.getTime expires-at) (.getTime created-at)))))
 
 (>defn- code-available?
@@ -57,20 +58,42 @@
 (>defn add-access-code-to-discussion
   "Generate an access code for a discussion."
   [share-hash days-valid]
-  [:discussion/share-hash nat-int? :ret ::specs/access-code]
+  [:discussion/share-hash nat-int? :ret :discussion/access]
   (let [_ (revoke-existing-access-codes share-hash)
         access-code-ref (clean-and-add-to-db!
                           {:discussion.access/code (find-available-code)
                            :discussion.access/discussion [:discussion/share-hash share-hash]
                            :discussion.access/created-at (Date.)
                            :discussion.access/expires-at (toolbelt/now-plus-days-instant days-valid)}
-                          ::specs/access-code)]
+                          :discussion/access)]
     (fast-pull access-code-ref patterns/access-code-with-discussion)))
 
 (>defn discussion-by-access-code
   "Query a discussion by its access code."
   [code]
-  [:discussion.access/code :ret (? ::specs/access-code)]
+  [:discussion.access/code :ret (? :discussion/access)]
   (let [access-code (toolbelt/pull-key-up
                       (fast-pull [:discussion.access/code code] patterns/access-code-with-discussion))]
     (when (:db/id access-code) access-code)))
+
+
+;; -----------------------------------------------------------------------------
+
+(defn remove-invalid-and-pull-up-access-codes
+  "Remove invalid / expired discussion access codes. Also unpacks the
+  access-codes from their collection, because there is always only one valid
+  access code.
+  This function is obsolete when we implement a scheduler, which periodically
+  checks the validity of the access tokens."
+  [data]
+  (walk/postwalk
+    (fn [discussion]
+      (if (s/valid? ::specs/discussion discussion)
+        (if-let [access-codes (:discussion/access discussion)]
+          (let [access-code (first access-codes)]
+            (if (valid? access-code)
+              (assoc discussion :discussion/access access-code)
+              (dissoc discussion :discussion/access)))
+          discussion)
+        discussion))
+    data))
