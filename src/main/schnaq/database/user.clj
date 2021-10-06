@@ -165,8 +165,7 @@
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
         existing-user (toolbelt/pull-key-up
-                        (fast-pull [:user.registered/keycloak-id id] private-user-pattern)
-                        :db/ident)
+                        (fast-pull [:user.registered/keycloak-id id] private-user-pattern))
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -204,8 +203,7 @@
                   @(transact [[:db/add [:user.registered/keycloak-id keycloak-id]
                                field value]]))]
      (toolbelt/pull-key-up
-       (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db)
-       :db/ident))))
+       (fast-pull [:user.registered/keycloak-id keycloak-id] pattern new-db)))))
 
 (>defn update-display-name
   "Update the name of an existing user."
@@ -252,5 +250,4 @@
       '[:find [(pull ?registered-user user-pattern) ...]
         :in $ user-pattern
         :where [?registered-user :user.registered/keycloak-id _]]
-      private-user-pattern)
-    :db/ident))
+      private-user-pattern)))

@@ -34,5 +34,4 @@
   "Query a discussion by its access code."
   [access-code]
   (toolbelt/pull-key-up
-    (main-db/fast-pull [:discussion.access/code access-code] access-code-pattern)
-    :db/ident))
+    (main-db/fast-pull [:discussion.access/code access-code] access-code-pattern)))

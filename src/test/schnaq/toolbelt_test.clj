@@ -7,7 +7,7 @@
   (testing "No specified keys should be present anymore if the keys are correctly chosen."
     (are [x y] (= x y)
                {:foo :bar}
-               (pull-key-up {:foo {:db/ident :bar}} :db/ident)
+               (pull-key-up {:foo {:db/ident :bar}})
                {:foo :bar, :baz {:some-key :oof}}
                (pull-key-up {:foo {:db/ident :bar}, :baz {:some-key :oof}} :db/ident)))
   (testing "If the keys could not be found, there should still be the original map."

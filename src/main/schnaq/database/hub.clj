@@ -32,7 +32,7 @@
           :in $ ?hub discussion-pattern
           :where [?hub :hub/schnaqs ?discussions]]
         hub-id discussion-db/discussion-pattern-minimal)
-      (toolbelt/pull-key-up :db/ident)))
+      toolbelt/pull-key-up))
 
 (defn- pull-hub
   "Pull a hub from the database and include all txs pull db/ident up."
@@ -102,8 +102,7 @@
       '[:find [(pull ?hub hub-pattern) ...]
         :in $ [?hub-names ...] hub-pattern
         :where [?hub :hub/keycloak-name ?hub-names]]
-      keycloak-names hub-pattern)
-    :db/ident))
+      keycloak-names hub-pattern)))
 
 (>defn change-hub-name
   "Change a hub's name."
@@ -113,8 +112,7 @@
                  @(transact [[:db/add [:hub/keycloak-name keycloak-name]
                               :hub/name new-name]]))]
     (toolbelt/pull-key-up
-      (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db)
-      :db/ident)))
+      (fast-pull [:hub/keycloak-name keycloak-name] hub-pattern new-db))))
 
 (>defn update-hub-logo-url
   "Update the hub logo url."

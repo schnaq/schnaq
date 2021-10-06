@@ -121,15 +121,13 @@
   "Query discussion and apply public discussion pattern to it."
   [share-hash]
   (toolbelt/pull-key-up
-    (fast-pull [:discussion/share-hash share-hash] discussion-pattern)
-    :db/ident))
+    (fast-pull [:discussion/share-hash share-hash] discussion-pattern)))
 
 (defn discussion-by-share-hash-private
   "Query discussion and apply the private discussion pattern."
   [share-hash]
   (toolbelt/pull-key-up
-    (fast-pull [:discussion/share-hash share-hash] discussion-pattern-private)
-    :db/ident))
+    (fast-pull [:discussion/share-hash share-hash] discussion-pattern-private)))
 
 (>defn valid-discussions-by-hashes
   "Returns all discussions that are valid (non deleted e.g.). Input is a collection of share-hashes."
@@ -142,7 +140,7 @@
           (not-join [?discussions]
                     [?discussions :discussion/states :discussion.state/deleted])]
         share-hashes discussion-pattern-minimal)
-      (toolbelt/pull-key-up :db/ident)))
+      toolbelt/pull-key-up))
 
 (>defn children-for-statement
   "Returns all children for a statement. (Statements that have the input set as a parent)."
@@ -152,7 +150,7 @@
                :in $ ?parent statement-pattern
                :where [?children :statement/parent ?parent]]
              parent-id statement-pattern)
-      (toolbelt/pull-key-up :db/ident)))
+      toolbelt/pull-key-up))
 
 (defn delete-statement!
   "Deletes a statement. Hard delete if there are no children, delete flag if there are.
@@ -218,7 +216,7 @@
           :in $ discussion-pattern ?title
           :where [?discussions :discussion/title ?title]]
         discussion-pattern title)
-      (toolbelt/pull-key-up :db/ident)))
+      toolbelt/pull-key-up))
 
 (>defn statements-by-content
   "Returns all statements that have the matching `content`."
@@ -283,8 +281,7 @@
         db-after (:db-after result)
         new-child-id (get-in result [:tempids (str "new-child-" reacting-string)])]
     (toolbelt/pull-key-up
-      (fast-pull new-child-id statement-pattern-with-secret db-after)
-      :db/ident)))
+      (fast-pull new-child-id statement-pattern-with-secret db-after))))
 
 (>defn new-discussion
   "Adds a new discussion to the database."
@@ -300,8 +297,7 @@
   [id]
   [int? :ret ::specs/discussion]
   (toolbelt/pull-key-up
-    (fast-pull id (conj discussion-pattern-private :discussion/creation-secret))
-    :db/ident))
+    (fast-pull id (conj discussion-pattern-private :discussion/creation-secret))))
 
 (defn set-discussion-read-only
   "Sets a discussion as read-only."
@@ -340,7 +336,7 @@
              :in $ % ?share-hash statement-pattern
              :where (all-statements ?share-hash ?statements)]
            rules share-hash statement-pattern)
-    (toolbelt/pull-key-up :db/ident)))
+    toolbelt/pull-key-up))
 
 (>defn all-statements-from-others
   "Returns all statements belonging to a discussion which are not from a user."
@@ -353,7 +349,7 @@
              [?statements :statement/author ?author]
              (not [?author :user.registered/keycloak-id ?keycloak-id])]
            rules keycloak-id share-hash statement-pattern)
-    (toolbelt/pull-key-up :db/ident)))
+    toolbelt/pull-key-up))
 
 (defn- new-statements-for-user
   "Retrieve new statements of a discussion for a user"
@@ -392,7 +388,7 @@
                :in $ discussion-pattern-private
                :where [?discussions :discussion/title _]]
              discussion-pattern-private)
-      (toolbelt/pull-key-up :db/ident)))
+      toolbelt/pull-key-up))
 
 (>defn check-valid-statement-id-for-discussion
   "Checks whether the statement-id matches the share-hash."
@@ -417,7 +413,7 @@
         @(transact [[:db/add statement-id :statement/content new-content]
                     [:db/add statement-id :statement/type new-type]]))
       @(transact [[:db/add statement-id :statement/content new-content]]))
-    (toolbelt/pull-key-up (fast-pull statement-id statement-pattern) :db/ident)))
+    (toolbelt/pull-key-up (fast-pull statement-id statement-pattern))))
 
 (>defn add-admin-to-discussion
   "Adds an admin user to a discussion."
@@ -462,7 +458,7 @@
                [?statements :statement/discussions ?discussion]
                [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
              statement-pattern share-hash safe-search-string)
-      (toolbelt/pull-key-up :db/ident))))
+      toolbelt/pull-key-up)))
 
 (def ^:private summary-pattern
   [:db/id
@@ -540,8 +536,7 @@
       (let [full-statement (fast-pull current statement-pattern)]
         (if (:statement/parent full-statement)
           (recur (-> full-statement :statement/parent :db/id) (conj history full-statement))
-          (conj history full-statement))))
-    :db/ident))
+          (conj history full-statement))))))
 
 (>defn add-label
   "Adds a label to a statement. If label is already applied, nothing changes."
@@ -552,8 +547,7 @@
       (->> @(transact [[:db/add statement-id :statement/labels label]])
            :db-after
            (fast-pull statement-id statement-pattern))
-      (fast-pull statement-id statement-pattern))
-    :db/ident))
+      (fast-pull statement-id statement-pattern))))
 
 (>defn remove-label
   "Deletes a label if it is in the statement-set. Otherwise, nothing changes."
@@ -562,8 +556,7 @@
   (toolbelt/pull-key-up
     (->> @(transact [[:db/retract statement-id :statement/labels label]])
          :db-after
-         (fast-pull statement-id statement-pattern))
-    :db/ident))
+         (fast-pull statement-id statement-pattern))))
 
 (defn- build-discussion-diff-list
   "Build a map of discussion hashes with new statements as values"

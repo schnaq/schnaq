@@ -30,13 +30,16 @@
    (ident-map->value {:foo {:db/ident :bar}} :not-found)
    => {:foo {:db/ident :bar}}
    ```"
-  [coll key-name]
-  [(? coll?) keyword? :ret (? coll?)]
-  (walk/postwalk
-    #(if (and (= PersistentArrayMap (type %)) (contains? % key-name))
-       (key-name %)
-       %)
-    coll))
+  ([coll]
+   [(? coll?) :ret (? coll?)]
+   (pull-key-up coll :db/ident))
+  ([coll key-name]
+   [(? coll?) keyword? :ret (? coll?)]
+   (walk/postwalk
+     #(if (and (= PersistentArrayMap (type %)) (contains? % key-name))
+        (key-name %)
+        %)
+     coll)))
 
 (>defn db-to-ref
   [coll]

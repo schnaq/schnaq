@@ -90,7 +90,7 @@
             {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
                                     processors/with-sub-discussion-info
                                     (processors/with-new-post-info share-hash user-identity)
-                                    (toolbelt/pull-key-up :db/ident)))
+                                    toolbelt/pull-key-up))
              :premises (-> (discussion-db/children-for-statement statement-id)
                            processors/with-sub-discussion-info
                            (processors/with-new-post-info share-hash user-identity))
