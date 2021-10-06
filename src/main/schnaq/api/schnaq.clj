@@ -1,6 +1,5 @@
 (ns schnaq.api.schnaq
   (:require [clojure.spec.alpha :as s]
-            [ghostwheel.core :refer [>defn-]]
             [ring.util.http-response :refer [ok created bad-request forbidden]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
@@ -9,13 +8,12 @@
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
             [schnaq.links :as links]
-            [schnaq.toolbelt :as toolbelt]
             [schnaq.processors :as processors]
+            [schnaq.toolbelt :as toolbelt]
             [schnaq.validator :as validator]
             [spec-tools.core :as st]
             [taoensso.timbre :as log])
-  (:import (java.util UUID)
-           (java.time LocalDateTime ZoneOffset)))
+  (:import (java.util UUID)))
 
 (defn- schnaq-by-hash
   "Returns a schnaq, identified by its share-hash."
