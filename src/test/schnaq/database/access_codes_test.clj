@@ -22,7 +22,6 @@
     (testing "Valid access-code with all fields is okay."
       (is (valid? sample)))
     (testing "Missing discussion or missing code is invalid."
-      (is (not (valid? (dissoc sample :discussion.access/discussion))))
       (is (not (valid? (dissoc sample :discussion.access/code)))))
     (testing "If expired is smaller than created, the access code is invalid."
       (is (not (valid? (assoc sample :discussion.access/expires-at #inst"2000-10-07T12:56:36.257-00:00"))))
