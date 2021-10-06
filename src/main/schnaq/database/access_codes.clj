@@ -41,7 +41,7 @@
       (recur (generate-code)))))
 
 (>defn- revoke-existing-access-codes
-  "Looks up all discussions and revokes the existing access-codes for them."
+  "Looks up a discussion by share-hash and revokes the existing access-code."
   [share-hash]
   [:discussion/share-hash :ret vector?]
   (transact
