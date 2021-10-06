@@ -3,6 +3,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
+            [schnaq.interface.components.buttons :as buttons]
             [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
@@ -106,8 +107,39 @@
         [:i.ml-2 {:class (fa :arrow-right)}]]]]
      [how-to-elements/quick-how-to-create]]]])
 
+(defn- create-schnaq-type-selection-page
+  "Choose whether the type of schnaq you are starting is a Q&A or a discussion."
+  []
+  [pages/with-nav-and-header
+   {:page/title (labels :schnaq.create/title)
+    :page/more-for-heading
+    [:section
+     [:h1.text-center.pb-5 "Was möchtest du starten?"]
+     [:div.row.mx-auto.pb-5
+      {:style {:max-width "800px"}}
+      [:div.col-md-6.col-12.text-center
+       [buttons/big
+        "Fragen und Antworten"
+        "btn-outline-white mb-3 miw-75"
+        {:disabled true}]
+       [:p.small.text-left
+        [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
+        [:strong "Bald verfügbar!"] [:br]
+        "Führe K.I. gestützte und nachhaltige Diskussionen mit anderen Teilnehmer:innen."]
+       [:p.small.text-left
+        "Lade Teilnehmer:innen per Link ein."]]
+      [:div.col-md-6.col-12.text-center
+       [buttons/big
+        "Diskussion"
+        "btn-outline-white mb-3 miw-75"]
+       [:p.small.text-left
+        [:i.my-auto.mr-1 {:class (str "fa " (fa :info))}]
+        "Sammel Fragen während einer Veranstaltung und beantworte sie wann immer du Zeit hast."]
+       [:p.small.text-left
+        "Lade Teilnehmer:innen per Link oder Zahlencode ein."]]]]}])
+
 (defn create-schnaq-view []
-  [create-schnaq-page])
+  [create-schnaq-type-selection-page])
 
 
 ;; -----------------------------------------------------------------------------
