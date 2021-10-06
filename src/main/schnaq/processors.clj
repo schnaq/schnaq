@@ -82,9 +82,11 @@
     data))
 
 (defn remove-invalid-and-pull-up-access-codes
-  "Remove invalid / expired discussion access codes. This function is obsolete
-  when we implement a scheduler, which periodically checks the validity of the
-  access tokens."
+  "Remove invalid / expired discussion access codes. Also unpacks the
+  access-codes from their collection, because there is always only one valid
+  access code.
+  This function is obsolete when we implement a scheduler, which periodically
+  checks the validity of the access tokens."
   [data]
   (walk/postwalk
     (fn [discussion]
