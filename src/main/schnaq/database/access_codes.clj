@@ -14,7 +14,7 @@
   [:ret :discussion.access/code]
   (rand-int (Math/pow 10 shared-config/access-code-length)))
 
-(>defn- valid?
+(>defn valid?
   "Check if the access-code is correctly configured and not expired."
   [{:discussion.access/keys [created-at expires-at] :as access-code}]
   [::specs/access-code :ret boolean?]

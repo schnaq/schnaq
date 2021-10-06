@@ -95,8 +95,9 @@
 (s/def :discussion.access/created-at inst?)
 (s/def :discussion.access/expires-at inst?)
 (s/def ::access-code
-  (s/keys :req [:discussion.access/code :discussion.access/discussion]
-          :opt [:discussion.access/created-at :discussion.access/expires-at]))
+  (s/keys :req [:discussion.access/code]
+          :opt [:discussion.access/discussion
+                :discussion.access/created-at :discussion.access/expires-at]))
 
 
 ;; Hubs

@@ -3,6 +3,7 @@
             [clojure.walk :as walk]
             [ghostwheel.core :refer [>defn]]
             [schnaq.config :as config]
+            [schnaq.database.access-codes :as access-codes]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -27,7 +28,7 @@
 ;; Processing statements
 
 (>defn with-aggregated-votes
-  "Anonymize the votes by just counting the numer of votes and adding whether the user has upvoted or not."
+  "Anonymize the votes by just counting the number of votes and adding whether the user has upvoted or not."
   [data user-id]
   [any? :db/id :ret any?]
   (walk/postwalk
@@ -78,4 +79,20 @@
           (assoc statement :meta/sub-discussion-info sub-discussions)
           statement)
         statement))
+    data))
+
+(defn remove-invalid-access-codes
+  "Remove invalid / expired discussion access codes. This function is obsolete
+  when we implement a scheduler, which periodically checks the validity of the
+  access tokens."
+  [data]
+  (walk/postwalk
+    (fn [discussion]
+      (if (s/valid? ::specs/discussion discussion)
+        (if-let [access-code (:discussion/access discussion)]
+          (if (access-codes/valid? access-code)
+            discussion
+            (dissoc discussion :discussion/access))
+          discussion)
+        discussion))
     data))
