@@ -65,12 +65,12 @@
                            :discussion.access/created-at (Date.)
                            :discussion.access/expires-at (toolbelt/now-plus-days-instant days-valid)}
                           ::specs/access-code)]
-    (fast-pull access-code-ref patterns/access-code-pattern)))
+    (fast-pull access-code-ref patterns/access-code-with-discussion)))
 
 (>defn discussion-by-access-code
   "Query a discussion by its access code."
   [code]
   [:discussion.access/code :ret (? ::specs/access-code)]
   (let [access-code (toolbelt/pull-key-up
-                      (fast-pull [:discussion.access/code code] patterns/access-code-pattern))]
+                      (fast-pull [:discussion.access/code code] patterns/access-code-with-discussion))]
     (when (:db/id access-code) access-code)))

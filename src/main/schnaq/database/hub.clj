@@ -21,7 +21,7 @@
    :hub/keycloak-name
    :hub/created-at
    :hub/logo
-   {:hub/schnaqs patterns/discussion-pattern}])
+   {:hub/schnaqs patterns/discussion}])
 
 (>defn- all-schnaqs-for-hub
   "Return all schnaqs belonging to a hub. Includes the tx."
@@ -31,7 +31,7 @@
         '[:find [(pull ?discussions discussion-pattern) ...]
           :in $ ?hub discussion-pattern
           :where [?hub :hub/schnaqs ?discussions]]
-        hub-id patterns/discussion-pattern-minimal)
+        hub-id patterns/discussion-minimal)
       toolbelt/pull-key-up))
 
 (defn- pull-hub

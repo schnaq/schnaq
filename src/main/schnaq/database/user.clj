@@ -134,7 +134,7 @@
   [associative? (s/coll-of :db/id) (s/coll-of :db/id) :ret (s/tuple boolean? ::specs/registered-user)]
   (let [id (str sub)
         existing-user (toolbelt/pull-key-up
-                        (fast-pull [:user.registered/keycloak-id id] patterns/private-user-pattern))
+                        (fast-pull [:user.registered/keycloak-id id] patterns/private-user))
         temp-id (str "new-registered-user-" id)
         new-user {:db/id temp-id
                   :user.registered/keycloak-id id
@@ -156,7 +156,7 @@
         [false existing-user])
       (let [new-user-from-db (-> @(transact [(clean-db-vals new-user)])
                                  (get-in [:tempids temp-id])
-                                 (fast-pull patterns/registered-user-public-pattern))]
+                                 (fast-pull patterns/registered-user-public))]
         (when-not (nil? visited-statements)
           (update-visited-statements (:db/id new-user-from-db) visited-statements))
         [true new-user-from-db]))))
@@ -165,7 +165,7 @@
   "Updates a user's field in the database and return updated user."
   ([keycloak-id field value]
    [:user.registered/keycloak-id keyword? any? :ret ::specs/registered-user]
-   (update-user-field keycloak-id field value patterns/registered-user-public-pattern))
+   (update-user-field keycloak-id field value patterns/registered-user-public))
   ([keycloak-id field value pattern]
    [:user.registered/keycloak-id keyword? any? any? :ret ::specs/registered-user]
    (let [new-db (:db-after
@@ -190,7 +190,7 @@
   "Update the name of an existing user."
   [keycloak-id interval]
   [:user.registered/keycloak-id :user.registered/notification-mail-interval :ret ::specs/registered-user]
-  (update-user-field keycloak-id :user.registered/notification-mail-interval interval patterns/private-user-pattern))
+  (update-user-field keycloak-id :user.registered/notification-mail-interval interval patterns/private-user))
 
 (>defn members-of-group
   "Returns all members of a certain group."
@@ -200,7 +200,7 @@
     '[:find [(pull ?users public-user-pattern) ...]
       :in $ ?group public-user-pattern
       :where [?users :user.registered/groups ?group]]
-    group-name patterns/public-user-pattern))
+    group-name patterns/public-user))
 
 (defn user-by-email
   "Returns the registered user by email."
@@ -209,7 +209,7 @@
     '[:find (pull ?user registered-user-public-pattern) .
       :in $ ?email registered-user-public-pattern
       :where [?user :user.registered/email ?email]]
-    user-email patterns/registered-user-public-pattern))
+    user-email patterns/registered-user-public))
 
 (defn all-registered-users
   "Returns all registered users' keycloak ids"
@@ -219,4 +219,4 @@
       '[:find [(pull ?registered-user user-pattern) ...]
         :in $ user-pattern
         :where [?registered-user :user.registered/keycloak-id _]]
-      patterns/private-user-pattern)))
+      patterns/private-user)))

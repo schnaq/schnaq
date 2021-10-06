@@ -27,7 +27,7 @@
   [share-hash]
   [:discussion/share-hash :ret map?]
   (let [discussion (discussion-db/discussion-by-share-hash share-hash)
-        author (fast-pull (-> discussion :discussion/author :db/id) patterns/public-user-pattern)]
+        author (fast-pull (-> discussion :discussion/author :db/id) patterns/public-user)]
     {:id share-hash
      :label (:discussion/title discussion)
      :author (user/display-name author)

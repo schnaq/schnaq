@@ -2,6 +2,7 @@
   (:require [clojure.test :refer [deftest testing use-fixtures is]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.user :as user-db]
             [schnaq.processors :as processors]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
@@ -46,7 +47,7 @@
         ;; check if content is correct
         (let [queried-visited (:seen-statements/visited-statements
                                 (fast-pull (user-db/seen-statements-entity keycloak-user-id share-hash)
-                                           user-db/seen-statements-pattern))]
+                                           patterns/seen-statements))]
           (is (= (count statements) (count queried-visited)))
           (is (some #(= statement-1 (:db/id %)) queried-visited))
           (is (some #(= statement-2 (:db/id %)) queried-visited)))))))
@@ -78,7 +79,7 @@
           statement-new (discussion-db/add-starting-statement! share-hash user-id-1 content-new true)
           seen-statements #{statement-1 statement-2 statement-3}
           ;; pull all statements
-          all-statements (mapv #(fast-pull % discussion-db/statement-pattern)
+          all-statements (mapv #(fast-pull % patterns/statement)
                                [statement-1 statement-2 statement-3 statement-new])
           ;; add seen statements for user-2
           _ (user-db/create-visited-statements-for-discussion keycloak-user-id-2 share-hash seen-statements)
@@ -116,7 +117,7 @@
         statement-4 (discussion-db/add-starting-statement! share-hash user-id content-new-1 true)
         statement-5 (discussion-db/add-starting-statement! share-hash user-id content-new-2 true)
         ;; pull all statements
-        all-statements (mapv #(fast-pull % discussion-db/statement-pattern)
+        all-statements (mapv #(fast-pull % patterns/statement)
                              [statement-1 statement-2 statement-3 statement-4 statement-5])
         ;; add visited schnaqs
         _ (user-db/update-visited-schnaqs keycloak-user-id [discussion-id])]
