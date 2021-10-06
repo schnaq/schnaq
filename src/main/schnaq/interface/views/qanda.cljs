@@ -1,4 +1,4 @@
-(ns schnaq.interface.views.qanda.view
+(ns schnaq.interface.views.qanda
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [fa]]
