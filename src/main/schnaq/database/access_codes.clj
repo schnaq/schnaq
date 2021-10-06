@@ -14,8 +14,7 @@
    :discussion.access/expires-at])
 
 (>defn- generate-access-code
-  "Generates an access code of a specific length. Generates integers from
-   [0, 9]."
+  "Generates an access code of a specific length defined in the config."
   []
   [:ret :discussion.access/code]
   (rand-int (Math/pow 10 shared-config/access-code-length)))
@@ -29,3 +28,20 @@
      :discussion.access/created-at (Date.)
      :discussion.access/expires-at (toolbelt/now-plus-days-instant days-valid)}
     ::specs/access-code))
+
+(defn discussion-by-access-code
+  "TODO"
+  [access-code]
+  (toolbelt/pull-key-up
+    (main-db/fast-pull [:discussion.access/code access-code] access-code-pattern)
+    :db/ident))
+
+(comment
+
+
+  (discussion-by-access-code 56709208)
+
+
+
+
+  nil)
