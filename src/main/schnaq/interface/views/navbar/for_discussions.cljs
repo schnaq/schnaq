@@ -12,6 +12,7 @@
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
 
@@ -141,22 +142,32 @@
            :style {:width (str current-bar "%")}}
           (nil? end-time) (assoc :class "progress-bar-striped"))]]]]))
 
-(defn navbar-statements []
+(defn navbar-settings []
   (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        edit-hash (get admin-access-map share-hash)]
-    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
-     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
-      [schnaq-progress-bar]
-      [admin/share-link]
-      [admin/txt-export share-hash title]
-      (when edit-hash
-        [admin/admin-center])
-      [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]
-     [:div.d-flex.align-items-center
-      [:div.mr-2.mx-md-2 [dropdown-views]]
-      [:div.d-flex.align-items-center.schnaq-navbar
-       [um/user-handling-menu "btn-link"]]]]))
+        edit-hash (get admin-access-map share-hash)
+        current-route @(rf/subscribe [:navigation/current-route-name])
+        graph? (= current-route :routes/graph-view)]
+    (if graph?
+      [:<>
+       [graph-settings/open-settings]
+       [admin/graph-download-as-png (gstring/format "#%s" graph-settings/graph-id)]]
+      [:<>
+       [admin/txt-export share-hash title]
+       (when edit-hash
+         [admin/admin-center])])))
+
+(defn navbar-statements []
+  [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
+   [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
+    [schnaq-progress-bar]
+    [admin/share-link]
+    [navbar-settings]
+    [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]
+   [:div.d-flex.align-items-center
+    [:div.mr-2.mx-md-2 [dropdown-views]]
+    [:div.d-flex.align-items-center.schnaq-navbar
+     [um/user-handling-menu "btn-link"]]]])
 
 (defn header
   "Overview header for a discussion."

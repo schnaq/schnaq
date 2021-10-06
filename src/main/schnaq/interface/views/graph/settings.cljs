@@ -5,6 +5,8 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.tooltip :as tooltip]))
 
+(def graph-id "graph")
+
 (defn- stabilize-graph
   "Stabilize the graph."
   []

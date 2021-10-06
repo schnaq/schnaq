@@ -2,22 +2,15 @@
   (:require ["vis-network/standalone/esm/vis-network" :refer [DataSet Network]]
             [clojure.set :as set]
             [ghostwheel.core :refer [>defn-]]
-            [goog.string :as gstring]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
             [reagent.dom :as rdom]
-            [reitit.frontend.easy :as rfe]
             [schnaq.interface.components.colors :refer [colors]]
-            [schnaq.interface.components.icons :refer [fa]]
             [schnaq.interface.config :as conf]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.views.common :as common]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.loading :as loading]
-            [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.schnaq.admin :as admin]))
-
-(def ^:private graph-id "graph")
+            [schnaq.interface.views.pages :as pages]))
 
 (>defn- node-types->colors
   "Add colors depending on node type."
@@ -104,7 +97,7 @@
              (.setOptions graph-object
                           (clj->js (assoc-in options [:physics :barnesHut :avoidOverlap]
                                              gravity))))
-           [:div {:id graph-id}]))
+           [:div {:id graph-settings/graph-id}]))
        :component-did-mount
        (fn [this]
          (.add nodes-vis (clj->js (convert-nodes-for-vis nodes controversy-values)))
@@ -132,21 +125,6 @@
            (reset! edges-store edges)))
        :component-will-unmount
        (fn [_this] (rf/dispatch [:graph/set-current nil]))})))
-
-(defn graph-agenda-header
-  "Header when displaying the graph."
-  [title share-hash]
-  (common/set-website-title! title)
-  [:section.container-fluid.bg-white.p-4.shadow-sm
-   [:div.row
-    [:div.col-2.col-md-1
-     [:a.link-unstyled {:href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
-      [:i.arrow-icon {:class (str "m-auto fas " (fa :arrow-left))}]]]
-    [:div.col-10.col-md-7 [:h2 title]]
-    [:div.col-12.col-md-4.text-md-right
-     [graph-settings/open-settings]
-     [admin/graph-download-as-png (gstring/format "#%s" graph-id)]
-     [admin/txt-export share-hash title]]]])
 
 (defn- graph-view
   "The core Graph visualization wrapper."
