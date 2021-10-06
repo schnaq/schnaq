@@ -18,18 +18,20 @@
              :discussion.access/expires-at #inst"2021-10-07T12:56:36.257-00:00"})
 
 (deftest valid?-test
-  (testing "Valid access-code with all fields is okay."
-    (is (ac/valid? sample)))
-  (testing "Missing discussion or missing code is invalid."
-    (is (not (ac/valid? (dissoc sample :discussion.access/discussion))))
-    (is (not (ac/valid? (dissoc sample :discussion.access/code)))))
-  (testing "If expired is smaller than created, the access code is invalid."
-    (is (not (ac/valid? (assoc sample :discussion.access/expires-at #inst"2000-10-07T12:56:36.257-00:00"))))
-    (is (ac/valid? (assoc sample :discussion.access/expires-at #inst"2021-10-06T10:56:36.257-00:00")))))
+  (let [valid? #'ac/valid?]
+    (testing "Valid access-code with all fields is okay."
+      (is (valid? sample)))
+    (testing "Missing discussion or missing code is invalid."
+      (is (not (valid? (dissoc sample :discussion.access/discussion))))
+      (is (not (valid? (dissoc sample :discussion.access/code)))))
+    (testing "If expired is smaller than created, the access code is invalid."
+      (is (not (valid? (assoc sample :discussion.access/expires-at #inst"2000-10-07T12:56:36.257-00:00"))))
+      (is (valid? (assoc sample :discussion.access/expires-at #inst"2021-10-06T10:56:36.257-00:00"))))))
 
 (deftest code-available?-test
-  (let [{:discussion.access/keys [code]} (ac/add-access-code-to-discussion "cat-dog-hash" 42)]
-    (testing ""
-      (is (not (ac/code-available? code)))
-      (is (ac/code-available? 23232323)))))
+  (let [{:discussion.access/keys [code]} (ac/add-access-code-to-discussion "cat-dog-hash" 42)
+        code-available? #'ac/code-available?]
+    (testing "Verify, that the code is really available."
+      (is (not (code-available? code)))
+      (is (code-available? 23232323)))))
 
