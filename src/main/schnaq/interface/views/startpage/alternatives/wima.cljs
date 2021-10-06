@@ -21,7 +21,7 @@
         [:a.btn.btn-lg.btn-secondary.d-inline-block
          {:href "https://schnaq.outgrow.us/WiMa"}
          "Umfrage starten "
-         [:i.m-auto {:class (str "fa " (fa :arrow-right))}]]]
+         [fa :right-arrow "m-auto"]]]
        [:p.text-social-proof.text-center.pt-2
         [:img.social-proof-icon
          {:src (img-path :schnaqqifant/white)}]

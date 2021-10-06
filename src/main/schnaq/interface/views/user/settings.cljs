@@ -30,7 +30,7 @@
                                  :href (rfe/href route)}
       [:div.row.text-left
        [:div.col-1
-        [:i.mr-4.my-auto {:class (str "fas " (fa icon))}]]
+        [fa icon "mr-4 my-auto"]]
        [:div.col
         [:span (labels label)]]]]]))
 
@@ -40,7 +40,7 @@
    [:a.button.btn.btn-dark-highlight.p-3
     {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}
     [:div.d-flex
-     [fa :arrow-left]]]])
+     [fa :arrow-left "m-auto"]]]])
 
 (defn- edit-user-panel []
   [:section

@@ -14,7 +14,7 @@
     [:div.flex.mx-3.my-auto
      [motion/fade-in-and-out
       [motion/move-in :bottom
-       [:i.text-secondary.m-auto {:class (fa :check/normal)}]]]]))
+       [fa :check/normal "text-secondary m-auto"]]]]))
 
 (defn- button-or-spinner
   "Show button per default or spinner while waiting or a server response"

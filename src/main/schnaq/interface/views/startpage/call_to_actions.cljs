@@ -19,7 +19,7 @@
     {:href (rfe/href :routes.schnaq/create)}
     (labels :schnaq.startpage.cta/button)
     " "
-    [:i.m-auto {:class (str "fa " (fa :arrow-right))}]]])
+    [fa :right-arrow "m-auto"]]])
 
 (defn- social-proof
   "A small section showing the user, that the risk was already taken by others."

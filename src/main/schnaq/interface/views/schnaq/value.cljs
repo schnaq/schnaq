@@ -31,7 +31,7 @@
      [:a.btn.btn-dark-highlight.p-3.rounded-1.ml-auto.mb-5
       {:href (rfe/href :routes.schnaq/start {:share-hash share-hash})}
       (labels :schnaqs/continue-to-schnaq-button)
-      [:i.ml-2 {:class (fa :arrow-right)}]]]))
+      [fa :arrow-right "ml-2"]]]))
 
 (defn- value-content []
   [:<>

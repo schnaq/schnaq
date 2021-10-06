@@ -1,22 +1,18 @@
 (ns schnaq.interface.components.icons)
 
 (defn fa
-  "Returns a fontawesome icon component for a given identifier. Icon tries to center itself by default."
+  "Returns a fontawesome icon component for a given identifier."
   ([identifier] [fa identifier nil])
   ([identifier classes]
    (identifier
-     {:arrow-down [:i.fas.fa-arrow-down.m-auto {:class classes}]
-      :arrow-left [:i.fa.fa-arrow-left.m-auto {:class classes}]
-      :arrow-right [:i.fa.fas.fa-arrow-right.ml-2 {:class (fa :arrow-right)}]
-      :arrow-up "fa-arrow-up"
-      :bell "fa-bell"
-      :book "fa-book"
-      :calendar "fa-calendar"
-      :camera "fa-camera"
-      :carry "fa-people-carry"
-      :check/circle "fa-check-circle"
-      :check/double "fa-check-double"
-      :check/normal "fas fa-check"
+     {:arrow-down [:i.fas.fa-arrow-down {:class classes}]
+      :arrow-left [:i.fa.fa-arrow-left {:class classes}]
+      :arrow-right [:i.fas.fa-arrow-right {:class classes}]
+      :arrow-up [:i.fas.fa-arrow-up {:class classes}]
+      :bell [:i.fas.fa-bell {:class classes}]
+      :calendar [:i.far.fa-calendar {:class classes}]
+      :camera [:i.fas.fa-camera {:class classes}]
+      :check/normal [:i.fas.fa-check {:class classes}]
       :check/square "fa-check-square"
       :circle "fas fa-circle"
       :circle-notch "fa-circle-notch"
@@ -73,5 +69,12 @@
       :user/ninja "fa-user-ninja"
       :user/plus "fa-user-plus"
       :user/shield "fa-user-shield"})))
+
+(defn icon-lg
+  "A bigger version of the icon"
+  ([identifier]
+   [icon-lg identifier nil])
+  ([identifier classes]
+   [fa identifier (if classes (str "fa-lg " classes) "fa-lg")]))
 
 ;; TODO check out labels

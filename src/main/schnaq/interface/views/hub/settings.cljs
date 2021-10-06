@@ -33,7 +33,7 @@
          [:i.fas {:class (fa :cross)}]]
         ;; upload temporary button
         [:label.btn.btn-light.change-profile-pic-button
-         [:i.fas {:class (fa :camera)}]
+         [fa :camera]
          [:input {:id input-id
                   :accept (string/join "," shared-config/allowed-mime-types)
                   :type "file"

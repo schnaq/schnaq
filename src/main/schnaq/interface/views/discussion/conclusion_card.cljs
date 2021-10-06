@@ -48,14 +48,14 @@
        :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-upvote statement]))}
-      [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-up))}]]
+      [fa :arrow-up "vote-arrow m-auto"]]
      [:span.mr-3 (logic/get-up-votes statement votes)]
      [:div.mr-2
       {:class (if downvoted? "badge badge-downvote-selected" "badge badge-downvote")
        :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [fa :arrow-down "vote-arrow"]]
+      [fa :arrow-down "vote-arrow m-auto"]]
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card

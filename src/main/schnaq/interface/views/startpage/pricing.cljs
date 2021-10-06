@@ -3,7 +3,7 @@
             [ghostwheel.core :refer [>defn-]]
             [goog.string :as gstring]
             [reitit.frontend.easy :as reititfe]
-            [schnaq.interface.components.icons :refer [fa]]
+            [schnaq.interface.components.icons :refer [fa icon-lg]]
             [schnaq.interface.config :as config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.toolbelt :as toolbelt]
@@ -54,9 +54,9 @@
   "Explain the check marks."
   []
   [:section.pl-4.pt-2
-   [:p.h6 [:i.fa-lg.text-primary.pr-2 {:class (fa :check/normal)}]
+   [:p.h6 [icon-lg :check/normal "text-primary pr-2"]
     (labels :pricing.features/implemented)]
-   [:p.h6 [:i.fa-lg.text-muted.pr-2 {:class (fa :check/normal)}]
+   [:p.h6 [icon-lg :check/normal "text-muted pr-2"]
     (labels :pricing.features/to-be-implemented)]])
 
 (defn- cta-button
@@ -80,12 +80,12 @@
        (for [[feature class] features]
          (with-meta
            [:li.list-group-item
-            [:i.mr-2 {:class (str class " " (fa :check/normal))}] feature]
+            [fa :check/normal (str class " mr-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))
        (for [[feature class] (add-class-to-feature upcoming-features "text-muted")]
          (with-meta
            [:li.list-group-item
-            [:i.mr-2 {:class (str class " " (fa :check/normal))}] feature]
+            [fa :check/normal (str class " mr-2")] feature]
            {:key (gstring/format "feature-list-%s-%s" title (toolbelt/slugify feature))}))]
       cta-button]]))
 

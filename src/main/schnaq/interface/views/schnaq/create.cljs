@@ -62,7 +62,7 @@
         {:class (when @end-time "active")
          :type "button"
          :on-click (fn [_e] (swap! end-time #(or @end-time 7)))}
-        [:i.mr-3 {:class (str "far " (fa :calendar))}]
+        [fa :calendar "mr-3"]
         (gstring/format (labels :discussion.progress.creation/button-limit) (or @end-time 7))]
        [:button.btn.btn-outline-secondary.btn-lg.rounded-1.p-3.mx-4
         {:class (when-not @end-time "active")
@@ -105,7 +105,7 @@
       [:div.row.px-1.py-3
        [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
         (labels :schnaq.create.button/save)
-        [:i.ml-2 {:class (fa :arrow-right)}]]]]
+        [fa :arrow-right "ml-2"]]]]
      [how-to-elements/quick-how-to-create]]]])
 
 (defn- create-schnaq-type-selection-page
