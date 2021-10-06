@@ -38,8 +38,7 @@
 (defn- ask-question
   "Either display input or read-only warning."
   []
-  (let [schnaq @(rf/subscribe [:schnaq/selected])
-        read-only? (some #{:discussion.state/read-only} (:discussion/states schnaq))]
+  (let [read-only? @(rf/subscribe [:schnaq.selected/read-only?])]
     [:div.panel-white.p-5.mt-md-5
      [:div.my-2.mx-lg-5.p-md-5
       (if read-only?
