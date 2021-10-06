@@ -40,7 +40,7 @@
    [:a.button.btn.btn-dark-highlight.p-3
     {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaqs/personal])}
     [:div.d-flex
-     [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]])
+     [fa :arrow-left]]]])
 
 (defn- edit-user-panel []
   [:section

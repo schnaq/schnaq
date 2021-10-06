@@ -55,7 +55,7 @@
        :on-click (fn [e]
                    (js-wrap/stop-propagation e)
                    (rf/dispatch [:discussion/toggle-downvote statement]))}
-      [:i.vote-arrow {:class (str "m-auto fas " (fa :arrow-down))}]]
+      [fa :arrow-down "vote-arrow"]]
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card

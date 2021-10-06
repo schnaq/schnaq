@@ -49,7 +49,7 @@
         [:button.btn.btn-dark-highlight.button-discussion-options.w-100.p-3
          {:on-click #(rf/dispatch navigation-target)}
          [:div.d-flex
-          [:i.m-auto {:class (str "fa " (fa :arrow-left))}]]]]])))
+          [fa :arrow-left]]]]])))
 
 
 (defn- discussion-start-button
