@@ -226,6 +226,7 @@
    {:db/ident :discussion.access/code
     :db/valueType :db.type/long
     :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/identity
     :db/doc "Generated access code for a discussion."}
    {:db/ident :discussion.access/discussion
     :db/valueType :db.type/ref

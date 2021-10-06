@@ -43,7 +43,8 @@
    {:discussion/mode [:db/ident]}
    :discussion/created-at
    :discussion/end-time
-   {:discussion/author user-db/public-user-pattern}])
+   {:discussion/author user-db/public-user-pattern}
+   :discussion.access/code])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."
