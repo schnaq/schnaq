@@ -29,7 +29,8 @@
        (nat-int? (- (.getTime expires-at) (.getTime created-at)))))
 
 (>defn- code-available?
-  "Validate, if the provided `code` is not in use."
+  "Validate, if the provided `code` is not in use. Invalidated codes
+  or free codes can be used."
   [code]
   [:discussion.access/code :ret boolean?]
   (let [access-code (fast-pull [:discussion.access/code code])]
@@ -37,7 +38,7 @@
         (not (valid? access-code)))))
 
 (>defn- find-available-code
-  "Returns for an available code, which can be used to access a discussion."
+  "Searches for an available code, which can be used to access a discussion."
   []
   [:ret :discussion.access/code]
   (loop [code (generate-code)]
@@ -81,8 +82,10 @@
                       (fast-pull [:discussion.access/code code] access-code-pattern))]
     (when (:db/id access-code) access-code)))
 
-
 (comment
+
+
+  (discussion-by-access-code 43236077)
 
 
   nil)

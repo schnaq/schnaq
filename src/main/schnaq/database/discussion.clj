@@ -44,7 +44,8 @@
    :discussion/created-at
    :discussion/end-time
    {:discussion/author user-db/public-user-pattern}
-   :discussion.access/code])
+   {[:discussion.access/_discussion :as :discussion.access/discussion]
+    [:discussion.access/code]}])
 
 (def discussion-pattern-private
   "Holds sensitive information as well."
