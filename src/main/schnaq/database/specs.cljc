@@ -9,7 +9,8 @@
 ;; Frontend only
 #?(:cljs (s/def :re-frame/component vector?))
 
-;; Transaction
+;; Common
+(s/def :db/id (s/or :transacted integer? :temporary any?))
 (s/def :db/txInstant inst?)
 
 ;; User
@@ -134,9 +135,6 @@
                 :statement/labels]))
 
 (s/def :statement.vote/operation #{:removed :switched :added})
-
-;; Common
-(s/def :db/id (s/or :transacted integer? :temporary any?))
 
 ;; Feedback
 (s/def :feedback/contact-name string?)
