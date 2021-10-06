@@ -216,6 +216,12 @@
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/doc "A secret to claim ownership of a discussion as an anonymous user."}
+   {:db/ident :discussion/mode
+    :db/valueType :db.type/ref
+    :db/cardinality :db.cardinality/one
+    :db/doc "Define the mode of your discussion."}
+   {:db/ident :discussion.mode/qanda
+    :db/doc "Q&A mode."}
 
    ;; hub
    {:db/ident :hub/name

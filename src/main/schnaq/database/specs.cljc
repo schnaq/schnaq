@@ -77,13 +77,14 @@
                :discussion.state/public :discussion.state/read-only
                :discussion.state/disable-pro-con}
              :distinct true))
+(s/def :discussion/mode #{:discussion.mode/discussion :discussion.mode/qanda})
 (s/def :discussion/starting-statements (s/coll-of ::statement))
 (s/def ::discussion (s/keys :req [:discussion/title :discussion/share-hash :discussion/author]
                             :opt [:discussion/starting-statements :discussion/description
                                   :discussion/header-image-url :discussion/edit-hash
                                   :discussion/admins :discussion/hub-origin :discussion/states
                                   :discussion/created-at :discussion/share-link :discussion/admin-link
-                                  :discussion/end-time :discussion/creation-secret]))
+                                  :discussion/end-time :discussion/creation-secret :discussion/mode]))
 
 ;; Access Codes
 (s/def :discussion.access/code

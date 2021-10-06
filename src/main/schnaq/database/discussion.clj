@@ -40,6 +40,7 @@
    {:discussion/starting-statements statement-pattern}
    :discussion/share-hash
    :discussion/header-image-url
+   {:discussion/mode [:db/ident]}
    :discussion/created-at
    :discussion/end-time
    {:discussion/author user-db/public-user-pattern}])

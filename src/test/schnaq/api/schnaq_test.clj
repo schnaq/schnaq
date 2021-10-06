@@ -1,5 +1,5 @@
 (ns schnaq.api.schnaq-test
-  (:require [clojure.test :refer [deftest is testing use-fixtures]]
+  (:require [clojure.test :refer [deftest is are testing use-fixtures]]
             [muuntaja.core :as m]
             [schnaq.api :as api]
             [schnaq.test.toolbelt :as toolbelt]))
@@ -50,3 +50,27 @@
       (let [api-call (schnaqs-by-hashes-request [share-hash1 share-hash2])]
         (is (= 200 (:status api-call)))
         (is (= 2 (count (:schnaqs (m/decode-response-body api-call)))))))))
+
+(defn- add-schnaq-request [payload]
+  (-> {:request-method :post :uri (:path (api/route-by-name :api.schnaq/add))
+       :body-params payload}
+      toolbelt/add-csrf-header
+      toolbelt/accept-edn-response-header
+      api/app))
+
+(deftest add-schnaq-test
+  (testing "schnaq creation."
+    (let [minimal-request {:discussion-title "huhu" :nickname "penguin"}]
+      (are [status payload]
+        (= status (:status (add-schnaq-request payload)))
+        400 {}
+        400 {:discussion-title "huhu"}
+        400 {:nickname "penguin"}
+        400 {:razupaltuff "kangaroo"}
+        201 minimal-request
+        201 (merge minimal-request {:hub-exclusive? true})
+        201 (merge minimal-request {:hub-exclusive? false})
+        201 (merge minimal-request {:hub-exclusive? false
+                                    :hub "works, because we don't provide error message"})
+        201 (merge minimal-request {:ends-in-days 42})
+        201 (merge minimal-request {:discussion-mode :discussion.mode/qanda})))))

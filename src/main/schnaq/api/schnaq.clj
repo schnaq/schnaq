@@ -54,35 +54,48 @@
                 (discussion-db/valid-discussions-by-hashes share-hashes-list))})
       at/not-found-hash-invalid)))
 
+
+;; -----------------------------------------------------------------------------
+
+(defn- bad-request-schnaq-creation
+  "Return bad request when something went wrong and show the parameters."
+  [parameters]
+  (let [error-msg (format "The input you provided could not be used to create a discussion: %s" parameters)]
+    (log/info error-msg)
+    (bad-request (at/build-error-body :schnaq-creation-failed error-msg))))
+
 (defn- add-schnaq
-  "Adds a discussion to the database. Returns the newly-created discussion."
+  "Adds a discussion to the database. Returns the newly-created discussion. Required fields are `discussion-title` and
+   (`nickname` or an authenticated user)."
   [{:keys [parameters identity]}]
-  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days]} (:body parameters)
-        keycloak-id (:sub identity)
-        authorized-for-hub? (some #(= % hub) (:groups identity))
-        author (if keycloak-id
-                 [:user.registered/keycloak-id keycloak-id]
-                 (user-db/add-user-if-not-exists nickname))
-        discussion-data (cond-> {:discussion/title discussion-title
-                                 :discussion/share-hash (.toString (UUID/randomUUID))
-                                 :discussion/edit-hash (.toString (UUID/randomUUID))
-                                 :discussion/author author}
-                                keycloak-id (assoc :discussion/admins [author])
-                                (and hub-exclusive? authorized-for-hub?)
-                                (assoc :discussion/hub-origin [:hub/keycloak-name hub])
-                                ends-in-days (assoc :discussion/end-time (toolbelt/now-plus-days-instant ends-in-days)))
-        new-discussion-id (discussion-db/new-discussion discussion-data)]
-    (if new-discussion-id
-      (let [created-discussion (discussion-db/secret-discussion-data new-discussion-id)]
-        (when (and hub-exclusive? hub authorized-for-hub?)
-          (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
-        (log/info "Discussion created: " new-discussion-id " - "
-                  (:discussion/title created-discussion) " – "
-                  "Exclusive?" hub-exclusive? "for" hub)
-        (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
-      (let [error-msg (format "The input you provided could not be used to create a discussion:%n%s" discussion-data)]
-        (log/info error-msg)
-        (bad-request (at/build-error-body :schnaq-creation-failed error-msg))))))
+  (let [{:keys [nickname discussion-title hub-exclusive? hub ends-in-days discussion-mode] :as parameters} (:body parameters)
+        keycloak-id (:sub identity)]
+    (if-not (or keycloak-id nickname)
+      (bad-request-schnaq-creation parameters)
+      (let [author (if keycloak-id
+                     [:user.registered/keycloak-id keycloak-id]
+                     (user-db/add-user-if-not-exists nickname))
+            authorized-for-hub? (some #(= % hub) (:groups identity))
+            discussion-data (cond-> {:discussion/title discussion-title
+                                     :discussion/share-hash (.toString (UUID/randomUUID))
+                                     :discussion/edit-hash (.toString (UUID/randomUUID))
+                                     :discussion/author author}
+                                    keycloak-id (assoc :discussion/admins [author])
+                                    (and hub-exclusive? authorized-for-hub?)
+                                    (assoc :discussion/hub-origin [:hub/keycloak-name hub])
+                                    ends-in-days (assoc :discussion/end-time (toolbelt/now-plus-days-instant ends-in-days))
+                                    discussion-mode (assoc :discussion/mode discussion-mode))
+            new-discussion-id (discussion-db/new-discussion discussion-data)]
+        (if new-discussion-id
+          (let [created-discussion (discussion-db/secret-discussion-data new-discussion-id)]
+            (when (and hub-exclusive? hub authorized-for-hub?)
+              (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
+            (log/info "Discussion created: " discussion-data)
+            (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
+          (bad-request-schnaq-creation parameters))))))
+
+
+;; -----------------------------------------------------------------------------
 
 (defn- schnaq-by-hash-as-admin
   "If user is authenticated, a meeting with an edit-hash is returned for further
@@ -133,14 +146,8 @@
     (user-db/update-visited-schnaqs user-identity [discussion-id])
     (ok {:share-hash share-hash})))
 
+
 ;; -----------------------------------------------------------------------------
-(s/def ::discussion-title :discussion/title)
-(s/def ::ends-in-days pos-int?)
-(s/def ::hub-exclusive? boolean?)
-(s/def ::hub :hub/keycloak-name)
-(s/def ::schnaq-add-body
-  (s/keys :req-un [::discussion-title]
-          :opt-un [::ends-in-days :user/nickname ::hub-exclusive? ::hub]))
 
 (def schnaq-routes
   [["" {:swagger {:tags ["schnaqs"]}}
@@ -164,7 +171,7 @@
      ["/add" {:post add-schnaq
               :description (at/get-doc #'add-schnaq)
               :name :api.schnaq/add
-              :parameters {:body ::schnaq-add-body}
+              :parameters {:body ::dto/discussion-add-body}
               :responses {201 {:body {:new-schnaq ::dto/discussion}}
                           400 at/response-error-body}}]
      ["/edit/title" {:put edit-schnaq-title!
