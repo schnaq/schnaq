@@ -6,6 +6,7 @@
             [schnaq.api.toolbelt :as at]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :as db]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.reaction :as reaction-db]
             [schnaq.database.specs :as specs]
             [schnaq.database.user :as user-db]
@@ -87,7 +88,7 @@
         author-id (user-db/user-id display-name user-identity)]
     (if (validator/valid-discussion-and-statement? statement-id share-hash)
       (ok (valid-statements-with-votes
-            {:conclusion (first (-> [(db/fast-pull statement-id discussion-db/statement-pattern)]
+            {:conclusion (first (-> [(db/fast-pull statement-id patterns/statement-pattern)]
                                     processors/with-sub-discussion-info
                                     (processors/with-new-post-info share-hash user-identity)
                                     toolbelt/pull-key-up))

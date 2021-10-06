@@ -1,8 +1,8 @@
 (ns schnaq.database.hub
   (:require [clojure.spec.alpha :as s]
             [ghostwheel.core :refer [>defn >defn-]]
-            [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [transact fast-pull query] :as main-db]
+            [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
             [schnaq.toolbelt :as toolbelt]
             [taoensso.timbre :as log])
@@ -21,7 +21,7 @@
    :hub/keycloak-name
    :hub/created-at
    :hub/logo
-   {:hub/schnaqs discussion-db/discussion-pattern}])
+   {:hub/schnaqs patterns/discussion-pattern}])
 
 (>defn- all-schnaqs-for-hub
   "Return all schnaqs belonging to a hub. Includes the tx."
@@ -31,7 +31,7 @@
         '[:find [(pull ?discussions discussion-pattern) ...]
           :in $ ?hub discussion-pattern
           :where [?hub :hub/schnaqs ?discussions]]
-        hub-id discussion-db/discussion-pattern-minimal)
+        hub-id patterns/discussion-pattern-minimal)
       toolbelt/pull-key-up))
 
 (defn- pull-hub

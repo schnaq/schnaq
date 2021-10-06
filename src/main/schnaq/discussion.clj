@@ -3,7 +3,7 @@
             [ghostwheel.core :refer [>defn >defn-]]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.main :refer [fast-pull]]
-            [schnaq.database.user :as user-db]
+            [schnaq.database.patterns :as patterns]
             [schnaq.user :as user]))
 
 (>defn- create-links
@@ -27,7 +27,7 @@
   [share-hash]
   [:discussion/share-hash :ret map?]
   (let [discussion (discussion-db/discussion-by-share-hash share-hash)
-        author (fast-pull (-> discussion :discussion/author :db/id) user-db/public-user-pattern)]
+        author (fast-pull (-> discussion :discussion/author :db/id) patterns/public-user-pattern)]
     {:id share-hash
      :label (:discussion/title discussion)
      :author (user/display-name author)
