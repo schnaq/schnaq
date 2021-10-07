@@ -177,7 +177,10 @@
        :link-text (labels :router/create-schnaq)}]
      ["/discussion"
       {:name :routes.schnaq.create/discussion
-       :view create/create-discussion-view}]]
+       :view create/create-discussion-view}]
+     ["/qanda"
+      {:name :routes.schnaq.create/qanda
+       :view create/create-qanda-view}]]
     ["/:share-hash"
      {:parameters {:path {:share-hash string?}}
       :controllers [{:parameters {:path [:share-hash]}
