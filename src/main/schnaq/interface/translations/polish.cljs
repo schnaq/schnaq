@@ -105,13 +105,13 @@
    :startpage/heading "Mózg słonia dla Twojego biznesu"
    :startpage/subheading "Gromadzenie wiedzy w sposób zrównoważony i bezpieczne zarządzanie nią"
    :startpage.social-proof/numbers [:span "schnaq pomógł poprowadzić ponad " [:b marketing-num-schnaqs]
-                                    " dyskusji, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
+                                    " dyskusji i Q&A, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
 
    :startpage.usage/lead "Do czego mogę używać schnaq?"
    :startpage.features/more-information "Więcej informacji"
 
-   :startpage.information.know-how/title "Zarządzanie know-how i komunikacja w zespole z jednego źródła."
-   :startpage.information.know-how/body "Każdego dnia pracujemy, aby przyczynić się do stworzenia świata biznesu, w którym każdy jest wysłuchany."
+   :startpage.information.know-how/title "Bezproblemowy transfer wiedzy"
+   :startpage.information.know-how/body "Dyskusje i Q&A Schnaq pomagają Twojej firmie, kursowi i warsztatowi przekazywać wiedzę w mgnieniu oka. Doskonałość powstaje tam, gdzie wiedza przepływa swobodnie."
 
    :startpage.information.positioning/title "Schnaq jest idealnym partnerem dla Twojej cyfrowej transformacji"
    :startpage.information.positioning/body "Dzięki schnaq gwarantujemy Państwu zrównoważone zarządzanie wiedzą, które oszczędza czas i zasoby."

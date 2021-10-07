@@ -106,14 +106,15 @@
    :startpage/heading "The Elephant-Brain for your Company"
    :startpage/subheading "Manage your knowledge safely and sustainably."
    :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
-                                    " discussions which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
+                                    " discussions and Q&As which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
 
    :startpage.usage/lead "What do I use schnaq for?"
 
    :startpage.features/more-information "More information"
 
-   :startpage.information.know-how/title "Know-how management and team communication from a single source."
-   :startpage.information.know-how/body "We work every day to do our part for a business world where everyone is heard."
+   :startpage.information.know-how/title "Effortless knowledge transfer"
+   :startpage.information.know-how/body "Schnaq discussions and Q&As help your company, course and workshop transfer knowledge in a heartbeat. Excelence arises where knowledge flows freely."
+
 
    :startpage.information.positioning/title "Schnaq is the perfect partner for digital transformation."
    :startpage.information.positioning/body "We guarantee sustainable knowledge management that saves time and resources."

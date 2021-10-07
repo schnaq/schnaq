@@ -106,13 +106,13 @@
    :startpage/heading "Das Elefantenhirn für dein Unternehmen"
    :startpage/subheading "Wissen nachhaltig sammeln und sicher managen."
    :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
-                                    " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
+                                    " Diskussionen und Q&As geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
    :startpage.features/more-information "Mehr Informationen"
 
-   :startpage.information.know-how/title "Know-how Management und Teamkommunikation aus einer Hand."
-   :startpage.information.know-how/body "Wir arbeiten tagtäglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jede:r gehört wird."
+   :startpage.information.know-how/title "Wissenstransfer ohne Aufwand"
+   :startpage.information.know-how/body "Schnaqs Diskussionen und Q&A Funktionen helfen deinem Unternehmen, Kurs und Schulung blitzschnell Wissen auszutauschen. Nur wo Wissen fließt, kann großartiges entstehen."
 
    :startpage.information.positioning/title "Schnaq ist der perfekte Partner für deine digitale Transformation"
    :startpage.information.positioning/body "Wir garantieren dir mit schnaq nachhaltiges Wissensmanagement das Zeit und Ressourcen spart."
