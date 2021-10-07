@@ -122,6 +122,9 @@
    :startpage.information.anywhere/title "Use schnaq anywhere at any time"
    :startpage.information.anywhere/body "Schnaq runs as a web app on all major operating systems, browsers and devices. Whether it's a smartphone, tablet or computer."
 
+   :startpage.information.meetings/title "Not everything has to be a meeting"
+   :startpage.information.meetings/body "Forget meetings and gatherings at the coffee machine just to ask questions. With smart Q&A, you can stay up-to-date without meetings and even online!"
+
    :startpage.feature-box.know-how/title "Secure Know-How"
    :startpage.feature-box.know-how/body
    "Digitalisation and mobile offices have changed the way we communicate. But even in modern processes, the challenge of bundling knowledge within the company remains. With our product, we offer you the solution to communicate in a contemporary way and to bring together the know-how of all experts."

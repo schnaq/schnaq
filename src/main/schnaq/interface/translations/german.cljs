@@ -120,6 +120,9 @@
    :startpage.information.anywhere/title "Nutze schnaq überall zu jeder Zeit"
    :startpage.information.anywhere/body "Schnaq läuft als Web-App auf allen gängigen Betriebssystemen, Browsern und Geräten. Egal ob Smartphone, Tablet oder Computer."
 
+   :startpage.information.meetings/title "Nicht alles muss ein Meeting sein"
+   :startpage.information.meetings/body "Vergiss Meetings und Kaffeeküchentreffen nur um Fragen zu stellen. Mit intelligenten Q&A kannst du auch ohne Meetings und sogar online up-to-date bleiben!"
+
    :startpage.feature-box.know-how/title "Know-how sichern"
    :startpage.feature-box.know-how/body
    "Digitalisierung und Mobile Office haben die Art, wie wir kommunizieren, verändert.

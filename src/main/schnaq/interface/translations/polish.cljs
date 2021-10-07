@@ -119,6 +119,9 @@
    :startpage.information.anywhere/title "Używaj schnaq w dowolnym miejscu i czasie"
    :startpage.information.anywhere/body "Schnaq działa jako aplikacja webowa na wszystkich popularnych systemach operacyjnych, przeglądarkach i urządzeniach. Nieważne czy smartfon, tablet czy komputer."
 
+   :startpage.information.meetings/title "Nie wszystko musi być spotkaniem"
+   :startpage.information.meetings/body "Zapomnij o spotkaniach i spotkaniach w kawiarni tylko po to, aby zadawać pytania. Dzięki inteligentnym Q&A możesz być na bieżąco bez spotkań, a nawet online!"
+
    :startpage.feature-box.know-how/title "Bezpieczne know-how"
    :startpage.feature-box.know-how/body
    "Cyfryzacja i mobilne biura zmieniły sposób, w jaki się komunikujemy.

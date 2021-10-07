@@ -82,6 +82,7 @@
      :startpage.alternatives.e-learning/david "https://s3.disqtec.com/startpage/david.jpeg"
      :startpage.alternatives.e-learning/student-smartphone "https://s3.disqtec.com/startpage/student_smartphone.jpg"
      :startpage.information/anywhere "https://s3.disqtec.com/startpage/startpage_mobile_work.jpeg"
+     :startpage.information/meeting "https://s3.disqtec.com/startpage/startpage-meeting.jpeg"
      :startpage.features/admin-center "https://s3.disqtec.com/startpage/features/admin-center.png"
      :startpage.example/discussion "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_discussion.jpg"
      :startpage.example/dashboard "https://s3.disqtec.com/schnaq-common/startpage/screenshots/example_dashboard.jpg"
