@@ -648,6 +648,8 @@
    :qanda.button/text "Q&A"
    :qanda.button/submit "Ask question"
    :qanda.state/read-only-warning "This schnaq is read-only, you cannot ask any questions at the moment."
+   :call-to-qanda/display-code "Participation code:"
+   :call-to-qanda/help "All options for sharing your schnaq can be found in the top right navigation bar"
 
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"

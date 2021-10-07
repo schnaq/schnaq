@@ -62,6 +62,7 @@
      :pricing.others/miro "https://s3.disqtec.com/schnaq-common/startpage/pricing/miro.png"
      :schnaqqifant/admin "https://s3.disqtec.com/schnaq-schnaqqifanten/admin.png"
      :schnaqqifant/flat "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi_flat_front.png"
+     :schnaqqifant/three-d-head "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqi-3d-head.png"
      :schnaqqifant/erase "https://s3.disqtec.com/schnaq-schnaqqifanten/erase.png"
      :schnaqqifant/hippie "https://s3.disqtec.com/schnaq-schnaqqifanten/schnaqqifant-hippie.png"
      :schnaqqifant/original "https://s3.disqtec.com/schnaq-common/logos/schnaqqifant.svg"

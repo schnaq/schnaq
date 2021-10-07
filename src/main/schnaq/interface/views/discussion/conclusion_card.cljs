@@ -17,19 +17,44 @@
             [schnaq.interface.views.discussion.logic :as logic]
             [schnaq.interface.views.user :as user]))
 
-(defn- call-to-contribute
+(defn- call-to-action-schnaq
   "If no contributions are available, add a call to action to engage the users."
-  []
+  [body]
   [motion/fade-in-and-out
    [:article.call-to-contribute.m-3
     [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5
      [:div.col-2.py-md-5.d-flex
-      [:img.w-75.align-self-center {:src (img-path :schnaqqifant/flat)}]]
+      [:img.w-75.align-self-center {:src (img-path :schnaqqifant/three-d-head)}]]
      [:div.col-10.py-md-5
-      [:h2 (labels :call-to-contribute/body)]
-      [:p.mt-5 (labels :how-to/ask-question)
-       [:a.text-dark.btn.btn-link {:href (reitfe/href :routes/how-to)}
-        (labels :how-to/answer-question)]]]]]])
+      body]]]])
+
+(defn- call-to-discuss
+  "If no contributions are available, add a call to action to engage the users."
+  []
+  [call-to-action-schnaq
+   [:<>
+    [:h2 (labels :call-to-contribute/body)]
+    [:p.mt-5 (labels :how-to/ask-question)
+     [:a.text-dark.btn.btn-link {:href (reitfe/href :routes/how-to)}
+      (labels :how-to/answer-question)]]]])
+
+(defn- call-to-q&a
+  "If no statements are present show the access code in Q&A"
+  [access-code]
+  [call-to-action-schnaq
+   [:<>
+    [:h2 (str (labels :call-to-qanda/display-code) " " access-code)]
+    [:p.mt-5 (icon :info "m-auto fas") " "
+     (labels :call-to-qanda/help) " " (icon :share "m-auto fas")]]])
+
+(defn- call-to-action-content
+"Either display cta for discussion or Q&A"
+  []
+  (let [current-schnaq @(rf/subscribe [:schnaq/selected])
+        access-code (-> current-schnaq :discussion/access :discussion.access/code)]
+    (if access-code
+      [call-to-q&a access-code]
+      [call-to-discuss])))
 
 
 ;; -----------------------------------------------------------------------------
@@ -118,7 +143,7 @@
            (with-meta
              [statement-or-edit-wrapper statement edit-hash]
              {:key (:db/id statement)}))])
-      [call-to-contribute])))
+      [call-to-action-content])))
 
 (rf/reg-event-fx
   :discussion.select/conclusion
