@@ -91,7 +91,9 @@
      [:form
       {:on-submit (fn [e]
                     (jq/prevent-default e)
-                    (rf/dispatch [:schnaq.create/new (oget e [:currentTarget :elements])]))}
+                    (rf/dispatch [:schnaq.create/new
+                                  (oget e [:currentTarget :elements])
+                                  :discussion]))}
       [:h4.mb-5 (labels :schnaq.create.input/title)]
       [:div.panel-grey.row.p-4
        [:div.col-12
@@ -107,6 +109,34 @@
         (labels :schnaq.create.button/save)
         [icon :arrow-right "ml-2"]]]]
      [how-to-elements/quick-how-to-create]]]])
+
+(defn- create-qanda-page []
+  [pages/with-nav-and-header
+   {:page/heading (labels :schnaq.create/heading)
+    :page/subheading (labels :schnaq.create/subheading)
+    :page/title (labels :schnaq.create/title)
+    :page/classes "base-wrapper bg-white"}
+   [:div.container
+    [:div.py-3
+     [:form
+      {:on-submit (fn [e]
+                    (jq/prevent-default e)
+                    (rf/dispatch [:schnaq.create/new
+                                  (oget e [:currentTarget :elements])
+                                  :qanda]))}
+      [:h4.mb-5 (labels :schnaq.create.input/title)]
+      [:div.panel-grey.row.p-4
+       [:div.col-12
+        [common/form-input {:id :schnaq-title
+                            :placeholder (labels :schnaq.create.input/placeholder)
+                            :css "font-150"}]]]
+      [:div.row.text-primary.p-3
+       [icon :info "my-auto mr-3"]
+       [:span (labels :schnaq.create/info)]]
+      [:div.row.px-1.py-3
+       [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
+        (labels :schnaq.create.button/save)
+        [icon :arrow-right "ml-2"]]]]]]])
 
 (defn- create-schnaq-type-selection-page
   "Choose whether the type of schnaq you are starting is a Q&A or a discussion."
@@ -147,12 +177,15 @@
 (defn create-discussion-view []
   [create-schnaq-page])
 
+(defn create-qanda-view []
+  [create-qanda-page])
+
 
 ;; -----------------------------------------------------------------------------
 
 (rf/reg-event-fx
   :schnaq.create/new
-  (fn [{:keys [db]} [_ form-elements]]
+  (fn [{:keys [db]} [_ form-elements mode]]
     (let [authenticated? (get-in db [:user :authenticated?] false)
           use-origin? (and authenticated?
                            (seq (get-in db [:user :groups] [])))
@@ -165,7 +198,8 @@
                           origin-hub (assoc :hub-exclusive? exclusive?
                                             :hub origin-hub)
                           end-from-now (assoc :ends-in-days (js/parseInt end-from-now))
-                          (not authenticated?) (assoc :nickname nickname))]
+                          (not authenticated?) (assoc :nickname nickname)
+                          (= :qanda mode) (assoc :discussion-mode :discussion.mode/qanda))]
       {:fx [(http/xhrio-request db :post "/schnaq/add"
                                 [:schnaq/created]
                                 payload
