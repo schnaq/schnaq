@@ -2,6 +2,7 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest testing is use-fixtures]]
             [schnaq.database.access-codes :as ac]
+            [schnaq.database.discussion :as discussion-db]
             [schnaq.test.toolbelt :as schnaq-toolbelt]))
 
 (use-fixtures :each schnaq-toolbelt/init-test-delete-db-fixture)
@@ -28,7 +29,8 @@
       (is (valid? (assoc sample :discussion.access/expires-at #inst"2021-10-06T10:56:36.257-00:00"))))))
 
 (deftest code-available?-test
-  (let [{:discussion.access/keys [code]} (ac/add-access-code-to-discussion "cat-dog-hash" 42)
+  (let [test-discussion (discussion-db/discussion-by-share-hash "cat-dog-hash")
+        {:discussion.access/keys [code]} (ac/add-access-code-to-discussion! (:db/id test-discussion) 42)
         code-available? #'ac/code-available?]
     (testing "Verify, that the code is really available."
       (is (not (code-available? code)))
