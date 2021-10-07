@@ -204,7 +204,6 @@
    ;; Create schnaq
    :schnaq.create.dispatch/heading "Co chcesz zacząć?"
    :schnaq.create.dispatch/qanda "Pytania i odpowiedzi"
-   :schnaq.create.dispatch.qanda/coming-soon "Już wkrótce!"
    :schnaq.create.dispatch.qanda/explain "Zbieraj pytania podczas kursu i odpowiadaj na nie, kiedy będziesz miał czas."
    :schnaq.create.dispatch.qanda/share "Zaproś uczestników poprzez link lub kod."
    :schnaq.create.dispatch/discussion "Dyskusja"

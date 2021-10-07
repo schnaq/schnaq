@@ -205,7 +205,6 @@
    ;; Create schnaq
    :schnaq.create.dispatch/heading "Was möchtest du starten?"
    :schnaq.create.dispatch/qanda "Fragen und Antworten"
-   :schnaq.create.dispatch.qanda/coming-soon "Bald verfügbar!"
    :schnaq.create.dispatch.qanda/explain "Sammel Fragen während einer Veranstaltung und beantworte sie wann immer du Zeit hast."
    :schnaq.create.dispatch.qanda/share "Lade Teilnehmer:innen per Link oder Zahlencode ein."
    :schnaq.create.dispatch/discussion "Diskussion"

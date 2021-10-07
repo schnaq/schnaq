@@ -153,11 +153,10 @@
       [:div.col-md-6.col-12.text-center
        [buttons/a-big
         (labels :schnaq.create.dispatch/qanda)
-        :todo
-        "btn-outline-white mb-3 miw-75 disabled"]
+        (rfe/href :routes.schnaq.create/qanda)
+        "btn-outline-white mb-3 miw-75"]
        [:p.small.text-left
         [icon :info "my-auto mr-1"]
-        [:strong (labels :schnaq.create.dispatch.qanda/coming-soon)] [:br]
         (labels :schnaq.create.dispatch.qanda/explain)]
        [:p.small.text-left
         (labels :schnaq.create.dispatch.qanda/share)]]
