@@ -113,8 +113,8 @@
    :startpage.information.know-how/title "Bezproblemowy transfer wiedzy"
    :startpage.information.know-how/body "Dyskusje i Q&A Schnaq pomagają Twojej firmie, kursowi i warsztatowi przekazywać wiedzę w mgnieniu oka. Doskonałość powstaje tam, gdzie wiedza przepływa swobodnie."
 
-   :startpage.information.positioning/title "Schnaq jest idealnym partnerem dla Twojej cyfrowej transformacji"
-   :startpage.information.positioning/body "Dzięki schnaq gwarantujemy Państwu zrównoważone zarządzanie wiedzą, które oszczędza czas i zasoby."
+   :startpage.information.positioning/title  "Zrozumieć, co jest przedmiotem dyskusji"
+   :startpage.information.positioning/body "Dzięki automatycznie generowanym mindmapom i analizom A.I. każda dyskusja staje się jasna i łatwa do zrozumienia."
 
    :startpage.feature-box.know-how/title "Bezpieczne know-how"
    :startpage.feature-box.know-how/body

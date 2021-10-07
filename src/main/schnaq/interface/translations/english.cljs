@@ -116,8 +116,8 @@
    :startpage.information.know-how/body "Schnaq discussions and Q&As help your company, course and workshop transfer knowledge in a heartbeat. Excelence arises where knowledge flows freely."
 
 
-   :startpage.information.positioning/title "Schnaq is the perfect partner for digital transformation."
-   :startpage.information.positioning/body "We guarantee sustainable knowledge management that saves time and resources."
+   :startpage.information.positioning/title "Understand what is being discussed"
+   :startpage.information.positioning/body "With the automatically generated mindmap and A.I. analyses, any discussion becomes clear and easy to understand."
 
    :startpage.feature-box.know-how/title "Secure Know-How"
    :startpage.feature-box.know-how/body

@@ -114,8 +114,8 @@
    :startpage.information.know-how/title "Wissenstransfer ohne Aufwand"
    :startpage.information.know-how/body "Schnaqs Diskussionen und Q&A Funktionen helfen deinem Unternehmen, Kurs und Schulung blitzschnell Wissen auszutauschen. Nur wo Wissen fließt, kann großartiges entstehen."
 
-   :startpage.information.positioning/title "Schnaq ist der perfekte Partner für deine digitale Transformation"
-   :startpage.information.positioning/body "Wir garantieren dir mit schnaq nachhaltiges Wissensmanagement das Zeit und Ressourcen spart."
+   :startpage.information.positioning/title "Verstehe was diskutiert wird"
+   :startpage.information.positioning/body "Mit der automatisch generierten Mindmap und den K.I. Analysen, wird jede Diskussion übersichtlich und einfach zu verstehen."
 
    :startpage.feature-box.know-how/title "Know-how sichern"
    :startpage.feature-box.know-how/body
