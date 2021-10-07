@@ -52,6 +52,25 @@
                                  discussion-id)]
       [:db/retractEntity access-code-ref])))
 
+(defn remove-invalid-and-pull-up-access-codes
+  "Remove invalid / expired discussion access codes. Also unpacks the
+  access-codes from their collection, because there is always only one valid
+  access code.
+  This function is obsolete when we implement a scheduler, which periodically
+  checks the validity of the access tokens."
+  [data]
+  (walk/postwalk
+    (fn [discussion]
+      (if (s/valid? ::specs/discussion discussion)
+        (if-let [access-codes (:discussion/access discussion)]
+          (let [access-code (first access-codes)]
+            (if (valid? access-code)
+              (assoc discussion :discussion/access access-code)
+              (dissoc discussion :discussion/access)))
+          discussion)
+        discussion))
+    data))
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -76,28 +95,7 @@
   "Query a discussion by its access code."
   [code]
   [:discussion.access/code :ret (? :discussion/access)]
-  (let [access-code (toolbelt/pull-key-up
-                      (fast-pull [:discussion.access/code code] patterns/access-code-with-discussion))]
-    (when (:db/id access-code) access-code)))
-
-
-;; -----------------------------------------------------------------------------
-
-(defn remove-invalid-and-pull-up-access-codes
-  "Remove invalid / expired discussion access codes. Also unpacks the
-  access-codes from their collection, because there is always only one valid
-  access code.
-  This function is obsolete when we implement a scheduler, which periodically
-  checks the validity of the access tokens."
-  [data]
-  (walk/postwalk
-    (fn [discussion]
-      (if (s/valid? ::specs/discussion discussion)
-        (if-let [access-codes (:discussion/access discussion)]
-          (let [access-code (first access-codes)]
-            (if (valid? access-code)
-              (assoc discussion :discussion/access access-code)
-              (dissoc discussion :discussion/access)))
-          discussion)
-        discussion))
-    data))
+  (let [access-code (-> (fast-pull [:discussion.access/code code] patterns/access-code-with-discussion)
+                        toolbelt/pull-key-up
+                        remove-invalid-and-pull-up-access-codes)]
+    (when (valid? access-code) access-code)))
