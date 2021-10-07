@@ -112,7 +112,7 @@
    :startpage.features/more-information "Mehr Informationen"
 
    :startpage.information.know-how/title "Wissenstransfer ohne Aufwand"
-   :startpage.information.know-how/body "Schnaqs Diskussionen und Q&A Funktionen helfen deinem Unternehmen, Kurs und Schulung blitzschnell Wissen auszutauschen. Nur wo Wissen fließt, kann großartiges entstehen."
+   :startpage.information.know-how/body "Schnaq's Diskussionen und Q&A Funktionen helfen deinem Unternehmen, Kurs und Schulung blitzschnell Wissen auszutauschen. Nur wo Wissen fließt, kann Großartiges entstehen."
 
    :startpage.information.positioning/title "Verstehe was diskutiert wird"
    :startpage.information.positioning/body "Mit der automatisch generierten Mindmap und den K.I. Analysen, wird jede Diskussion übersichtlich und einfach zu verstehen."

@@ -113,7 +113,7 @@
    :startpage.features/more-information "More information"
 
    :startpage.information.know-how/title "Effortless knowledge transfer"
-   :startpage.information.know-how/body "Schnaq discussions and Q&As help your company, course and workshop transfer knowledge in a heartbeat. Excelence arises where knowledge flows freely."
+   :startpage.information.know-how/body "Schnaq discussions and Q&As help your company, course and workshop transfer knowledge in a heartbeat. Excellence arises where knowledge flows freely."
 
 
    :startpage.information.positioning/title "Understand what is being discussed"
