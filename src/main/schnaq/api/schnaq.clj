@@ -1,6 +1,6 @@
 (ns schnaq.api.schnaq
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok created bad-request forbidden]]
+            [ring.util.http-response :refer [ok created bad-request forbidden see-other]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.access-codes :as ac]
@@ -15,6 +15,14 @@
             [spec-tools.core :as st]
             [taoensso.timbre :as log])
   (:import (java.util UUID)))
+
+(defn- schnaq-by-access-code
+  "Validate access code and redirect request, if the code was valid."
+  [{:keys [parameters]}]
+  (let [{:keys [access-code]} (:query parameters)]
+    (if-let [share-hash (get-in (ac/discussion-by-access-code access-code) [:discussion.access/discussion :discussion/share-hash])]
+      (see-other (links/get-link-to-ask-interface share-hash))
+      at/access-code-invalid)))
 
 (defn- schnaq-by-hash
   "Returns a schnaq, identified by its share-hash."
@@ -147,7 +155,6 @@
     (user-db/update-visited-schnaqs user-identity [discussion-id])
     (ok {:share-hash share-hash})))
 
-
 ;; -----------------------------------------------------------------------------
 
 (def schnaq-routes
@@ -161,6 +168,12 @@
                                        :display-name ::specs/non-blank-string}}
                   :responses {200 {:body {:schnaq ::specs/discussion}}
                               403 at/response-error-body}}]
+     ["/join" {:get schnaq-by-access-code
+               :description (at/get-doc #'schnaq-by-access-code)
+               :name :api.schnaq/by-access-code
+               :parameters {:query {:access-code :discussion.access/code}}
+               :responses {303 {:description "Redirect to access the discussion. Note: Swagger can't display this correctly."}
+                           403 at/response-error-body}}]
      ["/add-visited" {:put add-visited-schnaq
                       :description (at/get-doc #'add-visited-schnaq)
                       :name :api.schnaq/add-visited
