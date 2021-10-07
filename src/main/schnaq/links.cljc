@@ -11,16 +11,22 @@
 (>defn get-share-link
   "Takes a share hash and returns a link to the schnaq."
   [share-hash]
-  [string? :ret string?]
+  [:discussion/share-hash :ret string?]
   #?(:clj  (format "%s/schnaq/%s" config/frontend-url share-hash)
      :cljs (let [path (reitfe/href :routes.schnaq/start {:share-hash share-hash})
                  location (oget js/window :location)]
              (gstring/format "%s//%s%s" (oget location :protocol) (oget location :host) path))))
 
+(>defn get-link-to-ask-interface
+  "Return link to the ask-interface in the Q&A case."
+  [share-hash]
+  [:discussion/share-hash :ret string?]
+  (str (get-share-link share-hash) "/ask"))
+
 (>defn get-admin-link
-  "Building a URL to the admin-center of a schnaq.."
+  "Building a URL to the admin-center of a schnaq."
   [share-hash edit-hash]
-  [string? string? :ret string?]
+  [:discussion/share-hash :discussion/edit-hash :ret string?]
   #?(:clj  (format "%s/schnaq/%s/manage/%s" config/frontend-url share-hash edit-hash)
      :cljs (let [path (reitfe/href :routes.schnaq/admin-center {:share-hash share-hash
                                                                 :edit-hash edit-hash})
