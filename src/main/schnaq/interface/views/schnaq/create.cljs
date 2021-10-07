@@ -111,6 +111,7 @@
      [how-to-elements/quick-how-to-create]]]])
 
 (defn- create-qanda-page []
+  ;; TODO refactor and optimize
   [pages/with-nav-and-header
    {:page/heading (labels :schnaq.create/heading)
     :page/subheading (labels :schnaq.create/subheading)
