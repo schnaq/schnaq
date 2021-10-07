@@ -213,6 +213,7 @@
    :schnaq.create.dispatch.discussion/share "Lade Teilnehmer:innen per Link ein."
 
    :schnaq.create.input/title "Worüber möchtest du diskutieren?"
+   :schnaq.create.qanda.input/title "Worum sollen sich die Fragen drehen?"
    :schnaq.create.input/placeholder "Thema festlegen"
    :schnaq.create.hub/help-text "Füge deinen schnaq direkt einem Hub hinzu."
    :schnaq/copy-link-tooltip "Hier klicken, um Link zu kopieren"
@@ -252,6 +253,7 @@
    :schnaq.create/title "Schnaq starten"
    :schnaq.create/heading "Starte mit deinem schnaq."
    :schnaq.create/subheading "Mit einem schnaq kannst du dein Team diskutieren lassen und Entscheidungen nachhaltig sichern."
+   :schnaq.create.qanda/subheading "Mit einem schnaq kannst du effizient Fragen sammeln und beantworten."
    :schnaq.create/info "Gib deinem Thema einen möglichst einfachen und verständlichen Titel."
    :schnaq.create.button/save "Schnaq starten"
 

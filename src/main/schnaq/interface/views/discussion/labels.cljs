@@ -23,7 +23,7 @@
         extra-class (if set? (str badge-color " label-set") badge-color)]
     [:span.badge.badge-pill.px-4
      {:class (if hover? (str extra-class " label") extra-class)}
-     [icon icon-name (str "m-auto")]]))
+     [icon icon-name "m-auto"]]))
 
 (defn- anonymous-labels-modal
   "Explain to anonymous users that they need to log in to set and remove labels."

@@ -80,6 +80,11 @@
    [:div.col-12.col-xl-6.border-left
     [add-schnaq-to-hub]]])
 
+(defn- create-schnaq-button []
+  [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
+   (labels :schnaq.create.button/save)
+   [icon :arrow-right "ml-2"]])
+
 (defn- create-schnaq-page []
   [pages/with-nav-and-header
    {:page/heading (labels :schnaq.create/heading)
@@ -105,16 +110,13 @@
        [:span (labels :schnaq.create/info)]]
       [create-schnaq-options]
       [:div.row.px-1.py-3
-       [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
-        (labels :schnaq.create.button/save)
-        [icon :arrow-right "ml-2"]]]]
+       [create-schnaq-button]]]
      [how-to-elements/quick-how-to-create]]]])
 
 (defn- create-qanda-page []
-  ;; TODO refactor and optimize
   [pages/with-nav-and-header
    {:page/heading (labels :schnaq.create/heading)
-    :page/subheading (labels :schnaq.create/subheading)
+    :page/subheading (labels :schnaq.create.qanda/subheading)
     :page/title (labels :schnaq.create/title)
     :page/classes "base-wrapper bg-white"}
    [:div.container
@@ -135,9 +137,7 @@
        [icon :info "my-auto mr-3"]
        [:span (labels :schnaq.create/info)]]
       [:div.row.px-1.py-3
-       [:button.btn.btn-dark-highlight.p-3.rounded-1.ml-auto
-        (labels :schnaq.create.button/save)
-        [icon :arrow-right "ml-2"]]]]]]])
+       [create-schnaq-button]]]]]])
 
 (defn- create-schnaq-type-selection-page
   "Choose whether the type of schnaq you are starting is a Q&A or a discussion."

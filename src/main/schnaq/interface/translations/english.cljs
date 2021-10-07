@@ -206,6 +206,7 @@
    :schnaq.create.dispatch.discussion/share "Invite participants via link."
 
    :schnaq.create.input/title "What would you like to discuss?"
+   :schnaq.create.qanda.input/title "What should the questions be about?"
    :schnaq.create.input/placeholder "Specify Subject"
    :schnaq.create.hub/help-text "Directly assign your schnaq to a hub."
    :schnaq/copy-link-tooltip "Click here to copy your link"
@@ -246,6 +247,7 @@
    :schnaq.create/title "Start schnaq"
    :schnaq.create/heading "Start your schnaq."
    :schnaq.create/subheading "With a schnaq, you can let your team discuss and secure sustainable decisions."
+   :schnaq.create.qanda/subheading "With a schnaq, you can have optimized Q&As."
    :schnaq.create/info "Add a simple and comprehensible title to your discussion."
    :schnaq.create.button/save "Start a new schnaq"
 
