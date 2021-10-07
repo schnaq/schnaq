@@ -202,20 +202,22 @@
                           (not authenticated?) (assoc :nickname nickname)
                           (= :qanda mode) (assoc :discussion-mode :discussion.mode/qanda))]
       {:fx [(http/xhrio-request db :post "/schnaq/add"
-                                [:schnaq/created]
+                                [:schnaq/created mode]
                                 payload
                                 [:ajax.error/as-notification])]})))
 
 (rf/reg-event-fx
   :schnaq/created
-  (fn [{:keys [db]} [_ {:keys [new-schnaq]}]]
+  (fn [{:keys [db]} [_ mode {:keys [new-schnaq]}]]
     (let [{:discussion/keys [share-hash edit-hash creation-secret]} new-schnaq
           updated-secrets (assoc (get-in db [:discussion :schnaqs :creation-secrets]) share-hash creation-secret)]
       {:db (-> db
                (assoc-in [:schnaq :last-added] new-schnaq)
                (assoc-in [:discussion :schnaqs :creation-secrets] updated-secrets)
                (update-in [:schnaqs :all] conj new-schnaq))
-       :fx [[:dispatch [:navigation/navigate :routes.schnaq/value {:share-hash share-hash}]]
+       :fx [(if (= :qanda mode)
+              [:dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}]]
+              [:dispatch [:navigation/navigate :routes.schnaq/value {:share-hash share-hash}]])
             [:dispatch [:schnaq/select-current new-schnaq]]
             [:dispatch [:notification/add
                         #:notification{:title (labels :schnaq/created-success-heading)
