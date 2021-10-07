@@ -73,7 +73,7 @@
     (transact transaction)
     keycloak-names))
 
-(>defn add-discussions-to-hub
+(>defn add-discussions-to-hub!
   [hub-id discussion-ids]
   [:db/id (s/coll-of :db/id) :ret ::specs/hub]
   (transact (mapv #(vector :db/add hub-id :hub/schnaqs %) discussion-ids))

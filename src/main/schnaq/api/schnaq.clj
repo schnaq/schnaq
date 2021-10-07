@@ -3,6 +3,7 @@
             [ring.util.http-response :refer [ok created bad-request forbidden]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
+            [schnaq.database.access-codes :as ac]
             [schnaq.database.discussion :as discussion-db]
             [schnaq.database.hub :as hub-db]
             [schnaq.database.specs :as specs]
@@ -85,11 +86,13 @@
                                     discussion-mode (assoc :discussion/mode discussion-mode))
             new-discussion-id (discussion-db/new-discussion discussion-data)]
         (if new-discussion-id
-          (let [created-discussion (discussion-db/secret-discussion-data new-discussion-id)]
+          (do
             (when (and hub-exclusive? hub authorized-for-hub?)
-              (hub-db/add-discussions-to-hub [:hub/keycloak-name hub] [new-discussion-id]))
+              (hub-db/add-discussions-to-hub! [:hub/keycloak-name hub] [new-discussion-id]))
+            (when (= :discussion.mode/qanda discussion-mode)
+              (ac/add-access-code-to-discussion! new-discussion-id))
             (log/info "Discussion created: " discussion-data)
-            (created "" {:new-schnaq (links/add-links-to-discussion created-discussion)}))
+            (created "" {:new-schnaq (links/add-links-to-discussion (discussion-db/secret-discussion-data new-discussion-id))}))
           (bad-request-schnaq-creation parameters))))))
 
 
