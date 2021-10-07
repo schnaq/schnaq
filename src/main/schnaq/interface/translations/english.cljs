@@ -106,17 +106,24 @@
    :startpage/heading "The Elephant-Brain for your Company"
    :startpage/subheading "Manage your knowledge safely and sustainably."
    :startpage.social-proof/numbers [:span "schnaq helped lead over " [:b marketing-num-schnaqs]
-                                    " discussions which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
+                                    " discussions and Q&As which amounts to " [:b marketing-num-statements] " instances of shared knowledge."]
 
    :startpage.usage/lead "What do I use schnaq for?"
 
    :startpage.features/more-information "More information"
 
-   :startpage.information.know-how/title "Know-how management and team communication from a single source."
-   :startpage.information.know-how/body "We work every day to do our part for a business world where everyone is heard."
+   :startpage.information.know-how/title "Effortless knowledge transfer"
+   :startpage.information.know-how/body "Schnaq discussions and Q&As help your company, course and workshop transfer knowledge in a heartbeat. Excellence arises where knowledge flows freely."
 
-   :startpage.information.positioning/title "Schnaq is the perfect partner for digital transformation."
-   :startpage.information.positioning/body "We guarantee sustainable knowledge management that saves time and resources."
+
+   :startpage.information.positioning/title "Understand what is being discussed"
+   :startpage.information.positioning/body "With the automatically generated mindmap and A.I. analyses, any discussion becomes clear and easy to understand."
+
+   :startpage.information.anywhere/title "Use schnaq anywhere at any time"
+   :startpage.information.anywhere/body "Schnaq runs as a web app on all major operating systems, browsers and devices. Whether it's a smartphone, tablet or computer."
+
+   :startpage.information.meetings/title "Not everything has to be a meeting"
+   :startpage.information.meetings/body "Forget meetings and gatherings at the coffee machine just to ask questions. With smart Q&A, you can stay up-to-date without meetings and even online!"
 
    :startpage.feature-box.know-how/title "Secure Know-How"
    :startpage.feature-box.know-how/body

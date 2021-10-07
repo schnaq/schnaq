@@ -106,16 +106,22 @@
    :startpage/heading "Das Elefantenhirn für dein Unternehmen"
    :startpage/subheading "Wissen nachhaltig sammeln und sicher managen."
    :startpage.social-proof/numbers [:span "schnaq hat schon in über " [:b marketing-num-schnaqs]
-                                    " Diskussionen geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
+                                    " Diskussionen und Q&As geholfen mehr als " [:b marketing-num-statements] " mal Wissen auszutauschen."]
 
    :startpage.usage/lead "Wofür kann ich schnaq verwenden?"
    :startpage.features/more-information "Mehr Informationen"
 
-   :startpage.information.know-how/title "Know-how Management und Teamkommunikation aus einer Hand."
-   :startpage.information.know-how/body "Wir arbeiten tagtäglich daran, unseren Beitrag für eine Business-Welt zu leisten, in der jede:r gehört wird."
+   :startpage.information.know-how/title "Wissenstransfer ohne Aufwand"
+   :startpage.information.know-how/body "Schnaq's Diskussionen und Q&A Funktionen helfen deinem Unternehmen, Kurs und Schulung blitzschnell Wissen auszutauschen. Nur wo Wissen fließt, kann Großartiges entstehen."
 
-   :startpage.information.positioning/title "Schnaq ist der perfekte Partner für deine digitale Transformation"
-   :startpage.information.positioning/body "Wir garantieren dir mit schnaq nachhaltiges Wissensmanagement das Zeit und Ressourcen spart."
+   :startpage.information.positioning/title "Verstehe was diskutiert wird"
+   :startpage.information.positioning/body "Mit der automatisch generierten Mindmap und den K.I. Analysen, wird jede Diskussion übersichtlich und einfach zu verstehen."
+
+   :startpage.information.anywhere/title "Nutze schnaq überall zu jeder Zeit"
+   :startpage.information.anywhere/body "Schnaq läuft als Web-App auf allen gängigen Betriebssystemen, Browsern und Geräten. Egal ob Smartphone, Tablet oder Computer."
+
+   :startpage.information.meetings/title "Nicht alles muss ein Meeting sein"
+   :startpage.information.meetings/body "Vergiss Meetings und Kaffeeküchentreffen nur um Fragen zu stellen. Mit intelligenten Q&A kannst du auch ohne Meetings und sogar online up-to-date bleiben!"
 
    :startpage.feature-box.know-how/title "Know-how sichern"
    :startpage.feature-box.know-how/body

@@ -105,16 +105,22 @@
    :startpage/heading "Mózg słonia dla Twojego biznesu"
    :startpage/subheading "Gromadzenie wiedzy w sposób zrównoważony i bezpieczne zarządzanie nią"
    :startpage.social-proof/numbers [:span "schnaq pomógł poprowadzić ponad " [:b marketing-num-schnaqs]
-                                    " dyskusji, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
+                                    " dyskusji i Q&A, co przekłada się na " [:b marketing-num-statements] " przypadków wspólnej wiedzy."]
 
    :startpage.usage/lead "Do czego mogę używać schnaq?"
    :startpage.features/more-information "Więcej informacji"
 
-   :startpage.information.know-how/title "Zarządzanie know-how i komunikacja w zespole z jednego źródła."
-   :startpage.information.know-how/body "Każdego dnia pracujemy, aby przyczynić się do stworzenia świata biznesu, w którym każdy jest wysłuchany."
+   :startpage.information.know-how/title "Bezproblemowy transfer wiedzy"
+   :startpage.information.know-how/body "Dyskusje i Q&A Schnaq pomagają Twojej firmie, kursowi i warsztatowi przekazywać wiedzę w mgnieniu oka. Doskonałość powstaje tam, gdzie wiedza przepływa swobodnie."
 
-   :startpage.information.positioning/title "Schnaq jest idealnym partnerem dla Twojej cyfrowej transformacji"
-   :startpage.information.positioning/body "Dzięki schnaq gwarantujemy Państwu zrównoważone zarządzanie wiedzą, które oszczędza czas i zasoby."
+   :startpage.information.positioning/title "Zrozumieć, co jest przedmiotem dyskusji"
+   :startpage.information.positioning/body "Dzięki automatycznie generowanym mindmapom i analizom A.I. każda dyskusja staje się jasna i łatwa do zrozumienia."
+
+   :startpage.information.anywhere/title "Używaj schnaq w dowolnym miejscu i czasie"
+   :startpage.information.anywhere/body "Schnaq działa jako aplikacja webowa na wszystkich popularnych systemach operacyjnych, przeglądarkach i urządzeniach. Nieważne czy smartfon, tablet czy komputer."
+
+   :startpage.information.meetings/title "Nie wszystko musi być spotkaniem"
+   :startpage.information.meetings/body "Zapomnij o spotkaniach i spotkaniach w kawiarni tylko po to, aby zadawać pytania. Dzięki inteligentnym Q&A możesz być na bieżąco bez spotkań, a nawet online!"
 
    :startpage.feature-box.know-how/title "Bezpieczne know-how"
    :startpage.feature-box.know-how/body
