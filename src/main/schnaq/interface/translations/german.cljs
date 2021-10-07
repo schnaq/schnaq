@@ -652,6 +652,8 @@
    :qanda.button/text "Q&A"
    :qanda.button/submit "Frage stellen"
    :qanda.state/read-only-warning "Dieser schnaq ist schreibgeschützt, du kannst aktuell keine Fragen stellen."
+   :call-to-qanda/display-code "Teilnahmecode:"
+   :call-to-qanda/help "Alle Optionen zum Teilen deines schnaqs findest oben rechts in der Navigationsleiste"
 
    :schnaqs/header "Übersicht deiner schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
