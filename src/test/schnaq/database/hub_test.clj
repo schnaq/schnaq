@@ -1,7 +1,7 @@
 (ns schnaq.database.hub-test
   (:require [clojure.test :refer [is are use-fixtures deftest testing]]
             [schnaq.database.discussion :as discussion-db]
-            [schnaq.database.hub :refer [add-discussions-to-hub] :as hub]
+            [schnaq.database.hub :refer [add-discussions-to-hub!] :as hub]
             [schnaq.database.hub-test-data :as hub-test-data]
             [schnaq.database.main :refer [fast-pull]]
             [schnaq.test.toolbelt :as schnaq-toolbelt])
@@ -17,8 +17,8 @@
         discussion (first (discussion-db/all-discussions-by-title "Tapir oder Ameisenbär?"))
         cat-dog-discussion (first (discussion-db/all-discussions-by-title "Cat or Dog?"))]
     (is (empty? (:hub/schnaqs hub)))
-    (let [modified-hub (add-discussions-to-hub (:db/id hub) [(:db/id discussion)
-                                                             (:db/id cat-dog-discussion)])]
+    (let [modified-hub (add-discussions-to-hub! (:db/id hub) [(:db/id discussion)
+                                                              (:db/id cat-dog-discussion)])]
       (is (= 2 (count (:hub/schnaqs modified-hub))))
       (is (= #{"Tapir oder Ameisenbär?" "Cat or Dog?"} (->> modified-hub
                                                             :hub/schnaqs

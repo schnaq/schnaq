@@ -41,31 +41,32 @@
       (recur (generate-code)))))
 
 (>defn- revoke-existing-access-codes
-  "Looks up a discussion by share-hash and revokes the existing access-code."
-  [share-hash]
-  [:discussion/share-hash :ret vector?]
+  "Looks up a discussion and revokes the existing access-code for this
+  discussion."
+  [discussion-id]
+  [:db/id :ret (s/coll-of vector?)]
   (transact
     (for [access-code-ref (query '[:find [?access-code ...]
-                                   :in $ ?share-hash
-                                   :where [?discussion :discussion/share-hash ?share-hash]
-                                   [?access-code :discussion.access/discussion ?discussion]]
-                                 share-hash)]
-      [:db/retract access-code-ref :discussion.access/discussion])))
+                                   :in $ ?discussion-id
+                                   :where [?access-code :discussion.access/discussion ?discussion-id]]
+                                 discussion-id)]
+      [:db/retractEntity access-code-ref])))
 
 
 ;; -----------------------------------------------------------------------------
 
-(>defn add-access-code-to-discussion
-  "Generate an access code for a discussion."
-  ([share-hash]
-   [:discussion/share-hash :ret :discussion/access]
-   (add-access-code-to-discussion share-hash shared-config/access-code-default-expiration))
-  ([share-hash days-valid]
-   [:discussion/share-hash nat-int? :ret :discussion/access]
-   (let [_ (revoke-existing-access-codes share-hash)
+(>defn add-access-code-to-discussion!
+  "Generate an access code for a discussion. Optionally takes a number of days
+  to calculate a custom expiration date of the access-code."
+  ([discussion-id]
+   [:db/id :ret :discussion/access]
+   (add-access-code-to-discussion! discussion-id shared-config/access-code-default-expiration))
+  ([discussion-id days-valid]
+   [:db/id nat-int? :ret :discussion/access]
+   (let [_ (revoke-existing-access-codes discussion-id)
          access-code-ref (clean-and-add-to-db!
                            {:discussion.access/code (find-available-code)
-                            :discussion.access/discussion [:discussion/share-hash share-hash]
+                            :discussion.access/discussion discussion-id
                             :discussion.access/created-at (Date.)
                             :discussion.access/expires-at (toolbelt/now-plus-days-instant days-valid)}
                            :discussion/access)]

@@ -5,7 +5,7 @@
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
-            [schnaq.database.access-codes :as access-codes]
+            [schnaq.database.access-codes :as ac]
             [schnaq.database.main :refer [transact query fast-pull] :as main-db]
             [schnaq.database.patterns :as patterns]
             [schnaq.database.specs :as specs]
@@ -81,7 +81,7 @@
   [:discussion/share-hash vector? :ret ::specs/discussion]
   (-> (fast-pull [:discussion/share-hash share-hash] pattern)
       toolbelt/pull-key-up
-      access-codes/remove-invalid-and-pull-up-access-codes))
+      ac/remove-invalid-and-pull-up-access-codes))
 
 (defn discussion-by-share-hash
   "Query discussion and apply public discussion pattern to it."
@@ -257,11 +257,12 @@
                                 ::specs/discussion))
 
 (>defn secret-discussion-data
-  "Return non public meeting data by id."
+  "Return non-public discussion data by id."
   [id]
   [int? :ret ::specs/discussion]
-  (toolbelt/pull-key-up
-    (fast-pull id (conj patterns/discussion-private :discussion/creation-secret))))
+  (ac/remove-invalid-and-pull-up-access-codes
+    (toolbelt/pull-key-up
+      (fast-pull id (conj patterns/discussion-private :discussion/creation-secret)))))
 
 (defn set-discussion-read-only
   "Sets a discussion as read-only."

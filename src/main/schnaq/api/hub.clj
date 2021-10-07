@@ -52,7 +52,7 @@
         ;; NOTE: When hub-exclusive schnaqs are in, check it in the if above.
         (let [discussion-id (:db/id (fast-pull [:discussion/share-hash share-hash] [:db/id]))
               hub-id (:db/id (fast-pull [:hub/keycloak-name keycloak-name] [:db/id]))
-              hub (hub-db/add-discussions-to-hub hub-id [discussion-id])
+              hub (hub-db/add-discussions-to-hub! hub-id [discussion-id])
               processed-hub (update hub :hub/schnaqs #(map processors/add-meta-info-to-schnaq %))]
           (ok {:hub processed-hub}))
         (not-found (at/build-error-body :hub/discussion-not-found
