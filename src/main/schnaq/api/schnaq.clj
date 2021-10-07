@@ -1,6 +1,6 @@
 (ns schnaq.api.schnaq
   (:require [clojure.spec.alpha :as s]
-            [ring.util.http-response :refer [ok created bad-request forbidden see-other]]
+            [ring.util.http-response :refer [ok created bad-request forbidden]]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.access-codes :as ac]
@@ -21,7 +21,7 @@
   [{:keys [parameters]}]
   (let [{:keys [access-code]} (:query parameters)]
     (if-let [share-hash (get-in (ac/discussion-by-access-code access-code) [:discussion.access/discussion :discussion/share-hash])]
-      (see-other (links/get-link-to-ask-interface share-hash))
+      (ok {:location (links/get-link-to-ask-interface share-hash)})
       at/access-code-invalid)))
 
 (defn- schnaq-by-hash
@@ -172,7 +172,7 @@
                :description (at/get-doc #'schnaq-by-access-code)
                :name :api.schnaq/by-access-code
                :parameters {:query {:access-code :discussion.access/code}}
-               :responses {303 {:description "Redirect to access the discussion. Note: Swagger can't display this correctly."}
+               :responses {200 {:body {:location string?}}
                            403 at/response-error-body}}]
      ["/add-visited" {:put add-visited-schnaq
                       :description (at/get-doc #'add-visited-schnaq)
