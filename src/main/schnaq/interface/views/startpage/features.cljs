@@ -24,6 +24,13 @@
       {:class "img-fluid shadow-lg rounded-2"
        :src (img-path :startpage.example/dashboard)}]]]])
 
+(defn- use-it-anywhere []
+  [:div.my-5.py-lg-5
+   [rows/row-builder-text-right
+    [:img.shadow-lg.rounded-2
+     {:src (img-path :startpage.information/anywhere)}]
+    [rows/build-text-box :startpage.information.anywhere]]])
+
 (defn- feature-box
   "A Single feature box that can be put in a row. All inputs are keys."
   [title body]
@@ -55,4 +62,5 @@
   [:<>
    [what-is-schnaq]
    [schnaq-promise]
+   [use-it-anywhere]
    [feature-columns]])

@@ -119,6 +119,9 @@
    :startpage.information.positioning/title "Understand what is being discussed"
    :startpage.information.positioning/body "With the automatically generated mindmap and A.I. analyses, any discussion becomes clear and easy to understand."
 
+   :startpage.information.anywhere/title "Use schnaq anywhere at any time"
+   :startpage.information.anywhere/body "Schnaq runs as a web app on all major operating systems, browsers and devices. Whether it's a smartphone, tablet or computer."
+
    :startpage.feature-box.know-how/title "Secure Know-How"
    :startpage.feature-box.know-how/body
    "Digitalisation and mobile offices have changed the way we communicate. But even in modern processes, the challenge of bundling knowledge within the company remains. With our product, we offer you the solution to communicate in a contemporary way and to bring together the know-how of all experts."
