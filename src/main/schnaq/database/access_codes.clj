@@ -47,11 +47,10 @@
   [:db/id :ret (s/coll-of vector?)]
   (transact
     (for [access-code-ref (query '[:find [?access-code ...]
-                                   :in $ ?share-hash
-                                   :where [?discussion :discussion/share-hash ?share-hash]
-                                   [?access-code :discussion.access/discussion ?discussion]]
+                                   :in $ ?discussion-id
+                                   :where [?access-code :discussion.access/discussion ?discussion-id]]
                                  discussion-id)]
-      [:db/retract access-code-ref :discussion.access/discussion])))
+      [:db/retractEntity access-code-ref])))
 
 
 ;; -----------------------------------------------------------------------------
