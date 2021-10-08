@@ -152,8 +152,9 @@
   [schnaqqi-size bubble-content css-classes image-key]
   [number? vector? string? keyword?]
   [:section.d-flex
-   [:div.speech-bubble.text-center.py-3.pl-1.pr-3.text-gray {:class css-classes} bubble-content]
-   [:img.ml-3 {:style {:width schnaqqi-size}
+   [:div.speech-bubble.text-center.text-gray {:class css-classes} bubble-content]
+   [:img.ml-3 {:style {:width schnaqqi-size
+                       :object-fit "contain"}
                :alt "schnaqqi speaking"
                :src (img-path image-key)}]])
 
