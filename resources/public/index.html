@@ -64,6 +64,7 @@
     g.src = u + 'matomo.js';
     s.parentNode.insertBefore(g, s);
   })();
+
 </script>
 <noscript><p><img alt="" src="//analytics.schnaq.com/matomo.php?idsite=2&amp;rec=1" style="border:0;"/></p></noscript>
 
@@ -100,6 +101,14 @@
     'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '601900294299309');
   fbq('track', 'PageView');
+  if (window.location.href.endsWith("danke")){
+    fbq('track', 'Lead');
+  }
+
+
+
+
+
 </script>
 <noscript>
   <img height="1" src="https://www.facebook.com/tr?id=463419234718543&ev=PageView&noscript=1"
