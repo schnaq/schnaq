@@ -16,11 +16,11 @@
   (rand-int (Math/pow 10 shared-config/access-code-length)))
 
 (>defn valid?
-  "Check if the access-code is correctly configured and not expired."
-  [{:discussion.access/keys [created-at expires-at] :as access-code}]
+  "Check if the access-code is correctly formed. Does *not yet* verify that the
+  token is not expired."
+  [access-code]
   [:discussion/access :ret boolean?]
-  (and (s/valid? :discussion/access access-code)
-       (nat-int? (- (.getTime expires-at) (.getTime created-at)))))
+  (s/valid? :discussion/access access-code))
 
 (>defn- code-available?
   "Validate, if the provided `code` is not in use. Invalidated / expired codes
@@ -41,8 +41,7 @@
       (recur (generate-code)))))
 
 (>defn- revoke-existing-access-codes
-  "Looks up a discussion and revokes the existing access-code for this
-  discussion."
+  "Looks up a discussion and revokes the existing access-code."
   [discussion-id]
   [:db/id :ret (s/coll-of vector?)]
   (transact
