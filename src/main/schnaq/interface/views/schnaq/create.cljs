@@ -191,8 +191,8 @@
                            (seq (get-in db [:user :groups] [])))
           nickname (tools/current-display-name db)
           discussion-title (oget form-elements [:schnaq-title :value])
-          exclusive? (when use-origin? (oget form-elements [:hub-exclusive :checked]))
-          origin-hub (when use-origin? (oget form-elements [:exclusive-hub-select :value]))
+          exclusive? (when use-origin? (oget form-elements [:?hub-exclusive :checked]))
+          origin-hub (when use-origin? (oget form-elements [:?exclusive-hub-select :value]))
           end-from-now (oget form-elements [:?input-num-days-to-end :value])
           payload (cond-> {:discussion-title discussion-title}
                           origin-hub (assoc :hub-exclusive? exclusive?
