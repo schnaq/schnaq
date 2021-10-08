@@ -152,10 +152,11 @@
   [schnaqqi-size bubble-content css-classes image-key]
   [number? vector? string? keyword?]
   [:section.d-flex
-   [:div.speech-bubble.text-center {:class css-classes} bubble-content]
-   [:img {:style {:width schnaqqi-size}
-          :alt "schnaqqi speaking"
-          :src (img-path image-key)}]])
+   [:div.speech-bubble.text-center.text-gray {:class css-classes} bubble-content]
+   [:img.ml-3 {:style {:width schnaqqi-size
+                       :object-fit "contain"}
+               :alt "schnaqqi speaking"
+               :src (img-path image-key)}]])
 
 (defn schnaqqi-speech-bubble-white
   "Create a speech bubble left of a white schnaqqi and let him speak to the audience."
@@ -167,7 +168,7 @@
   "Create a speech bubble left of a blue schnaqqi and let him speak to the audience."
   [schnaqqi-size bubble-content]
   [schnaqqi-speech-bubble-builder
-   schnaqqi-size bubble-content "speech-bubble-bordered" :schnaqqifant/original])
+   schnaqqi-size bubble-content "speech-bubble-bordered" :schnaqqifant/three-d-left])
 
 
 ;; -----------------------------------------------------------------------------

@@ -47,7 +47,7 @@
 
 (defn qanda-content []
   (let [current-discussion @(rf/subscribe [:schnaq/selected])]
-    [pages/with-discussion-header
+    [pages/with-qanda-view-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.container.p-0.px-md-5
       [ask-question]]]))

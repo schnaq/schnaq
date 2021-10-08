@@ -1,7 +1,7 @@
 (ns schnaq.interface.celebrations
   (:require [re-frame.core :as rf]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.views.schnaq.admin :as admin]))
+            [schnaq.interface.views.discussion.share :as share]))
 
 (defn- schnaq-filled-body
   "Celebrate user that she added the first statement to a new schnaq."
@@ -10,7 +10,7 @@
    [:p (labels :celebrations.schnaq-filled/lead)]
    [:p (labels :celebrations.schnaq-filled/share-now)]
    [:button.btn.btn-sm.btn-secondary
-    {:on-click admin/open-share-modal}
+    {:on-click share/share-discussion-modal}
     (labels :celebrations.schnaq-filled/button)]])
 
 (rf/reg-event-fx

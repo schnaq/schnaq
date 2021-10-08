@@ -22,7 +22,7 @@
   [body]
   [motion/fade-in-and-out
    [:article.call-to-contribute.m-3
-    [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5
+    [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5
      [:div.col-2.py-md-5.d-flex
       [:img.w-75.align-self-center {:src (img-path :schnaqqifant/three-d-head)}]]
      [:div.col-10.py-md-5
@@ -48,7 +48,7 @@
      (labels :call-to-qanda/help) " " (icon :share "m-auto fas")]]])
 
 (defn- call-to-action-content
-"Either display cta for discussion or Q&A"
+  "Either display cta for discussion or Q&A"
   []
   (let [current-schnaq @(rf/subscribe [:schnaq/selected])
         access-code (-> current-schnaq :discussion/access :discussion.access/code)]

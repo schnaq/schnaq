@@ -626,11 +626,15 @@
    :schnaq.export/as-text "Pobierz schnaq jako plik tekstowy"
    :schnaq.admin/tooltip "Zarządzaj schnaq"
    :share-link/copy "Skopiuj link dostępu"
+   :share-link/via "Za link"
+   :share-access-code/via "Przez kod dostępu"
+   :share-access-code/title "Odwiedź schnaq.app"
 
    :sharing/tooltip "udział sznaq"
    :sharing.modal/title "Podziel się swoim schnaqiem"
    :sharing.modal/lead "Zaproś cały zespół do wypełnienia tego schnaqa wiedzą"
    :sharing.modal/schnaqqi-help "Wypełnij schnaq swoimi pomysłami. Twoim kolegom łatwiej będzie rozpocząć pracę."
+   :sharing.modal/qanda-help "Uczestnicy mogą zadawać pytania dotyczące wydarzenia poprzez widok Q&A. Albo bezpośrednio przez link, albo przez kod na www.schnaq.app!"
 
    ;; Discussion Language
    :discussion/create-argument-action "Dodaj wkład"

@@ -127,17 +127,29 @@
      [:div.col-12.col-md-6.px-0.px-md-3 middle]
      [:div.col-12.col-md-3.px-0.px-md-3 right]]]])
 
-(>defn with-discussion-header
+(>defn- with-header
   "Page layout with discussion header."
-  [{:page/keys [title heading] :as options} body]
-  [::page-options (s/+ vector?) :ret vector?]
+  [{:page/keys [title heading] :as options} body header]
+  [::page-options (s/+ vector?) vector? :ret vector?]
   (common/set-website-title! (or title heading))
   [scheduler/middleware
    [validate-conditions-middleware
     options
     [:<>
-     (if shared-config/embedded? [discussion-navbar/embeddable-header] [discussion-navbar/header])
+     (if shared-config/embedded? [discussion-navbar/embeddable-header] header)
      body]]])
+
+(>defn with-discussion-header
+  "Page layout with discussion header."
+  [options body]
+  [::page-options (s/+ vector?) :ret vector?]
+  [with-header options body [discussion-navbar/header]])
+
+(>defn with-qanda-view-header
+  "Page layout with discussion header."
+  [options body]
+  [::page-options (s/+ vector?) :ret vector?]
+  [with-header options body [discussion-navbar/header-for-qanda-view]])
 
 (>defn embeddable-view
   "A more dense view without footer and other shit "
