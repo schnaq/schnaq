@@ -7,13 +7,8 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.file-download :as file-download]
-            [schnaq.interface.utils.tooltip :as tooltip]
-            [schnaq.interface.views.common :as common]
-            [schnaq.interface.views.modal :as modal]
-            [schnaq.interface.views.notifications :refer [notify!]]
-            [schnaq.links :as links]))
+            [schnaq.interface.utils.tooltip :as tooltip]))
 
 (defn admin-center
   "Button to access admin menu."
@@ -25,46 +20,6 @@
       {:href (rfe/href :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash})
        :role :button}
       [icon :cog "m-auto"]]]))
-
-(defn- share-modal
-  "Modal showing sharing options."
-  []
-  (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
-    [modal/modal-template
-     (labels :sharing.modal/title)
-     [:section
-      [:p.lead (labels :sharing.modal/lead)]
-      [:div.input-group
-       [:input.form-control
-        {:value (links/get-share-link share-hash)
-         :readOnly true}]
-       [:div.input-group-append
-        [:button.btn.btn-outline-secondary
-         {:on-click (fn []
-                      (clipboard/copy-to-clipboard! (links/get-share-link share-hash))
-                      (notify! (labels :schnaq/link-copied-heading)
-                               (labels :schnaq/link-copied-success)
-                               :info
-                               false))}
-         (labels :share-link/copy)]]]
-      [:div.w-75.mx-auto.py-5
-       [common/schnaqqi-speech-bubble-blue
-        "100px"
-        (labels :sharing.modal/schnaqqi-help)]]]]))
-
-(defn open-share-modal
-  "Open the share-schnaq dialog."
-  []
-  (rf/dispatch [:modal {:show? true
-                        :large? true
-                        :child [share-modal]}]))
-
-(defn share-link
-  "Button to copy access link and notify the user."
-  []
-  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
-   [icon :share "m-auto"]
-   open-share-modal])
 
 (defn- create-txt-download-handler
   "Receives the export apis answer and creates a download."
@@ -81,7 +36,7 @@
   "Download the current graph as a png file."
   [surrounding-div]
   [tooltip/tooltip-button "bottom" (labels :graph.download/as-png)
-   [icon :grpah "ma-auto"]
+   [icon :graph "ma-auto"]
    (fn []
      (let [canvas (.querySelector js/document (gstring/format "%s div canvas" surrounding-div))
            anchor (.createElement js/document "a")]

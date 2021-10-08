@@ -3,15 +3,14 @@
 
 .speech-bubble {
   @include rounded.rounded-2;
-  background: vars.$white;
-  color: vars.$black;
+  background: vars.$gray-100;
+  border-radius: 1rem;
   line-height: 2rem;
   padding: 0.5rem;
   position: relative;
 
   &::after {
     border: 0.625rem solid transparent;
-    border-left-color: #fff;
     border-right: 0;
     content: '';
     height: 0;
@@ -26,9 +25,9 @@
 }
 
 .speech-bubble-bordered {
-  border: 1px solid vars.$gray-600;
+  border: 1px solid vars.$gray-100;
 
   &::after {
-    border-left-color: vars.$gray-600;
+    border-left-color: vars.$gray-100;
   }
 }

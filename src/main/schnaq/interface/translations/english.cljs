@@ -616,11 +616,15 @@
    :schnaq.export/as-text "Download schnaq as a text-file"
    :schnaq.admin/tooltip "Administrate schnaq"
    :share-link/copy "Copy share-link"
+   :share-link/via "By link"
+   :share-access-code/via "By code"
+   :share-access-code/title "Visit schnaq.app"
 
    :sharing/tooltip "Share your schnaq"
    :sharing.modal/title "Share your schnaq"
    :sharing.modal/lead "Invite your whole team to fill this schnaq with knowledge."
    :sharing.modal/schnaqqi-help "Fill the schnaq with your ideas. Your colleagues will find it easier to get started."
+   :sharing.modal/qanda-help "Participants can ask questions via the Q&A view. Either directly by link or by code on www.schnaq.app!"
 
    ;; Discussion Language
    :discussion/create-argument-action "Add Statement"

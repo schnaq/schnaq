@@ -5,6 +5,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
@@ -12,6 +13,7 @@
             [schnaq.interface.utils.time :as time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
+            [schnaq.interface.views.discussion.share :as share-modal]
             [schnaq.interface.views.graph.settings :as graph-settings]
             [schnaq.interface.views.navbar.user-management :as um]
             [schnaq.interface.views.schnaq.admin :as admin]))
@@ -25,29 +27,30 @@
        {:href (reitfe/href :routes.schnaq/start {:share-hash share-hash})}
        [:h1.h5 (toolbelt/truncate-to-n-chars title 30)]]]]))
 
-(defn navbar []
+(defn- navbar-title [additional-content]
+  [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4
+   ;; schnaq logo
+   [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
+    [:img.d-inline-block.align-middle.mr-2
+     {:src (img-path :logo-white) :alt "schnaq logo"
+      :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
+   [:div.mx-4
+    [clickable-title]]
+   additional-content])
+
+(defn- navbar-title-with-meta-infos []
   (let [discussion @(rf/subscribe [:schnaq/selected])
         meta-info (:meta-info discussion)
         statement-count (:all-statements meta-info)
-        user-count (count (:authors meta-info))
-        current-route @(rf/subscribe [:navigation/current-route-name])
-        qanda? (= current-route :routes.schnaq/qanda)]
-    [:div.d-flex.align-items-center.flex-row.schnaq-navbar-space.schnaq-navbar.mb-4
-     ;; schnaq logo
-     [:a.schnaq-logo-container.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
-      [:img.d-inline-block.align-middle.mr-2
-       {:src (img-path :logo-white) :alt "schnaq logo"
-        :style {:max-height "100%" :max-width "100%" :object-fit "contain"}}]]
-     [:div.mx-4
-      [clickable-title]]
-     (when-not qanda?
-       [:<>
-        [:div.mx-4.ml-auto.d-none.d-md-block
-         [:small.text-primary (labels :discussion.navbar/posts)]
-         [:h5.text-center statement-count]]
-        [:div.mx-4.d-none.d-md-block
-         [:small.text-primary (labels :discussion.navbar/members)]
-         [:h5.text-center user-count]]])]))
+        user-count (count (:authors meta-info))]
+    [navbar-title
+     [:<>
+      [:div.mx-4.ml-auto.d-none.d-md-block
+       [:small.text-primary (labels :discussion.navbar/posts)]
+       [:h5.text-center statement-count]]
+      [:div.mx-4.d-none.d-md-block
+       [:small.text-primary (labels :discussion.navbar/members)]
+       [:h5.text-center user-count]]]]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -161,27 +164,69 @@
        (when edit-hash
          [admin/admin-center])])))
 
-(defn navbar-statements []
-  (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        qanda? (= current-route :routes.schnaq/qanda)]
-    [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
-     (when-not qanda?
-       [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
-        [schnaq-progress-bar]
-        [admin/share-link]
-        [navbar-settings]
-        [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]])
-     [:div.d-flex.align-items-center
-      [:div.mr-2.mx-md-2 [dropdown-views]]
-      [:div.d-flex.align-items-center.schnaq-navbar
-       [um/user-handling-menu "btn-link"]]]]))
+(defn- share-discussion
+  "Button to copy access link and notify the user."
+  []
+  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
+   [icon :share "m-auto"]
+   share-modal/open-share-discussion])
 
-(defn header
+(defn- share-qanda
+  "Button to copy access link and acces code."
+  []
+  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
+   [icon :share "m-auto"]
+   share-modal/open-share-qanda])
+
+(defn navbar-tools [content]
+  [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
+   (when content
+     [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
+      content])
+   [:div.d-flex.align-items-center
+    [:div.mr-2.mx-md-2 [dropdown-views]]
+    [:div.d-flex.align-items-center.schnaq-navbar
+     [um/user-handling-menu "btn-link"]]]])
+
+(defn- header-discussion
   "Overview header for a discussion."
   []
   [:div.d-flex.flex-row.flex-wrap.p-md-3
-   [navbar]
-   [navbar-statements]])
+   [navbar-title-with-meta-infos]
+   [navbar-tools
+    [:<>
+     [schnaq-progress-bar]
+     [share-discussion]
+     [navbar-settings]
+     [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]]])
+
+(defn- header-qanda
+  "Overview header for a discussion."
+  []
+  [:div.d-flex.flex-row.flex-wrap.p-md-3
+   [navbar-title-with-meta-infos]
+   [navbar-tools
+    [:<>
+     [schnaq-progress-bar]
+     [share-qanda]
+     [navbar-settings]
+     [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]]])
+
+(defn header
+  "Header to dispatch between Q&A and discussion"
+  []
+  (let [current-schnaq @(rf/subscribe [:schnaq/selected])
+        is-qanda-mode? (= :discussion.mode/qanda (:discussion/mode current-schnaq))]
+    (if is-qanda-mode?
+      [header-qanda]
+      [header-discussion])))
+
+(defn header-for-qanda-view
+  "Header displaying only title, views and user"
+  []
+  [:div.d-flex.flex-row.flex-wrap.p-md-3
+   [navbar-title]
+   [navbar-tools]])
 
 (defn embeddable-header []
   ;; The view breaks earlier, because the breakpoints heed the screen size, not the div size
