@@ -12,7 +12,7 @@
    [:a.btn.btn-lg
     (cond->
       {:href target
-       :type "button"
+       :role "button"
        :class classes}
       attrs (merge attrs))
     content]))
