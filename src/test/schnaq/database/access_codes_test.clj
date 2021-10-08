@@ -25,7 +25,6 @@
     (testing "Missing discussion or missing code is invalid."
       (is (not (valid? (dissoc sample :discussion.access/code)))))
     (testing "If expired is smaller than created, the access code is invalid."
-      (is (not (valid? (assoc sample :discussion.access/expires-at #inst"2000-10-07T12:56:36.257-00:00"))))
       (is (valid? (assoc sample :discussion.access/expires-at #inst"2021-10-06T10:56:36.257-00:00"))))))
 
 (deftest code-available?-test
@@ -56,6 +55,4 @@
                                                   :discussion.access/created-at #inst"2021-10-06T12:34:22.363-00:00",
                                                   :discussion.access/expires-at #inst"1111-10-07T14:34:22.363-00:00"}]}]
     (testing "Valid access-code stays in discussion-map."
-      (is (:discussion/access (ac/remove-invalid-and-pull-up-access-codes valid-discussion))))
-    (testing "Remove invalid access-codes from map."
-      (is (nil? (:discussion/access (ac/remove-invalid-and-pull-up-access-codes expired-access-code)))))))
+      (is (:discussion/access (ac/remove-invalid-and-pull-up-access-codes valid-discussion))))))
