@@ -41,3 +41,16 @@
     border-radius: 0;
   }
 }
+
+.layered-wave-background {
+  @include rounded.rounded-1;
+  background-image: url('https://s3.disqtec.com/schnaq-common/background/layered_background_square.svg');
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+
+  @include media-breakpoint-down(sm) {
+    border-radius: 0;
+  }
+}
