@@ -1,7 +1,9 @@
 (ns schnaq.interface.views.discussion.share
   (:require [re-frame.core :as rf]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
+            [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.common :as common]
             [schnaq.interface.views.modal :as modal]
             [schnaq.interface.views.notifications :refer [notify!]]
@@ -51,7 +53,7 @@
         "100px"
         (labels :sharing.modal/qanda-help)]]]]))
 
-(defn- share-discussion-modal
+(defn share-discussion-modal
   "Modal showing sharing options."
   []
   (let [share-hash @(rf/subscribe [:schnaq/share-hash])]
@@ -64,16 +66,28 @@
         "100px"
         (labels :sharing.modal/schnaqqi-help)]]]]))
 
-(defn open-share-qanda
+(defn- open-share-qanda
   "Open the share-schnaq dialog."
   []
   (rf/dispatch [:modal {:show? true
                         :large? true
                         :child [share-qanda-modal]}]))
 
-(defn open-share-discussion
+(defn- open-share-discussion
   "Open the share-schnaq dialog."
   []
   (rf/dispatch [:modal {:show? true
                         :large? true
                         :child [share-discussion-modal]}]))
+
+(defn share-discussion-button
+  "Button to copy access link and notify the user."
+  []
+  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
+   [icon :share "m-auto"] open-share-discussion])
+
+(defn share-qanda-button
+  "Button to copy access link and acces code."
+  []
+  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
+   [icon :share "m-auto"] open-share-qanda])

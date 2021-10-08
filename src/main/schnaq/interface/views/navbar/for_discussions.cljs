@@ -5,7 +5,6 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
-            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
@@ -164,20 +163,6 @@
        (when edit-hash
          [admin/admin-center])])))
 
-(defn- share-discussion
-  "Button to copy access link and notify the user."
-  []
-  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
-   [icon :share "m-auto"]
-   share-modal/open-share-discussion])
-
-(defn- share-qanda
-  "Button to copy access link and acces code."
-  []
-  [tooltip/tooltip-button "bottom" (labels :sharing/tooltip)
-   [icon :share "m-auto"]
-   share-modal/open-share-qanda])
-
 (defn navbar-tools [content]
   [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
    (when content
@@ -196,7 +181,7 @@
    [navbar-tools
     [:<>
      [schnaq-progress-bar]
-     [share-discussion]
+     [share-modal/share-discussion-button]
      [navbar-settings]
      [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]]])
 
@@ -208,7 +193,7 @@
    [navbar-tools
     [:<>
      [schnaq-progress-bar]
-     [share-qanda]
+     [share-modal/share-qanda-button]
      [navbar-settings]
      [navbar-components/language-toggle-with-tooltip false {:class "text-dark btn-lg"}]]]])
 
