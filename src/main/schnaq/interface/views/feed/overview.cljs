@@ -89,7 +89,7 @@
        [no-schnaqs-found]
        [:div.panel-white.rounded-1
         [:div.d-flex.flex-row.mb-4
-         [:h5.text-purple-dark.d-md-none.d-lg-block (labels :router/visited-schnaqs)]
+         [:h6.text-purple-dark.d-md-none.d-lg-block (labels :router/visited-schnaqs)]
          [:div.ml-auto
           [sort-options]
           [filters/filter-button]]]
@@ -99,29 +99,47 @@
 
 (defn- feed-button
   "Create a button for the feed list."
-  ([label route]
-   [feed-button label route nil])
-  ([label route route-params]
-   (let [current-route @(rf/subscribe [:navigation/current-route-name])
-         button-class (if (= current-route route) "feed-button-focused" "feed-button")]
-     [:a.btn.btn-link.text-left {:class button-class
-                                 :role "button"
-                                 :href (reitfe/href route route-params)}
-      (labels label)])))
+  ([text image-div class-button route]
+   [feed-button text image-div class-button route nil])
+  ([text image-div button-class route route-params]
+   [:a.btn.btn-link.text-left {:class button-class
+                               :role "button"
+                               :href (reitfe/href route route-params)}
+    [:div.d-flex.flex-row
+     image-div
+     [:div.pt-1.pl-2 text]]]))
 
-(defn- generic-feed-button
-  "Generic outline button."
-  [label href-link]
-  [:article.w-100
-   [:a.feed-button-outlined {:href href-link}
-    (labels label)]])
+(defn label-feed-button
+  [label icon-name route route-params]
+  (let [current-route @(rf/subscribe [:navigation/current-route-name])
+        button-class (if (= current-route route) "feed-button-focused" "feed-button")
+        icon-section (if icon-name [:div.mx-2.my-auto [icon icon-name "m-auto"]] nil)]
+    [feed-button (labels label) icon-section button-class route route-params]))
 
-(defn sidebar-info-links []
-  [:section.panel-white.text-center.mt-4
-   [:div.btn-group {:role "group"}
-    [:div.btn-group-vertical
-     [generic-feed-button :coc/heading (reitfe/href :routes/code-of-conduct)]
-     [generic-feed-button :how-to/button (reitfe/href :routes/how-to)]]]])
+(defn create-feed-button
+  [label icon-name route route-params]
+  (let [button-class "feed-button-create"
+        icon-section (if icon-name [:div.mx-2.my-auto [icon icon-name "m-auto"]] nil)]
+    [feed-button (labels label) icon-section button-class route route-params]))
+
+
+(defn hub-feed-button
+  "Display a single hub."
+  [{:hub/keys [keycloak-name name logo]}]
+  (let [current-hub @(rf/subscribe [:hub/current])
+        current-hub-name (:hub/keycloak-name current-hub)
+        path-keycloak-name keycloak-name
+        button-class (if (= current-hub-name path-keycloak-name) "feed-button-focused" "feed-button")]
+    [feed-button name [hub/hub-logo logo name 32] button-class :routes/hub {:keycloak-name keycloak-name}]))
+
+(defn feed-hubs []
+  (when-let [hubs @(rf/subscribe [:hubs/all])]
+    [:section
+     [:h6.text-purple-dark.pb-2.ml-4 (labels :hubs/heading)]
+     [:div
+      (for [[keycloak-name hub] hubs]
+        (with-meta [hub-feed-button hub] {:key keycloak-name}))
+      [label-feed-button :router/visited-schnaqs :eye :routes.schnaqs/personal]]]))
 
 (defn feed-navigation
   "Navigate between the feeds."
@@ -131,15 +149,26 @@
     [:section
      (when hubs
        [:div.panel-white.mx-0.mt-0.mb-md-4
-        [hub/list-hubs-with-heading]])
+        [feed-hubs]])
      [:div.panel-white.m-0
-      [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
       (when-not (nil? edit-hash)
-        [feed-button :nav.schnaqs/last-added
+        [label-feed-button :nav.schnaqs/last-added :arrow-left
          :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
-      [feed-button :nav.schnaqs/create-schnaq :routes.schnaq/create]]
-     [:div.d-none.d-md-block
-      [sidebar-info-links]]]))
+      [create-feed-button :nav.schnaqs/create-schnaq :plus :routes.schnaq/create]]]))
+
+(defn- outline-info-button
+  "Generic outline button."
+  [label href-link]
+  [:article.w-100
+   [:a.feed-button-outlined {:href href-link}
+    (labels label)]])
+
+(defn sidebar-info-links []
+  [:section.panel-white.text-center
+   [:div.btn-group {:role "group"}
+    [:div.btn-group-vertical
+     [outline-info-button :coc/heading (reitfe/href :routes/code-of-conduct)]
+     [outline-info-button :how-to/button (reitfe/href :routes/how-to)]]]])
 
 (defn- personal-discussions-view
   "Shows the page for an overview of schnaqs. Takes a subscription-key which
@@ -151,7 +180,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view [:schnaqs.visited/all]]
-   [:div.d-md-none [sidebar-info-links]]])
+   [:div [sidebar-info-links]]])
 
 (defn page []
   [personal-discussions-view])

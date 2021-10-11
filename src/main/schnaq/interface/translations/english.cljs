@@ -990,7 +990,7 @@ Now we write down questions and discuss them and can still understand what we ha
    :loading.placeholder/lead "Loading..."
    :loading.placeholder/takes-too-long "This takes longer than expected. Maybe something went wrong. Try to reload the page or repeat the process again. If you still have problems, please contact us!"
 
-   :hubs/heading "Your Hubs"
+   :hubs/heading "Hubs"
    :hub/heading "Personal %s Hub"
    :hub/settings "Administration"
    :hub.settings/change-name "Change hub's name"

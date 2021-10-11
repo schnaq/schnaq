@@ -8,7 +8,7 @@
   box-shadow: none;
   color: $white;
   font-weight: bolder;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1.5rem;
 
   &:hover {
     background-color: $white-shade;
@@ -24,8 +24,11 @@
 
 .feed-button-focused {
   @include feed-button-base;
-  box-shadow: none;
+
+  border: 0;
+  box-shadow: none !important;
   color: $primary;
+  text-decoration: none !important;
 }
 
 .feed-button {
@@ -40,4 +43,14 @@
   @extend .my-2;
   @extend .w-100;
   @include rounded.rounded-2;
+}
+
+.feed-button-create {
+  @include feed-button-base;
+  color: $secondary;
+
+  &:hover {
+    color: $secondary-selected;
+  }
+
 }

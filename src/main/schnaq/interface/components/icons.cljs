@@ -24,6 +24,7 @@
       :delete-icon [:i.fas.fa-times-circle {:class classes}]
       :dots [:i.fas.fa-ellipsis-h {:class classes}]
       :edit [:i.fas.fa-edit {:class classes}]
+      :eye [:i.far.fa-eye {:class classes}]
       :file-download [:i.fas.fa-file-download {:class classes}]
       :flask [:i.fas.fa-flask {:class classes}]
       :ghost [:i.fas.fa-ghost {:class classes}]
