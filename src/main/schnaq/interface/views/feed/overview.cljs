@@ -5,6 +5,7 @@
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
+            [schnaq.interface.utils.time :as time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.feed.filters :as filters]
@@ -44,8 +45,10 @@
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq delete-from-hub?]
-  (let [share-hash (:discussion/share-hash schnaq)
+  (let [locale @(rf/subscribe [:current-locale])
+        share-hash (:discussion/share-hash schnaq)
         title (:discussion/title schnaq)
+        time (:discussion/created-at schnaq)
         url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
     [:article.meeting-entry
      {:on-click (fn []
@@ -53,17 +56,15 @@
                                 {:share-hash share-hash}])
                   (rf/dispatch [:schnaq/select-current schnaq]))}
      [:div.d-flex.flex-row
-      [:div.highlight-card
-       [:img.schnaq-header-image {:src url}]]
-      [:div.row.px-md-4.py-2.w-100
-       [:div.col-4.col-md-6
-        [:div.row.ml-1
-         [user/user-info-only (:discussion/author schnaq) 42]
-         [:div.mt-2 [badges/read-only-badge schnaq]]]
-        [:div.mt-1 [badges/static-info-badges schnaq]]]
-       [:div.col-8.col-md-6
-        [:div.meeting-entry-title
-         (toolbelt/truncate-to-n-chars title 40)]]]
+      [:img.schnaq-header-image {:src url}]
+      [:div.ml-3.w-100.py-2
+       [:div.meeting-entry-title (toolbelt/truncate-to-n-chars title 40)]
+       [:div.d-flex.flex-row.mt-auto.pt-3
+        [user/user-info-only (:discussion/author schnaq) 24]
+        [:div [badges/read-only-badge schnaq]]
+        [:div [badges/static-info-badges schnaq]]
+        [:small.font-weight-light.d-inline.my-auto.ml-auto
+         [time/timestamp-with-tooltip time locale]]]]
       (when delete-from-hub?
         [:button.btn.btn-outline-dark.btn-small.my-auto.mr-3
          {:title (labels :hub.remove.schnaq/tooltip)
@@ -86,12 +87,10 @@
                           (sort-by :discussion/created-at > filtered-schnaqs))]
      (if (empty? schnaqs)
        [no-schnaqs-found]
-       [:div.panel-white.rounded-1.px-md-5
-        [:div.row.pl-5
-         [:div.col-7 [:p.text-muted (labels :schnaqs/author)]]
-         [:div.col-5 [:p.text-muted (labels :schnaqs/schnaq)]]]
-        [:div.row.mb-3
-         [:div.col
+       [:div.panel-white.rounded-1
+        [:div.d-flex.flex-row.mb-4
+         [:h5.text-purple-dark.d-md-none.d-lg-block (labels :router/visited-schnaqs)]
+         [:div.ml-auto
           [sort-options]
           [filters/filter-button]]]
         (for [schnaq sorted-schnaqs]
@@ -118,7 +117,7 @@
     (labels label)]])
 
 (defn sidebar-info-links []
-  [:section.panel-white.text-center.mt-5
+  [:section.panel-white.text-center.mt-4
    [:div.btn-group {:role "group"}
     [:div.btn-group-vertical
      [generic-feed-button :coc/heading (reitfe/href :routes/code-of-conduct)]
@@ -129,12 +128,11 @@
   []
   (let [{:discussion/keys [share-hash edit-hash]} @(rf/subscribe [:schnaq/last-added])
         hubs @(rf/subscribe [:hubs/all])]
-    [:section.px-md-3
+    [:section
+     (when hubs
+       [:div.panel-white.mx-0.mt-0.mb-md-4
+        [hub/list-hubs-with-heading]])
      [:div.panel-white.m-0
-      (when hubs
-        [:<>
-         [hub/list-hubs-with-heading]
-         [:hr.d-none.d-md-block]])
       [feed-button :router/visited-schnaqs :routes.schnaqs/personal]
       (when-not (nil? edit-hash)
         [feed-button :nav.schnaqs/last-added

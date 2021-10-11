@@ -12,7 +12,6 @@
   /* stylelint-disable */
   @extend .meeting-entry-no-hover;
   /* stylelint-enable */
-  border: vars.$gray-200 solid 1px;
   cursor: pointer;
 
   @include media-breakpoint-down(sm) {
@@ -31,11 +30,12 @@
 }
 
 .schnaq-header-image {
+  @include rounded.rounded-1;
   background-position: center center;
   min-height: 100%;
   object-fit: cover;
   overflow: hidden;
-  width: 0.5rem;
+  width: 8rem;
 }
 
 .meeting-entry-desc {
