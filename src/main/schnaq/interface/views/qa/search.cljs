@@ -3,6 +3,7 @@
             [goog.functions :as gfun]
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as card]))
@@ -39,6 +40,7 @@
   (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
     [:div.row
      (for [result search-results]
-       [:div.col-12
+       [:div.col-12.col-md-6
         {:key (str (:db/id result) "-search-result")}
-        [card/statement-card nil result]])]))
+        [motion/move-in :bottom
+         [card/statement-card nil result]]])]))
