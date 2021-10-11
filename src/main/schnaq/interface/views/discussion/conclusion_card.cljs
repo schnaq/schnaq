@@ -158,7 +158,9 @@
          {:class card-column-class}
          (for [statement filtered-conclusions]
            (with-meta
-             [statement-or-edit-wrapper statement edit-hash]
+             [motion/fade-in-and-out
+              [statement-or-edit-wrapper statement edit-hash]
+              0.1]
              {:key (:db/id statement)}))])
       [call-to-action-content])))
 
