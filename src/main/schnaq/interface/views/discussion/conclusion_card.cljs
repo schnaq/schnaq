@@ -122,26 +122,44 @@
       [edit/edit-card-statement statement]
       [statement-card edit-hash statement])))
 
+(defn- sort-statements
+  "Sort statements according to the filter method. If we are in q-and-a-mode,
+  then always display own statements first."
+  [q-and-a? user statements sort-method local-votes]
+  (let [selection-function (if (:authenticated? user)
+                             #(= (:id user) (get-in % [:statement/author :db/id]))
+                             #(= (get-in user [:names :display]) (get-in % [:statement/author :user/nickname])))
+        keyfn (case sort-method
+                :newest :statement/created-at
+                :popular #(logic/calculate-votes % local-votes))
+        own-statements (filter selection-function statements)
+        other-statements (sort-by keyfn > (remove selection-function statements))]
+    (if q-and-a?
+      (concat own-statements other-statements)
+      (sort-by keyfn > statements))))
+
 (defn conclusion-cards-list
   "Displays a list of conclusions."
   [share-hash]
   (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
+        active-filters @(rf/subscribe [:filters/active])
+        sort-method @(rf/subscribe [:discussion.statements/sort-method])
+        local-votes @(rf/subscribe [:local-votes])
+        user @(rf/subscribe [:user/current])
+        q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
         edit-hash (get admin-access-map share-hash)
         card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         current-premises @(rf/subscribe [:discussion.premises/current])]
     (if (seq current-premises)
-      (let [sort-method @(rf/subscribe [:discussion.statements/sort-method])
-            keyfn (case sort-method
-                    :newest :statement/created-at
-                    :popular #(logic/calculate-votes % @(rf/subscribe [:local-votes])))
-            sorted-conclusions (sort-by keyfn > current-premises)
-            active-filters @(rf/subscribe [:filters/active])
+      (let [sorted-conclusions (sort-statements q-and-a? user current-premises sort-method local-votes)
             filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
         [:div.card-columns.pb-3
          {:class card-column-class}
          (for [statement filtered-conclusions]
            (with-meta
-             [statement-or-edit-wrapper statement edit-hash]
+             [motion/fade-in-and-out
+              [statement-or-edit-wrapper statement edit-hash]
+              0.1]
              {:key (:db/id statement)}))])
       [call-to-action-content])))
 

@@ -200,11 +200,9 @@
 (defn header
   "Header to dispatch between Q&A and discussion"
   []
-  (let [current-schnaq @(rf/subscribe [:schnaq/selected])
-        is-qanda-mode? (= :discussion.mode/qanda (:discussion/mode current-schnaq))]
-    (if is-qanda-mode?
-      [header-qanda]
-      [header-discussion])))
+  (if @(rf/subscribe [:schnaq.mode/qanda?])
+    [header-qanda]
+    [header-discussion]))
 
 (defn header-for-qanda-view
   "Header displaying only title, views and user"
