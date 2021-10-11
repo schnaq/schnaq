@@ -1,17 +1,12 @@
-(ns schnaq.interface.views.qanda
-  (:require [goog.functions :as gfun]
-            [oops.core :refer [oget]]
+(ns schnaq.interface.views.qa.inputs
+  (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.pages :as pages]))
-
-(def throttled-search
-  (gfun/throttle
-    #(rf/dispatch [:schnaq.qa/search (oget % [:?target :value])])
-    500))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.qa.search :refer [throttled-search]]))
 
 (defn- text-input-for-qanda
   "Input where users can enter their questions for Q&A."
