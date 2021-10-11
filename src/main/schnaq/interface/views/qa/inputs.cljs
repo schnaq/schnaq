@@ -1,18 +1,20 @@
-(ns schnaq.interface.views.qanda
+(ns schnaq.interface.views.qa.inputs
   (:require [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
-            [schnaq.interface.views.pages :as pages]))
+            [schnaq.interface.views.pages :as pages]
+            [schnaq.interface.views.qa.search :refer [throttled-search] :as search]))
 
 (defn- text-input-for-qanda
   "Input where users can enter their questions for Q&A."
   []
   (let [textarea-name "statement-text"
         attitude-class "highlight-card-neutral"
-        submit-fn (fn [e] (jq/prevent-default e)
+        submit-fn (fn [e]
+                    (jq/prevent-default e)
                     (rf/dispatch [:discussion.add.statement/starting
                                   (oget e [:currentTarget :elements])]))]
     [:form {:on-submit #(submit-fn %)
@@ -26,7 +28,8 @@
           :auto-complete "off" :autoFocus true
           :onInput #(toolbelt/height-to-scrollheight! (oget % :target))
           :required true :data-dynamic-height true
-          :placeholder (labels :qanda/add-question)}]]]]
+          :placeholder (labels :qanda/add-question)
+          :on-key-down #(throttled-search %)}]]]]
      [:div.input-group-append
       [:button.btn.btn-lg.btn-primary.w-100.shadow-sm.mt-5
        {:type "submit" :title (labels :qanda.button/submit)}
@@ -50,7 +53,8 @@
     [pages/with-qanda-view-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.container.p-0.px-md-5
-      [ask-question]]]))
+      [ask-question]
+      [search/results-list]]]))
 
 (defn qanda-view
   "A view that represents the first page of schnaq participation or creation."

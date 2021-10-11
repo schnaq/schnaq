@@ -415,14 +415,16 @@
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
   (let [safe-search-string (QueryParser/escape search-string)]
-    (->
-      (query '[:find [(pull ?statements statement-pattern) ...]
+    (->>
+      (query '[:find (pull ?statements statement-pattern) ?score
                :in $ statement-pattern ?share-hash ?search-string
                :where [?discussion :discussion/share-hash ?share-hash]
                [?statements :statement/discussions ?discussion]
-               [(fulltext $ :statement/content ?search-string) [[?statements _ _ _]]]]
+               [(fulltext $ :statement/content ?search-string) [[?statements _ _ ?score]]]]
              patterns/statement share-hash safe-search-string)
-      toolbelt/pull-key-up)))
+      toolbelt/pull-key-up
+      (sort-by second toolbelt/ascending)
+      (map first))))
 
 (def ^:private summary-pattern
   [:db/id
