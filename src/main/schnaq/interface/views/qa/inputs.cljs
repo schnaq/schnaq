@@ -54,7 +54,6 @@
      {:page/heading (:discussion/title current-discussion)}
      [:div.container.p-0.px-md-5
       [ask-question]
-      [:hr]
       [search/results-list]]]))
 
 (defn qanda-view

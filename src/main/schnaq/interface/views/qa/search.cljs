@@ -38,9 +38,13 @@
   "A list of statement results that came out of search."
   []
   (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
-    [:div.row
-     (for [result search-results]
-       [:div.col-12.col-md-6
-        {:key (str (:db/id result) "-search-result")}
-        [motion/move-in-spring :bottom
-         [card/statement-card nil result]]])]))
+    (when (seq search-results)
+      [:div.row.mt-5
+       [:div.col-12
+        [motion/move-in :top
+         [:h3.text-center "Ähnliche Fragen"]]]
+       (for [result search-results]
+         [:div.col-12.col-md-6
+          {:key (str (:db/id result) "-search-result")}
+          [motion/move-in-spring :bottom
+           [card/statement-card nil result]]])])))
