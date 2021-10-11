@@ -4,7 +4,8 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.toolbelt :as tools]))
+            [schnaq.interface.utils.toolbelt :as tools]
+            [schnaq.interface.views.discussion.conclusion-card :as card]))
 
 (def throttled-search
   (gfun/throttle
@@ -24,4 +25,20 @@
 (rf/reg-event-db
   :schnaq.qa.search/success
   (fn [db [_ {:keys [matching-statements]}]]
+    (println matching-statements)
     (assoc-in db [:schnaq :qa :search :results] matching-statements)))
+
+(rf/reg-sub
+  :schnaq.qa.search/results
+  (fn [db _]
+    (get-in db [:schnaq :qa :search :results] [])))
+
+(defn results-list
+  "A list of statement results that came out of search."
+  []
+  (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
+    [:div.row
+     (for [result search-results]
+       [:div.col-12
+        {:key (str (:db/id result) "-search-result")}
+        [card/statement-card nil result]])]))

@@ -6,7 +6,7 @@
             [schnaq.interface.utils.js-wrapper :as jq]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.pages :as pages]
-            [schnaq.interface.views.qa.search :refer [throttled-search]]))
+            [schnaq.interface.views.qa.search :refer [throttled-search] :as search]))
 
 (defn- text-input-for-qanda
   "Input where users can enter their questions for Q&A."
@@ -53,7 +53,9 @@
     [pages/with-qanda-view-header
      {:page/heading (:discussion/title current-discussion)}
      [:div.container.p-0.px-md-5
-      [ask-question]]]))
+      [ask-question]
+      [:hr]
+      [search/results-list]]]))
 
 (defn qanda-view
   "A view that represents the first page of schnaq participation or creation."
