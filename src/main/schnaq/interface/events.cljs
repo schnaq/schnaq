@@ -139,6 +139,13 @@
     (:discussion/share-hash selected-schnaq)))
 
 (rf/reg-sub
+  :schnaq.mode/qanda?
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (= :discussion.mode/qanda (:discussion/mode selected-schnaq))))
+
+(rf/reg-sub
   :schnaq.selected/read-only?
   (fn [_ _]
     (rf/subscribe [:schnaq/selected]))
