@@ -42,5 +42,5 @@
      (for [result search-results]
        [:div.col-12.col-md-6
         {:key (str (:db/id result) "-search-result")}
-        [motion/move-in :bottom
+        [motion/move-in-spring :bottom
          [card/statement-card nil result]]])]))
