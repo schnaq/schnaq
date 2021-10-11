@@ -126,8 +126,7 @@
   "Sort statements according to the filter method. If we are in q-and-a-mode,
   then always display own statements first."
   [q-and-a? user statements sort-method local-votes]
-  (let [authenticated? (:authenticated? user)
-        selection-function (if authenticated?
+  (let [selection-function (if (:authenticated? user)
                              #(= (:id user) (get-in % [:statement/author :db/id]))
                              #(= (get-in user [:names :display]) (get-in % [:statement/author :user/nickname])))
         keyfn (case sort-method
