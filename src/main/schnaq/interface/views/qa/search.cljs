@@ -4,6 +4,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as card]))
@@ -41,7 +42,7 @@
       [:div.mt-5
        [:div.col-12
         [motion/move-in :top
-         [:h3.text-center "Ähnliche Fragen"]]]
+         [:h3.text-center (labels :qanda.search/similar-results)]]]
        [:div.card-columns.card-columns-discussion
         (for [result search-results]
           (with-meta
