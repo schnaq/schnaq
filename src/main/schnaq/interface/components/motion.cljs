@@ -1,5 +1,5 @@
 (ns schnaq.interface.components.motion
-  (:require ["framer-motion" :refer [motion]]
+  (:require ["framer-motion" :refer [motion AnimatePresence]]
             [reagent.core :as reagent]))
 
 (defn zoom-image
@@ -32,12 +32,13 @@
   ([component]
    [fade-in-and-out component 0.5])
   ([component delay]
-   [:> (.-div motion)
-    {:initial {:opacity 0}
-     :animate {:opacity 1}
-     :transition {:delay delay}
-     :exit {:opacity 0}}
-    component]))
+   [:> AnimatePresence
+    [:> (.-div motion)
+     {:initial {:opacity 0}
+      :animate {:opacity 1}
+      :transition {:delay delay}
+      :exit {:opacity 0}}
+     component]]))
 
 (defn- basic-move-in
   "A basic move-in animation. Pass any transition you like."
