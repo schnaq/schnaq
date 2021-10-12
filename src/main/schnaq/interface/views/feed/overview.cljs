@@ -4,7 +4,6 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
-            [schnaq.interface.utils.js-wrapper :as js-wrap]
             [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]
@@ -42,6 +41,22 @@
        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
       (labels :badges.sort/alphabetical)]]))
 
+(defn- schnaq-options [schnaq]
+  (let [options-id "options-dropdown-menu"
+        dropdown-id "options-dropdown-elements"
+        share-hash (:discussion/share-hash schnaq)]
+    [:div.dropdown
+     [:button.btn.btn-transparent
+      {:id options-id :type "button" :data-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}
+      [icon :dots-v]]
+     [:div.dropdown-menu.dropdown-menu-right {:id dropdown-id :aria-labelledby options-id}
+      [:button.dropdown-item {:type "button"
+                              :title (labels :hub.remove.schnaq/tooltip)
+                              :on-click (fn [_e] (when (js/confirm (labels :hub.remove.schnaq/prompt))
+                                                   (rf/dispatch [:hub.remove/schnaq share-hash])))}
+       (labels :hub.remove.schnaq/tooltip)]]]))
+
 (defn- schnaq-entry
   "Displays a single schnaq of the schnaq list"
   [schnaq delete-from-hub?]
@@ -50,12 +65,12 @@
         title (:discussion/title schnaq)
         created (:discussion/created-at schnaq)
         url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
-    [:article.meeting-entry
-     {:on-click (fn []
-                  (rf/dispatch [:navigation/navigate :routes.schnaq/start
-                                {:share-hash share-hash}])
-                  (rf/dispatch [:schnaq/select-current schnaq]))}
-     [:div.d-flex.flex-row
+    [:article.meeting-entry.d-flex
+     [:div.d-flex.flex-row.flex-grow-1
+      {:on-click (fn []
+                   (rf/dispatch [:navigation/navigate :routes.schnaq/start
+                                 {:share-hash share-hash}])
+                   (rf/dispatch [:schnaq/select-current schnaq]))}
       [:img.schnaq-header-image {:src url}]
       [:div.ml-3.w-100.py-2
        [:div.meeting-entry-title (toolbelt/truncate-to-n-chars title 40)]
@@ -64,14 +79,9 @@
         [badges/read-only-badge schnaq]
         [:div [badges/static-info-badges schnaq]]
         [:small.font-weight-light.d-inline.my-auto.ml-auto
-         [util-time/timestamp-with-tooltip created locale]]]]
-      (when delete-from-hub?
-        [:button.btn.btn-outline-dark.btn-small.my-auto.mr-3
-         {:title (labels :hub.remove.schnaq/tooltip)
-          :on-click (fn [e] (js-wrap/stop-propagation e)
-                      (when (js/confirm (labels :hub.remove.schnaq/prompt))
-                        (rf/dispatch [:hub.remove/schnaq share-hash])))}
-         [icon :cross "m-auto"]])]]))
+         [util-time/timestamp-with-tooltip created locale]]]]]
+     (when delete-from-hub?
+       [schnaq-options schnaq])]))
 
 (defn schnaq-list-view
   "Shows a list of schnaqs."
