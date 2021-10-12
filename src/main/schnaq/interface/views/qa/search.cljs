@@ -26,7 +26,6 @@
 (rf/reg-event-db
   :schnaq.qa.search/success
   (fn [db [_ {:keys [matching-statements]}]]
-    (println matching-statements)
     (assoc-in db [:schnaq :qa :search :results] matching-statements)))
 
 (rf/reg-sub
