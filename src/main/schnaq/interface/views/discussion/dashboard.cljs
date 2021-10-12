@@ -15,7 +15,7 @@
 (defn- dashboard-statement [statement]
   (let [chart-data (pie-chart/create-vote-chart-data statement)
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
-    [:div.meeting-entry.my-3.p-3
+    [:div.schnaq-entry.my-3.p-3
      [:a.link-unstyled
       {:href (rfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
       [:div.row.h-100
@@ -104,7 +104,7 @@
 (defn- embedded-dashboard-statement [statement]
   (let [chart-data (pie-chart/create-vote-chart-data statement)
         path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
-    [:div.meeting-entry.my-3.p-3
+    [:div.schnaq-entry.my-3.p-3
      [:a.link-unstyled
       {:href (rfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
       [:div.row.h-100

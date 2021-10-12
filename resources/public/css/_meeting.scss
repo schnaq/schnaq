@@ -1,16 +1,16 @@
 @use 'variables' as vars;
 @use 'rounded' as rounded;
 
-.meeting-entry-no-hover {
+.schnaq-entry-no-hover {
   @include rounded.rounded-1;
   background-color: vars.$white;
   min-height: 5rem;
   overflow: hidden;
 }
 
-.meeting-entry {
+.schnaq-entry {
   /* stylelint-disable */
-  @extend .meeting-entry-no-hover;
+  @extend .schnaq-entry-no-hover;
   /* stylelint-enable */
   cursor: pointer;
 
@@ -23,7 +23,7 @@
   }
 }
 
-.meeting-entry-title {
+.schnaq-entry-title {
   background-color: transparent;
   color: $text-dark;
   text-decoration: none;
@@ -38,7 +38,7 @@
   width: 0.5rem;
 }
 
-.meeting-entry-desc {
+.schnaq-entry-desc {
   background-color: transparent;
   border-radius: 0 0 1.5rem 1.5rem;
   box-sizing: border-box;

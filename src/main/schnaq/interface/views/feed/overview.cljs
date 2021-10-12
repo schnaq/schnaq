@@ -68,7 +68,7 @@
         title (:discussion/title schnaq)
         created (:discussion/created-at schnaq)
         url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
-    [:article.meeting-entry.d-flex
+    [:article.schnaq-entry.d-flex
      [:div.d-flex.flex-row.flex-grow-1
       {:on-click (fn []
                    (rf/dispatch [:navigation/navigate :routes.schnaq/start
@@ -76,7 +76,7 @@
                    (rf/dispatch [:schnaq/select-current schnaq]))}
       [:img.schnaq-header-image {:src url}]
       [:div.ml-3.w-100.py-2
-       [:div.meeting-entry-title (toolbelt/truncate-to-n-chars title 40)]
+       [:div.schnaq-entry-title (toolbelt/truncate-to-n-chars title 40)]
        [:div.d-flex.flex-row.mt-auto.pt-3
         [user/user-info-only (:discussion/author schnaq) 24]
         [badges/read-only-badge schnaq]
