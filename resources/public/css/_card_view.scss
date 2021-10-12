@@ -138,6 +138,7 @@
 }
 
 .statement-card {
+  @extend .card;
   @include rounded.rounded-1;
   border: 0;
   white-space: pre-line;

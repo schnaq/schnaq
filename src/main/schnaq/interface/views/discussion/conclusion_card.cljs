@@ -95,12 +95,12 @@
   ([statement additional-content]
    (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
          statement-labels (set (:statement/labels statement))]
-     [:article.card.statement-card.my-2
+     [:article.statement-card.my-2
       [:div.d-flex.flex-row
        [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
        [:div.card-view.card-body.py-2
         (when (:meta/new? statement)
-          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
+          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
            (labels :discussion.badges/new)])
         [:div.d-flex.justify-content-start.pt-2
          [user/user-info statement 42 "w-100"]]
@@ -128,7 +128,7 @@
   [statement]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         statement-labels (set (:statement/labels statement))]
-    [:article.card.statement-card.my-1
+    [:article.statement-card.my-1
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body
