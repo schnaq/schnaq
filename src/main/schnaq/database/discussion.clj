@@ -437,7 +437,7 @@
                :where [?discussion :discussion/share-hash ?share-hash]
                [?discussion :discussion/starting-statements ?statements]
                [(fulltext $ :statement/content ?search-string) [[?statements _ _ ?score]]]]
-             patterns/statement share-hash safe-search-string)
+             patterns/qa-question share-hash safe-search-string)
       toolbelt/pull-key-up
       (sort-by second toolbelt/ascending)
       (map first))))

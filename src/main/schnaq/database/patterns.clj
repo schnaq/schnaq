@@ -53,6 +53,10 @@
 (def statement-with-secret
   (conj statement :statement/creation-secret))
 
+(def qa-question
+  (conj statement
+        {[:statement/_parent :as :statement/answers] statement}))
+
 
 ;; -----------------------------------------------------------------------------
 
