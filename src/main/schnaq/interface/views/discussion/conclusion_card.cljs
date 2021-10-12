@@ -160,13 +160,12 @@
       (let [sorted-conclusions (sort-statements q-and-a? user current-premises sort-method local-votes)
             filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
         [:div.card-columns.pb-3 {:class card-column-class}
-         [:> AnimatePresence
-          (for [statement filtered-conclusions]
-            (with-meta
-              [motion/fade-in-and-out
-               [statement-or-edit-wrapper statement edit-hash]
-               0.1]
-              {:key (:db/id statement)}))]])
+         (for [statement filtered-conclusions]
+           (with-meta
+             [motion/fade-in-and-out
+              [statement-or-edit-wrapper statement edit-hash]
+              0.1]
+             {:key (:db/id statement)}))])
       [call-to-action-content])))
 
 (rf/reg-event-fx
