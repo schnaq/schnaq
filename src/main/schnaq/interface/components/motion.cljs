@@ -1,5 +1,6 @@
 (ns schnaq.interface.components.motion
   (:require ["framer-motion" :refer [motion]]
+            [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
 (defn zoom-image
@@ -70,4 +71,16 @@
    {:type "spring"
     :bounce 0.4
     :duration 1}
+   component])
+
+(defn pulse-once
+  "Lets your component pulse a number of times.
+  Pulses once if the pulse-on-key is set and then calls the pulse-off-event."
+  [component pulse-sub pulse-off-event]
+  [:> (.-div motion)
+   {:variants {:pulse {:scale [1 1.4 1 1]
+                       :transition {:delay 0.1
+                                    :duration 2}}}
+    :animate (if @(rf/subscribe pulse-sub) "pulse" nil)
+    :on-animation-complete #(rf/dispatch pulse-off-event)}
    component])

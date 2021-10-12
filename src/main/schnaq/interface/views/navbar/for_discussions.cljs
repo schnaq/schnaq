@@ -5,7 +5,9 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jsw]
@@ -164,12 +166,27 @@
        (when edit-hash
          [admin/admin-center])])))
 
-(defn navbar-tools [content]
+(defn- statement-counter
+  "A counter showing all statements and pulsing live."
+  []
+  (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])]
+    ;; TODO only show in QA mode
+    [:div.ml-md-2
+     [navbar-components/separated-button
+      [:<>
+       [motion/pulse-once
+        [icon :bell]] " "
+       number-of-questions]]]))
+
+(defn navbar-tools
+  "Showing utilities in the navbar. E.g. Dropdown of views and user-menu."
+  [content]
   [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
    (when content
      [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
       content])
    [:div.d-flex.align-items-center
+    [statement-counter]
     [:div.mr-2.mx-md-2 [dropdown-views]]
     [:div.d-flex.align-items-center.schnaq-navbar
      [um/user-handling-menu "btn-link"]]]])
