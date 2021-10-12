@@ -4,7 +4,7 @@
             [schnaq.interface.config :refer [default-anonymous-display-name]]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.time :as time]
+            [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.common :as common]
             [schnaq.user :as user-utils]))
@@ -23,7 +23,7 @@
      [:small.mx-2.my-auto {:class name-class} display-name]
      (when time
        [:small.font-weight-light.d-inline.my-auto.ml-auto
-        [time/timestamp-with-tooltip time locale]])]))
+        [util-time/timestamp-with-tooltip time locale]])]))
 
 (defn user-info-only
   "User info box displaying user's nickname and the avatar."
@@ -48,7 +48,7 @@
     [:div.d-flex.flex-row.text-muted
      (when time
        [:small.font-weight-light.d-inline.my-auto.ml-2
-        [time/timestamp-with-tooltip time locale]])
+        [util-time/timestamp-with-tooltip time locale]])
      [:small.mx-1.my-auto " " (labels :discussion.badges/statement-by) " "]
      [:small.mr-2.my-auto {:class name-class} display-name]
      [common/avatar user avatar-size]]))

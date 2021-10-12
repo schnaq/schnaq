@@ -5,7 +5,7 @@
             [schnaq.interface.components.motion :as motion]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
-            [schnaq.interface.utils.time :as time]
+            [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.views.discussion.badges :as badges]
             [schnaq.interface.views.feed.filters :as filters]
@@ -64,7 +64,7 @@
         [:div [badges/read-only-badge schnaq]]
         [:div [badges/static-info-badges schnaq]]
         [:small.font-weight-light.d-inline.my-auto.ml-auto
-         [time/timestamp-with-tooltip time locale]]]]
+         [util-time/timestamp-with-tooltip time locale]]]]
       (when delete-from-hub?
         [:button.btn.btn-outline-dark.btn-small.my-auto.mr-3
          {:title (labels :hub.remove.schnaq/tooltip)

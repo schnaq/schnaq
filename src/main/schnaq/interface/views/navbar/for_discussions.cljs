@@ -9,7 +9,7 @@
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jsw]
-            [schnaq.interface.utils.time :as time]
+            [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.utils.toolbelt :as toolbelt]
             [schnaq.interface.utils.tooltip :as tooltip]
             [schnaq.interface.views.discussion.share :as share-modal]
@@ -137,7 +137,7 @@
         [first-word & rest] (str/split progress-text #" ")]
     [tooltip/text
      (if end-time
-       (gstring/format (labels :discussion.progress/ends) (time/formatted-with-timezone end-time))
+       (gstring/format (labels :discussion.progress/ends) (util-time/formatted-with-timezone end-time))
        (labels :discussion.progress/ends-not))
      [:section
       [:p.small.m-0 [:span.font-color-primary first-word " "] (str/join " " rest)]

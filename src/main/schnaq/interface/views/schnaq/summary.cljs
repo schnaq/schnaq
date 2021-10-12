@@ -10,7 +10,7 @@
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as jq]
-            [schnaq.interface.utils.time :as time]
+            [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
 
@@ -68,7 +68,7 @@
   (let [{:summary/keys [created-at text]} @(rf/subscribe [:schnaq/summary (:discussion/share-hash schnaq)])
         locale @(rf/subscribe [:current-locale])
         [updated-at text] (if text
-                            [(time/timestamp-with-tooltip created-at locale) text]
+                            [(util-time/timestamp-with-tooltip created-at locale) text]
                             ["-" "-"])]
     [:<>
      [:small.text-muted (labels :summary.user/last-updated) " " updated-at]
@@ -116,7 +116,7 @@
                                          {:share-hash share-hash})}
                      (-> summary :summary/discussion :discussion/title)]]
                [:td requester]
-               [:td (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
+               [:td (util-time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
                [:td [:form
                      {:on-submit (fn [e]
                                    (jq/prevent-default e)
@@ -148,9 +148,9 @@
              [:td [:a {:href (rfe/href :routes.schnaq/start
                                        {:share-hash (-> summary :summary/discussion :discussion/share-hash)})}
                    (-> summary :summary/discussion :discussion/title)]]
-             [:td (time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
+             [:td (util-time/timestamp-with-tooltip (:summary/requested-at summary) locale)]
              [:td (:summary/text summary)]
-             [:td (time/timestamp-with-tooltip (:summary/created-at summary) locale)]])]]]
+             [:td (util-time/timestamp-with-tooltip (:summary/created-at summary) locale)]])]]]
        [loading/loading-placeholder]))])
 
 (defn- admin-summaries
