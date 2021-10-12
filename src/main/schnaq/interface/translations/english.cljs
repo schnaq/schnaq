@@ -625,7 +625,8 @@
    :share-link/copy "Copy share-link"
    :share-link/via "By link"
    :share-access-code/via "By code"
-   :share-access-code/title "Visit schnaq.app"
+   :share-access-code/title-1 "Visit"
+   :share-access-code/title-2 "and enter the following access code:"
 
    :sharing/tooltip "Share your schnaq"
    :sharing.modal/title "Share your schnaq"

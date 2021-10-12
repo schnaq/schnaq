@@ -627,9 +627,11 @@
    :schnaq.export/as-text "schnaq als Textdatei runterladen"
    :schnaq.admin/tooltip "Schnaq verwalten"
    :share-link/copy "Zugangslink kopieren"
-   :share-link/via "Per link"
+   :share-link/via "Per Link"
    :share-access-code/via "Per Code"
-   :share-access-code/title "Gehe auf schnaq.app"
+   :share-access-code/title-1 "Gehe auf"
+   :share-access-code/title-2 "und gib folgenden Zugangscode ein:"
+
 
    :sharing/tooltip "schnaq teilen"
    :sharing.modal/title "Teile deinen schnaq"
