@@ -1,6 +1,5 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require ["framer-motion" :refer [AnimatePresence]]
-            [re-frame.core :as rf]
+  (:require [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.components.icons :refer [icon]]
