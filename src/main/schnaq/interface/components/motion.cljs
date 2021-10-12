@@ -32,13 +32,12 @@
   ([component]
    [fade-in-and-out component 0.5])
   ([component delay]
-   [:> AnimatePresence
-    [:> (.-div motion)
-     {:initial {:opacity 0}
-      :animate {:opacity 1}
-      :transition {:delay delay}
-      :exit {:opacity 0}}
-     component]]))
+   [:> (.-div motion)
+    {:initial {:opacity 0}
+     :animate {:opacity 1}
+     :transition {:delay delay}
+     :exit {:opacity 0}}
+    component]))
 
 (defn- basic-move-in
   "A basic move-in animation. Pass any transition you like."
