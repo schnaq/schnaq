@@ -663,8 +663,10 @@
    :qanda.button/text "Q&A"
    :qanda.button/submit "Frage stellen"
    :qanda.state/read-only-warning "Dieser schnaq ist schreibgeschützt, du kannst aktuell keine Fragen stellen."
-   :call-to-qanda/display-code "Teilnahmecode:"
-   :call-to-qanda/help "Alle Optionen zum Teilen deines schnaqs findest oben rechts in der Navigationsleiste"
+   :qanda.call-to-action/display-code "Dein Zugangscode:"
+   :qanda.call-to-action/intro-1 "Lade weitere Menschen ein, indem sie zu"
+   :qanda.call-to-action/intro-2 "navigieren und den Code dort eingeben."
+   :qanda.call-to-action/help "Alle Optionen zum Teilen deines schnaqs findest du oben rechts in der Navigationsleiste"
    :qanda.search/similar-results "Ähnliche Fragen"
 
 

@@ -662,8 +662,10 @@
    :qanda.button/text "Q&A"
    :qanda.button/submit "Zadaj pytanie"
    :qanda.state/read-only-warning "Ten schnaq jest tylko do odczytu, nie możesz zadawać żadnych pytań w tej chwili."
-   :call-to-qanda/display-code "Kod uczestnictwa:"
-   :call-to-qanda/help "Wszystkie opcje udostępniania Twojego schnaqa można znaleźć w prawym górnym pasku nawigacji"
+   :qanda.call-to-action/display-code "Kod uczestnictwa:"
+   :qanda.call-to-action/intro-1 "Zaproś więcej osób, stając się"
+   :qanda.call-to-action/intro-2 "i wprowadź tam kod."
+   :qanda.call-to-action/help "Wszystkie opcje udostępniania Twojego schnaqa można znaleźć w prawym górnym pasku nawigacji"
    :qanda.search/similar-results "Podobne pytania"
 
    :schnaqs/header "Przegląd Twojego schnaqs"

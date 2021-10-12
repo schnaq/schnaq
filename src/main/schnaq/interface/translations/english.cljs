@@ -659,8 +659,10 @@
    :qanda.button/text "Q&A"
    :qanda.button/submit "Ask question"
    :qanda.state/read-only-warning "This schnaq is read-only, you cannot ask any questions at the moment."
-   :call-to-qanda/display-code "Participation code:"
-   :call-to-qanda/help "All options for sharing your schnaq can be found in the top right navigation bar"
+   :qanda.call-to-action/display-code "Participation code:"
+   :qanda.call-to-action/intro-1 "Invite more people by navigating to"
+   :qanda.call-to-action/intro-2 "and entering the code there."
+   :qanda.call-to-action/help "All options for sharing your schnaq can be found in the top right navigation bar"
    :qanda.search/similar-results "Similar Questions"
 
    ;; meetings overview
