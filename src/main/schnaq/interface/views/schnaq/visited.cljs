@@ -8,13 +8,16 @@
 (rf/reg-event-db
   :schnaqs.visited/store-hashes-from-localstorage
   (fn [db _]
-    (assoc-in db [:schnaqs :visited-hashes] (:schnaqs/visited local-storage))))
+    (assoc-in db [:schnaqs :visited-hashes]
+              (remove nil? (:schnaqs/visited local-storage)))))
 
 (rf/reg-event-fx
   :schnaq.visited/to-localstorage
   (fn [_ [_ share-hash]]
-    {:fx [[:localstorage/assoc
-           [:schnaqs/visited (conj (:schnaqs/visited local-storage) share-hash)]]
+    {:fx [(when share-hash
+            [:localstorage/assoc
+             [:schnaqs/visited
+              (remove nil? (conj (:schnaqs/visited local-storage) share-hash))]])
           [:dispatch [:schnaqs.visited/store-hashes-from-localstorage]]]}))
 
 (rf/reg-sub
