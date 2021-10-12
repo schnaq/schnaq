@@ -84,35 +84,38 @@
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card
-  [statement]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-        statement-labels (set (:statement/labels statement))]
-    [:article.card.statement-card.my-2
-     [:div.d-flex.flex-row
-      [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
-      [:div.card-view.card-body.py-2
-       (when (:meta/new? statement)
-         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
-          (labels :discussion.badges/new)])
-       [:div.d-flex.justify-content-start.pt-2
-        [user/user-info statement 42 "w-100"]]
-       [:div.my-4]
-       [:div.text-purple-dark
-        [md/as-markdown (:statement/content statement)]]
-       [:div.d-flex.flex-wrap.align-items-center
-        [:a.badge.mr-3
-         {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
-         [:button.btn.btn-sm.btn-dark
-          [icon :plus "text-white m-auto fa-xs"]]
-         [:span.ml-2.text-dark (labels :statement/reply)]]
-        [up-down-vote statement]
-        [:div.ml-sm-0.ml-lg-auto
-         [badges/extra-discussion-info-badges statement]]]
-       (when (seq statement-labels)
-         [:div.mx-1
-          (for [label statement-labels]
-            [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-             [labels/build-label label]])])]]]))
+  ([statement]
+   [statement-card statement nil])
+  ([statement additional-content]
+   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
+         statement-labels (set (:statement/labels statement))]
+     [:article.card.statement-card.my-2
+      [:div.d-flex.flex-row
+       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+       [:div.card-view.card-body.py-2
+        (when (:meta/new? statement)
+          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
+           (labels :discussion.badges/new)])
+        [:div.d-flex.justify-content-start.pt-2
+         [user/user-info statement 42 "w-100"]]
+        [:div.my-4]
+        [:div.text-purple-dark
+         [md/as-markdown (:statement/content statement)]]
+        [:div.d-flex.flex-wrap.align-items-center
+         [:a.badge.mr-3
+          {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+          [:button.btn.btn-sm.btn-dark
+           [icon :plus "text-white m-auto fa-xs"]]
+          [:span.ml-2.text-dark (labels :statement/reply)]]
+         [up-down-vote statement]
+         [:div.ml-sm-0.ml-lg-auto
+          [badges/extra-discussion-info-badges statement]]]
+        (when (seq statement-labels)
+          [:div.mx-1
+           (for [label statement-labels]
+             [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+              [labels/build-label label]])])
+        additional-content]]])))
 
 (defn reduced-answer
   "A reduced statement-card focusing on the statement."
@@ -141,41 +144,14 @@
 
 (defn answer-card
   [statement]
-  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-        statement-labels (set (:statement/labels statement))
-        answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
-    [:article.card.statement-card.my-2
-     [:div.d-flex.flex-row
-      [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
-      [:div.card-view.card-body.py-2
-       (when (:meta/new? statement)
-         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
-          (labels :discussion.badges/new)])
-       [:div.d-flex.justify-content-start.pt-2
-        [user/user-info statement 42 "w-100"]]
-       [:div.my-4]
-       [:div.text-purple-dark
-        [md/as-markdown (:statement/content statement)]]
-       [:div.d-flex.flex-wrap.align-items-center
-        [:a.badge.mr-3
-         {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
-         [:button.btn.btn-sm.btn-dark
-          [icon :plus "text-white m-auto fa-xs"]]
-         [:span.ml-2.text-dark (labels :statement/reply)]]
-        [up-down-vote statement]
-        [:div.ml-sm-0.ml-lg-auto
-         [badges/extra-discussion-info-badges statement]]]
-       (when (seq statement-labels)
-         [:div.mx-1
-          (for [label statement-labels]
-            [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-             [labels/build-label label]])])
-       (when (seq answers)
-         [:div.mt-2
-          (for [answer answers]
-            (with-meta
-              [reduced-answer answer]
-              {:key (str "answer-" (:db/id answer))}))])]]]))
+  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
+    [statement-card statement
+     (when (seq answers)
+       [:div.mt-2
+        (for [answer answers]
+          (with-meta
+            [reduced-answer answer]
+            {:key (str "answer-" (:db/id answer))}))])]))
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."
