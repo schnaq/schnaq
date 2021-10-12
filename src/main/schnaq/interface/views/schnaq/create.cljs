@@ -151,7 +151,7 @@
      [:div.row.mx-auto.pb-5
       {:style {:max-width "800px"}}
       [:div.col-md-6.col-12.text-center
-       [buttons/a-big
+       [buttons/anchor-big
         (labels :schnaq.create.dispatch/qanda)
         (rfe/href :routes.schnaq.create/qanda)
         "btn-outline-white mb-3 miw-75"]
@@ -161,7 +161,7 @@
        [:p.small.text-left
         (labels :schnaq.create.dispatch.qanda/share)]]
       [:div.col-md-6.col-12.text-center
-       [buttons/a-big
+       [buttons/anchor-big
         (labels :schnaq.create.dispatch/discussion)
         (rfe/href :routes.schnaq.create/discussion)
         "btn-outline-white mb-3 miw-75"]
