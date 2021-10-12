@@ -38,12 +38,13 @@
   []
   (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
     (when (seq search-results)
-      [:div.row.mt-5
+      [:div.mt-5
        [:div.col-12
         [motion/move-in :top
          [:h3.text-center "Ähnliche Fragen"]]]
-       (for [result search-results]
-         [:div.col-12.col-md-6
-          {:key (str (:db/id result) "-search-result")}
-          [motion/move-in-spring :bottom
-           [card/answer-card result]]])])))
+       [:div.card-columns.card-columns-discussion
+        (for [result search-results]
+          (with-meta
+            [motion/move-in-spring :bottom
+             [card/answer-card result]]
+            {:key (str (:db/id result) "-search-result")}))]])))
