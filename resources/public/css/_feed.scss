@@ -24,11 +24,7 @@
 
 .feed-button-focused {
   @include feed-button-base;
-
-  border: 0;
-  box-shadow: none !important;
   color: $primary;
-  text-decoration: none !important;
 }
 
 .feed-button {
