@@ -17,7 +17,7 @@
   "Show error message when no meetings were loaded."
   []
   [motion/fade-in-and-out
-   [:div.alert.alert-light.text-light.row.blue-wave-background.p-md-5.text-center
+   [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5.text-center
     [:div.col-2.py-md-5.d-flex
      [:div.display-1.align-self-center "🙈"]]
     [:div.col-10.py-md-5
@@ -41,7 +41,10 @@
        :on-click #(rf/dispatch [:feed.sort/set :alphabetical])}
       (labels :badges.sort/alphabetical)]]))
 
-(defn- schnaq-options [schnaq]
+(defn- schnaq-options
+  "Adds a dropdown with deletion options to schnaqs, e.g. when displayed in the
+  list of schnaqs in a hub."
+  [schnaq]
   (let [options-id "options-dropdown-menu"
         dropdown-id "options-dropdown-elements"
         share-hash (:discussion/share-hash schnaq)]
