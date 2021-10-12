@@ -241,6 +241,9 @@
    :schnaq.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
    :schnaq.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
 
+   :schnaq.access-code.clipboard/header "Access code copied"
+   :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
+
    :statement/reply "Reply"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."

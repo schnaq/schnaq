@@ -246,6 +246,9 @@
    :schnaq.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
 
+   :schnaq.access-code.clipboard/header "Zugangscode kopiert"
+   :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
+
    :statement/reply "Antworten"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."

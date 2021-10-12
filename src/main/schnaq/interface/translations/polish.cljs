@@ -245,6 +245,9 @@
    :schnaq.admin.configurations.disable-pro-con/label "Za / przeciw Przycisk ukrycia"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktywuj, aby przycisk \"za/ przeciw\" nie był już wyświetlany. Nowe wkłady są traktowane jako zgoda. Opcja ta może być zmieniona w dowolnym momencie."
 
+   :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
+   :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
+
    :statement/reply "Odpowiedzi"
    :statement.edit.send.failure/title "Zmiana nie została zapisana"
    :statement.edit.send.failure/body "Zmiana nie mogła zostać wprowadzona. Proszę spróbować ponownie za chwilę."
