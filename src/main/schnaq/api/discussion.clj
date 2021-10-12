@@ -33,7 +33,7 @@
           %)
        statements))
 
-(defn- valid-statements-with-votes
+(defn valid-statements-with-votes
   "Returns a data structure, where all statements have been checked for being present and enriched with vote data."
   [statements user-id]
   (-> statements

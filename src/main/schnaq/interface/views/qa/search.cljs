@@ -18,7 +18,7 @@
   (fn [{:keys [db]} [_ search-term]]
     (when-not (cstring/blank? search-term)
       (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-        {:fx [(http/xhrio-request db :get "/discussion/statements/search"
+        {:fx [(http/xhrio-request db :get "/schnaq/qa/search"
                                   [:schnaq.qa.search/success]
                                   {:share-hash share-hash
                                    :search-string search-term
