@@ -84,7 +84,7 @@
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card
-  [edit-hash statement]
+  [statement]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         statement-labels (set (:statement/labels statement))]
     [:article.card.statement-card.my-2
@@ -107,7 +107,7 @@
          [:span.ml-2.text-dark (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-sm-0.ml-lg-auto
-         [badges/extra-discussion-info-badges statement edit-hash]]]
+         [badges/extra-discussion-info-badges statement]]]
        (when (seq statement-labels)
          [:div.mx-1
           (for [label statement-labels]
@@ -139,7 +139,7 @@
          [:span.ml-2.text-dark (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-sm-0.ml-lg-auto
-         [badges/extra-discussion-info-badges statement nil]]]
+         [badges/extra-discussion-info-badges statement]]]
        (when (seq statement-labels)
          [:div.mx-1
           (for [label statement-labels]
@@ -147,7 +147,7 @@
              [labels/build-label label]])])]]]))
 
 (defn answer-card
-  [edit-hash statement]
+  [statement]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         statement-labels (set (:statement/labels statement))
         answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
@@ -171,7 +171,7 @@
          [:span.ml-2.text-dark (labels :statement/reply)]]
         [up-down-vote statement]
         [:div.ml-sm-0.ml-lg-auto
-         [badges/extra-discussion-info-badges statement edit-hash]]]
+         [badges/extra-discussion-info-badges statement]]]
        (when (seq statement-labels)
          [:div.mx-1
           (for [label statement-labels]
@@ -186,11 +186,11 @@
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."
-  [statement edit-hash]
+  [statement]
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card-statement statement]
-      [statement-card edit-hash statement])))
+      [statement-card statement])))
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
@@ -210,14 +210,12 @@
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
-  [share-hash]
-  (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        active-filters @(rf/subscribe [:filters/active])
+  []
+  (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
         user @(rf/subscribe [:user/current])
         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
-        edit-hash (get admin-access-map share-hash)
         card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         current-premises @(rf/subscribe [:discussion.premises/current])]
     (if (seq current-premises)
@@ -228,7 +226,7 @@
          (for [statement filtered-conclusions]
            (with-meta
              [motion/fade-in-and-out
-              [statement-or-edit-wrapper statement edit-hash]
+              [statement-or-edit-wrapper statement]
               0.1]
              {:key (:db/id statement)}))])
       [call-to-action-content])))
