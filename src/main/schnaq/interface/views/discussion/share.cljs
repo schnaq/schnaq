@@ -16,7 +16,7 @@
      [:div.d-flex.flex-row.mt-3.mb-5
       [:p (labels :share-access-code/via)]
       [:div.flex.flex-fill.text-center.pr-5
-       [:p.mb-0 (labels :share-access-code/title-1) [:span.text-monospace.pl-3 "https://schnaq.app"]]
+       [:p.mb-0 (labels :share-access-code/title-1) " " [:span.text-monospace "https://schnaq.app"]]
        [:p (labels :share-access-code/title-2)]
        [:div.display-4 [sc/access-code]]]]
      [:hr.my-4]]))
