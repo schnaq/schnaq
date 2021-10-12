@@ -5,10 +5,11 @@
   background-color: transparent;
   border: 0;
   border-radius: 1.5rem;
-  box-shadow: none;
+  box-shadow: none !important;
   color: $white;
   font-weight: bolder;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1.5rem;
+  text-decoration: none !important; // Avoid ugly styling when clicking again on an already selected feed-item
 
   &:hover {
     background-color: $white-shade;
@@ -24,7 +25,6 @@
 
 .feed-button-focused {
   @include feed-button-base;
-  box-shadow: none;
   color: $primary;
 }
 
@@ -40,4 +40,14 @@
   @extend .my-2;
   @extend .w-100;
   @include rounded.rounded-2;
+}
+
+.feed-button-create {
+  @include feed-button-base;
+  color: $secondary;
+
+  &:hover {
+    color: $secondary-selected;
+  }
+
 }

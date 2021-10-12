@@ -992,7 +992,7 @@
    :loading.placeholder/lead "Dane są ładowane..."
    :loading.placeholder/takes-too-long "Trwa to dłużej niż oczekiwano. Może coś poszło nie tak. Spróbuj przeładować stronę lub powtórzyć proces ponownie. Jeśli nadal masz problemy, skontaktuj się z nami!"
 
-   :hubs/heading "Twój Hubs"
+   :hubs/heading "Hubs"
    :hub/heading "Osobiste %s Hub"
    :hub/settings "Administracja"
    :hub.settings/change-name "Zmień nazwę koncentratora"

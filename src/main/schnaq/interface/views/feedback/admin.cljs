@@ -5,7 +5,7 @@
             [schnaq.config.shared :as shared-config]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
-            [schnaq.interface.utils.time :as time]
+            [schnaq.interface.utils.time :as util-time]
             [schnaq.interface.views.loading :as loading]
             [schnaq.interface.views.pages :as pages]))
 
@@ -32,7 +32,7 @@
               (when-not (string/blank? (:feedback/contact-mail feedback))
                 [:a {:href (gstring/format "mailto:%s" (:feedback/contact-mail feedback))}
                  [:i.far.fa-envelope.pl-1]])]
-             [:td (time/format-distance (:feedback/created-at feedback) locale)]
+             [:td (util-time/format-distance (:feedback/created-at feedback) locale)]
              [:td (:feedback/description feedback)]
              [:td.image
               (when (:feedback/has-image? feedback)

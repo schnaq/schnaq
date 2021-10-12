@@ -51,7 +51,7 @@
   []
   (let [members @(rf/subscribe [:hub.current/members])]
     (when (seq members)
-      [:section.panel-white.mt-3
+      [:section.panel-white.mt-4
        [:h5.text-center.pb-2 (labels :hub.members/heading)]
        [:ul.list-group
         (for [member members]

@@ -21,7 +21,7 @@
 
 (defn- settings-button
   "Create a button for the feed list."
-  [icon label route]
+  [icon-name label route]
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
         button-class (if (= current-route route) "feed-button-focused" "feed-button")]
     [:article
@@ -30,7 +30,7 @@
                                  :href (rfe/href route)}
       [:div.row.text-left
        [:div.col-1
-        [icon icon "mr-4 my-auto"]]
+        [icon icon-name "mr-4 my-auto"]]
        [:div.col
         [:span (labels label)]]]]]))
 
