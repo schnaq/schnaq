@@ -47,4 +47,4 @@
          [:div.col-12.col-md-6
           {:key (str (:db/id result) "-search-result")}
           [motion/move-in-spring :bottom
-           [card/statement-card nil result]]])])))
+           [card/answer-card nil result]]])])))
