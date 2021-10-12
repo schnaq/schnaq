@@ -146,6 +146,13 @@
     (= :discussion.mode/qanda (:discussion/mode selected-schnaq))))
 
 (rf/reg-sub
+  :schnaq.selected/access-code
+  (fn [_ _]
+    (rf/subscribe [:schnaq/selected]))
+  (fn [selected-schnaq _ _]
+    (get-in selected-schnaq [:discussion/access :discussion.access/code])))
+
+(rf/reg-sub
   :schnaq.selected/read-only?
   (fn [_ _]
     (rf/subscribe [:schnaq/selected]))

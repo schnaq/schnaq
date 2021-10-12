@@ -245,6 +245,9 @@
    :schnaq.admin.configurations.disable-pro-con/label "Za / przeciw Przycisk ukrycia"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktywuj, aby przycisk \"za/ przeciw\" nie był już wyświetlany. Nowe wkłady są traktowane jako zgoda. Opcja ta może być zmieniona w dowolnym momencie."
 
+   :schnaq.access-code.clipboard/header "Skopiowany kod dostępu"
+   :schnaq.access-code.clipboard/body "Kod dostępu został skopiowany do schowka."
+
    :statement/reply "Odpowiedzi"
    :statement.edit.send.failure/title "Zmiana nie została zapisana"
    :statement.edit.send.failure/body "Zmiana nie mogła zostać wprowadzona. Proszę spróbować ponownie za chwilę."
@@ -628,7 +631,8 @@
    :share-link/copy "Skopiuj link dostępu"
    :share-link/via "Za link"
    :share-access-code/via "Przez kod dostępu"
-   :share-access-code/title "Odwiedź schnaq.app"
+   :share-access-code/title-1 "Odwiedź"
+   :share-access-code/title-2 "i wprowadź następujący kod"
 
    :sharing/tooltip "udział sznaq"
    :sharing.modal/title "Podziel się swoim schnaqiem"
@@ -662,8 +666,10 @@
    :qanda.button/text "Q&A"
    :qanda.button/submit "Zadaj pytanie"
    :qanda.state/read-only-warning "Ten schnaq jest tylko do odczytu, nie możesz zadawać żadnych pytań w tej chwili."
-   :call-to-qanda/display-code "Kod uczestnictwa:"
-   :call-to-qanda/help "Wszystkie opcje udostępniania Twojego schnaqa można znaleźć w prawym górnym pasku nawigacji"
+   :qanda.call-to-action/display-code "Kod uczestnictwa:"
+   :qanda.call-to-action/intro-1 "Zaproś więcej osób, stając się"
+   :qanda.call-to-action/intro-2 "i wprowadź tam kod."
+   :qanda.call-to-action/help "Wszystkie opcje udostępniania Twojego schnaqa można znaleźć w prawym górnym pasku nawigacji"
    :qanda.search/similar-results "Podobne pytania"
 
    :schnaqs/header "Przegląd Twojego schnaqs"

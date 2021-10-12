@@ -246,6 +246,9 @@
    :schnaq.admin.configurations.disable-pro-con/label "Dafür/Dagegen Knopf ausblenden"
    :schnaq.admin.configurations.disable-pro-con/explanation "Aktivieren, um den  Dafür/Dagegen Knopf nicht mehr anzuzeigen. Neue Beiträge werden als Zustimmung gewertet. Diese Option kann jederzeit geändert werden."
 
+   :schnaq.access-code.clipboard/header "Zugangscode kopiert"
+   :schnaq.access-code.clipboard/body "Der Zugangscode wurde in deine Zwischenablage kopiert."
+
    :statement/reply "Antworten"
    :statement.edit.send.failure/title "Änderung nicht gespeichert"
    :statement.edit.send.failure/body "Die Änderung konnte nicht durchgeführt werden. Bitte versuche es gleich noch einmal."
@@ -627,9 +630,11 @@
    :schnaq.export/as-text "schnaq als Textdatei runterladen"
    :schnaq.admin/tooltip "Schnaq verwalten"
    :share-link/copy "Zugangslink kopieren"
-   :share-link/via "Per link"
+   :share-link/via "Per Link"
    :share-access-code/via "Per Code"
-   :share-access-code/title "Gehe auf schnaq.app"
+   :share-access-code/title-1 "Gehe auf"
+   :share-access-code/title-2 "und gib folgenden Zugangscode ein:"
+
 
    :sharing/tooltip "schnaq teilen"
    :sharing.modal/title "Teile deinen schnaq"
@@ -663,8 +668,10 @@
    :qanda.button/text "Q&A"
    :qanda.button/submit "Frage stellen"
    :qanda.state/read-only-warning "Dieser schnaq ist schreibgeschützt, du kannst aktuell keine Fragen stellen."
-   :call-to-qanda/display-code "Teilnahmecode:"
-   :call-to-qanda/help "Alle Optionen zum Teilen deines schnaqs findest oben rechts in der Navigationsleiste"
+   :qanda.call-to-action/display-code "Dein Zugangscode:"
+   :qanda.call-to-action/intro-1 "Lade weitere Menschen ein, indem sie zu"
+   :qanda.call-to-action/intro-2 "navigieren und den Code dort eingeben."
+   :qanda.call-to-action/help "Alle Optionen zum Teilen deines schnaqs findest du oben rechts in der Navigationsleiste"
    :qanda.search/similar-results "Ähnliche Fragen"
 
 

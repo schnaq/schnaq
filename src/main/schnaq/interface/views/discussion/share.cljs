@@ -1,6 +1,7 @@
 (ns schnaq.interface.views.discussion.share
   (:require [re-frame.core :as rf]
             [schnaq.interface.components.icons :refer [icon]]
+            [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.clipboard :as clipboard]
             [schnaq.interface.utils.tooltip :as tooltip]
@@ -10,16 +11,15 @@
             [schnaq.links :as links]))
 
 (defn- share-qanda-via-access-code []
-  (let [current-schnaq @(rf/subscribe [:schnaq/selected])
-        access-code (-> current-schnaq :discussion/access :discussion.access/code)]
-    (when access-code
-      [:<>
-       [:div.d-flex.flex-row.mt-3.mb-5
-        [:p (labels :share-access-code/via)]
-        [:div.flex.flex-fill.text-center.pr-5
-         [:p (labels :share-access-code/title)]
-         [:div.display-4 access-code]]]
-       [:hr.my-4]])))
+  (when @(rf/subscribe [:schnaq.selected/access-code])
+    [:<>
+     [:div.d-flex.flex-row.mt-3.mb-5
+      [:p (labels :share-access-code/via)]
+      [:div.flex.flex-fill.text-center.pr-5
+       [:p.mb-0 (labels :share-access-code/title-1) " " [:span.text-monospace "https://schnaq.app"]]
+       [:p (labels :share-access-code/title-2)]
+       [:div.display-4 [sc/access-code]]]]
+     [:hr.my-4]]))
 
 (defn- share-via-link [link]
   [:div.d-flex.flex-row.mt-3

@@ -241,6 +241,9 @@
    :schnaq.admin.configurations.disable-pro-con/label "Disable agree/disagree button"
    :schnaq.admin.configurations.disable-pro-con/explanation "When checked, users can no longer use the agree/disagree button. New posts will be handled as agreement. You can change this option anytime."
 
+   :schnaq.access-code.clipboard/header "Access code copied"
+   :schnaq.access-code.clipboard/body "The access code has been copied to your clipboard."
+
    :statement/reply "Reply"
    :statement.edit.send.failure/title "Edit could not be made"
    :statement.edit.send.failure/body "The edit could not be published. Please try again in a short while."
@@ -625,7 +628,8 @@
    :share-link/copy "Copy share-link"
    :share-link/via "By link"
    :share-access-code/via "By code"
-   :share-access-code/title "Visit schnaq.app"
+   :share-access-code/title-1 "Visit"
+   :share-access-code/title-2 "and enter the following access code:"
 
    :sharing/tooltip "Share your schnaq"
    :sharing.modal/title "Share your schnaq"
@@ -659,8 +663,10 @@
    :qanda.button/text "Q&A"
    :qanda.button/submit "Ask question"
    :qanda.state/read-only-warning "This schnaq is read-only, you cannot ask any questions at the moment."
-   :call-to-qanda/display-code "Participation code:"
-   :call-to-qanda/help "All options for sharing your schnaq can be found in the top right navigation bar"
+   :qanda.call-to-action/display-code "Participation code:"
+   :qanda.call-to-action/intro-1 "Invite more people by navigating to"
+   :qanda.call-to-action/intro-2 "and entering the code there."
+   :qanda.call-to-action/help "All options for sharing your schnaq can be found in the top right navigation bar"
    :qanda.search/similar-results "Similar Questions"
 
    ;; meetings overview

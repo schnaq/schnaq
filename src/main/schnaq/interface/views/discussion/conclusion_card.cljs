@@ -5,6 +5,7 @@
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.components.schnaq :as sc]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.js-wrapper :as js-wrap]
@@ -40,21 +41,26 @@
 
 (defn- call-to-q&a
   "If no statements are present show the access code in Q&A"
-  [access-code]
+  []
   [call-to-action-schnaq
    [:<>
-    [:h2 (str (labels :call-to-qanda/display-code) " " access-code)]
-    [:p.mt-5 (icon :info "m-auto fas") " "
-     (labels :call-to-qanda/help) " " (icon :share "m-auto fas")]]])
+    [:p.h5 (labels :qanda.call-to-action/display-code)]
+    [:p.h1.py-3 [sc/access-code]]
+    [:p.h5 (labels :qanda.call-to-action/intro-1) " "
+     [:span.text-monospace.mx-2 {:href "https://schnaq.app"
+                                 :target :_blank}
+      "https://schnaq.app"]
+     " "
+     (labels :qanda.call-to-action/intro-2)]
+    [:p.pt-3 [icon :info "m-auto fas"] " "
+     (labels :qanda.call-to-action/help) " " [icon :share "m-auto fas"]]]])
 
 (defn- call-to-action-content
   "Either display cta for discussion or Q&A"
   []
-  (let [current-schnaq @(rf/subscribe [:schnaq/selected])
-        access-code (-> current-schnaq :discussion/access :discussion.access/code)]
-    (if access-code
-      [call-to-q&a access-code]
-      [call-to-discuss])))
+  (if @(rf/subscribe [:schnaq.selected/access-code])
+    [call-to-q&a]
+    [call-to-discuss]))
 
 
 ;; -----------------------------------------------------------------------------
@@ -64,7 +70,7 @@
   [statement]
   (let [votes @(rf/subscribe [:local-votes])
         [local-upvote? local-downvote?] @(rf/subscribe [:votes/upvoted-or-downvoted (:db/id statement)])
-        ;; Do not use or shortcut, since the value can be false and should be prefferably selected over backend value
+        ;; Do not use or shortcut, since the value can be false and should be preferably selected over backend value
         upvoted? (if (nil? local-upvote?) (:meta/upvoted? statement) local-upvote?)
         downvoted? (if (nil? local-downvote?) (:meta/downvoted? statement) local-downvote?)]
     [:div.d-flex.flex-row.align-items-center
@@ -153,8 +159,7 @@
     (if (seq current-premises)
       (let [sorted-conclusions (sort-statements q-and-a? user current-premises sort-method local-votes)
             filtered-conclusions (filters/filter-statements sorted-conclusions active-filters (rf/subscribe [:local-votes]))]
-        [:div.card-columns.pb-3
-         {:class card-column-class}
+        [:div.card-columns.pb-3 {:class card-column-class}
          (for [statement filtered-conclusions]
            (with-meta
              [motion/fade-in-and-out
