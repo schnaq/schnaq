@@ -51,8 +51,8 @@
                                  :target :_blank}
       "https://schnaq.app"]
      (labels :qanda.call-to-action/intro-2)]
-    [:p.pt-3 (icon :info "m-auto fas") " "
-     (labels :qanda.call-to-action/help) " " (icon :share "m-auto fas")]]])
+    [:p.pt-3 [icon :info "m-auto fas"] " "
+     (labels :qanda.call-to-action/help) " " [icon :share "m-auto fas"]]]])
 
 (defn- call-to-action-content
   "Either display cta for discussion or Q&A"
