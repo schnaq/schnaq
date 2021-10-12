@@ -100,17 +100,18 @@
 (defn- dropdown-views []
   (let [dropdown-id "schnaq-views-dropdown"]
     [:div.dropdown
-     [:button.btn.btn-white.discussion-navbar-button
-      {:id dropdown-id :type "button" :data-toggle "dropdown"
-       :aria-haspopup "true" :aria-expanded "false"}
-      [:img.header-standalone-icon
-       {:src (img-path :icon-views-dark) :alt "graph icon"}]
-      [:p.small.m-0.text-nowrap.dropdown-toggle (labels :discussion.navbar/views)]]
-     [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
-      [standard-view-button]
-      [graph-button]
-      [summary-button]
-      [qanda-view-button]]]))
+     [navbar-components/separated-button
+      [:<>
+       [:img.header-standalone-icon
+        {:src (img-path :icon-views-dark) :alt "graph icon"}]
+       [:p.small.m-0.text-nowrap.dropdown-toggle (labels :discussion.navbar/views)]
+       [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+        [standard-view-button]
+        [graph-button]
+        [summary-button]
+        [qanda-view-button]]]
+      {:id dropdown-id :data-toggle "dropdown"
+       :aria-haspopup "true" :aria-expanded "false"}]]))
 
 ;; -----------------------------------------------------------------------------
 

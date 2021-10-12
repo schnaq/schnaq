@@ -36,10 +36,21 @@
    (labels :nav.buttons/language-toggle)
    [:span [language-dropdown show-label? options]]])
 
-(>defn navbar-button
+(>defn button
   "Build a button for the navbar. Takes a label as a keyword and anything, which
   can be passed to an anchor's href."
   [label href]
   [keyword? any? :ret vector?]
   [:a.nav-link {:href href :role "button"}
    (labels label)])
+
+(defn separated-button
+  "The default navbar-button."
+  ([content]
+   [separated-button content {}])
+  ([content attributes]
+   [:button.btn.btn-white.discussion-navbar-button
+    (merge
+      {:type "button"}
+      attributes)
+    content]))
