@@ -175,7 +175,7 @@
 
 (defn- current-topic-badges [schnaq statement is-topic?]
   (let [badges-start [badges/static-info-badges-discussion schnaq]
-        badges-conclusion [badges/extra-discussion-info-badges statement (:discussion/edit-hash schnaq)]
+        badges-conclusion [badges/extra-discussion-info-badges statement]
         badges (if is-topic? badges-start badges-conclusion)]
     [:div.ml-auto badges]))
 

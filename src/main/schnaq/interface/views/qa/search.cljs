@@ -4,6 +4,7 @@
             [oops.core :refer [oget]]
             [re-frame.core :as rf]
             [schnaq.interface.components.motion :as motion]
+            [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.http :as http]
             [schnaq.interface.utils.toolbelt :as tools]
             [schnaq.interface.views.discussion.conclusion-card :as card]))
@@ -18,7 +19,7 @@
   (fn [{:keys [db]} [_ search-term]]
     (when-not (cstring/blank? search-term)
       (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])]
-        {:fx [(http/xhrio-request db :get "/discussion/statements/search"
+        {:fx [(http/xhrio-request db :get "/schnaq/qa/search"
                                   [:schnaq.qa.search/success]
                                   {:share-hash share-hash
                                    :search-string search-term
@@ -26,7 +27,6 @@
 (rf/reg-event-db
   :schnaq.qa.search/success
   (fn [db [_ {:keys [matching-statements]}]]
-    (println matching-statements)
     (assoc-in db [:schnaq :qa :search :results] matching-statements)))
 
 (rf/reg-sub
@@ -39,12 +39,13 @@
   []
   (let [search-results @(rf/subscribe [:schnaq.qa.search/results])]
     (when (seq search-results)
-      [:div.row.mt-5
+      [:div.mt-5
        [:div.col-12
         [motion/move-in :top
-         [:h3.text-center "Ähnliche Fragen"]]]
-       (for [result search-results]
-         [:div.col-12.col-md-6
-          {:key (str (:db/id result) "-search-result")}
-          [motion/move-in-spring :bottom
-           [card/statement-card nil result]]])])))
+         [:h3.text-center (labels :qanda.search/similar-results)]]]
+       [:div.card-columns.card-columns-discussion
+        (for [result search-results]
+          (with-meta
+            [motion/move-in-spring :bottom
+             [card/answer-card result]]
+            {:key (str (:db/id result) "-search-result")}))]])))

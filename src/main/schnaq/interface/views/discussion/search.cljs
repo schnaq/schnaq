@@ -49,7 +49,7 @@
      (for [statement filtered-conclusions]
        [:div.p-2.w-lg-50.d-inline-block
         {:key (:db/id statement)}
-        [card/statement-card nil statement]])]))
+        [card/statement-card statement]])]))
 
 (defn- search-view []
   (let [search-string @(rf/subscribe [:schnaq.search.current/search-string])

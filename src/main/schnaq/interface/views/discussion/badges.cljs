@@ -25,6 +25,14 @@
                          :discussion.anonymous-delete.modal/explain
                          :discussion.anonymous-delete.modal/cta))
 
+(defn- deletable?
+  "Checks if a statement can be deleted by the user."
+  [statement edit-hash user-id creation-secrets]
+  (when-not (:statement/deleted? statement)
+    (let [anonymous-owner? (contains? creation-secrets (:db/id statement))
+          registered-owner? (= user-id (:db/id (:statement/author statement)))]
+      (or edit-hash anonymous-owner? registered-owner?))))
+
 (defn- delete-dropdown-button
   "Give admin and author the ability to delete a statement."
   [statement edit-hash]
@@ -81,22 +89,10 @@
                         (rf/dispatch [:statement.edit/activate-edit discussion-id])))]
     [edit-dropdown-button on-click-fn]))
 
-(defn- is-deletable?
-  "Checks if a statement can be deleted"
-  [statement edit-hash]
-  (when-not (:statement/deleted? statement)
-    (let [user-id @(rf/subscribe [:user/id])
-          creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
-          anonymous-owner? (contains? creation-secrets (:db/id statement))
-          registered-owner? (= user-id (:db/id (:statement/author statement)))]
-      (or edit-hash anonymous-owner? registered-owner?))))
-
-(defn- is-editable?
+(defn- editable?
   "Checks if a statement can be edited"
-  [statement]
-  (let [user-id @(rf/subscribe [:user/id])
-        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
-        anonymous-owner? (contains? creation-secrets (:db/id statement))]
+  [statement user-id creation-secrets]
+  (let [anonymous-owner? (contains? creation-secrets (:db/id statement))]
     (and (not (:statement/deleted? statement))
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
@@ -122,10 +118,15 @@
           [:dropdown-item
            [edit-dropdown-button-discussion id share-hash]])]])))
 
-(defn- edit-statement-dropdown-menu [{:keys [db/id] :as statement} edit-hash]
+(defn- edit-statement-dropdown-menu [{:keys [db/id] :as statement}]
   (let [dropdown-id (str "drop-down-conclusion-card-" id)
-        deletable? (is-deletable? statement edit-hash)
-        editable? (is-editable? statement)]
+        share-hash @(rf/subscribe [:schnaq/share-hash])
+        admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
+        current-edit-hash (get admin-access-map share-hash)
+        user-id @(rf/subscribe [:user/id])
+        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        deletable? (deletable? statement current-edit-hash user-id creation-secrets)
+        editable? (editable? statement user-id creation-secrets)]
     (when (or deletable? editable?)
       [:div.dropdown.ml-2
        [:div.dropdown-toggle.m-0.p-0
@@ -139,7 +140,7 @@
            [edit-dropdown-button-statement statement]])
         (when deletable?
           [:dropdown-item
-           [delete-dropdown-button statement edit-hash]])]])))
+           [delete-dropdown-button statement current-edit-hash]])]])))
 
 (defn- author-list
   "A list of author-names participating in a subdiscussion."
@@ -164,7 +165,7 @@
 
 (defn extra-discussion-info-badges
   "Badges that display additional discussion info."
-  [statement edit-hash]
+  [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
         path-parameters (:path-params @(rf/subscribe [:navigation/current-route]))
         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
@@ -182,7 +183,7 @@
       " " statement-num]
      [authors-badge authors]
      [statement-labels/edit-labels-button statement]
-     [edit-statement-dropdown-menu statement edit-hash]]))
+     [edit-statement-dropdown-menu statement]]))
 
 (defn static-info-badges
   "Badges that display schnaq info."

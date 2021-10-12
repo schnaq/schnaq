@@ -90,43 +90,82 @@
      [:span (logic/get-down-votes statement votes)]]))
 
 (defn statement-card
-  [edit-hash statement]
+  ([statement]
+   [statement-card statement nil])
+  ([statement additional-content]
+   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
+         statement-labels (set (:statement/labels statement))]
+     [:article.card.statement-card.my-2
+      [:div.d-flex.flex-row
+       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+       [:div.card-view.card-body.py-2
+        (when (:meta/new? statement)
+          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
+           (labels :discussion.badges/new)])
+        [:div.d-flex.justify-content-start.pt-2
+         [user/user-info statement 42 "w-100"]]
+        [:div.my-4]
+        [:div.text-purple-dark
+         [md/as-markdown (:statement/content statement)]]
+        [:div.d-flex.flex-wrap.align-items-center
+         [:a.badge.mr-3
+          {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+          [:button.btn.btn-sm.btn-dark
+           [icon :plus "text-white m-auto fa-xs"]]
+          [:span.ml-2.text-dark (labels :statement/reply)]]
+         [up-down-vote statement]
+         [:div.ml-sm-0.ml-lg-auto
+          [badges/extra-discussion-info-badges statement]]]
+        (when (seq statement-labels)
+          [:div.mx-1
+           (for [label statement-labels]
+             [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+              [labels/build-label label]])])
+        additional-content]]])))
+
+(defn reduced-answer
+  "A reduced statement-card focusing on the statement."
+  [statement]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         statement-labels (set (:statement/labels statement))]
-    [:article.card.statement-card.my-2
+    [:article.card.statement-card.my-1
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
-      [:div.card-view.card-body.py-2
-       (when (:meta/new? statement)
-         [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
-          (labels :discussion.badges/new)])
+      [:div.card-view.card-body
        [:div.d-flex.justify-content-start.pt-2
-        [user/user-info statement 42 "w-100"]]
-       [:div.my-4]
+        [user/user-info statement 25 "w-100"]]
+       [:div.my-3]
        [:div.text-purple-dark
         [md/as-markdown (:statement/content statement)]]
        [:div.d-flex.flex-wrap.align-items-center
-        [:a.badge.mr-3
+        [:a.mr-3
          {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
-         [:button.btn.btn-sm.btn-dark
-          [icon :plus "text-white m-auto fa-xs"]]
-         [:span.ml-2.text-dark (labels :statement/reply)]]
-        [up-down-vote statement]
-        [:div.ml-sm-0.ml-lg-auto
-         [badges/extra-discussion-info-badges statement edit-hash]]]
+         [:small.text-muted (labels :statement/reply)]]
+        [up-down-vote statement]]
        (when (seq statement-labels)
          [:div.mx-1
           (for [label statement-labels]
-            [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+            [:span.pr-1 {:key (str "show-label-answer" (:db/id statement) label)}
              [labels/build-label label]])])]]]))
+
+(defn answer-card
+  [statement]
+  (let [answers (filter #(some #{":check"} (:statement/labels %)) (:statement/answers statement))]
+    [statement-card statement
+     (when (seq answers)
+       [:div.mt-2
+        (for [answer answers]
+          (with-meta
+            [reduced-answer answer]
+            {:key (str "answer-" (:db/id answer))}))])]))
 
 (defn- statement-or-edit-wrapper
   "Either show the clickable statement, or its edit-view."
-  [statement edit-hash]
+  [statement]
   (let [currently-edited? @(rf/subscribe [:statement.edit/ongoing? (:db/id statement)])]
     (if currently-edited?
       [edit/edit-card-statement statement]
-      [statement-card edit-hash statement])))
+      [statement-card statement])))
 
 (defn- sort-statements
   "Sort statements according to the filter method. If we are in q-and-a-mode,
@@ -146,14 +185,12 @@
 
 (defn conclusion-cards-list
   "Displays a list of conclusions."
-  [share-hash]
-  (let [admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
-        active-filters @(rf/subscribe [:filters/active])
+  []
+  (let [active-filters @(rf/subscribe [:filters/active])
         sort-method @(rf/subscribe [:discussion.statements/sort-method])
         local-votes @(rf/subscribe [:local-votes])
         user @(rf/subscribe [:user/current])
         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
-        edit-hash (get admin-access-map share-hash)
         card-column-class (if shared-config/embedded? "card-columns-embedded" "card-columns-discussion")
         current-premises @(rf/subscribe [:discussion.premises/current])]
     (if (seq current-premises)
@@ -163,7 +200,7 @@
          (for [statement filtered-conclusions]
            (with-meta
              [motion/fade-in-and-out
-              [statement-or-edit-wrapper statement edit-hash]
+              [statement-or-edit-wrapper statement]
               0.1]
              {:key (:db/id statement)}))])
       [call-to-action-content])))

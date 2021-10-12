@@ -1,6 +1,7 @@
 (ns schnaq.api.schnaq
   (:require [clojure.spec.alpha :as s]
             [ring.util.http-response :refer [ok created bad-request forbidden]]
+            [schnaq.api.discussion :as discussion-api]
             [schnaq.api.dto-specs :as dto]
             [schnaq.api.toolbelt :as at]
             [schnaq.database.access-codes :as ac]
@@ -155,6 +156,15 @@
     (user-db/update-visited-schnaqs user-identity [discussion-id])
     (ok {:share-hash share-hash})))
 
+(defn- search-qa
+  "Search through any valid discussion."
+  [{:keys [parameters identity]}]
+  (let [{:keys [share-hash search-string display-name]} (:query parameters)
+        user-id (user-db/user-id display-name (:sub identity))]
+    (ok {:matching-statements (-> (discussion-db/search-similar-questions share-hash search-string)
+                                  processors/with-sub-discussion-info
+                                  (discussion-api/valid-statements-with-votes user-id))})))
+
 ;; -----------------------------------------------------------------------------
 
 (def schnaq-routes
@@ -204,7 +214,17 @@
                            :middleware [:discussion/valid-credentials?]
                            :parameters {:body {:share-hash :discussion/share-hash
                                                :edit-hash :discussion/edit-hash}}
-                           :responses {200 {:body {:schnaq ::dto/discussion}}}}]]
+                           :responses {200 {:body {:schnaq ::dto/discussion}}}}]
+     ["/qa"
+      ["/search" {:get search-qa
+                  :description (at/get-doc #'search-qa)
+                  :name :api.schnaq.qa/search
+                  :middleware [:discussion/valid-share-hash?]
+                  :parameters {:query {:share-hash :discussion/share-hash
+                                       :search-string string?
+                                       :display-name ::specs/non-blank-string}}
+                  :responses {200 {:body {:matching-statements (s/coll-of ::dto/statement)}}
+                              404 at/response-error-body}}]]]
 
     ["/schnaqs/by-hashes"
      {:get schnaqs-by-hashes
