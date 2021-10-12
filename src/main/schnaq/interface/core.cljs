@@ -18,6 +18,7 @@
             [schnaq.interface.components.icons]
             [schnaq.interface.components.images]
             [schnaq.interface.components.navbar]
+            [schnaq.interface.components.schnaq]
             [schnaq.interface.components.videos]
             [schnaq.interface.config :as config]
             [schnaq.interface.events]
