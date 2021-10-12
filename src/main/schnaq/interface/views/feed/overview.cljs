@@ -48,7 +48,7 @@
   (let [locale @(rf/subscribe [:current-locale])
         share-hash (:discussion/share-hash schnaq)
         title (:discussion/title schnaq)
-        time (:discussion/created-at schnaq)
+        created (:discussion/created-at schnaq)
         url (header-image/check-for-header-img (:discussion/header-image-url schnaq))]
     [:article.meeting-entry
      {:on-click (fn []
@@ -61,10 +61,10 @@
        [:div.meeting-entry-title (toolbelt/truncate-to-n-chars title 40)]
        [:div.d-flex.flex-row.mt-auto.pt-3
         [user/user-info-only (:discussion/author schnaq) 24]
-        [:div [badges/read-only-badge schnaq]]
+        [badges/read-only-badge schnaq]
         [:div [badges/static-info-badges schnaq]]
         [:small.font-weight-light.d-inline.my-auto.ml-auto
-         [util-time/timestamp-with-tooltip time locale]]]]
+         [util-time/timestamp-with-tooltip created locale]]]]
       (when delete-from-hub?
         [:button.btn.btn-outline-dark.btn-small.my-auto.mr-3
          {:title (labels :hub.remove.schnaq/tooltip)
@@ -107,20 +107,22 @@
                                :href (reitfe/href route route-params)}
     [:div.d-flex.flex-row
      image-div
-     [:div.pt-1.pl-2 text]]]))
+     [:div.my-auto.pl-2 text]]]))
 
-(defn label-feed-button
+(defn icon-and-label-feed-button
   [label icon-name route route-params]
   (let [current-route @(rf/subscribe [:navigation/current-route-name])
-        button-class (if (= current-route route) "feed-button-focused" "feed-button")
-        icon-section (if icon-name [:div.mx-2.my-auto [icon icon-name "m-auto"]] nil)]
-    [feed-button (labels label) icon-section button-class route route-params]))
+        button-class (if (= current-route route) "feed-button-focused" "feed-button")]
+    [feed-button (labels label)
+     [:div.mx-2.my-auto [icon icon-name "m-auto"]]
+     button-class route route-params]))
 
 (defn create-feed-button
   [label icon-name route route-params]
-  (let [button-class "feed-button-create"
-        icon-section (if icon-name [:div.mx-2.my-auto [icon icon-name "m-auto"]] nil)]
-    [feed-button (labels label) icon-section button-class route route-params]))
+  (let [button-class "feed-button-create"]
+    [feed-button (labels label)
+     [:div.mx-2.my-auto [icon icon-name "m-auto"]]
+     button-class route route-params]))
 
 
 (defn hub-feed-button
@@ -139,7 +141,7 @@
      [:div
       (for [[keycloak-name hub] hubs]
         (with-meta [hub-feed-button hub] {:key keycloak-name}))
-      [label-feed-button :router/visited-schnaqs :eye :routes.schnaqs/personal]]]))
+      [icon-and-label-feed-button :router/visited-schnaqs :eye :routes.schnaqs/personal]]]))
 
 (defn feed-navigation
   "Navigate between the feeds."
@@ -152,7 +154,7 @@
         [feed-hubs]])
      [:div.panel-white.m-0
       (when-not (nil? edit-hash)
-        [label-feed-button :nav.schnaqs/last-added :arrow-left
+        [icon-and-label-feed-button :nav.schnaqs/last-added :arrow-left
          :routes.schnaq/admin-center {:share-hash share-hash :edit-hash edit-hash}])
       [create-feed-button :nav.schnaqs/create-schnaq :plus :routes.schnaq/create]]]))
 
