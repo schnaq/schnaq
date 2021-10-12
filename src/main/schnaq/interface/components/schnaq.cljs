@@ -9,5 +9,5 @@
         code-length shared-config/access-code-length
         padded-access-code (.padStart (str access-code) code-length "0")]
     [:span
-     (subs padded-access-code 0 (/ code-length 2)) [:span.pl-2]
+     (subs padded-access-code 0 (/ code-length 2)) [:span.pl-3]
      (subs padded-access-code (/ code-length 2))]))
