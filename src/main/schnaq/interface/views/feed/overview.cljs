@@ -182,7 +182,7 @@
     :page/subheading (labels :schnaqs/subheader)}
    [feed-navigation]
    [schnaq-list-view [:schnaqs.visited/all]]
-   [:div [sidebar-info-links]]])
+   [sidebar-info-links]])
 
 (defn page []
   [personal-discussions-view])
