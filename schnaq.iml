@@ -92,6 +92,7 @@
     <orderEntry type="library" name="Deps: org.flatland/useful:0.11.6" level="project" />
     <orderEntry type="library" name="Deps: com.datomic/datomic-pro:1.0.6316" level="project" />
     <orderEntry type="library" name="Deps: com.googlecode.json-simple/json-simple:1.1.1" level="project" />
+    <orderEntry type="library" name="Deps: clj-fuzzy:0.4.1" level="project" />
     <orderEntry type="library" name="Deps: gnl/ghostwheel:0.3.9" level="project" />
     <orderEntry type="library" name="Deps: com.cognitect/transit-cljs:0.8.269" level="project" />
     <orderEntry type="library" name="Deps: org.keycloak/keycloak-common:11.0.2" level="project" />

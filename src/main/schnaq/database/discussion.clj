@@ -1,7 +1,9 @@
 (ns schnaq.database.discussion
   "Discussion related functions interacting with the database."
-  (:require [clojure.data :as cdata]
+  (:require [clj-fuzzy.metrics :as fuzzy-metrics]
+            [clojure.data :as cdata]
             [clojure.spec.alpha :as s]
+            [clojure.string :as cstring]
             [ghostwheel.core :refer [>defn ? >defn-]]
             [schnaq.config :as config]
             [schnaq.config.shared :as shared-config]
@@ -426,21 +428,37 @@
       (sort-by second toolbelt/ascending)
       (map first))))
 
+(defn levenshtein-max?
+  "Levenshtein-Helper for datomic to have a maximum distance."
+  [max string-1 string-2]
+  (>= max (fuzzy-metrics/levenshtein
+            (cstring/lower-case string-1)
+            (cstring/lower-case string-2))))
+
+(defn tokenize-string
+  "Tokenizes a string into single tokens for the purpose of searching."
+  [content]
+  (remove cstring/blank? (cstring/split content #"\s")))
+
 (>defn search-similar-questions
   "Search starting Conclusions (Questions in QA) and try to provide answers if there are any."
   [share-hash search-string]
   [:discussion/share-hash ::specs/non-blank-string :ret (s/coll-of ::specs/statement)]
-  (let [safe-search-string (QueryParser/escape search-string)]
+  (let [search-tokens (tokenize-string search-string)]
     (->>
-      (query '[:find (pull ?statements statement-pattern) ?score
-               :in $ statement-pattern ?share-hash ?search-string
+      (query '[:find [(pull ?statements statement-pattern) ...]
+               :in $ statement-pattern ?share-hash [?search-tokens ...]
+               :with ?tokenized-content
                :where [?discussion :discussion/share-hash ?share-hash]
                [?discussion :discussion/starting-statements ?statements]
-               [(fulltext $ :statement/content ?search-string) [[?statements _ _ ?score]]]]
-             patterns/qa-question share-hash safe-search-string)
-      toolbelt/pull-key-up
-      (sort-by second toolbelt/ascending)
-      (map first))))
+               [?statements :statement/content ?content]
+               [(schnaq.database.discussion/tokenize-string ?content) [?tokenized-content ...]]
+               [(schnaq.database.discussion/levenshtein-max? 2 ?search-tokens ?tokenized-content)]]
+             patterns/qa-question share-hash search-tokens)
+      frequencies
+      (sort-by val >)
+      (map first)
+      toolbelt/pull-key-up)))
 
 (def ^:private summary-pattern
   [:db/id
