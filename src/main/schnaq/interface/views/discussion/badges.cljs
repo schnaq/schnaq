@@ -24,14 +24,12 @@
   (modal/anonymous-modal :discussion.anonymous-delete.modal/title
                          :discussion.anonymous-delete.modal/explain
                          :discussion.anonymous-delete.modal/cta))
-;; TODO no subs here or in editable?
+
 (defn- deletable?
-  "Checks if a statement can be deleted"
-  [statement edit-hash]
+  "Checks if a statement can be deleted by the user."
+  [statement edit-hash user-id creation-secrets]
   (when-not (:statement/deleted? statement)
-    (let [user-id @(rf/subscribe [:user/id])
-          creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
-          anonymous-owner? (contains? creation-secrets (:db/id statement))
+    (let [anonymous-owner? (contains? creation-secrets (:db/id statement))
           registered-owner? (= user-id (:db/id (:statement/author statement)))]
       (or edit-hash anonymous-owner? registered-owner?))))
 
@@ -93,10 +91,8 @@
 
 (defn- editable?
   "Checks if a statement can be edited"
-  [statement]
-  (let [user-id @(rf/subscribe [:user/id])
-        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
-        anonymous-owner? (contains? creation-secrets (:db/id statement))]
+  [statement user-id creation-secrets]
+  (let [anonymous-owner? (contains? creation-secrets (:db/id statement))]
     (and (not (:statement/deleted? statement))
          (or anonymous-owner?
              (= user-id (:db/id (:statement/author statement)))))))
@@ -127,8 +123,10 @@
         share-hash @(rf/subscribe [:schnaq/share-hash])
         admin-access-map @(rf/subscribe [:schnaqs/load-admin-access])
         current-edit-hash (get admin-access-map share-hash)
-        deletable? (deletable? statement current-edit-hash)
-        editable? (editable? statement)]
+        user-id @(rf/subscribe [:user/id])
+        creation-secrets @(rf/subscribe [:schnaq.discussion.statements/creation-secrets])
+        deletable? (deletable? statement current-edit-hash user-id creation-secrets)
+        editable? (editable? statement user-id creation-secrets)]
     (when (or deletable? editable?)
       [:div.dropdown.ml-2
        [:div.dropdown-toggle.m-0.p-0
