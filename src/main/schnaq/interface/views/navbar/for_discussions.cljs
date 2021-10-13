@@ -169,17 +169,18 @@
 (defn- statement-counter
   "A counter showing all statements and pulsing live."
   []
-  (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])]
-    ;; TODO only show in QA mode
-    [:div.ml-md-2
-     [navbar-components/separated-button
-      [:<>
-       [motion/pulse-once [icon :bell]
-        [:schnaq.qa.new-question/pulse?]
-        [:schnaq.qa.new-question/pulse false]
-        "#ff9e0d"]
-       " "
-       number-of-questions]]]))
+  (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
+        qa? @(rf/subscribe [:schnaq.mode/qanda?])]
+    (when qa?
+      [:div.ml-md-2
+       [navbar-components/separated-button
+        [:<>
+         [motion/pulse-once [icon :bell]
+          [:schnaq.qa.new-question/pulse?]
+          [:schnaq.qa.new-question/pulse false]
+          "#ff9e0d"]
+         " "
+         number-of-questions]]])))
 
 (rf/reg-event-db
   :schnaq.qa.new-question/pulse
