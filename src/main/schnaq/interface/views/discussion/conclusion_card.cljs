@@ -106,17 +106,17 @@
 (defn- mark-as-answer-button
   "Show a button to mark a statement as an answer."
   [statement]
-  (let [not-a-starting-statement? (= :routes.schnaq.select/statement @(rf/subscribe [:navigation/current-route-name]))
+  (let [history-length (count @(rf/subscribe [:discussion-history]))
         statement-labels (set (:statement/labels statement))
         label ":check"
         checked? (statement-labels label)]
-    (when not-a-starting-statement?
+    (when (= 1 history-length)
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pr-0
         {:on-click #(if checked?
                       (rf/dispatch [:statement.labels/remove statement label])
                       (rf/dispatch [:statement.labels/add statement label]))}
-        [:small.pr-2 (if checked? "Markierung aufheben" "Als Antwort markieren")]
+        [:small.pr-2 (if checked? (labels :qanda.button.mark/as-unanswered) (labels :qanda.button.mark/as-answer))]
         [labels/build-label (if checked? label ":unchecked")]]])))
 
 (defn- show-active-labels

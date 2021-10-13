@@ -673,7 +673,8 @@
    :qanda.call-to-action/intro-2 "navigieren und den Code dort eingeben."
    :qanda.call-to-action/help "Alle Optionen zum Teilen deines schnaqs findest du oben rechts in der Navigationsleiste"
    :qanda.search/similar-results "Ähnliche Fragen"
-
+   :qanda.button.mark/as-answer "Als Antwort markieren"
+   :qanda.button.mark/as-unanswered "Markierung aufheben"
 
    :schnaqs/header "Übersicht deiner schnaqs"
    :schnaqs/subheader "Auf diese schnaqs hast du Zugriff"
