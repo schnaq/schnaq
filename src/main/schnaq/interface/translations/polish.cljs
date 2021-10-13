@@ -673,7 +673,7 @@
    :qanda.call-to-action/help "Wszystkie opcje udostępniania Twojego schnaqa można znaleźć w prawym górnym pasku nawigacji"
    :qanda.search/similar-results "Podobne pytania"
    :qanda.search/similar-results-explanation-1 "Podobne pytania, które już zostały zadane, pojawiają się tutaj. Możesz oznaczyć je jako istotne dla Ciebie za pomocą "
-   :qanda.search/similar-results-explanation-2 " ."
+   :qanda.search/similar-results-explanation-2 "."
 
    :schnaqs/header "Przegląd Twojego schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"

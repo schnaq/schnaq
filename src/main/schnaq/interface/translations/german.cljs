@@ -675,7 +675,7 @@
    :qanda.call-to-action/help "Alle Optionen zum Teilen deines schnaqs findest du oben rechts in der Navigationsleiste"
    :qanda.search/similar-results "Ähnliche Fragen"
    :qanda.search/similar-results-explanation-1 "Bereits gestellte ähnliche Fragen erscheinen hier. Du kannst diese mit "
-   :qanda.search/similar-results-explanation-2 " für dich als relevant markieren."
+   :qanda.search/similar-results-explanation-2 "für dich als relevant markieren."
 
 
    :schnaqs/header "Übersicht deiner schnaqs"

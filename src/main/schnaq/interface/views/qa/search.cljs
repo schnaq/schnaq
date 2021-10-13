@@ -48,6 +48,7 @@
          [:text-sm.text-white
           (labels :qanda.search/similar-results-explanation-1)
           [icon :arrow-up "m-auto"]
+          " "
           (labels :qanda.search/similar-results-explanation-2)]]]
 
        [:div.card-columns.card-columns-discussion

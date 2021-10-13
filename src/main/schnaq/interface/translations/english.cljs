@@ -670,7 +670,7 @@
    :qanda.call-to-action/help "All options for sharing your schnaq can be found in the top right navigation bar"
    :qanda.search/similar-results "Similar Questions"
    :qanda.search/similar-results-explanation-1 "Similar questions that have already been asked appear here. You can mark them as relevant for you with "
-   :qanda.search/similar-results-explanation-2 " ."
+   :qanda.search/similar-results-explanation-2 "."
 
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"
