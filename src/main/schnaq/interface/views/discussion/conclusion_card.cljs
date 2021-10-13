@@ -111,7 +111,7 @@
         label ":check"
         checked? (statement-labels label)]
     (when not-a-starting-statement?
-      [:section.w-100 #_{:style {:width "400px"}}
+      [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pr-0
         {:on-click #(if checked?
                       (rf/dispatch [:statement.labels/remove statement label])
