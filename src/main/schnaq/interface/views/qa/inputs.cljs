@@ -28,7 +28,7 @@
          :required true :data-dynamic-height true
          :placeholder (labels :qanda/add-question)
          :on-key-down #(throttled-search %)}]]]
-     [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3
+     [:button.btn.btn-lg.btn-secondary.w-100.shadow-sm.mt-3.rounded-1
       {:type "submit" :title (labels :qanda.button/submit)}
       [:div.d-inline-block
        [:div.d-flex.flex-row.justify-content-center
