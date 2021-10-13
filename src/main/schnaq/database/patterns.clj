@@ -57,6 +57,9 @@
   (conj statement
         {[:statement/_parent :as :statement/answers] statement}))
 
+(def statement-with-labels-from-children
+  (conj statement
+        {[:statement/_parent :as :statement/children] [:statement/labels]}))
 
 ;; -----------------------------------------------------------------------------
 
