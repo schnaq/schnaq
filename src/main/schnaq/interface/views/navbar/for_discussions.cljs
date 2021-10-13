@@ -101,7 +101,7 @@
 
 (defn- dropdown-views []
   (let [dropdown-id "schnaq-views-dropdown"]
-    [:div.dropdown
+    [:div.dropdown.pl-2
      [navbar-components/separated-button
       [:<>
        [:img.header-standalone-icon
@@ -172,10 +172,10 @@
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
         qa? @(rf/subscribe [:schnaq.mode/qanda?])]
     (when qa?
-      [:div.ml-md-2
+      [:div.pl-2
        [navbar-components/separated-button
         [:<>
-         [motion/pulse-once [icon :bell]
+         [motion/pulse-once [icon :info-question]
           [:schnaq.qa.new-question/pulse?]
           [:schnaq.qa.new-question/pulse false]
           "#ff9e0d"]
@@ -201,8 +201,8 @@
       content])
    [:div.d-flex.align-items-center
     [statement-counter]
-    [:div.mr-2.mx-md-2 [dropdown-views]]
-    [:div.d-flex.align-items-center.schnaq-navbar
+    [dropdown-views]
+    [:div.d-flex.align-items-center.schnaq-navbar.ml-2
      [um/user-handling-menu "btn-link"]]]])
 
 (defn- header-discussion
