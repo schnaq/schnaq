@@ -175,7 +175,7 @@
       [:div.pl-2
        [navbar-components/separated-button
         [:<>
-         [motion/pulse-once [icon :info-question]
+         [motion/pulse-once [icon :comment/alt]
           [:schnaq.qa.new-question/pulse?]
           [:schnaq.qa.new-question/pulse false]
           "#ff9e0d"]

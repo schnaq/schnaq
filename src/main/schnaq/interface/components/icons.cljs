@@ -17,6 +17,7 @@
       :circle-notch [:i.fas.fa-circle-notch {:class classes}]
       :cog [:i.fas.fa-cog {:class classes}]
       :comment [:i.fas.fa-comment {:class classes}]
+      :comment/alt [:i.far.fa-comment-alt {:class classes}]
       :comments [:i.fas.fa-comments {:class classes}]
       :cookie/complete [:i.fas.fa-cookie {:class classes}]
       :copy [:i.far.fa-copy {:class classes}]
