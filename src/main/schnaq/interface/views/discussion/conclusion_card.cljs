@@ -1,7 +1,9 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [re-frame.core :as rf]
+  (:require [ghostwheel.core :refer [>defn-]]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-config]
+            [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -127,14 +129,24 @@
          [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
           [labels/build-label label]])])))
 
+(>defn- card-highlighting
+  "Add card-highlighting to a statement card."
+  [{:keys [meta/answered? statement/type]} route-name]
+  [::specs/statement keyword? :ret string?]
+  (let [starting? (= :routes.schnaq/start route-name)]
+    (if (and starting? answered?)
+      "highlight-card-answered"
+      (str "highlight-card-" (name (or type :neutral))))))
+
 (defn statement-card
   ([statement]
    [statement-card statement nil])
   ([statement additional-content]
-   (let [q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
+   (let [route-name @(rf/subscribe [:navigation/current-route-name])
+         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
      [:article.statement-card.my-2
       [:div.d-flex.flex-row
-       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+       [:div {:class (card-highlighting statement route-name)}]
        [:div.card-view.card-body.py-2
         (when (:meta/new? statement)
           [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
