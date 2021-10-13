@@ -119,7 +119,7 @@
 
 (rf/reg-event-fx
   :discussion.add.statement/starting-success
-  (fn [_ [_ form new-starting-statements]]
+  (fn [{:keys [db]} [_ form new-starting-statements]]
     (let [starting-conclusions (:starting-conclusions new-starting-statements)
           statement-with-creation-secret (first (filter :statement/creation-secret
                                                         starting-conclusions))]
@@ -128,7 +128,9 @@
                                        :body (labels :discussion.notification/new-content-body)
                                        :context :success}]]
             [:dispatch [:discussion.query.conclusions/set-starting new-starting-statements]]
-            (when (and (= 1 (count starting-conclusions)) (not shared-config/embedded?))
+            (when (and (= 1 (count starting-conclusions))
+                       (not shared-config/embedded?)
+                       (not= :discussion.mode/qanda (get-in db [:schnaq :selected :discussion/mode])))
               [:dispatch [:celebrate/schnaq-filled]])
             (when statement-with-creation-secret
               [:dispatch [:discussion.statements/add-creation-secret statement-with-creation-secret]])
