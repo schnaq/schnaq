@@ -5,6 +5,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -178,7 +179,7 @@
          [motion/pulse-once [icon :comment/alt]
           [:schnaq.qa.new-question/pulse?]
           [:schnaq.qa.new-question/pulse false]
-          "#ff9e0d"]
+          (:secondary colors)]
          " "
          number-of-questions]]])))
 
