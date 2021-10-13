@@ -109,7 +109,8 @@
   (fn [{:keys [db]} [_ form]]
     (let [share-hash (get-in db [:schnaq :selected :discussion/share-hash])
           statement-text (oget form [:statement-text :value])]
-      {:fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
+      {:db (update-in db [:schnaq :selected :meta-info :all-statements] inc)
+       :fx [(http/xhrio-request db :post "/discussion/statements/starting/add"
                                 [:discussion.add.statement/starting-success form]
                                 {:statement statement-text
                                  :share-hash share-hash

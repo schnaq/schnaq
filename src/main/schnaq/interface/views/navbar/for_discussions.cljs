@@ -174,9 +174,21 @@
     [:div.ml-md-2
      [navbar-components/separated-button
       [:<>
-       [motion/pulse-once
-        [icon :bell]] " "
+       [motion/pulse-once [icon :bell]
+        [:schnaq.qa.new-question/pulse?]
+        [:schnaq.qa.new-question/pulse false]]
+       " "
        number-of-questions]]]))
+
+(rf/reg-event-db
+  :schnaq.qa.new-question/pulse
+  (fn [db [_ pulse]]
+    (assoc-in db [:schnaq :qa :new-question :pulse] pulse)))
+
+(rf/reg-sub
+  :schnaq.qa.new-question/pulse?
+  (fn [db _]
+    (get-in db [:schnaq :qa :new-question :pulse] false)))
 
 (defn navbar-tools
   "Showing utilities in the navbar. E.g. Dropdown of views and user-menu."

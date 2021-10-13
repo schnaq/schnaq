@@ -16,7 +16,8 @@
         submit-fn (fn [e]
                     (jq/prevent-default e)
                     (rf/dispatch [:discussion.add.statement/starting
-                                  (oget e [:currentTarget :elements])]))]
+                                  (oget e [:currentTarget :elements])])
+                    (rf/dispatch [:schnaq.qa.new-question/pulse true]))]
     [:form {:on-submit #(submit-fn %)
             :on-key-down #(when (jq/ctrl-press % 13) (submit-fn %))}
      [:div.d-flex.flex-row.discussion-input-content.rounded-1.mb-3

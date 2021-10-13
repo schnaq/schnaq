@@ -75,12 +75,13 @@
 
 (defn pulse-once
   "Lets your component pulse a number of times.
-  Pulses once if the pulse-on-key is set and then calls the pulse-off-event."
-  [component pulse-sub pulse-off-event]
+  Pulses once if the pulse-sub subscription returns true.
+  Then dispatches the pulse-stop-event."
+  [component pulse-sub pulse-stop-event]
   [:> (.-div motion)
    {:variants {:pulse {:scale [1 1.4 1 1]
                        :transition {:delay 0.1
                                     :duration 2}}}
-    :animate (if @(rf/subscribe pulse-sub) "pulse" nil)
-    :on-animation-complete #(rf/dispatch pulse-off-event)}
+    :animate (if @(rf/subscribe pulse-sub) :pulse :nothing)
+    :on-animation-complete #(rf/dispatch pulse-stop-event)}
    component])
