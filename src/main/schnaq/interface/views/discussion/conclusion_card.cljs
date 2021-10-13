@@ -110,7 +110,7 @@
         statement-labels (set (:statement/labels statement))
         label ":check"
         checked? (statement-labels label)]
-    (when (= 1 history-length)
+    (when (= 1 history-length)                              ;; history-length == 1 => a reply to a question
       [:section.w-100
        [:button.btn.btn-sm.btn-link.text-dark.pr-0
         {:on-click #(if checked?
