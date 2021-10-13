@@ -171,7 +171,8 @@
   "A counter showing all statements and pulsing live."
   []
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
-        qa? @(rf/subscribe [:schnaq.mode/qanda?])]
+        qa? @(rf/subscribe [:schnaq.mode/qanda?])
+        share-hash @(rf/subscribe [:schnaq/share-hash])]
     (when qa?
       [:div.pl-2
        [navbar-components/separated-button
@@ -181,7 +182,8 @@
           [:schnaq.qa.new-question/pulse false]
           (:secondary colors)]
          " "
-         number-of-questions]]])))
+         number-of-questions]
+        {:on-click #(rf/dispatch [:navigation/navigate :routes.schnaq/start {:share-hash share-hash}])}]])))
 
 (rf/reg-event-db
   :schnaq.qa.new-question/pulse
