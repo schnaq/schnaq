@@ -135,7 +135,7 @@
   [scheduler/middleware
    [validate-conditions-middleware
     options
-    [:div  {:class classes}
+    [:div {:class classes}
      (if shared-config/embedded? [discussion-navbar/embeddable-header] header)
      body]]])
 
