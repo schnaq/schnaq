@@ -5,6 +5,7 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.components.colors :refer [colors]]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -101,7 +102,7 @@
 
 (defn- dropdown-views []
   (let [dropdown-id "schnaq-views-dropdown"]
-    [:div.dropdown
+    [:div.dropdown.pl-2
      [navbar-components/separated-button
       [:<>
        [:img.header-standalone-icon
@@ -172,13 +173,13 @@
   (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
         qa? @(rf/subscribe [:schnaq.mode/qanda?])]
     (when qa?
-      [:div.ml-md-2
+      [:div.pl-2
        [navbar-components/separated-button
         [:<>
-         [motion/pulse-once [icon :bell]
+         [motion/pulse-once [icon :comment/alt]
           [:schnaq.qa.new-question/pulse?]
           [:schnaq.qa.new-question/pulse false]
-          "#ff9e0d"]
+          (:secondary colors)]
          " "
          number-of-questions]]])))
 
@@ -201,8 +202,8 @@
       content])
    [:div.d-flex.align-items-center
     [statement-counter]
-    [:div.mr-2.mx-md-2 [dropdown-views]]
-    [:div.d-flex.align-items-center.schnaq-navbar
+    [dropdown-views]
+    [:div.d-flex.align-items-center.schnaq-navbar.ml-2
      [um/user-handling-menu "btn-link"]]]])
 
 (defn- header-discussion

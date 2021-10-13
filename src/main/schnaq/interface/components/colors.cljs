@@ -7,6 +7,7 @@
      :positive/default "#1292ee"
      :positive/light "#4cacf4"
      :positive/selected "#0181dd"
+     :secondary "#ff9e0d"
      :negative/default "#ff772d"
      :negative/selected "#fe661e"
      :neutral/dark "#adb5bd"

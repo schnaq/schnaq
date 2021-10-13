@@ -12,7 +12,6 @@ $height-of-components: 4.25rem;
   height: $height-of-components;
 
   @include media-breakpoint-down(sm) {
-    border-radius: 0;
     max-height: 8rem;
     width: 100%;
   }
