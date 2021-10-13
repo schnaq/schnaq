@@ -36,10 +36,26 @@
    (labels :nav.buttons/language-toggle)
    [:span [language-dropdown show-label? options]]])
 
-(>defn navbar-button
+(>defn button
   "Build a button for the navbar. Takes a label as a keyword and anything, which
   can be passed to an anchor's href."
   [label href]
   [keyword? any? :ret vector?]
   [:a.nav-link {:href href :role "button"}
    (labels label)])
+
+(defn separated-button
+  "The default navbar-button. Dropdown-content must have according classes."
+  ([button-content]
+   [separated-button button-content {}])
+  ([button-content attributes]
+   [separated-button button-content attributes nil])
+  ([button-content attributes dropdown-content]
+   [:<>
+    [:button.btn.discussion-navbar-button
+     (merge
+       {:type "button"
+        :class "btn-white"}
+       attributes)
+     button-content]
+    dropdown-content]))
