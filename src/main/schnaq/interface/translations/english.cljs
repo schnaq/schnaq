@@ -668,6 +668,8 @@
    :qanda.call-to-action/intro-2 "and entering the code there."
    :qanda.call-to-action/help "All options for sharing your schnaq can be found in the top right navigation bar"
    :qanda.search/similar-results "Similar Questions"
+   :qanda.button.mark/as-answer "Mark as answer"
+   :qanda.button.mark/as-unanswered "Unmark as answer"
 
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"

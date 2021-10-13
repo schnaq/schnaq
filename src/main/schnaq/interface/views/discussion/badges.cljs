@@ -168,6 +168,7 @@
   [statement]
   (let [old-statements-nums-map @(rf/subscribe [:visited/statement-nums])
         path-parameters (:path-params @(rf/subscribe [:navigation/current-route]))
+        q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])
         old-statement-num (get old-statements-nums-map (:db/id statement) 0)
         statement-num (get-in statement [:meta/sub-discussion-info :sub-statements] 0)
         new? (not (= old-statement-num statement-num))
@@ -182,7 +183,8 @@
         [icon :comments "m-auto"])
       " " statement-num]
      [authors-badge authors]
-     [statement-labels/edit-labels-button statement]
+     (when-not q-and-a?
+       [statement-labels/edit-labels-button statement])
      [edit-statement-dropdown-menu statement]]))
 
 (defn static-info-badges

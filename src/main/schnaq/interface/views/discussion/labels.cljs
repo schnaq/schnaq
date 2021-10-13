@@ -19,7 +19,8 @@
           ":check" ["badge-success" :check/normal]
           ":ghost" ["badge-dark" :ghost]
           ":question" ["badge-warning" :question]
-          ":times" ["badge-danger" :cross])
+          ":times" ["badge-danger" :cross]
+          ":unchecked" ["badge-light" :check/normal])
         extra-class (if set? (str badge-color " label-set") badge-color)]
     [:span.badge.badge-pill.px-4
      {:class (if hover? (str extra-class " label") extra-class)}
@@ -49,7 +50,7 @@
   [statement]
   (let [authenticated? @(rf/subscribe [:user/authenticated?])]
     ;; This outer div helps accessibility when popup is open – https://atomiks.github.io/tippyjs/v6/accessibility/#interactivity
-    [:div
+    [:div#label-selector
      (if authenticated?
        [tooltip/html
         [build-labels statement]

@@ -671,6 +671,8 @@
    :qanda.call-to-action/intro-2 "i wprowadź tam kod."
    :qanda.call-to-action/help "Wszystkie opcje udostępniania Twojego schnaqa można znaleźć w prawym górnym pasku nawigacji"
    :qanda.search/similar-results "Podobne pytania"
+   :qanda.button.mark/as-answer "Zaznacz jako odpowiedź"
+   :qanda.button.mark/as-unanswered "Odznacz"
 
    :schnaqs/header "Przegląd Twojego schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"

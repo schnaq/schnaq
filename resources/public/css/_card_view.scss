@@ -138,6 +138,7 @@
 }
 
 .statement-card {
+  @extend .card;
   @include rounded.rounded-1;
   border: 0;
   white-space: pre-line;
@@ -172,6 +173,11 @@
 .highlight-card-attack {
   @extend .highlight-card;
   background: $negative;
+}
+
+.highlight-card-answered {
+  @extend .highlight-card;
+  background: $green;
 }
 
 .search-bar {

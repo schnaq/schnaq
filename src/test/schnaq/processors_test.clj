@@ -25,3 +25,12 @@
           meta-info (meta-info/discussion-meta-info share-hash author)
           processed-meta-info (get discussion-with-meta-info :meta-info)]
       (is (= meta-info processed-meta-info)))))
+
+(deftest with-answered?-info-test
+  (let [statement {:db/id 17592186045670,
+                   :statement/author {:db/id 17592186045540, :user.registered/keycloak-id "d6d8a351-2074-46ff-aa9b-9c57ab6c6a18", :user.registered/display-name "n2o"}
+                   :statement/version 1, :statement/created-at #inst "2021-10-12T10:50:43.312-00:00", :statement/content "möp",
+                   :statement/children [{:statement/labels [":foo" ":check"]}
+                                        {:statement/labels [":todo"]}]}]
+    (is (:meta/answered? (processors/with-answered?-info statement)))
+    (is (not (:meta/answered? (processors/with-answered?-info (dissoc statement :statement/children)))))))
