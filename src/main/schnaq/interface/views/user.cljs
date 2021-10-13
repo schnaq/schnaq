@@ -18,7 +18,7 @@
         display-name (tools/truncate-to-n-chars (user-utils/display-name user) 15)]
     [:div.d-flex {:class additional-classes}
      [common/avatar user avatar-size]
-     [:div.mx-2 [:span.text-sm {:class "text-purple-dark"} display-name]
+     [:div.mx-2 [:span.text-sm.text-purple-dark display-name]
       (when created
         [:div.small.font-weight-light.text-muted
          [util-time/timestamp-with-tooltip created locale]])]]))
@@ -35,21 +35,6 @@
      [:div.d-none.d-md-block
       [common/avatar user avatar-size]]
      [:small.mx-2.my-auto {:class name-class} display-name]]))
-
-(defn user-info-left-to-right
-  "User info box displaying user's nickname, timestamp and the avatar from left to right."
-  [user avatar-size time]
-  (let [locale @(rf/subscribe [:current-locale])
-        authenticated? (:user.registered/keycloak-id user)
-        display-name (user-utils/display-name user)
-        name-class (if authenticated? "text-purple-dark" "text-muted")]
-    [:div.d-flex.flex-row.text-muted
-     (when time
-       [:small.font-weight-light.d-inline.my-auto.ml-2
-        [util-time/timestamp-with-tooltip time locale]])
-     [:small.mx-1.my-auto " " (labels :discussion.badges/statement-by) " "]
-     [:small.mr-2.my-auto {:class name-class} display-name]
-     [common/avatar user avatar-size]]))
 
 (rf/reg-event-fx
   :user/set-display-name
