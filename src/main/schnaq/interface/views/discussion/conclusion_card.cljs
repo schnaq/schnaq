@@ -25,7 +25,7 @@
   [body]
   [motion/fade-in-and-out
    [:article.call-to-contribute.m-3
-    [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5
+    [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5.rounded-1
      [:div.col-2.py-md-5.d-flex
       [:img.w-75.align-self-center {:src (img-path :schnaqqifant/three-d-head)}]]
      [:div.col-10.py-md-5

@@ -236,11 +236,25 @@
     [header-qanda]
     [header-discussion]))
 
+(defn- navbar-qanda-title []
+  (let [{:discussion/keys [title share-hash]} @(rf/subscribe [:schnaq/selected])]
+    [:<>
+     [:div.schnaq-navbar.mb-4.bg-primary
+      [:a.p-3.d-flex.h-100 {:href (reitfe/href :routes.schnaqs/personal)}
+       [:img.d-inline-block.align-middle
+        {:src (img-path :logo-white) :alt "schnaq logo"}]]]
+     [:div.mx-1.mx-md-5.px-md-5.pt-2.d-flex.flex-grow-1.flex-column
+      [:small.text-white (labels :discussion.navbar/title)]
+      [:div.clickable-no-hover
+       [:a.link-unstyled
+        {:href (reitfe/href :routes.schnaq/start {:share-hash share-hash})}
+        [:h1.h5.text-white (toolbelt/truncate-to-n-chars title 40)]]]]]))
+
 (defn header-for-qanda-view
   "Header displaying only title, views and user"
   []
   [:div.d-flex.flex-row.flex-wrap.p-md-3
-   [navbar-title]
+   [navbar-qanda-title]
    [navbar-tools]])
 
 (defn embeddable-header []

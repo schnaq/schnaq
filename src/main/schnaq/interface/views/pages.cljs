@@ -129,13 +129,13 @@
 
 (>defn- with-header
   "Page layout with discussion header."
-  [{:page/keys [title heading] :as options} body header]
+  [{:page/keys [title heading classes] :as options} body header]
   [::page-options (s/+ vector?) vector? :ret vector?]
   (common/set-website-title! (or title heading))
   [scheduler/middleware
    [validate-conditions-middleware
     options
-    [:<>
+    [:div {:class classes}
      (if shared-config/embedded? [discussion-navbar/embeddable-header] header)
      body]]])
 

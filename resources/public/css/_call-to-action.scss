@@ -30,7 +30,6 @@
 }
 
 .layered-wave-background {
-  @include rounded.rounded-1;
   background-image: url('https://s3.schnaq.com/schnaq-common/background/layered_background_square.svg');
   background-position: bottom;
   background-repeat: no-repeat;

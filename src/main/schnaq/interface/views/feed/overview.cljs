@@ -17,7 +17,7 @@
   "Show error message when no meetings were loaded."
   []
   [motion/fade-in-and-out
-   [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5.text-center
+   [:div.alert.alert-light.text-light.row.layered-wave-background.p-md-5.text-center.rounded-1
     [:div.col-2.py-md-5.d-flex
      [:div.display-1.align-self-center "🙈"]]
     [:div.col-10.py-md-5
