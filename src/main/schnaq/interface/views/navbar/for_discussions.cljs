@@ -176,7 +176,8 @@
       [:<>
        [motion/pulse-once [icon :bell]
         [:schnaq.qa.new-question/pulse?]
-        [:schnaq.qa.new-question/pulse false]]
+        [:schnaq.qa.new-question/pulse false]
+        "#ff9e0d"]
        " "
        number-of-questions]]]))
 
