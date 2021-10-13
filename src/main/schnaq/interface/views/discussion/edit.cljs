@@ -10,7 +10,7 @@
 (defn- edit-card
   "The same as a statement-card, but currently being an editable input."
   [label html-id dispatch-fn edit-id pro-con-enabled? content statement-type change-statement-type]
-  [:form.card.statement-card.py-2.px-3
+  [:form.statement-card.py-2.px-3
    {:on-submit (fn [e]
                  (jq/prevent-default e)
                  (dispatch-fn e))

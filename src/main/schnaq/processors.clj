@@ -67,6 +67,24 @@
         data))
     data))
 
+(defn- answered?
+  "Check if a child exists, which has the label :check."
+  [statement]
+  [::specs/statement :ret boolean?]
+  (string? ((set (flatten (map :statement/labels (:statement/children statement)))) ":check")))
+
+(defn with-answered?-info
+  "Mark a statement as answered if `answered?` is true."
+  [data]
+  (walk/postwalk
+    (fn [statement]
+      (if (s/valid? ::specs/statement statement)
+        (if (answered? statement)
+          (assoc statement :meta/answered? true)
+          statement)
+        statement))
+    data))
+
 (defn with-sub-discussion-info
   "Add sub-discussion-info to valid statements, if necessary.
    Sub-Discussion-infos are number of sub-statements, authors, ..."

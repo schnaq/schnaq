@@ -9,13 +9,13 @@
 ;; Navbar Elements
 
 (defn- blog-link []
-  [navbar-components/navbar-button :nav/blog "https://schnaq.com/blog/"])
+  [navbar-components/button :nav/blog "https://schnaq.com/blog/"])
 
 (defn- pricing-button []
-  [navbar-components/navbar-button :router/pricing (reitfe/href :routes/pricing)])
+  [navbar-components/button :router/pricing (reitfe/href :routes/pricing)])
 
 (defn- privacy-button []
-  [navbar-components/navbar-button :router/privacy (reitfe/href :routes/privacy)])
+  [navbar-components/button :router/privacy (reitfe/href :routes/privacy)])
 
 
 ;; -----------------------------------------------------------------------------
@@ -72,7 +72,7 @@
     ;; menu items
     [:div#schnaq-navbar.collapse.navbar-collapse
      [:ul.navbar-nav.ml-auto
-      [:li.nav-item [navbar-components/navbar-button :nav/schnaqs (reitfe/href :routes.schnaqs/personal)]]
+      [:li.nav-item [navbar-components/button :nav/schnaqs (reitfe/href :routes.schnaqs/personal)]]
       [:li.nav-item [pricing-button]]
       [:li.nav-item [privacy-button]]
       [:li.nav-item [blog-link]]

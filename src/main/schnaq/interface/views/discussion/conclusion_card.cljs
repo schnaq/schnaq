@@ -1,7 +1,9 @@
 (ns schnaq.interface.views.discussion.conclusion-card
-  (:require [re-frame.core :as rf]
+  (:require [ghostwheel.core :refer [>defn-]]
+            [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
             [schnaq.config.shared :as shared-config]
+            [schnaq.database.specs :as specs]
             [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
             [schnaq.interface.components.motion :as motion]
@@ -89,38 +91,75 @@
       [icon :arrow-down "vote-arrow m-auto"]]
      [:span (logic/get-down-votes statement votes)]]))
 
+(defn- statement-information-row [statement]
+  (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))]
+    [:div.d-flex.flex-wrap.align-items-center
+     [:a.badge.mr-3
+      {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
+      [:button.btn.btn-sm.btn-dark
+       [icon :plus "text-white m-auto fa-xs"]]
+      [:span.ml-2.text-dark (labels :statement/reply)]]
+     [up-down-vote statement]
+     [:div.ml-sm-0.ml-lg-auto
+      [badges/extra-discussion-info-badges statement]]]))
+
+(defn- mark-as-answer-button
+  "Show a button to mark a statement as an answer."
+  [statement]
+  (let [history-length (count @(rf/subscribe [:discussion-history]))
+        statement-labels (set (:statement/labels statement))
+        label ":check"
+        checked? (statement-labels label)]
+    (when (= 1 history-length)                              ;; history-length == 1 => a reply to a question
+      [:section.w-100
+       [:button.btn.btn-sm.btn-link.text-dark.pr-0
+        {:on-click #(if checked?
+                      (rf/dispatch [:statement.labels/remove statement label])
+                      (rf/dispatch [:statement.labels/add statement label]))}
+        [:small.pr-2 (if checked? (labels :qanda.button.mark/as-unanswered) (labels :qanda.button.mark/as-answer))]
+        [labels/build-label (if checked? label ":unchecked")]]])))
+
+(defn- show-active-labels
+  "Shows all active labels."
+  [statement]
+  (let [statement-labels (set (:statement/labels statement))]
+    (when (seq statement-labels)
+      [:div.mx-1
+       (for [label statement-labels]
+         [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
+          [labels/build-label label]])])))
+
+(>defn- card-highlighting
+  "Add card-highlighting to a statement card."
+  [{:keys [meta/answered? statement/type]} route-name]
+  [::specs/statement keyword? :ret string?]
+  (let [starting? (= :routes.schnaq/start route-name)]
+    (if (and starting? answered?)
+      "highlight-card-answered"
+      (str "highlight-card-" (name (or type :neutral))))))
+
 (defn statement-card
   ([statement]
    [statement-card statement nil])
   ([statement additional-content]
-   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
-         statement-labels (set (:statement/labels statement))]
-     [:article.card.statement-card.my-2
+   (let [route-name @(rf/subscribe [:navigation/current-route-name])
+         q-and-a? @(rf/subscribe [:schnaq.mode/qanda?])]
+     [:article.statement-card.my-2
       [:div.d-flex.flex-row
-       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
+       [:div {:class (card-highlighting statement route-name)}]
        [:div.card-view.card-body.py-2
         (when (:meta/new? statement)
-          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right.mt-n3
+          [:div.bg-primary.p-2.rounded-1.d-inline-block.text-white.small.float-right
            (labels :discussion.badges/new)])
-        [:div.d-flex.justify-content-start.pt-2
-         [user/user-info statement 42 "w-100"]]
+        [:div.pt-2.d-flex
+         [:div.mr-auto [user/user-info statement 42 "w-100"]]
+         (when q-and-a? [:div.ml-auto [mark-as-answer-button statement]])]
         [:div.my-4]
         [:div.text-purple-dark
          [md/as-markdown (:statement/content statement)]]
-        [:div.d-flex.flex-wrap.align-items-center
-         [:a.badge.mr-3
-          {:href (reitfe/href :routes.schnaq.select/statement (assoc path-params :statement-id (:db/id statement)))}
-          [:button.btn.btn-sm.btn-dark
-           [icon :plus "text-white m-auto fa-xs"]]
-          [:span.ml-2.text-dark (labels :statement/reply)]]
-         [up-down-vote statement]
-         [:div.ml-sm-0.ml-lg-auto
-          [badges/extra-discussion-info-badges statement]]]
-        (when (seq statement-labels)
-          [:div.mx-1
-           (for [label statement-labels]
-             [:span.pr-1 {:key (str "show-label-" (:db/id statement) label)}
-              [labels/build-label label]])])
+        [statement-information-row statement]
+        (when-not q-and-a?
+          [show-active-labels statement])
         additional-content]]])))
 
 (defn reduced-answer
@@ -128,7 +167,7 @@
   [statement]
   (let [path-params (:path-params @(rf/subscribe [:navigation/current-route]))
         statement-labels (set (:statement/labels statement))]
-    [:article.card.statement-card.my-1
+    [:article.statement-card.my-1
      [:div.d-flex.flex-row
       [:div {:class (str "highlight-card-" (name (or (:statement/type statement) :neutral)))}]
       [:div.card-view.card-body

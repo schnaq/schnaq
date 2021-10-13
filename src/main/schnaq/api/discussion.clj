@@ -47,7 +47,8 @@
    (-> share-hash
        discussion-db/starting-statements
        (valid-statements-with-votes user-id)
-       processors/with-sub-discussion-info))
+       processors/with-sub-discussion-info
+       processors/with-answered?-info))
   ([share-hash user-id secret-statement-id]
    (add-creation-secret (starting-conclusions-with-processors share-hash user-id) secret-statement-id)))
 
@@ -447,8 +448,7 @@
               :name :api.discussion.statement.vote/up
               :responses {200 {:body (s/keys :req-un [:statement.vote/operation])}
                           400 at/response-error-body}}]]
-     ["/label" {:middleware [:user/authenticated?
-                             :discussion/valid-statement?]}
+     ["/label" {:middleware [:discussion/valid-statement?]}
       ["/add" {:put add-label
                :description (at/get-doc #'add-label)
                :name :api.discussion.statement.label/add

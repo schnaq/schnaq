@@ -5,7 +5,9 @@
             [goog.string :as gstring]
             [re-frame.core :as rf]
             [reitit.frontend.easy :as reitfe]
+            [schnaq.interface.components.icons :refer [icon]]
             [schnaq.interface.components.images :refer [img-path]]
+            [schnaq.interface.components.motion :as motion]
             [schnaq.interface.components.navbar :as navbar-components]
             [schnaq.interface.translations :refer [labels]]
             [schnaq.interface.utils.js-wrapper :as jsw]
@@ -100,17 +102,18 @@
 (defn- dropdown-views []
   (let [dropdown-id "schnaq-views-dropdown"]
     [:div.dropdown
-     [:button.btn.btn-white.discussion-navbar-button
-      {:id dropdown-id :type "button" :data-toggle "dropdown"
+     [navbar-components/separated-button
+      [:<>
+       [:img.header-standalone-icon
+        {:src (img-path :icon-views-dark) :alt "graph icon"}]
+       [:p.small.m-0.text-nowrap.dropdown-toggle (labels :discussion.navbar/views)]]
+      {:id dropdown-id :data-toggle "dropdown"
        :aria-haspopup "true" :aria-expanded "false"}
-      [:img.header-standalone-icon
-       {:src (img-path :icon-views-dark) :alt "graph icon"}]
-      [:p.small.m-0.text-nowrap.dropdown-toggle (labels :discussion.navbar/views)]]
-     [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
-      [standard-view-button]
-      [graph-button]
-      [summary-button]
-      [qanda-view-button]]]))
+      [:div.dropdown-menu.dropdown-menu-right {:aria-labelledby dropdown-id}
+       [standard-view-button]
+       [graph-button]
+       [summary-button]
+       [qanda-view-button]]]]))
 
 ;; -----------------------------------------------------------------------------
 
@@ -163,12 +166,41 @@
        (when edit-hash
          [admin/admin-center])])))
 
-(defn navbar-tools [content]
+(defn- statement-counter
+  "A counter showing all statements and pulsing live."
+  []
+  (let [number-of-questions @(rf/subscribe [:schnaq.selected/statement-number])
+        qa? @(rf/subscribe [:schnaq.mode/qanda?])]
+    (when qa?
+      [:div.ml-md-2
+       [navbar-components/separated-button
+        [:<>
+         [motion/pulse-once [icon :bell]
+          [:schnaq.qa.new-question/pulse?]
+          [:schnaq.qa.new-question/pulse false]
+          "#ff9e0d"]
+         " "
+         number-of-questions]]])))
+
+(rf/reg-event-db
+  :schnaq.qa.new-question/pulse
+  (fn [db [_ pulse]]
+    (assoc-in db [:schnaq :qa :new-question :pulse] pulse)))
+
+(rf/reg-sub
+  :schnaq.qa.new-question/pulse?
+  (fn [db _]
+    (get-in db [:schnaq :qa :new-question :pulse] false)))
+
+(defn navbar-tools
+  "Showing utilities in the navbar. E.g. Dropdown of views and user-menu."
+  [content]
   [:div.d-flex.flex-row.schnaq-navbar-space.mb-4.flex-wrap.ml-xl-auto
    (when content
      [:div.d-flex.align-items-center.schnaq-navbar.px-4.mb-4.mb-md-0
       content])
    [:div.d-flex.align-items-center
+    [statement-counter]
     [:div.mr-2.mx-md-2 [dropdown-views]]
     [:div.d-flex.align-items-center.schnaq-navbar
      [um/user-handling-menu "btn-link"]]]])

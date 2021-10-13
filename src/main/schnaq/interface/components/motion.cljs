@@ -1,5 +1,6 @@
 (ns schnaq.interface.components.motion
   (:require ["framer-motion" :refer [motion]]
+            [re-frame.core :as rf]
             [reagent.core :as reagent]))
 
 (defn zoom-image
@@ -71,3 +72,19 @@
     :bounce 0.4
     :duration 1}
    component])
+
+(defn pulse-once
+  "Lets your component pulse a number of times.
+  Pulses once if the pulse-sub subscription returns true.
+  Then dispatches the pulse-stop-event. Optional pulse color can be given."
+  ([component pulse-sub pulse-stop-event]
+   [pulse-once component pulse-sub pulse-stop-event #"000"])
+  ([component pulse-sub pulse-stop-event pulse-color]
+   [:> (.-div motion)
+    {:variants {:pulse {:scale [1 2.5 1 1]
+                        :color ["#000" pulse-color "#000"]
+                        :transition {:delay 0.1
+                                     :duration 2}}}
+     :animate (if @(rf/subscribe pulse-sub) :pulse :nothing)
+     :on-animation-complete #(rf/dispatch pulse-stop-event)}
+    component]))

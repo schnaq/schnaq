@@ -671,6 +671,8 @@
    :qanda.search/similar-results "Similar Questions"
    :qanda.search/similar-results-explanation-1 "Similar questions that have already been asked appear here. You can mark them as relevant for you with "
    :qanda.search/similar-results-explanation-2 "."
+   :qanda.button.mark/as-answer "Mark as answer"
+   :qanda.button.mark/as-unanswered "Unmark as answer"
 
    ;; meetings overview
    :schnaqs/header "Overview of your schnaqs"

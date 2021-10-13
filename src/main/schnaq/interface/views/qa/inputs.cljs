@@ -14,7 +14,8 @@
   (let [input-id "qanda-input"
         submit-fn (fn [e] (jq/prevent-default e)
                     (rf/dispatch [:discussion.add.statement/starting
-                                  (oget e [:currentTarget :elements])]))]
+                                  (oget e [:currentTarget :elements])])
+                    (rf/dispatch [:schnaq.qa.new-question/pulse true]))]
     [:form {:on-submit #(submit-fn %)
             :on-key-down #(when (jq/ctrl-press % 13) (submit-fn %))}
      [:label.h5.mb-3.text-white {:for input-id} (labels :qanda/add-question-label)]

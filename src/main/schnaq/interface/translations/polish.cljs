@@ -674,6 +674,8 @@
    :qanda.search/similar-results "Podobne pytania"
    :qanda.search/similar-results-explanation-1 "Podobne pytania, które już zostały zadane, pojawiają się tutaj. Możesz oznaczyć je jako istotne dla Ciebie za pomocą "
    :qanda.search/similar-results-explanation-2 "."
+   :qanda.button.mark/as-answer "Zaznacz jako odpowiedź"
+   :qanda.button.mark/as-unanswered "Odznacz"
 
    :schnaqs/header "Przegląd Twojego schnaqs"
    :schnaqs/subheader "Masz dostęp do tych schnaqs"
