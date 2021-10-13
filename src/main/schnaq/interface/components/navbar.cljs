@@ -52,9 +52,10 @@
    [separated-button button-content attributes nil])
   ([button-content attributes dropdown-content]
    [:<>
-    [:button.btn.btn-white.discussion-navbar-button
+    [:button.btn.discussion-navbar-button
      (merge
-       {:type "button"}
+       {:type "button"
+        :class "btn-white"}
        attributes)
      button-content]
     dropdown-content]))
